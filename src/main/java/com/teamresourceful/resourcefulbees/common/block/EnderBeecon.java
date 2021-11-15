@@ -1,40 +1,45 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
+import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyTankTileEntity;
-import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.GlassBottleItem;
-import net.minecraft.item.HoneyBottleItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.*;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
@@ -42,11 +47,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EnderBeecon extends HoneyTank {
+public class EnderBeecon extends AbstractTank {
 
-    protected static final VoxelShape VOXEL_SHAPE_TOP = box(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
+    protected static final VoxelShape VOXEL_SHAPE_TOP = Util.make(() -> {
+        VoxelShape shape = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 1.0D, 14.0D);
+        shape = VoxelShapes.join(shape, Block.box(3.0D, 1.0D, 3.0D, 13.0D, 3.0D, 13.0D), IBooleanFunction.OR);
+        shape = VoxelShapes.join(shape, Block.box(4.0D, 3.0D, 4.0D, 12.0D, 11.0D, 12.0D), IBooleanFunction.OR);
+        shape = VoxelShapes.join(shape, Block.box(3.0D, 11.0D, 3.0D, 13.0D, 13.0D, 13.0D), IBooleanFunction.OR);
+        return shape;
+    });
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public static final BooleanProperty BEAM = BooleanProperty.create("beam");
+    public static final BooleanProperty SOUND = BooleanProperty.create("sound");
 
     public static final AbstractBlock.Properties PROPERTIES = AbstractBlock.Properties.of(Material.GLASS, MaterialColor.COLOR_PURPLE)
             .requiresCorrectToolForDrops()
@@ -59,10 +72,8 @@ public class EnderBeecon extends HoneyTank {
             .dynamicShape();
 
     public EnderBeecon(AbstractBlock.Properties properties) {
-        super(properties, HoneyTankTileEntity.TankTier.NETHER);
-        BlockState defaultState = this.stateDefinition.any()
-                .setValue(WATERLOGGED, false);
-        this.registerDefaultState(defaultState);
+        super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(BEAM, true).setValue(SOUND, true));
     }
 
     @NotNull
@@ -70,24 +81,23 @@ public class EnderBeecon extends HoneyTank {
     @Deprecated
     public ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult rayTraceResult) {
 
-        ItemStack heldItem = player.getItemInHand(hand);
-        boolean usingHoney = heldItem.getItem() instanceof HoneyBottleItem;
-        boolean usingBottle = heldItem.getItem() instanceof GlassBottleItem;
-        boolean usingWool = heldItem.getItem().is(ItemTags.WOOL);
-        boolean usingStick = heldItem.getItem() == Items.STICK;
+        Item heldItem = player.getItemInHand(hand).getItem();
         TileEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof EnderBeeconTileEntity) {
-            EnderBeeconTileEntity beecon = (EnderBeeconTileEntity) tileEntity;
+            HoneyFluidTank tank = ((EnderBeeconTileEntity) tileEntity).getTank();
             if (!world.isClientSide) {
+                boolean usingWool = heldItem.is(ItemTags.WOOL);
+                boolean usingStick = heldItem.equals(Items.STICK);
+
                 if (usingWool) {
-                    beecon.toggleSound();
+                    world.setBlock(pos, state.cycle(SOUND), Constants.BlockFlags.DEFAULT);
                 } else if (usingStick) {
-                    beecon.toggleBeam();
-                } else if (usingBottle) {
-                    beecon.fillBottle(player, hand);
-                } else if (usingHoney) {
-                    beecon.emptyBottle(player, hand);
+                    world.setBlock(pos, state.cycle(BEAM), Constants.BlockFlags.DEFAULT);
+                } else if (heldItem instanceof GlassBottleItem) {
+                    tank.fillBottle(player, hand);
+                } else if (heldItem instanceof HoneyBottleItem) {
+                    tank.emptyBottle(player, hand);
                 } else {
                     capabilityOrGuiUse(tileEntity, player, world, pos, hand);
                 }
@@ -98,8 +108,13 @@ public class EnderBeecon extends HoneyTank {
     }
 
     @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Override
     public @Nullable TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new EnderBeeconTileEntity(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get());
+        return new EnderBeeconTileEntity();
     }
 
     @NotNull
@@ -109,45 +124,48 @@ public class EnderBeecon extends HoneyTank {
         return VOXEL_SHAPE_TOP;
     }
 
+    @Override
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(WATERLOGGED).add(BEAM).add(SOUND);
+    }
+
+    @NotNull
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return Boolean.TRUE.equals(state.getValue(BlockStateProperties.WATERLOGGED)) ? Fluids.WATER.getSource(false) : Fluids.EMPTY.defaultFluidState();
+    }
+
+    @Override
+    public BlockState getStateForPlacement(@NotNull BlockItemUseContext context) {
+        return this.defaultBlockState();
+    }
+
+    @NotNull
+    @Override
+    public BlockState updateShape(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull IWorld world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
+        if (Boolean.TRUE.equals(stateIn.getValue(BlockStateProperties.WATERLOGGED))) {
+            world.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+        }
+        return stateIn;
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-        tooltip.addAll(new TooltipBuilder()
-                .addTranslatableTip("block.resourcefulbees.beecon.tooltip.info", TextFormatting.LIGHT_PURPLE)
-                .addTranslatableTip("block.resourcefulbees.beecon.tooltip.info.1", TextFormatting.LIGHT_PURPLE)
-                .build());
-        if (!stack.hasTag() || stack.getTag() == null || stack.getTag().isEmpty() || !stack.getTag().contains("fluid"))
-            return;
-        FluidTank tank = new FluidTank(16000).readFromNBT(stack.getTag().getCompound("fluid"));
+        tooltip.add(TranslationConstants.Items.BEECON_TOOLTIP.withStyle(TextFormatting.LIGHT_PURPLE));
+        tooltip.add(TranslationConstants.Items.BEECON_TOOLTIP_1.withStyle(TextFormatting.LIGHT_PURPLE));
+
+        if (!stack.hasTag()) return;
+        if (!stack.getTag().contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) return;
+        if (!stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).contains(NBTConstants.NBT_TANK)) return;
+
+        FluidTank tank = new FluidTank(16000).readFromNBT(stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getCompound(NBTConstants.NBT_TANK));
         FluidStack fluid = tank.getFluid();
         if (!fluid.isEmpty()) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(fluid.getTranslationKey())
-                    .appendText(": [" + tank.getFluidAmount() + "/" + tank.getCapacity() + "]")
-                    .applyStyle(TextFormatting.GOLD).build());
+            tooltip.add(new TranslationTextComponent(fluid.getTranslationKey())
+                    .append(": [" + tank.getFluidAmount() + "/" + tank.getCapacity() + "]")
+                    .withStyle(TextFormatting.GOLD));
         }
     }
 
-    @Override
-    public void setPlacedBy(World world, @NotNull BlockPos pos, @NotNull BlockState blockState, @Nullable LivingEntity livingEntity, @NotNull ItemStack itemStack) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof EnderBeeconTileEntity) {
-            EnderBeeconTileEntity tank = (EnderBeeconTileEntity) tileEntity;
-            if (itemStack.getTag() != null) {
-                tank.readNBT(itemStack.getTag());
-            }
-        }
-    }
-
-    @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof EnderBeeconTileEntity) {
-            EnderBeeconTileEntity tank = (EnderBeeconTileEntity) tileEntity;
-            ItemStack stack = new ItemStack(state.getBlock().asItem());
-            stack.setTag(tank.writeNBT(new CompoundNBT()));
-            return stack;
-        }
-        return new ItemStack(state.getBlock().asItem());
-    }
 }

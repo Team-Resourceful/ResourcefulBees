@@ -27,6 +27,7 @@ public class TraitRegistry implements ITraitRegistry {
      * @param data BeeTrait of the trait being registered
      * @return Returns false if trait already exists in the registry.
      */
+    @Override
     public boolean register(String name, BeeTrait data) {
         if (closed || TRAIT_REGISTRY.containsKey(name)) {
             ResourcefulBees.LOGGER.error("Trait is already registered or registration is closed: {}", name);
@@ -42,6 +43,7 @@ public class TraitRegistry implements ITraitRegistry {
      * @param name Trait name for which BeeTrait is requested.
      * @return Returns a BeeTrait object for the given bee type.
      */
+    @Override
     public BeeTrait getTrait(String name) {
         return TRAIT_REGISTRY.getOrDefault(name, BeeTrait.DEFAULT);
     }
@@ -52,6 +54,7 @@ public class TraitRegistry implements ITraitRegistry {
      *
      * @return Returns unmodifiable copy of trait registry.
      */
+    @Override
     public Map<String, BeeTrait> getTraits() {
         return Collections.unmodifiableMap(TRAIT_REGISTRY);
     }

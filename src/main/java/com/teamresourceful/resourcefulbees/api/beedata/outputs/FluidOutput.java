@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Unmodifiable;
 
 @Unmodifiable
-public class FluidOutput extends AbstractOutput{
+public class FluidOutput extends AbstractOutput {
 
     public static final Codec<FluidOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             CodecUtils.FLUID_STACK_CODEC.fieldOf("fluid").orElse(FluidStack.EMPTY).forGetter(FluidOutput::getFluidStack),

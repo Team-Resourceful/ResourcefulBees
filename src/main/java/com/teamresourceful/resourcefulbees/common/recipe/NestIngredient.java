@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.recipe;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -22,14 +23,31 @@ import java.util.stream.Stream;
 
 public class NestIngredient extends Ingredient {
 
-    public static final List<ItemStack> NESTS = ModItems.NESTS_ITEMS.getEntries().stream()
+    private static final List<ItemStack> NESTS = ModItems.NESTS_ITEMS.getEntries().stream()
             .filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).collect(Collectors.toList());
 
-    public int tier;
+    private final int tier;
 
     protected NestIngredient(int tier) {
         super(Stream.of(new StackList(getNests(tier))));
         this.tier = tier;
+    }
+
+    public static NestIngredient ofTier(int tier) {
+        return new NestIngredient(tier);
+    }
+
+    @Override
+    public @NotNull JsonElement toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "resourcefulbees:nest");
+        json.addProperty("tier", tier);
+        return json;
+    }
+
+    @Override
+    public @NotNull IIngredientSerializer<? extends Ingredient> getSerializer() {
+        return Serializer.INSTANCE;
     }
 
     @SuppressWarnings("ConstantConditions")

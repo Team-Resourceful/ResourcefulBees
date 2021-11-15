@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
 import net.minecraft.block.BlockState;
@@ -18,6 +19,10 @@ import java.util.function.Consumer;
 
 public class DefaultTraitAbilities {
 
+    private DefaultTraitAbilities() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
     public static void registerDefaultAbilities(TraitAbilityRegistry registry) {
         registry.register(TraitConstants.TELEPORT, enderAbility());
         registry.register(TraitConstants.SLIMY, slimeAbility());
@@ -27,30 +32,26 @@ public class DefaultTraitAbilities {
 
     private static Consumer<ResourcefulBee> enderAbility() {
         return bee -> {
-            if (!bee.hasCustomName() && bee.tickCount % 150 == 0 && bee.level.isDay() && !bee.isPollinating()) {
-                if (!bee.hasHiveInRange() && !bee.getDisruptorInRange()) {
-                    if (!bee.level.isClientSide() && bee.isAlive()) {
-                        double x = bee.getX() + (bee.getRandom().nextDouble() - 0.5D) * 4.0D;
-                        double y = bee.getY() + (bee.getRandom().nextInt(4) - 2);
-                        double z = bee.getZ() + (bee.getRandom().nextDouble() - 0.5D) * 4.0D;
-                        BlockPos.Mutable blockPos = new BlockPos.Mutable(x, y, z);
+            if (!bee.hasCustomName() && bee.tickCount % 150 == 0 && bee.level.isDay() && !bee.isPollinating() && !bee.hasHiveInRange() && !bee.getDisruptorInRange() && !bee.level.isClientSide() && bee.isAlive()) {
+                double x = bee.getX() + (bee.getRandom().nextDouble() - 0.5D) * 4.0D;
+                double y = bee.getY() + (bee.getRandom().nextInt(4) - 2);
+                double z = bee.getZ() + (bee.getRandom().nextDouble() - 0.5D) * 4.0D;
+                BlockPos.Mutable blockPos = new BlockPos.Mutable(x, y, z);
 
-                        while (blockPos.getY() > 0 && !bee.level.getBlockState(blockPos).getMaterial().blocksMotion()) {
-                            blockPos.move(Direction.DOWN);
-                        }
+                while (blockPos.getY() > 0 && !bee.level.getBlockState(blockPos).getMaterial().blocksMotion()) {
+                    blockPos.move(Direction.DOWN);
+                }
 
-                        BlockState blockstate = bee.level.getBlockState(blockPos);
-                        boolean canMove = blockstate.getMaterial().blocksMotion();
-                        boolean water = blockstate.getFluidState().is(FluidTags.WATER);
-                        if (canMove && !water) {
-                            EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(bee, x, y, z);
-                            if (MinecraftForge.EVENT_BUS.post(event)) return;
-                            boolean teleported = bee.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
-                            if (teleported) {
-                                bee.level.playSound(null, event.getTargetX(), event.getTargetY(), event.getTargetZ(), SoundEvents.ENDERMAN_TELEPORT, bee.getSoundSource(), 1.0F, 1.0F);
-                                bee.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
-                            }
-                        }
+                BlockState blockstate = bee.level.getBlockState(blockPos);
+                boolean canMove = blockstate.getMaterial().blocksMotion();
+                boolean water = blockstate.getFluidState().is(FluidTags.WATER);
+                if (canMove && !water) {
+                    EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(bee, x, y, z);
+                    if (MinecraftForge.EVENT_BUS.post(event)) return;
+                    boolean teleported = bee.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+                    if (teleported) {
+                        bee.level.playSound(null, event.getTargetX(), event.getTargetY(), event.getTargetZ(), SoundEvents.ENDERMAN_TELEPORT, bee.getSoundSource(), 1.0F, 1.0F);
+                        bee.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
                     }
                 }
             }

@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.tileentity;
 
 
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
+import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
@@ -36,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.SMOKE_TIME;
@@ -120,8 +122,10 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
                             vanillaBeeEntity.dropOffNectar();
                             int i = getHoneyLevel(state);
                             if (i < 5) {
-                                if (entity instanceof ICustomBee && ((ICustomBee) entity).getHoneycombData().isPresent()) {
-                                    honeycomb = ((ICustomBee)entity).getHoneycombData().get().getHiveOutput(tier);
+                                if (entity instanceof ICustomBee) {
+                                    Optional<OutputVariation> outputVariation = ((ICustomBee) entity).getHoneycombData();
+                                    if (outputVariation.isPresent())
+                                        honeycomb = outputVariation.get().getHiveOutput(tier);
                                 }
 
                                 if (!honeycomb.isEmpty()) this.honeycombs.add(0, honeycomb);
@@ -231,21 +235,17 @@ public class TieredBeehiveTileEntity extends BeehiveTileEntity {
     @Override
     public CompoundNBT save(@NotNull CompoundNBT nbt) {
         super.save(nbt);
-        if (!getHoneycombs().isEmpty()) nbt.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs());
+        List<ItemStack> combs = getHoneycombs();
+        if (!combs.isEmpty()) nbt.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs(combs));
         nbt.putBoolean(NBTConstants.NBT_SMOKED_TE, isSmoked);
         nbt.putInt(NBTConstants.NBT_TIER, getTier());
         nbt.putFloat(NBTConstants.NBT_TIER_MODIFIER, getTierModifier());
         return nbt;
     }
 
-    public ListNBT writeHoneycombs() {
+    public ListNBT writeHoneycombs(List<ItemStack> combs) {
         ListNBT nbtTagList = new ListNBT();
-        for (int i = 0; i < numberOfCombs(); i++) {
-            CompoundNBT itemTag = new CompoundNBT();
-            itemTag.putInt(String.valueOf(i), i);
-            getHoneycombs().get(i).save(itemTag);
-            nbtTagList.add(itemTag);
-        }
+        for (ItemStack honeycomb : combs) nbtTagList.add(honeycomb.save(new CompoundNBT()));
         return nbtTagList;
     }
 

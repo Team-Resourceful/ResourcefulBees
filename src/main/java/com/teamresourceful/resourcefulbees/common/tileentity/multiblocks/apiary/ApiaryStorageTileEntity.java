@@ -5,11 +5,12 @@ import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
-import com.teamresourceful.resourcefulbees.common.container.ApiaryStorageContainer;
-import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
+import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.ApiaryStorageContainer;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
@@ -40,7 +41,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -77,7 +77,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
     @NotNull
     @Override
     public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.apiary_storage");
+        return TranslationConstants.Guis.APIARY_STORAGE;
     }
 
     @Nullable
@@ -201,7 +201,7 @@ public class ApiaryStorageTileEntity extends TileEntity implements INamedContain
         }
     }
 
-    private static ItemStack getVanillaOutput(int apiaryTier) {
+    public static ItemStack getVanillaOutput(int apiaryTier) {
         ItemStack itemstack = (OutputVariation.DEFAULT_APIARY_OUTPUT_TYPES.get(apiaryTier) == ApiaryOutputType.BLOCK) ? VANILLA_HONEYCOMB_BLOCK.copy() : VANILLA_HONEYCOMB.copy();
         itemstack.setCount(OutputVariation.DEFAULT_APIARY_AMOUNTS.get(apiaryTier));
         return itemstack;

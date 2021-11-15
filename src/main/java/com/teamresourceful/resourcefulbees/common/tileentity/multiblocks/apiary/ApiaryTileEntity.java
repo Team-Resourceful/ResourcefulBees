@@ -4,10 +4,11 @@ package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.container.AutomationSensitiveItemStackHandler;
+import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
@@ -28,7 +29,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -44,10 +44,6 @@ import java.util.Map;
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 
 public class ApiaryTileEntity extends ApiaryController {
-    private static final TranslationTextComponent IMPORT_FAILED = new TranslationTextComponent("gui.resourcefulbees.apiary.import.false");
-    private static final TranslationTextComponent IMPORT_SUCCESS = new TranslationTextComponent("gui.resourcefulbees.apiary.import.true");
-    private static final TranslationTextComponent EXPORT_FAILED = new TranslationTextComponent("gui.resourcefulbees.apiary.export.false");
-    private static final TranslationTextComponent EXPORT_SUCCESS = new TranslationTextComponent("gui.resourcefulbees.apiary.export.true");
     public static final int IMPORT = 0;
     public static final int EXPORT = 2;
     public static final int EMPTY_JAR = 1;
@@ -306,7 +302,7 @@ public class ApiaryTileEntity extends ApiaryController {
             BeeEntity beeEntity = (BeeEntity) BeeJar.getEntityFromStack(filledJar, this.level, true);
 
             if (beeEntity != null && tryEnterHive(beeEntity, beeEntity.hasNectar(), true)) {
-                player.displayClientMessage(IMPORT_SUCCESS, true);
+                player.displayClientMessage(TranslationConstants.Apiary.IMPORT_SUCCESS, true);
                 ItemStack emptyJar = this.getTileStackHandler().getStackInSlot(EMPTY_JAR);
                 filledJar.shrink(1);
                 if (emptyJar.isEmpty()) {
@@ -317,7 +313,7 @@ public class ApiaryTileEntity extends ApiaryController {
                 return;
             }
         }
-        player.displayClientMessage(IMPORT_FAILED, true);
+        player.displayClientMessage(TranslationConstants.Apiary.IMPORT_FAILED, true);
     }
 
     private boolean canImport() {
@@ -336,11 +332,11 @@ public class ApiaryTileEntity extends ApiaryController {
             this.getTileStackHandler().getStackInSlot(EMPTY_JAR).shrink(1);
             if (this.level != null && !this.level.isClientSide)
                 syncApiaryToPlayersUsing();
-            player.displayClientMessage(EXPORT_SUCCESS, true);
+            player.displayClientMessage(TranslationConstants.Apiary.EXPORT_SUCCESS, true);
             return;
         }
 
-        player.displayClientMessage(EXPORT_FAILED, true);
+        player.displayClientMessage(TranslationConstants.Apiary.EXPORT_FAILED, true);
     }
 
     public void exportBee(BeeEntity beeEntity) {

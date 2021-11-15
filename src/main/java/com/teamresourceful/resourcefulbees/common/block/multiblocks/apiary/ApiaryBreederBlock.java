@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary;
 
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
-import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -70,12 +71,9 @@ public class ApiaryBreederBlock extends Block {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-        tooltip.addAll(new TooltipBuilder()
-                .addTranslatableTip("block.resourcefulbees.apiary_breeder.tooltip.info", TextFormatting.GOLD)
-                .addTip("block.resourcefulbees.apiary_breeder.tooltip.info1", TextFormatting.GOLD)
-                .appendText(String.format("%1$s ticks", CommonConfig.APIARY_MAX_BREED_TIME.get()), TextFormatting.GOLD)
-                .addTip("block.resourcefulbees.apiary_breeder.tooltip.info2", TextFormatting.GOLD)
-                .build());
+        tooltip.add(TranslationConstants.Items.BREEDER_TOOLTIP.withStyle(TextFormatting.GOLD));
+        tooltip.add(new TranslationTextComponent(TranslationConstants.Items.BREEDER_TOOLTIP_1, CommonConfig.APIARY_MAX_BREED_TIME.get()).withStyle(TextFormatting.GOLD));
+        tooltip.add(TranslationConstants.Items.BREEDER_TOOLTIP_2.withStyle(TextFormatting.GOLD));
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

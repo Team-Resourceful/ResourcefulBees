@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CSC",
+    "SMS",
+    "CSC"
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:gems/emerald"
+    },
+    "S": {
+      "tag": "forge:chests"
+    },
+    "M": {
+      "item": "resourcefulbees:diamond_storage_upgrade"
+    }
+  },
+  "result": {
+    "item": "resourcefulbees:emerald_storage_upgrade"
+  }
+}

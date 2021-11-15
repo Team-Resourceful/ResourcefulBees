@@ -31,6 +31,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effect;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
@@ -44,8 +45,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +54,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.VANILLA_BEE_COLOR;
 
@@ -69,30 +68,8 @@ public class BeeInfoUtils {
         return parent1.compareTo(parent2) > 0 ? Pair.of(parent1, parent2) : Pair.of(parent2, parent1);
     }
 
-    /**
-     * Returns new Resource Location with given input.
-     *
-     * @param resource Resource input as String in the form of "mod_id:item_or_block_id".
-     * @return Returns New Resource Location for given input.
-     */
-    public static @Nullable ResourceLocation getResource(String resource) {
-        return ResourceLocation.tryParse(resource);
-    }
-
-    public static Item getItem(String itemName) {
-        return ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(itemName));
-    }
-
-    public static Block getBlock(String blockName) {
-        return ForgeRegistries.BLOCKS.getValue(ResourceLocation.tryParse(blockName));
-    }
-
-    public static Fluid getFluid(String fluidName) {
-        return ForgeRegistries.FLUIDS.getValue(ResourceLocation.tryParse(fluidName));
-    }
-
-    public static Biome getBiome(String biomeName) {
-        return ForgeRegistries.BIOMES.getValue(ResourceLocation.tryParse(biomeName));
+    public static Effect getEffect(String effectName) {
+        return ForgeRegistries.POTIONS.getValue(ResourceLocation.tryParse(effectName));
     }
 
     public static @Nullable EntityType<?> getEntityType(String entityName) {
@@ -103,18 +80,23 @@ public class BeeInfoUtils {
         return ForgeRegistries.ENTITIES.getValue(entityId);
     }
 
-    // TODO Below get methods have the potential to cause NPE crashes and need fixing! - oreo
+    public static Optional<ResourceLocation> getResourceLocation(String resource) {
+        return Optional.ofNullable(ResourceLocation.tryParse(resource));
+    }
 
+    @Nullable
     public static ITag<Item> getItemTag(String itemTag) {
-        return ItemTags.getAllTags().getTag(ResourceLocation.tryParse(itemTag));
+        return getResourceLocation(itemTag).map(ItemTags.getAllTags()::getTag).orElse(null);
     }
 
+    @Nullable
     public static ITag<Fluid> getFluidTag(String fluidTag) {
-        return FluidTags.getAllTags().getTag(ResourceLocation.tryParse(fluidTag));
+        return getResourceLocation(fluidTag).map(FluidTags.getAllTags()::getTag).orElse(null);
     }
 
+    @Nullable
     public static ITag<Block> getBlockTag(String blockTag) {
-        return BlockTags.getAllTags().getTag(ResourceLocation.tryParse(blockTag));
+        return getResourceLocation(blockTag).map(BlockTags.getAllTags()::getTag).orElse(null);
     }
 
     public static void flagBeesInRange(BlockPos pos, World world) {
@@ -181,6 +163,7 @@ public class BeeInfoUtils {
     }
 
     public static boolean isBeeInJarOurs(@NotNull ItemStack stack) {
+        //noinspection ConstantConditions
         return BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
     }
 
@@ -216,7 +199,4 @@ public class BeeInfoUtils {
         }
     }
 
-    public static Predicate<FluidStack> getHoneyPredicate() {
-        return fluidStack -> fluidStack.getFluid().is(BeeInfoUtils.getFluidTag("forge:honey"));
-    }
 }

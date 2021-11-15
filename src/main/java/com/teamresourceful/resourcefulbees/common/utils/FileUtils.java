@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraftforge.fml.ModList;
 
 import java.io.*;
@@ -21,7 +22,7 @@ public class FileUtils {
     public static final Path MOD_ROOT = ModList.get().getModFileById(ResourcefulBees.MOD_ID).getFile().getFilePath();
 
     private FileUtils() {
-        throw new IllegalStateException("Utility Class");
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static void streamFilesAndParse(Path directoryPath, BiConsumer<Reader, String> instructions, String errorMessage) {
@@ -98,9 +99,8 @@ public class FileUtils {
         try (Stream<Path> sourceStream = Files.walk(source)) {
             sourceStream.filter(f -> f.getFileName().toString().endsWith(JSON))
                     .forEach(path -> {
-                        File targetFile = new File(String.valueOf(Paths.get(targetPath.toString(), "/", path.getFileName().toString())));
                         try {
-                            Files.copy(path, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                            Files.copy(path, Paths.get(targetPath.toString(), path.getFileName().toString()), StandardCopyOption.REPLACE_EXISTING);
                         } catch (IOException e) {
                             LOGGER.error("Could not copy file: {}, Target: {}", path, targetPath);
                         }

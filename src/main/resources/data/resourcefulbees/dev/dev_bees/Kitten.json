@@ -2,10 +2,16 @@
   "CoreData": {
     "flower": "minecraft:beds",
     "maxTimeInHive": 600,
-
-    "lore": "Cute little baby kitty bee.",
-    "loreColor": "rainbow",
-    "creator": "Dawn_Felstar"
+    "lore": [
+      {
+        "text":"Cute little baby kitty bee.",
+        "color": "light_purple"
+      },
+      {
+        "translate":"tooltip.resourcefulbees.bee.creator",
+        "with": ["§6Dawn_Felstar"]
+      }
+    ]
   },
   "honeycombVariation": "catnip",
   "CentrifugeData": {

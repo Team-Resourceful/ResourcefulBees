@@ -41,19 +41,19 @@ public class RenderCuboid {
     }
 
     public static float getRed(int color) {
-        return (float) (color >> 16 & 255) / 255.0F;
+        return (color >> 16 & 255) / 255.0F;
     }
 
     public static float getGreen(int color) {
-        return (float) (color >> 8 & 255) / 255.0F;
+        return (color >> 8 & 255) / 255.0F;
     }
 
     public static float getBlue(int color) {
-        return (float) (color & 255) / 255.0F;
+        return (color & 255) / 255.0F;
     }
 
     public static float getAlpha(int color) {
-        return (float) (color >> 24 & 255) / 255.0F;
+        return (color >> 24 & 255) / 255.0F;
     }
 
     public void renderCube(CubeModel cube, MatrixStack matrix, IVertexBuilder buffer, int argb, int light, int overlay) {
@@ -85,21 +85,21 @@ public class RenderCuboid {
                 float maxV = sprite.getV0();
                 double sizeU = getValue(size, u);
                 double sizeV = getValue(size, v);
-                for (int uIndex = 0; (double) uIndex < sizeU; ++uIndex) {
+                for (int uIndex = 0; uIndex < sizeU; ++uIndex) {
                     float[] baseUV = new float[]{minU, maxU, minV, maxV};
                     double addU = 1.0D;
-                    if ((double) uIndex + addU > sizeU) {
-                        addU = sizeU - (double) uIndex;
+                    if (uIndex + addU > sizeU) {
+                        addU = sizeU - uIndex;
                         baseUV[1] = baseUV[0] + (baseUV[1] - baseUV[0]) * (float) addU;
                     }
-                    for (int vIndex = 0; (double) vIndex < sizeV; ++vIndex) {
+                    for (int vIndex = 0; vIndex < sizeV; ++vIndex) {
                         float[] uv = Arrays.copyOf(baseUV, 4);
                         double addV = 1.0D;
-                        if ((double) vIndex + addV > sizeV) {
-                            addV = sizeV - (double) vIndex;
+                        if (vIndex + addV > sizeV) {
+                            addV = sizeV - vIndex;
                             uv[3] = uv[2] + (uv[3] - uv[2]) * (float) addV;
                         }
-                        float[] xyz = new float[]{(float) uIndex, (float) ((double) uIndex + addU), (float) vIndex, (float) ((double) vIndex + addV)};
+                        float[] xyz = new float[]{uIndex, (float) (uIndex + addU), vIndex, (float) (vIndex + addV)};
                         this.renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, true, false, red, green, blue, alpha, light, overlay);
                         this.renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, true, true, red, green, blue, alpha, light, overlay);
                         this.renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, false, true, red, green, blue, alpha, light, overlay);
@@ -124,7 +124,7 @@ public class RenderCuboid {
         vertex = withValue(vertex, face.getAxis(), other);
         Vector3i normalForFace = face.getNormal();
         float adjustment = 2.5F;
-        Vector3f norm = new Vector3f((float) normalForFace.getX() + adjustment, (float) normalForFace.getY() + adjustment, (float) normalForFace.getZ() + adjustment);
+        Vector3f norm = new Vector3f(normalForFace.getX() + adjustment, normalForFace.getY() + adjustment, normalForFace.getZ() + adjustment);
         norm.normalize();
         buffer.vertex(matrix4f, vertex.x(), vertex.y(), vertex.z()).color(red, green, blue, alpha).uv(uv[uArray], uv[vArray]).overlayCoords(overlay).uv2(light).normal(normal, norm.x(), norm.y(), norm.z()).endVertex();
     }

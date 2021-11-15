@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.resources.*;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,13 +28,12 @@ public class DataPackLoader implements IPackFinder {
 
     private static final String DATAPACK_NAME = "resourcefulbees:internals";
     public static final DataPackLoader INSTANCE = new DataPackLoader();
-    private static final Gson GSON = new Gson();
 
     @Override
     public void loadPacks(@NotNull Consumer<ResourcePackInfo> packList, @NotNull ResourcePackInfo.IFactory factory) {
         try (MemoryDataPack dataPack = new MemoryDataPack()) {
             DataGen.getTags().forEach((location, resourceLocations) -> {
-                Tag.Builder builder = Tag.Builder.tag();
+                ITag.Builder builder = ITag.Builder.tag();
                 resourceLocations.forEach(t -> builder.addElement(t, DATAPACK_NAME));
                 dataPack.putJson(ResourcePackType.SERVER_DATA, location, builder.serializeToJson());
             });
@@ -54,7 +53,7 @@ public class DataPackLoader implements IPackFinder {
 
     private static class MemoryDataPack implements IResourcePack {
 
-        private static final JsonObject META = GSON.fromJson("{\"pack_format\": 4, \"description\": \"Data for resourcefulbees tags.\"}", JsonObject.class);
+        private static final JsonObject META = ModConstants.GSON.fromJson("{\"pack_format\": 4, \"description\": \"Data for resourcefulbees tags.\"}", JsonObject.class);
         private final HashMap<ResourceLocation, Supplier<? extends InputStream>> data = new HashMap<>();
 
         private boolean isServerData(ResourcePackType type) {
@@ -63,7 +62,7 @@ public class DataPackLoader implements IPackFinder {
 
         public void putJson(ResourcePackType type, ResourceLocation location, JsonElement json) {
             if (!isServerData(type)) return;
-            data.put(location, () -> new ByteArrayInputStream(GSON.toJson(json).getBytes(StandardCharsets.UTF_8)));
+            data.put(location, () -> new ByteArrayInputStream(ModConstants.GSON.toJson(json).getBytes(StandardCharsets.UTF_8)));
         }
 
         @Override

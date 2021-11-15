@@ -20,10 +20,6 @@ import java.util.List;
 
 public class HoneyBottleData {
 
-    public static HoneyBottleData getDefault(String name) {
-        return new HoneyBottleData(name, Color.DEFAULT, 1, 1f, Collections.emptyList());
-    }
-
     public static Codec<HoneyBottleData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(HoneyBottleData::getName),

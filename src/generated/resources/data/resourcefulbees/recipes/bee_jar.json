@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "G G",
+    "GGG"
+  ],
+  "key": {
+    "G": {
+      "tag": "forge:glass_panes/colorless"
+    }
+  },
+  "result": {
+    "item": "resourcefulbees:bee_jar"
+  }
+}

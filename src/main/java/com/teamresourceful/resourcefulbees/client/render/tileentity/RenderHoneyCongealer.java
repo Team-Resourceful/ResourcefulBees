@@ -23,14 +23,14 @@ public class RenderHoneyCongealer extends TileEntityRenderer<HoneyCongealerTileE
     @Override
     public void render(HoneyCongealerTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
         if (tile.getLevel() == null) return;
-        FluidStack stack = tile.getFluidTank().getFluid();
+        FluidStack stack = tile.getTank().getFluid();
         if (!stack.isEmpty()) {
-            int level = tile.getFluidLevel();
+            float percentage = tile.getTank().getFluidAmount() / (float)tile.getTank().getCapacity();
             int color = stack.getFluid().getAttributes().getColor();
             ResourceLocation stillTexture = stack.getFluid().getAttributes().getStillTexture();
             IVertexBuilder builder = renderer.getBuffer(Atlases.translucentCullBlockSheet());
             Vector3f start = new Vector3f(0.188f, 0.3125f, 0.188f);
-            Vector3f end = new Vector3f(0.812f, 0.3125f + ((float) level / 100.0F) * 0.687f, 0.812f);
+            Vector3f end = new Vector3f(0.812f, 0.3125f + percentage * 0.687f, 0.812f);
             CubeModel model = new CubeModel(start, end);
             model.setTextures(stillTexture);
             RenderCuboid.INSTANCE.renderCube(model, matrix, builder, color, light, overlayLight);

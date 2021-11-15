@@ -9,8 +9,22 @@ displayName="Resourceful Bees"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"
 logoFile="logo.png"
 credits="Thanks to Tfarcenim for making Beesourceful which this mod is heavily based on."
-authors="Epic_Oreo, ThatGravyBoat, Dawn Felstar, (Textures) Vik, (Textures) QBert"
+authors="Epic_Oreo, ThatGravyBoat, Dawn Felstar, (Textures) Vik, (Textures) QBert, (Textures) Joosh"
 description="This mod provides pack makers with useful capabilities for creating custom Resource Bee Types. \n-Special Thanks- \nThanks to the MMD Discord peeps for all of their assistance."
+
+[[dependencies.resourcefulbees]]
+    modId="geckolib3"
+    mandatory=true
+    versionRange="[3.0.3,)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.resourcefulbees]]
+    modId="phosphophyllite"
+    mandatory=true
+    versionRange="[0.5.1,)"
+    ordering="NONE"
+    side="BOTH"
 
 [[dependencies.resourcefulbees]]
     modId="forge"

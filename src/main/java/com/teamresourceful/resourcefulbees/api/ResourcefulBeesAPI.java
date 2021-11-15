@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraftforge.fml.ModLoadingContext;
 
+@SuppressWarnings("unused")
 public class ResourcefulBeesAPI {
 
     private ResourcefulBeesAPI() {
@@ -37,7 +38,6 @@ public class ResourcefulBeesAPI {
 
     public static IBeeRegistry getBeeRegistry() { return beeRegistry; }
 
-    //TODO provide proper access - epic
     public static ITraitRegistry getTraitRegistry() { return traitRegistry; }
 
 }

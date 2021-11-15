@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.utils.TooltipBuilder;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipeType;
@@ -13,7 +13,6 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -31,19 +30,20 @@ public class ModItems {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = createItemRegistry();
 
-    public static final DeferredRegister<Item> NESTS_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
+    public static final DeferredRegister<Item> NESTS_ITEMS = createItemRegistry();
+    public static final DeferredRegister<Item> SPAWN_EGG_ITEMS = createItemRegistry();
+    public static final DeferredRegister<Item> HONEYCOMB_ITEMS = createItemRegistry();
+    public static final DeferredRegister<Item> HONEYCOMB_BLOCK_ITEMS = createItemRegistry();
+    public static final DeferredRegister<Item> HONEY_BOTTLE_ITEMS = createItemRegistry();
+    public static final DeferredRegister<Item> HONEY_BLOCK_ITEMS = createItemRegistry();
+    public static final DeferredRegister<Item> HONEY_BUCKET_ITEMS = createItemRegistry();
+    public static final DeferredRegister<Item> CENTRIFUGE_ITEMS = createItemRegistry();
 
-    public static final DeferredRegister<Item> SPAWN_EGG_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
-    public static final DeferredRegister<Item> HONEYCOMB_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
-    public static final DeferredRegister<Item> HONEYCOMB_BLOCK_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
-
-    public static final DeferredRegister<Item> HONEY_BOTTLE_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
-    public static final DeferredRegister<Item> HONEY_BLOCK_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
-    public static final DeferredRegister<Item> HONEY_BUCKET_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
-
-
+    private static DeferredRegister<Item> createItemRegistry() {
+        return DeferredRegister.create(ForgeRegistries.ITEMS, ResourcefulBees.MOD_ID);
+    }
 
     private static Item.Properties getItemProperties() {
         return new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES);
@@ -62,6 +62,7 @@ public class ModItems {
         HONEY_BOTTLE_ITEMS.register(bus);
         HONEY_BLOCK_ITEMS.register(bus);
         HONEY_BUCKET_ITEMS.register(bus);
+        CENTRIFUGE_ITEMS.register(bus);
     }
 
     public static final RegistryObject<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new Item(getItemProperties().food(new Food.Builder()
@@ -89,8 +90,8 @@ public class ModItems {
 
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.add(new TranslationTextComponent("item.resourcefulbees.scraper.tooltip").withStyle(TextFormatting.GOLD));
-            tooltip.add(new TranslationTextComponent("item.resourcefulbees.scraper.tooltip.1").withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.SCRAPER_TOOLTIP.withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.SCRAPER_TOOLTIP_1.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -141,12 +142,8 @@ public class ModItems {
     public static final RegistryObject<Item> APIARY_STORAGE_ITEM = ITEMS.register("apiary_storage", () -> new BlockItem(ModBlocks.APIARY_STORAGE_BLOCK.get(), getNestProperties()));
     public static final RegistryObject<Item> APIARY_BREEDER_ITEM = ITEMS.register("apiary_breeder", () -> new BlockItem(ModBlocks.APIARY_BREEDER_BLOCK.get(), getNestProperties()));
     public static final RegistryObject<Item> ENDER_BEECON_ITEM = ITEMS.register("ender_beecon", () -> new BlockItem(ModBlocks.ENDER_BEECON.get(), getItemProperties()));
-    public static final RegistryObject<Item> PURPUR_HONEY_TANK_ITEM = ITEMS.register("purpur_honey_tank", () -> new BlockItem(ModBlocks.PURPUR_HONEY_TANK.get(), getItemProperties()));
-    public static final RegistryObject<Item> NETHER_HONEY_TANK_ITEM = ITEMS.register("nether_honey_tank", () -> new BlockItem(ModBlocks.NETHER_HONEY_TANK.get(), getItemProperties()));
-    public static final RegistryObject<Item> WOODEN_HONEY_TANK_ITEM = ITEMS.register("wooden_honey_tank", () -> new BlockItem(ModBlocks.WOODEN_HONEY_TANK.get(), getItemProperties()));
     public static final RegistryObject<Item> HONEY_CONGEALER_ITEM = ITEMS.register("honey_congealer", () -> new BlockItem(ModBlocks.HONEY_CONGEALER.get(), getItemProperties()));
-//    public static final RegistryObject<Item> HONEY_PIPE_ITEM = ITEMS.register("honey_pipe", () -> new BlockItem(ModBlocks.HONEY_PIPE.get(), getItemProperties()));
-    public static final RegistryObject<Item> BOTTOMLESS_HONEY_POT = ITEMS.register("bottomless_honey_pot", () -> new BlockItem(ModBlocks.BOTTOMLESS_HONEY_POT.get(), getItemProperties()));
+    public static final RegistryObject<Item> HONEY_POT_ITEM = ITEMS.register("honey_pot", () -> new BlockItem(ModBlocks.HONEY_POT.get(), getItemProperties()));
 
     public static final RegistryObject<Item> IRON_STORAGE_UPGRADE = ITEMS.register("iron_storage_upgrade", () -> new UpgradeItem(getItemProperties().durability(0).stacksTo(16),
             UpgradeItem.builder()
@@ -179,9 +176,7 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip("item.resourcefulbees.apiary_breeder_upgrade.tooltip.info", TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.BREEDER_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -193,9 +188,7 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip("item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info", TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.BREED_TIME_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -210,9 +203,7 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -225,9 +216,7 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -240,9 +229,7 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -255,12 +242,52 @@ public class ModItems {
                     .build()) {
         @Override
         public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.addAll(new TooltipBuilder()
-                    .addTranslatableTip(ModConstants.HIVE_UPGRADE_TOOLTIP, TextFormatting.GOLD)
-                    .build());
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
+
+    //region centrifuge items
+    public static final RegistryObject<Item> CENTRIFUGE_CASING = CENTRIFUGE_ITEMS.register("centrifuge/casing", () -> new BlockItem(ModBlocks.CENTRIFUGE_CASING.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_PROCESSOR = CENTRIFUGE_ITEMS.register("centrifuge/processor", () -> new BlockItem(ModBlocks.CENTRIFUGE_PROCESSOR.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_GEARBOX = CENTRIFUGE_ITEMS.register("centrifuge/gearbox", () -> new BlockItem(ModBlocks.CENTRIFUGE_GEARBOX.get(), getItemProperties()));
+
+    //TERMINAL
+    public static final RegistryObject<Item> CENTRIFUGE_BASIC_TERMINAL = CENTRIFUGE_ITEMS.register("centrifuge/terminal/basic", () -> new BlockItem(ModBlocks.CENTRIFUGE_BASIC_TERMINAL.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ADVANCED_TERMINAL = CENTRIFUGE_ITEMS.register("centrifuge/terminal/advanced", () -> new BlockItem(ModBlocks.CENTRIFUGE_ADVANCED_TERMINAL.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ELITE_TERMINAL = CENTRIFUGE_ITEMS.register("centrifuge/terminal/elite", () -> new BlockItem(ModBlocks.CENTRIFUGE_ELITE_TERMINAL.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ULTIMATE_TERMINAL = CENTRIFUGE_ITEMS.register("centrifuge/terminal/ultimate", () -> new BlockItem(ModBlocks.CENTRIFUGE_ULTIMATE_TERMINAL.get(), getItemProperties()));
+
+    //VOID
+    public static final RegistryObject<Item> CENTRIFUGE_BASIC_VOID = CENTRIFUGE_ITEMS.register("centrifuge/void/basic", () -> new BlockItem(ModBlocks.CENTRIFUGE_BASIC_VOID.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ADVANCED_VOID = CENTRIFUGE_ITEMS.register("centrifuge/void/advanced", () -> new BlockItem(ModBlocks.CENTRIFUGE_ADVANCED_VOID.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ELITE_VOID = CENTRIFUGE_ITEMS.register("centrifuge/void/elite", () -> new BlockItem(ModBlocks.CENTRIFUGE_ELITE_VOID.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ULTIMATE_VOID = CENTRIFUGE_ITEMS.register("centrifuge/void/ultimate", () -> new BlockItem(ModBlocks.CENTRIFUGE_ULTIMATE_VOID.get(), getItemProperties()));
+
+    //INPUT
+    public static final RegistryObject<Item> CENTRIFUGE_BASIC_INPUT = CENTRIFUGE_ITEMS.register("centrifuge/input/item/basic", () -> new BlockItem(ModBlocks.CENTRIFUGE_BASIC_INPUT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ADVANCED_INPUT = CENTRIFUGE_ITEMS.register("centrifuge/input/item/advanced", () -> new BlockItem(ModBlocks.CENTRIFUGE_ADVANCED_INPUT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ELITE_INPUT = CENTRIFUGE_ITEMS.register("centrifuge/input/item/elite", () -> new BlockItem(ModBlocks.CENTRIFUGE_ELITE_INPUT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ULTIMATE_INPUT = CENTRIFUGE_ITEMS.register("centrifuge/input/item/ultimate", () -> new BlockItem(ModBlocks.CENTRIFUGE_ULTIMATE_INPUT.get(), getItemProperties()));
+
+    //ENERGY PORT
+    public static final RegistryObject<Item> CENTRIFUGE_BASIC_ENERGY_PORT = CENTRIFUGE_ITEMS.register("centrifuge/input/energy/basic", () -> new BlockItem(ModBlocks.CENTRIFUGE_BASIC_ENERGY_PORT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ADVANCED_ENERGY_PORT = CENTRIFUGE_ITEMS.register("centrifuge/input/energy/advanced", () -> new BlockItem(ModBlocks.CENTRIFUGE_ADVANCED_ENERGY_PORT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ELITE_ENERGY_PORT = CENTRIFUGE_ITEMS.register("centrifuge/input/energy/elite", () -> new BlockItem(ModBlocks.CENTRIFUGE_ELITE_ENERGY_PORT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ULTIMATE_ENERGY_PORT = CENTRIFUGE_ITEMS.register("centrifuge/input/energy/ultimate", () -> new BlockItem(ModBlocks.CENTRIFUGE_ULTIMATE_ENERGY_PORT.get(), getItemProperties()));
+
+    //ITEM OUTPUT
+    public static final RegistryObject<Item> CENTRIFUGE_BASIC_ITEM_OUTPUT = CENTRIFUGE_ITEMS.register("centrifuge/output/item/basic", () -> new BlockItem(ModBlocks.CENTRIFUGE_BASIC_ITEM_OUTPUT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ADVANCED_ITEM_OUTPUT = CENTRIFUGE_ITEMS.register("centrifuge/output/item/advanced", () -> new BlockItem(ModBlocks.CENTRIFUGE_ADVANCED_ITEM_OUTPUT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ELITE_ITEM_OUTPUT = CENTRIFUGE_ITEMS.register("centrifuge/output/item/elite", () -> new BlockItem(ModBlocks.CENTRIFUGE_ELITE_ITEM_OUTPUT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ULTIMATE_ITEM_OUTPUT = CENTRIFUGE_ITEMS.register("centrifuge/output/item/ultimate", () -> new BlockItem(ModBlocks.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT.get(), getItemProperties()));
+
+    //FLUID OUTPUT
+    public static final RegistryObject<Item> CENTRIFUGE_BASIC_FLUID_OUTPUT = CENTRIFUGE_ITEMS.register("centrifuge/output/fluid/basic", () -> new BlockItem(ModBlocks.CENTRIFUGE_BASIC_FLUID_OUTPUT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ADVANCED_FLUID_OUTPUT = CENTRIFUGE_ITEMS.register("centrifuge/output/fluid/advanced", () -> new BlockItem(ModBlocks.CENTRIFUGE_ADVANCED_FLUID_OUTPUT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ELITE_FLUID_OUTPUT = CENTRIFUGE_ITEMS.register("centrifuge/output/fluid/elite", () -> new BlockItem(ModBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE_ULTIMATE_FLUID_OUTPUT = CENTRIFUGE_ITEMS.register("centrifuge/output/fluid/ultimate", () -> new BlockItem(ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT.get(), getItemProperties()));
+    //endregion
 
     // HIDDEN ITEMS
     public static final RegistryObject<Item> MUTATION_ICON = ITEMS.register("mutation_icon", () -> new Item(new Item.Properties()));

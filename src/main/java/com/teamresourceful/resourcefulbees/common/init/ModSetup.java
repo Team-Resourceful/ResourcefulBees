@@ -38,6 +38,10 @@ public class ModSetup {
     }
 
     private static void loadResources() {
+        //This is needed for data gen as Minecraft.getInstance() is null in data gen.
+        //noinspection ConstantConditions
+        if (Minecraft.getInstance() == null) return;
+
         Minecraft.getInstance().getResourcePackRepository().addPackFinder((consumer, factory) -> {
             final ResourcePackInfo packInfo = ResourcePackInfo.create(
                     ResourcefulBees.MOD_ID,

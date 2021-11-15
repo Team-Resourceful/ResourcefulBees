@@ -4,7 +4,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.container.ValidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.ValidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.ApiaryTabMessage;
@@ -42,8 +43,6 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
 
     private static final ResourceLocation VALIDATED_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/validated.png");
     private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
-    private static final TranslationTextComponent MAIN_SCREEN = new TranslationTextComponent("gui.resourcefulbees.apiary.button.main_screen");
-    private static final TranslationTextComponent STORAGE_SCREEN = new TranslationTextComponent("gui.resourcefulbees.apiary.button.storage_screen");
     private static final ItemStack HONEYCOMB = new ItemStack(Items.HONEYCOMB);
     private static final ItemStack BEE_JAR = new ItemStack(ModItems.BEE_JAR.get());
     private int beeIndexOffset;
@@ -64,8 +63,8 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
     @Override
     protected void init() {
         super.init();
-        importButton = this.addButton(new Button(this.leftPos + 73, this.topPos + 10, 40, 20, new TranslationTextComponent("gui.resourcefulbees.apiary.button.import"), onPress -> this.importBee()));
-        exportButton = this.addButton(new Button(this.leftPos + 159, this.topPos + 10, 40, 20, new TranslationTextComponent("gui.resourcefulbees.apiary.button.export"), onPress -> this.exportSelectedBee()));
+        importButton = this.addButton(new Button(this.leftPos + 73, this.topPos + 10, 40, 20, TranslationConstants.Apiary.IMPORT, onPress -> this.importBee()));
+        exportButton = this.addButton(new Button(this.leftPos + 159, this.topPos + 10, 40, 20, TranslationConstants.Apiary.EXPORT, onPress -> this.exportSelectedBee()));
         addTabButtons();
     }
 
@@ -73,8 +72,8 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
         int i = this.leftPos;
         int j = this.topPos;
         int t = i + this.imageWidth - 25;
-        addTabImageButton(j + 17, t, ApiaryTab.MAIN, MAIN_SCREEN, BEE_JAR).active = false;
-        storageTabButton = addTabImageButton(j + 37, t, ApiaryTab.STORAGE, STORAGE_SCREEN, HONEYCOMB); // may need to pass in itemX so it can be 2 like the old code
+        addTabImageButton(j + 17, t, ApiaryTab.MAIN, TranslationConstants.Apiary.MAIN_SCREEN, BEE_JAR).active = false;
+        storageTabButton = addTabImageButton(j + 37, t, ApiaryTab.STORAGE, TranslationConstants.Apiary.STORAGE_SCREEN, HONEYCOMB); // may need to pass in itemX so it can be 2 like the old code
     }
 
     //TODO ummmmm clean this up? yes/no? - epic
@@ -184,8 +183,8 @@ public class ValidatedApiaryScreen extends ContainerScreen<ValidatedApiaryContai
                 int minTicks = apiaryBee.minOccupationTicks;
                 int ticksLeft = Math.max(minTicks - ticksInHive, 0);
                 beeInfo.add(apiaryBee.displayName);
-                beeInfo.add(new TranslationTextComponent("gui.resourcefulbees.apiary.bee.ticks_in_hive").append(": ").append(String.valueOf(ticksInHive)));
-                beeInfo.add(new TranslationTextComponent("gui.resourcefulbees.apiary.bee.ticks_left").append(": ").append(String.valueOf(ticksLeft)));
+                beeInfo.add(new TranslationTextComponent(TranslationConstants.Apiary.TICKS_HIVE, ticksInHive));
+                beeInfo.add(new TranslationTextComponent(TranslationConstants.Apiary.TICKS_LEFT, ticksLeft));
                 this.renderComponentTooltip(matrix, beeInfo, mouseX, mouseY);
             }
         }

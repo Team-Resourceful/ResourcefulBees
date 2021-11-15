@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Optional;
 
 @Unmodifiable
-public class BlockOutput extends AbstractOutput{
+public class BlockOutput extends AbstractOutput {
 
     public static final Codec<BlockOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Registry.BLOCK.fieldOf("block").orElse(Blocks.AIR).forGetter(BlockOutput::getBlock),

@@ -205,7 +205,7 @@ public class SpawnData {
     }
 
     private void addBiomesFromTag(ResourceLocation resourceLocation) {
-        if (CommonConfig.USE_FORGE_DICTIONARIES.get()) {
+        if (Boolean.TRUE.equals(CommonConfig.USE_FORGE_DICTIONARIES.get())) {
             net.minecraftforge.common.BiomeDictionary.Type type = BiomeDictionary.getForgeType(resourceLocation);
             if (type != null) {
                 spawnableBiomes.addAll(BiomeDictionary.getForgeBiomeLocations(type));
@@ -218,7 +218,7 @@ public class SpawnData {
     }
 
     private void removeBiomesFromTag(ResourceLocation resourceLocation) {
-        if (CommonConfig.USE_FORGE_DICTIONARIES.get()) {
+        if (Boolean.TRUE.equals(CommonConfig.USE_FORGE_DICTIONARIES.get())) {
             net.minecraftforge.common.BiomeDictionary.Type type = BiomeDictionary.getForgeType(resourceLocation);
             if (type != null) {
                 spawnableBiomes.removeAll(BiomeDictionary.getForgeBiomeLocations(type));

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "resourcefulbees:t2_apiary"
+    ]
+  },
+  "criteria": {
+    "has_honeycomb_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "resourcefulbees:resourceful_honeycomb_block"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "resourcefulbees:t2_apiary"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_honeycomb_block",
+      "has_the_recipe"
+    ]
+  ]
+}

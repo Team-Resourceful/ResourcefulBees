@@ -4,6 +4,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.*;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ModImageButton;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;

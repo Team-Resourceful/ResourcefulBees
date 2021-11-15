@@ -2,9 +2,16 @@
   "CoreData": {
     "flower": "minecraft:flowers",
     "maxTimeInHive": 6000,
-    "creator" : "Epic_Oreo",
-    "lore": "A Delicious Bee",
-    "loreColor": "rainbow"
+    "lore": [
+      {
+        "text":"A Delicious Bee.",
+        "color": "aqua"
+      },
+      {
+        "translate":"tooltip.resourcefulbees.bee.creator",
+        "with": ["§6Epic_Oreo"]
+      }
+    ]
   },
   "honeycombVariation": "oreo",
   "RenderData": {

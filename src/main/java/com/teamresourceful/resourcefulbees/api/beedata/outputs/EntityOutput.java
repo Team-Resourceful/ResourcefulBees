@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Optional;
 
 @Unmodifiable
-public class EntityOutput extends AbstractOutput{
+public class EntityOutput extends AbstractOutput {
     private final EntityType<?> entityType;
     private final Optional<CompoundNBT> compoundNBT;
     private Entity guiEntity = null;

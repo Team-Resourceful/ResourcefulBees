@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -30,7 +31,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
 
     public FlowersCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
-            I18n.get("gui.resourcefulbees.jei.category.bee_pollination_flowers"),
+            I18n.get(TranslationConstants.Jei.FLOWERS),
             guiHelper.drawableBuilder(GUI_BACK, 0, 0, 100, 75).addPadding(0, 0, 0, 0).build(),
             guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get())),
             FlowersCategory.Recipe.class);
@@ -47,7 +48,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
                 Set<ItemStack> stacks = new HashSet<>();
                 Set<FluidStack> fluids = new HashSet<>();
 
-                for (Block block : beeData.getCoreData().getBlockFlowers()) {
+                beeData.getCoreData().getBlockFlowers().forEach(block -> {
                     if (block instanceof FlowingFluidBlock){
                         fluids.add(new FluidStack(((FlowingFluidBlock) block).getFluid().getSource(), 1000 ));
                     }else if (block.asItem() != Items.AIR){
@@ -55,7 +56,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
                     }else {
                         stacks.add(getErrorItem(block));
                     }
-                }
+                });
 
                 if (!stacks.isEmpty()){
                     recipes.add(Recipe.getItemRecipe(beeData, stacks));

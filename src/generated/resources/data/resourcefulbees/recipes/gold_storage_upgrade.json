@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CSC",
+    "SMS",
+    "CSC"
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:ingots/gold"
+    },
+    "S": {
+      "tag": "forge:chests"
+    },
+    "M": {
+      "item": "resourcefulbees:iron_storage_upgrade"
+    }
+  },
+  "result": {
+    "item": "resourcefulbees:gold_storage_upgrade"
+  }
+}

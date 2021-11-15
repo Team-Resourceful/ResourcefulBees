@@ -1,11 +1,13 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net' }
-        maven { url='https://repo.spongepowered.org/maven' }
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://nexus.resourcefulbees.com/repository/parchmentmc/' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
@@ -13,12 +15,13 @@ plugins {
     id "org.sonarqube" version "3.1.1"
 }
 apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'signing'
 apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
+
 
 repositories {
     maven { url "https://nexus.resourcefulbees.com/repository/maven-public/" }
@@ -40,6 +43,25 @@ def releasesRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-releas
 def snapshotsRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-snapshots/"
 def ENV = System.getenv()
 
+sourceSets {
+    main {
+        java.excludes = ['com/teamresourceful/resourcefulbees/datagen/**']
+        resources {
+            srcDirs += 'src/generated/resources'
+            exclude '.cache'
+        }
+    }
+    datagen {
+        resources.srcDirs = main.resources.srcDirs
+        resources.srcDirs.remove('src/generated/resources')
+        java.srcDirs = main.java.srcDirs
+        compileClasspath += main.compileClasspath
+        runtimeClasspath += main.runtimeClasspath
+        compileClasspath += main.output
+        runtimeClasspath += main.output
+    }
+}
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
@@ -58,7 +80,7 @@ sonarqube {
 }
 
 minecraft {
-    mappings channel: "official", version: "${mapping}"
+    mappings channel: "parchment", version: "${mapping}"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -103,7 +125,7 @@ minecraft {
             args "--mod", "resourcefulbees", "--all", "--output", "\"" + file("src/generated/resources").toString() + "\"", "--validate", "--existing", "\"" + sourceSets.main.resources.srcDirs[0] + "\""
             mods {
                 resourcefulbees {
-                    source sourceSets.main
+                    source sourceSets.datagen
                 }
             }
         }
@@ -127,13 +149,12 @@ dependencies {
     compileOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     runtimeOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
-    compileOnly fg.deobf ("team.chisel.ctm:CTM:MC1.16.1-1.1.2.6")
-    runtimeOnly fg.deobf ("team.chisel.ctm:CTM:MC1.16.1-1.1.2.6")
+    compileOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")
+    runtimeOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")
 
     compileOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}:api")
     runtimeOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}")
 
-    // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
     runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}")// core
     runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
     runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
@@ -142,10 +163,12 @@ dependencies {
     runtimeOnly fg.deobf ("curse.maven:create-328085:${create_version}")
     runtimeOnly fg.deobf ("curse.maven:flywheel-486392:${flywheel_version}")
 
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.42')
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.16.5:${geckolib_version}")
 
-    compileOnly 'org.jetbrains:annotations:20.1.0'
-    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
+    implementation fg.deobf("net.roguelogix.phosphophyllite:Phosphophyllite:${phos_version}")
+
+    compileOnly 'org.jetbrains:annotations:22.0.0'
+    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 }
 
 jar {
@@ -173,6 +196,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact reobfArtifact
+            artifact sourcesJar
 
             pom {
                 name = 'ResourcefulBees'

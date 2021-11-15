@@ -213,7 +213,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
                 }
             }
         } else {
-            if (CommonConfig.BEES_DIE_IN_VOID.get() && this.position().y <= 0) {
+            if (Boolean.TRUE.equals(CommonConfig.BEES_DIE_IN_VOID.get()) && this.position().y <= 0) {
                 this.remove();
             }
             if (!hasCustomName() && this.tickCount % 100 == 0) {
@@ -241,6 +241,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         this.hasHiveInRange = hasHiveInRange;
     }
 
+    @SuppressWarnings("unused")
     public static boolean canBeeSpawn(EntityType<? extends AgeableEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
         String namespaceID = EntityType.getKey(typeIn).toString();
         String beeType = namespaceID.substring(namespaceID.lastIndexOf(":") + 1, namespaceID.length() - 4);

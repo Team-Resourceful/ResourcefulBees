@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -22,7 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,8 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BeeBox extends Item {
-
-    private static final String ITEM_DOT = "item.";
 
     final boolean isTemp;
 
@@ -99,13 +96,9 @@ public class BeeBox extends Item {
         if (isTemp) return ActionResultType.FAIL;
         BeeEntity target = (BeeEntity) targetIn;
 
-        CompoundNBT tag = stack.getTag() == null
-                ? new CompoundNBT()
-                : stack.getTag();
+        CompoundNBT tag = stack.getTag() == null ? new CompoundNBT() : stack.getTag();
 
-        ListNBT bees = tag.contains(NBTConstants.NBT_BEES)
-                ? tag.getList(NBTConstants.NBT_BEES, 10)
-                : new ListNBT();
+        ListNBT bees = tag.contains(NBTConstants.NBT_BEES) ? tag.getList(NBTConstants.NBT_BEES, 10) : new ListNBT();
 
         if (bees.size() == BeeConstants.MAX_BEES_BEE_BOX) return ActionResultType.FAIL;
         CompoundNBT entityData = new CompoundNBT();
@@ -127,12 +120,12 @@ public class BeeBox extends Item {
     public void appendHoverText(@NotNull ItemStack stack, @Nullable World world, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag tooltipFlag) {
         super.appendHoverText(stack, world, tooltip, tooltipFlag);
         if (isTemp) {
-            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.temp_info").withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.TEMP_INFO.withStyle(TextFormatting.GOLD));
         } else {
-            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.info").withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.INFO.withStyle(TextFormatting.GOLD));
         }
         if (Screen.hasShiftDown() && isFilled(stack)) {
-            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.bees").withStyle(TextFormatting.YELLOW));
+            tooltip.add(TranslationConstants.Items.BEES.withStyle(TextFormatting.YELLOW));
 
             //noinspection ConstantConditions
             stack.getTag().getList(NBTConstants.NBT_BEES, 10).stream()
@@ -144,7 +137,7 @@ public class BeeBox extends Item {
                         tooltip.add(new StringTextComponent("  - ").append(name).withStyle(TextFormatting.WHITE));
                     });
         } else if (isFilled(stack)) {
-            tooltip.add(new TranslationTextComponent(ITEM_DOT + ResourcefulBees.MOD_ID + ".information.bee_box.more_info").withStyle(TextFormatting.YELLOW));
+            tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(TextFormatting.YELLOW));
         }
     }
 }

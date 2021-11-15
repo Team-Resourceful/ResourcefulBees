@@ -6,24 +6,21 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Optional;
 
-public class BlockToMutationRecipe implements IMutationRecipe {
+public class BlockToMutationRecipe extends BaseMutationRecipe {
 
-    private final CustomBeeData beeData;
-    private final double chance;
-    private final double weight;
     private ItemStack inputItem = null;
     private ItemStack outputItem = null;
     private FluidStack inputFluid = null;
     private FluidStack outputFluid = null;
+    private Optional<CompoundNBT> nbt = Optional.empty();
 
     public BlockToMutationRecipe(CustomBeeData beeData, double chance, double weight, Block input, ItemOutput output){
-        this.beeData = beeData;
-        this.chance = chance;
-        this.weight = weight;
+        super(beeData, chance, weight);
         if (input instanceof FlowingFluidBlock) {
             inputFluid = new FluidStack(((FlowingFluidBlock) input).getFluid(), 1000);
         }else {
@@ -33,9 +30,7 @@ public class BlockToMutationRecipe implements IMutationRecipe {
     }
 
     public BlockToMutationRecipe(CustomBeeData beeData, double chance, double weight, Block input, BlockOutput output){
-        this.beeData = beeData;
-        this.chance = chance;
-        this.weight = weight;
+        super(beeData, chance, weight);
         if (input instanceof FlowingFluidBlock) {
             inputFluid = new FluidStack(((FlowingFluidBlock) input).getFluid(), 1000);
         }else {
@@ -43,30 +38,21 @@ public class BlockToMutationRecipe implements IMutationRecipe {
         }
         if (output.getBlock() instanceof FlowingFluidBlock){
             outputFluid = new FluidStack(((FlowingFluidBlock) output.getBlock()).getFluid(), 1000);
-            output.getCompoundNBT().ifPresent(nbt -> {
-                if (!nbt.isEmpty()) outputFluid.setTag(nbt);
+            output.getCompoundNBT().ifPresent(tag -> {
+                if (!tag.isEmpty()) outputFluid.setTag(tag);
             });
         }else {
             outputItem = output.getBlock().asItem().getDefaultInstance();
-            output.getCompoundNBT().ifPresent(nbt -> {
-                if (!nbt.isEmpty()) outputItem.setTag(nbt);
+            output.getCompoundNBT().ifPresent(tag -> {
+                if (!tag.isEmpty()) outputItem.setTag(tag);
             });
         }
+        this.nbt = output.getCompoundNBT();
     }
 
     @Override
-    public CustomBeeData getBeeData() {
-        return beeData;
-    }
-
-    @Override
-    public double chance() {
-        return chance;
-    }
-
-    @Override
-    public double weight() {
-        return weight;
+    public Optional<CompoundNBT> getNBT() {
+        return nbt;
     }
 
     @Override

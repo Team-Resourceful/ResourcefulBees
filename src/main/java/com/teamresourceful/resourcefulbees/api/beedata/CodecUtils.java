@@ -1,8 +1,11 @@
 package com.teamresourceful.resourcefulbees.api.beedata;
 
+import com.google.gson.JsonArray;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
@@ -15,6 +18,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.registry.Registry;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.NBTIngredient;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.*;
@@ -46,7 +51,7 @@ public class CodecUtils {
     ).apply(instance, CodecUtils::createItemStack)); //can't use this method in 1.17 due to constructor being removed!!!
 
     //Codec for converting an ItemStack to an Ingredient
-    public static final Codec<Ingredient> INGREDIENT_CODEC = ITEM_STACK_CODEC.comapFlatMap(CodecUtils::convertToIngredient, CodecUtils::ingredientToString);
+    public static final Codec<Ingredient> INGREDIENT_CODEC = ITEM_STACK_CODEC.comapFlatMap(CodecUtils::convertToIngredient, CodecUtils::ingredientToItemStack);
 
     //Codec for getting a FluidStack
     public static final Codec<FluidStack> FLUID_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -91,10 +96,10 @@ public class CodecUtils {
     }
 
     private static DataResult<Ingredient> convertToIngredient(ItemStack stack) {
-        return DataResult.success(Ingredient.of(stack));
+        return DataResult.success(new NBTIngredient(stack){});
     }
 
-    private static ItemStack ingredientToString(Ingredient ingredient) {
+    private static ItemStack ingredientToItemStack(Ingredient ingredient) {
         return ingredient.getItems()[0];
     }
 
@@ -109,5 +114,14 @@ public class CodecUtils {
     @SafeVarargs
     public static <E> Set<E> newLinkedHashSet(E... elements) {
         return new LinkedHashSet<>(Arrays.asList(elements));
+    }
+
+    public static final Codec<Boolean> RECIPE_CONDITION_CODEC = Codec.PASSTHROUGH.comapFlatMap(CodecUtils::decodeConditions, component -> new Dynamic<>(JsonOps.INSTANCE));
+
+    private static DataResult<Boolean> decodeConditions(Dynamic<?> dynamic) {
+        if (dynamic.getValue() instanceof JsonArray) {
+            return DataResult.success(CraftingHelper.processConditions(((JsonArray) dynamic.getValue())));
+        }
+        return DataResult.error("'conditions' was not a list");
     }
 }

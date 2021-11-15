@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import net.minecraft.client.util.ITooltipFlag;
@@ -81,8 +82,7 @@ public class Beepedia extends Item {
     }
 
     @Override
-    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
-        LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
+    public @NotNull ActionResultType interactLivingEntity(@NotNull ItemStack stack, PlayerEntity player, @NotNull LivingEntity entity, @NotNull Hand hand) {
         ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
         boolean hasShades = player.inventory.contains(book);
         if (entity instanceof CustomBeeEntity) {
@@ -103,7 +103,7 @@ public class Beepedia extends Item {
     @Override
     public @NotNull ITextComponent getName(ItemStack stack) {
         if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
-            if (stack.getTag().getBoolean(CREATIVE_TAG)) return new TranslationTextComponent("item.resourcefulbees.creative_beepedia").withStyle(TextFormatting.LIGHT_PURPLE);
+            if (stack.getTag().getBoolean(CREATIVE_TAG)) return TranslationConstants.Items.CREATIVE_BEEPEDIA.withStyle(TextFormatting.LIGHT_PURPLE);
             if (stack.getTag().getBoolean(COMPLETE_TAG)) return new StringTextComponent("✦ ").withStyle(TextFormatting.GREEN).append(super.getName(stack).copy().withStyle(TextFormatting.WHITE));
         }
         return super.getName(stack);
@@ -113,13 +113,12 @@ public class Beepedia extends Item {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @Nullable World world, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flag) {
         super.appendHoverText(stack, world, tooltip, flag);
-        tooltip.add(new TranslationTextComponent("item.resourcefulbees.information.beepedia").withStyle(TextFormatting.GREEN));
+        tooltip.add(TranslationConstants.Items.INFO_BEEPEDIA.withStyle(TextFormatting.GREEN));
         if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
             boolean complete = stack.getTag().getBoolean(COMPLETE_TAG) || stack.getTag().getBoolean(CREATIVE_TAG);
             int total = BeeRegistry.getRegistry().getBees().size();
             int count = stack.getTag().getList(NBTConstants.NBT_BEES, 8).size();
-            tooltip.add(new TranslationTextComponent("gui.resourcefulbees.beepedia.home.progress").withStyle(TextFormatting.GRAY)
-                    .append(String.format("%d / %d", complete? total : count, total)).withStyle(TextFormatting.GOLD));
+            tooltip.add(new TranslationTextComponent(TranslationConstants.Beepedia.PROGRESS, complete? total : count, total).withStyle(TextFormatting.GRAY));
         }
 
     }

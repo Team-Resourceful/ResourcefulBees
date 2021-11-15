@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.block.Block;
@@ -24,7 +25,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -142,7 +142,7 @@ public class HoneyDipper extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable World world, @NotNull List<ITextComponent> textComponents, @NotNull ITooltipFlag flag) {
         if (selectedBee != null) {
-            textComponents.add(new TranslationTextComponent("item.resourcefulbees.honey_dipper.tooltip")
+            textComponents.add(TranslationConstants.Items.HONEY_DIPPER_TOOLTIP
                     .append(new StringTextComponent(selectedBee.getDisplayName().getString()))
                     .withStyle(TextFormatting.GOLD));
         }

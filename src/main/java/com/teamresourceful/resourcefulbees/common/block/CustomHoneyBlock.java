@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-@SuppressWarnings({"unused", "deprecation"})
+@SuppressWarnings("deprecation")
 public class CustomHoneyBlock extends BreakableBlock {
 
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
@@ -54,10 +54,12 @@ public class CustomHoneyBlock extends BreakableBlock {
         return color;
     }
 
+    @SuppressWarnings("unused")
     public static int getBlockColor(BlockState state, @Nullable IBlockReader world, @Nullable BlockPos pos, int tintIndex) {
         return ((CustomHoneyBlock) state.getBlock()).getHoneyColor().getValue();
     }
 
+    @SuppressWarnings("unused")
     public static int getItemColor(ItemStack stack, int tintIndex) {
         BlockItem blockItem = (BlockItem) stack.getItem();
         if (!(blockItem.getBlock() instanceof CustomHoneyBlock)) return -1;
@@ -106,14 +108,14 @@ public class CustomHoneyBlock extends BreakableBlock {
     private boolean isSliding(BlockPos pos, Entity entity) {
         if (entity.isOnGround()) {
             return false;
-        } else if (entity.getY() > (double) pos.getY() + 0.9375D - 1.0E-7D) {
+        } else if (entity.getY() > pos.getY() + 0.9375D - 1.0E-7D) {
             return false;
         } else if (entity.getDeltaMovement().y >= -0.08D) {
             return false;
         } else {
-            double d0 = Math.abs((double) pos.getX() + 0.5D - entity.getX());
-            double d1 = Math.abs((double) pos.getZ() + 0.5D - entity.getZ());
-            double d2 = 0.4375D + (double) (entity.getBbWidth() / 2.0F);
+            double d0 = Math.abs(pos.getX() + 0.5D - entity.getX());
+            double d1 = Math.abs(pos.getZ() + 0.5D - entity.getZ());
+            double d2 = 0.4375D + (entity.getBbWidth() / 2.0F);
             return d0 + 1.0E-7D > d2 || d1 + 1.0E-7D > d2;
         }
     }

@@ -24,7 +24,7 @@ public abstract class BaseCategory<T> implements IRecipeCategory<T> {
     public final IDrawable info;
     public final IDrawable beeHive;
 
-    public BaseCategory(IGuiHelper guiHelper, ResourceLocation categoryId, String localizedName, IDrawable background, IDrawable icon, Class<? extends T> recipeClass) {
+    protected BaseCategory(IGuiHelper guiHelper, ResourceLocation categoryId, String localizedName, IDrawable background, IDrawable icon, Class<? extends T> recipeClass) {
         this.categoryId = categoryId;
         this.localizedName = localizedName;
         this.background = background;

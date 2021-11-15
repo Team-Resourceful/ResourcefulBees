@@ -3,6 +3,8 @@ package com.teamresourceful.resourcefulbees.api.beedata.centrifuge;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
+import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
@@ -21,17 +23,17 @@ public class CentrifugeData {
     public static final Codec<CentrifugeData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.intRange(1, Integer.MAX_VALUE).fieldOf("recipeTime").orElse(200).forGetter(CentrifugeData::getRecipeTime),
             Codec.intRange(1, Integer.MAX_VALUE).fieldOf("inputCount").orElse(1).forGetter(CentrifugeData::getInputCount),
-            CentrifugeItemOutput.CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeData::getItemOutputs),
-            CentrifugeFluidOutput.CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeData::getFluidOutputs)
+            CentrifugeRecipe.Output.ITEM_OUTPUT_CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeData::getItemOutputs),
+            CentrifugeRecipe.Output.FLUID_OUTPUT_CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeData::getFluidOutputs)
     ).apply(instance, CentrifugeData::new));
 
     protected final boolean hasCentrifugeOutput;
     protected int recipeTime;
     protected int inputCount;
-    protected List<CentrifugeItemOutput> itemOutputs;
-    protected List<CentrifugeFluidOutput> fluidOutputs;
+    protected List<CentrifugeRecipe.Output<ItemOutput>> itemOutputs;
+    protected List<CentrifugeRecipe.Output<FluidOutput>> fluidOutputs;
 
-    public CentrifugeData(int recipeTime, int inputCount, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs) {
+    public CentrifugeData(int recipeTime, int inputCount, List<CentrifugeRecipe.Output<ItemOutput>> itemOutputs, List<CentrifugeRecipe.Output<FluidOutput>> fluidOutputs) {
         this.recipeTime = recipeTime;
         this.inputCount = inputCount;
         this.itemOutputs = itemOutputs.stream().limit(3).collect(Collectors.toList());
@@ -82,9 +84,9 @@ public class CentrifugeData {
 
     /**
      * The maximum number of item outputs allowed is <t>3</tt>.
-     * @return Returns a {@link List} of {@link CentrifugeItemOutput}s.
+     * @return Returns a {@link List} of {@link CentrifugeRecipe.Output}s.
      */
-    public List<CentrifugeItemOutput> getItemOutputs() {
+    public List<CentrifugeRecipe.Output<ItemOutput>> getItemOutputs() {
         return itemOutputs;
     }
 
@@ -92,7 +94,7 @@ public class CentrifugeData {
      * The maximum number of fluid outputs allowed is <t>3</tt>.
      * @return Returns a {@link List} of {@link FluidOutput}s.
      */
-    public List<CentrifugeFluidOutput> getFluidOutputs() {
+    public List<CentrifugeRecipe.Output<FluidOutput>> getFluidOutputs() {
         return fluidOutputs;
     }
 
@@ -101,7 +103,7 @@ public class CentrifugeData {
     }
 
     public static class Mutable extends CentrifugeData {
-        public Mutable(int recipeTime, int inputCount, List<CentrifugeItemOutput> itemOutputs, List<CentrifugeFluidOutput> fluidOutputs) {
+        public Mutable(int recipeTime, int inputCount, List<CentrifugeRecipe.Output<ItemOutput>> itemOutputs, List<CentrifugeRecipe.Output<FluidOutput>> fluidOutputs) {
             super(recipeTime, inputCount, itemOutputs, fluidOutputs);
         }
 
@@ -119,12 +121,12 @@ public class CentrifugeData {
             return this;
         }
 
-        public Mutable setItemOutputs(List<CentrifugeItemOutput> itemOutputs) {
+        public Mutable setItemOutputs(List<CentrifugeRecipe.Output<ItemOutput>> itemOutputs) {
             this.itemOutputs = itemOutputs;
             return this;
         }
 
-        public Mutable setFluidOutputs(List<CentrifugeFluidOutput> fluidOutputs) {
+        public Mutable setFluidOutputs(List<CentrifugeRecipe.Output<FluidOutput>> fluidOutputs) {
             this.fluidOutputs = fluidOutputs;
             return this;
         }

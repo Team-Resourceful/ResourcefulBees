@@ -1,17 +1,24 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyCongealerTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.GlassBottleItem;
+import net.minecraft.item.HoneyBottleItem;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +29,13 @@ import java.util.Random;
 @SuppressWarnings("deprecation")
 public class HoneyCongealer extends AbstractTank {
 
-    protected static final VoxelShape VOXEL_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
+    protected static final VoxelShape VOXEL_SHAPE = Util.make(() -> {
+        VoxelShape shape = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 5.0D, 15.0D);
+        shape = VoxelShapes.join(shape, Block.box(10.0D, 5.0D, 1.0D, 6.0D, 9.0D, 15.0D), IBooleanFunction.OR);
+        shape = VoxelShapes.join(shape, Block.box(1.0D, 5.0D, 10.0D, 15.0D, 9.0D, 6.0D), IBooleanFunction.OR);
+        shape = VoxelShapes.join(shape, Block.box(3.0D, 5.0D, 3.0D, 13.0D, 16.0D, 13.0D), IBooleanFunction.OR);
+        return shape;
+    });
 
     public HoneyCongealer(Properties properties) {
         super(properties);
@@ -42,7 +55,15 @@ public class HoneyCongealer extends AbstractTank {
 
         if (tileEntity instanceof HoneyCongealerTileEntity) {
             if (!world.isClientSide) {
-                capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+                HoneyFluidTank tank = ((HoneyCongealerTileEntity) tileEntity).getTank();
+                Item item = player.getItemInHand(hand).getItem();
+                if (item instanceof HoneyBottleItem) {
+                    tank.emptyBottle(player, hand);
+                } else if (item instanceof GlassBottleItem) {
+                    tank.fillBottle(player, hand);
+                } else {
+                    capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+                }
             }
             return ActionResultType.SUCCESS;
         }
@@ -55,8 +76,8 @@ public class HoneyCongealer extends AbstractTank {
         if (tank == null) {
             return;
         }
-        if (tank.getFluidTank().getFluid().getFluid() instanceof CustomHoneyFluid) {
-            CustomHoneyFluid fluid = (CustomHoneyFluid) tank.getFluidTank().getFluid().getFluid();
+        if (tank.getTank().getFluid().getFluid() instanceof CustomHoneyFluid) {
+            CustomHoneyFluid fluid = (CustomHoneyFluid) tank.getTank().getFluid().getFluid();
             if (fluid.getHoneyData().getColor().isRainbow()) {
                 world.sendBlockUpdated(pos, stateIn, stateIn, 2);
             }

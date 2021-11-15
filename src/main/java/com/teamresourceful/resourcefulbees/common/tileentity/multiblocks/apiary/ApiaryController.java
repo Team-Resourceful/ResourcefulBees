@@ -1,9 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary;
 
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
-import com.teamresourceful.resourcefulbees.common.container.UnvalidatedApiaryContainer;
-import com.teamresourceful.resourcefulbees.common.container.ValidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.UnvalidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.containers.ValidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BlockAccessor;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
@@ -32,7 +33,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -144,7 +144,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
         }
 
         if (validatingPlayer != null) {
-            validatingPlayer.displayClientMessage(new TranslationTextComponent("gui.resourcefulbees.apiary.validated." + isStructureValid.get()), true);
+            validatingPlayer.displayClientMessage(isStructureValid.get() ? TranslationConstants.Apiary.VALIDATED_SUCCESS : TranslationConstants.Apiary.VALIDATED_FAILED, true);
         }
         return isStructureValid.get();
     }
@@ -182,7 +182,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     }
 
     public void runCreativeBuild(ServerPlayerEntity player) {
-        if (this.level != null) {
+        if (this.level != null && player.isCreative()) {
             buildStructureBlockList();
             AtomicBoolean addedStorage = new AtomicBoolean(false);
             structureBlocks.stream()
@@ -368,7 +368,7 @@ public class ApiaryController extends TileEntity implements ITickableTileEntity,
     @NotNull
     @Override
     public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.apiary");
+        return TranslationConstants.Guis.APIARY;
     }
 
     @Override

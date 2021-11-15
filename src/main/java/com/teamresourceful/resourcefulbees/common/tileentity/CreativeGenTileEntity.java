@@ -40,12 +40,7 @@ public class CreativeGenTileEntity extends TileEntity implements ITickableTileEn
                     .map(direction -> level.getBlockEntity(worldPosition.relative(direction)))
                     .filter(Objects::nonNull)
                     .forEach(tileEntity -> tileEntity.getCapability(CapabilityEnergy.ENERGY)
-                            .map(iEnergyStorage -> {
-                                if (iEnergyStorage.canReceive()) {
-                                    return iEnergyStorage.receiveEnergy(Integer.MAX_VALUE, false) != 0;
-                                }
-                                return true;
-                            }));
+                    .map(iEnergyStorage -> !iEnergyStorage.canReceive() || iEnergyStorage.receiveEnergy(Integer.MAX_VALUE, false) != 0));
         }
     }
 

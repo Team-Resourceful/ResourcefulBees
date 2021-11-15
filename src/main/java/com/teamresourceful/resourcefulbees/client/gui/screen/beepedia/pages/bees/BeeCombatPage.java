@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,17 +28,11 @@ public class BeeCombatPage extends BeeDataPage {
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         FontRenderer font = Minecraft.getInstance().font;
-        TranslationTextComponent healthName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.health");
-        TranslationTextComponent damageName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.damage");
-        TranslationTextComponent stingerName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.stinger");
-        TranslationTextComponent passiveName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.passive");
-        TranslationTextComponent poisonName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.poison");
-
-        damageName.append(new StringTextComponent("" + (int) beeData.getCombatData().getAttackDamage()));
-        healthName.append(new StringTextComponent("" + (int) beeData.getCombatData().getBaseHealth()));
-        stingerName.append(BeepediaUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
-        passiveName.append(BeepediaUtils.getYesNo(beeData.getCombatData().isPassive()));
-        poisonName.append(BeepediaUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
+        TranslationTextComponent healthName = new TranslationTextComponent(TranslationConstants.Beepedia.Info.HEALTH, beeData.getCombatData().getBaseHealth());
+        TranslationTextComponent damageName = new TranslationTextComponent(TranslationConstants.Beepedia.Info.DAMAGE, beeData.getCombatData().getAttackDamage());
+        TranslationTextComponent stingerName = new TranslationTextComponent(TranslationConstants.Beepedia.Info.STINGER, BeepediaUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
+        TranslationTextComponent passiveName = new TranslationTextComponent(TranslationConstants.Beepedia.Info.PASSIVE, BeepediaUtils.getYesNo(beeData.getCombatData().isPassive()));
+        TranslationTextComponent poisonName = new TranslationTextComponent(TranslationConstants.Beepedia.Info.POISON, BeepediaUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
 
         font.draw(matrix, healthName.withStyle(TextFormatting.GRAY), x, y + 34, -1);
         font.draw(matrix, damageName.withStyle(TextFormatting.GRAY), x + 86, y + 34, -1);
