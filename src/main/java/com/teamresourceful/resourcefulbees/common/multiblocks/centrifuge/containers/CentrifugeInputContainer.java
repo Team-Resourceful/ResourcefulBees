@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeInput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeInputEntity;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,18 +26,16 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
 
     protected void setupSlots() {
         if (entity != null) {
-            this.addSlot(new FilterSlot(entity.getFilterInventory(), CentrifugeInputEntity.RECIPE_SLOT, 10, 10) {
+            this.addSlot(new FilterSlot(entity.getFilterInventory(), CentrifugeInputEntity.RECIPE_SLOT, 126, 64) {
                 @Override
                 public boolean mayPlace(@NotNull ItemStack stack) {
                     return CentrifugeUtils.getRecipe(level, stack).isPresent();
                 }
             });
 
-            int rows = tier.equals(CentrifugeTier.BASIC) ? 1 : tier.getSlots() / 4;
-            int columns = tier.equals(CentrifugeTier.BASIC) ? 1 : 4;
-            for (int r = 0; r < rows; r++) {
-                for (int c = 0; c < columns; c++) {
-                    this.addSlot(new SlotItemHandler(entity.getInventoryHandler(), c + r * 4, 30 + c * 18, 10 + r * 18));
+            for (int r = 0; r < CentrifugeUtils.getRows(tier); r++) {
+                for (int c = 0; c < CentrifugeUtils.getColumns(tier); c++) {
+                    this.addSlot(new SlotItemHandler(entity.getInventoryHandler(), c + r * 4, 162 + c * 17, 46 + r * 17));
                 }
             }
         }
@@ -77,16 +74,6 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
         assert entity != null;
         return IWorldPosCallable.create(level, entity.getBlockPos()).evaluate((world, pos) ->
                 world.getBlockState(pos).getBlock() instanceof CentrifugeInput && player.distanceToSqr(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D, true);
-    }
-
-    @Override
-    public int getInvOffsetX() {
-        return 10;
-    }
-
-    @Override
-    public int getInvOffsetY() {
-        return 90;
     }
 
     @Override

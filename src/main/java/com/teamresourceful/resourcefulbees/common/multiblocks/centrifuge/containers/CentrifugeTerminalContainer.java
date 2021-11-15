@@ -49,16 +49,6 @@ public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeT
         //addPlayerInvSlots();
     }
 
-    @Override
-    protected int getInvOffsetX() {
-        return 10;
-    }
-
-    @Override
-    protected int getInvOffsetY() {
-        return 90;
-    }
-
     @Nullable
     @Override
     public GuiSync.IGUIPacket getGuiPacket() {

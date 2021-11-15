@@ -19,4 +19,12 @@ public class CentrifugeUtils {
     public static Optional<CentrifugeRecipe> getRecipe(World level, ItemStack recipeStack) {
         return level != null ? level.getRecipeManager().getRecipeFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, new Inventory(recipeStack), level) : Optional.empty();
     }
+
+    public static int getRows(CentrifugeTier tier) {
+        return tier.equals(CentrifugeTier.BASIC) ? 1 : tier.getSlots() / 4;
+    }
+
+    public static int getColumns(CentrifugeTier tier) {
+        return tier.equals(CentrifugeTier.BASIC) ? 1 : 4;
+    }
 }

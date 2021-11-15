@@ -44,14 +44,4 @@ public class CentrifugeFluidOutputContainer extends CentrifugeContainer<Centrifu
     protected void setupSlots() {
         addPlayerInvSlots();
     }
-
-    @Override
-    protected int getInvOffsetX() {
-        return 10;
-    }
-
-    @Override
-    protected int getInvOffsetY() {
-        return 90;
-    }
 }

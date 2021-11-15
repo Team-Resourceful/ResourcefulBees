@@ -17,8 +17,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class CentrifugeContainer <T extends AbstractTieredCentrifugeEntity> extends ContainerWithStackMove {
+public abstract class CentrifugeContainer<T extends AbstractTieredCentrifugeEntity> extends ContainerWithStackMove {
 
+    public static final int INV_X_OFFSET = 144;
+    public static final int INV_Y_OFFSET = 124;
     protected final @Nullable T entity;
     protected final PlayerInventory inv;
     protected final World level;
@@ -39,25 +41,23 @@ public abstract class CentrifugeContainer <T extends AbstractTieredCentrifugeEnt
 
     protected abstract void setupSlots();
 
-    protected abstract int getInvOffsetX();
+    public int getInvOffsetX() {
+        return INV_X_OFFSET;
+    }
 
-    protected abstract int getInvOffsetY();
+    public int getInvOffsetY() {
+        return INV_Y_OFFSET;
+    }
 
     protected void addPlayerInvSlots() {
-        int xOffset = getInvOffsetX();
-        int yOffset = getInvOffsetY();
-
-
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(inv, j + i * 9 + 9, xOffset + j * 18, yOffset + i * 18));
+                this.addSlot(new Slot(inv, j + i * 9 + 9, INV_X_OFFSET + j * 17, INV_Y_OFFSET + i * 17));
             }
         }
 
-        yOffset += 58;
-
         for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(inv, k, xOffset + k * 18, yOffset));
+            this.addSlot(new Slot(inv, k, INV_X_OFFSET + k * 17, INV_Y_OFFSET + 55));
         }
     }
 
