@@ -9,10 +9,12 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LightLevel;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.LazyOptional;

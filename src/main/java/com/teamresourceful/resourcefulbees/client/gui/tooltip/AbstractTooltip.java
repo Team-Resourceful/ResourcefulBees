@@ -88,17 +88,6 @@ public abstract class AbstractTooltip {
     }
 
     public static List<ITextComponent> getBeeLore(CoreData coreData) {
-        List<ITextComponent> tooltip = new LinkedList<>();
-        if (coreData.getLore().isPresent()) { //TODO Optional#isPresent fix
-            String lore = coreData.getLore().get();
-            String[] loreTooltip = lore.split("\\r?\\n");
-            for (String s: loreTooltip) {
-                tooltip.add(new StringTextComponent(s).withStyle(coreData.getLoreColor().getAsStyle()));
-            }
-        }
-        if (coreData.getCreator().isPresent()) {
-            tooltip.add(BeeConstants.CREATOR_LORE_PREFIX.copy().append(coreData.getCreator().get()).withStyle(TextFormatting.GRAY));
-        }
-        return tooltip;
+        return coreData.getLore();
     }
 }

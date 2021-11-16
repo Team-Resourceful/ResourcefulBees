@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

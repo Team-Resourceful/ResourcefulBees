@@ -83,6 +83,7 @@ public class Beepedia extends Item {
 
     @Override
     public @NotNull ActionResultType interactLivingEntity(@NotNull ItemStack stack, PlayerEntity player, @NotNull LivingEntity entity, @NotNull Hand hand) {
+        LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
         ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
         boolean hasShades = player.inventory.contains(book);
         if (entity instanceof CustomBeeEntity) {
