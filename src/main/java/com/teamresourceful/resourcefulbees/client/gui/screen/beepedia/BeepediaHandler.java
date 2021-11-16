@@ -14,7 +14,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
-import com.teamresourceful.resourcefulbees.network.packets.BeepediaEntityMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.BeepediaEntityMessage;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

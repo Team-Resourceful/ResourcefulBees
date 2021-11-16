@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.network.packets;
+package com.teamresourceful.resourcefulbees.common.network.packets;
 
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import net.minecraft.client.Minecraft;

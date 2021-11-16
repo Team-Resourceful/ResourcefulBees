@@ -1,4 +1,5 @@
 {
+	"parent": "block/cube_all",
 	"texture_size": [64, 64],
 	"textures": {
 		"1": "resourcefulbees:block/honey_pot_full",
