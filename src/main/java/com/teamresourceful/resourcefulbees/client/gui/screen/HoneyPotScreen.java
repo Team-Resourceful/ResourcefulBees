@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyPotContainer;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -33,12 +34,16 @@ public class HoneyPotScreen extends ContainerScreen<HoneyPotContainer> {
         FluidStack fluidStack = menu.getTileEntity().getTank().getFluid();
 
         this.font.drawShadow(matrix, "Fluid: ",this.leftPos + 36f, this.topPos + 17f, 0xffffff);
-        this.font.drawShadow(matrix, fluidStack.getDisplayName(),this.leftPos + 40f, this.topPos + 27f, 0xffffff);
+        this.font.drawShadow(matrix, getDisplayName(fluidStack),this.leftPos + 40f, this.topPos + 27f, 0xffffff);
         this.font.drawShadow(matrix, "Amount: ",this.leftPos + 36f, this.topPos + 37f, 0xffffff);
         this.font.drawShadow(matrix, fluidStack.getAmount()+"mB",this.leftPos + 40f, this.topPos + 47f, 0xffffff);
 
         int height = (int) ((fluidStack.getAmount() / 64000f) * 54);
         RenderUtils.drawFluid(matrix, height, 12, fluidStack, this.leftPos+129, this.topPos+16+(54-height), this.getBlitOffset());
+    }
+
+    private ITextComponent getDisplayName(FluidStack stack) {
+        return stack.isEmpty() ? TranslationConstants.Guis.NO_FLUID : stack.getDisplayName();
     }
 
     @Override
@@ -51,7 +56,7 @@ public class HoneyPotScreen extends ContainerScreen<HoneyPotContainer> {
 
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos+129, this.leftPos+141) && MathUtils.inRangeInclusive(mouseY, this.topPos+16, this.topPos+70)) {
             FluidStack fluidStack = menu.getTileEntity().getTank().getFluid();
-            ITextComponent component = fluidStack.getDisplayName().copy().append(new StringTextComponent(" : " + fluidStack.getAmount() + "mB"));
+            ITextComponent component = getDisplayName(fluidStack).copy().append(new StringTextComponent(" : " + fluidStack.getAmount() + "mB"));
             renderTooltip(matrix, component, mouseX, mouseY);
         }
     }

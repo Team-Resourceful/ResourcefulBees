@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
-import com.teamresourceful.resourcefulbees.capabilities.Capabilities;
+import com.teamresourceful.resourcefulbees.common.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;

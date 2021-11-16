@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.capabilities;
+package com.teamresourceful.resourcefulbees.common.capabilities;
 
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import net.minecraftforge.common.capabilities.Capability;

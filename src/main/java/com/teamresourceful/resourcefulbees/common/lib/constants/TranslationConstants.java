@@ -251,6 +251,9 @@ public class TranslationConstants {
         @Translate("Apiary Storage")
         public static final TranslationTextComponent APIARY_STORAGE = new TranslationTextComponent("gui.resourcefulbees.apiary_storage");
 
+        @Translate("Empty")
+        public static final TranslationTextComponent NO_FLUID = new TranslationTextComponent("gui.resourcefulbees.fluids.empty");
+
         public static class EnderBeecon {
 
             @Translate("Bee Effects")

@@ -2,11 +2,11 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
-import com.teamresourceful.resourcefulbees.capabilities.BeepediaData;
+import com.teamresourceful.resourcefulbees.common.capabilities.BeepediaData;
 import com.teamresourceful.resourcefulbees.client.gui.tooltip.AbstractTooltip;
 import com.teamresourceful.resourcefulbees.client.gui.widget.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.network.packets.BeepediaEntityMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.BeepediaEntityMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;

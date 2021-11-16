@@ -4,7 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeeconEffectWidget;
 import com.teamresourceful.resourcefulbees.client.gui.widget.OptionImageButton;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ToggleImageButton;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.EnderBeeconContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
@@ -86,7 +85,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         int buttonStartY = this.topPos + 17;
         powerButtons.clear();
         for (Effect allowedEffect : EnderBeeconTileEntity.ALLOWED_EFFECTS) {
-            BeeconEffectWidget button = this.addButton(new BeeconEffectWidget(this.leftPos + 9, buttonStartY, allowedEffect, menu.getEnderBeeconTileEntity()));
+            BeeconEffectWidget button = new BeeconEffectWidget(this.leftPos + 9, buttonStartY, allowedEffect, menu.getEnderBeeconTileEntity());
             button.active = true;
             button.setSelected(tileEntity.hasEffect(allowedEffect));
             powerButtons.add(button);
@@ -119,7 +118,10 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrix, mouseX, mouseY);
-        for (BeeconEffectWidget widget : this.powerButtons) if (widget.isHovered()) widget.renderToolTip(matrix, mouseX, mouseY);
+        for (BeeconEffectWidget widget : this.powerButtons) {
+            widget.render(matrix, mouseX, mouseY, partialTicks);
+            if (widget.isHovered()) widget.renderToolTip(matrix, mouseX, mouseY);
+        }
         if (soundButton.isHovered()) soundButton.renderToolTip(matrix, mouseX, mouseY);
         if (beamButton.isHovered()) beamButton.renderToolTip(matrix, mouseX, mouseY);
     }
@@ -127,6 +129,12 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
         return this.getFocused() != null && this.isDragging() && pButton == 0 ? this.getFocused().mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY) : super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        for (BeeconEffectWidget powerButton : this.powerButtons) powerButton.onClick(mouseX, mouseY);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     public class RangeSlider extends AbstractSlider {
