@@ -45,6 +45,14 @@ public class BeeRegistry implements IBeeRegistry {
         return SPAWNABLE_BIOMES.get(biome);
     }
 
+    public static CustomBeeData getBeeData(ResourceLocation beeType) {
+        return CUSTOM_DATA.getOrDefault(beeType.getPath().replaceAll("_bee$", ""), CustomBeeData.DEFAULT);
+    }
+
+    public static boolean containsBeeType(ResourceLocation beeType) {
+        return CUSTOM_DATA.containsKey(beeType.getPath().replaceAll("_bee$", ""));
+    }
+
     public static boolean containsBeeType(String beeType) {
         return CUSTOM_DATA.containsKey(beeType);
     }

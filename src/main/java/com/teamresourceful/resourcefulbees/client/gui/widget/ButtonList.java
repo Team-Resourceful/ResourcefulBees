@@ -1,16 +1,15 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.HoneyPage;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.TraitPage;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
+@Deprecated
+@OnlyIn(Dist.CLIENT)
 public class ButtonList {
     public final int xPos;
     public final int yPos;
@@ -35,7 +34,7 @@ public class ButtonList {
         this.button = button;
         if (this instanceof SubButtonList) return;
         updateReducedList(null, true);
-        list.forEach((s, b) -> b.listButton.setParent(this));
+//        list.forEach((s, b) -> b.listButton.setParent(this));
     }
 
     public void setSearchHeight() {
@@ -51,26 +50,26 @@ public class ButtonList {
     }
 
     public void updateReducedList(String search, boolean resetHeight) {
-        if (resetHeight) scrollPos = 0;
-        reducedList.clear();
-        if (search != null && !search.isEmpty()) {
-            list.forEach((s, b) -> reduceList(search, s, b));
-        } else {
-            if (active) list.forEach((s, b) -> b.listButton.visible = true);
-            reducedList = new TreeMap<>(list);
-        }
+//        if (resetHeight) scrollPos = 0;
+//        reducedList.clear();
+//        if (search != null && !search.isEmpty()) {
+//            list.forEach((s, b) -> reduceList(search, s, b));
+//        } else {
+//            if (active) list.forEach((s, b) -> b.listButton.visible = true);
+//            reducedList = new TreeMap<>(list);
+//        }
     }
 
     private void reduceList(String search, String s, BeepediaPage b) {
-        boolean pageFound = (b instanceof BeePage && ((BeePage) b).getBeeFromSearch(search)) ||
-                (b instanceof HoneyPage && ((HoneyPage) b).getHoneyFromSearch(search)) ||
-                (b instanceof TraitPage && ((TraitPage) b).getTraitFromSearch(search));
-        if (pageFound) {
-            reducedList.put(s, b);
-            if (active) b.listButton.visible = true;
-        } else {
-            if (active) b.listButton.visible = false;
-        }
+//        boolean pageFound = (b instanceof BeePage && ((BeePage) b).getBeeFromSearch(search)) ||
+//                (b instanceof HoneyPage && ((HoneyPage) b).getHoneyFromSearch(search)) ||
+//                (b instanceof TraitPage && ((TraitPage) b).getTraitFromSearch(search));
+//        if (pageFound) {
+//            reducedList.put(s, b);
+//            if (active) b.listButton.visible = true;
+//        } else {
+//            if (active) b.listButton.visible = false;
+//        }
     }
 
     public Map<String, ? extends BeepediaPage> getList() {
@@ -87,12 +86,12 @@ public class ButtonList {
     }
 
     public void updateList() {
-        // update each button
-        AtomicInteger counter = new AtomicInteger();
-        reducedList.forEach((s, b) -> {
-            b.updateListPosition(xPos, (yPos + scrollPos + counter.get() * itemHeight));
-            counter.getAndIncrement();
-        });
+//        // update each button
+//        AtomicInteger counter = new AtomicInteger();
+//        reducedList.forEach((s, b) -> {
+//            b.updateListPosition(xPos, (yPos + scrollPos + counter.get() * itemHeight));
+//            counter.getAndIncrement();
+//        });
     }
 
     public void setActive(boolean active) {
@@ -100,15 +99,15 @@ public class ButtonList {
     }
 
     public void setActive(boolean active, boolean forceRedraw) {
-        this.active = active;
-        if (button != null) button.active = !active;
-        if (!BeepediaScreen.listChanged() && !forceRedraw) return;
-        list.forEach((s, b) -> {
-            if (b.listButton != null) b.listButton.visible = active;
-        });
-        boolean searchVisible = BeepediaScreen.isSearchVisible();
-        boolean doUpdateList = active && searchVisible;
-        if (doUpdateList) updateReducedList(BeepediaScreen.getSearch(), BeepediaScreen.searchUpdated());
+//        this.active = active;
+//        if (button != null) button.active = !active;
+//        if (!BeepediaScreen.listChanged() && !forceRedraw) return;
+//        list.forEach((s, b) -> {
+//            if (b.listButton != null) b.listButton.visible = active;
+//        });
+//        boolean searchVisible = BeepediaScreen.isSearchVisible();
+//        boolean doUpdateList = active && searchVisible;
+//        if (doUpdateList) updateReducedList(BeepediaScreen.getSearch(), BeepediaScreen.searchUpdated());
     }
 
     public void setScrollPos(int scrollPos) {

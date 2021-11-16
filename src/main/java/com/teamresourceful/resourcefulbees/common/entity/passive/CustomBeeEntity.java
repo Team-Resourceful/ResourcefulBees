@@ -381,5 +381,9 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
     public AnimationFactory getFactory() {
         return this.factory;
     }
+
+    public CustomBeeData getBeeData() {
+        return customBeeData;
+    }
     //endregion
 }

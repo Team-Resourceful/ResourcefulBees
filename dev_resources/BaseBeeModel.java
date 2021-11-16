@@ -1,5 +1,5 @@
-// Made with Blockbench 3.8.4
-// Exported for Minecraft version 1.15 - 1.16
+// Made with Blockbench 3.9.3
+// Exported for Minecraft version 1.15 - 1.16 with MCP mappings
 // Paste this class into your mod and generate all required imports
 
 
@@ -53,6 +53,10 @@ public class BaseBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer cube_r13;
 	private final ModelRenderer cube_r14;
 	private final ModelRenderer cloaked;
+	private final ModelRenderer witch;
+	private final ModelRenderer cube_r15;
+	private final ModelRenderer cube_r16;
+	private final ModelRenderer cube_r17;
 
 	public BaseBeeModel() {
 		textureWidth = 64;
@@ -343,6 +347,29 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		cloaked.setRotationPoint(0.0F, 5.0F, 0.0F);
 		body.addChild(cloaked);
 		cloaked.setTextureOffset(0, 25).addBox(-3.5F, -9.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
+
+		witch = new ModelRenderer(this);
+		witch.setRotationPoint(0.0F, 0.0F, 0.0F);
+		body.addChild(witch);
+		witch.setTextureOffset(0, 57).addBox(-3.0F, -5.0F, -4.5F, 6.0F, 1.0F, 6.0F, 0.0F, false);
+
+		cube_r15 = new ModelRenderer(this);
+		cube_r15.setRotationPoint(0.0F, 0.0F, 0.0F);
+		witch.addChild(cube_r15);
+		setRotationAngle(cube_r15, 0.0F, 0.0F, -0.3054F);
+		cube_r15.setTextureOffset(24, 55).addBox(1.8F, -9.6F, -2.0F, 1.0F, 1.0F, 1.0F, 0.0F, false);
+
+		cube_r16 = new ModelRenderer(this);
+		cube_r16.setRotationPoint(0.0F, 0.0F, 0.0F);
+		witch.addChild(cube_r16);
+		setRotationAngle(cube_r16, 0.0F, 0.0F, -0.1745F);
+		cube_r16.setTextureOffset(16, 53).addBox(0.2F, -8.9F, -2.5F, 2.0F, 2.0F, 2.0F, 0.0F, false);
+
+		cube_r17 = new ModelRenderer(this);
+		cube_r17.setRotationPoint(0.0F, 0.0F, 0.0F);
+		witch.addChild(cube_r17);
+		setRotationAngle(cube_r17, 0.0F, 0.0F, -0.0698F);
+		cube_r17.setTextureOffset(0, 50).addBox(-1.6F, -7.3F, -3.5F, 4.0F, 3.0F, 4.0F, 0.0F, false);
 	}
 
 	@Override

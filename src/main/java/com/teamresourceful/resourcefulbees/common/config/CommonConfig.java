@@ -171,8 +171,6 @@ public class CommonConfig {
                 .defineInRange("beeconFireResistanceValue", 2d, 1d, 128d);
         BEECON_REGENERATION_VALUE = COMMON_BUILDER.comment("\nMultiplier for the drain rate for the Ender Beecon when the Regeneration effect is active.")
                 .defineInRange("beeconRegenerationValue", 2.5d, 1d, 128d);
-        BEECON_RANGE_PER_EFFECT = COMMON_BUILDER.comment("\nRange in blocks added for each level of range.")
-                .defineInRange("beeconBlocksPerRange", 10, 1, 25);
         BEECON_RANGE_MULTIPLIER = COMMON_BUILDER.comment("\nMultiplier for each level of range applied to the Ender Beecon's drain.")
                 .defineInRange("beeconRangeMultiplier", 0.33, 0, 2);
         BEECON_BASE_DRAIN = COMMON_BUILDER.comment("\nThe base drain rate for the Ender Beecon when an effect is active.")

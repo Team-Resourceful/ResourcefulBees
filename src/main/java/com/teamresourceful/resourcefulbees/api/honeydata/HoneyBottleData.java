@@ -12,6 +12,7 @@ import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 
 import java.util.Collections;

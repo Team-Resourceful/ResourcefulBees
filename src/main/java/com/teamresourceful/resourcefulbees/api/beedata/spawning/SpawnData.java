@@ -6,8 +6,10 @@ import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LightLevel;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BiomeDictionary;
+import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.MobSpawnInfo;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.Unmodifiable;
@@ -226,6 +228,10 @@ public class SpawnData {
                 spawnableBiomes.removeAll(BiomeDictionary.get().get(resourceLocation.getPath()));
             }
         }
+    }
+
+    public boolean canSpawnAtYLevel(BlockPos nestPos) {
+        return MathUtils.inRangeInclusive(nestPos.getY(), minYLevel, maxYLevel);
     }
     //endregion
 

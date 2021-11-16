@@ -150,6 +150,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 if (biomeKey != null && BeeRegistry.isSpawnableBiome(biomeKey.location())) {
                     CustomBeeData beeData = BeeRegistry.getSpawnableBiome(biomeKey.location()).next();
+                    if (beeData.getSpawnData().canSpawnAtYLevel(nestPos)) continue;
                     EntityType<?> entityType = beeData.getEntityType();
                     addBeeToNest(entityType, worldIn, nestPos, beeData, rand, nestTE);
                 } else logMissingBiome(biomeKey);

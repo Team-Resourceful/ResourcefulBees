@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeeconEffectWidget;
+import com.teamresourceful.resourcefulbees.client.gui.widget.OptionImageButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ToggleImageButton;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.EnderBeeconContainer;
@@ -18,12 +19,15 @@ import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
@@ -41,8 +45,8 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     }
 
     private final List<BeeconEffectWidget> powerButtons = new LinkedList<>();
-    private ToggleImageButton soundButton;
-    private ToggleImageButton beamButton;
+    private OptionImageButton soundButton;
+    private OptionImageButton beamButton;
 
     @Override
     protected void init() {
@@ -51,14 +55,14 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
         BlockState state = menu.getEnderBeeconTileEntity().getBlockState();
 
-        soundButton = addButton(new ToggleImageButton(  leftPos+109, topPos+84, 52, 200, state.hasProperty(EnderBeecon.SOUND) && !state.getValue(EnderBeecon.SOUND), BACKGROUND) {
+        soundButton = addButton(new OptionImageButton(  leftPos+109, topPos+84, 52, 200, state.hasProperty(EnderBeecon.SOUND) && !state.getValue(EnderBeecon.SOUND), BACKGROUND) {
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
                 NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.SOUND, !selected, menu.getEnderBeeconTileEntity().getBlockPos()));
             }
         });
-        beamButton = addButton(new ToggleImageButton(leftPos+132, topPos+84, 92, 200, state.hasProperty(EnderBeecon.BEAM) && !state.getValue(EnderBeecon.BEAM), BACKGROUND) {
+        beamButton = addButton(new OptionImageButton(leftPos+132, topPos+84, 92, 200, state.hasProperty(EnderBeecon.BEAM) && !state.getValue(EnderBeecon.BEAM), BACKGROUND) {
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);

@@ -6,10 +6,12 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.text.Style;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
 import java.util.*;
+import java.util.function.UnaryOperator;
 
 @SuppressWarnings("unused")
 public class Color {
@@ -193,6 +195,10 @@ public class Color {
     //region Rainbow
 
     public static void initRainbow() { new Timer().scheduleAtFixedRate(new ColorChange(), 0, 40); }
+
+    public Style getAsStyle() {
+        return Style.EMPTY.withColor(getTextColor());
+    }
 
     private static class ColorChange extends TimerTask {
         @Override

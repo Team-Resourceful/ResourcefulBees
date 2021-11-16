@@ -6,6 +6,7 @@ import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.function.Consumer;
 
@@ -46,5 +47,9 @@ public class HoneyData {
 
     public HoneyFluidData getFluidData() {
         return fluidData;
+    }
+
+    public ResourceLocation getRegistryID() {
+        return bottleData.getHoneyBottle().getId();
     }
 }

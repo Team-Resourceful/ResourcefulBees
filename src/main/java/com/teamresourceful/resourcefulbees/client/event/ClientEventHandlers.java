@@ -137,4 +137,3 @@ public class ClientEventHandlers {
         ScreenManager.register(ModContainers.CENTRIFUGE_TERMINAL_CONTAINER.get(), CentrifugeTerminalScreen::new);
     }
 }
-

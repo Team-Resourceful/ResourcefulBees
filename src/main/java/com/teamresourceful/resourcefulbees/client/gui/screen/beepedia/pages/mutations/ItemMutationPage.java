@@ -1,28 +1,23 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tags.Tag;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
-import static com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage.SUB_PAGE_WIDTH;
 
+@OnlyIn(Dist.CLIENT)
 public class ItemMutationPage extends MutationsPage {
 
     final List<Block> inputs;
@@ -63,56 +58,56 @@ public class ItemMutationPage extends MutationsPage {
         }
     }
 
-    @Override
-    public void draw(MatrixStack matrix, int xPos, int yPos) {
-        super.draw(matrix, xPos, yPos);
-        beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos + 32, yPos + 32);
-        ItemStack item = outputs.get(outputCounter).getRight().getItemStack();
-        beepedia.drawSlot(matrix, item, xPos + 112, yPos + 32);
-        drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
-        if (outputChance < 1) {
-            Minecraft.getInstance().getTextureManager().bind(infoIcon);
-            beepedia.blit(matrix, xPos + SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
-            drawChance(matrix, outputChance, xPos + SUB_PAGE_WIDTH / 2, yPos + 52);
-        }
-    }
+//    @Override
+//    public void draw(MatrixStack matrix, int xPos, int yPos) {
+//        super.draw(matrix, xPos, yPos);
+//        beepedia.drawSlot(matrix, inputs.get(inputCounter), xPos + 32, yPos + 32);
+//        ItemStack item = outputs.get(outputCounter).getRight().getItemStack();
+//        beepedia.drawSlot(matrix, item, xPos + 112, yPos + 32);
+//        drawWeight(matrix, outputs.get(outputCounter).getLeft(), xPos + 122, yPos + 54);
+//        if (outputChance < 1) {
+//            Minecraft.getInstance().getTextureManager().bind(infoIcon);
+//            beepedia.blit(matrix, xPos + SUB_PAGE_WIDTH / 2 - 20, yPos + 51, 16, 0, 9, 9);
+//            drawChance(matrix, outputChance, xPos + SUB_PAGE_WIDTH / 2, yPos + 52);
+//        }
+//    }
 
-    @Override
-    public boolean mouseClick(int xPos, int yPos, int mouseX, int mouseY) {
-        if (super.mouseClick(xPos, yPos, mouseX, mouseY)) return true;
-        Item output = outputs.get(outputCounter).getRight().getItem();
-        if (output instanceof BeeSpawnEggItem) {
-            BeeSpawnEggItem beeEgg = (BeeSpawnEggItem) output;
-            if (BeepediaScreen.mouseHovering((float) xPos + 112, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
-                if (BeepediaScreen.currScreenState.getPageID().equals((beeEgg.getBeeData().toString()))) return false;
-                BeepediaScreen.saveScreenState();  //// THESE TO STRING CALLS NEED TO BE FIXED AFTER TESTING - DONT FORGET!
-                beepedia.setActive(BeepediaScreen.PageType.BEE, beeEgg.getBeeData().toString());
-                return true;
-            }
-        }
-        return false;
-    }
+//    @Override
+//    public boolean mouseClick(int xPos, int yPos, int mouseX, int mouseY) {
+//        if (super.mouseClick(xPos, yPos, mouseX, mouseY)) return true;
+//        Item output = outputs.get(outputCounter).getRight().getItem();
+//        if (output instanceof BeeSpawnEggItem) {
+//            BeeSpawnEggItem beeEgg = (BeeSpawnEggItem) output;
+//            if (BeepediaScreen.mouseHovering((float) xPos + 112, (float) yPos + 27, 30, 30, mouseX, mouseY)) {
+//                if (BeepediaScreen.currScreenState.getPageID().equals((beeEgg.getBeeData().toString()))) return false;
+//                BeepediaScreen.saveScreenState();  //// THESE TO STRING CALLS NEED TO BE FIXED AFTER TESTING - DONT FORGET!
+//                beepedia.setActive(BeepediaScreen.PageType.BEE, beeEgg.getBeeData().toString());
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-    @Override
-    public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
-        super.drawTooltips(matrix, xPos, yPos, mouseX, mouseY);
-        if (outputChance < 1 && BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 51, 8, 8, mouseX, mouseY)) {
-            beepedia.renderTooltip(matrix, TranslationConstants.Jei.MUTATION_CHANCE_INFO, mouseX, mouseY);
-        }
-    }
+//    @Override
+//    public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+//        super.drawTooltips(matrix, xPos, yPos, mouseX, mouseY);
+//        if (outputChance < 1 && BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 51, 8, 8, mouseX, mouseY)) {
+//            beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info"), mouseX, mouseY);
+//        }
+//    }
 
     @Override
     public void addSearch() {
-        addSearch(parent);
+//        addSearch(parent);
     }
 
-    public void addSearch(BeePage parent) {
-        if (entityParent instanceof CustomBeeEntity) parent.addSearchBee(entityParent.getEntity(), ((CustomBeeEntity) entityParent).getBeeType());
-        for (Block input : inputs) {
-            parent.addSearchItem(input);
-        }
-        for (Pair<Double, ItemOutput> output : outputs) {
-            parent.addSearchItem(output.getRight().getItem());
-        }
-    }
+//    public void addSearch(BeePage parent) {
+//        if (entityParent instanceof CustomBeeEntity) parent.addSearchBee(entityParent.getEntity(), ((CustomBeeEntity) entityParent).getBeeType());
+//        for (Block input : inputs) {
+//            parent.addSearchItem(input);
+//        }
+//        for (Pair<Double, ItemOutput> output : outputs) {
+//            parent.addSearchItem(output.getRight().getItem());
+//        }
+//    }
 }

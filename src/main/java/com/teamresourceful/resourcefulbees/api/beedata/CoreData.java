@@ -133,7 +133,6 @@ public class CoreData {
         return lore;
     }
 
-
     public CoreData toImmutable() {
         return this;
     }

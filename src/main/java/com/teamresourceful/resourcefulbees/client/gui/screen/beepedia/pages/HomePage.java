@@ -1,9 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.*;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ModImageButton;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
@@ -12,80 +11,77 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import java.util.LinkedList;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class HomePage extends BeepediaPage {
 
-    private static final ResourceLocation discordButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/discord.png");
-    private static final ResourceLocation patreonButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/patreon.png");
-    private static final ResourceLocation issuesButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/issues.png");
-    private static final ResourceLocation wikiButton = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/wiki.png");
-
-
     int counter = 0;
-    final List<BeePage> bees;
-    final ModImageButton discord;
-    final ModImageButton patreon;
-    final ModImageButton issues;
-    final ModImageButton wiki;
+    List<Entity> bees;
+    private ModImageButton discord;
+    private ModImageButton patreon;
+    private ModImageButton issues;
+    private ModImageButton wiki;
 
-    final ResourceLocation logo = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/logo.png");
+    public HomePage(ScreenArea screenArea) {
+        super(screenArea);
+    }
 
-    public HomePage(BeepediaScreen beepedia, int left, int top) {
-        super(beepedia, left, top, "home");
+    @Override
+    public void registerScreen(BeepediaScreen beepedia) {
+        super.registerScreen(beepedia);
+        counter = 0;
+        int xPos = x;
+        int yPos = y;
+        discord = new ModImageButton(xPos + 169, yPos + 149, 25, 25, 0, 0, 25, BeepediaImages.DISCORD_BUTTON,
+                onPress -> Util.getPlatform().openUri("https://discord.resourcefulbees.com"), BeepediaLang.TOOLTIP_DISCORD);
+        patreon = new ModImageButton(xPos + 144, yPos + 149, 25, 25, 0, 0, 25, BeepediaImages.PATREON_BUTTON,
+                onPress -> Util.getPlatform().openUri("https://patreon.resourcefulbees.com"), BeepediaLang.TOOLTIP_PATREON);
+        issues = new ModImageButton(xPos + 119, yPos + 149, 25, 25, 0, 0, 25, BeepediaImages.ISSUES_BUTTON,
+                onPress -> Util.getPlatform().openUri("https://issues.resourcefulbees.com"), BeepediaLang.TOOLTIP_ISSUES);
+        wiki = new ModImageButton(xPos + 94, yPos + 149, 25, 25, 0, 0, 25, BeepediaImages.WIKI_BUTTON,
+                onPress -> Util.getPlatform().openUri("https://wiki.resourcefulbees.com"), BeepediaLang.TOOLTIP_WIKI);
+        children.add(discord);
+        children.add(patreon);
+        children.add(issues);
+        children.add(wiki);
         bees = new LinkedList<>();
-        beepedia.bees.forEach((s, b) -> bees.add(b));
-        discord = new ModImageButton(xPos + 139, yPos + 129, 25, 25, 0, 0, 25, discordButton,
-                onPress -> Util.getPlatform().openUri("https://discord.resourcefulbees.com"));
-        patreon = new ModImageButton(xPos + 114, yPos + 129, 25, 25, 0, 0, 25, patreonButton,
-                onPress -> Util.getPlatform().openUri("https://patreon.resourcefulbees.com"));
-        issues = new ModImageButton(xPos + 89, yPos + 129, 25, 25, 0, 0, 25, issuesButton,
-                onPress -> Util.getPlatform().openUri("https://issues.resourcefulbees.com"));
-        wiki = new ModImageButton(xPos + 64, yPos + 129, 25, 25, 0, 0, 25, wikiButton,
-                onPress -> Util.getPlatform().openUri("https://wiki.resourcefulbees.com"));
-        beepedia.addButton(discord);
-        discord.visible = false;
-        beepedia.addButton(patreon);
-        patreon.visible = false;
-        beepedia.addButton(issues);
-        issues.visible = false;
-        beepedia.addButton(wiki);
-        wiki.visible = false;
+        BeepediaHandler.beeStats.forEach((s, b) -> bees.add(b.getBee()));
     }
 
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         double scale = beepedia.getMinecraft().getWindow().getGuiScale();
-        int scissorY = (int) (beepedia.getMinecraft().getWindow().getHeight() - (this.yPos + 80) * scale);
-        GL11.glScissor((int) (this.xPos * scale), scissorY, (int) (SUB_PAGE_WIDTH * scale), (int) ((73) * scale));
-        RenderUtils.renderEntity(matrix, bees.get(counter).getBee(), beepedia.getMinecraft().level, xPos + (SUB_PAGE_WIDTH / 2F) - 12F, yPos + 10f, -45, 3);
+        int scissorY = (int) (beepedia.getMinecraft().getWindow().getHeight() - (y + 80) * scale);
+        GL11.glScissor((int) (x * scale), scissorY, (int) (width * scale), (int) ((73) * scale));
+        RenderUtils.renderEntity(matrix, bees.get(counter), beepedia.getMinecraft().level, x + (width / 2F) - 12F, y + 10f, -45, 3);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         FontRenderer font = Minecraft.getInstance().font;
         ITextComponent completeStatus = getProgress();
         int padding = font.width(completeStatus) / 2;
-        font.draw(matrix, completeStatus, xPos + (SUB_PAGE_WIDTH / 2F) - padding, yPos + 115F, -1);
-        font.draw(matrix, ItemGroupResourcefulBees.RESOURCEFUL_BEES.getDisplayName().copy().withStyle(TextFormatting.GRAY), xPos + 32F, yPos + 81F, -1);
-        Minecraft.getInstance().getTextureManager().bind(logo);
-        AbstractGui.blit(matrix, xPos + (SUB_PAGE_WIDTH / 2) - 52, yPos + 90, 0, 0, 104, 16, 104, 16);
+        font.draw(matrix, completeStatus, x + (width / 2F) - padding, y + 115F, -1);
+        font.draw(matrix, BeepediaLang.ITEM_GROUP.withStyle(TextFormatting.GRAY), x + 52F, y + 81F, -1);
+        Minecraft.getInstance().getTextureManager().bind(BeepediaImages.LOGO);
+        AbstractGui.blit(matrix, x + (width / 2) - 52, y + 90, 0, 0, 104, 16, 104, 16);
     }
 
     private ITextComponent getProgress() {
-        return new TranslationTextComponent(TranslationConstants.Beepedia.PROGRESS, beepedia.complete ? beepedia.bees.size() : beepedia.itemBees.size(), beepedia.bees.size()).withStyle(TextFormatting.GRAY);
-    }
-
-    @Override
-    public void addSearch() {
-        // does nothing
+        TranslationTextComponent prefix = BeepediaLang.COLLECTION_PROGRESS.plainCopy();
+        prefix.append(String.format("%d / %d", beepedia.isCreative ? bees.size() : beepedia.data.getBeeList().size(), bees.size()));
+        prefix.withStyle(TextFormatting.GRAY);
+        return prefix;
     }
 
     @Override
@@ -93,47 +89,11 @@ public class HomePage extends BeepediaPage {
         if (ticksActive % 20 == 0 && !Screen.hasShiftDown()) {
             counter++;
             if (counter >= bees.size()) counter = 0;
-            BeepediaScreen.currScreenState.setHomeCounter(counter);
         }
     }
 
     @Override
-    public void drawTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-        if (BeepediaScreen.mouseHovering(xPos + 139f, yPos + 129f, 25, 25, mouseX, mouseY)) {
-            beepedia.renderTooltip(matrixStack, TranslationConstants.Beepedia.Home.DISCORD, mouseX, mouseY);
-        }
-        if (BeepediaScreen.mouseHovering(xPos + 114f, yPos + 129f, 25, 25, mouseX, mouseY)) {
-            beepedia.renderTooltip(matrixStack, TranslationConstants.Beepedia.Home.PATREON, mouseX, mouseY);
-        }
-        if (BeepediaScreen.mouseHovering(xPos + 89f, yPos + 129f, 25, 25, mouseX, mouseY)) {
-            beepedia.renderTooltip(matrixStack, TranslationConstants.Beepedia.Home.ISSUES, mouseX, mouseY);
-        }
-        if (BeepediaScreen.mouseHovering(xPos + 64f, yPos + 129f, 25, 25, mouseX, mouseY)) {
-            beepedia.renderTooltip(matrixStack, TranslationConstants.Beepedia.Home.WIKI, mouseX, mouseY);
-        }
-    }
+    public void addSearch(BeepediaPage parent) {
 
-    @Override
-    public void openPage() {
-        super.openPage();
-        discord.visible = true;
-        patreon.visible = true;
-        issues.visible = true;
-        wiki.visible = true;
-        counter = BeepediaScreen.currScreenState.getHomeCounter();
-    }
-
-    @Override
-    public void closePage() {
-        super.closePage();
-        discord.visible = false;
-        patreon.visible = false;
-        issues.visible = false;
-        wiki.visible = false;
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        return false;
     }
 }

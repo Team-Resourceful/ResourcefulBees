@@ -185,7 +185,7 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
         tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP).ifPresent(handler -> {
             for (int i = 0; i < handler.getTanks(); i++) {
                 FluidStack stack = handler.getFluidInTank(i);
-                if (tank.isFluidValid(stack) && tank.getFluid().isFluidEqual(stack)) {
+                if (tank.isFluidValid(stack) && (tank.getFluid().isFluidEqual(stack) || tank.getFluid().isEmpty())) {
                     int pullAmount = CommonConfig.BEECON_PULL_AMOUNT.get();
                     if (pullAmount > tank.getSpace()) pullAmount = tank.getSpace();
                     FluidStack amountDrained = handler.drain(new FluidStack(stack.getFluid(), pullAmount), IFluidHandler.FluidAction.EXECUTE);
@@ -232,7 +232,7 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
     }
 
     public AxisAlignedBB getEffectBox(@NotNull World level) {
-        AxisAlignedBB pos = new AxisAlignedBB(this.worldPosition).inflate(getAdjustedRange());
+        AxisAlignedBB pos = new AxisAlignedBB(this.worldPosition).inflate(range);
         return new AxisAlignedBB(pos.minX, 0, pos.minZ, pos.maxX, level.getMaxBuildHeight(), pos.maxZ);
     }
 
@@ -240,10 +240,6 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
         if (!level.isClientSide && doEffects()) {
             for (BeeEntity mob : bees) for (Effect effect : effects) mob.addEffect(new EffectInstance(effect, 120, 0, false, false));
         }
-    }
-
-    public int getAdjustedRange() {
-        return range * CommonConfig.BEECON_RANGE_PER_EFFECT.get();
     }
 
     public int getRange() {
@@ -289,7 +285,7 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
     public int getDrain() {
         double base = CommonConfig.BEECON_BASE_DRAIN.get();
         for (Effect e : effects) base += getEffectValue(e);
-        base = (base * (range * CommonConfig.BEECON_RANGE_MULTIPLIER.get()));
+        base = (base * (range * CommonConfig.BEECON_RANGE_MULTIPLIER.get() * 0.10d));
         return (int) Math.ceil(base);
     }
 
