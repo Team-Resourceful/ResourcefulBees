@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeVoid;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeVoidEntity;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -24,25 +24,13 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
     }
 
     protected void setupSlots() {
-        int rows = tier.equals(CentrifugeTier.BASIC) ? 1 : tier.getSlots()/4;
-        int columns = tier.equals(CentrifugeTier.BASIC) ? 2 : 8;
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < columns; c++) {
-                if (entity != null) this.addSlot(new FilterSlot(entity.getFilterInventory(), c + r * 4, 30 + c * 18, 10 + r * 20));
+        for (int r = 0; r < CentrifugeUtils.getRows(tier); r++) {
+            for (int c = 0; c < CentrifugeUtils.getColumns(tier) * 2; c++) {
+                if (entity != null) this.addSlot(new FilterSlot(entity.getFilterInventory(), c + r * 4, 162 + c * 17, 46 + r * 17));
             }
         }
 
         addPlayerInvSlots();
-    }
-
-    @Override
-    protected int getInvOffsetX() {
-        return 10;
-    }
-
-    @Override
-    protected int getInvOffsetY() {
-        return 90;
     }
 
     @Override

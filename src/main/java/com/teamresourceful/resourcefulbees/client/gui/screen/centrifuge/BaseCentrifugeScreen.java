@@ -4,11 +4,11 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeContainer;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.client.gui.GuiUtils;
@@ -17,12 +17,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class BaseCrentrifugeScreen<T extends Container> extends ContainerScreen<T> {
+public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> extends ContainerScreen<T> {
 
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/background.png");
+    protected static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/background.png");
+    protected static final ResourceLocation COMPONENTS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/components.png");
+    protected final CentrifugeTier tier;
 
-    protected BaseCrentrifugeScreen(T pMenu, PlayerInventory pPlayerInventory, ITextComponent pTitle) {
+    protected BaseCentrifugeScreen(T pMenu, PlayerInventory pPlayerInventory, ITextComponent pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
+        this.tier = pMenu.getTier();
         this.imageWidth = 360;
         this.imageHeight = 228;
     }
@@ -52,10 +55,11 @@ public abstract class BaseCrentrifugeScreen<T extends Container> extends Contain
     @Override
     protected void renderBg(@NotNull MatrixStack matrix, float pPartialTicks, int pX, int pY) {
         this.renderBackground(matrix);
-        if (minecraft != null) {
-            minecraft.textureManager.bind(BACKGROUND);
-            AbstractGui.blit(matrix, leftPos, topPos, 0, 0, imageWidth, imageHeight, 360, 228);
-        }
+        if (minecraft == null) return;
+        minecraft.textureManager.bind(BACKGROUND);
+        blit(matrix, leftPos, topPos, 0, 0, imageWidth, imageHeight, 360, 228);
+        minecraft.textureManager.bind(COMPONENTS);
+        drawInfoPane(matrix, leftPos, topPos);
     }
 
     @Override
@@ -71,6 +75,10 @@ public abstract class BaseCrentrifugeScreen<T extends Container> extends Contain
         if (MathUtils.inRangeInclusive(mouseAlteredX, 346, 358) && MathUtils.inRangeInclusive(mouseAlteredY, 3, 15)){
             GuiUtils.drawHoveringText(matrixStack, Lists.newArrayList(TranslationConstants.Centrifuge.CLOSE), x, y, width, height, width, font);
         }
+    }
+
+    protected void drawInfoPane(@NotNull MatrixStack matrix, int x, int y) {
+        blit(matrix, x + 102, y + 39, 19, 0, 237, 164);
     }
 
     @Nullable
