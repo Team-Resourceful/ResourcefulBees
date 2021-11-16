@@ -46,7 +46,6 @@ public class BeeconEffectWidget extends Widget {
     @Override
     public void onClick(double mouseX, double mouseY) {
         if (MathUtils.inRangeInclusive((int) mouseX, x+60, x+85) && MathUtils.inRangeInclusive((int) mouseY, y+4, y+19)) {
-            this.selected = !selected;
             NetPacketHandler.sendToServer(new BeeconChangeMessage(
                     this.isSelected() ? BeeconChangeMessage.Option.EFFECT_OFF : BeeconChangeMessage.Option.EFFECT_ON,
                     Effect.getId(effect),

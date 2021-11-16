@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import javafx.geometry.BoundingBox;
+import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -20,11 +20,7 @@ public class ScreenArea {
         this.width = width;
     }
 
-    public BoundingBox getBoundingBox(BeepediaScreen beepedia) {
-        return new BoundingBox(xPos, yPos, width, height);
-    }
-
     public boolean isHovered(BeepediaScreen beepedia, double mouseX, double mouseY) {
-        return getBoundingBox(beepedia).contains(mouseX, mouseY);
+        return MathUtils.inRangeInclusive((int) mouseX, xPos, xPos+width) && MathUtils.inRangeInclusive((int) mouseY, yPos, yPos+height);
     }
 }

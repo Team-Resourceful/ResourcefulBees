@@ -182,6 +182,7 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
     private void pullFluidFromBelow(@NotNull World level) {
         TileEntity tileEntity = level.getBlockEntity(worldPosition.below());
         if (tileEntity == null) return;
+        if (tank.getSpace() == 0) return;
         tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP).ifPresent(handler -> {
             for (int i = 0; i < handler.getTanks(); i++) {
                 FluidStack stack = handler.getFluidInTank(i);
