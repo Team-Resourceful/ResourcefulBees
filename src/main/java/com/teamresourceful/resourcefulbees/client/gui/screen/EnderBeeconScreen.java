@@ -70,7 +70,6 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
 
     @Override
     protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
-        this.renderBackground(matrix);
         if (minecraft != null && tileEntity != null) {
             minecraft.getTextureManager().bind(BACKGROUND);
             this.blit(matrix, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
