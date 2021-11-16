@@ -39,4 +39,12 @@ public class TooltipWidget extends Widget {
             }
         });
     }
+
+    public boolean isClicked(double mouseX, double mouseY) {
+        return this.clicked(mouseX, mouseY);
+    }
+
+    public void tick(int ticksActive) {
+        // implement to use
+    }
 }

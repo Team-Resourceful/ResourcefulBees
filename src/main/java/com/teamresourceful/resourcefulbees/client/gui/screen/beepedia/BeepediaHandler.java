@@ -173,9 +173,9 @@ public class BeepediaHandler {
 
     public static void drawPage(MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
         listPage.renderBackground(matrix, partialTicks, mouseX, mouseY);
-        selectedPage.renderBackground(matrix, partialTicks, mouseX, mouseY);
+        if (selectedPage != null) selectedPage.renderBackground(matrix, partialTicks, mouseX, mouseY);
         listPage.renderForeground(matrix, mouseX, mouseY);
-        selectedPage.renderForeground(matrix, mouseX, mouseY);
+        if (selectedPage != null) selectedPage.renderForeground(matrix, mouseX, mouseY);
     }
 
     public static void closeState() {

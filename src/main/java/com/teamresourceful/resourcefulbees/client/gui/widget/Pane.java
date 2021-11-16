@@ -138,7 +138,7 @@ public class Pane extends TooltipWidget {
 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
-        children.forEach(c -> mouseMoved(mouseX, mouseY));
+        children.forEach(c -> c.mouseMoved(mouseX, mouseY));
     }
 
     @Override

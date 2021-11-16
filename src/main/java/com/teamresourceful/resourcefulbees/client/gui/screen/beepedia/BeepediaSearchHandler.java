@@ -55,7 +55,7 @@ public class BeepediaSearchHandler {
         beeButtons.clear();
         Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
         searchBox = new TooltipTextFieldWidget(Minecraft.getInstance().font, x + 10, y + 147, 117, 10, new TranslationTextComponent("gui.resourcefulbees.beepedia.search"));
-        searchBox.visible = false;
+        searchBox.visible = BeepediaState.isSearchVisible();
         beepedia.addWidget(searchBox);
 
         int buttonXOffset = x + 10;
@@ -126,7 +126,7 @@ public class BeepediaSearchHandler {
         beeButtons.add(beeHelpButton);
 
         beepedia.addButtons(beeButtons);
-        BeepediaScreen.setButtonsVisibility(searchBox.visible, beeButtons);
+        BeepediaScreen.setButtonsVisibility(BeepediaState.isSearchVisible(), beeButtons);
     }
 
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
@@ -139,7 +139,8 @@ public class BeepediaSearchHandler {
     }
 
     public void toggleSearch() {
-        searchBox.visible = !searchBox.visible;
-        BeepediaScreen.setButtonsVisibility(searchBox.visible, beeButtons);
+        BeepediaState.toggleSearch();
+        searchBox.visible = BeepediaState.isSearchVisible();
+        BeepediaScreen.setButtonsVisibility(BeepediaState.isSearchVisible(), beeButtons);
     }
 }
