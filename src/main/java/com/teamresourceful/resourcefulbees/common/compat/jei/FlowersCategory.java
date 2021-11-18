@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
-    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beeentityflowers.png");
+    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/flowers.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "bee_pollination_flowers");
 
     public FlowersCategory(IGuiHelper guiHelper) {
