@@ -139,6 +139,6 @@ public class RenderUtils {
 
         RenderSystem.color4f(((fluidColor >> 16) & 0xFF)/ 255.0F, ((fluidColor >> 8) & 0xFF)/ 255.0F, (fluidColor & 0xFF)/ 255.0F,  ((fluidColor >> 24) & 0xFF)/ 255.0F);
         for (int i = 0; i < splits; i++)
-            AbstractGui.blit(matrix,x, y + (i * 16), blitOffset, width, i+1 == splits ? remainder : 16, sprite);
+            AbstractGui.blit(matrix,x, y + (i * 16), blitOffset, width, i+1 == splits && remainder != 0 ? remainder : 16, sprite);
     }
 }
