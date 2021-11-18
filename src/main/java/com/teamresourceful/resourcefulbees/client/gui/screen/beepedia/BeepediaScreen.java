@@ -4,10 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import com.teamresourceful.resourcefulbees.common.capabilities.BeepediaData;
 import com.teamresourceful.resourcefulbees.client.gui.tooltip.AbstractTooltip;
-import com.teamresourceful.resourcefulbees.client.gui.widget.Interaction;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ModImageButton;
-import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
-import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipWidget;
+import com.teamresourceful.resourcefulbees.client.gui.widget.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeepediaEntityMessage;
 import net.minecraft.client.Minecraft;
@@ -27,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class BeepediaScreen extends Screen {
+public class BeepediaScreen extends TooltipScreen {
 
     public final boolean isCreative;
     public final boolean hasShades;
@@ -42,8 +39,6 @@ public class BeepediaScreen extends Screen {
     public static final int SCREEN_WIDTH = 328;
     public static final int SCREEN_HEIGHT = 200;
 
-    private final List<AbstractTooltip> tooltips = new LinkedList<>();
-    private final List<Interaction> interactions = new LinkedList<>();
     private ModImageButton backButton;
     private ModImageButton homeButton;
     private ModImageButton searchButton;
@@ -67,13 +62,11 @@ public class BeepediaScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        buttons.clear();
         this.guiLeft = (this.width - SCREEN_WIDTH) / 2;
         this.guiTop = (this.height - SCREEN_HEIGHT) / 2;
         registerScreen();
         BeepediaHandler.registerScreen(this);
     }
-
 
     private void registerScreen() {
         int x = this.guiLeft;
@@ -110,28 +103,14 @@ public class BeepediaScreen extends Screen {
 
     @Override
     public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
-        tooltips.clear();
-        interactions.clear();
-        // initialises the current page's data
         BeepediaHandler.preInit();
-        renderBackground(matrixStack, 0);
-        drawBackground(matrixStack, partialTick, mouseX, mouseY);
+        super.render(matrixStack, mouseX, mouseY, partialTick);
+        // initialises the current page's data
         if (hasShades) {
             drawShadesButton(matrixStack);
         }
-        for (Widget button : this.buttons) {
-            button.render(matrixStack, mouseX, mouseY, partialTick);
-        }
 
         searchHandler.render(matrixStack, mouseX, mouseY, partialTick);
-        drawTooltips(matrixStack, mouseX, mouseY);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        ticksOpen++;
-        BeepediaHandler.tick(ticksOpen);
     }
 
     private void drawShadesButton(MatrixStack matrix) {
@@ -141,7 +120,8 @@ public class BeepediaScreen extends Screen {
         blit(matrix, shadesButtonX, shadesButtonY, 0, 0, 30, 30, 30, 30);
     }
 
-    protected void drawBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+    @Override
+    public void drawBackground(MatrixStack matrix, int mouseX, int mouseY, float partialTick) {
         Minecraft client = this.minecraft;
         homeButton.active = BeepediaState.isHomeState();
         backButton.active = BeepediaState.hasPastStates();
@@ -155,46 +135,9 @@ public class BeepediaScreen extends Screen {
         BeepediaHandler.drawPage(matrix, partialTick, mouseX, mouseY);
     }
 
-    private void drawTooltips(MatrixStack matrix, int mouseX, int mouseY) {
-        widgets.forEach(t -> t.drawTooltips(matrix, this, mouseX, mouseY));
-    }
-
     @Override
     public boolean isPauseScreen() {
         return false;
-    }
-
-    public static boolean mouseHovering(float x, float y, int width, int height, int mouseX, int mouseY) {
-        return mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height;
-    }
-
-    public <T extends TooltipWidget> @NotNull T addWidget(@NotNull T widget) {
-        widgets.add(widget);
-        return widget;
-    }
-
-    public <T extends TooltipWidget> void addButtons(List<@NotNull T> widgets) {
-        widgets.forEach(this::addWidget);
-    }
-
-    public <T extends TooltipWidget> void addButtons(@NotNull T... widgets) {
-        addButtons(Arrays.asList(widgets));
-    }
-
-    public static <T extends TooltipWidget> void setButtonsVisibility(boolean visible, List<@NotNull T> widgets) {
-        widgets.forEach(w -> w.visible = visible);
-    }
-
-    public static <T extends TooltipWidget> void setButtonsActive(boolean active, List<@NotNull T> widgets) {
-        widgets.forEach(w -> w.active = active);
-    }
-
-    public static <T extends TooltipWidget> void setButtonsVisibility(boolean b, @NotNull T... widgets) {
-        setButtonsVisibility(b, Arrays.asList(widgets));
-    }
-
-    public static <T extends TooltipWidget> void setButtonsActive(boolean b, @NotNull T... widgets) {
-        setButtonsActive(b, Arrays.asList(widgets));
     }
 
     @OnlyIn(Dist.CLIENT)

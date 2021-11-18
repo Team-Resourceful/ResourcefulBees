@@ -58,6 +58,7 @@ public class BeepediaState {
      */
     public static BeepediaState currentState = new BeepediaState();
     public static Stack<BeepediaState> savedStates = new Stack<>();
+    private static boolean searchVisible;
 
     public BeepediaListTypes selectedList;
     public PageTypes page;
@@ -109,5 +110,13 @@ public class BeepediaState {
         if (subPage != null) currentState.subPage = subPage;
         if (subPageTab != null) currentState.subPageTab = subPageTab;
         BeepediaHandler.openState();
+    }
+
+    public static boolean isSearchVisible() {
+        return searchVisible;
+    }
+
+    public static void toggleSearch() {
+        searchVisible = !searchVisible;
     }
 }
