@@ -21,8 +21,10 @@ public abstract class BaseCategory<T> implements IRecipeCategory<T> {
     private final IDrawable icon;
     private final Class<? extends T> recipeClass;
 
+    public final IDrawable slot;
     public final IDrawable info;
     public final IDrawable beeHive;
+    public final IDrawable outputSlot;
 
     protected BaseCategory(IGuiHelper guiHelper, ResourceLocation categoryId, String localizedName, IDrawable background, IDrawable icon, Class<? extends T> recipeClass) {
         this.categoryId = categoryId;
@@ -33,6 +35,8 @@ public abstract class BaseCategory<T> implements IRecipeCategory<T> {
 
         this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get()));
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
+        this.outputSlot = guiHelper.createDrawable(ICONS, 25, 0, 26, 26);
+        this.slot = guiHelper.getSlotDrawable();
     }
 
     @Override

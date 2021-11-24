@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
+import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
@@ -9,8 +10,7 @@ import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 public class HoneyGeneratorContainer extends ContainerWithStackMove {
@@ -36,15 +36,11 @@ public class HoneyGeneratorContainer extends ContainerWithStackMove {
         }
     }
 
-    public int getEnergy() { return getHoneyGeneratorTileEntity().getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0); }
-    
-    public int getFluidAmount() { return getHoneyGeneratorTileEntity().getTank().getFluidAmount(); }
-    
-    public int getMaxEnergy() { return getHoneyGeneratorTileEntity().getEnergyStorage().getMaxEnergyStored(); }
+    public FluidStack getFluid() {
+        return getHoneyGeneratorTileEntity().getTank().getFluid();
+    }
 
-    public int getMaxFluid() { return getHoneyGeneratorTileEntity().getTank().getCapacity(); }
-
-    public int getProcessingTime() { return getHoneyGeneratorTileEntity().getProcessingTime(); }
+    public CustomEnergyStorage getEnergy() { return getHoneyGeneratorTileEntity().getEnergyStorage(); }
 
     @Override
     public boolean stillValid(@NotNull PlayerEntity player) {
