@@ -3,13 +3,10 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import com.teamresourceful.resourcefulbees.common.capabilities.BeepediaData;
-import com.teamresourceful.resourcefulbees.client.gui.tooltip.AbstractTooltip;
 import com.teamresourceful.resourcefulbees.client.gui.widget.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeepediaEntityMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
@@ -19,7 +16,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.PatchouliAPI;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,8 +28,7 @@ public class BeepediaScreen extends TooltipScreen {
 
     public List<TooltipWidget> widgets = new LinkedList<>();
 
-    public int guiLeft;
-    public int guiTop;
+
     protected int ticksOpen = 0;
 
     public static final int SCREEN_WIDTH = 328;
@@ -47,7 +42,7 @@ public class BeepediaScreen extends TooltipScreen {
 
     @OnlyIn(Dist.CLIENT)
     public BeepediaScreen(boolean isCreative, boolean hasShades, LazyOptional<IBeepediaData> data) {
-        super(BeepediaLang.INTERFACE_NAME);
+        super(BeepediaLang.INTERFACE_NAME, SCREEN_WIDTH, SCREEN_HEIGHT);
         BeepediaHandler.initBeepediaStates();
         this.hasShades = hasShades;
         this.isCreative = isCreative;
@@ -62,15 +57,14 @@ public class BeepediaScreen extends TooltipScreen {
     @Override
     protected void init() {
         super.init();
-        this.guiLeft = (this.width - SCREEN_WIDTH) / 2;
-        this.guiTop = (this.height - SCREEN_HEIGHT) / 2;
         registerScreen();
+        add(searchHandler);
         BeepediaHandler.registerScreen(this);
     }
 
     private void registerScreen() {
-        int x = this.guiLeft;
-        int y = this.guiTop;
+        int x = 0;
+        int y = 0;
 
         registerButtons(x, y);
     }
@@ -94,28 +88,28 @@ public class BeepediaScreen extends TooltipScreen {
                 18, 36, BeepediaLang.FIFTY_SHADES_BUTTON) {
         };
         // add buttons to button array
-        addButtons(homeButton, backButton, searchButton, shadesButton);
+        addAll(homeButton, backButton, searchButton, shadesButton);
         backButton.active = false;
         shadesButton.visible = hasShades;
-
-        searchHandler.registerSearch(x, y);
     }
 
     @Override
     public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
         BeepediaHandler.preInit();
+        searchHandler.visible = BeepediaState.isSearchVisible();
+
+        // all visibility changes must be done before this line
         super.render(matrixStack, mouseX, mouseY, partialTick);
         // initialises the current page's data
         if (hasShades) {
             drawShadesButton(matrixStack);
         }
 
-        searchHandler.render(matrixStack, mouseX, mouseY, partialTick);
     }
 
     private void drawShadesButton(MatrixStack matrix) {
-        int shadesButtonX = guiLeft + SCREEN_WIDTH + 2;
-        int shadesButtonY = guiTop + SCREEN_HEIGHT - 32;
+        int shadesButtonX = x + SCREEN_WIDTH + 2;
+        int shadesButtonY = y + SCREEN_HEIGHT - 32;
         Minecraft.getInstance().getTextureManager().bind(BeepediaImages.SHADES_BACKGROUND);
         blit(matrix, shadesButtonX, shadesButtonY, 0, 0, 30, 30, 30, 30);
     }
@@ -125,8 +119,8 @@ public class BeepediaScreen extends TooltipScreen {
         Minecraft client = this.minecraft;
         homeButton.active = BeepediaState.isHomeState();
         backButton.active = BeepediaState.hasPastStates();
-        int x = this.guiLeft;
-        int y = this.guiTop;
+        int x = this.x;
+        int y = this.y;
         if (client != null) {
             client.getTextureManager().bind(BeepediaImages.BACKGROUND);
             blit(matrix, x, y, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);

@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
@@ -15,16 +16,25 @@ import java.util.Set;
 
 public abstract class TooltipScreen extends Screen {
 
+    private final int screenWidth;
+    private final int screenHeight;
+    public int x;
+    public int y;
+
     protected final Set<TooltipWidget> widgets = new HashSet<>();
     private int ticksOpen = 0;
 
-    protected TooltipScreen(ITextComponent pTitle) {
+    protected TooltipScreen(ITextComponent pTitle, int screenWidth, int screenHeight) {
         super(pTitle);
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
     }
 
     @Override
     protected void init() {
         super.init();
+        this.x = (this.width - screenWidth) / 2;
+        this.y = (this.height - screenHeight) / 2;
         widgets.clear();
     }
 
@@ -36,16 +46,26 @@ public abstract class TooltipScreen extends Screen {
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
 
+
         renderBackground(matrix, 0);
         drawBackground(matrix, mouseX, mouseY, partialTicks);
 
         //move the matrix origin to the top left corner of scroll area
-
+        matrix.pushPose();
+        matrix.translate(x, y, 0);
         for (Widget child : widgets) {
             renderChild(matrix, child, mouseX, mouseY, partialTicks);
+            matrix.pushPose();
+            matrix.translate(0, 0, 100);
+            matrix.scale(0.5f, 0.5f, 1.0f);
+            Minecraft.getInstance().font.draw(matrix,"[" + child.x + ", " + child.y + "]", child.x * 2, child.y * 2 - 9, Color.DEFAULT.getValue());
+            matrix.popPose();
         }
+        matrix.popPose();
 
         drawTooltips(matrix, mouseX, mouseY);
+
+        font.draw(matrix,"[" + mouseX + ", " + mouseY + "]", mouseX, mouseY, Color.DEFAULT.getValue());
     }
 
     protected abstract void drawBackground(MatrixStack matrix, int mouseX, int mouseY, float partialTicks);
@@ -53,7 +73,7 @@ public abstract class TooltipScreen extends Screen {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         for (Widget child : widgets) {
-            boolean scrolled = child.mouseScrolled(mouseX, mouseY, scrollAmount);
+            boolean scrolled = child.mouseScrolled(mouseX - x, mouseY - y, scrollAmount);
             if (scrolled) return true;
         }
         return false;
@@ -63,14 +83,14 @@ public abstract class TooltipScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         for (TooltipWidget child : widgets) {
             if (mouseButton == 0) {
-                boolean flag = child.isClicked(mouseX, mouseY);
+                boolean flag = child.isClicked(mouseX - x, mouseY - y);
                 if (flag) {
                     child.playDownSound(Minecraft.getInstance().getSoundManager());
                     child.onClick(mouseX, mouseY);
                     return true;
                 }
             }
-            boolean clicked = child.mouseClicked(mouseX, mouseY, mouseButton);
+            boolean clicked = child.mouseClicked(mouseX - x, mouseY - y, mouseButton);
             if (clicked) return true;
         }
         return super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -79,29 +99,29 @@ public abstract class TooltipScreen extends Screen {
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
         for (Widget child : widgets) {
-            boolean released = child.mouseReleased(mouseX, mouseY, mouseButton);
-            child.onRelease(mouseX, mouseY);
+            boolean released = child.mouseReleased(mouseX - x, mouseY - y, mouseButton);
+            child.onRelease(mouseX - x, mouseY - y);
             if (released) return true;
         }
         return super.mouseReleased(mouseX, mouseY, mouseButton);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int p_231045_5_, double p_231045_6_, double p_231045_8_) {
+    public boolean mouseDragged(double mouseX, double mouseY, int pButton, double pDragX, double pDragY) {
         for (TooltipWidget child : widgets) {
-            boolean dragged = child.mouseDragged(mouseX, mouseY, p_231045_5_, p_231045_6_, p_231045_8_);
+            boolean dragged = child.mouseDragged(mouseX - x, mouseY - y, pButton, pDragX, pDragY);
             if (dragged) return true;
         }
-        return super.mouseDragged(mouseX, mouseY, p_231045_5_, p_231045_6_, p_231045_8_);
+        return super.mouseDragged(mouseX, mouseY, pButton, pDragX, pDragY);
     }
 
     private void drawTooltips(MatrixStack matrix, int mouseX, int mouseY) {
-        widgets.forEach(t -> t.drawTooltips(matrix, this, mouseX, mouseY));
+        widgets.forEach(c -> c.drawTooltips(matrix, this, mouseX, mouseY));
     }
 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
-        widgets.forEach(c -> c.mouseMoved(mouseX, mouseY));
+        widgets.forEach(c -> c.mouseMoved(mouseX - x, mouseY - y));
     }
 
     @Override
@@ -123,12 +143,12 @@ public abstract class TooltipScreen extends Screen {
     }
 
     @Override
-    public boolean charTyped(char character, int p_231042_2_) {
+    public boolean charTyped(char character, int pModifiers) {
         for (Widget child : widgets) {
-            boolean typed = child.charTyped(character, p_231042_2_);
+            boolean typed = child.charTyped(character, pModifiers);
             if (typed) return true;
         }
-        return super.charTyped(character, p_231042_2_);
+        return super.charTyped(character, pModifiers);
     }
 
     @Override
@@ -138,8 +158,9 @@ public abstract class TooltipScreen extends Screen {
         widgets.forEach(c -> c.tick(ticksOpen));
     }
 
-    public void add(TooltipWidget widget) {
+    public void addAll(TooltipWidget widget) {
         widgets.add(widget);
+        widget.addParent(x, y, null);
     }
 
     public void reset() {
@@ -150,17 +171,18 @@ public abstract class TooltipScreen extends Screen {
         return mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height;
     }
 
-    public <T extends TooltipWidget> @NotNull T addWidget(@NotNull T widget) {
+    public <T extends TooltipWidget> @NotNull T add(@NotNull T widget) {
         widgets.add(widget);
+        widget.addParent(x, y, null);
         return widget;
     }
 
-    public <T extends TooltipWidget> void addButtons(List<@NotNull T> widgets) {
-        widgets.forEach(this::addWidget);
+    public <T extends TooltipWidget> void addAll(List<@NotNull T> widgets) {
+        widgets.forEach(this::add);
     }
 
-    public <T extends TooltipWidget> void addButtons(@NotNull T... widgets) {
-        addButtons(Arrays.asList(widgets));
+    public <T extends TooltipWidget> void addAll(@NotNull T... widgets) {
+        addAll(Arrays.asList(widgets));
     }
 
     public static <T extends TooltipWidget> void setButtonsVisibility(boolean visible, List<@NotNull T> widgets) {

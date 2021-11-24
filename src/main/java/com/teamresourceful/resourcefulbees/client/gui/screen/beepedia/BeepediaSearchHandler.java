@@ -1,19 +1,19 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ButtonTemplate;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ToggleImageButton;
-import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipTextFieldWidget;
+import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.BeepediaListTypes;
+import com.teamresourceful.resourcefulbees.client.gui.widget.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class BeepediaSearchHandler {
+public class BeepediaSearchHandler extends Pane {
 
     // stored data
     private static String currentSearch = null;
@@ -42,28 +42,25 @@ public class BeepediaSearchHandler {
 
 
     public BeepediaSearchHandler(BeepediaScreen beepedia) {
+        super(10, 147, 177, 25);
         this.beepedia = beepedia;
-    }
 
-    /**
-     * Register the beepedia search bar and register search parameters for each page.
-     *
-     * @param x top left corner x position
-     * @param y top left corner y position
-     */
-    public void registerSearch(int x, int y) {
         beeButtons.clear();
         Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
-        searchBox = new TooltipTextFieldWidget(Minecraft.getInstance().font, x + 10, y + 147, 117, 10, new TranslationTextComponent("gui.resourcefulbees.beepedia.search"));
+        searchBox = new TooltipTextFieldWidget(Minecraft.getInstance().font, 0, 0, 117, 10, new TranslationTextComponent("gui.resourcefulbees.beepedia.search"));
         searchBox.visible = BeepediaState.isSearchVisible();
-        beepedia.addWidget(searchBox);
+        this.add(searchBox);
 
-        int buttonXOffset = x + 10;
-        int buttonYOffset = y + 159;
+        initBeeButtons(12);
 
+        this.addAll(beeButtons);
+        updateButtonVisibility();
+    }
+
+    private void initBeeButtons(int yOffset) {
         ButtonTemplate buttonTemplate = new ButtonTemplate(13, 13, 0, 0, 13, 128, 128, BeepediaImages.SEARCH_BUTTONS);
         // init search buttons
-        beeStarredButton = new ToggleImageButton(buttonXOffset, buttonYOffset, 0, beeStarred, buttonTemplate, b -> {
+        beeStarredButton = new ToggleImageButton(0, yOffset, 0, beeStarred, buttonTemplate, b -> {
             beeStarred = b.enabled;
             if (b.enabled) {
                 beeNotStarredButton.enabled = false;
@@ -72,7 +69,7 @@ public class BeepediaSearchHandler {
         }, BeepediaLang.BEE_SEARCH_STARRED);
         beeButtons.add(beeStarredButton);
 
-        beeNotStarredButton = new ToggleImageButton(buttonXOffset + 14, buttonYOffset, 13, beeNotStarred, buttonTemplate, b -> {
+        beeNotStarredButton = new ToggleImageButton(14, yOffset, 13, beeNotStarred, buttonTemplate, b -> {
             beeNotStarred = b.enabled;
             if (b.enabled) {
                 beeStarredButton.enabled = false;
@@ -81,7 +78,7 @@ public class BeepediaSearchHandler {
         }, BeepediaLang.BEE_SEARCH_NOT_STARRED);
         beeButtons.add(beeNotStarredButton);
 
-        beeWorldButton = new ToggleImageButton(buttonXOffset + 28, buttonYOffset, 26, beeWorld, buttonTemplate, b -> {
+        beeWorldButton = new ToggleImageButton(  28, yOffset, 26, beeWorld, buttonTemplate, b -> {
             beeWorld = b.enabled;
             if (b.enabled) {
                 beeNotWorldButton.enabled = false;
@@ -90,7 +87,7 @@ public class BeepediaSearchHandler {
         }, BeepediaLang.BEE_SEARCH_WORLD);
         beeButtons.add(beeWorldButton);
 
-        beeNotWorldButton = new ToggleImageButton(buttonXOffset + 42, buttonYOffset, 39, beeNotWorld, buttonTemplate, b -> {
+        beeNotWorldButton = new ToggleImageButton( 42, yOffset, 39, beeNotWorld, buttonTemplate, b -> {
             beeNotWorld = b.enabled;
             if (b.enabled) {
                 beeWorldButton.enabled = false;
@@ -99,7 +96,7 @@ public class BeepediaSearchHandler {
         }, BeepediaLang.BEE_SEARCH_NOT_WORLD);
         beeButtons.add(beeNotWorldButton);
 
-        beeBreedableButton = new ToggleImageButton(buttonXOffset + 56, buttonYOffset, 52, beeBreedable, buttonTemplate, b -> {
+        beeBreedableButton = new ToggleImageButton(56, yOffset, 52, beeBreedable, buttonTemplate, b -> {
             beeBreedable = b.enabled;
             if (b.enabled) {
                 beeNotBreedableButton.enabled = false;
@@ -108,7 +105,7 @@ public class BeepediaSearchHandler {
         }, BeepediaLang.BEE_SEARCH_BREEDABLE);
         beeButtons.add(beeBreedableButton);
 
-        beeNotBreedableButton = new ToggleImageButton(buttonXOffset + 70, buttonYOffset, 65, beeNotBreedable, buttonTemplate, b -> {
+        beeNotBreedableButton = new ToggleImageButton(  70, yOffset, 65, beeNotBreedable, buttonTemplate, b -> {
             beeNotBreedable = b.enabled;
             if (b.enabled) {
                 beeBreedableButton.enabled = false;
@@ -117,30 +114,22 @@ public class BeepediaSearchHandler {
         }, BeepediaLang.BEE_SEARCH_NOT_BREEDABLE);
         beeButtons.add(beeNotBreedableButton);
 
-        beeMutatesButton = new ToggleImageButton(buttonXOffset + 84, buttonYOffset, 78, beeMutates, buttonTemplate,
+        beeMutatesButton = new ToggleImageButton(  84, yOffset, 78, beeMutates, buttonTemplate,
                 b -> beeMutates = b.enabled, BeepediaLang.BEE_SEARCH_MUTATES);
         beeButtons.add(beeMutatesButton);
 
-        beeHelpButton = new ToggleImageButton(buttonXOffset + 104, buttonYOffset, 91, beeHelp, buttonTemplate,
+        beeHelpButton = new ToggleImageButton(  104, yOffset, 91, beeHelp, buttonTemplate,
                 b -> beeHelp = b.enabled, BeepediaLang.BEE_SEARCH_HELP);
         beeButtons.add(beeHelpButton);
-
-        beepedia.addButtons(beeButtons);
-        BeepediaScreen.setButtonsVisibility(BeepediaState.isSearchVisible(), beeButtons);
     }
 
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTick) {
-        searchBox.render(matrixStack, mouseX, mouseY, partialTick);
-        registerTooltips();
-    }
-
-    private void registerTooltips() {
-
+    private void updateButtonVisibility() {
+        TooltipScreen.setButtonsVisibility(BeepediaState.currentState.selectedList == BeepediaListTypes.BEES, beeButtons);
     }
 
     public void toggleSearch() {
         BeepediaState.toggleSearch();
         searchBox.visible = BeepediaState.isSearchVisible();
-        BeepediaScreen.setButtonsVisibility(BeepediaState.isSearchVisible(), beeButtons);
+        updateButtonVisibility();
     }
 }

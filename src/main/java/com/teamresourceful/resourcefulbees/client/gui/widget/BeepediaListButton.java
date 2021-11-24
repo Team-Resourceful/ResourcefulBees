@@ -18,7 +18,7 @@ public class BeepediaListButton extends Pane {
     }
 
     @Override
-    public void renderChild(MatrixStack matrix, Widget child, int mouseX, int mouseY, float partialTicks) {
+    public void renderChild(MatrixStack matrix, TooltipWidget child, int mouseX, int mouseY, float partialTicks) {
         child.active = this.active;
         super.renderChild(matrix, child, mouseX, mouseY, partialTicks);
     }

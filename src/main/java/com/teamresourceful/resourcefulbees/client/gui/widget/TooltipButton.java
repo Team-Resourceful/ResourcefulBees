@@ -22,7 +22,7 @@ public class TooltipButton extends TooltipAbstractButton{
 
     public void renderButton(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
         super.renderButton(matrix, mouseX, mouseY, partialTicks);
-        if (this.isHovered()) {
+        if (this.isHovered(mouseX, mouseY)) {
             this.renderToolTip(matrix, mouseX, mouseY);
         }
 

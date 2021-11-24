@@ -51,7 +51,7 @@ public class ModImageButton extends TooltipButton {
         int i = this.yTexStart;
         if (!this.active) {
             i += yDiffText * 2;
-        } else if (this.isHovered()) {
+        } else if (this.isHovered(mouseX, mouseY)) {
             i += this.yDiffText;
         }
         blit(matrix, this.x, this.y, this.xTexStart, i, this.width, this.height, imageWidth, imageHeight);
