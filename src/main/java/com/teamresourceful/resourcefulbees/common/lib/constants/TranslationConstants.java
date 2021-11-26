@@ -351,6 +351,21 @@ public class TranslationConstants {
         public static final TranslationTextComponent SCRAPER_TOOLTIP_1 = new TranslationTextComponent("block.resourcefulbees.scraper.tooltip.info.2");
     }
 
+    public static class HoneyDipper {
+
+        @Translate("Hive position for [%s] has been set to %s")
+        public static final String HIVE_SET = "items.resourcefulbees.honey_dipper.hive_set";
+
+        @Translate("Flower position for [%s] has been set to %s")
+        public static final String FLOWER_SET = "items.resourcefulbees.honey_dipper.flower_set";
+
+        @Translate("Bee Selection Cleared!")
+        public static final TranslationTextComponent SELECTION_CLEARED = new TranslationTextComponent("items.resourcefulbees.honey_dipper.cleared");
+
+        @Translate("[%s] has been selected!")
+        public static final String BEE_SET = "items.resourcefulbees.honey_dipper.bee_set";
+    }
+
     public static class Beepedia {
 
         @Translate("Bees Found: §6 %s / %s")
