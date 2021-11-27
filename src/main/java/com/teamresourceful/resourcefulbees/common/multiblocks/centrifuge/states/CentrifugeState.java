@@ -1,133 +1,258 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states;
 
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeTerminalEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
-import net.roguelogix.phosphophyllite.gui.GuiSync;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.INBTSerializable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
-public class CentrifugeState implements GuiSync.IGUIPacket {
+public class CentrifugeState implements INBTSerializable<CompoundNBT> {
 
-    /**
+    /*<T extends AbstractGUICentrifugeEntity>*/
+
+    //private CentrifugeActivity centrifugeActivity = CentrifugeActivity.INACTIVE;
+    private CentrifugeTier maxCentrifugeTier = CentrifugeTier.ERROR;
+    private String owner = "null";
+    private int energyStored = 0;
+    private int energyCapacity = 0;
+    private long terminal = 0;
+    private Set<BlockPos> inputs = new HashSet<>();
+    private Set<BlockPos> itemOutputs = new HashSet<>();
+    private Set<BlockPos> fluidOutputs = new HashSet<>();
+    private Set<BlockPos> dumps = new HashSet<>();
+    private int energyPorts = 0;
+    private int gearboxes = 0;
+    private int processors = 0;
+    private int recipePowerModifier = 1;
+    private double recipeTimeModifier = 1;
+
+/*    *//**
      * Activity status for the Centrifuge - Not sure if we're gonna use this yet...
-     */
-    public CentrifugeActivity centrifugeActivity = CentrifugeActivity.INACTIVE;
+     *//*
+    public CentrifugeActivity getCentrifugeActivity() {
+        return centrifugeActivity;
+    }
+
+    public void setCentrifugeActivity(CentrifugeActivity centrifugeActivity) {
+        this.centrifugeActivity = centrifugeActivity;
+    }*/
 
     /**
      * the maximum tier for this centrifuge - affects the maximum tier for blocks attached to it
      */
-    public CentrifugeTier maxCentrifugeTier = CentrifugeTier.ERROR;
+    public CentrifugeTier getMaxCentrifugeTier() {
+        return maxCentrifugeTier;
+    }
+
+    public void setMaxCentrifugeTier(CentrifugeTier maxCentrifugeTier) {
+        this.maxCentrifugeTier = maxCentrifugeTier;
+    }
 
     /**
      * Owner of the Centrifuge - idk if we'll add this or not
      */
-    public UUID owner = null;
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public long getTerminal() {
+        return terminal;
+    }
+
+    public void setTerminal(long terminal) {
+        this.terminal = terminal;
+    }
 
     /**
      * the current energy stored in the centrifuge
      */
-    public int energyStored = 0;
+    public int getEnergyStored() {
+        return energyStored;
+    }
+
+    public void setEnergyStored(int energyStored) {
+        this.energyStored = energyStored;
+    }
 
     /**
      * max energy the centrifuge can hold
      */
-    public int energyCapacity = 0;
+    public int getEnergyCapacity() {
+        return energyCapacity;
+    }
+
+    public void setEnergyCapacity(int energyCapacity) {
+        this.energyCapacity = energyCapacity;
+    }
 
     /**
      * total number of inputs attached to the centrifuge
      */
-    public int numInputs = 0;
+    public Set<BlockPos> getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(Set<BlockPos> inputs) {
+        this.inputs = inputs;
+    }
 
     /**
      * total number of item outputs attached to the centrifuge
      */
-    public int numItemOutputs = 0;
+    public Set<BlockPos> getItemOutputs() {
+        return itemOutputs;
+    }
+
+    public void setItemOutputs(Set<BlockPos> itemOutputs) {
+        this.itemOutputs = itemOutputs;
+    }
 
     /**
      * total number of fluid outputs attached to the centrifuge
      */
-    public int numFluidOutputs = 0;
+    public Set<BlockPos> getFluidOutputs() {
+        return fluidOutputs;
+    }
+
+    public void setFluidOutputs(Set<BlockPos> fluidOutputs) {
+        this.fluidOutputs = fluidOutputs;
+    }
 
     /**
      * total number of energy ports attached to the centrifuge
      */
-    public int numEnergyPorts = 0;
+    public int getEnergyPorts() {
+        return energyPorts;
+    }
+
+    public void setEnergyPorts(int energyPorts) {
+        this.energyPorts = energyPorts;
+    }
 
     /**
      * total number of voids attached to the centrifuge
      */
-    public int numDumps = 0;
+    public Set<BlockPos> getDumps() {
+        return dumps;
+    }
+
+    public void setDumps(Set<BlockPos> dumps) {
+        this.dumps = dumps;
+    }
 
     /**
      * total number of gearboxes attached to the centrifuge
      */
-    public int numGearboxes = 0;
+    public int getGearboxes() {
+        return gearboxes;
+    }
+
+    public void setGearboxes(int gearboxes) {
+        this.gearboxes = gearboxes;
+    }
 
     /**
      * total number of processors attached to the centrifuge
      */
-    public int numProcessors = 0;
+    public int getProcessors() {
+        return processors;
+    }
+
+    public void setProcessors(int processors) {
+        this.processors = processors;
+    }
 
     /**
      * the per tick recipe power multiplier
      */
-    public int recipePowerModifier = 1;
+    public int getRecipePowerModifier() {
+        return recipePowerModifier;
+    }
+
+    public void setRecipePowerModifier(int recipePowerModifier) {
+        this.recipePowerModifier = recipePowerModifier;
+    }
 
     /**
      * the recipe time reduction multiplier
      */
-    public double recipeTimeModifier = 1;
+    public double getRecipeTimeModifier() {
+        return recipeTimeModifier;
+    }
 
-    /**
-     * the terminal whose info this belongs to
-     */
-    private @Nullable CentrifugeTerminalEntity centrifugeTerminal;
-
-    public CentrifugeState(@Nullable CentrifugeTerminalEntity centrifugeTerminal) {
-        this.centrifugeTerminal = centrifugeTerminal;
+    public void setRecipeTimeModifier(double recipeTimeModifier) {
+        this.recipeTimeModifier = recipeTimeModifier;
     }
 
     @Override
-    public void read(@NotNull Map<?, ?> data) {
-        centrifugeActivity = CentrifugeActivity.fromByte((Byte) data.get("centrifugeActivity"));
-        maxCentrifugeTier = CentrifugeTier.byName((String) data.get("maxCentrifugeTier"));
-        energyStored = (Integer) data.get("energyStored");
-        energyCapacity = (Integer) data.get("energyCapacity");
-        numInputs = (Integer) data.get("numInputs");
-        numItemOutputs = (Integer) data.get("numItemOutputs");
-        numFluidOutputs = (Integer) data.get("numFluidOutputs");
-        numEnergyPorts = (Integer) data.get("numEnergyPorts");
-        numDumps = (Integer) data.get("numDumps");
-        numGearboxes = (Integer) data.get("numGearboxes");
-        numProcessors = (Integer) data.get("numProcessors");
-        recipePowerModifier = (Integer) data.get("recipePowerModifier");
-        recipeTimeModifier = (Double) data.get("recipeTimeModifier");
+    public CompoundNBT serializeNBT() {
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putString("Owner", owner);
+        nbt.putString("MaxTier", maxCentrifugeTier.getName());
+        nbt.putInt("EnergyStored", energyStored);
+        nbt.putInt("EnergyCapacity", energyCapacity);
+        nbt.putLong("Terminal", terminal);
+        nbt.put("Inputs", writeBlockList(inputs));
+        nbt.put("ItemOutputs", writeBlockList(itemOutputs));
+        nbt.put("FluidOutputs", writeBlockList(fluidOutputs));
+        nbt.put("Dumps", writeBlockList(dumps));
+        nbt.putInt("EnergyPorts", energyPorts);
+        nbt.putInt("Gearboxes", gearboxes);
+        nbt.putInt("Processors", processors);
+        nbt.putInt("RecipePowerModifier", recipePowerModifier);
+        nbt.putDouble("RecipeTimeModifier", recipeTimeModifier);
+        return nbt;
     }
 
-    @Nullable
     @Override
-    public Map<?, ?> write() {
-        if (centrifugeTerminal != null) centrifugeTerminal.updateState();
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("centrifugeActivity", centrifugeActivity.getByte());
-        data.put("maxCentrifugeTier", maxCentrifugeTier.getSerializedName());
-        //data.put("owner", owner.)   - not sure if we'll use this or not yet......
-        data.put("energyStored", energyStored);
-        data.put("energyCapacity", energyCapacity);
-        data.put("numInputs", numInputs);
-        data.put("numItemOutputs", numItemOutputs);
-        data.put("numFluidOutputs", numFluidOutputs);
-        data.put("numEnergyPorts", numEnergyPorts);
-        data.put("numDumps", numDumps);
-        data.put("numGearboxes", numGearboxes);
-        data.put("numProcessors", numProcessors);
-        data.put("recipePowerModifier", recipePowerModifier);
-        data.put("recipeTimeModifier", recipeTimeModifier);
+    public void deserializeNBT(CompoundNBT nbt) {
+        owner = nbt.getString("Owner");
+        maxCentrifugeTier = CentrifugeTier.byName(nbt.getString("MaxTier"));
+        energyStored = nbt.getInt("EnergyStored");
+        energyCapacity = nbt.getInt("EnergyCapacity");
+        terminal = nbt.getLong("Terminal");
+        inputs = readBlockList(nbt.getList("Inputs", 10));
+        itemOutputs = readBlockList(nbt.getList("ItemOutputs", 10));
+        fluidOutputs = readBlockList(nbt.getList("FluidOutputs", 10));
+        dumps = readBlockList(nbt.getList("Dumps", 10));
+        energyPorts = nbt.getInt("EnergyPorts");
+        gearboxes = nbt.getInt("Gearboxes");
+        processors = nbt.getInt("Processors");
+        recipePowerModifier = nbt.getInt("RecipePowerModifier");
+        recipeTimeModifier = nbt.getDouble("RecipeTimeModifier");
+    }
 
-        return data;
+    private static ListNBT writeBlockList(Collection<BlockPos> set) {
+        ListNBT listNBT = new ListNBT();
+        AtomicInteger i = new AtomicInteger();
+        set.forEach(value -> {
+            CompoundNBT nbt = new CompoundNBT();
+            nbt.put(String.valueOf(i.getAndIncrement()), NBTUtil.writeBlockPos(value));
+            listNBT.add(nbt);
+        });
+        return listNBT;
+    }
+
+    private Set<BlockPos> readBlockList(ListNBT listNBT) {
+        Set<BlockPos> blockSet = new HashSet<>();
+        if (!listNBT.isEmpty()) {
+            AtomicInteger i = new AtomicInteger();
+            return listNBT.stream()
+                    .map(CompoundNBT.class::cast)
+                    .map(tag -> NBTUtil.readBlockPos(tag.getCompound(String.valueOf(i.getAndIncrement()))))
+                    .collect(Collectors.toSet());
+        }
+        return blockSet;
     }
 }

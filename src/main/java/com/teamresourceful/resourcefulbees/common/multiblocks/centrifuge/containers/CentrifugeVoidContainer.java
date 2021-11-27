@@ -78,15 +78,4 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
     public int getContainerInputStart() {
         return 0;
     }
-
-/*    @Override
-    public void executeRequest(String requestName, Object requestData) {
-        assert voidEntity.getLevel() != null;
-        if (voidEntity.getLevel().isClientSide()) {
-            runRequest(requestName, requestData);
-            return;
-        }
-
-        voidEntity.runRequest(requestName, requestData);
-    }*/
 }

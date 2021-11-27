@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeInputContainer;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractTieredCentrifugeEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
@@ -16,19 +16,15 @@ import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import io.netty.buffer.Unpooled;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
@@ -48,11 +44,10 @@ import net.roguelogix.phosphophyllite.multiblock.generic.ITickableMultiblockTile
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implements INamedContainerProvider, ITickableMultiblockTile, IOnAssemblyTile {
+public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implements ITickableMultiblockTile, IOnAssemblyTile {
 
     public static final int RECIPE_SLOT = 0;
 
@@ -84,15 +79,45 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
         return filterInventory;
     }
 
+    @Nullable
+    public ResourceLocation getFilterRecipeID() {
+        return filterRecipeID;
+    }
+
+    @Nullable
+    public ResourceLocation getProcessRecipeID() {
+        return processRecipeID;
+    }
+
+    public ProcessStage getProcessStage() {
+        return processStage;
+    }
+
+    public OutputLocations<CentrifugeItemOutputEntity> getItemOutputs() {
+        return itemOutputs;
+    }
+
+    public OutputLocations<CentrifugeFluidOutputEntity> getFluidOutputs() {
+        return fluidOutputs;
+    }
+
     @Override
-    public @NotNull ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.centrifuge_input");
+    protected ITextComponent getDefaultName() {
+        return new TranslationTextComponent("gui.centrifuge.input.item." + tier.getName());
     }
 
     @Nullable
     @Override
     public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
+        controller.updateCentrifugeState(centrifugeState);
         return new CentrifugeInputContainer(id, playerInventory, this);
+    }
+
+    @Override
+    protected void getOpenGUIPacket(PacketBuffer buffer) {
+        super.getOpenGUIPacket(buffer);
+        buffer.writeInt(1);
+        buffer.writeInt(tier.getSlots());
     }
 
     public int getRecipeTime() {
@@ -210,28 +235,6 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
     //endregion
 
     //region NBT HANDLING
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(worldPosition, 0, writeNBT());
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        readNBT(pkt.getTag());
-    }
-
-    @NotNull
-    @Override
-    public CompoundNBT getUpdateTag() {
-        return save(new CompoundNBT());
-    }
-
-    @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-        load(state, tag);
-    }
-
     @Override
     public void onLoad() {
         if (level != null) {
@@ -243,6 +246,14 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
         super.onLoad();
     }
 
+    //TODO see below!
+    //REQUIRED:: STOP BLOATING NETWORK PACKETS!! Client side containers should be populated with dummy ItemStackHandlers
+    // . as vanilla will handle syncing of the data. therefore not every single datapoint needs to be written to nbt
+    // . UpdatePackets and UpdateTags dont always need to read/write the same data!
+    // . this means the container classes will need to be tweaked appropriately
+
+    //Note about my attempt to solve the above issue: I need access to level and filter recipe, so I can perform
+    //the proper testing against the itemstacks
     @Override
     protected void readNBT(@NotNull CompoundNBT tag) {
         inventoryHandler.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
@@ -267,7 +278,7 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
     @NotNull
     @Override
     protected CompoundNBT writeNBT() {
-        CompoundNBT tag = new CompoundNBT();
+        CompoundNBT tag = super.writeNBT();
         tag.put(NBTConstants.NBT_INVENTORY, inventoryHandler.serializeNBT());
         tag.put(NBTConstants.NBT_FILTER_INVENTORY, filterInventory.serializeNBT());
         tag.putString(NBTConstants.NBT_PROCESS_STAGE, processStage.toString().toLowerCase(Locale.ROOT));
@@ -285,11 +296,11 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
     // REQUIRED remove this method and logic after implementing linking code in gui - this is only for dev/testing
     @Override
     public void onAssembly() {
-        ArrayList<CentrifugeItemOutputEntity> iout = new ArrayList<>(this.controller.getItemOutputs());
+        List<CentrifugeItemOutputEntity> iout = this.controller.getItemOutputs();
         itemOutputs.setFirst(iout.get(0), iout.get(0).getBlockPos());
         itemOutputs.setSecond(iout.get(1), iout.get(1).getBlockPos());
         itemOutputs.setThird(iout.get(2), iout.get(2).getBlockPos());
-        ArrayList<CentrifugeFluidOutputEntity> fout = new ArrayList<>(this.controller.getFluidOutputs());
+        List<CentrifugeFluidOutputEntity> fout = this.controller.getFluidOutputs();
         fluidOutputs.setFirst(fout.get(0), iout.get(0).getBlockPos());
         fluidOutputs.setSecond(fout.get(0), iout.get(0).getBlockPos());
         fluidOutputs.setThird(fout.get(0), iout.get(0).getBlockPos());
@@ -321,12 +332,8 @@ public class CentrifugeInputEntity extends AbstractTieredCentrifugeEntity implem
         }
     }
 
-    //TODO figure out issue with clicking items into slots after world load
-    // issue is fixed after removing item in recipe slot and adding it back in
-    // leading to believe that client or server has the wrong info on load until the changes are made
-    // check onLoad and updateRecipe - verify first by checking the validation of the item when
-    // clicking into a slot on world load to see if one side has the wrong info and returns a false/null
     private class InventoryHandler extends ItemStackHandler {
+
         protected InventoryHandler(int slots) {
             super(slots);
         }

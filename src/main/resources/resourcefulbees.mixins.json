@@ -4,22 +4,26 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "resourcefulbees.refmap.json",
   "mixins": [
-    "accessors.AnimalEntityAccessor",
-    "accessors.BeeEntityAccessor",
-    "invokers.BeeEntityInvoker",
-    "accessors.BeeHiveTileEntityAccessor",
-    "accessors.BlockAccessor",
-    "invokers.BreedGoalInvoker",
-    "accessors.BTEBeeAccessor",
-    "accessors.ContainerAccessor",
-    "invokers.DispenserBlockInvoker",
-    "invokers.FindBeehiveGoalInvoker",
     "MixinBeeEntity",
     "MixinEnterBeehiveGoal",
     "MixinFindBeehiveGoal",
     "MixinMinecraftServer",
     "MixinUpdateBeehiveGoal",
-    "RecipeManagerAccessorInvoker"
+    "RecipeManagerAccessorInvoker",
+    "accessors.AnimalEntityAccessor",
+    "accessors.BeeEntityAccessor",
+    "accessors.BeeHiveTileEntityAccessor",
+    "accessors.BlockAccessor",
+    "accessors.BTEBeeAccessor",
+    "accessors.ContainerAccessor",
+    "invokers.BeeEntityInvoker",
+    "invokers.BreedGoalInvoker",
+    "invokers.DispenserBlockInvoker",
+    "invokers.FindBeehiveGoalInvoker"
   ],
-  "minVersion": "0.8.1"
+  "minVersion": "0.8.1",
+  "client": [
+    "accessors.FontResourceManagerAccessor",
+    "accessors.MinecraftAccessor"
+  ]
 }

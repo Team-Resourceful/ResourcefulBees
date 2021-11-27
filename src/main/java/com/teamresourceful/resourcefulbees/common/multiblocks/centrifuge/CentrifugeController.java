@@ -18,23 +18,20 @@ import net.roguelogix.phosphophyllite.multiblock.rectangular.RectangularMultiblo
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CentrifugeController extends RectangularMultiblockController<CentrifugeController, AbstractCentrifugeEntity, AbstractCentrifuge> {
 
     private CentrifugeActivity centrifugeActivity = CentrifugeActivity.INACTIVE;
 
-    private final Set<CentrifugeInputEntity> inputs = new HashSet<>();
     private final Set<CentrifugeProcessorEntity> processors = new HashSet<>();
     private final Set<CentrifugeGearboxEntity> gearboxes = new HashSet<>();
-    private final Set<CentrifugeItemOutputEntity> itemOutputs = new HashSet<>();
-    private final Set<CentrifugeFluidOutputEntity> fluidOutputs = new HashSet<>();
-    private final Set<CentrifugeVoidEntity> dumps = new HashSet<>();
     private final Set<CentrifugeEnergyPortEntity> energyPorts = new HashSet<>();
     private final Set<CentrifugeTerminalEntity> terminals = new HashSet<>();
+    private final Map<BlockPos, CentrifugeInputEntity> inputs = new HashMap<>();
+    private final Map<BlockPos, CentrifugeItemOutputEntity> itemOutputs = new HashMap<>();
+    private final Map<BlockPos, CentrifugeFluidOutputEntity> fluidOutputs = new HashMap<>();
+    private final Map<BlockPos, CentrifugeVoidEntity> dumps = new HashMap<>();
     private final CentrifugeEnergyStorage energyStorage = new CentrifugeEnergyStorage();
 
     private final HashMap<BlockPos, ArrayList<BlockPos>> inputOutputMap = new HashMap<>();
@@ -51,20 +48,20 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
         interiorValidator = block -> block.defaultBlockState().isAir();
         setAssemblyValidator(centrifugeController -> {
             checkRequiredBlocksExist(terminals, "no_terminal");
-            checkRequiredBlocksExist(inputs, "no_input");
-            checkRequiredBlocksExist(itemOutputs, "no_item_output");
-            checkRequiredBlocksExist(fluidOutputs, "no_fluid_output");
+            checkRequiredBlocksExist(inputs.values(), "no_input");
+            checkRequiredBlocksExist(itemOutputs.values(), "no_item_output");
+            checkRequiredBlocksExist(fluidOutputs.values(), "no_fluid_output");
             checkRequiredBlocksExist(energyPorts, "no_energy_port");
-            checkHasTooManyBlocks(terminals, 1,"too_many_terminal" );
+            if (terminals.size() != 1) throwValidationError("too_many_terminal");
             checkHasTooManyBlocks(processors, 63, "too_many_cpu");
             checkHasTooManyBlocks(gearboxes, 64, "too_many_gearbox");
             terminals.stream().findFirst().ifPresent(entity -> {
                 this.terminal = entity;
                 CentrifugeTier tier = entity.getTier();
-                checkBlockExceedsTier(dumps, tier, "void_exceeds_tier");
-                checkBlockExceedsTier(inputs, tier, "input_exceeds_tier");
-                checkBlockExceedsTier(itemOutputs, tier, "item_output_exceeds_tier");
-                checkBlockExceedsTier(fluidOutputs, tier, "fluid_output_exceeds_tier");
+                checkBlockExceedsTier(dumps.values(), tier, "void_exceeds_tier");
+                checkBlockExceedsTier(inputs.values(), tier, "input_exceeds_tier");
+                checkBlockExceedsTier(itemOutputs.values(), tier, "item_output_exceeds_tier");
+                checkBlockExceedsTier(fluidOutputs.values(), tier, "fluid_output_exceeds_tier");
                 checkBlockExceedsTier(energyPorts, tier, "energy_port_exceeds_tier");
             });
             validateBlockLocations();
@@ -72,23 +69,23 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
         });
     }
 
-    public Set<CentrifugeItemOutputEntity> getItemOutputs() {
-        return itemOutputs;
+    public List<CentrifugeItemOutputEntity> getItemOutputs() {
+        return new ArrayList<>(itemOutputs.values());
     }
 
-    public Set<CentrifugeFluidOutputEntity> getFluidOutputs() {
-        return fluidOutputs;
+    public List<CentrifugeFluidOutputEntity> getFluidOutputs() {
+        return new ArrayList<>(fluidOutputs.values());
     }
 
-    private <T extends AbstractCentrifugeEntity> void checkRequiredBlocksExist(Set<T> blockSet, String error) {
+    private <T extends AbstractCentrifugeEntity> void checkRequiredBlocksExist(Collection<T> blockSet, String error) {
         if (blockSet.isEmpty()) throwValidationError(error);
     }
 
-    private <T extends AbstractCentrifugeEntity> void checkHasTooManyBlocks(Set<T> blockSet, int allowed, String error) {
+    private <T extends AbstractCentrifugeEntity> void checkHasTooManyBlocks(Collection<T> blockSet, int allowed, String error) {
         if (blockSet.size() > allowed) throwValidationError(error);
     }
 
-    private <T extends AbstractTieredCentrifugeEntity> void checkBlockExceedsTier(Set<T> blockSet, CentrifugeTier tier, String error) {
+    private <T extends AbstractTieredCentrifugeEntity> void checkBlockExceedsTier(Collection<T> blockSet, CentrifugeTier tier, String error) {
         blockSet.forEach(t -> {
             if (t.getTier().ordinal() > tier.ordinal()) throwValidationError(error);
         });
@@ -101,20 +98,20 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     private void validateBlockLocations() {
         BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 
-        for (CentrifugeInputEntity input : inputs) {
+        for (CentrifugeInputEntity input : inputs.values()) {
             mutablePos.set(input.getBlockPos());
             if (mutablePos.getY() != maxCoord().y()) throwValidationError("input_not_on_top");
         }
 
-        for (CentrifugeItemOutputEntity itemOutput : itemOutputs) {
+        for (CentrifugeItemOutputEntity itemOutput : itemOutputs.values()) {
             mutablePos.set(itemOutput.getBlockPos());
             if (mutablePos.getY() == maxCoord().y()) throwValidationError("wrong_output_location");
         }
-        for (CentrifugeFluidOutputEntity fluidOutputOutput : fluidOutputs) {
+        for (CentrifugeFluidOutputEntity fluidOutputOutput : fluidOutputs.values()) {
             mutablePos.set(fluidOutputOutput.getBlockPos());
             if (mutablePos.getY() == maxCoord().y()) throwValidationError("wrong_output_location");
         }
-        for (CentrifugeVoidEntity dump : dumps) {
+        for (CentrifugeVoidEntity dump : dumps.values()) {
             mutablePos.set(dump.getBlockPos());
             if (mutablePos.getY() == maxCoord().y()) throwValidationError("wrong_output_location");
         }
@@ -128,7 +125,7 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     @Override
     protected synchronized void onPartAttached(@Nonnull AbstractCentrifugeEntity tile) {
         if (tile instanceof CentrifugeInputEntity) {
-            inputs.add((CentrifugeInputEntity) tile);
+            inputs.put(tile.getBlockPos(), (CentrifugeInputEntity) tile);
         }
         if (tile instanceof CentrifugeProcessorEntity) {
             processors.add((CentrifugeProcessorEntity) tile);
@@ -137,13 +134,13 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
             gearboxes.add((CentrifugeGearboxEntity) tile);
         }
         if (tile instanceof CentrifugeItemOutputEntity) {
-            itemOutputs.add((CentrifugeItemOutputEntity) tile);
+            itemOutputs.put(tile.getBlockPos(), (CentrifugeItemOutputEntity) tile);
         }
         if (tile instanceof CentrifugeFluidOutputEntity) {
-            fluidOutputs.add((CentrifugeFluidOutputEntity) tile);
+            fluidOutputs.put(tile.getBlockPos(), (CentrifugeFluidOutputEntity) tile);
         }
         if (tile instanceof CentrifugeVoidEntity) {
-            dumps.add((CentrifugeVoidEntity) tile);
+            dumps.put(tile.getBlockPos(), (CentrifugeVoidEntity) tile);
         }
         if (tile instanceof CentrifugeEnergyPortEntity) {
             CentrifugeEnergyPortEntity energyPort = (CentrifugeEnergyPortEntity) tile;
@@ -163,7 +160,7 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     @Override
     protected synchronized void onPartDetached(@Nonnull AbstractCentrifugeEntity tile) {
         if (tile instanceof CentrifugeInputEntity) {
-            inputs.remove(tile);
+            inputs.remove(tile.getBlockPos().asLong());
         }
         if (tile instanceof CentrifugeProcessorEntity) {
             processors.remove(tile);
@@ -172,20 +169,20 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
             gearboxes.remove(tile);
         }
         if (tile instanceof CentrifugeItemOutputEntity) {
-            itemOutputs.remove(tile);
+            itemOutputs.remove(tile.getBlockPos().asLong());
         }
         if (tile instanceof CentrifugeFluidOutputEntity) {
-            fluidOutputs.remove(tile);
+            fluidOutputs.remove(tile.getBlockPos().asLong());
         }
         if (tile instanceof CentrifugeVoidEntity) {
-            dumps.remove(tile);
+            dumps.remove(tile.getBlockPos().asLong());
         }
         if (tile instanceof CentrifugeEnergyPortEntity) {
-            energyPorts.remove(tile);
+            energyPorts.remove(tile.getBlockPos().asLong());
             energyStorage.decreaseCapacity(((CentrifugeEnergyPortEntity) tile).getTier().getEnergyCapacity());
         }
         if (tile instanceof CentrifugeTerminalEntity) {
-            terminals.remove(tile);
+            terminals.remove(tile.getBlockPos().asLong());
         }
 
     }
@@ -209,14 +206,14 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     }
 
     public synchronized boolean dumpsContainItem(ItemStack stack) {
-        for (CentrifugeVoidEntity dump : dumps) {
+        for (CentrifugeVoidEntity dump : dumps.values()) {
             if (dump.containsItem(stack)) return true;
         }
         return false;
     }
 
     public synchronized boolean dumpsContainFluid(FluidStack stack) {
-        for (CentrifugeVoidEntity dump : dumps) {
+        for (CentrifugeVoidEntity dump : dumps.values()) {
             if (dump.containsFluid(stack)) return true;
         }
         return false;
@@ -224,12 +221,12 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
 
     boolean updateBlockStates = false;
 
-    public void updateBlockStates() {
+/*    public void updateBlockStates() {
         terminals.forEach(terminal -> {
             world.setBlockAndUpdate(terminal.getBlockPos(), terminal.getBlockState().setValue(CentrifugeActivity.PROPERTY, centrifugeActivity));
             terminal.setChanged();
         });
-    }
+    }*/
 
     public synchronized void setActive(@Nonnull CentrifugeActivity newState) {
         if (centrifugeActivity != newState) {
@@ -268,13 +265,6 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     }
     //endregion
 
-
-    @Override
-    public void tick() {
-        markDirty();
-        super.tick();
-    }
-
     @Override
     protected void onMerge(@NotNull CentrifugeController otherController) {
         energyStorage.storeEnergy(otherController.energyStorage.getStored());
@@ -283,18 +273,21 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     }
 
     public void updateCentrifugeState(CentrifugeState centrifugeState) {
-        centrifugeState.centrifugeActivity = centrifugeActivity;
-        centrifugeState.maxCentrifugeTier = terminal.getTier();
-        centrifugeState.energyStored = energyStorage.getStored();
-        centrifugeState.energyCapacity = energyStorage.getCapacity();
-        centrifugeState.numInputs = inputs.size();
-        centrifugeState.numItemOutputs = itemOutputs.size();
-        centrifugeState.numFluidOutputs = fluidOutputs.size();
-        centrifugeState.numEnergyPorts = energyPorts.size();
-        centrifugeState.numDumps = dumps.size();
-        centrifugeState.numGearboxes = gearboxes.size();
-        centrifugeState.numProcessors = processors.size();
-        centrifugeState.recipePowerModifier = getRecipePowerModifier();
-        centrifugeState.recipeTimeModifier = getRecipeTimeModifier();
+        //centrifugeState.setCentrifugeActivity(centrifugeActivity);
+        centrifugeState.setMaxCentrifugeTier(terminal.getTier());
+        centrifugeState.setTerminal(terminal.getBlockPos().asLong());
+        centrifugeState.setEnergyStored(energyStorage.getStored());
+        centrifugeState.setEnergyCapacity(energyStorage.getCapacity());
+        centrifugeState.setInputs(inputs.keySet());
+        centrifugeState.setItemOutputs(itemOutputs.keySet());
+        centrifugeState.setFluidOutputs(fluidOutputs.keySet());
+        centrifugeState.setDumps(dumps.keySet());
+        centrifugeState.setEnergyPorts(energyPorts.size());
+        centrifugeState.setGearboxes(gearboxes.size());
+        centrifugeState.setProcessors(processors.size());
+        centrifugeState.setRecipePowerModifier(getRecipePowerModifier());
+        centrifugeState.setRecipeTimeModifier(getRecipeTimeModifier());
     }
+
+
 }

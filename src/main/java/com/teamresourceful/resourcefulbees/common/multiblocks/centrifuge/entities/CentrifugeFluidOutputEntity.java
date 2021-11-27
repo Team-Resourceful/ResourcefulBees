@@ -2,11 +2,10 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entiti
 
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeFluidOutputContainer;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractTieredCentrifugeEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -25,7 +24,7 @@ import net.minecraftforge.fml.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CentrifugeFluidOutputEntity extends AbstractTieredCentrifugeEntity implements ICentrifugeOutput<FluidOutput> {
+public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity implements ICentrifugeOutput<FluidOutput> {
 
     private final FluidTank fluidTank;
     private final LazyOptional<IFluidHandler> fluidOptional;
@@ -71,30 +70,18 @@ public class CentrifugeFluidOutputEntity extends AbstractTieredCentrifugeEntity 
     }
 
     @Override
-    public @NotNull ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.resourcefulbees.centrifuge_fluid_output");
+    protected ITextComponent getDefaultName() {
+        return new TranslationTextComponent("gui.centrifuge.output.fluid." + tier.getName());
     }
 
     @Nullable
     @Override
     public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity player) {
+        controller.updateCentrifugeState(centrifugeState);
         return new CentrifugeFluidOutputContainer(id, playerInventory, this);
     }
 
     //region NBT HANDLING
-    @NotNull
-    @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbtTagCompound = new CompoundNBT();
-        save(nbtTagCompound);
-        return nbtTagCompound;
-    }
-
-    @Override
-    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
-        this.load(state, tag);
-    }
-
     @Override
     protected void readNBT(@NotNull CompoundNBT tag) {
         fluidTank.readFromNBT(tag);
@@ -104,7 +91,7 @@ public class CentrifugeFluidOutputEntity extends AbstractTieredCentrifugeEntity 
     @NotNull
     @Override
     protected CompoundNBT writeNBT() {
-        CompoundNBT tag = new CompoundNBT();
+        CompoundNBT tag = super.writeNBT();
         fluidTank.writeToNBT(tag);
         return tag;
     }

@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 
 import com.teamresourceful.resourcefulbees.common.inventory.containers.ContainerWithStackMove;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractTieredCentrifugeEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.utils.WorldUtils;
 import net.minecraft.client.Minecraft;
@@ -17,7 +17,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class CentrifugeContainer<T extends AbstractTieredCentrifugeEntity> extends ContainerWithStackMove {
+public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity> extends ContainerWithStackMove {
 
     public static final int INV_X_OFFSET = 144;
     public static final int INV_Y_OFFSET = 124;
@@ -35,19 +35,15 @@ public abstract class CentrifugeContainer<T extends AbstractTieredCentrifugeEnti
         setupSlots();
     }
 
+    public @Nullable T getEntity() {
+        return entity;
+    }
+
     public CentrifugeTier getTier() {
         return tier;
     }
 
     protected abstract void setupSlots();
-
-    public int getInvOffsetX() {
-        return INV_X_OFFSET;
-    }
-
-    public int getInvOffsetY() {
-        return INV_Y_OFFSET;
-    }
 
     protected void addPlayerInvSlots() {
         for (int i = 0; i < 3; ++i) {

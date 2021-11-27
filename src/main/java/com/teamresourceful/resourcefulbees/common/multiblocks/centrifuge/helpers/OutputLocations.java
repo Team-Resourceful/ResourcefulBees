@@ -1,7 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers;
 
+import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
+import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.WorldUtils;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -55,6 +57,10 @@ public class OutputLocations<T extends TileEntity & ICentrifugeOutput<?>> {
     }
 
     public Output<T> get(int i) {
+        if (!MathUtils.inRangeInclusive(i, 0, 2)) {
+            ResourcefulBees.LOGGER.warn("Invalid Output Location Requested!");
+            return outputs[0];
+        }
         return outputs[i];
     }
 

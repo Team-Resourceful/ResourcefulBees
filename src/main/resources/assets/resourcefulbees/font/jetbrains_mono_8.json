@@ -1,0 +1,10 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "resourcefulbees:jetbrainsmonobold.ttf",
+      "size": 8,
+      "oversample": 5
+    }
+  ]
+}
