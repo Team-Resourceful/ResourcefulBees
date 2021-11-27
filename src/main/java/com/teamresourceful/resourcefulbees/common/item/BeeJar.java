@@ -12,6 +12,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.common.utils.TextComponentCodec;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -82,7 +83,13 @@ public class BeeJar extends Item {
             World worldIn = context.getLevel();
             BlockPos pos = context.getClickedPos();
             Entity entity = getEntityFromStack(stack, worldIn, true);
+
             if (entity != null) {
+                assert stack.getTag() != null;
+                CompoundNBT display = stack.getTag().getCompound(NBTConstants.NBT_DISPLAY);
+                if (!display.getString(NBTConstants.NBT_NAME).contains("item.resourcefulbees.bee_jar_filled")) {
+                    entity.setCustomName(ITextComponent.Serializer.fromJson(display.getString(NBTConstants.NBT_NAME)));
+                }
                 if (entity instanceof BeeEntity) {
                     BeeEntity beeEntity = (BeeEntity) entity;
                     resetBee(beeEntity);
@@ -122,7 +129,7 @@ public class BeeJar extends Item {
 
     public static void resetBee(BeeEntity beeEntity) {
         beeEntity.setSavedFlowerPos(null);
-        ((BeeEntityAccessor)beeEntity).setHivePos(null);
+        ((BeeEntityAccessor) beeEntity).setHivePos(null);
     }
 
     @Nullable
@@ -169,7 +176,7 @@ public class BeeJar extends Item {
     public static void renameJar(ItemStack stack, Entity target, String name) {
         if (stack.getTag() == null || stack.getTag().contains(NBTConstants.NBT_DISPLAY)) return;
         CompoundNBT nbt = stack.getOrCreateTag();
-        ITextComponent beeName = target.getName();
+        ITextComponent beeName = target.getCustomName() != null ? target.getCustomName() : target.getDisplayName();
         TranslationTextComponent bottleName = new TranslationTextComponent(name);
         bottleName.append(" - ").append(beeName);
         bottleName.setStyle(Style.EMPTY.withItalic(false));

@@ -52,7 +52,7 @@ public class TooltipTextFieldWidget extends TooltipWidget{
     };
 
     public TooltipTextFieldWidget(FontRenderer p_i232260_1_, int p_i232260_2_, int p_i232260_3_, int p_i232260_4_, int p_i232260_5_, ITextComponent p_i232260_6_) {
-        this(p_i232260_1_, p_i232260_2_, p_i232260_3_, p_i232260_4_, p_i232260_5_, (TextFieldWidget)null, p_i232260_6_);
+        this(p_i232260_1_, p_i232260_2_, p_i232260_3_, p_i232260_4_, p_i232260_5_, null, p_i232260_6_);
     }
 
     public TooltipTextFieldWidget(FontRenderer p_i232259_1_, int p_i232259_2_, int p_i232259_3_, int p_i232259_4_, int p_i232259_5_, @Nullable TextFieldWidget p_i232259_6_, ITextComponent p_i232259_7_) {
@@ -498,8 +498,8 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         return this.visible && this.isEditable ? super.changeFocus(p_231049_1_) : false;
     }
 
-    public boolean isMouseOver(double p_231047_1_, double p_231047_3_) {
-        return this.visible && p_231047_1_ >= (double)this.x && p_231047_1_ < (double)(this.x + this.width) && p_231047_3_ >= (double)this.y && p_231047_3_ < (double)(this.y + this.height);
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        return this.visible && mouseX >= (double)this.x && mouseX < (double)(this.x + this.width) && mouseY >= (double)this.y && mouseY < (double)(this.y + this.height);
     }
 
     protected void onFocusedChanged(boolean p_230995_1_) {

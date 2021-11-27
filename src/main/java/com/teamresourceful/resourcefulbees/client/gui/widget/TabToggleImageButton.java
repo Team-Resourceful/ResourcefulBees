@@ -38,7 +38,7 @@ public class TabToggleImageButton extends TabImageButton {
             i += this.xDiffTex;
         }
 
-        if (this.isHovered()) {
+        if (this.isHovered(mouseX, mouseY)) {
             j += this.yDiffText;
         }
 

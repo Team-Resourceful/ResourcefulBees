@@ -195,7 +195,7 @@ public class ModLanguageProvider extends BaseLanguageProvider {
         addBlock(ModBlocks.APIARY_BREEDER_BLOCK, "Apiary Breeder");
         addBlock(ModBlocks.HONEY_GENERATOR, "Honey Generator");
         addBlock(ModBlocks.ENDER_BEECON, "Ender Beecon");
-        addBlock(ModBlocks.HONEY_CONGEALER, "Honey Congealer");
+        addBlock(ModBlocks.SOLIDIFICATION_CHAMBER, "Solidification Chamber");
         addBlock(ModBlocks.HONEY_POT, "Honey Pot");
         //TODO Centrifuge
     }

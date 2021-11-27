@@ -25,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -80,17 +81,16 @@ public class HoneyDipper extends Item {
     private void sendMessageToPlayer(PlayerEntity playerEntity, MessageTypes messageTypes, BlockPos pos) {
         assert selectedBee != null : "bee went null before message was sent to player";
         switch (messageTypes) {
-            case HIVE:
-                playerEntity.displayClientMessage(new StringTextComponent(String.format("Hive position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NBTUtil.writeBlockPos(pos))), false);
-                break;
             case FLOWER:
-                playerEntity.displayClientMessage(new StringTextComponent(String.format("Flower position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NBTUtil.writeBlockPos(pos))), false);
+            case HIVE:
+                String translation = messageTypes.equals(MessageTypes.FLOWER) ? TranslationConstants.HoneyDipper.FLOWER_SET : TranslationConstants.HoneyDipper.HIVE_SET;
+                playerEntity.displayClientMessage(new TranslationTextComponent(translation, selectedBee.getDisplayName(), NBTUtil.writeBlockPos(pos)), false);
                 break;
             case BEE_CLEARED:
-                playerEntity.displayClientMessage(new StringTextComponent("Bee Selection Cleared!"), false);
+                playerEntity.displayClientMessage(TranslationConstants.HoneyDipper.SELECTION_CLEARED, false);
                 break;
             case BEE_SELECTED:
-                playerEntity.displayClientMessage(new StringTextComponent(String.format("[%1$s] has been selected!", selectedBee.getDisplayName().getString())), false);
+                playerEntity.displayClientMessage(new TranslationTextComponent(TranslationConstants.HoneyDipper.BEE_SET, selectedBee.getDisplayName()), false);
                 break;
             default: //Do Nothing
         }

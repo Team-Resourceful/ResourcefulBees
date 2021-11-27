@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyCongealerTileEntity;
+import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,13 +21,14 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
-public class HoneyCongealer extends AbstractTank {
+public class SolidificationChamber extends AbstractTank {
 
     protected static final VoxelShape VOXEL_SHAPE = Util.make(() -> {
         VoxelShape shape = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 5.0D, 15.0D);
@@ -37,14 +38,14 @@ public class HoneyCongealer extends AbstractTank {
         return shape;
     });
 
-    public HoneyCongealer(Properties properties) {
+    public SolidificationChamber(Properties properties) {
         super(properties);
     }
 
-    private static HoneyCongealerTileEntity getTileEntity(@NotNull IBlockReader world, @NotNull BlockPos pos) {
+    private static SolidificationChamberTileEntity getTileEntity(@NotNull IBlockReader world, @NotNull BlockPos pos) {
         TileEntity entity = world.getBlockEntity(pos);
-        if (entity instanceof HoneyCongealerTileEntity) {
-            return (HoneyCongealerTileEntity) entity;
+        if (entity instanceof SolidificationChamberTileEntity) {
+            return (SolidificationChamberTileEntity) entity;
         }
         return null;
     }
@@ -53,14 +54,14 @@ public class HoneyCongealer extends AbstractTank {
     public @NotNull ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult blockRayTraceResult) {
         TileEntity tileEntity = world.getBlockEntity(pos);
 
-        if (tileEntity instanceof HoneyCongealerTileEntity) {
+        if (tileEntity instanceof SolidificationChamberTileEntity) {
             if (!world.isClientSide) {
-                HoneyFluidTank tank = ((HoneyCongealerTileEntity) tileEntity).getTank();
+                FluidTank tank = ((SolidificationChamberTileEntity) tileEntity).getTank();
                 Item item = player.getItemInHand(hand).getItem();
                 if (item instanceof HoneyBottleItem) {
-                    tank.emptyBottle(player, hand);
+                    HoneyFluidTank.emptyBottle(tank, player, hand);
                 } else if (item instanceof GlassBottleItem) {
-                    tank.fillBottle(player, hand);
+                    HoneyFluidTank.fillBottle(tank, player, hand);
                 } else {
                     capabilityOrGuiUse(tileEntity, player, world, pos, hand);
                 }
@@ -72,7 +73,7 @@ public class HoneyCongealer extends AbstractTank {
 
     @Override
     public void animateTick(@NotNull BlockState stateIn, @NotNull World world, @NotNull BlockPos pos, @NotNull Random rand) {
-        HoneyCongealerTileEntity tank = getTileEntity(world, pos);
+        SolidificationChamberTileEntity tank = getTileEntity(world, pos);
         if (tank == null) {
             return;
         }
@@ -88,7 +89,7 @@ public class HoneyCongealer extends AbstractTank {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new HoneyCongealerTileEntity();
+        return new SolidificationChamberTileEntity();
     }
 
     @Override

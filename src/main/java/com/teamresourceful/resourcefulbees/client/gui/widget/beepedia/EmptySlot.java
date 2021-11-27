@@ -17,8 +17,8 @@ public class EmptySlot extends TooltipWidget {
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        super.render(matrix, mouseX, mouseY, partialTicks);
+    public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bind(BeepediaImages.BUTTON_IMAGE);
 

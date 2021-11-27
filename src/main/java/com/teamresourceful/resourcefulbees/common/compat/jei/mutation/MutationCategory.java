@@ -11,7 +11,6 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
@@ -34,14 +33,10 @@ import java.util.*;
 
 public class MutationCategory extends BaseCategory<IMutationRecipe> {
 
-    public static final ResourceLocation OUTPUT_SLOT = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/output_slot.png");
-    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beemutation.png");
+    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/mutation.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "mutation");
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##%");
-
-    private final IDrawableStatic slot;
-    private final IDrawableStatic outputSlot;
 
     public MutationCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
@@ -49,8 +44,6 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
                 guiHelper.drawableBuilder(GUI_BACK, -12, 0, 117, 75).addPadding(0, 0, 0, 0).build(),
                 guiHelper.createDrawableIngredient(new ItemStack(ModItems.MUTATION_ENTITY_ICON.get())),
                 IMutationRecipe.class);
-        this.slot = guiHelper.getSlotDrawable();
-        this.outputSlot = guiHelper.createDrawable(OUTPUT_SLOT, 0, 0, 26, 26);
     }
 
     public static List<IMutationRecipe> getMutationRecipes() {

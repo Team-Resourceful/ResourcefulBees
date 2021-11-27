@@ -35,10 +35,8 @@ import java.util.stream.Stream;
 
 public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
-    public static final ResourceLocation HIVE_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/beehive.png");
-    public static final ResourceLocation APIARY_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/apiary.png");
+    public static final ResourceLocation HIVE_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/honeycomb.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
-
 
     protected static final List<ItemStack> NESTS_0 = ModItems.NESTS_ITEMS.getEntries().stream()
             .filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).collect(Collectors.toList());
@@ -63,8 +61,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
                 HiveCategory.Recipe.class);
 
         hiveBackground = guiHelper.drawableBuilder(HIVE_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
-        apiaryBackground = guiHelper.drawableBuilder(APIARY_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
-
+        apiaryBackground = guiHelper.drawableBuilder(HIVE_BACK, 0, 26, 160, 26).addPadding(0, 0, 0, 0).build();
     }
 
     public static List<Recipe> getHoneycombRecipes() {

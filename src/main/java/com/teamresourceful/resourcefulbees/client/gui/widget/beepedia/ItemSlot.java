@@ -63,8 +63,8 @@ public class ItemSlot extends EmptySlot {
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        super.render(matrix, mouseX, mouseY, partialTicks);
+    public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
         renderItemStack(this, stack.get());
     }
 

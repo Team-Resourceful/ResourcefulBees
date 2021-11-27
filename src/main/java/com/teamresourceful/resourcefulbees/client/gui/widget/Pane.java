@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
@@ -13,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @OnlyIn(Dist.CLIENT)
@@ -23,6 +25,7 @@ public class Pane extends TooltipWidget {
 
     public Pane(int xPos, int yPos, int viewWidth, int viewHeight, ITextComponent message) {
         super(xPos, yPos, viewWidth, viewHeight, message);
+        mute = true;
     }
 
     public Pane(int xPos, int yPos, int viewWidth, int viewHeight) {
@@ -56,7 +59,7 @@ public class Pane extends TooltipWidget {
     }
 
     @OverridingMethodsMustInvokeSuper
-    public void renderChild(MatrixStack matrix, Widget child, int mouseX, int mouseY, float partialTicks) {
+    public void renderChild(MatrixStack matrix, TooltipWidget child, int mouseX, int mouseY, float partialTicks) {
         child.render(matrix, mouseX, mouseY, partialTicks);
     }
 
@@ -65,48 +68,54 @@ public class Pane extends TooltipWidget {
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (!visible) return;
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+
         startScissor();
 
-        super.render(matrix, mouseX, mouseY, partialTicks);
-
         //move the matrix origin to the top left corner of scroll area
-        matrix.pushPose();
-        modifyPane(matrix);
+        matrixStack.pushPose();
+        modifyPane(matrixStack);
 
-        for (Widget child : children) {
-            renderChild(matrix, child, mouseX, mouseY, partialTicks);
+        for (TooltipWidget child : children) {
+            renderChild(matrixStack, child, mouseX, mouseY, partialTicks);
+            matrixStack.pushPose();
+            matrixStack.translate(0, 0, 100);
+            matrixStack.scale(0.5f, 0.5f, 1.0f);
+            Minecraft.getInstance().font.draw(matrixStack, "[" + child.x + ", " + child.y + "]", child.x * 2, child.y * 2 - 9, Color.DEFAULT.getValue());
+            matrixStack.popPose();
         }
 
         //reset
-        matrix.popPose();
+        matrixStack.popPose();
         endScissor();
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
         for (Widget child : children) {
-            boolean scrolled = child.mouseScrolled(mouseX + x, mouseY + y, scrollAmount);
+            boolean scrolled = child.mouseScrolled(mouseX - x, mouseY - y, scrollAmount);
             if (scrolled) return true;
         }
-        return false;
+        return super.mouseScrolled(mouseX, mouseY, scrollAmount);
     }
+
 
     @Override
     public void onClick(double mouseX, double mouseY) {
-        children.forEach(c -> c.onClick(mouseX, mouseY));
+        children.forEach(c -> c.onClick(mouseX - x, mouseY - y));
     }
 
     @Override
     public void onRelease(double mouseX, double mouseY) {
-        children.forEach(c -> c.onRelease(mouseX, mouseY));
+        children.forEach(c -> c.onRelease(mouseX - x, mouseY - y));
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         for (Widget child : children) {
-            boolean clicked = child.mouseClicked(mouseX + x, mouseY + y, mouseButton);
+            boolean clicked = child.mouseClicked(mouseX - x, mouseY - y, mouseButton);
             if (clicked) return true;
         }
         return super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -115,30 +124,35 @@ public class Pane extends TooltipWidget {
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
         for (Widget child : children) {
-            boolean released = child.mouseReleased(mouseX + x, mouseY + y, mouseButton);
+            boolean released = child.mouseReleased(mouseX - x, mouseY - y, mouseButton);
             if (released) return true;
         }
         return super.mouseReleased(mouseX, mouseY, mouseButton);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int p_231045_5_, double p_231045_6_, double p_231045_8_) {
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double mouseXAmount, double mouseYAmount) {
         for (TooltipWidget child : children) {
-            boolean dragged = child.mouseDragged(mouseX + x, mouseY + y, p_231045_5_, p_231045_6_, p_231045_8_);
+            boolean dragged = child.mouseDragged(mouseX - x, mouseY - y, button, mouseXAmount, mouseYAmount);
             if (dragged) return true;
         }
-        return super.mouseDragged(mouseX, mouseY, p_231045_5_, p_231045_6_, p_231045_8_);
+        return super.mouseDragged(mouseX, mouseY, button, mouseXAmount, mouseYAmount);
+    }
+
+    @Override
+    protected boolean clicked(double pMouseX, double pMouseY) {
+        return super.clicked(pMouseX, pMouseY);
     }
 
     @Override
     public void drawTooltips(@NotNull MatrixStack matrix, Screen screen, int mouseX, int mouseY) {
         super.drawTooltips(matrix, screen, mouseX, mouseY);
-        children.forEach(c -> c.renderToolTip(matrix, mouseX + x, mouseY + y));
+        children.forEach(c -> c.renderToolTip(matrix, mouseX, mouseY));
     }
 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
-        children.forEach(c -> c.mouseMoved(mouseX, mouseY));
+        children.forEach(c -> c.mouseMoved(mouseX - x, mouseY - y));
     }
 
     @Override
@@ -160,16 +174,22 @@ public class Pane extends TooltipWidget {
     }
 
     @Override
-    public boolean charTyped(char character, int p_231042_2_) {
+    public boolean charTyped(char character, int modifiers) {
         for (Widget child : children) {
-            boolean typed = child.charTyped(character, p_231042_2_);
+            boolean typed = child.charTyped(character, modifiers);
             if (typed) return true;
         }
-        return super.charTyped(character, p_231042_2_);
+        return super.charTyped(character, modifiers);
     }
 
     public void add(TooltipWidget widget) {
         children.add(widget);
+        widget.addParent(x, y, this);
+    }
+
+    protected void addAll(List<? extends TooltipWidget> beeButtons) {
+        children.addAll(beeButtons);
+        beeButtons.forEach(c -> c.addParent(x, y, this));
     }
 
     public void reset() {

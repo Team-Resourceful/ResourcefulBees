@@ -35,6 +35,10 @@ public class CustomEnergyStorage extends EnergyStorage implements INBTSerializab
         onEnergyChanged();
     }
 
+    public float getPercentage() {
+        return this.getEnergyStored() / (float)this.getMaxEnergyStored();
+    }
+
     @Override
     public CompoundNBT serializeNBT() {
         CompoundNBT tag = new CompoundNBT();

@@ -136,7 +136,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('O', Ingredient.of(Tags.Items.OBSIDIAN))
                 .unlockedBy("has_obsidian", has(Tags.Items.OBSIDIAN))
                 .save(recipes);
-        AdvancedShapedRecipeBuilder.shaped(ModItems.HONEY_CONGEALER_ITEM)
+        AdvancedShapedRecipeBuilder.shaped(ModItems.SOLIDIFICATION_CHAMBER_ITEM)
                 .pattern(" G ","IGI","SWS")
                 .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
                 .define('G', Ingredient.of(Tags.Items.GLASS))

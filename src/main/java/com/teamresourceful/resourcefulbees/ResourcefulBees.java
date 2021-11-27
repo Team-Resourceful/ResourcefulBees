@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
-import com.teamresourceful.resourcefulbees.common.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.gui.IncompatibleModWarning;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
+import com.teamresourceful.resourcefulbees.common.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.config.ConfigLoader;

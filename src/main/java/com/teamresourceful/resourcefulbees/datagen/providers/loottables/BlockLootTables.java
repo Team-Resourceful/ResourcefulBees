@@ -31,7 +31,7 @@ public class BlockLootTables extends BaseBlockLootTable {
         //endregion
         //region Machines
         dropSelf(ModBlocks.HONEY_GENERATOR);
-        dropSelf(ModBlocks.HONEY_CONGEALER);
+        dropSelf(ModBlocks.SOLIDIFICATION_CHAMBER);
         dropSelf(ModBlocks.ENDER_BEECON);
         dropSelf(ModBlocks.HONEY_POT);
         //endregion

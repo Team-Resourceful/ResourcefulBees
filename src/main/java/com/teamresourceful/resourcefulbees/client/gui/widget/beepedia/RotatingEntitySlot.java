@@ -58,9 +58,9 @@ public class RotatingEntitySlot extends EmptySlot{
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (entities.isEmpty()) return;
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        EntitySlot.renderEntity(matrix, this, entities.get(rotation));
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        EntitySlot.renderEntity(matrixStack, this, entities.get(rotation));
     }
 }

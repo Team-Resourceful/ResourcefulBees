@@ -11,6 +11,7 @@ import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.IModPlugin;
@@ -47,6 +48,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new FlowersCategory(helper));
         registration.addRecipeCategories(new MutationCategory(helper));
         registration.addRecipeCategories(new CentrifugeCategory(helper));
+        registration.addRecipeCategories(new SolidificationCategory(helper));
     }
 
     @NotNull
@@ -62,6 +64,7 @@ public class JEICompat implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.T3_APIARY_ITEM.get()), HiveCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.T4_APIARY_ITEM.get()), HiveCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModItems.APIARY_BREEDER_ITEM.get()), BeeBreedingCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get()), SolidificationCategory.ID);
         for (ItemStack stack:HiveCategory.NESTS_0) registration.addRecipeCatalyst(stack, HiveCategory.ID);
     }
 
@@ -75,6 +78,7 @@ public class JEICompat implements IModPlugin {
             registration.addRecipes(MutationCategory.getMutationRecipes(), MutationCategory.ID);
             registration.addRecipes(FlowersCategory.getFlowersRecipes(), FlowersCategory.ID);
             registration.addRecipes(CentrifugeCategory.getRecipes(((RecipeManagerAccessorInvoker)recipeManager).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).values()), CentrifugeCategory.ID);
+            registration.addRecipes(((RecipeManagerAccessorInvoker)recipeManager).callByType(SolidificationRecipe.SOLIDIFICATION_RECIPE_TYPE).values(), SolidificationCategory.ID);
             registerInfoDesc(registration);
         }
     }

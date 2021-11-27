@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
-import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyCongealerContainer;
@@ -8,16 +7,16 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
+import com.teamresourceful.resourcefulbees.common.recipe.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -38,11 +37,11 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HoneyCongealerTileEntity extends TileEntity implements ITickableTileEntity, ISyncableGUI {
+public class SolidificationChamberTileEntity extends TileEntity implements ITickableTileEntity, ISyncableGUI {
 
     public static final int BLOCK_OUTPUT = 0;
 
-    private final HoneyFluidTank tank = new HoneyFluidTank(16000);
+    private final FluidTank tank = new FluidTank(16000, fluid -> this.level != null && SolidificationRecipe.matches(level.getRecipeManager(), fluid));
     private final LazyOptional<FluidTank> tankOptional = LazyOptional.of(() -> tank);
 
     private final AutomationSensitiveItemStackHandler inventory = new TileStackHandler(2, getAcceptor(), getRemover());
@@ -51,9 +50,11 @@ public class HoneyCongealerTileEntity extends TileEntity implements ITickableTil
     private boolean dirty;
     private int processingFill;
 
-    //TODO make this block use the recipe system instead
-    public HoneyCongealerTileEntity() {
-        super(ModBlockEntityTypes.HONEY_CONGEALER_TILE_ENTITY.get());
+    private SolidificationRecipe cachedRecipe;
+    private Fluid lastFluid;
+
+    public SolidificationChamberTileEntity() {
+        super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get());
     }
 
     public float getProcessPercent() {
@@ -65,7 +66,7 @@ public class HoneyCongealerTileEntity extends TileEntity implements ITickableTil
     @Override
     @NotNull
     public ITextComponent getDisplayName() {
-        return TranslationConstants.Guis.CONGEALER;
+        return TranslationConstants.Guis.SOLIDIFICATION_CHAMBER;
     }
 
     @Nullable
@@ -75,29 +76,37 @@ public class HoneyCongealerTileEntity extends TileEntity implements ITickableTil
         return new HoneyCongealerContainer(id, level, worldPosition, playerInventory);
     }
 
-    public HoneyFluidTank getTank() {
+    public FluidTank getTank() {
         return tank;
     }
 
     public boolean canProcessHoney() {
+        if (level == null) return false;
         FluidStack fluidStack = tank.getFluid();
+        if (fluidStack.isEmpty()) {
+            cachedRecipe = null;
+            lastFluid = null;
+            return false;
+        }
         ItemStack outputStack = getInventory().getStackInSlot(BLOCK_OUTPUT);
-        Item outputHoney = BeeInfoUtils.getHoneyBlockFromFluid(fluidStack.getFluid());
+        final SolidificationRecipe recipe = fluidStack.getFluid().equals(lastFluid) && cachedRecipe != null ?
+                cachedRecipe : SolidificationRecipe.findRecipe(level.getRecipeManager(), fluidStack).orElse(null);
+        if (recipe == null) return false;
 
-        boolean isTankReady = !fluidStack.isEmpty() && tank.getFluidAmount() >= 1000;
-        boolean hasHoneyBlock = outputHoney != Items.AIR;
-        boolean canOutput = outputStack.isEmpty() || outputStack.getItem() == outputHoney && outputStack.getCount() < outputStack.getMaxStackSize();
+        boolean isTankReady = !fluidStack.isEmpty() && tank.getFluidAmount() >= recipe.getFluid().getAmount();
+        boolean canOutput = outputStack.isEmpty() || Container.consideredTheSameItem(recipe.getStack(), outputStack) && outputStack.getCount() < outputStack.getMaxStackSize();
 
-        return isTankReady && hasHoneyBlock && canOutput;
+        cachedRecipe = recipe;
+        lastFluid = fluidStack.getFluid();
+        return isTankReady && canOutput;
     }
 
     public void processHoney() {
-        FluidStack fluidStack = new FluidStack(tank.getFluid(), 1000);
         ItemStack outputStack = getInventory().getStackInSlot(BLOCK_OUTPUT);
-        if (outputStack.isEmpty()) outputStack = new ItemStack(BeeInfoUtils.getHoneyBlockFromFluid(fluidStack.getFluid()));
+        if (outputStack.isEmpty()) outputStack = cachedRecipe.getStack().copy();
         else outputStack.grow(1);
         getInventory().setStackInSlot(BLOCK_OUTPUT, outputStack);
-        tank.drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+        tank.drain(cachedRecipe.getFluid().copy(), IFluidHandler.FluidAction.EXECUTE);
     }
 
     public @NotNull AutomationSensitiveItemStackHandler getInventory() {

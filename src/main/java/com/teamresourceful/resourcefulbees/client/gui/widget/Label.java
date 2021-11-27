@@ -49,8 +49,8 @@ public class Label extends TooltipWidget {
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        Minecraft.getInstance().font.draw(matrix, text, this.x, this.y, color);
+    public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        Minecraft.getInstance().font.draw(matrixStack, text, this.x, this.y, color);
     }
 }

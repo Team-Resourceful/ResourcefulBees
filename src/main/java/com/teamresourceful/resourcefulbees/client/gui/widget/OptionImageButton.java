@@ -35,11 +35,11 @@ public class OptionImageButton extends TooltipAbstractButton {
     }
 
     @Override
-    public void renderButton(@NotNull MatrixStack matrixStack, int xPos, int yPos, float partialTicks) {
+    public void renderButton(@NotNull MatrixStack matrixStack, int pMouseX, int pMouseY, float partialTicks) {
         Minecraft.getInstance().getTextureManager().bind(texture);
         //noinspection deprecation
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        blit(matrixStack, this.x, this.y, isSelected() ? u + 20 : u, isHovered() ? v + 20 : v, this.width, this.height);
+        blit(matrixStack, this.x, this.y, isSelected() ? u + 20 : u, isHovered(pMouseX, pMouseY) ? v + 20 : v, this.width, this.height);
     }
 
     @Override

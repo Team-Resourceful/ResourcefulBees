@@ -45,10 +45,11 @@ public class ToggleImageButton extends TooltipButton {
 
     @Override
     public void renderButton(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        super.renderButton(matrixStack, mouseX, mouseY, partialTicks);
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bind(this.resourceLocation);
         int i = this.yTexStart;
-        if (this.isHovered() && active) {
+        if (this.isMouseOver(mouseX, mouseY) && active) {
             i += this.yDiffTex;
         } else if (this.enabled) {
             i += this.yDiffTex * 2;
