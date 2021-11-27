@@ -74,6 +74,9 @@ public class TranslationConstants {
         @Translate("Mutations")
         public static final String MUTATIONS = "gui.resourcefulbees.jei.category.mutations";
 
+        @Translate("Solidification Chamber")
+        public static final String SOLIDIFICATION = "gui.resourcefulbees.jei.category.solidification";
+
         @Translate("Chance that this will succeed in creating a new bee.")
         public static final TranslationTextComponent BREED_CHANCE_INFO = new TranslationTextComponent("gui.resourcefulbees.jei.category.breed_chance.info");
 
@@ -233,8 +236,8 @@ public class TranslationConstants {
         @Translate("Ender Beecon")
         public static final TranslationTextComponent BEECON = new TranslationTextComponent("gui.resourcefulbees.ender_beecon");
 
-        @Translate("Honey Congealer")
-        public static final TranslationTextComponent CONGEALER = new TranslationTextComponent("gui.resourcefulbees.honey_congealer");
+        @Translate("Solidification Chamber")
+        public static final TranslationTextComponent SOLIDIFICATION_CHAMBER = new TranslationTextComponent("gui.resourcefulbees.solidfication_chamber");
 
         @Translate("Honey Generator")
         public static final TranslationTextComponent GENERATOR = new TranslationTextComponent("gui.resourcefulbees.honey_generator");

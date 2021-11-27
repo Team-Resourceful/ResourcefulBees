@@ -49,8 +49,9 @@ public class ModBlockEntityTypes {
     public static final RegistryObject<TileEntityType<EnderBeeconTileEntity>> ENDER_BEECON_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("ender_beecon", () -> TileEntityType.Builder
             .of(EnderBeeconTileEntity::new, ModBlocks.ENDER_BEECON.get())
             .build(null));
-    public static final RegistryObject<TileEntityType<HoneyCongealerTileEntity>> HONEY_CONGEALER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_congealer", () -> TileEntityType.Builder
-            .of(HoneyCongealerTileEntity::new, ModBlocks.HONEY_CONGEALER.get())
+    //TODO Change id to solidification_chamber for 1.17/1.18
+    public static final RegistryObject<TileEntityType<SolidificationChamberTileEntity>> SOLIDIFICATION_CHAMBER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_congealer", () -> TileEntityType.Builder
+            .of(SolidificationChamberTileEntity::new, ModBlocks.SOLIDIFICATION_CHAMBER.get())
             .build(null));
     public static final RegistryObject<TileEntityType<HoneyPotTileEntity>> HONEY_POT_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_pot", () -> TileEntityType.Builder
             .of(HoneyPotTileEntity::new, ModBlocks.HONEY_POT.get())

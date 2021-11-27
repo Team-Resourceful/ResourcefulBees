@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
+import com.teamresourceful.resourcefulbees.common.recipe.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -18,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,7 +60,8 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                             makeBottleToBucketRecipe(data),
                             makeBucketToBottleRecipe(data),
                             makeBlockToBucketRecipe(data),
-                            makeBucketToBlockRecipe(data)
+                            makeBucketToBlockRecipe(data),
+                            makeFluidToBlockRecipe(data)
                         )
                     )
                     .filter(Objects::nonNull)
@@ -156,6 +159,15 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
                 NonNullList.of(Ingredient.EMPTY,
                         honeyBlockItem, bucketItem
                 )
+        );
+    }
+
+    private IRecipe<?> makeFluidToBlockRecipe(HoneyData info) {
+        if (info.getFluidData().getStillFluid() == null || info.getBlockData().getBlockItem() == null) return null;
+        return new SolidificationRecipe(
+                new ResourceLocation(ResourcefulBees.MOD_ID, info.getName() + "_fluid_to_block"),
+                new FluidStack(info.getFluidData().getStillFluid().get().getFluid(), 1000),
+                new ItemStack(info.getBlockData().getBlockItem().get())
         );
     }
 

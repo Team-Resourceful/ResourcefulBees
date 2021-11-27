@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.inventory.containers;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyCongealerTileEntity;
+import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.IContainerListener;
@@ -14,15 +14,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class HoneyCongealerContainer extends ContainerWithStackMove {
 
-    private final HoneyCongealerTileEntity honeyCongealerTileEntity;
+    private final SolidificationChamberTileEntity honeyCongealerTileEntity;
 
     public HoneyCongealerContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
         super(ModContainers.HONEY_CONGEALER_CONTAINER.get(), id);
 
-        honeyCongealerTileEntity = (HoneyCongealerTileEntity) world.getBlockEntity(pos);
+        honeyCongealerTileEntity = (SolidificationChamberTileEntity) world.getBlockEntity(pos);
 
         if (getHoneyCongealerTileEntity() != null) {
-            this.addSlot(new OutputSlot(getHoneyCongealerTileEntity().getInventory(), HoneyCongealerTileEntity.BLOCK_OUTPUT, 93, 54));
+            this.addSlot(new OutputSlot(getHoneyCongealerTileEntity().getInventory(), SolidificationChamberTileEntity.BLOCK_OUTPUT, 93, 54));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
@@ -64,7 +64,7 @@ public class HoneyCongealerContainer extends ContainerWithStackMove {
         return true;
     }
 
-    public HoneyCongealerTileEntity getHoneyCongealerTileEntity() {
+    public SolidificationChamberTileEntity getHoneyCongealerTileEntity() {
         return honeyCongealerTileEntity;
     }
 }

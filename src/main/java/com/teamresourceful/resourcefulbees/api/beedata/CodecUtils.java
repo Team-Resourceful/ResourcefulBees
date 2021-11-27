@@ -1,11 +1,8 @@
 package com.teamresourceful.resourcefulbees.api.beedata;
 
-import com.google.gson.JsonArray;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
@@ -18,7 +15,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.registry.Registry;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.NBTIngredient;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -114,14 +110,5 @@ public class CodecUtils {
     @SafeVarargs
     public static <E> Set<E> newLinkedHashSet(E... elements) {
         return new LinkedHashSet<>(Arrays.asList(elements));
-    }
-
-    public static final Codec<Boolean> RECIPE_CONDITION_CODEC = Codec.PASSTHROUGH.comapFlatMap(CodecUtils::decodeConditions, component -> new Dynamic<>(JsonOps.INSTANCE));
-
-    private static DataResult<Boolean> decodeConditions(Dynamic<?> dynamic) {
-        if (dynamic.getValue() instanceof JsonArray) {
-            return DataResult.success(CraftingHelper.processConditions(((JsonArray) dynamic.getValue())));
-        }
-        return DataResult.error("'conditions' was not a list");
     }
 }

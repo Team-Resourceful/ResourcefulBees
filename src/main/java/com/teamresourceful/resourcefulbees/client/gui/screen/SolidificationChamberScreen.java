@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyCongealerContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyCongealerTileEntity;
+import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -20,18 +20,19 @@ import org.jetbrains.annotations.NotNull;
 
 
 @OnlyIn(Dist.CLIENT)
-public class HoneyCongealerScreen extends ContainerScreen<HoneyCongealerContainer> {
+public class SolidificationChamberScreen extends ContainerScreen<HoneyCongealerContainer> {
 
-    private final HoneyCongealerTileEntity tileEntity;
+    private final SolidificationChamberTileEntity tileEntity;
 
-    public HoneyCongealerScreen(HoneyCongealerContainer container, PlayerInventory inventory, ITextComponent displayName) {
+    public SolidificationChamberScreen(HoneyCongealerContainer container, PlayerInventory inventory, ITextComponent displayName) {
         super(container, inventory, displayName);
         tileEntity = container.getHoneyCongealerTileEntity();
+        titleLabelY -= 3;
     }
 
     @Override
     protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/congealer/honey_congealer.png");
+        ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/solidification/solidification.png");
         Minecraft client = this.minecraft;
         if (client != null && tileEntity != null) {
             client.getTextureManager().bind(texture);
@@ -45,7 +46,7 @@ public class HoneyCongealerScreen extends ContainerScreen<HoneyCongealerContaine
     }
 
     private void renderProgressBar(MatrixStack matrix) {
-        ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/congealer/honey_congealer.png");
+        ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/solidification/solidification.png");
         Minecraft client = this.minecraft;
         if (client != null) {
             client.getTextureManager().bind(texture);
@@ -63,7 +64,7 @@ public class HoneyCongealerScreen extends ContainerScreen<HoneyCongealerContaine
             this.renderProgressBar(matrix);
             this.renderTooltip(matrix, mouseX, mouseY);
             if (mouseX >= this.leftPos + 67 && mouseX <= this.leftPos + 81 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74) {
-                if (Screen.hasShiftDown() || tileEntity.getTank().getFluidAmount() < 500) {
+                if (Screen.hasShiftDown() || tileEntity.getTank().getFluidAmount() < 1000) {
                     this.renderTooltip(matrix, new StringTextComponent(tileEntity.getTank().getFluidAmount() + " MB"), mouseX, mouseY);
                 } else {
                     this.renderTooltip(matrix, new StringTextComponent(ModConstants.DECIMAL_FORMAT.format((double) tileEntity.getTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);

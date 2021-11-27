@@ -28,11 +28,15 @@ public class HoneyFluidTank extends FluidTank {
     }
 
     public void fillBottle(PlayerEntity player, Hand hand) {
-        FluidStack fluidStack = new FluidStack(this.getFluid(), ModConstants.HONEY_PER_BOTTLE);
-        ItemStack itemStack = new ItemStack(BeeInfoUtils.getHoneyBottleFromFluid(this.getFluid().getFluid()), 1);
-        if (this.isEmpty()) return;
-        if (this.getFluidAmount() >= ModConstants.HONEY_PER_BOTTLE) {
-            this.drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+        fillBottle(this, player, hand);
+    }
+
+    public static void fillBottle(FluidTank tank, PlayerEntity player, Hand hand){
+        FluidStack fluidStack = new FluidStack(tank.getFluid(), ModConstants.HONEY_PER_BOTTLE);
+        ItemStack itemStack = new ItemStack(BeeInfoUtils.getHoneyBottleFromFluid(tank.getFluid().getFluid()), 1);
+        if (tank.isEmpty()) return;
+        if (tank.getFluidAmount() >= ModConstants.HONEY_PER_BOTTLE) {
+            tank.drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
             ItemStack stack = player.getItemInHand(hand);
             if (stack.getCount() > 1) {
                 stack.setCount(stack.getCount() - 1);
@@ -45,12 +49,16 @@ public class HoneyFluidTank extends FluidTank {
     }
 
     public void emptyBottle(PlayerEntity player, Hand hand) {
+        emptyBottle(this, player, hand);
+    }
+
+    public static void emptyBottle(FluidTank tank, PlayerEntity player, Hand hand){
         FluidStack fluidStack = new FluidStack(BeeInfoUtils.getHoneyFluidFromBottle(player.getItemInHand(hand)), ModConstants.HONEY_PER_BOTTLE);
-        if (!this.getFluid().isFluidEqual(fluidStack) && !this.isEmpty()) {
+        if (!tank.getFluid().isFluidEqual(fluidStack) && !tank.isEmpty()) {
             return;
         }
-        if (this.getFluidAmount() + ModConstants.HONEY_PER_BOTTLE <= this.getTankCapacity(0)) {
-            this.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+        if (tank.getFluidAmount() + ModConstants.HONEY_PER_BOTTLE <= tank.getTankCapacity(0)) {
+            tank.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
             ItemStack stack = player.getItemInHand(hand);
             if (stack.getCount() > 1) {
                 stack.setCount(stack.getCount() - 1);

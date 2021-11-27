@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefulbees.client.render.fluid.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderEnderBeecon;
-import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyCongealer;
+import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderSolidificationChamber;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
@@ -101,7 +101,7 @@ public class ClientEventHandlers {
 
     private static void registerTERs() {
         ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
-        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.HONEY_CONGEALER_TILE_ENTITY.get(), RenderHoneyCongealer::new);
+        ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), RenderSolidificationChamber::new);
         ClientRegistry.bindTileEntityRenderer(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
     }
 
@@ -110,7 +110,7 @@ public class ClientEventHandlers {
         RenderTypeLookup.setRenderLayer(ModBlocks.PREVIEW_BLOCK.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.ERRORED_PREVIEW_BLOCK.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.ENDER_BEECON.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_CONGEALER.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.SOLIDIFICATION_CHAMBER.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
 
         // bee nests need cutout for overlay
@@ -127,7 +127,7 @@ public class ClientEventHandlers {
         ScreenManager.register(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
         ScreenManager.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
         ScreenManager.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
-        ScreenManager.register(ModContainers.HONEY_CONGEALER_CONTAINER.get(), HoneyCongealerScreen::new);
+        ScreenManager.register(ModContainers.HONEY_CONGEALER_CONTAINER.get(), SolidificationChamberScreen::new);
         ScreenManager.register(ModContainers.HONEY_POT_CONTAINER.get(), HoneyPotScreen::new);
 
         //centrifuge

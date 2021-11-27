@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.render.tileentity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyCongealerTileEntity;
+import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.CubeModel;
 import com.teamresourceful.resourcefulbees.common.utils.RenderCuboid;
 import net.minecraft.client.renderer.Atlases;
@@ -14,14 +14,14 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderHoneyCongealer extends TileEntityRenderer<HoneyCongealerTileEntity> {
+public class RenderSolidificationChamber extends TileEntityRenderer<SolidificationChamberTileEntity> {
 
-    public RenderHoneyCongealer(TileEntityRendererDispatcher renderer) {
+    public RenderSolidificationChamber(TileEntityRendererDispatcher renderer) {
         super(renderer);
     }
 
     @Override
-    public void render(HoneyCongealerTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
+    public void render(SolidificationChamberTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
         if (tile.getLevel() == null) return;
         FluidStack stack = tile.getTank().getFluid();
         if (!stack.isEmpty()) {
