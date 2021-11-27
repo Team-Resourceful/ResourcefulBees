@@ -7,6 +7,7 @@ import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class HoneycombItem extends Item {
@@ -14,12 +15,14 @@ public class HoneycombItem extends Item {
     private final RegistryObject<Item> storageBlock;
     private final Color color;
     private final boolean isEdible;
+    private final boolean enchanted;
 
-    public HoneycombItem(Color color, boolean isEdible, RegistryObject<Item> storageBlock) {
+    public HoneycombItem(Color color, boolean isEdible, RegistryObject<Item> storageBlock, boolean enchanted) {
         super(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_COMBS));
         this.color = color;
         this.isEdible = isEdible;
         this.storageBlock = storageBlock;
+        this.enchanted = enchanted;
     }
 
     @SuppressWarnings("unused")
@@ -40,6 +43,11 @@ public class HoneycombItem extends Item {
     @Override
     public boolean isEdible() {
         return isEdible;
+    }
+
+    @Override
+    public boolean isFoil(@NotNull ItemStack stack) {
+        return this.enchanted || stack.isEnchanted();
     }
 
     @Nullable
