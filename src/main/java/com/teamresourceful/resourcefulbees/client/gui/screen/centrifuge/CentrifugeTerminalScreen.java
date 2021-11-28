@@ -7,22 +7,28 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contain
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeFluidOutputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeInputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeItemOutputEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeTerminalEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.OutputLocations;
+import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandMessage;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.RenderComponentsUtil;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTerminalContainer> {
@@ -43,6 +49,10 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
     private Rectangle selectedTab = HOME;
     private int selectedBlock = 0;
     private @Nullable AbstractGUICentrifugeEntity selectedEntity;
+
+    private String commandInput = "";
+    private boolean neofetch = true;
+    private List<IReorderingProcessor> components = new ArrayList<>();
 
     public CentrifugeTerminalScreen(CentrifugeTerminalContainer pMenu, PlayerInventory pPlayerInventory, ITextComponent pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -131,25 +141,55 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
 
 
     private void drawTerminalData(@NotNull MatrixStack matrix) {
-        matrix.pushPose();
-        matrix.translate(TEXT_X + 90d, 66, 0);
-        String owner = centrifugeState.getOwner();
-        TERMINAL_FONT_8.draw(matrix, owner, 0, 0, COLOR);
-        hLine(matrix, 0, TERMINAL_FONT_8.width(owner), 6, COLOR);
-        //TERMINAL_FONT_8.draw(matrix, "Activity: " + StringUtils.capitalize(centrifugeState.getCentrifugeActivity().getSerializedName()), 6, 16, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Max Tier: " + StringUtils.capitalize(centrifugeState.getMaxCentrifugeTier().getName()), 6, 24, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Energy Stored: " + centrifugeState.getEnergyStored() + "rf", 6, 32, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Energy Capacity: " + centrifugeState.getEnergyCapacity() + "rf", 6, 40, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Inputs: " + centrifugeState.getInputs().size(), 6, 48, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Item Outputs: " + centrifugeState.getItemOutputs().size(), 6, 56, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Fluid Outputs: " + centrifugeState.getFluidOutputs().size(), 6, 64, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Energy Ports: " + centrifugeState.getEnergyPorts(), 6, 72, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Voids: " + centrifugeState.getDumps().size(), 6, 80, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Gearboxes: " + centrifugeState.getGearboxes(), 6, 88, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Processors: " + centrifugeState.getProcessors(), 6, 96, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Recipe Power Modifier: " + centrifugeState.getRecipePowerModifier() * 100 + "%", 6, 104, COLOR);
-        TERMINAL_FONT_8.draw(matrix, "Recipe Time Modifier: " + ModConstants.DECIMAL_FORMAT.format(centrifugeState.getRecipeTimeModifier() * 100) + "%", 6, 112, COLOR);
-        matrix.popPose();
+        if (neofetch) {
+            drawASCII(matrix);
+            matrix.pushPose();
+            matrix.translate(TEXT_X + 90d, 66, 0);
+            String owner = centrifugeState.getOwner()+"@centrifuge";
+            TERMINAL_FONT_8.draw(matrix, owner, 6, 0, COLOR);
+            TERMINAL_FONT_8.draw(matrix, StringUtils.repeat('-', owner.length()), 6, 8, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Max Tier: " + StringUtils.capitalize(centrifugeState.getMaxCentrifugeTier().getName()), 6, 16, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Energy Stored: " + centrifugeState.getEnergyStored() + "rf", 6, 24, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Energy Capacity: " + centrifugeState.getEnergyCapacity() + "rf", 6, 32, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Inputs: " + centrifugeState.getInputs().size(), 6, 40, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Item Outputs: " + centrifugeState.getItemOutputs().size(), 6, 48, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Fluid Outputs: " + centrifugeState.getFluidOutputs().size(), 6, 56, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Energy Ports: " + centrifugeState.getEnergyPorts(), 6, 64, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Voids: " + centrifugeState.getDumps().size(), 6, 72, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Gearboxes: " + centrifugeState.getGearboxes(), 6, 80, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Processors: " + centrifugeState.getProcessors(), 6, 88, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Recipe Power Modifier: " + centrifugeState.getRecipePowerModifier() * 100 + "%", 6, 96, COLOR);
+            TERMINAL_FONT_8.draw(matrix, "Recipe Time Modifier: " + ModConstants.DECIMAL_FORMAT.format(centrifugeState.getRecipeTimeModifier() * 100) + "%", 6, 104, COLOR);
+            matrix.popPose();
+            TERMINAL_FONT_8.draw(matrix, formatUserInput(commandInput), TEXT_X+4f, 186, COLOR);
+        }else {
+            matrix.pushPose();
+            matrix.translate(TEXT_X-2f, 66, 0);
+            float pos = 0;
+            int offset = Math.max(components.size()-12, 0);
+            for (int i = offset; i < components.size(); i++) {
+                pos = (i-offset)*10f;
+                TERMINAL_FONT_8.draw(matrix, components.get(i), 6, pos, COLOR);
+            }
+            pos += pos > 0 ? 10f : 0f;
+            TERMINAL_FONT_8.draw(matrix, formatUserInput(commandInput), 6, pos, COLOR);
+            matrix.popPose();
+        }
+    }
+
+    private ITextComponent formatUserInput(String input) {
+        IFormattableTextComponent component = new StringTextComponent(Minecraft.getInstance().getUser().getName()).withStyle(TextFormatting.BLUE);
+        component.append(new StringTextComponent("@").withStyle(TextFormatting.WHITE));
+        component.append(new StringTextComponent("centrifuge").withStyle(TextFormatting.GREEN));
+        component.append(new StringTextComponent("> ").withStyle(TextFormatting.GRAY));
+        String[] splits = input.split(" ");
+        if (splits.length > 1) {
+            component.append(new StringTextComponent(splits[0]).withStyle(TextFormatting.YELLOW));
+            component.append(new StringTextComponent(" " +String.join(" ", Arrays.copyOfRange(splits, 1, splits.length))).withStyle(TextFormatting.AQUA));
+        }else {
+            component.append(new StringTextComponent(input).withStyle(TextFormatting.YELLOW));
+        }
+        return component;
     }
 
     private void drawInputData(@NotNull MatrixStack matrix) {
@@ -202,6 +242,48 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
     }
 
     @Override
+    public boolean charTyped(char pCodePoint, int pModifiers) {
+        if (selectedTab.equals(HOME)){
+            if (commandInput.length() < 34) commandInput += pCodePoint;
+            return true;
+        }
+        return super.charTyped(pCodePoint, pModifiers);
+    }
+
+    @Override
+    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+        if (selectedTab.equals(HOME)){
+            if (pKeyCode == 69) return true;
+            if (pKeyCode == 259) {
+                commandInput = StringUtils.chop(commandInput);
+                return true;
+            }
+            if (pKeyCode == 257) {
+                CentrifugeTerminalEntity terminal = menu.getEntity();
+                commandInput = commandInput.toLowerCase(Locale.ROOT);
+                switch (commandInput){
+                    case "clear":
+                        components.clear();
+                        neofetch = false;
+                        break;
+                    case "neofetch":
+                        neofetch = true;
+                        break;
+                    default:
+                        if (terminal != null) {
+                            sendResponse(formatUserInput(commandInput));
+                            NetPacketHandler.sendToServer(new CommandMessage(terminal.getBlockPos(), commandInput));
+                            neofetch = false;
+                        }
+                }
+                commandInput = "";
+                return true;
+            }
+        }
+        return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+    }
+
+    @Override
     @Nullable List<ITextComponent> getInfoTooltip() {
         return Lists.newArrayList(new StringTextComponent("INFO TEXT"));
     }
@@ -250,5 +332,12 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
         if (minecraft != null && minecraft.level != null) {
             selectedEntity = (AbstractGUICentrifugeEntity) minecraft.level.getBlockEntity(CentrifugeUtils.getFromSet(centrifugeState.getInputs(), selectedBlock));
         }
+    }
+
+    public void sendResponse(ITextComponent component) {
+        //max 59 chars
+        List<IReorderingProcessor> list = RenderComponentsUtil.wrapComponents(component, 215, TERMINAL_FONT_8);
+        components.addAll(list);
+        System.out.println(component.getString());
     }
 }

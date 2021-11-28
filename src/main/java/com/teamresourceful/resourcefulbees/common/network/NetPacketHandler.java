@@ -3,6 +3,8 @@ package com.teamresourceful.resourcefulbees.common.network;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.packets.*;
+import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandResponseMessage;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -36,6 +38,8 @@ public class NetPacketHandler {
         INSTANCE.registerMessage(++id, ApiaryTabMessage.class, ApiaryTabMessage::encode, ApiaryTabMessage::decode, ApiaryTabMessage::handle);
         INSTANCE.registerMessage(++id, SyncGUIMessage.class, SyncGUIMessage::encode, SyncGUIMessage::decode, SyncGUIMessage::handle);
         INSTANCE.registerMessage(++id, BeeconChangeMessage.class, BeeconChangeMessage::encode, BeeconChangeMessage::decode, BeeconChangeMessage::handle);
+        INSTANCE.registerMessage(++id, CommandMessage.class, CommandMessage::encode, CommandMessage::decode, CommandMessage::handle);
+        INSTANCE.registerMessage(++id, CommandResponseMessage.class, CommandResponseMessage::encode, CommandResponseMessage::decode, CommandResponseMessage::handle);
     }
 
     public static void sendToServer(Object message) {

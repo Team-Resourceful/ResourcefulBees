@@ -19,4 +19,8 @@ public abstract class AbstractCentrifugeEntity extends RectangularMultiblockTile
         }
         return new CentrifugeController(level);
     }
+
+    public CentrifugeController getController() {
+        return controller;
+    }
 }
