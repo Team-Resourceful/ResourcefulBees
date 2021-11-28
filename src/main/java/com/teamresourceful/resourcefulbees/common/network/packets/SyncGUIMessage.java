@@ -34,7 +34,7 @@ public class SyncGUIMessage {
     }
 
     public static SyncGUIMessage decode(PacketBuffer buffer){
-        return new SyncGUIMessage(buffer.readBlockPos(), buffer);
+        return new SyncGUIMessage(buffer.readBlockPos(), buffer, buffer.readBoolean());
     }
 
     public static void handle(SyncGUIMessage message, Supplier<NetworkEvent.Context> context) {
@@ -43,7 +43,11 @@ public class SyncGUIMessage {
             if (player != null && player.level.isLoaded(message.pos)) {
                 TileEntity tileEntity = player.level.getBlockEntity(message.pos);
                 if (tileEntity instanceof ISyncableGUI) {
-                    ((ISyncableGUI) tileEntity).handleGUINetworkPacket(message.buffer);
+                    if (message.initPacket) {
+                        ((ISyncableGUI) tileEntity).handleInitGUIPacket(message.buffer);
+                    } else {
+                        ((ISyncableGUI) tileEntity).handleGUINetworkPacket(message.buffer);
+                    }
                 }
             }
         });

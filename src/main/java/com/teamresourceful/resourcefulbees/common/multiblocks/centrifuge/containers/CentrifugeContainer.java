@@ -34,7 +34,7 @@ public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity>
         this.entity = entity;
         this.tier = entity == null ? CentrifugeTier.ERROR : entity.getTier();
         setupSlots();
-        if (entity != null && inv.player instanceof ServerPlayerEntity) entity.sendGUINetworkPacket((ServerPlayerEntity) inv.player);
+        if (entity != null && inv.player instanceof ServerPlayerEntity) entity.sendInitGUIPacket((ServerPlayerEntity) inv.player);
     }
 
     public @Nullable T getEntity() {

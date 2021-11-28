@@ -83,22 +83,6 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
         load(state, tag);
     }
 
-/*    @Override
-    protected void readNBT(@NotNull CompoundNBT compound) {
-        super.readNBT(compound);
-        if (compound.contains("CentrifugeState")) {
-            centrifugeState.deserializeNBT(compound.getCompound("CentrifugeState"));
-        }
-    }
-
-    @NotNull
-    @Override
-    protected CompoundNBT writeNBT() {
-        CompoundNBT data = super.writeNBT();
-        data.put("CentrifugeState", centrifugeState.serializeNBT());
-        return data;
-    }*/
-
     //endregion
 
     //region GUI Packet
@@ -117,7 +101,7 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
                 centrifugeState.setOwner(owner);
             }
             buffer.writeNbt(centrifugeState.serializeNBT());
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), player);
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer, true), player);
         }
     }
 

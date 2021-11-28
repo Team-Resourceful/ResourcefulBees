@@ -301,9 +301,9 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         itemOutputs.setSecond(iout.get(1), iout.get(1).getBlockPos());
         itemOutputs.setThird(iout.get(2), iout.get(2).getBlockPos());
         List<CentrifugeFluidOutputEntity> fout = this.controller.getFluidOutputs();
-        fluidOutputs.setFirst(fout.get(0), iout.get(0).getBlockPos());
-        fluidOutputs.setSecond(fout.get(0), iout.get(0).getBlockPos());
-        fluidOutputs.setThird(fout.get(0), iout.get(0).getBlockPos());
+        fluidOutputs.setFirst(fout.get(0), fout.get(0).getBlockPos());
+        fluidOutputs.setSecond(fout.get(1), fout.get(1).getBlockPos());
+        fluidOutputs.setThird(fout.get(2), fout.get(2).getBlockPos());
     }
 
     @Override
