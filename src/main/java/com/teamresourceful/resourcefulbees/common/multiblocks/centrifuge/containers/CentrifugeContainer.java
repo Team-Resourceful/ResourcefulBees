@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers
 import com.teamresourceful.resourcefulbees.common.utils.WorldUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
@@ -33,6 +34,7 @@ public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity>
         this.entity = entity;
         this.tier = entity == null ? CentrifugeTier.ERROR : entity.getTier();
         setupSlots();
+        if (entity != null && inv.player instanceof ServerPlayerEntity) entity.sendGUINetworkPacket((ServerPlayerEntity) inv.player);
     }
 
     public @Nullable T getEntity() {

@@ -2,7 +2,10 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entiti
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
+import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.tileentity.ISyncableGUI;
+import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -16,13 +19,14 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.INameable;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.roguelogix.phosphophyllite.multiblock.generic.IAssemblyAttemptedTile;
 import net.roguelogix.phosphophyllite.multiblock.generic.MultiblockBlock;
+import net.roguelogix.phosphophyllite.multiblock.generic.MultiblockController;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifugeEntity implements INameable, ISyncableGUI, IAssemblyAttemptedTile {
+public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifugeEntity implements INameable, ISyncableGUI {
 
     private ITextComponent name;
     private String owner = "null";
@@ -42,7 +46,6 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
         assert level != null;
         if (Boolean.TRUE.equals(level.getBlockState(worldPosition).getValue(MultiblockBlock.ASSEMBLED))) {
             if (!level.isClientSide) {
-                controller.updateCentrifugeState(centrifugeState);
                 NetworkHooks.openGui((ServerPlayerEntity) player, this, this::getOpenGUIPacket);
             }
             return ActionResultType.SUCCESS;
@@ -80,7 +83,7 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
         load(state, tag);
     }
 
-    @Override
+/*    @Override
     protected void readNBT(@NotNull CompoundNBT compound) {
         super.readNBT(compound);
         if (compound.contains("CentrifugeState")) {
@@ -94,17 +97,34 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
         CompoundNBT data = super.writeNBT();
         data.put("CentrifugeState", centrifugeState.serializeNBT());
         return data;
-    }
+    }*/
 
     //endregion
 
     //region GUI Packet
     @Override
-    public void sendGUINetworkPacket(IContainerListener player) {
+    public void sendGUINetworkPacket(IContainerListener player) {}
+
+    @Override
+    public void handleGUINetworkPacket(PacketBuffer buffer) {}
+
+    @Override
+    public final void sendInitGUIPacket(ServerPlayerEntity player) {
+        if (!(player instanceof FakePlayer)) {
+            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+            if (controller != null && controller.assemblyState().equals(MultiblockController.AssemblyState.ASSEMBLED)) {
+                controller.updateCentrifugeState(centrifugeState);
+                centrifugeState.setOwner(owner);
+            }
+            buffer.writeNbt(centrifugeState.serializeNBT());
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), player);
+        }
     }
 
     @Override
-    public void handleGUINetworkPacket(PacketBuffer buffer) {
+    public final void handleInitGUIPacket(PacketBuffer buffer) {
+        CompoundNBT nbt = buffer.readNbt();
+        if (nbt != null) centrifugeState.deserializeNBT(nbt);
     }
     //endregion
 
@@ -140,12 +160,4 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
 
     protected abstract ITextComponent getDefaultName();
     //endregion
-
-    @Override
-    public void onAssemblyAttempted() {
-        if (controller != null) {
-            controller.updateCentrifugeState(centrifugeState);
-            centrifugeState.setOwner(owner);
-        }
-    }
 }

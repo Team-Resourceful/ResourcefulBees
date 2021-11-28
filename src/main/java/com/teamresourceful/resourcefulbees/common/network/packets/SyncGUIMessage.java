@@ -13,14 +13,23 @@ import java.util.function.Supplier;
 public class SyncGUIMessage {
     private final BlockPos pos;
     private final PacketBuffer buffer;
+    private final boolean initPacket;
 
     public SyncGUIMessage(BlockPos pos, PacketBuffer buffer){
         this.pos = pos;
         this.buffer = buffer;
+        this.initPacket = false;
+    }
+
+    public SyncGUIMessage(BlockPos pos, PacketBuffer buffer, boolean initPacket){
+        this.pos = pos;
+        this.buffer = buffer;
+        this.initPacket = initPacket;
     }
 
     public static void encode(SyncGUIMessage message, PacketBuffer buffer){
         buffer.writeBlockPos(message.pos);
+        buffer.writeBoolean(message.initPacket);
         buffer.writeBytes(message.buffer);
     }
 
