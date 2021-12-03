@@ -78,17 +78,16 @@ public class HoneyDipper extends Item {
     private void sendMessageToPlayer(PlayerEntity playerEntity, MessageTypes messageTypes, BlockPos pos) {
         assert selectedBee != null : "bee went null before message was sent to player";
         switch (messageTypes) {
-            case HIVE:
-                playerEntity.displayClientMessage(new StringTextComponent(String.format("Hive position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NBTUtil.writeBlockPos(pos))), false);
-                break;
             case FLOWER:
-                playerEntity.displayClientMessage(new StringTextComponent(String.format("Flower position for [%1$s] has been set to %2$s", selectedBee.getDisplayName().getString(), NBTUtil.writeBlockPos(pos))), false);
+            case HIVE:
+                String translation = messageTypes.equals(MessageTypes.FLOWER) ? "item.resourcefulbees.honey_dipper.flower_set" : "item.resourcefulbees.honey_dipper.hive_set";
+                playerEntity.displayClientMessage(new TranslationTextComponent(translation, selectedBee.getDisplayName(), NBTUtil.writeBlockPos(pos)), false);
                 break;
             case BEE_CLEARED:
-                playerEntity.displayClientMessage(new StringTextComponent("Bee Selection Cleared!"), false);
+                playerEntity.displayClientMessage(new TranslationTextComponent("item.resourcefulbees.honey_dipper.cleared"), false);
                 break;
             case BEE_SELECTED:
-                playerEntity.displayClientMessage(new StringTextComponent(String.format("[%1$s] has been selected!", selectedBee.getDisplayName().getString())), false);
+                playerEntity.displayClientMessage(new TranslationTextComponent("item.resourcefulbees.honey_dipper.bee_set", selectedBee.getDisplayName()), false);
                 break;
             default: //Do Nothing
         }
