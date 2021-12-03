@@ -478,16 +478,20 @@ public class BeepediaScreen extends Screen {
         return mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height;
     }
 
-    public void drawSlot(MatrixStack matrix, IItemProvider item, int amount, int xPos, int yPos) {
+    public void drawSlot(MatrixStack matrix, IItemProvider item, int amount, int xPos, int yPos, boolean showFluidAmount) {
         if (item instanceof FlowingFluidBlock) {
-            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getSource(), amount), xPos, yPos, true);
+            drawFluidSlot(matrix, new FluidStack(((FlowingFluidBlock) item).getFluid().getSource(), amount), xPos, yPos, showFluidAmount);
         } else {
             drawSlot(matrix, new ItemStack(item, amount), xPos, yPos);
         }
     }
 
+    public void drawSlot(MatrixStack matrix, IItemProvider item, int amount, int xPos, int yPos) {
+        drawSlot(matrix, item, amount, xPos, yPos, true);
+    }
+
     public void drawSlot(MatrixStack matrix, Block item, int xPos, int yPos) {
-        drawSlot(matrix, item, 1, xPos, yPos);
+        drawSlot(matrix, item, 1, xPos, yPos, false);
     }
 
     public void drawSlot(MatrixStack matrix, IItemProvider item, int xPos, int yPos) {
