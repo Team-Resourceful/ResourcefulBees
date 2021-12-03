@@ -10,6 +10,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.muta
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations.ItemMutationPage;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.MutationTypes;
+import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
@@ -39,12 +40,14 @@ import java.util.Map;
 
 public class BreedingPage extends BeeDataPage {
 
+
     Map<Pair<String, String>, RandomCollection<CustomBeeData>> children;
     Map<Pair<String, String>, CustomBeeData> parents;
     List<BreedingObject> parentBreeding = new LinkedList<>();
     List<BreedingObject> childrenBreeding = new LinkedList<>();
     List<EntityMutationPage> entityMutationBreeding = new LinkedList<>();
     List<ItemMutationPage> itemMutationBreeding = new LinkedList<>();
+    List<HoneycombPage.RecipeObject> centrifugeBreeding = new LinkedList<>();
 
     List<BreedingPageType> subPages = new LinkedList<>();
 
@@ -62,9 +65,10 @@ public class BreedingPage extends BeeDataPage {
     private final TranslationTextComponent childrenTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title");
     private final TranslationTextComponent entityMutationsTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.entity_mutations_title");
     private final TranslationTextComponent itemMutationsTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.item_mutations_title");
+    private final TranslationTextComponent centrifugeTitle = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.centrifuge_breeding_title");
     private int activePage = 0;
 
-    public BreedingPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, List<EntityMutation> mutations, List<ItemMutation> itemBreedMutation, BeePage parent) {
+    public BreedingPage(BeepediaScreen beepedia, CustomBeeData beeData, int xPos, int yPos, List<EntityMutation> mutations, List<ItemMutation> itemBreedMutation, List<CentrifugeRecipe> centrifugeRecipes, BeePage parent) {
         super(beepedia, beeData, xPos, yPos, parent);
         children = BeeRegistry.getRegistry().getChildren(beeData);
         parents = BeeRegistry.getRegistry().getParents(beeData);
@@ -72,6 +76,7 @@ public class BreedingPage extends BeeDataPage {
         parents.forEach((p, b) -> parentBreeding.add(new BreedingObject(p, b)));
         mutations.forEach(b -> entityMutationBreeding.add(new EntityMutationPage(b.getParent(), b.getInput(), b.getOutputs(), MutationTypes.ENTITY, b.getMutaionCount(), beepedia)));
         itemBreedMutation.forEach(b -> itemMutationBreeding.add(new ItemMutationPage(b.getParent(), b.getInputs(), b.getOutputs(), MutationTypes.ITEM, b.getMutationCount(), beepedia)));
+        centrifugeRecipes.forEach(c -> centrifugeBreeding.add(new HoneycombPage.RecipeObject(c, beepedia)));
         leftArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 28, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
         rightArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) + 20, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 8, 0, 11, arrowImage, 16, 33, button -> nextPage());
         prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 6, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevTab());
@@ -91,11 +96,7 @@ public class BreedingPage extends BeeDataPage {
         if (!childrenBreeding.isEmpty()) subPages.add(BreedingPageType.CHILDREN);
         if (!entityMutationBreeding.isEmpty()) subPages.add(BreedingPageType.ENTITY_MUTATIONS);
         if (!itemMutationBreeding.isEmpty()) subPages.add(BreedingPageType.ITEM_MUTATIONS);
-
-        if (BeepediaScreen.currScreenState.getBreedingTab() >= subPages.size())
-            BeepediaScreen.currScreenState.setBreedingTab(subPages.size() - 1);
-
-        activeSubPage = subPages.get(BeepediaScreen.currScreenState.getBreedingTab());
+        if (!centrifugeBreeding.isEmpty()) subPages.add(BreedingPageType.CENTRIFUGE);
 
         parentBreeding.sort((o1, o2) -> {
             if (o1.isBase) return 1;
@@ -145,6 +146,11 @@ public class BreedingPage extends BeeDataPage {
                 else if (activePage >= entityMutationBreeding.size()) activePage = 0;
                 activeSubPage = BreedingPageType.ENTITY_MUTATIONS;
                 break;
+            case CENTRIFUGE:
+                if (activePage < 0) activePage = centrifugeBreeding.size() - 1;
+                else if (activePage >= centrifugeBreeding.size()) activePage = 0;
+                activeSubPage = BreedingPageType.CENTRIFUGE;
+                break;
             default:
                 activePage = 0;
         }
@@ -169,6 +175,7 @@ public class BreedingPage extends BeeDataPage {
         if (tab >= subPages.size()) tab = subPages.size() - 1;
         BeepediaScreen.currScreenState.setBreedingTab(tab);
         activeSubPage = subPages.get(tab);
+        updatePagePosition();
     }
 
 
@@ -191,6 +198,8 @@ public class BreedingPage extends BeeDataPage {
                 return childrenBreeding.size();
             case PARENTS:
                 return parentBreeding.size();
+            case CENTRIFUGE:
+                return centrifugeBreeding.size();
             default:
                 return 0;
         }
@@ -210,6 +219,9 @@ public class BreedingPage extends BeeDataPage {
                 break;
             case ENTITY_MUTATIONS:
                 title = entityMutationsTitle;
+                break;
+            case CENTRIFUGE:
+                title = centrifugeTitle;
                 break;
             default:
                 title = parentsTitle;
@@ -254,6 +266,9 @@ public class BreedingPage extends BeeDataPage {
             case PARENTS:
                 parentBreeding.get(activePage).draw(matrix);
                 break;
+            case CENTRIFUGE:
+                centrifugeBreeding.get(activePage).draw(matrix, xPos, yPos + 22, mouseX, mouseY);
+                break;
             default:
                 // do nothing this should never happen
                 break;
@@ -295,6 +310,9 @@ public class BreedingPage extends BeeDataPage {
             case PARENTS:
                 parentBreeding.get(activePage).tick(ticksActive);
                 break;
+            case CENTRIFUGE:
+                centrifugeBreeding.get(activePage).tick(ticksActive);
+                break;
             default:
                 // do nothing this should never happen
                 break;
@@ -316,6 +334,9 @@ public class BreedingPage extends BeeDataPage {
             case PARENTS:
                 parentBreeding.get(activePage).drawTooltips(matrixStack, mouseX, mouseY);
                 break;
+            case CENTRIFUGE:
+                centrifugeBreeding.get(activePage).drawTooltip(matrixStack, xPos, yPos + 22, mouseX, mouseY);
+                break;
             default:
                 // do nothing this should never happen
                 break;
@@ -333,6 +354,8 @@ public class BreedingPage extends BeeDataPage {
                 return itemMutationBreeding.get(activePage).mouseClick(xPos, yPos + 22, (int) mouseX, (int) mouseY);
             case PARENTS:
                 return parentBreeding.get(activePage).mouseClicked(mouseX, mouseY);
+            case CENTRIFUGE:
+                return centrifugeBreeding.get(activePage).mouseClick(xPos, yPos + 22, (int) mouseX, (int) mouseY);
             default:
                 return false;
         }
@@ -488,6 +511,7 @@ public class BreedingPage extends BeeDataPage {
         PARENTS,
         CHILDREN,
         ENTITY_MUTATIONS,
-        ITEM_MUTATIONS;
+        ITEM_MUTATIONS,
+        CENTRIFUGE;
     }
 }

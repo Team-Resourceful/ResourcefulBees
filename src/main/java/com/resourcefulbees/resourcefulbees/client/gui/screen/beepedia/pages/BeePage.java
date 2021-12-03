@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
@@ -12,6 +13,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.resourcefulbees.resourcefulbees.client.gui.widget.TabImageButton;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
+import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
@@ -101,11 +103,12 @@ public class BeePage extends BeepediaPage {
         }
         List<EntityMutation> breedMutations = BeeRegistry.getRegistry().getMutationsContaining(beeData);
         List<ItemMutation> itemBreedMutation = BeeRegistry.getRegistry().getItemMutationsContaining(beeData);
+        List<CentrifugeRecipe> centrifugeRecipes = BeeRegistry.getRegistry().getCentrifugeContaining(beeData);
         if (beeData.getBreedData().isBreedable() || !breedMutations.isEmpty() || !itemBreedMutation.isEmpty()) {
             breedingPage = Pair.of(
                     getTabButton(new ItemStack(ModItems.GOLD_FLOWER_ITEM.get()), onPress -> setSubPage(SubPageType.BREEDING),
                             new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding")),
-                    new BreedingPage(beepedia, beeData, subX, subY, breedMutations, itemBreedMutation, this)
+                    new BreedingPage(beepedia, beeData, subX, subY, breedMutations, itemBreedMutation, centrifugeRecipes, this)
             );
             tabs.add(breedingPage);
         }

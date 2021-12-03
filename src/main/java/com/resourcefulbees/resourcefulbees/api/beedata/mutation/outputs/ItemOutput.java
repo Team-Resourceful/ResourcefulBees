@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 public class ItemOutput {
@@ -24,5 +25,11 @@ public class ItemOutput {
 
     public double getWeight() {
         return weight;
+    }
+
+    public ItemStack getItemStack() {
+        ItemStack stack = new ItemStack(item);
+        stack.setTag(compoundNBT);
+        return stack;
     }
 }

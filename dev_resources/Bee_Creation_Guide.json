@@ -112,9 +112,9 @@
       "bottleOutputCount": 1,
       "fluidOutputCount": 250,
       "mainInputCount": 1,
-      "mainOutputNBTData": {},
-      "secondaryOutputNBTData": {},
-      "bottleOutputNBTData": {},
+      "mainNBTData": {},
+      "secondaryNBTData": {},
+      "bottleNBTData": {},
       "recipeTime": 200,
       "hasFluidOutput": false
     },

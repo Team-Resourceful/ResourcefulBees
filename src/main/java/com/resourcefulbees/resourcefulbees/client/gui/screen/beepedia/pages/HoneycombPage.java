@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.beedata.CentrifugeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.config.Config;
@@ -58,9 +57,9 @@ public class HoneycombPage extends BeeDataPage {
     ItemStack apiary3 = new ItemStack(ModItems.T3_APIARY_ITEM.get());
     ItemStack apiary4 = new ItemStack(ModItems.T4_APIARY_ITEM.get());
 
-    ResourceLocation honeycombsImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/honeycombs.png");
-    ResourceLocation centrifugeImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/centrifuge.png");
-    ResourceLocation multiblockOnlyImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/multiblock_only.png");
+    public static final ResourceLocation HONEYCOMBS_IMAGE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/honeycombs.png");
+    public static final ResourceLocation CENTRIFUGE_IMAGE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/centrifuge.png");
+    public static final ResourceLocation MULTIBLOCK_ONLY_IMAGE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/multiblock_only.png");
 
     Button leftArrow;
     Button rightArrow;
@@ -89,10 +88,10 @@ public class HoneycombPage extends BeeDataPage {
         apiary4Output = new ItemStack(beeData.getApiaryOutputsTypes()[3] == ApiaryOutput.COMB ? beeData.getCombRegistryObject().get() : beeData.getCombBlockItemRegistryObject().get(), apiaryAmounts[3]);
 
         ClientWorld world = beepedia.getMinecraft().level;
-        recipes.add(new RecipeObject(false, true, beeData, world));
-        recipes.add(new RecipeObject(false, false, beeData, world));
-        recipes.add(new RecipeObject(true, true, beeData, world));
-        recipes.add(new RecipeObject(true, false, beeData, world));
+        recipes.add(new RecipeObject(false, true, beeData, world, beepedia));
+        recipes.add(new RecipeObject(false, false, beeData, world, beepedia));
+        recipes.add(new RecipeObject(true, true, beeData, world, beepedia));
+        recipes.add(new RecipeObject(true, false, beeData, world, beepedia));
         recipes.removeIf(b -> b.recipe == null);
 
         leftArrow = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 28, yPos + SUB_PAGE_HEIGHT - 16, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> prevPage());
@@ -153,8 +152,6 @@ public class HoneycombPage extends BeeDataPage {
         int padding = font.width(title) / 2;
         font.draw(matrix, title.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + 8, -1);
         if (BeepediaScreen.currScreenState.isCentrifugeOpen() && !recipes.isEmpty()) {
-            manager.bind(centrifugeImage);
-            AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
             recipes.get(activePage).draw(matrix, xPos, yPos + 22, mouseX, mouseY);
             if (recipes.size() > 1) {
                 StringTextComponent page = new StringTextComponent(String.format("%d / %d", activePage + 1, recipes.size()));
@@ -162,7 +159,7 @@ public class HoneycombPage extends BeeDataPage {
                 font.draw(matrix, page.withStyle(TextFormatting.WHITE), (float) xPos + ((float) SUB_PAGE_WIDTH / 2) - padding, (float) yPos + SUB_PAGE_HEIGHT - 14, -1);
             }
         } else {
-            manager.bind(honeycombsImage);
+            manager.bind(HONEYCOMBS_IMAGE);
             AbstractGui.blit(matrix, xPos, yPos + 22, 0, 0, 169, 84, 169, 84);
             beepedia.drawSlot(matrix, hives.get(counter), xPos + 14, yPos + 23);
             beepedia.drawSlot(matrix, apiary1, xPos + 43, yPos + 23);
@@ -202,10 +199,10 @@ public class HoneycombPage extends BeeDataPage {
 
     @Override
     public void drawTooltips(MatrixStack matrix, int mouseX, int mouseY) {
-        if (!recipes.isEmpty()) recipes.get(activePage).drawTooltip(matrix, mouseX, mouseY);
+        if (!recipes.isEmpty()) recipes.get(activePage).drawTooltip(matrix, xPos, yPos, mouseX, mouseY);
     }
 
-    private class RecipeObject {
+    public static class RecipeObject {
         boolean isBlock;
         boolean hasBottle;
         ItemStack inputItem;
@@ -214,22 +211,18 @@ public class HoneycombPage extends BeeDataPage {
         List<Pair<FluidStack, Float>> outputFluids;
         CentrifugeRecipe recipe;
         CustomBeeData beeData;
+        BeepediaScreen beepedia;
 
-        public RecipeObject(boolean isBlock, boolean hasBottle, CustomBeeData beeData, ClientWorld world) {
+        public RecipeObject(boolean isBlock, boolean hasBottle, CustomBeeData beeData, ClientWorld world, BeepediaScreen beepedia) {
             this.isBlock = isBlock;
             this.hasBottle = hasBottle;
             this.beeData = beeData;
-
+            this.beepedia = beepedia;
+            setBottles();
             if (isBlock) {
                 inputItem = beeData.getCombBlockItemStack();
-                if (hasBottle) {
-                    bottleItem = new ItemStack(Items.GLASS_BOTTLE, 9);
-                }
             } else {
                 inputItem = beeData.getCombStack();
-                if (hasBottle) {
-                    bottleItem = new ItemStack(Items.GLASS_BOTTLE);
-                }
             }
             Inventory inventory = new Inventory(inputItem, bottleItem);
             recipe = world.getRecipeManager().getRecipeFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, inventory, world).orElse(null);
@@ -239,7 +232,29 @@ public class HoneycombPage extends BeeDataPage {
             }
         }
 
+        public RecipeObject(CentrifugeRecipe recipe, BeepediaScreen beepedia) {
+            this.beepedia = beepedia;
+            this.recipe = recipe;
+            inputItem = recipe.ingredient.getItems()[0];
+            outputItems = recipe.itemOutputs;
+            outputFluids = recipe.fluidOutput;
+            isBlock = recipe.multiblock;
+            hasBottle = !recipe.noBottleInput;
+            setBottles();
+        }
+
+        private void setBottles() {
+            if (hasBottle) {
+                bottleItem = isBlock ? new ItemStack(Items.GLASS_BOTTLE, 9) : new ItemStack(Items.GLASS_BOTTLE);
+            }
+        }
+
         public void draw(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+
+            // draw background
+            Minecraft.getInstance().textureManager.bind(CENTRIFUGE_IMAGE);
+            AbstractGui.blit(matrix, xPos, yPos, 0, 0, 169, 84, 169, 84);
+
             beepedia.drawSlot(matrix, inputItem, xPos + 25, yPos + 3);
             if (bottleItem.isEmpty()) beepedia.drawEmptySlot(matrix, xPos + 25, yPos + 23);
             else beepedia.drawSlot(matrix, bottleItem, xPos + 25, yPos + 23);
@@ -260,7 +275,7 @@ public class HoneycombPage extends BeeDataPage {
             beepedia.drawSlot(matrix, outputItems.get(1).getLeft(), xPos + 124, yPos + 23);
             drawWeight(matrix, outputItems.get(1).getRight(), xPos + 112, yPos + 30);
             if (isBlock || Config.MULTIBLOCK_RECIPES_ONLY.get()) {
-                Minecraft.getInstance().getTextureManager().bind(multiblockOnlyImage);
+                Minecraft.getInstance().getTextureManager().bind(MULTIBLOCK_ONLY_IMAGE);
                 AbstractGui.blit(matrix, xPos + 28, yPos + 45, 0, 0, 16, 16, 16, 16);
             }
             if (hasBottle) {
@@ -326,10 +341,19 @@ public class HoneycombPage extends BeeDataPage {
             font.draw(matrix, text.withStyle(TextFormatting.GRAY), (float) xPos - padding, yPos, -1);
         }
 
-        public void drawTooltip(MatrixStack matrix, int mouseX, int mouseY) {
+        public void drawTooltip(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
             if (BeepediaScreen.mouseHovering((float) xPos + 28, (float) yPos + 67, 20, 20, mouseX, mouseY)) {
                 beepedia.renderTooltip(matrix, new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock"), mouseX, mouseY);
             }
+        }
+
+        public boolean mouseClick(int xPos, int i, int mouseX, int mouseY) {
+            // already handled via interactive slot
+            return false;
+        }
+
+        public void tick(int ticksActive) {
+            // recipes don't tick yet
         }
     }
 }

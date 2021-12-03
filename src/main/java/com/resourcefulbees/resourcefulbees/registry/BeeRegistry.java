@@ -4,14 +4,17 @@ import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
-import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import com.resourcefulbees.resourcefulbees.utils.validation.FirstPhaseValidator;
-import net.minecraft.entity.EntityType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -219,16 +222,40 @@ public class BeeRegistry implements IBeeRegistry {
         List<ItemMutation> mutations = new LinkedList<>();
         INSTANCE.getBees().forEach((s, beeData1) -> {
             beeData1.getMutationData().getJeiItemMutations().forEach((block, pair) -> pair.getRight().forEach(itemOutput -> {
-                if (itemOutput.getItem() == beeData.getSpawnEggItemRegistryObject().get()) {
+                if (itemPresent(itemOutput.getItemStack(), beeData)) {
                     mutations.add(new ItemMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), block, pair, beeData1.getMutationData().getMutationCount()));
                 }
             }));
             beeData1.getMutationData().getJeiBlockTagItemMutations().forEach((tag, pair) -> pair.getRight().forEach(itemOutput -> {
-                if (itemOutput.getItem() == beeData.getSpawnEggItemRegistryObject().get()) {
+                if (itemPresent(itemOutput.getItemStack(), beeData)) {
                     mutations.add(new ItemMutation(BeeInfoUtils.getEntityType(beeData1.getEntityTypeRegistryID()), tag, pair, beeData1.getMutationData().getMutationCount()));
                 }
             }));
         });
         return mutations;
+    }
+
+    private boolean itemPresent(ItemStack item, CustomBeeData beeData) {
+        return (item.getItem() == ModItems.BEE_JAR.get() &&
+                item.hasTag() && item.getTag() != null &&
+                item.getTag().contains(NBTConstants.NBT_ENTITY) &&
+                item.getTag().getString(NBTConstants.NBT_ENTITY).equals(beeData.getEntityTypeRegistryID().toString())) ||
+                item.getItem() == beeData.getSpawnEggItemRegistryObject().get();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public List<CentrifugeRecipe> getCentrifugeContaining(CustomBeeData beeData) {
+        List<CentrifugeRecipe> centrifugePages = new LinkedList<>();
+        List<CentrifugeRecipe> recipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE);
+        recipes.forEach(c -> {
+            if (!c.itemOutputs.isEmpty()) {
+                for (Pair<ItemStack, Float> item: c.itemOutputs) {
+                    if (itemPresent(item.getLeft(), beeData)) {
+                        centrifugePages.add(c);
+                    }
+                }
+            }
+        });
+        return centrifugePages;
     }
 }
