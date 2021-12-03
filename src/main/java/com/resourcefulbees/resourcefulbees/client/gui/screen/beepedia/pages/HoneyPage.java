@@ -59,12 +59,12 @@ public class HoneyPage extends BeepediaPage {
             DefaultHoneyBottleData data = (DefaultHoneyBottleData) bottleData;
             this.bottle = new ItemStack(data.bottle);
             this.hunger = Foods.HONEY_BOTTLE.getNutrition();
-            this.saturation = Foods.HONEY_BOTTLE.getSaturationModifier();
+            this.saturation = Math.min((float) Foods.HONEY_BOTTLE.getNutrition() * Foods.HONEY_BOTTLE.getSaturationModifier() * 2.0F, 20.0F);
             this.text = new TranslationTextComponent("fluid.resourcefulbees.honey");
         } else {
             this.bottle = new ItemStack(bottleData.getHoneyBottleRegistryObject().get());
             this.hunger = bottleData.getHunger();
-            this.saturation = bottleData.getSaturation();
+            this.saturation = Math.min(bottleData.getHunger() * bottleData.getSaturation() * 2.0F, 20.0F);
             this.effects = bottleData.getEffects();
             if (bottleData.doGenerateHoneyFluid()) {
                 this.text = bottleData.getFluidTranslation();
@@ -193,7 +193,7 @@ public class HoneyPage extends BeepediaPage {
         if (pipCounter == 1) {
             AbstractGui.blit(matrix, xPos + pipPosition, yPos + 21, 0, 9, 9, 9, 9, 18);
         }
-        float saturationWidth = Math.min(saturation * 90, 90);
+        float saturationWidth = (saturation / 20) * 90;
         float saturationRemainder = 90 - saturationWidth;
         float saturationStart = 24 + saturationRemainder;
         manager.bind(saturationIcons);

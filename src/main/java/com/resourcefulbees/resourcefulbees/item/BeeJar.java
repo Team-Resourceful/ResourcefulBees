@@ -96,6 +96,11 @@ public class BeeJar extends Item {
             BlockPos pos = context.getClickedPos();
             Entity entity = getEntityFromStack(stack, worldIn, true);
             if (entity != null) {
+                assert stack.getTag() != null;
+                CompoundNBT display = stack.getTag().getCompound(NBTConstants.NBT_DISPLAY);
+                if (!display.getString(NBTConstants.NBT_NAME).contains("item.resourcefulbees.bee_jar_filled")) {
+                    entity.setCustomName(ITextComponent.Serializer.fromJson(display.getString(NBTConstants.NBT_NAME)));
+                }
                 if (entity instanceof BeeEntity) {
                     BeeEntity beeEntity = (BeeEntity) entity;
                     resetBee(beeEntity);
