@@ -18,7 +18,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -32,7 +31,6 @@ import java.util.List;
 
 public class Beepedia extends Item {
 
-    public static final String COMPLETE_TAG = "Complete";
     public static final String CREATIVE_TAG = "Creative";
 
     public Beepedia(Properties properties) {
@@ -63,8 +61,6 @@ public class Beepedia extends Item {
         if (entity != null) {
             data.getBeeList().add(entity.getBeeType());
             data.getBeeList().removeIf(b -> BeeRegistry.getRegistry().getBeeData(b) == null);
-            nbt.putBoolean(COMPLETE_TAG, data.getBeeList().size() == BeeRegistry.getRegistry().getBees().size());
-            stack.setTag(nbt);
         }
     }
 
@@ -95,8 +91,8 @@ public class Beepedia extends Item {
     @Override
     public ITextComponent getName(ItemStack stack) {
         if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
-            if (stack.getTag().getBoolean(CREATIVE_TAG)) return new TranslationTextComponent("item.resourcefulbees.creative_beepedia").withStyle(TextFormatting.LIGHT_PURPLE);
-            if (stack.getTag().getBoolean(COMPLETE_TAG)) return new StringTextComponent("✦ ").withStyle(TextFormatting.GREEN).append(super.getName(stack).copy().withStyle(TextFormatting.WHITE));
+            if (stack.getTag().getBoolean(CREATIVE_TAG))
+                return new TranslationTextComponent("item.resourcefulbees.creative_beepedia").withStyle(TextFormatting.LIGHT_PURPLE);
         }
         return super.getName(stack);
     }
@@ -106,18 +102,15 @@ public class Beepedia extends Item {
     public void appendHoverText(@NotNull ItemStack stack, @Nullable World world, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flag) {
         super.appendHoverText(stack, world, tooltip, flag);
         tooltip.add(new TranslationTextComponent("item.resourcefulbees.information.beepedia").withStyle(TextFormatting.GREEN));
-        if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
-            boolean complete = stack.getTag().getBoolean(COMPLETE_TAG) || stack.getTag().getBoolean(CREATIVE_TAG);
-            int total = BeeRegistry.getRegistry().getBees().size();
-            assert Minecraft.getInstance().player != null;
-            int count = Minecraft.getInstance().player.getCapability(BeepediaData.Provider.BEEPEDIA_DATA).orElseGet(BeepediaData::new).getBeeList().size();
-            tooltip.add(new TranslationTextComponent("gui.resourcefulbees.beepedia.home.progress").withStyle(TextFormatting.GRAY)
-                    .append(String.format("%d / %d", complete? total : count, total)).withStyle(TextFormatting.GOLD));
-        }
-
+        boolean creative = stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty() && stack.getTag().getBoolean(CREATIVE_TAG);
+        int total = BeeRegistry.getRegistry().getBees().size();
+        if (Minecraft.getInstance().player == null) return;
+        int count = Minecraft.getInstance().player.getCapability(BeepediaData.Provider.BEEPEDIA_DATA).orElseGet(BeepediaData::new).getBeeList().size();
+        tooltip.add(new TranslationTextComponent("gui.resourcefulbees.beepedia.home.progress").withStyle(TextFormatting.GRAY)
+                .append(String.format("%d / %d", creative ? total : count, total)).withStyle(TextFormatting.GOLD));
     }
 
-    public static boolean isCreative(ItemStack stack){
+    public static boolean isCreative(ItemStack stack) {
         return !stack.isEmpty() && stack.hasTag() && stack.getTag() != null && stack.getTag().getBoolean(CREATIVE_TAG);
     }
 }

@@ -26,7 +26,7 @@ public class BeepediaUtils {
     public static void loadBeepedia(ItemStack itemstack, Entity entity, IBeepediaData data) {
         boolean complete = false;
         if (itemstack.hasTag() && itemstack.getTag() != null && !itemstack.isEmpty()) {
-            complete = itemstack.getTag().getBoolean(Beepedia.COMPLETE_TAG) || itemstack.getTag().getBoolean(Beepedia.CREATIVE_TAG);
+            complete =  itemstack.getTag().getBoolean(Beepedia.CREATIVE_TAG);
         }
         Minecraft.getInstance().setScreen(new BeepediaScreen(entity == null ? null : ((CustomBeeEntity) entity).getBeeType(), data.getBeeList(), complete));
     }

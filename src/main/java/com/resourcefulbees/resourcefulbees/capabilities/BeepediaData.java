@@ -3,16 +3,18 @@ package com.resourcefulbees.resourcefulbees.capabilities;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.IBeepediaData;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
+import com.resourcefulbees.resourcefulbees.network.packets.BeepediaSyncMessage;
+import io.netty.buffer.Unpooled;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
@@ -23,10 +25,13 @@ import java.util.Set;
 
 public class BeepediaData implements IBeepediaData {
 
-
     public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ResourcefulBees.MOD_ID, "beepedia_data");
 
     private Set<String> bees = new HashSet<>();
+
+    public static void sync(ServerPlayerEntity player, IBeepediaData data) {
+        NetPacketHandler.sendToPlayer(new BeepediaSyncMessage(data.serializeNBT(), new PacketBuffer(Unpooled.buffer())), player);
+    }
 
     @Override
     public Set<String> getBeeList() {
@@ -74,7 +79,7 @@ public class BeepediaData implements IBeepediaData {
         }, BeepediaData::new);
     }
 
-    public static class Provider implements ICapabilitySerializable<CompoundNBT> {
+    public static class Provider implements ICapabilitySerializable<CompoundNBT>, ICapabilityProvider {
         @CapabilityInject(IBeepediaData.class)
         public static Capability<IBeepediaData> BEEPEDIA_DATA = null;
 

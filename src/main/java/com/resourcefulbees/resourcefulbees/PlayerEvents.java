@@ -2,16 +2,10 @@ package com.resourcefulbees.resourcefulbees;
 
 import com.resourcefulbees.resourcefulbees.api.IBeepediaData;
 import com.resourcefulbees.resourcefulbees.capabilities.BeepediaData;
-import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
-import com.resourcefulbees.resourcefulbees.network.packets.BeepediaSyncMessage;
-import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
-import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -38,6 +32,27 @@ public class PlayerEvents {
     public void cloneEvent(PlayerEvent.Clone event) {
         IBeepediaData data = event.getOriginal().getCapability(BeepediaData.Provider.BEEPEDIA_DATA).orElse(new BeepediaData());
         event.getPlayer().getCapability(BeepediaData.Provider.BEEPEDIA_DATA).ifPresent(c -> c.deserializeNBT(data.serializeNBT()));
-        NetPacketHandler.sendToPlayer(new BeepediaSyncMessage(data.serializeNBT(), new PacketBuffer(Unpooled.buffer())), (ServerPlayerEntity) event.getPlayer());
+
+    }
+
+    @SubscribeEvent
+    public void onPlayerLoginEvent(PlayerEvent.PlayerLoggedInEvent event) {
+        PlayerEntity player = event.getPlayer();
+        if (!player.level.isClientSide) {
+            event.getPlayer().getCapability(BeepediaData.Provider.BEEPEDIA_DATA).ifPresent(c ->
+                    BeepediaData.sync((ServerPlayerEntity) event.getPlayer(), c));
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerDimChangedEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
+        event.getPlayer().getCapability(BeepediaData.Provider.BEEPEDIA_DATA).ifPresent(c ->
+                BeepediaData.sync((ServerPlayerEntity) event.getPlayer(), c));
+    }
+
+    @SubscribeEvent
+    public void respawnEvent(PlayerEvent.PlayerRespawnEvent event) {
+        event.getPlayer().getCapability(BeepediaData.Provider.BEEPEDIA_DATA).ifPresent(c ->
+                BeepediaData.sync((ServerPlayerEntity) event.getPlayer(), c));
     }
 }
