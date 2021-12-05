@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees;
 
 import com.resourcefulbees.resourcefulbees.api.ResourcefulBeesAPI;
+import com.resourcefulbees.resourcefulbees.capabilities.BeepediaData;
 import com.resourcefulbees.resourcefulbees.client.gui.IncompatibleModWarning;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
 import com.resourcefulbees.resourcefulbees.config.Config;
@@ -29,7 +30,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -81,6 +81,9 @@ public class ResourcefulBees {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupCommon);
         MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
+
+        // events related to player specifically
+        MinecraftForge.EVENT_BUS.register(new PlayerEvents());
 
 
         MinecraftForge.EVENT_BUS.addListener(this::trade);
@@ -148,6 +151,7 @@ public class ResourcefulBees {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
+        BeepediaData.register();
         BeeInfoUtils.makeValidApiaryTag();
         event.enqueueWork(ModSetup::registerDispenserBehaviors);
         NetPacketHandler.init();

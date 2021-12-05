@@ -51,4 +51,5 @@ public class NBTConstants {
     public static final String NBT_PLAY_SOUND = "playSound";
     public static final String NBT_DISPLAY = "display";
     public static final String NBT_NAME = "Name";
+    public static final String NBT_BEEPEDIA_DATA = "BeepediaData";
 }

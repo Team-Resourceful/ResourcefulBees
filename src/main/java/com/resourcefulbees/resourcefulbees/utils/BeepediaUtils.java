@@ -1,5 +1,6 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
+import com.resourcefulbees.resourcefulbees.api.IBeepediaData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.item.Beepedia;
@@ -22,21 +23,11 @@ public class BeepediaUtils {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static void loadBeepedia(ItemStack itemstack, Entity entity) {
+    public static void loadBeepedia(ItemStack itemstack, Entity entity, IBeepediaData data) {
         boolean complete = false;
-        List<String> bees = new LinkedList<>();
         if (itemstack.hasTag() && itemstack.getTag() != null && !itemstack.isEmpty()) {
             complete = itemstack.getTag().getBoolean(Beepedia.COMPLETE_TAG) || itemstack.getTag().getBoolean(Beepedia.CREATIVE_TAG);
-            bees = getBees(itemstack.getTag());
         }
-        Minecraft.getInstance().setScreen(new BeepediaScreen(entity == null ? null : ((CustomBeeEntity) entity).getBeeType(), bees, complete));
-    }
-
-    private static List<String> getBees(CompoundNBT tag) {
-        if (tag.contains(NBTConstants.NBT_BEES)) {
-            return tag.getList(NBTConstants.NBT_BEES, 8).copy().stream().map(INBT::getAsString).collect(Collectors.toList());
-        } else {
-            return new LinkedList<>();
-        }
+        Minecraft.getInstance().setScreen(new BeepediaScreen(entity == null ? null : ((CustomBeeEntity) entity).getBeeType(), data.getBeeList(), complete));
     }
 }

@@ -96,14 +96,14 @@ public class BeepediaScreen extends Screen {
     private ModImageButton homeButton;
 
     @OnlyIn(Dist.CLIENT)
-    public BeepediaScreen(String pageID, List<String> bees, boolean complete) {
+    public BeepediaScreen(String pageID, Set<String> bees, boolean complete) {
         super(new TranslationTextComponent("gui.resourcefulbees.beepedia"));
         if (pageID != null) {
             currScreenState.setPageType(PageType.BEE);
             currScreenState.setPageID(pageID);
             currScreenState.setBeeSubPage(BeePage.SubPageType.INFO);
         }
-        this.itemBees = bees;
+        this.itemBees = new LinkedList<>(bees);
         this.complete = complete;
         this.xSize = 286;
         this.ySize = 182;
