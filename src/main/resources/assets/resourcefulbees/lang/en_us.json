@@ -628,5 +628,12 @@
 	"advancements.resourcefulbees.t4_hive_upgrade.title": "Mini Bee Mansion",
 	"advancements.resourcefulbees.t4_hive_upgrade.description": "Obtain a T4 Hive Upgrade",
 	"advancements.resourcefulbees.wax.title": "Wax On, Wax Off",
-	"advancements.resourcefulbees.wax.description": "Obtain some Wax"
+	"advancements.resourcefulbees.wax.description": "Obtain some Wax",
+
+	"argument.resourcefulbees.beepedia.bee_not_found" : "Unknown Bee ID.",
+
+	"command.resourcefulbees.beepedia.bee_discovered": "Discovered Bee: %s.",
+	"command.resourcefulbees.beepedia.bee_forgotten": "Forgotten Bee: %s.",
+	"command.resourcefulbees.beepedia.complete": "Completed Beepedia Progress.",
+	"command.resourcefulbees.beepedia.reset": "Reset Beepedia Progress."
 }

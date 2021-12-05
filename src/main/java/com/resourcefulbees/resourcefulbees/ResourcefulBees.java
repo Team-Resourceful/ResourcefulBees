@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees;
 import com.resourcefulbees.resourcefulbees.api.ResourcefulBeesAPI;
 import com.resourcefulbees.resourcefulbees.capabilities.BeepediaData;
 import com.resourcefulbees.resourcefulbees.client.gui.IncompatibleModWarning;
+import com.resourcefulbees.resourcefulbees.command.BeepediaCommand;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
@@ -29,6 +30,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
@@ -81,6 +83,7 @@ public class ResourcefulBees {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupCommon);
         MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
+        MinecraftForge.EVENT_BUS.addListener(this::registerCommand);
 
         // events related to player specifically
         MinecraftForge.EVENT_BUS.register(new PlayerEvents());
@@ -94,6 +97,10 @@ public class ResourcefulBees {
         MinecraftForge.EVENT_BUS.register(this);
         ItemStack stack = new ItemStack(Items.ACACIA_DOOR);
         stack.setTag(stack.getOrCreateTag().merge(new CompoundNBT()));
+    }
+
+    private void registerCommand(RegisterCommandsEvent event) {
+        BeepediaCommand.register(event.getDispatcher());
     }
 
     private void setupCommon(FMLCommonSetupEvent event) {
