@@ -3,6 +3,8 @@ package com.resourcefulbees.resourcefulbees.item;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
+import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -15,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.BeehiveTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -23,10 +27,13 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class BeeBox extends Item {
 
@@ -39,34 +46,115 @@ public class BeeBox extends Item {
         this.isTemp = isTemp;
     }
 
+
     @Override
     public @NotNull ActionResultType useOn(ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
         if (player != null) {
             World playerWorld = context.getPlayer().getCommandSenderWorld();
             ItemStack stack = context.getItemInHand();
-            if (!context.getPlayer().isShiftKeyDown()) return ActionResultType.FAIL;
-            if (playerWorld.isClientSide() || !isFilled(stack)) return ActionResultType.FAIL;
+            if (playerWorld.isClientSide()) return ActionResultType.FAIL;
+
             World worldIn = context.getLevel();
             BlockPos pos = context.getClickedPos();
-            List<Entity> entities = getEntitiesFromStack(stack, worldIn, true);
-            for (Entity entity : entities) {
-                if (entity != null) {
-                    BlockPos blockPos = pos.relative(context.getClickedFace());
-                    entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
-                    worldIn.addFreshEntity(entity);
-                    if (entity instanceof BeeEntity) {
-                        BeeEntity beeEntity = (BeeEntity) entity;
-                        BeeJar.resetBee(beeEntity);
-                        BeeJar.setBeeAngry(beeEntity, player);
-                    }
-                }
+
+            if ((worldIn.getBlockEntity(pos) instanceof ApiaryTileEntity ||
+                    worldIn.getBlockEntity(pos) instanceof BeehiveTileEntity) &&
+                    context.getPlayer().isShiftKeyDown()) {
+                return stealBees(worldIn, stack, pos);
             }
-            if (isTemp) stack.shrink(1);
-            else stack.setTag(null);
+            if (!isFilled(stack)) return ActionResultType.FAIL;
+            if (context.getPlayer().isShiftKeyDown()) {
+                releaseAll(worldIn, stack, pos, context, player);
+            } else {
+                releaseOne(worldIn, stack, pos, context, player);
+            }
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;
+    }
+
+    private void releaseOne(World worldIn, ItemStack stack, BlockPos pos, ItemUseContext context, PlayerEntity player) {
+        assert stack.getTag() != null;
+        ListNBT listNBT = stack.getTag().getList(NBTConstants.NBT_BEES, Constants.NBT.TAG_COMPOUND);
+        CompoundNBT tag = (CompoundNBT) listNBT.remove(0);
+        EntityType.byString(tag.getCompound(NBTConstants.ENTITY_DATA).getString("id")).ifPresent(type -> {
+            Entity entity = type.create(worldIn);
+            if (entity != null) {
+                entity.load(tag);
+                loadEntity(pos, context, entity, worldIn, player);
+            }
+        });
+        if (listNBT.isEmpty()) stack.setTag(null);
+        else {
+            CompoundNBT nbt = stack.getTag();
+            nbt.put(NBTConstants.NBT_BEES, listNBT);
+            stack.setTag(nbt);
+        }
+    }
+
+    private void releaseAll(World worldIn, ItemStack stack, BlockPos pos, ItemUseContext context, PlayerEntity player) {
+        List<Entity> entities = getEntitiesFromStack(stack, worldIn, true);
+        for (Entity entity : entities) {
+            if (entity != null) {
+                loadEntity(pos, context, entity, worldIn, player);
+            }
+        }
+        if (isTemp) stack.shrink(1);
+        else stack.setTag(null);
+    }
+
+    private ActionResultType stealBees(World worldIn, ItemStack stack, BlockPos pos) {
+        if (isTemp) return ActionResultType.FAIL;
+        TileEntity tile = worldIn.getBlockEntity(pos);
+
+        ListNBT list;
+        if (stack.getTag() != null && stack.getTag().contains(NBTConstants.NBT_BEES)) {
+            list = stack.getTag().getList(NBTConstants.NBT_BEES, Constants.NBT.TAG_COMPOUND);
+        } else {
+            list = new ListNBT();
+        }
+
+        int space = BeeConstants.MAX_BEES_BEE_BOX - list.size();
+
+        if (tile instanceof ApiaryTileEntity) {
+            ApiaryTileEntity apiary = (ApiaryTileEntity) tile;
+            Map<String, ApiaryTileEntity.ApiaryBee> bees = apiary.bees;
+            for (int i = 0; i < space; i++) {
+                if (apiary.bees.isEmpty()) break;
+                ApiaryTileEntity.ApiaryBee bee = bees.remove(bees.entrySet().iterator().next().getKey());
+                CompoundNBT nbt = new CompoundNBT();
+                nbt.put(NBTConstants.ENTITY_DATA, bee.entityData);
+                list.add(nbt);
+            }
+        } else if (tile instanceof BeehiveTileEntity) {
+            BeehiveTileEntity hive = (BeehiveTileEntity) tile;
+            for (int i = 0; i < space; i++) {
+                Iterator<BeehiveTileEntity.Bee> beeIterator = hive.stored.listIterator();
+                if (beeIterator.hasNext()) {
+                    BeehiveTileEntity.Bee bee = beeIterator.next();
+                    beeIterator.remove();
+                    CompoundNBT nbt = new CompoundNBT();
+                    nbt.put(NBTConstants.ENTITY_DATA, bee.entityData);
+                    list.add(nbt);
+                } else break;
+            }
+        }
+        CompoundNBT nbt = stack.getTag() == null ? new CompoundNBT() : stack.getTag();
+        nbt.put(NBTConstants.NBT_BEES, list);
+        stack.setTag(nbt);
+        return ActionResultType.SUCCESS;
+    }
+
+    private void loadEntity(BlockPos pos, ItemUseContext context, Entity entity, World worldIn, PlayerEntity player) {
+        BlockPos blockPos = pos.relative(context.getClickedFace());
+        entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
+        worldIn.addFreshEntity(entity);
+        if (entity instanceof BeeEntity) {
+            BeeEntity beeEntity = (BeeEntity) entity;
+            BeeJar.resetBee(beeEntity);
+            BeeJar.setBeeAngry(beeEntity, player);
+        }
     }
 
     public @NotNull List<Entity> getEntitiesFromStack(ItemStack stack, World world, boolean withInfo) {
@@ -80,7 +168,8 @@ public class BeeBox extends Item {
                         EntityType<?> type = EntityType.byString(compoundNBT.getCompound(NBTConstants.ENTITY_DATA).getString("id")).orElse(null);
                         if (type != null) {
                             Entity entity = type.create(world);
-                            if (entity != null && withInfo) entity.load(compoundNBT.getCompound(NBTConstants.ENTITY_DATA));
+                            if (entity != null && withInfo)
+                                entity.load(compoundNBT.getCompound(NBTConstants.ENTITY_DATA));
                             entities.add(entity);
                         }
                     });
