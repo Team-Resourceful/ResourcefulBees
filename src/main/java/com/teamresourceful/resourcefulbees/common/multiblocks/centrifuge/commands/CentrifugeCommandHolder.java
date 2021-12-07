@@ -7,6 +7,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import net.minecraftforge.fml.loading.FMLLoader;
 
 import java.util.Collection;
 
@@ -16,7 +17,7 @@ public class CentrifugeCommandHolder {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
-    public static CommandDispatcher<CentrifugeCommandSource> dispatcher = generateCommands();
+    private static CommandDispatcher<CentrifugeCommandSource> dispatcher = generateCommands();
 
     public static CommandDispatcher<CentrifugeCommandSource> generateCommands() {
         final CommandDispatcher<CentrifugeCommandSource> newDispatcher = new CommandDispatcher<>();
@@ -34,10 +35,12 @@ public class CentrifugeCommandHolder {
             ctx.getSource().sendMessage("pong");
             return 1;
         }));
-        newDispatcher.register(literal("reload").executes(ctx -> {
-            dispatcher = generateCommands();
-            return 1;
-        }));
+        if (!FMLLoader.isProduction()) {
+            newDispatcher.register(literal("reload").executes(ctx -> {
+                dispatcher = generateCommands();
+                return 1;
+            }));
+        }
         return newDispatcher;
     }
 
@@ -53,7 +56,7 @@ public class CentrifugeCommandHolder {
         try {
             dispatcher.execute(data, source);
         } catch (CommandSyntaxException e) {
-            source.sendError(e.getRawMessage().getString());
+            source.sendError(e.getMessage());
         }
     }
 }

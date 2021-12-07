@@ -46,6 +46,7 @@ public abstract class MixinEnterBeehiveGoal {
         }
     }
 
+    //TODO convert this to an inject
     /**
      * @author epic_oreo
      * @reason crashes when switching to vanilla code due to hivePos being null. retained vanilla checks in overwrite.

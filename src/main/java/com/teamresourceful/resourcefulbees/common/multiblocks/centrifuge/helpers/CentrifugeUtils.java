@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,5 +37,9 @@ public class CentrifugeUtils {
             i++;
         }
         throw new IndexOutOfBoundsException();
+    }
+
+    public static String formatBlockPos(BlockPos pos) {
+        return String.format("[x:%s, y:%s, z:%s]", pos.getX(), pos.getY(), pos.getZ());
     }
 }

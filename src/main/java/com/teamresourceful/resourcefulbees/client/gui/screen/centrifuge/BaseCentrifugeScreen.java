@@ -4,15 +4,11 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.FontResourceManagerAccessor;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.MinecraftAccessor;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.fonts.Font;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -28,10 +24,6 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
 
     protected static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/background.png");
     protected static final ResourceLocation COMPONENTS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/components.png");
-    protected static final Font FONT_8 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(new ResourceLocation(ResourcefulBees.MOD_ID, "jetbrains_mono_8"));
-    protected static final FontRenderer TERMINAL_FONT_8 = new FontRenderer(resourceLocation -> FONT_8);
-    protected static final Font FONT_12 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(new ResourceLocation(ResourcefulBees.MOD_ID, "jetbrains_mono_12"));
-    protected static final FontRenderer TERMINAL_FONT_12 = new FontRenderer(resourceLocation -> FONT_12);
 
     protected static final Rectangle CLOSE = new Rectangle(345, 2, 13, 13);
     protected static final Rectangle BACK = new Rectangle(2, 2, 13, 13);
@@ -45,6 +37,10 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         this.imageWidth = 360;
         this.imageHeight = 228;
         this.centrifugeState = pMenu.getEntity() == null  ? new CentrifugeState() : pMenu.getEntity().getCentrifugeState();
+    }
+
+    public CentrifugeState getCentrifugeState() {
+        return centrifugeState;
     }
 
     @Override
@@ -67,15 +63,17 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
 
     @Override
     protected void renderLabels(@NotNull MatrixStack matrix, int pX, int pY) {
-        TERMINAL_FONT_12.draw(matrix, this.title, 10,5, 0xffffff);
+        RenderUtils.TERMINAL_FONT_12.draw(matrix, this.title, 10,5, 0xffc9c9c9);
     }
 
     @Override
     protected void renderBg(@NotNull MatrixStack matrix, float pPartialTicks, int pX, int pY) {
         this.renderBackground(matrix);
         if (minecraft == null) return;
+        //BACKGROUND
         minecraft.textureManager.bind(BACKGROUND);
         blit(matrix, leftPos, topPos, 0, 0, imageWidth, imageHeight, 360, 228);
+        //COMPONENTS
         minecraft.textureManager.bind(COMPONENTS);
         drawInfoPane(matrix, leftPos, topPos);
     }

@@ -237,13 +237,13 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     //region NBT HANDLING
     @Override
     public void onLoad() {
+        super.onLoad();
         if (level != null) {
             filterRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(filterRecipeID);
             processRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(processRecipeID);
             itemOutputs.onLoad(CentrifugeItemOutputEntity.class, level); //TODO remove this in 1.18
             fluidOutputs.onLoad(CentrifugeFluidOutputEntity.class, level); //TODO remove this in 1.18
         }
-        super.onLoad();
     }
 
     //TODO see below!

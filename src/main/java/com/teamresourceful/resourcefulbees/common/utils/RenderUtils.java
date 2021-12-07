@@ -2,10 +2,15 @@ package com.teamresourceful.resourcefulbees.common.utils;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.FontResourceManagerAccessor;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.fonts.Font;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
@@ -15,6 +20,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
@@ -22,6 +28,13 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 public class RenderUtils {
+
+    public static final int FONT_COLOR_1 = 0xffc9c9c9;
+    public static final int FONT_COLOR_2 = 0xff2cafc7;
+    private static final Font FONT_8 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(new ResourceLocation(ResourcefulBees.MOD_ID, "jetbrains_mono_8"));
+    public static final FontRenderer TERMINAL_FONT_8 = new FontRenderer(resourceLocation -> FONT_8);
+    private static final Font FONT_12 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(new ResourceLocation(ResourcefulBees.MOD_ID, "jetbrains_mono_12"));
+    public static final FontRenderer TERMINAL_FONT_12 = new FontRenderer(resourceLocation -> FONT_12);
 
     private RenderUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

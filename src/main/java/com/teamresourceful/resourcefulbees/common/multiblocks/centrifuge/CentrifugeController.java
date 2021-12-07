@@ -160,7 +160,7 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     @Override
     protected synchronized void onPartDetached(@Nonnull AbstractCentrifugeEntity tile) {
         if (tile instanceof CentrifugeInputEntity) {
-            inputs.remove(tile.getBlockPos().asLong());
+            inputs.remove(tile.getBlockPos());
         }
         if (tile instanceof CentrifugeProcessorEntity) {
             processors.remove(tile);
@@ -169,20 +169,20 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
             gearboxes.remove(tile);
         }
         if (tile instanceof CentrifugeItemOutputEntity) {
-            itemOutputs.remove(tile.getBlockPos().asLong());
+            itemOutputs.remove(tile.getBlockPos());
         }
         if (tile instanceof CentrifugeFluidOutputEntity) {
-            fluidOutputs.remove(tile.getBlockPos().asLong());
+            fluidOutputs.remove(tile.getBlockPos());
         }
         if (tile instanceof CentrifugeVoidEntity) {
-            dumps.remove(tile.getBlockPos().asLong());
+            dumps.remove(tile.getBlockPos());
         }
         if (tile instanceof CentrifugeEnergyPortEntity) {
-            energyPorts.remove(tile.getBlockPos().asLong());
+            energyPorts.remove(tile);
             energyStorage.decreaseCapacity(((CentrifugeEnergyPortEntity) tile).getTier().getEnergyCapacity());
         }
         if (tile instanceof CentrifugeTerminalEntity) {
-            terminals.remove(tile.getBlockPos().asLong());
+            terminals.remove(tile);
         }
 
     }

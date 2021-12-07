@@ -23,23 +23,15 @@ public class ModLanguageProvider extends BaseLanguageProvider {
         addBlocks();
         addItems();
         addPotions();
-
         addItemGroups();
-
         addAdvancements();
-
         addDefaultBees();
         addHoney();
         addTraits();
         addHoneycombs();
-
-        addCentrifugeStuff();
-
         addBook();
-
         add("tooltip.resourcefulbees.bee.creator", "§7- %s");
         add("entity.minecraft.villager.resourcefulbees.beekeeper", "Beekeeper");
-
         super.addTranslations();
     }
 
@@ -61,7 +53,6 @@ public class ModLanguageProvider extends BaseLanguageProvider {
         addHoneycomb("netherite", "Netherite");
         addHoneycomb("rgbee", "RGBee");
         addHoneycomb("dragon", "Dragon");
-
         addHoneycomb("catnip", "Catnip");
     }
 
@@ -197,7 +188,6 @@ public class ModLanguageProvider extends BaseLanguageProvider {
         addBlock(ModBlocks.ENDER_BEECON, "Ender Beecon");
         addBlock(ModBlocks.SOLIDIFICATION_CHAMBER, "Solidification Chamber");
         addBlock(ModBlocks.HONEY_POT, "Honey Pot");
-        //TODO Centrifuge
     }
 
     private void addAdvancements() {
@@ -411,49 +401,5 @@ public class ModLanguageProvider extends BaseLanguageProvider {
         add("book.resourcefulbees.ess_tools_category.beepedia", "Beepedia");
         add("book.resourcefulbees.ess_tools_category.beepedia.1", "The beepedia is the ultimate device for learning about the bees in your world. It provides all the same information as JEI, plus more! Seriously, check it out!");
         add("book.resourcefulbees.ess_tools_category.beepedia.2", "The beepedia can also keep track of which bees you've interacted with by right-clicking a bee while holding it.");
-    }
-
-    private void addCentrifugeStuff() {
-        //region blocks
-        addBlock(ModBlocks.CENTRIFUGE_CASING, "Centrifuge Casing");
-        addBlock(ModBlocks.CENTRIFUGE_PROCESSOR, "Centrifuge Processor");
-        addBlock(ModBlocks.CENTRIFUGE_GEARBOX, "Centrifuge Gearbox");
-
-        //terminal
-        addBlock(ModBlocks.CENTRIFUGE_BASIC_TERMINAL, "Basic Centrifuge Terminal");
-        addBlock(ModBlocks.CENTRIFUGE_ADVANCED_TERMINAL, "Advanced Centrifuge Terminal");
-        addBlock(ModBlocks.CENTRIFUGE_ELITE_TERMINAL, "Elite Centrifuge Terminal");
-        addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_TERMINAL, "Ultimate Centrifuge Terminal");
-
-        //void
-        addBlock(ModBlocks.CENTRIFUGE_BASIC_VOID, "Basic Centrifuge Void");
-        addBlock(ModBlocks.CENTRIFUGE_ADVANCED_VOID, "Advanced Centrifuge Void");
-        addBlock(ModBlocks.CENTRIFUGE_ELITE_VOID, "Elite Centrifuge Void");
-        addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_VOID, "Ultimate Centrifuge Void");
-
-        //input
-        addBlock(ModBlocks.CENTRIFUGE_BASIC_INPUT, "Basic Centrifuge Input");
-        addBlock(ModBlocks.CENTRIFUGE_ADVANCED_INPUT, "Advanced Centrifuge Input");
-        addBlock(ModBlocks.CENTRIFUGE_ELITE_INPUT, "Elite Centrifuge Input");
-        addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_INPUT, "Ultimate Centrifuge Input");
-
-        //energy port
-        addBlock(ModBlocks.CENTRIFUGE_BASIC_ENERGY_PORT, "Basic Centrifuge Energy Port");
-        addBlock(ModBlocks.CENTRIFUGE_ADVANCED_ENERGY_PORT, "Advanced Centrifuge Energy Port");
-        addBlock(ModBlocks.CENTRIFUGE_ELITE_ENERGY_PORT, "Elite Centrifuge Energy Port");
-        addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_ENERGY_PORT, "Ultimate Centrifuge Energy Port");
-
-        //item output
-        addBlock(ModBlocks.CENTRIFUGE_BASIC_ITEM_OUTPUT, "Basic Centrifuge Item Output");
-        addBlock(ModBlocks.CENTRIFUGE_ADVANCED_ITEM_OUTPUT, "Advanced Centrifuge Item Output");
-        addBlock(ModBlocks.CENTRIFUGE_ELITE_ITEM_OUTPUT, "Elite Centrifuge Item Output");
-        addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT, "Ultimate Centrifuge Item Output");
-
-        //fluid output
-        addBlock(ModBlocks.CENTRIFUGE_BASIC_FLUID_OUTPUT, "Basic Centrifuge Fluid Output");
-        addBlock(ModBlocks.CENTRIFUGE_ADVANCED_FLUID_OUTPUT, "Advanced Centrifuge Fluid Output");
-        addBlock(ModBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT, "Elite Centrifuge Fluid Output");
-        addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT, "Ultimate Centrifuge Fluid Output");
-        //endregion
     }
 }
