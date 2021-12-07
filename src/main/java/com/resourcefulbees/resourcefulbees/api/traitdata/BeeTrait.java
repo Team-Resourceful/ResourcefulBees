@@ -1,4 +1,4 @@
-package com.resourcefulbees.resourcefulbees.data;
+package com.resourcefulbees.resourcefulbees.api.traitdata;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import net.minecraft.item.Item;
@@ -17,10 +17,11 @@ public class BeeTrait {
     private final List<Effect> potionImmunities;
     private final List<Pair<String, Integer>> damageTypes;
     private final List<String> specialAbilities;
+    private final List<BeeAura> beeAuras;
     private final BasicParticleType particleEffect;
     private final String name;
 
-    private BeeTrait(String name, Item beepediaItem, List<Pair<Effect, Integer>> potionDamageEffects, List<String> damageImmunities, List<Effect> potionImmunities, List<Pair<String, Integer>> damageTypes, List<String> specialAbilities, BasicParticleType particleEffect) {
+    private BeeTrait(String name, Item beepediaItem, List<Pair<Effect, Integer>> potionDamageEffects, List<String> damageImmunities, List<Effect> potionImmunities, List<Pair<String, Integer>> damageTypes, List<String> specialAbilities, BasicParticleType particleEffect, List<BeeAura> beeAuras) {
         this.name = name;
         this.beepediaItem = beepediaItem;
         this.potionDamageEffects = potionDamageEffects;
@@ -29,6 +30,7 @@ public class BeeTrait {
         this.damageTypes = damageTypes;
         this.specialAbilities = specialAbilities;
         this.particleEffect = particleEffect;
+        this.beeAuras = beeAuras;
     }
 
     public boolean hasDamagePotionEffects() {
@@ -49,6 +51,10 @@ public class BeeTrait {
 
     public boolean hasSpecialAbilities() {
         return this.specialAbilities != null && !this.specialAbilities.isEmpty();
+    }
+
+    public boolean hasBeeAuras() {
+        return this.beeAuras != null && !this.beeAuras.isEmpty();
     }
 
     public boolean hasParticleEffect() {
@@ -87,6 +93,11 @@ public class BeeTrait {
         return String.format("trait.%s.%s", ResourcefulBees.MOD_ID, name);
     }
 
+    public List<BeeAura> getAuras() {
+        return beeAuras;
+    }
+
+
     @SuppressWarnings("unused")
     public static class Builder {
         String name;
@@ -97,6 +108,7 @@ public class BeeTrait {
         List<Pair<String, Integer>> damageTypes = new ArrayList<>();
         List<String> specialAbilities = new ArrayList<>();
         BasicParticleType particleEffect;
+        List<BeeAura> beeAuras = new ArrayList<>();
 
         public Builder(String name) {
             this.name = name;
@@ -157,13 +169,18 @@ public class BeeTrait {
             return this;
         }
 
+        public Builder addSpecialAbility(BeeAura beeAura) {
+            this.beeAuras.add(beeAura);
+            return this;
+        }
+
         public Builder setParticleEffect(BasicParticleType particleEffect) {
             this.particleEffect = particleEffect;
             return this;
         }
 
         public BeeTrait build() {
-            return new BeeTrait(name, beepediaItem, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffect);
+            return new BeeTrait(name, beepediaItem, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffect, beeAuras);
         }
     }
 }

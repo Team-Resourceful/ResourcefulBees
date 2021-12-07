@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ITraitRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.data.BeeTrait;
+import com.resourcefulbees.resourcefulbees.api.traitdata.BeeTrait;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import net.minecraft.item.Items;

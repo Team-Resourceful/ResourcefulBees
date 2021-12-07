@@ -14,6 +14,7 @@ import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModEffects;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import com.resourcefulbees.resourcefulbees.utils.DamageUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -51,6 +52,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ResourcefulBee extends CustomBeeEntity {
 
@@ -356,13 +358,8 @@ public class ResourcefulBee extends CustomBeeEntity {
     public boolean doHurtTarget(@NotNull Entity entityIn) {
         float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
         TraitData info = this.getBeeData().getTraitData();
-        boolean flag = entityIn.hurt(DamageSource.sting(this), damage);
-        if (flag && this.getBeeData().getCombatData().removeStingerOnAttack()) {
-            this.doEnchantDamageEffects(this, entityIn);
-            if (entityIn instanceof LivingEntity) {
-                ((LivingEntity) entityIn).setStingerCount(((LivingEntity) entityIn).getStingerCount() + 1);
-            }
-        }
+
+        AtomicBoolean flag = new AtomicBoolean(false);
         if (entityIn instanceof LivingEntity) {
             int i = getDifficultyModifier();
             if (info.hasTraits() && info.hasDamageTypes()) {
@@ -371,7 +368,15 @@ public class ResourcefulBee extends CustomBeeEntity {
                         entityIn.setSecondsOnFire(i * stringIntegerPair.getRight());
                     if (stringIntegerPair.getLeft().equals(TraitConstants.EXPLOSIVE))
                         this.explode(i / stringIntegerPair.getRight());
+                    else {
+                        flag.set(DamageUtils.dealDamage(stringIntegerPair.getRight(), stringIntegerPair.getLeft(), (LivingEntity) entityIn, this));
+                    }
                 });
+            }
+            flag.set(entityIn.hurt(DamageSource.sting(this), damage));
+            if (flag.get() && this.getBeeData().getCombatData().removeStingerOnAttack()) {
+                this.doEnchantDamageEffects(this, entityIn);
+                ((LivingEntity) entityIn).setStingerCount(((LivingEntity) entityIn).getStingerCount() + 1);
             }
             if (i > 0 && info.hasTraits() && info.hasDamagePotionEffects()) {
                 info.getPotionDamageEffects().forEach(effectIntegerPair -> ((LivingEntity) entityIn).addEffect(new EffectInstance(effectIntegerPair.getLeft(), i * 20, effectIntegerPair.getRight())));
@@ -385,7 +390,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         this.setHasStung(Config.BEE_DIES_FROM_STING.get() && this.getBeeData().getCombatData().removeStingerOnAttack());
         this.playSound(SoundEvents.BEE_STING, 1.0F, 1.0F);
 
-        return flag;
+        return flag.get();
     }
 
     private int getDifficultyModifier() {

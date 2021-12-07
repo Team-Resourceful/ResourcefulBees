@@ -81,6 +81,11 @@ public class CustomBeeData extends AbstractBeeData {
     private boolean hasHoneycomb;
 
     /**
+     * the range of the bee's auras
+     */
+    private Integer auraRange;
+
+    /**
      * If a custom item should drop when normally combs drop.
      */
     private String customCombDrop;
@@ -340,6 +345,10 @@ public class CustomBeeData extends AbstractBeeData {
 
     public void setName(String name) {
         this.name = this.name == null ? name : this.name;
+    }
+
+    public int getAuraRange() {
+        return auraRange != null && auraRange > 0 ? Math.max(Math.min(auraRange, 20), 3) : Config.DEFAULT_BEE_AURA_RANGE.get();
     }
 
     public float getSizeModifier() {

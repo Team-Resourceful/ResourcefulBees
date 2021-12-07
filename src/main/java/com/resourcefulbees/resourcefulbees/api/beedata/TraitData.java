@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
-import com.resourcefulbees.resourcefulbees.data.BeeTrait;
+import com.resourcefulbees.resourcefulbees.api.traitdata.BeeAura;
+import com.resourcefulbees.resourcefulbees.api.traitdata.BeeTrait;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.potion.Effect;
 import org.apache.commons.lang3.tuple.Pair;
@@ -35,6 +36,10 @@ public class TraitData extends AbstractBeeData {
     private transient Set<String> specialAbilities;
     private transient Set<BasicParticleType> particleEffects;
 
+
+    private transient Set<BeeAura> beeAuras;
+
+
     /**
      * If the bee has traits
      */
@@ -65,6 +70,9 @@ public class TraitData extends AbstractBeeData {
             if (trait.hasParticleEffect()) {
                 this.particleEffects.add(trait.getParticleEffect());
             }
+            if (trait.hasBeeAuras()) {
+                this.beeAuras.addAll(trait.getAuras());
+            }
         }
     }
 
@@ -75,6 +83,7 @@ public class TraitData extends AbstractBeeData {
         this.damageTypes = new HashSet<>();
         this.specialAbilities = new HashSet<>();
         this.particleEffects = new HashSet<>();
+        this.beeAuras = new HashSet<>();
     }
 
     public boolean hasTraits() { return this.hasTraits; }
@@ -85,6 +94,8 @@ public class TraitData extends AbstractBeeData {
     public boolean hasDamageTypes() { return this.hasTraits && !this.damageTypes.isEmpty(); }
     public boolean hasSpecialAbilities() { return this.hasTraits && !this.specialAbilities.isEmpty(); }
     public boolean hasParticleEffects() { return this.hasTraits && !this.particleEffects.isEmpty(); }
+    public boolean hasBeeAuras() { return this.hasTraits && !this.beeAuras.isEmpty(); }
+
 
     public Set<Pair<Effect, Integer>> getPotionDamageEffects(){
         return potionDamageEffects;
@@ -103,6 +114,9 @@ public class TraitData extends AbstractBeeData {
     }
     public Set<BasicParticleType> getParticleEffects(){
         return particleEffects;
+    }
+    public Set<BeeAura> getBeeAuras(){
+        return beeAuras;
     }
 
     public static TraitData createDefault() {

@@ -2,8 +2,8 @@ package com.resourcefulbees.resourcefulbees.init;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.resourcefulbees.resourcefulbees.data.BeeTrait;
-import com.resourcefulbees.resourcefulbees.data.JsonBeeTrait;
+import com.resourcefulbees.resourcefulbees.api.traitdata.BeeTrait;
+import com.resourcefulbees.resourcefulbees.api.traitdata.JsonBeeTrait;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.TraitRegistry;
 import net.minecraft.item.Item;

@@ -1,6 +1,6 @@
 package com.resourcefulbees.resourcefulbees.api;
 
-import com.resourcefulbees.resourcefulbees.data.BeeTrait;
+import com.resourcefulbees.resourcefulbees.api.traitdata.BeeTrait;
 
 /**
  * ITraitRegistry is implemented in TraitRegistry

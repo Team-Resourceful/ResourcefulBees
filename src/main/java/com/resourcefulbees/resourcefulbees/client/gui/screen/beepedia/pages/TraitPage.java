@@ -6,7 +6,7 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPa
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.SubButtonList;
-import com.resourcefulbees.resourcefulbees.data.BeeTrait;
+import com.resourcefulbees.resourcefulbees.api.traitdata.BeeTrait;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;

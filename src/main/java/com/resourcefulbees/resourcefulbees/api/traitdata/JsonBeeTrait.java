@@ -1,4 +1,4 @@
-package com.resourcefulbees.resourcefulbees.data;
+package com.resourcefulbees.resourcefulbees.api.traitdata;
 
 import com.google.gson.annotations.SerializedName;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;

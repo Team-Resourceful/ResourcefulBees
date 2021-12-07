@@ -2,18 +2,18 @@ package com.resourcefulbees.resourcefulbees.config;
 
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
 public class Config {
 
 
-
     //TODO Rewrite config names in 1.17 to be more informative also update comments if needed
-
     private Config() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
+
 
     public static BooleanValue GENERATE_DEFAULTS;
     public static BooleanValue GENERATE_BIOME_DICTIONARIES;
@@ -95,6 +95,7 @@ public class Config {
 
     public static BooleanValue BYPASS_PERFORMANT_CHECK;
     public static BooleanValue BEEPEDIA_HIDE_LOCKED;
+    public static IntValue DEFAULT_BEE_AURA_RANGE;
 
     public static BooleanValue MANUAL_MODE;
 
@@ -102,8 +103,8 @@ public class Config {
 
     public static BooleanValue GENERATE_ENGLISH_LANG;
     public static BooleanValue SHOW_DEBUG_INFO;
-
     public static class CommonConfig {
+
 
         private CommonConfig() {
             throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -255,6 +256,8 @@ public class Config {
                     "Bees will not scan surroundings for flowers or hives and will instead go to their designated spot until changed.",
                     "WARNING: For now, this will prevent bees from having their wander goal attached which effectively makes them dumb (seriously, they'll just hover in one spot), however it would also significantly improve performance until pathfinding can be optimized.")
                     .define("use_experimental_manual_mode", false);
+            DEFAULT_BEE_AURA_RANGE = COMMON_BUILDER.comment("\nThe default radius that all bees will use for their auras.")
+                    .defineInRange("beeAuraRange", 10, 3, 20);
             COMMON_BUILDER.pop();
 
             COMMON_BUILDER.push("Honeycomb Options");
@@ -281,8 +284,8 @@ public class Config {
             COMMON_CONFIG = COMMON_BUILDER.build();
         }
     }
-
     public static class ClientConfig {
+
 
         private ClientConfig() {
             throw new IllegalStateException(ModConstants.UTILITY_CLASS);
