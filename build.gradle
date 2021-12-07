@@ -36,7 +36,8 @@ repositories {
 version = "${mod_version}"
 group = "com.resourcefulbees" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+evaluationDependsOnChildren()
 
 def releasesRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-releases/"
 def snapshotsRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-snapshots/"
@@ -87,6 +88,7 @@ minecraft {
         client {
             workingDirectory project.file('run')
             arg "-mixin.config=resourcefulbees.mixins.json"
+            arg "-mixin.config=phosphophyllite.mixins.json"
 
             property 'forge.logging.console.level', 'debug'
             //property 'mixin.env.disableRefMap', 'true'
@@ -98,6 +100,9 @@ minecraft {
             mods {
                 resourcefulbees {
                     source sourceSets.main
+                }
+                Phosphophyllite {
+                    source project(':Phosphophyllite').sourceSets.main
                 }
             }
         }
@@ -114,6 +119,9 @@ minecraft {
                 resourcefulbees {
                     source sourceSets.main
                 }
+                Phosphophyllite {
+                    source project(':Phosphophyllite').sourceSets.main
+                }
             }
         }
 
@@ -125,6 +133,9 @@ minecraft {
             mods {
                 resourcefulbees {
                     source sourceSets.datagen
+                }
+                Phosphophyllite {
+                    source project(':Phosphophyllite').sourceSets.main
                 }
             }
         }
@@ -142,29 +153,30 @@ mixin {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}" //21
 
-    compileOnly fg.deobf("mezz.jei:jei-1.16.5:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.18:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18:${jei_version}")
 
-    compileOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
-    runtimeOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
+    //compileOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
+    //runtimeOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
-    compileOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")
-    runtimeOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")
+    //compileOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")
+    //runtimeOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")
 
-    compileOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}:api")
-    runtimeOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}")
+    //compileOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}:api")
+    //runtimeOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}")
 
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}")// core
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
+    ///runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}")// core
+    //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
+    //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
-    runtimeOnly fg.deobf ("curse.maven:create-328085:${create_version}")
-    runtimeOnly fg.deobf ("curse.maven:flywheel-486392:${flywheel_version}")
+    //runtimeOnly fg.deobf ("curse.maven:create-328085:${create_version}")
+    //runtimeOnly fg.deobf ("curse.maven:flywheel-486392:${flywheel_version}")
 
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.16.5:${geckolib_version}")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-1.18:${geckolib_version}")
 
-    implementation fg.deobf("net.roguelogix.phosphophyllite:Phosphophyllite:${phos_version}")
+    implementation project(':Phosphophyllite')
+    //implementation fg.deobf("net.roguelogix.phosphophyllite:Phosphophyllite:${phos_version}")
 
     compileOnly 'org.jetbrains:annotations:22.0.0'
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
@@ -219,21 +231,31 @@ publishing {
                     developer {
                         id = 'epic428'
                         name = 'Epic_Oreo'
+                        roles = ['Developer']
                         email = 'admin@resourcefulbees.com'
                     }
                     developer {
                         id = 'thatgravyboat'
                         name = 'ThatGravyBoat'
+                        roles = ['Developer']
                         email = 'admin@resourcefulbees.com'
                     }
                     developer {
                         id = 'dawn_felstar'
                         name = 'Dawn Felstar'
+                        roles = ['Developer']
                         email = 'admin@resourcefulbees.com'
                     }
                     developer {
-                        id = 'vikthoor'
-                        name = 'Vik'
+                        id = '19PixelsPlaced'
+                        name = 'Ellah'
+                        roles = ['Artist']
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'ruby_r1der'
+                        name = 'Joosh'
+                        roles = ['Artist']
                         email = 'admin@resourcefulbees.com'
                     }
                 }

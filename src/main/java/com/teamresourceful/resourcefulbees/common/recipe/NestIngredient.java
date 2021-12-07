@@ -10,9 +10,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.StackList;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +28,7 @@ import java.util.stream.Stream;
 public class NestIngredient extends Ingredient {
 
     private static final List<ItemStack> NESTS = ModItems.NESTS_ITEMS.getEntries().stream()
-            .filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).collect(Collectors.toList());
+            .filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).toList();
 
     private final int tier;
 
