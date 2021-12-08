@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -26,25 +26,25 @@ public class FluidTooltip extends AbstractTooltip {
     }
 
     @Override
-    public List<ITextComponent> getTooltip() {
+    public List<Component> getTooltip() {
         FluidStack fluid = this.fluidSupplier.get();
-        List<ITextComponent> tooltips = new ArrayList<>();
+        List<Component> tooltips = new ArrayList<>();
         tooltips.add(fluid.getDisplayName());
         if (fluid.getAmount() > 1 || showFluid) {
             DecimalFormat decimalFormat = new DecimalFormat("##0.0");
             String amount = fluid.getAmount() < 500 || Screen.hasShiftDown() ? String.format("%,d", fluid.getAmount()) + " mb" : decimalFormat.format((float) fluid.getAmount() / 1000) + " B";
-            tooltips.add(new StringTextComponent(amount));
+            tooltips.add(new TextComponent(amount));
         }
-        tooltips.add(new StringTextComponent(String.valueOf(fluid.getFluid().getRegistryName())).withStyle(TextFormatting.DARK_GRAY));
+        tooltips.add(new TextComponent(String.valueOf(fluid.getFluid().getRegistryName())).withStyle(ChatFormatting.DARK_GRAY));
         return tooltips;
     }
 
     @Override
-    public List<ITextComponent> getAdvancedTooltip() {
+    public List<Component> getAdvancedTooltip() {
         FluidStack fluid = this.fluidSupplier.get();
-        List<ITextComponent> tooltips = getTooltip();
+        List<Component> tooltips = getTooltip();
         if (fluid.getFluid().getRegistryName() == null) return getTooltip();
-        tooltips.add(new StringTextComponent(fluid.getFluid().getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY));
+        tooltips.add(new TextComponent(fluid.getFluid().getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY));
         return tooltips;
     }
 }

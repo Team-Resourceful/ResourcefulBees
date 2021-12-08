@@ -7,10 +7,10 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LightLevel;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BiomeDictionary;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -89,16 +89,16 @@ public class SpawnData {
     }
 
     /**
-     * This method is a helper method used for getting a {@link MobSpawnInfo.Spawners} object
+     * This method is a helper method used for getting a {@link MobSpawnSettings.SpawnerData} object
      * that can be passed into the biome's spawner.
      *
      * @param entityType The entity type spawner data is being created for.
      * @param isFlowerForest Is the biome this is being used for a flower forest biome?
-     * @return Returns a {@link MobSpawnInfo.Spawners} object to be used for adding
+     * @return Returns a {@link MobSpawnSettings.SpawnerData} object to be used for adding
      * the associated bees spawn to biomes.
      */
-    public MobSpawnInfo.Spawners getSpawnerData(EntityType<?> entityType, boolean isFlowerForest) {
-        return new MobSpawnInfo.Spawners(entityType, isFlowerForest ? spawnWeight + CommonConfig.BEE_FLOWER_FOREST_MULTIPLIER.get() : spawnWeight, minGroupSize, maxGroupSize);
+    public MobSpawnSettings.SpawnerData getSpawnerData(EntityType<?> entityType, boolean isFlowerForest) {
+        return new MobSpawnSettings.SpawnerData(entityType, isFlowerForest ? spawnWeight + CommonConfig.BEE_FLOWER_FOREST_MULTIPLIER.get() : spawnWeight, minGroupSize, maxGroupSize);
     }
 
     /**
@@ -146,7 +146,7 @@ public class SpawnData {
     /**
      * y-level spawn restrictions can seem a bit buggy when set for underground spawns
      * bc they are exceedingly rare. We have not yet determined why they are rarer than
-     * hostile mobs other than the different {@link net.minecraft.entity.EntityClassification}s.
+     * hostile mobs other than the different {@link net.minecraft.world.entity.MobCategory}s.
      *
      * @return Returns the minimum y-level the associated bee will spawn at.
      */
@@ -155,7 +155,7 @@ public class SpawnData {
     /**
      * y-level spawn restrictions can seem a bit buggy when set for underground spawns
      * bc they are exceedingly rare. We have not yet determined why they are rarer than
-     * hostile mobs other than the different {@link net.minecraft.entity.EntityClassification}s.
+     * hostile mobs other than the different {@link net.minecraft.world.entity.MobCategory}s.
      *
      * @return Returns the maximum y-level the associated bee will spawn at.
      */

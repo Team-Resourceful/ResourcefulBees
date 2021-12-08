@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTypes;
@@ -64,7 +65,7 @@ public class BeePage extends BeepediaPage {
     }
 
     @Override
-    public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+    public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
 //        beepedia.getMinecraft().textureManager.bind(BeepediaImages.SPLITTER_IMAGE);
 //        AbstractGui.blit(matrix, xPos, yPos, 0, 0, 186, 100, 186, 100);
 //        Minecraft.getInstance().font.draw(matrix, label.withStyle(TextFormatting.WHITE), (float) xPos + 40, (float) yPos + 10, -1);
@@ -80,7 +81,7 @@ public class BeePage extends BeepediaPage {
     }
 
     @Override
-    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
+    public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
 //        subPage.getRight().renderForeground(matrix, mouseX, mouseY);
     }
 

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.BeepediaListTypes;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.PageTypes;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.SubPageTypes;
@@ -11,10 +11,10 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.Hone
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.TraitBeepediaStats;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.network.packets.BeepediaEntityMessage;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
-import com.teamresourceful.resourcefulbees.common.network.packets.BeepediaEntityMessage;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -171,7 +171,7 @@ public class BeepediaHandler {
         }
     }
 
-    public static void drawPage(MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    public static void drawPage(PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         listPage.renderBackground(matrix, partialTicks, mouseX, mouseY);
         if (selectedPage != null) selectedPage.renderBackground(matrix, partialTicks, mouseX, mouseY);
         listPage.renderForeground(matrix, mouseX, mouseY);
@@ -180,55 +180,25 @@ public class BeepediaHandler {
 
     public static void closeState() {
         switch (BeepediaState.currentState.page) {
-            case HOME:
-                homePage.visible = false;
-                break;
-            case HELP:
-                helpPage.visible = false;
-                break;
-            case BEES:
-                beePage.visible = false;
-                break;
-            case TRAITS:
-                traitPage.visible = false;
-                break;
-            case HONEY:
-                honeyPage.visible = false;
-                break;
-            case COMBS:
-                combPage.visible = false;
-                break;
-            case COLLECTED:
-                collectedPage.visible = false;
-                break;
-            default:
+            case HOME -> homePage.visible = false;
+            case HELP -> helpPage.visible = false;
+            case BEES -> beePage.visible = false;
+            case TRAITS -> traitPage.visible = false;
+            case HONEY -> honeyPage.visible = false;
+            case COMBS -> combPage.visible = false;
+            case COLLECTED -> collectedPage.visible = false;
         }
     }
 
     public static void openState() {
         switch (BeepediaState.currentState.page) {
-            case HOME:
-                homePage.visible = true;
-                break;
-            case HELP:
-                helpPage.visible = true;
-                break;
-            case BEES:
-                beePage.visible = true;
-                break;
-            case TRAITS:
-                traitPage.visible = true;
-                break;
-            case HONEY:
-                honeyPage.visible = true;
-                break;
-            case COMBS:
-                combPage.visible = true;
-                break;
-            case COLLECTED:
-                collectedPage.visible = true;
-                break;
-            default:
+            case HOME -> homePage.visible = true;
+            case HELP -> helpPage.visible = true;
+            case BEES -> beePage.visible = true;
+            case TRAITS -> traitPage.visible = true;
+            case HONEY -> honeyPage.visible = true;
+            case COMBS -> combPage.visible = true;
+            case COLLECTED -> collectedPage.visible = true;
         }
     }
 

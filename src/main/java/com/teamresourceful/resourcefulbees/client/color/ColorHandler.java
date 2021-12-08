@@ -6,14 +6,14 @@ import com.teamresourceful.resourcefulbees.common.item.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.item.Item;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
 import java.util.List;
@@ -44,7 +44,7 @@ public final class ColorHandler {
         registerBlocks(colors, CustomHoneyBlock::getBlockColor, ModBlocks.HONEY_BLOCKS.getEntries());
     }
 
-    private static void registerItems(ItemColors handler, IItemColor itemColor, Collection<RegistryObject<Item>> items) {
+    private static void registerItems(ItemColors handler, ItemColor itemColor, Collection<RegistryObject<Item>> items) {
         if (items.isEmpty()) return;
         List<Item> itemList = items.stream().filter(RegistryObject::isPresent).map(RegistryObject::get).collect(Collectors.toList());
         try {
@@ -54,7 +54,7 @@ public final class ColorHandler {
         }
     }
 
-    private static void registerBlocks(BlockColors handler, IBlockColor blockColor, Collection<RegistryObject<Block>> blocks) {
+    private static void registerBlocks(BlockColors handler, BlockColor blockColor, Collection<RegistryObject<Block>> blocks) {
         if (blocks.isEmpty()) return;
         List<Block> blockList = blocks.stream().filter(RegistryObject::isPresent).map(RegistryObject::get).collect(Collectors.toList());
         try {

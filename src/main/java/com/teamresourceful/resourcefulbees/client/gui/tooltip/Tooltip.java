@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -15,31 +15,31 @@ import java.util.stream.Collectors;
 @OnlyIn(Dist.CLIENT)
 public class Tooltip extends AbstractTooltip {
 
-    private Supplier<List<ITextComponent>> textList = null;
-    private Supplier<ITextComponent> text = null;
+    private Supplier<List<Component>> textList = null;
+    private Supplier<Component> text = null;
 
     public Tooltip(int x, int y, int hoverWidth, int hoverHeight, String text) {
         super(x, y, hoverWidth, hoverHeight);
-        this.textList = () -> Arrays.stream(text.split("\\r?\\n")).map(StringTextComponent::new).collect(Collectors.toList());
+        this.textList = () -> Arrays.stream(text.split("\\r?\\n")).map(TextComponent::new).collect(Collectors.toList());
     }
 
-    public Tooltip(int x, int y, int hoverWidth, int hoverHeight, ITextComponent text) {
+    public Tooltip(int x, int y, int hoverWidth, int hoverHeight, Component text) {
         super(x, y, hoverWidth, hoverHeight);
         this.textList = () -> Collections.singletonList(text);
     }
 
-    public Tooltip(int x, int y, int hoverWidth, int hoverHeight, List<ITextComponent> text) {
+    public Tooltip(int x, int y, int hoverWidth, int hoverHeight, List<Component> text) {
         super(x, y, hoverWidth, hoverHeight);
         this.textList = () -> text;
     }
 
-    public Tooltip(int x, int y, int hoverWidth, int hoverHeight, Supplier<ITextComponent> text) {
+    public Tooltip(int x, int y, int hoverWidth, int hoverHeight, Supplier<Component> text) {
         super(x, y, hoverWidth, hoverHeight);
         this.text = text;
     }
 
     @Override
-    public List<ITextComponent> getTooltip() {
+    public List<Component> getTooltip() {
         if (textList != null) {
             return textList.get();
         }else if (text != null) {

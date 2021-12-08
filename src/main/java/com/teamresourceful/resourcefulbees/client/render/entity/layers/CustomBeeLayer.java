@@ -1,15 +1,15 @@
 package com.teamresourceful.resourcefulbees.client.render.entity.layers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefulbees.api.beedata.render.LayerData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
@@ -28,7 +28,7 @@ public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoLayerRenderer<
 
 
     @Override
-    public void render(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight, E bee, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack stack, MultiBufferSource buffer, int packedLight, E bee, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!bee.hasNectar() && layerData.isPollen()) return;
         ResourceLocation texture = bee.isAngry() ? layerData.getBeeTexture().getAngryTexture() : layerData.getBeeTexture().getNormalTexture();
 
@@ -39,7 +39,7 @@ public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoLayerRenderer<
                     packedLight, OverlayTexture.NO_OVERLAY,
                     0.0F, 0.0F, 0.0F, 0.0F);
         } else if (layerData.isEmissive()) {
-            IVertexBuilder vertexConsumer = buffer.getBuffer(RenderType.eyes(texture));
+            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.eyes(texture));
             if (layerData.getPulseFrequency() == 0 || bee.tickCount % layerData.getPulseFrequency() == 0.0f) {
                 renderer.render(this.getEntityModel().getModel(renderData.getModel()),
                         bee, partialTicks,
@@ -48,11 +48,11 @@ public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoLayerRenderer<
                         layerData.getColor().getFloatRed(), layerData.getColor().getFloatGreen(), layerData.getColor().getFloatBlue(), 1.0F);
             }
         } else {
-            IVertexBuilder vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(texture));
+            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(texture));
             renderer.render(this.getEntityModel().getModel(renderData.getModel()),
                     bee, partialTicks,
                     null, stack, null, vertexConsumer,
-                    packedLight, LivingRenderer.getOverlayCoords(bee, 0.0F),
+                    packedLight, LivingEntityRenderer.getOverlayCoords(bee, 0.0F),
                     layerData.getColor().getFloatRed(), layerData.getColor().getFloatGreen(), layerData.getColor().getFloatBlue(), 1.0F);
         }
 

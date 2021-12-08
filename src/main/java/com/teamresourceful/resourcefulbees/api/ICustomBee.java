@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
-import net.minecraft.entity.AgeableEntity;
+import net.minecraft.world.entity.AgeableMob;
 
 import java.util.Optional;
 
@@ -68,5 +68,5 @@ public interface ICustomBee {
      */
     void addFeedCount();
 
-    AgeableEntity createSelectedChild(BeeFamily beeType);
+    AgeableMob createSelectedChild(BeeFamily beeType);
 }

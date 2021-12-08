@@ -1,18 +1,18 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyCongealerContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -20,22 +20,21 @@ import org.jetbrains.annotations.NotNull;
 
 
 @OnlyIn(Dist.CLIENT)
-public class SolidificationChamberScreen extends ContainerScreen<HoneyCongealerContainer> {
+public class SolidificationChamberScreen extends AbstractContainerScreen<HoneyCongealerContainer> {
 
     private final SolidificationChamberTileEntity tileEntity;
 
-    public SolidificationChamberScreen(HoneyCongealerContainer container, PlayerInventory inventory, ITextComponent displayName) {
+    public SolidificationChamberScreen(HoneyCongealerContainer container, Inventory inventory, Component displayName) {
         super(container, inventory, displayName);
         tileEntity = container.getHoneyCongealerTileEntity();
         titleLabelY -= 3;
     }
 
     @Override
-    protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/solidification/solidification.png");
-        Minecraft client = this.minecraft;
-        if (client != null && tileEntity != null) {
-            client.getTextureManager().bind(texture);
+        if (tileEntity != null) {
+            RenderUtils.bindTexture(texture);
             int i = this.leftPos;
             int j = this.topPos;
             this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
@@ -45,19 +44,16 @@ public class SolidificationChamberScreen extends ContainerScreen<HoneyCongealerC
         }
     }
 
-    private void renderProgressBar(MatrixStack matrix) {
+    private void renderProgressBar(PoseStack matrix) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/solidification/solidification.png");
-        Minecraft client = this.minecraft;
-        if (client != null) {
-            client.getTextureManager().bind(texture);
-            int i = this.leftPos;
-            int j = this.topPos;
-            this.blit(matrix, i + 84, j + 17, 176, 0, 24, (int) (34 * tileEntity.getProcessPercent()));
-        }
+        RenderUtils.bindTexture(texture);
+        int i = this.leftPos;
+        int j = this.topPos;
+        this.blit(matrix, i + 84, j + 17, 176, 0, 24, (int) (34 * tileEntity.getProcessPercent()));
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         if (this.tileEntity != null) {
             this.renderBackground(matrix);
             super.render(matrix, mouseX, mouseY, partialTicks);
@@ -65,9 +61,9 @@ public class SolidificationChamberScreen extends ContainerScreen<HoneyCongealerC
             this.renderTooltip(matrix, mouseX, mouseY);
             if (mouseX >= this.leftPos + 67 && mouseX <= this.leftPos + 81 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74) {
                 if (Screen.hasShiftDown() || tileEntity.getTank().getFluidAmount() < 1000) {
-                    this.renderTooltip(matrix, new StringTextComponent(tileEntity.getTank().getFluidAmount() + " MB"), mouseX, mouseY);
+                    this.renderTooltip(matrix, new TextComponent(tileEntity.getTank().getFluidAmount() + " MB"), mouseX, mouseY);
                 } else {
-                    this.renderTooltip(matrix, new StringTextComponent(ModConstants.DECIMAL_FORMAT.format((double) tileEntity.getTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
+                    this.renderTooltip(matrix, new TextComponent(ModConstants.DECIMAL_FORMAT.format((double) tileEntity.getTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
                 }
             }
         }

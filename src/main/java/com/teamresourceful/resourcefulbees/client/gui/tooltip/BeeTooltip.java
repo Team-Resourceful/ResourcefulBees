@@ -1,6 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -32,26 +35,26 @@ public class BeeTooltip extends AbstractTooltip {
     }
 
     @Override
-    public List<ITextComponent> getTooltip() {
+    public List<Component> getTooltip() {
         return getTooltip(this.beeDataSupplier.get(), showName);
     }
 
     @Override
-    public List<ITextComponent> getAdvancedTooltip() {
+    public List<Component> getAdvancedTooltip() {
         return getAdvancedTooltip(this.beeDataSupplier.get(), showName);
     }
 
-    public static List<ITextComponent> getTooltip(CustomBeeData beeData, boolean showName) {
-        List<ITextComponent> tooltips = new LinkedList<>();
+    public static List<Component> getTooltip(CustomBeeData beeData, boolean showName) {
+        List<Component> tooltips = new LinkedList<>();
         if (showName) tooltips.add(beeData.getDisplayName());
         tooltips.addAll(getBeeLore(beeData.getCoreData()));
         return tooltips;
     }
 
-    public static List<ITextComponent> getAdvancedTooltip(CustomBeeData beeData, boolean showName) {
-        List<ITextComponent> tooltips = getTooltip(beeData, showName);
+    public static List<Component> getAdvancedTooltip(CustomBeeData beeData, boolean showName) {
+        List<Component> tooltips = getTooltip(beeData, showName);
         if (beeData.getRegistryID() == null) return getTooltip(beeData, showName);
-        tooltips.add(new StringTextComponent(beeData.getRegistryID().toString()).withStyle(TextFormatting.DARK_GRAY));
+        tooltips.add(new TextComponent(beeData.getRegistryID().toString()).withStyle(ChatFormatting.DARK_GRAY));
         return tooltips;
     }
 }

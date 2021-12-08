@@ -17,18 +17,19 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 public class HoneyFluidData {
 
@@ -48,8 +49,8 @@ public class HoneyFluidData {
                 ResourceLocation.CODEC.fieldOf("stillTexture").orElse(CUSTOM_FLUID_STILL).forGetter(HoneyFluidData::getStillTexture),
                 ResourceLocation.CODEC.fieldOf("flowingTexture").orElse(CUSTOM_FLUID_FLOWING).forGetter(HoneyFluidData::getFlowingTexture),
                 ResourceLocation.CODEC.fieldOf("overlayTexture").orElse(CUSTOM_FLUID_OVERLAY).forGetter(HoneyFluidData::getOverlayTexture),
-                Registry.SOUND_EVENT.fieldOf("pickupSound").orElse(SoundEvents.BUCKET_FILL).forGetter(h -> h.pickupSound),
-                Registry.SOUND_EVENT.fieldOf("emptySound").orElse(SoundEvents.BUCKET_EMPTY).forGetter(h -> h.emptySound),
+                Registry.SOUND_EVENT.byNameCodec().fieldOf("pickupSound").orElse(SoundEvents.BUCKET_FILL).forGetter(h -> h.pickupSound),
+                Registry.SOUND_EVENT.byNameCodec().fieldOf("emptySound").orElse(SoundEvents.BUCKET_EMPTY).forGetter(h -> h.emptySound),
                 Codec.INT.fieldOf("density").orElse(1300).forGetter(h -> h.density),
                 Codec.INT.fieldOf("temperature").orElse(300).forGetter(h -> h.temperature),
                 Codec.INT.fieldOf("viscosity").orElse(1800).forGetter(h -> h.viscosity)
@@ -72,7 +73,7 @@ public class HoneyFluidData {
     private RegistryObject<FlowingFluid> stillFluid;
     private RegistryObject<FlowingFluid> flowingFluid;
     private RegistryObject<Item> fluidBucket;
-    private RegistryObject<FlowingFluidBlock> fluidBlock;
+    private RegistryObject<LiquidBlock> fluidBlock;
 
     public HoneyFluidData(boolean generate, String name, Color color, ResourceLocation stillTexture, ResourceLocation flowingTexture, ResourceLocation overlayTexture, SoundEvent pickupSound, SoundEvent emptySound, int density, int temperature, int viscosity){
         this.name = name;
@@ -99,7 +100,7 @@ public class HoneyFluidData {
             stillFluid = ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey", () -> new CustomHoneyFluid.Source(properties[0], this));
             flowingFluid = ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_flowing", () -> new CustomHoneyFluid.Flowing(properties[0], this));
             fluidBucket = ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", () -> new CustomHoneyBucketItem(this.stillFluid, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY).craftRemainder(Items.BUCKET).stacksTo(1), this));
-            fluidBlock = ModBlocks.HONEY_FLUID_BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(this.stillFluid, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops(), this));
+            fluidBlock = ModBlocks.HONEY_FLUID_BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(this.stillFluid, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops(), this));
 
             properties[0] = new ForgeFlowingFluid.Properties(this.stillFluid, this.flowingFluid, builder)
                     .bucket(this.fluidBucket)
@@ -140,7 +141,7 @@ public class HoneyFluidData {
         return fluidBucket;
     }
 
-    public RegistryObject<FlowingFluidBlock> getFluidBlock() {
+    public RegistryObject<LiquidBlock> getFluidBlock() {
         return fluidBlock;
     }
 }

@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +20,7 @@ public class ModImageButton extends TooltipButton {
     protected final int imageWidth;
     protected final int imageHeight;
 
-    public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int imageWidth, int imageHeight, IPressable onPressIn, ITextComponent message) {
+    public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int imageWidth, int imageHeight, IPressable onPressIn, Component message) {
         super(xIn, yIn, widthIn, heightIn, message, onPressIn);
         this.resourceLocation = resourceLocationIn;
         this.xTexStart = xTexStartIn;
@@ -32,21 +31,20 @@ public class ModImageButton extends TooltipButton {
     }
 
     public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int imageWidth, int imageHeight, IPressable onPressIn) {
-        this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, imageWidth, imageHeight, onPressIn, StringTextComponent.EMPTY);
+        this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, imageWidth, imageHeight, onPressIn, TextComponent.EMPTY);
     }
 
-    public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, IPressable onPressIn, ITextComponent message) {
+    public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, IPressable onPressIn, Component message) {
         this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, widthIn, yDiffTextIn * 3,  onPressIn, message);
     }
 
     public ModImageButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, IPressable onPressIn) {
-        this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, onPressIn, StringTextComponent.EMPTY);
+        this(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, onPressIn, TextComponent.EMPTY);
     }
 
     @Override
-    public void renderButton(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTick) {
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bind(this.resourceLocation);
+    public void renderButton(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTick) {
+        RenderUtils.bindTexture(this.resourceLocation);
         RenderSystem.disableDepthTest();
         int i = this.yTexStart;
         if (!this.active) {

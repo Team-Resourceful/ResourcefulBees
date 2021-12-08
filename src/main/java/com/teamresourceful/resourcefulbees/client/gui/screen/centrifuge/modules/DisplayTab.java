@@ -1,20 +1,20 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.BaseCentrifugeScreen;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
 public class DisplayTab extends AbstractDisplayModule<BaseCentrifugeScreen<?>> {
 
-    private final @Nullable ITextComponent displayText;
+    private final @Nullable Component displayText;
     private boolean isSelected;
 
     //TODO figure out a way to make x/y respect screen resizing without needing to pass in the screen since leftPos/topPos are set
     // on resize and not when the screen is created. maybe override the init method in the screen and cache the leftPos/rightPos in
     // AbstractDisplayModule?
-    public DisplayTab(int x, int y, int width, int height, @Nullable ITextComponent displayText, BaseCentrifugeScreen<?> screen) {
+    public DisplayTab(int x, int y, int width, int height, @Nullable Component displayText, BaseCentrifugeScreen<?> screen) {
         super(x, y, width, height, screen);
         this.displayText = displayText;
     }
@@ -34,7 +34,7 @@ public class DisplayTab extends AbstractDisplayModule<BaseCentrifugeScreen<?>> {
 
 
     @Override
-    public void renderBackground(MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    public void renderBackground(PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         if (isSelected || isMouseOver(mouseX, mouseY)) {
             blit(matrix, screen.getGuiLeft() + getMaxX() - 7, screen.getGuiTop() + y, 66, 196, 6, 13);
         }
@@ -42,7 +42,7 @@ public class DisplayTab extends AbstractDisplayModule<BaseCentrifugeScreen<?>> {
 
     //TODO Why tf is this already taking into account guiLeft and guiTop but renderBG isn't???
     @Override
-    public void renderText(MatrixStack matrix, int mouseX, int mouseY) {
+    public void renderText(PoseStack matrix, int mouseX, int mouseY) {
         if (displayText != null) {
             int color = isSelected || isMouseOver(mouseX, mouseY) ? RenderUtils.FONT_COLOR_2 : RenderUtils.FONT_COLOR_1;
             RenderUtils.TERMINAL_FONT_8.draw(matrix, displayText, x + 4f, y + 6f, color);

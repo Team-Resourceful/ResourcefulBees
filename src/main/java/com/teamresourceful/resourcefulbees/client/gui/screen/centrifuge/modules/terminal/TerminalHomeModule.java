@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.terminal;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeTerminalScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.AbstractTerminalModule;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -8,20 +8,18 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandMessage;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.RenderComponentsUtil;
+import net.minecraft.client.gui.components.ComponentRenderUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import static com.teamresourceful.resourcefulbees.common.utils.RenderUtils.FONT_COLOR_1;
 import static com.teamresourceful.resourcefulbees.common.utils.RenderUtils.TERMINAL_FONT_8;
@@ -32,14 +30,14 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
 
     private String commandInput = "";
     private boolean neofetch = true;
-    private final List<IReorderingProcessor> consoleHistory = new ArrayList<>();
+    private final List<FormattedCharSequence> consoleHistory = new ArrayList<>();
 
     public TerminalHomeModule(CentrifugeTerminalScreen screen) {
         super(screen);
     }
 
     @Override
-    public void renderText(MatrixStack matrix, int mouseX, int mouseY) {
+    public void renderText(PoseStack matrix, int mouseX, int mouseY) {
         if (neofetch) {
             drawASCII(matrix);
             matrix.pushPose();
@@ -116,14 +114,14 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
     }
 
     @Override
-    public void onTerminalResponse(ITextComponent component) {
+    public void onTerminalResponse(Component component) {
         //max 59 chars
-        List<IReorderingProcessor> list = RenderComponentsUtil.wrapComponents(component, 215, TERMINAL_FONT_8);
+        List<FormattedCharSequence> list = ComponentRenderUtils.wrapComponents(component, 215, TERMINAL_FONT_8);
         consoleHistory.addAll(list);
         System.out.println(component.getString());
     }
 
-    private void drawASCII(@NotNull MatrixStack matrix) {
+    private void drawASCII(@NotNull PoseStack matrix) {
         /*
      ^^      .-=-=-=-.  ^^
  ^^        (`-=-=-=-=-`)         ^^
@@ -158,17 +156,17 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
         matrix.popPose();
     }
 
-    private ITextComponent formatUserInput(String input) {
-        IFormattableTextComponent component = new StringTextComponent(Minecraft.getInstance().getUser().getName()).withStyle(TextFormatting.BLUE);
-        component.append(new StringTextComponent("@").withStyle(TextFormatting.WHITE));
-        component.append(new StringTextComponent("centrifuge").withStyle(TextFormatting.GREEN));
-        component.append(new StringTextComponent("> ").withStyle(TextFormatting.GRAY));
+    private Component formatUserInput(String input) {
+        MutableComponent component = new TextComponent(Minecraft.getInstance().getUser().getName()).withStyle(ChatFormatting.BLUE);
+        component.append(new TextComponent("@").withStyle(ChatFormatting.WHITE));
+        component.append(new TextComponent("centrifuge").withStyle(ChatFormatting.GREEN));
+        component.append(new TextComponent("> ").withStyle(ChatFormatting.GRAY));
         String[] splits = input.split(" ");
         if (splits.length > 1) {
-            component.append(new StringTextComponent(splits[0]).withStyle(TextFormatting.YELLOW));
-            component.append(new StringTextComponent(" " + String.join(" ", Arrays.copyOfRange(splits, 1, splits.length))).withStyle(TextFormatting.AQUA));
+            component.append(new TextComponent(splits[0]).withStyle(ChatFormatting.YELLOW));
+            component.append(new TextComponent(" " + String.join(" ", Arrays.copyOfRange(splits, 1, splits.length))).withStyle(ChatFormatting.AQUA));
         } else {
-            component.append(new StringTextComponent(input).withStyle(TextFormatting.YELLOW));
+            component.append(new TextComponent(input).withStyle(ChatFormatting.YELLOW));
         }
         return component;
     }

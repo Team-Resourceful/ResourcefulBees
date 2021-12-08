@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
@@ -26,7 +26,7 @@ public abstract class BeeDataPage extends BeepediaPage {
     }
 
     @Override
-    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
+    public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
         // override to implement
     }
 

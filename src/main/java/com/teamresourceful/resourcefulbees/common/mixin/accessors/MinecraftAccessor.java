@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.mixin.accessors;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.fonts.FontResourceManager;
+import net.minecraft.client.gui.font.FontManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface MinecraftAccessor {
 
     @Accessor("fontManager")
-    FontResourceManager getFontManager();
+    FontManager getFontManager();
 }

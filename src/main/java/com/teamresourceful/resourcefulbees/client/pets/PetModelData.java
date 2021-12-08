@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.api.beedata.render.BeeTexture;
 import com.teamresourceful.resourcefulbees.api.beedata.render.LayerData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;

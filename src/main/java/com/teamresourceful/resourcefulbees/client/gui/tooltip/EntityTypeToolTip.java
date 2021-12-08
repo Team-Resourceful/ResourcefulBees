@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,16 +27,16 @@ public class EntityTypeToolTip extends AbstractTooltip {
     }
 
     @Override
-    public List<ITextComponent> getTooltip() {
+    public List<Component> getTooltip() {
         return Collections.singletonList(entitySupplier.get().getDescription());
     }
 
     @Override
-    public List<ITextComponent> getAdvancedTooltip() {
+    public List<Component> getAdvancedTooltip() {
         EntityType<?> entity = this.entitySupplier.get();
-        List<ITextComponent> tooltips = getTooltip();
+        List<Component> tooltips = getTooltip();
         if (entity.getRegistryName() == null) return getTooltip();
-        tooltips.add(new StringTextComponent(entity.getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY));
+        tooltips.add(new TextComponent(entity.getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY));
         return tooltips;
     }
 }

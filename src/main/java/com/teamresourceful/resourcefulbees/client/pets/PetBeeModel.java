@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.pets;
 
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

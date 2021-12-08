@@ -8,8 +8,8 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 

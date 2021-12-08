@@ -6,8 +6,8 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public class TextComponentCodec {
 
@@ -15,20 +15,20 @@ public class TextComponentCodec {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static final Codec<ITextComponent> CODEC = Codec.PASSTHROUGH.comapFlatMap(TextComponentCodec::decodeData, TextComponentCodec::encodeData);
+    public static final Codec<Component> CODEC = Codec.PASSTHROUGH.comapFlatMap(TextComponentCodec::decodeData, TextComponentCodec::encodeData);
 
-    private static DataResult<ITextComponent> decodeData(Dynamic<?> dynamic) {
+    private static DataResult<Component> decodeData(Dynamic<?> dynamic) {
         Object object = dynamic.getValue();
         if (object instanceof JsonElement) {
-            IFormattableTextComponent component = ITextComponent.Serializer.fromJson(((JsonElement) object));
+            MutableComponent component = Component.Serializer.fromJson(((JsonElement) object));
             return component != null ? DataResult.success(component) : DataResult.error("component became null");
         } else {
             return DataResult.error("value was some how not a JsonElement");
         }
     }
 
-    private static Dynamic<JsonElement> encodeData(ITextComponent component) {
-        return new Dynamic<>(JsonOps.INSTANCE, ITextComponent.Serializer.toJsonTree(component));
+    private static Dynamic<JsonElement> encodeData(Component component) {
+        return new Dynamic<>(JsonOps.INSTANCE, Component.Serializer.toJsonTree(component));
     }
 
 }

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeeconEffectWidget;
 import com.teamresourceful.resourcefulbees.client.gui.widget.OptionImageButton;
@@ -10,14 +10,16 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConst
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
 import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.AbstractSlider;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import net.minecraft.client.gui.components.AbstractSliderButton;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -27,13 +29,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
+public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContainer> {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
 
     private final EnderBeeconTileEntity tileEntity;
 
-    public EnderBeeconScreen(EnderBeeconContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
+    public EnderBeeconScreen(EnderBeeconContainer screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);
         this.tileEntity = screenContainer.getEnderBeeconTileEntity();
         this.imageWidth = 230;
@@ -50,31 +52,31 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     @Override
     protected void init() {
         super.init();
-        buttons.clear();
+        clearWidgets();
 
         BlockState state = menu.getEnderBeeconTileEntity().getBlockState();
 
-        soundButton = addButton(new OptionImageButton(  leftPos+109, topPos+84, 52, 200, state.hasProperty(EnderBeecon.SOUND) && !state.getValue(EnderBeecon.SOUND), BACKGROUND) {
+        soundButton = addWidget(new OptionImageButton(  leftPos+109, topPos+84, 52, 200, state.hasProperty(EnderBeecon.SOUND) && !state.getValue(EnderBeecon.SOUND), BACKGROUND) {
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
                 NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.SOUND, !selected, menu.getEnderBeeconTileEntity().getBlockPos()));
             }
         });
-        beamButton = addButton(new OptionImageButton(leftPos+132, topPos+84, 92, 200, state.hasProperty(EnderBeecon.BEAM) && !state.getValue(EnderBeecon.BEAM), BACKGROUND) {
+        beamButton = addWidget(new OptionImageButton(leftPos+132, topPos+84, 92, 200, state.hasProperty(EnderBeecon.BEAM) && !state.getValue(EnderBeecon.BEAM), BACKGROUND) {
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
                 NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.BEAM, !selected, menu.getEnderBeeconTileEntity().getBlockPos()));
             }
         });
-        addButton(new RangeSlider(leftPos+155, topPos+84, menu.getEnderBeeconTileEntity().getRange()/50f));
+        addWidget(new RangeSlider(leftPos+155, topPos+84, menu.getEnderBeeconTileEntity().getRange()/50f));
     }
 
     @Override
-    protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
-        if (minecraft != null && tileEntity != null) {
-            minecraft.getTextureManager().bind(BACKGROUND);
+    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
+        if (tileEntity != null) {
+            RenderUtils.bindTexture(BACKGROUND);
             this.blit(matrix, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
             this.blit(matrix, this.leftPos+100, this.topPos+17, 138, 200, 6, 27);
         }
@@ -84,7 +86,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     private void drawButtons() {
         int buttonStartY = this.topPos + 17;
         powerButtons.clear();
-        for (Effect allowedEffect : EnderBeeconTileEntity.ALLOWED_EFFECTS) {
+        for (MobEffect allowedEffect : EnderBeeconTileEntity.ALLOWED_EFFECTS) {
             BeeconEffectWidget button = new BeeconEffectWidget(this.leftPos + 9, buttonStartY, allowedEffect, menu.getEnderBeeconTileEntity());
             button.active = true;
             button.setSelected(tileEntity.hasEffect(allowedEffect));
@@ -94,7 +96,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     }
 
     @Override
-    protected void renderLabels(@NotNull MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
         super.renderLabels(matrixStack, mouseX, mouseY);
         this.font.draw(matrixStack, TranslationConstants.Guis.EnderBeecon.PRIMARY_LABEL, 10, 6, 4210752);
 
@@ -114,16 +116,16 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrix, mouseX, mouseY);
         for (BeeconEffectWidget widget : this.powerButtons) {
             widget.render(matrix, mouseX, mouseY, partialTicks);
-            if (widget.isHovered()) widget.renderToolTip(matrix, mouseX, mouseY);
+            if (widget.isHovered(mouseX, mouseY)) widget.renderToolTip(matrix, mouseX, mouseY);
         }
-        if (soundButton.isHovered()) soundButton.renderToolTip(matrix, mouseX, mouseY);
-        if (beamButton.isHovered()) beamButton.renderToolTip(matrix, mouseX, mouseY);
+        if (soundButton.isHovered(mouseX, mouseY)) soundButton.renderToolTip(matrix, mouseX, mouseY);
+        if (beamButton.isHovered(mouseX, mouseY)) beamButton.renderToolTip(matrix, mouseX, mouseY);
     }
 
     @Override
@@ -137,16 +139,16 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    public class RangeSlider extends AbstractSlider {
+    public class RangeSlider extends AbstractSliderButton {
 
         public RangeSlider(int pX, int pY, double pValue) {
-            super(pX, pY, 66, 20, StringTextComponent.EMPTY, pValue);
+            super(pX, pY, 66, 20, TextComponent.EMPTY, pValue);
             updateMessage();
         }
 
         @Override
         protected void updateMessage() {
-            setMessage(new StringTextComponent("Range: " + (int)((value * 40)+10)));
+            setMessage(new TextComponent("Range: " + (int)((value * 40)+10)));
         }
 
         @Override

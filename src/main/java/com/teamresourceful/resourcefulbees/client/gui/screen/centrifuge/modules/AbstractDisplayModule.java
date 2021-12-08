@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 
 //TODO The hierarchy of these classes needs to be changed if we want this to be useful beyond just the centrifuge
 public abstract class AbstractDisplayModule<T extends ContainerScreen<?>> extends AbstractTerminalModule<T> {

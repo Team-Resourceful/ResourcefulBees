@@ -1,21 +1,24 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.*;
-import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ModImageButton;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
+import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -60,7 +63,7 @@ public class HomePage extends BeepediaPage {
     }
 
     @Override
-    public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+    public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         double scale = beepedia.getMinecraft().getWindow().getGuiScale();
         int scissorY = (int) (beepedia.getMinecraft().getWindow().getHeight() - (y + 80) * scale);
@@ -68,19 +71,19 @@ public class HomePage extends BeepediaPage {
         RenderUtils.renderEntity(matrix, bees.get(counter), beepedia.getMinecraft().level, x + (width / 2F) - 12F, y + 10f, -45, 3);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
-        FontRenderer font = Minecraft.getInstance().font;
-        ITextComponent completeStatus = getProgress();
+        Font font = Minecraft.getInstance().font;
+        Component completeStatus = getProgress();
         int padding = font.width(completeStatus) / 2;
         font.draw(matrix, completeStatus, x + (width / 2F) - padding, y + 115F, -1);
-        font.draw(matrix, BeepediaLang.ITEM_GROUP.withStyle(TextFormatting.GRAY), x + 52F, y + 81F, -1);
+        font.draw(matrix, BeepediaLang.ITEM_GROUP.withStyle(ChatFormatting.GRAY), x + 52F, y + 81F, -1);
         Minecraft.getInstance().getTextureManager().bind(BeepediaImages.LOGO);
-        AbstractGui.blit(matrix, x + (width / 2) - 52, y + 90, 0, 0, 104, 16, 104, 16);
+        Gui.blit(matrix, x + (width / 2) - 52, y + 90, 0, 0, 104, 16, 104, 16);
     }
 
-    private ITextComponent getProgress() {
-        TranslationTextComponent prefix = BeepediaLang.COLLECTION_PROGRESS.plainCopy();
+    private Component getProgress() {
+        TranslatableComponent prefix = BeepediaLang.COLLECTION_PROGRESS.plainCopy();
         prefix.append(String.format("%d / %d", beepedia.isCreative ? bees.size() : beepedia.data.getBeeList().size(), bees.size()));
-        prefix.withStyle(TextFormatting.GRAY);
+        prefix.withStyle(ChatFormatting.GRAY);
         return prefix;
     }
 

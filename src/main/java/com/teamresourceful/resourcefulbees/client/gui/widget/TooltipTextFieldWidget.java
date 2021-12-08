@@ -1,24 +1,21 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
+import net.minecraft.SharedConstants;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.SharedConstants;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -31,7 +28,7 @@ import java.util.function.Predicate;
 @OnlyIn(Dist.CLIENT)
 public class TooltipTextFieldWidget extends TooltipWidget{
 
-    private final FontRenderer font;
+    private final Font font;
     private String value = "";
     private int maxLength = 32;
     private int frame;
@@ -47,15 +44,15 @@ public class TooltipTextFieldWidget extends TooltipWidget{
     private String suggestion;
     private Consumer<String> responder;
     private Predicate<String> filter = Objects::nonNull;
-    private BiFunction<String, Integer, IReorderingProcessor> formatter = (p_195610_0_, p_195610_1_) -> {
-        return IReorderingProcessor.forward(p_195610_0_, Style.EMPTY);
+    private BiFunction<String, Integer, FormattedCharSequence> formatter = (p_195610_0_, p_195610_1_) -> {
+        return FormattedCharSequence.forward(p_195610_0_, Style.EMPTY);
     };
 
-    public TooltipTextFieldWidget(FontRenderer p_i232260_1_, int p_i232260_2_, int p_i232260_3_, int p_i232260_4_, int p_i232260_5_, ITextComponent p_i232260_6_) {
+    public TooltipTextFieldWidget(Font p_i232260_1_, int p_i232260_2_, int p_i232260_3_, int p_i232260_4_, int p_i232260_5_, Component p_i232260_6_) {
         this(p_i232260_1_, p_i232260_2_, p_i232260_3_, p_i232260_4_, p_i232260_5_, null, p_i232260_6_);
     }
 
-    public TooltipTextFieldWidget(FontRenderer p_i232259_1_, int p_i232259_2_, int p_i232259_3_, int p_i232259_4_, int p_i232259_5_, @Nullable TextFieldWidget p_i232259_6_, ITextComponent p_i232259_7_) {
+    public TooltipTextFieldWidget(Font p_i232259_1_, int p_i232259_2_, int p_i232259_3_, int p_i232259_4_, int p_i232259_5_, @Nullable EditBox p_i232259_6_, Component p_i232259_7_) {
         super(p_i232259_2_, p_i232259_3_, p_i232259_4_, p_i232259_5_, p_i232259_7_);
         this.font = p_i232259_1_;
         if (p_i232259_6_ != null) {
@@ -68,7 +65,7 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         this.responder = p_212954_1_;
     }
 
-    public void setFormatter(BiFunction<String, Integer, IReorderingProcessor> p_195607_1_) {
+    public void setFormatter(BiFunction<String, Integer, FormattedCharSequence> p_195607_1_) {
         this.formatter = p_195607_1_;
     }
 
@@ -76,9 +73,8 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         ++this.frame;
     }
 
-    protected IFormattableTextComponent createNarrationMessage() {
-        ITextComponent itextcomponent = this.getMessage();
-        return new TranslationTextComponent("gui.narrate.editBox", itextcomponent, this.value);
+    protected MutableComponent createNarrationMessage() {
+        return new TranslatableComponent("gui.narrate.editBox", this.getMessage(), this.value);
     }
 
     public void setValue(String p_146180_1_) {
@@ -134,7 +130,7 @@ public class TooltipTextFieldWidget extends TooltipWidget{
             this.responder.accept(p_212951_1_);
         }
 
-        this.nextNarration = Util.getMillis() + 500L;
+        //TODO this.nextNarration = Util.getMillis() + 500L;
     }
 
     private void deleteText(int p_212950_1_) {
@@ -231,7 +227,7 @@ public class TooltipTextFieldWidget extends TooltipWidget{
     }
 
     public void setCursorPosition(int p_212422_1_) {
-        this.cursorPos = MathHelper.clamp(p_212422_1_, 0, this.value.length());
+        this.cursorPos = Mth.clamp(p_212422_1_, 0, this.value.length());
     }
 
     public void moveCursorToStart() {
@@ -347,7 +343,7 @@ public class TooltipTextFieldWidget extends TooltipWidget{
             }
 
             if (this.isFocused() && flag && p_231044_5_ == 0) {
-                int i = MathHelper.floor(p_231044_1_) - this.x;
+                int i = Mth.floor(p_231044_1_) - this.x;
                 if (this.bordered) {
                     i -= 4;
                 }
@@ -365,7 +361,7 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         super.setFocused(p_146195_1_);
     }
 
-    public void renderButton(MatrixStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
+    public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
         if (this.isVisible()) {
             if (this.isBordered()) {
                 int i = this.isFocused() ? -1 : -6250336;
@@ -410,7 +406,7 @@ public class TooltipTextFieldWidget extends TooltipWidget{
 
             if (flag1) {
                 if (flag2) {
-                    AbstractGui.fill(p_230431_1_, k1, i1 - 1, k1 + 1, i1 + 1 + 9, -3092272);
+                    Gui.fill(p_230431_1_, k1, i1 - 1, k1 + 1, i1 + 1 + 9, -3092272);
                 } else {
                     this.font.drawShadow(p_230431_1_, "_", (float)k1, (float)i1, i2);
                 }
@@ -445,17 +441,17 @@ public class TooltipTextFieldWidget extends TooltipWidget{
             p_146188_1_ = this.x + this.width;
         }
 
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
-        RenderSystem.color4f(0.0F, 0.0F, 255.0F, 255.0F);
+        RenderSystem.setShaderColor(0.0F, 0.0F, 255.0F, 255.0F);
         RenderSystem.disableTexture();
         RenderSystem.enableColorLogicOp();
         RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
-        bufferbuilder.vertex((double)p_146188_1_, (double)p_146188_4_, 0.0D).endVertex();
-        bufferbuilder.vertex((double)p_146188_3_, (double)p_146188_4_, 0.0D).endVertex();
-        bufferbuilder.vertex((double)p_146188_3_, (double)p_146188_2_, 0.0D).endVertex();
-        bufferbuilder.vertex((double)p_146188_1_, (double)p_146188_2_, 0.0D).endVertex();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+        bufferbuilder.vertex(p_146188_1_, p_146188_4_, 0.0D).endVertex();
+        bufferbuilder.vertex(p_146188_3_, p_146188_4_, 0.0D).endVertex();
+        bufferbuilder.vertex(p_146188_3_, p_146188_2_, 0.0D).endVertex();
+        bufferbuilder.vertex(p_146188_1_, p_146188_2_, 0.0D).endVertex();
         tessellator.end();
         RenderSystem.disableColorLogicOp();
         RenderSystem.enableTexture();
@@ -523,7 +519,7 @@ public class TooltipTextFieldWidget extends TooltipWidget{
 
     public void setHighlightPos(int p_146199_1_) {
         int i = this.value.length();
-        this.highlightPos = MathHelper.clamp(p_146199_1_, 0, i);
+        this.highlightPos = Mth.clamp(p_146199_1_, 0, i);
         if (this.font != null) {
             if (this.displayPos > i) {
                 this.displayPos = i;
@@ -542,7 +538,7 @@ public class TooltipTextFieldWidget extends TooltipWidget{
                 this.displayPos -= this.displayPos - this.highlightPos;
             }
 
-            this.displayPos = MathHelper.clamp(this.displayPos, 0, i);
+            this.displayPos = Mth.clamp(this.displayPos, 0, i);
         }
 
     }

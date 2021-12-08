@@ -6,51 +6,44 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
-import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBlockData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.Effect;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,7 +61,7 @@ public class BeeInfoUtils {
         return parent1.compareTo(parent2) > 0 ? Pair.of(parent1, parent2) : Pair.of(parent2, parent1);
     }
 
-    public static Effect getEffect(String effectName) {
+    public static MobEffect getEffect(String effectName) {
         return ForgeRegistries.POTIONS.getValue(ResourceLocation.tryParse(effectName));
     }
 
@@ -85,30 +78,30 @@ public class BeeInfoUtils {
     }
 
     @Nullable
-    public static ITag<Item> getItemTag(String itemTag) {
+    public static Tag<Item> getItemTag(String itemTag) {
         return getResourceLocation(itemTag).map(ItemTags.getAllTags()::getTag).orElse(null);
     }
 
     @Nullable
-    public static ITag<Fluid> getFluidTag(String fluidTag) {
+    public static Tag<Fluid> getFluidTag(String fluidTag) {
         return getResourceLocation(fluidTag).map(FluidTags.getAllTags()::getTag).orElse(null);
     }
 
     @Nullable
-    public static ITag<Block> getBlockTag(String blockTag) {
+    public static Tag<Block> getBlockTag(String blockTag) {
         return getResourceLocation(blockTag).map(BlockTags.getAllTags()::getTag).orElse(null);
     }
 
-    public static void flagBeesInRange(BlockPos pos, World world) {
-        MutableBoundingBox box = MutableBoundingBox.createProper(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
-        AxisAlignedBB aabb = AxisAlignedBB.of(box);
+    public static void flagBeesInRange(BlockPos pos, Level world) {
+        BoundingBox box = BoundingBox.orientBox(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
+        AABB aabb = AABB.of(box);
         if (world != null) {
             List<CustomBeeEntity> list = world.getEntitiesOfClass(CustomBeeEntity.class, aabb);
             list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
         }
     }
 
-    public static List<String> getLoreLines(CompoundNBT outputNBT) {
+    public static List<String> getLoreLines(CompoundTag outputNBT) {
         if (outputNBT.isEmpty()) return new LinkedList<>();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonParser jp = new JsonParser();
@@ -117,7 +110,7 @@ public class BeeInfoUtils {
         return Arrays.asList(nbtString.split("\n"));
     }
 
-    public static void ageBee(int ticksInHive, BeeEntity beeEntity) {
+    public static void ageBee(int ticksInHive, Bee beeEntity) {
         int i = beeEntity.getAge();
         if (i < 0) {
             beeEntity.setAge(Math.min(0, i + ticksInHive));
@@ -134,25 +127,24 @@ public class BeeInfoUtils {
     }
 
     public static void setEntityLocationAndAngle(BlockPos blockpos, Direction direction, Entity entity) {
-        EntitySize size = entity.getDimensions(Pose.STANDING);
+        EntityDimensions size = entity.getDimensions(Pose.STANDING);
         double d0 = 0.65D + size.width / 2.0F;
         double d1 = blockpos.getX() + 0.5D + d0 * direction.getStepX();
         double d2 = blockpos.getY() + Math.max(0.5D - (size.height / 2.0F), 0);
         double d3 = blockpos.getZ() + 0.5D + d0 * direction.getStepZ();
-        entity.moveTo(d1, d2, d3, entity.yRot, entity.xRot);
+        entity.moveTo(d1, d2, d3, entity.getYRot(), entity.getXRot());
     }
 
-    public static @NotNull CompoundNBT createJarBeeTag(BeeEntity beeEntity, String nbtTagID) {
+    public static @NotNull CompoundTag createJarBeeTag(Bee beeEntity, String nbtTagID) {
         String type = EntityType.getKey(beeEntity.getType()).toString();
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         nbt.putString(nbtTagID, type);
 
         beeEntity.saveWithoutId(nbt);
 
         String beeColor = VANILLA_BEE_COLOR;
 
-        if (beeEntity instanceof ICustomBee) {
-            ICustomBee iCustomBee = (ICustomBee) beeEntity;
+        if (beeEntity instanceof ICustomBee iCustomBee) {
             nbt.putString(NBTConstants.NBT_BEE_TYPE, iCustomBee.getBeeType());
             beeColor = iCustomBee.getRenderData().getColorData().getJarColor().toString();
         }

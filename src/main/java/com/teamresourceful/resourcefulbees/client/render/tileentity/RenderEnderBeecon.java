@@ -1,33 +1,31 @@
 package com.teamresourceful.resourcefulbees.client.render.tileentity;
 
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.CubeModel;
 import com.teamresourceful.resourcefulbees.common.utils.RenderCuboid;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.Atlases;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.BeaconTileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.blockentity.BeaconRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity> {
+public class RenderEnderBeecon extends BlockEntityRenderer<EnderBeeconTileEntity> {
 
     public static final ResourceLocation TEXTURE_BEACON_BEAM = new ResourceLocation("textures/entity/beacon_beam.png");
 
-    public RenderEnderBeecon(TileEntityRendererDispatcher renderer) {
-        super(renderer);
-    }
+    public RenderEnderBeecon(BlockEntityRendererProvider.Context renderer) {}
 
     @Override
-    public void render(EnderBeeconTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
+    public void render(EnderBeeconTileEntity tile, float partialTick, @NotNull PoseStack matrix, @NotNull MultiBufferSource renderer, int light, int overlayLight) {
         if (tile.getLevel() == null) return;
         FluidStack stack = tile.getTank().getFluid();
         long gameTime = tile.getLevel().getGameTime();
@@ -41,7 +39,7 @@ public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity>
             float percentage = tile.getTank().getFluidAmount() / (float)tile.getTank().getCapacity();
             int color = stack.getFluid().getAttributes().getColor();
             ResourceLocation stillTexture = stack.getFluid().getAttributes().getStillTexture();
-            IVertexBuilder builder = renderer.getBuffer(Atlases.translucentCullBlockSheet());
+            VertexConsumer builder = renderer.getBuffer(Sheets.translucentCullBlockSheet());
             Vector3f start = new Vector3f(0.26f, 0.25f, 0.26f);
             Vector3f end = new Vector3f(0.74f, 0.25f + percentage * 0.375f, 0.74f);
             CubeModel model = new CubeModel(start, end);
@@ -54,7 +52,7 @@ public class RenderEnderBeecon extends TileEntityRenderer<EnderBeeconTileEntity>
             float blue = RenderCuboid.getBlue(color);
             float alpha = RenderCuboid.getAlpha(color);
             float[] afloats = {red, green, blue, alpha};
-            BeaconTileEntityRenderer.renderBeaconBeam(matrix, renderer, TEXTURE_BEACON_BEAM, partialTick, 1.0F, gameTime, 0, 1024, afloats, 0.2F, 0.25F);
+            BeaconRenderer.renderBeaconBeam(matrix, renderer, TEXTURE_BEACON_BEAM, partialTick, 1.0F, gameTime, 0, 1024, afloats, 0.2F, 0.25F);
         }
     }
 

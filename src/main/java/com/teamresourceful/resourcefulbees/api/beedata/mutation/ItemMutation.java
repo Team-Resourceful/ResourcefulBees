@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation;
 
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Block;
 
 import java.util.Collections;
 import java.util.List;

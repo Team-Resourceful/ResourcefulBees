@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
@@ -21,12 +21,12 @@ public class HelpPage extends BeepediaPage {
     }
 
     @Override
-    public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+    public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
 
     }
 
     @Override
-    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
+    public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
 
     }
 

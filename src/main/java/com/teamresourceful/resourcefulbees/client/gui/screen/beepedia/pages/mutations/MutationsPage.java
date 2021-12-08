@@ -1,16 +1,16 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.mutations;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -41,7 +41,7 @@ public abstract class MutationsPage {
 
     public abstract void tick(int ticksActive);
 
-    public void draw(MatrixStack matrix, int xPos, int yPos) {
+    public void draw(PoseStack matrix, int xPos, int yPos) {
 //        FontRenderer font = Minecraft.getInstance().font;
 //        StringTextComponent mutationCountString = new StringTextComponent("x " + mutationCount);
 //        font.draw(matrix, mutationCountString.withStyle(TextFormatting.GRAY), (float) xPos + 20, (float) yPos - 5, -1);
@@ -66,7 +66,7 @@ public abstract class MutationsPage {
         return false;
     }
 
-    public void drawTooltips(MatrixStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
+    public void drawTooltips(PoseStack matrix, int xPos, int yPos, int mouseX, int mouseY) {
 //        if (BeepediaScreen.mouseHovering((float) xPos + ((float) SUB_PAGE_WIDTH / 2) - 20, (float) yPos + 6, 30, 30, mouseX, mouseY)) {
 //            List<ITextComponent> tooltip = new ArrayList<>();
 //            IFormattableTextComponent name = entityParent.getName().plainCopy();
@@ -81,15 +81,15 @@ public abstract class MutationsPage {
 //        }
     }
 
-    protected void drawWeight(MatrixStack matrix, Double right, int xPos, int yPos) {
-        FontRenderer font = Minecraft.getInstance().font;
+    protected void drawWeight(PoseStack matrix, Double right, int xPos, int yPos) {
+        Font font = Minecraft.getInstance().font;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
-        StringTextComponent text = new StringTextComponent(decimalFormat.format(right));
+        TextComponent text = new TextComponent(decimalFormat.format(right));
         int padding = font.width(text) / 2;
-        font.draw(matrix, text.withStyle(TextFormatting.GRAY), (float) xPos - padding, yPos, -1);
+        font.draw(matrix, text.withStyle(ChatFormatting.GRAY), (float) xPos - padding, yPos, -1);
     }
 
-    protected void drawChance(MatrixStack matrix, Double right, int xPos, int yPos) {
+    protected void drawChance(PoseStack matrix, Double right, int xPos, int yPos) {
         if (right >= 1) return;
         drawWeight(matrix, right, xPos, yPos);
     }

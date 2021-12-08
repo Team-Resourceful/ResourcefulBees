@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.terminal;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeTerminalScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.AbstractDisplayModule;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.AbstractTerminalModule;
@@ -13,9 +14,9 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.OutputLocations;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,9 +30,9 @@ import static com.teamresourceful.resourcefulbees.common.utils.RenderUtils.TERMI
 public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTerminalScreen> {
 
     //TODO change these to translation texts
-    private static final ITextComponent HOME_TEXT = new StringTextComponent("Home");
-    private static final ITextComponent ITEM_OUTS_TEXT = new StringTextComponent("Item Outputs");
-    private static final ITextComponent FLUID_OUTS_TEXT = new StringTextComponent("Fluid Outputs");
+    private static final Component HOME_TEXT = new TextComponent("Home");
+    private static final Component ITEM_OUTS_TEXT = new TextComponent("Item Outputs");
+    private static final Component FLUID_OUTS_TEXT = new TextComponent("Fluid Outputs");
 
     //Nav Buttons
     //TODO make these a 3 texture "button" or modify DisplayTab to handle such cases by passing in uv values
@@ -64,7 +65,7 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
     }
 
     @Override
-    public void renderBackground(MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    public void renderBackground(PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         //Draw Info Panel Title Bar
         blit(matrix, screen.getGuiLeft() + 104, screen.getGuiTop() + 55, 21, 0, 233, 3);
         //Draw nav "module"
@@ -74,7 +75,7 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
     }
 
     @Override
-    public void renderText(MatrixStack matrix, int mouseX, int mouseY) {
+    public void renderText(PoseStack matrix, int mouseX, int mouseY) {
         //TODO make this a translation component
         String text = "Input #" + (selectedBlock + 1);
         TERMINAL_FONT_12.draw(matrix, text, 58f - TERMINAL_FONT_12.width(text)/2f, 146.5f, RenderUtils.FONT_COLOR_1);
@@ -157,7 +158,7 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
         }
 
         @Override
-        public void renderText(MatrixStack matrix, int mouseX, int mouseY) {
+        public void renderText(PoseStack matrix, int mouseX, int mouseY) {
             if (module.selectedEntity != null) {
                 TERMINAL_FONT_12.draw(matrix, module.selectedEntity.getDisplayName(), 220 - TERMINAL_FONT_12.width(module.selectedEntity.getDisplayName()) / 2f, 45.5f, RenderUtils.FONT_COLOR_1);
 
@@ -195,7 +196,7 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
         }
 
         @Override
-        public void renderBackground(MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+        public void renderBackground(PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
 /*            int tX = screen.getGuiLeft() + x + 110;
             int tY = screen.getGuiTop() + y + 38;
             Set<BlockPos> outputBlocks = screen.getCentrifugeState().getItemOutputs();
@@ -212,7 +213,7 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
         }
 
         @Override
-        public void renderText(MatrixStack matrix, int mouseX, int mouseY) {
+        public void renderText(PoseStack matrix, int mouseX, int mouseY) {
             if (module.selectedEntity != null) {
                 TERMINAL_FONT_12.draw(matrix, module.selectedEntity.getDisplayName(), 220 - TERMINAL_FONT_12.width(module.selectedEntity.getDisplayName()) / 2f, 45.5f, RenderUtils.FONT_COLOR_1);
 
