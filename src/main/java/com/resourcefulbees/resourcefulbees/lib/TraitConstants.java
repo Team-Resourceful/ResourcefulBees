@@ -6,6 +6,7 @@ public class TraitConstants {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
+
     public static final String WITHER = "wither";
     public static final String BLAZE = "blaze";
     public static final String CAN_SWIM = "can_swim";
@@ -22,4 +23,5 @@ public class TraitConstants {
     public static final String EXPLOSIVE = "explosive";
     public static final String ANGRY = "angry";
     public static final String SPIDER = "spider";
+    public static final String HEALER = "healer";
 }

@@ -10,7 +10,8 @@ public class BeeAura {
     public int strength = 0;
     public String damageType = null;
     public boolean calmingDisabled = false;
-    private Effect potionEffect = Effects.MOVEMENT_SPEED;
+    public String effectID = null;
+    public transient Effect potionEffect = null;
 
     public BeeAura() {
         // intentionally left empty will allow for default values to be saved
@@ -38,6 +39,10 @@ public class BeeAura {
         this.strength = strength;
         this.damageType = damageType;
         this.calmingDisabled = calmingDisabled;
+    }
+
+    public Effect getEffect() {
+        return potionEffect;
     }
 
     public enum AuraType {

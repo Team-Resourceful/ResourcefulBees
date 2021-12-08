@@ -100,6 +100,24 @@
 	"gui.resourcefulbees.beepedia.tab.traits.potion_damage_effects": "Potion Damage Effects",
 	"gui.resourcefulbees.beepedia.tab.traits.particle": "Particles",
 
+	"gui.resourcefulbees.beepedia.tab.traits.auras.burning" : "Burning Aura",
+	"gui.resourcefulbees.beepedia.tab.traits.auras.burning_explanation" : "This aura will set all players within the bee's aura range on fire.",
+
+	"gui.resourcefulbees.beepedia.tab.traits.auras.potion" : "Potion Effect Aura",
+	"gui.resourcefulbees.beepedia.tab.traits.auras.potion_explanation" : "This aura will grant all players within the bee's aura range §5%s§7.",
+
+	"gui.resourcefulbees.beepedia.tab.traits.auras.healing" : "Healing Aura",
+	"gui.resourcefulbees.beepedia.tab.traits.auras.healing_explanation" : "This aura will grant all players within the bee's aura range §2%d§7 health.",
+
+	"gui.resourcefulbees.beepedia.tab.traits.auras.damaging" : "Damaging Aura",
+	"gui.resourcefulbees.beepedia.tab.traits.auras.damaging_explanation" : "This aura will deal §4%d§7 damage to all players within the bee's aura range.",
+
+	"gui.resourcefulbees.beepedia.tab.traits.auras.experience" : "Experience Aura",
+	"gui.resourcefulbees.beepedia.tab.traits.auras.experience_explanation" : "This aura will grant §a%d§7 experience to all players within the bee's aura range.",
+
+	"gui.resourcefulbees.beepedia.tab.traits.auras.error" : "AN ERROR OCCURED",
+	"gui.resourcefulbees.beepedia.tab.traits.auras.error_explanation" : "your aura is missing it's effect type.",
+
 	"gui.resourcefulbees.beepedia.tab.honey": "Honey",
 	"gui.resourcefulbees.beepedia.tab.honey.effects_list": "Effects",
 	"gui.resourcefulbees.beepedia.tab.honey.bees_list": "Bees",
@@ -114,6 +132,7 @@
 	"gui.resourcefulbees.beepedia.bee_subtab.info.poison": "Poisonous: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.found": "Found By: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.time": "Time In Hive: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.info.aura_range": "Aura Range: ",
 
 	"gui.resourcefulbees.beepedia.bee_subtab.mutations": "Mutations",
 	"gui.resourcefulbees.beepedia.bee_subtab.mutations.block": "Block Mutations",

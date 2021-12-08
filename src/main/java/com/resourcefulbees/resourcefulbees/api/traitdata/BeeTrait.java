@@ -169,7 +169,7 @@ public class BeeTrait {
             return this;
         }
 
-        public Builder addSpecialAbility(BeeAura beeAura) {
+        public Builder addAura(BeeAura beeAura) {
             this.beeAuras.add(beeAura);
             return this;
         }

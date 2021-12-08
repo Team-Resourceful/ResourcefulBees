@@ -21,9 +21,10 @@ public class JsonBeeTrait {
         private final String[] potionImmunities;
         private final List<DamageType> damageTypes;
         private final String[] specialAbilities;
+        private final List<BeeAura> beeAuras;
         private final String particleName;
 
-        public JsonTrait(String beepediaItemID, List<PotionDamageEffect> potionDamageEffects, String[] damageImmunities, String[] potionImmunities, List<DamageType> damageTypes, String[] specialAbilities, String particleName) {
+        public JsonTrait(String beepediaItemID, List<PotionDamageEffect> potionDamageEffects, String[] damageImmunities, String[] potionImmunities, List<DamageType> damageTypes, String[] specialAbilities, String particleName, List<BeeAura> beeAuras) {
             this.beepediaItemID = beepediaItemID;
             this.potionDamageEffects = potionDamageEffects;
             this.damageImmunities = damageImmunities;
@@ -31,6 +32,7 @@ public class JsonBeeTrait {
             this.damageTypes = damageTypes;
             this.specialAbilities = specialAbilities;
             this.particleName = particleName;
+            this.beeAuras = beeAuras;
         }
 
         public String getBeepediaItemID() { return beepediaItemID; }
@@ -46,6 +48,8 @@ public class JsonBeeTrait {
         public String[] getSpecialAbilities() { return specialAbilities; }
 
         public String getParticleName() { return particleName; }
+
+        public List<BeeAura> getBeeAuras() { return beeAuras; }
     }
 
     @SuppressWarnings("unused")

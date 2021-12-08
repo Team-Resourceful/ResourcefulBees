@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.traitdata.BeeAura;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
@@ -15,16 +16,15 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
@@ -62,6 +62,54 @@ public class TraitPage extends BeepediaPage {
         addPotionDamageEffects();
         addDamageTypes();
         addParticle();
+        addAuras();
+    }
+
+    private void addAuras() {
+        if (trait.hasBeeAuras()) {
+            for (BeeAura aura : trait.getAuras()) {
+                ITextComponent title;
+                ITextComponent text;
+                ItemStack item;
+                switch (aura.auraType) {
+                    case BURNING:
+                        title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.burning");
+                        text = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.burning_explanation");
+                        item = new ItemStack(Items.FIRE_CHARGE);
+                        break;
+                    case EXPERIENCE:
+                        title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.experience");
+                        text = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.experience_explanation", aura.strength);
+                        item = new ItemStack(Items.EXPERIENCE_BOTTLE);
+                        break;
+                    case DAMAGING:
+                        title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.damaging");
+                        text = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.damaging_explanation", aura.strength);
+                        item = new ItemStack(Items.ARROW);
+                        break;
+                    case HEALING:
+                        title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.healing");
+                        text = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.healing_explanation", aura.strength);
+                        item = new ItemStack(Items.GLISTERING_MELON_SLICE);
+                        break;
+                    case POTION:
+                        IFormattableTextComponent potion = aura.potionEffect.getDisplayName().plainCopy()
+                                .append(" ")
+                                .append(new TranslationTextComponent(String.format("enchantment.level.%d", (aura.strength + 1))));
+                        title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.potion");
+                        text = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.potion_explanation", potion.getString());
+                        item = PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), Potions.LONG_NIGHT_VISION);
+                        break;
+                    default:
+                        title = new StringTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.error");
+                        text = new StringTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.error_explanation");
+                        item = new ItemStack(Items.BARRIER);
+                        break;
+                }
+                if (aura.calmingDisabled) text.plainCopy().append(new TranslationTextComponent("gui.resourcefulbees.tab.traits.aura.calming_disabled"));
+                traitSections.add(new TraitSection(title, item, text));
+            }
+        }
     }
 
     private void addParticle() {
@@ -98,7 +146,7 @@ public class TraitPage extends BeepediaPage {
                 text.append(effect.getKey().getDisplayName());
                 text.append(" ");
 
-                if (effect.getRight() > 0) text.append(new StringTextComponent(effect.getRight().toString()));
+                text.append(new TranslationTextComponent(String.format("enchantment.level.%d", (effect.getRight() + 1))));
                 if (i != trait.getPotionDamageEffects().size() - 1) {
                     text.append(", ");
                 }

@@ -3,9 +3,11 @@ package com.resourcefulbees.resourcefulbees.registry;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ITraitRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.traitdata.BeeAura;
 import com.resourcefulbees.resourcefulbees.api.traitdata.BeeTrait;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effects;
@@ -87,6 +89,7 @@ public class TraitRegistry implements ITraitRegistry {
         getRegistry().register(TraitConstants.DESERT, new BeeTrait.Builder(TraitConstants.DESERT).addDamageImmunity(DamageSource.CACTUS.msgId).setBeepediaItem(Items.CACTUS).build());
         getRegistry().register(TraitConstants.ANGRY, new BeeTrait.Builder(TraitConstants.ANGRY).addSpecialAbility(TraitConstants.ANGRY).build());
         getRegistry().register(TraitConstants.SPIDER, new BeeTrait.Builder(TraitConstants.SPIDER).addSpecialAbility(TraitConstants.SPIDER).setBeepediaItem(Items.COBWEB).build());
+        getRegistry().register(TraitConstants.HEALER, new BeeTrait.Builder(TraitConstants.HEALER).addAura(new BeeAura(BeeAura.AuraType.HEALING, null, "", 5, false)).setBeepediaItem(Items.GLISTERING_MELON_SLICE).build());
     }
 
     public static void applyBeeTraits() {

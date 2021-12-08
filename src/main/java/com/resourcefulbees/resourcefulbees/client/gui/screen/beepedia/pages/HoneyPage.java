@@ -22,10 +22,7 @@ import net.minecraft.item.Foods;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import org.lwjgl.opengl.GL11;
 
 import java.text.DecimalFormat;
@@ -151,7 +148,7 @@ public class HoneyPage extends BeepediaPage {
 
             // init effect
             Effect effect = effects.get(i).getEffect();
-            TranslationTextComponent name = new TranslationTextComponent(effect.getDescriptionId());
+            IFormattableTextComponent name = new TranslationTextComponent(effect.getDescriptionId()).append(" ").append(new TranslationTextComponent(String.format("enchantment.level.%d", (effects.get(i).strength + 1))));
             int duration = effects.get(i).duration;
             name.append(new StringTextComponent(String.format(" (%02d:%02d)", (duration / 20) / 60, (duration / 20) % 60)));
             StringTextComponent chance = new StringTextComponent(new DecimalFormat("##%").format(effects.get(i).chance));

@@ -49,6 +49,7 @@ public class TraitSetup {
             parseParticle(jsonTrait, builder);
             parsePotionImmunities(jsonTrait, builder);
             parsePotionDamageEffects(jsonTrait, builder);
+            parseBeeAuras(jsonTrait, builder);
             parseBeepediaItem(jsonTrait, builder);
             TraitRegistry.getRegistry().register(name, builder.build());
         } catch (JsonSyntaxException e) {
@@ -103,6 +104,17 @@ public class TraitSetup {
                 if (potion != null)
                     builder.addDamagePotionEffect(Pair.of(potion, MathHelper.clamp(traitPotionDamageEffect.getStrength(), 0, 255)));
             }));
+        }
+    }
+
+    private static void parseBeeAuras(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
+        if (jsonTrait.getPotionDamageEffects() != null && !jsonTrait.getPotionDamageEffects().isEmpty()) {
+            jsonTrait.getBeeAuras().forEach(beeAura -> {
+                if (beeAura.effectID != null) {
+                    beeAura.potionEffect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(beeAura.effectID));
+                }
+                builder.addAura(beeAura);
+            });
         }
     }
 

@@ -11,6 +11,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -36,32 +37,38 @@ public class BeeInfoPage extends BeeDataPage {
     @Override
     public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
         FontRenderer font = Minecraft.getInstance().font;
-        TranslationTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info");
-        TranslationTextComponent sizeName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.size");
 
-        TranslationTextComponent healthName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.health");
-        TranslationTextComponent damageName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.damage");
-        TranslationTextComponent stingerName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.stinger");
-        TranslationTextComponent passiveName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.passive");
-        TranslationTextComponent poisonName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.poison");
-        TranslationTextComponent timeName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.time");
+        IFormattableTextComponent title = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info").withStyle(TextFormatting.WHITE);
+        IFormattableTextComponent sizeName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.size").withStyle(titleStyle);
 
-        sizeName.append(BeeInfoUtils.getSizeName(beeData.getSizeModifier()));
-        damageName.append(new StringTextComponent("" + (int) beeData.getCombatData().getAttackDamage()));
-        healthName.append(new StringTextComponent("" + (int) beeData.getCombatData().getBaseHealth()));
-        stingerName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
-        passiveName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().isPassive()));
-        poisonName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
-        timeName.append(beeData.getMaxTimeInHive() / 20 + "s");
+        IFormattableTextComponent healthName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.health").withStyle(titleStyle);
+        IFormattableTextComponent damageName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.damage").withStyle(titleStyle);
+        IFormattableTextComponent stingerName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.stinger").withStyle(titleStyle);
+        IFormattableTextComponent passiveName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.passive").withStyle(titleStyle);
+        IFormattableTextComponent poisonName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.poison").withStyle(titleStyle);
+        IFormattableTextComponent timeName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.time").withStyle(titleStyle);
+        IFormattableTextComponent auraRangeName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.aura_range").withStyle(titleStyle);
 
-        font.draw(matrix, title.withStyle(TextFormatting.WHITE), xPos, (float) yPos + 8, -1);
-        font.draw(matrix, sizeName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 22, -1);
-        font.draw(matrix, timeName.withStyle(TextFormatting.GRAY), (float) xPos + 76, (float) yPos + 22, -1);
-        font.draw(matrix, healthName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 34, -1);
-        font.draw(matrix, damageName.withStyle(TextFormatting.GRAY), (float) xPos + 76, (float) yPos + 34, -1);
-        font.draw(matrix, passiveName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 46, -1);
-        font.draw(matrix, poisonName.withStyle(TextFormatting.GRAY), (float) xPos + 76, (float) yPos + 46, -1);
-        font.draw(matrix, stingerName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 58, -1);
+        sizeName.append(BeeInfoUtils.getSizeName(beeData.getSizeModifier()).withStyle(subStyle));
+        damageName.append(new StringTextComponent("" + (int) beeData.getCombatData().getAttackDamage()).withStyle(subStyle));
+        healthName.append(new StringTextComponent("" + (int) beeData.getCombatData().getBaseHealth()).withStyle(subStyle));
+        stingerName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()).withStyle(subStyle));
+        passiveName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().isPassive()).withStyle(subStyle));
+        poisonName.append(BeeInfoUtils.getYesNo(beeData.getCombatData().inflictsPoison()).withStyle(subStyle));
+        auraRangeName.append(new StringTextComponent("" + beeData.getAuraRange()).withStyle(subStyle));
+        timeName.append(new StringTextComponent("" + beeData.getMaxTimeInHive() / 20 + "s").withStyle(subStyle));
+
+        font.draw(matrix, title, xPos, (float) yPos + 8, -1);
+        font.draw(matrix, sizeName, xPos, (float) yPos + 22, -1);
+        font.draw(matrix, timeName, (float) xPos + 76, (float) yPos + 22, -1);
+        font.draw(matrix, healthName, xPos, (float) yPos + 34, -1);
+        font.draw(matrix, damageName, (float) xPos + 76, (float) yPos + 34, -1);
+        font.draw(matrix, passiveName, xPos, (float) yPos + 46, -1);
+        font.draw(matrix, poisonName, (float) xPos + 76, (float) yPos + 46, -1);
+        font.draw(matrix, stingerName, xPos, (float) yPos + 58, -1);
+        if (beeData.getTraitData().hasBeeAuras()) {
+            font.draw(matrix, auraRangeName, (float) xPos + 76, (float) yPos + 70, -1);
+        }
     }
 
     @Override

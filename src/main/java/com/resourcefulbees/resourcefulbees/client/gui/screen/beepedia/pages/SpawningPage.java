@@ -10,6 +10,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -63,18 +64,20 @@ public class SpawningPage extends BeeDataPage {
             }
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         } else {
-            TranslationTextComponent groupName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.group");
-            TranslationTextComponent heightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.height");
-            TranslationTextComponent weightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.weight");
-            TranslationTextComponent lightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.light");
-            groupName.append(new StringTextComponent(String.format("%d - %d", beeData.getSpawnData().getMinGroupSize(), beeData.getSpawnData().getMaxGroupSize())));
-            heightName.append(new StringTextComponent(String.format("%d - %d", beeData.getSpawnData().getMinYLevel(), beeData.getSpawnData().getMaxYLevel())));
-            weightName.append(new StringTextComponent(String.format("%d", beeData.getSpawnData().getSpawnWeight())));
-            lightName.append(BeeInfoUtils.getLightName(beeData.getSpawnData().getLightLevel()));
-            font.draw(matrix, groupName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 22f, -1);
-            font.draw(matrix, heightName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 34f, -1);
-            font.draw(matrix, weightName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 46f, -1);
-            font.draw(matrix, lightName.withStyle(TextFormatting.GRAY), xPos, (float) yPos + 58f, -1);
+
+
+            IFormattableTextComponent groupName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.group").withStyle(titleStyle);
+            IFormattableTextComponent heightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.height").withStyle(titleStyle);
+            IFormattableTextComponent weightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.weight").withStyle(titleStyle);
+            IFormattableTextComponent lightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.light").withStyle(titleStyle);
+            groupName.append(new StringTextComponent(String.format("%d - %d", beeData.getSpawnData().getMinGroupSize(), beeData.getSpawnData().getMaxGroupSize())).withStyle(subStyle));
+            heightName.append(new StringTextComponent(String.format("%d - %d", beeData.getSpawnData().getMinYLevel(), beeData.getSpawnData().getMaxYLevel())).withStyle(subStyle));
+            weightName.append(new StringTextComponent(String.format("%d", beeData.getSpawnData().getSpawnWeight())).withStyle(subStyle));
+            lightName.append(BeeInfoUtils.getLightName(beeData.getSpawnData().getLightLevel()).withStyle(subStyle));
+            font.draw(matrix, groupName, xPos, (float) yPos + 22f, -1);
+            font.draw(matrix, heightName, xPos, (float) yPos + 34f, -1);
+            font.draw(matrix, weightName, xPos, (float) yPos + 46f, -1);
+            font.draw(matrix, lightName, xPos, (float) yPos + 58f, -1);
         }
     }
 

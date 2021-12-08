@@ -59,6 +59,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     private boolean wasColliding;
     private int numberOfMutations;
     private BeePollinateGoal pollinateGoal;
+    private BeeAuraGoal beeAuraGoal;
     private int explosiveCooldown = 0;
 
     public ResourcefulBee(EntityType<? extends BeeEntity> type, World world, CustomBeeData beeData) {
@@ -101,6 +102,8 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
         if (!Config.MANUAL_MODE.get()) this.goalSelector.addGoal(8, new BeeWanderGoal(this));
         this.goalSelector.addGoal(9, new SwimGoal(this));
+        this.beeAuraGoal = new BeeAuraGoal(this);
+        this.goalSelector.addGoal(10, beeAuraGoal);
     }
 
     @Override
