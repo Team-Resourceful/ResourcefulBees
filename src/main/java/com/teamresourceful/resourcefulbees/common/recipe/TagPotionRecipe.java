@@ -1,17 +1,17 @@
 package com.teamresourceful.resourcefulbees.common.recipe;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.brewing.BrewingRecipe;
 import org.jetbrains.annotations.NotNull;
 
 public class TagPotionRecipe extends BrewingRecipe {
     @NotNull
-    private final ITag<Item> tag;
+    private final Tag<Item> tag;
 
-    public TagPotionRecipe(@NotNull Ingredient input, @NotNull ITag<Item> tag, @NotNull ItemStack output) {
+    public TagPotionRecipe(@NotNull Ingredient input, @NotNull Tag<Item> tag, @NotNull ItemStack output) {
         super(input, Ingredient.EMPTY, output);
         this.tag = tag;
     }
@@ -33,6 +33,6 @@ public class TagPotionRecipe extends BrewingRecipe {
 
     @Override
     public boolean isIngredient(@NotNull ItemStack stack) {
-        return stack.getItem().is(tag);
+        return stack.is(tag);
     }
 }

@@ -80,7 +80,7 @@ sonarqube {
 }
 
 minecraft {
-    mappings channel: "parchment", version: "${mapping}"
+    mappings channel: "official", version: "1.18"//"${mapping}"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -110,6 +110,7 @@ minecraft {
         server {
             workingDirectory project.file('run')
             arg "-mixin.config=resourcefulbees.mixins.json"
+            arg "-mixin.config=phosphophyllite.mixins.json"
 
             property 'forge.logging.console.level', 'debug'
             //property 'mixin.env.disableRefMap', 'true'

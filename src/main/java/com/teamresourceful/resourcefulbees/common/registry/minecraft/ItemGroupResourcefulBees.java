@@ -4,12 +4,12 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.NestIngredient;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public class ItemGroupResourcefulBees {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static final ItemGroup RESOURCEFUL_BEES = new ItemGroup(ResourcefulBees.MOD_ID) {
+    public static final CreativeModeTab RESOURCEFUL_BEES = new CreativeModeTab(ResourcefulBees.MOD_ID) {
 
         @Override
         @NotNull
@@ -43,7 +43,7 @@ public class ItemGroupResourcefulBees {
         }
     };
 
-    public static final ItemGroup RESOURCEFUL_BEES_HIVES = new ItemGroup(ResourcefulBees.MOD_ID + ".hives") {
+    public static final CreativeModeTab RESOURCEFUL_BEES_HIVES = new CreativeModeTab(ResourcefulBees.MOD_ID + ".hives") {
 
         @Override
         @NotNull
@@ -62,7 +62,7 @@ public class ItemGroupResourcefulBees {
         }
     };
 
-    public static final ItemGroup RESOURCEFUL_BEES_HONEY = new ItemGroup(ResourcefulBees.MOD_ID + ".honey") {
+    public static final CreativeModeTab RESOURCEFUL_BEES_HONEY = new CreativeModeTab(ResourcefulBees.MOD_ID + ".honey") {
 
         @Override
         @NotNull
@@ -72,7 +72,7 @@ public class ItemGroupResourcefulBees {
         }
     };
 
-    public static final ItemGroup RESOURCEFUL_BEES_COMBS = new ItemGroup(ResourcefulBees.MOD_ID + ".combs") {
+    public static final CreativeModeTab RESOURCEFUL_BEES_COMBS = new CreativeModeTab(ResourcefulBees.MOD_ID + ".combs") {
 
         @Override
         @NotNull
@@ -82,7 +82,7 @@ public class ItemGroupResourcefulBees {
         }
     };
 
-    public static final ItemGroup RESOURCEFUL_BEES_BEES = new ItemGroup(ResourcefulBees.MOD_ID + ".bees") {
+    public static final CreativeModeTab RESOURCEFUL_BEES_BEES = new CreativeModeTab(ResourcefulBees.MOD_ID + ".bees") {
 
         @Override
         @NotNull

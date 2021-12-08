@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.teamresourceful.resourcefulbees.common.lib.annotations.Translate;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class TranslationConstants {
 
     /**
-     * NOTE: TranslationTextComponents should be USED ONLY for static contexts they should be never used if .append is happening to them.
+     * NOTE: TranslatableComponents should be USED ONLY for static contexts they should be never used if .append is happening to them.
      * Use a string of the translation key if appending is needed and use string formats where possible instead of .append
      *
      * This class is used to store translation components and keys and every key and component should be annotated with @Translate
@@ -20,41 +20,41 @@ public class TranslationConstants {
     public static class LightLevel {
 
         @Translate("Any")
-        public static final TranslationTextComponent ANY = new TranslationTextComponent("gui.resourcefulbees.light.any");
+        public static final TranslatableComponent ANY = new TranslatableComponent("gui.resourcefulbees.light.any");
 
         @Translate("Day")
-        public static final TranslationTextComponent DAY = new TranslationTextComponent("gui.resourcefulbees.light.day");
+        public static final TranslatableComponent DAY = new TranslatableComponent("gui.resourcefulbees.light.day");
 
         @Translate("Night")
-        public static final TranslationTextComponent NIGHT = new TranslationTextComponent("gui.resourcefulbees.light.night");
+        public static final TranslatableComponent NIGHT = new TranslatableComponent("gui.resourcefulbees.light.night");
     }
 
     public static class Booleans {
 
         @Translate("Yes")
-        public static final TranslationTextComponent YES = new TranslationTextComponent("gui.resourcefulbees.yes");
+        public static final TranslatableComponent YES = new TranslatableComponent("gui.resourcefulbees.yes");
 
         @Translate("No")
-        public static final TranslationTextComponent NO = new TranslationTextComponent("gui.resourcefulbees.no");
+        public static final TranslatableComponent NO = new TranslatableComponent("gui.resourcefulbees.no");
 
     }
 
     public static class Sizes {
 
         @Translate("Tiny")
-        public static final TranslationTextComponent TINY = new TranslationTextComponent("gui.resourcefulbees.size.tiny");
+        public static final TranslatableComponent TINY = new TranslatableComponent("gui.resourcefulbees.size.tiny");
 
         @Translate("Small")
-        public static final TranslationTextComponent SMALL = new TranslationTextComponent("gui.resourcefulbees.size.small");
+        public static final TranslatableComponent SMALL = new TranslatableComponent("gui.resourcefulbees.size.small");
 
         @Translate("Regular")
-        public static final TranslationTextComponent REGULAR = new TranslationTextComponent("gui.resourcefulbees.size.regular");
+        public static final TranslatableComponent REGULAR = new TranslatableComponent("gui.resourcefulbees.size.regular");
 
         @Translate("Large")
-        public static final TranslationTextComponent LARGE = new TranslationTextComponent("gui.resourcefulbees.size.large");
+        public static final TranslatableComponent LARGE = new TranslatableComponent("gui.resourcefulbees.size.large");
 
         @Translate("Giant")
-        public static final TranslationTextComponent GIANT = new TranslationTextComponent("gui.resourcefulbees.size.giant");
+        public static final TranslatableComponent GIANT = new TranslatableComponent("gui.resourcefulbees.size.giant");
     }
 
     public static class Jei {
@@ -78,37 +78,37 @@ public class TranslationConstants {
         public static final String SOLIDIFICATION = "gui.resourcefulbees.jei.category.solidification";
 
         @Translate("Chance that this will succeed in creating a new bee.")
-        public static final TranslationTextComponent BREED_CHANCE_INFO = new TranslationTextComponent("gui.resourcefulbees.jei.category.breed_chance.info");
+        public static final TranslatableComponent BREED_CHANCE_INFO = new TranslatableComponent("gui.resourcefulbees.jei.category.breed_chance.info");
 
         @Translate("[Press Shift to show NBT]")
-        public static final TranslationTextComponent NBT = new TranslationTextComponent("gui.resourcefulbees.jei.tooltip.show_nbt");
+        public static final TranslatableComponent NBT = new TranslatableComponent("gui.resourcefulbees.jei.tooltip.show_nbt");
 
         @Translate("Bee block mutation requires there to be a valid hive for the bee to go into & the bee to have nectar.")
-        public static final TranslationTextComponent MUTATION_INFO = new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation.info");
+        public static final TranslatableComponent MUTATION_INFO = new TranslatableComponent("gui.resourcefulbees.jei.category.mutation.info");
 
         @Translate("Chance that this will succeed in mutating.")
-        public static final TranslationTextComponent MUTATION_CHANCE_INFO = new TranslationTextComponent("gui.resourcefulbees.jei.category.mutation_chance.info");
+        public static final TranslatableComponent MUTATION_CHANCE_INFO = new TranslatableComponent("gui.resourcefulbees.jei.category.mutation_chance.info");
 
         @Translate("Weight: %d")
         public static final String CENTRIFUGE_WEIGHT = "gui.resourcefulbees.jei.category.centrifuge.weight";
 
         @Translate("Weight: SLOT EMPTY")
-        public static final TranslationTextComponent CENTRIFUGE_WEIGHT_EMPTY = new TranslationTextComponent("gui.resourcefulbees.jei.category.centrifuge.weight.empty");
+        public static final TranslatableComponent CENTRIFUGE_WEIGHT_EMPTY = new TranslatableComponent("gui.resourcefulbees.jei.category.centrifuge.weight.empty");
 
         @Translate("Pool Chance: %d")
         public static final String CENTRIFUGE_CHANCE = "gui.resourcefulbees.jei.category.centrifuge.chance";
 
         @Translate("Pool Chance: SLOT EMPTY")
-        public static final TranslationTextComponent CENTRIFUGE_CHANCE_EMPTY = new TranslationTextComponent("gui.resourcefulbees.jei.category.centrifuge.chance.empty");
+        public static final TranslatableComponent CENTRIFUGE_CHANCE_EMPTY = new TranslatableComponent("gui.resourcefulbees.jei.category.centrifuge.chance.empty");
 
         @Translate("Click or Right-Click for more info!")
-        public static final TranslationTextComponent CLICK_INFO = new TranslationTextComponent("tooltip.resourcefulbees.jei.click_bee_info");
+        public static final TranslatableComponent CLICK_INFO = new TranslatableComponent("tooltip.resourcefulbees.jei.click_bee_info");
     }
 
     public static class Top {
 
         @Translate("Smoke Time:")
-        public static final TranslationTextComponent SMOKE_TIME = new TranslationTextComponent("gui.resourcefulbees.top.smoke_time");
+        public static final TranslatableComponent SMOKE_TIME = new TranslatableComponent("gui.resourcefulbees.top.smoke_time");
 
         @Translate("Tier: %s")
         public static final String TIER = "gui.resourcefulbees.top.tier";
@@ -126,49 +126,49 @@ public class TranslationConstants {
     public static class Apiary {
 
         @Translate("Bee import was unsuccessful!")
-        public static final TranslationTextComponent IMPORT_FAILED = new TranslationTextComponent("gui.resourcefulbees.apiary.import.false");
+        public static final TranslatableComponent IMPORT_FAILED = new TranslatableComponent("gui.resourcefulbees.apiary.import.false");
 
         @Translate("Bee import was successful!")
-        public static final TranslationTextComponent IMPORT_SUCCESS = new TranslationTextComponent("gui.resourcefulbees.apiary.import.true");
+        public static final TranslatableComponent IMPORT_SUCCESS = new TranslatableComponent("gui.resourcefulbees.apiary.import.true");
 
         @Translate("Bee export was unsuccessful!")
-        public static final TranslationTextComponent EXPORT_FAILED = new TranslationTextComponent("gui.resourcefulbees.apiary.export.false");
+        public static final TranslatableComponent EXPORT_FAILED = new TranslatableComponent("gui.resourcefulbees.apiary.export.false");
 
         @Translate("Bee export was successful!")
-        public static final TranslationTextComponent EXPORT_SUCCESS = new TranslationTextComponent("gui.resourcefulbees.apiary.export.true");
+        public static final TranslatableComponent EXPORT_SUCCESS = new TranslatableComponent("gui.resourcefulbees.apiary.export.true");
 
         @Translate("Apiary validation successful!")
-        public static final TranslationTextComponent VALIDATED_SUCCESS = new TranslationTextComponent("gui.resourcefulbees.apiary.validated.true");
+        public static final TranslatableComponent VALIDATED_SUCCESS = new TranslatableComponent("gui.resourcefulbees.apiary.validated.true");
 
         @Translate("Apiary validation unsuccessful!")
-        public static final TranslationTextComponent VALIDATED_FAILED = new TranslationTextComponent("gui.resourcefulbees.apiary.validated.false");
+        public static final TranslatableComponent VALIDATED_FAILED = new TranslatableComponent("gui.resourcefulbees.apiary.validated.false");
 
         @Translate("Multiblock is a 7x6x7 hollow box.")
-        public static final TranslationTextComponent STRUCTURE_SIZE = new TranslationTextComponent("block.resourcefulbees.apiary.tooltip.structure_size");
+        public static final TranslatableComponent STRUCTURE_SIZE = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.structure_size");
 
         @Translate("Requires Apiary Storage to validate.")
-        public static final TranslationTextComponent REQUISITES = new TranslationTextComponent("block.resourcefulbees.apiary.tooltip.requisites");
+        public static final TranslatableComponent REQUISITES = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.requisites");
 
         @Translate("Retains contents when broken.")
-        public static final TranslationTextComponent DROPS = new TranslationTextComponent("block.resourcefulbees.apiary.tooltip.drops");
+        public static final TranslatableComponent DROPS = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.drops");
 
         @Translate("Multiblock can be built using any block from the valid_apiary tag.")
-        public static final TranslationTextComponent TAGS = new TranslationTextComponent("block.resourcefulbees.apiary.tooltip.tags");
+        public static final TranslatableComponent TAGS = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.tags");
 
         @Translate("Offset determines the location of the Apiary Block based on its facing direction.")
-        public static final TranslationTextComponent OFFSET = new TranslationTextComponent("block.resourcefulbees.apiary.tooltip.offset");
+        public static final TranslatableComponent OFFSET = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.offset");
 
         @Translate("Bees are locked on import.")
-        public static final TranslationTextComponent LOCK = new TranslationTextComponent("block.resourcefulbees.apiary.tooltip.lock");
+        public static final TranslatableComponent LOCK = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.lock");
 
         @Translate("Bees must be locked and selected to export.")
-        public static final TranslationTextComponent LOCK2 = new TranslationTextComponent("block.resourcefulbees.apiary.tooltip.lock_2");
+        public static final TranslatableComponent LOCK2 = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.lock_2");
 
         @Translate("Honeycomb")
-        public static final TranslationTextComponent HONEYCOMB = new TranslationTextComponent("item.resourcefulbees.tooltip.honeycomb");
+        public static final TranslatableComponent HONEYCOMB = new TranslatableComponent("item.resourcefulbees.tooltip.honeycomb");
 
         @Translate("Honeycomb Block")
-        public static final TranslationTextComponent HONEYCOMB_BLOCK = new TranslationTextComponent("item.resourcefulbees.tooltip.honeycomb_block");
+        public static final TranslatableComponent HONEYCOMB_BLOCK = new TranslatableComponent("item.resourcefulbees.tooltip.honeycomb_block");
 
         @Translate("Output Quantity: %s")
         public static final String OUTPUT_QUANTITY = "block.resourcefulbees.apiary.tooltip.output_quantity";
@@ -177,31 +177,31 @@ public class TranslationConstants {
         public static final String OUTPUT_TYPE = "block.resourcefulbees.apiary.tooltip.output_type";
 
         @Translate("Bee Import/Export")
-        public static final TranslationTextComponent MAIN_SCREEN = new TranslationTextComponent("gui.resourcefulbees.apiary.button.main_screen");
+        public static final TranslatableComponent MAIN_SCREEN = new TranslatableComponent("gui.resourcefulbees.apiary.button.main_screen");
 
         @Translate("Apiary Storage")
-        public static final TranslationTextComponent STORAGE_SCREEN = new TranslationTextComponent("gui.resourcefulbees.apiary.button.storage_screen");
+        public static final TranslatableComponent STORAGE_SCREEN = new TranslatableComponent("gui.resourcefulbees.apiary.button.storage_screen");
 
         @Translate("Validate")
-        public static final TranslationTextComponent VALIDATE_BUTTON = new TranslationTextComponent("gui.resourcefulbees.apiary.button.validate");
+        public static final TranslatableComponent VALIDATE_BUTTON = new TranslatableComponent("gui.resourcefulbees.apiary.button.validate");
 
         @Translate("Build")
-        public static final TranslationTextComponent BUILD_BUTTON = new TranslationTextComponent("gui.resourcefulbees.apiary.button.build");
+        public static final TranslatableComponent BUILD_BUTTON = new TranslatableComponent("gui.resourcefulbees.apiary.button.build");
 
         @Translate("Creative Mode Only!")
-        public static final TranslationTextComponent CREATIVE_BUILD_BUTTON = new TranslationTextComponent("gui.resourcefulbees.apiary.button.build.creative");
+        public static final TranslatableComponent CREATIVE_BUILD_BUTTON = new TranslatableComponent("gui.resourcefulbees.apiary.button.build.creative");
 
         @Translate("Disable Preview")
-        public static final TranslationTextComponent PREVIEW_DISABLED = new TranslationTextComponent("gui.resourcefulbees.apiary.button.preview.disable");
+        public static final TranslatableComponent PREVIEW_DISABLED = new TranslatableComponent("gui.resourcefulbees.apiary.button.preview.disable");
 
         @Translate("Enable Preview")
-        public static final TranslationTextComponent PREVIEW_ENABLED = new TranslationTextComponent("gui.resourcefulbees.apiary.button.preview.enable");
+        public static final TranslatableComponent PREVIEW_ENABLED = new TranslatableComponent("gui.resourcefulbees.apiary.button.preview.enable");
 
         @Translate("Import")
-        public static final TranslationTextComponent IMPORT = new TranslationTextComponent("gui.resourcefulbees.apiary.button.import");
+        public static final TranslatableComponent IMPORT = new TranslatableComponent("gui.resourcefulbees.apiary.button.import");
 
         @Translate("Export")
-        public static final TranslationTextComponent EXPORT = new TranslationTextComponent("gui.resourcefulbees.apiary.button.export");
+        public static final TranslatableComponent EXPORT = new TranslatableComponent("gui.resourcefulbees.apiary.button.export");
 
         @Translate("Ticks in Hive: %s")
         public static final String TICKS_HIVE = "gui.resourcefulbees.apiary.bee.ticks_in_hive";
@@ -222,136 +222,136 @@ public class TranslationConstants {
         public static final String HIVE_TIME ="block.resourcefulbees.beehive.tooltip.hive_time";
 
         @Translate(" UNIQUE §6Bees")
-        public static final TranslationTextComponent UNIQUE = new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.unique_bees");
+        public static final TranslatableComponent UNIQUE = new TranslatableComponent("block.resourcefulbees.beehive.tooltip.unique_bees");
 
         @Translate("Bees:")
-        public static final TranslationTextComponent BEES = new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.bees");
+        public static final TranslatableComponent BEES = new TranslatableComponent("block.resourcefulbees.beehive.tooltip.bees");
 
         @Translate("Honeycombs:")
-        public static final TranslationTextComponent HONEYCOMBS = new TranslationTextComponent("block.resourcefulbees.beehive.tooltip.honeycombs");
+        public static final TranslatableComponent HONEYCOMBS = new TranslatableComponent("block.resourcefulbees.beehive.tooltip.honeycombs");
     }
 
     public static class Guis {
 
         @Translate("Ender Beecon")
-        public static final TranslationTextComponent BEECON = new TranslationTextComponent("gui.resourcefulbees.ender_beecon");
+        public static final TranslatableComponent BEECON = new TranslatableComponent("gui.resourcefulbees.ender_beecon");
 
         @Translate("Solidification Chamber")
-        public static final TranslationTextComponent SOLIDIFICATION_CHAMBER = new TranslationTextComponent("gui.resourcefulbees.solidfication_chamber");
+        public static final TranslatableComponent SOLIDIFICATION_CHAMBER = new TranslatableComponent("gui.resourcefulbees.solidfication_chamber");
 
         @Translate("Honey Generator")
-        public static final TranslationTextComponent GENERATOR = new TranslationTextComponent("gui.resourcefulbees.honey_generator");
+        public static final TranslatableComponent GENERATOR = new TranslatableComponent("gui.resourcefulbees.honey_generator");
 
         @Translate("Honey Pot")
-        public static final TranslationTextComponent POT = new TranslationTextComponent("gui.resourcefulbees.honey_pot");
+        public static final TranslatableComponent POT = new TranslatableComponent("gui.resourcefulbees.honey_pot");
 
         @Translate("Apiary")
-        public static final TranslationTextComponent APIARY = new TranslationTextComponent("gui.resourcefulbees.apiary");
+        public static final TranslatableComponent APIARY = new TranslatableComponent("gui.resourcefulbees.apiary");
 
         @Translate("Apiary Breeder")
-        public static final TranslationTextComponent APIARY_BREEDER = new TranslationTextComponent("gui.resourcefulbees.apiary_breeder");
+        public static final TranslatableComponent APIARY_BREEDER = new TranslatableComponent("gui.resourcefulbees.apiary_breeder");
 
         @Translate("Apiary Storage")
-        public static final TranslationTextComponent APIARY_STORAGE = new TranslationTextComponent("gui.resourcefulbees.apiary_storage");
+        public static final TranslatableComponent APIARY_STORAGE = new TranslatableComponent("gui.resourcefulbees.apiary_storage");
 
         @Translate("Empty")
-        public static final TranslationTextComponent NO_FLUID = new TranslationTextComponent("gui.resourcefulbees.fluids.empty");
+        public static final TranslatableComponent NO_FLUID = new TranslatableComponent("gui.resourcefulbees.fluids.empty");
 
         public static class EnderBeecon {
 
             @Translate("Bee Effects")
-            public static final TranslationTextComponent PRIMARY_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.primary");
+            public static final TranslatableComponent PRIMARY_LABEL = new TranslatableComponent("block.resourcefulbees.ender_beecon.primary");
 
             @Translate("Drain: ")
-            public static final TranslationTextComponent DRAIN_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.drain");
+            public static final TranslatableComponent DRAIN_LABEL = new TranslatableComponent("block.resourcefulbees.ender_beecon.drain");
 
             @Translate("Range: ")
-            public static final TranslationTextComponent RANGE_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.range");
+            public static final TranslatableComponent RANGE_LABEL = new TranslatableComponent("block.resourcefulbees.ender_beecon.range");
 
             @Translate("Is Active: ")
-            public static final TranslationTextComponent ACTIVE_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.is_active");
+            public static final TranslatableComponent ACTIVE_LABEL = new TranslatableComponent("block.resourcefulbees.ender_beecon.is_active");
 
             @Translate("Fluid: ")
-            public static final TranslationTextComponent FLUID_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.fluid");
+            public static final TranslatableComponent FLUID_LABEL = new TranslatableComponent("block.resourcefulbees.ender_beecon.fluid");
 
             @Translate("Amount: ")
-            public static final TranslationTextComponent FLUID_AMOUNT_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.fluid_amount");
+            public static final TranslatableComponent FLUID_AMOUNT_LABEL = new TranslatableComponent("block.resourcefulbees.ender_beecon.fluid_amount");
 
             @Translate("Empty")
-            public static final TranslationTextComponent NO_FLUID_LABEL = new TranslationTextComponent("block.resourcefulbees.ender_beecon.no_fluid");
+            public static final TranslatableComponent NO_FLUID_LABEL = new TranslatableComponent("block.resourcefulbees.ender_beecon.no_fluid");
         }
     }
 
     public static class Items {
 
         @Translate("Creative Beepedia")
-        public static final TranslationTextComponent CREATIVE_BEEPEDIA = new TranslationTextComponent("item.resourcefulbees.creative_beepedia");
+        public static final TranslatableComponent CREATIVE_BEEPEDIA = new TranslatableComponent("item.resourcefulbees.creative_beepedia");
 
         @Translate("Use on a bee to see it's information")
-        public static final TranslationTextComponent INFO_BEEPEDIA = new TranslationTextComponent("item.resourcefulbees.information.beepedia");
+        public static final TranslatableComponent INFO_BEEPEDIA = new TranslatableComponent("item.resourcefulbees.information.beepedia");
 
         @Translate("Hold SHIFT for more info")
-        public static final TranslationTextComponent MORE_INFO = new TranslationTextComponent("item.resourcefulbees.shift_info");
+        public static final TranslatableComponent MORE_INFO = new TranslatableComponent("item.resourcefulbees.shift_info");
 
         @Translate("Hold CTRL for Multiblock Info")
-        public static final TranslationTextComponent MULTIBLOCK_INFO = new TranslationTextComponent("item.resourcefulbees.ctrl_info");
+        public static final TranslatableComponent MULTIBLOCK_INFO = new TranslatableComponent("item.resourcefulbees.ctrl_info");
 
         @Translate("Contains Lost bees, use while sneaking to release them. (Consumed on use)")
-        public static final TranslationTextComponent TEMP_INFO = new TranslationTextComponent("item.resourcefulbees.information.bee_box.temp_info");
+        public static final TranslatableComponent TEMP_INFO = new TranslatableComponent("item.resourcefulbees.information.bee_box.temp_info");
 
         @Translate("Can be used to hold up to 10 bees. Use while sneaking to release them.")
-        public static final TranslationTextComponent INFO = new TranslationTextComponent("item.resourcefulbees.information.bee_box.info");
+        public static final TranslatableComponent INFO = new TranslatableComponent("item.resourcefulbees.information.bee_box.info");
 
         @Translate("Bees:")
-        public static final TranslationTextComponent BEES = new TranslationTextComponent("item.resourcefulbees.information.bee_box.bees");
+        public static final TranslatableComponent BEES = new TranslatableComponent("item.resourcefulbees.information.bee_box.bees");
 
         @Translate("Right click the hive to smoke it.")
-        public static final TranslationTextComponent SMOKER_TOOLTIP = new TranslationTextComponent("item.resourcefulbees.smoker.tooltip");
+        public static final TranslatableComponent SMOKER_TOOLTIP = new TranslatableComponent("item.resourcefulbees.smoker.tooltip");
 
         @Translate("Bees won't get angry for 30s when shearing honeycombs.")
-        public static final TranslationTextComponent SMOKER_TOOLTIP1 = new TranslationTextComponent("item.resourcefulbees.smoker.tooltip.1");
+        public static final TranslatableComponent SMOKER_TOOLTIP1 = new TranslatableComponent("item.resourcefulbees.smoker.tooltip.1");
 
         @Translate("Selected Bee: ")
-        public static final TranslationTextComponent HONEY_DIPPER_TOOLTIP = new TranslationTextComponent("item.resourcefulbees.honey_dipper.tooltip");
+        public static final TranslatableComponent HONEY_DIPPER_TOOLTIP = new TranslatableComponent("item.resourcefulbees.honey_dipper.tooltip");
 
         @Translate("Queen Bee Banner")
-        public static final TranslationTextComponent QUEEN_BEE_BANNER = new TranslationTextComponent("block.resourcefulbees.queen_bee_banner");
+        public static final TranslatableComponent QUEEN_BEE_BANNER = new TranslatableComponent("block.resourcefulbees.queen_bee_banner");
 
         @Translate("Use on a previous tier nest to upgrade it")
-        public static final TranslationTextComponent HIVE_UPGRADE = new TranslationTextComponent("item.resourcefulbees.hive_upgrade.tooltip.info");
+        public static final TranslatableComponent HIVE_UPGRADE = new TranslatableComponent("item.resourcefulbees.hive_upgrade.tooltip.info");
 
         @Translate("Adds additional breeders to the Apiary Breeder")
-        public static final TranslationTextComponent BREEDER_UPGRADE = new TranslationTextComponent("item.resourcefulbees.apiary_breeder_upgrade.tooltip.info");
+        public static final TranslatableComponent BREEDER_UPGRADE = new TranslatableComponent("item.resourcefulbees.apiary_breeder_upgrade.tooltip.info");
 
         @Translate("Reduces max breed time by 300 ticks.")
-        public static final TranslationTextComponent BREED_TIME_UPGRADE = new TranslationTextComponent("item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info");
+        public static final TranslatableComponent BREED_TIME_UPGRADE = new TranslatableComponent("item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info");
 
         @Translate("Fifty Shades of Bees")
-        public static final TranslationTextComponent BOOK_NAME = new TranslationTextComponent("book.resourcefulbees.name");
+        public static final TranslatableComponent BOOK_NAME = new TranslatableComponent("book.resourcefulbees.name");
 
         @Translate("Consumes honey, grants bees safety.")
-        public static final TranslationTextComponent BEECON_TOOLTIP = new TranslationTextComponent("block.resourcefulbees.beecon.tooltip.info");
+        public static final TranslatableComponent BEECON_TOOLTIP = new TranslatableComponent("block.resourcefulbees.beecon.tooltip.info");
 
         @Translate("[Prevents bees from teleporting in effect range]")
-        public static final TranslationTextComponent BEECON_TOOLTIP_1 = new TranslationTextComponent("block.resourcefulbees.beecon.tooltip.info.1");
+        public static final TranslatableComponent BEECON_TOOLTIP_1 = new TranslatableComponent("block.resourcefulbees.beecon.tooltip.info.1");
 
         @Translate("Generates RF using honey bottles.")
-        public static final TranslationTextComponent GEN_TOOLTIP = new TranslationTextComponent("block.resourcefulbees.generator.tooltip.info");
+        public static final TranslatableComponent GEN_TOOLTIP = new TranslatableComponent("block.resourcefulbees.generator.tooltip.info");
 
         @Translate("An OPTIONAL breeder that can be added as part of the Apiary Multiblock")
-        public static final TranslationTextComponent BREEDER_TOOLTIP = new TranslationTextComponent("block.resourcefulbees.apiary_breeder.tooltip.info");
+        public static final TranslatableComponent BREEDER_TOOLTIP = new TranslatableComponent("block.resourcefulbees.apiary_breeder.tooltip.info");
 
         @Translate("Max Breed Time: %s ticks")
         public static final String BREEDER_TOOLTIP_1 = "block.resourcefulbees.apiary_breeder.tooltip.info.1";
 
         @Translate("Can be upgraded with additional breeders or time modifiers.")
-        public static final TranslationTextComponent BREEDER_TOOLTIP_2 = new TranslationTextComponent("block.resourcefulbees.apiary_breeder.tooltip.info.2");
+        public static final TranslatableComponent BREEDER_TOOLTIP_2 = new TranslatableComponent("block.resourcefulbees.apiary_breeder.tooltip.info.2");
 
         @Translate("Right-click on Tiered Beehives to collect honeycombs.")
-        public static final TranslationTextComponent SCRAPER_TOOLTIP = new TranslationTextComponent("block.resourcefulbees.scraper.tooltip.info");
+        public static final TranslatableComponent SCRAPER_TOOLTIP = new TranslatableComponent("block.resourcefulbees.scraper.tooltip.info");
 
         @Translate("Must collect ALL honeycombs for bees to generate new ones!")
-        public static final TranslationTextComponent SCRAPER_TOOLTIP_1 = new TranslationTextComponent("block.resourcefulbees.scraper.tooltip.info.2");
+        public static final TranslatableComponent SCRAPER_TOOLTIP_1 = new TranslatableComponent("block.resourcefulbees.scraper.tooltip.info.2");
     }
 
     public static class HoneyDipper {
@@ -363,7 +363,7 @@ public class TranslationConstants {
         public static final String FLOWER_SET = "items.resourcefulbees.honey_dipper.flower_set";
 
         @Translate("Bee Selection Cleared!")
-        public static final TranslationTextComponent SELECTION_CLEARED = new TranslationTextComponent("items.resourcefulbees.honey_dipper.cleared");
+        public static final TranslatableComponent SELECTION_CLEARED = new TranslatableComponent("items.resourcefulbees.honey_dipper.cleared");
 
         @Translate("[%s] has been selected!")
         public static final String BEE_SET = "items.resourcefulbees.honey_dipper.bee_set";
@@ -375,64 +375,64 @@ public class TranslationConstants {
         public static final String PROGRESS = "gui.resourcefulbees.beepedia.home.progress";
 
         @Translate("Beepedia v2.0")
-        public static final TranslationTextComponent NAME = new TranslationTextComponent("gui.resourcefulbees.beepedia");
+        public static final TranslatableComponent NAME = new TranslatableComponent("gui.resourcefulbees.beepedia");
 
         @Translate("Bees")
-        public static final TranslationTextComponent BEE_LIST = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.bees_list");
+        public static final TranslatableComponent BEE_LIST = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.bees_list");
 
         @Translate("Trait Effects")
-        public static final TranslationTextComponent EFFECTS_LIST = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.effects_list");
+        public static final TranslatableComponent EFFECTS_LIST = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.effects_list");
 
         @Translate("Search")
-        public static final TranslationTextComponent SEARCH = new TranslationTextComponent("gui.resourcefulbees.beepedia.search");
+        public static final TranslatableComponent SEARCH = new TranslatableComponent("gui.resourcefulbees.beepedia.search");
 
         @Translate("Honey")
-        public static final TranslationTextComponent HONEY = new TranslationTextComponent("gui.resourcefulbees.beepedia.honey");
+        public static final TranslatableComponent HONEY = new TranslatableComponent("gui.resourcefulbees.beepedia.honey");
 
 
         public static class Home {
 
             @Translate("Join us on Discord!")
-            public static final TranslationTextComponent DISCORD = new TranslationTextComponent("gui.resourcefulbees.beepedia.home.discord");
+            public static final TranslatableComponent DISCORD = new TranslatableComponent("gui.resourcefulbees.beepedia.home.discord");
 
             @Translate("Support us on Patreon!")
-            public static final TranslationTextComponent PATREON = new TranslationTextComponent("gui.resourcefulbees.beepedia.home.patreon");
+            public static final TranslatableComponent PATREON = new TranslatableComponent("gui.resourcefulbees.beepedia.home.patreon");
 
             @Translate("Found a bug/issue? Submit it here.")
-            public static final TranslationTextComponent ISSUES = new TranslationTextComponent("gui.resourcefulbees.beepedia.home.issues");
+            public static final TranslatableComponent ISSUES = new TranslatableComponent("gui.resourcefulbees.beepedia.home.issues");
 
             @Translate("Browse the wiki.")
-            public static final TranslationTextComponent WIKI = new TranslationTextComponent("gui.resourcefulbees.beepedia.home.wiki");
+            public static final TranslatableComponent WIKI = new TranslatableComponent("gui.resourcefulbees.beepedia.home.wiki");
         }
 
         public static class Breeding {
 
             @Translate("Breeding")
-            public static final TranslationTextComponent TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding");
+            public static final TranslatableComponent TITLE = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding");
 
             @Translate("Parents")
-            public static final TranslationTextComponent PARENTS = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_title");
+            public static final TranslatableComponent PARENTS = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_title");
 
             @Translate("Children")
-            public static final TranslationTextComponent CHILDREN = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title");
+            public static final TranslatableComponent CHILDREN = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title");
 
             @Translate("Entity Mutations")
-            public static final TranslationTextComponent ENTITY_MUTATIONS = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.entity_mutations_title");
+            public static final TranslatableComponent ENTITY_MUTATIONS = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.entity_mutations_title");
 
             @Translate("Item Mutations")
-            public static final TranslationTextComponent ITEM_MUTATIONS = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.item_mutations_title");
+            public static final TranslatableComponent ITEM_MUTATIONS = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.item_mutations_title");
 
             @Translate("Error")
-            public static final TranslationTextComponent ERROR = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.error_title");
+            public static final TranslatableComponent ERROR = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.error_title");
         }
 
         public static class Spawning {
 
             @Translate("Spawning")
-            public static final TranslationTextComponent TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning");
+            public static final TranslatableComponent TITLE = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning");
 
             @Translate("Biomes")
-            public static final TranslationTextComponent BIOMES = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes");
+            public static final TranslatableComponent BIOMES = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes");
 
             @Translate("Group Size: %s - %s")
             public static final String GROUP = "gui.resourcefulbees.beepedia.bee_subtab.spawning.group";
@@ -450,68 +450,68 @@ public class TranslationConstants {
         public static class Honeycombs {
 
             @Translate("Honeycomb")
-            public static final TranslationTextComponent TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.honeycomb");
+            public static final TranslatableComponent TITLE = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.honeycomb");
         }
 
         public static class Centrifuge {
 
             @Translate("Centrifuge")
-            public static final TranslationTextComponent TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.centrifuge");
+            public static final TranslatableComponent TITLE = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.centrifuge");
 
             @Translate("Multiblock centrifuge required for this recipe.")
-            public static final TranslationTextComponent MULTIBLOCK = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock");
+            public static final TranslatableComponent MULTIBLOCK = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock");
         }
 
         public static class Mutations {
 
             @Translate("Mutations")
-            public static final TranslationTextComponent TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations");
+            public static final TranslatableComponent TITLE = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations");
 
             @Translate("Amount of mutations able to be performed per pollination.")
-            public static final TranslationTextComponent MUTATION_COUNT = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.mutation_count.tooltip");
+            public static final TranslatableComponent MUTATION_COUNT = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.mutation_count.tooltip");
 
             @Translate("Block Mutations")
-            public static final TranslationTextComponent BLOCK = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.block");
+            public static final TranslatableComponent BLOCK = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.block");
 
             @Translate("Entity Mutations")
-            public static final TranslationTextComponent ENTITY = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.entity");
+            public static final TranslatableComponent ENTITY = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.entity");
 
             @Translate("Item Mutations")
-            public static final TranslationTextComponent ITEM = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.item");
+            public static final TranslatableComponent ITEM = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.mutations.item");
 
         }
 
         public static class Traits {
 
             @Translate("Traits")
-            public static final TranslationTextComponent TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits");
+            public static final TranslatableComponent TITLE = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits");
 
             @Translate("Particles")
-            public static final TranslationTextComponent PARTICLES = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.particle");
+            public static final TranslatableComponent PARTICLES = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.particle");
 
             @Translate("Damage Types")
-            public static final TranslationTextComponent DAMAGE_TYPES = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.damageTypes");
+            public static final TranslatableComponent DAMAGE_TYPES = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.damageTypes");
 
             @Translate("Amplifier: ")
-            public static final TranslationTextComponent AMPLIFIER = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.amplifier");
+            public static final TranslatableComponent AMPLIFIER = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.amplifier");
 
             @Translate("Potion Damage Effects")
-            public static final TranslationTextComponent POTION_DAMAGE_EFFECTS = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.potion_damage_effects");
+            public static final TranslatableComponent POTION_DAMAGE_EFFECTS = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.potion_damage_effects");
 
             @Translate("Potion Immunities")
-            public static final TranslationTextComponent POTION_IMMUNITIES = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.potion_immunities");
+            public static final TranslatableComponent POTION_IMMUNITIES = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.potion_immunities");
 
             @Translate("Damage Immunities")
-            public static final TranslationTextComponent DAMAGE_IMMUNITIES = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.damage_immunities");
+            public static final TranslatableComponent DAMAGE_IMMUNITIES = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits.damage_immunities");
         }
 
         public static class Info {
 
             @Translate("Info")
-            public static final TranslationTextComponent INFO = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info");
+            public static final TranslatableComponent INFO = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info");
 
             @Translate("Flower: ")
-            public static final TranslationTextComponent FLOWER = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
+            public static final TranslatableComponent FLOWER = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
 
             @Translate("Health: %s")
             public static final String HEALTH = "gui.resourcefulbees.beepedia.bee_subtab.info.health";
@@ -538,7 +538,7 @@ public class TranslationConstants {
         public static class Combat {
 
             @Translate("Combat Data")
-            public static final TranslationTextComponent TITLE = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.combat");
+            public static final TranslatableComponent TITLE = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.combat");
         }
 
     }
@@ -546,7 +546,7 @@ public class TranslationConstants {
     public static class Centrifuge {
 
         @Translate("Close")
-        public static final TranslationTextComponent CLOSE = new TranslationTextComponent("gui.resourcefulbees.centrifuge.close");
+        public static final TranslatableComponent CLOSE = new TranslatableComponent("gui.resourcefulbees.centrifuge.close");
     }
 
 }

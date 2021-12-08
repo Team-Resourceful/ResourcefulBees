@@ -25,6 +25,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
@@ -37,7 +38,7 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SolidificationChamberTileEntity extends TileEntity implements ITickableTileEntity, ISyncableGUI {
+public class SolidificationChamberTileEntity extends BlockEntity implements ITickableTileEntity, ISyncableGUI {
 
     public static final int BLOCK_OUTPUT = 0;
 

@@ -7,34 +7,38 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.BeehiveTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
@@ -43,10 +47,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class TieredBeehiveBlock extends BeehiveBlock {
 
-    private static final StringTextComponent NONE_TEXT = new StringTextComponent("     NONE");
+    private static final TextComponent NONE_TEXT = new TextComponent("     NONE");
     public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 0, 4);
     private final int tier;
     private final float tierModifier;
@@ -58,6 +61,14 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(HONEY_LEVEL, 0).setValue(FACING, Direction.NORTH).setValue(TIER_PROPERTY, tier));
     }
 
+    public int getTier() { return tier; }
+
+    public float getTierModifier() { return tierModifier; }
+
+    public int getMaxCombs() { return Math.round((float) CommonConfig.HIVE_MAX_COMBS.get() * getTierModifier()); }
+
+    public int getMaxBees() { return Math.round((float) CommonConfig.HIVE_MAX_BEES.get() * getTierModifier()); }
+
     /**
      * Static method for use with Dispenser logic
      *
@@ -67,12 +78,14 @@ public class TieredBeehiveBlock extends BeehiveBlock {
      * @param useScraper set to true if scraper logic should run
      * @return returns true if the hive has been emptied
      */
-    public static boolean dropResourceHoneycomb(TieredBeehiveBlock block, World world, BlockPos pos, boolean useScraper) {
+    public static boolean dropResourceHoneycomb(TieredBeehiveBlock block, Level world, BlockPos pos, boolean useScraper) {
         return block.dropResourceHoneycomb(world, pos, useScraper);
     }
 
+
+
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction direction = context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? context.getHorizontalDirection() : context.getHorizontalDirection().getOpposite();
         if (context.getItemInHand().getTag() != null){
             return this.defaultBlockState().setValue(FACING, direction).setValue(TIER_PROPERTY, context.getItemInHand().getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getInt(NBTConstants.NBT_TIER));
@@ -82,46 +95,44 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
     @Nullable
     @Override
-    public TileEntity newBlockEntity(@NotNull IBlockReader reader) {
-        return null;
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return super.newBlockEntity(pos, state);
     }
 
-    public boolean isHiveSmoked(BlockPos pos, World world) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
+    public boolean isHiveSmoked(BlockPos pos, Level world) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         return tileEntity instanceof TieredBeehiveTileEntity && ((TieredBeehiveTileEntity) tileEntity).isSedated();
     }
 
     @Override
-    public @NotNull ActionResultType use(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, PlayerEntity player, @NotNull Hand handIn, @NotNull BlockRayTraceResult hit) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
         ItemStack itemstack = player.getItemInHand(handIn);
 
         if (state.getValue(HONEY_LEVEL) >= 5) {
-            boolean isShear = CommonConfig.ALLOW_SHEARS.get() && itemstack.getItem().is(ModTags.Items.SHEARS);
+            boolean isShear = CommonConfig.ALLOW_SHEARS.get() && itemstack.is(ModTags.Items.SHEARS);
             boolean isScraper = itemstack.getItem().equals(ModItems.SCRAPER.get());
 
             if (isShear || isScraper) {
-                ActionResultType success = performHoneyHarvest(state, world, pos, player, handIn, itemstack, isScraper);
+                InteractionResult success = performHoneyHarvest(state, world, pos, player, handIn, itemstack, isScraper);
                 if (success != null) return success;
             }
         }
 
         if (UpgradeItem.isUpgradeItem(itemstack) && UpgradeItem.getUpgradeType(itemstack).equals(NBTConstants.NBT_HIVE_UPGRADE)) {
-            ActionResultType success = performHiveUpgrade(state, world, pos, itemstack);
+            InteractionResult success = performHiveUpgrade(state, world, pos, itemstack);
             if (success != null) {
                 return success;
             }
         }
 
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Nullable
-    private ActionResultType performHiveUpgrade(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, ItemStack itemstack) {
-        CompoundNBT data = ((UpgradeItem) itemstack.getItem()).getUpgradeData();
-        TileEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof TieredBeehiveTileEntity) {
-            TieredBeehiveTileEntity beehiveTileEntity = (TieredBeehiveTileEntity) tileEntity;
-
+    private InteractionResult performHiveUpgrade(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, ItemStack itemstack) {
+        CompoundTag data = ((UpgradeItem) itemstack.getItem()).getUpgradeData();
+        BlockEntity tileEntity = world.getBlockEntity(pos);
+        if (tileEntity instanceof TieredBeehiveTileEntity beehiveTileEntity) {
             if (1 + beehiveTileEntity.getTier() == data.getInt(NBTConstants.NBT_TIER)) {
                 int newTier = data.getInt(NBTConstants.NBT_TIER);
                 beehiveTileEntity.setTier(newTier);
@@ -130,21 +141,20 @@ public class TieredBeehiveBlock extends BeehiveBlock {
                 itemstack.shrink(1);
                 state = state.setValue(TIER_PROPERTY, newTier);
                 world.setBlockAndUpdate(pos, state);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         return null;
     }
 
     @Nullable
-    private ActionResultType performHoneyHarvest(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, PlayerEntity player, @NotNull Hand handIn, ItemStack itemstack, boolean isScraper) {
-        world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+    private InteractionResult performHoneyHarvest(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, ItemStack itemstack, boolean isScraper) {
+        world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
         dropResourceHoneycomb(world, pos, isScraper);
         itemstack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(handIn));
 
-        TileEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof TieredBeehiveTileEntity) {
-            TieredBeehiveTileEntity beehiveTileEntity = (TieredBeehiveTileEntity) tileEntity;
+        BlockEntity tileEntity = world.getBlockEntity(pos);
+        if (tileEntity instanceof TieredBeehiveTileEntity beehiveTileEntity) {
 
             if (!beehiveTileEntity.hasCombs()) {
                 if (isHiveSmoked(pos, world)) {
@@ -153,25 +163,25 @@ public class TieredBeehiveBlock extends BeehiveBlock {
                     if (beehiveTileEntity.hasBees() && !(player instanceof FakePlayer)) {
                         this.angerBeesNearby(world, pos);
                     }
-                    this.releaseBeesAndResetHoneyLevel(world, state, pos, player, BeehiveTileEntity.State.EMERGENCY);
+                    this.releaseBeesAndResetHoneyLevel(world, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
                 }
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         return null;
     }
 
-    private void angerBeesNearby(World world, BlockPos pos) {
-        AxisAlignedBB aabb = new AxisAlignedBB(pos).inflate(8.0D, 6.0D, 8.0D);
-        List<BeeEntity> beeEntityList = world.getEntitiesOfClass(BeeEntity.class, aabb);
+    private void angerBeesNearby(Level world, BlockPos pos) {
+        AABB aabb = new AABB(pos).inflate(8.0D, 6.0D, 8.0D);
+        List<Bee> beeEntityList = world.getEntitiesOfClass(Bee.class, aabb);
         if (!beeEntityList.isEmpty()) {
-            List<PlayerEntity> playerEntityList = world.getEntitiesOfClass(PlayerEntity.class, aabb);
+            List<Player> playerEntityList = world.getEntitiesOfClass(Player.class, aabb);
 
             if (!playerEntityList.isEmpty()) {
                 beeEntityList.stream()
                         .filter(beeEntity -> beeEntity.getTarget() == null)
                         .forEach(beeEntity -> {
-                            PlayerEntity randomPlayer = playerEntityList.get(world.random.nextInt(playerEntityList.size()));
+                            Player randomPlayer = playerEntityList.get(world.random.nextInt(playerEntityList.size()));
                             if (!(randomPlayer instanceof FakePlayer))
                                 beeEntity.setTarget(randomPlayer);
                         });
@@ -181,7 +191,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable IBlockReader worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (Screen.hasShiftDown()) {
             createAdvancedTooltip(stack, tooltip);
         } else {
@@ -191,59 +201,60 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
-    private void createNormalTooltip(@NotNull List<ITextComponent> tooltip, ItemStack stack) {
+    //TODO Fix this to remove "localTier"
+    private void createNormalTooltip(@NotNull List<Component> tooltip, ItemStack stack) {
         int localTier = this.tier;
         float localTierModifier = this.tierModifier;
 
         if (stack.hasTag()) {
-            CompoundNBT stackTag = stack.getTag();
+            CompoundTag stackTag = stack.getTag();
             if (stackTag != null && !stackTag.isEmpty() && stackTag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
-                CompoundNBT blockEntityTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
+                CompoundTag blockEntityTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
                 localTier = blockEntityTag.getInt(NBTConstants.NBT_TIER);
                 localTierModifier = blockEntityTag.getFloat(NBTConstants.NBT_TIER_MODIFIER);
             }
         }
 
 
-        tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(TextFormatting.YELLOW));
-        tooltip.add(new TranslationTextComponent(TranslationConstants.BeeHive.MAX_BEES, Math.round(CommonConfig.HIVE_MAX_BEES.get() * localTierModifier)).withStyle(TextFormatting.GOLD));
-        tooltip.add(new TranslationTextComponent(TranslationConstants.BeeHive.MAX_COMBS, Math.round(CommonConfig.HIVE_MAX_COMBS.get() * localTierModifier)).withStyle(TextFormatting.GOLD));
+        tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(ChatFormatting.YELLOW));
+        tooltip.add(new TranslatableComponent(TranslationConstants.BeeHive.MAX_BEES, Math.round(CommonConfig.HIVE_MAX_BEES.get() * localTierModifier)).withStyle(ChatFormatting.GOLD));
+        tooltip.add(new TranslatableComponent(TranslationConstants.BeeHive.MAX_COMBS, Math.round(CommonConfig.HIVE_MAX_COMBS.get() * localTierModifier)).withStyle(ChatFormatting.GOLD));
 
 
         if (localTier != 1) {
             int timeReduction = localTier > 1 ? (int) ((localTier * .05) * 100) : (int) (.05 * 100);
             String sign = localTier > 1 ? "-" : "+";
-            tooltip.add(new TranslationTextComponent(TranslationConstants.BeeHive.HIVE_TIME, sign, timeReduction).withStyle(TextFormatting.GOLD));
+            tooltip.add(new TranslatableComponent(TranslationConstants.BeeHive.HIVE_TIME, sign, timeReduction).withStyle(ChatFormatting.GOLD));
         }
     }
 
-    private void createAdvancedTooltip(@NotNull ItemStack stack, @NotNull List<ITextComponent> tooltip) {
+    private void createAdvancedTooltip(@NotNull ItemStack stack, @NotNull List<Component> tooltip) {
         if (stack.hasTag()) {
-            CompoundNBT stackTag = stack.getTag();
+            CompoundTag stackTag = stack.getTag();
             if (stackTag != null && !stackTag.isEmpty() && stackTag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
-                CompoundNBT blockEntityTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
+                CompoundTag blockEntityTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
                 createBeesTooltip(tooltip, blockEntityTag);
                 createHoneycombsTooltip(tooltip, blockEntityTag);
             }
         } else {
-            tooltip.add(TranslationConstants.BeeHive.BEES.withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.BeeHive.BEES.withStyle(ChatFormatting.GOLD));
             tooltip.add(NONE_TEXT);
-            tooltip.add(StringTextComponent.EMPTY);
-            tooltip.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(TextFormatting.GOLD));
+            tooltip.add(TextComponent.EMPTY);
+            tooltip.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
             tooltip.add(NONE_TEXT);
         }
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HONEY_LEVEL, FACING, TIER_PROPERTY);
     }
 
-    private void createHoneycombsTooltip(@NotNull List<ITextComponent> tooltip, CompoundNBT blockEntityTag) {
-        tooltip.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(TextFormatting.GOLD));
-        if (blockEntityTag.contains(NBTConstants.NBT_HONEYCOMBS_TE, Constants.NBT.TAG_LIST)) {
+    private void createHoneycombsTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {
+        tooltip.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
+        if (blockEntityTag.contains(NBTConstants.NBT_HONEYCOMBS_TE, Tag.TAG_LIST)) {
             HashMap<String, Integer> combs = new HashMap<>();
-            ListNBT combList = blockEntityTag.getList(NBTConstants.NBT_HONEYCOMBS_TE, Constants.NBT.TAG_COMPOUND);
+            ListTag combList = blockEntityTag.getList(NBTConstants.NBT_HONEYCOMBS_TE, Tag.TAG_LIST);
 
             for (int i = 0; i < combList.size(); i++) {
                 String id = combList.getCompound(i).getString("id");
@@ -251,7 +262,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
                 combs.merge(comb, 1, Integer::sum);
             }
 
-            combs.forEach((comb, count) -> tooltip.add(new StringTextComponent("     ")
+            combs.forEach((comb, count) -> tooltip.add(new TextComponent("     ")
                     .append(String.valueOf(count))
                     .append("x ")
                     .append(WordUtils.capitalize(comb))));
@@ -260,14 +271,14 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         }
     }
 
-    private void createBeesTooltip(@NotNull List<ITextComponent> tooltip, CompoundNBT blockEntityTag) {
-        tooltip.add(TranslationConstants.BeeHive.BEES.withStyle(TextFormatting.GOLD));
-        if (blockEntityTag.contains("Bees", Constants.NBT.TAG_LIST)) {
+    private void createBeesTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {
+        tooltip.add(TranslationConstants.BeeHive.BEES.withStyle(ChatFormatting.GOLD));
+        if (blockEntityTag.contains("Bees", Tag.TAG_LIST)) {
             HashMap<String, Integer> bees = new HashMap<>();
-            ListNBT beeList = blockEntityTag.getList(NBTConstants.NBT_BEES, Constants.NBT.TAG_COMPOUND);
+            ListTag beeList = blockEntityTag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND);
 
             for (int i = 0; i < beeList.size(); i++) {
-                CompoundNBT entityData = beeList.getCompound(i).getCompound("EntityData");
+                CompoundTag entityData = beeList.getCompound(i).getCompound("EntityData");
                 String id = entityData.getString("id");
                 String beeType = id.substring(id.indexOf(":") + 1).replace("_", " ");
                 if (beeType.length() == 3 && beeType.matches("Bee")) {
@@ -277,20 +288,19 @@ public class TieredBeehiveBlock extends BeehiveBlock {
                 }
             }
 
-            bees.forEach((name, count) -> tooltip.add(new StringTextComponent("     ")
+            bees.forEach((name, count) -> tooltip.add(new TextComponent("     ")
                     .append(String.valueOf(count))
                     .append("x ")
                     .append(WordUtils.capitalize(name))));
         } else {
             tooltip.add(NONE_TEXT);
         }
-        tooltip.add(StringTextComponent.EMPTY);
+        tooltip.add(TextComponent.EMPTY);
     }
 
-    public boolean dropResourceHoneycomb(World world, BlockPos pos, boolean useScraper) {
-        TileEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TieredBeehiveTileEntity) {
-            TieredBeehiveTileEntity hive = (TieredBeehiveTileEntity) blockEntity;
+    public boolean dropResourceHoneycomb(Level world, BlockPos pos, boolean useScraper) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof TieredBeehiveTileEntity hive) {
             while (hive.hasCombs()) {
                 popResource(world, pos, hive.getResourceHoneycomb());
                 if (useScraper) break;
@@ -298,11 +308,5 @@ public class TieredBeehiveBlock extends BeehiveBlock {
             return !hive.hasCombs();
         }
         return false;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TieredBeehiveTileEntity(tier, tierModifier);
     }
 }

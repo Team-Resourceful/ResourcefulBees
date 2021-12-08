@@ -6,18 +6,32 @@ import com.teamresourceful.resourcefulbees.common.item.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.util.ToolTipFlag;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.ChatFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodData;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.food.Foods;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import net.roguelogix.phosphophyllite.gui.client.api.ITooltip;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,15 +79,15 @@ public class ModItems {
         CENTRIFUGE_ITEMS.register(bus);
     }
 
-    public static final RegistryObject<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new Item(getItemProperties().food(new Food.Builder()
-            .effect(() -> new EffectInstance(Effects.REGENERATION, 600, 1), 1)
-            .effect(() -> new EffectInstance(Effects.ABSORPTION, 2400, 3), 1)
-            .effect(() -> new EffectInstance(Effects.SATURATION, 2400, 1), 1)
-            .effect(() -> new EffectInstance(Effects.LUCK, 600, 3), 1)
-            .effect(() -> new EffectInstance(Effects.FIRE_RESISTANCE, 6000, 0), 1)
-            .effect(() -> new EffectInstance(Effects.DAMAGE_RESISTANCE, 6000, 0), 1)
-            .effect(() -> new EffectInstance(Effects.WATER_BREATHING, 6000, 0), 1)
-            .effect(() -> new EffectInstance(Effects.NIGHT_VISION, 1200, 0), 1)
+    public static final RegistryObject<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new Item(getItemProperties().food(new FoodProperties.Builder()
+            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 600, 1), 1)
+            .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 2400, 3), 1)
+            .effect(() -> new MobEffectInstance(MobEffects.SATURATION, 2400, 1), 1)
+            .effect(() -> new MobEffectInstance(MobEffects.LUCK, 600, 3), 1)
+            .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 6000, 0), 1)
+            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 6000, 0), 1)
+            .effect(() -> new MobEffectInstance(MobEffects.WATER_BREATHING, 6000, 0), 1)
+            .effect(() -> new MobEffectInstance(MobEffects.NIGHT_VISION, 1200, 0), 1)
             .nutrition(8)
             .saturationMod(2)
             .alwaysEat()
@@ -89,10 +103,10 @@ public class ModItems {
     public static final RegistryObject<Item> SCRAPER = ITEMS.register("scraper", () -> new Item(getItemProperties().stacksTo(1)) {
 
         @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.SCRAPER_TOOLTIP.withStyle(TextFormatting.GOLD));
-            tooltip.add(TranslationConstants.Items.SCRAPER_TOOLTIP_1.withStyle(TextFormatting.GOLD));
-            super.appendHoverText(stack, worldIn, tooltip, flagIn);
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+            tooltip.add(TranslationConstants.Items.SCRAPER_TOOLTIP.withStyle(ChatFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.SCRAPER_TOOLTIP_1.withStyle(ChatFormatting.GOLD));
+            super.appendHoverText(stack, level, tooltip, flagIn);
         }
     });
 
@@ -102,7 +116,7 @@ public class ModItems {
 
     public static final RegistryObject<Item> WAX = ITEMS.register("wax", () -> new Item(getItemProperties()) {
         @Override
-        public int getBurnTime(ItemStack itemStack, IRecipeType<?> recipeType) {
+        public int getBurnTime(ItemStack itemStack, RecipeType<?> recipeType) {
             return 400;
         }
     });
@@ -111,7 +125,7 @@ public class ModItems {
 
     public static final RegistryObject<Item> WAX_BLOCK_ITEM = ITEMS.register("wax_block", () -> new BlockItem(ModBlocks.WAX_BLOCK.get(), getItemProperties()) {
         @Override
-        public int getBurnTime(ItemStack itemStack, IRecipeType<?> recipeType) {
+        public int getBurnTime(ItemStack itemStack, RecipeType<?> recipeType) {
             return 4000;
         }
     });
@@ -176,8 +190,8 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_BREEDER_COUNT, 1)
                     .build()) {
         @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.BREEDER_UPGRADE.withStyle(TextFormatting.GOLD));
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+            tooltip.add(TranslationConstants.Items.BREEDER_UPGRADE.withStyle(ChatFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -188,8 +202,8 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_BREED_TIME, 300)
                     .build()) {
         @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.BREED_TIME_UPGRADE.withStyle(TextFormatting.GOLD));
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+            tooltip.add(TranslationConstants.Items.BREED_TIME_UPGRADE.withStyle(ChatFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -203,8 +217,8 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 1f)
                     .build()) {
         @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -216,8 +230,8 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 1.5f)
                     .build()) {
         @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
@@ -229,9 +243,9 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 2f)
                     .build()) {
         @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
-            super.appendHoverText(stack, worldIn, tooltip, flagIn);
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
+            super.appendHoverText(stack, level, tooltip, flagIn);
         }
     });
 
@@ -242,8 +256,8 @@ public class ModItems {
                     .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 4f)
                     .build()) {
         @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(TextFormatting.GOLD));
+        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
         }
     });
