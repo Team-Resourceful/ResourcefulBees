@@ -88,7 +88,7 @@ minecraft {
         client {
             workingDirectory project.file('run')
             arg "-mixin.config=resourcefulbees.mixins.json"
-            arg "-mixin.config=phosphophyllite.mixins.json"
+            //arg "-mixin.config=phosphophyllite.mixins.json"
 
             property 'forge.logging.console.level', 'debug'
             //property 'mixin.env.disableRefMap', 'true'
@@ -177,7 +177,6 @@ dependencies {
     implementation fg.deobf("software.bernie.geckolib:geckolib-1.18:${geckolib_version}")
 
     implementation project(':Phosphophyllite')
-    //implementation fg.deobf("net.roguelogix.phosphophyllite:Phosphophyllite:${phos_version}")
 
     compileOnly 'org.jetbrains:annotations:22.0.0'
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'

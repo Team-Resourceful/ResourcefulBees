@@ -5,39 +5,35 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeHiveTileEntityAccessor;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.BeehiveTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
-public class BeeNestFeature extends Feature<NoFeatureConfig> {
+public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
     private static final RandomCollection<Block> overworldBlocks = new RandomCollection<>();
 
@@ -51,7 +47,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
         overworldBlocks.add(3, ModBlocks.BROWN_MUSHROOM_BEE_NEST.get());
     }
 
-    public BeeNestFeature(Codec<NoFeatureConfig> configFactoryIn) { super(configFactoryIn); }
+    public BeeNestFeature(Codec<NoneFeatureConfiguration> configFactoryIn) { super(configFactoryIn); }
 
     private void generateHivePlatform(ISeedReader worldIn, BlockPos hivePos, BlockState platformBlock, Direction direction, Block blockToReplace) {
         if (platformBlock == null) platformBlock = Blocks.OAK_WOOD.defaultBlockState();
@@ -89,7 +85,7 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             return newPos;
         }
 
-        BlockPos pos = worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, initPos);
+        BlockPos pos = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, initPos);
 
         if ((category == Biome.Category.OCEAN || category == Biome.Category.RIVER)
                 && rand.nextInt(10) != 0
@@ -131,17 +127,17 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
             Entity bee = entityType.create(worldIn.getLevel());
             if (bee != null) {
                 bee.setPos(nestPos.getX(), nestPos.getY(), nestPos.getZ());
-                CompoundNBT compoundNBT = new CompoundNBT();
+                CompoundTag compoundNBT = new CompoundTag();
                 bee.save(compoundNBT);
                 int timeInHive = rand.nextInt(data.getCoreData().getMaxTimeInHive());
-                BeehiveTileEntity.Bee beehiveTileEntityBee = new BeehiveTileEntity.Bee(compoundNBT, 0, timeInHive);
-                ((BeeHiveTileEntityAccessor)nest).getBees().add(beehiveTileEntityBee);
+                BeehiveBlockEntity.BeeData beehiveTileEntityBee = new BeehiveBlockEntity.BeeData(compoundNBT, 0, timeInHive);
+                ((BeehiveEntityAccessor)nest).getBees().add(beehiveTileEntityBee);
             }
         }
     }
 
     private void setNestBees(BlockPos nestPos, @Nullable RegistryKey<Biome> biomeKey, ISeedReader worldIn, Random rand){
-        TileEntity tileEntity = worldIn.getBlockEntity(nestPos);
+        BlockEntity tileEntity = worldIn.getBlockEntity(nestPos);
 
         if (tileEntity instanceof TieredBeehiveTileEntity) {
             TieredBeehiveTileEntity nestTE = (TieredBeehiveTileEntity) tileEntity;
@@ -158,8 +154,13 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
         }
     }
 
-
+    //TODO rewrite the Nest Feature!!!!
     @Override
+    public boolean place(@NotNull FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        return false;
+    }
+
+/*    @Override
     public boolean place(@NotNull ISeedReader worldIn, @NotNull ChunkGenerator generator, @NotNull Random rand, @NotNull BlockPos pos, @NotNull NoFeatureConfig config) {
         if(Boolean.FALSE.equals(CommonConfig.GENERATE_BEE_NESTS.get())) return false;
 
@@ -247,5 +248,5 @@ public class BeeNestFeature extends Feature<NoFeatureConfig> {
 
         setNestBees(newPos, biomeKey.orElse(null), worldIn, rand);
         return true;
-    }
+    }*/
 }

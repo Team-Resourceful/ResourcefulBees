@@ -1,3 +1,6 @@
+//TODO Reimplement when patchouli updates to 1.18 or move everything to wiki/custom book mod
+
+/*
 package com.teamresourceful.resourcefulbees.common.compat.patchouli;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -58,3 +61,4 @@ public class EffectComponent implements ICustomComponent {
         this.effectName = getEffectName(effect);
     }
 }
+*/

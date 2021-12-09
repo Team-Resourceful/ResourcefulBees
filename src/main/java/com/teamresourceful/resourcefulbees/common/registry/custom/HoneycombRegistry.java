@@ -11,13 +11,13 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupRe
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -132,7 +132,7 @@ public class HoneycombRegistry {
 
         private RegistryData(String name, Color color, boolean isEdible, boolean hasBlock, boolean enchanted) {
             if (hasBlock) {
-                RegistryObject<Block> customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(color, AbstractBlock.Properties.copy(Blocks.HONEYCOMB_BLOCK)));
+                RegistryObject<Block> customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(color, BlockBehaviour.Properties.copy(Blocks.HONEYCOMB_BLOCK)));
                 final RegistryObject<Item> blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_COMBS)) {
                     @Override
                     public boolean isFoil(@NotNull ItemStack stack) {
@@ -140,7 +140,7 @@ public class HoneycombRegistry {
                     }
                 });
                 ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, isEdible, blockItem, enchanted));
-            }else {
+            } else {
                 ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, isEdible, null, enchanted));
             }
 

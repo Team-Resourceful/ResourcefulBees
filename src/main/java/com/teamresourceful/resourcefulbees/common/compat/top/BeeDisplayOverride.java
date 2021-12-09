@@ -1,3 +1,6 @@
+//TODO Reimplement when TOP has a 1.18 maven upload
+
+/*
 package com.teamresourceful.resourcefulbees.common.compat.top;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
@@ -29,3 +32,4 @@ public class BeeDisplayOverride implements IEntityDisplayOverride {
         return true;
     }
 }
+*/

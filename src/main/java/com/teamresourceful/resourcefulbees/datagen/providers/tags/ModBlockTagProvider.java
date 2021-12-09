@@ -27,7 +27,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         //noinspection unchecked
         tag(net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS).addTags(ModTags.Blocks.WAX);
         Builder<Block> hiveBuilder = tag(BlockTags.BEEHIVES);
-        ModBlocks.NEST_BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(hiveBuilder::add);
+        ModBlocks.HIVES.getEntries().stream().map(RegistryObject::get).forEach(hiveBuilder::add);
     }
 
     @Override

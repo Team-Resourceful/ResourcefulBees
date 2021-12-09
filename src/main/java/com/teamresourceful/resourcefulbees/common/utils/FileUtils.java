@@ -81,13 +81,13 @@ public class FileUtils {
 
     public static void setupDefaultFiles(String dataPath, Path targetPath) {
         if (Files.isRegularFile(MOD_ROOT)) {
-            try(FileSystem fileSystem = FileSystems.newFileSystem(FileUtils.MOD_ROOT, null)) {
+            try(FileSystem fileSystem = FileSystems.newFileSystem(MOD_ROOT)) {
                 Path path = fileSystem.getPath(dataPath);
                 if (Files.exists(path)) {
                     copyFiles(path, targetPath);
                 }
             } catch (IOException e) {
-                LOGGER.error("Could not load source {}!!", FileUtils.MOD_ROOT);
+                LOGGER.error("Could not load source {}!!", MOD_ROOT);
                 e.printStackTrace();
             }
         } else if (Files.isDirectory(MOD_ROOT)) {
@@ -111,18 +111,18 @@ public class FileUtils {
     }
 
     public static void setupDevResources(String devPath, BiConsumer<Reader, String> parser, String errorMessage) {
-        if (Files.isRegularFile(FileUtils.MOD_ROOT)) {
-            try(FileSystem fileSystem = FileSystems.newFileSystem(FileUtils.MOD_ROOT, null)) {
+        if (Files.isRegularFile(MOD_ROOT)) {
+            try(FileSystem fileSystem = FileSystems.newFileSystem(MOD_ROOT)) {
                 Path path = fileSystem.getPath(devPath);
                 if (Files.exists(path)) {
                     FileUtils.streamFilesAndParse(path, parser, errorMessage);
                 }
             } catch (IOException e) {
-                LOGGER.error("Could not load source {}!", FileUtils.MOD_ROOT);
+                LOGGER.error("Could not load source {}!", MOD_ROOT);
                 e.printStackTrace();
             }
-        } else if (Files.isDirectory(FileUtils.MOD_ROOT)) {
-            FileUtils.streamFilesAndParse(Paths.get(FileUtils.MOD_ROOT.toString(), devPath), parser, errorMessage);
+        } else if (Files.isDirectory(MOD_ROOT)) {
+            FileUtils.streamFilesAndParse(Paths.get(MOD_ROOT.toString(), devPath), parser, errorMessage);
         }
     }
 }

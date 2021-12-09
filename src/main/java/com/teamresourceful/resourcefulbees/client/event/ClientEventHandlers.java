@@ -114,7 +114,7 @@ public class ClientEventHandlers {
         RenderTypeLookup.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
 
         // bee nests need cutout for overlay
-        ModBlocks.NEST_BLOCKS.getEntries().stream()
+        ModBlocks.HIVES.getEntries().stream()
                 .filter(RegistryObject::isPresent)
                 .map(RegistryObject::get)
                 .forEach(nest -> RenderTypeLookup.setRenderLayer(nest, RenderType.cutout()));

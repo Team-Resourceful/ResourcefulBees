@@ -6,12 +6,12 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.text.Style;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
 import java.util.*;
-import java.util.function.UnaryOperator;
 
 @SuppressWarnings("unused")
 public class Color {
@@ -145,7 +145,7 @@ public class Color {
 
     //endregion
 
-    public net.minecraft.util.text.Color getTextColor() { return net.minecraft.util.text.Color.fromRgb(value); }
+    public TextColor getTextColor() { return TextColor.fromRgb(value); }
 
     public int getValue() { return value; }
 

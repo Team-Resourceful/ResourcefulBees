@@ -1,3 +1,6 @@
+//TODO Reimplement when patchouli updates to 1.18 or move everything to wiki/custom book mod
+
+/*
 package com.teamresourceful.resourcefulbees.common.compat.patchouli;
 
 
@@ -112,3 +115,4 @@ public class ListBeesComponent implements ICustomComponent {
         //not used
     }
 }
+*/

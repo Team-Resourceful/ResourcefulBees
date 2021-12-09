@@ -15,9 +15,9 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
@@ -35,7 +35,7 @@ public class PreviewHandler {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static void setPreview(BlockPos apiary, MutableBoundingBox box, boolean enabled){
+    public static void setPreview(BlockPos apiary, BoundingBox box, boolean enabled){
         STRUCTURE_PREVIEW_POS.clear();
         if (enabled) {
             PreviewHandler.apiaryPos = apiary;

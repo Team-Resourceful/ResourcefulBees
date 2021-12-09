@@ -5,6 +5,8 @@ import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeTerminalEntity;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
 import net.minecraft.ChatFormatting;
@@ -32,6 +34,8 @@ import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -40,6 +44,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,24 +55,33 @@ import java.util.List;
 public class TieredBeehiveBlock extends BeehiveBlock {
 
     private static final TextComponent NONE_TEXT = new TextComponent("     NONE");
-    public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 0, 4);
-    private final int tier;
-    private final float tierModifier;
+    //public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 1, 4);
 
-    public TieredBeehiveBlock(final int tier, final float tierModifier, Properties properties) {
+    private final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> entityType;
+    private final BeehiveTier tier;
+
+    /*private final int tier;
+    private final float tierModifier;*/
+
+    public TieredBeehiveBlock(RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> entityType, BeehiveTier tier, Properties properties) {
         super(properties);
+        this.entityType = entityType;
         this.tier = tier;
-        this.tierModifier = tierModifier;
-        this.registerDefaultState(this.stateDefinition.any().setValue(HONEY_LEVEL, 0).setValue(FACING, Direction.NORTH).setValue(TIER_PROPERTY, tier));
+        this.registerDefaultState(this.stateDefinition.any().setValue(HONEY_LEVEL, 0).setValue(FACING, Direction.NORTH);//.setValue(TIER_PROPERTY, tier.ordinal()));
     }
 
-    public int getTier() { return tier; }
+    public BeehiveTier getTier() { return tier; }
 
-    public float getTierModifier() { return tierModifier; }
+    //TODO maybe make the enum values modifiable via a config option
+    /*public int getMaxCombs() { return Math.round((float) CommonConfig.HIVE_MAX_COMBS.get() * getTierModifier()); }
 
-    public int getMaxCombs() { return Math.round((float) CommonConfig.HIVE_MAX_COMBS.get() * getTierModifier()); }
+    public int getMaxBees() { return Math.round((float) CommonConfig.HIVE_MAX_BEES.get() * getTierModifier()); }*/
 
-    public int getMaxBees() { return Math.round((float) CommonConfig.HIVE_MAX_BEES.get() * getTierModifier()); }
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, entityType.get(), BeehiveBlockEntity::serverTick);
+    }
 
     /**
      * Static method for use with Dispenser logic
@@ -87,10 +101,10 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction direction = context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? context.getHorizontalDirection() : context.getHorizontalDirection().getOpposite();
-        if (context.getItemInHand().getTag() != null){
+        /*if (context.getItemInHand().getTag() != null){
             return this.defaultBlockState().setValue(FACING, direction).setValue(TIER_PROPERTY, context.getItemInHand().getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getInt(NBTConstants.NBT_TIER));
-        }
-        return this.defaultBlockState().setValue(FACING, direction).setValue(TIER_PROPERTY, tier);
+        }*/
+        return this.defaultBlockState().setValue(FACING, direction);//.setValue(TIER_PROPERTY, tier.ordinal());
     }
 
     @Nullable
@@ -118,17 +132,20 @@ public class TieredBeehiveBlock extends BeehiveBlock {
             }
         }
 
-        if (UpgradeItem.isUpgradeItem(itemstack) && UpgradeItem.getUpgradeType(itemstack).equals(NBTConstants.NBT_HIVE_UPGRADE)) {
+        //TODO see todo below
+/*        if (UpgradeItem.isUpgradeItem(itemstack) && UpgradeItem.getUpgradeType(itemstack).equals(NBTConstants.NBT_HIVE_UPGRADE)) {
             InteractionResult success = performHiveUpgrade(state, world, pos, itemstack);
             if (success != null) {
                 return success;
             }
-        }
+        }*/
 
         return InteractionResult.PASS;
     }
 
-    @Nullable
+
+    //TODO Upgrades need to be changed to switch the blockstate and copy over the hive/comb data
+/*    @Nullable
     private InteractionResult performHiveUpgrade(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, ItemStack itemstack) {
         CompoundTag data = ((UpgradeItem) itemstack.getItem()).getUpgradeData();
         BlockEntity tileEntity = world.getBlockEntity(pos);
@@ -145,7 +162,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
             }
         }
         return null;
-    }
+    }*/
 
     @Nullable
     private InteractionResult performHoneyHarvest(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, ItemStack itemstack, boolean isScraper) {
@@ -195,17 +212,15 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         if (Screen.hasShiftDown()) {
             createAdvancedTooltip(stack, tooltip);
         } else {
-            createNormalTooltip(tooltip, stack);
+            //createNormalTooltip(tooltip, stack);
         }
 
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
-    //TODO Fix this to remove "localTier"
-    private void createNormalTooltip(@NotNull List<Component> tooltip, ItemStack stack) {
-        int localTier = this.tier;
-        float localTierModifier = this.tierModifier;
 
+    //TODO create a better tooltip
+/*    private void createNormalTooltip(@NotNull List<Component> tooltip, ItemStack stack) {
         if (stack.hasTag()) {
             CompoundTag stackTag = stack.getTag();
             if (stackTag != null && !stackTag.isEmpty() && stackTag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
@@ -226,7 +241,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
             String sign = localTier > 1 ? "-" : "+";
             tooltip.add(new TranslatableComponent(TranslationConstants.BeeHive.HIVE_TIME, sign, timeReduction).withStyle(ChatFormatting.GOLD));
         }
-    }
+    }*/
 
     private void createAdvancedTooltip(@NotNull ItemStack stack, @NotNull List<Component> tooltip) {
         if (stack.hasTag()) {
@@ -247,7 +262,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HONEY_LEVEL, FACING, TIER_PROPERTY);
+        builder.add(HONEY_LEVEL, FACING);//, TIER_PROPERTY);
     }
 
     private void createHoneycombsTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {

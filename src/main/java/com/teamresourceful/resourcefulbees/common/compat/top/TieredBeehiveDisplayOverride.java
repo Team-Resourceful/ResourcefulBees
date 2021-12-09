@@ -1,3 +1,6 @@
+//TODO Reimplement when TOP has a maven upload for 1.18
+
+/*
 package com.teamresourceful.resourcefulbees.common.compat.top;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
@@ -127,3 +130,4 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
         }
     }
 }
+*/

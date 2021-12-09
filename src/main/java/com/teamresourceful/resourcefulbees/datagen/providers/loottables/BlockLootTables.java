@@ -20,7 +20,7 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.WAX_BLOCK);
         dropSelf(ModBlocks.GOLD_FLOWER);
         //endregion
-        ModBlocks.NEST_BLOCKS.getEntries().forEach(this::addNest);
+        ModBlocks.HIVES.getEntries().forEach(this::addNest);
         //region Apiary
         dropSelf(ModBlocks.T1_APIARY_BLOCK);
         dropSelf(ModBlocks.T2_APIARY_BLOCK);

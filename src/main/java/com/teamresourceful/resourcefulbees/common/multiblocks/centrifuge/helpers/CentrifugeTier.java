@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helper
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 import net.minecraftforge.common.IExtensibleEnum;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public enum CentrifugeTier implements IExtensibleEnum, IStringSerializable {
+public enum CentrifugeTier implements IExtensibleEnum, StringRepresentable {
     ERROR("error", 0, 0, 0, 0),
     BASIC("basic", 1, 4000, 50000, 512),
     ADVANCED("advanced", 4, 16000, 500000, 8192),
