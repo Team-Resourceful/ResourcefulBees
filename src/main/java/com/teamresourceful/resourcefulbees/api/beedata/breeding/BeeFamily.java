@@ -9,9 +9,9 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
@@ -95,17 +95,17 @@ public class BeeFamily {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public Entity createParent1DisplayEntity(ClientWorld level) {
+    public Entity createParent1DisplayEntity(ClientLevel level) {
         return parent1Data.getEntityType().create(level);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public Entity createParent2DisplayEntity(ClientWorld level) {
+    public Entity createParent2DisplayEntity(ClientLevel level) {
         return parent2Data.getEntityType().create(level);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public Entity createChildDisplayEntity(ClientWorld level) {
+    public Entity createChildDisplayEntity(ClientLevel level) {
         return childData.getEntityType().create(level);
     }
 

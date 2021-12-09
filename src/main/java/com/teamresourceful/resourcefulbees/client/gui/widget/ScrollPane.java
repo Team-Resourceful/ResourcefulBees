@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -14,7 +14,7 @@ public class ScrollPane extends Pane {
     private int maxY;
     private int scrollOffset;
 
-    public ScrollPane(int xPos, int yPos, int viewWidth, int viewHeight, int startHeight, ITextComponent message) {
+    public ScrollPane(int xPos, int yPos, int viewWidth, int viewHeight, int startHeight, Component message) {
         super(xPos, yPos, viewWidth, viewHeight, message);
         scrollOffset = 0;
         this.startHeight = startHeight;
@@ -24,19 +24,19 @@ public class ScrollPane extends Pane {
     }
 
     public ScrollPane(int xPos, int yPos, int viewWidth, int viewHeight) {
-        this(xPos, yPos, viewWidth, viewHeight, 0, new StringTextComponent(""));
+        this(xPos, yPos, viewWidth, viewHeight, 0, new TextComponent(""));
     }
 
-    public ScrollPane(int xPos, int yPos, int viewWidth, int viewHeight, ITextComponent message) {
+    public ScrollPane(int xPos, int yPos, int viewWidth, int viewHeight, Component message) {
         this(xPos, yPos, viewWidth, viewHeight, 0, message);
     }
 
     public ScrollPane(int xPos, int yPos, int viewWidth, int viewHeight, int startHeight) {
-        this(xPos, yPos, viewWidth, viewHeight, startHeight, new StringTextComponent(""));
+        this(xPos, yPos, viewWidth, viewHeight, startHeight, new TextComponent(""));
     }
 
     @Override
-    public void modifyPane(MatrixStack matrix) {
+    public void modifyPane(PoseStack matrix) {
         matrix.translate(x, y + scrollOffset, 0);
     }
 

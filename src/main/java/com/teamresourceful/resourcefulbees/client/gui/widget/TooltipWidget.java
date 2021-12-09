@@ -1,25 +1,25 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.tooltip.AbstractTooltip;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.LinkedList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class TooltipWidget extends Widget {
+public class TooltipWidget extends AbstractWidget {
 
     protected int xOffset = 0;
     protected int yOffset = 0;
@@ -28,7 +28,7 @@ public class TooltipWidget extends Widget {
     private List<AbstractTooltip> tooltips = new LinkedList<>();
     protected boolean mute = false;
 
-    public TooltipWidget(int x, int y, int width, int height, ITextComponent message) {
+    public TooltipWidget(int x, int y, int width, int height, Component message) {
         super(x, y, width, height, message);
     }
 
@@ -43,18 +43,6 @@ public class TooltipWidget extends Widget {
         return active && visible && MathUtils.inRangeInclusive((int) mouseX, x + xOffset, x + width + xOffset) && MathUtils.inRangeInclusive((int) mouseY, y + yOffset, y + height + yOffset);
     }
 
-
-    /**
-     * @deprecated 19/11/2021, does not work with {@link Pane} Objects, use {@link TooltipWidget#isHovered(double, double)} instead.
-     *
-     * @return if the object is hovered.
-     */
-    @Deprecated
-    @Override
-    public boolean isHovered() {
-        return super.isHovered();
-    }
-
     public boolean isHovered(double mouseX, double mouseY) {
         return visible && MathUtils.inRangeInclusive((int) mouseX, x + xOffset, x + width + xOffset) && MathUtils.inRangeInclusive((int) mouseY, y + yOffset, y + height + yOffset);
     }
@@ -67,7 +55,7 @@ public class TooltipWidget extends Widget {
         return tooltips;
     }
 
-    public void drawTooltips(@NotNull MatrixStack matrix, Screen screen, int mouseX, int mouseY) {
+    public void drawTooltips(@NotNull PoseStack matrix, Screen screen, int mouseX, int mouseY) {
         boolean showAdvanced = Minecraft.getInstance().options.advancedItemTooltips;
         tooltips.forEach(t -> {
             if (t.isHovered(mouseX, mouseY)) {
@@ -77,7 +65,7 @@ public class TooltipWidget extends Widget {
     }
 
     @Override
-    public void renderButton(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+    public void renderButton(PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
         // do nothing please... seriously don't do anything
     }
 
@@ -89,8 +77,13 @@ public class TooltipWidget extends Widget {
         // implement to use
     }
 
-    public void playDownSound(SoundHandler pHandler) {
+    public void playDownSound(SoundManager pHandler) {
         if (mute) return;
-        pHandler.play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        pHandler.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    }
+
+    @Override
+    public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
+
     }
 }

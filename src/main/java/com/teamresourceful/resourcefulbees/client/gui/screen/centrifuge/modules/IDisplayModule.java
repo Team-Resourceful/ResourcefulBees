@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
 
 public interface IDisplayModule {
 
-    default void renderBackground(MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {}
+    default void renderBackground(PoseStack matrix, float partialTicks, int mouseX, int mouseY) {}
 
-    default void renderText(MatrixStack stack, int mouseX, int mouseY) {}
+    default void renderText(PoseStack stack, int mouseX, int mouseY) {}
 
     default boolean onCharTyped(char typedChar, int modifiers) {
         return false;
@@ -26,5 +26,5 @@ public interface IDisplayModule {
         return false;
     }
 
-    default void onTerminalResponse(ITextComponent component) {}
+    default void onTerminalResponse(Component component) {}
 }

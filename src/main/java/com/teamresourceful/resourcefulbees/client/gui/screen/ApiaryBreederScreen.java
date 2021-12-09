@@ -1,29 +1,31 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.ApiaryBreederContainer;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
-public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer> {
+public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederContainer> {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_breeder_gui.png");
     private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
 
     private final ApiaryBreederTileEntity apiaryBreederTileEntity;
 
-    public ApiaryBreederScreen(ApiaryBreederContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public ApiaryBreederScreen(ApiaryBreederContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         apiaryBreederTileEntity = this.menu.getApiaryBreederTileEntity();
         preInit();
@@ -41,7 +43,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrix,int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         if (getApiaryBreederTileEntity() != null) {
             this.renderBackground(matrix);
             super.render(matrix, mouseX, mouseY, partialTicks);
@@ -50,7 +52,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
     }
 
     @Override
-    protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         if (this.menu.isRebuild()) {
             preInit();
             init();
@@ -60,7 +62,7 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
 
         Minecraft client = this.minecraft;
         if (client != null) {
-            client.getTextureManager().bind(BACKGROUND);
+            RenderUtils.bindTexture(BACKGROUND);
             int i = this.leftPos;
             int j = this.topPos;
             //upgrade slots
@@ -74,23 +76,23 @@ public class ApiaryBreederScreen extends ContainerScreen<ApiaryBreederContainer>
             }
 
             for (int k = 0; k < this.menu.getNumberOfBreeders(); k++) {
-                scaledProgress = MathHelper.clamp(118 * this.menu.times.get(k) / this.menu.getApiaryBreederTileEntity().getTotalTime(), 0, this.menu.getApiaryBreederTileEntity().getTotalTime());
+                scaledProgress = Mth.clamp(118 * this.menu.times.get(k) / this.menu.getApiaryBreederTileEntity().getTotalTime(), 0, this.menu.getApiaryBreederTileEntity().getTotalTime());
                 blit(matrix, i+54, j + 21 + (k*20), 0, 246, scaledProgress, 10);
             }
 
             blit(matrix, i+25, j+15 + (20 * this.menu.getNumberOfBreeders()), 25, 95, 176, 95);
 
             int t = i + this.imageWidth - 24;
-            this.minecraft.getTextureManager().bind(TABS_BG);
+            RenderUtils.bindTexture(TABS_BG);
             blit(matrix, t -1, j + 12, 0,0, 25, 68, 128, 128);
         }
     }
 
     @Override
-    protected void renderLabels(@NotNull MatrixStack matrix, int mouseX, int mouseY) {
-        for (Widget widget : this.buttons) {
-            if (widget.isHovered()) {
-                widget.renderToolTip(matrix, mouseX - this.leftPos, mouseY - this.topPos);
+    protected void renderLabels(@NotNull PoseStack matrix, int mouseX, int mouseY) {
+        for (Widget widget : this.renderables) {
+            if (widget instanceof AbstractWidget aWidget && aWidget.isMouseOver(mouseX, mouseY)) {
+                aWidget.renderToolTip(matrix, mouseX - this.leftPos, mouseY - this.topPos);
                 break;
             }
         }

@@ -1,14 +1,14 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class TooltipAbstractButton extends TooltipWidget {
 
-    public TooltipAbstractButton(int x, int y, int width, int height, ITextComponent message) {
+    public TooltipAbstractButton(int x, int y, int width, int height, Component message) {
         super(x, y, width, height, message);
     }
 

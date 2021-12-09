@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.widget.Pane;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,9 +39,9 @@ public abstract class BeepediaPage extends Pane {
         this.beepedia = beepedia;
     }
 
-    public abstract void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY);
+    public abstract void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY);
 
-    public void renderForeground(MatrixStack matrix, int mouseX, int mouseY) {
+    public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
         // override to implement
     }
 

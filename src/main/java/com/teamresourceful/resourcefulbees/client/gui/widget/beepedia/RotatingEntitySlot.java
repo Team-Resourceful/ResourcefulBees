@@ -1,13 +1,15 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget.beepedia;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.tooltip.EntityTooltip;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +30,7 @@ public class RotatingEntitySlot extends EmptySlot{
     private int rotation;
 
     public RotatingEntitySlot(int x, int y, int width, int height, Supplier<? extends Collection<EntityType<?>>> entitySupplier, CustomBeeData beeData, boolean showNBT) {
-        super(x, y, width, height, new StringTextComponent(""));
+        super(x, y, width, height, new TextComponent(""));
         this.entitySupplier = entitySupplier;
         EntityTooltip tooltip = new EntityTooltip(this.x, this.y, this.width, this.height, () -> entities.get(rotation)).setDoNBT(showNBT);
         setTooltips(Collections.singletonList(tooltip));
@@ -58,7 +60,7 @@ public class RotatingEntitySlot extends EmptySlot{
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (entities.isEmpty()) return;
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         EntitySlot.renderEntity(matrixStack, this, entities.get(rotation));

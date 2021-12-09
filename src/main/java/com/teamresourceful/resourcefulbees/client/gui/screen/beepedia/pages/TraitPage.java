@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.stats.TraitBeepediaStats;
@@ -159,7 +159,7 @@ public class TraitPage extends BeepediaPage {
 //    }
 
     @Override
-    public void renderBackground(MatrixStack matrix, float partialTick, int mouseX, int mouseY) {
+    public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
 //        if (list == null) return;
 //        list.updateList();
 //        beepedia.drawSlotNoToolTip(matrix, trait.getDisplayItem(), xPos, yPos + 10);

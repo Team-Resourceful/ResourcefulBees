@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget.beepedia;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.tooltip.ItemTooltip;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public class RotatingItemSlot extends EmptySlot {
     private int rotation;
 
     public RotatingItemSlot(int x, int y, int width, int height, CustomBeeData beeData, Supplier<? extends Collection<ItemStack>> items, boolean showNBT) {
-        super(x, y, width, height, new StringTextComponent(""));
+        super(x, y, width, height, new TextComponent(""));
         this.itemSupplier = items;
         reset(beeData);
         ItemTooltip tooltip = new ItemTooltip(this.x, this.y, this.width, this.height, () -> this.items.get(rotation)).setDoNBT(showNBT);
@@ -60,7 +60,7 @@ public class RotatingItemSlot extends EmptySlot {
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (items.isEmpty()) return;
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         ItemSlot.renderItemStack(this, items.get(rotation));

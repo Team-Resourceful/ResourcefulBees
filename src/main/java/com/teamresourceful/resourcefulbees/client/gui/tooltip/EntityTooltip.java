@@ -1,11 +1,15 @@
 package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import net.minecraft.entity.Entity;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -30,28 +34,28 @@ public class EntityTooltip extends AbstractTooltip{
     }
 
     @Override
-    public List<ITextComponent> getTooltip() {
+    public List<Component> getTooltip() {
         Entity entity = this.entitySupplier.get();
-        List<ITextComponent> tooltips;
-        if (entity instanceof CustomBeeEntity) {
-             tooltips = BeeTooltip.getTooltip(((CustomBeeEntity) entity).getBeeData(),true);
+        List<Component> tooltips;
+        if (entity instanceof CustomBeeEntity customBee) {
+             tooltips = BeeTooltip.getTooltip(customBee.getBeeData(),true);
         }else {
             tooltips = new LinkedList<>();
             tooltips.add(entity.getDisplayName());
         }
         if (showNBT) {
-            CompoundNBT nbt = entity.saveWithoutId(new CompoundNBT());
+            CompoundTag nbt = entity.saveWithoutId(new CompoundTag());
             tooltips.addAll(getNbtTooltips(nbt));
         }
         return tooltips;
     }
 
     @Override
-    public List<ITextComponent> getAdvancedTooltip() {
+    public List<Component> getAdvancedTooltip() {
         Entity entity = entitySupplier.get();
-        List<ITextComponent> tooltips = getTooltip();
+        List<Component> tooltips = getTooltip();
         if (entity.getType().getRegistryName() == null) return getTooltip();
-        tooltips.add(new StringTextComponent(entity.getType().getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY));
+        tooltips.add(new TextComponent(entity.getType().getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY));
         return tooltips;
     }
 

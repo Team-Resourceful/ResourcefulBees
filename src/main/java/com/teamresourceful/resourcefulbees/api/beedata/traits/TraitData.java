@@ -7,10 +7,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
-import net.minecraft.item.Item;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
@@ -38,17 +38,17 @@ public class TraitData extends BeeTrait {
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("traits").orElse(new HashSet<>()).forGetter(TraitData::getTraits),
                 CodecUtils.createSetCodec(PotionDamageEffect.CODEC).fieldOf("potionDamageEffects").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionDamageEffects),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("damageImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getDamageImmunities),
-                CodecUtils.createSetCodec(Registry.MOB_EFFECT).fieldOf("potionImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionImmunities),
+                CodecUtils.createSetCodec(Registry.MOB_EFFECT.byNameCodec()).fieldOf("potionImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionImmunities),
                 CodecUtils.createSetCodec(DamageType.CODEC).fieldOf("damageTypes").orElse(new HashSet<>()).forGetter(BeeTrait::getDamageTypes),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("specialAbilities").orElse(new HashSet<>()).forGetter(BeeTrait::getSpecialAbilities),
-                CodecUtils.createSetCodec(Registry.PARTICLE_TYPE).fieldOf("particles").orElse(new HashSet<>()).forGetter(BeeTrait::getParticleEffects)
+                CodecUtils.createSetCodec(Registry.PARTICLE_TYPE.byNameCodec()).fieldOf("particles").orElse(new HashSet<>()).forGetter(BeeTrait::getParticleEffects)
         ).apply(instance, TraitData::new));
     }
 
     protected Set<String> traits;
     private final boolean hasTraits;
 
-    private TraitData(String name, Set<String> traits, Set<PotionDamageEffect> potionDamageEffects, Set<String> damageImmunities, Set<Effect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects) {
+    private TraitData(String name, Set<String> traits, Set<PotionDamageEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects) {
         super(name, null, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects);
         this.traits = traits;
         this.traits.forEach(this::addTrait);
@@ -97,7 +97,7 @@ public class TraitData extends BeeTrait {
     //endregion
 
     public static class Mutable extends TraitData {
-        public Mutable(String name, Set<String> traits, Set<PotionDamageEffect> potionDamageEffects, Set<String> damageImmunities, Set<Effect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects) {
+        public Mutable(String name, Set<String> traits, Set<PotionDamageEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects) {
             super(name, traits, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects);
         }
 
@@ -140,12 +140,12 @@ public class TraitData extends BeeTrait {
             return this;
         }
 
-        public TraitData.Mutable addPotionImmunities(Collection<Effect> potionImmunities) {
+        public TraitData.Mutable addPotionImmunities(Collection<MobEffect> potionImmunities) {
             this.potionImmunities.addAll(potionImmunities);
             return this;
         }
 
-        public TraitData.Mutable addPotionImmunity(Effect potionImmunity) {
+        public TraitData.Mutable addPotionImmunity(MobEffect potionImmunity) {
             this.potionImmunities.add(potionImmunity);
             return this;
         }

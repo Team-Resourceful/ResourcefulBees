@@ -5,8 +5,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -30,7 +30,7 @@ public class FluidOutput extends AbstractOutput {
         this.fluid = fluid;
     }
 
-    public CompoundNBT getCompoundNBT() {
+    public CompoundTag getCompoundNBT() {
         return fluid.getTag();
     }
 

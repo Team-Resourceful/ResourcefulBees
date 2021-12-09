@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -24,7 +24,7 @@ public abstract class TooltipScreen extends Screen {
     protected final Set<TooltipWidget> widgets = new HashSet<>();
     private int ticksOpen = 0;
 
-    protected TooltipScreen(ITextComponent pTitle, int screenWidth, int screenHeight) {
+    protected TooltipScreen(Component pTitle, int screenWidth, int screenHeight) {
         super(pTitle);
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -39,12 +39,12 @@ public abstract class TooltipScreen extends Screen {
     }
 
     @OverridingMethodsMustInvokeSuper
-    public void renderChild(MatrixStack matrix, Widget child, int mouseX, int mouseY, float partialTicks) {
+    public void renderChild(PoseStack matrix, AbstractWidget child, int mouseX, int mouseY, float partialTicks) {
         child.render(matrix, mouseX, mouseY, partialTicks);
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
 
 
         renderBackground(matrix, 0);
@@ -53,7 +53,7 @@ public abstract class TooltipScreen extends Screen {
         //move the matrix origin to the top left corner of scroll area
         matrix.pushPose();
         matrix.translate(x, y, 0);
-        for (Widget child : widgets) {
+        for (AbstractWidget child : widgets) {
             renderChild(matrix, child, mouseX, mouseY, partialTicks);
             matrix.pushPose();
             matrix.translate(0, 0, 100);
@@ -68,11 +68,11 @@ public abstract class TooltipScreen extends Screen {
         font.draw(matrix,"[" + mouseX + ", " + mouseY + "]", mouseX, mouseY, Color.DEFAULT.getValue());
     }
 
-    protected abstract void drawBackground(MatrixStack matrix, int mouseX, int mouseY, float partialTicks);
+    protected abstract void drawBackground(PoseStack matrix, int mouseX, int mouseY, float partialTicks);
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollAmount) {
-        for (Widget child : widgets) {
+        for (AbstractWidget child : widgets) {
             boolean scrolled = child.mouseScrolled(mouseX - x, mouseY - y, scrollAmount);
             if (scrolled) return true;
         }
@@ -98,7 +98,7 @@ public abstract class TooltipScreen extends Screen {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
-        for (Widget child : widgets) {
+        for (AbstractWidget child : widgets) {
             boolean released = child.mouseReleased(mouseX - x, mouseY - y, mouseButton);
             child.onRelease(mouseX - x, mouseY - y);
             if (released) return true;
@@ -115,7 +115,7 @@ public abstract class TooltipScreen extends Screen {
         return super.mouseDragged(mouseX, mouseY, pButton, pDragX, pDragY);
     }
 
-    private void drawTooltips(MatrixStack matrix, int mouseX, int mouseY) {
+    private void drawTooltips(PoseStack matrix, int mouseX, int mouseY) {
         widgets.forEach(c -> c.drawTooltips(matrix, this, mouseX, mouseY));
     }
 
@@ -126,7 +126,7 @@ public abstract class TooltipScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keycode, int scanCode, int modifiers) {
-        for (Widget child : widgets) {
+        for (AbstractWidget child : widgets) {
             boolean pressed = child.keyPressed(keycode, scanCode, modifiers);
             if (pressed) return true;
         }
@@ -135,7 +135,7 @@ public abstract class TooltipScreen extends Screen {
 
     @Override
     public boolean keyReleased(int keycode, int scanCode, int modifiers) {
-        for (Widget child : widgets) {
+        for (AbstractWidget child : widgets) {
             boolean pressed = child.keyReleased(keycode, scanCode, modifiers);
             if (pressed) return true;
         }
@@ -144,7 +144,7 @@ public abstract class TooltipScreen extends Screen {
 
     @Override
     public boolean charTyped(char character, int pModifiers) {
-        for (Widget child : widgets) {
+        for (AbstractWidget child : widgets) {
             boolean typed = child.charTyped(character, pModifiers);
             if (typed) return true;
         }

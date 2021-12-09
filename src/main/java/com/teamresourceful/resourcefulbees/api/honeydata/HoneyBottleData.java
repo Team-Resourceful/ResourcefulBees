@@ -9,11 +9,10 @@ import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collections;
 import java.util.List;
@@ -82,8 +81,8 @@ public class HoneyBottleData {
                 .stacksTo(16);
     }
 
-    public Food getFood() {
-        Food.Builder builder = new Food.Builder().nutrition(hunger).saturationMod(saturation);
+    public FoodProperties getFood() {
+        FoodProperties.Builder builder = new FoodProperties.Builder().nutrition(hunger).saturationMod(saturation);
         if (hasEffects()) effects.forEach(honeyEffect -> builder.effect(honeyEffect::getInstance, honeyEffect.getChance()));
         return builder.build();
     }

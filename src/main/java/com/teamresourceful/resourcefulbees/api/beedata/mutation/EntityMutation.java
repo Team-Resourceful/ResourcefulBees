@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation;
 
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.EntityOutput;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
 
 public class EntityMutation {
     final EntityType<?> parent;

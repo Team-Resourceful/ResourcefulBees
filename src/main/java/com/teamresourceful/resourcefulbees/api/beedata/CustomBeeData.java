@@ -14,9 +14,9 @@ import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -69,7 +69,7 @@ public class CustomBeeData {
     protected JsonObject rawData;
     protected ResourceLocation registryID;
     protected EntityType<?> entityType;
-    protected TranslationTextComponent displayName;
+    protected TranslatableComponent displayName;
 
     private CustomBeeData(CoreData coreData, String honeycombIdentifier, RenderData renderData, BreedData breedData, CentrifugeData centrifugeData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
         this.coreData = coreData;
@@ -83,7 +83,7 @@ public class CustomBeeData {
         this.traitData = traitData;
         this.rawData = BeeRegistry.getRegistry().getRawBeeData(coreData.getName());
         this.registryID = new ResourceLocation(ResourcefulBees.MOD_ID + ":" + coreData.getName() + "_bee");
-        this.displayName = new TranslationTextComponent("entity.resourcefulbees." + coreData.getName() + "_bee");
+        this.displayName = new TranslatableComponent("entity.resourcefulbees." + coreData.getName() + "_bee");
     }
 
     private CustomBeeData(Mutable mutable) {
@@ -237,7 +237,7 @@ public class CustomBeeData {
         return rawData;
     }
 
-    public TranslationTextComponent getDisplayName() {
+    public TranslatableComponent getDisplayName() {
         return displayName;
     }
 
@@ -305,7 +305,7 @@ public class CustomBeeData {
             return this;
         }
 
-        public Mutable setDisplayName(TranslationTextComponent displayName) {
+        public Mutable setDisplayName(TranslatableComponent displayName) {
             this.displayName = displayName;
             return this;
         }

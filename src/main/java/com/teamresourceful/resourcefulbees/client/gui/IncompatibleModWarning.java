@@ -1,14 +1,14 @@
 package com.teamresourceful.resourcefulbees.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ServerListScreen;
-import net.minecraft.client.gui.screen.WorldSelectionScreen;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraft.client.gui.screens.DirectJoinServerScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.client.event.ScreenOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.jetbrains.annotations.NotNull;
@@ -28,10 +28,10 @@ public class IncompatibleModWarning {
         MinecraftForge.EVENT_BUS.addListener(IncompatibleModWarning::guiOpened);
     }
 
-    private static void guiOpened(GuiOpenEvent event) {
-        Screen curr = event.getGui();
-        if (isPerformantLoaded && !hasBeenShownOnce && (curr instanceof WorldSelectionScreen || curr instanceof ServerListScreen) && Boolean.FALSE.equals(CommonConfig.BYPASS_PERFORMANT_CHECK.get())) {
-            event.setGui(new ModWarningScreen(curr));
+    private static void guiOpened(ScreenOpenEvent event) {
+        Screen curr = event.getScreen();
+        if (isPerformantLoaded && !hasBeenShownOnce && (curr instanceof SelectWorldScreen || curr instanceof DirectJoinServerScreen) && Boolean.FALSE.equals(CommonConfig.BYPASS_PERFORMANT_CHECK.get())) {
+            event.setScreen(new ModWarningScreen(curr));
             hasBeenShownOnce = true;
         }
     }
@@ -41,7 +41,7 @@ public class IncompatibleModWarning {
         private int ticksElapsed = 0;
 
         protected ModWarningScreen(Screen parent) {
-            super(new StringTextComponent(""));
+            super(new TextComponent(""));
             this.parent = parent;
         }
 
@@ -57,7 +57,7 @@ public class IncompatibleModWarning {
         }
 
         @Override
-        public void render(@NotNull MatrixStack stack, int mx, int my, float partialTicks) {
+        public void render(@NotNull PoseStack stack, int mx, int my, float partialTicks) {
             super.render(stack, mx, my, partialTicks);
 
             renderDirtBackground(0);

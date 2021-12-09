@@ -1,10 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class OptionImageButton extends TooltipAbstractButton {
@@ -15,7 +14,7 @@ public class OptionImageButton extends TooltipAbstractButton {
     private final ResourceLocation texture;
 
     public OptionImageButton(int xPos, int yPos, int u, int v, boolean selected, ResourceLocation texture) {
-        super(xPos, yPos, 20, 20, StringTextComponent.EMPTY);
+        super(xPos, yPos, 20, 20, TextComponent.EMPTY);
         this.texture = texture;
         this.selected = selected;
         this.u = u;
@@ -35,10 +34,8 @@ public class OptionImageButton extends TooltipAbstractButton {
     }
 
     @Override
-    public void renderButton(@NotNull MatrixStack matrixStack, int pMouseX, int pMouseY, float partialTicks) {
-        Minecraft.getInstance().getTextureManager().bind(texture);
-        //noinspection deprecation
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    public void renderButton(@NotNull PoseStack matrixStack, int pMouseX, int pMouseY, float partialTicks) {
+        RenderUtils.bindTexture(texture);
         blit(matrixStack, this.x, this.y, isSelected() ? u + 20 : u, isHovered(pMouseX, pMouseY) ? v + 20 : v, this.width, this.height);
     }
 

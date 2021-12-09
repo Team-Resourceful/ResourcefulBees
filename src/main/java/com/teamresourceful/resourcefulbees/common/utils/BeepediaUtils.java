@@ -6,17 +6,16 @@ import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LightLevel;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.common.util.LazyOptional;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -39,7 +38,7 @@ public class BeepediaUtils {
         Minecraft.getInstance().setScreen(new BeepediaScreen(complete, hasShades, data));
     }
 
-    public static TranslationTextComponent getSizeName(float sizeModifier) {
+    public static TranslatableComponent getSizeName(float sizeModifier) {
         if (sizeModifier < 0.75) return TranslationConstants.Sizes.TINY;
         else if (sizeModifier < 1) return TranslationConstants.Sizes.SMALL;
         else if (sizeModifier == 1) return TranslationConstants.Sizes.REGULAR;
@@ -47,11 +46,11 @@ public class BeepediaUtils {
         else return TranslationConstants.Sizes.GIANT;
     }
 
-    public static ITextComponent getYesNo(boolean bool) {
+    public static Component getYesNo(boolean bool) {
         return bool ? TranslationConstants.Booleans.YES : TranslationConstants.Booleans.NO;
     }
 
-    public static TranslationTextComponent getLightName(LightLevel light) {
+    public static TranslatableComponent getLightName(LightLevel light) {
         return light.getDisplay();
     }
 

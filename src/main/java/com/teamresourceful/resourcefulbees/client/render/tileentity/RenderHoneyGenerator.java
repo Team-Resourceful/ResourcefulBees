@@ -1,34 +1,32 @@
 package com.teamresourceful.resourcefulbees.client.render.tileentity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.CubeModel;
 import com.teamresourceful.resourcefulbees.common.utils.RenderCuboid;
-import net.minecraft.client.renderer.Atlases;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderHoneyGenerator extends TileEntityRenderer<HoneyGeneratorTileEntity> {
+public class RenderHoneyGenerator extends BlockEntityRenderer<HoneyGeneratorTileEntity> {
 
-    public RenderHoneyGenerator(TileEntityRendererDispatcher renderer) {
-        super(renderer);
-    }
+    public RenderHoneyGenerator(BlockEntityRendererProvider.Context renderer) {}
 
     @Override
-    public void render(HoneyGeneratorTileEntity tile, float partialTick, @NotNull MatrixStack matrix, @NotNull IRenderTypeBuffer renderer, int light, int overlayLight) {
+    public void render(HoneyGeneratorTileEntity tile, float partialTick, @NotNull PoseStack matrix, @NotNull MultiBufferSource renderer, int light, int overlayLight) {
         if (tile.getLevel() == null) return;
         FluidStack stack = tile.getTank().getFluid();
         if (!stack.isEmpty()) {
             float percentage = tile.getTank().getFluidAmount() / (float)tile.getTank().getCapacity();
             int color = stack.getFluid().getAttributes().getColor();
             ResourceLocation stillTexture = stack.getFluid().getAttributes().getStillTexture();
-            IVertexBuilder builder = renderer.getBuffer(Atlases.translucentCullBlockSheet());
+            VertexConsumer builder = renderer.getBuffer(Sheets.translucentCullBlockSheet());
             Vector3f start = new Vector3f(0.0625f, 0.0625f, 0.0625f);
             Vector3f end = new Vector3f(0.9375f, 0.0625f + percentage * 0.875f, 0.9375f);
             CubeModel model = new CubeModel(start, end);

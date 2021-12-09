@@ -18,13 +18,13 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -33,7 +33,6 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -62,7 +61,7 @@ public class BeeInfoUtils {
         return parent1.compareTo(parent2) > 0 ? Pair.of(parent1, parent2) : Pair.of(parent2, parent1);
     }
 
-    public static Potion getEffect(String effectName) {
+    public static MobEffect getEffect(String effectName) {
         return ForgeRegistries.POTIONS.getValue(ResourceLocation.tryParse(effectName));
     }
 
@@ -93,12 +92,11 @@ public class BeeInfoUtils {
         return getResourceLocation(blockTag).map(BlockTags.getAllTags()::getTag).orElse(null);
     }
 
-    public static void flagBeesInRange(BlockPos pos, Level level) {
-        Vec3i corner1 = new Vec3i(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10);
-        Vec3i corner2 = new Vec3i(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
-        AABB aabb = AABB.of(BoundingBox.fromCorners(corner1, corner2));
-        if (level != null) {
-            List<CustomBeeEntity> list = level.getEntitiesOfClass(CustomBeeEntity.class, aabb);
+    public static void flagBeesInRange(BlockPos pos, Level world) {
+        BoundingBox box = BoundingBox.orientBox(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
+        AABB aabb = AABB.of(box);
+        if (world != null) {
+            List<CustomBeeEntity> list = world.getEntitiesOfClass(CustomBeeEntity.class, aabb);
             list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
         }
     }
@@ -106,8 +104,8 @@ public class BeeInfoUtils {
     public static List<String> getLoreLines(CompoundTag outputNBT) {
         if (outputNBT.isEmpty()) return new LinkedList<>();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        //JsonParser jp = new JsonParser();
-        JsonElement je = JsonParser.parseString(outputNBT.toString());
+        JsonParser jp = new JsonParser();
+        JsonElement je = jp.parse(outputNBT.toString());
         String nbtString = "NBT: " + gson.toJson(je);
         return Arrays.asList(nbtString.split("\n"));
     }
@@ -165,7 +163,8 @@ public class BeeInfoUtils {
         Item item = bottleOutput.getItem();
         if (item == Items.HONEY_BOTTLE) {
             return ModFluids.HONEY_STILL.get().getSource();
-        } else if (item instanceof CustomHoneyBottleItem honey) {
+        } else if (item instanceof CustomHoneyBottleItem) {
+            CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item;
             HoneyFluidData fluidData = HoneyRegistry.getRegistry().getHoneyData(honey.getHoneyData().getName()).getFluidData();
             return fluidData.getStillFluid().get().getSource();
         }
@@ -173,16 +172,18 @@ public class BeeInfoUtils {
     }
 
     public static Item getHoneyBottleFromFluid(Fluid fluid) {
-        if (fluid instanceof CustomHoneyFluid honeyFluid) {
-            return HoneyRegistry.getRegistry().getHoneyData(honeyFluid.getHoneyData().getName()).getBottleData().getHoneyBottle().get();
+        if (fluid instanceof CustomHoneyFluid) {
+            CustomHoneyFluid customfluid = (CustomHoneyFluid) fluid;
+            return HoneyRegistry.getRegistry().getHoneyData(customfluid.getHoneyData().getName()).getBottleData().getHoneyBottle().get();
         } else {
             return Items.HONEY_BOTTLE;
         }
     }
 
     public static Item getHoneyBlockFromFluid(Fluid fluid) {
-        if (fluid instanceof CustomHoneyFluid honeyFluid) {
-            HoneyBlockData blockData = HoneyRegistry.getRegistry().getHoneyData(honeyFluid.getHoneyData().getName()).getBlockData();
+        if (fluid instanceof CustomHoneyFluid) {
+            CustomHoneyFluid customfluid = (CustomHoneyFluid) fluid;
+            HoneyBlockData blockData = HoneyRegistry.getRegistry().getHoneyData(customfluid.getHoneyData().getName()).getBlockData();
             if (blockData.getBlockItem() == null) return Items.AIR;
             return blockData.getBlockItem().get();
         } else {

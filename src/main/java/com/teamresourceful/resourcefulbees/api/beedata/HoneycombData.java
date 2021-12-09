@@ -6,10 +6,10 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.HoneycombType;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Arrays;
@@ -30,8 +30,8 @@ public class HoneycombData {
      */
     public static final Codec<HoneycombData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             HoneycombType.CODEC.fieldOf("type").orElse(HoneycombType.DEFAULT).forGetter(HoneycombData::getHoneycombType),
-            Registry.ITEM.fieldOf("item").orElse(Items.BARRIER).forGetter(HoneycombData::getHoneycomb),
-            Registry.ITEM.fieldOf("block").orElse(Items.BARRIER).forGetter(HoneycombData::getHoneycombBlock),
+            Registry.ITEM.byNameCodec().fieldOf("item").orElse(Items.BARRIER).forGetter(HoneycombData::getHoneycomb),
+            Registry.ITEM.byNameCodec().fieldOf("block").orElse(Items.BARRIER).forGetter(HoneycombData::getHoneycombBlock),
             Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneycombData::getColor),
             Codec.BOOL.fieldOf("edible").orElse(true).forGetter(HoneycombData::isEdible),
             Codec.intRange(-1, Integer.MAX_VALUE).listOf().fieldOf("apiaryOutputAmounts").orElse(DEFAULT_APIARY_AMOUNTS).forGetter(HoneycombData::getApiaryOutputAmounts),
