@@ -1,12 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
+import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
 import mezz.jei.api.ingredients.IIngredientHelper;
+import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.ingredients.subtypes.UidContext;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IFocusFactory;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,6 +18,11 @@ import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 public class EntityIngredientHelper implements IIngredientHelper<EntityIngredient> {
+
+    @Override
+    public @NotNull IIngredientType<EntityIngredient> getIngredientType() {
+        return JEICompat.ENTITY_INGREDIENT;
+    }
 
     @NotNull
     @Override
@@ -23,7 +32,7 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
 
     @Nullable
     @Override
-    public EntityIngredient getMatch(Iterable<EntityIngredient> iterable, @NotNull EntityIngredient entityIngredient) {
+    public EntityIngredient getMatch(Iterable<EntityIngredient> iterable, @NotNull EntityIngredient entityIngredient, @NotNull UidContext context) {
         return StreamSupport.stream(iterable.spliterator(), false)
                 .filter(ingredient -> {
                     if (ingredient.getEntityType().getRegistryName() == null) return false;
@@ -38,6 +47,14 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
         return I18n.get(entityIngredient.getEntityType().getDescriptionId());
     }
 
+    @Override
+    public @NotNull String getUniqueId(@NotNull EntityIngredient entityIngredient, @NotNull UidContext context) {
+        Entity entity = entityIngredient.getEntity();
+        if (entity == null) return "entity:error";
+        String id = entity.getEncodeId();
+        return id == null ? "entity:error" : "entity:" + id;
+    }
+
     @NotNull
     @Override
     public ItemStack getCheatItemStack(EntityIngredient ingredient) {
@@ -46,15 +63,8 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
 
     @NotNull
     @Override
-    public String getUniqueId(EntityIngredient entityIngredient) {
-        String id = entityIngredient.getEntity().getEncodeId();
-        return id == null ? "entity:error" : "entity:" + id;
-    }
-
-    @NotNull
-    @Override
     public String getWildcardId(@NotNull EntityIngredient entityIngredient) {
-        return this.getUniqueId(entityIngredient);
+        return this.getUniqueId(entityIngredient, UidContext.Ingredient);
     }
 
     @NotNull

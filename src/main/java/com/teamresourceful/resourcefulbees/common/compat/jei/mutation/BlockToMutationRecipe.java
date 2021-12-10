@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.common.compat.jei.mutation;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.BlockOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Optional;
@@ -17,12 +17,12 @@ public class BlockToMutationRecipe extends BaseMutationRecipe {
     private ItemStack outputItem = null;
     private FluidStack inputFluid = null;
     private FluidStack outputFluid = null;
-    private Optional<CompoundNBT> nbt = Optional.empty();
+    private Optional<CompoundTag> nbt = Optional.empty();
 
     public BlockToMutationRecipe(CustomBeeData beeData, double chance, double weight, Block input, ItemOutput output){
         super(beeData, chance, weight);
-        if (input instanceof FlowingFluidBlock) {
-            inputFluid = new FluidStack(((FlowingFluidBlock) input).getFluid(), 1000);
+        if (input instanceof LiquidBlock liquidBlock) {
+            inputFluid = new FluidStack(liquidBlock.getFluid(), 1000);
         }else {
             inputItem = input.asItem().getDefaultInstance();
         }
@@ -31,13 +31,13 @@ public class BlockToMutationRecipe extends BaseMutationRecipe {
 
     public BlockToMutationRecipe(CustomBeeData beeData, double chance, double weight, Block input, BlockOutput output){
         super(beeData, chance, weight);
-        if (input instanceof FlowingFluidBlock) {
-            inputFluid = new FluidStack(((FlowingFluidBlock) input).getFluid(), 1000);
+        if (input instanceof LiquidBlock liquidBlock) {
+            inputFluid = new FluidStack(liquidBlock.getFluid(), 1000);
         }else {
             inputItem = input.asItem().getDefaultInstance();
         }
-        if (output.getBlock() instanceof FlowingFluidBlock){
-            outputFluid = new FluidStack(((FlowingFluidBlock) output.getBlock()).getFluid(), 1000);
+        if (output.getBlock() instanceof LiquidBlock liquidBlock){
+            outputFluid = new FluidStack(liquidBlock.getFluid(), 1000);
             output.getCompoundNBT().ifPresent(tag -> {
                 if (!tag.isEmpty()) outputFluid.setTag(tag);
             });
@@ -51,7 +51,7 @@ public class BlockToMutationRecipe extends BaseMutationRecipe {
     }
 
     @Override
-    public Optional<CompoundNBT> getNBT() {
+    public Optional<CompoundTag> getNBT() {
         return nbt;
     }
 

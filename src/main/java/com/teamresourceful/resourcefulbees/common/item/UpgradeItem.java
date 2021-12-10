@@ -1,26 +1,26 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class UpgradeItem extends Item {
 
 
-    private CompoundNBT upgradeData = new CompoundNBT();
+    private CompoundTag upgradeData = new CompoundTag();
 
-    public UpgradeItem(Properties properties, CompoundNBT upgradeData) {
+    public UpgradeItem(Properties properties, CompoundTag upgradeData) {
         super(properties);
         setUpgradeData(upgradeData);
     }
 
-    public CompoundNBT getUpgradeData() {
+    public CompoundTag getUpgradeData() {
         return upgradeData;
     }
 
-    public void setUpgradeData(CompoundNBT upgradeData) {
+    public void setUpgradeData(CompoundTag upgradeData) {
         this.upgradeData = upgradeData;
     }
 
@@ -28,11 +28,11 @@ public class UpgradeItem extends Item {
         return !stack.isEmpty() && stack.getItem() instanceof UpgradeItem;
     }
 
-    public static CompoundNBT getUpgradeData(ItemStack stack) {
+    public static CompoundTag getUpgradeData(ItemStack stack) {
         if (stack.getTagElement("UpgradeData") == null && isUpgradeItem(stack)) {
            return ((UpgradeItem) stack.getItem()).getUpgradeData();
         }
-        return new CompoundNBT();
+        return new CompoundTag();
     }
 
     public static String getUpgradeType(@NotNull ItemStack stack) {
@@ -49,9 +49,9 @@ public class UpgradeItem extends Item {
 
     public static class Builder {
 
-        final CompoundNBT upgradeData = new CompoundNBT();
+        final CompoundTag upgradeData = new CompoundTag();
 
-        public CompoundNBT build() {
+        public CompoundTag build() {
             return upgradeData.isEmpty() ? null : upgradeData;
         }
 

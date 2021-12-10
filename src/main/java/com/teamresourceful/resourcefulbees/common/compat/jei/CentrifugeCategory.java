@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
@@ -10,23 +10,21 @@ import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ingredient.IGuiIngredient;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraftforge.client.gui.GuiUtils;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
@@ -42,15 +40,15 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
 
     public CentrifugeCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
-                I18n.get(TranslationConstants.Jei.CENTRIFUGE),
+                TranslationConstants.Jei.CENTRIFUGE,
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 134, 66).addPadding(0, 0, 0, 0).build(),
                 guiHelper.createDrawableIngredient(ModItems.APIARY_BREEDER_ITEM.get().getDefaultInstance()),
                 CentrifugeRecipeAdapter.class);
     }
 
-    public static List<CentrifugeRecipeAdapter> getRecipes(Collection<IRecipe<IInventory>> recipes) {
+    public static List<CentrifugeRecipeAdapter> getRecipes(Collection<Recipe<Container>> recipes) {
         List<CentrifugeRecipeAdapter> newRecipes = new ArrayList<>();
-        for (IRecipe<IInventory> recipe : recipes) {
+        for (Recipe<Container> recipe : recipes) {
             if (recipe instanceof CentrifugeRecipe){
                 newRecipes.add(new CentrifugeRecipeAdapter(((CentrifugeRecipe) recipe)));
             }
@@ -85,16 +83,16 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     }
 
     @Override
-    public void draw(@NotNull CentrifugeRecipeAdapter recipe, @NotNull MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(@NotNull CentrifugeRecipeAdapter recipe, @NotNull PoseStack matrixStack, double mouseX, double mouseY) {
         super.draw(recipe, matrixStack, mouseX, mouseY);
-        Minecraft.getInstance().getTextureManager().bind(GUI_BACK);
+        RenderUtils.bindTexture(GUI_BACK);
         for (int i = 0; i < 3; i++) {
             if (recipe.items.get(i+1) != null) drawWeightAndChance(matrixStack, 61, mouseX, mouseY, i);
             if (recipe.fluids.get(i) != null) drawWeightAndChance(matrixStack, 97, mouseX, mouseY, i);
         }
     }
 
-    private static void drawWeightAndChance(MatrixStack matrixStack, int start, double mouseX, double mouseY, int i){
+    private static void drawWeightAndChance(PoseStack matrixStack, int start, double mouseX, double mouseY, int i){
         boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, start, start+9) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18*i), 6 + (18*i) + 9);
         GuiUtils.drawTexturedModalRect(matrixStack, start, 6 + (18*i), 134, (inBounds ? 18 : 0), 9,9, 100);
         inBounds = MathUtils.inRangeInclusive((int) mouseX, start, start+9) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
@@ -102,13 +100,13 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     }
 
     @Override
-    public @NotNull List<ITextComponent> getTooltipStrings(@NotNull CentrifugeRecipeAdapter recipe, double mouseX, double mouseY) {
+    public @NotNull List<Component> getTooltipStrings(@NotNull CentrifugeRecipeAdapter recipe, double mouseX, double mouseY) {
         for (int i = 0; i < 3; i++) {
             if (recipe.getRecipe().getItemOutputs().size() > i) {
                 Double itemWeight = recipe.getItemWeight(i + 1);
                 ItemStack item = recipe.items.get(i + 1).getDisplayedIngredient();
                 double itemChance = recipe.getRecipe().getItemOutputs().get(i).getChance();
-                List<ITextComponent> itemTooltip = drawTooltip(item == null ? null : item.getDisplayName(), itemWeight, itemChance, mouseX, mouseY, i, recipe.getRecipe().getItemOutputs().size(), 61, 70);
+                List<Component> itemTooltip = drawTooltip(item == null ? null : item.getDisplayName(), itemWeight, itemChance, mouseX, mouseY, i, recipe.getRecipe().getItemOutputs().size(), 61, 70);
                 if (!itemTooltip.isEmpty()) return itemTooltip;
             }
 
@@ -116,20 +114,20 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
                 Double fluidWeight = recipe.getFluidWeight(i);
                 FluidStack fluid = recipe.fluids.get(i).getDisplayedIngredient();
                 double fluidChance = recipe.getRecipe().getFluidOutputs().get(i).getChance();
-                List<ITextComponent> fluidTooltip = drawTooltip(fluid == null ? null : fluid.getDisplayName(), fluidWeight, fluidChance, mouseX, mouseY, i, recipe.getRecipe().getFluidOutputs().size(), 97, 106);
+                List<Component> fluidTooltip = drawTooltip(fluid == null ? null : fluid.getDisplayName(), fluidWeight, fluidChance, mouseX, mouseY, i, recipe.getRecipe().getFluidOutputs().size(), 97, 106);
                 if (!fluidTooltip.isEmpty()) return fluidTooltip;
             }
         }
         return super.getTooltipStrings(recipe, mouseX, mouseY);
     }
 
-    private static List<ITextComponent> drawTooltip(ITextComponent displayname, Double weight, double chance, double mouseX, double mouseY, int i, int outputSize, int min, int max) {
+    private static List<Component> drawTooltip(Component displayname, Double weight, double chance, double mouseX, double mouseY, int i, int outputSize, int min, int max) {
         boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, min, max) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18*i), 6 + (18*i) + 9);
         if (inBounds) {
-            List<ITextComponent> tooltip = new ArrayList<>();
+            List<Component> tooltip = new ArrayList<>();
             if (displayname != null) tooltip.add(displayname);
             if (weight != null) {
-                tooltip.add(new TranslationTextComponent(TranslationConstants.Jei.CENTRIFUGE_WEIGHT, DECIMAL_FORMAT.format(weight)));
+                tooltip.add(new TranslatableComponent(TranslationConstants.Jei.CENTRIFUGE_WEIGHT, DECIMAL_FORMAT.format(weight)));
             } else {
                 tooltip.add(TranslationConstants.Jei.CENTRIFUGE_WEIGHT_EMPTY);
             }
@@ -138,7 +136,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         inBounds = MathUtils.inRangeInclusive((int) mouseX, min, max) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
         if (inBounds) {
             if (outputSize > i)
-                return Collections.singletonList(new TranslationTextComponent(TranslationConstants.Jei.CENTRIFUGE_CHANCE, DECIMAL_FORMAT.format(chance)));
+                return Collections.singletonList(new TranslatableComponent(TranslationConstants.Jei.CENTRIFUGE_CHANCE, DECIMAL_FORMAT.format(chance)));
             else {
                 return Collections.singletonList(TranslationConstants.Jei.CENTRIFUGE_CHANCE_EMPTY);
             }
@@ -189,7 +187,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             Map<ItemStack, Double> weightMap = itemWeights.get(integer);
             if (weightMap == null) return null;
             for (Map.Entry<ItemStack, Double> entry : weightMap.entrySet()) {
-                if (Container.consideredTheSameItem(entry.getKey(), displayedIngredient)) return entry.getValue();
+                if (ItemStack.matches(entry.getKey(), displayedIngredient)) return entry.getValue();
             }
             return null;
         }

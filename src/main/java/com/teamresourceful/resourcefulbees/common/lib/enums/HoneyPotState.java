@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.lib.enums;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public enum HoneyPotState implements IStringSerializable {
+public enum HoneyPotState implements StringRepresentable {
     OPEN,
     BEECON,
     CLOSED;

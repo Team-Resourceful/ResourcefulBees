@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.mixin.accessors;
 
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.animal.Bee;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(BeeEntity.class)
+@Mixin(Bee.class)
 public interface BeeEntityAccessor {
 
     @Accessor
@@ -21,21 +21,21 @@ public interface BeeEntityAccessor {
     void setRemainingCooldownBeforeLocatingNewFlower(int time);
 
     @Accessor("beePollinateGoal")
-    BeeEntity.PollinateGoal getPollinateGoal();
+    Bee.BeePollinateGoal getPollinateGoal();
 
     @Accessor("beePollinateGoal")
-    void setPollinateGoal(BeeEntity.PollinateGoal goal);
+    void setPollinateGoal(Bee.BeePollinateGoal goal);
 
     @Accessor
-    BeeEntity.FindBeehiveGoal getGoToHiveGoal();
+    Bee.BeeGoToHiveGoal getGoToHiveGoal();
 
     @Accessor
-    void setGoToHiveGoal(BeeEntity.FindBeehiveGoal goal);
+    void setGoToHiveGoal(Bee.BeeGoToHiveGoal goal);
 
     @Accessor
-    BeeEntity.FindFlowerGoal getGoToKnownFlowerGoal();
+    Bee.BeeGoToKnownFlowerGoal getGoToKnownFlowerGoal();
 
     @Accessor
-    void setGoToKnownFlowerGoal(BeeEntity.FindFlowerGoal goal);
+    void setGoToKnownFlowerGoal(Bee.BeeGoToKnownFlowerGoal goal);
     
 }

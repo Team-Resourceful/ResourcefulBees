@@ -1,13 +1,14 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
 
-public interface ISyncableGUI extends INamedContainerProvider {
-    void sendGUINetworkPacket(IContainerListener player);
-    void handleGUINetworkPacket(PacketBuffer buffer);
-    default void sendInitGUIPacket(ServerPlayerEntity player) {}
-    default void handleInitGUIPacket(PacketBuffer buffer) {}
+import java.awt.event.ContainerListener;
+
+public interface ISyncableGUI extends MenuProvider {
+    void sendGUINetworkPacket(ContainerListener player);
+    void handleGUINetworkPacket(FriendlyByteBuf buffer);
+    default void sendInitGUIPacket(ServerPlayer player) {}
+    default void handleInitGUIPacket(FriendlyByteBuf buffer) {}
 }

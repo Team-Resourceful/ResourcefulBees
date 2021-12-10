@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.capabilities;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.energy.EnergyStorage;
 
-public class CustomEnergyStorage extends EnergyStorage implements INBTSerializable<CompoundNBT> {
+public class CustomEnergyStorage extends EnergyStorage {
 
     public CustomEnergyStorage(int capacity, int maxReceive, int maxTransfer) {
         super(capacity, maxReceive, maxTransfer);
@@ -40,14 +40,14 @@ public class CustomEnergyStorage extends EnergyStorage implements INBTSerializab
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT tag = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag tag = new CompoundTag();
         tag.putInt("energy", getEnergyStored());
         return tag;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
-        setEnergy(nbt.getInt("energy"));
+    public void deserializeNBT(Tag nbt) {
+        if (nbt instanceof CompoundTag tag) setEnergy(tag.getInt("energy"));
     }
 }

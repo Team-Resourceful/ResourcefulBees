@@ -13,13 +13,13 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 
 import java.io.Reader;
@@ -49,7 +49,7 @@ public class BeeSetup {
     }
 
     private static void parseBee(Reader reader, String name) {
-        JsonObject jsonObject = JSONUtils.fromJson(ModConstants.GSON, reader, JsonObject.class);
+        JsonObject jsonObject = GsonHelper.fromJson(ModConstants.GSON, reader, JsonObject.class);
         name = Codec.STRING.fieldOf("name").orElse(name).codec().fieldOf("CoreData").codec().parse(JsonOps.INSTANCE, jsonObject).get().orThrow();
         BeeRegistry.getRegistry().cacheRawBeeData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
     }
@@ -74,13 +74,13 @@ public class BeeSetup {
     }
 
     private static void addNestFeature(BiomeLoadingEvent event) {
-        Biome.Category category = event.getCategory();
-        if (category == Biome.Category.NETHER) {
-            event.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.NETHER_NESTS);
-        } else if (category == Biome.Category.THEEND) {
-            event.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.THE_END_NESTS);
+        Biome.BiomeCategory category = event.getCategory();
+        if (category == Biome.BiomeCategory.NETHER) {
+            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.NETHER_NESTS);
+        } else if (category == Biome.BiomeCategory.THEEND) {
+            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.THE_END_NESTS);
         } else {
-            event.getGeneration().addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.OVERWORLD_NESTS);
+            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.OVERWORLD_NESTS);
         }
     }
 
@@ -88,9 +88,9 @@ public class BeeSetup {
         ModEntities.getModBees().forEach((s, entityType) -> {
             boolean canSpawnInWorld = BeeRegistry.getRegistry().getBeeData(s).getSpawnData().canSpawnInWorld();
             if (canSpawnInWorld) {
-                EntitySpawnPlacementRegistry.register(entityType,
-                        EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                        Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                SpawnPlacements.register(entityType,
+                        SpawnPlacements.Type.ON_GROUND,
+                        Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                         CustomBeeEntity::canBeeSpawn);
             }
         });

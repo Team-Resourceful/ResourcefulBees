@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -24,8 +24,8 @@ public class BeeAngerGoal extends HurtByTargetGoal {
     }
 
     @Override
-    protected void alertOther(@NotNull MobEntity mobIn, @NotNull LivingEntity targetIn) {
-        if (mobIn instanceof BeeEntity && this.mob.canSee(targetIn)) {
+    protected void alertOther(@NotNull Mob mobIn, @NotNull LivingEntity targetIn) {
+        if (mobIn instanceof Bee && this.mob.hasLineOfSight(targetIn)) {
             mobIn.setTarget(targetIn);
         }
     }
@@ -33,8 +33,8 @@ public class BeeAngerGoal extends HurtByTargetGoal {
     @Override
     protected void alertOthers() {
         double d0 = this.getFollowDistance();
-        AxisAlignedBB axisalignedbb = AxisAlignedBB.unitCubeFromLowerCorner(this.mob.position()).inflate(d0, 10.0D, d0);
-        List<BeeEntity> list = this.mob.level.getLoadedEntitiesOfClass(BeeEntity.class, axisalignedbb);
+        AABB axisalignedbb = AABB.unitCubeFromLowerCorner(this.mob.position()).inflate(d0, 10.0D, d0);
+        List<Bee> list = this.mob.level.getEntitiesOfClass(Bee.class, axisalignedbb);
         list.forEach(beeEntity -> {
             if (this.mob.getLastHurtByMob() != null)
                 this.alertOther(beeEntity, this.mob.getLastHurtByMob());

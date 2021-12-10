@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 
 import java.util.Arrays;
 
@@ -56,7 +56,7 @@ public class RenderCuboid {
         return (color >> 24 & 255) / 255.0F;
     }
 
-    public void renderCube(CubeModel cube, MatrixStack matrix, IVertexBuilder buffer, int argb, int light, int overlay) {
+    public void renderCube(CubeModel cube, PoseStack matrix, VertexConsumer buffer, int argb, int light, int overlay) {
         float red = getRed(argb);
         float green = getGreen(argb);
         float blue = getBlue(argb);
@@ -64,7 +64,7 @@ public class RenderCuboid {
         Vector3f size = cube.getSize();
         matrix.pushPose();
         matrix.translate(cube.getStart().x(), cube.getStart().y(), cube.getStart().z());
-        MatrixStack.Entry lastMatrix = matrix.last();
+        PoseStack.Pose lastMatrix = matrix.last();
         Matrix4f matrix4f = lastMatrix.pose();
         Matrix3f normal = lastMatrix.normal();
         Direction[] directions = Direction.values();
@@ -116,13 +116,13 @@ public class RenderCuboid {
         matrix.popPose();
     }
 
-    private void renderPoint(Matrix4f matrix4f, Matrix3f normal, IVertexBuilder buffer, Direction face, Direction.Axis u, Direction.Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV, float red, float green, float blue, float alpha, int light, int overlay) {
+    private void renderPoint(Matrix4f matrix4f, Matrix3f normal, VertexConsumer buffer, Direction face, Direction.Axis u, Direction.Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV, float red, float green, float blue, float alpha, int light, int overlay) {
         int uArray = minU ? 0 : 1;
         int vArray = minV ? 2 : 3;
         Vector3f vertex = withValue(VEC_ZERO, u, xyz[uArray]);
         vertex = withValue(vertex, v, xyz[vArray]);
         vertex = withValue(vertex, face.getAxis(), other);
-        Vector3i normalForFace = face.getNormal();
+        Vec3i normalForFace = face.getNormal();
         float adjustment = 2.5F;
         Vector3f norm = new Vector3f(normalForFace.getX() + adjustment, normalForFace.getY() + adjustment, normalForFace.getZ() + adjustment);
         norm.normalize();

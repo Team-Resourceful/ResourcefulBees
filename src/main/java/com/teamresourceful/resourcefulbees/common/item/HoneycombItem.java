@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.common.item;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,11 +52,11 @@ public class HoneycombItem extends Item {
 
     @Nullable
     @Override
-    public Food getFoodProperties() {
+    public FoodProperties getFoodProperties() {
         if (Boolean.TRUE.equals(CommonConfig.EDIBLE_HONEYCOMBS.get()) && !isEdible) {
             return super.getFoodProperties();
         }
-        return new Food.Builder()
+        return new FoodProperties.Builder()
                 .nutrition(CommonConfig.HONEYCOMB_HUNGER.get())
                 .saturationMod(CommonConfig.HONEYCOMB_SATURATION.get().floatValue())
                 .fast()

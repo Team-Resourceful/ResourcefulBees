@@ -18,32 +18,31 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.AnimalEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.NameTagItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.NameTagItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.common.util.FakePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,7 +60,7 @@ import java.util.Random;
 
 public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimatable {
 
-    private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.defineId(CustomBeeEntity.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", true).addAnimation("animation.bee.fly.bobbing", true));
@@ -77,13 +76,13 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
     private boolean hasHiveInRange;
     private int disruptorInRange;
 
-    public CustomBeeEntity(EntityType<? extends BeeEntity> type, World world, String beeType) {
+    public CustomBeeEntity(EntityType<? extends Bee> type, Level world, String beeType) {
         super(type, world);
         this.beeType = beeType;
         this.customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
     }
 
-    public static AttributeModifierMap.MutableAttribute createBeeAttributes(String key) {
+    public static AttributeSupplier.Builder createBeeAttributes(String key) {
         CombatData combatData = BeeRegistry.getRegistry().getBeeData(key).getCombatData();
         return createMobAttributes()
                 .add(Attributes.MAX_HEALTH, combatData.getBaseHealth())
@@ -174,7 +173,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         if (getCombatData().isInvulnerable()) return true;
 
         TraitData info = getTraitData();
-        if (hasEffect(Effects.WATER_BREATHING) && source == DamageSource.DROWN) {
+        if (hasEffect(MobEffects.WATER_BREATHING) && source == DamageSource.DROWN) {
             return true;
         }
         if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
@@ -187,10 +186,10 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
     }
 
     @Override
-    public boolean canBeAffected(@NotNull EffectInstance effectInstance) {
+    public boolean canBeAffected(@NotNull MobEffectInstance effectInstance) {
         TraitData info = getTraitData();
         if (info.hasTraits() && info.hasPotionImmunities()) {
-            Effect potionEffect = effectInstance.getEffect();
+            MobEffect potionEffect = effectInstance.getEffect();
             return info.getPotionImmunities().stream().noneMatch(potionEffect::equals);
         }
         return super.canBeAffected(effectInstance);
@@ -204,7 +203,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
                 if (info.hasTraits() && info.hasParticleEffects()) {
                     info.getParticleEffects().forEach(basicParticleType -> {
                         for (int i = 0; i < 10; ++i) {
-                            this.level.addParticle((IParticleData) basicParticleType, this.getRandomX(0.5D),
+                            this.level.addParticle((ParticleOptions) basicParticleType, this.getRandomX(0.5D),
                                     this.getRandomY() - 0.25D, this.getRandomZ(0.5D),
                                     (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
                                     (this.random.nextDouble() - 0.5D) * 2.0D);
@@ -214,14 +213,14 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
             }
         } else {
             if (Boolean.TRUE.equals(CommonConfig.BEES_DIE_IN_VOID.get()) && this.position().y <= 0) {
-                this.remove();
+                this.remove(RemovalReason.KILLED);
             }
             if (!hasCustomName() && this.tickCount % 100 == 0) {
                 if (hasHiveInRange() || hasSavedFlowerPos() || isPassenger() || isPersistenceRequired() || isLeashed() || hasNectar() || disruptorInRange > 0 || isBaby()) {
                     timeWithoutHive = 0;
                 } else {
                     timeWithoutHive += 100;
-                    if (timeWithoutHive >= 12000) this.remove();
+                    if (timeWithoutHive >= 12000) this.discard();
                 }
                 hasHiveInRange = false;
             }
@@ -242,7 +241,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
     }
 
     @SuppressWarnings("unused")
-    public static boolean canBeeSpawn(EntityType<? extends AgeableEntity> typeIn, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+    public static boolean canBeeSpawn(EntityType<? extends AgeableMob> typeIn, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, Random randomIn) {
         String namespaceID = EntityType.getKey(typeIn).toString();
         String beeType = namespaceID.substring(namespaceID.lastIndexOf(":") + 1, namespaceID.length() - 4);
         SpawnData spawnData = BeeRegistry.getRegistry().getBeeData(beeType).getSpawnData();
@@ -254,15 +253,11 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
                     if (!MathUtils.inRangeInclusive(pos.getY(), spawnData.getMinYLevel(), spawnData.getMaxYLevel())) {
                         return false;
                     }
-                    switch (spawnData.getLightLevel()) {
-                        case DAY:
-                            return worldIn.getMaxLocalRawBrightness(pos) >= 8;
-                        case NIGHT:
-                            return worldIn.getMaxLocalRawBrightness(pos) <= 7;
-                        case ANY:
-                        default:
-                            return true;
-                    }
+                    return switch (spawnData.getLightLevel()) {
+                        case DAY -> worldIn.getMaxLocalRawBrightness(pos) >= 8;
+                        case NIGHT -> worldIn.getMaxLocalRawBrightness(pos) <= 7;
+                        case ANY -> true;
+                    };
                 }
                 break;
             default:
@@ -279,27 +274,26 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
     }
 
     @Override
-    public void readAdditionalSaveData(@NotNull CompoundNBT compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(FEED_COUNT, compound.getInt(NBTConstants.NBT_FEED_COUNT));
     }
 
     @Override
-    public void addAdditionalSaveData(@NotNull CompoundNBT compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString(NBTConstants.NBT_BEE_TYPE, this.getBeeType());
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
-    public AgeableEntity createSelectedChild(BeeFamily beeFamily) {
+    public AgeableMob createSelectedChild(BeeFamily beeFamily) {
         EntityType<?> entityType = Objects.requireNonNull(beeFamily.getChildData().getEntityType());
-        Entity entity = entityType.create(level);
-        return (AgeableEntity) entity;
+        return (AgeableMob) entityType.create(level);
     }
 
     //This is because we don't want IF being able to breed our animals
     @Override
-    public void setInLove(@Nullable PlayerEntity player) {
+    public void setInLove(@Nullable Player player) {
         if (player != null && !(player instanceof FakePlayer))
             super.setInLove(player);
     }
@@ -327,7 +321,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
     }
 
     @Override
-    public @NotNull ActionResultType mobInteract(PlayerEntity player, @NotNull Hand hand) {
+    public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
         if (item instanceof NameTagItem) {
@@ -335,23 +329,23 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         }
         if (this.isFood(itemstack)) {
             if (!this.level.isClientSide && this.getAge() == 0 && !this.isInLove()) {
-                this.usePlayerItem(player, itemstack);
+                this.usePlayerItem(player, hand, itemstack);
                 player.addItem(new ItemStack(getBreedData().getFeedReturnItem().orElse(Items.AIR)));
                 this.addFeedCount();
                 if (this.getFeedCount() >= getBreedData().getFeedAmount()) {
                     this.setInLove(player);
                 }
                 player.swing(hand, true);
-                return ActionResultType.PASS;
+                return InteractionResult.PASS;
             }
 
             if (this.isBaby()) {
-                this.usePlayerItem(player, itemstack);
+                this.usePlayerItem(player, hand, itemstack);
                 this.ageUp((int) ((-this.getAge() / 20D) * 0.1F), true);
-                return ActionResultType.PASS;
+                return InteractionResult.PASS;
             }
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
     @Override

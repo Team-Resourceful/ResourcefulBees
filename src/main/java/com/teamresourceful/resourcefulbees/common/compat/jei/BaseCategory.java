@@ -6,8 +6,9 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseCategory<T> implements IRecipeCategory<T> {
@@ -16,7 +17,7 @@ public abstract class BaseCategory<T> implements IRecipeCategory<T> {
     private static final ResourceLocation ICONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
 
     private final ResourceLocation categoryId;
-    private final String localizedName;
+    private final Component localizedName;
     private final IDrawable background;
     private final IDrawable icon;
     private final Class<? extends T> recipeClass;
@@ -26,7 +27,7 @@ public abstract class BaseCategory<T> implements IRecipeCategory<T> {
     public final IDrawable beeHive;
     public final IDrawable outputSlot;
 
-    protected BaseCategory(IGuiHelper guiHelper, ResourceLocation categoryId, String localizedName, IDrawable background, IDrawable icon, Class<? extends T> recipeClass) {
+    protected BaseCategory(IGuiHelper guiHelper, ResourceLocation categoryId, Component localizedName, IDrawable background, IDrawable icon, Class<? extends T> recipeClass) {
         this.categoryId = categoryId;
         this.localizedName = localizedName;
         this.background = background;
@@ -50,7 +51,7 @@ public abstract class BaseCategory<T> implements IRecipeCategory<T> {
     }
 
     @Override
-    public @NotNull String getTitle() {
+    public @NotNull Component getTitle() {
         return localizedName;
     }
 

@@ -2,14 +2,14 @@ package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class EntityIngredient {
         this(entityType, rotation, Optional.empty());
     }
 
-    public EntityIngredient(EntityType<?> entityType, float rotation, Optional<CompoundNBT> nbt) {
+    public EntityIngredient(EntityType<?> entityType, float rotation, Optional<CompoundTag> nbt) {
         this.rotation = rotation;
         this.entityType = entityType;
 
@@ -52,20 +52,20 @@ public class EntityIngredient {
         return entityType;
     }
 
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent(entityType.getDescriptionId());
+    public Component getDisplayName() {
+        return new TranslatableComponent(entityType.getDescriptionId());
     }
 
-    public List<ITextComponent> getTooltip() {
-        List<ITextComponent> tooltip = new ArrayList<>();
+    public List<Component> getTooltip() {
+        List<Component> tooltip = new ArrayList<>();
 
         if (entity != null) {
             if (entity instanceof CustomBeeEntity) {
                 tooltip.addAll(((CustomBeeEntity) entity).getCoreData().getLore());
-                tooltip.add(TranslationConstants.Jei.CLICK_INFO.withStyle(TextFormatting.GOLD));
+                tooltip.add(TranslationConstants.Jei.CLICK_INFO.withStyle(ChatFormatting.GOLD));
             }
             if (Minecraft.getInstance().options.advancedItemTooltips && entityType.getRegistryName() != null) {
-                tooltip.add(new StringTextComponent(entityType.getRegistryName().toString()).withStyle(TextFormatting.DARK_GRAY));
+                tooltip.add(new TextComponent(entityType.getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY));
             }
         }
         return tooltip;

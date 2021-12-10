@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.common.utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import net.minecraft.resources.IResourcePack;
-import net.minecraft.resources.ResourcePackType;
-import net.minecraft.resources.data.IMetadataSectionSerializer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackResources;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,30 +23,30 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public abstract class GenericMemoryPack implements IResourcePack {
+public abstract class GenericMemoryPack implements PackResources {
 
     private final HashMap<ResourceLocation, Supplier<? extends InputStream>> data = new HashMap<>();
 
     private final JsonObject metaData;
-    private final ResourcePackType allowedType;
+    private final PackType allowedType;
     private final String id;
 
-    protected GenericMemoryPack(ResourcePackType type, String id, String meta) {
+    protected GenericMemoryPack(PackType type, String id, String meta) {
         this.metaData = ModConstants.GSON.fromJson(meta, JsonObject.class);
         this.allowedType = type;
         this.id = id;
     }
 
-    private boolean isTypeAllowed(ResourcePackType type) {
+    private boolean isTypeAllowed(PackType type) {
         return allowedType.equals(type);
     }
 
-    public void putData(ResourcePackType type, ResourceLocation location, Supplier<? extends InputStream> supplier){
+    public void putData(PackType type, ResourceLocation location, Supplier<? extends InputStream> supplier){
         if (!isTypeAllowed(type)) return;
         data.put(location, supplier);
     }
 
-    public void putJson(ResourcePackType type, ResourceLocation location, JsonElement json) {
+    public void putJson(PackType type, ResourceLocation location, JsonElement json) {
         putData(type, location, () -> new ByteArrayInputStream(ModConstants.GSON.toJson(json).getBytes(StandardCharsets.UTF_8)));
     }
 
@@ -59,13 +59,13 @@ public abstract class GenericMemoryPack implements IResourcePack {
     }
 
     @Override
-    public @NotNull InputStream getResource(@NotNull ResourcePackType type, @NotNull ResourceLocation location) throws IOException {
+    public @NotNull InputStream getResource(@NotNull PackType type, @NotNull ResourceLocation location) throws IOException {
         if(this.hasResource(type, location)) return data.get(location).get();
         throw new FileNotFoundException(location.toString());
     }
 
     @Override
-    public @NotNull Collection<ResourceLocation> getResources(@NotNull ResourcePackType type, @NotNull String namespace, @NotNull String path, int maxFolderWalk, @NotNull Predicate<String> predicate) {
+    public @NotNull Collection<ResourceLocation> getResources(@NotNull PackType type, @NotNull String namespace, @NotNull String path, int maxFolderWalk, @NotNull Predicate<String> predicate) {
         if (!isTypeAllowed(type)) return Collections.emptyList();
         return data.keySet().stream()
                 .filter(location->location.getNamespace().equals(namespace))
@@ -76,19 +76,19 @@ public abstract class GenericMemoryPack implements IResourcePack {
     }
 
     @Override
-    public boolean hasResource(@NotNull ResourcePackType type, @NotNull ResourceLocation location) {
+    public boolean hasResource(@NotNull PackType type, @NotNull ResourceLocation location) {
         return isTypeAllowed(type) && data.containsKey(location);
     }
 
     @Override
-    public @NotNull Set<String> getNamespaces(@NotNull ResourcePackType type) {
+    public @NotNull Set<String> getNamespaces(@NotNull PackType type) {
         if (!isTypeAllowed(type)) return Collections.emptySet();
         return data.keySet().stream().map(ResourceLocation::getNamespace).collect(Collectors.toSet());
     }
 
     @Nullable
     @Override
-    public <T> T getMetadataSection(@NotNull IMetadataSectionSerializer<T> serializer) {
+    public <T> T getMetadataSection(@NotNull MetadataSectionSerializer<T> serializer) {
         if (!serializer.getMetadataSectionName().equals("pack")) return null;
         return serializer.fromJson(metaData);
     }

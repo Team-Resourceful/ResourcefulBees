@@ -12,15 +12,17 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.*;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.resources.IResourceManagerReloadListener;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -30,7 +32,7 @@ import java.util.stream.Stream;
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
 @SuppressWarnings("deprecation")
-public class RecipeBuilder implements IResourceManagerReloadListener {
+public class RecipeBuilder implements ResourceManagerReloadListener {
     private static RecipeManager recipeManager;
 
     private static void setRecipeManager(RecipeManager recipeManager) {
@@ -38,7 +40,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
     }
 
     @Override
-    public void onResourceManagerReload(@NotNull IResourceManager resourceManager) {
+    public void onResourceManagerReload(@NotNull ResourceManager resourceManager) {
         if (Boolean.TRUE.equals(CommonConfig.HONEYCOMB_BLOCK_RECIPES.get())) {
             LOGGER.info("Generating comb recipes for {} honeycombs...", ModItems.HONEYCOMB_ITEMS.getEntries().size());
             ModItems.HONEYCOMB_ITEMS.getEntries().stream()
@@ -69,7 +71,7 @@ public class RecipeBuilder implements IResourceManagerReloadListener {
         }
     }
 
-    public void addRecipe(IRecipe<?> recipe) {
+    public void addRecipe(Recipe<?> recipe) {
         ((RecipeManagerAccessorInvoker)getRecipeManager()).getRecipes().computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
     }
 

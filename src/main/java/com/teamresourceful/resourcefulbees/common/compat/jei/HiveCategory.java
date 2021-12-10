@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
@@ -17,14 +18,14 @@ import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
     public HiveCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
-                I18n.get(TranslationConstants.Jei.HIVE),
+                TranslationConstants.Jei.HIVE,
                 guiHelper.createBlankDrawable(160, 26),
                 guiHelper.createDrawableIngredient(new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get())),
                 HiveCategory.Recipe.class);
@@ -82,7 +83,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
     private static ItemStack getNestWithTier(ItemStack stack, int tier, float modifier) {
         stack = stack.copy();
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         nbt.putInt("Tier", tier);
         nbt.putFloat("TierModifier", modifier);
         stack.getOrCreateTag().put(NBTConstants.NBT_BLOCK_ENTITY_TAG, nbt);
@@ -109,7 +110,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     }
 
     @Override
-    public void draw(@NotNull Recipe recipe, @NotNull MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(@NotNull Recipe recipe, @NotNull PoseStack matrixStack, double mouseX, double mouseY) {
         if (recipe.isApiary) this.apiaryBackground.draw(matrixStack);
         else this.hiveBackground.draw(matrixStack);
     }

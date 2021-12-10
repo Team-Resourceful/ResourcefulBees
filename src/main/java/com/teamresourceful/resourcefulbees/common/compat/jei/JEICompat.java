@@ -20,14 +20,14 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.registration.*;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
@@ -70,7 +70,7 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
-        World clientWorld = Minecraft.getInstance().level;
+        ClientLevel clientWorld = Minecraft.getInstance().level;
         if (clientWorld != null) {
             RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
             registration.addRecipes(HiveCategory.getHoneycombRecipes(), HiveCategory.ID);
@@ -101,7 +101,7 @@ public class JEICompat implements IModPlugin {
             ModItems.NESTS_ITEMS.getEntries().forEach(nest ->
                 registration.registerSubtypeInterpreter(nest.get(), (stack, context) -> {
                     if (!stack.hasTag() || stack.getTag() == null) return IIngredientSubtypeInterpreter.NONE;
-                    CompoundNBT blockTag = stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
+                    CompoundTag blockTag = stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
                     if (!blockTag.contains(NBTConstants.NBT_TIER)) return IIngredientSubtypeInterpreter.NONE;
                     return "tier." + blockTag.getInt(NBTConstants.NBT_TIER) + "." + nest.getId().getPath();
                 })
@@ -111,12 +111,11 @@ public class JEICompat implements IModPlugin {
 
     public void registerInfoDesc(IRecipeRegistration registration) {
         for (EntityIngredient ingredient : registration.getIngredientManager().getAllIngredients(ENTITY_INGREDIENT)) {
-            if (ingredient.getEntity() instanceof CustomBeeEntity) {
-                CustomBeeEntity customBee = ((CustomBeeEntity) ingredient.getEntity());
+            if (ingredient.getEntity() instanceof CustomBeeEntity customBee) {
 
                 StringBuilder stats = new StringBuilder();
-                String aqua = TextFormatting.DARK_AQUA.toString();
-                String purple = TextFormatting.DARK_PURPLE.toString();
+                String aqua = ChatFormatting.DARK_AQUA.toString();
+                String purple = ChatFormatting.DARK_PURPLE.toString();
 
 
                 stats.append(aqua).append(" Base Health: ").append(purple).append(customBee.getCombatData().getBaseHealth()).append("\n");
@@ -153,7 +152,7 @@ public class JEICompat implements IModPlugin {
                     stats.append(aqua).append(" Biomes: ").append(purple).append(customBee.getSpawnData().getSpawnableBiomesAsString());
                 }
 
-                registration.addIngredientInfo(ingredient, ENTITY_INGREDIENT, new StringTextComponent(stats.toString()));
+                registration.addIngredientInfo(ingredient, ENTITY_INGREDIENT, new TextComponent(stats.toString()));
             }
         }
     }

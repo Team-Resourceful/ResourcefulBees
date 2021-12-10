@@ -5,14 +5,14 @@ import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeEntityInvoker;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -20,15 +20,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class BeePollinateGoal extends Goal {
+public class RBeePollinateGoal extends Goal {
 
     private int pollinationTicks;
     private int lastPollinationTick;
     private boolean running;
-    private Vector3d nextTarget;
+    private Vec3 nextTarget;
     private int ticks;
     private final CustomBeeEntity bee;
-    private Vector3d boundingBox;
+    private Vec3 boundingBox;
     private static final ArrayList<BlockPos> positionOffsets = new ArrayList<>();
 
     static {
@@ -43,7 +43,7 @@ public class BeePollinateGoal extends Goal {
         }
     }
 
-    public BeePollinateGoal(CustomBeeEntity beeEntity) {
+    public RBeePollinateGoal(CustomBeeEntity beeEntity) {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         this.bee = beeEntity;
     }
@@ -153,7 +153,7 @@ public class BeePollinateGoal extends Goal {
 
     private void handleBlockFlower() {
         if (bee.getSavedFlowerPos() != null) {
-            Vector3d vector3d = Vector3d.atBottomCenterOf(bee.getSavedFlowerPos()).add(0.0D, 0.6F, 0.0D);
+            Vec3 vector3d = Vec3.atBottomCenterOf(bee.getSavedFlowerPos()).add(0.0D, 0.6F, 0.0D);
             if (boundingBox != null) vector3d = boundingBox.add(0.0D, 0.4F, 0.0D);
             if (vector3d.distanceTo(bee.position()) > 1D) {
                 this.nextTarget = vector3d;
@@ -168,7 +168,7 @@ public class BeePollinateGoal extends Goal {
         }
     }
 
-    private void pollinateFlower(Vector3d vector3d) {
+    private void pollinateFlower(Vec3 vector3d) {
         boolean closeToTarget = bee.position().distanceTo(this.nextTarget) <= 0.1D;
         boolean shouldMoveToNewTarget = true;
         if (!closeToTarget && this.ticks > 600) {
@@ -176,7 +176,7 @@ public class BeePollinateGoal extends Goal {
         } else {
             if (closeToTarget) {
                 if (bee.getRandom().nextInt(25) == 0) {
-                    this.nextTarget = new Vector3d(vector3d.x() + this.getRandomOffset(), vector3d.y(), vector3d.z() + this.getRandomOffset());
+                    this.nextTarget = new Vec3(vector3d.x() + this.getRandomOffset(), vector3d.y(), vector3d.z() + this.getRandomOffset());
                     bee.getNavigation().stop();
                 } else {
                     shouldMoveToNewTarget = false;
@@ -206,7 +206,7 @@ public class BeePollinateGoal extends Goal {
         if (bee.tickCount % 5 == 0 && bee.getCoreData().getEntityFlower().isPresent()) {
             Entity flowerEntity = bee.level.getEntity(bee.getFlowerEntityID());
             if (flowerEntity != null) {
-                boundingBox = new Vector3d(flowerEntity.getBoundingBox().getCenter().x(), flowerEntity.getBoundingBox().maxY, flowerEntity.getBoundingBox().getCenter().z());
+                boundingBox = new Vec3(flowerEntity.getBoundingBox().getCenter().x(), flowerEntity.getBoundingBox().maxY, flowerEntity.getBoundingBox().getCenter().z());
                 bee.setSavedFlowerPos(flowerEntity.blockPosition());
             } else this.clearTask();
         }
@@ -224,7 +224,7 @@ public class BeePollinateGoal extends Goal {
         BlockPos beePos = bee.blockPosition();
         Optional<EntityType<?>> entityFlower = bee.getCoreData().getEntityFlower();
         if (entityFlower.isPresent()) {
-            List<?> entityList = bee.level.getEntities(entityFlower.get(), (new AxisAlignedBB(bee.blockPosition())).inflate(range),
+            List<?> entityList = bee.level.getEntities(entityFlower.get(), (new AABB(bee.blockPosition())).inflate(range),
                     entity -> entity.getEncodeId() != null && entity.getEncodeId().equals(bee.getCoreData().getEntityFlowerRegistryID()));
             if (!entityList.isEmpty()) {
                 Entity firstEntity = (Entity) entityList.get(0);
@@ -232,7 +232,7 @@ public class BeePollinateGoal extends Goal {
                 return Optional.of(firstEntity.blockPosition());
             }
         } else {
-            BlockPos.Mutable flowerPos = beePos.mutable();
+            BlockPos.MutableBlockPos flowerPos = beePos.mutable();
             for (BlockPos blockPos : positionOffsets){
                 flowerPos.setWithOffset(beePos, blockPos.getX(), blockPos.getY(), blockPos.getZ());
                 if (getFlowerBlockPredicate().test(flowerPos)){

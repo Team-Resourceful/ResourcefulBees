@@ -4,15 +4,15 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModVillagerProfessions;
-import net.minecraft.entity.merchant.villager.VillagerTrades;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.MerchantOffer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 
 import java.util.List;
@@ -24,18 +24,18 @@ public class Beekeeper {
     }
 
     public static void setupBeekeeper(VillagerTradesEvent event) {
-        List<VillagerTrades.ITrade> level1 = event.getTrades().get(1);
-        List<VillagerTrades.ITrade> level2 = event.getTrades().get(2);
-        List<VillagerTrades.ITrade> level3 = event.getTrades().get(3);
-        List<VillagerTrades.ITrade> level4 = event.getTrades().get(4);
-        List<VillagerTrades.ITrade> level5 = event.getTrades().get(5);
+        List<VillagerTrades.ItemListing> level1 = event.getTrades().get(1);
+        List<VillagerTrades.ItemListing> level2 = event.getTrades().get(2);
+        List<VillagerTrades.ItemListing> level3 = event.getTrades().get(3);
+        List<VillagerTrades.ItemListing> level4 = event.getTrades().get(4);
+        List<VillagerTrades.ItemListing> level5 = event.getTrades().get(5);
 
         if (event.getType() == ModVillagerProfessions.BEEKEEPER.get()) {
             ItemStack queenBeeBanner = new ItemStack(Items.BLACK_BANNER);
-            CompoundNBT compoundnbt = queenBeeBanner.getOrCreateTagElement("BlockEntityTag");
-            ListNBT listnbt = new BannerPattern.Builder().addPattern(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).addPattern(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).addPattern(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).addPattern(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).addPattern(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).addPattern(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).toListTag();
+            CompoundTag compoundnbt = queenBeeBanner.getOrCreateTagElement("BlockEntityTag");
+            ListTag listnbt = new BannerPattern.Builder().addPattern(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).addPattern(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).addPattern(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).addPattern(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).addPattern(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).addPattern(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).toListTag();
             compoundnbt.put("Patterns", listnbt);
-            queenBeeBanner.setHoverName(TranslationConstants.Items.QUEEN_BEE_BANNER.withStyle(TextFormatting.GOLD));
+            queenBeeBanner.setHoverName(TranslationConstants.Items.QUEEN_BEE_BANNER.withStyle(ChatFormatting.GOLD));
             queenBeeBanner.setCount(1);
 
             level1.add((entity, rand) -> new MerchantOffer(

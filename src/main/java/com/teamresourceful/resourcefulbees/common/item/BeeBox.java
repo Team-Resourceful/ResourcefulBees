@@ -4,25 +4,25 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,14 +39,13 @@ public class BeeBox extends Item {
     }
 
     @Override
-    public @NotNull ActionResultType useOn(ItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
+    public @NotNull InteractionResult useOn(UseOnContext context) {
+        Player player = context.getPlayer();
         if (player != null) {
-            World playerWorld = context.getPlayer().getCommandSenderWorld();
+            Level worldIn = context.getLevel();
             ItemStack stack = context.getItemInHand();
-            if (!context.getPlayer().isShiftKeyDown()) return ActionResultType.FAIL;
-            if (playerWorld.isClientSide() || !isFilled(stack)) return ActionResultType.FAIL;
-            World worldIn = context.getLevel();
+            if (!context.getPlayer().isShiftKeyDown()) return InteractionResult.FAIL;
+            if (worldIn.isClientSide() || !isFilled(stack)) return InteractionResult.FAIL;
             BlockPos pos = context.getClickedPos();
             List<Entity> entities = getEntitiesFromStack(stack, worldIn, true);
             for (Entity entity : entities) {
@@ -54,27 +53,26 @@ public class BeeBox extends Item {
                     BlockPos blockPos = pos.relative(context.getClickedFace());
                     entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
                     worldIn.addFreshEntity(entity);
-                    if (entity instanceof BeeEntity) {
-                        BeeEntity beeEntity = (BeeEntity) entity;
-                        BeeJar.resetBee(beeEntity);
-                        BeeJar.setBeeAngry(beeEntity, player);
+                    if (entity instanceof Bee bee) {
+                        BeeJar.resetBee(bee);
+                        BeeJar.setBeeAngry(bee, player);
                     }
                 }
             }
             if (isTemp) stack.shrink(1);
             else stack.setTag(null);
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
-    public @NotNull List<Entity> getEntitiesFromStack(ItemStack stack, World world, boolean withInfo) {
-        CompoundNBT tag = stack.getTag();
+    public @NotNull List<Entity> getEntitiesFromStack(ItemStack stack, Level world, boolean withInfo) {
+        CompoundTag tag = stack.getTag();
         List<Entity> entities = new ArrayList<>();
         if (tag != null) {
-            ListNBT bees = tag.getList(NBTConstants.NBT_BEES, 10);
+            ListTag bees = tag.getList(NBTConstants.NBT_BEES, 10);
             bees.stream()
-                    .map(CompoundNBT.class::cast)
+                    .map(CompoundTag.class::cast)
                     .forEach(compoundNBT -> {
                         EntityType<?> type = EntityType.byString(compoundNBT.getCompound(NBTConstants.ENTITY_DATA).getString("id")).orElse(null);
                         if (type != null) {
@@ -89,27 +87,26 @@ public class BeeBox extends Item {
 
     @NotNull
     @Override
-    public ActionResultType interactLivingEntity(@NotNull ItemStack stack, @NotNull PlayerEntity player, LivingEntity targetIn, @NotNull Hand hand) {
-        if (targetIn.getCommandSenderWorld().isClientSide() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive())) {
-            return ActionResultType.FAIL;
+    public InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, LivingEntity targetIn, @NotNull InteractionHand hand) {
+        if (targetIn.getCommandSenderWorld().isClientSide() || (!(targetIn instanceof Bee target) || !targetIn.isAlive())) {
+            return InteractionResult.FAIL;
         }
-        if (isTemp) return ActionResultType.FAIL;
-        BeeEntity target = (BeeEntity) targetIn;
+        if (isTemp) return InteractionResult.FAIL;
 
-        CompoundNBT tag = stack.getTag() == null ? new CompoundNBT() : stack.getTag();
+        CompoundTag tag = stack.getTag() == null ? new CompoundTag() : stack.getTag();
 
-        ListNBT bees = tag.contains(NBTConstants.NBT_BEES) ? tag.getList(NBTConstants.NBT_BEES, 10) : new ListNBT();
+        ListTag bees = tag.contains(NBTConstants.NBT_BEES) ? tag.getList(NBTConstants.NBT_BEES, 10) : new ListTag();
 
-        if (bees.size() == BeeConstants.MAX_BEES_BEE_BOX) return ActionResultType.FAIL;
-        CompoundNBT entityData = new CompoundNBT();
+        if (bees.size() == BeeConstants.MAX_BEES_BEE_BOX) return InteractionResult.FAIL;
+        CompoundTag entityData = new CompoundTag();
         entityData.put(NBTConstants.ENTITY_DATA, BeeInfoUtils.createJarBeeTag(target, NBTConstants.NBT_ID));
         bees.add(entityData);
         tag.put(NBTConstants.NBT_BEES, bees);
         stack.setTag(tag);
         player.setItemInHand(hand, stack);
         player.swing(hand);
-        target.remove(true);
-        return ActionResultType.PASS;
+        target.discard();
+        return InteractionResult.PASS;
     }
 
     public static boolean isFilled(ItemStack stack) {
@@ -117,27 +114,27 @@ public class BeeBox extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable World world, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag tooltipFlag) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level world, @NotNull List<Component> tooltip, @NotNull TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, world, tooltip, tooltipFlag);
         if (isTemp) {
-            tooltip.add(TranslationConstants.Items.TEMP_INFO.withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.TEMP_INFO.withStyle(ChatFormatting.GOLD));
         } else {
-            tooltip.add(TranslationConstants.Items.INFO.withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.INFO.withStyle(ChatFormatting.GOLD));
         }
         if (Screen.hasShiftDown() && isFilled(stack)) {
-            tooltip.add(TranslationConstants.Items.BEES.withStyle(TextFormatting.YELLOW));
+            tooltip.add(TranslationConstants.Items.BEES.withStyle(ChatFormatting.YELLOW));
 
             //noinspection ConstantConditions
             stack.getTag().getList(NBTConstants.NBT_BEES, 10).stream()
-                    .map(CompoundNBT.class::cast)
+                    .map(CompoundTag.class::cast)
                     .forEach(compoundNBT -> {
                         String id = compoundNBT.getCompound(NBTConstants.ENTITY_DATA).getString("id");
                         EntityType<?> entityType = BeeInfoUtils.getEntityType(id);
-                        ITextComponent name = entityType == null ? new StringTextComponent("NULL_ENTITY") : entityType.getDescription();
-                        tooltip.add(new StringTextComponent("  - ").append(name).withStyle(TextFormatting.WHITE));
+                        Component name = entityType == null ? new TextComponent("NULL_ENTITY") : entityType.getDescription();
+                        tooltip.add(new TextComponent("  - ").append(name).withStyle(ChatFormatting.WHITE));
                     });
         } else if (isFilled(stack)) {
-            tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(TextFormatting.YELLOW));
+            tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(ChatFormatting.YELLOW));
         }
     }
 }

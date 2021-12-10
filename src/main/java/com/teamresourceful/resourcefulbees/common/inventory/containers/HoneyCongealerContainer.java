@@ -4,19 +4,20 @@ import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberTileEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class HoneyCongealerContainer extends ContainerWithStackMove {
 
     private final SolidificationChamberTileEntity honeyCongealerTileEntity;
 
-    public HoneyCongealerContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+    public HoneyCongealerContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.HONEY_CONGEALER_CONTAINER.get(), id);
 
         honeyCongealerTileEntity = (SolidificationChamberTileEntity) world.getBlockEntity(pos);
@@ -56,11 +57,11 @@ public class HoneyCongealerContainer extends ContainerWithStackMove {
         super.broadcastChanges();
         if (getHoneyCongealerTileEntity() == null) return;
 
-        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) getHoneyCongealerTileEntity().sendGUINetworkPacket(listener);
+        for (ContainerListener listener : ((ContainerAccessor) this).getListeners()) getHoneyCongealerTileEntity().sendGUINetworkPacket(listener);
     }
 
     @Override
-    public boolean stillValid(@NotNull PlayerEntity player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 

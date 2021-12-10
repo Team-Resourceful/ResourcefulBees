@@ -9,15 +9,15 @@ import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
@@ -25,9 +25,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class SolidificationRecipe implements IRecipe<IInventory> {
+public class SolidificationRecipe implements Recipe<Container> {
 
-    public static final IRecipeType<CentrifugeRecipe> SOLIDIFICATION_RECIPE_TYPE = IRecipeType.register(ResourcefulBees.MOD_ID + ":solidification");
+    public static final RecipeType<CentrifugeRecipe> SOLIDIFICATION_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":solidification");
 
     private final ResourceLocation id;
     private final FluidStack fluid;
@@ -64,12 +64,12 @@ public class SolidificationRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean matches(@NotNull IInventory inventory, @NotNull World world) {
+    public boolean matches(@NotNull Container inventory, @NotNull Level world) {
         return false;
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull IInventory inventory) {
+    public @NotNull ItemStack assemble(@NotNull Container inventory) {
         return ItemStack.EMPTY;
     }
 
@@ -89,12 +89,12 @@ public class SolidificationRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public @NotNull IRecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.SOLIDIFICATION_RECIPE.get();
     }
 
     @Override
-    public @NotNull IRecipeType<?> getType() {
+    public @NotNull RecipeType<?> getType() {
         return SOLIDIFICATION_RECIPE_TYPE;
     }
 
@@ -106,7 +106,7 @@ public class SolidificationRecipe implements IRecipe<IInventory> {
         return stack;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SolidificationRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<SolidificationRecipe> {
 
         @Override
         public @NotNull SolidificationRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
@@ -115,13 +115,13 @@ public class SolidificationRecipe implements IRecipe<IInventory> {
 
         @Nullable
         @Override
-        public SolidificationRecipe fromNetwork(@NotNull ResourceLocation id, PacketBuffer buffer) {
+        public SolidificationRecipe fromNetwork(@NotNull ResourceLocation id, FriendlyByteBuf buffer) {
             Optional<SolidificationRecipe> result = SolidificationRecipe.codec(id).parse(JsonOps.COMPRESSED, ModConstants.GSON.fromJson(buffer.readUtf(), JsonArray.class)).result();
             return result.orElse(null);
         }
 
         @Override
-        public void toNetwork(@NotNull PacketBuffer buffer, SolidificationRecipe recipe) {
+        public void toNetwork(@NotNull FriendlyByteBuf buffer, SolidificationRecipe recipe) {
             SolidificationRecipe.codec(recipe.id).encodeStart(JsonOps.COMPRESSED, recipe).result().ifPresent(element -> buffer.writeUtf(element.toString()));
         }
     }

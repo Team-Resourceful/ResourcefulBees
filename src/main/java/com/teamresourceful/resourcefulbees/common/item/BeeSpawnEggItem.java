@@ -4,21 +4,21 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.ColorData;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -30,7 +30,7 @@ import java.util.Optional;
 public class BeeSpawnEggItem extends SpawnEggItem {
     private final CustomBeeData beeData;
 
-	public BeeSpawnEggItem(EntityType<?> entityType, String beeType) {
+	public BeeSpawnEggItem(EntityType<? extends Mob> entityType, String beeType) {
 		super(entityType, 0xffcc33, 0x303030, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_BEES));
 		this.beeData = BeeRegistry.getRegistry().getBeeData(beeType);
 	}
@@ -46,13 +46,13 @@ public class BeeSpawnEggItem extends SpawnEggItem {
     }
 
     @Override
-    public @NotNull ActionResultType useOn(ItemUseContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         ItemStack itemstack = context.getItemInHand();
-        PlayerEntity player = context.getPlayer();
+        Player player = context.getPlayer();
         if (player != null) {
-            World world = context.getLevel();
+            Level world = context.getLevel();
             if (world.isClientSide) {
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else {
                 BlockPos blockPos = context.getClickedPos();
                 Direction direction = context.getClickedFace();
@@ -66,18 +66,18 @@ public class BeeSpawnEggItem extends SpawnEggItem {
                 }
 
                 EntityType<?> entityType = this.getType(itemstack.getTag());
-                if (entityType.spawn((ServerWorld) world, itemstack, context.getPlayer(), blockPos1, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockPos, blockPos1) && direction == Direction.UP) != null) {
+                if (entityType.spawn((ServerLevel) world, itemstack, context.getPlayer(), blockPos1, MobSpawnType.SPAWN_EGG, true, !Objects.equals(blockPos, blockPos1) && direction == Direction.UP) != null) {
                     itemstack.shrink(1);
                 }
 
-                return ActionResultType.CONSUME;
+                return InteractionResult.CONSUME;
             }
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public @NotNull Optional<MobEntity> spawnOffspringFromSpawnEgg(@NotNull PlayerEntity playerEntity, @NotNull MobEntity mobEntity, @NotNull EntityType<? extends MobEntity> entityType, @NotNull ServerWorld world, @NotNull Vector3d vector3d, @NotNull ItemStack stack) {
+    public @NotNull Optional<Mob> spawnOffspringFromSpawnEgg(@NotNull Player playerEntity, @NotNull Mob mobEntity, @NotNull EntityType<? extends Mob> entityType, @NotNull ServerLevel world, @NotNull Vec3 vector3d, @NotNull ItemStack stack) {
         return Optional.empty();
     }
 }

@@ -5,17 +5,18 @@ import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.Apiar
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.Block;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public class ApiaryUpgradeRecipe extends ShapedRecipe {
@@ -25,7 +26,7 @@ public class ApiaryUpgradeRecipe extends ShapedRecipe {
     }
 
     @Override
-    public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull CraftingInventory inventory) {
+    public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull CraftingContainer inventory) {
         NonNullList<ItemStack> remainingItems = super.getRemainingItems(inventory);
 
         for (int i = 0; i < inventory.getContainerSize(); i++) {
@@ -43,7 +44,7 @@ public class ApiaryUpgradeRecipe extends ShapedRecipe {
 
     private ItemStack getBeeBoxFromHive(ItemStack hive){
         if (!hive.hasTag() || hive.getTag() == null || hive.getTag().isEmpty() || !hive.getTag().contains("BlockEntityTag")) return null;
-        ListNBT list = hive.getTag().getCompound("BlockEntityTag").getList(NBTConstants.NBT_BEES, 10);
+        ListTag list = hive.getTag().getCompound("BlockEntityTag").getList(NBTConstants.NBT_BEES, 10);
         if (!list.isEmpty()){
             ItemStack box = ModItems.CRAFTING_BEE_BOX.get().getDefaultInstance();
             box.getOrCreateTag().put(NBTConstants.NBT_BEES, list);
@@ -53,7 +54,7 @@ public class ApiaryUpgradeRecipe extends ShapedRecipe {
     }
 
     @Override
-    public @NotNull IRecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.APIARY_UPGRADE_RECIPE.get();
     }
 
@@ -66,7 +67,7 @@ public class ApiaryUpgradeRecipe extends ShapedRecipe {
         }
 
         @Override
-        public ShapedRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull PacketBuffer buffer) {
+        public ShapedRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
             ShapedRecipe recipe = super.fromNetwork(recipeId, buffer);
             assert recipe != null : "why is recipe null?";
             return new ApiaryUpgradeRecipe(recipeId, recipe.getGroup(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getResultItem());

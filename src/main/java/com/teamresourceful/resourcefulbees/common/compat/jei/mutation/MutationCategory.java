@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.mutation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.common.compat.jei.BaseCategory;
@@ -14,17 +14,16 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +39,7 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
 
     public MutationCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
-                I18n.get(TranslationConstants.Jei.MUTATIONS),
+                TranslationConstants.Jei.MUTATIONS,
                 guiHelper.drawableBuilder(GUI_BACK, -12, 0, 117, 75).addPadding(0, 0, 0, 0).build(),
                 guiHelper.createDrawableIngredient(new ItemStack(ModItems.MUTATION_ENTITY_ICON.get())),
                 IMutationRecipe.class);
@@ -148,21 +147,21 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
         });
     }
 
-    private static void addMutationTooltip(List<ITextComponent> tooltip, CompoundNBT nbt, int index, int wantedIndex) {
+    private static void addMutationTooltip(List<Component> tooltip, CompoundTag nbt, int index, int wantedIndex) {
         if (index == wantedIndex) {
             if (Screen.hasShiftDown()) {
-                String tag = nbt.getPrettyDisplay(" ", 0).getString();
+                String tag = "null"; // TODO nbt.getPrettyDisplay(" ", 0).getString();
                 for (String s : tag.split("\n")) {
-                    tooltip.add(new StringTextComponent(s).withStyle(TextFormatting.DARK_PURPLE));
+                    tooltip.add(new TextComponent(s).withStyle(ChatFormatting.DARK_PURPLE));
                 }
             } else {
-                tooltip.add(TranslationConstants.Jei.NBT.withStyle(TextFormatting.DARK_PURPLE));
+                tooltip.add(TranslationConstants.Jei.NBT.withStyle(ChatFormatting.DARK_PURPLE));
             }
         }
     }
 
     @Override
-    public @NotNull List<ITextComponent> getTooltipStrings(@NotNull IMutationRecipe recipe, double mouseX, double mouseY) {
+    public @NotNull List<Component> getTooltipStrings(@NotNull IMutationRecipe recipe, double mouseX, double mouseY) {
         if (mouseX >= 63 && mouseX <= 72 && mouseY >= 8 && mouseY <= 17) {
             return Collections.singletonList(TranslationConstants.Jei.MUTATION_INFO);
         }
@@ -173,10 +172,10 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
     }
 
     @Override
-    public void draw(@NotNull IMutationRecipe recipe, @NotNull MatrixStack stack, double mouseX, double mouseY) {
+    public void draw(@NotNull IMutationRecipe recipe, @NotNull PoseStack stack, double mouseX, double mouseY) {
         beeHive.draw(stack, 65, 10);
         info.draw(stack, 63, 8);
-        FontRenderer fontRenderer = Minecraft.getInstance().font;
+        Font fontRenderer = Minecraft.getInstance().font;
         if (recipe.chance() < 1) {
             String chanceString = DECIMAL_FORMAT.format(recipe.chance());
             int padding = fontRenderer.width(chanceString) / 2;
@@ -188,7 +187,7 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
             int padding = fontRenderer.width(weightString) / 2;
             fontRenderer.draw(stack, weightString, 48F - padding, 66, 0xff808080);
         }
-        if (!recipe.getInputEntity().isPresent()) this.slot.draw(stack, 15, 52);
-        if (!recipe.getOutputEntity().isPresent()) this.outputSlot.draw(stack, 85, 43);
+        if (recipe.getInputEntity().isEmpty()) this.slot.draw(stack, 15, 52);
+        if (recipe.getOutputEntity().isEmpty()) this.outputSlot.draw(stack, 85, 43);
     }
 }

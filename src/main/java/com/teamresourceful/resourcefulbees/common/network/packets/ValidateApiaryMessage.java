@@ -1,43 +1,32 @@
 package com.teamresourceful.resourcefulbees.common.network.packets;
 
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class ValidateApiaryMessage {
+public record ValidateApiaryMessage(BlockPos pos, int verticalOffset, int horizontalOffset) {
 
-    private final BlockPos pos;
-    private final int verticalOffset;
-    private final int horizontalOffset;
-
-    public ValidateApiaryMessage(BlockPos pos, int verticalOffset, int horizontalOffset){
-        this.pos = pos;
-        this.verticalOffset = verticalOffset;
-        this.horizontalOffset = horizontalOffset;
-    }
-
-    public static void encode(ValidateApiaryMessage message, PacketBuffer buffer){
+    public static void encode(ValidateApiaryMessage message, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(message.pos);
         buffer.writeInt(message.verticalOffset);
         buffer.writeInt(message.horizontalOffset);
     }
 
-    public static ValidateApiaryMessage decode(PacketBuffer buffer){
+    public static ValidateApiaryMessage decode(FriendlyByteBuf buffer) {
         return new ValidateApiaryMessage(buffer.readBlockPos(), buffer.readInt(), buffer.readInt());
     }
 
-    public static void handle(ValidateApiaryMessage message, Supplier<NetworkEvent.Context> context){
+    public static void handle(ValidateApiaryMessage message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
-            ServerPlayerEntity player = context.get().getSender();
+            ServerPlayer player = context.get().getSender();
             if (player != null && player.level.isLoaded(message.pos)) {
-                TileEntity tileEntity = player.level.getBlockEntity(message.pos);
-                if (tileEntity instanceof ApiaryTileEntity) {
-                    ApiaryTileEntity apiaryTileEntity = (ApiaryTileEntity) tileEntity;
+                BlockEntity tileEntity = player.level.getBlockEntity(message.pos);
+                if (tileEntity instanceof ApiaryTileEntity apiaryTileEntity) {
                     apiaryTileEntity.setVerticalOffset(message.verticalOffset);
                     apiaryTileEntity.setHorizontalOffset(message.horizontalOffset);
                     apiaryTileEntity.runStructureValidation(player);

@@ -6,22 +6,23 @@ import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class ApiaryStorageContainer extends ContainerWithStackMove {
 
     private final ApiaryStorageTileEntity apiaryStorageTileEntity;
-    private final PlayerInventory playerInventory;
+    private final Inventory playerInventory;
     private int numberOfSlots;
     private boolean rebuild;
 
-    public ApiaryStorageContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+    public ApiaryStorageContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.APIARY_STORAGE_CONTAINER.get(), id);
         this.playerInventory = inv;
         this.apiaryStorageTileEntity = (ApiaryStorageTileEntity) world.getBlockEntity(pos);
@@ -34,7 +35,7 @@ public class ApiaryStorageContainer extends ContainerWithStackMove {
      * @param player the player
      */
     @Override
-    public boolean stillValid(@NotNull PlayerEntity player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
@@ -52,7 +53,7 @@ public class ApiaryStorageContainer extends ContainerWithStackMove {
                 public boolean mayPlace(@NotNull ItemStack stack) { return UpgradeItem.hasUpgradeData(stack) && (UpgradeItem.getUpgradeType(stack).contains(NBTConstants.NBT_STORAGE_UPGRADE)); }
 
                 @Override
-                public boolean mayPickup(PlayerEntity playerIn) {
+                public boolean mayPickup(Player playerIn) {
                     boolean flag = true;
 
                     for (int i = 10; i <= getNumberOfSlots(); ++i) {
@@ -114,7 +115,7 @@ public class ApiaryStorageContainer extends ContainerWithStackMove {
         return 0;
     }
 
-    public PlayerInventory getPlayerInventory() {
+    public Inventory getPlayerInventory() {
         return playerInventory;
     }
 

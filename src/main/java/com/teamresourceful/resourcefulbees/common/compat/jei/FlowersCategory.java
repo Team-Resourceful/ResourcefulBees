@@ -12,14 +12,13 @@ import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,14 +30,14 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
 
     public FlowersCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
-            I18n.get(TranslationConstants.Jei.FLOWERS),
+            TranslationConstants.Jei.FLOWERS,
             guiHelper.drawableBuilder(GUI_BACK, 0, 0, 100, 75).addPadding(0, 0, 0, 0).build(),
             guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get())),
             FlowersCategory.Recipe.class);
     }
 
     private static ItemStack getErrorItem(Block block){
-        return new ItemStack(Items.BARRIER).setHoverName(new StringTextComponent(block.getRegistryName() != null ? block.getRegistryName().toString() : "Unknown Block ID"));
+        return new ItemStack(Items.BARRIER).setHoverName(new TextComponent(block.getRegistryName() != null ? block.getRegistryName().toString() : "Unknown Block ID"));
     }
 
     public static List<Recipe> getFlowersRecipes() {
@@ -49,8 +48,8 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
                 Set<FluidStack> fluids = new HashSet<>();
 
                 beeData.getCoreData().getBlockFlowers().forEach(block -> {
-                    if (block instanceof FlowingFluidBlock){
-                        fluids.add(new FluidStack(((FlowingFluidBlock) block).getFluid().getSource(), 1000 ));
+                    if (block instanceof LiquidBlock liquidBlock){
+                        fluids.add(new FluidStack(liquidBlock.getFluid().getSource(), 1000 ));
                     }else if (block.asItem() != Items.AIR){
                         stacks.add(block.asItem().getDefaultInstance());
                     }else {

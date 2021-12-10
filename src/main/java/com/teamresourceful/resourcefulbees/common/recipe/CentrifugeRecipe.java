@@ -14,16 +14,15 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,9 +31,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class CentrifugeRecipe implements IRecipe<IInventory> {
+public class CentrifugeRecipe implements Recipe<Container> {
 
-    public static final IRecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE_TYPE = IRecipeType.register(ResourcefulBees.MOD_ID + ":centrifuge");
+    public static final RecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":centrifuge");
 
     private final ResourceLocation id;
     private final int inputAmount;
@@ -66,14 +65,14 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean matches(IInventory inventory, @NotNull World world) {
+    public boolean matches(Container inventory, @NotNull Level world) {
         ItemStack stack = inventory.getItem(0);
         if (stack == ItemStack.EMPTY) return false;
         else {
             ItemStack[] matchingStacks = ingredient.getItems();
             if (matchingStacks.length == 0) return false;
             else {
-                return Arrays.stream(matchingStacks).anyMatch(itemStack -> Container.consideredTheSameItem(stack, itemStack));
+                return Arrays.stream(matchingStacks).anyMatch(itemStack -> ItemStack.matches(stack, itemStack));
             }
         }
     }
@@ -87,8 +86,9 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
         return true;
     }
 
+
     @Override
-    public @NotNull ItemStack assemble(@NotNull IInventory inventory) {
+    public @NotNull ItemStack assemble(@NotNull Container inventory) {
         return ItemStack.EMPTY;
     }
 
@@ -117,13 +117,13 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
     @NotNull
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.CENTRIFUGE_RECIPE.get();
     }
 
     @NotNull
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return CENTRIFUGE_RECIPE_TYPE;
     }
 
@@ -148,7 +148,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
     }
 
     //REQUIRED This needs serious testing to ensure it is working properly before pushing update!!!
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CentrifugeRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CentrifugeRecipe> {
 
         @Override
         public @NotNull CentrifugeRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
@@ -167,7 +167,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
          */
 
         @Override
-        public CentrifugeRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull PacketBuffer buffer) {
+        public CentrifugeRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf buffer) {
             Optional<CentrifugeRecipe> result = CentrifugeRecipe.codec(id).parse(JsonOps.COMPRESSED, ModConstants.GSON.fromJson(buffer.readUtf(), JsonArray.class)).result();
             return result.orElse(null);
 
@@ -175,7 +175,7 @@ public class CentrifugeRecipe implements IRecipe<IInventory> {
 
         //REQUIRED TEST THIS ON SERVERS!!!!!!!!!!!
         @Override
-        public void toNetwork(@NotNull PacketBuffer buffer, @NotNull CentrifugeRecipe recipe) {
+        public void toNetwork(@NotNull FriendlyByteBuf buffer, @NotNull CentrifugeRecipe recipe) {
             CentrifugeRecipe.codec(recipe.id).encodeStart(JsonOps.COMPRESSED, recipe).result().ifPresent(element -> buffer.writeUtf(element.toString()));
         }
     }

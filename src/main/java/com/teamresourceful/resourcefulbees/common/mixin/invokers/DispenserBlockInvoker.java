@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.mixin.invokers;
 
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.dispenser.IDispenseItemBehavior;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.DispenserBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
@@ -10,5 +10,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface DispenserBlockInvoker {
 
     @Invoker("getDispenseMethod")
-    IDispenseItemBehavior invokeGetBehavior(ItemStack stack);
+    DispenseItemBehavior invokeGetBehavior(ItemStack stack);
 }

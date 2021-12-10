@@ -1,8 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
-import io.netty.buffer.ReadOnlyByteBuf;
-import net.minecraft.util.text.TranslationTextComponent;
-
 public class BeeConstants {
 
 
@@ -14,7 +11,6 @@ public class BeeConstants {
     public static final String MOD_NAME = "Resourceful Bees";
     public static final String ENTITY_TEXTURES_DIR = "textures/entity/";
     public static final String STRING_DEFAULT_ITEM_COLOR = "-1";
-    public static final String INGREDIENT_COUNT = "count";
     public static final String VANILLA_BEE_TYPE = "minecraft";
     public static final String VANILLA_BEE_COLOR = "#edc343";
     public static final int VANILLA_BEE_INT_COLOR = 15582019;
@@ -29,6 +25,4 @@ public class BeeConstants {
 
     public static final int DEFAULT_ITEM_COLOR = -1;
     public static final int MAX_BEES_BEE_BOX = 10;
-
-    public static final TranslationTextComponent CREATOR_LORE_PREFIX = new TranslationTextComponent("tooltip.resourcefulbees.bee.creator");
 }

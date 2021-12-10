@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
@@ -13,11 +13,10 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
@@ -31,7 +30,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeFamily> {
 
     public BeeBreedingCategory(IGuiHelper guiHelper) {
         super(guiHelper, ID,
-                I18n.get(TranslationConstants.Jei.BREEDING),
+                TranslationConstants.Jei.BREEDING,
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 160, 60).addPadding(0, 0, 0, 0).build(),
                 guiHelper.createDrawableIngredient(ModItems.APIARY_BREEDER_ITEM.get().getDefaultInstance()),
                 BeeFamily.class);
@@ -88,9 +87,9 @@ public class BeeBreedingCategory extends BaseCategory<BeeFamily> {
     }
 
     @Override
-    public void draw(@NotNull BeeFamily beeFamily, @NotNull MatrixStack matrix, double mouseX, double mouseY) {
+    public void draw(@NotNull BeeFamily beeFamily, @NotNull PoseStack matrix, double mouseX, double mouseY) {
         Minecraft minecraft = Minecraft.getInstance();
-        FontRenderer fontRenderer = minecraft.font;
+        Font fontRenderer = minecraft.font;
         DecimalFormat decimalFormat = new DecimalFormat("##%");
         if (beeFamily.getChance() < 1) {
             info.draw(matrix, 115, 40);
@@ -101,7 +100,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeFamily> {
 
     @NotNull
     @Override
-    public List<ITextComponent> getTooltipStrings(@NotNull BeeFamily beeFamily, double mouseX, double mouseY) {
+    public List<Component> getTooltipStrings(@NotNull BeeFamily beeFamily, double mouseX, double mouseY) {
         double infoX = 115D;
         double infoY = 40D;
         if (mouseX >= infoX && mouseX <= infoX + 9D && mouseY >= infoY && mouseY <= infoY + 9D && beeFamily.getChance() < 1) {

@@ -7,27 +7,27 @@ import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.LockBeeMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 public class ValidatedApiaryContainer extends ContainerWithStackMove {
 
-    private final IntReferenceHolder selectedBee = IntReferenceHolder.standalone();
+    private final DataSlot selectedBee = DataSlot.standalone();
     private final ApiaryTileEntity apiaryTileEntity;
     private final BlockPos pos;
-    private final PlayerEntity player;
+    private final Player player;
     private String[] beeList;
 
-    public ValidatedApiaryContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+    public ValidatedApiaryContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.VALIDATED_APIARY_CONTAINER.get(), id);
 
         this.player = inv.player;
@@ -67,7 +67,7 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
     }
 
     @Override
-    public boolean stillValid(@NotNull PlayerEntity playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return true;
     }
 
@@ -123,7 +123,7 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
         return pos;
     }
 
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
@@ -136,7 +136,7 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
     }
 
     @Override
-    public void addSlotListener(@NotNull IContainerListener listener) {
+    public void addSlotListener(@NotNull ContainerListener listener) {
         super.addSlotListener(listener);
         apiaryTileEntity.setListeners(((ContainerAccessor) this).getListeners());
         //apiaryTileEntity.setNumPlayersUsing(((ContainerAccessor) this).getListeners().size());
@@ -144,7 +144,7 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void removeSlotListener(@NotNull IContainerListener listener) {
+    public void removeSlotListener(@NotNull ContainerListener listener) {
         super.removeSlotListener(listener);
         apiaryTileEntity.setListeners(((ContainerAccessor) this).getListeners());
         //apiaryTileEntity.setNumPlayersUsing(((ContainerAccessor) this).getListeners().size());

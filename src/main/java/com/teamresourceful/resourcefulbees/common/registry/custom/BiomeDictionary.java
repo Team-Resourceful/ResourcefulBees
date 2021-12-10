@@ -7,9 +7,9 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 
 import java.io.Reader;
 import java.util.Collection;
@@ -39,13 +39,13 @@ public class BiomeDictionary extends HashMap<String, Set<ResourceLocation>> {
 
     private static void parseType(Reader reader, String name) {
         Set<ResourceLocation> biomeType = CodecUtils.createSetCodec(ResourceLocation.CODEC)
-                .parse(JsonOps.INSTANCE, JSONUtils.fromJson(ModConstants.GSON, reader, JsonArray.class))
+                .parse(JsonOps.INSTANCE, GsonHelper.fromJson(ModConstants.GSON, reader, JsonArray.class))
                 .getOrThrow(false, s -> LOGGER.warn("Could not parse biome type {}", name));
         get().put(name, biomeType);
     }
 
     public static Collection<? extends ResourceLocation> getForgeBiomeLocations(Type type) {
-        return getBiomes(type).stream().map(RegistryKey::location).collect(Collectors.toList());
+        return getBiomes(type).stream().map(ResourceKey::location).collect(Collectors.toList());
     }
 
     public static Type getForgeType(ResourceLocation resourceLocation) {

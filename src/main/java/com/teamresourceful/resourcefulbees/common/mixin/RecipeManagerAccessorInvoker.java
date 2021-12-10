@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.mixin;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -15,12 +15,12 @@ import java.util.Map;
 public interface RecipeManagerAccessorInvoker {
 
     @Accessor
-    Map<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>> getRecipes();
+    Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> getRecipes();
 
     @Accessor
-    void setRecipes(Map<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>> recipes);
+    void setRecipes(Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> recipes);
 
     @Invoker
-    <C extends IInventory, T extends IRecipe<C>> Map<ResourceLocation, IRecipe<C>> callByType(IRecipeType<T> recipeType);
+    <C extends Container, T extends Recipe<C>> Map<ResourceLocation, Recipe<C>> callByType(RecipeType<T> recipeType);
 
 }

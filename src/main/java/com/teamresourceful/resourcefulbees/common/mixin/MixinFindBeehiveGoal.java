@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.mixin;
 
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeEntityInvoker;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.animal.Bee;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -12,17 +12,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(BeeEntity.FindBeehiveGoal.class)
+@Mixin(Bee.BeeGoToHiveGoal.class)
 public abstract class MixinFindBeehiveGoal {
 
     @Final
     @Mutable
     @Shadow(aliases = "field_226467_b_")
-    private BeeEntity this$0;
+    private Bee this$0;
 
     @SuppressWarnings("UnresolvedMixinReference")
     @Inject(method = "<init>(Lnet/minecraft/entity/passive/BeeEntity;)V", at = @At(value = "RETURN"))
-    private void init(BeeEntity beeEntity, CallbackInfo ci) {
+    private void init(Bee beeEntity, CallbackInfo ci) {
         this.this$0 = beeEntity;
     }
 

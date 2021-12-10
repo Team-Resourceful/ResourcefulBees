@@ -27,9 +27,9 @@ package com.teamresourceful.resourcefulbees.common.utils;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,8 +43,8 @@ public class WorldUtils {
 
     @Nullable
     @Contract("_, null, _, _ -> null")
-    public static <A extends TileEntity> A getTileEntity(@Nonnull Class<A> clazz, @Nullable World reader, @Nonnull BlockPos pos, boolean logWrongType) {
-        TileEntity tile = getTileEntity(reader, pos);
+    public static <A extends BlockEntity> A getTileEntity(@Nonnull Class<A> clazz, @Nullable Level reader, @Nonnull BlockPos pos, boolean logWrongType) {
+        BlockEntity tile = getTileEntity(reader, pos);
         if (tile == null) {
             return null;
         } else if (clazz.isInstance(tile)) {
@@ -60,18 +60,18 @@ public class WorldUtils {
 
     @Nullable
     @Contract("null, _ -> null")
-    public static TileEntity getTileEntity(@Nullable World world, @Nonnull BlockPos pos) {
+    public static BlockEntity getTileEntity(@Nullable Level world, @Nonnull BlockPos pos) {
         return !isBlockLoaded(world, pos) ? null : world.getBlockEntity(pos);
     }
 
     @Contract("null, _ -> false")
-    public static boolean isBlockLoaded(@Nullable World world, @Nonnull BlockPos pos) {
-        return world != null && World.isInWorldBounds(pos) && world.isLoaded(pos);
+    public static boolean isBlockLoaded(@Nullable Level world, @Nonnull BlockPos pos) {
+        return world != null && world.isInWorldBounds(pos) && world.isLoaded(pos);
     }
 
     @Nullable
     @Contract("_, null, _ -> null")
-    public static <T extends TileEntity> T getTileEntity(@Nonnull Class<T> clazz, @Nullable World world, @Nonnull BlockPos pos) {
+    public static <T extends BlockEntity> T getTileEntity(@Nonnull Class<T> clazz, @Nullable Level world, @Nonnull BlockPos pos) {
         return getTileEntity(clazz, world, pos, false);
     }
 }

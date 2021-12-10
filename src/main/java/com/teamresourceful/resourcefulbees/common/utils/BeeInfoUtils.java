@@ -33,6 +33,7 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -62,7 +63,7 @@ public class BeeInfoUtils {
     }
 
     public static MobEffect getEffect(String effectName) {
-        return ForgeRegistries.POTIONS.getValue(ResourceLocation.tryParse(effectName));
+        return ForgeRegistries.MOB_EFFECTS.getValue(ResourceLocation.tryParse(effectName));
     }
 
     public static @Nullable EntityType<?> getEntityType(String entityName) {
@@ -93,7 +94,7 @@ public class BeeInfoUtils {
     }
 
     public static void flagBeesInRange(BlockPos pos, Level world) {
-        BoundingBox box = BoundingBox.orientBox(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
+        BoundingBox box = new BoundingBox(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
         AABB aabb = AABB.of(box);
         if (world != null) {
             List<CustomBeeEntity> list = world.getEntitiesOfClass(CustomBeeEntity.class, aabb);
@@ -118,8 +119,8 @@ public class BeeInfoUtils {
             beeEntity.setAge(Math.max(0, i - ticksInHive));
         }
 
-        if (beeEntity instanceof CustomBeeEntity) {
-            ((CustomBeeEntity) beeEntity).setLoveTime(Math.max(0, beeEntity.getInLoveTime() - ticksInHive));
+        if (beeEntity instanceof CustomBeeEntity beeEntity) {
+            beeEntity.setLoveTime(Math.max(0, beeEntity.getInLoveTime() - ticksInHive));
         } else {
             beeEntity.setInLoveTime(Math.max(0, beeEntity.getInLoveTime() - ticksInHive));
         }
@@ -163,8 +164,7 @@ public class BeeInfoUtils {
         Item item = bottleOutput.getItem();
         if (item == Items.HONEY_BOTTLE) {
             return ModFluids.HONEY_STILL.get().getSource();
-        } else if (item instanceof CustomHoneyBottleItem) {
-            CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item;
+        } else if (item instanceof CustomHoneyBottleItem honey) {
             HoneyFluidData fluidData = HoneyRegistry.getRegistry().getHoneyData(honey.getHoneyData().getName()).getFluidData();
             return fluidData.getStillFluid().get().getSource();
         }
@@ -172,8 +172,7 @@ public class BeeInfoUtils {
     }
 
     public static Item getHoneyBottleFromFluid(Fluid fluid) {
-        if (fluid instanceof CustomHoneyFluid) {
-            CustomHoneyFluid customfluid = (CustomHoneyFluid) fluid;
+        if (fluid instanceof CustomHoneyFluid customfluid) {
             return HoneyRegistry.getRegistry().getHoneyData(customfluid.getHoneyData().getName()).getBottleData().getHoneyBottle().get();
         } else {
             return Items.HONEY_BOTTLE;
@@ -181,8 +180,7 @@ public class BeeInfoUtils {
     }
 
     public static Item getHoneyBlockFromFluid(Fluid fluid) {
-        if (fluid instanceof CustomHoneyFluid) {
-            CustomHoneyFluid customfluid = (CustomHoneyFluid) fluid;
+        if (fluid instanceof CustomHoneyFluid customfluid) {
             HoneyBlockData blockData = HoneyRegistry.getRegistry().getHoneyData(customfluid.getHoneyData().getName()).getBlockData();
             if (blockData.getBlockItem() == null) return Items.AIR;
             return blockData.getBlockItem().get();

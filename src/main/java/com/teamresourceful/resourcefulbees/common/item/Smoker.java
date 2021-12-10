@@ -3,26 +3,26 @@ package com.teamresourceful.resourcefulbees.common.item;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.IAngerable;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -39,23 +39,23 @@ public class Smoker extends Item {
     }
 
     @Override
-    public @NotNull ActionResultType useOn(ItemUseContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         if (!context.getLevel().isClientSide && context.getItemInHand().getDamageValue() < context.getItemInHand().getMaxDamage()) {
             smokeHive(context.getClickedPos(), context.getLevel());
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         }
         return super.useOn(context);
     }
 
-    protected void smokeHive(BlockPos pos, World world) {
-        TileEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TieredBeehiveTileEntity) {
-            ((TieredBeehiveTileEntity) blockEntity).smokeHive();
+    protected void smokeHive(BlockPos pos, Level world) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof TieredBeehiveTileEntity hive) {
+            hive.smokeHive();
         }
     }
 
     @Override
-	public @NotNull ActionResult<ItemStack> use(World world, @NotNull PlayerEntity player, @NotNull Hand hand) {
+	public @NotNull InteractionResultHolder<ItemStack> use(Level world, @NotNull Player player, @NotNull InteractionHand hand) {
 	    if (!world.isClientSide) {
 	        int damage = player.getItemInHand(hand).getDamageValue();
 	        int maxDamage = player.getItemInHand(hand).getMaxDamage();
@@ -67,21 +67,21 @@ public class Smoker extends Item {
 	            flag++;
             }
 
-	        Vector3d vec3d = player.getLookAngle();
+	        Vec3 vec3d = player.getLookAngle();
 			double x = player.getX() + vec3d.x * 2;
 			double y = player.getY() + vec3d.y * 2;
 			double z = player.getZ() + vec3d.z * 2;
 
-            AxisAlignedBB axisalignedbb = new AxisAlignedBB((player.getX() + vec3d.x) - 2.5D, (player.getY() + vec3d.y) - 2D, (player.getZ() + vec3d.z) - 2.5D, (player.getX() + vec3d.x) + 2.5D, (player.getY() + vec3d.y) + 2D, (player.getZ() + vec3d.z) + 2.5D);
-            List<BeeEntity> list = world.getLoadedEntitiesOfClass(BeeEntity.class, axisalignedbb);
+            AABB axisalignedbb = new AABB((player.getX() + vec3d.x) - 2.5D, (player.getY() + vec3d.y) - 2D, (player.getZ() + vec3d.z) - 2.5D, (player.getX() + vec3d.x) + 2.5D, (player.getY() + vec3d.y) + 2D, (player.getZ() + vec3d.z) + 2.5D);
+            List<Bee> list = world.getEntitiesOfClass(Bee.class, axisalignedbb);
             list.stream()
-                    .filter(IAngerable::isAngry)
+                    .filter(NeutralMob::isAngry)
                     .forEach(bee -> {
                         bee.setRemainingPersistentAngerTime(0);
                         bee.setLastHurtByMob(null);
                     });
 
-			ServerWorld worldServer = (ServerWorld) world;
+            ServerLevel worldServer = (ServerLevel) world;
 			worldServer.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y + 1.3D, z, 50, 0, 0, 0, 0.01F);
 	    }
 		return super.use(world, player, hand);
@@ -99,12 +99,12 @@ public class Smoker extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable World worldIn, @NotNull List<ITextComponent> tooltip, @NotNull ITooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if(Screen.hasShiftDown()) {
-            tooltip.add(TranslationConstants.Items.SMOKER_TOOLTIP.withStyle(TextFormatting.GOLD));
-            tooltip.add(TranslationConstants.Items.SMOKER_TOOLTIP1.withStyle(TextFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.SMOKER_TOOLTIP.withStyle(ChatFormatting.GOLD));
+            tooltip.add(TranslationConstants.Items.SMOKER_TOOLTIP1.withStyle(ChatFormatting.GOLD));
         } else {
-            tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(TextFormatting.YELLOW));
+            tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(ChatFormatting.YELLOW));
         }
     }
 }

@@ -5,32 +5,33 @@ import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class ApiaryBreederContainer extends ContainerWithStackMove {
 
     private final ApiaryBreederTileEntity apiaryBreederTileEntity;
-    private final PlayerInventory playerInventory;
+    private final Inventory playerInventory;
     private int numberOfBreeders;
     private boolean rebuild;
 
-    public final IIntArray times;
+    public final ContainerData times;
 
-    public ApiaryBreederContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
-        this(id, world, pos, inv, new IntArray(5));
+    public ApiaryBreederContainer(int id, Level world, BlockPos pos, Inventory inv) {
+        this(id, world, pos, inv, new SimpleContainerData(5));
     }
 
-    public ApiaryBreederContainer(int id, World world, BlockPos pos, PlayerInventory inv, IIntArray times) {
+    public ApiaryBreederContainer(int id, Level world, BlockPos pos, Inventory inv, ContainerData times) {
         super(ModContainers.APIARY_BREEDER_CONTAINER.get(), id);
         this.playerInventory = inv;
         apiaryBreederTileEntity = (ApiaryBreederTileEntity) world.getBlockEntity(pos);
@@ -40,7 +41,7 @@ public class ApiaryBreederContainer extends ContainerWithStackMove {
     }
 
     @Override
-    public boolean stillValid(@NotNull PlayerEntity player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
@@ -64,13 +65,13 @@ public class ApiaryBreederContainer extends ContainerWithStackMove {
                     }
 
                     @Override
-                    public boolean mayPickup(PlayerEntity playerIn) {
+                    public boolean mayPickup(Player playerIn) {
                         boolean flag = true;
                         int count;
                         ItemStack upgradeItem = getItem();
-                        CompoundNBT data = UpgradeItem.getUpgradeData(upgradeItem);
+                        CompoundTag data = UpgradeItem.getUpgradeData(upgradeItem);
                         if (data != null && data.getString(NBTConstants.NBT_UPGRADE_TYPE).equals(NBTConstants.NBT_BREEDER_UPGRADE) && data.contains(NBTConstants.NBT_BREEDER_COUNT)) {
-                            count = (int) MathHelper.clamp(data.getFloat(NBTConstants.NBT_BREEDER_COUNT), 1F, 5);
+                            count = (int) Mth.clamp(data.getFloat(NBTConstants.NBT_BREEDER_COUNT), 1F, 5);
                             int numBreeders = getApiaryBreederTileEntity().getNumberOfBreeders();
                             for (int j = numBreeders - count; j < numBreeders; j++) {
                                 if (!areSlotsEmpty(j)) {
@@ -180,7 +181,7 @@ public class ApiaryBreederContainer extends ContainerWithStackMove {
         return apiaryBreederTileEntity;
     }
 
-    public PlayerInventory getPlayerInventory() {
+    public Inventory getPlayerInventory() {
         return playerInventory;
     }
 

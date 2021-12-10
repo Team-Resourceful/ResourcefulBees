@@ -60,22 +60,22 @@ public class TranslationConstants {
     public static class Jei {
 
         @Translate("Bee Breeding")
-        public static final String BREEDING = "gui.resourcefulbees.jei.category.breeding";
+        public static final TranslatableComponent BREEDING = new TranslatableComponent("gui.resourcefulbees.jei.category.breeding");
 
         @Translate("Centrifuge")
-        public static final String CENTRIFUGE = "gui.resourcefulbees.jei.category.centrifuge";
+        public static final TranslatableComponent CENTRIFUGE = new TranslatableComponent("gui.resourcefulbees.jei.category.centrifuge");
 
         @Translate("Bee Flowers")
-        public static final String FLOWERS = "gui.resourcefulbees.jei.category.bee_pollination_flowers";
+        public static final TranslatableComponent FLOWERS = new TranslatableComponent("gui.resourcefulbees.jei.category.bee_pollination_flowers");
 
         @Translate("Beehive Outputs")
-        public static final String HIVE = "gui.resourcefulbees.jei.category.hive";
+        public static final TranslatableComponent HIVE = new TranslatableComponent("gui.resourcefulbees.jei.category.hive");
 
         @Translate("Mutations")
-        public static final String MUTATIONS = "gui.resourcefulbees.jei.category.mutations";
+        public static final TranslatableComponent MUTATIONS = new TranslatableComponent("gui.resourcefulbees.jei.category.mutations");
 
         @Translate("Solidification Chamber")
-        public static final String SOLIDIFICATION = "gui.resourcefulbees.jei.category.solidification";
+        public static final TranslatableComponent SOLIDIFICATION = new TranslatableComponent("gui.resourcefulbees.jei.category.solidification");
 
         @Translate("Chance that this will succeed in creating a new bee.")
         public static final TranslatableComponent BREED_CHANCE_INFO = new TranslatableComponent("gui.resourcefulbees.jei.category.breed_chance.info");

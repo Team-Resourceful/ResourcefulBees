@@ -2,12 +2,12 @@ package com.teamresourceful.resourcefulbees.common.capabilities;
 
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import org.jetbrains.annotations.Nullable;
@@ -25,19 +25,19 @@ public class BeepediaData implements IBeepediaData {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT nbt = new CompoundNBT();
-        ListNBT list = new ListNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag nbt = new CompoundTag();
+        ListTag list = new ListTag();
         int i = 0;
         for (ResourceLocation bee : bees) {
-            list.add(i++, StringNBT.valueOf(bee.toString()));
+            list.add(i++, StringTag.valueOf(bee.toString()));
         }
         nbt.put(NBTConstants.NBT_BEEPEDIA_DATA, list);
         return nbt;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         bees = new HashSet<>();
         nbt.getList(NBTConstants.NBT_BEEPEDIA_DATA, 10).forEach(i -> bees.add(new ResourceLocation(i.getAsString())));
     }
@@ -47,14 +47,14 @@ public class BeepediaData implements IBeepediaData {
 
             @Nullable
             @Override
-            public INBT writeNBT(Capability<IBeepediaData> capability, IBeepediaData instance, Direction side) {
+            public Tag writeNBT(Capability<IBeepediaData> capability, IBeepediaData instance, Direction side) {
                 return instance.serializeNBT();
             }
 
             @Override
-            public void readNBT(Capability<IBeepediaData> capability, IBeepediaData instance, Direction side, INBT nbt) {
-                if (nbt instanceof CompoundNBT) {
-                    instance.deserializeNBT((CompoundNBT) nbt);
+            public void readNBT(Capability<IBeepediaData> capability, IBeepediaData instance, Direction side, Tag nbt) {
+                if (nbt instanceof CompoundTag) {
+                    instance.deserializeNBT((CompoundTag) nbt);
                 }
             }
         }, BeepediaData::new);

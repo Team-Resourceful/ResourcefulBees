@@ -1,7 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.inventory.slots;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,7 @@ public class FilterSlot extends SlotItemHandler {
     }
 
     @Override
-    public @NotNull ItemStack onTake(@NotNull PlayerEntity pPlayer, @NotNull ItemStack pStack) {
+    public @NotNull ItemStack onTake(@NotNull Player pPlayer, @NotNull ItemStack pStack) {
         return ItemStack.EMPTY;
     }
 
@@ -34,7 +35,7 @@ public class FilterSlot extends SlotItemHandler {
     }
 
     @Override
-    public boolean mayPickup(PlayerEntity playerIn) {
+    public boolean mayPickup(Player playerIn) {
         return false;
     }
 }

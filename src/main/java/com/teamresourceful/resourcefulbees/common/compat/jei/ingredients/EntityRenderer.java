@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
 
     @Override
-    public void render(@NotNull MatrixStack stack, int x, int y, @Nullable EntityIngredient entityIngredient) {
+    public void render(@NotNull PoseStack stack, int x, int y, @Nullable EntityIngredient entityIngredient) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null && entityIngredient != null && mc.player != null && entityIngredient.getEntity() != null) {
             if (entityIngredient.getEntity() instanceof CustomBeeEntity) {
@@ -28,8 +28,8 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
 
     @NotNull
     @Override
-    public List<ITextComponent> getTooltip(EntityIngredient entityIngredient, @NotNull ITooltipFlag iTooltipFlag) {
-        List<ITextComponent> tooltip = new ArrayList<>();
+    public List<Component> getTooltip(EntityIngredient entityIngredient, @NotNull TooltipFlag iTooltipFlag) {
+        List<Component> tooltip = new ArrayList<>();
         tooltip.add(entityIngredient.getDisplayName());
         tooltip.addAll(entityIngredient.getTooltip());
         return tooltip;

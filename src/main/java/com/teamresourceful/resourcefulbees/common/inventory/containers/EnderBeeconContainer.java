@@ -3,20 +3,21 @@ package com.teamresourceful.resourcefulbees.common.inventory.containers;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class EnderBeeconContainer extends ContainerWithStackMove {
 
     private final EnderBeeconTileEntity enderBeeconTileEntity;
-    private final PlayerEntity player;
+    private final Player player;
 
-    public EnderBeeconContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+    public EnderBeeconContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.ENDER_BEECON_CONTAINER.get(), id);
 
         this.player = inv.player;
@@ -34,7 +35,7 @@ public class EnderBeeconContainer extends ContainerWithStackMove {
     }
 
     @Override
-    public boolean stillValid(@NotNull PlayerEntity player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
@@ -64,7 +65,7 @@ public class EnderBeeconContainer extends ContainerWithStackMove {
             return;
         }
 
-        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
+        for (ContainerListener listener : ((ContainerAccessor) this).getListeners()) {
             getEnderBeeconTileEntity().sendGUINetworkPacket(listener);
         }
     }
@@ -73,7 +74,7 @@ public class EnderBeeconContainer extends ContainerWithStackMove {
         return enderBeeconTileEntity;
     }
 
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

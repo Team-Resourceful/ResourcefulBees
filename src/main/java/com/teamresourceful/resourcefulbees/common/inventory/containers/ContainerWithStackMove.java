@@ -1,17 +1,17 @@
 package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ContainerWithStackMove extends Container {
+public abstract class ContainerWithStackMove extends AbstractContainerMenu {
 
 
-    protected ContainerWithStackMove(@Nullable ContainerType<?> type, int id) {
+    protected ContainerWithStackMove(@Nullable MenuType<?> type, int id) {
         super(type, id);
     }
 
@@ -22,10 +22,10 @@ public abstract class ContainerWithStackMove extends Container {
     public abstract int getContainerInputStart();
 
     @Override
-    public @NotNull ItemStack quickMoveStack(@NotNull PlayerEntity player, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 

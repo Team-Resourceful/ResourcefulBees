@@ -5,17 +5,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.StackList;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.common.crafting.MultiItemValue;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +29,7 @@ public class NestIngredient extends Ingredient {
     private final int tier;
 
     protected NestIngredient(int tier) {
-        super(Stream.of(new StackList(getNests(tier))));
+        super(Stream.of(new MultiItemValue(getNests(tier))));
         this.tier = tier;
     }
 
@@ -58,8 +54,8 @@ public class NestIngredient extends Ingredient {
     public static Collection<ItemStack> getNests(int tier) {
         return NESTS.stream().map(stack ->  {
             stack = stack.copy();
-            stack.setTag(new CompoundNBT());
-            CompoundNBT tag = new CompoundNBT();
+            stack.setTag(new CompoundTag());
+            CompoundTag tag = new CompoundTag();
             tag.putInt(NBTConstants.NBT_TIER, tier);
             stack.getTag().put(NBTConstants.NBT_BLOCK_ENTITY_TAG, tag);
             return stack;
@@ -80,7 +76,7 @@ public class NestIngredient extends Ingredient {
     @SuppressWarnings("ConstantConditions")
     private static int getTier(ItemStack stack) {
         if (!stack.hasTag()) return -1;
-        CompoundNBT tag = stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
+        CompoundTag tag = stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
         if (tag == null) return -1;
         return tag.contains(NBTConstants.NBT_TIER) ? tag.getInt(NBTConstants.NBT_TIER) : -1;
     }
@@ -90,7 +86,7 @@ public class NestIngredient extends Ingredient {
         public static final Serializer INSTANCE = new Serializer();
 
         @Override
-        public @NotNull NestIngredient parse(@NotNull PacketBuffer buffer) {
+        public @NotNull NestIngredient parse(@NotNull FriendlyByteBuf buffer) {
             return new NestIngredient(buffer.readInt());
         }
 
@@ -101,7 +97,7 @@ public class NestIngredient extends Ingredient {
         }
 
         @Override
-        public void write(@NotNull PacketBuffer buffer, @NotNull NestIngredient ingredient) {
+        public void write(@NotNull FriendlyByteBuf buffer, @NotNull NestIngredient ingredient) {
             buffer.writeInt(ingredient.tier);
         }
     }

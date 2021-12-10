@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.common.entity.goals;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.ModBeeEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -39,7 +39,7 @@ public class BeeWanderGoal extends Goal {
      */
     @Override
     public void start() {
-        Vector3d vector3d = this.getRandomLocation();
+        Vec3 vector3d = this.getRandomLocation();
         if (vector3d != null) {
             modBeeEntity.getNavigation().moveTo(modBeeEntity.getNavigation().createPath(new BlockPos(vector3d), 1), 1.0D);
         }
@@ -47,10 +47,10 @@ public class BeeWanderGoal extends Goal {
     }
 
     @Nullable
-    private Vector3d getRandomLocation() {
-        Vector3d vector3d;
+    private Vec3 getRandomLocation() {
+        Vec3 vector3d;
         if (modBeeEntity.isHiveValid() && !modBeeEntity.checkIsWithinDistance(Objects.requireNonNull(modBeeEntity.getHivePos()), 22)) {
-            Vector3d vector3d1 = Vector3d.atCenterOf(modBeeEntity.getHivePos());
+            Vec3 vector3d1 = Vec3.atCenterOf(modBeeEntity.getHivePos());
             vector3d = vector3d1.subtract(modBeeEntity.position()).normalize();
         } else {
             vector3d = modBeeEntity.getViewVector(0.0F);
@@ -58,7 +58,7 @@ public class BeeWanderGoal extends Goal {
 
         int randHorz = modBeeEntity.getRandom().nextInt(8) + 8;
 
-        Vector3d vector3d2 = RandomPositionGenerator.findAirTarget(modBeeEntity, randHorz, 7, vector3d);
+        Vec3 vector3d2 = RandomPositionGenerator.findAirTarget(modBeeEntity, randHorz, 7, vector3d);
         return vector3d2 != null ? vector3d2 : RandomPositionGenerator.findGroundTarget(modBeeEntity, randHorz, 6, -4, vector3d);
     }
 }

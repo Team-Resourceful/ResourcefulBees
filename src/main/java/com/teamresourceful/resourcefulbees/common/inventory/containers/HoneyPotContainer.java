@@ -3,19 +3,19 @@ package com.teamresourceful.resourcefulbees.common.inventory.containers;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.HoneyPotTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class HoneyPotContainer extends ContainerWithStackMove {
 
     private final HoneyPotTileEntity tileEntity;
 
-    public HoneyPotContainer(int id, World world, BlockPos pos, PlayerInventory inv) {
+    public HoneyPotContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.HONEY_POT_CONTAINER.get(), id);
 
         this.tileEntity = (HoneyPotTileEntity) world.getBlockEntity(pos);
@@ -51,7 +51,7 @@ public class HoneyPotContainer extends ContainerWithStackMove {
     }
 
     @Override
-    public boolean stillValid(@NotNull PlayerEntity player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
@@ -60,7 +60,7 @@ public class HoneyPotContainer extends ContainerWithStackMove {
         super.broadcastChanges();
         if (getTileEntity() == null) return;
 
-        for (IContainerListener listener : ((ContainerAccessor) this).getListeners())
+        for (ContainerListener listener : ((ContainerAccessor) this).getListeners())
             getTileEntity().sendGUINetworkPacket(listener);
     }
 

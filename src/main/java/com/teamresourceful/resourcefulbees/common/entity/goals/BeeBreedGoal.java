@@ -5,18 +5,17 @@ import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BreedGoalInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.BreedGoal;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 
@@ -25,7 +24,7 @@ import java.util.Objects;
 public class BeeBreedGoal extends BreedGoal {
 
     private final String beeType;
-    public BeeBreedGoal(AnimalEntity animal, double speedIn, String beeType) {
+    public BeeBreedGoal(Animal animal, double speedIn, String beeType) {
         super(animal, speedIn);
         this.beeType = beeType;
     }
@@ -36,8 +35,7 @@ public class BeeBreedGoal extends BreedGoal {
             return false;
         } else {
             this.partner = ((BreedGoalInvoker)this).callGetFreePartner();
-            if (partner instanceof ICustomBee){
-                ICustomBee parent1 = ((ICustomBee) partner);
+            if (partner instanceof ICustomBee parent1){
                 ICustomBee parent2 = ((ICustomBee) animal);
                 return BeeRegistry.getRegistry().canParentsBreed(parent1.getBeeType(), parent2.getBeeType());
             }
@@ -48,6 +46,7 @@ public class BeeBreedGoal extends BreedGoal {
 
     @Override
     protected void breed() {
+        if (partner == null) return;
         BeeFamily beeFamily = BeeRegistry.getRegistry().getWeightedChild(((ICustomBee)this.partner).getBeeType(), beeType);
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, this.partner, createSelectedChild(beeFamily));
@@ -55,7 +54,7 @@ public class BeeBreedGoal extends BreedGoal {
             resetBreed();
             return;
         }
-        AgeableEntity selectedChild = event.getChild();
+        AgeableMob selectedChild = event.getChild();
         if (selectedChild != null) {
             awardPlayerAdvancement(selectedChild);
             resetBreed();
@@ -69,19 +68,19 @@ public class BeeBreedGoal extends BreedGoal {
         }
     }
 
-    private void spawnChildInLevel(BeeFamily beeFamily, AgeableEntity selectedChild) {
+    private void spawnChildInLevel(BeeFamily beeFamily, AgeableMob selectedChild) {
         selectedChild.setAge(beeFamily.getChildData().getBreedData().getChildGrowthDelay());
         selectedChild.moveTo(animal.position()); //TODO check effect of this vs the 5-arg #moveTo
         this.level.addFreshEntity(selectedChild);
         this.level.broadcastEntityEvent(this.animal, (byte)18);
         if (this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-            this.level.addFreshEntity(new ExperienceOrbEntity(this.level, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRandom().nextInt(7) + 1));
+            this.level.addFreshEntity(new ExperienceOrb(this.level, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRandom().nextInt(7) + 1));
         }
     }
 
-    private void awardPlayerAdvancement(AgeableEntity selectedChild) {
-        ServerPlayerEntity serverPlayer = getPlayerBreeding();
-        if (serverPlayer != null) {
+    private void awardPlayerAdvancement(AgeableMob selectedChild) {
+        ServerPlayer serverPlayer = getPlayerBreeding();
+        if (serverPlayer != null && partner != null) {
             serverPlayer.awardStat(Stats.ANIMALS_BRED);
             CriteriaTriggers.BRED_ANIMALS.trigger(serverPlayer, this.animal, this.partner, selectedChild);
         }
@@ -89,7 +88,7 @@ public class BeeBreedGoal extends BreedGoal {
 
     protected void spawnParticles() {
         if (!level.isClientSide()) {
-            ServerWorld worldServer = (ServerWorld) level;
+            ServerLevel worldServer = (ServerLevel) level;
             for(int i = 0; i < 5; ++i) {
                 double d0 = level.random.nextGaussian() * 0.02D;
                 double d1 = level.random.nextGaussian() * 0.02D;
@@ -112,14 +111,13 @@ public class BeeBreedGoal extends BreedGoal {
         this.partner.resetLove();
     }
 
-    public AgeableEntity createSelectedChild(BeeFamily beeFamily) {
+    public AgeableMob createSelectedChild(BeeFamily beeFamily) {
         EntityType<?> entityType = Objects.requireNonNull(beeFamily.getChildData().getEntityType());
-        Entity entity = entityType.create(level);
-        return (AgeableEntity) entity;
+        return (AgeableMob) entityType.create(level);
     }
 
-    private ServerPlayerEntity getPlayerBreeding() {
-        return animal.getLoveCause() == null && partner.getLoveCause() != null
+    private ServerPlayer getPlayerBreeding() {
+        return animal.getLoveCause() == null && partner != null && partner.getLoveCause() != null
                 ? this.partner.getLoveCause()
                 : animal.getLoveCause();
     }
