@@ -1,24 +1,23 @@
 package com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary;
 
+import com.teamresourceful.resourcefulbees.common.block.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
-public class ApiaryStorageBlock extends Block {
+public class ApiaryStorageBlock extends RenderingBaseEntityBlock {
     public ApiaryStorageBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any());
@@ -26,28 +25,23 @@ public class ApiaryStorageBlock extends Block {
 
     @NotNull
     @Override
-    public ActionResultType use(@NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand handIn, @NotNull BlockRayTraceResult hit) {
+    public InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult) {
         if (!player.isShiftKeyDown() && !world.isClientSide) {
-            INamedContainerProvider blockEntity = state.getMenuProvider(world,pos);
-            NetworkHooks.openGui((ServerPlayerEntity) player, blockEntity, pos);
+            MenuProvider blockEntity = state.getMenuProvider(world,pos);
+            NetworkHooks.openGui((ServerPlayer) player, blockEntity, pos);
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Nullable
     @Override
-    public INamedContainerProvider getMenuProvider(@NotNull BlockState state, World worldIn, @NotNull BlockPos pos) {
-        return (INamedContainerProvider)worldIn.getBlockEntity(pos);
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
+    public MenuProvider getMenuProvider(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos) {
+        return (MenuProvider)worldIn.getBlockEntity(pos);
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new ApiaryStorageTileEntity();
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return new ApiaryStorageTileEntity(pos, state);
     }
 }

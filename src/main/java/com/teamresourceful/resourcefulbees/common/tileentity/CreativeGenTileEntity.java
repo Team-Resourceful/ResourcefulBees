@@ -2,9 +2,11 @@ package com.teamresourceful.resourcefulbees.common.tileentity;
 
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -15,12 +17,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class CreativeGenTileEntity extends TileEntity implements ITickableTileEntity {
+public class CreativeGenTileEntity extends BlockEntity {
 
     public final CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
 
-    public CreativeGenTileEntity() { super(ModBlockEntityTypes.CREATIVE_GEN_ENTITY.get()); }
+    public CreativeGenTileEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntityTypes.CREATIVE_GEN_ENTITY.get(), pos, state);
+    }
 
     @NotNull
     @Override
@@ -30,14 +34,14 @@ public class CreativeGenTileEntity extends TileEntity implements ITickableTileEn
     }
 
     @Override
-    protected void invalidateCaps() {
+    public void invalidateCaps() {
         this.energyOptional.invalidate();
     }
 
-    private void sendOutPower() {
+    private static void sendOutPower(Level level, BlockPos pos) {
         if (level != null && !level.isClientSide) {
             Arrays.stream(Direction.values())
-                    .map(direction -> level.getBlockEntity(worldPosition.relative(direction)))
+                    .map(direction -> level.getBlockEntity(pos.relative(direction)))
                     .filter(Objects::nonNull)
                     .forEach(tileEntity -> tileEntity.getCapability(CapabilityEnergy.ENERGY)
                     .map(iEnergyStorage -> !iEnergyStorage.canReceive() || iEnergyStorage.receiveEnergy(Integer.MAX_VALUE, false) != 0));
@@ -51,11 +55,10 @@ public class CreativeGenTileEntity extends TileEntity implements ITickableTileEn
         };
     }
 
-    @Override
-    public void tick() {
-        if (level != null && !level.isClientSide) {
-            energyStorage.setEnergy(Integer.MAX_VALUE);
-            sendOutPower();
+    public static void serverTick(Level level, BlockPos pos, BlockState state, CreativeGenTileEntity entity) {
+        if (level != null) {
+            entity.energyStorage.setEnergy(Integer.MAX_VALUE);
+            sendOutPower(level, pos);
         }
     }
 }

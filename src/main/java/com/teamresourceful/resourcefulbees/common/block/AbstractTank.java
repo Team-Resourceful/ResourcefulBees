@@ -6,13 +6,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.network.NetworkHooks;
 
-public abstract class AbstractTank extends BaseEntityBlock {
+public abstract class AbstractTank extends RenderingBaseEntityBlock {
     protected AbstractTank(Properties properties) {
         super(properties);
     }

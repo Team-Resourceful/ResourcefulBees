@@ -16,36 +16,34 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEnt
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import io.netty.buffer.Unpooled;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -59,9 +57,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, ITickableTileEntity {
+public class EnderBeeconTileEntity extends BlockEntity implements ISyncableGUI {
 
-    public static final Set<Effect> ALLOWED_EFFECTS = Sets.newHashSet(ModEffects.CALMING.get(), Effects.WATER_BREATHING, Effects.FIRE_RESISTANCE, Effects.REGENERATION);
+    public static final Set<MobEffect> ALLOWED_EFFECTS = Sets.newHashSet(ModEffects.CALMING.get(), MobEffects.WATER_BREATHING, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION);
 
     private final HoneyFluidTank tank = new HoneyFluidTank(16000) {
         @Override
@@ -72,24 +70,24 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
     private boolean updateBeecon = true;
     private boolean beeconActive = false;
 
-    private Set<Effect> effects = new LinkedHashSet<>();
+    private Set<MobEffect> effects = new LinkedHashSet<>();
     private int range = 1;
 
-    public EnderBeeconTileEntity() {
-        super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get());
+    public EnderBeeconTileEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), pos, state);
     }
 
     //region MENU
 
     @NotNull
     @Override
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return TranslationConstants.Guis.BEECON;
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         if (level == null) return null;
         return new EnderBeeconContainer(id, level, worldPosition, playerInventory);
     }
@@ -99,98 +97,94 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
     //region NBT
 
     @Override
-    public @NotNull CompoundNBT save(@NotNull CompoundNBT nbt) {
-        nbt.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundNBT()));
+    public @NotNull CompoundTag save(@NotNull CompoundTag nbt) {
+        nbt.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundTag()));
         nbt.putInt(NBTConstants.Beecon.RANGE, range);
-        if (effects != null && !effects.isEmpty()) nbt.put(NBTConstants.Beecon.ACTIVE_EFFECTS, writeEffectsToNBT(new ListNBT()));
+        if (effects != null && !effects.isEmpty()) nbt.put(NBTConstants.Beecon.ACTIVE_EFFECTS, writeEffectsToNBT(new ListTag()));
         return super.save(nbt);
     }
 
     @Override
-    public void load(@NotNull BlockState state, @NotNull CompoundNBT nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         tank.readFromNBT(nbt.getCompound(NBTConstants.NBT_TANK));
-        effects = readEffectsFromNBT(nbt.getList(NBTConstants.Beecon.ACTIVE_EFFECTS, Constants.NBT.TAG_STRING));
+        effects = readEffectsFromNBT(nbt.getList(NBTConstants.Beecon.ACTIVE_EFFECTS, Tag.TAG_STRING));
         range = nbt.getInt(NBTConstants.Beecon.RANGE);
         range = range > 0 ? range : 1;
     }
 
     @Override
-    public @NotNull CompoundNBT getUpdateTag() {
-        return save(new CompoundNBT());
+    public @NotNull CompoundTag getUpdateTag() {
+        return save(new CompoundTag());
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.getBlockPos(), 0, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        load(this.getBlockState(), pkt.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        load(pkt.getTag());
     }
 
     //endregion
 
-    @Override
-    public void tick() {
-        if (this.level == null) return;
+    public static void serverTick(Level level, BlockPos pos, BlockState state, EnderBeeconTileEntity entity) {
+        if (level == null) return;
 
         // do drain tank
-        if (doEffects()) {
-            tank.drain(getDrain(), IFluidHandler.FluidAction.EXECUTE);
+        if (entity.doEffects()) {
+            entity.tank.drain(entity.getDrain(), IFluidHandler.FluidAction.EXECUTE);
         }
 
         // give effects
-        if (this.level.getGameTime() % 80L == 0L && !tank.isEmpty()) {
-            BlockState state = level.getBlockState(this.worldPosition);
-
-            List<BeeEntity> bees = level.getEntitiesOfClass(BeeEntity.class, getEffectBox(this.level));
+        if (level.getGameTime() % 80L == 0L && !entity.tank.isEmpty()) {
+            List<Bee> bees = level.getEntitiesOfClass(Bee.class, getEffectBox(level, pos, entity.range));
             bees.stream().filter(CustomBeeEntity.class::isInstance).map(CustomBeeEntity.class::cast).forEach(CustomBeeEntity::setHasDisruptorInRange);
-            this.addEffectsToBees(this.level, bees);
+            addEffectsToBees(level, bees, entity);
             if (state.hasProperty(EnderBeecon.SOUND) && Boolean.TRUE.equals(state.getValue(EnderBeecon.SOUND)))
-                level.playSound(null, this.worldPosition, SoundEvents.BEACON_AMBIENT, SoundCategory.BLOCKS, 1f, 1f);
+                level.playSound(null, pos, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 1f, 1f);
         }
 
         // pull from below containers
-        pullFluidFromBelow(this.level);
+        pullFluidFromBelow(level, pos, state, entity);
 
         // play activation sounds
-        startUpCheck(this.level);
+        startUpCheck(level, pos, state, entity);
     }
 
-    private void startUpCheck(@NotNull World level) {
+    private static void startUpCheck(@NotNull Level level, BlockPos pos, BlockState state, EnderBeeconTileEntity entity) {
         if (level.isClientSide) return;
 
-        boolean flag = tank.getFluidAmount() > 0;
-        BlockState state = level.getBlockState(this.worldPosition);
-        if (updateBeecon) {
-            if (flag && !beeconActive) {
+        boolean flag = entity.tank.getFluidAmount() > 0;
+        if (entity.updateBeecon) {
+            if (flag && !entity.beeconActive) {
                 if (state.hasProperty(EnderBeecon.SOUND) && Boolean.TRUE.equals(state.getValue(EnderBeecon.SOUND)))
-                    level.playSound(null, this.worldPosition, SoundEvents.BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
-                beeconActive = true;
-            } else if (!flag && beeconActive) {
+                    level.playSound(null, pos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1f, 1f);
+                entity.beeconActive = true;
+            } else if (!flag && entity.beeconActive) {
                 if (state.hasProperty(EnderBeecon.SOUND) && Boolean.TRUE.equals(state.getValue(EnderBeecon.SOUND)))
-                    level.playSound(null, this.worldPosition, SoundEvents.BEACON_DEACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
-                beeconActive = false;
+                    level.playSound(null, pos, SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 1f, 1f);
+                entity.beeconActive = false;
             }
         }
-        updateBeecon = false;
+        entity.updateBeecon = false;
     }
 
-    private void pullFluidFromBelow(@NotNull World level) {
-        TileEntity tileEntity = level.getBlockEntity(worldPosition.below());
+    private static void pullFluidFromBelow(@NotNull Level level, BlockPos pos, BlockState state, EnderBeeconTileEntity entity) {
+        BlockEntity tileEntity = level.getBlockEntity(pos.below());
         if (tileEntity == null) return;
-        if (tank.getSpace() == 0) return;
+        if (entity.tank.getSpace() == 0) return;
         tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP).ifPresent(handler -> {
             for (int i = 0; i < handler.getTanks(); i++) {
                 FluidStack stack = handler.getFluidInTank(i);
-                if (tank.isFluidValid(stack) && (tank.getFluid().isFluidEqual(stack) || tank.getFluid().isEmpty())) {
+                if (entity.tank.isFluidValid(stack) && (entity.tank.getFluid().isFluidEqual(stack) || entity.tank.getFluid().isEmpty())) {
                     int pullAmount = CommonConfig.BEECON_PULL_AMOUNT.get();
-                    if (pullAmount > tank.getSpace()) pullAmount = tank.getSpace();
+                    if (pullAmount > entity.tank.getSpace()) pullAmount = entity.tank.getSpace();
                     FluidStack amountDrained = handler.drain(new FluidStack(stack.getFluid(), pullAmount), IFluidHandler.FluidAction.EXECUTE);
-                    tank.fill(amountDrained, IFluidHandler.FluidAction.EXECUTE);
+                    entity.tank.fill(amountDrained, IFluidHandler.FluidAction.EXECUTE);
                 }
             }
         });
@@ -199,14 +193,8 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
     //region CLIENT
 
     @Override
-    public AxisAlignedBB getRenderBoundingBox() {
-        return new AxisAlignedBB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX(), worldPosition.getY() + 255D, worldPosition.getZ());
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public double getViewDistance() {
-        return 256.0D;
+    public AABB getRenderBoundingBox() {
+        return new AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX(), worldPosition.getY() + 255D, worldPosition.getZ());
     }
 
     //endregion
@@ -223,23 +211,23 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
     }
 
     @Override
-    protected void invalidateCaps() {
+    public void invalidateCaps() {
         super.invalidateCaps();
         tankOptional.invalidate();
     }
 
-    public Set<Effect> getEffects() {
+    public Set<MobEffect> getEffects() {
         return effects;
     }
 
-    public AxisAlignedBB getEffectBox(@NotNull World level) {
-        AxisAlignedBB pos = new AxisAlignedBB(this.worldPosition).inflate(range);
-        return new AxisAlignedBB(pos.minX, 0, pos.minZ, pos.maxX, level.getMaxBuildHeight(), pos.maxZ);
+    public static AABB getEffectBox(@NotNull Level level, BlockPos pos, int range) {
+        AABB aabb = new AABB(pos).inflate(range);
+        return new AABB(aabb.minX, 0, aabb.minZ, aabb.maxX, level.getMaxBuildHeight(), aabb.maxZ);
     }
 
-    private void addEffectsToBees(@NotNull World level, List<BeeEntity> bees) {
-        if (!level.isClientSide && doEffects()) {
-            for (BeeEntity mob : bees) for (Effect effect : effects) mob.addEffect(new EffectInstance(effect, 120, 0, false, false));
+    private static void addEffectsToBees(@NotNull Level level, List<Bee> bees, EnderBeeconTileEntity entity) {
+        if (entity.doEffects()) {
+            for (Bee mob : bees) for (MobEffect effect : entity.effects) mob.addEffect(new MobEffectInstance(effect, 120, 0, false, false));
         }
     }
 
@@ -259,56 +247,50 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
     public void handleBeeconUpdate(BeeconChangeMessage.Option option, int value) {
         if (this.level == null) return;
         switch (option) {
-            case EFFECT_OFF:
-            case EFFECT_ON:
-                Effect effect = Effect.byId(value);
+            case EFFECT_OFF, EFFECT_ON -> {
+                MobEffect effect = MobEffect.byId(value);
                 if (effect != null && ALLOWED_EFFECTS.contains(effect)) {
                     if (option.equals(BeeconChangeMessage.Option.EFFECT_ON)) effects.add(effect);
                     else effects.remove(effect);
-                    this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Constants.BlockFlags.DEFAULT);
+                    this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
                 }
-                break;
-            case BEAM:
-                this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(EnderBeecon.BEAM, value == 1), Constants.BlockFlags.DEFAULT);
-                break;
-            case SOUND:
-                this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(EnderBeecon.SOUND, value == 1), Constants.BlockFlags.DEFAULT);
-                break;
-            case RANGE:
+            }
+            case BEAM -> this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(EnderBeecon.BEAM, value == 1), Block.UPDATE_ALL);
+            case SOUND -> this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(EnderBeecon.SOUND, value == 1), Block.UPDATE_ALL);
+            case RANGE -> {
                 this.setRange(value);
-                this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Constants.BlockFlags.DEFAULT);
-                break;
-            default:
-                ResourcefulBees.LOGGER.error("UNKNOWN Beecon Configuration Option '{}' please report to github!", option);
+                this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+            }
+            default -> ResourcefulBees.LOGGER.error("UNKNOWN Beecon Configuration Option '{}' please report to github!", option);
         }
     }
 
     public int getDrain() {
         double base = CommonConfig.BEECON_BASE_DRAIN.get();
-        for (Effect e : effects) base += getEffectValue(e);
+        for (MobEffect e : effects) base += getEffectValue(e);
         base = (base * (range * CommonConfig.BEECON_RANGE_MULTIPLIER.get() * 0.10d));
         return (int) Math.ceil(base);
     }
 
-    public boolean hasEffect(Effect effect) {
+    public boolean hasEffect(MobEffect effect) {
         return effects.contains(effect);
     }
 
     //region effect nbt
 
-    public ListNBT writeEffectsToNBT(ListNBT nbt) {
-        for (Effect effect : effects) {
-            ResourceLocation effectId = effect.getEffect().getRegistryName();
-            if (effectId != null) nbt.add(StringNBT.valueOf(effectId.toString()));
+    public ListTag writeEffectsToNBT(ListTag nbt) {
+        for (MobEffect effect : effects) {
+            ResourceLocation effectId = effect.getRegistryName();
+            if (effectId != null) nbt.add(StringTag.valueOf(effectId.toString()));
         }
         return nbt;
     }
 
-    public Set<Effect> readEffectsFromNBT(ListNBT nbt) {
-        Set<Effect> beeconEffects = new LinkedHashSet<>();
-        for (INBT inbt : nbt) {
-            if (inbt instanceof StringNBT) {
-                Effect effect = BeeInfoUtils.getEffect(inbt.getAsString());
+    public Set<MobEffect> readEffectsFromNBT(ListTag nbt) {
+        Set<MobEffect> beeconEffects = new LinkedHashSet<>();
+        for (Tag inbt : nbt) {
+            if (inbt instanceof StringTag) {
+                MobEffect effect = BeeInfoUtils.getEffect(inbt.getAsString());
                 if (effect != null) {
                     beeconEffects.add(effect);
                 }
@@ -317,11 +299,11 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
         return beeconEffects;
     }
 
-    public double getEffectValue(Effect effect) {
+    public double getEffectValue(MobEffect effect) {
         if (ModEffects.CALMING.get().equals(effect)) return CommonConfig.BEECON_CALMING_VALUE.get();
-        else if (Effects.WATER_BREATHING.equals(effect)) return CommonConfig.BEECON_WATER_BREATHING_VALUE.get();
-        else if (Effects.FIRE_RESISTANCE.equals(effect)) return CommonConfig.BEECON_FIRE_RESISTANCE_VALUE.get();
-        else if (Effects.REGENERATION.equals(effect)) return CommonConfig.BEECON_REGENERATION_VALUE.get();
+        else if (MobEffects.WATER_BREATHING.equals(effect)) return CommonConfig.BEECON_WATER_BREATHING_VALUE.get();
+        else if (MobEffects.FIRE_RESISTANCE.equals(effect)) return CommonConfig.BEECON_FIRE_RESISTANCE_VALUE.get();
+        else if (MobEffects.REGENERATION.equals(effect)) return CommonConfig.BEECON_REGENERATION_VALUE.get();
 
         ResourcefulBees.LOGGER.error("Effect {} does not have an effect value", effect.getRegistryName());
         return 1D;
@@ -332,16 +314,16 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
     //region SYNCABLE GUI
 
     @Override
-    public void sendGUINetworkPacket(IContainerListener player) {
-        if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
-            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+    public void sendGUINetworkPacket(ContainerListener player) {
+        if (player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer)) {
+            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
             buffer.writeFluidStack(tank.getFluid());
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayerEntity) player);
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), serverPlayer);
         }
     }
 
     @Override
-    public void handleGUINetworkPacket(PacketBuffer buffer) {
+    public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
         tank.setFluid(buffer.readFluidStack());
     }
 

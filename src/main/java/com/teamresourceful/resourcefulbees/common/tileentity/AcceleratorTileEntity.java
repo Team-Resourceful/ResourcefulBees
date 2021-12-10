@@ -1,41 +1,47 @@
 package com.teamresourceful.resourcefulbees.common.tileentity;
 
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class AcceleratorTileEntity extends TileEntity implements ITickableTileEntity {
-    public AcceleratorTileEntity() {
-        super(ModBlockEntityTypes.ACCELERATOR_TILE_ENTITY.get());
+public class AcceleratorTileEntity extends BlockEntity {
+
+    public AcceleratorTileEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntityTypes.ACCELERATOR_TILE_ENTITY.get(), pos, state);
     }
 
-    @Override
-    public void tick() {
-        assert level != null : "World is null?!?!?";
-        accelerateTick(level, worldPosition.below());
-        accelerateTick(level, worldPosition.above());
-        accelerateTick(level, worldPosition.north());
-        accelerateTick(level, worldPosition.south());
-        accelerateTick(level, worldPosition.east());
-        accelerateTick(level, worldPosition.west());
+    public static void serverTick(Level level, BlockPos pos, BlockState state, AcceleratorTileEntity entity) {
+        accelerateTick(level, pos.below());
+        accelerateTick(level, pos.above());
+        accelerateTick(level, pos.north());
+        accelerateTick(level, pos.south());
+        accelerateTick(level, pos.east());
+        accelerateTick(level, pos.west());
     }
 
-    public static void accelerateTick(World world, BlockPos pos) {
-        BlockState blockState = world.getBlockState(pos);
-        if(!world.isClientSide && world instanceof ServerWorld && blockState.isRandomlyTicking() && world.getRandom().nextInt(40) == 0) {
-            blockState.randomTick((ServerWorld) world, pos, world.getRandom());
+    private static void accelerateTick(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        if(!level.isClientSide && level instanceof ServerLevel serverLevel && state.isRandomlyTicking() && level.getRandom().nextInt(40) == 0) {
+            state.randomTick(serverLevel, pos, level.getRandom());
         }
-        if (blockState.hasTileEntity()) {
-            TileEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity != null && !tileEntity.isRemoved() && tileEntity instanceof ITickableTileEntity && !(tileEntity instanceof AcceleratorTileEntity)) {
+        tickBlock(level, pos, state, level.getBlockEntity(pos));
+    }
+
+    private static <T extends BlockEntity> void tickBlock(Level level, BlockPos pos, BlockState state, T blockEntity) {
+        if (blockEntity == null) return;
+        try {
+            BlockEntityTicker<T> ticker = (BlockEntityTicker<T>) state.getTicker(level, blockEntity.getType());
+            if (!blockEntity.isRemoved() && ticker != null && !(blockEntity instanceof AcceleratorTileEntity)) {
                 for (int i = 0; i < 384; i++) {
-                    ((ITickableTileEntity) tileEntity).tick();
+                    ticker.tick(level, pos, state, blockEntity);
                 }
             }
+        }catch (ClassCastException e) {
+            //DO NOTHING, This should never happen.
         }
     }
 }
