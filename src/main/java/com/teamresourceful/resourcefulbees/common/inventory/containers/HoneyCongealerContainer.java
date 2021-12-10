@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.inventory.containers;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
-import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberTileEntity;
+import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,15 +15,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class HoneyCongealerContainer extends ContainerWithStackMove {
 
-    private final SolidificationChamberTileEntity honeyCongealerTileEntity;
+    private final SolidificationChamberBlockEntity honeyCongealerTileEntity;
 
     public HoneyCongealerContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.HONEY_CONGEALER_CONTAINER.get(), id);
 
-        honeyCongealerTileEntity = (SolidificationChamberTileEntity) world.getBlockEntity(pos);
+        honeyCongealerTileEntity = (SolidificationChamberBlockEntity) world.getBlockEntity(pos);
 
         if (getHoneyCongealerTileEntity() != null) {
-            this.addSlot(new OutputSlot(getHoneyCongealerTileEntity().getInventory(), SolidificationChamberTileEntity.BLOCK_OUTPUT, 93, 54));
+            this.addSlot(new OutputSlot(getHoneyCongealerTileEntity().getInventory(), SolidificationChamberBlockEntity.BLOCK_OUTPUT, 93, 54));
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
@@ -65,7 +65,7 @@ public class HoneyCongealerContainer extends ContainerWithStackMove {
         return true;
     }
 
-    public SolidificationChamberTileEntity getHoneyCongealerTileEntity() {
+    public SolidificationChamberBlockEntity getHoneyCongealerTileEntity() {
         return honeyCongealerTileEntity;
     }
 }

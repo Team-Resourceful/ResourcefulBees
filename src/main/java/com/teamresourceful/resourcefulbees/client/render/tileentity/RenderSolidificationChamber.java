@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.render.tileentity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
-import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberTileEntity;
+import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.CubeModel;
 import com.teamresourceful.resourcefulbees.common.utils.RenderCuboid;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,12 +14,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderSolidificationChamber extends BlockEntityRenderer<SolidificationChamberTileEntity> {
+public class RenderSolidificationChamber extends BlockEntityRenderer<SolidificationChamberBlockEntity> {
 
     public RenderSolidificationChamber(BlockEntityRendererProvider.Context renderer) {}
 
     @Override
-    public void render(SolidificationChamberTileEntity tile, float partialTick, @NotNull PoseStack matrix, @NotNull MultiBufferSource renderer, int light, int overlayLight) {
+    public void render(SolidificationChamberBlockEntity tile, float partialTick, @NotNull PoseStack matrix, @NotNull MultiBufferSource renderer, int light, int overlayLight) {
         if (tile.getLevel() == null) return;
         FluidStack stack = tile.getTank().getFluid();
         if (!stack.isEmpty()) {

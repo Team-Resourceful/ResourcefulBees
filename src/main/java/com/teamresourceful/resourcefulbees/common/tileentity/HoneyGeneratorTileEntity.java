@@ -13,20 +13,29 @@ import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
@@ -42,7 +51,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTileEntity, ISyncableGUI {
+public class HoneyGeneratorTileEntity extends BlockEntity implements ISyncableGUI {
 
     public static final int HONEY_DRAIN_AMOUNT = CommonConfig.HONEY_DRAIN_AMOUNT.get();
     public static final int ENERGY_FILL_AMOUNT = CommonConfig.ENERGY_FILL_AMOUNT.get();
@@ -64,11 +73,11 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
     private int processingTime = 0;
     private ProcessStage processStage = ProcessStage.IDLE;
 
-    public HoneyGeneratorTileEntity() {
-        super(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get());
+    public HoneyGeneratorTileEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), pos, state);
     }
 
-    @Override
+/*    @Override
     public void tick() {
         if (level == null) return;
         if (level.isClientSide) {
@@ -87,9 +96,9 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
             }
         }
         sendOutPower(level);
-    }
+    }*/
 
-    private void changeState(ProcessStage stage, World level) {
+    private void changeState(ProcessStage stage, Level level) {
         if (stage == ProcessStage.IDLE && processStage != stage) {
             level.setBlockAndUpdate(worldPosition, getBlockState().setValue(HoneyGenerator.PROPERTY_ON, false));
         }
@@ -99,7 +108,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         processStage = stage;
     }
 
-    private void sendOutPower(World level) {
+    private void sendOutPower(Level level) {
         if (getStoredEnergy() > 0) {
             Arrays.stream(Direction.values())
                     .map(direction -> Pair.of(level.getBlockEntity(worldPosition.relative(direction)), direction))
@@ -108,7 +117,7 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         }
     }
 
-    private void transferEnergy(Pair<TileEntity, Direction> tileEntityDirectionPair) {
+    private void transferEnergy(Pair<BlockEntity, Direction> tileEntityDirectionPair) {
         tileEntityDirectionPair.getLeft().getCapability(CapabilityEnergy.ENERGY, tileEntityDirectionPair.getRight().getOpposite())
                 .filter(IEnergyStorage::canReceive)
                 .ifPresent(this::transferEnergy);
@@ -128,56 +137,60 @@ public class HoneyGeneratorTileEntity extends TileEntity implements ITickableTil
         return getStoredEnergy() + ENERGY_FILL_AMOUNT <= energyStorage.getMaxEnergyStored() && tank.getFluidAmount() >= HONEY_DRAIN_AMOUNT;
     }
 
-    private void processEnergy(World level) {
+    private void processEnergy(Level level) {
         tank.drain(HONEY_DRAIN_AMOUNT, IFluidHandler.FluidAction.EXECUTE);
         energyStorage.addEnergy(ENERGY_FILL_AMOUNT);
         changeState(ProcessStage.COMPLETED, level);
     }
 
-    @Nullable
+
+
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT nbt = new CompoundNBT();
-        nbt.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundNBT()));
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        CompoundTag nbt = new CompoundTag();
+        nbt.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundTag()));
         nbt.put(NBTConstants.NBT_ENERGY, energyStorage.serializeNBT());
         nbt.putString(NBTConstants.NBT_PROCESS_STAGE, processStage.toString());
-        return new SUpdateTileEntityPacket(worldPosition, 0, nbt);
+        return ClientboundBlockEntityDataPacket.create(this, blockEntity -> nbt);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT nbt = pkt.getTag();
-        tank.readFromNBT(nbt.getCompound(NBTConstants.NBT_TANK));
-        energyStorage.deserializeNBT(nbt.getCompound(NBTConstants.NBT_ENERGY));
-        processStage = ProcessStage.valueOf(nbt.getString(NBTConstants.NBT_PROCESS_STAGE).toUpperCase(Locale.ROOT));
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        CompoundTag nbt = pkt.getTag();
+        if (nbt != null) {
+            tank.readFromNBT(nbt.getCompound(NBTConstants.NBT_TANK));
+            energyStorage.deserializeNBT(nbt.getCompound(NBTConstants.NBT_ENERGY));
+            processStage = ProcessStage.valueOf(nbt.getString(NBTConstants.NBT_PROCESS_STAGE).toUpperCase(Locale.ROOT));
+        }
     }
 
     @NotNull
     @Override
-    public CompoundNBT save(@NotNull CompoundNBT tag) {
+    public CompoundTag save(@NotNull CompoundTag tag) {
         tag.put(NBTConstants.NBT_ENERGY, energyStorage.serializeNBT());
-        tag.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundNBT()));
+        tag.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundTag()));
         tag.putString(NBTConstants.NBT_PROCESS_STAGE, processStage.toString());
         return super.save(tag);
     }
 
     @NotNull
     @Override
-    public CompoundNBT getUpdateTag() {
-        return save(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        return save(new CompoundTag());
     }
 
-    @Override
-    public void load(@NotNull BlockState state, @NotNull CompoundNBT tag) {
+    //TODO change this to follow new nbt system
+/*    @Override
+    public void load(@NotNull BlockState state, @NotNull CompoundTag tag) {
         energyStorage.deserializeNBT(tag.getCompound(NBTConstants.NBT_ENERGY));
         tank.readFromNBT(tag.getCompound(NBTConstants.NBT_TANK));
         if (tag.contains(NBTConstants.NBT_PROCESS_STAGE)) processStage = ProcessStage.valueOf(tag.getString(NBTConstants.NBT_PROCESS_STAGE).toUpperCase(Locale.ROOT));
         super.load(state, tag);
-    }
+    }*/
 
     @Override
-    public void handleUpdateTag(@NotNull BlockState state, CompoundNBT tag) {
-        this.load(state, tag);
+    public void handleUpdateTag(CompoundTag tag) {
+        this.load(tag);
     }
 
     @NotNull

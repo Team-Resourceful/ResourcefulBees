@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyPotTileEntity;
+import com.teamresourceful.resourcefulbees.common.tileentity.HoneyPotBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class HoneyPotContainer extends ContainerWithStackMove {
 
-    private final HoneyPotTileEntity tileEntity;
+    private final HoneyPotBlockEntity tileEntity;
 
     public HoneyPotContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.HONEY_POT_CONTAINER.get(), id);
 
-        this.tileEntity = (HoneyPotTileEntity) world.getBlockEntity(pos);
+        this.tileEntity = (HoneyPotBlockEntity) world.getBlockEntity(pos);
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -31,7 +31,7 @@ public class HoneyPotContainer extends ContainerWithStackMove {
         }
     }
 
-    public HoneyPotTileEntity getTileEntity() {
+    public HoneyPotBlockEntity getTileEntity() {
         return tileEntity;
     }
 

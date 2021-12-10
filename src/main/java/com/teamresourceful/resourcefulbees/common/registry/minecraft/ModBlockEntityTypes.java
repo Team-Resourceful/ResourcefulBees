@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.tileentity.*;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
-import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.RegistryObject;
@@ -300,11 +299,11 @@ public class ModBlockEntityTypes {
             .of(EnderBeeconTileEntity::new, ModBlocks.ENDER_BEECON.get())
             .build(null));
     //TODO Change id to solidification_chamber for 1.17/1.18
-    public static final RegistryObject<BlockEntityType<SolidificationChamberTileEntity>> SOLIDIFICATION_CHAMBER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_congealer", () -> BlockEntityType.Builder
-            .of(SolidificationChamberTileEntity::new, ModBlocks.SOLIDIFICATION_CHAMBER.get())
+    public static final RegistryObject<BlockEntityType<SolidificationChamberBlockEntity>> SOLIDIFICATION_CHAMBER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_congealer", () -> BlockEntityType.Builder
+            .of(SolidificationChamberBlockEntity::new, ModBlocks.SOLIDIFICATION_CHAMBER.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<HoneyPotTileEntity>> HONEY_POT_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_pot", () -> BlockEntityType.Builder
-            .of(HoneyPotTileEntity::new, ModBlocks.HONEY_POT.get())
+    public static final RegistryObject<BlockEntityType<HoneyPotBlockEntity>> HONEY_POT_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_pot", () -> BlockEntityType.Builder
+            .of(HoneyPotBlockEntity::new, ModBlocks.HONEY_POT.get())
             .build(null));
 
     //region Centrifuge Block Entity Types

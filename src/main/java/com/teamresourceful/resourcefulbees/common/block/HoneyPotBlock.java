@@ -2,28 +2,27 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.lib.enums.HoneyPotState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyPotTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.GlassBottleItem;
-import net.minecraft.item.HoneyBottleItem;
-import net.minecraft.item.Item;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import com.teamresourceful.resourcefulbees.common.tileentity.HoneyPotBlockEntity;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BottleItem;
+import net.minecraft.world.item.HoneyBottleItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,15 +30,15 @@ import org.jetbrains.annotations.Nullable;
 public class HoneyPotBlock extends AbstractTank {
 
     private static final VoxelShape NO_LID = Util.make(() -> {
-        VoxelShape shape = VoxelShapes.box(0.125, 0, 0.125, 0.875, 0.625, 0.875);
-        shape = VoxelShapes.join(shape, VoxelShapes.box(0.3125, 0.625, 0.3125, 0.6875, 0.6875, 0.6875), IBooleanFunction.OR);
+        VoxelShape shape = Shapes.box(0.125, 0, 0.125, 0.875, 0.625, 0.875);
+        shape = Shapes.join(shape, Shapes.box(0.3125, 0.625, 0.3125, 0.6875, 0.6875, 0.6875), BooleanOp.OR);
         return shape;
     });
 
     private static final VoxelShape LID = Util.make(() -> {
         VoxelShape shape = NO_LID;
-        shape = VoxelShapes.join(shape, VoxelShapes.box(0.1875, 0.6875, 0.1875, 0.8125, 0.8125, 0.8125), IBooleanFunction.OR);
-        shape = VoxelShapes.join(shape, VoxelShapes.box(0.4375, 0.8125, 0.4375, 0.5625, 0.9375, 0.5625), IBooleanFunction.OR);
+        shape = Shapes.join(shape, Shapes.box(0.1875, 0.6875, 0.1875, 0.8125, 0.8125, 0.8125), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.4375, 0.8125, 0.4375, 0.5625, 0.9375, 0.5625), BooleanOp.OR);
         return shape;
     });
 
@@ -51,57 +50,50 @@ public class HoneyPotBlock extends AbstractTank {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(LID_STATE);
     }
 
     @NotNull
     @Override
-    public ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult result) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
+    public InteractionResult use(@NotNull BlockState state, Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
 
-        if (tileEntity instanceof HoneyPotTileEntity) {
+        if (tileEntity instanceof HoneyPotBlockEntity) {
             Item item = player.getItemInHand(hand).getItem();
-            HoneyPotTileEntity.HoneyPotFluidTank tank = ((HoneyPotTileEntity) tileEntity).getTank();
+            HoneyPotBlockEntity.HoneyPotFluidTank tank = ((HoneyPotBlockEntity) tileEntity).getTank();
 
-            if (item instanceof GlassBottleItem) tank.fillBottle(player, hand);
+            if (item instanceof BottleItem) tank.fillBottle(player, hand);
             else if (item instanceof HoneyBottleItem) tank.emptyBottle(player, hand);
             else capabilityOrGuiUse(tileEntity, player, world, pos, hand);
 
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.use(state, world, pos, player, hand, result);
     }
 
-
     @Override
-    public void neighborChanged(@NotNull BlockState state, @NotNull World level, @NotNull BlockPos pos, @NotNull Block block, @NotNull BlockPos fromPos, boolean moving) {
+    public void neighborChanged(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Block block, @NotNull BlockPos fromPos, boolean moving) {
         super.neighborChanged(state, level, pos, block, fromPos, moving);
         if (pos.above().equals(fromPos)) {
-            TileEntity tileAbove = level.getBlockEntity(pos.above());
+            BlockEntity tileAbove = level.getBlockEntity(pos.above());
             HoneyPotState potState = HoneyPotState.CLOSED;
 
             if (level.getBlockState(pos.above()).getBlock().equals(ModBlocks.ENDER_BEECON.get())) potState = HoneyPotState.BEECON;
             else if (tileAbove != null && tileAbove.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()) potState = HoneyPotState.OPEN;
 
-            level.setBlock(pos, state.setValue(LID_STATE, potState), Constants.BlockFlags.BLOCK_UPDATE);
-
+            level.setBlock(pos, state.setValue(LID_STATE, potState), Block.UPDATE_ALL); //TODO determine if this is the right flag to use might just need UPDATE_CLIENTS
         }
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new HoneyPotTileEntity();
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return new HoneyPotBlockEntity(pos, state);
     }
 
     @Override
-    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader level, @NotNull BlockPos pos, @NotNull ISelectionContext ctx) {
+    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext ctx) {
         return state.getValue(LID_STATE).equals(HoneyPotState.CLOSED) ? LID : NO_LID;
     }
 }

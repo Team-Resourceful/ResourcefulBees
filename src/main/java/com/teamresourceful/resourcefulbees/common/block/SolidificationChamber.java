@@ -2,25 +2,28 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
-import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.GlassBottleItem;
-import net.minecraft.item.HoneyBottleItem;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberBlockEntity;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BottleItem;
+import net.minecraft.world.item.HoneyBottleItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,9 +35,9 @@ public class SolidificationChamber extends AbstractTank {
 
     protected static final VoxelShape VOXEL_SHAPE = Util.make(() -> {
         VoxelShape shape = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 5.0D, 15.0D);
-        shape = VoxelShapes.join(shape, Block.box(10.0D, 5.0D, 1.0D, 6.0D, 9.0D, 15.0D), IBooleanFunction.OR);
-        shape = VoxelShapes.join(shape, Block.box(1.0D, 5.0D, 10.0D, 15.0D, 9.0D, 6.0D), IBooleanFunction.OR);
-        shape = VoxelShapes.join(shape, Block.box(3.0D, 5.0D, 3.0D, 13.0D, 16.0D, 13.0D), IBooleanFunction.OR);
+        shape = Shapes.join(shape, Block.box(10.0D, 5.0D, 1.0D, 6.0D, 9.0D, 15.0D), BooleanOp.OR);
+        shape = Shapes.join(shape, Block.box(1.0D, 5.0D, 10.0D, 15.0D, 9.0D, 6.0D), BooleanOp.OR);
+        shape = Shapes.join(shape, Block.box(3.0D, 5.0D, 3.0D, 13.0D, 16.0D, 13.0D), BooleanOp.OR);
         return shape;
     });
 
@@ -42,64 +45,65 @@ public class SolidificationChamber extends AbstractTank {
         super(properties);
     }
 
-    private static SolidificationChamberTileEntity getTileEntity(@NotNull IBlockReader world, @NotNull BlockPos pos) {
-        TileEntity entity = world.getBlockEntity(pos);
-        if (entity instanceof SolidificationChamberTileEntity) {
-            return (SolidificationChamberTileEntity) entity;
+    private static SolidificationChamberBlockEntity getBlockEntity(@NotNull BlockGetter level, @NotNull BlockPos pos) {
+        BlockEntity entity = level.getBlockEntity(pos);
+        if (entity instanceof SolidificationChamberBlockEntity) {
+            return (SolidificationChamberBlockEntity) entity;
         }
         return null;
     }
 
     @Override
-    public @NotNull ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult blockRayTraceResult) {
-        TileEntity tileEntity = world.getBlockEntity(pos);
+    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
+        BlockEntity tileEntity = level.getBlockEntity(pos);
 
-        if (tileEntity instanceof SolidificationChamberTileEntity) {
-            if (!world.isClientSide) {
-                FluidTank tank = ((SolidificationChamberTileEntity) tileEntity).getTank();
+        if (tileEntity instanceof SolidificationChamberBlockEntity) {
+            if (!level.isClientSide) {
+                FluidTank tank = ((SolidificationChamberBlockEntity) tileEntity).getTank();
                 Item item = player.getItemInHand(hand).getItem();
                 if (item instanceof HoneyBottleItem) {
                     HoneyFluidTank.emptyBottle(tank, player, hand);
-                } else if (item instanceof GlassBottleItem) {
+                } else if (item instanceof BottleItem) {
                     HoneyFluidTank.fillBottle(tank, player, hand);
                 } else {
-                    capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+                    capabilityOrGuiUse(tileEntity, player, level, pos, hand);
                 }
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return super.use(state, world, pos, player, hand, blockRayTraceResult);
+        return super.use(state, level, pos, player, hand, hitResult);
     }
 
     @Override
-    public void animateTick(@NotNull BlockState stateIn, @NotNull World world, @NotNull BlockPos pos, @NotNull Random rand) {
-        SolidificationChamberTileEntity tank = getTileEntity(world, pos);
+    public void animateTick(@NotNull BlockState stateIn, @NotNull Level level, @NotNull BlockPos pos, @NotNull Random rand) {
+        SolidificationChamberBlockEntity tank = getBlockEntity(level, pos);
         if (tank == null) {
             return;
         }
-        if (tank.getTank().getFluid().getFluid() instanceof CustomHoneyFluid) {
-            CustomHoneyFluid fluid = (CustomHoneyFluid) tank.getTank().getFluid().getFluid();
+        if (tank.getTank().getFluid().getFluid() instanceof CustomHoneyFluid fluid) {
             if (fluid.getHoneyData().getColor().isRainbow()) {
-                world.sendBlockUpdated(pos, stateIn, stateIn, 2);
+                level.sendBlockUpdated(pos, stateIn, stateIn, 2);
             }
         }
-        super.animateTick(stateIn, world, pos, rand);
+        super.animateTick(stateIn, level, pos, rand);
+    }
+
+
+    @NotNull
+    @Override
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+        return VOXEL_SHAPE;
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new SolidificationChamberTileEntity();
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return new SolidificationChamberBlockEntity(pos, state);
     }
 
+    @Nullable
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @NotNull
-    @Override
-    public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context) {
-        return VOXEL_SHAPE;
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> entityType) {
+        return level.isClientSide ? null : createTickerHelper(entityType, ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), SolidificationChamberBlockEntity::serverTick);
     }
 }

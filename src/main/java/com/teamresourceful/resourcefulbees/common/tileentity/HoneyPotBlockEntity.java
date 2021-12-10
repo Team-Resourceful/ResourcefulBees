@@ -8,17 +8,18 @@ import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import io.netty.buffer.Unpooled;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
@@ -28,13 +29,13 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HoneyPotTileEntity extends TileEntity implements ISyncableGUI {
+public class HoneyPotBlockEntity extends BlockEntity implements ISyncableGUI {
 
     private final HoneyPotFluidTank tank = new HoneyPotFluidTank();
     private final LazyOptional<FluidTank> tankOptional = LazyOptional.of(() -> tank);
 
-    public HoneyPotTileEntity() {
-        super(ModBlockEntityTypes.HONEY_POT_TILE_ENTITY.get());
+    public HoneyPotBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntityTypes.HONEY_POT_TILE_ENTITY.get(), pos, state);
     }
 
     @NotNull
@@ -46,41 +47,42 @@ public class HoneyPotTileEntity extends TileEntity implements ISyncableGUI {
 
     @Nullable
     @Override
-    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         if (level == null) return null;
         return new HoneyPotContainer(id, level, worldPosition, playerInventory);
     }
 
     @Override
-    public void sendGUINetworkPacket(IContainerListener player) {
-        if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
-            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+    public void sendGUINetworkPacket(ContainerListener player) {
+        if (player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer)) {
+            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
             buffer.writeFluidStack(tank.getFluid());
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayerEntity) player);
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), serverPlayer);
         }
     }
 
     @Override
-    public void handleGUINetworkPacket(PacketBuffer buffer) {
+    public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
         this.tank.setFluid(buffer.readFluidStack());
     }
 
     @Override
-    public @NotNull ITextComponent getDisplayName() {
+    public @NotNull Component getDisplayName() {
         return TranslationConstants.Guis.POT;
     }
 
     @Override
-    public @NotNull CompoundNBT save(@NotNull CompoundNBT nbt) {
-        nbt.put(NBTConstants.NBT_TANK, getTank().writeToNBT(new CompoundNBT()));
+    public @NotNull CompoundTag save(@NotNull CompoundTag nbt) {
+        nbt.put(NBTConstants.NBT_TANK, getTank().writeToNBT(new CompoundTag()));
         return super.save(nbt);
     }
 
-    @Override
-    public void load(@NotNull BlockState state, CompoundNBT nbt) {
+    //TODO switch this to the new NBT system
+    /*@Override
+    public void load(@NotNull BlockState state, CompoundTag nbt) {
         getTank().readFromNBT(nbt.getCompound(NBTConstants.NBT_TANK));
         super.load(state, nbt);
-    }
+    }*/
 
     public HoneyPotFluidTank getTank() {
         return this.tank;

@@ -4,9 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyCongealerContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberTileEntity;
+import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -22,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @OnlyIn(Dist.CLIENT)
 public class SolidificationChamberScreen extends AbstractContainerScreen<HoneyCongealerContainer> {
 
-    private final SolidificationChamberTileEntity tileEntity;
+    private final SolidificationChamberBlockEntity tileEntity;
 
     public SolidificationChamberScreen(HoneyCongealerContainer container, Inventory inventory, Component displayName) {
         super(container, inventory, displayName);

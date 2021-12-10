@@ -10,22 +10,22 @@ import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage
 import com.teamresourceful.resourcefulbees.common.recipe.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import io.netty.buffer.Unpooled;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
@@ -38,7 +38,7 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SolidificationChamberTileEntity extends BlockEntity implements ITickableTileEntity, ISyncableGUI {
+public class SolidificationChamberBlockEntity extends BlockEntity implements ISyncableGUI {
 
     public static final int BLOCK_OUTPUT = 0;
 
@@ -54,8 +54,8 @@ public class SolidificationChamberTileEntity extends BlockEntity implements ITic
     private SolidificationRecipe cachedRecipe;
     private Fluid lastFluid;
 
-    public SolidificationChamberTileEntity() {
-        super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get());
+    public SolidificationChamberBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), pos, state);
     }
 
     public float getProcessPercent() {
@@ -66,13 +66,14 @@ public class SolidificationChamberTileEntity extends BlockEntity implements ITic
 
     @Override
     @NotNull
-    public ITextComponent getDisplayName() {
+    public Component getDisplayName() {
         return TranslationConstants.Guis.SOLIDIFICATION_CHAMBER;
     }
 
-    @Nullable
+
+
     @Override
-    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         if (level == null) return null;
         return new HoneyCongealerContainer(id, level, worldPosition, playerInventory);
     }
@@ -95,7 +96,7 @@ public class SolidificationChamberTileEntity extends BlockEntity implements ITic
         if (recipe == null) return false;
 
         boolean isTankReady = !fluidStack.isEmpty() && tank.getFluidAmount() >= recipe.getFluid().getAmount();
-        boolean canOutput = outputStack.isEmpty() || Container.consideredTheSameItem(recipe.getStack(), outputStack) && outputStack.getCount() < outputStack.getMaxStackSize();
+        boolean canOutput = outputStack.isEmpty() || ItemStack.isSameItemSameTags(recipe.getStack(), outputStack) && outputStack.getCount() < outputStack.getMaxStackSize();
 
         cachedRecipe = recipe;
         lastFluid = fluidStack.getFluid();
@@ -122,31 +123,30 @@ public class SolidificationChamberTileEntity extends BlockEntity implements ITic
         return (slot, automation) -> !automation || slot == BLOCK_OUTPUT;
     }
 
-    public void sendGUINetworkPacket(IContainerListener player) {
-        if (player instanceof ServerPlayerEntity && (!(player instanceof FakePlayer))) {
-            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+    public void sendGUINetworkPacket(ContainerListener player) {
+        if (player instanceof ServerPlayer serverPlayer && (!(player instanceof FakePlayer))) {
+            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
             buffer.writeFluidStack(tank.getFluid());
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayerEntity) player);
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), serverPlayer);
         }
     }
 
-    public void handleGUINetworkPacket(PacketBuffer buffer) {
+    public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
         tank.setFluid(buffer.readFluidStack());
     }
 
-    @Override
-    public void tick() {
-        if (canProcessHoney()) {
-            if (processingFill >= CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get()) {
-                processHoney();
-                processingFill = 0;
+    public static void serverTick(Level level, BlockPos pos, BlockState state, SolidificationChamberBlockEntity entity) {
+        if (entity.canProcessHoney()) {
+            if (entity.processingFill >= CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get()) {
+                entity.processHoney();
+                entity.processingFill = 0;
             }
-            processingFill++;
+            entity.processingFill++;
         }
 
-        if (dirty) {
-            this.dirty = false;
-            this.setChanged();
+        if (entity.dirty) {
+            entity.dirty = false;
+            entity.setChanged();
         }
     }
 
@@ -159,18 +159,19 @@ public class SolidificationChamberTileEntity extends BlockEntity implements ITic
     }
 
     @Override
-    public @NotNull CompoundNBT save(@NotNull CompoundNBT nbt) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag nbt) {
         nbt.put(NBTConstants.NBT_INVENTORY, inventory.serializeNBT());
-        nbt.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundNBT()));
+        nbt.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundTag()));
         return super.save(nbt);
     }
 
-    @Override
-    public void load(@NotNull BlockState state, @NotNull CompoundNBT nbt) {
+    //TODO convert to new way of handling nbt
+/*    @Override
+    public void load(@NotNull BlockState state, @NotNull CompoundTag nbt) {
         super.load(state, nbt);
         inventory.deserializeNBT(nbt.getCompound(NBTConstants.NBT_INVENTORY));
         tank.readFromNBT(nbt.getCompound(NBTConstants.NBT_TANK));
-    }
+    }*/
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
         protected TileStackHandler(int slots, IAcceptor acceptor, IRemover remover) {

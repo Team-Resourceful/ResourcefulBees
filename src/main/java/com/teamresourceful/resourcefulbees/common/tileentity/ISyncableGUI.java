@@ -3,8 +3,7 @@ package com.teamresourceful.resourcefulbees.common.tileentity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-
-import java.awt.event.ContainerListener;
+import net.minecraft.world.inventory.ContainerListener;
 
 public interface ISyncableGUI extends MenuProvider {
     void sendGUINetworkPacket(ContainerListener player);

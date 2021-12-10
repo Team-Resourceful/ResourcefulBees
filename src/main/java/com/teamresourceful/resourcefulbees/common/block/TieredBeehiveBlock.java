@@ -67,7 +67,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         super(properties);
         this.entityType = entityType;
         this.tier = tier;
-        this.registerDefaultState(this.stateDefinition.any().setValue(HONEY_LEVEL, 0).setValue(FACING, Direction.NORTH);//.setValue(TIER_PROPERTY, tier.ordinal()));
+        this.registerDefaultState(this.stateDefinition.any().setValue(HONEY_LEVEL, 0).setValue(FACING, Direction.NORTH));//.setValue(TIER_PROPERTY, tier.ordinal()));
     }
 
     public BeehiveTier getTier() { return tier; }
