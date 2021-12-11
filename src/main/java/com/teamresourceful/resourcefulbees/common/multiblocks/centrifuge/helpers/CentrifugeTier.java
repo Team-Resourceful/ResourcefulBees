@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.StringRepresentable;
 import net.minecraftforge.common.IExtensibleEnum;
 import org.jetbrains.annotations.NotNull;

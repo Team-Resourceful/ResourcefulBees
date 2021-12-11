@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states;
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.Collection;
@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class CentrifugeState implements INBTSerializable<CompoundNBT> {
+public class CentrifugeState implements INBTSerializable<CompoundTag> {
 
     /*<T extends AbstractGUICentrifugeEntity>*/
 
@@ -196,8 +196,8 @@ public class CentrifugeState implements INBTSerializable<CompoundNBT> {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag nbt = new CompoundTag();
         nbt.putString("Owner", owner);
         nbt.putString("MaxTier", maxCentrifugeTier.getName());
         nbt.putInt("EnergyStored", energyStored);
@@ -216,7 +216,7 @@ public class CentrifugeState implements INBTSerializable<CompoundNBT> {
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         owner = nbt.getString("Owner");
         maxCentrifugeTier = CentrifugeTier.byName(nbt.getString("MaxTier"));
         energyStored = nbt.getInt("EnergyStored");
@@ -233,24 +233,24 @@ public class CentrifugeState implements INBTSerializable<CompoundNBT> {
         recipeTimeModifier = nbt.getDouble("RecipeTimeModifier");
     }
 
-    private static ListNBT writeBlockList(Collection<BlockPos> set) {
-        ListNBT listNBT = new ListNBT();
+    private static ListTag writeBlockList(Collection<BlockPos> set) {
+        ListTag listNBT = new ListTag();
         AtomicInteger i = new AtomicInteger();
         set.forEach(value -> {
-            CompoundNBT nbt = new CompoundNBT();
-            nbt.put(String.valueOf(i.getAndIncrement()), NBTUtil.writeBlockPos(value));
+            CompoundTag nbt = new CompoundTag();
+            nbt.put(String.valueOf(i.getAndIncrement()), NbtUtils.writeBlockPos(value));
             listNBT.add(nbt);
         });
         return listNBT;
     }
 
-    private Set<BlockPos> readBlockList(ListNBT listNBT) {
+    private Set<BlockPos> readBlockList(ListTag listNBT) {
         Set<BlockPos> blockSet = new HashSet<>();
         if (!listNBT.isEmpty()) {
             AtomicInteger i = new AtomicInteger();
             return listNBT.stream()
-                    .map(CompoundNBT.class::cast)
-                    .map(tag -> NBTUtil.readBlockPos(tag.getCompound(String.valueOf(i.getAndIncrement()))))
+                    .map(CompoundTag.class::cast)
+                    .map(tag -> NbtUtils.readBlockPos(tag.getCompound(String.valueOf(i.getAndIncrement()))))
                     .collect(Collectors.toSet());
         }
         return blockSet;

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 public class CentrifugeEnergyStorage {
 
@@ -44,11 +44,11 @@ public class CentrifugeEnergyStorage {
     }
 
 
-    public void serializeNBT(CompoundNBT tag) {
+    public void serializeNBT(CompoundTag tag) {
         tag.putInt("storedEnergy", stored);
     }
 
-    public void deserializeNBT(CompoundNBT tag) {
+    public void deserializeNBT(CompoundTag tag) {
         stored = tag.getInt("storedEnergy");
     }
 }

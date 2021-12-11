@@ -7,17 +7,21 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import org.jetbrains.annotations.NotNull;
 
 public class CentrifugeItemOutputContainer extends CentrifugeContainer<CentrifugeItemOutputEntity> {
 
-    public CentrifugeItemOutputContainer(int id, PlayerInventory inv, PacketBuffer buffer) {
+    public CentrifugeItemOutputContainer(int id, Inventory inv, FriendlyByteBuf buffer) {
         this(id, inv, getTileFromBuf(buffer, CentrifugeItemOutputEntity.class));
     }
 
-    public CentrifugeItemOutputContainer(int id, PlayerInventory inv, CentrifugeItemOutputEntity entity) {
+    public CentrifugeItemOutputContainer(int id, FriendlyByteBuf inv, CentrifugeItemOutputEntity entity) {
         super(ModContainers.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), id, inv, entity);
     }
 
@@ -32,8 +36,8 @@ public class CentrifugeItemOutputContainer extends CentrifugeContainer<Centrifug
     }
 
     @Override
-    public boolean stillValid(@NotNull PlayerEntity player) {
-        return entity != null && IWorldPosCallable.create(level, entity.getBlockPos()).evaluate((world, pos) ->
+    public boolean stillValid(@NotNull Player player) {
+        return entity != null && ContainerLevelAccess.create(level, entity.getBlockPos()).evaluate((world, pos) ->
                 world.getBlockState(pos).getBlock() instanceof CentrifugeItemOutput && player.distanceToSqr(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D, true);
     }
 

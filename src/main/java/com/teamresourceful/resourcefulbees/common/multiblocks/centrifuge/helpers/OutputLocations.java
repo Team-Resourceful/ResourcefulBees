@@ -5,18 +5,15 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.WorldUtils;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-public class OutputLocations<T extends TileEntity & ICentrifugeOutput<?>> {
+public class OutputLocations<T extends BlockEntity & ICentrifugeOutput<?>> {
 
     //TODO decide if most of the methods in this class should be moved to the inner class or not
 
@@ -93,38 +90,38 @@ public class OutputLocations<T extends TileEntity & ICentrifugeOutput<?>> {
     }*/
 
     // merge this back into #deserialize in 1.18
-    public void onLoad(Class<T> clazz, @Nullable World level) {
+    public void onLoad(Class<T> clazz, @Nullable Level level) {
         for (int i = 0; i < 3; i++) {
             BlockPos pos = outputs[i].pos;
             if (pos != null) set(i, WorldUtils.getTileEntity(clazz, level, pos), pos);
         }
     }
 
-    public void deserialize(CompoundNBT tag) {
+    public void deserialize(CompoundTag tag) {
         if (tag.contains(NBTConstants.NBT_LOCATIONS)) {
-            ListNBT listTag = tag.getList(NBTConstants.NBT_LOCATIONS, Constants.NBT.TAG_COMPOUND);
+            ListTag listTag = tag.getList(NBTConstants.NBT_LOCATIONS, Tag.TAG_COMPOUND);
             for (int i = 0; i < listTag.size(); i++) {
-                CompoundNBT location = listTag.getCompound(i);
+                CompoundTag location = listTag.getCompound(i);
                 if (location.getInt("id") != i) continue;
-                BlockPos pos = NBTUtil.readBlockPos(location.getCompound("pos"));
+                BlockPos pos = NbtUtils.readBlockPos(location.getCompound("pos"));
                 outputs[i].pos = pos;
                 //set(i, WorldUtils.getTileEntity(clazz, level, pos), pos); //TODO reimplement this in 1.18
             }
         }
     }
 
-    public CompoundNBT serialize() {
-        ListNBT nbtTagList = new ListNBT();
+    public CompoundTag serialize() {
+        ListTag nbtTagList = new ListTag();
         for (int i = 0; i < 3; i++) {
             Output<T> output = outputs[i];
             if (output.tile == null || output.pos == null) continue;
-            CompoundNBT nbt = new CompoundNBT();
+            CompoundTag nbt = new CompoundTag();
             nbt.putInt("id", i);
-            nbt.put("pos", NBTUtil.writeBlockPos(output.pos));
+            nbt.put("pos", NbtUtils.writeBlockPos(output.pos));
             nbt.putBoolean("resultDeposited", output.deposited);
             nbtTagList.add(nbt);
         }
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         nbt.put(NBTConstants.NBT_LOCATIONS, nbtTagList);
         return nbt;
     }

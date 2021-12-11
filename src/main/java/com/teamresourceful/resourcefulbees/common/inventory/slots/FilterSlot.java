@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.inventory.slots;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -19,8 +18,8 @@ public class FilterSlot extends SlotItemHandler {
     }
 
     @Override
-    public @NotNull ItemStack onTake(@NotNull Player pPlayer, @NotNull ItemStack pStack) {
-        return ItemStack.EMPTY;
+    public void onTake(@NotNull Player pPlayer, @NotNull ItemStack pStack) {
+        //TODO make sure this works as onTake no longer returns itemstack
     }
 
     @NotNull

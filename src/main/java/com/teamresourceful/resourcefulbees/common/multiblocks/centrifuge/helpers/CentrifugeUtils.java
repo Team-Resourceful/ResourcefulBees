@@ -2,10 +2,10 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helper
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -18,8 +18,8 @@ public class CentrifugeUtils {
     }
 
     @NotNull
-    public static Optional<CentrifugeRecipe> getRecipe(World level, ItemStack recipeStack) {
-        return level != null ? level.getRecipeManager().getRecipeFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, new Inventory(recipeStack), level) : Optional.empty();
+    public static Optional<CentrifugeRecipe> getRecipe(Level level, ItemStack recipeStack) {
+        return level != null ? level.getRecipeManager().getRecipeFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, new SimpleContainer(recipeStack), level) : Optional.empty();
     }
 
     public static int getRows(CentrifugeTier tier) {

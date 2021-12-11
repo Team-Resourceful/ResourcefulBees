@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states;
 
-import net.minecraft.state.EnumProperty;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jetbrains.annotations.NotNull;
 
-public enum CentrifugeActivity implements IStringSerializable {
+public enum CentrifugeActivity implements StringRepresentable {
     ACTIVE((byte)1),
     INACTIVE((byte)0);
 
@@ -26,13 +26,10 @@ public enum CentrifugeActivity implements IStringSerializable {
     }
 
     public static CentrifugeActivity fromByte(byte state) {
-        switch (state) {
-            case 1:
-                return CentrifugeActivity.ACTIVE;
-            case 0:
-                return CentrifugeActivity.INACTIVE;
-            default:
-                throw new IndexOutOfBoundsException("Invalid index while deciphering centrifuge activity");
-        }
+        return switch (state) {
+            case 1 -> CentrifugeActivity.ACTIVE;
+            case 0 -> CentrifugeActivity.INACTIVE;
+            default -> throw new IndexOutOfBoundsException("Invalid index while deciphering centrifuge activity");
+        };
     }
 }
