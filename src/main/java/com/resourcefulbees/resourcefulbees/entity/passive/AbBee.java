@@ -50,7 +50,7 @@ public class AbBee {
                 .setEasterEggBee(true)
                 .setBaseLayerTexture("/abbee/bee")
                 .setMaxTimeInHive(500)
-                .setBaseModelType(BaseModelTypes.KITTEN)
+                .setBaseModelType(BaseModelTypes.THICK_LEGS)
                 .setSizeModifier(0.75f)
                 .setTraits(new String[]{BeeConstants.KITTEN_BEE})
                 .setCreator("Dawn Felstar")

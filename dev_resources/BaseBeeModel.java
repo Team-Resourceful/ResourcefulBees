@@ -1,4 +1,4 @@
-// Made with Blockbench 4.0.4
+// Made with Blockbench 4.0.5
 // Exported for Minecraft version 1.15 - 1.16 with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
@@ -6,6 +6,11 @@
 public class BaseBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer body;
 	private final ModelRenderer torso;
+	private final ModelRenderer betterdefault;
+	private final ModelRenderer leftAntenna2;
+	private final ModelRenderer rightAntenna2;
+	private final ModelRenderer rightWing2;
+	private final ModelRenderer leftWing2;
 	private final ModelRenderer stinger;
 	private final ModelRenderer leftAntenna;
 	private final ModelRenderer rightAntenna;
@@ -63,6 +68,11 @@ public class BaseBeeModel extends EntityModel<Entity> {
 	private final ModelRenderer frontLegs2;
 	private final ModelRenderer middleLegs2;
 	private final ModelRenderer backLegs2;
+	private final ModelRenderer oldKitten;
+	private final ModelRenderer frontLegs3;
+	private final ModelRenderer middleLegs3;
+	private final ModelRenderer backLegs3;
+	private final ModelRenderer kitten2;
 
 	public BaseBeeModel() {
 		texWidth = 64;
@@ -76,6 +86,31 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		torso.setPos(0.0F, 0.0F, 0.0F);
 		body.addChild(torso);
 		torso.texOffs(0, 0).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F, false);
+
+		betterdefault = new ModelRenderer(this);
+		betterdefault.setPos(0.0F, 5.0F, 0.0F);
+		torso.addChild(betterdefault);
+		
+
+		leftAntenna2 = new ModelRenderer(this);
+		leftAntenna2.setPos(0.0F, 0.0F, 0.0F);
+		betterdefault.addChild(leftAntenna2);
+		leftAntenna2.texOffs(0, 0).addBox(1.5F, -9.0F, -8.0F, 1.0F, 2.0F, 3.0F, 0.0F, false);
+
+		rightAntenna2 = new ModelRenderer(this);
+		rightAntenna2.setPos(0.0F, 0.0F, 0.0F);
+		betterdefault.addChild(rightAntenna2);
+		rightAntenna2.texOffs(0, 5).addBox(-2.5F, -9.0F, -8.0F, 1.0F, 2.0F, 3.0F, 0.0F, false);
+
+		rightWing2 = new ModelRenderer(this);
+		rightWing2.setPos(-1.5F, -9.0F, -3.0F);
+		betterdefault.addChild(rightWing2);
+		rightWing2.texOffs(34, 30).addBox(-9.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.0F, false);
+
+		leftWing2 = new ModelRenderer(this);
+		leftWing2.setPos(1.5F, -9.0F, -3.0F);
+		betterdefault.addChild(leftWing2);
+		leftWing2.texOffs(34, 36).addBox(0.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.0F, true);
 
 		stinger = new ModelRenderer(this);
 		stinger.setPos(0.0F, 0.0F, 0.0F);
@@ -404,14 +439,44 @@ public class BaseBeeModel extends EntityModel<Entity> {
 		middleLegs2 = new ModelRenderer(this);
 		middleLegs2.setPos(1.5F, 3.0F, 0.0F);
 		baseKitten.addChild(middleLegs2);
-		middleLegs2.texOffs(32, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
-		middleLegs2.texOffs(36, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+		middleLegs2.texOffs(24, 3).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+		middleLegs2.texOffs(28, 3).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
 
 		backLegs2 = new ModelRenderer(this);
 		backLegs2.setPos(1.5F, 3.0F, 2.0F);
 		baseKitten.addChild(backLegs2);
-		backLegs2.texOffs(40, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
-		backLegs2.texOffs(44, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+		backLegs2.texOffs(24, 6).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+		backLegs2.texOffs(28, 6).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+		oldKitten = new ModelRenderer(this);
+		oldKitten.setPos(0.0F, 0.0F, 0.0F);
+		body.addChild(oldKitten);
+		
+
+		frontLegs3 = new ModelRenderer(this);
+		frontLegs3.setPos(1.5F, 3.0F, -2.0F);
+		oldKitten.addChild(frontLegs3);
+		frontLegs3.texOffs(24, 0).addBox(-3.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+		frontLegs3.texOffs(24, 0).addBox(-1.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+		middleLegs3 = new ModelRenderer(this);
+		middleLegs3.setPos(1.5F, 3.0F, 0.0F);
+		oldKitten.addChild(middleLegs3);
+		middleLegs3.texOffs(24, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+		middleLegs3.texOffs(24, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+		backLegs3 = new ModelRenderer(this);
+		backLegs3.setPos(1.5F, 3.0F, 2.0F);
+		oldKitten.addChild(backLegs3);
+		backLegs3.texOffs(24, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+		backLegs3.texOffs(24, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+		kitten2 = new ModelRenderer(this);
+		kitten2.setPos(0.0F, 5.0F, 0.0F);
+		oldKitten.addChild(kitten2);
+		kitten2.texOffs(24, 3).addBox(1.5F, -10.0F, -4.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+		kitten2.texOffs(24, 6).addBox(-1.5F, -4.0F, -6.0F, 3.0F, 2.0F, 1.0F, 0.0F, false);
+		kitten2.texOffs(24, 3).addBox(-2.5F, -10.0F, -4.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
 	}
 
 	@Override

@@ -82,14 +82,22 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
 
     public CustomBeeModel(BaseModelTypes modelType) {
         this();
-
-
-        if (modelType.equals(BaseModelTypes.KITTEN)) {
-            addKittenParts();
-        } else if (modelType.equals(BaseModelTypes.DEFAULT)) {
-            addDefaultParts();
+        switch (modelType) {
+            case DEFAULT:
+                addDefaultParts();
+                break;
+            case KITTEN:
+                addOldKittenParts();
+                break;
+            case THICK_LEGS:
+                addThickLegs();
+                break;
+            case BETTER_DEFAULT:
+                addBetterDefault();
+                break;
         }
     }
+
 
     public CustomBeeModel() {
         super(false, 24.0F, 0.0F);
@@ -98,10 +106,11 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.body = new ModelRenderer(this);
         this.torso = new ModelRenderer(this);
         this.stinger = new ModelRenderer(this, 26, 7);
-        this.leftAntenna = new ModelRenderer(this, 2, 0);
-        this.rightAntenna = new ModelRenderer(this, 2, 3);
-        this.rightWing = new ModelRenderer(this, 0, 18);
-        this.leftWing = new ModelRenderer(this, 0, 18);
+        this.leftAntenna = new ModelRenderer(this);
+        this.rightAntenna = new ModelRenderer(this);
+        this.rightWing = new ModelRenderer(this);
+        this.leftWing = new ModelRenderer(this);
+
         this.frontLegs = new ModelRenderer(this);
         this.middleLegs = new ModelRenderer(this);
         this.backLegs = new ModelRenderer(this);
@@ -172,23 +181,25 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     // base bee parts
 
     private void addDefaultParts() {
-        this.body.setPos(0.0F, 19.0F, 0.0F);
-        this.torso.setPos(0.0F, 0.0F, 0.0F);
-        this.body.addChild(this.torso);
-        this.torso.texOffs(0, 0).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F);
+        addBody();
+        addAntennaWingParts();
+        addLegs();
+    }
 
-        this.stinger.addBox(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
-        this.torso.addChild(this.stinger);
+    private void addAntennaWingParts() {
 
         this.leftAntenna.setPos(0.0F, -2.0F, -5.0F);
+        this.leftAntenna.texOffs(2, 0);
         this.leftAntenna.addBox(1.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
 
         this.rightAntenna.setPos(0.0F, -2.0F, -5.0F);
+        this.rightAntenna.texOffs(2, 3);
         this.rightAntenna.addBox(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
         this.torso.addChild(this.leftAntenna);
         this.torso.addChild(this.rightAntenna);
 
         this.rightWing.setPos(-1.5F, -4.0F, -3.0F);
+        this.rightWing.texOffs(0, 18);
         this.setRotationAngle(rightWing, 0, -0.2618F, 0);
         this.body.addChild(this.rightWing);
         this.rightWing.addBox(-9.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
@@ -196,9 +207,96 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.leftWing.setPos(1.5F, -4.0F, -3.0F);
         this.setRotationAngle(leftWing, 0, 0.2618F, 0);
         this.leftWing.mirror = true;
-        this.body.addChild(this.leftWing);
+        this.leftWing.texOffs(0, 18);
         this.leftWing.addBox(0.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
+        this.body.addChild(this.leftWing);
+    }
 
+
+    private void addBody() {
+        body.setPos(0.0F, 19.0F, 0.0F);
+
+        torso.setPos(0.0F, 0.0F, 0.0F);
+        body.addChild(torso);
+        torso.texOffs(0, 0).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F, false);
+
+        stinger.setPos(0.0F, 0.0F, 0.0F);
+        torso.addChild(this.stinger);
+        stinger.addBox(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
+    }
+
+    private void addOldKittenParts() {
+        addBody();
+        addAntennaWingParts();
+        frontLegs.setPos(1.5F, 3.0F, -2.0F);
+        body.addChild(frontLegs);
+        frontLegs.texOffs(24, 0).addBox(-3.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+        frontLegs.texOffs(24, 0).addBox(-1.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+        middleLegs.setPos(1.5F, 3.0F, 0.0F);
+        body.addChild(middleLegs);
+        middleLegs.texOffs(24, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+        middleLegs.texOffs(24, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+        backLegs.setPos(1.5F, 3.0F, 2.0F);
+        body.addChild(backLegs);
+        backLegs.texOffs(24, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+        backLegs.texOffs(24, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+        ModelRenderer oldKitten = new ModelRenderer(this);
+        oldKitten.setPos(0.0F, 5.0F, 0.0F);
+        body.addChild(oldKitten);
+        oldKitten.texOffs(24, 3).addBox(1.5F, -10.0F, -4.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+        oldKitten.texOffs(24, 6).addBox(-1.5F, -4.0F, -6.0F, 3.0F, 2.0F, 1.0F, 0.0F, false);
+        oldKitten.texOffs(24, 3).addBox(-2.5F, -10.0F, -4.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+    }
+
+    private void addThickLegs() {
+        addBody();
+        addBetterParts();
+
+        frontLegs.setPos(1.5F, 3.0F, -2.0F);
+        body.addChild(frontLegs);
+        frontLegs.texOffs(24, 0).addBox(-3.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+        frontLegs.texOffs(28, 0).addBox(-1.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+        middleLegs.setPos(1.5F, 3.0F, 0.0F);
+        body.addChild(middleLegs);
+        middleLegs.texOffs(24, 3).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+        middleLegs.texOffs(28, 3).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
+        backLegs.setPos(1.5F, 3.0F, 2.0F);
+        body.addChild(backLegs);
+        backLegs.texOffs(24, 6).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+        backLegs.texOffs(28, 6).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+    }
+
+    private void addBetterParts() {
+        this.leftAntenna.setPos(0.0F, -2.0F, -5.0F);
+        this.leftAntenna.texOffs(0, 0);
+        this.leftAntenna.addBox(1.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
+
+        this.rightAntenna.setPos(0.0F, -2.0F, -5.0F);
+        this.rightAntenna.texOffs(0, 5);
+        this.rightAntenna.addBox(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F);
+        this.torso.addChild(this.leftAntenna);
+        this.torso.addChild(this.rightAntenna);
+
+        this.rightWing.setPos(-1.5F, -4.0F, -3.0F);
+        this.setRotationAngle(rightWing, 0, -0.2618F, 0);
+        this.rightWing.texOffs(34, 30);
+        this.rightWing.addBox(-9.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
+        this.body.addChild(this.rightWing);
+
+        this.leftWing.setPos(1.5F, -4.0F, -3.0F);
+        this.setRotationAngle(leftWing, 0, 0.2618F, 0);
+        this.leftWing.mirror = true;
+        this.leftWing.texOffs(34, 36);
+        this.leftWing.addBox(0.0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.001F);
+        this.body.addChild(this.leftWing);
+    }
+
+    private void addLegs() {
         this.frontLegs.setPos(1.5F, 3.0F, -2.0F);
         this.body.addChild(this.frontLegs);
         this.frontLegs.addBox("frontLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 1);
@@ -212,48 +310,12 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         this.backLegs.addBox("backLegBox", -5.0F, 0.0F, 0.0F, 7, 2, 0, 0.0F, 26, 5);
     }
 
-    private void addKittenParts() {
-        body.setPos(0.0F, 19.0F, 0.0F);
-
-        torso.setPos(0.0F, 0.0F, 0.0F);
-        body.addChild(torso);
-        torso.texOffs(0, 0).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F, false);
-
-        stinger.setPos(0.0F, 0.0F, 0.0F);
-        torso.addChild(this.stinger);
-        stinger.addBox(0.0F, -1.0F, 5.0F, 0.0F, 1.0F, 2.0F, 0.0F);
-
-        leftAntenna.setPos(0.0F, -2.0F, -5.0F);
-        torso.addChild(leftAntenna);
-        leftAntenna.texOffs(2, 0).addBox(1.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F, false);
-
-        rightAntenna.setPos(0.0F, -2.0F, -5.0F);
-        torso.addChild(rightAntenna);
-        rightAntenna.texOffs(2, 3).addBox(-2.5F, -2.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F, false);
-
-        rightWing.setPos(-1.5F, -4.0F, -3.0F);
-        body.addChild(rightWing);
-        rightWing.texOffs(0, 18).addBox(-9F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.0F, false);
-
-        leftWing.setPos(1.5F, -4.0F, -3.0F);
-        body.addChild(leftWing);
-        leftWing.texOffs(0, 18).addBox(0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.0F, true);
-
-        frontLegs.setPos(1.5F, 3.0F, -2.0F);
-        frontLegs.texOffs(24, 0).addBox(-3.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
-        frontLegs.texOffs(28, 0).addBox(-1.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
-        body.addChild(frontLegs);
-
-        middleLegs.setPos(1.5F, 3.0F, 0.0F);
-        middleLegs.texOffs(32, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
-        middleLegs.texOffs(36, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
-        body.addChild(middleLegs);
-
-        backLegs.setPos(1.5F, 3.0F, 2.0F);
-        backLegs.texOffs(40, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
-        backLegs.texOffs(44, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
-        body.addChild(backLegs);
+    private void addBetterDefault() {
+        addBody();
+        addBetterParts();
+        addLegs();
     }
+
 
     private void addCloak() {
         ModelRenderer cloak = new ModelRenderer(this);
