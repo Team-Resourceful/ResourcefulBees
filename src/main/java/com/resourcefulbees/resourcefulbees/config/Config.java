@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.config;
 
 import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
-import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
@@ -19,6 +18,8 @@ public class Config {
     public static BooleanValue GENERATE_BIOME_DICTIONARIES;
     public static BooleanValue USE_FORGE_DICTIONARIES;
     public static BooleanValue ENABLE_EASTER_EGG_BEES;
+    public static BooleanValue ENABLE_CUSTOM_PATREON_BEES;
+
 
     public static IntValue BEE_FLOWER_FOREST_MULTIPLIER;
 
@@ -125,6 +126,8 @@ public class Config {
                     .define("useForgeBiomeDictionaries", true);
             ENABLE_EASTER_EGG_BEES = COMMON_BUILDER.comment("\nSet to true if you want easter egg bees to generate (WIP) [true/false]", "The only easter egg bee currently available is the Oreo bee")
                     .define("enableEasterEggBees", true);
+            ENABLE_CUSTOM_PATREON_BEES = COMMON_BUILDER.comment("\nSet to true if you want patreon custom bees to generate [true/false]", "The only easter egg bee currently available is the Oreo bee")
+                    .define("enableCustomPatreonBees", true);
             SMOKER_DURABILITY = COMMON_BUILDER.comment("\nSets the max durability for the smoker")
                     .defineInRange("smokerDurability", 1000, 100, 5000);
             BEEPEDIA_HIDE_LOCKED = COMMON_BUILDER.comment("\nSet to true to hide certain data in the Beepedia until the player has unlocked the bee. [true/false]")

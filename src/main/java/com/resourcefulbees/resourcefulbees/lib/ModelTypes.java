@@ -12,5 +12,7 @@ public enum ModelTypes {
     ARMORED,
     GUARDIAN,
     YETI,
-    WITCH;
+    WITCH,
+    BUNNY,
+    KITTEN;
 }

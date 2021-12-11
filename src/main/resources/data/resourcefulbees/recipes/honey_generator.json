@@ -11,7 +11,7 @@
     "G": { "tag": "forge:glass" },
     "S": { "item": "minecraft:iron_bars" },
     "R": { "tag": "forge:dusts/redstone" },
-    "@": { "tag": "forge:storage_blocks/iron" }
+    "@": { "item": "resourcefulbees:waxed_machine_block" }
   },
   "result": {
     "item": "resourcefulbees:honey_generator"

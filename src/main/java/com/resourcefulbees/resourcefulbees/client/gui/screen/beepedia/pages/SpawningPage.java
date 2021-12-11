@@ -64,8 +64,6 @@ public class SpawningPage extends BeeDataPage {
             }
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         } else {
-
-
             IFormattableTextComponent groupName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.group").withStyle(titleStyle);
             IFormattableTextComponent heightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.height").withStyle(titleStyle);
             IFormattableTextComponent weightName = new TranslationTextComponent("gui.resourcefulbees.beepedia.bee_subtab.spawning.weight").withStyle(titleStyle);

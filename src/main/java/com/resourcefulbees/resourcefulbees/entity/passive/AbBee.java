@@ -10,23 +10,23 @@ import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.potion.Effects;
 
-public class KittenBee {
+public class AbBee {
 
-    private KittenBee() {
+    private AbBee() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
     public static void register() {
-        BeeRegistry.getRegistry().registerBee(BeeConstants.KITTEN_BEE, getKittenBeeData());
+        BeeRegistry.getRegistry().registerBee(BeeConstants.ABBEE_BEE, getBunnyBeeData());
     }
 
-    private static CustomBeeData getKittenBeeData() {
+    private static CustomBeeData getBunnyBeeData() {
         CustomBeeData data = new CustomBeeData.Builder(BeeConstants.KITTEN_BEE, "tag:minecraft:beds", true,
                 MutationData.createDefault(),
                 new ColorData.Builder(false)
                         .setPrimaryColor("#EAA939")
                         .setSecondaryColor("#4C483B")
-                        .setModelType(ModelTypes.KITTEN)
+                        .setModelType(ModelTypes.BUNNY)
                         .createColorData(),
                 new CombatData.Builder(false)
                         .setAttackDamage(0f)
@@ -48,7 +48,7 @@ public class KittenBee {
                         .createSpawnData(),
                 new TraitData(true))
                 .setEasterEggBee(true)
-                .setBaseLayerTexture("/kitten/bee")
+                .setBaseLayerTexture("/abbee/bee")
                 .setMaxTimeInHive(500)
                 .setBaseModelType(BaseModelTypes.KITTEN)
                 .setSizeModifier(0.75f)

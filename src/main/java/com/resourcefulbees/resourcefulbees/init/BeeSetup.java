@@ -6,10 +6,7 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
-import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
-import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
-import com.resourcefulbees.resourcefulbees.entity.passive.OreoBee;
-import com.resourcefulbees.resourcefulbees.entity.passive.YetiBee;
+import com.resourcefulbees.resourcefulbees.entity.passive.*;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModEntities;
@@ -73,6 +70,9 @@ public class BeeSetup {
             OreoBee.register();
             KittenBee.register();
             YetiBee.register();
+        }
+        if (Boolean.TRUE.equals(Config.ENABLE_CUSTOM_PATREON_BEES.get())) {
+            AbBee.register();
         }
         if (Boolean.TRUE.equals(GENERATE_DEFAULTS.get())) {
             setupDefaultBees();

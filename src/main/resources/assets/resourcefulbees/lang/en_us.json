@@ -229,6 +229,9 @@
 	"block.resourcefulbees.wooden_honey_tank": "Wooden Honey Tank",
 	"block.resourcefulbees.honey_pipe": "Honey Pipe",
 	"block.resourcefulbees.bottomless_honey_pot": "Bottomless Honey Pot",
+	"block.resourcefulbees.waxed_planks": "Waxed Planks",
+	"block.resourcefulbees.trimmed_waxed_planks": "Trimmed Waxed Planks",
+	"block.resourcefulbees.waxed_machine_block": "Waxed Machine Block",
 
 	"item.resourcefulbees.t1_hive_upgrade": "Tier 1 Hive upgrade",
 	"item.resourcefulbees.t2_hive_upgrade": "Tier 2 Hive upgrade",

@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "PPP",
+        "PWP",
+        "PPP"
+    ],
+    "key": {
+        "P": { "item": "resourcefulbees:waxed_planks" },
+        "W": { "tag": "forge:wax" }
+    },
+    "result": {
+        "item": "resourcefulbees:trimmed_waxed_planks",
+        "count" : 8
+    }
+}

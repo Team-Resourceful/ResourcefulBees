@@ -2,14 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "III",
-    "IBI",
+    "WBW",
     "SPS"
   ],
   "key": {
     "I": { "tag": "forge:ingots/iron" },
     "B": { "item": "minecraft:bucket" },
     "P": { "item": "minecraft:piston" },
-    "S": { "item": "minecraft:smooth_stone" }
+    "S": { "item": "minecraft:smooth_stone" },
+    "W": { "tag": "forge:wax" }
   },
   "result": {
     "item": "resourcefulbees:centrifuge"

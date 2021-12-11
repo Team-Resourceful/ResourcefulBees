@@ -68,12 +68,16 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
             case WITCH:
                 addHat();
                 break;
+            case BUNNY:
+                addBunnyEars();
+                break;
+            case KITTEN:
+                addCatParts();
+                break;
             case DEFAULT:
                 addDefaultParts();
         }
     }
-
-
 
 
     public CustomBeeModel(BaseModelTypes modelType) {
@@ -213,9 +217,6 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
 
         torso.setPos(0.0F, 0.0F, 0.0F);
         body.addChild(torso);
-        torso.texOffs(24, 6).addBox(-1.5F, 1.0F, -6.0F, 3.0F, 2.0F, 1.0F, 0.0F, false);
-        torso.texOffs(24, 3).addBox(-2.5F, -5.0F, -4.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
-        torso.texOffs(24, 3).addBox(1.5F, -5.0F, -4.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
         torso.texOffs(0, 0).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.0F, false);
 
         stinger.setPos(0.0F, 0.0F, 0.0F);
@@ -239,18 +240,26 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         leftWing.texOffs(0, 18).addBox(0F, 0.0F, 0.0F, 9.0F, 0.0F, 6.0F, 0.0F, true);
 
         frontLegs.setPos(1.5F, 3.0F, -2.0F);
+        frontLegs.texOffs(24, 0).addBox(-3.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
+        frontLegs.texOffs(28, 0).addBox(-1.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
         body.addChild(frontLegs);
-        frontLegs.texOffs(24, 0).addBox(-3F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
-        frontLegs.texOffs(24, 0).addBox(-1F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
 
         middleLegs.setPos(1.5F, 3.0F, 0.0F);
+        middleLegs.texOffs(32, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
+        middleLegs.texOffs(36, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
         body.addChild(middleLegs);
-        middleLegs.texOffs(24, 0).addBox(-4F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
-        middleLegs.texOffs(24, 0).addBox(0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+
         backLegs.setPos(1.5F, 3.0F, 2.0F);
+        backLegs.texOffs(40, 0).addBox(-4.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
+        backLegs.texOffs(44, 0).addBox(0.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F);
         body.addChild(backLegs);
-        backLegs.texOffs(24, 0).addBox(-4F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
-        backLegs.texOffs(24, 0).addBox(0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+    }
+
+    private void addCloak() {
+        ModelRenderer cloak = new ModelRenderer(this);
+        cloak.setPos(0.0F, 0.0F, 0.0F);
+        body.addChild(cloak);
+        cloak.texOffs(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
     }
 
     // extra parts
@@ -263,6 +272,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     private void addOreCrystals() {
+        addCloak();
         ModelRenderer crystals = new ModelRenderer(this);
         crystals.setPos(-0.25F, 1.0F, -6.5F);
         body.addChild(crystals);
@@ -303,6 +313,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     private void addDragonParts() {
+        addCloak();
         ModelRenderer dragon = new ModelRenderer(this);
         dragon.setPos(0.0F, -4.0F, -4.0F);
         body.addChild(dragon);
@@ -320,6 +331,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     private void addQueenParts() {
+        addCloak();
         ModelRenderer queen = new ModelRenderer(this);
         queen.setPos(0.0F, 0.0F, 0.0F);
         body.addChild(queen);
@@ -335,6 +347,7 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     private void addVillagerNose() {
+        addCloak();
         ModelRenderer nose = new ModelRenderer(this);
         nose.setPos(0.0F, -21.0F, 0.0F);
         body.addChild(nose);
@@ -342,11 +355,10 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     private void addMushrooms() {
-
+        addCloak();
         ModelRenderer mushroom = new ModelRenderer(this);
         mushroom.setPos(0.0F, 0.0F, 0.0F);
         body.addChild(mushroom);
-        mushroom.texOffs(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
 
         ModelRenderer frontMushroom1 = new ModelRenderer(this);
         frontMushroom1.setPos(-1.5F, -4.0F, 0.0F);
@@ -373,15 +385,14 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     private void addCrops() {
+        addCloak();
         ModelRenderer crop = new ModelRenderer(this);
         crop.setPos(0.0F, 0.0F, 0.0F);
         body.addChild(crop);
-        crop.texOffs(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
 
         ModelRenderer crop2 = new ModelRenderer(this);
         crop2.setPos(-1.6F, -4.0F, 1.5F);
         crop.addChild(crop2);
-
 
         ModelRenderer crop3 = new ModelRenderer(this);
         crop3.setPos(0.0F, -9.0F, -2.0F);
@@ -412,10 +423,10 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     private void addSpikes() {
+        addCloak();
         ModelRenderer guardian = new ModelRenderer(this);
         guardian.setPos(0.0F, 5.0F, 0.0F);
         body.addChild(guardian);
-        guardian.texOffs(0, 25).addBox(-3.5F, -9.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
 
         ModelRenderer spike1 = new ModelRenderer(this);
         spike1.setPos(3.5F, -5.5F, 5.0F);
@@ -491,10 +502,10 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     private void addYetiHorns() {
+        addCloak();
         ModelRenderer yetiHorns = new ModelRenderer(this);
         yetiHorns.setPos(0.0F, 0.0F, 0.0F);
         body.addChild(yetiHorns);
-
 
         ModelRenderer rightHorn = new ModelRenderer(this);
         rightHorn.setPos(-2.0F, -4.0F, -4.0F);
@@ -510,10 +521,10 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
     }
 
     private void addHat() {
+        addCloak();
         ModelRenderer witch = new ModelRenderer(this);
         witch.setPos(0.0F, 0.0F, 0.0F);
         body.addChild(witch);
-        witch.texOffs(0, 25).addBox(-3.5F, -4.0F, -5.0F, 7.0F, 7.0F, 10.0F, 0.4F, false);
 
         ModelRenderer hat1 = new ModelRenderer(this);
         hat1.setPos(0.0F, 0.0F, 0.0F);
@@ -537,6 +548,27 @@ public class CustomBeeModel<T extends CustomBeeEntity> extends AgeableModel<T> {
         witch.addChild(hat4);
         setRotationAngle(hat4, 0.0F, 0.0F, -0.0698F);
         hat4.texOffs(0, 50).addBox(-1.6F, -7.3F, -3.5F, 4.0F, 3.0F, 4.0F, 0.0F, false);
+    }
+
+
+    private void addCatParts() {
+        addCloak();
+        ModelRenderer kitten = new ModelRenderer(this);
+        kitten.setPos(0.0F, 5.0F, 0.0F);
+        body.addChild(kitten);
+        kitten.texOffs(0, 61).addBox(1.5F, -10.0F, -4.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+        kitten.texOffs(12, 61).addBox(-1.5F, -4.0F, -6.0F, 3.0F, 2.0F, 1.0F, 0.0F, false);
+        kitten.texOffs(6, 61).addBox(-2.5F, -10.0F, -4.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+    }
+
+    private void addBunnyEars() {
+        addCloak();
+        ModelRenderer bunny = new ModelRenderer(this);
+        bunny.setPos(0.0F, 5.0F, 0.0F);
+        body.addChild(bunny);
+
+        bunny.texOffs(0, 59).addBox(-2.75F, -13.0F, -4.0F, 2.0F, 4.0F, 1.0F);
+        bunny.texOffs(6, 59).addBox(0.75F, -13.0F, -4.0F, 2.0F, 4.0F, 1.0F);
     }
 
     public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "WIW",
+    "WWW"
+  ],
+  "key": {
+    "I": { "tag": "forge:storage_blocks/iron" },
+    "W": { "item": "resourcefulbees:trimmed_waxed_planks" }
+  },
+  "result": {
+    "item": "resourcefulbees:waxed_machine_block",
+    "count": 1
+  }
+}
