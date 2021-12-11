@@ -21,22 +21,19 @@ public class AbBee {
     }
 
     private static CustomBeeData getBunnyBeeData() {
-        CustomBeeData data = new CustomBeeData.Builder(BeeConstants.KITTEN_BEE, "tag:minecraft:beds", true,
+        CustomBeeData data = new CustomBeeData.Builder(BeeConstants.ABBEE_BEE, "tag:minecraft:beds", true,
                 MutationData.createDefault(),
                 new ColorData.Builder(false)
                         .setPrimaryColor("#EAA939")
                         .setSecondaryColor("#4C483B")
                         .setModelType(ModelTypes.BUNNY)
                         .createColorData(),
-                new CombatData.Builder(false)
+                new CombatData.Builder(true)
                         .setAttackDamage(0f)
                         .setRemoveStingerOnAttack(false)
                         .setBaseHealth(20f)
                         .create(),
-                new CentrifugeData.Builder(true, "minecraft:cat_spawn_egg")
-                        .setBottleOutput("resourcefulbees:catnip_honey_bottle")
-                        .setBottleOutputWeight(0.1f)
-                        .setMainOutputWeight(0.01f)
+                new CentrifugeData.Builder(false, null)
                         .createCentrifugeData(),
                 BreedData.createDefault(),
                 new SpawnData.Builder(true)
@@ -52,7 +49,7 @@ public class AbBee {
                 .setMaxTimeInHive(500)
                 .setBaseModelType(BaseModelTypes.THICK_LEGS)
                 .setSizeModifier(0.75f)
-                .setTraits(new String[]{BeeConstants.KITTEN_BEE})
+                .setTraits(new String[]{TraitConstants.CLINGY})
                 .setCreator("Dawn Felstar")
                 .setLore("Cute little baby kitty bee.")
                 .setLoreColor(BeeConstants.RAINBOW_COLOR)
@@ -64,25 +61,5 @@ public class AbBee {
         data.setCombBlockRegistryObject(ModBlocks.CATNIP_HONEYCOMB_BLOCK);
 
         return data;
-    }
-
-    private static HoneyBottleData honeyBottleData = null;
-
-    public static HoneyBottleData getHoneyBottleData() {
-        if (honeyBottleData == null) {
-            HoneyBottleData.Builder builder = new HoneyBottleData.Builder("catnip", 8, 0.9f, "#BD5331");
-            HoneyEffect speed = new HoneyEffect(Effects.MOVEMENT_SPEED.getRegistryName().toString(), 2400, 2, 1);
-            HoneyEffect nightVision = new HoneyEffect(Effects.NIGHT_VISION.getRegistryName().toString(), 2400, 0, 1);
-            HoneyEffect jump = new HoneyEffect(Effects.JUMP.getRegistryName().toString(), 2400, 1, 1);
-            builder.addEffect(speed).addEffect(nightVision).addEffect(jump);
-            honeyBottleData = builder.build();
-            honeyBottleData.setHoneyBlockRegistryObject(ModBlocks.CATNIP_HONEY_BLOCK);
-            honeyBottleData.setHoneyStillFluidRegistryObject(ModFluids.CATNIP_HONEY_STILL);
-            honeyBottleData.setHoneyFlowingFluidRegistryObject(ModFluids.CATNIP_HONEY_FLOWING);
-            honeyBottleData.setHoneyBlockItemRegistryObject(ModItems.CATNIP_HONEY_BLOCK_ITEM);
-            honeyBottleData.setHoneyBucketItemRegistryObject(ModItems.CATNIP_HONEY_FLUID_BUCKET);
-            honeyBottleData.setHoneyBottleRegistryObject(ModItems.CATNIP_HONEY_BOTTLE);
-        }
-        return honeyBottleData;
     }
 }

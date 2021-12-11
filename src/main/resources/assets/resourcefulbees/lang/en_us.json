@@ -385,12 +385,15 @@
 	"trait.resourcefulbees.teleport": "Teleport",
 	"trait.resourcefulbees.flammable": "Flammable",
 	"trait.resourcefulbees.spider": "Spider",
+	"trait.resourcefulbees.healer": "Healer",
+	"trait.resourcefulbees.clingy": "Clingy",
 
 	"trait.resourcefulbees.special.teleport": "During the day the bee can randomly teleport to an empty position within 4 blocks. This ability is stopped by the Ender Beecon and Bee Hives.",
 	"trait.resourcefulbees.special.flammable": "This effect will randomly light the bee on fire.",
 	"trait.resourcefulbees.special.angry": "Bees with this effect will become aggressive and cause bees around to join them. They can and will attack you, Calming effects will stop them from being angry.",
 	"trait.resourcefulbees.special.slimy": "Slimy bees will make squishy sounds and spurt out slime particles at random.",
 	"trait.resourcefulbees.special.spider": "Allows bees to fly through spiderwebs without issues.",
+	"trait.resourcefulbees.special.clingy": "Bees with this trait will follow you no matter what. They want to give you hugs.",
 
 
 	"entity.minecraft.villager.resourcefulbees.beekeeper": "Beekeeper",

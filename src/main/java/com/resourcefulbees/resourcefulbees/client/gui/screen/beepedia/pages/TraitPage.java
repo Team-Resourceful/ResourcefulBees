@@ -200,6 +200,9 @@ public class TraitPage extends BeepediaPage {
                     case TraitConstants.SPIDER:
                         item = new ItemStack(Items.COBWEB);
                         break;
+                    case TraitConstants.CLINGY:
+                        item = new ItemStack(ModItems.OREO_COOKIE.get());
+                        break;
                     default:
                         item = new ItemStack(Items.BARRIER);
                         break;

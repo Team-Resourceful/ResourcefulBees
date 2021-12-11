@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.entity.goals;
 
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
+import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.ai.goal.Goal;
@@ -47,6 +48,7 @@ public class BeeTemptGoal extends Goal {
     }
 
     protected boolean isTempting(ItemStack stack) {
+        if (this.beeEntity.getBeeData().getTraitData().getSpecialAbilities().contains(TraitConstants.CLINGY)) return true;
         return BeeInfoUtils.isValidBreedItem(stack, this.beeEntity.getBeeData().getBreedData());
     }
 
