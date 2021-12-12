@@ -35,7 +35,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
@@ -93,10 +92,8 @@ public class BeeInfoUtils {
     }
 
     public static void flagBeesInRange(BlockPos pos, Level world) {
-        BoundingBox box = new BoundingBox(pos.getX() + 10, pos.getY() + 10, pos.getZ() + 10, pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10);
-        AABB aabb = AABB.of(box);
         if (world != null) {
-            List<CustomBeeEntity> list = world.getEntitiesOfClass(CustomBeeEntity.class, aabb);
+            List<CustomBeeEntity> list = world.getEntitiesOfClass(CustomBeeEntity.class, new AABB(pos).inflate(10));
             list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
         }
     }
