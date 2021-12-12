@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.NestIngredient;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.CreativeModeTab;
@@ -50,15 +49,6 @@ public class ItemGroupResourcefulBees {
         @OnlyIn(Dist.CLIENT)
         public ItemStack makeIcon() {
             return new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get());
-        }
-
-        @Override
-        public void fillItemList(@NotNull NonNullList<ItemStack> stacks) {
-            super.fillItemList(stacks);
-            stacks.addAll(NestIngredient.getNests(1));
-            stacks.addAll(NestIngredient.getNests(2));
-            stacks.addAll(NestIngredient.getNests(3));
-            stacks.addAll(NestIngredient.getNests(4));
         }
     };
 

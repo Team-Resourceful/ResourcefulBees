@@ -1,14 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredientHelper;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityRenderer;
 import com.teamresourceful.resourcefulbees.common.compat.jei.mutation.MutationCategory;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.SolidificationRecipe;
@@ -18,12 +16,10 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
-import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.registration.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -96,17 +92,6 @@ public class JEICompat implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         registration.registerSubtypeInterpreter(ModItems.BEEPEDIA.get(), (ingredient, context) -> ingredient.hasTag() && ingredient.getTag() != null && ingredient.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
-
-        if (Boolean.TRUE.equals(ClientConfig.SHOW_TIERS_IN_JEI.get())) {
-            ModItems.NESTS_ITEMS.getEntries().forEach(nest ->
-                registration.registerSubtypeInterpreter(nest.get(), (stack, context) -> {
-                    if (!stack.hasTag() || stack.getTag() == null) return IIngredientSubtypeInterpreter.NONE;
-                    CompoundTag blockTag = stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
-                    if (!blockTag.contains(NBTConstants.NBT_TIER)) return IIngredientSubtypeInterpreter.NONE;
-                    return "tier." + blockTag.getInt(NBTConstants.NBT_TIER) + "." + nest.getId().getPath();
-                })
-            );
-        }
     }
 
     public void registerInfoDesc(IRecipeRegistration registration) {
