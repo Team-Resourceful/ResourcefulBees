@@ -89,7 +89,7 @@ public class TraitRegistry implements ITraitRegistry {
         getRegistry().register(TraitConstants.DESERT, new BeeTrait.Builder(TraitConstants.DESERT).addDamageImmunity(DamageSource.CACTUS.msgId).setBeepediaItem(Items.CACTUS).build());
         getRegistry().register(TraitConstants.ANGRY, new BeeTrait.Builder(TraitConstants.ANGRY).addSpecialAbility(TraitConstants.ANGRY).build());
         getRegistry().register(TraitConstants.SPIDER, new BeeTrait.Builder(TraitConstants.SPIDER).addSpecialAbility(TraitConstants.SPIDER).setBeepediaItem(Items.COBWEB).build());
-        getRegistry().register(TraitConstants.HEALER, new BeeTrait.Builder(TraitConstants.HEALER).addAura(new BeeAura(BeeAura.AuraType.HEALING, null, "", 5, false)).setBeepediaItem(Items.GLISTERING_MELON_SLICE).build());
+        getRegistry().register(TraitConstants.HEALER, new BeeTrait.Builder(TraitConstants.HEALER).addAura(new BeeAura(BeeAura.AuraType.HEALING, null, "", 2, false)).setBeepediaItem(Items.GLISTERING_MELON_SLICE).build());
         getRegistry().register(TraitConstants.CLINGY, new BeeTrait.Builder(TraitConstants.CLINGY).addSpecialAbility(TraitConstants.CLINGY).setBeepediaItem(Items.LEAD).build());
     }
 
