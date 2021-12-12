@@ -54,14 +54,15 @@ public class Beepedia extends Item {
             listNBT = nbt.getList(NBTConstants.NBT_BEES, Constants.NBT.TAG_STRING).copy();
             listNBT.forEach(i -> data.getBeeList().add(i.getAsString()));
             nbt.remove(NBTConstants.NBT_BEES);
-            stack.setTag(nbt);
-        }
 
+        }
 
         if (entity != null) {
             data.getBeeList().add(entity.getBeeType());
             data.getBeeList().removeIf(b -> BeeRegistry.getRegistry().getBeeData(b) == null);
+            nbt.putBoolean(NBTConstants.BEEPEDIA_COMPLETE, data.getBeeList().size() == BeeRegistry.getRegistry().getBees().size());
         }
+        stack.setTag(nbt);
     }
 
     @Override
