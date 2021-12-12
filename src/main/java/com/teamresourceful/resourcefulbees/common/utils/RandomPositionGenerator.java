@@ -72,7 +72,7 @@ public class RandomPositionGenerator {
                 BlockPos targetPos = new BlockPos(rndPosX + bee.getX(), rndPosY + bee.getY(), rndPosZ + bee.getZ());
 
                 //if target Y is between 0 and world height AND (is not in Distance of home OR target pos is in distance of home) AND entity can stand on target pos
-                if (MathUtils.inRangeInclusive(targetPos.getY(), 0, bee.level.getMaxBuildHeight()) && (!inDistanceOfHome || bee.isWithinRestriction(targetPos)) && pathnavigator.isStableDestination(targetPos)) {
+                if (MathUtils.inRangeInclusive(targetPos.getY(), bee.level.getMinBuildHeight(), bee.level.getMaxBuildHeight()) && (!inDistanceOfHome || bee.isWithinRestriction(targetPos)) && pathnavigator.isStableDestination(targetPos)) {
 
                     //flip a coin heads = check block above is air if so find valid position above else go below
                     if (random.nextBoolean() && bee.level.isEmptyBlock(bee.blockPosition().above())) {
