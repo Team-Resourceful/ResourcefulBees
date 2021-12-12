@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:bee_jar"
+            "items": [
+              "resourcefulbees:bee_jar"
+            ]
           }
         ]
       }

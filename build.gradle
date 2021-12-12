@@ -45,7 +45,7 @@ def ENV = System.getenv()
 
 sourceSets {
     main {
-        java.excludes = ['com/teamresourceful/resourcefulbees/datagen/**']
+        java.excludes = ['com/teamresourceful/resourcefulbees/datagen/**', 'com/teamresourceful/resourcefulbees/common/multiblocks/**', 'com/teamresourceful/resourcefulbees/client/gui/screen/centrifuge/**']
         resources {
             srcDirs += 'src/generated/resources'
             exclude '.cache'
@@ -55,6 +55,7 @@ sourceSets {
         resources.srcDirs = main.resources.srcDirs
         resources.srcDirs.remove('src/generated/resources')
         java.srcDirs = main.java.srcDirs
+        java.excludes = ['com/teamresourceful/resourcefulbees/common/multiblocks/**', 'com/teamresourceful/resourcefulbees/client/gui/screen/centrifuge/**']
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
         compileClasspath += main.output
@@ -101,9 +102,9 @@ minecraft {
                 resourcefulbees {
                     source sourceSets.main
                 }
-                Phosphophyllite {
-                    source project(':Phosphophyllite').sourceSets.main
-                }
+//                Phosphophyllite {
+//                    source project(':Phosphophyllite').sourceSets.main
+//                }
             }
         }
 
@@ -120,9 +121,9 @@ minecraft {
                 resourcefulbees {
                     source sourceSets.main
                 }
-                Phosphophyllite {
-                    source project(':Phosphophyllite').sourceSets.main
-                }
+//                Phosphophyllite {
+//                    source project(':Phosphophyllite').sourceSets.main
+//                }
             }
         }
 
@@ -135,9 +136,9 @@ minecraft {
                 resourcefulbees {
                     source sourceSets.datagen
                 }
-                Phosphophyllite {
-                    source project(':Phosphophyllite').sourceSets.main
-                }
+//                Phosphophyllite {
+//                    source project(':Phosphophyllite').sourceSets.main
+//                }
             }
         }
     }
@@ -176,7 +177,7 @@ dependencies {
 
     implementation fg.deobf("software.bernie.geckolib:geckolib-1.18:${geckolib_version}")
 
-    implementation project(':Phosphophyllite')
+    //implementation project(':Phosphophyllite')
 
     compileOnly 'org.jetbrains:annotations:22.0.0'
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
@@ -189,7 +190,7 @@ jar {
                 "Specification-Vendor": "resourcefulbees",
                 "Specification-Version": "1", // We are version 1 of ourselves
                 "Implementation-Title": project.name,
-                "Implementation-Version": "${version}",
+                "Implementation-Version": "${getArchiveVersion()}",
                 "Implementation-Vendor" :"resourcefulbees",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "MixinConfigs": "${modid}.mixins.json"

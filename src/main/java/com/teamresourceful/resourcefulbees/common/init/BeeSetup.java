@@ -11,14 +11,12 @@ import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 
@@ -76,11 +74,11 @@ public class BeeSetup {
     private static void addNestFeature(BiomeLoadingEvent event) {
         Biome.BiomeCategory category = event.getCategory();
         if (category == Biome.BiomeCategory.NETHER) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.NETHER_NESTS);
+            //TODO event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.NETHER_NESTS);
         } else if (category == Biome.BiomeCategory.THEEND) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.THE_END_NESTS);
+            //TODO event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.THE_END_NESTS);
         } else {
-            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.OVERWORLD_NESTS);
+            //TODO event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.OVERWORLD_NESTS);
         }
     }
 

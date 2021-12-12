@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSe
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;

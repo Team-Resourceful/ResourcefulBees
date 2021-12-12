@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:honey_dipper"
+            "items": [
+              "resourcefulbees:honey_dipper"
+            ]
           }
         ]
       }

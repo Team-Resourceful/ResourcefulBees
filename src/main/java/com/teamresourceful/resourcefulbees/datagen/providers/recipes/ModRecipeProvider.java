@@ -5,13 +5,13 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import com.teamresourceful.resourcefulbees.common.recipe.NestIngredient;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +24,7 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     @Override
-    protected void buildShapelessRecipes(@NotNull Consumer<IFinishedRecipe> recipes) {
+    protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> recipes) {
         RecipeCriteria hasPlanks = new RecipeCriteria("has_planks", has(ItemTags.PLANKS));
         RecipeCriteria hasGoldStorage = new RecipeCriteria("has_gold_storage", has(ModItems.GOLD_STORAGE_UPGRADE.get()));
         RecipeCriteria hasHoneycombBlock = new RecipeCriteria("has_honeycomb_block", has(ModTags.Items.HONEYCOMB_BLOCK));
@@ -41,8 +41,6 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(hasPlanks).save(recipes);
         //endregion
         //region Apiary Upgrades
-        RecipeHelper.createCornerWithChestRecipe(Ingredient.of(ModItems.APIARY_STORAGE_ITEM.get()), Tags.Items.INGOTS_IRON, ModItems.IRON_STORAGE_UPGRADE.get())
-                .unlockedBy(hasIron).save(recipes);
         RecipeHelper.createCornerWithChestRecipe(Ingredient.of(ModItems.IRON_STORAGE_UPGRADE.get()), Tags.Items.INGOTS_GOLD, ModItems.GOLD_STORAGE_UPGRADE.get())
                 .unlockedBy("has_gold", has(Tags.Items.INGOTS_GOLD)).save(recipes);
         RecipeHelper.createCornerWithChestRecipe(Ingredient.of(ModItems.GOLD_STORAGE_UPGRADE.get()), Tags.Items.GEMS_DIAMOND, ModItems.DIAMOND_STORAGE_UPGRADE.get())
@@ -63,10 +61,6 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(hasHoneycombBlock).save(recipes);
         RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(ModItems.T3_APIARY_ITEM.get()), ModItems.T4_APIARY_ITEM.get())
                 .unlockedBy(hasHoneycombBlock).save(recipes);
-        RecipeHelper.createCornerWithChestRecipe(Ingredient.of(Items.HOPPER), ModTags.Items.HONEYCOMB_BLOCK, ModItems.APIARY_STORAGE_ITEM.get())
-                .unlockedBy(hasHoneycombBlock).save(recipes);
-        RecipeHelper.createCornerWithMid(Ingredient.of(ModItems.APIARY_STORAGE_ITEM.get()), Ingredient.of(ModItems.BEE_JAR.get()), Ingredient.of(ItemTags.FLOWERS), ModItems.APIARY_BREEDER_ITEM.get())
-                .unlockedBy("has_bee_jar", has(ModItems.BEE_JAR.get())).save(recipes);
         //endregion
         //region Honey Conversion
         ShapelessRecipeBuilder.shapeless(ModItems.HONEY_FLUID_BUCKET.get()).requires(Items.HONEY_BOTTLE, 4).requires(Items.BUCKET)

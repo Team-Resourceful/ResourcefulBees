@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.blockstates;
 
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockStateProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -17,6 +16,7 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
     }
 
     private void registerCentrifuge() {
+        /*
         simpleBlockWithItem(ModBlocks.CENTRIFUGE_CASING.get());
         simpleBlockWithItem(ModBlocks.CENTRIFUGE_GEARBOX.get());
         simpleBlockWithItem(ModBlocks.CENTRIFUGE_PROCESSOR.get());
@@ -56,5 +56,6 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_FLUID_OUTPUT.get());
         horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT.get());
         horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT.get());
+         */
     }
 }

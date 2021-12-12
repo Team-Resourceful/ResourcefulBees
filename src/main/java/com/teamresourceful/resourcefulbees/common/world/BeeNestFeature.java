@@ -13,10 +13,10 @@ import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.world.ISeedReader;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
@@ -49,7 +49,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
     public BeeNestFeature(Codec<NoneFeatureConfiguration> configFactoryIn) { super(configFactoryIn); }
 
-    private void generateHivePlatform(ISeedReader worldIn, BlockPos hivePos, BlockState platformBlock, Direction direction, Block blockToReplace) {
+    private void generateHivePlatform(WorldGenLevel worldIn, BlockPos hivePos, BlockState platformBlock, Direction direction, Block blockToReplace) {
         if (platformBlock == null) platformBlock = Blocks.OAK_WOOD.defaultBlockState();
 
         BlockPos posBlockPos = hivePos.offset(direction.getNormal());
@@ -64,8 +64,8 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         worldIn.setBlock(hivePos, platformBlock, 1);
     }
 
-    private BlockPos getYPos(ISeedReader worldIn, Random rand, Biome.Category category, BlockPos initPos){
-        if (category == Biome.Category.NETHER || worldIn.dimensionType().hasCeiling()) {
+    private BlockPos getYPos(WorldGenLevel worldIn, Random rand, Biome.BiomeCategory category, BlockPos initPos){
+        if (category == Biome.BiomeCategory.NETHER || worldIn.dimensionType().hasCeiling()) {
             int ceilHeight = worldIn.getHeight();
             BlockPos newPos = new BlockPos(initPos.getX(), rand.nextInt(ceilHeight - 33) + 32, initPos.getZ())
                     .south(rand.nextInt(15))
@@ -87,7 +87,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
         BlockPos pos = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, initPos);
 
-        if ((category == Biome.Category.OCEAN || category == Biome.Category.RIVER)
+        if ((category == Biome.BiomeCategory.OCEAN || category == Biome.BiomeCategory.RIVER)
                 && rand.nextInt(10) != 0
                 && worldIn.getBlockState(pos.below()).getBlock().equals(Blocks.WATER)) {
             return BlockPos.ZERO;
@@ -99,7 +99,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         return headsOrTails ? blockOne : blockTwo;
     }
 
-    private Block getNetherNest(boolean headsOrTails, @Nullable RegistryKey<Biome> biomeKey){
+    private Block getNetherNest(boolean headsOrTails, @Nullable ResourceKey<Biome> biomeKey){
         if (Biomes.WARPED_FOREST.equals(biomeKey)) {
             return selectNest(headsOrTails, ModBlocks.WARPED_BEE_NEST.get(), ModBlocks.WARPED_NYLIUM_BEE_NEST.get());
         } else if (Biomes.CRIMSON_FOREST.equals(biomeKey)) {
@@ -109,11 +109,11 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private boolean isFrozenBiome(@Nullable RegistryKey<Biome> biomeKey){
+    private boolean isFrozenBiome(@Nullable ResourceKey<Biome> biomeKey){
         return biomeKey != null && (biomeKey.equals(Biomes.FROZEN_OCEAN) || biomeKey.equals(Biomes.FROZEN_RIVER) || biomeKey.equals(Biomes.DEEP_FROZEN_OCEAN));
     }
 
-    private void logMissingBiome(RegistryKey<Biome> biomeKey){
+    private void logMissingBiome(ResourceKey<Biome> biomeKey){
         if (biomeKey != null && ClientConfig.SHOW_DEBUG_INFO.get()) {
             ResourcefulBees.LOGGER.warn("*****************************************************");
             ResourcefulBees.LOGGER.warn("Could not load bees into nest during chunk generation");
@@ -122,7 +122,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void addBeeToNest(@Nullable EntityType<?> entityType, ISeedReader worldIn, BlockPos nestPos, CustomBeeData data, Random rand, TieredBeehiveTileEntity nest){
+    private void addBeeToNest(@Nullable EntityType<?> entityType, WorldGenLevel worldIn, BlockPos nestPos, CustomBeeData data, Random rand, TieredBeehiveTileEntity nest){
         if (entityType != null) {
             Entity bee = entityType.create(worldIn.getLevel());
             if (bee != null) {
@@ -136,11 +136,10 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void setNestBees(BlockPos nestPos, @Nullable RegistryKey<Biome> biomeKey, ISeedReader worldIn, Random rand){
+    private void setNestBees(BlockPos nestPos, @Nullable ResourceKey<Biome> biomeKey, WorldGenLevel worldIn, Random rand){
         BlockEntity tileEntity = worldIn.getBlockEntity(nestPos);
 
-        if (tileEntity instanceof TieredBeehiveTileEntity) {
-            TieredBeehiveTileEntity nestTE = (TieredBeehiveTileEntity) tileEntity;
+        if (tileEntity instanceof TieredBeehiveTileEntity nestTE) {
             int maxBees = Math.round(CommonConfig.HIVE_MAX_BEES.get() * 0.5f);
 
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {

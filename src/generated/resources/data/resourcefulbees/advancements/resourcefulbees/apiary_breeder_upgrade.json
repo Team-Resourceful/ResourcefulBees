@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:apiary_breeder_upgrade"
+            "items": [
+              "resourcefulbees:apiary_breeder_upgrade"
+            ]
           }
         ]
       }

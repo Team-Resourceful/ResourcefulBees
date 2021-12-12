@@ -2,13 +2,10 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.*;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.tileentity.*;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -306,6 +303,7 @@ public class ModBlockEntityTypes {
             .of(HoneyPotBlockEntity::new, ModBlocks.HONEY_POT.get())
             .build(null));
 
+    /* TODO REMOVE TO WORK ON CENTRIFUGE
     //region Centrifuge Block Entity Types
     public static final RegistryObject<BlockEntityType<CentrifugeCasingEntity>> CENTRIFUGE_CASING_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge_casing", () -> BlockEntityType.Builder
             .of(CentrifugeCasingEntity::new, ModBlocks.CENTRIFUGE_CASING.get())
@@ -401,4 +399,5 @@ public class ModBlockEntityTypes {
             .of(() -> new CentrifugeFluidOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT_ENTITY, CentrifugeTier.ULTIMATE), ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT.get())
             .build(null));
     //endregion
+     */
 }

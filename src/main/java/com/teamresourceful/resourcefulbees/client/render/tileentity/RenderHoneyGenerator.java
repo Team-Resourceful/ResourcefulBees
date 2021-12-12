@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderHoneyGenerator extends BlockEntityRenderer<HoneyGeneratorTileEntity> {
+public class RenderHoneyGenerator implements BlockEntityRenderer<HoneyGeneratorTileEntity> {
 
     public RenderHoneyGenerator(BlockEntityRendererProvider.Context renderer) {}
 

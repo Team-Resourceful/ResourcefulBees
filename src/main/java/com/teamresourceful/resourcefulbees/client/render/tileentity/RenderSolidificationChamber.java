@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderSolidificationChamber extends BlockEntityRenderer<SolidificationChamberBlockEntity> {
+public class RenderSolidificationChamber implements BlockEntityRenderer<SolidificationChamberBlockEntity> {
 
     public RenderSolidificationChamber(BlockEntityRendererProvider.Context renderer) {}
 

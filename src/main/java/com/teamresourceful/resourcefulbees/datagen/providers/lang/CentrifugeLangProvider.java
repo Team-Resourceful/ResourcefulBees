@@ -1,14 +1,9 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import net.minecraft.data.DataGenerator;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
 
 public class CentrifugeLangProvider extends BaseLanguageProvider {
 
@@ -29,16 +24,17 @@ public class CentrifugeLangProvider extends BaseLanguageProvider {
     }
 
     private void addGui() {
-        Arrays.stream(CentrifugeTier.values()).forEach(tier -> {
-            add("gui.centrifuge.input.item." + tier.getName(), StringUtils.capitalize(tier.getName()) + " Input");
-            add("gui.centrifuge.output.item." + tier.getName(), StringUtils.capitalize(tier.getName()) + " Item Output");
-            add("gui.centrifuge.output.fluid." + tier.getName(), StringUtils.capitalize(tier.getName()) + " Fluid Output");
-            add("gui.centrifuge.terminal." + tier.getName(), StringUtils.capitalize(tier.getName()) + " Terminal");
-            add("gui.centrifuge.void." + tier.getName(), StringUtils.capitalize(tier.getName()) + " Void");
-        });
+//        Arrays.stream(CentrifugeTier.values()).forEach(tier -> {
+//            add("gui.centrifuge.input.item." + tier.getName(), StringUtils.capitalize(tier.getName()) + " Input");
+//            add("gui.centrifuge.output.item." + tier.getName(), StringUtils.capitalize(tier.getName()) + " Item Output");
+//            add("gui.centrifuge.output.fluid." + tier.getName(), StringUtils.capitalize(tier.getName()) + " Fluid Output");
+//            add("gui.centrifuge.terminal." + tier.getName(), StringUtils.capitalize(tier.getName()) + " Terminal");
+//            add("gui.centrifuge.void." + tier.getName(), StringUtils.capitalize(tier.getName()) + " Void");
+//        });
     }
 
     private void addBlocks() {
+        /*
         //region blocks
         addBlock(ModBlocks.CENTRIFUGE_CASING, "Centrifuge Casing");
         addBlock(ModBlocks.CENTRIFUGE_PROCESSOR, "Centrifuge Processor");
@@ -80,5 +76,6 @@ public class CentrifugeLangProvider extends BaseLanguageProvider {
         addBlock(ModBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT, "Elite Centrifuge Fluid Output");
         addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT, "Ultimate Centrifuge Fluid Output");
         //endregion
+         */
     }
 }

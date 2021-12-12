@@ -5,21 +5,21 @@ import com.google.gson.GsonBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.HashCache;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseAdvancementProvider implements IDataProvider {
+public abstract class BaseAdvancementProvider implements DataProvider {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     public static final String TRANSLATIONS_PREFIX = "advancements.resourcefulbees.";
     public static final String TITLE_SUFFIX = ".title";
@@ -44,7 +44,7 @@ public abstract class BaseAdvancementProvider implements IDataProvider {
 
     public abstract void buildAdvancements();
 
-    protected static Advancement createRootAdvancement(RegistryObject<Item> item, ITextComponent title, ITextComponent desc, ResourceLocation background, ItemPredicate predicate) {
+    protected static Advancement createRootAdvancement(RegistryObject<Item> item, Component title, Component desc, ResourceLocation background, ItemPredicate predicate) {
         return Advancement.Builder.advancement()
                 .display(item.get().getDefaultInstance(),
                         title,
@@ -60,13 +60,13 @@ public abstract class BaseAdvancementProvider implements IDataProvider {
 
     protected static Advancement.Builder createAdvancement(ItemStack item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item, new TranslationTextComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.TASK, true, true, false)
+                .display(item, new TranslatableComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslatableComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.TASK, true, true, false)
                 .parent(parent);
     }
 
     protected static Advancement.Builder createAdvancement(RegistryObject<Item> item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item.get().getDefaultInstance(), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.TASK, true, true, false)
+                .display(item.get().getDefaultInstance(), new TranslatableComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslatableComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.TASK, true, true, false)
                 .parent(parent);
     }
 
@@ -78,13 +78,13 @@ public abstract class BaseAdvancementProvider implements IDataProvider {
 
     protected static Advancement.Builder createChallengeAchivement(ItemStack item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item, new TranslationTextComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.CHALLENGE, true, true, true)
+                .display(item, new TranslatableComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslatableComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.CHALLENGE, true, true, true)
                 .parent(parent);
     }
 
     protected static Advancement.Builder createChallengeAchivement(RegistryObject<Item> item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item.get().getDefaultInstance(), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslationTextComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.CHALLENGE, true, true, true)
+                .display(item.get().getDefaultInstance(), new TranslatableComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslatableComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.CHALLENGE, true, true, true)
                 .parent(parent);
     }
 
@@ -94,16 +94,16 @@ public abstract class BaseAdvancementProvider implements IDataProvider {
                 .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/"+id));
     }
 
-    protected static InventoryChangeTrigger.Instance has(IItemProvider pItemLike) {
+    protected static InventoryChangeTrigger.TriggerInstance has(ItemLike pItemLike) {
         return inventoryTrigger(ItemPredicate.Builder.item().of(pItemLike).build());
     }
 
-    protected static InventoryChangeTrigger.Instance has(ITag<Item> pTag) {
+    protected static InventoryChangeTrigger.TriggerInstance has(Tag<Item> pTag) {
         return inventoryTrigger(ItemPredicate.Builder.item().of(pTag).build());
     }
 
-    protected static InventoryChangeTrigger.Instance inventoryTrigger(ItemPredicate... pPredicate) {
-        return new InventoryChangeTrigger.Instance(EntityPredicate.AndPredicate.ANY, MinMaxBounds.IntBound.ANY, MinMaxBounds.IntBound.ANY, MinMaxBounds.IntBound.ANY, pPredicate);
+    protected static InventoryChangeTrigger.TriggerInstance inventoryTrigger(ItemPredicate... pPredicate) {
+        return new InventoryChangeTrigger.TriggerInstance(EntityPredicate.Composite.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, pPredicate);
     }
 
     public Advancement addAdvancement(Advancement advancement) {
@@ -114,14 +114,14 @@ public abstract class BaseAdvancementProvider implements IDataProvider {
     }
 
     @Override
-    public void run(@NotNull DirectoryCache cache) throws IOException {
+    public void run(@NotNull HashCache cache) throws IOException {
         Path path = this.generator.getOutputFolder();
 
         buildAdvancements();
 
         for (Advancement advancement : this.advancements.values()) {
             Path path1 = createPath(path, advancement);
-            IDataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path1);
+            DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path1);
         }
     }
 

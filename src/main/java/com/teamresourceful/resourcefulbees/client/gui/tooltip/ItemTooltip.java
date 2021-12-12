@@ -1,12 +1,10 @@
 package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -48,7 +46,7 @@ public class ItemTooltip extends AbstractTooltip {
 
     @Override
     public List<Component> getTooltip() {
-        List<Component> tooltips = itemSupplier.get().getTooltipLines(Minecraft.getInstance().player, Minecraft.getInstance().options.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
+        List<Component> tooltips = itemSupplier.get().getTooltipLines(Minecraft.getInstance().player, Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL);
         if (doNBT) {
             CompoundTag nbt = nbtSupplier.get();
             tooltips.addAll(getNbtTooltips(nbt));

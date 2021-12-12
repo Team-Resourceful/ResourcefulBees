@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.common.capabilities;
 
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 
 public class Capabilities {
 
@@ -10,6 +9,6 @@ public class Capabilities {
 
     }
 
-    @CapabilityInject(IBeepediaData.class)
+    //@CapabilityInject(IBeepediaData.class)
     public static Capability<IBeepediaData> BEEPEDIA_DATA;
 }

@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
@@ -10,7 +9,6 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryStorageTileEntity;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -18,7 +16,6 @@ import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -68,7 +65,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     public static List<Recipe> getHoneycombRecipes() {
         List<Recipe> recipes = BeeRegistry.getRegistry().getBees().values().stream().flatMap(HiveCategory::createRecipes).collect(Collectors.toList());
         for (int i = 0; i < 5; i++) recipes.add(new Recipe(Items.HONEYCOMB.getDefaultInstance(), NESTS.get(i), EntityType.BEE, false));
-        for (int i = 0; i < 4; i++) recipes.add(new Recipe(ApiaryStorageTileEntity.getVanillaOutput(i), APIARIES.get(i), EntityType.BEE, true));
+        //for (int i = 0; i < 4; i++) recipes.add(new Recipe(ApiaryStorageTileEntity.getVanillaOutput(i), APIARIES.get(i), EntityType.BEE, true));
         return recipes;
     }
 

@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "resourcefulbees:bee_jar",
-      "nbt": "{Entity:\"minecraft:bee\",Color:\"#edc343\"}"
+      "nbt": "{Color:\"#edc343\",Entity:\"minecraft:bee\"}"
     },
     "title": {
       "translate": "advancements.resourcefulbees.collect_bee.title"
@@ -22,8 +22,10 @@
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:bee_jar",
-            "nbt": "{id:\"resourcefulbees:bee_jar\",Count:1b,tag:{Entity:\"minecraft:bee\",Color:\"#edc343\"}}"
+            "items": [
+              "resourcefulbees:bee_jar"
+            ],
+            "nbt": "{Count:1b,id:\"resourcefulbees:bee_jar\",tag:{Color:\"#edc343\",Entity:\"minecraft:bee\"}}"
           }
         ]
       }

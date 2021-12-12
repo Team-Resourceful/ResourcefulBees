@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/orientable_with_bottom",
-  "textures": {
-    "side": "resourcefulbees:block/centrifuge/casing",
-    "front": "resourcefulbees:block/centrifuge/input/energy/basic",
-    "bottom": "resourcefulbees:block/centrifuge/input/energy/basic",
-    "top": "resourcefulbees:block/centrifuge/casing"
-  }
-}

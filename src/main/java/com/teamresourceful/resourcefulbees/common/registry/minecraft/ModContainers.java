@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.*;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -21,12 +20,8 @@ public class ModContainers {
 
     public static final RegistryObject<MenuType<HoneyGeneratorContainer>> HONEY_GENERATOR_CONTAINER = CONTAINER_TYPES.register("honey_generator", () -> IForgeMenuType
             .create((id, inv, c) -> new HoneyGeneratorContainer(id, inv.player.level, c.readBlockPos(), inv)));
-    public static final RegistryObject<MenuType<UnvalidatedApiaryContainer>> UNVALIDATED_APIARY_CONTAINER = CONTAINER_TYPES.register("unvalidated_apiary", () -> IForgeMenuType
-            .create((id, inv, c) -> new UnvalidatedApiaryContainer(id, inv.player.level, c.readBlockPos(), inv)));
     public static final RegistryObject<MenuType<ValidatedApiaryContainer>> VALIDATED_APIARY_CONTAINER = CONTAINER_TYPES.register("validated_apiary", () -> IForgeMenuType
             .create((id, inv, c) -> new ValidatedApiaryContainer(id, inv.player.level, c.readBlockPos(), inv)));
-    public static final RegistryObject<MenuType<ApiaryStorageContainer>> APIARY_STORAGE_CONTAINER = CONTAINER_TYPES.register("apiary_storage", () -> IForgeMenuType
-            .create((id, inv, c) -> new ApiaryStorageContainer(id, inv.player.level, c.readBlockPos(), inv)));
     public static final RegistryObject<MenuType<ApiaryBreederContainer>> APIARY_BREEDER_CONTAINER = CONTAINER_TYPES.register("apiary_breeder", () -> IForgeMenuType
             .create((id, inv, c) -> new ApiaryBreederContainer(id, inv.player.level, c.readBlockPos(), inv)));
     public static final RegistryObject<MenuType<EnderBeeconContainer>> ENDER_BEECON_CONTAINER = CONTAINER_TYPES.register("ender_beecon", () -> IForgeMenuType
@@ -36,6 +31,7 @@ public class ModContainers {
     public static final RegistryObject<MenuType<HoneyPotContainer>> HONEY_POT_CONTAINER = CONTAINER_TYPES.register("honey_pot", () -> IForgeMenuType
             .create((id, inv, c) -> new HoneyPotContainer(id, inv.player.level, c.readBlockPos(), inv)));
 
+    /* TODO REMOVE TO WORK ON CENTRIFUGE
     // region Centrifuge Containers
     public static final RegistryObject<MenuType<CentrifugeTerminalContainer>> CENTRIFUGE_TERMINAL_CONTAINER = CONTAINER_TYPES.register("centrifuge/terminal", () -> IForgeMenuType
             .create(CentrifugeTerminalContainer::new));
@@ -48,4 +44,5 @@ public class ModContainers {
     public static final RegistryObject<MenuType<CentrifugeVoidContainer>> CENTRIFUGE_VOID_CONTAINER = CONTAINER_TYPES.register("centrifuge/void", () -> IForgeMenuType
             .create(CentrifugeVoidContainer::new));
     // endregion
+     */
 }

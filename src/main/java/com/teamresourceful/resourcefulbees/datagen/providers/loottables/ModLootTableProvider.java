@@ -2,12 +2,12 @@ package com.teamresourceful.resourcefulbees.datagen.providers.loottables;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.LootTableProvider;
-import net.minecraft.loot.LootParameterSet;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.ValidationTracker;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,14 +29,14 @@ public class ModLootTableProvider extends LootTableProvider {
     }
 
     @Override
-    protected @NotNull List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
-        List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables = new ArrayList<>();
-        tables.add(Pair.of(BlockLootTables::new, LootParameterSets.BLOCK));
+    protected @NotNull List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
+        List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> tables = new ArrayList<>();
+        tables.add(Pair.of(BlockLootTables::new, LootContextParamSets.BLOCK));
         return tables;
     }
 
     @Override
-    protected void validate(@NotNull Map<ResourceLocation, LootTable> map, @NotNull ValidationTracker validationtracker) {
+    protected void validate(@NotNull Map<ResourceLocation, LootTable> map, @NotNull ValidationContext validationtracker) {
         //We dont need validation.
     }
 }

@@ -39,7 +39,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
     @Override
     protected void init() {
         super.init();
-        this.buttons.clear();
+        clearWidgets();
     }
 
     @Override

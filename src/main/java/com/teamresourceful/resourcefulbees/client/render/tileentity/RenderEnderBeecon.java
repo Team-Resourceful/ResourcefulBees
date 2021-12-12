@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderEnderBeecon extends BlockEntityRenderer<EnderBeeconTileEntity> {
+public class RenderEnderBeecon implements BlockEntityRenderer<EnderBeeconTileEntity> {
 
     public static final ResourceLocation TEXTURE_BEACON_BEAM = new ResourceLocation("textures/entity/beacon_beam.png");
 

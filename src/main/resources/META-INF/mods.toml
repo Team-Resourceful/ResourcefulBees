@@ -4,7 +4,7 @@ license="https://www.gnu.org/licenses/lgpl-3.0.en.html"
 issueTrackerURL="https://github.com/Resourceful-Bees/ResourcefulBees/issues/new/choose"
 [[mods]]
 modId="resourcefulbees"
-version="${version}"
+version="1"
 displayName="Resourceful Bees"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"
 logoFile="logo.png"
@@ -18,12 +18,12 @@ description="This mod provides pack makers with useful capabilities for creating
     ordering="NONE"
     side="CLIENT"
 
-[[dependencies.resourcefulbees]]
-    modId="phosphophyllite"
-    mandatory=true
-    versionRange="[0.6.0,)"
-    ordering="NONE"
-    side="BOTH"
+# [[dependencies.resourcefulbees]]
+#     modId="phosphophyllite"
+#     mandatory=true
+#     versionRange="[0.6.0,)"
+#     ordering="NONE"
+#     side="BOTH"
 
 [[dependencies.resourcefulbees]]
     modId="forge"

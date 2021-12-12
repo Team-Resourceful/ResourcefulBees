@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.centrifuge;
 
-import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeTerminalScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -21,9 +20,11 @@ public record CommandResponseMessage(Component response) {
     public static void handle(CommandResponseMessage message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             Minecraft minecraft = Minecraft.getInstance();
+            /* TODO UNCOMMENT TO WORK ON CENTRIFUGE
             if (minecraft.screen instanceof CentrifugeTerminalScreen) {
                 ((CentrifugeTerminalScreen) minecraft.screen).sendResponse(message.response);
             }
+             */
         });
         context.get().setPacketHandled(true);
     }

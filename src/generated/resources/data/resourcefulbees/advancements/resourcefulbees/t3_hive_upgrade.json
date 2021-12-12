@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:t3_hive_upgrade"
+            "items": [
+              "resourcefulbees:t3_hive_upgrade"
+            ]
           }
         ]
       }

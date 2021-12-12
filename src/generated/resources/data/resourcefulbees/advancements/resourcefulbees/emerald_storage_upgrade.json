@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:emerald_storage_upgrade"
+            "items": [
+              "resourcefulbees:emerald_storage_upgrade"
+            ]
           }
         ]
       }

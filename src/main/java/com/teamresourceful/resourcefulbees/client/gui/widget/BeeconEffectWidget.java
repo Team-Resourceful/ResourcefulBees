@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
@@ -10,16 +9,12 @@ import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.potion.Effect;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
 
 public class BeeconEffectWidget extends AbstractWidget {
 
@@ -87,6 +82,11 @@ public class BeeconEffectWidget extends AbstractWidget {
         if (MathUtils.inRangeInclusive(mouseX, x+4, x+22) && MathUtils.inRangeInclusive(mouseY, y+4, y+22)) {
             //TODO GuiUtils.drawHoveringText(matrix, Collections.singletonList(effect.getDisplayName()), mouseX, mouseY, mc.screen.width, mc.screen.height, -1, mc.font);
         }
+
+    }
+
+    @Override
+    public void updateNarration(@NotNull NarrationElementOutput output) {
 
     }
 }

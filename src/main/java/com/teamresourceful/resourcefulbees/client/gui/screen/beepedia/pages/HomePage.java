@@ -8,16 +8,11 @@ import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -76,7 +71,7 @@ public class HomePage extends BeepediaPage {
         int padding = font.width(completeStatus) / 2;
         font.draw(matrix, completeStatus, x + (width / 2F) - padding, y + 115F, -1);
         font.draw(matrix, BeepediaLang.ITEM_GROUP.withStyle(ChatFormatting.GRAY), x + 52F, y + 81F, -1);
-        Minecraft.getInstance().getTextureManager().bind(BeepediaImages.LOGO);
+        RenderUtils.bindTexture(BeepediaImages.LOGO);
         Gui.blit(matrix, x + (width / 2) - 52, y + 90, 0, 0, 104, 16, 104, 16);
     }
 

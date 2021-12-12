@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.client.render.entity.models.CustomBee
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -16,8 +16,8 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class CustomBeeRenderer<E extends CustomBeeEntity> extends GeoEntityRenderer<E> {
 
-    public CustomBeeRenderer(EntityRenderDispatcher renderManager, RenderData renderData) {
-        super(renderManager, new CustomBeeModel<>());
+    public CustomBeeRenderer(EntityRendererProvider.Context ctx, RenderData renderData) {
+        super(ctx, new CustomBeeModel<>());
         renderData.getLayers().stream().limit(6).forEach(layerData -> addLayer(new CustomBeeLayer<>(this, renderData, layerData)));
     }
 

@@ -182,7 +182,6 @@ public class ModLanguageProvider extends BaseLanguageProvider {
         addBlock(ModBlocks.T2_APIARY_BLOCK, "Tier 2 Apiary");
         addBlock(ModBlocks.T3_APIARY_BLOCK, "Tier 3 Apiary");
         addBlock(ModBlocks.T4_APIARY_BLOCK, "Tier 4 Apiary");
-        addBlock(ModBlocks.APIARY_STORAGE_BLOCK, "Apiary Storage");
         addBlock(ModBlocks.APIARY_BREEDER_BLOCK, "Apiary Breeder");
         addBlock(ModBlocks.HONEY_GENERATOR, "Honey Generator");
         addBlock(ModBlocks.ENDER_BEECON, "Ender Beecon");

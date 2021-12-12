@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:ender_beecon"
+            "items": [
+              "resourcefulbees:ender_beecon"
+            ]
           }
         ]
       }

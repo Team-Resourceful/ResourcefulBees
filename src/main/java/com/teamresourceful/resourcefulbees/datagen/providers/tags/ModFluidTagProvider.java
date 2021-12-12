@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.FluidTagsProvider;
+import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 

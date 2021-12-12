@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.*;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.BeepediaListTypes;
@@ -9,10 +8,8 @@ import com.teamresourceful.resourcefulbees.client.gui.widget.ToggleItemImageButt
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.item.Item;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
@@ -52,7 +49,7 @@ public class ListPage extends BeepediaPage {
         BeepediaState.updateState(type, null, null, null, null);
     }
 
-    private ToggleItemImageButton createButton(int xOffset, int yOffset, ButtonTemplate template, BeepediaListTypes type, ITextComponent tooltip, Item item) {
+    private ToggleItemImageButton createButton(int xOffset, int yOffset, ButtonTemplate template, BeepediaListTypes type, Component tooltip, Item item) {
         return new ToggleItemImageButton(xOffset, yOffset, 0, isActive(type),
                 template, button -> updateState(type), tooltip, 2, 2, new ItemStack(item));
     }

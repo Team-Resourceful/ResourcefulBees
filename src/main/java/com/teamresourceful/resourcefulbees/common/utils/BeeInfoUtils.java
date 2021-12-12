@@ -33,7 +33,6 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -119,8 +118,8 @@ public class BeeInfoUtils {
             beeEntity.setAge(Math.max(0, i - ticksInHive));
         }
 
-        if (beeEntity instanceof CustomBeeEntity beeEntity) {
-            beeEntity.setLoveTime(Math.max(0, beeEntity.getInLoveTime() - ticksInHive));
+        if (beeEntity instanceof CustomBeeEntity bee) {
+            bee.setLoveTime(Math.max(0, beeEntity.getInLoveTime() - ticksInHive));
         } else {
             beeEntity.setInLoveTime(Math.max(0, beeEntity.getInLoveTime() - ticksInHive));
         }

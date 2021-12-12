@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 
 public class RecipeHelper {
 
@@ -14,26 +14,26 @@ public class RecipeHelper {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
-    public static ShapedRecipeBuilder getStorageRecipe(IItemProvider result, Ingredient item) {
+    public static ShapedRecipeBuilder getStorageRecipe(ItemLike result, Ingredient item) {
         return AdvancedShapedRecipeBuilder.shaped(result).pattern("###","###","###").define('#', item).getBuilder();
     }
 
-    public static ShapelessRecipeBuilder getStorageToItemRecipe(IItemProvider result, Ingredient item){
+    public static ShapelessRecipeBuilder getStorageToItemRecipe(ItemLike result, Ingredient item){
         return ShapelessRecipeBuilder.shapeless(result, 9).requires(item);
     }
 
-    public static AdvancedShapedRecipeBuilder createBoxed(Ingredient middle, Ingredient sides, IItemProvider result) {
+    public static AdvancedShapedRecipeBuilder createBoxed(Ingredient middle, Ingredient sides, ItemLike result) {
         return AdvancedShapedRecipeBuilder
                 .shaped(result)
                 .define('S', sides).define('M', middle)
                 .pattern("SSS", "SMS", "SSS");
     }
 
-    public static AdvancedShapedRecipeBuilder createCornerWithChestRecipe(Ingredient previous, ITag<Item> corners, IItemProvider result) {
+    public static AdvancedShapedRecipeBuilder createCornerWithChestRecipe(Ingredient previous, Tag<Item> corners, ItemLike result) {
         return createCornerWithMid(previous, Ingredient.of(corners), Ingredient.of(net.minecraftforge.common.Tags.Items.CHESTS), result);
     }
 
-    public static AdvancedShapedRecipeBuilder createCornerWithMid(Ingredient middle, Ingredient corners, Ingredient sides, IItemProvider result) {
+    public static AdvancedShapedRecipeBuilder createCornerWithMid(Ingredient middle, Ingredient corners, Ingredient sides, ItemLike result) {
         return AdvancedShapedRecipeBuilder
                 .shaped(result)
                 .define('C', corners).define('S', sides).define('M', middle)

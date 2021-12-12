@@ -1,5 +1,5 @@
 {
-  "parent": "resourcefulbees:resourcefulbees/apiary_storage",
+  "parent": "resourcefulbees:resourcefulbees/t4_hive_upgrade",
   "display": {
     "icon": {
       "item": "resourcefulbees:iron_storage_upgrade"
@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:iron_storage_upgrade"
+            "items": [
+              "resourcefulbees:iron_storage_upgrade"
+            ]
           }
         ]
       }

@@ -2,9 +2,6 @@ package com.teamresourceful.resourcefulbees.common.mixin;
 
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.tileentity.BeehiveTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;

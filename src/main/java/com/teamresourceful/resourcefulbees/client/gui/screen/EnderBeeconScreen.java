@@ -16,7 +16,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.block.state.BlockState;
@@ -122,7 +121,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContai
         this.renderTooltip(matrix, mouseX, mouseY);
         for (BeeconEffectWidget widget : this.powerButtons) {
             widget.render(matrix, mouseX, mouseY, partialTicks);
-            if (widget.isHovered(mouseX, mouseY)) widget.renderToolTip(matrix, mouseX, mouseY);
+            if (widget.isMouseOver(mouseX, mouseY)) widget.renderToolTip(matrix, mouseX, mouseY);
         }
         if (soundButton.isHovered(mouseX, mouseY)) soundButton.renderToolTip(matrix, mouseX, mouseY);
         if (beamButton.isHovered(mouseX, mouseY)) beamButton.renderToolTip(matrix, mouseX, mouseY);

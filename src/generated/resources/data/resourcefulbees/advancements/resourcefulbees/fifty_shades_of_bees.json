@@ -2,8 +2,7 @@
   "parent": "resourcefulbees:resourcefulbees/root",
   "display": {
     "icon": {
-      "item": "patchouli:guide_book",
-      "nbt": "{\"patchouli:book\":\"resourcefulbees:fifty_shades_of_bees\"}"
+      "item": "minecraft:air"
     },
     "title": {
       "translate": "advancements.resourcefulbees.fifty_shades_of_bees.title"
@@ -22,8 +21,10 @@
       "conditions": {
         "items": [
           {
-            "item": "patchouli:guide_book",
-            "nbt": "{id:\"patchouli:guide_book\",Count:1b,tag:{\"patchouli:book\":\"resourcefulbees:fifty_shades_of_bees\"}}"
+            "items": [
+              "minecraft:air"
+            ],
+            "nbt": "{Count:1b,id:\"minecraft:air\"}"
           }
         ]
       }

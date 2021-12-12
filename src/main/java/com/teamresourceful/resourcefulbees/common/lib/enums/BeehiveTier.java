@@ -53,7 +53,7 @@ public enum BeehiveTier implements IExtensibleEnum, StringRepresentable {
     }
 
     @SuppressWarnings("unused")
-    public static BeehiveTier create(String name, int maxBees, int maxCombs, double timeModifier) {
+    public static BeehiveTier create(String name, String id, int maxBees, int maxCombs, double timeModifier) {
         throw new IllegalStateException("Enum not extended");
     }
 

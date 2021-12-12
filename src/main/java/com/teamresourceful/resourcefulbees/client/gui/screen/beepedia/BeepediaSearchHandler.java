@@ -1,13 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.BeepediaListTypes;
 import com.teamresourceful.resourcefulbees.client.gui.widget.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +45,7 @@ public class BeepediaSearchHandler extends Pane {
 
         beeButtons.clear();
         Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
-        searchBox = new TooltipTextFieldWidget(Minecraft.getInstance().font, 0, 0, 117, 10, new TranslationTextComponent("gui.resourcefulbees.beepedia.search"));
+        searchBox = new TooltipTextFieldWidget(Minecraft.getInstance().font, 0, 0, 117, 10, new TranslatableComponent("gui.resourcefulbees.beepedia.search"));
         searchBox.visible = BeepediaState.isSearchVisible();
         this.add(searchBox);
 

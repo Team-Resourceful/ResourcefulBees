@@ -3,14 +3,14 @@ package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +24,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
     protected void addTags() {
         tag(ModTags.Items.HONEYCOMB).add(Items.HONEYCOMB);
         tag(ModTags.Items.HONEYCOMB_BLOCK).add(Items.HONEYCOMB_BLOCK);
-        Builder<Item> hiveBuilder = tag(ModTags.Items.BEEHIVES).add(Items.BEEHIVE).add(Items.BEE_NEST);
+        TagAppender<Item> hiveBuilder = tag(ModTags.Items.BEEHIVES).add(Items.BEEHIVE).add(Items.BEE_NEST);
         ModItems.NESTS_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(hiveBuilder::add);
         tag(ItemTags.SMALL_FLOWERS).add(ModItems.GOLD_FLOWER_ITEM.get());
         tag(ModTags.Items.WAX).add(ModItems.WAX.get());

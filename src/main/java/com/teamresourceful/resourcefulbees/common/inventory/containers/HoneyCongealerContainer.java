@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAcces
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerListener;

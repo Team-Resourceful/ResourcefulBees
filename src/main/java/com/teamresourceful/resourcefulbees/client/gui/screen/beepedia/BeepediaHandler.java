@@ -113,7 +113,7 @@ public class BeepediaHandler {
      * generate save and select the collectedBeeInfoState
      */
     public static void collectBee(BeepediaEntityMessage message) {
-        currScreenState.newState(BeepediaListTypes.BEES, PageTypes.COLLECTED, message.id.toString(), SubPageTypes.INFO, null);
+        currScreenState.newState(BeepediaListTypes.BEES, PageTypes.COLLECTED, message.id().toString(), SubPageTypes.INFO, null);
     }
 
     public static void registerScreen(BeepediaScreen beepedia) {

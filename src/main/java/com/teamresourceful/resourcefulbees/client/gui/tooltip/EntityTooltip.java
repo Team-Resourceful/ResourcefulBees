@@ -2,13 +2,9 @@ package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

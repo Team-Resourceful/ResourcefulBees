@@ -2,15 +2,16 @@ package com.teamresourceful.resourcefulbees.datagen.providers.loottables;
 
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockLootTable;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.Block;
-import net.minecraft.loot.ConstantRange;
-import net.minecraft.loot.ItemLootEntry;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.functions.CopyBlockState;
-import net.minecraft.loot.functions.CopyNbt;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.CopyBlockState;
+import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraftforge.registries.RegistryObject;
 
 public class BlockLootTables extends BaseBlockLootTable {
 
@@ -26,7 +27,6 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.T2_APIARY_BLOCK);
         dropSelf(ModBlocks.T3_APIARY_BLOCK);
         dropSelf(ModBlocks.T4_APIARY_BLOCK);
-        dropSelf(ModBlocks.APIARY_STORAGE_BLOCK);
         dropSelf(ModBlocks.APIARY_BREEDER_BLOCK);
         //endregion
         //region Machines
@@ -45,12 +45,12 @@ public class BlockLootTables extends BaseBlockLootTable {
 
     private LootPool.Builder getNestPool(Block block) {
         return LootPool.lootPool()
-                .setRolls(ConstantRange.exactly(1))
+                .setRolls(ConstantValue.exactly(1))
                 .add(
-                    ItemLootEntry.lootTableItem(block)
+                        LootItem.lootTableItem(block)
                         .when(HAS_SILK_TOUCH)
                         .apply(
-                            CopyNbt.copyData(CopyNbt.Source.BLOCK_ENTITY)
+                                CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
                                 .copy("Bees", "BlockEntityTag.Bees")
                                 .copy("Tier", "BlockEntityTag.Tier")
                                 .copy("TierModifier", "BlockEntityTag.TierModifier")
@@ -59,8 +59,8 @@ public class BlockLootTables extends BaseBlockLootTable {
                             CopyBlockState.copyState(block).copy(BeehiveBlock.HONEY_LEVEL)
                         )
                         .otherwise(
-                            ItemLootEntry.lootTableItem(block).apply(
-                                CopyNbt.copyData(CopyNbt.Source.BLOCK_ENTITY).copy("Tier", "BlockEntityTag.Tier").copy("TierModifier", "BlockEntityTag.TierModifier")
+                                LootItem.lootTableItem(block).apply(
+                                        CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("Tier", "BlockEntityTag.Tier").copy("TierModifier", "BlockEntityTag.TierModifier")
                             )
                         )
                 );

@@ -212,7 +212,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
                 }
             }
         } else {
-            if (Boolean.TRUE.equals(CommonConfig.BEES_DIE_IN_VOID.get()) && this.position().y <= 0) {
+            if (Boolean.TRUE.equals(CommonConfig.BEES_DIE_IN_VOID.get()) && this.position().y <= level.getMinBuildHeight()) {
                 this.remove(RemovalReason.KILLED);
             }
             if (!hasCustomName() && this.tickCount % 100 == 0) {

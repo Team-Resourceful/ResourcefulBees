@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:diamond_storage_upgrade"
+            "items": [
+              "resourcefulbees:diamond_storage_upgrade"
+            ]
           }
         ]
       }

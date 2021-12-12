@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Consumer;
 
@@ -19,11 +19,11 @@ public class AdvancedShapedRecipeBuilder {
         return new AdvancedShapedRecipeBuilder(result.get());
     }
 
-    public static AdvancedShapedRecipeBuilder shaped(IItemProvider result){
+    public static AdvancedShapedRecipeBuilder shaped(ItemLike result){
         return new AdvancedShapedRecipeBuilder(result);
     }
 
-    private AdvancedShapedRecipeBuilder(IItemProvider result) {
+    private AdvancedShapedRecipeBuilder(ItemLike result) {
         this.builder = ShapedRecipeBuilder.shaped(result);
     }
 
@@ -37,21 +37,21 @@ public class AdvancedShapedRecipeBuilder {
         return this;
     }
 
-    public AdvancedShapedRecipeBuilder unlockedBy(String id, ICriterionInstance instance) {
+    public AdvancedShapedRecipeBuilder unlockedBy(String id, CriterionTriggerInstance instance) {
         builder.unlockedBy(id, instance);
         return this;
     }
 
     public AdvancedShapedRecipeBuilder unlockedBy(RecipeCriteria criteria) {
-        builder.unlockedBy(criteria.getId(), criteria.getInstance());
+        builder.unlockedBy(criteria.id(), criteria.instance());
         return this;
     }
 
-    public void save(Consumer<IFinishedRecipe> recipeConsumer, String modid, String path){
+    public void save(Consumer<FinishedRecipe> recipeConsumer, String modid, String path){
         builder.save(recipeConsumer, new ResourceLocation(modid, path));
     }
 
-    public void save(Consumer<IFinishedRecipe> recipeConsumer){
+    public void save(Consumer<FinishedRecipe> recipeConsumer){
         builder.save(recipeConsumer);
     }
 

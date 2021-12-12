@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:smoker_can"
+            "items": [
+              "resourcefulbees:smoker_can"
+            ]
           }
         ]
       }

@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "resourcefulbees:wax_block"
+            "items": [
+              "resourcefulbees:wax_block"
+            ]
           }
         ]
       }

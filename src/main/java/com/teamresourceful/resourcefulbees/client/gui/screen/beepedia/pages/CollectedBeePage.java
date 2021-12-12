@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;

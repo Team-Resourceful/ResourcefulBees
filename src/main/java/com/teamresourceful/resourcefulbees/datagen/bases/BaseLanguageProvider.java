@@ -4,12 +4,12 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.common.lib.annotations.Translate;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
@@ -36,7 +36,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
             if (field.isAnnotationPresent(Translate.class)) {
                 String key = null;
                 if (field.getType().isAssignableFrom(String.class)) key = getOrNull(field);
-                else if (field.getType().isAssignableFrom(TranslationTextComponent.class)) key = getTranslationKeyOrNull(field);
+                else if (field.getType().isAssignableFrom(TranslatableComponent.class)) key = getTranslationKeyOrNull(field);
 
                 if (key != null) add(key, field.getAnnotation(Translate.class).value());
             }
@@ -50,7 +50,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
 
     @Nullable
     private static String getTranslationKeyOrNull(Field field) {
-        try { return ((TranslationTextComponent) field.get(null)).getKey(); }catch (Exception e) { return null; }
+        try { return ((TranslatableComponent) field.get(null)).getKey(); }catch (Exception e) { return null; }
     }
 
     public void addAdvancement(String id, String title, String desc) {
@@ -85,10 +85,10 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         add("item.minecraft.tipped_arrow.effect."+id, "Arrow of "+name);
     }
 
-    public void add(ItemGroup group, String name) {
-        final ITextComponent displayName = group.getDisplayName();
-        if (displayName instanceof TranslationTextComponent) {
-            add(((TranslationTextComponent) displayName).getKey(), name);
+    public void add(CreativeModeTab group, String name) {
+        final Component displayName = group.getDisplayName();
+        if (displayName instanceof TranslatableComponent translatableComponent) {
+            add(translatableComponent.getKey(), name);
         }
     }
 

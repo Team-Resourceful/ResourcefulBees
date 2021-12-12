@@ -2,23 +2,14 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.ValidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTab;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.ApiaryTabMessage;
-import com.teamresourceful.resourcefulbees.common.network.packets.ExportBeeMessage;
-import com.teamresourceful.resourcefulbees.common.network.packets.ImportBeeMessage;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -29,8 +20,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -44,69 +33,16 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
 
     private static final ResourceLocation VALIDATED_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/validated.png");
     private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
-    private static final ItemStack HONEYCOMB = new ItemStack(Items.HONEYCOMB);
-    private static final ItemStack BEE_JAR = new ItemStack(ModItems.BEE_JAR.get());
     private int beeIndexOffset;
     private float sliderProgress;
     private boolean clickedOnScroll;
     private final ApiaryTileEntity apiaryTileEntity;
-    private Button importButton;
-    private Button exportButton;
-    private TabImageButton storageTabButton;
 
     public ValidatedApiaryScreen(ValidatedApiaryContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.imageWidth = 250;
         this.imageHeight = 152;
         apiaryTileEntity = this.menu.getApiaryTileEntity();
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        importButton = this.addWidget(new Button(this.leftPos + 73, this.topPos + 10, 40, 20, TranslationConstants.Apiary.IMPORT, onPress -> this.importBee()));
-        exportButton = this.addWidget(new Button(this.leftPos + 159, this.topPos + 10, 40, 20, TranslationConstants.Apiary.EXPORT, onPress -> this.exportSelectedBee()));
-        addTabButtons();
-    }
-
-    private void addTabButtons() {
-        int i = this.leftPos;
-        int j = this.topPos;
-        int t = i + this.imageWidth - 25;
-        addTabImageButton(j + 17, t, ApiaryTab.MAIN, TranslationConstants.Apiary.MAIN_SCREEN, BEE_JAR).active = false;
-        storageTabButton = addTabImageButton(j + 37, t, ApiaryTab.STORAGE, TranslationConstants.Apiary.STORAGE_SCREEN, HONEYCOMB); // may need to pass in itemX so it can be 2 like the old code
-    }
-
-    //TODO ummmmm clean this up? yes/no? - epic
-    private TabImageButton addTabImageButton(int j, int t, ApiaryTab tab, Component text, ItemStack displayItem) {
-        return this.addWidget(new TabImageButton(t+1, j, 18, 18, 110, 0, 18, TABS_BG, displayItem, 1, 1,
-                onPress -> this.changeScreen(tab), 128, 128) {
-
-            @Override
-            public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
-                ValidatedApiaryScreen.this.renderTooltip(matrix, text, mouseX, mouseY);
-            }
-        });
-    }
-
-    private void changeScreen(ApiaryTab tab) {
-        if (tab == ApiaryTab.STORAGE && storageTabButton.active) {
-            NetPacketHandler.sendToServer(new ApiaryTabMessage(apiaryTileEntity.getBlockPos(), ApiaryTab.STORAGE));
-        }
-    }
-
-    private void exportSelectedBee() {
-        if (apiaryTileEntity.getBeeCount() != 0) {
-            NetPacketHandler.sendToServer(new ExportBeeMessage(this.menu.getPos(), this.menu.getBeeList()[this.menu.getSelectedBee()]));
-            //beeIndexOffset--;
-            // TODO this causes Array Out of Bounds exception.
-            //  Not having it causes GUI to not update correctly when last bee in list is exported.
-            //  Figure out how to make list update correctly when last bee is exported without this error.
-        }
-    }
-
-    private void importBee() {
-        NetPacketHandler.sendToServer(new ImportBeeMessage(this.menu.getPos()));
     }
 
     @Override
@@ -132,9 +68,6 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
             if (this.menu.getSelectedBee() == -1 && apiaryTileEntity.getBeeCount() > 0) {
                 this.menu.selectBee(0);
             }
-            exportButton.active = this.menu.getSelectedBee() != -1;
-            importButton.active = apiaryTileEntity.getBeeCount() < CommonConfig.APIARY_MAX_BEES.get();
-            storageTabButton.active = apiaryTileEntity.getApiaryStorage() != null;
 
             this.menu.setBeeList(Arrays.copyOf(apiaryTileEntity.bees.keySet().toArray(), apiaryTileEntity.getBeeCount(), String[].class));
             RenderUtils.bindTexture(VALIDATED_TEXTURE);
@@ -164,7 +97,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
         this.font.draw(matrix, s, 4, 7, 0x404040);
 
         for (Widget widget : this.renderables) {
-            if (widget instanceof AbstractWidget aWidget && aWidget.isHovered()) {
+            if (widget instanceof AbstractWidget aWidget && aWidget.isMouseOver(mouseX, mouseY)) {
                 aWidget.renderToolTip(matrix, mouseX - this.leftPos, mouseY - this.topPos);
                 break;
             }

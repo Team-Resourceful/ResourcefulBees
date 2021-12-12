@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
 import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAccessor;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.LockBeeMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
@@ -38,7 +37,6 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
             addInputSlot(apiaryTileEntity, ApiaryTileEntity.IMPORT, 74);
             addInputSlot(getApiaryTileEntity(), ApiaryTileEntity.EMPTY_JAR, 128);
             this.addSlot(new OutputSlot(apiaryTileEntity.getTileStackHandler(), ApiaryTileEntity.EXPORT, 182, 37));
-            if (!world.isClientSide) apiaryTileEntity.syncApiaryToPlayersUsing();
         }
 
         for (int i = 0; i < 3; ++i) {
@@ -138,7 +136,6 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
     @Override
     public void addSlotListener(@NotNull ContainerListener listener) {
         super.addSlotListener(listener);
-        apiaryTileEntity.setListeners(((ContainerAccessor) this).getListeners());
         //apiaryTileEntity.setNumPlayersUsing(((ContainerAccessor) this).getListeners().size());
     }
 
@@ -146,7 +143,6 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
     @Override
     public void removeSlotListener(@NotNull ContainerListener listener) {
         super.removeSlotListener(listener);
-        apiaryTileEntity.setListeners(((ContainerAccessor) this).getListeners());
         //apiaryTileEntity.setNumPlayersUsing(((ContainerAccessor) this).getListeners().size());
     }
 }

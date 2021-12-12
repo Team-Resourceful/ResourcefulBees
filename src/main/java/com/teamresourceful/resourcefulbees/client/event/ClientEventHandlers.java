@@ -2,10 +2,6 @@ package com.teamresourceful.resourcefulbees.client.event;
 
 import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
-import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeInputScreen;
-import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeItemOutputScreen;
-import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeTerminalScreen;
-import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeVoidScreen;
 import com.teamresourceful.resourcefulbees.client.models.ModelHandler;
 import com.teamresourceful.resourcefulbees.client.render.entity.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.render.fluid.FluidRender;
@@ -20,15 +16,14 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEnt
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
-import com.teamresourceful.resourcefulbees.common.utils.PreviewHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
@@ -47,12 +42,12 @@ public class ClientEventHandlers {
     private static boolean setupsDone = false;
 
     public static void clientStuff() {
-        MinecraftForge.EVENT_BUS.addListener(PreviewHandler::onWorldRenderLast);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::registerModels);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::onModelBake);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::clientSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::addLayers);
         MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
@@ -79,12 +74,13 @@ public class ClientEventHandlers {
         }
     }
 
-    public static void registerPatreonRender() {
-        EntityRenderDispatcher manager =  Minecraft.getInstance().getEntityRenderDispatcher();
-        PlayerRenderer defaultRenderer = (PlayerRenderer) manager.getSkinMap().get("default");
-        PlayerRenderer slimRenderer = (PlayerRenderer) manager.getSkinMap().get("slim");
-        defaultRenderer.addLayer(new BeeRewardRender(defaultRenderer));
-        slimRenderer.addLayer(new BeeRewardRender(defaultRenderer));
+    public static void addLayers(EntityRenderersEvent.AddLayers event) {
+        PlayerRenderer defaultRenderer = event.getSkin("default");
+        PlayerRenderer slimRenderer = event.getSkin("slim");
+        if (defaultRenderer != null && slimRenderer != null) {
+            defaultRenderer.addLayer(new BeeRewardRender(defaultRenderer));
+            slimRenderer.addLayer(new BeeRewardRender(slimRenderer));
+        }
     }
 
     private static void clientSetup(final FMLClientSetupEvent event) {
@@ -122,19 +118,19 @@ public class ClientEventHandlers {
     }
 
     private static void registerScreens() {
-        MenuScreens.register(ModContainers.UNVALIDATED_APIARY_CONTAINER.get(), UnvalidatedApiaryScreen::new);
         MenuScreens.register(ModContainers.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
-        MenuScreens.register(ModContainers.APIARY_STORAGE_CONTAINER.get(), ApiaryStorageScreen::new);
         MenuScreens.register(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
         MenuScreens.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
         MenuScreens.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
         MenuScreens.register(ModContainers.HONEY_CONGEALER_CONTAINER.get(), SolidificationChamberScreen::new);
         MenuScreens.register(ModContainers.HONEY_POT_CONTAINER.get(), HoneyPotScreen::new);
 
+        /* TODO REMOVE TO WORK ON CENTRIFUGE
         //centrifuge
         MenuScreens.register(ModContainers.CENTRIFUGE_INPUT_CONTAINER.get(), CentrifugeInputScreen::new);
         MenuScreens.register(ModContainers.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), CentrifugeItemOutputScreen::new);
         MenuScreens.register(ModContainers.CENTRIFUGE_VOID_CONTAINER.get(), CentrifugeVoidScreen::new);
         MenuScreens.register(ModContainers.CENTRIFUGE_TERMINAL_CONTAINER.get(), CentrifugeTerminalScreen::new);
+         */
     }
 }
