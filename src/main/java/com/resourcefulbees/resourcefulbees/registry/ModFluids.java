@@ -29,6 +29,10 @@ public class ModFluids {
     public static final ResourceLocation CATNIP_FLUID_FLOWING = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/catnip_honey_flow");
     public static final ResourceLocation CATNIP_FLUID_OVERLAY = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/catnip_honey_overlay");
 
+    public static final ResourceLocation STARRY_FLUID_STILL = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/starry_honey_still");
+    public static final ResourceLocation STARRY_FLUID_FLOWING = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/starry_honey_flow");
+    public static final ResourceLocation STARRY_FLUID_OVERLAY = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/starry_honey_overlay");
+
     public static final ResourceLocation CUSTOM_FLUID_STILL = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/custom_honey_still");
     public static final ResourceLocation CUSTOM_FLUID_FLOWING = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/custom_honey_flow");
     public static final ResourceLocation CUSTOM_FLUID_OVERLAY = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/custom_honey_overlay");
@@ -47,6 +51,14 @@ public class ModFluids {
                 .bucket(ModItems.CATNIP_HONEY_FLUID_BUCKET).block(ModBlocks.CATNIP_HONEY_FLUID_BLOCK).tickRate(20);
     }
 
+    private static ForgeFlowingFluid.Properties makeStarryProperties() {
+        return new ForgeFlowingFluid.Properties(STARRY_HONEY_STILL, STARRY_HONEY_FLOWING,
+                FluidAttributes.builder(STARRY_FLUID_STILL, STARRY_FLUID_FLOWING).sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY)
+                        .overlay(STARRY_FLUID_OVERLAY).density(1300).temperature(300).viscosity(1800).rarity(Rarity.COMMON))
+                .bucket(ModItems.STARRY_HONEY_FLUID_BUCKET).block(ModBlocks.STARRY_HONEY_FLUID_BLOCK).tickRate(20);
+    }
+
+
     public static final RegistryObject<FlowingFluid> HONEY_STILL = FLUIDS.register("honey", () ->
             new ForgeFlowingFluid.Source(makeProperties())
     );
@@ -60,5 +72,13 @@ public class ModFluids {
 
     public static final RegistryObject<FlowingFluid> CATNIP_HONEY_FLOWING = FLUIDS.register("catnip_honey_flowing", () ->
             new ForgeFlowingFluid.Flowing(makeCatnipProperties())
+    );
+
+    public static final RegistryObject<FlowingFluid> STARRY_HONEY_STILL = FLUIDS.register("starry_honey", () ->
+            new ForgeFlowingFluid.Source(makeStarryProperties())
+    );
+
+    public static final RegistryObject<FlowingFluid> STARRY_HONEY_FLOWING = FLUIDS.register("starry_honey_flowing", () ->
+            new ForgeFlowingFluid.Flowing(makeStarryProperties())
     );
 }

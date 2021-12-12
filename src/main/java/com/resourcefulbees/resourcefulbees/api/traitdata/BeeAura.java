@@ -41,8 +41,11 @@ public class BeeAura {
         this.calmingDisabled = calmingDisabled;
     }
 
-    public Effect getEffect() {
-        return potionEffect;
+    public boolean isBeneficial() {
+        if (this.auraType == AuraType.BURNING || this.auraType == AuraType.DAMAGING) return false;
+        if (this.auraType == AuraType.HEALING || this.auraType == AuraType.EXPERIENCE) return true;
+        if (this.auraType == AuraType.POTION && potionEffect != null) return potionEffect.isBeneficial();
+        return true;
     }
 
     public enum AuraType {

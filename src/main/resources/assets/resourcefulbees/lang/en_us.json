@@ -118,6 +118,10 @@
 	"gui.resourcefulbees.beepedia.tab.traits.auras.error" : "AN ERROR OCCURED",
 	"gui.resourcefulbees.beepedia.tab.traits.auras.error_explanation" : "your aura is missing it's effect type.",
 
+	"gui.resourcefulbees.tab.traits.aura.not_calming_disabled.dangerous" : "\n\nThis aura is §4NOT§7 disabled by the calming effect, be careful around bees with this trait.",
+	"gui.resourcefulbees.tab.traits.aura.not_calming_disabled.helpful" : "\n\nThis aura is not disabled by the calming effect.",
+	"gui.resourcefulbees.tab.traits.aura.calming_disabled" : "\n\nThis aura is disabled by the calming effect.",
+
 	"gui.resourcefulbees.beepedia.tab.honey": "Honey",
 	"gui.resourcefulbees.beepedia.tab.honey.effects_list": "Effects",
 	"gui.resourcefulbees.beepedia.tab.honey.bees_list": "Bees",
@@ -268,6 +272,10 @@
 	"item.resourcefulbees.catnip_honeycomb": "Catnip Honeycomb",
 	"item.resourcefulbees.catnip_honey_bottle": "Catnip Honey Bottle",
 	"item.resourcefulbees.catnip_honey_fluid_bucket": "Catnip Honey Bucket",
+	"item.resourcefulbees.starry_honeycomb": "Starry Honeycomb",
+	"item.resourcefulbees.starry_honey_bottle": "Starry Honey Bottle",
+  "item.resourcefulbees.starry_honey_fluid_bucket": "Starry Honey Bucket",
+
 
 	"item.resourcefulbees.rainbow_honeycomb": "Rainbow Honeycomb",
 	"item.resourcefulbees.rainbow_honey_bottle": "Rainbow Honey Bottle",
@@ -293,6 +301,8 @@
 	"block.resourcefulbees.rainbow_honey_block": "Rainbow Honey Block",
 	"block.resourcefulbees.catnip_honeycomb_block": "Catnip Honeycomb Block",
 	"block.resourcefulbees.catnip_honey_block": "Catnip Honey Block",
+	"block.resourcefulbees.starry_honeycomb_block": "Starry Honeycomb Block",
+	"block.resourcefulbees.starry_honey_block": "Starry Honey Block",
 	"block.resourcefulbees.honey_glass": "Honey Glass (Bee)",
 	"block.resourcefulbees.honey_glass_player": "Honey Glass (Player)",
 
@@ -300,6 +310,7 @@
 	"fluid.resourcefulbees.honey": "Honey",
 	"fluid.resourcefulbees.catnip_honey": "Catnip Honey",
 	"fluid.resourcefulbees.rainbow_honey": "Rainbow Honey",
+	"fluid.resourcefulbees.starry_honey": "Starry Honey",
 
 	"item.resourcefulbees.gold_honeycomb": "Gold Honeycomb",
 	"item.resourcefulbees.iron_honeycomb": "Iron Honeycomb",
@@ -336,6 +347,7 @@
 	"item.resourcefulbees.netherite_bee_spawn_egg": "Netherite Bee Spawn Egg",
 	"item.resourcefulbees.rgbee_bee_spawn_egg": "RGBee Spawn Egg",
 	"item.resourcefulbees.oreo_bee_spawn_egg": "Oreo Bee Spawn Egg",
+	"item.resourcefulbees.starry_bee_spawn_egg": "Starry Bee Spawn Egg",
 	"item.resourcefulbees.abbee_bee_spawn_egg": "AbBee Spawn Egg",
 	"item.resourcefulbees.slimy_bee_spawn_egg": "Slimy Bee Spawn Egg",
 	"item.resourcefulbees.icy_bee_spawn_egg": "Icy Bee Spawn Egg",
@@ -363,6 +375,7 @@
 	"entity.resourcefulbees.netherite_bee": "Netherite Bee",
 	"entity.resourcefulbees.rgbee_bee": "RGBee",
 	"entity.resourcefulbees.oreo_bee": "Oreo Bee",
+	"entity.resourcefulbees.starry_bee": "Starry Bee",
 	"entity.resourcefulbees.abbee_bee": "AbBee",
 	"entity.resourcefulbees.slimy_bee": "Slimy Bee",
 	"entity.resourcefulbees.icy_bee": "Icy Bee",
@@ -390,6 +403,7 @@
 	"trait.resourcefulbees.spider": "Spider",
 	"trait.resourcefulbees.healer": "Healer",
 	"trait.resourcefulbees.clingy": "Clingy",
+	"trait.resourcefulbees.starry": "Starry",
 
 	"trait.resourcefulbees.special.teleport": "During the day the bee can randomly teleport to an empty position within 4 blocks. This ability is stopped by the Ender Beecon and Bee Hives.",
 	"trait.resourcefulbees.special.flammable": "This effect will randomly light the bee on fire.",

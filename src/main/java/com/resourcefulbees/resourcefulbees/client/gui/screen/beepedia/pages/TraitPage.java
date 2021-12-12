@@ -68,8 +68,8 @@ public class TraitPage extends BeepediaPage {
     private void addAuras() {
         if (trait.hasBeeAuras()) {
             for (BeeAura aura : trait.getAuras()) {
-                ITextComponent title;
-                ITextComponent text;
+                IFormattableTextComponent title;
+                IFormattableTextComponent text;
                 ItemStack item;
                 switch (aura.auraType) {
                     case BURNING:
@@ -106,7 +106,13 @@ public class TraitPage extends BeepediaPage {
                         item = new ItemStack(Items.BARRIER);
                         break;
                 }
-                if (aura.calmingDisabled) text.plainCopy().append(new TranslationTextComponent("gui.resourcefulbees.tab.traits.aura.calming_disabled"));
+                if (!aura.calmingDisabled) {
+                    text.append(aura.isBeneficial() ?
+                            new TranslationTextComponent("gui.resourcefulbees.tab.traits.aura.not_calming_disabled.helpful") :
+                            new TranslationTextComponent("gui.resourcefulbees.tab.traits.aura.not_calming_disabled.dangerous"));
+                }else {
+                    text.append(new TranslationTextComponent("gui.resourcefulbees.tab.traits.aura.calming_disabled"));
+                }
                 traitSections.add(new TraitSection(title, item, text));
             }
         }

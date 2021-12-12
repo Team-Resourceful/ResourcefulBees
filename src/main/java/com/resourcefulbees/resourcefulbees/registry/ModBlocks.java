@@ -10,7 +10,9 @@ import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.Centrifu
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.EliteCentrifugeCasingBlock;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.EliteCentrifugeControllerBlock;
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
+import com.resourcefulbees.resourcefulbees.entity.passive.StarryBee;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -30,15 +32,16 @@ public class ModBlocks {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
+
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ResourcefulBees.MOD_ID);
 
     private static final AbstractBlock.Properties CENTRIFUGE_PROPERTIES = AbstractBlock.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL);
     private static final AbstractBlock.Properties HIVE_PROPERTIES = AbstractBlock.Properties.of(Material.WOOD).strength(2).sound(SoundType.WOOD);
     private static final AbstractBlock.Properties NEST_PROPERTIES = AbstractBlock.Properties.of(Material.WOOD).strength(1F).sound(SoundType.WOOD);
-
     private static AbstractBlock.Properties makeNestProperty(Material material, MaterialColor color, SoundType soundType) {
         return AbstractBlock.Properties.of(material, color).strength(1.0F).sound(soundType);
     }
+
 
     //TODO 1.17 remove Tiered hives in favor of upgradeable nests
     public static final RegistryObject<Block> T1_BEEHIVE = BLOCKS.register("t1_beehive", () -> new TieredBeehiveBlock(1, 1.0F, HIVE_PROPERTIES));
@@ -77,6 +80,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<FlowingFluidBlock> HONEY_FLUID_BLOCK = BLOCKS.register("honey_fluid_block", () -> new FlowingFluidBlock(ModFluids.HONEY_STILL, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<FlowingFluidBlock> CATNIP_HONEY_FLUID_BLOCK = BLOCKS.register("catnip_honey_fluid_block", () -> new FlowingFluidBlock(ModFluids.CATNIP_HONEY_STILL, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<FlowingFluidBlock> STARRY_HONEY_FLUID_BLOCK = BLOCKS.register("starry_honey_fluid_block", () -> new FlowingFluidBlock(ModFluids.STARRY_HONEY_STILL, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> CENTRIFUGE_CONTROLLER = BLOCKS.register("centrifuge_controller", () -> new CentrifugeControllerBlock(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> CENTRIFUGE_CASING = BLOCKS.register("centrifuge_casing", () -> new CentrifugeCasingBlock(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new CreativeGen(CENTRIFUGE_PROPERTIES));
@@ -88,8 +92,10 @@ public class ModBlocks {
     public static final RegistryObject<Block> NETHER_HONEY_TANK = BLOCKS.register("nether_honey_tank", () -> new HoneyTank(HoneyTank.NETHER, HoneyTankTileEntity.TankTier.NETHER));
     public static final RegistryObject<Block> WOODEN_HONEY_TANK = BLOCKS.register("wooden_honey_tank", () -> new HoneyTank(HoneyTank.WOODEN, HoneyTankTileEntity.TankTier.WOODEN));
     public static final RegistryObject<Block> HONEY_CONGEALER = BLOCKS.register("honey_congealer", () -> new HoneyCongealer(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
-    public static final RegistryObject<Block> CATNIP_HONEYCOMB_BLOCK = BLOCKS.register("catnip_honeycomb_block", () -> new Block(AbstractBlock.Properties.of(Material.CLAY).sound(SoundType.SNOW).strength(0.3F)));
+    public static final RegistryObject<Block> CATNIP_HONEYCOMB_BLOCK = BLOCKS.register("catnip_honeycomb_block", () -> new Block(AbstractBlock.Properties.of(Material.CLAY, MaterialColor.COLOR_BROWN).sound(SoundType.CORAL_BLOCK).strength(0.3F)));
     public static final RegistryObject<Block> CATNIP_HONEY_BLOCK = BLOCKS.register("catnip_honey_block", () -> new ColoredHoneyBlock(KittenBee.getHoneyBottleData())); //Dont care about color as we dont use it for this hardcoded block.
+    public static final RegistryObject<Block> STARRY_HONEYCOMB_BLOCK = BLOCKS.register("starry_honeycomb_block", () -> new Block(AbstractBlock.Properties.of(Material.CLAY, MaterialColor.COLOR_YELLOW).sound(SoundType.CORAL_BLOCK).strength(0.3F)));
+    public static final RegistryObject<Block> STARRY_HONEY_BLOCK = BLOCKS.register("starry_honey_block", () -> new ColoredHoneyBlock(StarryBee.getHoneyBottleData())); //Dont care about color as we dont use it for this hardcoded block.
     public static final RegistryObject<Block> HONEY_PIPE = BLOCKS.register("honey_pipe", () -> new HoneyPipe(AbstractBlock.Properties.of(Material.METAL).sound(SoundType.METAL).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
     public static final RegistryObject<Block> BOTTOMLESS_HONEY_POT = BLOCKS.register("bottomless_honey_pot", () -> new BottomlessHoneyPot(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops().harvestLevel(1).harvestTool(ToolType.PICKAXE)));
     public static final RegistryObject<Block> HONEY_GLASS = BLOCKS.register("honey_glass", () -> new HoneyGlass(AbstractBlock.Properties.of(Material.GLASS).strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn(ModBlocks::never).isRedstoneConductor(ModBlocks::never).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollission(), true));
@@ -97,6 +103,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> WAXED_PLANKS = BLOCKS.register("waxed_planks", WaxedPlanks::new);
     public static final RegistryObject<Block> TRIMMED_WAXED_PLANKS = BLOCKS.register("trimmed_waxed_planks", WaxedPlanks::new);
     public static final RegistryObject<Block> WAXED_MACHINE_BLOCK = BLOCKS.register("waxed_machine_block", WaxedMachineBlock::new);
+    ;
 
 
     private static Boolean never(BlockState blockState, IBlockReader reader, BlockPos pos, EntityType<?> entityType) {

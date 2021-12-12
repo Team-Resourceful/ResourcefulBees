@@ -55,16 +55,15 @@ public class BeeAuraGoal extends Goal {
             AtomicReference<Boolean> flag = new AtomicReference<>(false);
             AtomicReference<BasicParticleType> type = new AtomicReference<>(ParticleTypes.POOF);
             entityList.forEach(playerEntity -> {
+                if (!aura.isBeneficial() && entity.level.getDifficulty() == Difficulty.PEACEFUL) return;
                 switch (aura.auraType) {
                     case POTION:
                         if (aura.potionEffect == null) return;
-                        if (entity.level.getDifficulty() == Difficulty.PEACEFUL && !aura.potionEffect.isBeneficial()) return;
                         grantPotion(playerEntity, aura);
                         type.set(ParticleTypes.WITCH);
                         flag.set(true);
                         break;
                     case BURNING:
-                        if (entity.level.getDifficulty() == Difficulty.PEACEFUL) return;
                         burnEntity(playerEntity);
                         type.set(ParticleTypes.FLAME);
                         flag.set(true);
@@ -75,7 +74,6 @@ public class BeeAuraGoal extends Goal {
                         flag.set(true);
                         break;
                     case DAMAGING:
-                        if (entity.level.getDifficulty() == Difficulty.PEACEFUL) return;
                         damageEntity(playerEntity, aura);
                         type.set(ParticleTypes.CRIT);
                         flag.set(true);
@@ -122,7 +120,7 @@ public class BeeAuraGoal extends Goal {
         float power = 0.1f;
         if (particleType.equals(ParticleTypes.ENCHANT)) {
             power = 1;
-        }else if (particleType.equals(ParticleTypes.CRIT)) {
+        } else if (particleType.equals(ParticleTypes.CRIT)) {
             power = 0.5f;
         }
         if (!entity.level.isClientSide()) {

@@ -16,6 +16,7 @@ public class BeeConstants {
     }
 
 
+
     public static final String FLOWER_TAG_ALL = "all";
     public static final String FLOWER_TAG_SMALL = "small";
     public static final String FLOWER_TAG_TALL = "tall";
@@ -34,6 +35,7 @@ public class BeeConstants {
     public static final String KITTEN_BEE = "kitten";
     public static final String YETI_BEE = "yeti";
     public static final String ABBEE_BEE = "abbee";
+    public static final String STARRY_BEE = "starry";
 
     public static final int SMOKE_TIME = 600;
     public static final int MIN_HIVE_TIME = 600;

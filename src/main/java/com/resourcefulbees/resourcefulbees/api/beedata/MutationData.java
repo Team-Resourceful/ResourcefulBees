@@ -244,6 +244,11 @@ public class MutationData extends AbstractBeeData {
         public MutationData createMutationData() {
             return new MutationData(mutationInput, mutationOutput, mutationCount, hasMutation, mutationType, mutations);
         }
+
+        public Builder addMutation(Mutation mutation) {
+            mutations.add(mutation);
+            return this;
+        }
     }
 
     public static MutationData createDefault() {

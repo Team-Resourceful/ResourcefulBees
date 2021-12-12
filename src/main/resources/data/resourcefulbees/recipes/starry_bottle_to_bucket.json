@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "resourcefulbees:starry_honey_bottle"},
+    {"item": "resourcefulbees:starry_honey_bottle"},
+    {"item": "resourcefulbees:starry_honey_bottle"},
+    {"item": "resourcefulbees:starry_honey_bottle"},
+    {"item": "minecraft:bucket"}
+  ],
+  "result": {
+    "item": "resourcefulbees:starry_honey_fluid_bucket",
+    "count": 1
+  }
+}

@@ -7,7 +7,6 @@ import com.resourcefulbees.resourcefulbees.api.traitdata.BeeAura;
 import com.resourcefulbees.resourcefulbees.api.traitdata.BeeTrait;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.TraitConstants;
-import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effects;
@@ -91,6 +90,16 @@ public class TraitRegistry implements ITraitRegistry {
         getRegistry().register(TraitConstants.SPIDER, new BeeTrait.Builder(TraitConstants.SPIDER).addSpecialAbility(TraitConstants.SPIDER).setBeepediaItem(Items.COBWEB).build());
         getRegistry().register(TraitConstants.HEALER, new BeeTrait.Builder(TraitConstants.HEALER).addAura(new BeeAura(BeeAura.AuraType.HEALING, null, "", 2, false)).setBeepediaItem(Items.GLISTERING_MELON_SLICE).build());
         getRegistry().register(TraitConstants.CLINGY, new BeeTrait.Builder(TraitConstants.CLINGY).addSpecialAbility(TraitConstants.CLINGY).setBeepediaItem(Items.LEAD).build());
+        getRegistry().register(BeeConstants.STARRY_BEE, new BeeTrait.Builder(BeeConstants.STARRY_BEE)
+                .addSpecialAbility(TraitConstants.SPIDER)
+                .setParticleEffect(ParticleTypes.END_ROD)
+                .addPotionImmunities(Arrays.asList(Effects.POISON, Effects.MOVEMENT_SLOWDOWN, Effects.HARM, Effects.CONFUSION, Effects.HUNGER, Effects.WEAKNESS, Effects.WITHER))
+                .setBeepediaItem(Items.NETHER_STAR)
+                .addDamageType(Pair.of(DamageSource.OUT_OF_WORLD.msgId, 10))
+                .addAura(new BeeAura(BeeAura.AuraType.DAMAGING, null, "magic", 5, false))
+                .addAura(new BeeAura(BeeAura.AuraType.POTION, Effects.WITHER, null, 0, false))
+                .addAura(new BeeAura(BeeAura.AuraType.BURNING, null, null, 0, false))
+                .build());
     }
 
     public static void applyBeeTraits() {

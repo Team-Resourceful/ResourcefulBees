@@ -70,6 +70,7 @@ public class BeeSetup {
             OreoBee.register();
             KittenBee.register();
             YetiBee.register();
+            StarryBee.register();
         }
         if (Boolean.TRUE.equals(Config.ENABLE_CUSTOM_PATREON_BEES.get())) {
             AbBee.register();
