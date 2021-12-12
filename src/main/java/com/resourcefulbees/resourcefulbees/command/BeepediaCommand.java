@@ -45,7 +45,7 @@ public class BeepediaCommand {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         dispatcher.register(Commands.literal("beepedia")
                 .requires(cs -> cs.hasPermission(2))
-                .then(Commands.argument(PLAYER, EntityArgument.player())
+                .then(Commands.argument(PLAYER, EntityArgument.players())
                         .then(DiscoverCommand.register())
                         .then(ForgetCommand.register())
                         .then(ResetCommand.register())
@@ -63,11 +63,13 @@ public class BeepediaCommand {
         public static ArgumentBuilder<CommandSource, ?> register() {
             return Commands.literal("discover").then(Commands.argument(BEE, BeeArgument.bees()).executes(context -> {
                 String arg = getBee(context);
-                ServerPlayerEntity playerEntity = EntityArgument.getPlayer(context, PLAYER);
-                IBeepediaData data = playerEntity.getCapability(BeepediaData.Provider.BEEPEDIA_DATA).orElse(new BeepediaData());
-                data.getBeeList().add(arg);
-                BeepediaData.sync(playerEntity, data);
-                sendMessageToPlayer(playerEntity, MessageTypes.UNLOCK, arg);
+                Collection<ServerPlayerEntity> playerEntities = EntityArgument.getPlayers(context, PLAYER);
+                for (ServerPlayerEntity playerEntity : playerEntities) {
+                    IBeepediaData data = playerEntity.getCapability(BeepediaData.Provider.BEEPEDIA_DATA).orElse(new BeepediaData());
+                    data.getBeeList().add(arg);
+                    BeepediaData.sync(playerEntity, data);
+                    sendMessageToPlayer(playerEntity, MessageTypes.UNLOCK, arg);
+                }
                 return 1;
             }));
         }
@@ -78,11 +80,13 @@ public class BeepediaCommand {
         public static ArgumentBuilder<CommandSource, ?> register() {
             return Commands.literal("forget").then(Commands.argument(BEE, BeeArgument.bees()).executes(context -> {
                 String arg = getBee(context);
-                ServerPlayerEntity playerEntity = EntityArgument.getPlayer(context, PLAYER);
-                IBeepediaData data = playerEntity.getCapability(BeepediaData.Provider.BEEPEDIA_DATA).orElse(new BeepediaData());
-                data.getBeeList().remove(arg);
-                BeepediaData.sync(playerEntity, data);
-                sendMessageToPlayer(playerEntity, MessageTypes.LOCK, arg);
+                Collection<ServerPlayerEntity> playerEntities = EntityArgument.getPlayers(context, PLAYER);
+                for (ServerPlayerEntity playerEntity : playerEntities) {
+                    IBeepediaData data = playerEntity.getCapability(BeepediaData.Provider.BEEPEDIA_DATA).orElse(new BeepediaData());
+                    data.getBeeList().remove(arg);
+                    BeepediaData.sync(playerEntity, data);
+                    sendMessageToPlayer(playerEntity, MessageTypes.LOCK, arg);
+                }
                 return 1;
             }));
         }
@@ -97,9 +101,18 @@ public class BeepediaCommand {
 
         public static ArgumentBuilder<CommandSource, ?> register() {
             return Commands.literal("reset").executes(context -> {
-                BeepediaCommand.removeAllBees(context);
+                removeAllBees(context);
                 return 1;
             });
+        }
+        private static void removeAllBees(CommandContext<CommandSource> context) throws CommandSyntaxException {
+            Collection<ServerPlayerEntity> playerEntities = EntityArgument.getPlayers(context, PLAYER);
+            for (ServerPlayerEntity playerEntity : playerEntities) {
+                IBeepediaData data = playerEntity.getCapability(BeepediaData.Provider.BEEPEDIA_DATA).orElse(new BeepediaData());
+                data.getBeeList().clear();
+                BeepediaData.sync(playerEntity, data);
+                sendMessageToPlayer(playerEntity, MessageTypes.RESET, "");
+            }
         }
     }
 
@@ -111,23 +124,19 @@ public class BeepediaCommand {
                 return 1;
             });
         }
+
+        private static void addAllBees(CommandContext<CommandSource> context) throws CommandSyntaxException {
+            Collection<ServerPlayerEntity> playerEntities = EntityArgument.getPlayers(context, PLAYER);
+            for (ServerPlayerEntity playerEntity : playerEntities) {
+                IBeepediaData data = playerEntity.getCapability(BeepediaData.Provider.BEEPEDIA_DATA).orElse(new BeepediaData());
+                data.getBeeList().addAll(BeeRegistry.getRegistry().getBees().values().stream().map(CustomBeeData::getName).collect(Collectors.toCollection(LinkedHashSet::new)));
+                BeepediaData.sync(playerEntity, data);
+                sendMessageToPlayer(playerEntity, MessageTypes.COMPLETE, "");
+            }
+        }
+
     }
 
-    private static void addAllBees(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity playerEntity = EntityArgument.getPlayer(context, PLAYER);
-        IBeepediaData data = playerEntity.getCapability(BeepediaData.Provider.BEEPEDIA_DATA).orElse(new BeepediaData());
-        data.getBeeList().addAll(BeeRegistry.getRegistry().getBees().values().stream().map(CustomBeeData::getName).collect(Collectors.toCollection(LinkedHashSet::new)));
-        BeepediaData.sync(playerEntity, data);
-        sendMessageToPlayer(playerEntity, MessageTypes.COMPLETE, "");
-    }
-
-    private static void removeAllBees(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity playerEntity = EntityArgument.getPlayer(context, PLAYER);
-        IBeepediaData data = playerEntity.getCapability(BeepediaData.Provider.BEEPEDIA_DATA).orElse(new BeepediaData());
-        data.getBeeList().clear();
-        BeepediaData.sync(playerEntity, data);
-        sendMessageToPlayer(playerEntity, MessageTypes.RESET, "");
-    }
 
     private static void sendMessageToPlayer(PlayerEntity playerEntity, BeepediaCommand.MessageTypes messageTypes, String bee) {
         switch (messageTypes) {
