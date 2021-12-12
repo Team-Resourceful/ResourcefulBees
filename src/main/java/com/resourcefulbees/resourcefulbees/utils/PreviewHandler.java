@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.resourcefulbees.resourcefulbees.block.multiblocks.apiary.ApiaryBlock;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.mixin.BlockAccessor;
 import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.block.BlockState;
@@ -36,10 +37,13 @@ public class PreviewHandler {
         if (enabled) {
             PreviewHandler.apiaryPos = apiary;
             BlockPos.betweenClosedStream(box).forEach((blockPos -> {
-                boolean isXZWall = blockPos.getX() == box.x1 || blockPos.getX() == box.x0 ||
-                        blockPos.getZ() == box.z1 || blockPos.getZ() == box.z0;
+                boolean isWall = blockPos.getX() == box.x0 ||
+                        blockPos.getX() == box.x1 ||
+                        blockPos.getY() == box.y1 ||
+                        blockPos.getZ() == box.z0 ||
+                        blockPos.getZ() == box.z1;
 
-                if ((blockPos.getY() == box.y1 || (blockPos.getY() == box.y0 && (isXZWall)) || isXZWall) && !apiary.equals(blockPos.immutable())) {
+                if (isWall && !apiary.equals(blockPos.immutable())) {
                     BlockPos savedPos = new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
                     STRUCTURE_PREVIEW_POS.add(savedPos);
                 }
@@ -65,8 +69,10 @@ public class PreviewHandler {
                             if (world.getBlockState(pos).equals(net.minecraft.block.Blocks.AIR.defaultBlockState()))
                                 renderBlockAt(ms, buffer, ModBlocks.PREVIEW_BLOCK.get().defaultBlockState(), pos);
                             else {
+                                BlockState state = world.getBlockState(pos);
                                 if (BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary") != null
-                                        && !world.getBlockState(pos).is(BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary"))) {
+                                        && !state.is(BeeInfoUtils.getBlockTag("resourcefulbees:valid_apiary")) &&
+                                        !((BlockAccessor) state.getBlock()).getHasCollision()) {
                                     renderBlockAt(ms, buffer, ModBlocks.ERRORED_PREVIEW_BLOCK.get().defaultBlockState(), pos);
                                 }
                             }
