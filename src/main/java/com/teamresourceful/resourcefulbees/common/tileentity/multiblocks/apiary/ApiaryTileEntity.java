@@ -10,14 +10,20 @@ import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.tileentity.ISyncableGUI;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
+import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
@@ -27,25 +33,25 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 
-public class ApiaryTileEntity extends BlockEntity implements MenuProvider {
+public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISyncableGUI {
     public static final int IMPORT = 0;
     public static final int EXPORT = 2;
     public static final int EMPTY_JAR = 1;
@@ -54,7 +60,6 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider {
     private final ApiaryTileEntity.TileStackHandler tileStackHandler = new ApiaryTileEntity.TileStackHandler(3);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     protected int ticksSinceBeesFlagged;
-
 
     public ApiaryTileEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.APIARY_TILE_ENTITY.get(), pos, state);
@@ -303,6 +308,29 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider {
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory inventory, @NotNull Player player) {
         return level == null ? null : new ValidatedApiaryContainer(id, level, worldPosition, inventory);
+    }
+
+    public void sendData(ServerPlayer player) {
+        if (!(player instanceof FakePlayer)) {
+            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+            CompoundTag tag = new CompoundTag();
+            tag.put(NBTConstants.NBT_BEES, writeBees());
+            buffer.writeNbt(tag);
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), player);
+        }
+    }
+
+    @Override
+    public void sendGUINetworkPacket(ContainerListener player) {
+    }
+
+    @Override
+    public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
+        CompoundTag nbt = buffer.readNbt();
+        if (nbt != null) {
+            bees.clear();
+            loadBees(nbt);
+        }
     }
 
     public static class ApiaryBee {
