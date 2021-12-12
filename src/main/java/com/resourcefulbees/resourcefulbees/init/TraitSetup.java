@@ -108,7 +108,7 @@ public class TraitSetup {
     }
 
     private static void parseBeeAuras(JsonBeeTrait.JsonTrait jsonTrait, BeeTrait.Builder builder) {
-        if (jsonTrait.getPotionDamageEffects() != null && !jsonTrait.getPotionDamageEffects().isEmpty()) {
+        if (jsonTrait.getBeeAuras() != null && !jsonTrait.getBeeAuras().isEmpty()) {
             jsonTrait.getBeeAuras().forEach(beeAura -> {
                 if (beeAura.effectID != null) {
                     beeAura.potionEffect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(beeAura.effectID));
