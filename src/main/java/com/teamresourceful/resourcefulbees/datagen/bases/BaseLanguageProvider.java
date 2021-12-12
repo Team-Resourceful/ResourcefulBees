@@ -13,9 +13,12 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseLanguageProvider extends LanguageProvider {
 
+    private final List<LanguageModule> modules = new ArrayList<>();
     private final Class<?>[] miscTranslationsClazz;
 
     protected BaseLanguageProvider(DataGenerator gen, @Nullable Class<?>... miscTranslationsClazz) {
@@ -23,9 +26,16 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         this.miscTranslationsClazz = miscTranslationsClazz;
     }
 
+    protected void addModule(LanguageModule module) {
+        modules.add(module);
+    }
+
     @Override
     protected void addTranslations() {
         if (miscTranslationsClazz != null) for (Class<?> clazz : miscTranslationsClazz) addTranslationsForClass(clazz);
+        for (LanguageModule module : modules) {
+            module.addEntries(this);
+        }
     }
 
     private void addTranslationsForClass(Class<?> clazz) {

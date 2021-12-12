@@ -1,0 +1,81 @@
+package com.teamresourceful.resourcefulbees.datagen.providers.lang;
+
+import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
+import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
+import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;
+
+public class BeeLanguageModule extends LanguageModule {
+    @Override
+    public void addEntries(BaseLanguageProvider provider) {
+        provider.addBee("gold", "Gold");
+        provider.addBee("iron", "Iron");
+        provider.addBee("emerald", "Emerald");
+        provider.addBee("diamond", "Diamond");
+        provider.addBee("redstone", "Redstone");
+        provider.addBee("nether_quartz", "Nether Quartz");
+        provider.addBee("lapis", "Lapis");
+        provider.addBee("coal", "Coal");
+        provider.addBee("ender", "Ender");
+        provider.addBee("beeper", "Beeper");
+        provider.addBee("pigman", "Pigman");
+        provider.addBee("skeleton", "Skeleton");
+        provider.addBee("wither", "Wither");
+        provider.addBee("zombee", "Zombee");
+        provider.addBee("netherite", "Netherite");
+        provider.addBee("oreo", "Oreo");
+        provider.addBee("slimy", "Slimy");
+        provider.addBee("icy", "Icy");
+        provider.addBee("kitten", "Kitten");
+        provider.addBee("dragon", "Dragon");
+        provider.addBee("dungeon", "Dungeon");
+        provider.addBee("brown_mushroom", "Brown Mushroom");
+        provider.addBee("red_mushroom", "Red Mushroom");
+        provider.addBee("crimson_fungus", "Crimson Fungus");
+        provider.addBee("warped_fungus", "Warped Fungus");
+        provider.addBee("yeti", "Yeti");
+        provider.add(LangGeneration.ITEM_RESOURCEFULBEES+"rgbee_bee_spawn_egg", "RGBee Spawn Egg");
+        provider.add(LangGeneration.ITEM_RESOURCEFULBEES+"rgbee_bee", "RGBee");
+        provider.addHoney("catnip", "Catnip", true, true);
+        provider.addHoney("rainbow", "Rainbow", true, true);
+        provider.add("fluid.resourcefulbees.honey", "Honey");
+        provider.add("trait.resourcefulbees.wither", "Wither");
+        provider.add("trait.resourcefulbees.blaze", "Blaze");
+        provider.add("trait.resourcefulbees.can_swim", "Can Swim");
+        provider.add("trait.resourcefulbees.creeper", "Creeper");
+        provider.add("trait.resourcefulbees.zombee", "Zombee");
+        provider.add("trait.resourcefulbees.pigman", "Pigman");
+        provider.add("trait.resourcefulbees.ender", "Ender");
+        provider.add("trait.resourcefulbees.nether", "Nether");
+        provider.add("trait.resourcefulbees.oreo", "Oreo");
+        provider.add("trait.resourcefulbees.kitten", "Kitten");
+        provider.add("trait.resourcefulbees.slimy", "Slimy");
+        provider.add("trait.resourcefulbees.desert", "Desert");
+        provider.add("trait.resourcefulbees.angry", "Angry");
+        provider.add("trait.resourcefulbees.teleport", "Teleport");
+        provider.add("trait.resourcefulbees.flammable", "Flammable");
+        provider.add("trait.resourcefulbees.spider", "Spider");
+        provider.add("trait.resourcefulbees.special.teleport", "During the day the bee can randomly teleport to an empty position within 4 blocks. This ability is stopped by the Ender Beecon and Bee Hives.");
+        provider.add("trait.resourcefulbees.special.flammable", "This effect will randomly light the bee on fire.");
+        provider.add("trait.resourcefulbees.special.angry", "Bees with this effect will become aggressive and cause bees around to join them. They can and will attack you, Calming effects will stop them from being angry.");
+        provider.add("trait.resourcefulbees.special.slimy", "Slimy bees will make squishy sounds and spurt out slime particles at random.");
+        provider.add("trait.resourcefulbees.special.spider", "Allows bees to fly through spiderwebs without issues.");
+        provider.addHoneycomb("iron", "Iron");
+        provider.addHoneycomb("gold", "Gold");
+        provider.addHoneycomb("emerald", "Emerald");
+        provider.addHoneycomb("diamond", "Diamond");
+        provider.addHoneycomb("redstone", "Redstone");
+        provider.addHoneycomb("nether_quartz", "Nether Quartz");
+        provider.addHoneycomb("lapis", "Lapis");
+        provider.addHoneycomb("coal", "Coal");
+        provider.addHoneycomb("ender", "Ender");
+        provider.addHoneycomb("creeper", "Beeper");
+        provider.addHoneycomb("pigman", "Pigman");
+        provider.addHoneycomb("skeleton", "Skeleton");
+        provider.addHoneycomb("wither", "Wither");
+        provider.addHoneycomb("zombee", "Zombee");
+        provider.addHoneycomb("netherite", "Netherite");
+        provider.addHoneycomb("rgbee", "RGBee");
+        provider.addHoneycomb("dragon", "Dragon");
+        provider.addHoneycomb("catnip", "Catnip");
+    }
+}
