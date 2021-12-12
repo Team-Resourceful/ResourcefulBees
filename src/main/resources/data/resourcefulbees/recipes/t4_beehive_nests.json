@@ -6,7 +6,7 @@
     "CHC"
   ],
   "key": {
-    "H": { "item": "minecraft:honey_block" },
+    "H": { "tag": "resourcefulbees:resourceful_honey_block" },
     "B": {
       "type": "resourcefulbees:hive",
       "tier": 3

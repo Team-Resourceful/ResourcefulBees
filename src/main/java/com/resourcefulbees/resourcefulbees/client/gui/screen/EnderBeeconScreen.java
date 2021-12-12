@@ -16,10 +16,9 @@ import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.potion.Effect;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -131,15 +130,18 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
             buttonStartX += buttonWidth + padding;
             if (widget.isHovered()) widget.renderToolTip(matrixStack, mouseX - this.leftPos, mouseY - this.topPos);
         }
-        StringTextComponent fluidCount;
-        DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-        if (tileEntity.getFluidTank().getFluidAmount() < 1000f || Screen.hasShiftDown()) {
-            fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount()) + " mb");
-        } else {
-            fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount() / 1000f) + " B");
-        }
         if (mouseX >= this.leftPos + 207 && mouseX <= this.leftPos + 221 && mouseY >= this.topPos + 30 && mouseY <= this.topPos + 92) {
-            renderTooltip(matrixStack, fluidCount, mouseX - this.leftPos, mouseY - this.topPos);
+            StringTextComponent fluidCount;
+            DecimalFormat decimalFormat = new DecimalFormat("##0.0");
+            List<IReorderingProcessor> tooltip = new LinkedList<>();
+            tooltip.add(new TranslationTextComponent(tileEntity.getFluidTank().getFluid().getTranslationKey()).getVisualOrderText());
+            if (tileEntity.getFluidTank().getFluidAmount() < 1000f || Screen.hasShiftDown()) {
+                fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount()) + " mb");
+            } else {
+                fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount() / 1000f) + " B");
+            }
+            tooltip.add(fluidCount.withStyle(TextFormatting.GRAY).getVisualOrderText());
+            renderTooltip(matrixStack, tooltip, mouseX - this.leftPos, mouseY - this.topPos);
         }
     }
 
@@ -224,6 +226,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
         if (this.menu.getEnderBeeconTileEntity() != null) {
             this.renderBackground(matrix);
             super.render(matrix, mouseX, mouseY, partialTicks);
+            this.renderTooltip(matrix, mouseX, mouseY);
         }
     }
 }

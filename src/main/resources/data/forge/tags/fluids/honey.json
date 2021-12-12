@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "resourcefulbees:honey",
-    "resourcefulbees:catnip_honey"
+    "resourcefulbees:honey"
   ]
 }

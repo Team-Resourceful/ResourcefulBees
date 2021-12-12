@@ -44,7 +44,7 @@ public class AbstractHoneyTank extends TileEntity {
     }
 
     protected static Predicate<FluidStack> honeyFluidPredicate() {
-        return fluidStack -> fluidStack.getFluid().is(BeeInfoUtils.getFluidTag("forge:honey"));
+        return fluidStack -> fluidStack.getFluid().is(BeeInfoUtils.getFluidTag("resourcefulbees:resourceful_honey"));
     }
 
     public LazyOptional<IFluidHandler> getFluidOptional() {

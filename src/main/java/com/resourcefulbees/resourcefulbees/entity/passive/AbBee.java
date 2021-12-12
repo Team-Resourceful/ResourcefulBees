@@ -44,7 +44,7 @@ public class AbBee {
                 .setBaseModelType(BaseModelTypes.THICK_LEGS)
                 .setSizeModifier(0.75f)
                 .setTraits(new String[]{TraitConstants.CLINGY})
-                .setCreator("-absent")
+                .setCreator("absent-")
                 .setLore("Bunny Bun Bun.")
                 .setLoreColor(BeeConstants.RAINBOW_COLOR)
                 .setApiaryOutputAmounts(new int[]{1, 2, 3, 4})

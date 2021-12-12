@@ -10,12 +10,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class HoneyTankScreen extends ContainerScreen<HoneyTankContainer> {
@@ -60,12 +65,19 @@ public class HoneyTankScreen extends ContainerScreen<HoneyTankContainer> {
             this.renderProgressBar(matrix);
             this.renderTooltip(matrix, mouseX, mouseY);
             DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-            if (tileEntity != null && MathUtils.inRangeInclusive(mouseX, this.leftPos + 81, this.leftPos + 93) && MathUtils.inRangeInclusive(mouseY, this.topPos + 12, this.topPos + 74)) {
-                if (Screen.hasShiftDown() || tileEntity.getFluidTank().getFluidAmount() < 500) {
-                    this.renderTooltip(matrix, new StringTextComponent(tileEntity.getFluidTank().getFluidAmount() + " MB"), mouseX, mouseY);
+
+            if (tileEntity.getFluidTank().isEmpty()) return;
+            if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 81, this.leftPos + 93) && MathUtils.inRangeInclusive(mouseY, this.topPos + 12, this.topPos + 74)) {
+                List<IReorderingProcessor> tooltip = new LinkedList<>();
+                StringTextComponent fluidCount;
+                tooltip.add(new TranslationTextComponent(tileEntity.getFluidTank().getFluid().getTranslationKey()).getVisualOrderText());
+                if (tileEntity.getFluidTank().getFluidAmount() < 1000f || Screen.hasShiftDown()) {
+                    fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount()) + " mb");
                 } else {
-                    this.renderTooltip(matrix, new StringTextComponent(decimalFormat.format((double) tileEntity.getFluidTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
+                    fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount() / 1000f) + " B");
                 }
+                tooltip.add(fluidCount.withStyle(TextFormatting.GRAY).getVisualOrderText());
+                renderTooltip(matrix, tooltip, mouseX, mouseY);
             }
         }
     }

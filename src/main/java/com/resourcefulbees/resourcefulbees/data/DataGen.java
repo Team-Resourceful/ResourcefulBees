@@ -180,7 +180,7 @@ public class DataGen {
     }
 
     private static void generateHoneyBottleTags() {
-        TAGS.put(new ResourceLocation("forge", "tags/items/honey_bottle.json"),
+        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honey_bottle.json"),
                 BEE_REGISTRY.getHoneyBottles().values().stream()
                         .filter(HoneyBottleData::doGenerateHoneyBlock)
                         .map(honey -> honey.getHoneyBottleRegistryObject().getId()).collect(Collectors.toSet()));
@@ -207,7 +207,7 @@ public class DataGen {
     }
 
     private static void generateHoneyTags() {
-        TAGS.put(new ResourceLocation("forge", "tags/fluids/honey.json"),
+        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/fluids/resourceful_honey.json"),
                 BEE_REGISTRY.getHoneyBottles().values().stream()
                         .filter(HoneyBottleData::doGenerateHoneyFluid)
                         .flatMap(hbd -> Stream.of(hbd.getHoneyFlowingFluidRegistryObject().getId(), hbd.getHoneyStillFluidRegistryObject().getId()))

@@ -24,8 +24,8 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractHoneyTankContainer extends AbstractHoneyTank implements ITickableTileEntity, INamedContainerProvider {
 
-    public static final ITag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("forge:honey");
-    public static final ITag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("forge:honey_bottle");
+    public static final ITag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("resourcefulbees:resourceful_honey");
+    public static final ITag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("resourcefulbees:resourceful_honey_bottle");
     public static final int BOTTLE_INPUT_EMPTY = 0;
     public static final int BOTTLE_OUTPUT_EMPTY = 1;
     public static final int HONEY_FILL_AMOUNT = ModConstants.HONEY_PER_BOTTLE;

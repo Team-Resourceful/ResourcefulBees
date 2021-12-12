@@ -63,8 +63,8 @@ public class HoneyGeneratorTileEntity extends AbstractHoneyTankContainer impleme
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
 
-    public static final ITag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("forge:honey");
-    public static final ITag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("forge:honey_bottle");
+    public static final ITag<Fluid> HONEY_FLUID_TAG = BeeInfoUtils.getFluidTag("resourcefulbees:resourceful_honey");
+    public static final ITag<Item> HONEY_BOTTLE_TAG = BeeInfoUtils.getItemTag("resourcefulbees:resourceful_honey_bottle");
 
     private int fluidFilled;
     private int energyFilled;
