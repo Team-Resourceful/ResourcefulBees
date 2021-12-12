@@ -36,10 +36,10 @@ public class PreviewHandler {
         if (enabled) {
             PreviewHandler.apiaryPos = apiary;
             BlockPos.betweenClosedStream(box).forEach((blockPos -> {
-                if (   (blockPos.getX() == box.x0 || blockPos.getX() == box.x1 ||
-                        blockPos.getY() == box.y0 || blockPos.getY() == box.y1 ||
-                        blockPos.getZ() == box.z0 || blockPos.getZ() == box.z1  ) && !apiary.equals(blockPos.immutable())) {
+                boolean isXZWall = blockPos.getX() == box.x1 || blockPos.getX() == box.x0 ||
+                        blockPos.getZ() == box.z1 || blockPos.getZ() == box.z0;
 
+                if ((blockPos.getY() == box.y1 || (blockPos.getY() == box.y0 && (isXZWall)) || isXZWall) && !apiary.equals(blockPos.immutable())) {
                     BlockPos savedPos = new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
                     STRUCTURE_PREVIEW_POS.add(savedPos);
                 }
