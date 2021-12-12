@@ -1,14 +1,9 @@
 package com.resourcefulbees.resourcefulbees.entity.passive;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.*;
-import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
-import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyEffect;
 import com.resourcefulbees.resourcefulbees.lib.*;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
-import com.resourcefulbees.resourcefulbees.registry.ModFluids;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
-import net.minecraft.potion.Effects;
 
 public class AbBee {
 
@@ -24,8 +19,8 @@ public class AbBee {
         CustomBeeData data = new CustomBeeData.Builder(BeeConstants.ABBEE_BEE, "tag:minecraft:beds", true,
                 MutationData.createDefault(),
                 new ColorData.Builder(false)
-                        .setPrimaryColor("#EAA939")
-                        .setSecondaryColor("#4C483B")
+                        .setPrimaryColor("#E5DED5")
+                        .setSecondaryColor("#FFB1C5")
                         .setModelType(ModelTypes.BUNNY)
                         .createColorData(),
                 new CombatData.Builder(true)
@@ -33,8 +28,7 @@ public class AbBee {
                         .setRemoveStingerOnAttack(false)
                         .setBaseHealth(20f)
                         .create(),
-                new CentrifugeData.Builder(false, null)
-                        .createCentrifugeData(),
+                CentrifugeData.createDefault(),
                 BreedData.createDefault(),
                 new SpawnData.Builder(true)
                         .setSpawnWeight(3)
@@ -50,15 +44,15 @@ public class AbBee {
                 .setBaseModelType(BaseModelTypes.THICK_LEGS)
                 .setSizeModifier(0.75f)
                 .setTraits(new String[]{TraitConstants.CLINGY})
-                .setCreator("Dawn Felstar")
-                .setLore("Cute little baby kitty bee.")
+                .setCreator("-absent")
+                .setLore("Bunny Bun Bun.")
                 .setLoreColor(BeeConstants.RAINBOW_COLOR)
+                .setApiaryOutputAmounts(new int[]{1, 2, 3, 4})
                 .createCustomBee();
 
         data.setShouldResourcefulBeesDoForgeRegistration(true);
-        data.setCombRegistryObject(ModItems.CATNIP_HONEYCOMB);
-        data.setCombBlockItemRegistryObject(ModItems.CATNIP_HONEYCOMB_BLOCK_ITEM);
-        data.setCombBlockRegistryObject(ModBlocks.CATNIP_HONEYCOMB_BLOCK);
+        data.setCombRegistryObject(ModItems.STRAWBEERRY_MILKSHAKE);
+        data.setCombBlockItemRegistryObject(ModItems.STRAWBEERRY_MILKSHAKE);
 
         return data;
     }

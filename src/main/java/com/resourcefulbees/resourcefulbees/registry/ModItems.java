@@ -49,6 +49,17 @@ public class ModItems {
             .build())
             .rarity(Rarity.EPIC)));
 
+    @SuppressWarnings("deprecation")
+    public static final RegistryObject<Item> STRAWBEERRY_MILKSHAKE = ITEMS.register("strawbeerry_milkshake", () -> new StrawbeeryMilkshake(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).food(new Food.Builder()
+            .effect(new EffectInstance(Effects.REGENERATION, 1200, 1), 1)
+            .effect(new EffectInstance(Effects.LUCK, 1200, 0), 1)
+            .effect(new EffectInstance(Effects.JUMP, 1200, 1), 1)
+            .nutrition(6)
+            .saturationMod(1.5f)
+            .alwaysEat()
+            .build())
+            .rarity(Rarity.EPIC)));
+
     public static final RegistryObject<Item> CATNIP_HONEYCOMB = ITEMS.register("catnip_honeycomb", () -> new Item(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> CATNIP_HONEY_BOTTLE = ITEMS.register("catnip_honey_bottle", () -> new CustomHoneyBottleItem(KittenBee.getHoneyBottleData().getProperties().rarity(Rarity.EPIC), KittenBee.getHoneyBottleData()));
     public static final RegistryObject<Item> CATNIP_HONEYCOMB_BLOCK_ITEM = ITEMS.register("catnip_honeycomb_block", () -> new BlockItem(ModBlocks.CATNIP_HONEYCOMB_BLOCK.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).rarity(Rarity.RARE)));
