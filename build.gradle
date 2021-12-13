@@ -7,11 +7,13 @@ buildscript {
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 plugins {
     id "org.sonarqube" version "3.1.1"
+    id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
@@ -45,7 +47,7 @@ def ENV = System.getenv()
 
 sourceSets {
     main {
-        java.excludes = ['com/teamresourceful/resourcefulbees/datagen/**', 'com/teamresourceful/resourcefulbees/common/multiblocks/**', 'com/teamresourceful/resourcefulbees/client/gui/screen/centrifuge/**']
+        java.excludes = ['com/teamresourceful/resourcefulbees/datagen/**']
         resources {
             srcDirs += 'src/generated/resources'
             exclude '.cache'
@@ -55,21 +57,12 @@ sourceSets {
         resources.srcDirs = main.resources.srcDirs
         resources.srcDirs.remove('src/generated/resources')
         java.srcDirs = main.java.srcDirs
-        java.excludes = ['com/teamresourceful/resourcefulbees/common/multiblocks/**', 'com/teamresourceful/resourcefulbees/client/gui/screen/centrifuge/**']
+        //java.excludes = ['com/teamresourceful/resourcefulbees/common/multiblocks/**', 'com/teamresourceful/resourcefulbees/client/gui/screen/centrifuge/**']
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
         compileClasspath += main.output
         runtimeClasspath += main.output
     }
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
 }
 
 sonarqube {
@@ -81,7 +74,7 @@ sonarqube {
 }
 
 minecraft {
-    mappings channel: "official", version: "1.18"//"${mapping}"
+    mappings channel: "official", version: "1.18.1"//"${mapping}"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -89,7 +82,7 @@ minecraft {
         client {
             workingDirectory project.file('run')
             arg "-mixin.config=resourcefulbees.mixins.json"
-            //arg "-mixin.config=phosphophyllite.mixins.json"
+            arg "-mixin.config=phosphophyllite.mixins.json"
 
             property 'forge.logging.console.level', 'debug'
             //property 'mixin.env.disableRefMap', 'true'
@@ -102,9 +95,9 @@ minecraft {
                 resourcefulbees {
                     source sourceSets.main
                 }
-//                Phosphophyllite {
-//                    source project(':Phosphophyllite').sourceSets.main
-//                }
+                Phosphophyllite {
+                    source project(':Phosphophyllite').sourceSets.main
+                }
             }
         }
 
@@ -121,9 +114,9 @@ minecraft {
                 resourcefulbees {
                     source sourceSets.main
                 }
-//                Phosphophyllite {
-//                    source project(':Phosphophyllite').sourceSets.main
-//                }
+                Phosphophyllite {
+                    source project(':Phosphophyllite').sourceSets.main
+                }
             }
         }
 
@@ -136,16 +129,12 @@ minecraft {
                 resourcefulbees {
                     source sourceSets.datagen
                 }
-//                Phosphophyllite {
-//                    source project(':Phosphophyllite').sourceSets.main
-//                }
+                Phosphophyllite {
+                    source project(':Phosphophyllite').sourceSets.main
+                }
             }
         }
     }
-}
-
-artifacts {
-    archives sourcesJar
 }
 
 mixin {
@@ -155,8 +144,8 @@ mixin {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}" //21
 
-    compileOnly fg.deobf("mezz.jei:jei-1.18:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.1:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:${jei_version}")
 
     //compileOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     //runtimeOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
@@ -175,9 +164,9 @@ dependencies {
     //runtimeOnly fg.deobf ("curse.maven:create-328085:${create_version}")
     //runtimeOnly fg.deobf ("curse.maven:flywheel-486392:${flywheel_version}")
 
-    implementation fg.deobf("software.bernie.geckolib:geckolib-1.18:${geckolib_version}")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-1.18-forge:${geckolib_version}")
 
-    //implementation project(':Phosphophyllite')
+    implementation project(':Phosphophyllite')
 
     compileOnly 'org.jetbrains:annotations:22.0.0'
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
@@ -198,17 +187,40 @@ jar {
     }
 }
 
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
+jar.finalizedBy('reobfJar')
+
+task sourcesJar(type: Jar) {
+    classifier = "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocs(type: Javadoc) {
+    classpath = sourceSets.main.compileClasspath
+    source = sourceSets.main.java
+    include "com/resourcefulbees/**"
+
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+}
+
+task javadocJar(type: Jar, dependsOn: javadocs) {
+    classifier = "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact reobfArtifact
+            artifact jar
             artifact sourcesJar
+            artifact javadocJar
 
             pom {
                 name = 'ResourcefulBees'
@@ -272,6 +284,59 @@ publishing {
                 username ENV.MAVEN_USER
                 password ENV.MAVEN_PASS
             }
+        }
+    }
+}
+
+gradle.projectsEvaluated {
+    def resource_targets = ["META-INF/mods.toml", "pack.mcmeta"]
+    def into_targets = ["$rootDir/out/production/resources/", "$rootDir/out/production/${project.name}.main/", "$rootDir/bin/main/"]
+    def properties = [
+            version     : version,
+            fmlVersion  : forge_version.substring(0, forge_version.indexOf('.')),
+            forgeVersion: forge_version,
+            mcVersion   : mc_version,
+            phosVersion : project.project(":Phosphophyllite").property("compatibility").toString(),
+            geckoVersion: geckolib_version
+    ]
+    processResources {
+        duplicatesStrategy = 'INCLUDE'
+        inputs.properties properties
+
+        def spec = copySpec {
+            from(sourceSets.main.resources) {
+                include resource_targets
+                expand properties
+            }
+        }
+
+        with spec
+        into_targets.each {
+            def file = file(it)
+            if (file.exists()) {
+                copy {
+                    with spec
+                    into file
+                }
+            }
+        }
+
+        from(sourceSets.main.resources) {
+            exclude resource_targets
+        }
+    }
+}
+
+curseforge {
+    apiKey = "${ENV.CURSE_API_KEY}"
+    project {
+        id = '384508'
+        changelog = file('changelog.md')
+        changelogType = 'markdown'
+        releaseType = 'release'
+        addGameVersion "${mc_version}"
+        mainArtifact(jar) {
+            displayName = "Resourceful Bees ${version}"
         }
     }
 }

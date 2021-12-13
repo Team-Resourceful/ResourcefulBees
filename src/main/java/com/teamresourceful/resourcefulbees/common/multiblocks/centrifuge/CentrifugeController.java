@@ -8,19 +8,19 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeActivity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
-import net.roguelogix.phosphophyllite.multiblock.generic.ValidationError;
+import net.roguelogix.phosphophyllite.multiblock.ValidationError;
 import net.roguelogix.phosphophyllite.multiblock.rectangular.RectangularMultiblockController;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class CentrifugeController extends RectangularMultiblockController<CentrifugeController, AbstractCentrifugeEntity, AbstractCentrifuge> {
+public class CentrifugeController extends RectangularMultiblockController<AbstractCentrifugeEntity, CentrifugeController> {
 
     private CentrifugeActivity centrifugeActivity = CentrifugeActivity.INACTIVE;
 
@@ -41,7 +41,7 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     //region structure building and validation
 
     //TODO enforce only 1 redstone control block
-    public CentrifugeController(@NotNull World world) {
+    public CentrifugeController(@NotNull Level world) {
         super(world, AbstractCentrifugeEntity.class::isInstance , AbstractCentrifuge.class::isInstance);
         minSize.set(3);
         maxSize.set(7, 8, 7);
@@ -96,7 +96,7 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
     }
 
     private void validateBlockLocations() {
-        BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 
         for (CentrifugeInputEntity input : inputs.values()) {
             mutablePos.set(input.getBlockPos());
@@ -250,15 +250,15 @@ public class CentrifugeController extends RectangularMultiblockController<Centri
 
     //region NBT HANDLING
     @Override
-    protected void read(@Nonnull CompoundNBT compound) {
+    protected void read(@Nonnull CompoundTag compound) {
         if (compound.contains("centrifugeState")) centrifugeActivity = CentrifugeActivity.fromByte(compound.getByte("centrifugeState"));
         energyStorage.deserializeNBT(compound);
     }
 
     @Override
     @Nonnull
-    protected CompoundNBT write() {
-        CompoundNBT compound = new CompoundNBT();
+    protected CompoundTag write() {
+        CompoundTag compound = new CompoundTag();
         compound.putByte("centrifugeState", centrifugeActivity.getByte());
         energyStorage.serializeNBT(compound);
         return compound;

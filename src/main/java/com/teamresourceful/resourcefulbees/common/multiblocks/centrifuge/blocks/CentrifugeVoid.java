@@ -1,44 +1,44 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks;
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeVoidEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.world.IBlockReader;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CentrifugeVoid extends AbstractCentrifuge {
 
-    private final RegistryObject<TileEntityType<CentrifugeVoidEntity>> entityType;
+    private final RegistryObject<BlockEntityType<CentrifugeVoidEntity>> entityType;
 
-    public CentrifugeVoid(@NotNull Properties properties, RegistryObject<TileEntityType<CentrifugeVoidEntity>> entityType) {
+    public CentrifugeVoid(@NotNull Properties properties, RegistryObject<BlockEntityType<CentrifugeVoidEntity>> entityType) {
         super(properties);
         this.entityType = entityType;
         this.registerDefaultState(defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
     }
 
     @Override
-    protected void createBlockStateDefinition(@NotNull StateContainer.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
+    protected void buildStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
+        super.buildStateDefinition(builder);
         builder.add(BlockStateProperties.HORIZONTAL_FACING);
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(@NotNull BlockItemUseContext pContext) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
         return this.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, pContext.getHorizontalDirection().getOpposite());
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return entityType.get().create();
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return entityType.get().create(pos, state);
     }
 }

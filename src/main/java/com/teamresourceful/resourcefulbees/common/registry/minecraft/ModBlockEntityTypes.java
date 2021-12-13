@@ -2,6 +2,8 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.*;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.tileentity.*;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
@@ -250,30 +252,6 @@ public class ModBlockEntityTypes {
             .build(null));
     //endregion
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public static final RegistryObject<BlockEntityType<HoneyGeneratorTileEntity>> HONEY_GENERATOR_ENTITY = BLOCK_ENTITY_TYPES.register("honey_generator", () -> BlockEntityType.Builder
             .of(HoneyGeneratorTileEntity::new, ModBlocks.HONEY_GENERATOR.get())
             .build(null));
@@ -283,9 +261,6 @@ public class ModBlockEntityTypes {
     public static final RegistryObject<BlockEntityType<ApiaryTileEntity>> APIARY_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("apiary", () -> BlockEntityType.Builder
             .of(ApiaryTileEntity::new, ModBlocks.T1_APIARY_BLOCK.get(), ModBlocks.T2_APIARY_BLOCK.get(), ModBlocks.T3_APIARY_BLOCK.get(), ModBlocks.T4_APIARY_BLOCK.get())
             .build(null));
-/*    public static final RegistryObject<BlockEntityType<ApiaryStorageTileEntity>> APIARY_STORAGE_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("apiary_storage", () -> BlockEntityType.Builder
-            .of(ApiaryStorageTileEntity::new, ModBlocks.APIARY_STORAGE_BLOCK.get())
-            .build(null));*/
     public static final RegistryObject<BlockEntityType<ApiaryBreederTileEntity>> APIARY_BREEDER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("apiary_breeder", () -> BlockEntityType.Builder
             .of(ApiaryBreederTileEntity::new, ModBlocks.APIARY_BREEDER_BLOCK.get())
             .build(null));
@@ -303,7 +278,6 @@ public class ModBlockEntityTypes {
             .of(HoneyPotBlockEntity::new, ModBlocks.HONEY_POT.get())
             .build(null));
 
-    /* TODO REMOVE TO WORK ON CENTRIFUGE
     //region Centrifuge Block Entity Types
     public static final RegistryObject<BlockEntityType<CentrifugeCasingEntity>> CENTRIFUGE_CASING_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge_casing", () -> BlockEntityType.Builder
             .of(CentrifugeCasingEntity::new, ModBlocks.CENTRIFUGE_CASING.get())
@@ -317,87 +291,86 @@ public class ModBlockEntityTypes {
 
     //TERMINAL
     public static final RegistryObject<BlockEntityType<CentrifugeTerminalEntity>> CENTRIFUGE_BASIC_TERMINAL_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/terminal/basic", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeTerminalEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_TERMINAL_ENTITY, CentrifugeTier.BASIC), ModBlocks.CENTRIFUGE_BASIC_TERMINAL.get())
+            .of((pos, state) -> new CentrifugeTerminalEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_TERMINAL_ENTITY, CentrifugeTier.BASIC, pos, state), ModBlocks.CENTRIFUGE_BASIC_TERMINAL.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeTerminalEntity>> CENTRIFUGE_ADVANCED_TERMINAL_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/terminal/advanced", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeTerminalEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_TERMINAL_ENTITY, CentrifugeTier.ADVANCED), ModBlocks.CENTRIFUGE_ADVANCED_TERMINAL.get())
+            .of((pos, state) -> new CentrifugeTerminalEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_TERMINAL_ENTITY, CentrifugeTier.ADVANCED, pos, state), ModBlocks.CENTRIFUGE_ADVANCED_TERMINAL.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeTerminalEntity>> CENTRIFUGE_ELITE_TERMINAL_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/terminal/elite", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeTerminalEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_TERMINAL_ENTITY, CentrifugeTier.ELITE), ModBlocks.CENTRIFUGE_ELITE_TERMINAL.get())
+            .of((pos, state) -> new CentrifugeTerminalEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_TERMINAL_ENTITY, CentrifugeTier.ELITE, pos, state), ModBlocks.CENTRIFUGE_ELITE_TERMINAL.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeTerminalEntity>> CENTRIFUGE_ULTIMATE_TERMINAL_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/terminal/ultimate", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeTerminalEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_TERMINAL_ENTITY, CentrifugeTier.ULTIMATE), ModBlocks.CENTRIFUGE_ULTIMATE_TERMINAL.get())
+            .of((pos, state) -> new CentrifugeTerminalEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_TERMINAL_ENTITY, CentrifugeTier.ULTIMATE, pos, state), ModBlocks.CENTRIFUGE_ULTIMATE_TERMINAL.get())
             .build(null));
 
     //VOID
     public static final RegistryObject<BlockEntityType<CentrifugeVoidEntity>> CENTRIFUGE_BASIC_VOID_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/void/basic", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeVoidEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_VOID_ENTITY, CentrifugeTier.BASIC), ModBlocks.CENTRIFUGE_BASIC_VOID.get())
+            .of((pos, state) -> new CentrifugeVoidEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_VOID_ENTITY, CentrifugeTier.BASIC, pos, state), ModBlocks.CENTRIFUGE_BASIC_VOID.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeVoidEntity>> CENTRIFUGE_ADVANCED_VOID_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/void/advanced", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeVoidEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_VOID_ENTITY, CentrifugeTier.ADVANCED), ModBlocks.CENTRIFUGE_ADVANCED_VOID.get())
+            .of((pos, state) -> new CentrifugeVoidEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_VOID_ENTITY, CentrifugeTier.ADVANCED, pos, state), ModBlocks.CENTRIFUGE_ADVANCED_VOID.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeVoidEntity>> CENTRIFUGE_ELITE_VOID_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/void/elite", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeVoidEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_VOID_ENTITY, CentrifugeTier.ELITE), ModBlocks.CENTRIFUGE_ELITE_VOID.get())
+            .of((pos, state) -> new CentrifugeVoidEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_VOID_ENTITY, CentrifugeTier.ELITE, pos, state), ModBlocks.CENTRIFUGE_ELITE_VOID.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeVoidEntity>> CENTRIFUGE_ULTIMATE_VOID_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/void/ultimate", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeVoidEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_VOID_ENTITY, CentrifugeTier.ULTIMATE), ModBlocks.CENTRIFUGE_ULTIMATE_VOID.get())
+            .of((pos, state) -> new CentrifugeVoidEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_VOID_ENTITY, CentrifugeTier.ULTIMATE, pos, state), ModBlocks.CENTRIFUGE_ULTIMATE_VOID.get())
             .build(null));
 
     //INPUT
     public static final RegistryObject<BlockEntityType<CentrifugeInputEntity>> CENTRIFUGE_BASIC_INPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/input/item/basic", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeInputEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_INPUT_ENTITY, CentrifugeTier.BASIC), ModBlocks.CENTRIFUGE_BASIC_INPUT.get())
+            .of((pos, state) -> new CentrifugeInputEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_INPUT_ENTITY, CentrifugeTier.BASIC, pos, state), ModBlocks.CENTRIFUGE_BASIC_INPUT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeInputEntity>> CENTRIFUGE_ADVANCED_INPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/input/item/advanced", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeInputEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_INPUT_ENTITY, CentrifugeTier.ADVANCED), ModBlocks.CENTRIFUGE_ADVANCED_INPUT.get())
+            .of((pos, state) -> new CentrifugeInputEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_INPUT_ENTITY, CentrifugeTier.ADVANCED, pos, state), ModBlocks.CENTRIFUGE_ADVANCED_INPUT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeInputEntity>> CENTRIFUGE_ELITE_INPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/input/item/elite", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeInputEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_INPUT_ENTITY, CentrifugeTier.ELITE), ModBlocks.CENTRIFUGE_ELITE_INPUT.get())
+            .of((pos, state) -> new CentrifugeInputEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_INPUT_ENTITY, CentrifugeTier.ELITE, pos, state), ModBlocks.CENTRIFUGE_ELITE_INPUT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeInputEntity>> CENTRIFUGE_ULTIMATE_INPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/input/item/ultimate", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeInputEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_INPUT_ENTITY, CentrifugeTier.ULTIMATE), ModBlocks.CENTRIFUGE_ULTIMATE_INPUT.get())
+            .of((pos, state) -> new CentrifugeInputEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_INPUT_ENTITY, CentrifugeTier.ULTIMATE, pos, state), ModBlocks.CENTRIFUGE_ULTIMATE_INPUT.get())
             .build(null));
 
     //ENERGY PORT
     public static final RegistryObject<BlockEntityType<CentrifugeEnergyPortEntity>> CENTRIFUGE_BASIC_ENERGY_PORT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/input/energy/basic", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeEnergyPortEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_ENERGY_PORT_ENTITY, CentrifugeTier.BASIC), ModBlocks.CENTRIFUGE_BASIC_ENERGY_PORT.get())
+            .of((pos, state) -> new CentrifugeEnergyPortEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_ENERGY_PORT_ENTITY, CentrifugeTier.BASIC, pos, state), ModBlocks.CENTRIFUGE_BASIC_ENERGY_PORT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeEnergyPortEntity>> CENTRIFUGE_ADVANCED_ENERGY_PORT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/input/energy/advanced", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeEnergyPortEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_ENERGY_PORT_ENTITY, CentrifugeTier.ADVANCED), ModBlocks.CENTRIFUGE_ADVANCED_ENERGY_PORT.get())
+            .of((pos, state) -> new CentrifugeEnergyPortEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_ENERGY_PORT_ENTITY, CentrifugeTier.ADVANCED, pos, state), ModBlocks.CENTRIFUGE_ADVANCED_ENERGY_PORT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeEnergyPortEntity>> CENTRIFUGE_ELITE_ENERGY_PORT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/input/energy/elite", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeEnergyPortEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_ENERGY_PORT_ENTITY, CentrifugeTier.ELITE), ModBlocks.CENTRIFUGE_ELITE_ENERGY_PORT.get())
+            .of((pos, state) -> new CentrifugeEnergyPortEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_ENERGY_PORT_ENTITY, CentrifugeTier.ELITE, pos, state), ModBlocks.CENTRIFUGE_ELITE_ENERGY_PORT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeEnergyPortEntity>> CENTRIFUGE_ULTIMATE_ENERGY_PORT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/input/energy/ultimate", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeEnergyPortEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_ENERGY_PORT_ENTITY, CentrifugeTier.ULTIMATE), ModBlocks.CENTRIFUGE_ULTIMATE_ENERGY_PORT.get())
+            .of((pos, state) -> new CentrifugeEnergyPortEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_ENERGY_PORT_ENTITY, CentrifugeTier.ULTIMATE, pos, state), ModBlocks.CENTRIFUGE_ULTIMATE_ENERGY_PORT.get())
             .build(null));
 
     //ITEM OUTPUT
     public static final RegistryObject<BlockEntityType<CentrifugeItemOutputEntity>> CENTRIFUGE_BASIC_ITEM_OUTPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/output/item/basic", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeItemOutputEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_ITEM_OUTPUT_ENTITY, CentrifugeTier.BASIC), ModBlocks.CENTRIFUGE_BASIC_ITEM_OUTPUT.get())
+            .of((pos, state) -> new CentrifugeItemOutputEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_ITEM_OUTPUT_ENTITY, CentrifugeTier.BASIC, pos, state), ModBlocks.CENTRIFUGE_BASIC_ITEM_OUTPUT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeItemOutputEntity>> CENTRIFUGE_ADVANCED_ITEM_OUTPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/output/item/advanced", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeItemOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_ITEM_OUTPUT_ENTITY, CentrifugeTier.ADVANCED), ModBlocks.CENTRIFUGE_ADVANCED_ITEM_OUTPUT.get())
+            .of((pos, state) -> new CentrifugeItemOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_ITEM_OUTPUT_ENTITY, CentrifugeTier.ADVANCED, pos, state), ModBlocks.CENTRIFUGE_ADVANCED_ITEM_OUTPUT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeItemOutputEntity>> CENTRIFUGE_ELITE_ITEM_OUTPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/output/item/elite", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeItemOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_ITEM_OUTPUT_ENTITY, CentrifugeTier.ELITE), ModBlocks.CENTRIFUGE_ELITE_ITEM_OUTPUT.get())
+            .of((pos, state) -> new CentrifugeItemOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_ITEM_OUTPUT_ENTITY, CentrifugeTier.ELITE, pos, state), ModBlocks.CENTRIFUGE_ELITE_ITEM_OUTPUT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeItemOutputEntity>> CENTRIFUGE_ULTIMATE_ITEM_OUTPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/output/item/ultimate", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeItemOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT_ENTITY, CentrifugeTier.ULTIMATE), ModBlocks.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT.get())
+            .of((pos, state) -> new CentrifugeItemOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT_ENTITY, CentrifugeTier.ULTIMATE, pos, state), ModBlocks.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT.get())
             .build(null));
 
     //FLUID OUTPUT
     public static final RegistryObject<BlockEntityType<CentrifugeFluidOutputEntity>> CENTRIFUGE_BASIC_FLUID_OUTPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/output/fluid/basic", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeFluidOutputEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_FLUID_OUTPUT_ENTITY, CentrifugeTier.BASIC), ModBlocks.CENTRIFUGE_BASIC_FLUID_OUTPUT.get())
+            .of((pos, state) -> new CentrifugeFluidOutputEntity(ModBlockEntityTypes.CENTRIFUGE_BASIC_FLUID_OUTPUT_ENTITY, CentrifugeTier.BASIC, pos, state), ModBlocks.CENTRIFUGE_BASIC_FLUID_OUTPUT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeFluidOutputEntity>> CENTRIFUGE_ADVANCED_FLUID_OUTPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/output/fluid/advanced", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeFluidOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_FLUID_OUTPUT_ENTITY, CentrifugeTier.ADVANCED), ModBlocks.CENTRIFUGE_ADVANCED_FLUID_OUTPUT.get())
+            .of((pos, state) -> new CentrifugeFluidOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ADVANCED_FLUID_OUTPUT_ENTITY, CentrifugeTier.ADVANCED, pos, state), ModBlocks.CENTRIFUGE_ADVANCED_FLUID_OUTPUT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeFluidOutputEntity>> CENTRIFUGE_ELITE_FLUID_OUTPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/output/fluid/elite", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeFluidOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_FLUID_OUTPUT_ENTITY, CentrifugeTier.ELITE), ModBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT.get())
+            .of((pos, state) -> new CentrifugeFluidOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ELITE_FLUID_OUTPUT_ENTITY, CentrifugeTier.ELITE, pos, state), ModBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<CentrifugeFluidOutputEntity>> CENTRIFUGE_ULTIMATE_FLUID_OUTPUT_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge/output/fluid/ultimate", () -> BlockEntityType.Builder
-            .of(() -> new CentrifugeFluidOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT_ENTITY, CentrifugeTier.ULTIMATE), ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT.get())
+            .of((pos, state) -> new CentrifugeFluidOutputEntity(ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT_ENTITY, CentrifugeTier.ULTIMATE, pos, state), ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT.get())
             .build(null));
     //endregion
-     */
 }

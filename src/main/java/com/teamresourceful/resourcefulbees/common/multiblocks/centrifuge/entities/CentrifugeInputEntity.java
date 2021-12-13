@@ -16,31 +16,33 @@ import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.roguelogix.phosphophyllite.multiblock.generic.IOnAssemblyTile;
-import net.roguelogix.phosphophyllite.multiblock.generic.ITickableMultiblockTile;
+import net.minecraftforge.registries.RegistryObject;
+import net.roguelogix.phosphophyllite.multiblock.IOnAssemblyTile;
+import net.roguelogix.phosphophyllite.multiblock.ITickableMultiblockTile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,8 +67,8 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     private int processQuantity; //# of inputs being currently being processed
     private ProcessStage processStage = ProcessStage.IDLE;
 
-    public CentrifugeInputEntity(RegistryObject<TileEntityType<CentrifugeInputEntity>> entityType, CentrifugeTier tier) {
-        super(entityType.get(), tier);
+    public CentrifugeInputEntity(RegistryObject<BlockEntityType<CentrifugeInputEntity>> entityType, CentrifugeTier tier, BlockPos pos, BlockState state) {
+        super(entityType.get(), tier, pos, state);
         this.inventoryHandler = new InventoryHandler(tier.getSlots());
         this.lazyOptional = LazyOptional.of(() -> inventoryHandler);
     }
@@ -102,26 +104,26 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("gui.centrifuge.input.item." + tier.getName());
+    protected Component getDefaultName() {
+        return new TranslatableComponent("gui.centrifuge.input.item." + tier.getName());
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
-        controller.updateCentrifugeState(centrifugeState);
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
+        controller().updateCentrifugeState(centrifugeState);
         return new CentrifugeInputContainer(id, playerInventory, this);
     }
 
     @Override
-    protected void getOpenGUIPacket(PacketBuffer buffer) {
+    protected void getOpenGUIPacket(FriendlyByteBuf buffer) {
         super.getOpenGUIPacket(buffer);
         buffer.writeInt(1);
         buffer.writeInt(tier.getSlots());
     }
 
     public int getRecipeTime() {
-        return processRecipe == null ? 0 : Math.max(1, MathHelper.floor(processRecipe.getTime() * controller.getRecipeTimeModifier()));
+        return processRecipe == null ? 0 : Math.max(1, Mth.floor(processRecipe.getTime() * controller().getRecipeTimeModifier()));
     }
 
     private void setProcessStage(ProcessStage newStage) {
@@ -147,7 +149,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         processRecipe = filterRecipe;
         processRecipeID = processRecipe.getId();
         processTime = getRecipeTime();
-        processEnergy = processRecipe.getEnergyPerTick() * this.controller.getRecipePowerModifier();
+        processEnergy = processRecipe.getEnergyPerTick() * this.controller().getRecipePowerModifier();
         consumeInputs(false);
         setChanged();
     }
@@ -159,7 +161,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         }
 
         Ingredient ingredient = filterRecipe.getIngredient();
-        int needed = simulate ? filterRecipe.getInputAmount() * controller.getMaxInputRecipes() : processQuantity;
+        int needed = simulate ? filterRecipe.getInputAmount() * controller().getMaxInputRecipes() : processQuantity;
         int collected = 0;
 
         for (int slot = 0; collected < needed && slot < inventoryHandler.getSlots(); slot++) {
@@ -176,7 +178,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     }
 
     private void processRecipe() {
-        if (this.controller.getEnergyStorage().consumeEnergy(processEnergy, false)) {
+        if (this.controller().getEnergyStorage().consumeEnergy(processEnergy, false)) {
             processTime--;
             if (processTime == 0) setProcessStage(ProcessStage.FINALIZING);
         }
@@ -190,7 +192,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         }
     }
 
-    private <T extends AbstractOutput, A extends TileEntity & ICentrifugeOutput<T>> boolean depositResults(List<CentrifugeRecipe.Output<T>> recipeOutputs, OutputLocations<A> outputLocations) {
+    private <T extends AbstractOutput, A extends BlockEntity & ICentrifugeOutput<T>> boolean depositResults(List<CentrifugeRecipe.Output<T>> recipeOutputs, OutputLocations<A> outputLocations) {
         for (int i = 0; i < recipeOutputs.size(); i++) {
             CentrifugeRecipe.Output<T> recipeOutput = recipeOutputs.get(i);
             if (recipeOutput.getChance() >= MathUtils.RANDOM.nextFloat()) {
@@ -221,23 +223,15 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     //region CAPABILITIES
     @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> capability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
-        return super.getCapability(cap, side);
+        return super.capability(cap, side);
     }
-
-    @Override
-    protected void invalidateCaps() {
-        super.invalidateCaps();
-        this.lazyOptional.invalidate();
-    }
-
     //endregion
 
     //region NBT HANDLING
     @Override
-    public void onLoad() {
-        super.onLoad();
+    public void onAdded() {
         if (level != null) {
             filterRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(filterRecipeID);
             processRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(processRecipeID);
@@ -255,7 +249,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     //Note about my attempt to solve the above issue: I need access to level and filter recipe, so I can perform
     //the proper testing against the itemstacks
     @Override
-    protected void readNBT(@NotNull CompoundNBT tag) {
+    protected void readNBT(@NotNull CompoundTag tag) {
         inventoryHandler.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
         filterInventory.deserializeNBT(tag.getCompound(NBTConstants.NBT_FILTER_INVENTORY));
         processStage = ProcessStage.valueOf(tag.getString(NBTConstants.NBT_PROCESS_STAGE).toUpperCase(Locale.ROOT));
@@ -277,8 +271,8 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
 
     @NotNull
     @Override
-    protected CompoundNBT writeNBT() {
-        CompoundNBT tag = super.writeNBT();
+    protected CompoundTag writeNBT() {
+        CompoundTag tag = super.writeNBT();
         tag.put(NBTConstants.NBT_INVENTORY, inventoryHandler.serializeNBT());
         tag.put(NBTConstants.NBT_FILTER_INVENTORY, filterInventory.serializeNBT());
         tag.putString(NBTConstants.NBT_PROCESS_STAGE, processStage.toString().toLowerCase(Locale.ROOT));
@@ -296,27 +290,29 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     // REQUIRED remove this method and logic after implementing linking code in gui - this is only for dev/testing
     @Override
     public void onAssembly() {
-        List<CentrifugeItemOutputEntity> iout = this.controller.getItemOutputs();
+        List<CentrifugeItemOutputEntity> iout = this.controller().getItemOutputs();
         itemOutputs.setFirst(iout.get(0), iout.get(0).getBlockPos());
         itemOutputs.setSecond(iout.get(1), iout.get(1).getBlockPos());
         itemOutputs.setThird(iout.get(2), iout.get(2).getBlockPos());
-        List<CentrifugeFluidOutputEntity> fout = this.controller.getFluidOutputs();
+        List<CentrifugeFluidOutputEntity> fout = this.controller().getFluidOutputs();
         fluidOutputs.setFirst(fout.get(0), fout.get(0).getBlockPos());
         fluidOutputs.setSecond(fout.get(1), fout.get(1).getBlockPos());
         fluidOutputs.setThird(fout.get(2), fout.get(2).getBlockPos());
     }
 
+
+
     @Override
-    public void sendGUINetworkPacket(IContainerListener player) {
-        if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
-            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+    public void sendGUINetworkPacket(ContainerListener player) {
+        if (player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer)) {
+            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
             buffer.writeInt(processTime);
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), (ServerPlayerEntity) player);
+            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), serverPlayer);
         }
     }
 
     @Override
-    public void handleGUINetworkPacket(PacketBuffer buffer) {
+    public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
         processTime = buffer.readInt();
     }
 

@@ -72,7 +72,7 @@ public class CentrifugeRecipe implements Recipe<Container> {
             ItemStack[] matchingStacks = ingredient.getItems();
             if (matchingStacks.length == 0) return false;
             else {
-                return Arrays.stream(matchingStacks).anyMatch(itemStack -> ItemStack.matches(stack, itemStack));
+                return Arrays.stream(matchingStacks).anyMatch(itemStack -> ItemStack.isSameItemSameTags(stack, itemStack));
             }
         }
     }

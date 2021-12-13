@@ -7,21 +7,23 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,21 +33,21 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
     private final LazyOptional<IItemHandler> lazyOptional;
     private boolean voidExcess = true;
 
-    public CentrifugeItemOutputEntity(RegistryObject<TileEntityType<CentrifugeItemOutputEntity>> tileType, CentrifugeTier tier) {
-        super(tileType.get(), tier);
+    public CentrifugeItemOutputEntity(RegistryObject<BlockEntityType<CentrifugeItemOutputEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
+        super(tileType.get(), tier, pos, state);
         this.inventoryHandler = new InventoryHandler(tier.getSlots());
         this.lazyOptional = LazyOptional.of(() -> inventoryHandler);
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("gui.centrifuge.output.item." + tier.getName());
+    protected Component getDefaultName() {
+        return new TranslatableComponent("gui.centrifuge.output.item." + tier.getName());
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
-        controller.updateCentrifugeState(centrifugeState);
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
+        controller().updateCentrifugeState(centrifugeState);
         return new CentrifugeItemOutputContainer(id, playerInventory, this);
     }
 
@@ -65,15 +67,15 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
 
     //region NBT HANDLING
     @Override
-    protected void readNBT(@NotNull CompoundNBT tag) {
+    protected void readNBT(@NotNull CompoundTag tag) {
         inventoryHandler.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
         super.readNBT(tag);
     }
 
     @NotNull
     @Override
-    protected CompoundNBT writeNBT() {
-        CompoundNBT tag = super.writeNBT();
+    protected CompoundTag writeNBT() {
+        CompoundTag tag = super.writeNBT();
         tag.put(NBTConstants.NBT_INVENTORY, inventoryHandler.serializeNBT());
         return tag;
     }
@@ -82,17 +84,10 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
     //region CAPABILITIES
     @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> capability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
-        return super.getCapability(cap, side);
+        return super.capability(cap, side);
     }
-
-    @Override
-    protected void invalidateCaps() {
-        super.invalidateCaps();
-        this.lazyOptional.invalidate();
-    }
-
     //endregion
 
     private class InventoryHandler extends ItemStackHandler {
@@ -118,7 +113,7 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
         }
 
         private boolean depositResult(ItemStack result) {
-            if (result.isEmpty() || controller.dumpsContainItem(result)) return true;
+            if (result.isEmpty() || controller().dumpsContainItem(result)) return true;
 
             boolean canDeposit = voidExcess || simulateDeposit(result);
 
@@ -138,7 +133,7 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
 
             if (slotStack.isEmpty()) {
                 setStackInSlot(slotIndex, result.split(itemMaxStackSize));
-            } else if (Container.consideredTheSameItem(result, slotStack) && slotStack.getCount() != itemMaxStackSize) {
+            } else if (ItemStack.isSameItemSameTags(result, slotStack) && slotStack.getCount() != itemMaxStackSize) {
                 int combinedCount = result.getCount() + slotStack.getCount();
                 if (combinedCount <= itemMaxStackSize) {
                     result.setCount(0);
@@ -161,7 +156,7 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
 
                 if (slotStack.isEmpty()) {
                     count -= itemMaxStackSize;
-                } else if (Container.consideredTheSameItem(result, slotStack) && slotStack.getCount() != itemMaxStackSize) {
+                } else if (ItemStack.isSameItemSameTags(result, slotStack) && slotStack.getCount() != itemMaxStackSize) {
                     count -= (itemMaxStackSize - slotStack.getCount());
                 }
             }

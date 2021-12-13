@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks;
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeProcessorEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,10 +12,11 @@ public class CentrifugeProcessor extends AbstractCentrifuge {
         super(properties);
     }
 
+
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new CentrifugeProcessorEntity();
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return new CentrifugeProcessorEntity(pos, state);
     }
 
     @Override

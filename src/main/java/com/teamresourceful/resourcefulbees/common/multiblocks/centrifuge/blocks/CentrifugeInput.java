@@ -1,31 +1,26 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks;
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeInputEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.world.IBlockReader;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CentrifugeInput extends AbstractCentrifuge {
 
-    private final RegistryObject<TileEntityType<CentrifugeInputEntity>> entityType;
+    private final RegistryObject<BlockEntityType<CentrifugeInputEntity>> entityType;
 
-    public CentrifugeInput(@NotNull Properties properties, RegistryObject<TileEntityType<CentrifugeInputEntity>> entityType) {
+    public CentrifugeInput(@NotNull Properties properties, RegistryObject<BlockEntityType<CentrifugeInputEntity>> entityType) {
         super(properties);
         this.entityType = entityType;
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return entityType.get().create();
-    }
-
-    @Override
-    public boolean usesFaceDirection() {
-        return true;
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return entityType.get().create(pos, state);
     }
 }

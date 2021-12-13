@@ -6,21 +6,23 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,8 +32,8 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
     private final LazyOptional<IFluidHandler> fluidOptional;
     private boolean voidExcess = true;
 
-    public CentrifugeFluidOutputEntity(RegistryObject<TileEntityType<CentrifugeFluidOutputEntity>> tileType, CentrifugeTier tier) {
-        super(tileType.get(), tier);
+    public CentrifugeFluidOutputEntity(RegistryObject<BlockEntityType<CentrifugeFluidOutputEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
+        super(tileType.get(), tier, pos, state);
         this.fluidTank = new FluidTank(this.tier.getTankCapacity());
         this.fluidOptional = LazyOptional.of(() -> fluidTank);
     }
@@ -42,56 +44,51 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
 
     @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> capability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) return fluidOptional.cast();
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    protected void invalidateCaps() {
-        this.fluidOptional.invalidate();
-        super.invalidateCaps();
+        return super.capability(cap, side);
     }
 
     public boolean depositResult(CentrifugeRecipe.Output<FluidOutput> output, int processQuantity) {
         FluidStack result = output.getPool().next().getFluidStack();
+        if (result.isEmpty() || controller().dumpsContainFluid(result)) return true;
         result.setAmount(result.getAmount() * processQuantity);
-        if (result.isEmpty() || controller.dumpsContainFluid(result)) return true;
-        boolean canDeposit = (voidExcess || simulateDeposit(result)) && result.isFluidEqual(fluidTank.getFluid());
-
-        if (canDeposit) {
+        if ((voidExcess || simulateDeposit(result))) {
             fluidTank.fill(result, IFluidHandler.FluidAction.EXECUTE);
+            return true;
         }
-        return canDeposit;
+        return false;
     }
 
     private boolean simulateDeposit(FluidStack result) {
-        return result.getAmount() + fluidTank.getFluidAmount() > fluidTank.getCapacity();
+        return result.isFluidEqual(fluidTank.getFluid()) && result.getAmount() + fluidTank.getFluidAmount() > fluidTank.getCapacity();
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("gui.centrifuge.output.fluid." + tier.getName());
+    protected Component getDefaultName() {
+        return new TranslatableComponent("gui.centrifuge.output.fluid." + tier.getName());
     }
+
+
 
     @Nullable
     @Override
-    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity player) {
-        controller.updateCentrifugeState(centrifugeState);
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
+        controller().updateCentrifugeState(centrifugeState);
         return new CentrifugeFluidOutputContainer(id, playerInventory, this);
     }
 
     //region NBT HANDLING
     @Override
-    protected void readNBT(@NotNull CompoundNBT tag) {
+    protected void readNBT(@NotNull CompoundTag tag) {
         fluidTank.readFromNBT(tag);
         super.readNBT(tag);
     }
 
     @NotNull
     @Override
-    protected CompoundNBT writeNBT() {
-        CompoundNBT tag = super.writeNBT();
+    protected CompoundTag writeNBT() {
+        CompoundTag tag = super.writeNBT();
         fluidTank.writeToNBT(tag);
         return tag;
     }

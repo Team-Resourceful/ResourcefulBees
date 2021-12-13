@@ -1,10 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules;
 
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.screens.inventory.ContainerScreen;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
-public abstract class AbstractTerminalModule<T extends ContainerScreen<?>> extends Gui implements IDisplayModule {
+public abstract class AbstractTerminalModule<T extends AbstractContainerScreen<?>> extends GuiComponent implements IDisplayModule {
 
     protected final T screen;
 

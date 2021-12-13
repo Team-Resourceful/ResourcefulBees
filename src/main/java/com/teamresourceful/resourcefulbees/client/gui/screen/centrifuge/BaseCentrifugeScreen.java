@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> extends AbstractContainerScreen<T> {
 
@@ -82,7 +83,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
 
         if (MathUtils.inRangeInclusive(mouseAlteredX, 332, 344) && MathUtils.inRangeInclusive(mouseAlteredY, 3, 15)){
             List<Component> tooltip = getInfoTooltip();
-            if (tooltip != null) this.renderTooltip(matrixStack, tooltip, x, y, font);
+            if (tooltip != null) this.renderTooltip(matrixStack, tooltip, Optional.empty(), x, y, font);
         }
         if (MathUtils.inRangeInclusive(mouseAlteredX, 346, 358) && MathUtils.inRangeInclusive(mouseAlteredY, 3, 15)){
             //TODO GuiUtils.drawHoveringText(matrixStack, Lists.newArrayList(TranslationConstants.Centrifuge.CLOSE), x, y, width, height, width, font);

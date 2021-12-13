@@ -1,10 +1,10 @@
 modLoader="javafml"
-loaderVersion="[38,)"
+loaderVersion="[${fmlVersion},)"
 license="https://www.gnu.org/licenses/lgpl-3.0.en.html"
 issueTrackerURL="https://github.com/Resourceful-Bees/ResourcefulBees/issues/new/choose"
 [[mods]]
 modId="resourcefulbees"
-version="1"
+version="${version}"
 displayName="Resourceful Bees"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"
 logoFile="logo.png"
@@ -14,27 +14,27 @@ description="This mod provides pack makers with useful capabilities for creating
 [[dependencies.resourcefulbees]]
     modId="geckolib3"
     mandatory=true
-    versionRange="[3.0.0,)"
+    versionRange="[${geckoVersion},)"
     ordering="NONE"
     side="CLIENT"
 
-# [[dependencies.resourcefulbees]]
-#     modId="phosphophyllite"
-#     mandatory=true
-#     versionRange="[0.6.0,)"
-#     ordering="NONE"
-#     side="BOTH"
+[[dependencies.resourcefulbees]]
+    modId="phosphophyllite"
+    mandatory=true
+    versionRange="${phosVersion}"
+    ordering="NONE"
+    side="BOTH"
 
 [[dependencies.resourcefulbees]]
     modId="forge"
     mandatory=true
-    versionRange="[38.0.15,)"
+    versionRange="[${forgeVersion},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.resourcefulbees]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18,)"
+    versionRange="[${mcVersion},)"
     ordering="NONE"
     side="BOTH"

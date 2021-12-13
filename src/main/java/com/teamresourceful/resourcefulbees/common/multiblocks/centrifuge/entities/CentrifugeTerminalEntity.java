@@ -3,32 +3,34 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entiti
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeTerminalContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CentrifugeTerminalEntity extends AbstractGUICentrifugeEntity {
 
-    public CentrifugeTerminalEntity(RegistryObject<TileEntityType<CentrifugeTerminalEntity>> entityType, CentrifugeTier tier) {
-        super(entityType.get(), tier);
+    public CentrifugeTerminalEntity(RegistryObject<BlockEntityType<CentrifugeTerminalEntity>> entityType, CentrifugeTier tier, BlockPos pos, BlockState state) {
+        super(entityType.get(), tier, pos, state);
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("gui.centrifuge.terminal." + tier.getName());
+    protected Component getDefaultName() {
+        return new TranslatableComponent("gui.centrifuge.terminal." + tier.getName());
     }
 
     //TODO see if this can be handled generically via the superclass AbstractGUICentrifugeEntity
     @Nullable
     @Override
-    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
-        controller.updateCentrifugeState(centrifugeState);
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
+        controller().updateCentrifugeState(centrifugeState);
         return new CentrifugeTerminalContainer(id, playerInventory, this);
     }
 }

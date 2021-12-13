@@ -5,9 +5,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeInputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;

@@ -1,5 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.centrifuge;
 
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.commands.CentrifugeCommandHolder;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.commands.CentrifugeCommandSource;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,11 +27,10 @@ public record CommandMessage(BlockPos pos, String command) {
             ServerPlayer player = context.get().getSender();
             if (player != null && player.level.isLoaded(message.pos)) {
                 BlockEntity tileEntity = player.level.getBlockEntity(message.pos);
-                /* TODO UNCOMMENT TO WORK ON CENTRIFUGE
                 if (tileEntity instanceof AbstractCentrifugeEntity centrifuge) {
-                    CentrifugeCommandHolder.callDispatcher(message.command, new CentrifugeCommandSource(centrifuge.getController(), player));
+                    CentrifugeCommandHolder.callDispatcher(message.command, new CentrifugeCommandSource(centrifuge.controller(), player));
                 }
-                 */
+
             }
         });
         context.get().setPacketHandled(true);

@@ -5,16 +5,18 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeVoidContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,8 +24,8 @@ public class CentrifugeVoidEntity extends AbstractGUICentrifugeEntity {
 
     private final CentrifugeVoidEntity.FilterInventory filterInventory;
 
-    public CentrifugeVoidEntity(RegistryObject<TileEntityType<CentrifugeVoidEntity>> entityType, CentrifugeTier tier) {
-        super(entityType.get(), tier);
+    public CentrifugeVoidEntity(RegistryObject<BlockEntityType<CentrifugeVoidEntity>> entityType, CentrifugeTier tier, BlockPos pos, BlockState state) {
+        super(entityType.get(), tier, pos, state);
         this.filterInventory = new FilterInventory(tier.getSlots() * 2);
     }
 
@@ -40,29 +42,29 @@ public class CentrifugeVoidEntity extends AbstractGUICentrifugeEntity {
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("gui.centrifuge.void." + tier.getName());
+    protected Component getDefaultName() {
+        return new TranslatableComponent("gui.centrifuge.void." + tier.getName());
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
-        controller.updateCentrifugeState(centrifugeState);
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
+        controller().updateCentrifugeState(centrifugeState);
         return new CentrifugeVoidContainer(id, playerInventory, this);
     }
 
     //region NBT HANDLING
     //TODO DON'T SYNC INVENTORY THIS WAY!
     @Override
-    protected void readNBT(@NotNull CompoundNBT tag) {
+    protected void readNBT(@NotNull CompoundTag tag) {
         filterInventory.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
         super.readNBT(tag);
     }
 
     @NotNull
     @Override
-    protected CompoundNBT writeNBT() {
-        CompoundNBT tag = super.writeNBT();
+    protected CompoundTag writeNBT() {
+        CompoundTag tag = super.writeNBT();
         tag.put(NBTConstants.NBT_INVENTORY, filterInventory.serializeNBT());
         return tag;
     }
@@ -76,7 +78,7 @@ public class CentrifugeVoidEntity extends AbstractGUICentrifugeEntity {
 
         public boolean containsItem(ItemStack stack) {
             for (ItemStack slotStack : stacks) {
-                if (Container.consideredTheSameItem(stack, slotStack)) return true;
+                if (ItemStack.isSameItemSameTags(stack, slotStack)) return true;
             }
             return false;
         }

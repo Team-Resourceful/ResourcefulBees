@@ -187,7 +187,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             Map<ItemStack, Double> weightMap = itemWeights.get(integer);
             if (weightMap == null) return null;
             for (Map.Entry<ItemStack, Double> entry : weightMap.entrySet()) {
-                if (ItemStack.matches(entry.getKey(), displayedIngredient)) return entry.getValue();
+                if (ItemStack.isSameItemSameTags(entry.getKey(), displayedIngredient)) return entry.getValue();
             }
             return null;
         }

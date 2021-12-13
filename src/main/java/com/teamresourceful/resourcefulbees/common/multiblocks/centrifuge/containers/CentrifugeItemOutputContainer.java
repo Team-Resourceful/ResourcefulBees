@@ -5,11 +5,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeItemOutputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -21,7 +17,7 @@ public class CentrifugeItemOutputContainer extends CentrifugeContainer<Centrifug
         this(id, inv, getTileFromBuf(buffer, CentrifugeItemOutputEntity.class));
     }
 
-    public CentrifugeItemOutputContainer(int id, FriendlyByteBuf inv, CentrifugeItemOutputEntity entity) {
+    public CentrifugeItemOutputContainer(int id, Inventory inv, CentrifugeItemOutputEntity entity) {
         super(ModContainers.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), id, inv, entity);
     }
 

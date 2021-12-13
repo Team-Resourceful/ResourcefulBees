@@ -15,11 +15,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.util.IReorderingProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 import static com.teamresourceful.resourcefulbees.common.utils.RenderUtils.FONT_COLOR_1;
 import static com.teamresourceful.resourcefulbees.common.utils.RenderUtils.TERMINAL_FONT_8;
