@@ -4,8 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.ValidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -13,13 +14,14 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -156,14 +158,14 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
         for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryTileEntity.getBeeCount(); ++i) {
             int j = i - this.beeIndexOffset;
             int i1 = top + j * 18 + 2;
-            Entity bee = BeeRegistry.getRegistry().getBeeData(this.menu.getApiaryBee(i).beeType).getEntityType().create(Minecraft.getInstance().level);
-            RenderUtils.renderEntity(matrix, bee, Minecraft.getInstance().level, left, i1, -45, 2);
-/*
+            //Entity bee = BeeRegistry.getRegistry().getBeeData(this.menu.getApiaryBee(i).beeType).getEntityType().create(Minecraft.getInstance().level);
+            //RenderUtils.renderEntity(matrix, bee, Minecraft.getInstance().level, left, i1, -45, 2);
+
 
             ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
-            CompoundNBT data = new CompoundNBT();
+            CompoundTag data = new CompoundTag();
 
-            CompoundNBT tag = this.menu.getApiaryBee(i).entityData;
+            CompoundTag tag = this.menu.getApiaryBee(i).entityData;
             String entityID = tag.getString("id");
 
             data.putString(NBTConstants.NBT_ENTITY, entityID);
@@ -171,7 +173,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
 
             beeJar.setTag(data);
             if (this.minecraft != null)
-                this.minecraft.getItemRenderer().renderAndDecorateItem(beeJar, left, i1);*/
+                this.minecraft.getItemRenderer().renderAndDecorateItem(beeJar, left, i1);
         }
     }
 

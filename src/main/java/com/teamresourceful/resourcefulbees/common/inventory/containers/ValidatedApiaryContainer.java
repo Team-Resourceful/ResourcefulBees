@@ -7,15 +7,13 @@ import com.teamresourceful.resourcefulbees.common.network.packets.LockBeeMessage
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
 import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 public class ValidatedApiaryContainer extends ContainerWithStackMove {
@@ -48,6 +46,8 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inv, k, 56 + k * 18, 128));
         }
+
+
     }
 
     private void addInputSlot(ApiaryTileEntity apiaryTileEntity, int slot, int xPos) {
@@ -134,15 +134,8 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
     }
 
     @Override
-    public void addSlotListener(@NotNull ContainerListener listener) {
-        super.addSlotListener(listener);
-        //apiaryTileEntity.setNumPlayersUsing(((ContainerAccessor) this).getListeners().size());
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void removeSlotListener(@NotNull ContainerListener listener) {
-        super.removeSlotListener(listener);
-        //apiaryTileEntity.setNumPlayersUsing(((ContainerAccessor) this).getListeners().size());
+    public void broadcastChanges() {
+        super.broadcastChanges();
+        if (player instanceof ServerPlayer serverPlayer) apiaryTileEntity.sendData(serverPlayer);
     }
 }
