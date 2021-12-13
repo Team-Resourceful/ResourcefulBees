@@ -32,7 +32,11 @@ public class ModItems {
 
     public static final DeferredRegister<Item> ITEMS = createItemRegistry();
 
-    public static final DeferredRegister<Item> NESTS_ITEMS = createItemRegistry();
+
+    public static final DeferredRegister<Item> T0_NEST_ITEMS = createItemRegistry();
+    public static final DeferredRegister<Item> T1_NEST_ITEMS = createItemRegistry();
+    public static final DeferredRegister<Item> T2_NEST_ITEMS = createItemRegistry();
+    public static final DeferredRegister<Item> T3_NEST_ITEMS = createItemRegistry();
     public static final DeferredRegister<Item> SPAWN_EGG_ITEMS = createItemRegistry();
     public static final DeferredRegister<Item> HONEYCOMB_ITEMS = createItemRegistry();
     public static final DeferredRegister<Item> HONEYCOMB_BLOCK_ITEMS = createItemRegistry();
@@ -55,7 +59,10 @@ public class ModItems {
 
     public static void initializeRegistries(IEventBus bus) {
         ITEMS.register(bus);
-        NESTS_ITEMS.register(bus);
+        T0_NEST_ITEMS.register(bus);
+        T1_NEST_ITEMS.register(bus);
+        T2_NEST_ITEMS.register(bus);
+        T3_NEST_ITEMS.register(bus);
         SPAWN_EGG_ITEMS.register(bus);
         HONEYCOMB_ITEMS.register(bus);
         HONEYCOMB_BLOCK_ITEMS.register(bus);
@@ -66,83 +73,83 @@ public class ModItems {
     }
 
     //region Nests
-    public static final RegistryObject<Item> ACACIA_BEE_NEST_ITEM = NESTS_ITEMS.register("acacia_bee_nest", () -> new BlockItem(ModBlocks.ACACIA_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> BIRCH_BEE_NEST_ITEM = NESTS_ITEMS.register("birch_bee_nest", () -> new BlockItem(ModBlocks.BIRCH_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> BROWN_MUSHROOM_NEST_ITEM = NESTS_ITEMS.register("brown_mushroom_bee_nest", () -> new BlockItem(ModBlocks.BROWN_MUSHROOM_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> CRIMSON_BEE_NEST_ITEM = NESTS_ITEMS.register("crimson_bee_nest", () -> new BlockItem(ModBlocks.CRIMSON_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> CRIMSON_NYLIUM_BEE_NEST_ITEM = NESTS_ITEMS.register("crimson_nylium_bee_nest", () -> new BlockItem(ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> DARK_OAK_NEST_ITEM = NESTS_ITEMS.register("dark_oak_bee_nest", () -> new BlockItem(ModBlocks.DARK_OAK_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> GRASS_BEE_NEST_ITEM = NESTS_ITEMS.register("grass_bee_nest", () -> new BlockItem(ModBlocks.GRASS_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> JUNGLE_BEE_NEST_ITEM = NESTS_ITEMS.register("jungle_bee_nest", () -> new BlockItem(ModBlocks.JUNGLE_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> NETHER_BEE_NEST_ITEM = NESTS_ITEMS.register("nether_bee_nest", () -> new BlockItem(ModBlocks.NETHER_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> OAK_BEE_NEST_ITEM = NESTS_ITEMS.register("bee_nest", () -> new BlockItem(ModBlocks.OAK_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> PRISMARINE_BEE_NEST_ITEM = NESTS_ITEMS.register("prismarine_bee_nest", () -> new BlockItem(ModBlocks.PRISMARINE_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> PURPUR_BEE_NEST_ITEM = NESTS_ITEMS.register("purpur_bee_nest", () -> new BlockItem(ModBlocks.PURPUR_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> RED_MUSHROOM_NEST_ITEM = NESTS_ITEMS.register("red_mushroom_bee_nest", () -> new BlockItem(ModBlocks.RED_MUSHROOM_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> SPRUCE_BEE_NEST_ITEM = NESTS_ITEMS.register("spruce_bee_nest", () -> new BlockItem(ModBlocks.SPRUCE_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> WARPED_BEE_NEST_ITEM = NESTS_ITEMS.register("warped_bee_nest", () -> new BlockItem(ModBlocks.WARPED_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> WARPED_NYLIUM_BEE_NEST_ITEM = NESTS_ITEMS.register("warped_nylium_bee_nest", () -> new BlockItem(ModBlocks.WARPED_NYLIUM_BEE_NEST.get(), getNestProperties()));
-    public static final RegistryObject<Item> WITHER_BEE_NEST_ITEM = NESTS_ITEMS.register("wither_bee_nest", () -> new BlockItem(ModBlocks.WITHER_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> ACACIA_BEE_NEST_ITEM = T0_NEST_ITEMS.register("acacia_bee_nest", () -> new BlockItem(ModBlocks.ACACIA_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> BIRCH_BEE_NEST_ITEM = T0_NEST_ITEMS.register("birch_bee_nest", () -> new BlockItem(ModBlocks.BIRCH_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> BROWN_MUSHROOM_NEST_ITEM = T0_NEST_ITEMS.register("brown_mushroom_bee_nest", () -> new BlockItem(ModBlocks.BROWN_MUSHROOM_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> CRIMSON_BEE_NEST_ITEM = T0_NEST_ITEMS.register("crimson_bee_nest", () -> new BlockItem(ModBlocks.CRIMSON_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> CRIMSON_NYLIUM_BEE_NEST_ITEM = T0_NEST_ITEMS.register("crimson_nylium_bee_nest", () -> new BlockItem(ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> DARK_OAK_NEST_ITEM = T0_NEST_ITEMS.register("dark_oak_bee_nest", () -> new BlockItem(ModBlocks.DARK_OAK_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> GRASS_BEE_NEST_ITEM = T0_NEST_ITEMS.register("grass_bee_nest", () -> new BlockItem(ModBlocks.GRASS_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> JUNGLE_BEE_NEST_ITEM = T0_NEST_ITEMS.register("jungle_bee_nest", () -> new BlockItem(ModBlocks.JUNGLE_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> NETHER_BEE_NEST_ITEM = T0_NEST_ITEMS.register("nether_bee_nest", () -> new BlockItem(ModBlocks.NETHER_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> OAK_BEE_NEST_ITEM = T0_NEST_ITEMS.register("bee_nest", () -> new BlockItem(ModBlocks.OAK_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> PRISMARINE_BEE_NEST_ITEM = T0_NEST_ITEMS.register("prismarine_bee_nest", () -> new BlockItem(ModBlocks.PRISMARINE_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> PURPUR_BEE_NEST_ITEM = T0_NEST_ITEMS.register("purpur_bee_nest", () -> new BlockItem(ModBlocks.PURPUR_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> RED_MUSHROOM_NEST_ITEM = T0_NEST_ITEMS.register("red_mushroom_bee_nest", () -> new BlockItem(ModBlocks.RED_MUSHROOM_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> SPRUCE_BEE_NEST_ITEM = T0_NEST_ITEMS.register("spruce_bee_nest", () -> new BlockItem(ModBlocks.SPRUCE_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> WARPED_BEE_NEST_ITEM = T0_NEST_ITEMS.register("warped_bee_nest", () -> new BlockItem(ModBlocks.WARPED_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> WARPED_NYLIUM_BEE_NEST_ITEM = T0_NEST_ITEMS.register("warped_nylium_bee_nest", () -> new BlockItem(ModBlocks.WARPED_NYLIUM_BEE_NEST.get(), getNestProperties()));
+    public static final RegistryObject<Item> WITHER_BEE_NEST_ITEM = T0_NEST_ITEMS.register("wither_bee_nest", () -> new BlockItem(ModBlocks.WITHER_BEE_NEST.get(), getNestProperties()));
     //endregion
 
     //region T1 Hives
-    public static final RegistryObject<Item> T1_ACACIA_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_acacia_beehive", () -> new BlockItem(ModBlocks.T1_ACACIA_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_BIRCH_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_birch_beehive", () -> new BlockItem(ModBlocks.T1_BIRCH_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_BROWN_MUSHROOM_NEST_ITEM = NESTS_ITEMS.register("t1_brown_mushroom_beehive", () -> new BlockItem(ModBlocks.T1_BROWN_MUSHROOM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_CRIMSON_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_crimson_beehive", () -> new BlockItem(ModBlocks.T1_CRIMSON_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_CRIMSON_NYLIUM_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_crimson_nylium_beehive", () -> new BlockItem(ModBlocks.T1_CRIMSON_NYLIUM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_DARK_OAK_NEST_ITEM = NESTS_ITEMS.register("t1_dark_oak_beehive", () -> new BlockItem(ModBlocks.T1_DARK_OAK_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_GRASS_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_grass_beehive", () -> new BlockItem(ModBlocks.T1_GRASS_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_JUNGLE_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_jungle_beehive", () -> new BlockItem(ModBlocks.T1_JUNGLE_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_NETHER_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_nether_beehive", () -> new BlockItem(ModBlocks.T1_NETHER_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_OAK_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_bee_nest", () -> new BlockItem(ModBlocks.T1_OAK_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_PRISMARINE_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_prismarine_beehive", () -> new BlockItem(ModBlocks.T1_PRISMARINE_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_PURPUR_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_purpur_beehive", () -> new BlockItem(ModBlocks.T1_PURPUR_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_RED_MUSHROOM_NEST_ITEM = NESTS_ITEMS.register("t1_red_mushroom_beehive", () -> new BlockItem(ModBlocks.T1_RED_MUSHROOM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_SPRUCE_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_spruce_beehive", () -> new BlockItem(ModBlocks.T1_SPRUCE_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_WARPED_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_warped_beehive", () -> new BlockItem(ModBlocks.T1_WARPED_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_WARPED_NYLIUM_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_warped_nylium_beehive", () -> new BlockItem(ModBlocks.T1_WARPED_NYLIUM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T1_WITHER_BEEHIVE_ITEM = NESTS_ITEMS.register("t1_wither_beehive", () -> new BlockItem(ModBlocks.T1_WITHER_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_ACACIA_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_acacia_beehive", () -> new BlockItem(ModBlocks.T1_ACACIA_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_BIRCH_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_birch_beehive", () -> new BlockItem(ModBlocks.T1_BIRCH_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_BROWN_MUSHROOM_NEST_ITEM = T1_NEST_ITEMS.register("t1_brown_mushroom_beehive", () -> new BlockItem(ModBlocks.T1_BROWN_MUSHROOM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_CRIMSON_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_crimson_beehive", () -> new BlockItem(ModBlocks.T1_CRIMSON_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_CRIMSON_NYLIUM_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_crimson_nylium_beehive", () -> new BlockItem(ModBlocks.T1_CRIMSON_NYLIUM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_DARK_OAK_NEST_ITEM = T1_NEST_ITEMS.register("t1_dark_oak_beehive", () -> new BlockItem(ModBlocks.T1_DARK_OAK_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_GRASS_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_grass_beehive", () -> new BlockItem(ModBlocks.T1_GRASS_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_JUNGLE_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_jungle_beehive", () -> new BlockItem(ModBlocks.T1_JUNGLE_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_NETHER_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_nether_beehive", () -> new BlockItem(ModBlocks.T1_NETHER_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_OAK_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_bee_nest", () -> new BlockItem(ModBlocks.T1_OAK_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_PRISMARINE_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_prismarine_beehive", () -> new BlockItem(ModBlocks.T1_PRISMARINE_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_PURPUR_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_purpur_beehive", () -> new BlockItem(ModBlocks.T1_PURPUR_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_RED_MUSHROOM_NEST_ITEM = T1_NEST_ITEMS.register("t1_red_mushroom_beehive", () -> new BlockItem(ModBlocks.T1_RED_MUSHROOM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_SPRUCE_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_spruce_beehive", () -> new BlockItem(ModBlocks.T1_SPRUCE_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_WARPED_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_warped_beehive", () -> new BlockItem(ModBlocks.T1_WARPED_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_WARPED_NYLIUM_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_warped_nylium_beehive", () -> new BlockItem(ModBlocks.T1_WARPED_NYLIUM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T1_WITHER_BEEHIVE_ITEM = T1_NEST_ITEMS.register("t1_wither_beehive", () -> new BlockItem(ModBlocks.T1_WITHER_BEEHIVE.get(), getNestProperties()));
     //endregion
 
     //region T2 Hives
-    public static final RegistryObject<Item> T2_ACACIA_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_acacia_beehive", () -> new BlockItem(ModBlocks.T2_ACACIA_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_BIRCH_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_birch_beehive", () -> new BlockItem(ModBlocks.T2_BIRCH_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_BROWN_MUSHROOM_NEST_ITEM = NESTS_ITEMS.register("t2_brown_mushroom_beehive", () -> new BlockItem(ModBlocks.T2_BROWN_MUSHROOM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_CRIMSON_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_crimson_beehive", () -> new BlockItem(ModBlocks.T2_CRIMSON_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_CRIMSON_NYLIUM_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_crimson_nylium_beehive", () -> new BlockItem(ModBlocks.T2_CRIMSON_NYLIUM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_DARK_OAK_NEST_ITEM = NESTS_ITEMS.register("t2_dark_oak_beehive", () -> new BlockItem(ModBlocks.T2_DARK_OAK_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_GRASS_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_grass_beehive", () -> new BlockItem(ModBlocks.T2_GRASS_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_JUNGLE_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_jungle_beehive", () -> new BlockItem(ModBlocks.T2_JUNGLE_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_NETHER_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_nether_beehive", () -> new BlockItem(ModBlocks.T2_NETHER_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_OAK_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_bee_nest", () -> new BlockItem(ModBlocks.T2_OAK_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_PRISMARINE_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_prismarine_beehive", () -> new BlockItem(ModBlocks.T2_PRISMARINE_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_PURPUR_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_purpur_beehive", () -> new BlockItem(ModBlocks.T2_PURPUR_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_RED_MUSHROOM_NEST_ITEM = NESTS_ITEMS.register("t2_red_mushroom_beehive", () -> new BlockItem(ModBlocks.T2_RED_MUSHROOM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_SPRUCE_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_spruce_beehive", () -> new BlockItem(ModBlocks.T2_SPRUCE_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_WARPED_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_warped_beehive", () -> new BlockItem(ModBlocks.T2_WARPED_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_WARPED_NYLIUM_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_warped_nylium_beehive", () -> new BlockItem(ModBlocks.T2_WARPED_NYLIUM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T2_WITHER_BEEHIVE_ITEM = NESTS_ITEMS.register("t2_wither_beehive", () -> new BlockItem(ModBlocks.T2_WITHER_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_ACACIA_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_acacia_beehive", () -> new BlockItem(ModBlocks.T2_ACACIA_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_BIRCH_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_birch_beehive", () -> new BlockItem(ModBlocks.T2_BIRCH_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_BROWN_MUSHROOM_NEST_ITEM = T2_NEST_ITEMS.register("t2_brown_mushroom_beehive", () -> new BlockItem(ModBlocks.T2_BROWN_MUSHROOM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_CRIMSON_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_crimson_beehive", () -> new BlockItem(ModBlocks.T2_CRIMSON_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_CRIMSON_NYLIUM_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_crimson_nylium_beehive", () -> new BlockItem(ModBlocks.T2_CRIMSON_NYLIUM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_DARK_OAK_NEST_ITEM = T2_NEST_ITEMS.register("t2_dark_oak_beehive", () -> new BlockItem(ModBlocks.T2_DARK_OAK_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_GRASS_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_grass_beehive", () -> new BlockItem(ModBlocks.T2_GRASS_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_JUNGLE_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_jungle_beehive", () -> new BlockItem(ModBlocks.T2_JUNGLE_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_NETHER_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_nether_beehive", () -> new BlockItem(ModBlocks.T2_NETHER_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_OAK_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_bee_nest", () -> new BlockItem(ModBlocks.T2_OAK_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_PRISMARINE_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_prismarine_beehive", () -> new BlockItem(ModBlocks.T2_PRISMARINE_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_PURPUR_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_purpur_beehive", () -> new BlockItem(ModBlocks.T2_PURPUR_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_RED_MUSHROOM_NEST_ITEM = T2_NEST_ITEMS.register("t2_red_mushroom_beehive", () -> new BlockItem(ModBlocks.T2_RED_MUSHROOM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_SPRUCE_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_spruce_beehive", () -> new BlockItem(ModBlocks.T2_SPRUCE_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_WARPED_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_warped_beehive", () -> new BlockItem(ModBlocks.T2_WARPED_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_WARPED_NYLIUM_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_warped_nylium_beehive", () -> new BlockItem(ModBlocks.T2_WARPED_NYLIUM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T2_WITHER_BEEHIVE_ITEM = T2_NEST_ITEMS.register("t2_wither_beehive", () -> new BlockItem(ModBlocks.T2_WITHER_BEEHIVE.get(), getNestProperties()));
     //endregion
 
     //region T3 Hives
-    public static final RegistryObject<Item> T3_ACACIA_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_acacia_beehive", () -> new BlockItem(ModBlocks.T3_ACACIA_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_BIRCH_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_birch_beehive", () -> new BlockItem(ModBlocks.T3_BIRCH_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_BROWN_MUSHROOM_NEST_ITEM = NESTS_ITEMS.register("t3_brown_mushroom_beehive", () -> new BlockItem(ModBlocks.T3_BROWN_MUSHROOM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_CRIMSON_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_crimson_beehive", () -> new BlockItem(ModBlocks.T3_CRIMSON_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_CRIMSON_NYLIUM_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_crimson_nylium_beehive", () -> new BlockItem(ModBlocks.T3_CRIMSON_NYLIUM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_DARK_OAK_NEST_ITEM = NESTS_ITEMS.register("t3_dark_oak_beehive", () -> new BlockItem(ModBlocks.T3_DARK_OAK_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_GRASS_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_grass_beehive", () -> new BlockItem(ModBlocks.T3_GRASS_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_JUNGLE_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_jungle_beehive", () -> new BlockItem(ModBlocks.T3_JUNGLE_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_NETHER_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_nether_beehive", () -> new BlockItem(ModBlocks.T3_NETHER_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_OAK_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_bee_nest", () -> new BlockItem(ModBlocks.T3_OAK_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_PRISMARINE_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_prismarine_beehive", () -> new BlockItem(ModBlocks.T3_PRISMARINE_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_PURPUR_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_purpur_beehive", () -> new BlockItem(ModBlocks.T3_PURPUR_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_RED_MUSHROOM_NEST_ITEM = NESTS_ITEMS.register("t3_red_mushroom_beehive", () -> new BlockItem(ModBlocks.T3_RED_MUSHROOM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_SPRUCE_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_spruce_beehive", () -> new BlockItem(ModBlocks.T3_SPRUCE_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_WARPED_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_warped_beehive", () -> new BlockItem(ModBlocks.T3_WARPED_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_WARPED_NYLIUM_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_warped_nylium_beehive", () -> new BlockItem(ModBlocks.T3_WARPED_NYLIUM_BEEHIVE.get(), getNestProperties()));
-    public static final RegistryObject<Item> T3_WITHER_BEEHIVE_ITEM = NESTS_ITEMS.register("t3_wither_beehive", () -> new BlockItem(ModBlocks.T3_WITHER_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_ACACIA_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_acacia_beehive", () -> new BlockItem(ModBlocks.T3_ACACIA_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_BIRCH_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_birch_beehive", () -> new BlockItem(ModBlocks.T3_BIRCH_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_BROWN_MUSHROOM_NEST_ITEM = T3_NEST_ITEMS.register("t3_brown_mushroom_beehive", () -> new BlockItem(ModBlocks.T3_BROWN_MUSHROOM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_CRIMSON_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_crimson_beehive", () -> new BlockItem(ModBlocks.T3_CRIMSON_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_CRIMSON_NYLIUM_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_crimson_nylium_beehive", () -> new BlockItem(ModBlocks.T3_CRIMSON_NYLIUM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_DARK_OAK_NEST_ITEM = T3_NEST_ITEMS.register("t3_dark_oak_beehive", () -> new BlockItem(ModBlocks.T3_DARK_OAK_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_GRASS_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_grass_beehive", () -> new BlockItem(ModBlocks.T3_GRASS_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_JUNGLE_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_jungle_beehive", () -> new BlockItem(ModBlocks.T3_JUNGLE_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_NETHER_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_nether_beehive", () -> new BlockItem(ModBlocks.T3_NETHER_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_OAK_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_bee_nest", () -> new BlockItem(ModBlocks.T3_OAK_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_PRISMARINE_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_prismarine_beehive", () -> new BlockItem(ModBlocks.T3_PRISMARINE_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_PURPUR_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_purpur_beehive", () -> new BlockItem(ModBlocks.T3_PURPUR_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_RED_MUSHROOM_NEST_ITEM = T3_NEST_ITEMS.register("t3_red_mushroom_beehive", () -> new BlockItem(ModBlocks.T3_RED_MUSHROOM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_SPRUCE_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_spruce_beehive", () -> new BlockItem(ModBlocks.T3_SPRUCE_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_WARPED_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_warped_beehive", () -> new BlockItem(ModBlocks.T3_WARPED_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_WARPED_NYLIUM_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_warped_nylium_beehive", () -> new BlockItem(ModBlocks.T3_WARPED_NYLIUM_BEEHIVE.get(), getNestProperties()));
+    public static final RegistryObject<Item> T3_WITHER_BEEHIVE_ITEM = T3_NEST_ITEMS.register("t3_wither_beehive", () -> new BlockItem(ModBlocks.T3_WITHER_BEEHIVE.get(), getNestProperties()));
     //endregion
 
     public static final RegistryObject<Item> BEE_JAR = ITEMS.register("bee_jar", () -> new BeeJar(getItemProperties().durability(0).stacksTo(16)));

@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "resourcefulbees:t2_acacia_beehive",
+    "resourcefulbees:t2_birch_beehive",
+    "resourcefulbees:t2_brown_mushroom_beehive",
+    "resourcefulbees:t2_crimson_beehive",
+    "resourcefulbees:t2_crimson_nylium_beehive",
+    "resourcefulbees:t2_dark_oak_beehive",
+    "resourcefulbees:t2_grass_beehive",
+    "resourcefulbees:t2_jungle_beehive",
+    "resourcefulbees:t2_nether_beehive",
+    "resourcefulbees:t2_bee_nest",
+    "resourcefulbees:t2_prismarine_beehive",
+    "resourcefulbees:t2_purpur_beehive",
+    "resourcefulbees:t2_red_mushroom_beehive",
+    "resourcefulbees:t2_spruce_beehive",
+    "resourcefulbees:t2_warped_beehive",
+    "resourcefulbees:t2_warped_nylium_beehive",
+    "resourcefulbees:t2_wither_beehive"
+  ]
+}

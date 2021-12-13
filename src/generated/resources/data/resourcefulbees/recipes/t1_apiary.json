@@ -10,8 +10,7 @@
       "tag": "resourcefulbees:resourceful_honeycomb_block"
     },
     "S": {
-      "type": "resourcefulbees:nest",
-      "tier": 4
+      "tag": "resourcefulbees:t3_nests"
     },
     "M": {
       "item": "minecraft:nether_star"

@@ -9,15 +9,15 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public record LockBeeMessage(BlockPos pos, String beeType) {
+public record LockBeeMessage(BlockPos pos, int bee) {
 
     public static void encode(LockBeeMessage message, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(message.pos);
-        buffer.writeUtf(message.beeType);
+        buffer.writeInt(message.bee);
     }
 
     public static LockBeeMessage decode(FriendlyByteBuf buffer) {
-        return new LockBeeMessage(buffer.readBlockPos(), buffer.readUtf(100));
+        return new LockBeeMessage(buffer.readBlockPos(), buffer.readInt());
     }
 
     public static void handle(LockBeeMessage message, Supplier<NetworkEvent.Context> context) {
@@ -26,7 +26,7 @@ public record LockBeeMessage(BlockPos pos, String beeType) {
             if (player != null && player.level.isLoaded(message.pos)) {
                 BlockEntity tileEntity = player.level.getBlockEntity(message.pos);
                 if (tileEntity instanceof ApiaryTileEntity apiaryTileEntity) {
-                    apiaryTileEntity.lockOrUnlockBee(message.beeType);
+                    apiaryTileEntity.lockOrUnlockBee(message.bee);
                 }
             }
         });

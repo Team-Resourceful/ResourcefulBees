@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.mixin.accessors;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,5 +21,10 @@ public interface BeehiveEntityAccessor {
     @Invoker("tickOccupants")
     static void callTickOccupants(Level level, BlockPos blockPos, BlockState state, List<BeehiveBlockEntity.BeeData> beeDataList, @Nullable BlockPos savedFlowerPos) {
         throw new AssertionError("callTickOccupants mixin did not apply!");
+    }
+
+    @Invoker("removeIgnoredBeeTags")
+    static void callRemoveIgnoredBeeTags(CompoundTag tag) {
+        throw new AssertionError("callRemoveIgnoredBeeTags mixin did not apply!");
     }
 }

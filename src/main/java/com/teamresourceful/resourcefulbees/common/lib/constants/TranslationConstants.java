@@ -125,45 +125,6 @@ public class TranslationConstants {
 
     public static class Apiary {
 
-        @Translate("Bee import was unsuccessful!")
-        public static final TranslatableComponent IMPORT_FAILED = new TranslatableComponent("gui.resourcefulbees.apiary.import.false");
-
-        @Translate("Bee import was successful!")
-        public static final TranslatableComponent IMPORT_SUCCESS = new TranslatableComponent("gui.resourcefulbees.apiary.import.true");
-
-        @Translate("Bee export was unsuccessful!")
-        public static final TranslatableComponent EXPORT_FAILED = new TranslatableComponent("gui.resourcefulbees.apiary.export.false");
-
-        @Translate("Bee export was successful!")
-        public static final TranslatableComponent EXPORT_SUCCESS = new TranslatableComponent("gui.resourcefulbees.apiary.export.true");
-
-        @Translate("Apiary validation successful!")
-        public static final TranslatableComponent VALIDATED_SUCCESS = new TranslatableComponent("gui.resourcefulbees.apiary.validated.true");
-
-        @Translate("Apiary validation unsuccessful!")
-        public static final TranslatableComponent VALIDATED_FAILED = new TranslatableComponent("gui.resourcefulbees.apiary.validated.false");
-
-        @Translate("Multiblock is a 7x6x7 hollow box.")
-        public static final TranslatableComponent STRUCTURE_SIZE = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.structure_size");
-
-        @Translate("Requires Apiary Storage to validate.")
-        public static final TranslatableComponent REQUISITES = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.requisites");
-
-        @Translate("Retains contents when broken.")
-        public static final TranslatableComponent DROPS = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.drops");
-
-        @Translate("Multiblock can be built using any block from the valid_apiary tag.")
-        public static final TranslatableComponent TAGS = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.tags");
-
-        @Translate("Offset determines the location of the Apiary Block based on its facing direction.")
-        public static final TranslatableComponent OFFSET = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.offset");
-
-        @Translate("Bees are locked on import.")
-        public static final TranslatableComponent LOCK = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.lock");
-
-        @Translate("Bees must be locked and selected to export.")
-        public static final TranslatableComponent LOCK2 = new TranslatableComponent("block.resourcefulbees.apiary.tooltip.lock_2");
-
         @Translate("Honeycomb")
         public static final TranslatableComponent HONEYCOMB = new TranslatableComponent("item.resourcefulbees.tooltip.honeycomb");
 
@@ -175,33 +136,6 @@ public class TranslationConstants {
 
         @Translate("Output Type: %s")
         public static final String OUTPUT_TYPE = "block.resourcefulbees.apiary.tooltip.output_type";
-
-        @Translate("Bee Import/Export")
-        public static final TranslatableComponent MAIN_SCREEN = new TranslatableComponent("gui.resourcefulbees.apiary.button.main_screen");
-
-        @Translate("Apiary Storage")
-        public static final TranslatableComponent STORAGE_SCREEN = new TranslatableComponent("gui.resourcefulbees.apiary.button.storage_screen");
-
-        @Translate("Validate")
-        public static final TranslatableComponent VALIDATE_BUTTON = new TranslatableComponent("gui.resourcefulbees.apiary.button.validate");
-
-        @Translate("Build")
-        public static final TranslatableComponent BUILD_BUTTON = new TranslatableComponent("gui.resourcefulbees.apiary.button.build");
-
-        @Translate("Creative Mode Only!")
-        public static final TranslatableComponent CREATIVE_BUILD_BUTTON = new TranslatableComponent("gui.resourcefulbees.apiary.button.build.creative");
-
-        @Translate("Disable Preview")
-        public static final TranslatableComponent PREVIEW_DISABLED = new TranslatableComponent("gui.resourcefulbees.apiary.button.preview.disable");
-
-        @Translate("Enable Preview")
-        public static final TranslatableComponent PREVIEW_ENABLED = new TranslatableComponent("gui.resourcefulbees.apiary.button.preview.enable");
-
-        @Translate("Import")
-        public static final TranslatableComponent IMPORT = new TranslatableComponent("gui.resourcefulbees.apiary.button.import");
-
-        @Translate("Export")
-        public static final TranslatableComponent EXPORT = new TranslatableComponent("gui.resourcefulbees.apiary.button.export");
 
         @Translate("Ticks in Hive: %s")
         public static final String TICKS_HIVE = "gui.resourcefulbees.apiary.bee.ticks_in_hive";
@@ -233,6 +167,8 @@ public class TranslationConstants {
 
     public static class Guis {
 
+        public static final TranslatableComponent INVENTORY = new TranslatableComponent("container.inventory");
+
         @Translate("Ender Beecon")
         public static final TranslatableComponent BEECON = new TranslatableComponent("gui.resourcefulbees.ender_beecon");
 
@@ -250,9 +186,6 @@ public class TranslationConstants {
 
         @Translate("Apiary Breeder")
         public static final TranslatableComponent APIARY_BREEDER = new TranslatableComponent("gui.resourcefulbees.apiary_breeder");
-
-        @Translate("Apiary Storage")
-        public static final TranslatableComponent APIARY_STORAGE = new TranslatableComponent("gui.resourcefulbees.apiary_storage");
 
         @Translate("Empty")
         public static final TranslatableComponent NO_FLUID = new TranslatableComponent("gui.resourcefulbees.fluids.empty");

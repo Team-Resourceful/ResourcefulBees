@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
-import com.teamresourceful.resourcefulbees.common.recipe.NestIngredient;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -53,7 +52,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(hasGoldStorage).save(recipes);
         //endregion
         //region Apiary Blocks
-        RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), NestIngredient.ofTier(4), ModItems.T1_APIARY_ITEM.get())
+        RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(ModTags.Items.T3_NESTS), ModItems.T1_APIARY_ITEM.get())
                 .unlockedBy(hasHoneycombBlock).save(recipes);
         RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(ModItems.T1_APIARY_ITEM.get()), ModItems.T2_APIARY_ITEM.get())
                 .unlockedBy(hasHoneycombBlock).save(recipes);

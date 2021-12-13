@@ -57,7 +57,7 @@ public abstract class MixinEnterBeehiveGoal {
                 if (tileentity instanceof BeehiveBlockEntity hive) {
                     hive.addOccupant(this$0, this$0.hasNectar());
                 } else if (tileentity instanceof ApiaryTileEntity apiary) {
-                    apiary.tryEnterHive(this$0, this$0.hasNectar(), false);
+                    apiary.tryEnterHive(this$0, this$0.hasNectar(), 0);
                 }
             }
         }

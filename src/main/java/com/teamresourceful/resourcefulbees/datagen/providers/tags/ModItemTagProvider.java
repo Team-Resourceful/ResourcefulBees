@@ -25,7 +25,14 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.HONEYCOMB).add(Items.HONEYCOMB);
         tag(ModTags.Items.HONEYCOMB_BLOCK).add(Items.HONEYCOMB_BLOCK);
         TagAppender<Item> hiveBuilder = tag(ModTags.Items.BEEHIVES).add(Items.BEEHIVE).add(Items.BEE_NEST);
-        ModItems.NESTS_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(hiveBuilder::add);
+        TagAppender<Item> t0Nests = tag(ModTags.Items.T0_NESTS);
+        TagAppender<Item> t1Nests = tag(ModTags.Items.T1_NESTS);
+        TagAppender<Item> t2Nests = tag(ModTags.Items.T2_NESTS);
+        TagAppender<Item> t3Nests = tag(ModTags.Items.T3_NESTS);
+        ModItems.T0_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t0Nests));
+        ModItems.T1_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t1Nests));
+        ModItems.T2_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t2Nests));
+        ModItems.T3_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t3Nests));
         tag(ItemTags.SMALL_FLOWERS).add(ModItems.GOLD_FLOWER_ITEM.get());
         tag(ModTags.Items.WAX).add(ModItems.WAX.get());
         tag(ModTags.Items.WAX_BLOCK).add(ModItems.WAX_BLOCK_ITEM.get());
@@ -34,6 +41,11 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.SHEARS).add(Items.SHEARS);
         tag(ModTags.Items.MUSHROOM).add(Items.RED_MUSHROOM).add(Items.BROWN_MUSHROOM);
         tag(ModTags.Items.HONEY_BOTTLES).add(Items.HONEY_BOTTLE);
+    }
+
+    @SafeVarargs
+    private void addToBuilders(Item item, TagAppender<Item>... appenders) {
+        for (TagAppender<Item> appender : appenders) {appender.add(item);}
     }
 
     @Override

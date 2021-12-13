@@ -411,7 +411,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                     if (blockEntity instanceof BeehiveBlockEntity beehiveBlockEntity) {
                         beehiveBlockEntity.addOccupant(ResourcefulBee.this, ResourcefulBee.this.hasNectar());
                     } else if (blockEntity instanceof ApiaryTileEntity apiaryTileEntity) {
-                        apiaryTileEntity.tryEnterHive(ResourcefulBee.this, ResourcefulBee.this.hasNectar(), false);
+                        apiaryTileEntity.tryEnterHive(ResourcefulBee.this, ResourcefulBee.this.hasNectar(), 0);
                     }
                 }
             }

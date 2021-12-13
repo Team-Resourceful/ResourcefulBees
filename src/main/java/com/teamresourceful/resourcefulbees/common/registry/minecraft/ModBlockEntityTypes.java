@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.*;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.tileentity.*;
@@ -76,179 +77,179 @@ public class ModBlockEntityTypes {
     //endregion
 
     //region T1 Hives
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_ACACIA_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_acacia_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_ACACIA_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_acacia_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_ACACIA_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_ACACIA_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_BIRCH_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_birch_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_BIRCH_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_birch_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_BIRCH_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_BIRCH_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_BROWN_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_brown_mushroom_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_BROWN_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_brown_mushroom_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_BROWN_MUSHROOM_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_BROWN_MUSHROOM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_CRIMSON_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_crimson_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_CRIMSON_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_crimson_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_CRIMSON_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_CRIMSON_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_CRIMSON_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_crimson_nylium_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_CRIMSON_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_crimson_nylium_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_CRIMSON_NYLIUM_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_CRIMSON_NYLIUM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_DARK_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_dark_oak_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_DARK_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_dark_oak_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_DARK_OAK_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_DARK_OAK_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_GRASS_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_grass_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_GRASS_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_grass_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_GRASS_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_GRASS_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_JUNGLE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_jungle_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_JUNGLE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_jungle_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_JUNGLE_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_JUNGLE_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_NETHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_nether_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_NETHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_nether_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_NETHER_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_NETHER_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_oak_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_oak_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_OAK_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_OAK_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_PRISMARINE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_prismarine_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_PRISMARINE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_prismarine_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_PRISMARINE_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_PRISMARINE_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_PURPUR_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_purpur_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_PURPUR_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_purpur_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_PURPUR_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_PURPUR_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_RED_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_red_mushroom_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_RED_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_red_mushroom_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_RED_MUSHROOM_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_RED_MUSHROOM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_SPRUCE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_spruce_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_SPRUCE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_spruce_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_SPRUCE_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_SPRUCE_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_WARPED_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_warped_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_WARPED_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_warped_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_WARPED_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_WARPED_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_WARPED_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_warped_nylium_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_WARPED_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_warped_nylium_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_WARPED_NYLIUM_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_WARPED_NYLIUM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_WITHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_wither_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T1_WITHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t1_wither_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T1_WITHER_BEEHIVE_ENTITY, pos, state), ModBlocks.T1_WITHER_BEEHIVE.get())
             .build(null));
     //endregion
 
     //region T2 Hives
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_ACACIA_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_acacia_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_ACACIA_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_acacia_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_ACACIA_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_ACACIA_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_BIRCH_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_birch_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_BIRCH_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_birch_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_BIRCH_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_BIRCH_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_BROWN_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_brown_mushroom_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_BROWN_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_brown_mushroom_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_BROWN_MUSHROOM_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_BROWN_MUSHROOM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_CRIMSON_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_crimson_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_CRIMSON_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_crimson_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_CRIMSON_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_CRIMSON_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_CRIMSON_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_crimson_nylium_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_CRIMSON_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_crimson_nylium_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_CRIMSON_NYLIUM_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_CRIMSON_NYLIUM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_DARK_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_dark_oak_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_DARK_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_dark_oak_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_DARK_OAK_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_DARK_OAK_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_GRASS_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_grass_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_GRASS_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_grass_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_GRASS_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_GRASS_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_JUNGLE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_jungle_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_JUNGLE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_jungle_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_JUNGLE_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_JUNGLE_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_NETHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_nether_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_NETHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_nether_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_NETHER_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_NETHER_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_oak_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_oak_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_OAK_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_OAK_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_PRISMARINE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_prismarine_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_PRISMARINE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_prismarine_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_PRISMARINE_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_PRISMARINE_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_PURPUR_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_purpur_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_PURPUR_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_purpur_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_PURPUR_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_PURPUR_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_RED_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_red_mushroom_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_RED_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_red_mushroom_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_RED_MUSHROOM_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_RED_MUSHROOM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_SPRUCE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_spruce_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_SPRUCE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_spruce_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_SPRUCE_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_SPRUCE_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_WARPED_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_warped_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_WARPED_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_warped_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_WARPED_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_WARPED_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_WARPED_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_warped_nylium_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_WARPED_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_warped_nylium_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_WARPED_NYLIUM_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_WARPED_NYLIUM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_WITHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_wither_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T2_WITHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t2_wither_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T2_WITHER_BEEHIVE_ENTITY, pos, state), ModBlocks.T2_WITHER_BEEHIVE.get())
             .build(null));
     //endregion
 
     //region T3 Hives
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_ACACIA_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_acacia_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_ACACIA_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_acacia_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_ACACIA_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_ACACIA_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_BIRCH_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_birch_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_BIRCH_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_birch_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_BIRCH_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_BIRCH_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_BROWN_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_brown_mushroom_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_BROWN_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_brown_mushroom_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_BROWN_MUSHROOM_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_BROWN_MUSHROOM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_CRIMSON_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_crimson_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_CRIMSON_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_crimson_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_CRIMSON_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_CRIMSON_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_CRIMSON_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_crimson_nylium_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_CRIMSON_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_crimson_nylium_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_CRIMSON_NYLIUM_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_CRIMSON_NYLIUM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_DARK_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_dark_oak_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_DARK_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_dark_oak_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_DARK_OAK_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_DARK_OAK_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_GRASS_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_grass_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_GRASS_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_grass_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_GRASS_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_GRASS_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_JUNGLE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_jungle_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_JUNGLE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_jungle_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_JUNGLE_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_JUNGLE_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_NETHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_nether_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_NETHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_nether_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_NETHER_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_NETHER_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_oak_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_OAK_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_oak_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_OAK_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_OAK_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_PRISMARINE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_prismarine_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_PRISMARINE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_prismarine_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_PRISMARINE_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_PRISMARINE_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_PURPUR_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_purpur_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_PURPUR_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_purpur_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_PURPUR_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_PURPUR_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_RED_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_red_mushroom_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_RED_MUSHROOM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_red_mushroom_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_RED_MUSHROOM_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_RED_MUSHROOM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_SPRUCE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_spruce_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_SPRUCE_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_spruce_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_SPRUCE_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_SPRUCE_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_WARPED_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_warped_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_WARPED_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_warped_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_WARPED_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_WARPED_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_WARPED_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_warped_nylium_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_WARPED_NYLIUM_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_warped_nylium_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_WARPED_NYLIUM_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_WARPED_NYLIUM_BEEHIVE.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_WITHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_wither_beehive", () -> BlockEntityType.Builder
+    public static final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> T3_WITHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("t3_wither_nest", () -> BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveTileEntity(ModBlockEntityTypes.T3_WITHER_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_WITHER_BEEHIVE.get())
             .build(null));
     //endregion
 
     //region Apiaries
-    public static final RegistryObject<BlockEntityType<ApiaryTileEntity>> T1_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t1_apiary", () -> BlockEntityType.Builder
-            .of(ApiaryTileEntity::new, ModBlocks.T1_APIARY_BLOCK.get())
+    public static final RegistryObject<BlockEntityType<? extends ApiaryTileEntity>> T1_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t1_apiary", () -> BlockEntityType.Builder
+            .of((pos, state) -> new ApiaryTileEntity(ApiaryTier.T1_APIARY, pos, state), ModBlocks.T1_APIARY_BLOCK.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<ApiaryTileEntity>> T2_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t2_apiary", () -> BlockEntityType.Builder
-            .of(ApiaryTileEntity::new, ModBlocks.T2_APIARY_BLOCK.get())
+    public static final RegistryObject<BlockEntityType<? extends ApiaryTileEntity>> T2_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t2_apiary", () -> BlockEntityType.Builder
+            .of((pos, state) -> new ApiaryTileEntity(ApiaryTier.T2_APIARY, pos, state), ModBlocks.T2_APIARY_BLOCK.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<ApiaryTileEntity>> T3_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t3_apiary", () -> BlockEntityType.Builder
-            .of(ApiaryTileEntity::new, ModBlocks.T3_APIARY_BLOCK.get())
+    public static final RegistryObject<BlockEntityType<? extends ApiaryTileEntity>> T3_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t3_apiary", () -> BlockEntityType.Builder
+            .of((pos, state) -> new ApiaryTileEntity(ApiaryTier.T3_APIARY, pos, state), ModBlocks.T3_APIARY_BLOCK.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<ApiaryTileEntity>> T4_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t4_apiary", () -> BlockEntityType.Builder
-            .of(ApiaryTileEntity::new, ModBlocks.T4_APIARY_BLOCK.get())
+    public static final RegistryObject<BlockEntityType<? extends ApiaryTileEntity>> T4_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t4_apiary", () -> BlockEntityType.Builder
+            .of((pos, state) -> new ApiaryTileEntity(ApiaryTier.T4_APIARY, pos, state), ModBlocks.T4_APIARY_BLOCK.get())
             .build(null));
     //endregion
 
@@ -257,9 +258,6 @@ public class ModBlockEntityTypes {
             .build(null));
     public static final RegistryObject<BlockEntityType<CreativeGenTileEntity>> CREATIVE_GEN_ENTITY = BLOCK_ENTITY_TYPES.register("creative_gen", () -> BlockEntityType.Builder
             .of(CreativeGenTileEntity::new, ModBlocks.CREATIVE_GEN.get())
-            .build(null));
-    public static final RegistryObject<BlockEntityType<ApiaryTileEntity>> APIARY_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("apiary", () -> BlockEntityType.Builder
-            .of(ApiaryTileEntity::new, ModBlocks.T1_APIARY_BLOCK.get(), ModBlocks.T2_APIARY_BLOCK.get(), ModBlocks.T3_APIARY_BLOCK.get(), ModBlocks.T4_APIARY_BLOCK.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<ApiaryBreederTileEntity>> APIARY_BREEDER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("apiary_breeder", () -> BlockEntityType.Builder
             .of(ApiaryBreederTileEntity::new, ModBlocks.APIARY_BREEDER_BLOCK.get())

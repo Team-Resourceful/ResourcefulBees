@@ -24,6 +24,12 @@ public class ModTags {
         public static final Tag.Named<Item> WAX_BLOCK = createItemTag(ForgeVersion.MOD_ID, "storage_blocks/wax");
         public static final Tag.Named<Item> SHEARS = createItemTag(ForgeVersion.MOD_ID, "shears");
         public static final Tag.Named<Item> BEEHIVES = createItemTag("minecraft", "beehives");
+
+        public static final Tag.Named<Item> T0_NESTS = createItemTag(ResourcefulBees.MOD_ID, "t0_nests");
+        public static final Tag.Named<Item> T1_NESTS = createItemTag(ResourcefulBees.MOD_ID, "t1_nests");
+        public static final Tag.Named<Item> T2_NESTS = createItemTag(ResourcefulBees.MOD_ID, "t2_nests");
+        public static final Tag.Named<Item> T3_NESTS = createItemTag(ResourcefulBees.MOD_ID, "t3_nests");
+
         public static final Tag.Named<Item> MUSHROOM = createItemTag(ForgeVersion.MOD_ID, "mushrooms");
         public static final Tag.Named<Item> HONEY_BOTTLES = createItemTag(ForgeVersion.MOD_ID, "honey_bottle");
 

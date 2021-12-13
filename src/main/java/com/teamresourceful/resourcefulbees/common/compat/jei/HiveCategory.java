@@ -7,6 +7,8 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -36,17 +38,15 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     public static final ResourceLocation HIVE_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/honeycomb.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
 
-    protected static final List<ItemStack> NESTS_0 = ModItems.NESTS_ITEMS.getEntries().stream()
+    protected static final List<ItemStack> NESTS_0 = ModItems.T0_NEST_ITEMS.getEntries().stream()
             .filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).collect(Collectors.toList());
-
-    private static final List<ItemStack> NESTS_1 = NESTS_0.stream().map(stack -> getNestWithTier(stack, 1, 1f)).collect(Collectors.toList());
-    private static final List<ItemStack> NESTS_2 = NESTS_0.stream().map(stack -> getNestWithTier(stack, 2, 1.5f)).collect(Collectors.toList());
-    private static final List<ItemStack> NESTS_3 = NESTS_0.stream().map(stack -> getNestWithTier(stack, 3, 2f)).collect(Collectors.toList());
-    private static final List<ItemStack> NESTS_4 = NESTS_0.stream().map(stack -> getNestWithTier(stack, 4, 4f)).collect(Collectors.toList());
-
-    private static final List<List<ItemStack>> NESTS = Lists.newArrayList(NESTS_0, NESTS_1, NESTS_2, NESTS_3, NESTS_4);
-    private static final List<ItemStack> APIARIES = Lists.newArrayList(ModItems.T1_APIARY_ITEM.get().getDefaultInstance(), ModItems.T2_APIARY_ITEM.get().getDefaultInstance(), ModItems.T3_APIARY_ITEM.get().getDefaultInstance(), ModItems.T4_APIARY_ITEM.get().getDefaultInstance());
-
+    private static final List<ItemStack> NESTS_1 = ModItems.T1_NEST_ITEMS.getEntries().stream()
+            .filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).collect(Collectors.toList());
+    private static final List<ItemStack> NESTS_2 = ModItems.T2_NEST_ITEMS.getEntries().stream()
+            .filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).collect(Collectors.toList());
+    private static final List<ItemStack> NESTS_3 = ModItems.T3_NEST_ITEMS.getEntries().stream()
+            .filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).collect(Collectors.toList());
+    private static final List<List<ItemStack>> NESTS = Lists.newArrayList(NESTS_0, NESTS_1, NESTS_2, NESTS_3);
 
     private final IDrawable hiveBackground;
     private final IDrawable apiaryBackground;
@@ -64,16 +64,26 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
     public static List<Recipe> getHoneycombRecipes() {
         List<Recipe> recipes = BeeRegistry.getRegistry().getBees().values().stream().flatMap(HiveCategory::createRecipes).collect(Collectors.toList());
-        for (int i = 0; i < 5; i++) recipes.add(new Recipe(Items.HONEYCOMB.getDefaultInstance(), NESTS.get(i), EntityType.BEE, false));
-        //for (int i = 0; i < 4; i++) recipes.add(new Recipe(ApiaryStorageTileEntity.getVanillaOutput(i), APIARIES.get(i), EntityType.BEE, true));
+        for (int i = 0; i < 4; i++) recipes.add(new Recipe(Items.HONEYCOMB.getDefaultInstance(), NESTS.get(i), EntityType.BEE, false));
+        for (ApiaryTier tier : ApiaryTier.values()) {
+            int outputCount = tier.getOutputAmount();
+            if (outputCount > 0) {
+                ItemStack output = new ItemStack(tier.getOutputType().equals(ApiaryOutputType.COMB) ? Items.HONEYCOMB : Items.HONEYCOMB_BLOCK, outputCount);
+                recipes.add(new Recipe(output, tier.getItem().getDefaultInstance(), EntityType.BEE, true));
+            }
+        }
         return recipes;
     }
 
     private static Stream<Recipe> createRecipes(CustomBeeData beeData){
         List<Recipe> recipes = new ArrayList<>();
         beeData.getHoneycombData().ifPresent(honeycombData -> {
-            for (int i = 0; i < 5; i++) recipes.add(new Recipe(honeycombData.getHiveOutput(i), NESTS.get(i), beeData.getEntityType(), false));
-            for (int i = 0; i < 4; i++) recipes.add(new Recipe(honeycombData.getApiaryOutput(i), APIARIES.get(i), beeData.getEntityType(), true));
+            for (int i = 0; i < 4; i++) recipes.add(new Recipe(honeycombData.getHiveOutput(i), NESTS.get(i), beeData.getEntityType(), false));
+            for (ApiaryTier tier : ApiaryTier.values()) {
+                if (tier.getOutputAmount() > 0) {
+                    recipes.add(new Recipe(honeycombData.getApiaryOutput(tier.ordinal()-1), tier.getItem().getDefaultInstance(), beeData.getEntityType(), true));
+                }
+            }
         });
         return recipes.stream();
     }

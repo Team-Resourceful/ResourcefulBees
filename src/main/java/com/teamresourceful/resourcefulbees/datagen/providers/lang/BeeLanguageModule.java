@@ -34,7 +34,7 @@ public class BeeLanguageModule extends LanguageModule {
         provider.addBee("warped_fungus", "Warped Fungus");
         provider.addBee("yeti", "Yeti");
         provider.add(LangGeneration.ITEM_RESOURCEFULBEES+"rgbee_bee_spawn_egg", "RGBee Spawn Egg");
-        provider.add(LangGeneration.ITEM_RESOURCEFULBEES+"rgbee_bee", "RGBee");
+        provider.add(LangGeneration.ENTITY_RESOURCEFULBEES+"rgbee_bee", "RGBee");
         provider.addHoney("catnip", "Catnip", true, true);
         provider.addHoney("rainbow", "Rainbow", true, true);
         provider.add("fluid.resourcefulbees.honey", "Honey");

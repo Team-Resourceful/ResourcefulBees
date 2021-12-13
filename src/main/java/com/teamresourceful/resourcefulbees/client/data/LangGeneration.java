@@ -24,6 +24,7 @@ public class LangGeneration {
 
     public static final String ITEM_RESOURCEFULBEES = "item.resourcefulbees.";
     public static final String BLOCK_RESOURCEFULBEES = "block.resourcefulbees.";
+    public static final String ENTITY_RESOURCEFULBEES = "entity.resourcefulbees.";
 
     private LangGeneration() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -38,7 +39,7 @@ public class LangGeneration {
             String name = customBeeData.getCoreData().getName();
             String displayName = WordUtils.capitalizeFully(StringUtils.replace(name, "_", " "));
             //entity
-            generateLangEntry(builder, "entity.resourcefulbees.", name, "_bee", displayName, "Bee");
+            generateLangEntry(builder, ENTITY_RESOURCEFULBEES, name, "_bee", displayName, "Bee");
 
         }));
 
