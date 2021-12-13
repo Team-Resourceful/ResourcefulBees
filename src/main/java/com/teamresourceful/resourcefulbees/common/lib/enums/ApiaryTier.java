@@ -9,26 +9,26 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public enum BeehiveTier implements IExtensibleEnum, StringRepresentable {
+public enum ApiaryTier implements IExtensibleEnum, StringRepresentable {
     //TODO Balance these numbers against the apiary
     //TODO Also determine a better naming scheme
-    ERROR("error", 0, 0, 0), //WTF
-    NEST("nest", 2, 4, 2.0), //nest
-    T1_HIVE("t1_hive", 4, 8, 1.3), //normal
-    T2_HIVE("t2_hive", 6, 16, 1.2), //T2
-    T3_HIVE("t3_hive", 8, 32, 1.0); //T3
+    ERROR("error", 0, 0), //WTF
+    T1_APIARY("t1_apiary", 8, 0.8),
+    T2_APIARY("t2_apiary", 12, 0.7),
+    T3_APIARY("t3_apiary", 16, 0.6),
+    T4_APIARY("t4_apiary", 20, 0.5);
 
-    public static final Codec<BeehiveTier> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(BeehiveTier::values, BeehiveTier::byName);
-    private static final Map<String, BeehiveTier> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(BeehiveTier::getName, tier -> tier));
+    public static final Codec<ApiaryTier> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(ApiaryTier::values, ApiaryTier::byName);
+    private static final Map<String, ApiaryTier> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(ApiaryTier::getName, tier -> tier));
     private final String name;
     private final int maxBees;
-    private final int maxCombs;
+    //private final int maxCombs; //Not sure if we'll keep this
     private final double timeModifier;
 
-    BeehiveTier(String name, int maxBees, int maxCombs, double timeModifier) {
+    ApiaryTier(String name, int maxBees, /*int maxCombs,*/ double timeModifier) {
         this.name = name;
         this.maxBees = maxBees;
-        this.maxCombs = maxCombs;
+        //this.maxCombs = maxCombs;
         this.timeModifier = timeModifier;
     }
 
@@ -40,20 +40,20 @@ public enum BeehiveTier implements IExtensibleEnum, StringRepresentable {
         return maxBees;
     }
 
-    public int getMaxCombs() {
+    /*public int getMaxCombs() {
         return maxCombs;
-    }
+    }*/
 
     public double getTimeModifier() {
         return timeModifier;
     }
 
-    public static BeehiveTier byName(String s) {
+    public static ApiaryTier byName(String s) {
         return BY_NAME.get(s);
     }
 
     @SuppressWarnings("unused")
-    public static BeehiveTier create(String name, String id, int maxBees, int maxCombs, double timeModifier) {
+    public static ApiaryTier create(String name, String id, int maxBees, int maxCombs, double timeModifier) {
         throw new IllegalStateException("Enum not extended");
     }
 
