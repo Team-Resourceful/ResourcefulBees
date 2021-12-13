@@ -170,7 +170,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
 
     @Override
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
-        if (getCombatData().isInvulnerable()) return true;
+        if (getCombatData().isInvulnerable() && !source.equals(DamageSource.OUT_OF_WORLD)) return true;
 
         TraitData info = getTraitData();
         if (hasEffect(MobEffects.WATER_BREATHING) && source == DamageSource.DROWN) {
