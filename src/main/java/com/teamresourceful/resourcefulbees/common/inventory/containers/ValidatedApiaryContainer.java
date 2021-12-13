@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.inventory.containers;
 
+import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.LockBeeMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
@@ -25,6 +26,14 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
         this.pos = pos;
         this.apiaryTileEntity = (ApiaryTileEntity) world.getBlockEntity(pos);
 
+        if (apiaryTileEntity != null) {
+            for (int i = 0; i < 3; ++i) {
+                for (int j = 0; j < 9; ++j) {
+                    this.addSlot(new OutputSlot(apiaryTileEntity.getInventory(), j + i * 9, 56 + j * 18, 18 + i * 18));
+                }
+            }
+        }
+
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(inv, j + i * 9 + 9, 56 + j * 18, 86 + i * 18));
@@ -34,8 +43,6 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inv, k, 56 + k * 18, 144));
         }
-
-
     }
 
     @Override
@@ -43,28 +50,19 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
         return true;
     }
 
-    //TODO is this an artifact left over from the unstash? - oreo
-/*    @Override
-    public void removed(@NotNull PlayerEntity playerIn) {
-        World world = this.getApiaryTileEntity().getLevel();
-        if (world != null && !world.isClientSide)
-            this.getApiaryTileEntity().setNumPlayersUsing(this.getApiaryTileEntity().getNumPlayersUsing() - 1);
-        super.removed(playerIn);
-    }*/
-
     @Override
     public int getContainerInputEnd() {
-        return 2;
+        return 27;
     }
 
     @Override
     public int getInventoryStart() {
-        return 3;
+        return 27;
     }
 
     @Override
     public int getContainerInputStart() {
-        return 0;
+        return 27;
     }
 
     public boolean lockOrUnlockBee(int id) {

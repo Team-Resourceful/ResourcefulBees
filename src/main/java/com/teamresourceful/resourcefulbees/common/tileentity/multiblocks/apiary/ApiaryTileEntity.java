@@ -2,7 +2,10 @@ package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary
 
 
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
+import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
+import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.ValidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -32,6 +35,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -39,13 +44,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
+import static com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler.ACCEPT_FALSE;
+import static com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler.REMOVE_TRUE;
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 
 public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISyncableGUI {
@@ -53,6 +61,9 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISync
     public final List<ApiaryBee> bees = new ArrayList<>();
     protected ApiaryTier tier;
     protected int ticksSinceBeesFlagged;
+
+    private final AutomationSensitiveItemStackHandler inventory = new AutomationSensitiveItemStackHandler(27, ACCEPT_FALSE, REMOVE_TRUE);
+    private final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> inventory);
 
     public ApiaryTileEntity(ApiaryTier tier, BlockPos pos, BlockState state) {
         super(tier.getBlockEntityType(), pos, state);
@@ -78,29 +89,51 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISync
             if (EntityType.loadEntityRecursive(nbt, this.level, entity1 -> entity1) instanceof Bee bee) {
                 BeeInfoUtils.setEntityLocationAndAngle(blockPos, direction, bee);
                 deliverNectar(nbt, bee);
-                this.ageBee(apiaryBee.getTicksInHive(), bee);
-                releaseBee(bee, this.level);
+                BeeInfoUtils.ageBee(apiaryBee.getTicksInHive(), bee);
+                level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.addFreshEntity(bee);
             }
             return true;
         }
         return false;
     }
 
-    private void releaseBee(Bee vanillaBeeEntity, Level level) {
-        BlockPos hivePos = this.getBlockPos();
-        level.playSound(null, hivePos.getX(), hivePos.getY(), hivePos.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
-        level.addFreshEntity(vanillaBeeEntity);
-    }
-
-    private void deliverNectar(CompoundTag nbt, Bee vanillaBeeEntity) {
+    private void deliverNectar(CompoundTag nbt, Bee bee) {
         if (nbt.getBoolean("HasNectar")) {
-            vanillaBeeEntity.dropOffNectar();
-            //TODO DEPOSIT COMB
+            bee.dropOffNectar();
+            ItemHandlerHelper.insertItem(inventory, getStackFromBee(bee), false);
+            ItemStack stack = getStackFromBee(bee);
+            for (int i = 0; i < inventory.getSlots() && !stack.isEmpty(); i++) { stack = insertItem(i, stack); }
         }
     }
 
-    private void ageBee(int ticksInHive, Bee beeEntity) {
-        BeeInfoUtils.ageBee(ticksInHive, beeEntity);
+    private ItemStack insertItem(int slot, ItemStack stack) {
+        if (stack.isEmpty()) return ItemStack.EMPTY;
+
+        ItemStack existing = inventory.getStackInSlot(slot);
+        int limit = Math.min(64, stack.getMaxStackSize());
+
+        if (!existing.isEmpty()) {
+            if (!ItemHandlerHelper.canItemStacksStack(stack, existing)) return stack;
+            limit -= existing.getCount();
+        }
+
+        if (limit <= 0) return stack;
+
+        boolean reachedLimit = stack.getCount() > limit;
+        if (existing.isEmpty()) inventory.setStackInSlot(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
+        else existing.grow(reachedLimit ? limit : stack.getCount());
+
+        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount()- limit) : ItemStack.EMPTY;
+    }
+
+    private ItemStack getStackFromBee(Bee bee) {
+        ItemStack stack = new ItemStack(tier.getOutputType().isComb() ? Items.HONEYCOMB : Items.HONEYCOMB_BLOCK, Objects.requireNonNullElse(tier.getOutputAmount(), 1));
+        if (bee instanceof CustomBeeEntity customBee) {
+            Optional<OutputVariation> outputVariation = customBee.getBeeData().getHoneycombData();
+            if (outputVariation.isPresent()) stack = outputVariation.get().getApiaryOutput(tier.ordinal()-1);
+        }
+        return stack;
     }
 
     public void tryEnterHive(@NotNull Entity bee, boolean hasNectar, int ticksInHive) {
@@ -115,16 +148,13 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISync
     }
 
     private int getMaxTimeInHive(@NotNull Entity bee) {
-        return getMaxTimeInHive(bee instanceof ICustomBee ? ((ICustomBee) bee).getCoreData().getMaxTimeInHive() : BeeConstants.MAX_TIME_IN_HIVE);
-    }
-
-    private int getMaxTimeInHive(int timeInput) {
-        return (int) (timeInput * tier.getTimeModifier());
+        return (int) ((bee instanceof ICustomBee iBee ? iBee.getCoreData().getMaxTimeInHive() : BeeConstants.MAX_TIME_IN_HIVE) * tier.getTimeModifier());
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, ApiaryTileEntity apiaryTile) {
         ApiaryBee apiaryBee;
-        for (Iterator<ApiaryBee> iterator = apiaryTile.bees.iterator(); iterator.hasNext();) {
+        Iterator<ApiaryBee> iterator = apiaryTile.bees.iterator();
+        while (iterator.hasNext()) {
             apiaryBee = iterator.next();
             if (apiaryTile.canRelease(apiaryBee) && apiaryTile.releaseBee(state, apiaryBee)) iterator.remove();
             else apiaryBee.setTicksInHive(Math.min(apiaryBee.getTicksInHive() + 1, Integer.MAX_VALUE - 1));
@@ -164,13 +194,13 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISync
     public ListTag writeBees() {
         ListTag listTag = new ListTag();
         this.bees.forEach(apiaryBee -> {
-            CompoundTag compoundnbt = new CompoundTag();
-            compoundnbt.put("EntityData", apiaryBee.entityData);
-            compoundnbt.putInt("TicksInHive", apiaryBee.getTicksInHive());
-            compoundnbt.putInt("MinOccupationTicks", apiaryBee.minOccupationTicks);
-            compoundnbt.putBoolean(NBTConstants.NBT_LOCKED, apiaryBee.isLocked());
-            compoundnbt.putString(NBTConstants.NBT_BEE_NAME, Component.Serializer.toJson(apiaryBee.displayName));
-            listTag.add(compoundnbt);
+            CompoundTag tag = new CompoundTag();
+            tag.put("EntityData", apiaryBee.entityData);
+            tag.putInt("TicksInHive", apiaryBee.getTicksInHive());
+            tag.putInt("MinOccupationTicks", apiaryBee.minOccupationTicks);
+            tag.putBoolean(NBTConstants.NBT_LOCKED, apiaryBee.isLocked());
+            tag.putString(NBTConstants.NBT_BEE_NAME, Component.Serializer.toJson(apiaryBee.displayName));
+            listTag.add(tag);
         });
         return listTag;
     }
@@ -188,15 +218,17 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISync
     }
 
     @Override
-    public void load(@NotNull CompoundTag nbt) {
-        super.load(nbt);
-        loadBees(nbt);
+    public void load(@NotNull CompoundTag tag) {
+        super.load(tag);
+        inventory.deserializeNBTWithoutCheckingSize(tag.getCompound(NBTConstants.NBT_INVENTORY));
+        loadBees(tag);
         bees.removeIf(bee -> BeeInfoUtils.getEntityType(bee.entityData.getString("id")) == EntityType.PIG);
     }
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
+        tag.put(NBTConstants.NBT_INVENTORY, inventory.serializeNBT());
         tag.put(NBTConstants.NBT_BEES, this.writeBees());
     }
 
@@ -205,7 +237,7 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISync
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return /*cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? getLazyOptional().cast() :*/
+        return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? inventoryOptional.cast() :
                 super.getCapability(cap, side);
     }
 
@@ -218,6 +250,10 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISync
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory inventory, @NotNull Player player) {
         return level == null ? null : new ValidatedApiaryContainer(id, level, worldPosition, inventory);
+    }
+
+    public AutomationSensitiveItemStackHandler getInventory() {
+        return inventory;
     }
 
     public void sendData(ServerPlayer player) {

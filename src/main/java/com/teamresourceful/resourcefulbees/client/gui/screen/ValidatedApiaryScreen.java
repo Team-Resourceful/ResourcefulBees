@@ -89,9 +89,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
     protected void renderLabels(@NotNull PoseStack matrix, int mouseX, int mouseY) {
         String s = String.format("(%1$s/%2$s)", apiaryTileEntity.getBeeCount(), apiaryTileEntity.getTier().getMaxBees());
         this.font.draw(matrix, s, 4, 17, 0x404040);
-
-        this.font.draw(matrix, TranslationConstants.Guis.APIARY, 55, 7, 0x404040);
-
+        this.font.draw(matrix, getTitle(), 55, 7, 0x404040);
         this.font.draw(matrix, TranslationConstants.Guis.INVENTORY, 55, 75, 0x404040);
 
         for (Widget widget : this.renderables) {
@@ -112,11 +110,9 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
                 ApiaryTileEntity.ApiaryBee apiaryBee = this.menu.getApiaryBee(i);
 
                 int ticksInHive = apiaryBee.getTicksInHive();
-                int minTicks = apiaryBee.minOccupationTicks;
-                int ticksLeft = Math.max(minTicks - ticksInHive, 0);
                 beeInfo.add(apiaryBee.displayName);
                 beeInfo.add(new TranslatableComponent(TranslationConstants.Apiary.TICKS_HIVE, ticksInHive));
-                beeInfo.add(new TranslatableComponent(TranslationConstants.Apiary.TICKS_LEFT, ticksLeft));
+                beeInfo.add(new TranslatableComponent(TranslationConstants.Apiary.TICKS_LEFT, Math.max(apiaryBee.minOccupationTicks - ticksInHive, 0)));
                 this.renderComponentTooltip(matrix, beeInfo, mouseX, mouseY);
             }
         }
@@ -166,8 +162,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
             //data.putString(NBTConstants.NBT_COLOR, this.menu.getApiaryBee(i).beeColor);
 
             beeJar.setTag(data);
-            if (this.minecraft != null)
-                this.minecraft.getItemRenderer().renderAndDecorateItem(beeJar, left, i1);
+            this.itemRenderer.renderAndDecorateItem(beeJar, left, i1);
         }
     }
 
@@ -183,7 +178,6 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
             this.sliderProgress = Mth.clamp(this.sliderProgress, 0.0F, 1.0F);
             this.beeIndexOffset = (int) ((this.sliderProgress * i) + 0.5D);
         }
-
         return true;
     }
 
@@ -196,9 +190,8 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
             this.sliderProgress = Mth.clamp(this.sliderProgress, 0.0F, 1.0F);
             this.beeIndexOffset = (int) ( (this.sliderProgress * this.getHiddenRows()) + 0.5D);
             return true;
-        } else {
-            return super.mouseDragged(mouseX, mouseY, pMouseDragged5, pMouseDragged6, pMouseDragged8);
         }
+        return super.mouseDragged(mouseX, mouseY, pMouseDragged5, pMouseDragged6, pMouseDragged8);
     }
 
     private int getHiddenRows() { return apiaryTileEntity.getBeeCount() - 7; }
@@ -222,9 +215,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
             }
 
             i = this.leftPos + 44;
-            j = this.topPos + 34;
-            j = j + ((int) (99.0F * this.sliderProgress));
-
+            j = this.topPos + 34 + ((int) (99.0F * this.sliderProgress));
 
             if (mouseX >= i && mouseX < (i + 6) && mouseY >= j && mouseY <= (j + 27)) {
                 this.clickedOnScroll = true;
