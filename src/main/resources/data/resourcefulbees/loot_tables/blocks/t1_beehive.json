@@ -38,6 +38,16 @@
                       "source": "Honeycombs",
                       "target": "BlockEntityTag.Honeycombs",
                       "op": "replace"
+                    },
+                    {
+                      "source": "Tier",
+                      "target": "BlockEntityTag.Tier",
+                      "op": "replace"
+                    },
+                    {
+                      "source": "TierModifier",
+                      "target": "BlockEntityTag.TierModifier",
+                      "op": "replace"
                     }
                   ]
                 },

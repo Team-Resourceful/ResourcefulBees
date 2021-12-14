@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.utils;
 
 import com.resourcefulbees.resourcefulbees.api.IEntity;
+import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.lib.TagConstants;
 import com.resourcefulbees.resourcefulbees.mixin.EntityAccessor;
 import com.resourcefulbees.resourcefulbees.mixin.LivingEntityAccessor;
@@ -20,12 +21,16 @@ import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.Random;
 
+/**
+ * @author TelepathicGrunt
+ * <p>Copied from Bumblezone.</p>
+ */
 public class HoneyFluidUtils {
 
-    /***
-     * Cloned from Bumblezone
-     * @param entity
-     */
+    private HoneyFluidUtils() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
     public static void breathing(LivingEntity entity) {
         boolean invulnerable = entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.invulnerable;
         boolean isBee = entity instanceof BeeEntity;

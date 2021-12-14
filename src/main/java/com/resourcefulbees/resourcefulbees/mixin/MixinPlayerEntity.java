@@ -11,6 +11,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * @author TelepathicGrunt
+ * <p>Copied from Bumblezone.</p>
+ */
 @Mixin(PlayerEntity.class)
 public abstract class MixinPlayerEntity extends Entity {
     @Shadow
