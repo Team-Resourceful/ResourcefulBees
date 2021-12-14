@@ -29,6 +29,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -107,20 +108,20 @@ public class BeeInfoUtils {
         return Arrays.asList(nbtString.split("\n"));
     }
 
-    public static void ageBee(int ticksInHive, Bee beeEntity) {
-        int i = beeEntity.getAge();
+    public static void ageBee(int ticksInHive, Animal animal) {
+        int i = animal.getAge();
         if (i < 0) {
-            beeEntity.setAge(Math.min(0, i + ticksInHive));
+            animal.setAge(Math.min(0, i + ticksInHive));
         } else if (i > 0) {
-            beeEntity.setAge(Math.max(0, i - ticksInHive));
+            animal.setAge(Math.max(0, i - ticksInHive));
         }
 
-        if (beeEntity instanceof CustomBeeEntity bee) {
-            bee.setLoveTime(Math.max(0, beeEntity.getInLoveTime() - ticksInHive));
+        if (animal instanceof CustomBeeEntity bee) {
+            bee.setLoveTime(Math.max(0, animal.getInLoveTime() - ticksInHive));
         } else {
-            beeEntity.setInLoveTime(Math.max(0, beeEntity.getInLoveTime() - ticksInHive));
+            animal.setInLoveTime(Math.max(0, animal.getInLoveTime() - ticksInHive));
         }
-        beeEntity.resetTicksWithoutNectarSinceExitingHive();
+        if (animal instanceof Bee bee) bee.resetTicksWithoutNectarSinceExitingHive();
     }
 
     public static void setEntityLocationAndAngle(BlockPos blockpos, Direction direction, Entity entity) {

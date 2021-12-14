@@ -56,9 +56,6 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     private final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> entityType;
     private final BeehiveTier tier;
 
-    /*private final int tier;
-    private final float tierModifier;*/
-
     public TieredBeehiveBlock(RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> entityType, BeehiveTier tier, Properties properties) {
         super(properties);
         this.entityType = entityType;
@@ -76,7 +73,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, entityType.get(), BeehiveBlockEntity::serverTick);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, entityType.get(), TieredBeehiveTileEntity::serverSideTick);
     }
 
     /**
@@ -106,7 +103,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return super.newBlockEntity(pos, state);
+        return new TieredBeehiveTileEntity(entityType, pos, state);
     }
 
     public boolean isHiveSmoked(BlockPos pos, Level world) {

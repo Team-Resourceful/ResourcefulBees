@@ -12,6 +12,9 @@ public interface BeehiveBeeDataAccessor {
     int getTicksInHive();
 
     @Accessor
+    void setTicksInHive(int ticksInHive);
+
+    @Accessor
     CompoundTag getEntityData();
 
     @Accessor

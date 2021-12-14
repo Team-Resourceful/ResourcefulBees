@@ -1,13 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary;
 
 
-import com.teamresourceful.resourcefulbees.api.ICustomBee;
-import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.IBeeCompat;
 import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.ValidatedApiaryContainer;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
@@ -30,13 +27,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -50,7 +46,9 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler.ACCEPT_FALSE;
 import static com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler.REMOVE_TRUE;
@@ -86,23 +84,23 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISync
         CompoundTag nbt = apiaryBee.entityData;
 
         if (level != null && this.level.getBlockState(blockPos1).getCollisionShape(this.level, blockPos1).isEmpty()) {
-            if (EntityType.loadEntityRecursive(nbt, this.level, entity1 -> entity1) instanceof Bee bee) {
-                BeeInfoUtils.setEntityLocationAndAngle(blockPos, direction, bee);
-                deliverNectar(nbt, bee);
-                BeeInfoUtils.ageBee(apiaryBee.getTicksInHive(), bee);
+            Entity entity = EntityType.loadEntityRecursive(nbt, this.level, entity1 -> entity1);
+            if (entity instanceof IBeeCompat beeCompat) {
+                BeeInfoUtils.setEntityLocationAndAngle(blockPos, direction, entity);
+                deliverNectar(nbt, beeCompat);
+                if (entity instanceof Animal animal) BeeInfoUtils.ageBee(apiaryBee.getTicksInHive(), animal);
                 level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
-                level.addFreshEntity(bee);
+                level.addFreshEntity(entity);
             }
             return true;
         }
         return false;
     }
 
-    private void deliverNectar(CompoundTag nbt, Bee bee) {
+    private void deliverNectar(CompoundTag nbt, IBeeCompat bee) {
         if (nbt.getBoolean("HasNectar")) {
-            bee.dropOffNectar();
-            ItemHandlerHelper.insertItem(inventory, getStackFromBee(bee), false);
-            ItemStack stack = getStackFromBee(bee);
+            bee.nectarDroppedOff();
+            ItemStack stack = bee.getApiaryOutput(tier);
             for (int i = 0; i < inventory.getSlots() && !stack.isEmpty(); i++) { stack = insertItem(i, stack); }
         }
     }
@@ -127,28 +125,19 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISync
         return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount()- limit) : ItemStack.EMPTY;
     }
 
-    private ItemStack getStackFromBee(Bee bee) {
-        ItemStack stack = new ItemStack(tier.getOutputType().isComb() ? Items.HONEYCOMB : Items.HONEYCOMB_BLOCK, Objects.requireNonNullElse(tier.getOutputAmount(), 1));
-        if (bee instanceof CustomBeeEntity customBee) {
-            Optional<OutputVariation> outputVariation = customBee.getBeeData().getHoneycombData();
-            if (outputVariation.isPresent()) stack = outputVariation.get().getApiaryOutput(tier.ordinal()-1);
-        }
-        return stack;
-    }
-
     public void tryEnterHive(@NotNull Entity bee, boolean hasNectar, int ticksInHive) {
-        if (this.level != null && hasSpace() && bee instanceof Bee) {
+        if (this.level != null && hasSpace() && bee instanceof IBeeCompat beeCompat) {
             bee.ejectPassengers();
             CompoundTag nbt = new CompoundTag();
             bee.save(nbt);
-            this.bees.add(new ApiaryBee(nbt, ticksInHive, hasNectar ? getMaxTimeInHive(bee) : MIN_HIVE_TIME, bee.getName()));
+            this.bees.add(new ApiaryBee(nbt, ticksInHive, hasNectar ? getMaxTimeInHive(beeCompat) : MIN_HIVE_TIME, bee.getName()));
             this.level.playSound(null, this.getBlockPos(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
             bee.discard();
         }
     }
 
-    private int getMaxTimeInHive(@NotNull Entity bee) {
-        return (int) ((bee instanceof ICustomBee iBee ? iBee.getCoreData().getMaxTimeInHive() : BeeConstants.MAX_TIME_IN_HIVE) * tier.getTimeModifier());
+    private int getMaxTimeInHive(@NotNull IBeeCompat bee) {
+        return (int) (bee.getMaxTimeInHive() * tier.getTimeModifier());
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, ApiaryTileEntity apiaryTile) {

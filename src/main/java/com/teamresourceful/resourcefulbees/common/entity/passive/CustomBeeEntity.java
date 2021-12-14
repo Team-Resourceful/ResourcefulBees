@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.entity.passive;
 
 import com.google.gson.JsonObject;
+import com.teamresourceful.resourcefulbees.api.IBeeCompat;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.CombatData;
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
@@ -15,6 +16,8 @@ import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.AnimalEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
@@ -58,7 +61,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
-public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimatable {
+public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimatable, IBeeCompat {
 
     private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
 
@@ -378,6 +381,33 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
 
     public CustomBeeData getBeeData() {
         return customBeeData;
+    }
+
+    @Override
+    public ItemStack getHiveOutput(BeehiveTier tier) {
+        if (getHoneycombData().isEmpty()) return ItemStack.EMPTY;
+        return Objects.requireNonNullElse(getHoneycombData().get().getHiveOutput(tier), ItemStack.EMPTY);
+    }
+
+    @Override
+    public ItemStack getApiaryOutput(ApiaryTier tier) {
+        if (getHoneycombData().isEmpty()) return ItemStack.EMPTY;
+        return Objects.requireNonNullElse(getHoneycombData().get().getApiaryOutput(tier), ItemStack.EMPTY);
+    }
+
+    @Override
+    public int getMaxTimeInHive() {
+        return getBeeData().getCoreData().getMaxTimeInHive();
+    }
+
+    @Override
+    public void nectarDroppedOff() {
+        this.dropOffNectar();
+    }
+
+    @Override
+    public void setOutOfHiveCooldown(int cooldown) {
+        this.setStayOutOfHiveCountdown(cooldown);
     }
     //endregion
 }

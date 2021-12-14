@@ -6,45 +6,42 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 @Unmodifiable
 public class OutputVariation {
 
-    public static final List<Integer> DEFAULT_APIARY_AMOUNTS = Arrays.asList(CommonConfig.T1_APIARY_QUANTITY.get(), CommonConfig.T2_APIARY_QUANTITY.get(), CommonConfig.T3_APIARY_QUANTITY.get(), CommonConfig.T4_APIARY_QUANTITY.get());
     public static final List<ApiaryOutputType> DEFAULT_APIARY_OUTPUT_TYPES = Arrays.asList(CommonConfig.T1_APIARY_OUTPUT.get(), CommonConfig.T2_APIARY_OUTPUT.get(), CommonConfig.T3_APIARY_OUTPUT.get(), CommonConfig.T4_APIARY_OUTPUT.get());
     private static final String MISSING_ID = "Identifier is REQUIRED!";
-    private static final String MISSING_APIARY_COMB = "Default comb must be present when list is empty and config contains combs!!!";
-    private static final String MISSING_APIARY_BLOCK = "Default block must be present when list is empty and config contains blocks!!!";
+    private static final String MISSING_APIARY_COMB = " : Default comb must be present when list is empty and config contains combs!!!";
+    private static final String MISSING_APIARY_BLOCK = " : Default block must be present when list is empty and config contains blocks!!!";
     private static final boolean DEFAULT_OUTPUT_TYPE_INCLUDES_COMB = DEFAULT_APIARY_OUTPUT_TYPES.contains(ApiaryOutputType.COMB);
     private static final boolean DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK = DEFAULT_APIARY_OUTPUT_TYPES.contains(ApiaryOutputType.BLOCK);
 
-
     public static final Codec<OutputVariation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("identifier").orElseGet((Consumer<String>) s -> ResourcefulBees.LOGGER.error(MISSING_ID), null).forGetter(OutputVariation::getIdentifier),
-            CodecUtils.ITEM_STACK_CODEC.listOf().fieldOf("hiveCombs").orElseGet(ArrayList::new).forGetter(OutputVariation::getHiveCombs),
-            CodecUtils.ITEM_STACK_CODEC.listOf().fieldOf("apiaryCombs").orElseGet(ArrayList::new).forGetter(OutputVariation::getApiaryCombs),
+            CodecUtils.BEEHIVE_VARIATIONS.fieldOf("hiveCombs").orElseGet(HashMap::new).forGetter(OutputVariation::getHiveCombs),
+            CodecUtils.APIARY_VARIATIONS.fieldOf("apiaryCombs").orElseGet(HashMap::new).forGetter(OutputVariation::getApiaryCombs),
             CodecUtils.ITEM_STACK_CODEC.optionalFieldOf("defaultComb").forGetter(OutputVariation::getDefaultComb),
             CodecUtils.ITEM_STACK_CODEC.optionalFieldOf("defaultCombBlock").forGetter(OutputVariation::getDefaultCombBlock)
     ).apply(instance, OutputVariation::new));
 
     private final String identifier;
-    private final List<ItemStack> hiveCombs;
-    private final List<ItemStack> apiaryCombs;
+    private final Map<BeehiveTier, ItemStack> hiveCombs;
+    private final Map<ApiaryTier, ItemStack> apiaryCombs;
     private final Optional<ItemStack> defaultComb;
     private final Optional<ItemStack> defaultCombBlock;
 
-    private OutputVariation(String identifier, List<ItemStack> hiveCombs, List<ItemStack> apiaryCombs, Optional<ItemStack> defaultComb, Optional<ItemStack> defaultCombBlock) {
+    private OutputVariation(String identifier, Map<BeehiveTier, ItemStack> hiveCombs, Map<ApiaryTier, ItemStack> apiaryCombs, Optional<ItemStack> defaultComb, Optional<ItemStack> defaultCombBlock) {
         this.identifier = identifier;
-        this.hiveCombs = new ArrayList<>(hiveCombs);
-        this.apiaryCombs = new ArrayList<>(apiaryCombs);
+        this.hiveCombs = new HashMap<>(hiveCombs);
+        this.apiaryCombs = new HashMap<>(apiaryCombs);
         this.defaultComb = defaultComb;
         this.defaultComb.ifPresent(comb -> comb.setCount(1));
         this.defaultCombBlock = defaultCombBlock;
@@ -57,11 +54,11 @@ public class OutputVariation {
         return identifier;
     }
 
-    private List<ItemStack> getHiveCombs() {
+    private Map<BeehiveTier, ItemStack> getHiveCombs() {
         return hiveCombs;
     }
 
-    private List<ItemStack> getApiaryCombs() {
+    private Map<ApiaryTier, ItemStack> getApiaryCombs() {
         return apiaryCombs;
     }
 
@@ -73,11 +70,11 @@ public class OutputVariation {
         return defaultCombBlock;
     }
 
-    public ItemStack getHiveOutput(int tier) {
+    public ItemStack getHiveOutput(BeehiveTier tier) {
         return getHiveCombs().get(tier).copy();
     }
 
-    public ItemStack getApiaryOutput(int tier) {
+    public ItemStack getApiaryOutput(ApiaryTier tier) {
         return getApiaryCombs().get(tier).copy();
     }
 
@@ -87,15 +84,13 @@ public class OutputVariation {
      * be provided for the list to be created!
      * */
     private void fixHiveCombs() {
-        do {
-            if (hiveCombs.isEmpty() && defaultComb.isPresent()) {
-                hiveCombs.add(defaultComb.get().copy());
-            } else if (hiveCombs.isEmpty()) {
-                throw new IllegalArgumentException("HiveCombs list can't be empty without a default comb supplied!!");
-            } else {
-                hiveCombs.add(hiveCombs.get(hiveCombs.size() -1));
-            }
-        } while (hiveCombs.size() < 6);
+        ItemStack lastStack = defaultComb.orElse(null);
+        if (lastStack == null && hiveCombs.isEmpty()) throw new IllegalArgumentException("HiveCombs list can't be empty without a default comb supplied!!");
+        for (BeehiveTier tier : BeehiveTier.values()) {
+            ItemStack comb = hiveCombs.get(tier);
+            if (comb != null) { lastStack = comb; continue; }
+            hiveCombs.put(tier, lastStack);
+        }
     }
 
     /**
@@ -104,26 +99,24 @@ public class OutputVariation {
      * <b>BOTH</b> a {@link #defaultComb} and a {@link #defaultCombBlock} <b>MUST</b> be supplied for the list when they are specified in the config!
      * */
     private void fixApiaryCombs() {
-        if (apiaryCombs.isEmpty()) {
-            checkDefaultsAreOK();
-            for (int i = 0; i < 4; i++) {
-                ItemStack stack = DEFAULT_APIARY_OUTPUT_TYPES.get(i).equals(ApiaryOutputType.COMB) ? defaultComb.get() : defaultCombBlock.get();
-                stack = stack.copy();
-                stack.setCount(DEFAULT_APIARY_AMOUNTS.get(i));
-                apiaryCombs.add(stack);
+        ItemStack lastStack = null;
+        if (apiaryCombs.isEmpty()) checkDefaultsAreOK();
+        for (ApiaryTier tier : ApiaryTier.values()) {
+            ItemStack comb = apiaryCombs.get(tier);
+            if (comb != null) { lastStack = comb; continue; }
+            if (lastStack == null) {
+                lastStack = tier.getOutputType().isComb() ? defaultComb.get() : defaultCombBlock.get();
+                lastStack.setCount(tier.getOutputAmount());
             }
-        } else {
-            while (apiaryCombs.size() < 4) {
-                apiaryCombs.add(apiaryCombs.get(apiaryCombs.size() -1));
-            }
+            apiaryCombs.put(tier, lastStack);
         }
     }
 
     private void checkDefaultsAreOK() {
-        if (DEFAULT_OUTPUT_TYPE_INCLUDES_COMB && !defaultComb.isPresent()) {
-            throw new IllegalArgumentException(MISSING_APIARY_COMB);
-        } else if (DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK && !defaultCombBlock.isPresent()) {
-            throw new IllegalArgumentException(MISSING_APIARY_BLOCK);
+        if (DEFAULT_OUTPUT_TYPE_INCLUDES_COMB && defaultComb.isEmpty()) {
+            throw new IllegalArgumentException(identifier + MISSING_APIARY_COMB);
+        } else if (DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK && defaultCombBlock.isEmpty()) {
+            throw new IllegalArgumentException(identifier + MISSING_APIARY_BLOCK);
         }
     }
 }
