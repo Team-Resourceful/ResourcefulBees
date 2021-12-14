@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "particle": "resourcefulbees:block/nest/prismarine/side",
+    "bottom": "resourcefulbees:block/nest/prismarine/bottom",
+    "top": "resourcefulbees:block/nest/prismarine/top",
+    "front": "resourcefulbees:block/nest/prismarine/front",
+    "side": "resourcefulbees:block/nest/prismarine/side"
+  }
+}

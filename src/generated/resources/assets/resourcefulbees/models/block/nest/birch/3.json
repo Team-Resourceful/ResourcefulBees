@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "particle": "resourcefulbees:block/nest/birch/side",
+    "bottom": "resourcefulbees:block/nest/birch/bottom",
+    "top": "resourcefulbees:block/nest/birch/top",
+    "front": "resourcefulbees:block/nest/birch/front",
+    "side": "resourcefulbees:block/nest/birch/side"
+  }
+}

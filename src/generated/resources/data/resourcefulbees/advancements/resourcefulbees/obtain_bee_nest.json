@@ -2,7 +2,7 @@
   "parent": "resourcefulbees:resourcefulbees/root",
   "display": {
     "icon": {
-      "item": "resourcefulbees:bee_nest"
+      "item": "resourcefulbees:nest/oak/0"
     },
     "title": {
       "translate": "advancements.resourcefulbees.obtain_bee_nest.title"

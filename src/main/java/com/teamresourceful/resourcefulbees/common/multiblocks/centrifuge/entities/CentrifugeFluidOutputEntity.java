@@ -45,8 +45,7 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
     @NotNull
     @Override
     public <T> LazyOptional<T> capability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) return fluidOptional.cast();
-        return super.capability(cap, side);
+        return cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) ? fluidOptional.cast() : super.capability(cap, side);
     }
 
     public boolean depositResult(CentrifugeRecipe.Output<FluidOutput> output, int processQuantity) {

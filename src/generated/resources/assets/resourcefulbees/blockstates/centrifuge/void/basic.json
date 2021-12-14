@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "resourcefulbees:block/centrifuge/void/basic"
+    },
+    "facing=south": {
+      "model": "resourcefulbees:block/centrifuge/void/basic",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "resourcefulbees:block/centrifuge/void/basic",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "resourcefulbees:block/centrifuge/void/basic",
+      "y": 90
+    }
+  }
+}

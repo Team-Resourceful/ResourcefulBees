@@ -292,7 +292,7 @@ gradle.projectsEvaluated {
     def resource_targets = ["META-INF/mods.toml", "pack.mcmeta"]
     def into_targets = ["$rootDir/out/production/resources/", "$rootDir/out/production/${project.name}.main/", "$rootDir/bin/main/"]
     def properties = [
-            version     : version,
+            version     : mod_version,
             fmlVersion  : forge_version.substring(0, forge_version.indexOf('.')),
             forgeVersion: forge_version,
             mcVersion   : mc_version,
@@ -300,6 +300,7 @@ gradle.projectsEvaluated {
             geckoVersion: geckolib_version
     ]
     processResources {
+        outputs.upToDateWhen { false }
         duplicatesStrategy = 'INCLUDE'
         inputs.properties properties
 

@@ -85,8 +85,7 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
     @NotNull
     @Override
     public <T> LazyOptional<T> capability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return lazyOptional.cast();
-        return super.capability(cap, side);
+        return cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) ? lazyOptional.cast() : super.capability(cap, side);
     }
     //endregion
 

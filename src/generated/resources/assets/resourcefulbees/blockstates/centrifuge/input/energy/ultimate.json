@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/ultimate"
+    },
+    "facing=south": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/ultimate",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/ultimate",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "resourcefulbees:block/centrifuge/input/energy/ultimate",
+      "y": 90
+    }
+  }
+}
