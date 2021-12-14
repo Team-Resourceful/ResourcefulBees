@@ -234,7 +234,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         List<ItemStack> combs = honeycombs;
         if (!combs.isEmpty()) tag.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs(combs));

@@ -105,7 +105,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
             int j = i - this.beeIndexOffset;
             int i1 = top + j * 18;
 
-            if (mouseX >= left && mouseY >= i1 && mouseX < left + 16 && mouseY < i1 + 18) {
+            if (mouseX >= left && mouseY >= i1 && mouseX < left + 18 && mouseY < i1 + 18) {
                 List<Component> beeInfo = new ArrayList<>();
                 ApiaryTileEntity.ApiaryBee apiaryBee = this.menu.getApiaryBee(i);
 
@@ -125,7 +125,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
             int k = left;
             int i1 = top + j * 18;
             int j1 = this.imageHeight;
-            if (mouseX >= k && mouseY >= i1 && mouseX < k + 16 && mouseY < i1 + 18) {
+            if (mouseX >= k && mouseY >= i1 && mouseX < k + 18 && mouseY < i1 + 18) {
                 j1 += 18;
             }
             this.blit(matrix, k, i1, 0, j1, 18, 18);
@@ -135,7 +135,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
             if (this.menu.getApiaryBee(i).isLocked()) {
                 l1 += 18;
             }
-            if (mouseX >= k && mouseY >= i1 && mouseX < k + 16 && mouseY < i1 + 18) {
+            if (mouseX >= k && mouseY >= i1 && mouseX < k + 18 && mouseY < i1 + 18) {
                 j1 += 18;
             }
 
@@ -208,7 +208,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ValidatedApia
                 int i1 = l - this.beeIndexOffset;
                 double d0 = mouseX - (i);
                 double d1 = mouseY - (j + i1 * 18);
-                if (d0 >= 0.0D && d1 >= 0.0D && d0 < 35.0D && d1 < 17.0D && this.menu.lockOrUnlockBee(l)) {
+                if (d0 >= 18.0D && d1 >= 0.0D && d0 <= 36.0D && d1 <= 18.0D && this.menu.lockOrUnlockBee(l)) {
                     Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                     return true;
                 }

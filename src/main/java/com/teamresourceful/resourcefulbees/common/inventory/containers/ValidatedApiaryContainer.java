@@ -16,14 +16,12 @@ import org.jetbrains.annotations.NotNull;
 public class ValidatedApiaryContainer extends ContainerWithStackMove {
 
     private final ApiaryTileEntity apiaryTileEntity;
-    private final BlockPos pos;
     private final Player player;
 
     public ValidatedApiaryContainer(int id, Level world, BlockPos pos, Inventory inv) {
         super(ModContainers.VALIDATED_APIARY_CONTAINER.get(), id);
 
         this.player = inv.player;
-        this.pos = pos;
         this.apiaryTileEntity = (ApiaryTileEntity) world.getBlockEntity(pos);
 
         if (apiaryTileEntity != null) {
@@ -80,17 +78,9 @@ public class ValidatedApiaryContainer extends ContainerWithStackMove {
         return apiaryTileEntity;
     }
 
-    public BlockPos getPos() {
-        return pos;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        if (player instanceof ServerPlayer serverPlayer) apiaryTileEntity.sendData(serverPlayer);
+        if (player instanceof ServerPlayer serverPlayer) apiaryTileEntity.sendToPlayer(serverPlayer);
     }
 }

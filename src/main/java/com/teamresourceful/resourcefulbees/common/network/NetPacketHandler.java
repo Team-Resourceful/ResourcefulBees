@@ -2,7 +2,10 @@ package com.teamresourceful.resourcefulbees.common.network;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.network.packets.*;
+import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.LockBeeMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.SyncBlockEntityMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandMessage;
 import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandResponseMessage;
 import net.minecraft.core.BlockPos;
@@ -12,6 +15,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
+
+import java.util.List;
 
 public class NetPacketHandler {
 
@@ -34,6 +39,7 @@ public class NetPacketHandler {
         INSTANCE.registerMessage(++id, BeeconChangeMessage.class, BeeconChangeMessage::encode, BeeconChangeMessage::decode, BeeconChangeMessage::handle);
         INSTANCE.registerMessage(++id, CommandMessage.class, CommandMessage::encode, CommandMessage::decode, CommandMessage::handle);
         INSTANCE.registerMessage(++id, CommandResponseMessage.class, CommandResponseMessage::encode, CommandResponseMessage::decode, CommandResponseMessage::handle);
+        INSTANCE.registerMessage(++id, SyncBlockEntityMessage.class, SyncBlockEntityMessage::encode, SyncBlockEntityMessage::decode, SyncBlockEntityMessage::handle);
     }
 
     public static void sendToServer(Object message) {
@@ -44,7 +50,15 @@ public class NetPacketHandler {
         INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), message);
     }
 
+    public static void sendToPlayers(Object message, List<ServerPlayer> players) {
+        for (ServerPlayer player : players) { sendToPlayer(message, player); }
+    }
+
     public static void sendToPlayer(Object message, ServerPlayer playerEntity) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> playerEntity), message);
+    }
+
+    public static void sendToPlayersInRange(Object message, Level world, BlockPos pos, double range) {
+        INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, world.dimension())), message);
     }
 }

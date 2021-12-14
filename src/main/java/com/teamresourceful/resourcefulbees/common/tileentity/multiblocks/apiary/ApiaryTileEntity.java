@@ -9,19 +9,14 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
-import com.teamresourceful.resourcefulbees.common.tileentity.ISyncableGUI;
+import com.teamresourceful.resourcefulbees.common.tileentity.SyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
@@ -31,14 +26,11 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -54,7 +46,7 @@ import static com.teamresourceful.resourcefulbees.common.inventory.AutomationSen
 import static com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler.REMOVE_TRUE;
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 
-public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISyncableGUI {
+public class ApiaryTileEntity extends SyncedBlockEntity implements MenuProvider {
 
     public final List<ApiaryBee> bees = new ArrayList<>();
     protected ApiaryTier tier;
@@ -226,8 +218,7 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISync
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? inventoryOptional.cast() :
-                super.getCapability(cap, side);
+        return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? inventoryOptional.cast() : super.getCapability(cap, side);
     }
 
     @Override
@@ -245,27 +236,17 @@ public class ApiaryTileEntity extends BlockEntity implements MenuProvider, ISync
         return inventory;
     }
 
-    public void sendData(ServerPlayer player) {
-        if (!(player instanceof FakePlayer)) {
-            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            CompoundTag tag = new CompoundTag();
-            tag.put(NBTConstants.NBT_BEES, writeBees());
-            buffer.writeNbt(tag);
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), player);
-        }
+    @Override
+    public @NotNull CompoundTag getData() {
+        CompoundTag tag = new CompoundTag();
+        tag.put(NBTConstants.NBT_BEES, writeBees());
+        return tag;
     }
 
     @Override
-    public void sendGUINetworkPacket(ContainerListener player) {
-    }
-
-    @Override
-    public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
-        CompoundTag nbt = buffer.readNbt();
-        if (nbt != null) {
-            bees.clear();
-            loadBees(nbt);
-        }
+    public void updateData(@NotNull CompoundTag tag) {
+        bees.clear();
+        loadBees(tag);
     }
 
     public static class ApiaryBee {
