@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "resourcefulbees:honey",
-    "resourcefulbees:catnip_honey"
+    "resourcefulbees:catnip_honey",
+    "resourcefulbees:starry_honey",
+    "resourcefulbees:honey_flowing",
+    "resourcefulbees:catnip_honey_flowing",
+    "resourcefulbees:starry_honey_flowing"
   ]
 }
