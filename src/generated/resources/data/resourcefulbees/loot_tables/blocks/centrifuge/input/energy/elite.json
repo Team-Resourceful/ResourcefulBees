@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:air"
+          "name": "resourcefulbees:centrifuge/input/energy/elite"
         }
       ],
       "conditions": [

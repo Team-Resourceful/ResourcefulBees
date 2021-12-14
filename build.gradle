@@ -288,45 +288,62 @@ publishing {
     }
 }
 
-gradle.projectsEvaluated {
-    def resource_targets = ["META-INF/mods.toml", "pack.mcmeta"]
-    def into_targets = ["$rootDir/out/production/resources/", "$rootDir/out/production/${project.name}.main/", "$rootDir/bin/main/"]
-    def properties = [
-            version     : mod_version,
-            fmlVersion  : forge_version.substring(0, forge_version.indexOf('.')),
-            forgeVersion: forge_version,
-            mcVersion   : mc_version,
-            phosVersion : project.project(":Phosphophyllite").property("compatibility").toString(),
-            geckoVersion: geckolib_version
+ext {
+    versionProperties = [
+            "version"     : mod_version,
+            "fmlVersion"  : forge_version.substring(0, forge_version.indexOf('.')),
+            "forgeVersion": forge_version,
+            "mcVersion"   : mc_version,
+            "phosVersion" : project.project(":Phosphophyllite").property("compatibility").toString(),
+            "geckoVersion": geckolib_version
     ]
-    processResources {
-        outputs.upToDateWhen { false }
-        duplicatesStrategy = 'INCLUDE'
-        inputs.properties properties
+}
 
-        def spec = copySpec {
-            from(sourceSets.main.resources) {
-                include resource_targets
-                expand properties
+def mainReplaceResources = createReplaceResourcesTask("main", sourceSets.main)
+def datagenReplaceResources = createReplaceResourcesTask("datagen", sourceSets.main)
+
+def createReplaceResourcesTask(String output, SourceSet sourceset) {
+    return tasks.register("${output}ReplaceResources", Copy) {
+        it.outputs.upToDateWhen { false }
+
+        def modsToml = copySpec {
+            from(sourceset.resources) {
+                include "META-INF/mods.toml"
+                expand versionProperties
             }
         }
 
-        with spec
-        into_targets.each {
-            def file = file(it)
-            if (file.exists()) {
-                copy {
-                    with spec
-                    into file
-                }
+        it.with modsToml
+        it.into "$buildDir/resources/${output}/"
+
+        if (new File("$rootDir/out/production/ResourcefulBees.${output}/").exists()) {
+            copy {
+                with modsToml
+                into "$rootDir/out/production/ResourcefulBees.${output}/"
             }
         }
 
-        from(sourceSets.main.resources) {
-            exclude resource_targets
+        if (new File("$rootDir/bin/${output}/").exists()) {
+            copy {
+                with modsToml
+                into "$rootDir/bin/${output}/"
+            }
         }
     }
 }
+
+processResources { setupProcessResources(processResources, mainReplaceResources) }
+processDatagenResources { setupProcessResources(processDatagenResources, datagenReplaceResources) }
+
+def setupProcessResources(ProcessResources process, TaskProvider replaceResources) {
+    process.duplicatesStrategy(DuplicatesStrategy.FAIL)
+    process.exclude("META-INF/mods.toml")
+    process.from("${projectDir}") { include 'logo.png' }
+    process.configure { finalizedBy(replaceResources)}
+}
+
+classes.configure { dependsOn(mainReplaceResources) }
+datagenClasses.configure { dependsOn(datagenReplaceResources) }
 
 curseforge {
     apiKey = "${ENV.CURSE_API_KEY}"
