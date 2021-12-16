@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.recipe;
 
 import com.google.gson.JsonObject;
-import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
+import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;

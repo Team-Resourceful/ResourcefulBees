@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary
 
 
 import com.teamresourceful.resourcefulbees.api.IBeeCompat;
-import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
+import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.containers.ValidatedApiaryContainer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;

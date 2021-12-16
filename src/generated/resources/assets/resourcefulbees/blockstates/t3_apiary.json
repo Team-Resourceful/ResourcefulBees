@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "resourcefulbees:block/t3_apiary"
+    },
+    "facing=south": {
+      "model": "resourcefulbees:block/t3_apiary",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "resourcefulbees:block/t3_apiary",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "resourcefulbees:block/t3_apiary",
+      "y": 90
+    }
+  }
+}

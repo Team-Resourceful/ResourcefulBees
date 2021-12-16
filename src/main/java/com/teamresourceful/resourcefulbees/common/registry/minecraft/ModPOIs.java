@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.google.common.collect.ImmutableSet;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
-import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
+import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.level.block.Block;

@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.*;
-import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBlock;
-import com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary.ApiaryBreederBlock;
+import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
+import com.teamresourceful.resourcefulbees.common.block.ApiaryBreederBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
@@ -33,6 +33,7 @@ public class ModBlocks {
 
     public static final DeferredRegister<Block> BLOCKS = createBlockRegistry();
     public static final DeferredRegister<Block> HIVES = createBlockRegistry();
+    public static final DeferredRegister<Block> APIARIES = createBlockRegistry();
     public static final DeferredRegister<Block> HONEYCOMB_BLOCKS = createBlockRegistry();
     public static final DeferredRegister<Block> HONEY_BLOCKS = createBlockRegistry();
     public static final DeferredRegister<Block> HONEY_FLUID_BLOCKS = createBlockRegistry();
@@ -45,6 +46,7 @@ public class ModBlocks {
     public static void initializeRegistries(IEventBus bus) {
         BLOCKS.register(bus);
         HIVES.register(bus);
+        APIARIES.register(bus);
         HONEYCOMB_BLOCKS.register(bus);
         HONEY_BLOCKS.register(bus);
         HONEY_FLUID_BLOCKS.register(bus);
@@ -154,10 +156,12 @@ public class ModBlocks {
     //endregion
 
     //region Apiaries
-    public static final RegistryObject<Block> T1_APIARY_BLOCK = BLOCKS.register("t1_apiary", () -> new ApiaryBlock(ApiaryTier.T1_APIARY, 5, 6));
-    public static final RegistryObject<Block> T2_APIARY_BLOCK = BLOCKS.register("t2_apiary", () -> new ApiaryBlock(ApiaryTier.T2_APIARY, 5, 6));
-    public static final RegistryObject<Block> T3_APIARY_BLOCK = BLOCKS.register("t3_apiary", () -> new ApiaryBlock(ApiaryTier.T3_APIARY, 6, 8));
-    public static final RegistryObject<Block> T4_APIARY_BLOCK = BLOCKS.register("t4_apiary", () -> new ApiaryBlock(ApiaryTier.T4_APIARY, 6, 8));
+    public static final RegistryObject<Block> T1_APIARY_BLOCK = APIARIES.register("t1_apiary", () -> new ApiaryBlock(ApiaryTier.T1_APIARY, 5, 6));
+    public static final RegistryObject<Block> T2_APIARY_BLOCK = APIARIES.register("t2_apiary", () -> new ApiaryBlock(ApiaryTier.T2_APIARY, 5, 6));
+    public static final RegistryObject<Block> T3_APIARY_BLOCK = APIARIES.register("t3_apiary", () -> new ApiaryBlock(ApiaryTier.T3_APIARY, 6, 8));
+    public static final RegistryObject<Block> T4_APIARY_BLOCK = APIARIES.register("t4_apiary", () -> new ApiaryBlock(ApiaryTier.T4_APIARY, 6, 8));
+
+    public static final RegistryObject<Block> BEEHOUSE_TOP = BLOCKS.register("beehouse_top", () -> new BeeHouseTopBlock(BlockBehaviour.Properties.of(Material.WOOD)));
     //endregion
 
 

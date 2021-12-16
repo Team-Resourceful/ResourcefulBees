@@ -20,7 +20,20 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         ModBlocks.HIVES.getEntries().forEach(this::registerNest);
+        ModBlocks.APIARIES.getEntries().forEach(this::registerApiary);
         registerCentrifuge();
+    }
+
+    private void registerApiary(RegistryObject<Block> registryObject) {
+        String name = registryObject.getId().getPath();
+        ModelFile model = models().getBuilder(name)
+                .parent(models().getExistingFile(modLoc("block/beehouse")))
+                .texture("particle", modLoc("block/apiary/"+name))
+                .texture("texture", modLoc("block/apiary/"+name));
+        getVariantBuilder(registryObject.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(model)
+                .rotationY(((int)(state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180 ) % 360))
+                .build()
+        );
     }
 
     private void registerNest(RegistryObject<Block> registryObject) {

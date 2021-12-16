@@ -1,6 +1,5 @@
-package com.teamresourceful.resourcefulbees.common.block.multiblocks.apiary;
+package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.block.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
@@ -34,6 +33,10 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
@@ -41,9 +44,28 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @SuppressWarnings("deprecation")
-public class ApiaryBlock extends RenderingBaseEntityBlock {
+public class ApiaryBlock extends BeeHouseBlock {
+
+  public static final VoxelShape FULL_Z_SHAPE = Stream.of(
+          Block.box(1, 0, 1, 15, 13, 15),
+          Block.box(0, 13, 0, 16, 16, 16),
+          Block.box(1, 16, 0, 15, 18, 16),
+          Block.box(3, 18, 0, 13, 20, 16),
+          Block.box(5, 20, 0, 11, 22, 16),
+          Block.box(7, 22, -1, 9, 24, 17)
+  ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+
+  public static final VoxelShape FULL_X_SHAPE = Stream.of(
+          Block.box(0, 16, 1, 16, 18, 15),
+          Block.box(0, 13, 0, 16, 16, 16),
+          Block.box(1, 0, 1, 15, 13, 15),
+          Block.box(0, 18, 3, 16, 20, 13),
+          Block.box(0, 20, 5, 16, 22, 11),
+          Block.box(-1, 22, 7, 17, 24, 9)
+  ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
   public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
@@ -104,6 +126,12 @@ public class ApiaryBlock extends RenderingBaseEntityBlock {
     }
 
     super.appendHoverText(stack, worldIn, tooltip, flagIn);
+  }
+
+  @NotNull
+  @Override
+  public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+    return state.hasProperty(FACING) && state.getValue(FACING).getAxis().equals(Direction.Axis.Z) ? FULL_Z_SHAPE : FULL_X_SHAPE;
   }
 
   @Nullable
