@@ -17,9 +17,12 @@ import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
 import com.resourcefulbees.resourcefulbees.utils.color.ColorHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.tileentity.SignTileEntityRenderer;
+import net.minecraft.tileentity.SignTileEntity;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
@@ -47,6 +50,9 @@ public class ClientEventHandlers {
         MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
+
+        Atlases.addWoodType(ModBlocks.WAXED_WOOD_TYPE);
+
     }
 
     public static void recipesLoaded(RecipesUpdatedEvent event){
@@ -124,6 +130,9 @@ public class ClientEventHandlers {
         RenderTypeLookup.setRenderLayer(ModBlocks.PURPUR_BEE_NEST.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.WITHER_BEE_NEST.get(), RenderType.translucent());
 
+        RenderTypeLookup.setRenderLayer(ModBlocks.WAXED_DOOR.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.WAXED_TRAPDOOR.get(), RenderType.cutout());
+
         RenderTypeLookup.setRenderLayer(ModBlocks.T1_BEEHIVE.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.T2_BEEHIVE.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.T3_BEEHIVE.get(), RenderType.translucent());
@@ -134,6 +143,7 @@ public class ClientEventHandlers {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.HONEY_CONGEALER_TILE_ENTITY.get(), RenderHoneyCongealer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityTypes.WAXED_SIGN_TILE_ENTITY.get(), SignTileEntityRenderer::new);
         event.enqueueWork(FluidRender::setHoneyRenderType);
     }
 }

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wooden_pressure_plate",
+  "pattern": [
+    "##"
+  ],
+  "key": {
+    "#": {
+      "tag": "resourcefulbees:waxed_planks"
+    }
+  },
+  "result": {
+    "item": "resourcefulbees:waxed_pressure_plate"
+  }
+}

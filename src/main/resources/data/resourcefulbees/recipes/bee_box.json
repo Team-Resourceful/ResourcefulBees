@@ -7,7 +7,7 @@
   ],
   "key": {
     "I": { "tag": "forge:ingots/iron" },
-    "P": { "tag": "forge:waxed_planks" },
+    "P": { "tag": "resourcefulbees:waxed_planks" },
     "W": { "tag": "forge:wax" }
   },
   "result": {

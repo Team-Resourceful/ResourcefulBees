@@ -10,6 +10,7 @@ import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.Cen
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.CentrifugeControllerTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.EliteCentrifugeCasingTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.multiblocks.centrifuge.EliteCentrifugeControllerTileEntity;
+import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -75,11 +76,14 @@ public class ModTileEntityTypes {
     public static final RegistryObject<TileEntityType<HoneyCongealerTileEntity>> HONEY_CONGEALER_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_congealer", () -> TileEntityType.Builder
             .of(HoneyCongealerTileEntity::new, ModBlocks.HONEY_CONGEALER.get())
             .build(null));
-    public static final RegistryObject<TileEntityType<?>> HONEY_PIPE_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_pipe", () -> TileEntityType.Builder
-            .of(HoneyPipeTileEntity::new, ModBlocks.HONEY_PIPE.get())
-            .build(null));
+//    public static final RegistryObject<TileEntityType<?>> HONEY_PIPE_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_pipe", () -> TileEntityType.Builder
+//            .of(HoneyPipeTileEntity::new, ModBlocks.HONEY_PIPE.get())
+//            .build(null));
     public static final RegistryObject<TileEntityType<?>> BOTTOMLESS_HONEY_POT_TILE_ENTITY = TILE_ENTITY_TYPES.register("bottomless_honey_pot", () -> TileEntityType.Builder
             .of(BottomlessHoneyPotTileEntity::new, ModBlocks.BOTTOMLESS_HONEY_POT.get())
+            .build(null));
+    public static final RegistryObject<TileEntityType<WaxedSignTileEntity>> WAXED_SIGN_TILE_ENTITY = TILE_ENTITY_TYPES.register("waxed_sign", ()-> TileEntityType.Builder
+            .of(WaxedSignTileEntity::new, ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get())
             .build(null));
 
 }

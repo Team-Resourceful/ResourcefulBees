@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "wooden_button",
+  "ingredients": [
+    {
+      "tag": "resourcefulbees:waxed_planks"
+    }
+  ],
+  "result": {
+    "item": "resourcefulbees:waxed_button"
+  }
+}

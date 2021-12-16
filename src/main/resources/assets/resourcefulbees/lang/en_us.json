@@ -236,6 +236,16 @@
 	"block.resourcefulbees.waxed_planks": "Waxed Planks",
 	"block.resourcefulbees.trimmed_waxed_planks": "Trimmed Waxed Planks",
 	"block.resourcefulbees.waxed_machine_block": "Waxed Machine Block",
+	"block.resourcefulbees.waxed_slab": "Waxed Slab",
+	"block.resourcefulbees.waxed_stairs": "Waxed Stairs",
+	"block.resourcefulbees.waxed_pressure_plate": "Waxed Pressure Plate",
+	"block.resourcefulbees.waxed_button": "Waxed Button",
+	"block.resourcefulbees.waxed_sign": "Waxed Sign",
+	"block.resourcefulbees.waxed_door": "Waxed Door",
+	"block.resourcefulbees.waxed_trapdoor": "Waxed Trapdoor",
+	"block.resourcefulbees.waxed_fence": "Waxed Fence",
+	"block.resourcefulbees.waxed_fence_gate": "Waxed Fence Gate",
+
 
 	"item.resourcefulbees.t1_hive_upgrade": "Tier 1 Hive upgrade",
 	"item.resourcefulbees.t2_hive_upgrade": "Tier 2 Hive upgrade",

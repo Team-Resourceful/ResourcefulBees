@@ -12,13 +12,14 @@ import com.resourcefulbees.resourcefulbees.block.multiblocks.centrifuge.EliteCen
 import com.resourcefulbees.resourcefulbees.entity.passive.KittenBee;
 import com.resourcefulbees.resourcefulbees.entity.passive.StarryBee;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
-import com.resourcefulbees.resourcefulbees.tileentity.CentrifugeTileEntity;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.EntityType;
 import net.minecraft.potion.Effects;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
@@ -27,6 +28,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModBlocks {
+
 
     private ModBlocks() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -38,6 +40,10 @@ public class ModBlocks {
     private static final AbstractBlock.Properties CENTRIFUGE_PROPERTIES = AbstractBlock.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL);
     private static final AbstractBlock.Properties HIVE_PROPERTIES = AbstractBlock.Properties.of(Material.WOOD).strength(2).sound(SoundType.WOOD);
     private static final AbstractBlock.Properties NEST_PROPERTIES = AbstractBlock.Properties.of(Material.WOOD).strength(1F).sound(SoundType.WOOD);
+
+    public static final AbstractBlock.Properties WAXED_PLANKS_PROPERTIES = AbstractBlock.Properties.of(Material.WOOD, MaterialColor.WOOD).harvestTool(ToolType.AXE).strength(2.0F, 3.0F).sound(SoundType.WOOD);
+    public static final WoodType WAXED_WOOD_TYPE = WoodType.register(WoodType.create(new ResourceLocation(ResourcefulBees.MOD_ID, "waxed").toString()));
+
     private static AbstractBlock.Properties makeNestProperty(Material material, MaterialColor color, SoundType soundType) {
         return AbstractBlock.Properties.of(material, color).strength(1.0F).sound(soundType);
     }
@@ -96,14 +102,33 @@ public class ModBlocks {
     public static final RegistryObject<Block> CATNIP_HONEY_BLOCK = BLOCKS.register("catnip_honey_block", () -> new ColoredHoneyBlock(KittenBee.getHoneyBottleData())); //Dont care about color as we dont use it for this hardcoded block.
     public static final RegistryObject<Block> STARRY_HONEYCOMB_BLOCK = BLOCKS.register("starry_honeycomb_block", () -> new Block(AbstractBlock.Properties.of(Material.CLAY, MaterialColor.COLOR_YELLOW).sound(SoundType.CORAL_BLOCK).strength(0.3F)));
     public static final RegistryObject<Block> STARRY_HONEY_BLOCK = BLOCKS.register("starry_honey_block", () -> new ColoredHoneyBlock(StarryBee.getHoneyBottleData())); //Dont care about color as we dont use it for this hardcoded block.
-    public static final RegistryObject<Block> HONEY_PIPE = BLOCKS.register("honey_pipe", () -> new HoneyPipe(AbstractBlock.Properties.of(Material.METAL).sound(SoundType.METAL).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
+    //    public static final RegistryObject<Block> HONEY_PIPE = BLOCKS.register("honey_pipe", () -> new HoneyPipe(AbstractBlock.Properties.of(Material.METAL).sound(SoundType.METAL).strength(1.5f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(1)));
     public static final RegistryObject<Block> BOTTOMLESS_HONEY_POT = BLOCKS.register("bottomless_honey_pot", () -> new BottomlessHoneyPot(AbstractBlock.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops().harvestLevel(1).harvestTool(ToolType.PICKAXE)));
     public static final RegistryObject<Block> HONEY_GLASS = BLOCKS.register("honey_glass", () -> new HoneyGlass(AbstractBlock.Properties.of(Material.GLASS).strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn(ModBlocks::never).isRedstoneConductor(ModBlocks::never).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollission(), true));
     public static final RegistryObject<Block> HONEY_GLASS_PLAYER = BLOCKS.register("honey_glass_player", () -> new HoneyGlass(AbstractBlock.Properties.of(Material.GLASS).strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn(ModBlocks::never).isRedstoneConductor(ModBlocks::never).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollission(), false));
-    public static final RegistryObject<Block> WAXED_PLANKS = BLOCKS.register("waxed_planks", WaxedPlanks::new);
-    public static final RegistryObject<Block> TRIMMED_WAXED_PLANKS = BLOCKS.register("trimmed_waxed_planks", WaxedPlanks::new);
+    public static final RegistryObject<Block> WAXED_PLANKS = BLOCKS.register("waxed_planks", () -> new Block(WAXED_PLANKS_PROPERTIES));
+    public static final RegistryObject<Block> WAXED_STAIRS = BLOCKS.register("waxed_stairs", () -> new StairsBlock(() -> WAXED_PLANKS.get().defaultBlockState(), AbstractBlock.Properties.copy(WAXED_PLANKS.get()).dynamicShape()));
+    public static final RegistryObject<Block> WAXED_SLAB = BLOCKS.register("waxed_slab", () -> new SlabBlock(AbstractBlock.Properties.copy(WAXED_PLANKS.get()).dynamicShape()));
+    public static final RegistryObject<Block> WAXED_FENCE = BLOCKS.register("waxed_fence", () -> new FenceBlock(AbstractBlock.Properties.copy(WAXED_PLANKS.get()).noOcclusion()));
+    public static final RegistryObject<Block> WAXED_FENCE_GATE = BLOCKS.register("waxed_fence_gate", () -> new FenceGateBlock(AbstractBlock.Properties.copy(WAXED_PLANKS.get()).noOcclusion()));
+    public static final RegistryObject<Block> WAXED_BUTTON = BLOCKS.register("waxed_button", () -> new WoodButtonBlock(AbstractBlock.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission()));
+    public static final RegistryObject<Block> WAXED_PRESSURE_PLATE = BLOCKS.register("waxed_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, AbstractBlock.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission()));
+    public static final RegistryObject<Block> WAXED_DOOR = BLOCKS.register("waxed_door", () -> new DoorBlock(AbstractBlock.Properties.copy(WAXED_PLANKS.get()).noOcclusion()));
+    public static final RegistryObject<Block> WAXED_TRAPDOOR = BLOCKS.register("waxed_trapdoor", () -> new TrapDoorBlock(AbstractBlock.Properties.copy(WAXED_PLANKS.get()).noOcclusion()));
+    public static final RegistryObject<Block> WAXED_SIGN = BLOCKS.register("waxed_sign", () -> new StandingSignBlock(AbstractBlock.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission(), WAXED_WOOD_TYPE){
+        @Override
+        public TileEntity newBlockEntity(IBlockReader blockReader) {
+            return ModTileEntityTypes.WAXED_SIGN_TILE_ENTITY.get().create();
+        }
+    });
+    public static final RegistryObject<Block> WAXED_WALL_SIGN = BLOCKS.register("waxed_wall_sign", () -> new WallSignBlock(AbstractBlock.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission(), WAXED_WOOD_TYPE){
+        @Override
+        public TileEntity newBlockEntity(IBlockReader blockReader) {
+            return ModTileEntityTypes.WAXED_SIGN_TILE_ENTITY.get().create();
+        }
+    });
+    public static final RegistryObject<Block> TRIMMED_WAXED_PLANKS = BLOCKS.register("trimmed_waxed_planks", () -> new Block(WAXED_PLANKS_PROPERTIES));
     public static final RegistryObject<Block> WAXED_MACHINE_BLOCK = BLOCKS.register("waxed_machine_block", WaxedMachineBlock::new);
-    ;
 
 
     private static Boolean never(BlockState blockState, IBlockReader reader, BlockPos pos, EntityType<?> entityType) {

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wooden_trapdoor",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "resourcefulbees:waxed_planks"
+    }
+  },
+  "result": {
+    "item": "resourcefulbees:waxed_trapdoor",
+    "count": 2
+  }
+}

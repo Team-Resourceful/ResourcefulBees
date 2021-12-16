@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_rh",
+  "textures": {
+    "top": "resourcefulbees:block/waxed_door_top",
+    "bottom": "resourcefulbees:block/waxed_door_bottom"
+  }
+}
