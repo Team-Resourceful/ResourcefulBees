@@ -17,7 +17,7 @@ public class HoneyCongealerContainer extends ContainerWithStackMove {
     private final SolidificationChamberBlockEntity honeyCongealerTileEntity;
 
     public HoneyCongealerContainer(int id, Level world, BlockPos pos, Inventory inv) {
-        super(ModContainers.HONEY_CONGEALER_CONTAINER.get(), id);
+        super(ModContainers.SOLIDIFICATION_CHAMBER_CONTAINER.get(), id);
 
         honeyCongealerTileEntity = (SolidificationChamberBlockEntity) world.getBlockEntity(pos);
 

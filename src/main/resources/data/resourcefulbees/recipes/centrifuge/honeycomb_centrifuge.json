@@ -1,7 +1,7 @@
 {
   "type": "resourcefulbees:centrifuge",
   "ingredient": {
-    "id": "minecraft:honeycomb"
+    "item": "minecraft:honeycomb"
   },
   "itemOutputs": [
     {

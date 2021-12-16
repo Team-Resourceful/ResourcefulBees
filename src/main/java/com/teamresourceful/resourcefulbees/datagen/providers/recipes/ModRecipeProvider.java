@@ -25,7 +25,6 @@ public class ModRecipeProvider extends RecipeProvider {
     @Override
     protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> recipes) {
         RecipeCriteria hasPlanks = new RecipeCriteria("has_planks", has(ItemTags.PLANKS));
-        RecipeCriteria hasGoldStorage = new RecipeCriteria("has_gold_storage", has(ModItems.GOLD_STORAGE_UPGRADE.get()));
         RecipeCriteria hasHoneycombBlock = new RecipeCriteria("has_honeycomb_block", has(ModTags.Items.HONEYCOMB_BLOCK));
         RecipeCriteria hasIron = new RecipeCriteria("has_iron", has(Tags.Items.INGOTS_IRON));
 
@@ -39,18 +38,7 @@ public class ModRecipeProvider extends RecipeProvider {
         RecipeHelper.createCornerWithMid(Ingredient.of(ItemTags.PLANKS), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(Items.HONEY_BLOCK), ModItems.T4_HIVE_UPGRADE.get())
                 .unlockedBy(hasPlanks).save(recipes);
         //endregion
-        //region Apiary Upgrades
-        RecipeHelper.createCornerWithChestRecipe(Ingredient.of(ModItems.IRON_STORAGE_UPGRADE.get()), Tags.Items.INGOTS_GOLD, ModItems.GOLD_STORAGE_UPGRADE.get())
-                .unlockedBy("has_gold", has(Tags.Items.INGOTS_GOLD)).save(recipes);
-        RecipeHelper.createCornerWithChestRecipe(Ingredient.of(ModItems.GOLD_STORAGE_UPGRADE.get()), Tags.Items.GEMS_DIAMOND, ModItems.DIAMOND_STORAGE_UPGRADE.get())
-                .unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND)).save(recipes);
-        RecipeHelper.createCornerWithChestRecipe(Ingredient.of(ModItems.DIAMOND_STORAGE_UPGRADE.get()), Tags.Items.GEMS_EMERALD, ModItems.EMERALD_STORAGE_UPGRADE.get())
-                .unlockedBy("has_emerald", has(Tags.Items.GEMS_EMERALD)).save(recipes);
-        RecipeHelper.createCornerWithMid(Ingredient.of(ModItems.GOLD_STORAGE_UPGRADE.get()), Ingredient.of(ModItems.BEE_JAR.get()), Ingredient.of(ItemTags.FLOWERS), ModItems.APIARY_BREEDER_UPGRADE.get())
-                .unlockedBy(hasGoldStorage).save(recipes);
-        RecipeHelper.createCornerWithMid(Ingredient.of(ModItems.GOLD_STORAGE_UPGRADE.get()), Ingredient.of(Items.CLOCK), Ingredient.of(ItemTags.FLOWERS), ModItems.APIARY_BREED_TIME_UPGRADE.get())
-                .unlockedBy(hasGoldStorage).save(recipes);
-        //endregion
+
         //region Apiary Blocks
         RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(ModTags.Items.T3_NESTS), ModItems.T1_APIARY_ITEM.get())
                 .unlockedBy(hasHoneycombBlock).save(recipes);

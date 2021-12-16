@@ -122,7 +122,7 @@ public class ClientEventHandlers {
         MenuScreens.register(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
         MenuScreens.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
         MenuScreens.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
-        MenuScreens.register(ModContainers.HONEY_CONGEALER_CONTAINER.get(), SolidificationChamberScreen::new);
+        MenuScreens.register(ModContainers.SOLIDIFICATION_CHAMBER_CONTAINER.get(), SolidificationChamberScreen::new);
         MenuScreens.register(ModContainers.HONEY_POT_CONTAINER.get(), HoneyPotScreen::new);
 
         /* TODO REMOVE TO WORK ON CENTRIFUGE

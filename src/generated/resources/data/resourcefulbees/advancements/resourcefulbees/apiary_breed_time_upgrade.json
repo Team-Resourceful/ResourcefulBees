@@ -1,5 +1,5 @@
 {
-  "parent": "resourcefulbees:resourcefulbees/gold_storage_upgrade",
+  "parent": "resourcefulbees:resourcefulbees/t4_hive_upgrade",
   "display": {
     "icon": {
       "item": "resourcefulbees:apiary_breed_time_upgrade"

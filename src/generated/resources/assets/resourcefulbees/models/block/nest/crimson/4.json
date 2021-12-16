@@ -1,0 +1,11 @@
+{
+  "parent": "resourcefulbees:block/nest",
+  "textures": {
+    "particle": "resourcefulbees:block/nest/crimson/side",
+    "bottom": "resourcefulbees:block/nest/crimson/bottom",
+    "top": "resourcefulbees:block/nest/crimson/top",
+    "front": "resourcefulbees:block/nest/crimson/front",
+    "side": "resourcefulbees:block/nest/crimson/side",
+    "tier": "resourcefulbees:block/nest/tier_overlay/tier_4"
+  }
+}

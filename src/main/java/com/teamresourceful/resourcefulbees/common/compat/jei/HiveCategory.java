@@ -36,7 +36,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     public static final ResourceLocation HIVE_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/honeycomb.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
 
-    protected static final List<ItemStack> NESTS_0 = getStacksFromRegister(ModItems.T0_NEST_ITEMS);
+    protected static final List<ItemStack> NESTS_0 = getStacksFromRegister(ModItems.T1_NEST_ITEMS);
 
     private final IDrawable hiveBackground;
     private final IDrawable apiaryBackground;

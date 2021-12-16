@@ -4,73 +4,91 @@
       "model": "resourcefulbees:block/nest/netherrack/3"
     },
     "facing=south,honey_level=0": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 180
     },
     "facing=west,honey_level=0": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 270
     },
     "facing=east,honey_level=0": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 90
     },
     "facing=north,honey_level=1": {
       "model": "resourcefulbees:block/nest/netherrack/3"
     },
     "facing=south,honey_level=1": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 180
     },
     "facing=west,honey_level=1": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 270
     },
     "facing=east,honey_level=1": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 90
     },
     "facing=north,honey_level=2": {
       "model": "resourcefulbees:block/nest/netherrack/3"
     },
     "facing=south,honey_level=2": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 180
     },
     "facing=west,honey_level=2": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 270
     },
     "facing=east,honey_level=2": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 90
     },
     "facing=north,honey_level=3": {
       "model": "resourcefulbees:block/nest/netherrack/3"
     },
     "facing=south,honey_level=3": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 180
     },
     "facing=west,honey_level=3": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 270
     },
     "facing=east,honey_level=3": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 90
     },
     "facing=north,honey_level=4": {
       "model": "resourcefulbees:block/nest/netherrack/3"
     },
     "facing=south,honey_level=4": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 180
     },
     "facing=west,honey_level=4": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 270
     },
     "facing=east,honey_level=4": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 90
     },
     "facing=north,honey_level=5": {
       "model": "resourcefulbees:block/nest/netherrack/3"
     },
     "facing=south,honey_level=5": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 180
     },
     "facing=west,honey_level=5": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 270
     },
     "facing=east,honey_level=5": {
-      "model": "resourcefulbees:block/nest/netherrack/3"
+      "model": "resourcefulbees:block/nest/netherrack/3",
+      "y": 90
     }
   }
 }

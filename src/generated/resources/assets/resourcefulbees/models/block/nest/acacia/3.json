@@ -1,10 +1,11 @@
 {
-  "parent": "minecraft:block/orientable_with_bottom",
+  "parent": "resourcefulbees:block/nest",
   "textures": {
     "particle": "resourcefulbees:block/nest/acacia/side",
     "bottom": "resourcefulbees:block/nest/acacia/bottom",
     "top": "resourcefulbees:block/nest/acacia/top",
     "front": "resourcefulbees:block/nest/acacia/front",
-    "side": "resourcefulbees:block/nest/acacia/side"
+    "side": "resourcefulbees:block/nest/acacia/side",
+    "tier": "resourcefulbees:block/nest/tier_overlay/tier_3"
   }
 }

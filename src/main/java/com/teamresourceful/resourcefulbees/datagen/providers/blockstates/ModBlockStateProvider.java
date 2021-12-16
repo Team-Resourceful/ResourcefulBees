@@ -1,10 +1,11 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.blockstates;
 
-import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockStateProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -27,21 +28,29 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         ModelFile model = buildNestModel(name, false);
         ModelFile modelHoney = buildNestModel(name, true);
 
-        getVariantBuilder(registryObject.get()).forAllStates(state -> state.getValue(TieredBeehiveBlock.HONEY_LEVEL) == 5 ?
-                ConfiguredModel.builder().modelFile(modelHoney).build() : ConfiguredModel.builder().modelFile(model).build());
+        getVariantBuilder(registryObject.get()).forAllStates(state -> getNestModel(state, modelHoney, model)
+                .rotationY(((int)(state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180 ) % 360))
+                .build()
+        );
         this.simpleBlockItem(registryObject.get(), model);
     }
 
-    //TODO figure out how to use the element builder to add a tier overlay
+    private ConfiguredModel.Builder<?> getNestModel(BlockState state, ModelFile modelHoney, ModelFile model) {
+        return state.getValue(BlockStateProperties.LEVEL_HONEY) == 5 ?
+                ConfiguredModel.builder().modelFile(modelHoney) : ConfiguredModel.builder().modelFile(model);
+    }
+
     private ModelFile buildNestModel(String id, boolean honey) {
         String texture = id.substring(0, id.lastIndexOf("/") + 1);
+        String tier = id.substring(id.lastIndexOf("/") + 1);
         return models().getBuilder(id)
-                .parent(models().getExistingFile(mcLoc("block/orientable_with_bottom")))
+                .parent(models().getExistingFile(modLoc("block/nest")))
                 .texture("particle", modLoc("block/" + texture + "side"))
                 .texture("bottom", modLoc("block/" + texture + "bottom"))
                 .texture("top", modLoc("block/" + texture + "top"))
                 .texture("front", modLoc("block/" + texture + (honey ? "front" : "front_honey")))
-                .texture("side", modLoc("block/" + texture + "side"));
+                .texture("side", modLoc("block/" + texture + "side"))
+                .texture("tier", modLoc("block/nest/tier_overlay/tier_" + tier));
     }
 
     private void registerCentrifuge() {

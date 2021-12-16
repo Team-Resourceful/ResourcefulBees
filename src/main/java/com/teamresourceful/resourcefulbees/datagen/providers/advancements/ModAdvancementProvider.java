@@ -49,19 +49,15 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
         Advancement t3ApiaryUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T3_APIARY_ITEM, "t3_apiary", t2ApiaryUpgrade));
         addAdvancement(createSimpleAdvancement(ModItems.T4_APIARY_ITEM, "t4_apiary", t3ApiaryUpgrade));
 
-        Advancement ironStorageUpgrade = addAdvancement(createSimpleAdvancement(ModItems.IRON_STORAGE_UPGRADE, "iron_storage_upgrade", t4HiveUpgrade));
-        Advancement goldStorageUpgrade = addAdvancement(createSimpleAdvancement(ModItems.GOLD_STORAGE_UPGRADE, "gold_storage_upgrade", ironStorageUpgrade));
-        Advancement diamondStorageUpgrade = addAdvancement(createSimpleAdvancement(ModItems.DIAMOND_STORAGE_UPGRADE, "diamond_storage_upgrade", goldStorageUpgrade));
-        addAdvancement(createSimpleAdvancement(ModItems.EMERALD_STORAGE_UPGRADE, "emerald_storage_upgrade", diamondStorageUpgrade));
-
         Advancement beeBox = addAdvancement(createSimpleAdvancement(ModItems.BEE_BOX, "bee_box", beeJar));
         addAdvancement(createSimpleChallengeAchivement(ModItems.CRAFTING_BEE_BOX, "crafting_bee_box", beeBox));
         addAdvancement(createSimpleAdvancement(ModItems.HONEY_DIPPER, "honey_dipper", nest));
         addAdvancement(createSimpleAdvancement(ModItems.SMOKER, "smoker", scraper));
 
-        addAdvancement(createSimpleAdvancement(ModItems.APIARY_BREED_TIME_UPGRADE, "apiary_breed_time_upgrade", goldStorageUpgrade));
+        //TODO fix this!
+        addAdvancement(createSimpleAdvancement(ModItems.APIARY_BREED_TIME_UPGRADE, "apiary_breed_time_upgrade", t4HiveUpgrade));
         addAdvancement(createSimpleAdvancement(ModItems.APIARY_BREEDER_ITEM, "apiary_breeder", t4HiveUpgrade));
-        addAdvancement(createSimpleAdvancement(ModItems.APIARY_BREEDER_UPGRADE, "apiary_breeder_upgrade", goldStorageUpgrade));
+        addAdvancement(createSimpleAdvancement(ModItems.APIARY_BREEDER_UPGRADE, "apiary_breeder_upgrade", t4HiveUpgrade));
 
         CompoundTag beepediaNbt = new CompoundTag();
         beepediaNbt.putBoolean("Complete", false);

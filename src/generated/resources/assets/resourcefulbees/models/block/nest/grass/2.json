@@ -1,10 +1,11 @@
 {
-  "parent": "minecraft:block/orientable_with_bottom",
+  "parent": "resourcefulbees:block/nest",
   "textures": {
     "particle": "resourcefulbees:block/nest/grass/side",
     "bottom": "resourcefulbees:block/nest/grass/bottom",
     "top": "resourcefulbees:block/nest/grass/top",
     "front": "resourcefulbees:block/nest/grass/front",
-    "side": "resourcefulbees:block/nest/grass/side"
+    "side": "resourcefulbees:block/nest/grass/side",
+    "tier": "resourcefulbees:block/nest/tier_overlay/tier_2"
   }
 }

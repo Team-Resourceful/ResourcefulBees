@@ -1,6 +1,6 @@
 {
   "type": "resourcefulbees:centrifuge",
-  "ingredient": { "id": "minecraft:diamond" },
+  "ingredient": { "item": "minecraft:diamond" },
   "itemOutputs": [
     {
       "pool": [{"item": { "id": "minecraft:coal", "count": 12 }}]

@@ -29,10 +29,10 @@ public class ModItemTagProvider extends ItemTagsProvider {
         TagAppender<Item> t1Nests = tag(ModTags.Items.T1_NESTS);
         TagAppender<Item> t2Nests = tag(ModTags.Items.T2_NESTS);
         TagAppender<Item> t3Nests = tag(ModTags.Items.T3_NESTS);
-        ModItems.T0_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t0Nests));
-        ModItems.T1_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t1Nests));
-        ModItems.T2_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t2Nests));
-        ModItems.T3_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t3Nests));
+        ModItems.T1_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t0Nests));
+        ModItems.T2_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t1Nests));
+        ModItems.T3_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t2Nests));
+        ModItems.T4_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t3Nests));
         tag(ItemTags.SMALL_FLOWERS).add(ModItems.GOLD_FLOWER_ITEM.get());
         tag(ModTags.Items.WAX).add(ModItems.WAX.get());
         tag(ModTags.Items.WAX_BLOCK).add(ModItems.WAX_BLOCK_ITEM.get());
