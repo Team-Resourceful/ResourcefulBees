@@ -57,7 +57,6 @@ sourceSets {
         resources.srcDirs = main.resources.srcDirs
         resources.srcDirs.remove('src/generated/resources')
         java.srcDirs = main.java.srcDirs
-        //java.excludes = ['com/teamresourceful/resourcefulbees/common/multiblocks/**', 'com/teamresourceful/resourcefulbees/client/gui/screen/centrifuge/**']
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
         compileClasspath += main.output

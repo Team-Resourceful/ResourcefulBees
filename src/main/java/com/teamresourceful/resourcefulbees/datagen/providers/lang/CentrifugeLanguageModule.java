@@ -43,7 +43,7 @@ public class CentrifugeLanguageModule extends LanguageModule {
 
         for (CentrifugeTier tier : CentrifugeTier.values()) {
             for (String type : TYPES) {
-                provider.add("centrifuge/" + type + "/" + tier.getName(), StringUtils.capitalize(tier.getName()) + " Centrifuge " + formatType(type));
+                provider.add("block.resourcefulbees.centrifuge." + type.replace("/", ".") + "." + tier.getName(), StringUtils.capitalize(tier.getName()) + " Centrifuge " + formatType(type));
             }
         }
     }
