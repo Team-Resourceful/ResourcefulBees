@@ -5,10 +5,14 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Arrays;
+import java.util.Set;
 
 public class CentrifugeLanguageModule extends LanguageModule {
+
+    private static final Set<String> TYPES = Set.of("void", "terminal", "input/item", "input/energy", "output/item", "output/fluid");
 
     @Override
     public void addEntries(BaseLanguageProvider provider) {
@@ -26,48 +30,21 @@ public class CentrifugeLanguageModule extends LanguageModule {
         });
     }
 
-    private void addCentrifuge(BaseLanguageProvider provider) {
+    private static String formatType(String type) {
+        if (!type.contains("/")) return StringUtils.capitalize(type);
+        String[] splits = type.split("/");
+        return WordUtils.capitalize(splits[1] + " " + splits[0]);
+    }
 
-        //region blocks
+    private void addCentrifuge(BaseLanguageProvider provider) {
         provider.addBlock(ModBlocks.CENTRIFUGE_CASING, "Centrifuge Casing");
         provider.addBlock(ModBlocks.CENTRIFUGE_PROCESSOR, "Centrifuge Processor");
         provider.addBlock(ModBlocks.CENTRIFUGE_GEARBOX, "Centrifuge Gearbox");
 
-        //terminal
-        provider.addBlock(ModBlocks.CENTRIFUGE_BASIC_TERMINAL, "Basic Centrifuge Terminal");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ADVANCED_TERMINAL, "Advanced Centrifuge Terminal");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ELITE_TERMINAL, "Elite Centrifuge Terminal");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_TERMINAL, "Ultimate Centrifuge Terminal");
-
-        //void
-        provider.addBlock(ModBlocks.CENTRIFUGE_BASIC_VOID, "Basic Centrifuge Void");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ADVANCED_VOID, "Advanced Centrifuge Void");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ELITE_VOID, "Elite Centrifuge Void");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_VOID, "Ultimate Centrifuge Void");
-
-        //input
-        provider.addBlock(ModBlocks.CENTRIFUGE_BASIC_INPUT, "Basic Centrifuge Input");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ADVANCED_INPUT, "Advanced Centrifuge Input");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ELITE_INPUT, "Elite Centrifuge Input");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_INPUT, "Ultimate Centrifuge Input");
-
-        //energy port
-        provider.addBlock(ModBlocks.CENTRIFUGE_BASIC_ENERGY_PORT, "Basic Centrifuge Energy Port");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ADVANCED_ENERGY_PORT, "Advanced Centrifuge Energy Port");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ELITE_ENERGY_PORT, "Elite Centrifuge Energy Port");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_ENERGY_PORT, "Ultimate Centrifuge Energy Port");
-
-        //item output
-        provider.addBlock(ModBlocks.CENTRIFUGE_BASIC_ITEM_OUTPUT, "Basic Centrifuge Item Output");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ADVANCED_ITEM_OUTPUT, "Advanced Centrifuge Item Output");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ELITE_ITEM_OUTPUT, "Elite Centrifuge Item Output");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT, "Ultimate Centrifuge Item Output");
-
-        //fluid output
-        provider.addBlock(ModBlocks.CENTRIFUGE_BASIC_FLUID_OUTPUT, "Basic Centrifuge Fluid Output");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ADVANCED_FLUID_OUTPUT, "Advanced Centrifuge Fluid Output");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT, "Elite Centrifuge Fluid Output");
-        provider.addBlock(ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT, "Ultimate Centrifuge Fluid Output");
-        //endregion
+        for (CentrifugeTier tier : CentrifugeTier.values()) {
+            for (String type : TYPES) {
+                provider.add("centrifuge/" + type + "/" + tier.getName(), StringUtils.capitalize(tier.getName()) + " Centrifuge " + formatType(type));
+            }
+        }
     }
 }

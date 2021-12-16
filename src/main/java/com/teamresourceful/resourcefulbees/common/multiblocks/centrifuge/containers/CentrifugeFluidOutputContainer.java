@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class CentrifugeFluidOutputContainer extends CentrifugeContainer<CentrifugeFluidOutputEntity> {
 
     public CentrifugeFluidOutputContainer(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(buffer, CentrifugeFluidOutputEntity.class));
+        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeFluidOutputEntity.class));
     }
 
     public CentrifugeFluidOutputContainer(int id, Inventory inv, CentrifugeFluidOutputEntity entity) {

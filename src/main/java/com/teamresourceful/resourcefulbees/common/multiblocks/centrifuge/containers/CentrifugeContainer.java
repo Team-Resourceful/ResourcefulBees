@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.common.mixin.accessors.ContainerAcces
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.utils.WorldUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,6 +14,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,7 +71,7 @@ public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity>
         }
     }
 
-    protected static <T extends BlockEntity> T getTileFromBuf(FriendlyByteBuf buf, Class<T> type) {
-        return buf == null ? null : DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> WorldUtils.getTileEntity(type, Minecraft.getInstance().level, buf.readBlockPos()));
+    protected static <T extends BlockEntity> T getTileFromBuf(Level level, FriendlyByteBuf buf, Class<T> type) {
+        return buf == null ? null : DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> WorldUtils.getTileEntity(type, level, buf.readBlockPos()));
     }
 }
