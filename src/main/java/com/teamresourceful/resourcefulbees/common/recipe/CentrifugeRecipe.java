@@ -46,7 +46,7 @@ public class CentrifugeRecipe implements Recipe<Container> {
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> id)).forGetter(CentrifugeRecipe::getId),
-                CodecUtils.INGREDIENT_CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::getIngredient),
+                CodecUtils.ING_CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::getIngredient),
                 Output.ITEM_OUTPUT_CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getItemOutputs),
                 Output.FLUID_OUTPUT_CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getFluidOutputs),
                 Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::getTime),

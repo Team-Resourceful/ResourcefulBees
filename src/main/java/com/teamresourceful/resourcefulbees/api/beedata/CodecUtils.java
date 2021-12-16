@@ -1,8 +1,11 @@
 package com.teamresourceful.resourcefulbees.api.beedata;
 
+import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
@@ -51,6 +54,8 @@ public class CodecUtils {
     //Codec for converting an ItemStack to an Ingredient
     public static final Codec<Ingredient> INGREDIENT_CODEC = ITEM_STACK_CODEC.comapFlatMap(CodecUtils::convertToIngredient, CodecUtils::ingredientToItemStack);
 
+    public static final Codec<Ingredient> ING_CODEC = Codec.PASSTHROUGH.comapFlatMap(CodecUtils::decodeIngredient, CodecUtils::encodeIngredient);
+
     //Codec for getting a FluidStack
     public static final Codec<FluidStack> FLUID_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Registry.FLUID.byNameCodec().fieldOf("id").forGetter(FluidStack::getFluid),
@@ -58,7 +63,7 @@ public class CodecUtils {
             CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
     ).apply(instance, CodecUtils::createFluidStack));
 
-    public static final Codec<Map<ApiaryTier, ItemStack>> APIARY_VARIATIONS = Codec.unboundedMap(ApiaryTier.CODEC, ITEM_STACK_CODEC).stable();
+    public static final Codec<Map<ApiaryTier, ItemStack>> APIARY_VARIATIONS = Codec.unboundedMap(ApiaryTier.CODEC, ITEM_STACK_CODEC);
     public static final Codec<Map<BeehiveTier, ItemStack>> BEEHIVE_VARIATIONS = Codec.unboundedMap(BeehiveTier.CODEC, ITEM_STACK_CODEC);
 
     private static DataResult<Set<Item>> convertItemTagToSet(String input) {
@@ -93,6 +98,20 @@ public class CodecUtils {
     //helper method to create a fluid stack with an optional tag
     private static FluidStack createFluidStack(Fluid fluid, int amount, Optional<CompoundTag> tagOptional) {
         return new FluidStack(fluid, amount, tagOptional.orElse(null));
+    }
+
+    private static DataResult<Ingredient> decodeIngredient(Dynamic<?> dynamic) {
+        Object object = dynamic.getValue();
+        if (object instanceof JsonElement jsonElement) {
+            return DataResult.success(Ingredient.fromJson(jsonElement));
+        } else {
+            return DataResult.error("value was some how not a JsonElement");
+        }
+    }
+
+    //TODO test if swapping INSTANCE for COMPRESSED and removing convert would also work
+    private static Dynamic<JsonElement> encodeIngredient(Ingredient ingredient) {
+        return new Dynamic<>(JsonOps.INSTANCE, ingredient.toJson()).convert(JsonOps.COMPRESSED);
     }
 
     private static DataResult<Ingredient> convertToIngredient(ItemStack stack) {
