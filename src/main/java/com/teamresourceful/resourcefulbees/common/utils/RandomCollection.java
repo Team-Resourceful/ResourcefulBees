@@ -2,6 +2,8 @@ package com.teamresourceful.resourcefulbees.common.utils;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 public class RandomCollection<E> {
@@ -59,5 +61,12 @@ public class RandomCollection<E> {
 
     public int getSize() {
         return map.size();
+    }
+
+    public static <T> Collector<T, ?, RandomCollection<T>> getCollector(Function<T, Double> weightGetter) {
+        return Collector.of(RandomCollection::new, (c, t) -> c.add(weightGetter.apply(t), t), (left, right) -> {
+            left.forEach((item) -> right.add(weightGetter.apply(item), item));
+            return right;
+        });
     }
 }

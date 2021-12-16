@@ -20,7 +20,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.crafting.NBTIngredient;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.*;
@@ -52,9 +51,7 @@ public class CodecUtils {
     ).apply(instance, CodecUtils::createItemStack)); //can't use this method in 1.17 due to constructor being removed!!!
 
     //Codec for converting an ItemStack to an Ingredient
-    public static final Codec<Ingredient> INGREDIENT_CODEC = ITEM_STACK_CODEC.comapFlatMap(CodecUtils::convertToIngredient, CodecUtils::ingredientToItemStack);
-
-    public static final Codec<Ingredient> ING_CODEC = Codec.PASSTHROUGH.comapFlatMap(CodecUtils::decodeIngredient, CodecUtils::encodeIngredient);
+    public static final Codec<Ingredient> INGREDIENT_CODEC = Codec.PASSTHROUGH.comapFlatMap(CodecUtils::decodeIngredient, CodecUtils::encodeIngredient);
 
     //Codec for getting a FluidStack
     public static final Codec<FluidStack> FLUID_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -112,14 +109,6 @@ public class CodecUtils {
     //TODO test if swapping INSTANCE for COMPRESSED and removing convert would also work
     private static Dynamic<JsonElement> encodeIngredient(Ingredient ingredient) {
         return new Dynamic<>(JsonOps.INSTANCE, ingredient.toJson()).convert(JsonOps.COMPRESSED);
-    }
-
-    private static DataResult<Ingredient> convertToIngredient(ItemStack stack) {
-        return DataResult.success(new NBTIngredient(stack){});
-    }
-
-    private static ItemStack ingredientToItemStack(Ingredient ingredient) {
-        return ingredient.getItems()[0];
     }
 
     public static <A> Codec<Set<A>> createSetCodec(Codec<A> codec) {

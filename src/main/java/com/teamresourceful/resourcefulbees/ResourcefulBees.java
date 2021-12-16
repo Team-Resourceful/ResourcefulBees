@@ -13,15 +13,19 @@ import com.teamresourceful.resourcefulbees.common.data.DataGen;
 import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
+import com.teamresourceful.resourcefulbees.common.ingredients.AmountSensitiveIngredient;
+import com.teamresourceful.resourcefulbees.common.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.init.*;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.*;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPotions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -104,6 +108,8 @@ public class ResourcefulBees {
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
         ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
         ModPotions.createMixes();
+        CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "amount_sensitive"), AmountSensitiveIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
     }
 
     @SubscribeEvent

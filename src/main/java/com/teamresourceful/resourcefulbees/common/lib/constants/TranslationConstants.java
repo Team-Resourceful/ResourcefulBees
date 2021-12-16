@@ -155,7 +155,7 @@ public class TranslationConstants {
         @Translate("Hive Time Modification: %s%s%%")
         public static final String HIVE_TIME ="block.resourcefulbees.beehive.tooltip.hive_time";
 
-        @Translate(" UNIQUE §6Bees")
+        @Translate(" UNIQUE \u00A76Bees")
         public static final TranslatableComponent UNIQUE = new TranslatableComponent("block.resourcefulbees.beehive.tooltip.unique_bees");
 
         @Translate("Bees:")
@@ -304,7 +304,7 @@ public class TranslationConstants {
 
     public static class Beepedia {
 
-        @Translate("Bees Found: §6 %s / %s")
+        @Translate("Bees Found: \u00A76 %s / %s")
         public static final String PROGRESS = "gui.resourcefulbees.beepedia.home.progress";
 
         @Translate("Beepedia v2.0")

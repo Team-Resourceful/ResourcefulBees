@@ -1,14 +1,18 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
+import com.teamresourceful.resourcefulbees.common.recipe.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -25,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
@@ -66,6 +71,8 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
                     .filter(Objects::nonNull)
                     .forEach(this::addRecipe);
         }
+
+        BeeRegistry.getRegistry().getFamilyTree().values().forEach(c -> c.forEach(f -> addRecipe(makeBreedingRecipe(c))));
     }
 
     public void addRecipe(Recipe<?> recipe) {
@@ -81,6 +88,23 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         //recipes are generated.
         BeeRegistry.getRegistry().regenerateCustomBeeData();
         LOGGER.info("Adding Reload Listener: 'resourcefulbees recipe manager'");
+    }
+
+    private Recipe<?> makeBreedingRecipe(RandomCollection<BeeFamily> families) {
+        BeeFamily family = families.get(0);
+        ResourceLocation id = new ResourceLocation(ResourcefulBees.MOD_ID, family.getParent1() + "_" + family.getParent2() + "_" + family.getChild());
+        ResourceLocation parent1Id = family.getParent1Data().getRegistryID();
+        BeeJarIngredient beeJarParent1 = new BeeJarIngredient(parent1Id, family.getParent1Data().getRenderData().getColorData().getJarColor().getValue());
+        BreederRecipe.BreederPair parent1 = new BreederRecipe.BreederPair(beeJarParent1, Optional.of(parent1Id.toString()), Ingredient.of(family.getParent1FeedItemStacks().stream()));
+        ResourceLocation parent2Id = family.getParent2Data().getRegistryID();
+        BeeJarIngredient beeJarParent2 = new BeeJarIngredient(parent2Id, family.getParent2Data().getRenderData().getColorData().getJarColor().getValue());
+        BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parent2Id.toString()), Ingredient.of(family.getParent2FeedItemStacks().stream()));
+        return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(RandomCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
+    }
+
+    private BreederRecipe.BreederOutput makeOutput(BeeFamily family) {
+        ItemStack childBeeJar = BeeJarIngredient.getBeeJar(family.getChildData().getRegistryID(), family.getChildData().getRenderData().getColorData().getJarColor().getValue());
+        return new BreederRecipe.BreederOutput(childBeeJar, family.getChildData().getRegistryID(), family.getWeight(), family.getChance());
     }
 
     private Recipe<?> makeHoneycombRecipe(HoneycombItem comb) {
