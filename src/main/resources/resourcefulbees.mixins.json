@@ -7,7 +7,6 @@
     "MixinBeeEntity",
     "MixinEnterBeehiveGoal",
     "MixinFindBeehiveGoal",
-    "MixinMinecraftServer",
     "MixinUpdateBeehiveGoal",
     "RecipeManagerAccessorInvoker",
     "accessors.AnimalEntityAccessor",
