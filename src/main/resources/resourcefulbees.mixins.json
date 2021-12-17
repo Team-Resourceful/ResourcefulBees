@@ -10,16 +10,16 @@
     "BTEBeeAccessor",
     "ContainerAccessor",
     "DispenserBlockInvoker",
+    "EntityAccessor",
+    "LivingEntityAccessor",
     "MixinBeeEntity",
     "MixinEnterBeehiveGoal",
-    "MixinFindBeehiveGoal",
-    "MixinMinecraftServer",
-    "MixinUpdateBeehiveGoal",
-    "MixinLivingEntity",
-    "MixinPlayerEntity",
     "MixinEntity",
-    "EntityAccessor",
-    "LivingEntityAccessor"
+    "MixinFindBeehiveGoal",
+    "MixinLivingEntity",
+    "MixinMinecraftServer",
+    "MixinPlayerEntity",
+    "MixinUpdateBeehiveGoal"
   ],
   "minVersion": "0.8.1"
 }

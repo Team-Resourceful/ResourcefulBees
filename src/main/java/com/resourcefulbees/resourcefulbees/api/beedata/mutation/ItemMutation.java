@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.api.beedata.mutation;
 
-import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.EntityOutput;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.ItemOutput;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.block.Block;

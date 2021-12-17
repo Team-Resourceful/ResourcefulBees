@@ -1,6 +1,5 @@
 package com.resourcefulbees.resourcefulbees.block;
 
-import com.resourcefulbees.resourcefulbees.tileentity.HoneyPipeTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

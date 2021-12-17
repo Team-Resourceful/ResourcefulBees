@@ -10,10 +10,7 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.Foods;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class VanillaHoneyBottleData extends HoneyBottleData {
 

@@ -1,7 +1,6 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.mutations;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.outputs.BlockOutput;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
@@ -10,7 +9,6 @@ import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.text.*;

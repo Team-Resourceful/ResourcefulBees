@@ -2,7 +2,6 @@ package com.resourcefulbees.resourcefulbees.api.traitdata;
 
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 
 public class BeeAura {
 

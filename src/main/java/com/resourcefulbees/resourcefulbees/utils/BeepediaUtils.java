@@ -5,16 +5,9 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.item.Beepedia;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
-import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class BeepediaUtils {

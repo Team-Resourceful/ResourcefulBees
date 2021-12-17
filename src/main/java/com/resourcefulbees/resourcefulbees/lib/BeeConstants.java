@@ -1,8 +1,8 @@
 package com.resourcefulbees.resourcefulbees.lib;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.honeydata.VanillaHoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.VanillaHoneyBottleData;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 

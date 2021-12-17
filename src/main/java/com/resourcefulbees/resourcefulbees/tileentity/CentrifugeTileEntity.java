@@ -1,14 +1,12 @@
 
 package com.resourcefulbees.resourcefulbees.tileentity;
 
-import com.google.gson.JsonElement;
 import com.resourcefulbees.resourcefulbees.block.CentrifugeBlock;
 import com.resourcefulbees.resourcefulbees.capabilities.CustomEnergyStorage;
 import com.resourcefulbees.resourcefulbees.capabilities.MultiFluidTank;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.container.AutomationSensitiveItemStackHandler;
 import com.resourcefulbees.resourcefulbees.container.CentrifugeContainer;
-import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.network.packets.SyncGUIMessage;
