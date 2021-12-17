@@ -52,18 +52,6 @@ public class EnderBeeconContainer extends ContainerWithStackMove {
         return getEnderBeeconTileEntity().getTank().getFluidAmount();
     }
 
-    @Override
-    public void broadcastChanges() {
-        super.broadcastChanges();
-        if (getEnderBeeconTileEntity() == null) {
-            return;
-        }
-
-        for (IContainerListener listener : ((ContainerAccessor) this).getListeners()) {
-            getEnderBeeconTileEntity().sendGUINetworkPacket(listener);
-        }
-    }
-
     public EnderBeeconTileEntity getEnderBeeconTileEntity() {
         return enderBeeconTileEntity;
     }

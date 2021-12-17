@@ -67,6 +67,8 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
         @Override
         protected void onContentsChanged() {
             updateBeecon = true;
+            if (getLevel() != null && !getLevel().isClientSide())
+                NetPacketHandler.sendToAllLoaded(new NewSyncGUIMessage(getBlockPos(), getBufToSend()), getLevel(), getBlockPos());
         }
     };
     private final LazyOptional<FluidTank> tankOptional = LazyOptional.of(() -> tank);
@@ -335,12 +337,16 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
 
     //region SYNCABLE GUI
 
+    private PacketBuffer getBufToSend() {
+        PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+        buffer.writeFluidStack(tank.getFluid());
+        return buffer;
+    }
+
     @Override
     public void sendGUINetworkPacket(IContainerListener player) {
         if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
-            PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
-            buffer.writeFluidStack(tank.getFluid());
-            NetPacketHandler.sendToPlayer(new NewSyncGUIMessage(this.worldPosition, buffer), (ServerPlayerEntity) player);
+            NetPacketHandler.sendToPlayer(new NewSyncGUIMessage(this.worldPosition, getBufToSend()), (ServerPlayerEntity) player);
         }
     }
 
