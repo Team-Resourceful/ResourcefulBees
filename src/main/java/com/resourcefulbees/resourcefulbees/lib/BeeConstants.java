@@ -1,10 +1,8 @@
 package com.resourcefulbees.resourcefulbees.lib;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.api.honeydata.DefaultHoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.VanillaHoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
-import com.resourcefulbees.resourcefulbees.config.Config;
-import io.netty.util.AsciiString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -55,5 +53,5 @@ public class BeeConstants {
 
     public static final TranslationTextComponent CREATOR_LORE_PREFIX = new TranslationTextComponent("tooltip.resourcefulbees.bee.creator");
 
-    public static final HoneyBottleData defaultHoney = new DefaultHoneyBottleData();
+    public static final HoneyBottleData defaultHoney = new VanillaHoneyBottleData();
 }

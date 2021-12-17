@@ -393,7 +393,7 @@ public class BeeInfoUtils {
             return ModItems.CATNIP_HONEY_BOTTLE.get();
         } else if (fluid instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
-            return customfluid.getHoneyData().getHoneyBottleRegistryObject().get();
+            return customfluid.getHoneyData().getHoneyBottle();
         } else {
             return Items.HONEY_BOTTLE;
         }
@@ -404,7 +404,7 @@ public class BeeInfoUtils {
             return ModItems.CATNIP_HONEY_FLUID_BUCKET.get();
         } else if (fluid instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
-            return customfluid.getHoneyData().getHoneyBucketItemRegistryObject().get();
+            return customfluid.getHoneyData().getHoneyBucketItem();
         } else {
             return ModItems.HONEY_FLUID_BUCKET.get();
         }
@@ -416,7 +416,7 @@ public class BeeInfoUtils {
         } else if (fluid instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
             if (!customfluid.getHoneyData().doGenerateHoneyBlock()) return Items.AIR;
-            return customfluid.getHoneyData().getHoneyBlockItemRegistryObject().get();
+            return customfluid.getHoneyData().getHoneyBlockItem();
         } else {
             return Items.HONEY_BLOCK;
         }

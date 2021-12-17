@@ -4,7 +4,7 @@ import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
-import com.resourcefulbees.resourcefulbees.api.honeydata.DefaultHoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.VanillaHoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HoneycombPage;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.data.ForgeRecipeProvider;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -268,22 +267,6 @@ public class BeeRegistry implements IBeeRegistry {
 
     @OnlyIn(Dist.CLIENT)
     public List<CustomBeeData> getBeesFromHoney(HoneyBottleData bottleData, ClientWorld world) {
-        Item bucket;
-        Item bottle;
-        Item block;
-        Fluid fluid;
-        if (bottleData instanceof DefaultHoneyBottleData) {
-            bucket = ((DefaultHoneyBottleData) bottleData).bucket.get();
-            bottle = ((DefaultHoneyBottleData) bottleData).bottle;
-            block = ((DefaultHoneyBottleData) bottleData).blockItem;
-            fluid = ((DefaultHoneyBottleData) bottleData).stillFluid.get().getFluid();
-        }else {
-            bucket = (bottleData.getHoneyBucketItemRegistryObject() == null || !bottleData.getHoneyBucketItemRegistryObject().isPresent()) ? null : bottleData.getHoneyBucketItemRegistryObject().get();
-            bottle = (bottleData.getHoneyBottleRegistryObject() == null || !bottleData.getHoneyBottleRegistryObject().isPresent()) ? null : bottleData.getHoneyBottleRegistryObject().get();
-            block = (bottleData.getHoneyBlockItemRegistryObject() == null || !bottleData.getHoneyBlockItemRegistryObject().isPresent()) ? null : bottleData.getHoneyBlockItemRegistryObject().get();
-            fluid = (bottleData.getHoneyStillFluidRegistryObject() == null || !bottleData.getHoneyStillFluidRegistryObject().isPresent()) ? null : bottleData.getHoneyStillFluidRegistryObject().get();
-        }
-
         List<CustomBeeData> bees = new LinkedList<>();
         getBees().forEach((s, b) -> {
             if (b.getCombRegistryObject() == null ||
@@ -298,10 +281,10 @@ public class BeeRegistry implements IBeeRegistry {
             recipes.removeIf(r -> r.recipe == null);
             recipes.forEach(r -> {
                 boolean found = false;
-                if (r.outputFluids != null && bottleData.getHoneyBottleRegistryObject() != null && bottleData.getHoneyBottleRegistryObject().isPresent()) {
+                if (r.outputFluids != null && bottleData.getHoneyStillFluid() != null) {
                     for (Pair<FluidStack, Float> outputFluid : r.outputFluids) {
-                        if (outputFluid == null || fluid == null) continue;
-                        if (outputFluid.getLeft().getFluid().isSame(fluid)) {
+                        if (outputFluid == null) continue;
+                        if (outputFluid.getLeft().getFluid().isSame(bottleData.getHoneyStillFluid())) {
                             found = true;
                             break;
                         }
@@ -310,7 +293,9 @@ public class BeeRegistry implements IBeeRegistry {
                 if (r.outputItems != null) {
                     for (Pair<ItemStack, Float> outputItem : r.outputItems) {
                         if (outputItem == null) continue;
-                        if (outputItem.getLeft().getItem() == bottle || outputItem.getLeft().getItem() == block || outputItem.getLeft().getItem() == bucket) {
+                        if (outputItem.getLeft().getItem() == bottleData.getHoneyBottle() ||
+                                outputItem.getLeft().getItem() == bottleData.getHoneyBlockItem() ||
+                                outputItem.getLeft().getItem() == bottleData.getHoneyBucketItem()) {
                             found = true;
                             break;
                         }

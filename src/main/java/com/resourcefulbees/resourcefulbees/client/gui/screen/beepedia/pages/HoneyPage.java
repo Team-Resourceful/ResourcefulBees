@@ -3,7 +3,7 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
-import com.resourcefulbees.resourcefulbees.api.honeydata.DefaultHoneyBottleData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.VanillaHoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyEffect;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
@@ -11,7 +11,6 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.SubButtonList;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
-import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.client.Minecraft;
@@ -21,7 +20,6 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Foods;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
@@ -56,22 +54,14 @@ public class HoneyPage extends BeepediaPage {
         super(beepedia, left, top, id);
         this.bottleData = bottleData;
         initSearch();
-        if (bottleData instanceof DefaultHoneyBottleData) {
-            DefaultHoneyBottleData data = (DefaultHoneyBottleData) bottleData;
-            this.bottle = new ItemStack(data.bottle);
-            this.hunger = Foods.HONEY_BOTTLE.getNutrition();
-            this.saturation = Math.min((float) Foods.HONEY_BOTTLE.getNutrition() * Foods.HONEY_BOTTLE.getSaturationModifier() * 2.0F, 20.0F);
-            this.text = new TranslationTextComponent("fluid.resourcefulbees.honey");
+        this.bottle = new ItemStack(bottleData.getHoneyBottle());
+        this.hunger = bottleData.getHunger();
+        this.saturation = Math.min(bottleData.getHunger() * bottleData.getSaturation() * 2.0F, 20.0F);
+        this.effects = bottleData.getEffects();
+        if (bottleData.doGenerateHoneyFluid()) {
+            this.text = bottleData.getFluidTranslation();
         } else {
-            this.bottle = new ItemStack(bottleData.getHoneyBottleRegistryObject().get());
-            this.hunger = bottleData.getHunger();
-            this.saturation = Math.min(bottleData.getHunger() * bottleData.getSaturation() * 2.0F, 20.0F);
-            this.effects = bottleData.getEffects();
-            if (bottleData.doGenerateHoneyFluid()) {
-                this.text = bottleData.getFluidTranslation();
-            } else {
-                this.text = bottleData.getBottleTranslation();
-            }
+            this.text = bottleData.getBottleTranslation();
         }
         newListButton(bottle, text);
         prevTab = new ImageButton(xPos + (SUB_PAGE_WIDTH / 2) - 48, yPos + 40, 8, 11, 0, 0, 11, arrowImage, 16, 33, button -> toggleTab());
@@ -89,14 +79,14 @@ public class HoneyPage extends BeepediaPage {
 
     private void initSearch() {
         honeySearch = "";
-        if (bottleData.getHoneyBottleRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBottleRegistryObject().get().getDescriptionId()).getString();
-        if (bottleData.getHoneyFluidBlockRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyFluidBlockRegistryObject().get().getDescriptionId()).getString();
-        if (bottleData.getHoneyBlockItemRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBlockItemRegistryObject().get().getDescriptionId()).getString();
-        if (bottleData.getHoneyBucketItemRegistryObject() != null)
-            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBucketItemRegistryObject().get().getDescriptionId()).getString();
+        if (bottleData.getHoneyBottle() != null)
+            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBottle().getDescriptionId()).getString();
+        if (bottleData.getHoneyFluidBlock() != null)
+            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyFluidBlock().getDescriptionId()).getString();
+        if (bottleData.getHoneyBlockItem() != null)
+            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBlockItem().getDescriptionId()).getString();
+        if (bottleData.getHoneyBucketItem() != null)
+            honeySearch += " " + new TranslationTextComponent(bottleData.getHoneyBucketItem().getDescriptionId()).getString();
     }
 
     @Override

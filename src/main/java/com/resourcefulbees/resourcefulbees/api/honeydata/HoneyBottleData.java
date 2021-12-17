@@ -208,6 +208,35 @@ public class HoneyBottleData {
         return honeyFluidBlockRegistryObject;
     }
 
+    public Item getHoneyBottle() {
+        return honeyBottleRegistryObject != null && honeyBottleRegistryObject.isPresent() ? honeyBottleRegistryObject.get() : null;
+    }
+
+    public Item getHoneyBlockItem() {
+        return honeyBlockItemRegistryObject != null && honeyBlockItemRegistryObject.isPresent() ? honeyBlockItemRegistryObject.get() : null;
+    }
+
+    public Block getHoneyBlock() {
+        return honeyBlockRegistryObject != null && honeyBlockRegistryObject.isPresent() ? honeyBlockRegistryObject.get() : null;
+    }
+
+    public FlowingFluid getHoneyStillFluid() {
+        return honeyStillFluidRegistryObject != null && honeyStillFluidRegistryObject.isPresent() ? honeyStillFluidRegistryObject.get() : null;
+    }
+
+    public FlowingFluid getHoneyFlowingFluid() {
+        return honeyFlowingFluidRegistryObject != null && honeyFlowingFluidRegistryObject.isPresent() ? honeyFlowingFluidRegistryObject.get() : null;
+    }
+
+    public Item getHoneyBucketItem() {
+        return honeyBucketItemRegistryObject != null && honeyBucketItemRegistryObject.isPresent() ? honeyBucketItemRegistryObject.get() : null;
+    }
+
+    public FlowingFluidBlock getHoneyFluidBlock() {
+        return honeyFluidBlockRegistryObject != null && honeyFluidBlockRegistryObject.isPresent() ? honeyFluidBlockRegistryObject.get() : null;
+    }
+
+
     public Item.Properties getProperties() {
         return new Item.Properties()
                 .tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)
