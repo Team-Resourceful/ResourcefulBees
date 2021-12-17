@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
+import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.DefaultHoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyEffect;
@@ -10,6 +11,8 @@ import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaSc
 import com.resourcefulbees.resourcefulbees.client.gui.widget.ListButton;
 import com.resourcefulbees.resourcefulbees.client.gui.widget.SubButtonList;
 import com.resourcefulbees.resourcefulbees.item.BeeJar;
+import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
+import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -18,6 +21,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Foods;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
@@ -113,20 +117,20 @@ public class HoneyPage extends BeepediaPage {
     }
 
     private void initBeeList() {
-        Map<String, BeePage> beePages = beepedia.getBees(bottle);
         SortedMap<String, ListButton> buttons = new TreeMap<>();
-        for (Map.Entry<String, BeePage> e : beePages.entrySet()) {
+        List<CustomBeeData> bees = BeeRegistry.getRegistry().getBeesFromHoney(bottleData, Minecraft.getInstance().level);
+        for (CustomBeeData beeData : bees) {
             ItemStack stack = new ItemStack(ModItems.BEE_JAR.get());
-            BeeJar.fillJar(stack, e.getValue().beeData);
-            ITextComponent translation = e.getValue().beeData.getTranslation();
+            BeeJar.fillJar(stack, beeData);
+            ITextComponent translation = beeData.getTranslation();
             Button.IPressable onPress = button -> {
                 BeepediaScreen.saveScreenState();
-                beepedia.setActive(BeepediaScreen.PageType.BEE, e.getKey());
+                beepedia.setActive(BeepediaScreen.PageType.BEE, beeData.getName());
             };
             ListButton button = new ListButton(0, 0, 100, 20, 0, 0, 20, listImage, stack, 2, 2, translation, 22, 6, onPress);
             beepedia.addButton(button);
             button.visible = false;
-            buttons.put(e.getKey(), button);
+            buttons.put(beeData.getName(), button);
         }
         beeList = new SubButtonList(xPos, yPos + 54, SUB_PAGE_WIDTH, 102, 21, null, buttons);
         beeList.setActive(false);

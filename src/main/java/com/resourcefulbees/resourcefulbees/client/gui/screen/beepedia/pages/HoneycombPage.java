@@ -202,16 +202,18 @@ public class HoneycombPage extends BeeDataPage {
         if (!recipes.isEmpty()) recipes.get(activePage).drawTooltip(matrix, xPos, yPos, mouseX, mouseY);
     }
 
+
+
     public static class RecipeObject {
-        boolean isBlock;
-        boolean hasBottle;
-        ItemStack inputItem;
-        ItemStack bottleItem = ItemStack.EMPTY;
-        List<Pair<ItemStack, Float>> outputItems;
-        List<Pair<FluidStack, Float>> outputFluids;
-        CentrifugeRecipe recipe;
-        CustomBeeData beeData;
-        BeepediaScreen beepedia;
+        public boolean isBlock;
+        public boolean hasBottle;
+        public ItemStack inputItem;
+        public ItemStack bottleItem = ItemStack.EMPTY;
+        public List<Pair<ItemStack, Float>> outputItems;
+        public List<Pair<FluidStack, Float>> outputFluids;
+        public CentrifugeRecipe recipe;
+        public CustomBeeData beeData;
+        public BeepediaScreen beepedia;
 
         public RecipeObject(boolean isBlock, boolean hasBottle, CustomBeeData beeData, ClientWorld world, BeepediaScreen beepedia) {
             this.isBlock = isBlock;

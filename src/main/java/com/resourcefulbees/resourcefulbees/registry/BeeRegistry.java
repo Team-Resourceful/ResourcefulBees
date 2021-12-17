@@ -4,17 +4,24 @@ import com.resourcefulbees.resourcefulbees.api.IBeeRegistry;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.EntityMutation;
 import com.resourcefulbees.resourcefulbees.api.beedata.mutation.ItemMutation;
+import com.resourcefulbees.resourcefulbees.api.honeydata.DefaultHoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.HoneycombPage;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.recipe.CentrifugeRecipe;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import com.resourcefulbees.resourcefulbees.utils.validation.FirstPhaseValidator;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.data.ForgeRecipeProvider;
+import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -249,7 +256,7 @@ public class BeeRegistry implements IBeeRegistry {
         List<CentrifugeRecipe> recipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE);
         recipes.forEach(c -> {
             if (!c.itemOutputs.isEmpty()) {
-                for (Pair<ItemStack, Float> item: c.itemOutputs) {
+                for (Pair<ItemStack, Float> item : c.itemOutputs) {
                     if (itemPresent(item.getLeft(), beeData)) {
                         centrifugePages.add(c);
                     }
@@ -257,5 +264,63 @@ public class BeeRegistry implements IBeeRegistry {
             }
         });
         return centrifugePages;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public List<CustomBeeData> getBeesFromHoney(HoneyBottleData bottleData, ClientWorld world) {
+        Item bucket;
+        Item bottle;
+        Item block;
+        Fluid fluid;
+        if (bottleData instanceof DefaultHoneyBottleData) {
+            bucket = ((DefaultHoneyBottleData) bottleData).bucket.get();
+            bottle = ((DefaultHoneyBottleData) bottleData).bottle;
+            block = ((DefaultHoneyBottleData) bottleData).blockItem;
+            fluid = ((DefaultHoneyBottleData) bottleData).stillFluid.get().getFluid();
+        }else {
+            bucket = (bottleData.getHoneyBucketItemRegistryObject() == null || !bottleData.getHoneyBucketItemRegistryObject().isPresent()) ? null : bottleData.getHoneyBucketItemRegistryObject().get();
+            bottle = (bottleData.getHoneyBottleRegistryObject() == null || !bottleData.getHoneyBottleRegistryObject().isPresent()) ? null : bottleData.getHoneyBottleRegistryObject().get();
+            block = (bottleData.getHoneyBlockItemRegistryObject() == null || !bottleData.getHoneyBlockItemRegistryObject().isPresent()) ? null : bottleData.getHoneyBlockItemRegistryObject().get();
+            fluid = (bottleData.getHoneyStillFluidRegistryObject() == null || !bottleData.getHoneyStillFluidRegistryObject().isPresent()) ? null : bottleData.getHoneyStillFluidRegistryObject().get();
+        }
+
+        List<CustomBeeData> bees = new LinkedList<>();
+        getBees().forEach((s, b) -> {
+            if (b.getCombRegistryObject() == null ||
+                    b.getCombBlockItemRegistryObject() == null ||
+                    !b.getCombRegistryObject().isPresent() ||
+                    !b.getCombBlockItemRegistryObject().isPresent()) return;
+            List<HoneycombPage.RecipeObject> recipes = new LinkedList<>();
+            recipes.add(new HoneycombPage.RecipeObject(false, true, b, world, null));
+            recipes.add(new HoneycombPage.RecipeObject(false, false, b, world, null));
+            recipes.add(new HoneycombPage.RecipeObject(true, true, b, world, null));
+            recipes.add(new HoneycombPage.RecipeObject(true, false, b, world, null));
+            recipes.removeIf(r -> r.recipe == null);
+            recipes.forEach(r -> {
+                boolean found = false;
+                if (r.outputFluids != null && bottleData.getHoneyBottleRegistryObject() != null && bottleData.getHoneyBottleRegistryObject().isPresent()) {
+                    for (Pair<FluidStack, Float> outputFluid : r.outputFluids) {
+                        if (outputFluid == null || fluid == null) continue;
+                        if (outputFluid.getLeft().getFluid().isSame(fluid)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (r.outputItems != null) {
+                    for (Pair<ItemStack, Float> outputItem : r.outputItems) {
+                        if (outputItem == null) continue;
+                        if (outputItem.getLeft().getItem() == bottle || outputItem.getLeft().getItem() == block || outputItem.getLeft().getItem() == bucket) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (found) {
+                    bees.add(b);
+                }
+            });
+        });
+        return bees;
     }
 }
