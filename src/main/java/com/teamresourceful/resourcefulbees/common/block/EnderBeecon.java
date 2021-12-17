@@ -70,8 +70,8 @@ public class EnderBeecon extends AbstractTank {
             .noOcclusion()
             .dynamicShape();
 
-    public EnderBeecon(BlockBehaviour.Properties properties) {
-        super(properties);
+    public EnderBeecon() {
+        super(PROPERTIES);
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(BEAM, true).setValue(SOUND, true));
     }
 

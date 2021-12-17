@@ -105,6 +105,7 @@ public class ApiaryBreederTileEntity extends BlockEntity implements MenuProvider
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, ApiaryBreederTileEntity entity) {
+        if (true) return;
         boolean dirty = false;
         for (int i = 0; i < entity.getNumberOfBreeders(); i++) {
             if (entity.allBreedSlotsAreFilled(i)) {

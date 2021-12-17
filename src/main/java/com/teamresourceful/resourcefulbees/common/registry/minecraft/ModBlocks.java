@@ -2,8 +2,6 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.*;
-import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
-import com.teamresourceful.resourcefulbees.common.block.ApiaryBreederBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
@@ -70,8 +68,6 @@ public class ModBlocks {
     }
 
     public static final RegistryObject<Block> WAX_BLOCK = BLOCKS.register("wax_block", () -> new Block(BlockBehaviour.Properties.of(Material.CLAY).sound(SoundType.SNOW).strength(0.3F)));
-    public static final RegistryObject<Block> PREVIEW_BLOCK = BLOCKS.register("preview_block", () -> new Block(BlockBehaviour.Properties.of(Material.DECORATION).sound(SoundType.GLASS)));
-    public static final RegistryObject<Block> ERRORED_PREVIEW_BLOCK = BLOCKS.register("error_preview_block", () -> new Block(BlockBehaviour.Properties.of(Material.DECORATION).sound(SoundType.GLASS)));
     public static final RegistryObject<Block> GOLD_FLOWER = BLOCKS.register("gold_flower", () -> new FlowerBlock(MobEffects.INVISIBILITY, 10, BlockBehaviour.Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS)));
 
     //TODO figure out how to make this nest registration cleaner and reduce duplicate processes
@@ -156,28 +152,19 @@ public class ModBlocks {
     //endregion
 
     //region Apiaries
-    public static final RegistryObject<Block> T1_APIARY_BLOCK = APIARIES.register("t1_apiary", () -> new ApiaryBlock(ApiaryTier.T1_APIARY, 5, 6));
-    public static final RegistryObject<Block> T2_APIARY_BLOCK = APIARIES.register("t2_apiary", () -> new ApiaryBlock(ApiaryTier.T2_APIARY, 5, 6));
-    public static final RegistryObject<Block> T3_APIARY_BLOCK = APIARIES.register("t3_apiary", () -> new ApiaryBlock(ApiaryTier.T3_APIARY, 6, 8));
-    public static final RegistryObject<Block> T4_APIARY_BLOCK = APIARIES.register("t4_apiary", () -> new ApiaryBlock(ApiaryTier.T4_APIARY, 6, 8));
-
-    public static final RegistryObject<Block> BEEHOUSE_TOP = BLOCKS.register("beehouse_top", () -> new BeeHouseTopBlock(BlockBehaviour.Properties.of(Material.WOOD)));
+    public static final RegistryObject<Block> T1_APIARY_BLOCK = APIARIES.register("t1_apiary", () -> new ApiaryBlock(ApiaryTier.T1_APIARY));
+    public static final RegistryObject<Block> T2_APIARY_BLOCK = APIARIES.register("t2_apiary", () -> new ApiaryBlock(ApiaryTier.T2_APIARY));
+    public static final RegistryObject<Block> T3_APIARY_BLOCK = APIARIES.register("t3_apiary", () -> new ApiaryBlock(ApiaryTier.T3_APIARY));
+    public static final RegistryObject<Block> T4_APIARY_BLOCK = APIARIES.register("t4_apiary", () -> new ApiaryBlock(ApiaryTier.T4_APIARY));
+    public static final RegistryObject<Block> BEEHOUSE_TOP = BLOCKS.register("beehouse_top", BeeHouseTopBlock::new);
     //endregion
-
-
-
-
-
-
-
-
     public static final RegistryObject<Block> APIARY_BREEDER_BLOCK = BLOCKS.register("apiary_breeder", () -> new ApiaryBreederBlock(NEST_PROPERTIES));
     public static final RegistryObject<LiquidBlock> HONEY_FLUID_BLOCK = BLOCKS.register("honey_fluid_block", () -> new LiquidBlock(ModFluids.HONEY_STILL, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new CreativeGen(CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> ACCELERATOR = BLOCKS.register("accelerator", () -> new AcceleratorBlock(CENTRIFUGE_PROPERTIES));
-    public static final RegistryObject<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", () -> new EnderBeecon(EnderBeecon.PROPERTIES));
-    public static final RegistryObject<Block> SOLIDIFICATION_CHAMBER = BLOCKS.register("solidification_chamber", () -> new SolidificationChamber(BlockBehaviour.Properties.of(Material.STONE).sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", EnderBeecon::new);
+    public static final RegistryObject<Block> SOLIDIFICATION_CHAMBER = BLOCKS.register("solidification_chamber", SolidificationChamber::new);
     public static final RegistryObject<Block> HONEY_POT = BLOCKS.register("honey_pot", () -> new HoneyPotBlock(BlockBehaviour.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops()));
 
     //region Centrifuge Multiblock Blocks

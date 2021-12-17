@@ -71,8 +71,8 @@ public class ApiaryBlock extends BeeHouseBlock {
 
   private final ApiaryTier tier;
 
-  public ApiaryBlock(final ApiaryTier tier, float hardness, float resistance) {
-    super(BlockBehaviour.Properties.of(Material.METAL).strength(hardness, resistance).sound(SoundType.METAL));
+  public ApiaryBlock(final ApiaryTier tier) {
+    super(BlockBehaviour.Properties.of(Material.METAL).strength(5f, 6f).sound(SoundType.METAL));
     this.tier = tier;
     this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
   }
