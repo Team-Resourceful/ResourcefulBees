@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.commands;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -25,20 +26,20 @@ public class CentrifugeCommandHolder {
             Collection<String> commands = newDispatcher.getSmartUsage(newDispatcher.getRoot(), ctx.getSource()).values();
             ctx.getSource().sendMessage("Centrifuge Commands: ");
             for (String command : commands) ctx.getSource().sendMessage(" - " + command);
-            return 1;
+            return Command.SINGLE_SUCCESS;
         }));
         newDispatcher.register(literal("say").then(argument("message", StringArgumentType.greedyString()).executes(ctx -> {
             ctx.getSource().sendMessage(StringArgumentType.getString(ctx, "message"));
-            return 1;
+            return Command.SINGLE_SUCCESS;
         })));
         newDispatcher.register(literal("ping").executes(ctx -> {
             ctx.getSource().sendMessage("pong");
-            return 1;
+            return Command.SINGLE_SUCCESS;
         }));
         if (!FMLLoader.isProduction()) {
             newDispatcher.register(literal("reload").executes(ctx -> {
                 dispatcher = generateCommands();
-                return 1;
+                return Command.SINGLE_SUCCESS;
             }));
         }
         return newDispatcher;
