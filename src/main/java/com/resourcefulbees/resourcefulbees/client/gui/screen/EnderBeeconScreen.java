@@ -1,232 +1,158 @@
 package com.resourcefulbees.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
-import com.resourcefulbees.resourcefulbees.config.Config;
+import com.resourcefulbees.resourcefulbees.block.EnderBeecon;
+import com.resourcefulbees.resourcefulbees.client.gui.widget.BeeconEffectWidget;
+import com.resourcefulbees.resourcefulbees.client.gui.widget.OptionImageButton;
 import com.resourcefulbees.resourcefulbees.container.EnderBeeconContainer;
+import com.resourcefulbees.resourcefulbees.lib.TranslationConstants;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
-import com.resourcefulbees.resourcefulbees.network.packets.UpdateBeeconMessage;
+import com.resourcefulbees.resourcefulbees.network.packets.BeeconChangeMessage;
 import com.resourcefulbees.resourcefulbees.tileentity.EnderBeeconTileEntity;
-import com.resourcefulbees.resourcefulbees.utils.RenderUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.AbstractButton;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.gui.widget.AbstractSlider;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.potion.Effect;
-import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
+
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
 
     private final EnderBeeconTileEntity tileEntity;
 
     public EnderBeeconScreen(EnderBeeconContainer screenContainer, PlayerInventory inventory, ITextComponent titleIn) {
         super(screenContainer, inventory, titleIn);
         this.tileEntity = screenContainer.getEnderBeeconTileEntity();
-        preInit();
-    }
-
-    private static final ITextComponent primaryLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.primary");
-    private static final ITextComponent drainLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.drain");
-    private static final ITextComponent rangeLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.range");
-    private static final ITextComponent activeLabel = new TranslationTextComponent("block.resourcefulbees.ender_beecon.is_active");
-    private static final ResourceLocation BUTTON_CALMING = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/calming_button.png");
-
-    List<PowerButton> powerButtons = new LinkedList<>();
-
-    private void preInit() {
         this.imageWidth = 230;
         this.imageHeight = 200;
         this.inventoryLabelX = 36;
-        this.inventoryLabelY = 106;
+        this.inventoryLabelY = 107;
+        this.titleLabelX = 110;
     }
+
+    private final List<BeeconEffectWidget> powerButtons = new LinkedList<>();
+    private OptionImageButton soundButton;
+    private OptionImageButton beamButton;
 
     @Override
     protected void init() {
         super.init();
         buttons.clear();
+
+        BlockState state = menu.getEnderBeeconTileEntity().getBlockState();
+
+        soundButton = addButton(new OptionImageButton(leftPos + 109, topPos + 84, 52, 200, state.hasProperty(EnderBeecon.SOUND) && !state.getValue(EnderBeecon.SOUND), BACKGROUND) {
+            @Override
+            public void setSelected(boolean selected) {
+                super.setSelected(selected);
+                NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.SOUND, !selected, menu.getEnderBeeconTileEntity().getBlockPos()));
+            }
+        });
+        beamButton = addButton(new OptionImageButton(leftPos + 132, topPos + 84, 92, 200, state.hasProperty(EnderBeecon.BEAM) && !state.getValue(EnderBeecon.BEAM), BACKGROUND) {
+            @Override
+            public void setSelected(boolean selected) {
+                super.setSelected(selected);
+                NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.BEAM, !selected, menu.getEnderBeeconTileEntity().getBlockPos()));
+            }
+        });
+        addButton(new RangeSlider(leftPos + 155, topPos + 84, menu.getEnderBeeconTileEntity().getRange() / 50f));
     }
 
     @Override
     protected void renderBg(@NotNull MatrixStack matrix, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
         if (minecraft != null && tileEntity != null) {
-            minecraft.getTextureManager().bind(texture);
-            int i = this.leftPos;
-            int j = this.topPos;
-            this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
+            minecraft.getTextureManager().bind(BACKGROUND);
+            this.blit(matrix, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+            this.blit(matrix, this.leftPos + 100, this.topPos + 17, 138, 200, 6, 27);
         }
-        drawFluidTank(matrix);
         drawButtons();
     }
 
     private void drawButtons() {
-        int i = this.leftPos;
-        int j = this.topPos;
-        int buttonX = i + 24;
-        int buttonY = j + 36;
-        int buttonWidth = 22;
-        int padding = 16;
-        int buttonStartX = buttonX;
+        int buttonStartY = this.topPos + 17;
         powerButtons.clear();
-        for (EnderBeeconTileEntity.BeeconEffect effect : tileEntity.getEffects()) {
-            PowerButton button = this.addButton(new PowerButton(buttonStartX, buttonY, effect.getEffect(), BUTTON_CALMING));
+        for (Effect allowedEffect : EnderBeeconTileEntity.ALLOWED_EFFECTS) {
+            BeeconEffectWidget button = new BeeconEffectWidget(this.leftPos + 9, buttonStartY, allowedEffect, menu.getEnderBeeconTileEntity());
             button.active = true;
-            button.setSelected(effect.isActive());
+            button.setSelected(tileEntity.hasEffect(allowedEffect));
             powerButtons.add(button);
-            buttonStartX += buttonWidth + padding;
-        }
-    }
-
-    private void drawFluidTank(MatrixStack matrix) {
-        if (!tileEntity.getFluidTank().isEmpty()) {
-            //init stuff
-            int tankPosX = this.leftPos + 207;
-            int tankPosY = this.topPos + 30;
-            int tankHeight = 62;
-            int tankWidth = 14;
-            RenderUtils.renderFluid(matrix, tileEntity.getFluidTank(), tankPosX, tankPosY, tankWidth, tankHeight, getBlitOffset());
+            buttonStartY += 22;
         }
     }
 
     @Override
     protected void renderLabels(@NotNull MatrixStack matrixStack, int mouseX, int mouseY) {
         super.renderLabels(matrixStack, mouseX, mouseY);
-        int buttonX = 24 + 11;
-        int buttonY = 36 + 25;
-        int buttonWidth = 22;
-        int padding = 16;
-        int buttonStartX = buttonX;
-        drawCenteredString(matrixStack, this.font, primaryLabel, 92, 24, 14737632);
-        this.font.draw(matrixStack, drainLabel, 13, 90, 14737632);
-        this.font.draw(matrixStack, tileEntity.getDrain() + " mb/t", 44, 90, 16751628);
-        this.font.draw(matrixStack, rangeLabel, 90, 90, 14737632);
-        this.font.draw(matrixStack, tileEntity.getRange() + " blocks", 125, 90, 34815);
-        this.font.draw(matrixStack, activeLabel, 13, 78, 14737632);
-        if (tileEntity.doEffects()) {
-            this.font.draw(matrixStack, "Yes", 63, 78, 47104);
-        } else {
-            this.font.draw(matrixStack, "No", 63, 78, 12320768);
-        }
+        this.font.draw(matrixStack, TranslationConstants.Guis.EnderBeecon.PRIMARY_LABEL, 10, 6, 4210752);
 
-        for (PowerButton widget : this.powerButtons) {
-            EnderBeeconTileEntity.BeeconEffect effect = tileEntity.getEffect(widget.effect);
-            if (Config.BEECON_DO_MULTIPLIER.get()) {
-                drawCenteredString(matrixStack, this.font, new StringTextComponent("x" + effect.getValue()), buttonStartX, buttonY, 14737632);
-            } else {
-                drawCenteredString(matrixStack, this.font, new StringTextComponent("+" + effect.getValue()), buttonStartX, buttonY, 14737632);
-            }
-            buttonStartX += buttonWidth + padding;
-            if (widget.isHovered()) widget.renderToolTip(matrixStack, mouseX - this.leftPos, mouseY - this.topPos);
-        }
-        if (mouseX >= this.leftPos + 207 && mouseX <= this.leftPos + 221 && mouseY >= this.topPos + 30 && mouseY <= this.topPos + 92) {
-            StringTextComponent fluidCount;
-            DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-            List<IReorderingProcessor> tooltip = new LinkedList<>();
-            tooltip.add(new TranslationTextComponent(tileEntity.getFluidTank().getFluid().getTranslationKey()).getVisualOrderText());
-            if (tileEntity.getFluidTank().getFluidAmount() < 1000f || Screen.hasShiftDown()) {
-                fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount()) + " mb");
-            } else {
-                fluidCount = new StringTextComponent(decimalFormat.format(tileEntity.getFluidTank().getFluidAmount() / 1000f) + " B");
-            }
-            tooltip.add(fluidCount.withStyle(TextFormatting.GRAY).getVisualOrderText());
-            renderTooltip(matrixStack, tooltip, mouseX - this.leftPos, mouseY - this.topPos);
-        }
-    }
+        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.ACTIVE_LABEL, 110, 20, 14737632);
+        drawString(matrixStack, font, tileEntity.doEffects() ? "Yes" : "No", 160, 20, tileEntity.doEffects() ? 47104 : 12320768);
+        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.DRAIN_LABEL, 110, 32, 14737632);
+        drawString(matrixStack, font, tileEntity.getDrain() + " mb/t", 141, 32, 16751628);
+        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.RANGE_LABEL, 110, 44, 14737632);
+        drawString(matrixStack, font, tileEntity.getRange() + " blocks", 145, 44, 34815);
 
-    @OnlyIn(Dist.CLIENT)
-    abstract static class Button extends AbstractButton {
-        private boolean selected;
-        private final ResourceLocation texture;
+        FluidStack fluidStack = menu.getEnderBeeconTileEntity().getTank().getFluid();
 
-        protected Button(int xPos, int yPos, ResourceLocation texture) {
-            super(xPos, yPos, 22, 22, StringTextComponent.EMPTY);
-            this.texture = texture;
-        }
-
-        @Override
-        public void renderButton(@NotNull MatrixStack matrixStack, int xPos, int yPos, float v) {
-            Minecraft.getInstance().getTextureManager().bind(texture);
-            //noinspection deprecation
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            int i = 0;
-            int j = 0;
-            if (!this.active) {
-                j += this.width * 2;
-            } else if (this.selected) {
-                j += this.width;
-            } else if (this.isHovered()) {
-                j += this.width * 3;
-            }
-
-            blit(matrixStack, this.x, this.y, j, i, this.width, this.height, 22 * 4, 22);
-            this.renderExtra(matrixStack);
-        }
-
-        protected abstract void renderExtra(MatrixStack matrixStack);
-
-        public boolean isSelected() {
-            return this.selected;
-        }
-
-        public void setSelected(boolean selected) {
-            this.selected = selected;
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    class PowerButton extends EnderBeeconScreen.Button {
-        private final Effect effect;
-        private final TextureAtlasSprite effectSprite;
-        private final ITextComponent textComponent;
-
-        public PowerButton(int xPos, int yPos, Effect effect, ResourceLocation texture) {
-            super(xPos, yPos, texture);
-            this.effect = effect;
-            this.effectSprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
-            this.textComponent = this.getTooltip(effect);
-        }
-
-        private ITextComponent getTooltip(Effect effect) {
-            return new TranslationTextComponent(effect.getDescriptionId());
-        }
-
-        public void onPress() {
-            NetPacketHandler.sendToServer(new UpdateBeeconMessage(effect.getRegistryName(), !this.isSelected(), tileEntity.getBlockPos()));
-            this.setSelected(!this.isSelected());
-
-            EnderBeeconScreen.this.tick();
-            EnderBeeconScreen.this.init();
-        }
-
-        @Override
-        public void renderToolTip(@NotNull MatrixStack matrixStack, int xPos, int yPos) {
-            EnderBeeconScreen.this.renderTooltip(matrixStack, this.textComponent, xPos, yPos);
-        }
-
-        protected void renderExtra(MatrixStack matrixStack) {
-            Minecraft.getInstance().getTextureManager().bind(this.effectSprite.atlas().location());
-            blit(matrixStack, this.x + 2, this.y + 2, this.getBlitOffset(), 18, 18, this.effectSprite);
-        }
+        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.FLUID_LABEL, 110, 56, 14737632);
+        drawString(matrixStack, font, fluidStack.isEmpty() ? TranslationConstants.Guis.EnderBeecon.NO_FLUID_LABEL : fluidStack.getDisplayName(), 137, 56, 16751628);
+        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.FLUID_AMOUNT_LABEL, 110, 68, 14737632);
+        drawString(matrixStack, font, fluidStack.getAmount() + "mB", 148, 68, 47104);
     }
 
     @Override
     public void render(@NotNull MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
-        if (this.menu.getEnderBeeconTileEntity() != null) {
-            this.renderBackground(matrix);
-            super.render(matrix, mouseX, mouseY, partialTicks);
-            this.renderTooltip(matrix, mouseX, mouseY);
+        this.renderBackground(matrix);
+        super.render(matrix, mouseX, mouseY, partialTicks);
+        this.renderTooltip(matrix, mouseX, mouseY);
+        for (BeeconEffectWidget widget : this.powerButtons) {
+            widget.render(matrix, mouseX, mouseY, partialTicks);
+            if (widget.isHovered()) widget.renderToolTip(matrix, mouseX, mouseY);
+        }
+        if (soundButton.isHovered()) soundButton.renderToolTip(matrix, mouseX, mouseY);
+        if (beamButton.isHovered()) beamButton.renderToolTip(matrix, mouseX, mouseY);
+    }
+
+    @Override
+    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+        return this.getFocused() != null && this.isDragging() && pButton == 0 ? this.getFocused().mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY) : super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        for (BeeconEffectWidget powerButton : this.powerButtons) powerButton.onClick(mouseX, mouseY);
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    public class RangeSlider extends AbstractSlider {
+
+        public RangeSlider(int pX, int pY, double pValue) {
+            super(pX, pY, 66, 20, StringTextComponent.EMPTY, pValue);
+            updateMessage();
+        }
+
+        @Override
+        protected void updateMessage() {
+            setMessage(new StringTextComponent("Range: " + (int) ((value * 40) + 10)));
+        }
+
+        @Override
+        protected void applyValue() {
+            int range = (int) (value * 40) + 10;
+            NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.RANGE, range, EnderBeeconScreen.this.menu.getEnderBeeconTileEntity().getBlockPos()));
         }
     }
 }

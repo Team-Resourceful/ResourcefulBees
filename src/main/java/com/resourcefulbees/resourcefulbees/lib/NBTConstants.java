@@ -7,7 +7,6 @@ public class NBTConstants {
     }
 
 
-
     public static final String NBT_ROOT = "ResourcefulBees";
     public static final String NBT_COLOR = "Color";
     public static final String NBT_BEE_TYPE = "BeeType";
@@ -54,4 +53,13 @@ public class NBTConstants {
     public static final String NBT_NAME = "Name";
     public static final String NBT_BEEPEDIA_DATA = "BeepediaData";
     public static final String BEEPEDIA_COMPLETE = "Complete";
+    public static final String NBT_TANK = "Tank";
+
+    public static class Beecon {
+        private Beecon() {
+            throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        }
+        public static final String RANGE = "range";
+        public static final String ACTIVE_EFFECTS = "active_effects";
+    }
 }

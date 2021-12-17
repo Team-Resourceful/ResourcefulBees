@@ -36,7 +36,7 @@ public class UpdateClientBeeconMessage {
                 TileEntity tileEntity = player.level.getBlockEntity(message.pos);
                 if (tileEntity instanceof EnderBeeconTileEntity) {
                     EnderBeeconTileEntity beeconTileEntity = (EnderBeeconTileEntity) tileEntity;
-                    beeconTileEntity.readNBT(message.data);
+                    beeconTileEntity.save(message.data);
                 }
             }
         });

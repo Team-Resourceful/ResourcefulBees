@@ -68,7 +68,7 @@ public class ModTileEntityTypes {
             .of(() -> new EliteCentrifugeCasingTileEntity(ModTileEntityTypes.ELITE_CENTRIFUGE_CASING_ENTITY.get()), ModBlocks.ELITE_CENTRIFUGE_CASING.get())
             .build(null));
     public static final RegistryObject<TileEntityType<EnderBeeconTileEntity>> ENDER_BEECON_TILE_ENTITY = TILE_ENTITY_TYPES.register("ender_beecon", () -> TileEntityType.Builder
-            .of(() -> new EnderBeeconTileEntity(ModTileEntityTypes.ENDER_BEECON_TILE_ENTITY.get()), ModBlocks.ENDER_BEECON.get())
+            .of(EnderBeeconTileEntity::new, ModBlocks.ENDER_BEECON.get())
             .build(null));
     public static final RegistryObject<TileEntityType<HoneyTankTileEntity>> HONEY_TANK_TILE_ENTITY = TILE_ENTITY_TYPES.register("honey_tank", () -> TileEntityType.Builder
             .of(() -> new HoneyTankTileEntity(HoneyTankTileEntity.TankTier.WOODEN), ModBlocks.PURPUR_HONEY_TANK.get(), ModBlocks.NETHER_HONEY_TANK.get(), ModBlocks.WOODEN_HONEY_TANK.get())

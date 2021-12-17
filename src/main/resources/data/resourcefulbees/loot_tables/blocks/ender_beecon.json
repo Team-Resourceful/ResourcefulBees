@@ -15,20 +15,23 @@
                   "source": "block_entity",
                   "ops": [
                     {
-                      "source": "fluid",
-                      "target": "fluid",
+                      "source": "Tank",
+                      "target": "Tank",
                       "op": "replace"
                     },
                     {
                       "source": "active_effects",
                       "target": "active_effects",
                       "op": "replace"
-                    },
-                    {
-                      "source": "tier",
-                      "target": "tier",
-                      "op": "replace"
                     }
+                  ]
+                },
+                {
+                  "function": "minecraft:copy_state",
+                  "block": "resourcefulbees:ender_beecon",
+                  "properties": [
+                    "sound",
+                    "beam"
                   ]
                 }
               ],

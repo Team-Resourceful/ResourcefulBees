@@ -44,6 +44,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -75,6 +76,11 @@ public class ResourcefulBees {
         BeeSetup.setupBees();
         RegistryHandler.registerDynamicBees();
         RegistryHandler.registerDynamicHoney();
+        if (FMLLoader.isProduction()) {
+            Config.GENERATE_DEFAULTS.set(false);
+            Config.GENERATE_DEFAULTS.save();
+        }
+
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(RegistryHandler::addEntityAttributes);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);

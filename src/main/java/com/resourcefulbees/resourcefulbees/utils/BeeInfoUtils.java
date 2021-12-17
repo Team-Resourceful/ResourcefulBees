@@ -9,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.api.ICustomBee;
 import com.resourcefulbees.resourcefulbees.api.beedata.BreedData;
 import com.resourcefulbees.resourcefulbees.api.beedata.CustomBeeData;
+import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.entity.passive.CustomBeeEntity;
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
@@ -34,11 +35,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effect;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -321,6 +324,18 @@ public class BeeInfoUtils {
         beeEntity.resetTicksWithoutNectarSinceExitingHive();
     }
 
+    public static Fluid getHoneyFluidFromBottle(ItemStack bottleOutput) {
+        Item item = bottleOutput.getItem();
+        if (item == Items.HONEY_BOTTLE) {
+            return ModFluids.HONEY_STILL.get().getSource();
+        } else if (item instanceof CustomHoneyBottleItem) {
+            CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item;
+            HoneyBottleData fluidData = BeeRegistry.getRegistry().getHoneyData(honey.getHoneyData().getName());
+            return fluidData.getHoneyStillFluidRegistryObject().get().getSource();
+        }
+        return Fluids.EMPTY;
+    }
+
     public static void setEntityLocationAndAngle(BlockPos blockpos, Direction direction, Entity entity) {
         EntitySize size = entity.getDimensions(Pose.STANDING);
         double d0 = 0.65D + size.width / 2.0F;
@@ -450,5 +465,18 @@ public class BeeInfoUtils {
     @OnlyIn(Dist.CLIENT)
     public static World getClientWorld() {
         return Minecraft.getInstance().level;
+    }
+
+    public static Item getHoneyBottleFromFluid(Fluid fluid) {
+        if (fluid instanceof HoneyFlowingFluid) {
+            HoneyFlowingFluid customFluid = (HoneyFlowingFluid) fluid;
+            return BeeRegistry.getRegistry().getHoneyData(customFluid.getHoneyData().getName()).getHoneyBottleRegistryObject().get();
+        } else {
+            return Items.HONEY_BOTTLE;
+        }
+    }
+
+    public static Effect getEffect(String effectName) {
+        return ForgeRegistries.POTIONS.getValue(ResourceLocation.tryParse(effectName));
     }
 }
