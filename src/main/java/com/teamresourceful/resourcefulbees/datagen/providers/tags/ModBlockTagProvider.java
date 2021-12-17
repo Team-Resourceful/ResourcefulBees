@@ -28,6 +28,14 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         tag(net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS).addTags(ModTags.Blocks.WAX);
         TagAppender<Block> hiveBuilder = tag(BlockTags.BEEHIVES);
         ModBlocks.HIVES.getEntries().stream().map(RegistryObject::get).forEach(hiveBuilder::add);
+
+        TagAppender<Block> axeTagBuilder = tag(BlockTags.MINEABLE_WITH_AXE);
+        ModBlocks.APIARIES.getEntries().stream().map(RegistryObject::get).forEach(axeTagBuilder::add);
+        axeTagBuilder.add(ModBlocks.BEEHOUSE_TOP.get(), ModBlocks.APIARY_BREEDER_BLOCK.get());
+
+        TagAppender<Block> pickaxeTagBuilder = tag(BlockTags.MINEABLE_WITH_PICKAXE);
+        ModBlocks.CENTRIFUGE_BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(pickaxeTagBuilder::add);
+        pickaxeTagBuilder.add(ModBlocks.HONEY_GENERATOR.get(), ModBlocks.ENDER_BEECON.get(), ModBlocks.SOLIDIFICATION_CHAMBER.get(), ModBlocks.HONEY_POT.get());
     }
 
     @Override
