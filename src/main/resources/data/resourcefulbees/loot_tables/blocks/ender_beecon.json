@@ -16,12 +16,17 @@
                   "ops": [
                     {
                       "source": "Tank",
-                      "target": "Tank",
+                      "target": "BlockEntityTag.Tank",
                       "op": "replace"
                     },
                     {
                       "source": "active_effects",
-                      "target": "active_effects",
+                      "target": "BlockEntityTag.active_effects",
+                      "op": "replace"
+                    },
+                    {
+                      "source": "range",
+                      "target": "BlockEntityTag.range",
                       "op": "replace"
                     }
                   ]
