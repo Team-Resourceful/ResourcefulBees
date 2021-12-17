@@ -68,7 +68,7 @@ public class EnderBeeconScreen extends ContainerScreen<EnderBeeconContainer> {
                 NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.BEAM, !selected, menu.getEnderBeeconTileEntity().getBlockPos()));
             }
         });
-        addButton(new RangeSlider(leftPos + 155, topPos + 84, menu.getEnderBeeconTileEntity().getRange() / 50f));
+        addButton(new RangeSlider(leftPos + 155, topPos + 84, (menu.getEnderBeeconTileEntity().getRange() -10) / 40f));
     }
 
     @Override
