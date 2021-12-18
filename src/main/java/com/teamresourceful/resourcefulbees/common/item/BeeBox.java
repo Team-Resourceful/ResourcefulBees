@@ -53,10 +53,7 @@ public class BeeBox extends Item {
                     BlockPos blockPos = pos.relative(context.getClickedFace());
                     entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
                     worldIn.addFreshEntity(entity);
-                    if (entity instanceof Bee bee) {
-                        BeeJar.resetBee(bee);
-                        BeeJar.setBeeAngry(bee, player);
-                    }
+                    if (entity instanceof Bee bee) BeeJar.updateCapturedBee(bee, player);
                 }
             }
             if (isTemp) stack.shrink(1);
@@ -93,7 +90,7 @@ public class BeeBox extends Item {
         }
         if (isTemp) return InteractionResult.FAIL;
 
-        CompoundTag tag = stack.getTag() == null ? new CompoundTag() : stack.getTag();
+        CompoundTag tag = stack.getOrCreateTag();
 
         ListTag bees = tag.contains(NBTConstants.NBT_BEES) ? tag.getList(NBTConstants.NBT_BEES, 10) : new ListTag();
 

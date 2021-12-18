@@ -13,6 +13,7 @@ import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.core.BlockPos;
@@ -142,12 +143,11 @@ public class BeeInfoUtils {
         String beeColor = VANILLA_BEE_COLOR;
 
         if (beeEntity instanceof ICustomBee iCustomBee) {
-            nbt.putString(NBTConstants.NBT_BEE_TYPE, iCustomBee.getBeeType());
             beeColor = iCustomBee.getRenderData().colorData().jarColor().toString();
         }
 
         nbt.putString(NBTConstants.NBT_COLOR, beeColor);
-
+        BeehiveEntityAccessor.callRemoveIgnoredBeeTags(nbt);
         return nbt;
     }
 

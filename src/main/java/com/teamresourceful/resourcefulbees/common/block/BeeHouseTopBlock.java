@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -97,6 +98,11 @@ public class BeeHouseTopBlock extends Block {
     @Override
     public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.INVISIBLE;
+    }
+
+    @Override
+    public @NotNull PushReaction getPistonPushReaction(@NotNull BlockState state) {
+        return PushReaction.BLOCK;
     }
 
     @Override

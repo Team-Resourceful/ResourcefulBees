@@ -285,6 +285,12 @@ public class TranslationConstants {
 
         @Translate("Must collect ALL honeycombs for bees to generate new ones!")
         public static final TranslatableComponent SCRAPER_TOOLTIP_1 = new TranslatableComponent("block.resourcefulbees.scraper.tooltip.info.2");
+
+        @Translate("Filled Bee Jar")
+        public static final String BEE_JAR_FILLED = "item.resourcefulbees.bee_jar_filled";
+
+        @Translate("Filled Bee Jar")
+        public static final String BEE_JAR_EMPTY = "item.resourcefulbees.bee_jar_empty";
     }
 
     public static class HoneyDipper {

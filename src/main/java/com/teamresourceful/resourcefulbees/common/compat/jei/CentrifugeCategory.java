@@ -42,7 +42,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         super(guiHelper, ID,
                 TranslationConstants.Jei.CENTRIFUGE,
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 134, 66).addPadding(0, 0, 0, 0).build(),
-                guiHelper.createDrawableIngredient(ModItems.APIARY_BREEDER_ITEM.get().getDefaultInstance()),
+                guiHelper.createDrawableIngredient(ModItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance()),
                 CentrifugeRecipeAdapter.class);
     }
 

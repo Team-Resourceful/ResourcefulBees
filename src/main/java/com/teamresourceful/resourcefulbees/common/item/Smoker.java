@@ -32,8 +32,6 @@ import java.util.List;
 
 public class Smoker extends Item {
 
-    private int flag = 0;
-
     public Smoker(Properties properties) {
         super(properties);
     }
@@ -55,41 +53,31 @@ public class Smoker extends Item {
     }
 
     @Override
-	public @NotNull InteractionResultHolder<ItemStack> use(Level world, @NotNull Player player, @NotNull InteractionHand hand) {
-	    if (!world.isClientSide) {
-	        int damage = player.getItemInHand(hand).getDamageValue();
-	        int maxDamage = player.getItemInHand(hand).getMaxDamage();
-
-	        if (flag == 1 && damage < maxDamage) {
-                player.getItemInHand(hand).hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(hand));
-                flag = 0;
-            } else {
-	            flag++;
-            }
+	public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
+	    if (level instanceof ServerLevel serverLevel) {
+            player.getItemInHand(hand).hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(hand));
 
 	        Vec3 vec3d = player.getLookAngle();
 			double x = player.getX() + vec3d.x * 2;
 			double y = player.getY() + vec3d.y * 2;
 			double z = player.getZ() + vec3d.z * 2;
 
-            AABB axisalignedbb = new AABB((player.getX() + vec3d.x) - 2.5D, (player.getY() + vec3d.y) - 2D, (player.getZ() + vec3d.z) - 2.5D, (player.getX() + vec3d.x) + 2.5D, (player.getY() + vec3d.y) + 2D, (player.getZ() + vec3d.z) + 2.5D);
-            List<Bee> list = world.getEntitiesOfClass(Bee.class, axisalignedbb);
-            list.stream()
+            AABB aabb = new AABB((player.getX() + vec3d.x), (player.getY() + vec3d.y), (player.getZ() + vec3d.z), (player.getX() + vec3d.x), (player.getY() + vec3d.y), (player.getZ() + vec3d.z)).inflate(2.5D);
+            level.getEntitiesOfClass(Bee.class, aabb).stream()
                     .filter(NeutralMob::isAngry)
                     .forEach(bee -> {
                         bee.setRemainingPersistentAngerTime(0);
                         bee.setLastHurtByMob(null);
                     });
 
-            ServerLevel worldServer = (ServerLevel) world;
-			worldServer.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y + 1.3D, z, 50, 0, 0, 0, 0.01F);
+            serverLevel.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y + 1.3D, z, 50, 0, 0, 0, 0.01F);
 	    }
-		return super.use(world, player, hand);
+		return super.use(level, player, hand);
 	}
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return CommonConfig.SMOKER_DURABILITY.get();
+        return CommonConfig.SMOKER_DURABILITY.get() * 2;
     }
 
     @Override

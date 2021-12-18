@@ -285,7 +285,6 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString(NBTConstants.NBT_BEE_TYPE, this.getBeeType());
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
