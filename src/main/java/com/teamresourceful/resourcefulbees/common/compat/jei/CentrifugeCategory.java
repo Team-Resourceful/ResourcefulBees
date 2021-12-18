@@ -58,12 +58,12 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
 
     @Override
     public void setIngredients(@NotNull CentrifugeRecipeAdapter recipe, @NotNull IIngredients ingredients) {
-        ingredients.setInputIngredients(Lists.newArrayList(recipe.recipe.getIngredient()));
-        ingredients.setOutputLists(VanillaTypes.ITEM, recipe.recipe.getItemOutputs().stream()
-                .map(output -> output.getPool().stream().map(ItemOutput::getItemStack).collect(Collectors.toList()))
+        ingredients.setInputIngredients(Lists.newArrayList(recipe.recipe.ingredient()));
+        ingredients.setOutputLists(VanillaTypes.ITEM, recipe.recipe.itemOutputs().stream()
+                .map(output -> output.pool().stream().map(ItemOutput::getItemStack).collect(Collectors.toList()))
                 .collect(Collectors.toList()));
-        ingredients.setOutputLists(VanillaTypes.FLUID, recipe.recipe.getFluidOutputs().stream()
-                .map(output -> output.getPool().stream().map(FluidOutput::getFluidStack).collect(Collectors.toList()))
+        ingredients.setOutputLists(VanillaTypes.FLUID, recipe.recipe.fluidOutputs().stream()
+                .map(output -> output.pool().stream().map(FluidOutput::getFluidStack).collect(Collectors.toList()))
                 .collect(Collectors.toList()));
     }
 
@@ -102,19 +102,19 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     @Override
     public @NotNull List<Component> getTooltipStrings(@NotNull CentrifugeRecipeAdapter recipe, double mouseX, double mouseY) {
         for (int i = 0; i < 3; i++) {
-            if (recipe.getRecipe().getItemOutputs().size() > i) {
+            if (recipe.getRecipe().itemOutputs().size() > i) {
                 Double itemWeight = recipe.getItemWeight(i + 1);
                 ItemStack item = recipe.items.get(i + 1).getDisplayedIngredient();
-                double itemChance = recipe.getRecipe().getItemOutputs().get(i).getChance();
-                List<Component> itemTooltip = drawTooltip(item == null ? null : item.getDisplayName(), itemWeight, itemChance, mouseX, mouseY, i, recipe.getRecipe().getItemOutputs().size(), 61, 70);
+                double itemChance = recipe.getRecipe().itemOutputs().get(i).chance();
+                List<Component> itemTooltip = drawTooltip(item == null ? null : item.getDisplayName(), itemWeight, itemChance, mouseX, mouseY, i, recipe.getRecipe().itemOutputs().size(), 61, 70);
                 if (!itemTooltip.isEmpty()) return itemTooltip;
             }
 
-            if (recipe.getRecipe().getFluidOutputs().size() > i) {
+            if (recipe.getRecipe().fluidOutputs().size() > i) {
                 Double fluidWeight = recipe.getFluidWeight(i);
                 FluidStack fluid = recipe.fluids.get(i).getDisplayedIngredient();
-                double fluidChance = recipe.getRecipe().getFluidOutputs().get(i).getChance();
-                List<Component> fluidTooltip = drawTooltip(fluid == null ? null : fluid.getDisplayName(), fluidWeight, fluidChance, mouseX, mouseY, i, recipe.getRecipe().getFluidOutputs().size(), 97, 106);
+                double fluidChance = recipe.getRecipe().fluidOutputs().get(i).chance();
+                List<Component> fluidTooltip = drawTooltip(fluid == null ? null : fluid.getDisplayName(), fluidWeight, fluidChance, mouseX, mouseY, i, recipe.getRecipe().fluidOutputs().size(), 97, 106);
                 if (!fluidTooltip.isEmpty()) return fluidTooltip;
             }
         }
@@ -157,19 +157,19 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         public CentrifugeRecipeAdapter(CentrifugeRecipe recipe) {
             this.recipe = recipe;
 
-            List<CentrifugeRecipe.Output<ItemOutput>> itemOutputList = this.recipe.getItemOutputs();
+            List<CentrifugeRecipe.Output<ItemOutput>> itemOutputList = this.recipe.itemOutputs();
 
             for (int i = 0; i < itemOutputList.size(); i++) {
-                RandomCollection<ItemOutput> pool = itemOutputList.get(i).getPool();
+                RandomCollection<ItemOutput> pool = itemOutputList.get(i).pool();
                 Map<ItemStack, Double> weights = new HashMap<>();
                 pool.forEach(output -> weights.put(output.getItemStack(), pool.getAdjustedWeight(output.getWeight())));
                 itemWeights.put(i+1, weights);
             }
 
-            List<CentrifugeRecipe.Output<FluidOutput>> fluidOutputList = this.recipe.getFluidOutputs();
+            List<CentrifugeRecipe.Output<FluidOutput>> fluidOutputList = this.recipe.fluidOutputs();
 
             for (int i = 0; i < fluidOutputList.size(); i++) {
-                RandomCollection<FluidOutput> pool = fluidOutputList.get(i).getPool();
+                RandomCollection<FluidOutput> pool = fluidOutputList.get(i).pool();
                 Map<FluidStack, Double> weights = new HashMap<>();
                 pool.forEach(output -> weights.put(output.getFluidStack(), pool.getAdjustedWeight(output.getWeight())));
                 fluidWeights.put(i, weights);

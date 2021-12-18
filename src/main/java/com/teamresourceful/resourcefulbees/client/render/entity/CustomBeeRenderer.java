@@ -18,7 +18,7 @@ public class CustomBeeRenderer<E extends CustomBeeEntity> extends GeoEntityRende
 
     public CustomBeeRenderer(EntityRendererProvider.Context ctx, RenderData renderData) {
         super(ctx, new CustomBeeModel<>());
-        renderData.getLayers().stream().limit(6).forEach(layerData -> addLayer(new CustomBeeLayer<>(this, renderData, layerData)));
+        renderData.layers().stream().limit(6).forEach(layerData -> addLayer(new CustomBeeLayer<>(this, renderData, layerData)));
     }
 
     @Override
@@ -31,7 +31,7 @@ public class CustomBeeRenderer<E extends CustomBeeEntity> extends GeoEntityRende
     @Override
     public void renderEarly(E bee, PoseStack stackIn, float ticks, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         super.renderEarly(bee, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
-        stackIn.scale(bee.getRenderData().getSizeModifier(), bee.getRenderData().getSizeModifier(), bee.getRenderData().getSizeModifier());
+        stackIn.scale(bee.getRenderData().sizeModifier(), bee.getRenderData().sizeModifier(), bee.getRenderData().sizeModifier());
         if (bee.isBaby()){
             stackIn.scale(0.5f, 0.5f, 0.5f);
         }

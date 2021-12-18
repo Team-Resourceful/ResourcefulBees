@@ -30,30 +30,30 @@ public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoLayerRenderer<
     @Override
     public void render(PoseStack stack, MultiBufferSource buffer, int packedLight, E bee, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!bee.hasNectar() && layerData.isPollen()) return;
-        ResourceLocation texture = bee.isAngry() ? layerData.getBeeTexture().getAngryTexture() : layerData.getBeeTexture().getNormalTexture();
+        ResourceLocation texture = layerData.beeTexture().getTexture(bee);
 
         if (layerData.isEnchanted()) {
-            renderer.render(this.getEntityModel().getModel(renderData.getModel()),
+            renderer.render(this.getEntityModel().getModel(renderData.model()),
                     bee, partialTicks,
                     null, stack, null, buffer.getBuffer(RenderType.entityGlint()),
                     packedLight, OverlayTexture.NO_OVERLAY,
                     0.0F, 0.0F, 0.0F, 0.0F);
         } else if (layerData.isEmissive()) {
             VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.eyes(texture));
-            if (layerData.getPulseFrequency() == 0 || bee.tickCount % layerData.getPulseFrequency() == 0.0f) {
-                renderer.render(this.getEntityModel().getModel(renderData.getModel()),
+            if (layerData.pulseFrequency() == 0 || bee.tickCount % layerData.pulseFrequency() == 0.0f) {
+                renderer.render(this.getEntityModel().getModel(renderData.model()),
                         bee, partialTicks,
                         null, stack, null, vertexConsumer,
                         15728640, OverlayTexture.NO_OVERLAY,
-                        layerData.getColor().getFloatRed(), layerData.getColor().getFloatGreen(), layerData.getColor().getFloatBlue(), 1.0F);
+                        layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
             }
         } else {
             VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(texture));
-            renderer.render(this.getEntityModel().getModel(renderData.getModel()),
+            renderer.render(this.getEntityModel().getModel(renderData.model()),
                     bee, partialTicks,
                     null, stack, null, vertexConsumer,
                     packedLight, LivingEntityRenderer.getOverlayCoords(bee, 0.0F),
-                    layerData.getColor().getFloatRed(), layerData.getColor().getFloatGreen(), layerData.getColor().getFloatBlue(), 1.0F);
+                    layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
         }
 
     }

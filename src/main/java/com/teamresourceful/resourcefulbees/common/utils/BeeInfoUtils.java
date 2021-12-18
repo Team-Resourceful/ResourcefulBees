@@ -143,7 +143,7 @@ public class BeeInfoUtils {
 
         if (beeEntity instanceof ICustomBee iCustomBee) {
             nbt.putString(NBTConstants.NBT_BEE_TYPE, iCustomBee.getBeeType());
-            beeColor = iCustomBee.getRenderData().getColorData().getJarColor().toString();
+            beeColor = iCustomBee.getRenderData().colorData().jarColor().toString();
         }
 
         nbt.putString(NBTConstants.NBT_COLOR, beeColor);

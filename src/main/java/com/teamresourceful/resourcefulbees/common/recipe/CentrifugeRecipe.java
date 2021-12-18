@@ -11,6 +11,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.ingredients.IAmountSensitive;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
@@ -27,58 +28,32 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class CentrifugeRecipe implements Recipe<Container> {
+public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick) implements Recipe<Container> {
 
     public static final RecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":centrifuge");
 
-    private final ResourceLocation id;
-    private final int inputAmount;
-    private final Ingredient ingredient;
-    private final List<Output<ItemOutput>> itemOutputs;
-    private final List<Output<FluidOutput>> fluidOutputs;
-    private final int time;
-    private final int energyPerTick;
-
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                MapCodec.of(Encoder.empty(), Decoder.unit(() -> id)).forGetter(CentrifugeRecipe::getId),
-                CodecUtils.INGREDIENT_CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::getIngredient),
-                Output.ITEM_OUTPUT_CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getItemOutputs),
-                Output.FLUID_OUTPUT_CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::getFluidOutputs),
-                Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::getTime),
-                Codec.INT.fieldOf("energyPerTick").orElse(CommonConfig.RF_TICK_CENTRIFUGE.get()).forGetter(CentrifugeRecipe::getEnergyPerTick)
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> id)).forGetter(CentrifugeRecipe::id),
+                CodecUtils.INGREDIENT_CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::ingredient),
+                Output.ITEM_OUTPUT_CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::itemOutputs),
+                Output.FLUID_OUTPUT_CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::fluidOutputs),
+                Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::time),
+                Codec.INT.fieldOf("energyPerTick").orElse(CommonConfig.RF_TICK_CENTRIFUGE.get()).forGetter(CentrifugeRecipe::energyPerTick)
         ).apply(instance, CentrifugeRecipe::new));
-    }
-
-    public CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick) {
-        this.id = id;
-        this.ingredient = ingredient;
-        this.inputAmount = this.ingredient.getItems()[0].getCount();
-        this.itemOutputs = itemOutputs;
-        this.fluidOutputs = fluidOutputs;
-        this.time = time;
-        this.energyPerTick = energyPerTick;
     }
 
     @Override
     public boolean matches(Container inventory, @NotNull Level world) {
         ItemStack stack = inventory.getItem(0);
-        if (stack == ItemStack.EMPTY) return false;
-        else {
-            ItemStack[] matchingStacks = ingredient.getItems();
-            if (matchingStacks.length == 0) return false;
-            else {
-                return Arrays.stream(matchingStacks).anyMatch(itemStack -> ItemStack.isSameItemSameTags(stack, itemStack));
-            }
-        }
+        return !stack.isEmpty() && ingredient.test(stack);
     }
 
     public int getInputAmount() {
-        return this.inputAmount;
+        return ingredient instanceof IAmountSensitive amountSensitive ? amountSensitive.getAmount() : 1;
     }
 
     @Override
@@ -88,7 +63,8 @@ public class CentrifugeRecipe implements Recipe<Container> {
 
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull Container inventory) {
+    public @NotNull
+    ItemStack assemble(@NotNull Container inventory) {
         return ItemStack.EMPTY;
     }
 
@@ -105,7 +81,8 @@ public class CentrifugeRecipe implements Recipe<Container> {
      * possible result (e.g. it's dynamic and depends on its inputs), then return an empty stack.
      */
     @Override
-    public @NotNull ItemStack getResultItem() {
+    public @NotNull
+    ItemStack getResultItem() {
         return ItemStack.EMPTY;
     }
 
@@ -127,31 +104,12 @@ public class CentrifugeRecipe implements Recipe<Container> {
         return CENTRIFUGE_RECIPE_TYPE;
     }
 
-    public Ingredient getIngredient() {
-        return ingredient;
-    }
-
-    public List<Output<ItemOutput>> getItemOutputs() {
-        return itemOutputs;
-    }
-
-    public List<Output<FluidOutput>> getFluidOutputs() {
-        return fluidOutputs;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public int getEnergyPerTick() {
-        return energyPerTick;
-    }
-
     //REQUIRED This needs serious testing to ensure it is working properly before pushing update!!!
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CentrifugeRecipe> {
 
         @Override
-        public @NotNull CentrifugeRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
+        public @NotNull
+        CentrifugeRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
             return CentrifugeRecipe.codec(id).parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not parse Centrifuge Recipe!!"));
         }
 
@@ -180,32 +138,16 @@ public class CentrifugeRecipe implements Recipe<Container> {
         }
     }
 
-    public static class Output<T extends AbstractOutput> {
+    public record Output<T extends AbstractOutput>(double chance, RandomCollection<T> pool) {
         public static final Codec<Output<ItemOutput>> ITEM_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::getChance),
-                ItemOutput.RANDOM_COLLECTION_CODEC.fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::getPool)
+                Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::chance),
+                ItemOutput.RANDOM_COLLECTION_CODEC.fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::pool)
         ).apply(instance, Output::new));
 
         public static final Codec<Output<FluidOutput>> FLUID_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::getChance),
-                FluidOutput.RANDOM_COLLECTION_CODEC.fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::getPool)
+                Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::chance),
+                FluidOutput.RANDOM_COLLECTION_CODEC.fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::pool)
         ).apply(instance, Output::new));
-
-        private final RandomCollection<T> pool;
-        private final double chance;
-
-        public Output(double chance, RandomCollection<T> pool) {
-            this.chance = chance;
-            this.pool = pool;
-        }
-
-        public RandomCollection<T> getPool() {
-            return pool;
-        }
-
-        public double getChance() {
-            return chance;
-        }
     }
 }
 

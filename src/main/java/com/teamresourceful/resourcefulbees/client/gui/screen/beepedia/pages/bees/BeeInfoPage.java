@@ -63,7 +63,7 @@ public class BeeInfoPage extends BeeDataPage {
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         if (beeData == null) throw new IllegalStateException("preInit not implemented");
         Font font = Minecraft.getInstance().font;
-        SIZE_NAME.append(BeepediaUtils.getSizeName(beeData.getRenderData().getSizeModifier()));
+        SIZE_NAME.append(BeepediaUtils.getSizeName(beeData.getRenderData().sizeModifier()));
         TIME_NAME.append(beeData.getCoreData().getMaxTimeInHive() / 20 + "s");
         font.draw(matrix, TITLE.withStyle(ChatFormatting.WHITE), x, y + 8, -1);
         font.draw(matrix, SIZE_NAME.withStyle(ChatFormatting.GRAY),x, y + 22, -1);

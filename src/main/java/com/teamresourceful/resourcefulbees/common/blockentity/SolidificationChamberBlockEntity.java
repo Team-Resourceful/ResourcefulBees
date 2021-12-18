@@ -85,8 +85,8 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
                 cachedRecipe : SolidificationRecipe.findRecipe(level.getRecipeManager(), fluidStack).orElse(null);
         if (recipe == null) return false;
 
-        boolean isTankReady = !fluidStack.isEmpty() && tank.getFluidAmount() >= recipe.getFluid().getAmount();
-        boolean canOutput = outputStack.isEmpty() || ItemStack.isSameItemSameTags(recipe.getStack(), outputStack) && outputStack.getCount() < outputStack.getMaxStackSize();
+        boolean isTankReady = !fluidStack.isEmpty() && tank.getFluidAmount() >= recipe.fluid().getAmount();
+        boolean canOutput = outputStack.isEmpty() || ItemStack.isSameItemSameTags(recipe.stack(), outputStack) && outputStack.getCount() < outputStack.getMaxStackSize();
 
         cachedRecipe = recipe;
         lastFluid = fluidStack.getFluid();
@@ -95,10 +95,10 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
 
     public void processHoney() {
         ItemStack outputStack = getInventory().getStackInSlot(BLOCK_OUTPUT);
-        if (outputStack.isEmpty()) outputStack = cachedRecipe.getStack().copy();
+        if (outputStack.isEmpty()) outputStack = cachedRecipe.stack().copy();
         else outputStack.grow(1);
         getInventory().setStackInSlot(BLOCK_OUTPUT, outputStack);
-        tank.drain(cachedRecipe.getFluid().copy(), IFluidHandler.FluidAction.EXECUTE);
+        tank.drain(cachedRecipe.fluid().copy(), IFluidHandler.FluidAction.EXECUTE);
     }
 
     public @NotNull AutomationSensitiveItemStackHandler getInventory() {

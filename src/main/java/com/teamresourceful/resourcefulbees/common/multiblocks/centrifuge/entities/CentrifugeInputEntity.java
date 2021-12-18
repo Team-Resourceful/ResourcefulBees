@@ -11,11 +11,8 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.OutputLocations;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,19 +20,16 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -123,7 +117,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     }
 
     public int getRecipeTime() {
-        return processRecipe == null ? 0 : Math.max(1, Mth.floor(processRecipe.getTime() * controller().getRecipeTimeModifier()));
+        return processRecipe == null ? 0 : Math.max(1, Mth.floor(processRecipe.time() * controller().getRecipeTimeModifier()));
     }
 
     private void setProcessStage(ProcessStage newStage) {
@@ -149,7 +143,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         processRecipe = filterRecipe;
         processRecipeID = processRecipe.getId();
         processTime = getRecipeTime();
-        processEnergy = processRecipe.getEnergyPerTick() * this.controller().getRecipePowerModifier();
+        processEnergy = processRecipe.energyPerTick() * this.controller().getRecipePowerModifier();
         consumeInputs(false);
         setChanged();
     }
@@ -160,7 +154,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
             return false;
         }
 
-        Ingredient ingredient = filterRecipe.getIngredient();
+        Ingredient ingredient = filterRecipe.ingredient();
         int needed = simulate ? filterRecipe.getInputAmount() * controller().getMaxInputRecipes() : processQuantity;
         int collected = 0;
 
@@ -187,7 +181,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     //TODO determine an optimal way of rolling outputs based on process quantity vs just multiplying them
     // - low priority and not necessary for release
     private void depositResults() {
-        if (processRecipe == null || depositResults(processRecipe.getItemOutputs(), itemOutputs) && depositResults(processRecipe.getFluidOutputs(), fluidOutputs)) {
+        if (processRecipe == null || depositResults(processRecipe.itemOutputs(), itemOutputs) && depositResults(processRecipe.fluidOutputs(), fluidOutputs)) {
             setProcessStage(ProcessStage.COMPLETED);
         }
     }
@@ -195,7 +189,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     private <T extends AbstractOutput, A extends BlockEntity & ICentrifugeOutput<T>> boolean depositResults(List<CentrifugeRecipe.Output<T>> recipeOutputs, OutputLocations<A> outputLocations) {
         for (int i = 0; i < recipeOutputs.size(); i++) {
             CentrifugeRecipe.Output<T> recipeOutput = recipeOutputs.get(i);
-            if (recipeOutput.getChance() >= MathUtils.RANDOM.nextFloat()) {
+            if (recipeOutput.chance() >= MathUtils.RANDOM.nextFloat()) {
                 A location = outputLocations.get(i).getTile();
                 if (location == null) return false;
                 if (!outputLocations.isDeposited(i)) outputLocations.setDeposited(i, location.depositResult(recipeOutput, processQuantity));
@@ -335,7 +329,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return filterRecipe != null && filterRecipe.getIngredient().test(stack);
+            return filterRecipe != null && filterRecipe.ingredient().test(stack);
         }
 
         @Override

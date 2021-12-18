@@ -25,33 +25,23 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class SolidificationRecipe implements Recipe<Container> {
+public record SolidificationRecipe(ResourceLocation id, FluidStack fluid, ItemStack stack) implements Recipe<Container> {
 
     public static final RecipeType<CentrifugeRecipe> SOLIDIFICATION_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":solidification");
-
-    private final ResourceLocation id;
-    private final FluidStack fluid;
-    private final ItemStack stack;
 
     public static Codec<SolidificationRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> id)).forGetter(SolidificationRecipe::getId),
-                CodecUtils.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(SolidificationRecipe::getFluid),
-                CodecUtils.ITEM_STACK_CODEC.fieldOf("result").forGetter(SolidificationRecipe::getStack)
+                CodecUtils.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(SolidificationRecipe::fluid),
+                CodecUtils.ITEM_STACK_CODEC.fieldOf("result").forGetter(SolidificationRecipe::stack)
         ).apply(instance, SolidificationRecipe::new));
     }
 
-    public SolidificationRecipe(ResourceLocation id, FluidStack fluid, ItemStack stack) {
-        this.id = id;
-        this.fluid = fluid;
-        this.stack = stack;
-    }
-
     public static Optional<SolidificationRecipe> findRecipe(RecipeManager manager, FluidStack fluid) {
-        return ((RecipeManagerAccessorInvoker)manager).callByType(SOLIDIFICATION_RECIPE_TYPE).values()
+        return ((RecipeManagerAccessorInvoker) manager).callByType(SOLIDIFICATION_RECIPE_TYPE).values()
                 .stream().filter(SolidificationRecipe.class::isInstance)
                 .map(SolidificationRecipe.class::cast)
-                .filter(recipe -> recipe.getFluid().isFluidEqual(fluid)).findFirst();
+                .filter(recipe -> recipe.fluid().isFluidEqual(fluid)).findFirst();
     }
 
     public static boolean matches(RecipeManager manager, FluidStack fluid) {
@@ -69,7 +59,8 @@ public class SolidificationRecipe implements Recipe<Container> {
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull Container inventory) {
+    public @NotNull
+    ItemStack assemble(@NotNull Container inventory) {
         return ItemStack.EMPTY;
     }
 
@@ -79,37 +70,34 @@ public class SolidificationRecipe implements Recipe<Container> {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem() {
+    public @NotNull
+    ItemStack getResultItem() {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public @NotNull ResourceLocation getId() {
+    public @NotNull
+    ResourceLocation getId() {
         return id;
     }
 
     @Override
-    public @NotNull RecipeSerializer<?> getSerializer() {
+    public @NotNull
+    RecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.SOLIDIFICATION_RECIPE.get();
     }
 
     @Override
-    public @NotNull RecipeType<?> getType() {
+    public @NotNull
+    RecipeType<?> getType() {
         return SOLIDIFICATION_RECIPE_TYPE;
-    }
-
-    public FluidStack getFluid() {
-        return fluid;
-    }
-
-    public ItemStack getStack() {
-        return stack;
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<SolidificationRecipe> {
 
         @Override
-        public @NotNull SolidificationRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
+        public @NotNull
+        SolidificationRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
             return SolidificationRecipe.codec(id).parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not parse Solidification Recipe!!"));
         }
 

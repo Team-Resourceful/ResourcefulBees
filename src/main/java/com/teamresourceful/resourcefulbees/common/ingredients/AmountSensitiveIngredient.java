@@ -3,9 +3,11 @@ package com.teamresourceful.resourcefulbees.common.ingredients;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -19,6 +21,11 @@ public class AmountSensitiveIngredient extends Ingredient implements IAmountSens
     protected AmountSensitiveIngredient(Stream<? extends Value> value, int count) {
         super(value);
         this.count = count;
+    }
+
+    @Override
+    public boolean test(@Nullable ItemStack stack) {
+        return stack != null && stack.getCount() >= count && super.test(stack);
     }
 
     @Override

@@ -41,8 +41,8 @@ public class BeeSpawnEggItem extends SpawnEggItem {
     }
 
     public static int getColor(ItemStack stack, int tintIndex) {
-        ColorData colorData = ((BeeSpawnEggItem)stack.getItem()).beeData.getRenderData().getColorData();
-        return tintIndex == 0 ? colorData.getSpawnEggPrimaryColor().getValue(): colorData.getSpawnEggSecondaryColor().getValue();
+        ColorData colorData = ((BeeSpawnEggItem)stack.getItem()).beeData.getRenderData().colorData();
+        return tintIndex == 0 ? colorData.spawnEggPrimaryColor().getValue(): colorData.spawnEggSecondaryColor().getValue();
     }
 
     @Override

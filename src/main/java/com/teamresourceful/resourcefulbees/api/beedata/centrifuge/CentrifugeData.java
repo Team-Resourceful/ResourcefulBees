@@ -54,7 +54,7 @@ public class CentrifugeData {
      * @return Returns <tt>true</tt> if the centrifuge recipe has item outputs.
      */
     public boolean hasItemOutputs() {
-        return !itemOutputs.isEmpty() && itemOutputs.stream().noneMatch(output -> output.getPool().isEmpty());
+        return !itemOutputs.isEmpty() && itemOutputs.stream().noneMatch(output -> output.pool().isEmpty());
     }
 
     /**
@@ -62,7 +62,7 @@ public class CentrifugeData {
      * @return Returns <tt>true</tt> if the centrifuge recipe has fluid outputs.
      */
     public boolean hasFluidOutputs() {
-        return !fluidOutputs.isEmpty() && fluidOutputs.stream().noneMatch(output -> output.getPool().isEmpty());
+        return !fluidOutputs.isEmpty() && fluidOutputs.stream().noneMatch(output -> output.pool().isEmpty());
     }
 
     /**

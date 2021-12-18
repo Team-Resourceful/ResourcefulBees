@@ -66,7 +66,7 @@ public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerMod
     }
 
     public void renderLayer(AbstractClientPlayer playerEntity, PoseStack stack, @NotNull MultiBufferSource buffer, LayerData layerData, PetModelData data, GeoModel model, float partialTicks, int packedLightIn) {
-        ResourceLocation texture = layerData.getBeeTexture().getNormalTexture();
+        ResourceLocation texture = layerData.beeTexture().normalTexture();
 
         if (layerData.isEnchanted()) {
             RenderType renderType = RenderType.entityGlint();
@@ -76,18 +76,18 @@ public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerMod
                     0.0F, 0.0F, 0.0F, 0.0F);
         } else if (layerData.isEmissive()) {
             VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.eyes(texture));
-            if (layerData.getPulseFrequency() == 0 || playerEntity.tickCount % layerData.getPulseFrequency() == 0.0f) {
+            if (layerData.pulseFrequency() == 0 || playerEntity.tickCount % layerData.pulseFrequency() == 0.0f) {
                 renderer.render(model, data, partialTicks,
                         null, stack, null, vertexConsumer,
                         15728640, OverlayTexture.NO_OVERLAY,
-                        layerData.getColor().getFloatRed(), layerData.getColor().getFloatGreen(), layerData.getColor().getFloatBlue(), 1.0F);
+                        layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
             }
         } else {
             VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(texture));
             renderer.render(model, data, partialTicks,
                     null, stack, null, vertexConsumer,
                     packedLightIn, OverlayTexture.pack(OverlayTexture.u(0f), OverlayTexture.v(false)),
-                    layerData.getColor().getFloatRed(), layerData.getColor().getFloatGreen(), layerData.getColor().getFloatBlue(), 1.0F);
+                    layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
         }
 
     }

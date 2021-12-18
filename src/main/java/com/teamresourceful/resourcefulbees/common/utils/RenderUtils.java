@@ -117,7 +117,7 @@ public class RenderUtils {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) entity.tickCount = mc.player.tickCount;
         if (entity instanceof CustomBeeEntity customBee) {
-            scaledSize = 20 / customBee.getRenderData().getSizeModifier();
+            scaledSize = 20 / customBee.getRenderData().sizeModifier();
         } else {
             scaledSize = 20 / (Math.max(entity.getBbWidth(), entity.getBbHeight()));
         }

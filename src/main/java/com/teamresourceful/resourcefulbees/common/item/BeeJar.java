@@ -60,8 +60,8 @@ public class BeeJar extends Item {
                     Entity entity = entityType.create(Minecraft.getInstance().level);
                     if (entity instanceof CustomBeeEntity bee) {
                         RenderData renderData = bee.getRenderData();
-                        tag.putString(NBTConstants.NBT_COLOR, renderData.getColorData().getJarColor().toString());
-                        return renderData.getColorData().getJarColor().getValue();
+                        tag.putString(NBTConstants.NBT_COLOR, renderData.colorData().jarColor().toString());
+                        return renderData.colorData().jarColor().getValue();
                     }
                 }
                 tag.putString(NBTConstants.NBT_COLOR, BeeConstants.STRING_DEFAULT_ITEM_COLOR);

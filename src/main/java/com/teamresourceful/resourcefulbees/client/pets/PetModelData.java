@@ -22,7 +22,7 @@ public class PetModelData implements IAnimatable {
     public static final Codec<PetModelData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("id").orElse("error").forGetter(PetModelData::getId),
             ResourceLocation.CODEC.fieldOf("model").orElse(RenderData.BASE_MODEL).forGetter(PetModelData::getModelLocation),
-            ResourceLocation.CODEC.fieldOf("texture").orElse(BeeTexture.MISSING_TEXTURE.getNormalTexture()).forGetter(PetModelData::getTexture),
+            ResourceLocation.CODEC.fieldOf("texture").orElse(BeeTexture.MISSING_TEXTURE.normalTexture()).forGetter(PetModelData::getTexture),
             CodecUtils.createLinkedSetCodec(LayerData.CODEC).fieldOf("layers").orElse(new LinkedHashSet<>()).forGetter(PetModelData::getLayers)
     ).apply(instance, PetModelData::new));
 

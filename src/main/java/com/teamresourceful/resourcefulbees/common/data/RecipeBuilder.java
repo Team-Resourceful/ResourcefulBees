@@ -95,16 +95,16 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         BeeFamily family = families.get(0);
         ResourceLocation id = new ResourceLocation(ResourcefulBees.MOD_ID, family.getParent1() + "_" + family.getParent2() + "_" + family.getChild());
         ResourceLocation parent1Id = family.getParent1Data().getRegistryID();
-        BeeJarIngredient beeJarParent1 = new BeeJarIngredient(parent1Id, family.getParent1Data().getRenderData().getColorData().getJarColor().getValue());
+        BeeJarIngredient beeJarParent1 = new BeeJarIngredient(parent1Id, family.getParent1Data().getRenderData().colorData().jarColor().getValue());
         BreederRecipe.BreederPair parent1 = new BreederRecipe.BreederPair(beeJarParent1, Optional.of(parent1Id.toString()), Ingredient.of(family.getParent1FeedItemStacks().stream()));
         ResourceLocation parent2Id = family.getParent2Data().getRegistryID();
-        BeeJarIngredient beeJarParent2 = new BeeJarIngredient(parent2Id, family.getParent2Data().getRenderData().getColorData().getJarColor().getValue());
+        BeeJarIngredient beeJarParent2 = new BeeJarIngredient(parent2Id, family.getParent2Data().getRenderData().colorData().jarColor().getValue());
         BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parent2Id.toString()), Ingredient.of(family.getParent2FeedItemStacks().stream()));
         return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(RandomCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
     }
 
     private BreederRecipe.BreederOutput makeOutput(BeeFamily family) {
-        ItemStack childBeeJar = BeeJarIngredient.getBeeJar(family.getChildData().getRegistryID(), family.getChildData().getRenderData().getColorData().getJarColor().getValue());
+        ItemStack childBeeJar = BeeJarIngredient.getBeeJar(family.getChildData().getRegistryID(), family.getChildData().getRenderData().colorData().jarColor().getValue());
         return new BreederRecipe.BreederOutput(childBeeJar, family.getChildData().getRegistryID(), family.getWeight(), family.getChance());
     }
 

@@ -8,16 +8,16 @@ public class CustomBeeModel<E extends CustomBeeEntity> extends AnimatedGeoModel<
 
     @Override
     public ResourceLocation getModelLocation(E bee) {
-        return bee.getRenderData().getModel();
+        return bee.getRenderData().model();
     }
 
     @Override
     public ResourceLocation getTextureLocation(E bee) {
-        return bee.getRenderData().getTexture().getTexture(bee);
+        return bee.getRenderData().texture().getTexture(bee);
     }
 
     @Override
     public ResourceLocation getAnimationFileLocation(E bee) {
-        return bee.getRenderData().getAnimations();
+        return bee.getRenderData().animations();
     }
 }

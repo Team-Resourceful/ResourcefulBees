@@ -6,15 +6,14 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.NeutralMob;
-import org.jetbrains.annotations.Unmodifiable;
 
-@Unmodifiable
-public class BeeTexture {
+public record BeeTexture(ResourceLocation normalTexture, ResourceLocation angryTexture) {
 
     private static final String PNG_SUFFIX = ".png";
     private static final String ANGRY_PNG_SUFFIX = "_angry.png";
     private static final ResourceLocation MISSING_LOCATION = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/entity/missing_texture.png");
     public static final BeeTexture MISSING_TEXTURE = new BeeTexture(MISSING_LOCATION, MISSING_LOCATION);
+
     /**
      * A {@link Codec<BeeTexture>} that can be parsed to create a {@link BeeTexture} object.
      */
@@ -28,36 +27,8 @@ public class BeeTexture {
                 : DataResult.error("Not a valid resource location: " + s);
     }
 
-    private final ResourceLocation normalTexture;
-    private final ResourceLocation angryTexture;
-
-    private BeeTexture(ResourceLocation normalTexture, ResourceLocation angryTexture) {
-        this.normalTexture = normalTexture;
-        this.angryTexture = angryTexture;
-    }
-
-    /**
-     * Gets the normal texture for the bee. This is the texture that is
-     * most often seen by players. This texture can be colored or made emissive.
-     *
-     * @return Returns a {@link ResourceLocation} for the normal bee texture.
-     */
-    public ResourceLocation getNormalTexture() {
-        return normalTexture;
-    }
-
-    /**
-     * Gets the angry texture for the bee. This texture can only seen by players
-     * when bees are angry. This texture can be colored or made emissive.
-     *
-     * @return Returns a {@link ResourceLocation} for the angry bee texture.
-     */
-    public ResourceLocation getAngryTexture() {
-        return angryTexture;
-    }
-
-    public ResourceLocation getTexture(NeutralMob angerable) {
-        return angerable.isAngry() ? angryTexture : normalTexture;
+    public ResourceLocation getTexture(NeutralMob neutralMob) {
+        return neutralMob.isAngry() ? angryTexture : normalTexture;
     }
 
     @Override

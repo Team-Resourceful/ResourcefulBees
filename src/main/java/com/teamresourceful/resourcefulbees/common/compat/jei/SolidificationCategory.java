@@ -31,8 +31,8 @@ public class SolidificationCategory extends BaseCategory<SolidificationRecipe> {
 
     @Override
     public void setIngredients(@NotNull SolidificationRecipe recipe, @NotNull IIngredients ingredients) {
-        ingredients.setInput(VanillaTypes.FLUID, recipe.getFluid());
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.getStack());
+        ingredients.setInput(VanillaTypes.FLUID, recipe.fluid());
+        ingredients.setOutput(VanillaTypes.ITEM, recipe.stack());
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SolidificationCategory extends BaseCategory<SolidificationRecipe> {
         IGuiIngredientGroup<FluidStack> guiFluidStacks = layout.getIngredientsGroup(VanillaTypes.FLUID);
         guiFluidStacks.init(0, true, 21, 11);
         guiItemStacks.init(0, false, 48, 53);
-        guiFluidStacks.addTooltipCallback((index, isInput, ingredient, tooltip) -> tooltip.add(new TextComponent("Amount: " + recipe.getFluid().getAmount() + "mb")));
+        guiFluidStacks.addTooltipCallback((index, isInput, ingredient, tooltip) -> tooltip.add(new TextComponent("Amount: " + recipe.fluid().getAmount() + "mb")));
         guiFluidStacks.set(ingredients);
         guiItemStacks.set(ingredients);
     }
