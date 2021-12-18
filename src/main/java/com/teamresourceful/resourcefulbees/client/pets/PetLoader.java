@@ -28,11 +28,8 @@ public class PetLoader {
             String rep = IOUtils.toString(new BufferedInputStream(connection.getInputStream()), StandardCharsets.UTF_8);
             JsonObject json = ModConstants.GSON.fromJson(rep, JsonObject.class);
 
-            //TODO 1.17 change all to an inline instanceof.
-
             JsonElement models = json.get("models");
-            if (models instanceof JsonArray) {
-                JsonArray modelData = models.getAsJsonArray();
+            if (models instanceof JsonArray modelData) {
                 for (JsonElement model : modelData) {
                     Optional<PetModelData> petData = PetModelData.CODEC.parse(JsonOps.INSTANCE, model).result();
                     petData.ifPresent(PetInfo::addModel);
@@ -40,8 +37,7 @@ public class PetLoader {
             }
 
             JsonElement users = json.get("users");
-            if (users instanceof JsonObject) {
-                JsonObject userObject = users.getAsJsonObject();
+            if (users instanceof JsonObject userObject) {
                 for (Map.Entry<String, JsonElement> user : userObject.entrySet()) {
                     if (user.getValue() instanceof JsonPrimitive)
                         PetInfo.addUser(user.getKey(), user.getValue().getAsString());
