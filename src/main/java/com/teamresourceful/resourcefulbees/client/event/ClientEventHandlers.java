@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.event;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeInputScreen;
@@ -11,9 +12,12 @@ import com.teamresourceful.resourcefulbees.client.render.entity.CustomBeeRendere
 import com.teamresourceful.resourcefulbees.client.render.fluid.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
+import com.teamresourceful.resourcefulbees.client.render.tileentity.BeeHouseSelectionBox;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderEnderBeecon;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderSolidificationChamber;
+import com.teamresourceful.resourcefulbees.common.block.BeeHouseBlock;
+import com.teamresourceful.resourcefulbees.common.block.BeeHouseTopBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -27,6 +31,10 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.client.event.DrawSelectionEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -56,7 +64,18 @@ public class ClientEventHandlers {
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onBlockHighlight);
 
+    }
+
+    public static void onBlockHighlight(DrawSelectionEvent.HighlightBlock event) {
+        BlockState state = event.getCamera().getEntity().level.getBlockState(event.getTarget().getBlockPos());
+        if (state.getBlock() instanceof BeeHouseBlock || state.getBlock() instanceof BeeHouseTopBlock) {
+            event.setCanceled(true);
+            VertexConsumer consumer = event.getMultiBufferSource().getBuffer(RenderType.lines());
+            boolean shouldFlip = state.hasProperty(BlockStateProperties.HORIZONTAL_FACING) && state.getValue(BlockStateProperties.HORIZONTAL_FACING).getAxis().equals(Direction.Axis.X);
+            BeeHouseSelectionBox.renderSelectionBox(consumer, event.getPoseStack(), event.getCamera().getPosition(), event.getTarget().getBlockPos(), (state.getBlock() instanceof BeeHouseTopBlock ? 1 : 0), shouldFlip);
+        }
     }
 
     public static void recipesLoaded(RecipesUpdatedEvent event){
