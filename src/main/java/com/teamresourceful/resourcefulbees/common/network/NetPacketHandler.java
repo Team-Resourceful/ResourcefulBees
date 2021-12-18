@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
 import com.teamresourceful.resourcefulbees.common.network.packets.LockBeeMessage;
-import com.teamresourceful.resourcefulbees.common.network.packets.SyncBlockEntityMessage;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandMessage;
 import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandResponseMessage;
@@ -39,7 +38,6 @@ public class NetPacketHandler {
         INSTANCE.registerMessage(++id, BeeconChangeMessage.class, BeeconChangeMessage::encode, BeeconChangeMessage::decode, BeeconChangeMessage::handle);
         INSTANCE.registerMessage(++id, CommandMessage.class, CommandMessage::encode, CommandMessage::decode, CommandMessage::handle);
         INSTANCE.registerMessage(++id, CommandResponseMessage.class, CommandResponseMessage::encode, CommandResponseMessage::decode, CommandResponseMessage::handle);
-        INSTANCE.registerMessage(++id, SyncBlockEntityMessage.class, SyncBlockEntityMessage::encode, SyncBlockEntityMessage::decode, SyncBlockEntityMessage::handle);
     }
 
     public static void sendToServer(Object message) {

@@ -2,30 +2,30 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entiti
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
-import com.teamresourceful.resourcefulbees.common.tileentity.ISyncableGUI;
-import io.netty.buffer.Unpooled;
+import com.teamresourceful.resourcefulbees.common.blockentity.ISyncableGUI;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Nameable;
-import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.FakePlayer;
-import net.roguelogix.phosphophyllite.multiblock.MultiblockController;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifugeEntity implements Nameable, ISyncableGUI {
+
+    private final List<ServerPlayer> listeners = new ArrayList<>();
 
     private Component name;
     private String owner = "null";
 
     protected final CentrifugeState centrifugeState = new CentrifugeState();
+
 
     protected AbstractGUICentrifugeEntity(BlockEntityType<?> tileEntityTypeIn, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, tier, pos, state);
@@ -35,22 +35,7 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
         return centrifugeState;
     }
 
-
-//TODO move this to block
-
-/*    @Override
-    public @NotNull InteractionResult use(@NotNull Player player, @NotNull InteractionHand handIn) {
-        assert level != null;
-        if (Boolean.TRUE.equals(level.getBlockState(worldPosition).getValue(MultiblockBlock.ASSEMBLED))) {
-            if (!level.isClientSide) {
-                NetworkHooks.openGui((ServerPlayer) player, this, this::getOpenGUIPacket);
-            }
-            return InteractionResult.SUCCESS;
-        }
-        return super.onBlockActivated(player, handIn);
-    }*/
-
-    protected void getOpenGUIPacket(FriendlyByteBuf buffer) {
+    public void getOpenGUIPacket(FriendlyByteBuf buffer) {
         buffer.writeBlockPos(this.getBlockPos());
         buffer.writeRegistryId(this.getType());
     }
@@ -83,7 +68,23 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
     //endregion
 
     //region GUI Packet
+
     @Override
+    public final List<ServerPlayer> getListeners() {
+        return listeners;
+    }
+
+    @Override
+    public CompoundTag getSyncData() {
+        return null;
+    }
+
+    @Override
+    public void readSyncData(@NotNull CompoundTag tag) {
+
+    }
+
+    /*    @Override
     public void sendGUINetworkPacket(ContainerListener player) {}
 
     @Override
@@ -107,7 +108,7 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
     public final void handleInitGUIPacket(FriendlyByteBuf buffer) {
         CompoundTag nbt = buffer.readNbt();
         if (nbt != null) centrifugeState.deserializeNBT(nbt);
-    }
+    }*/
     //endregion
 
 

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.network.packets;
 
-import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,7 +30,7 @@ public record BeeconChangeMessage(Option option, int value, BlockPos pos) {
             ServerPlayer player = context.get().getSender();
             if (player != null && player.level.isLoaded(message.pos)){
                 BlockEntity tileEntity = player.level.getBlockEntity(message.pos);
-                if (tileEntity instanceof EnderBeeconTileEntity beecon) {
+                if (tileEntity instanceof EnderBeeconBlockEntity beecon) {
                     beecon.handleBeeconUpdate(message.option, message.value);
                 }
             }

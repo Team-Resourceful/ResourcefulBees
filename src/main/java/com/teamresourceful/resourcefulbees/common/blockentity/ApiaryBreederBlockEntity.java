@@ -1,11 +1,11 @@
-package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary;
+package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
-import com.teamresourceful.resourcefulbees.common.inventory.containers.ApiaryBreederContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryBreederContainer;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -41,7 +41,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants.NBT_BREEDER_COUNT;
 
-public class ApiaryBreederTileEntity extends BlockEntity implements MenuProvider {
+public class ApiaryBreederBlockEntity extends BlockEntity implements MenuProvider {
 
     private static final int[] UPGRADE_SLOTS = {0, 1, 2, 3};
     private static final int[] PARENT_1_SLOTS = {4, 9, 14, 19, 24};
@@ -50,7 +50,7 @@ public class ApiaryBreederTileEntity extends BlockEntity implements MenuProvider
     private static final int[] FEED_2_SLOTS = {7, 12, 17, 22, 27};
     private static final int[] EMPTY_JAR_SLOTS = {8, 13, 18, 23, 28};
 
-    private final ApiaryBreederTileEntity.TileStackHandler tileStackHandler = new ApiaryBreederTileEntity.TileStackHandler(29);
+    private final ApiaryBreederBlockEntity.TileStackHandler tileStackHandler = new ApiaryBreederBlockEntity.TileStackHandler(29);
     private final LazyOptional<IItemHandler> lazyOptional = LazyOptional.of(this::getTileStackHandler);
     private int[] time = {0, 0, 0, 0, 0};
     private int totalTime = CommonConfig.APIARY_MAX_BREED_TIME.get();
@@ -60,14 +60,14 @@ public class ApiaryBreederTileEntity extends BlockEntity implements MenuProvider
         @Override
         public int get(int index) {
             return MathUtils.inRangeInclusive(index, 0, 4)
-                    ? ApiaryBreederTileEntity.this.getTime()[index]
+                    ? ApiaryBreederBlockEntity.this.getTime()[index]
                     : 0;
         }
 
         @Override
         public void set(int index, int value) {
             if (!MathUtils.inRangeInclusive(index, 0, 4)) return;
-            ApiaryBreederTileEntity.this.getTime()[index] = value;
+            ApiaryBreederBlockEntity.this.getTime()[index] = value;
          }
 
         @Override
@@ -76,7 +76,7 @@ public class ApiaryBreederTileEntity extends BlockEntity implements MenuProvider
         }
     };
 
-    public ApiaryBreederTileEntity(BlockPos pos, BlockState state) {
+    public ApiaryBreederBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.APIARY_BREEDER_TILE_ENTITY.get(), pos, state);
     }
 
@@ -104,7 +104,7 @@ public class ApiaryBreederTileEntity extends BlockEntity implements MenuProvider
         return EMPTY_JAR_SLOTS;
     }
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, ApiaryBreederTileEntity entity) {
+    public static void serverTick(Level level, BlockPos pos, BlockState state, ApiaryBreederBlockEntity entity) {
         if (true) return;
         boolean dirty = false;
         for (int i = 0; i < entity.getNumberOfBreeders(); i++) {
@@ -272,8 +272,7 @@ public class ApiaryBreederTileEntity extends BlockEntity implements MenuProvider
 
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-        //noinspection ConstantConditions
-        return new ApiaryBreederContainer(id, level, worldPosition, playerInventory, times);
+        return new ApiaryBreederContainer(id, playerInventory, this, times);
     }
 
     @NotNull
@@ -324,12 +323,12 @@ public class ApiaryBreederTileEntity extends BlockEntity implements MenuProvider
 
         @Override
         public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-            return ApiaryBreederTileEntity.this.getAcceptor();
+            return ApiaryBreederBlockEntity.this.getAcceptor();
         }
 
         @Override
         public AutomationSensitiveItemStackHandler.IRemover getRemover() {
-            return ApiaryBreederTileEntity.this.getRemover();
+            return ApiaryBreederBlockEntity.this.getRemover();
         }
 
         @Override
@@ -396,8 +395,8 @@ public class ApiaryBreederTileEntity extends BlockEntity implements MenuProvider
                 }
             }
 
-            ApiaryBreederTileEntity.this.setNumberOfBreeders(count);
-            tileStackHandler.setMaxSlots(3 + ApiaryBreederTileEntity.this.getNumberOfBreeders() * 5);
+            ApiaryBreederBlockEntity.this.setNumberOfBreeders(count);
+            tileStackHandler.setMaxSlots(3 + ApiaryBreederBlockEntity.this.getNumberOfBreeders() * 5);
         }
 
         private void updateBreedTime(TileStackHandler tileStackHandler) {
@@ -415,15 +414,15 @@ public class ApiaryBreederTileEntity extends BlockEntity implements MenuProvider
                 }
             }
 
-            ApiaryBreederTileEntity.this.setTotalTime(Mth.clamp(newTotalTime, 300, 4800));
+            ApiaryBreederBlockEntity.this.setTotalTime(Mth.clamp(newTotalTime, 300, 4800));
         }
 
         private void rebuildOpenContainers() {
-            if (ApiaryBreederTileEntity.this.level != null) {
+            if (ApiaryBreederBlockEntity.this.level != null) {
                 float f = 5.0F;
-                BlockPos pos = ApiaryBreederTileEntity.this.worldPosition;
+                BlockPos pos = ApiaryBreederBlockEntity.this.worldPosition;
 
-                ApiaryBreederTileEntity.this.level.getEntitiesOfClass(Player.class, new AABB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))
+                ApiaryBreederBlockEntity.this.level.getEntitiesOfClass(Player.class, new AABB(pos.getX() - f, pos.getY() - f, pos.getZ() - f, (pos.getX() + 1) + f, (pos.getY() + 1) + f, (pos.getZ() + 1) + f))
                         .stream()
                         .filter(playerEntity -> playerEntity.containerMenu instanceof ApiaryBreederContainer)
                         .filter(this::openContainerMatches)
@@ -433,8 +432,8 @@ public class ApiaryBreederTileEntity extends BlockEntity implements MenuProvider
 
         private boolean openContainerMatches(Player playerEntity) {
             ApiaryBreederContainer openContainer = (ApiaryBreederContainer) playerEntity.containerMenu;
-            ApiaryBreederTileEntity apiaryBreederTileEntity = openContainer.getApiaryBreederTileEntity();
-            return  ApiaryBreederTileEntity.this == apiaryBreederTileEntity;
+            ApiaryBreederBlockEntity apiaryBreederBlockEntity = openContainer.getEntity();
+            return  ApiaryBreederBlockEntity.this == apiaryBreederBlockEntity;
         }
     }
 }

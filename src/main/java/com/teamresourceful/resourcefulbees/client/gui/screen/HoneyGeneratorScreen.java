@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
-import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyGeneratorContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGeneratorMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
@@ -23,11 +23,11 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 
 @OnlyIn(Dist.CLIENT)
-public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGeneratorContainer> {
+public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGeneratorMenu> {
 
     public static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/generator/honey_gen.png");
 
-    public HoneyGeneratorScreen(HoneyGeneratorContainer screenContainer, Inventory inventory, Component titleIn) {
+    public HoneyGeneratorScreen(HoneyGeneratorMenu screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);
     }
 
@@ -41,7 +41,7 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
             this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
             renderEnergy(matrix, i+136, j+16, this.menu.getEnergy().getPercentage());
 
-            HoneyFluidTank tank = menu.getHoneyGeneratorTileEntity().getTank();
+            HoneyFluidTank tank = menu.getEntity().getTank();
             FluidStack fluidStack = tank.getFluid();
 
             int height = (int)(54*((float)tank.getFluidAmount() / tank.getCapacity()));
@@ -65,13 +65,11 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
 
     @Override
     public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        if (this.menu.getHoneyGeneratorTileEntity() != null) {
-            this.renderBackground(matrix);
-            super.render(matrix, mouseX, mouseY, partialTicks);
-            this.renderTooltip(matrix, mouseX, mouseY);
-            renderFluidTooltip(matrix, mouseX, mouseY, ModConstants.DECIMAL_FORMAT);
-            renderEnergyTooltip(matrix, mouseX, mouseY, ModConstants.DECIMAL_FORMAT);
-        }
+        this.renderBackground(matrix);
+        super.render(matrix, mouseX, mouseY, partialTicks);
+        this.renderTooltip(matrix, mouseX, mouseY);
+        renderFluidTooltip(matrix, mouseX, mouseY, ModConstants.DECIMAL_FORMAT);
+        renderEnergyTooltip(matrix, mouseX, mouseY, ModConstants.DECIMAL_FORMAT);
     }
 
     public void renderEnergyTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY, DecimalFormat decimalFormat) {
@@ -85,7 +83,7 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
 
     public void renderFluidTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY, DecimalFormat decimalFormat) {
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 28, this.leftPos + 40) && MathUtils.inRangeInclusive(mouseY, this.topPos + 16, this.topPos + 70)) {
-            FluidStack fluid = this.menu.getHoneyGeneratorTileEntity().getTank().getFluid();
+            FluidStack fluid = this.menu.getEntity().getTank().getFluid();
             if (Screen.hasShiftDown() || fluid.getAmount() < 500)
                 this.renderTooltip(matrix, new TextComponent(fluid.getAmount() + " MB"), mouseX, mouseY);
             else

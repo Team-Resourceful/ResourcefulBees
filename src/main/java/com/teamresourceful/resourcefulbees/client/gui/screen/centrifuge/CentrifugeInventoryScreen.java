@@ -27,7 +27,7 @@ public abstract class CentrifugeInventoryScreen<T extends CentrifugeContainer<?>
     protected void renderBg(@NotNull PoseStack matrix, float pPartialTicks, int pX, int pY) {
         super.renderBg(matrix, pPartialTicks, pX, pY);
         drawContainerSlots(matrix, leftPos, topPos);
-        drawPlayerInventory(matrix, leftPos - 1 + CentrifugeContainer.INV_X_OFFSET, topPos - 1 + CentrifugeContainer.INV_Y_OFFSET);
+        drawPlayerInventory(matrix, leftPos - 1 + menu.getPlayerInvXOffset(), topPos - 1 + menu.getPlayerInvYOffset());
     }
 
     protected void drawContainerSlots(@NotNull PoseStack matrix, int x, int y) {

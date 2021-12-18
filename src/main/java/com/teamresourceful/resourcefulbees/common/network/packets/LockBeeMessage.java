@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.network.packets;
 
-import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,8 +25,8 @@ public record LockBeeMessage(BlockPos pos, int bee) {
             ServerPlayer player = context.get().getSender();
             if (player != null && player.level.isLoaded(message.pos)) {
                 BlockEntity tileEntity = player.level.getBlockEntity(message.pos);
-                if (tileEntity instanceof ApiaryTileEntity apiaryTileEntity) {
-                    apiaryTileEntity.lockOrUnlockBee(message.bee);
+                if (tileEntity instanceof ApiaryBlockEntity apiaryBlockEntity) {
+                    apiaryBlockEntity.lockOrUnlockBee(message.bee);
                 }
             }
         });

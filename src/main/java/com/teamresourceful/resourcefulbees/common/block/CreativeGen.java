@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.tileentity.CreativeGenTileEntity;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.CreativeGenBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.HoneyGeneratorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,7 +21,7 @@ public class CreativeGen extends RenderingBaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new HoneyGeneratorTileEntity(pos, state);
+        return new HoneyGeneratorBlockEntity(pos, state);
     }
 
 
@@ -30,6 +30,6 @@ public class CreativeGen extends RenderingBaseEntityBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         return level.isClientSide ?
                 null :
-                createTickerHelper(type, ModBlockEntityTypes.CREATIVE_GEN_ENTITY.get(), CreativeGenTileEntity::serverTick);
+                createTickerHelper(type, ModBlockEntityTypes.CREATIVE_GEN_ENTITY.get(), CreativeGenBlockEntity::serverTick);
     }
 }

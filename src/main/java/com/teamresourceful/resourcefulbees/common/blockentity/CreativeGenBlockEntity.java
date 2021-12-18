@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.tileentity;
+package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -17,12 +17,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class CreativeGenTileEntity extends BlockEntity {
+public class CreativeGenBlockEntity extends BlockEntity {
 
     public final CustomEnergyStorage energyStorage = createEnergy();
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
 
-    public CreativeGenTileEntity(BlockPos pos, BlockState state) {
+    public CreativeGenBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.CREATIVE_GEN_ENTITY.get(), pos, state);
     }
 
@@ -55,7 +55,7 @@ public class CreativeGenTileEntity extends BlockEntity {
         };
     }
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, CreativeGenTileEntity entity) {
+    public static void serverTick(Level level, BlockPos pos, BlockState state, CreativeGenBlockEntity entity) {
         if (level != null) {
             entity.energyStorage.setEnergy(Integer.MAX_VALUE);
             sendOutPower(level, pos);

@@ -18,7 +18,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -120,17 +120,17 @@ public class ClientEventHandlers {
     }
 
     private static void registerScreens() {
-        MenuScreens.register(ModContainers.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
-        MenuScreens.register(ModContainers.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
-        MenuScreens.register(ModContainers.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
-        MenuScreens.register(ModContainers.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
-        MenuScreens.register(ModContainers.SOLIDIFICATION_CHAMBER_CONTAINER.get(), SolidificationChamberScreen::new);
-        MenuScreens.register(ModContainers.HONEY_POT_CONTAINER.get(), HoneyPotScreen::new);
+        MenuScreens.register(ModMenus.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
+        MenuScreens.register(ModMenus.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
+        MenuScreens.register(ModMenus.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
+        MenuScreens.register(ModMenus.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
+        MenuScreens.register(ModMenus.SOLIDIFICATION_CHAMBER_CONTAINER.get(), SolidificationChamberScreen::new);
+        MenuScreens.register(ModMenus.HONEY_POT_CONTAINER.get(), HoneyPotScreen::new);
 
         //centrifuge
-        MenuScreens.register(ModContainers.CENTRIFUGE_INPUT_CONTAINER.get(), CentrifugeInputScreen::new);
-        MenuScreens.register(ModContainers.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), CentrifugeItemOutputScreen::new);
-        MenuScreens.register(ModContainers.CENTRIFUGE_VOID_CONTAINER.get(), CentrifugeVoidScreen::new);
-        MenuScreens.register(ModContainers.CENTRIFUGE_TERMINAL_CONTAINER.get(), CentrifugeTerminalScreen::new);
+        MenuScreens.register(ModMenus.CENTRIFUGE_INPUT_CONTAINER.get(), CentrifugeInputScreen::new);
+        MenuScreens.register(ModMenus.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), CentrifugeItemOutputScreen::new);
+        MenuScreens.register(ModMenus.CENTRIFUGE_VOID_CONTAINER.get(), CentrifugeVoidScreen::new);
+        MenuScreens.register(ModMenus.CENTRIFUGE_TERMINAL_CONTAINER.get(), CentrifugeTerminalScreen::new);
     }
 }

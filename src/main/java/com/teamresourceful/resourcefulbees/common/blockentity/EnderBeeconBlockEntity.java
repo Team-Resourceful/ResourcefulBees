@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.tileentity;
+package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.google.common.collect.Sets;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
@@ -6,16 +6,13 @@ import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.inventory.containers.EnderBeeconContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
-import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,11 +20,9 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
@@ -37,14 +32,12 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -57,13 +50,16 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class EnderBeeconTileEntity extends BlockEntity implements ISyncableGUI {
+public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements ISyncableGUI {
 
     public static final Set<MobEffect> ALLOWED_EFFECTS = Sets.newHashSet(ModEffects.CALMING.get(), MobEffects.WATER_BREATHING, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION);
 
     private final HoneyFluidTank tank = new HoneyFluidTank(16000) {
         @Override
-        protected void onContentsChanged() { updateBeecon = true; }
+        protected void onContentsChanged() {
+            //sendToPlayersTrackingChunk();
+            updateBeecon = true;
+        }
     };
     private final LazyOptional<FluidTank> tankOptional = LazyOptional.of(() -> tank);
 
@@ -73,7 +69,7 @@ public class EnderBeeconTileEntity extends BlockEntity implements ISyncableGUI {
     private Set<MobEffect> effects = new LinkedHashSet<>();
     private int range = 1;
 
-    public EnderBeeconTileEntity(BlockPos pos, BlockState state) {
+    public EnderBeeconBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), pos, state);
     }
 
@@ -88,34 +84,46 @@ public class EnderBeeconTileEntity extends BlockEntity implements ISyncableGUI {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-        if (level == null) return null;
-        return new EnderBeeconContainer(id, level, worldPosition, playerInventory);
+        return new EnderBeeconMenu(id, playerInventory, this);
     }
 
     //endregion
 
-    //region NBT
-
+    //region SYNCABLE GUI
     @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag nbt) {
-        nbt.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundTag()));
-        nbt.putInt(NBTConstants.Beecon.RANGE, range);
-        if (effects != null && !effects.isEmpty()) nbt.put(NBTConstants.Beecon.ACTIVE_EFFECTS, writeEffectsToNBT(new ListTag()));
-        return super.save(nbt);
+    public CompoundTag getSyncData() {
+        CompoundTag tag = new CompoundTag();
+        tag.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundTag()));
+        tag.putInt(NBTConstants.Beecon.RANGE, range);
+        if (effects != null && !effects.isEmpty()) tag.put(NBTConstants.Beecon.ACTIVE_EFFECTS, writeEffectsToNBT(new ListTag()));
+        return tag;
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        tank.readFromNBT(nbt.getCompound(NBTConstants.NBT_TANK));
-        effects = readEffectsFromNBT(nbt.getList(NBTConstants.Beecon.ACTIVE_EFFECTS, Tag.TAG_STRING));
-        range = nbt.getInt(NBTConstants.Beecon.RANGE);
+    public void readSyncData(@NotNull CompoundTag tag) {
+        tank.readFromNBT(tag.getCompound(NBTConstants.NBT_TANK));
+        effects = readEffectsFromNBT(tag.getList(NBTConstants.Beecon.ACTIVE_EFFECTS, Tag.TAG_STRING));
+        range = tag.getInt(NBTConstants.Beecon.RANGE);
         range = range > 0 ? range : 1;
+    }
+    //endregion
+
+    //region NBT
+    @Override
+    protected void saveAdditional(@NotNull CompoundTag tag) {
+        super.saveAdditional(tag);
+        tag.put("SyncData", getSyncData());
+    }
+
+    @Override
+    public void load(@NotNull CompoundTag tag) {
+        super.load(tag);
+        readSyncData(tag.getCompound("SyncData"));
     }
 
     @Override
     public @NotNull CompoundTag getUpdateTag() {
-        return save(new CompoundTag());
+        return getSyncData();
     }
 
     @Nullable
@@ -126,12 +134,12 @@ public class EnderBeeconTileEntity extends BlockEntity implements ISyncableGUI {
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        load(pkt.getTag());
+        if (pkt.getTag() != null) readSyncData(pkt.getTag());
     }
 
     //endregion
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, EnderBeeconTileEntity entity) {
+    public static void serverTick(Level level, BlockPos pos, BlockState state, EnderBeeconBlockEntity entity) {
         if (level == null) return;
 
         // do drain tank
@@ -155,7 +163,7 @@ public class EnderBeeconTileEntity extends BlockEntity implements ISyncableGUI {
         startUpCheck(level, pos, state, entity);
     }
 
-    private static void startUpCheck(@NotNull Level level, BlockPos pos, BlockState state, EnderBeeconTileEntity entity) {
+    private static void startUpCheck(@NotNull Level level, BlockPos pos, BlockState state, EnderBeeconBlockEntity entity) {
         if (level.isClientSide) return;
 
         boolean flag = entity.tank.getFluidAmount() > 0;
@@ -173,7 +181,7 @@ public class EnderBeeconTileEntity extends BlockEntity implements ISyncableGUI {
         entity.updateBeecon = false;
     }
 
-    private static void pullFluidFromBelow(@NotNull Level level, BlockPos pos, BlockState state, EnderBeeconTileEntity entity) {
+    private static void pullFluidFromBelow(@NotNull Level level, BlockPos pos, BlockState state, EnderBeeconBlockEntity entity) {
         BlockEntity tileEntity = level.getBlockEntity(pos.below());
         if (tileEntity == null) return;
         if (entity.tank.getSpace() == 0) return;
@@ -225,7 +233,7 @@ public class EnderBeeconTileEntity extends BlockEntity implements ISyncableGUI {
         return new AABB(aabb.minX, 0, aabb.minZ, aabb.maxX, level.getMaxBuildHeight(), aabb.maxZ);
     }
 
-    private static void addEffectsToBees(@NotNull Level level, List<Bee> bees, EnderBeeconTileEntity entity) {
+    private static void addEffectsToBees(@NotNull Level level, List<Bee> bees, EnderBeeconBlockEntity entity) {
         if (entity.doEffects()) {
             for (Bee mob : bees) for (MobEffect effect : entity.effects) mob.addEffect(new MobEffectInstance(effect, 120, 0, false, false));
         }
@@ -307,24 +315,6 @@ public class EnderBeeconTileEntity extends BlockEntity implements ISyncableGUI {
 
         ResourcefulBees.LOGGER.error("Effect {} does not have an effect value", effect.getRegistryName());
         return 1D;
-    }
-
-    //endregion
-
-    //region SYNCABLE GUI
-
-    @Override
-    public void sendGUINetworkPacket(ContainerListener player) {
-        if (player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer)) {
-            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            buffer.writeFluidStack(tank.getFluid());
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), serverPlayer);
-        }
-    }
-
-    @Override
-    public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
-        tank.setFluid(buffer.readFluidStack());
     }
 
     //endregion

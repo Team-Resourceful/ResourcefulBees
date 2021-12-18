@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
-import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -20,14 +20,14 @@ public class BeeconEffectWidget extends AbstractWidget {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
 
-    private final EnderBeeconTileEntity tile;
+    private final EnderBeeconBlockEntity tile;
 
     private final MobEffect effect;
     private final TextureAtlasSprite effectSprite;
 
     private boolean selected;
 
-    public BeeconEffectWidget(int x, int y, MobEffect effect, EnderBeeconTileEntity tile) {
+    public BeeconEffectWidget(int x, int y, MobEffect effect, EnderBeeconBlockEntity tile) {
         super(x, y, 88, 22, new TextComponent("Beecon Effect Button"));
         this.effectSprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
         this.effect = effect;

@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.lib.enums.HoneyPotState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyPotBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.HoneyPotBlockEntity;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -59,9 +59,9 @@ public class HoneyPotBlock extends AbstractTank {
     public InteractionResult use(@NotNull BlockState state, Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
         BlockEntity tileEntity = world.getBlockEntity(pos);
 
-        if (tileEntity instanceof HoneyPotBlockEntity) {
+        if (tileEntity instanceof HoneyPotBlockEntity entity) {
             Item item = player.getItemInHand(hand).getItem();
-            HoneyPotBlockEntity.HoneyPotFluidTank tank = ((HoneyPotBlockEntity) tileEntity).getTank();
+            HoneyPotBlockEntity.HoneyPotFluidTank tank = entity.getTank();
 
             if (item instanceof BottleItem) tank.fillBottle(player, hand);
             else if (item instanceof HoneyBottleItem) tank.emptyBottle(player, hand);

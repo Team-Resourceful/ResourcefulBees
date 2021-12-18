@@ -1,33 +1,25 @@
-package com.teamresourceful.resourcefulbees.common.tileentity;
+package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
-import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyCongealerContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.menus.SolidificationChamberMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import com.teamresourceful.resourcefulbees.common.recipe.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -38,7 +30,7 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SolidificationChamberBlockEntity extends BlockEntity implements ISyncableGUI {
+public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity implements ISyncableGUI {
 
     public static final int BLOCK_OUTPUT = 0;
 
@@ -70,12 +62,10 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements ISy
         return TranslationConstants.Guis.SOLIDIFICATION_CHAMBER;
     }
 
-
-
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         if (level == null) return null;
-        return new HoneyCongealerContainer(id, level, worldPosition, playerInventory);
+        return new SolidificationChamberMenu(id, playerInventory, this);
     }
 
     public FluidTank getTank() {
@@ -123,18 +113,6 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements ISy
         return (slot, automation) -> !automation || slot == BLOCK_OUTPUT;
     }
 
-    public void sendGUINetworkPacket(ContainerListener player) {
-        if (player instanceof ServerPlayer serverPlayer && (!(player instanceof FakePlayer))) {
-            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            buffer.writeFluidStack(tank.getFluid());
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), serverPlayer);
-        }
-    }
-
-    public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
-        tank.setFluid(buffer.readFluidStack());
-    }
-
     public static void serverTick(Level level, BlockPos pos, BlockState state, SolidificationChamberBlockEntity entity) {
         if (entity.canProcessHoney()) {
             if (entity.processingFill >= CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get()) {
@@ -159,19 +137,30 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements ISy
     }
 
     @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag nbt) {
-        nbt.put(NBTConstants.NBT_INVENTORY, inventory.serializeNBT());
-        nbt.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundTag()));
-        return super.save(nbt);
+    protected void saveAdditional(@NotNull CompoundTag tag) {
+        super.saveAdditional(tag);
+        tag.put(NBTConstants.SYNC_DATA, getSyncData());
+        tag.put(NBTConstants.NBT_INVENTORY, inventory.serializeNBT());
     }
 
-    //TODO convert to new way of handling nbt
-/*    @Override
-    public void load(@NotNull BlockState state, @NotNull CompoundTag nbt) {
-        super.load(state, nbt);
-        inventory.deserializeNBT(nbt.getCompound(NBTConstants.NBT_INVENTORY));
-        tank.readFromNBT(nbt.getCompound(NBTConstants.NBT_TANK));
-    }*/
+    @Override
+    public void load(@NotNull CompoundTag tag) {
+        super.load(tag);
+        inventory.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
+        readSyncData(tag.getCompound(NBTConstants.SYNC_DATA));
+    }
+
+    @Override
+    public CompoundTag getSyncData() {
+        CompoundTag tag = new CompoundTag();
+        tag.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundTag()));
+        return tag;
+    }
+
+    @Override
+    public void readSyncData(@NotNull CompoundTag tag) {
+        tank.readFromNBT(tag.getCompound(NBTConstants.NBT_TANK));
+    }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
         protected TileStackHandler(int slots, IAcceptor acceptor, IRemover remover) {

@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.common.mixin;
 import com.teamresourceful.resourcefulbees.api.IBeeCompat;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
-import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
-import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
@@ -44,8 +44,8 @@ public abstract class MixinBeeEntity extends Animal implements IBeeCompat {
     @Inject(at = @At("HEAD"), method = "doesHiveHaveSpace", cancellable = true)
     private void doesHiveHaveSpace(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
         BlockEntity blockEntity = this.level.getBlockEntity(pos);
-        if ((blockEntity instanceof TieredBeehiveTileEntity && !((TieredBeehiveTileEntity) blockEntity).isFull())
-                || (blockEntity instanceof ApiaryTileEntity apiary && apiary.hasSpace())
+        if ((blockEntity instanceof TieredBeehiveBlockEntity && !((TieredBeehiveBlockEntity) blockEntity).isFull())
+                || (blockEntity instanceof ApiaryBlockEntity apiary && apiary.hasSpace())
                 || (blockEntity instanceof BeehiveBlockEntity beeHive && !beeHive.isFull())) {
             callback.setReturnValue(true);
         }
@@ -57,8 +57,8 @@ public abstract class MixinBeeEntity extends Animal implements IBeeCompat {
             BlockPos pos = this.hivePos;
             if (pos != null) {
                 BlockEntity blockEntity = this.level.getBlockEntity(this.hivePos);
-                if ((blockEntity instanceof TieredBeehiveTileEntity tieredHive && tieredHive.isAllowedBee())
-                        || (blockEntity instanceof ApiaryTileEntity apiary && apiary.isAllowedBee())) {
+                if ((blockEntity instanceof TieredBeehiveBlockEntity tieredHive && tieredHive.isAllowedBee())
+                        || (blockEntity instanceof ApiaryBlockEntity apiary && apiary.isAllowedBee())) {
                     callback.setReturnValue(true);
                 }
             }

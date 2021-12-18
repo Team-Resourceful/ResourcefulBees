@@ -5,11 +5,11 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeeconEffectWidget;
 import com.teamresourceful.resourcefulbees.client.gui.widget.OptionImageButton;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
-import com.teamresourceful.resourcefulbees.common.inventory.containers.EnderBeeconContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
-import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -28,15 +28,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContainer> {
+public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
 
-    private final EnderBeeconTileEntity tileEntity;
+    private final EnderBeeconBlockEntity tileEntity;
 
-    public EnderBeeconScreen(EnderBeeconContainer screenContainer, Inventory inventory, Component titleIn) {
+    public EnderBeeconScreen(EnderBeeconMenu screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);
-        this.tileEntity = screenContainer.getEnderBeeconTileEntity();
+        this.tileEntity = screenContainer.getEntity();
         this.imageWidth = 230;
         this.imageHeight = 200;
         this.inventoryLabelX = 36;
@@ -53,23 +53,23 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContai
         super.init();
         clearWidgets();
 
-        BlockState state = menu.getEnderBeeconTileEntity().getBlockState();
+        BlockState state = menu.getEntity().getBlockState();
 
         soundButton = addWidget(new OptionImageButton(  leftPos+109, topPos+84, 52, 200, state.hasProperty(EnderBeecon.SOUND) && !state.getValue(EnderBeecon.SOUND), BACKGROUND) {
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
-                NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.SOUND, !selected, menu.getEnderBeeconTileEntity().getBlockPos()));
+                NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.SOUND, !selected, menu.getEntity().getBlockPos()));
             }
         });
         beamButton = addWidget(new OptionImageButton(leftPos+132, topPos+84, 92, 200, state.hasProperty(EnderBeecon.BEAM) && !state.getValue(EnderBeecon.BEAM), BACKGROUND) {
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
-                NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.BEAM, !selected, menu.getEnderBeeconTileEntity().getBlockPos()));
+                NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.BEAM, !selected, menu.getEntity().getBlockPos()));
             }
         });
-        addWidget(new RangeSlider(leftPos+155, topPos+84, menu.getEnderBeeconTileEntity().getRange()/50f));
+        addWidget(new RangeSlider(leftPos + 155, topPos + 84, menu.getEntity().getRange() - 10f / 40f));
     }
 
     @Override
@@ -85,8 +85,8 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContai
     private void drawButtons() {
         int buttonStartY = this.topPos + 17;
         powerButtons.clear();
-        for (MobEffect allowedEffect : EnderBeeconTileEntity.ALLOWED_EFFECTS) {
-            BeeconEffectWidget button = new BeeconEffectWidget(this.leftPos + 9, buttonStartY, allowedEffect, menu.getEnderBeeconTileEntity());
+        for (MobEffect allowedEffect : EnderBeeconBlockEntity.ALLOWED_EFFECTS) {
+            BeeconEffectWidget button = new BeeconEffectWidget(this.leftPos + 9, buttonStartY, allowedEffect, menu.getEntity());
             button.active = true;
             button.setSelected(tileEntity.hasEffect(allowedEffect));
             powerButtons.add(button);
@@ -106,7 +106,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContai
         drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.RANGE_LABEL, 110, 44, 14737632);
         drawString(matrixStack, font, tileEntity.getRange() + " blocks", 145, 44, 34815);
 
-        FluidStack fluidStack = menu.getEnderBeeconTileEntity().getTank().getFluid();
+        FluidStack fluidStack = menu.getEntity().getTank().getFluid();
 
         drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.FLUID_LABEL, 110, 56, 14737632);
         drawString(matrixStack, font, fluidStack.isEmpty() ? TranslationConstants.Guis.EnderBeecon.NO_FLUID_LABEL : fluidStack.getDisplayName(), 137, 56, 16751628);
@@ -153,7 +153,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconContai
         @Override
         protected void applyValue() {
             int range = (int)(value * 40)+10;
-            NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.RANGE, range, EnderBeeconScreen.this.menu.getEnderBeeconTileEntity().getBlockPos()));
+            NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.RANGE, range, EnderBeeconScreen.this.menu.getEntity().getBlockPos()));
         }
     }
 }

@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBreederBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -68,7 +68,7 @@ public class ApiaryBreederBlock extends RenderingBaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new ApiaryBreederTileEntity(pos, state);
+        return new ApiaryBreederBlockEntity(pos, state);
     }
 
     @Nullable
@@ -76,6 +76,6 @@ public class ApiaryBreederBlock extends RenderingBaseEntityBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         return level.isClientSide() ?
                 null :
-                createTickerHelper(type, ModBlockEntityTypes.APIARY_BREEDER_TILE_ENTITY.get(), ApiaryBreederTileEntity::serverTick);
+                createTickerHelper(type, ModBlockEntityTypes.APIARY_BREEDER_TILE_ENTITY.get(), ApiaryBreederBlockEntity::serverTick);
     }
 }

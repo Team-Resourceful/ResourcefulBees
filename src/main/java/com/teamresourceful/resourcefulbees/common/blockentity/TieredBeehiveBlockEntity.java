@@ -1,5 +1,5 @@
 
-package com.teamresourceful.resourcefulbees.common.tileentity;
+package com.teamresourceful.resourcefulbees.common.blockentity;
 
 
 import com.google.common.collect.Lists;
@@ -43,15 +43,15 @@ import java.util.List;
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.SMOKE_TIME;
 
-public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
+public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
 
-    private final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> entityType;
+    private final RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
     private List<ItemStack> honeycombs = new LinkedList<>();
     protected boolean isSmoked = false;
     protected int ticksSmoked = -1;
     protected int ticksSinceBeesFlagged;
 
-    public TieredBeehiveTileEntity(RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> entityType, BlockPos pos, BlockState state) {
+    public TieredBeehiveBlockEntity(RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType, BlockPos pos, BlockState state) {
         super(pos,state);
         this.entityType = entityType;
     }
@@ -61,7 +61,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
     public BlockEntityType<?> getType() { return entityType.get(); }
 
 
-    public static void recalculateHoneyLevel(TieredBeehiveTileEntity hive) {
+    public static void recalculateHoneyLevel(TieredBeehiveBlockEntity hive) {
         float combsInHive = hive.honeycombs.size();
         float percentValue = (combsInHive / hive.getBlock().getTier().getMaxCombs()) * 100;
         int newState = (int) Mth.clamp((percentValue - (percentValue % 20)) / 20, 0, 5) ;
@@ -82,9 +82,10 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
                 .stream()
                 .filter(e -> e.position().distanceToSqr(player.position()) <= 16.0D)
                 .forEach(entity -> {
-                        if (!this.isSedated())
+                        if (!this.isSedated()) {
                             if (entity instanceof Mob mob) mob.setTarget(player);
                             else if (entity instanceof IBeeCompat compat) compat.setOutOfHiveCooldown(400);
+                        }
                 });
     }
 
@@ -94,7 +95,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
         return list;
     }
 
-    private static boolean releaseBee(TieredBeehiveTileEntity hive, @NotNull BlockState state, @NotNull BeehiveBlockEntity.BeeData tileBee, @Nullable List<Entity> entities, @NotNull BeeReleaseStatus beehiveState) {
+    private static boolean releaseBee(TieredBeehiveBlockEntity hive, @NotNull BlockState state, @NotNull BeehiveBlockEntity.BeeData tileBee, @Nullable List<Entity> entities, @NotNull BeeReleaseStatus beehiveState) {
         if (shouldStayInHive(hive.level, beehiveState)) {
             return false;
         } else {
@@ -164,7 +165,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
         return isSmoked || CampfireBlock.isSmokeyPos(this.level, this.getBlockPos());
     }
 
-    public static void serverSideTick(Level level, BlockPos blockPos, BlockState state, TieredBeehiveTileEntity hive) {
+    public static void serverSideTick(Level level, BlockPos blockPos, BlockState state, TieredBeehiveBlockEntity hive) {
         if (hive.isSmoked) {
             if (MathUtils.inRangeInclusive(hive.ticksSmoked, 0, SMOKE_TIME)) {
                 hive.ticksSmoked++;
@@ -190,7 +191,7 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
         DebugPackets.sendHiveInfo(level, blockPos, state, hive);
     }
 
-    private static void tickOccupants(TieredBeehiveTileEntity hive, BlockState state, List<BeeData> bees) {
+    private static void tickOccupants(TieredBeehiveBlockEntity hive, BlockState state, List<BeeData> bees) {
         BeehiveBlockEntity.BeeData bee;
         for(Iterator<BeeData> iterator = bees.iterator(); iterator.hasNext(); increaseTicksInHive(bee, 1)) {
             bee = iterator.next();
@@ -203,8 +204,9 @@ public class TieredBeehiveTileEntity extends BeehiveBlockEntity {
         }
     }
 
+    //TODO make something (item, etc) to speed up bees xD
     private static void increaseTicksInHive(BeeData beeData, int amount) {
-        ((BeehiveBeeDataAccessor)beeData).setTicksInHive(((BeehiveBeeDataAccessor) beeData).getTicksInHive()+amount);
+        ((BeehiveBeeDataAccessor)beeData).setTicksInHive(((BeehiveBeeDataAccessor) beeData).getTicksInHive() + amount);
     }
 
     public static boolean shouldStayInHive(Level level, BeeReleaseStatus beehiveState){

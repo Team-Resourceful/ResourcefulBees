@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeItemOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeItemOutputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -18,10 +18,10 @@ public class CentrifugeItemOutputContainer extends CentrifugeContainer<Centrifug
     }
 
     public CentrifugeItemOutputContainer(int id, Inventory inv, CentrifugeItemOutputEntity entity) {
-        super(ModContainers.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), id, inv, entity);
+        super(ModMenus.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), id, inv, entity);
     }
 
-    protected void setupSlots() {
+    protected void addMenuSlots() {
         for (int r = 0; r < CentrifugeUtils.getRows(tier); r++) {
             for (int c = 0; c < CentrifugeUtils.getColumns(tier); c++) {
                 if (entity != null) this.addSlot(new OutputSlot(entity.getInventoryHandler(), c + r * 4, 162 + c * 17, 46 + r * 17));

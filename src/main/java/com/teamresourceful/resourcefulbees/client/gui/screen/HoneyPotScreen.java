@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyPotContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyPotMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
@@ -14,11 +14,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotContainer> {
+public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/honey_tank/honey_pot.png");
 
-    public HoneyPotScreen(HoneyPotContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public HoneyPotScreen(HoneyPotMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
 
@@ -30,7 +30,7 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotContainer> {
         RenderUtils.bindTexture(BACKGROUND);
         blit(matrix, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
-        FluidStack fluidStack = menu.getTileEntity().getTank().getFluid();
+        FluidStack fluidStack = menu.getEntity().getTank().getFluid();
 
         this.font.drawShadow(matrix, "Fluid: ",this.leftPos + 36f, this.topPos + 17f, 0xffffff);
         this.font.drawShadow(matrix, getDisplayName(fluidStack),this.leftPos + 40f, this.topPos + 27f, 0xffffff);
@@ -54,7 +54,7 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotContainer> {
         if (this.minecraft == null) return;
 
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos+129, this.leftPos+141) && MathUtils.inRangeInclusive(mouseY, this.topPos+16, this.topPos+70)) {
-            FluidStack fluidStack = menu.getTileEntity().getTank().getFluid();
+            FluidStack fluidStack = menu.getEntity().getTank().getFluid();
             Component component = getDisplayName(fluidStack).copy().append(new TextComponent(" : " + fluidStack.getAmount() + "mB"));
             renderTooltip(matrix, component, mouseX, mouseY);
         }

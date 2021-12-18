@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeFluidOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeFluidOutputEntity;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +16,7 @@ public class CentrifugeFluidOutputContainer extends CentrifugeContainer<Centrifu
     }
 
     public CentrifugeFluidOutputContainer(int id, Inventory inv, CentrifugeFluidOutputEntity entity) {
-        super(ModContainers.CENTRIFUGE_FLUID_OUTPUT_CONTAINER.get(), id, inv, entity);
+        super(ModMenus.CENTRIFUGE_FLUID_OUTPUT_CONTAINER.get(), id, inv, entity);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class CentrifugeFluidOutputContainer extends CentrifugeContainer<Centrifu
     }
 
     @Override
-    protected void setupSlots() {
+    protected void addMenuSlots() {
         addPlayerInvSlots();
     }
 }

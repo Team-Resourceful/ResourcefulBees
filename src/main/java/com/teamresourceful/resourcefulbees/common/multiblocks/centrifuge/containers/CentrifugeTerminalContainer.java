@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeTerminal;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeTerminalEntity;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +16,7 @@ public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeT
     }
 
     public CentrifugeTerminalContainer(int id, Inventory inv, CentrifugeTerminalEntity entity) {
-        super(ModContainers.CENTRIFUGE_TERMINAL_CONTAINER.get(), id, inv, entity);
+        super(ModMenus.CENTRIFUGE_TERMINAL_CONTAINER.get(), id, inv, entity);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeT
     }
 
     @Override
-    protected void setupSlots() {
+    protected void addMenuSlots() {
         //addPlayerInvSlots();
     }
 }

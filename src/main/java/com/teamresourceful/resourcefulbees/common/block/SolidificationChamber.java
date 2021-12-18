@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;

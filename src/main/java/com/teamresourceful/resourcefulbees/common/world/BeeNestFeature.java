@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -126,7 +126,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void addBeeToNest(@Nullable EntityType<?> entityType, WorldGenLevel worldIn, BlockPos nestPos, CustomBeeData data, Random rand, TieredBeehiveTileEntity nest){
+    private void addBeeToNest(@Nullable EntityType<?> entityType, WorldGenLevel worldIn, BlockPos nestPos, CustomBeeData data, Random rand, TieredBeehiveBlockEntity nest){
         if (entityType != null) {
             Entity bee = entityType.create(worldIn.getLevel());
             if (bee != null) {
@@ -143,7 +143,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     private void setNestBees(BlockPos nestPos, @Nullable ResourceKey<Biome> biomeKey, WorldGenLevel worldIn, Random rand){
         BlockEntity tileEntity = worldIn.getBlockEntity(nestPos);
 
-        if (tileEntity instanceof TieredBeehiveTileEntity nestTE) {
+        if (tileEntity instanceof TieredBeehiveBlockEntity nestTE) {
             int maxBees = Math.round(CommonConfig.HIVE_MAX_BEES.get() * 0.5f);
 
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {

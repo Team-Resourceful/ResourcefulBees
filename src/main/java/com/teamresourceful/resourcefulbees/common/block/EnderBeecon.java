@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -83,7 +83,7 @@ public class EnderBeecon extends AbstractTank {
         Item heldItem = player.getItemInHand(hand).getItem();
         BlockEntity tileEntity = world.getBlockEntity(pos);
 
-        if (tileEntity instanceof EnderBeeconTileEntity beecon) {
+        if (tileEntity instanceof EnderBeeconBlockEntity beecon) {
             HoneyFluidTank tank = beecon.getTank();
             if (!world.isClientSide) {
                 boolean usingWool = ItemTags.WOOL.contains(heldItem);
@@ -160,7 +160,7 @@ public class EnderBeecon extends AbstractTank {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new EnderBeeconTileEntity(pos, state);
+        return new EnderBeeconBlockEntity(pos, state);
     }
 
     @Nullable
@@ -168,6 +168,6 @@ public class EnderBeecon extends AbstractTank {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         return level.isClientSide ?
                 null :
-                createTickerHelper(type, ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), EnderBeeconTileEntity::serverTick);
+                createTickerHelper(type, ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), EnderBeeconBlockEntity::serverTick);
     }
 }

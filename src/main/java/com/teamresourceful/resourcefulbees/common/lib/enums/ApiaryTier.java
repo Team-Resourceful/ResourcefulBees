@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -29,10 +29,10 @@ public enum ApiaryTier implements IExtensibleEnum, StringRepresentable {
     private final double timeModifier;
     private final Supplier<ApiaryOutputType> outputType;
     private final Supplier<Integer> outputAmount;
-    private final Supplier<BlockEntityType<? extends ApiaryTileEntity>> blockEntityType;
+    private final Supplier<BlockEntityType<? extends ApiaryBlockEntity>> blockEntityType;
     private final Supplier<Item> item;
 
-    ApiaryTier(String name, int maxBees, double timeModifier, Supplier<ApiaryOutputType> outputType, Supplier<Integer> outputAmount, Supplier<BlockEntityType<? extends ApiaryTileEntity>> blockEntityType, Supplier<Item> item) {
+    ApiaryTier(String name, int maxBees, double timeModifier, Supplier<ApiaryOutputType> outputType, Supplier<Integer> outputAmount, Supplier<BlockEntityType<? extends ApiaryBlockEntity>> blockEntityType, Supplier<Item> item) {
         this.name = name;
         this.maxBees = maxBees;
         this.timeModifier = timeModifier;
@@ -62,7 +62,7 @@ public enum ApiaryTier implements IExtensibleEnum, StringRepresentable {
         return outputAmount.get();
     }
 
-    public BlockEntityType<? extends ApiaryTileEntity> getBlockEntityType() {
+    public BlockEntityType<? extends ApiaryBlockEntity> getBlockEntityType() {
         return blockEntityType.get();
     }
 
@@ -75,7 +75,7 @@ public enum ApiaryTier implements IExtensibleEnum, StringRepresentable {
     }
 
     @SuppressWarnings("unused")
-    public static ApiaryTier create(String name, String id, int maxBees, double timeModifier, Supplier<ApiaryOutputType> outputType, Supplier<Integer> outputAmount, Supplier<BlockEntityType<? extends ApiaryTileEntity>> blockEntityType, Supplier<Item> item) {
+    public static ApiaryTier create(String name, String id, int maxBees, double timeModifier, Supplier<ApiaryOutputType> outputType, Supplier<Integer> outputAmount, Supplier<BlockEntityType<? extends ApiaryBlockEntity>> blockEntityType, Supplier<Item> item) {
         throw new IllegalStateException("Enum not extended");
     }
 

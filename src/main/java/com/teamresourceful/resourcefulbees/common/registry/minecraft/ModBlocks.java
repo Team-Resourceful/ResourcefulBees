@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.*;
-import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerBlock;
@@ -59,11 +59,11 @@ public class ModBlocks {
         return BlockBehaviour.Properties.of(material, color).strength(1.0F).sound(soundType);
     }
 
-    private static Supplier<TieredBeehiveBlock> createWoodNest(RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> entityType, BeehiveTier tier) {
+    private static Supplier<TieredBeehiveBlock> createWoodNest(RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType, BeehiveTier tier) {
         return () -> new TieredBeehiveBlock(entityType, tier, NEST_PROPERTIES);
     }
 
-    private static Supplier<TieredBeehiveBlock> createNest(RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> entityType, BeehiveTier tier, Material material, MaterialColor materialColor, SoundType soundType) {
+    private static Supplier<TieredBeehiveBlock> createNest(RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType, BeehiveTier tier, Material material, MaterialColor materialColor, SoundType soundType) {
         return () -> new TieredBeehiveBlock(entityType, tier, makeNestProperty(material, materialColor, soundType));
     }
 

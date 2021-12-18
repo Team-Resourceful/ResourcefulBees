@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -137,7 +137,7 @@ public class ApiaryBlock extends BeeHouseBlock {
   @Nullable
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-    return new ApiaryTileEntity(tier, pos, state);
+    return new ApiaryBlockEntity(tier, pos, state);
   }
 
   @Nullable
@@ -145,6 +145,6 @@ public class ApiaryBlock extends BeeHouseBlock {
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
     return level.isClientSide ?
             null :
-            createTickerHelper(type, tier.getBlockEntityType(), ApiaryTileEntity::serverTick);
+            createTickerHelper(type, tier.getBlockEntityType(), ApiaryBlockEntity::serverTick);
   }
 }

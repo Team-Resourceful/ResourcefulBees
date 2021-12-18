@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.HoneyGeneratorBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -48,7 +48,7 @@ public class HoneyGenerator extends AbstractTank {
     public InteractionResult use(@NotNull BlockState state, Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
         BlockEntity tileEntity = world.getBlockEntity(pos);
 
-        if (tileEntity instanceof HoneyGeneratorTileEntity) {
+        if (tileEntity instanceof HoneyGeneratorBlockEntity) {
             capabilityOrGuiUse(tileEntity, player, world, pos, hand);
             return InteractionResult.SUCCESS;
         }
@@ -80,14 +80,14 @@ public class HoneyGenerator extends AbstractTank {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new HoneyGeneratorTileEntity(pos, state);
+        return new HoneyGeneratorBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         return level.isClientSide ?
-                createTickerHelper(type, ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), HoneyGeneratorTileEntity::clientTick) :
-                createTickerHelper(type, ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), HoneyGeneratorTileEntity::serverTick);
+                createTickerHelper(type, ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), HoneyGeneratorBlockEntity::clientTick) :
+                createTickerHelper(type, ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), HoneyGeneratorBlockEntity::serverTick);
     }
 }

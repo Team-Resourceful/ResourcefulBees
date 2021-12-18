@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -49,7 +49,7 @@ public class Smoker extends Item {
 
     protected void smokeHive(BlockPos pos, Level world) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TieredBeehiveTileEntity hive) {
+        if (blockEntity instanceof TieredBeehiveBlockEntity hive) {
             hive.smokeHive();
         }
     }

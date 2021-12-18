@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.render.tileentity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
-import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.CubeModel;
 import com.teamresourceful.resourcefulbees.common.utils.RenderCuboid;
 import net.minecraft.client.renderer.MultiBufferSource;

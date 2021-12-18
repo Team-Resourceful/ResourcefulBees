@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.render.tileentity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
-import com.teamresourceful.resourcefulbees.common.tileentity.HoneyGeneratorTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.HoneyGeneratorBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.CubeModel;
 import com.teamresourceful.resourcefulbees.common.utils.RenderCuboid;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,12 +14,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderHoneyGenerator implements BlockEntityRenderer<HoneyGeneratorTileEntity> {
+public class RenderHoneyGenerator implements BlockEntityRenderer<HoneyGeneratorBlockEntity> {
 
     public RenderHoneyGenerator(BlockEntityRendererProvider.Context renderer) {}
 
     @Override
-    public void render(HoneyGeneratorTileEntity tile, float partialTick, @NotNull PoseStack matrix, @NotNull MultiBufferSource renderer, int light, int overlayLight) {
+    public void render(HoneyGeneratorBlockEntity tile, float partialTick, @NotNull PoseStack matrix, @NotNull MultiBufferSource renderer, int light, int overlayLight) {
         if (tile.getLevel() == null) return;
         FluidStack stack = tile.getTank().getFluid();
         if (!stack.isEmpty()) {

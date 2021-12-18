@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.tileentity;
+package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
@@ -8,13 +8,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class AcceleratorTileEntity extends BlockEntity {
+public class AcceleratorBlockEntity extends BlockEntity {
 
-    public AcceleratorTileEntity(BlockPos pos, BlockState state) {
+    public AcceleratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.ACCELERATOR_TILE_ENTITY.get(), pos, state);
     }
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, AcceleratorTileEntity entity) {
+    public static void serverTick(Level level, BlockPos pos, BlockState state, AcceleratorBlockEntity entity) {
         accelerateTick(level, pos.below());
         accelerateTick(level, pos.above());
         accelerateTick(level, pos.north());
@@ -35,7 +35,7 @@ public class AcceleratorTileEntity extends BlockEntity {
         if (blockEntity == null) return;
         try {
             BlockEntityTicker<T> ticker = (BlockEntityTicker<T>) state.getTicker(level, blockEntity.getType());
-            if (!blockEntity.isRemoved() && ticker != null && !(blockEntity instanceof AcceleratorTileEntity)) {
+            if (!blockEntity.isRemoved() && ticker != null && !(blockEntity instanceof AcceleratorBlockEntity)) {
                 for (int i = 0; i < 384; i++) {
                     ticker.tick(level, pos, state, blockEntity);
                 }

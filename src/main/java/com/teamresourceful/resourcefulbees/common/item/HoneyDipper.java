@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.NbtUtils;
@@ -59,7 +59,7 @@ public class HoneyDipper extends Item {
             }
 
             BlockEntity clickedTile = useContext.getLevel().getBlockEntity(useContext.getClickedPos());
-            if (selectedBee != null && (clickedTile instanceof BeehiveBlockEntity || clickedTile instanceof ApiaryTileEntity)) {
+            if (selectedBee != null && (clickedTile instanceof BeehiveBlockEntity || clickedTile instanceof ApiaryBlockEntity)) {
                 ((BeeEntityAccessor)selectedBee).setHivePos(useContext.getClickedPos());
                 sendMessageToPlayer(useContext.getPlayer(), MessageTypes.HIVE, useContext.getClickedPos());
                 selectedBee = null;

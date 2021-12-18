@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.mixin;
 
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -34,7 +34,7 @@ public abstract class MixinEnterBeehiveGoal {
                 } else {
                     ((BeeEntityAccessor) this$0).setHivePos(null);
                 }
-            } else if (blockEntity instanceof ApiaryTileEntity apiary) {
+            } else if (blockEntity instanceof ApiaryBlockEntity apiary) {
                 if (apiary.hasSpace()) {
                     cir.setReturnValue(true);
                 } else {
@@ -56,7 +56,7 @@ public abstract class MixinEnterBeehiveGoal {
             if (tileentity != null) {
                 if (tileentity instanceof BeehiveBlockEntity hive) {
                     hive.addOccupant(this$0, this$0.hasNectar());
-                } else if (tileentity instanceof ApiaryTileEntity apiary) {
+                } else if (tileentity instanceof ApiaryBlockEntity apiary) {
                     apiary.tryEnterHive(this$0, this$0.hasNectar(), 0);
                 }
             }

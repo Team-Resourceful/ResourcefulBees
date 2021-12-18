@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.inventory.containers.ApiaryBreederContainer;
-import com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary.ApiaryBreederTileEntity;
+import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryBreederContainer;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBreederBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -23,11 +23,11 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_breeder_gui.png");
     private static final ResourceLocation TABS_BG = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/apiary_gui_tabs.png");
 
-    private final ApiaryBreederTileEntity apiaryBreederTileEntity;
+    private final ApiaryBreederBlockEntity apiaryBreederBlockEntity;
 
     public ApiaryBreederScreen(ApiaryBreederContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
-        apiaryBreederTileEntity = this.menu.getApiaryBreederTileEntity();
+        apiaryBreederBlockEntity = this.menu.getEntity();
         preInit();
     }
 
@@ -76,7 +76,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
             }
 
             for (int k = 0; k < this.menu.getNumberOfBreeders(); k++) {
-                scaledProgress = Mth.clamp(118 * this.menu.times.get(k) / this.menu.getApiaryBreederTileEntity().getTotalTime(), 0, this.menu.getApiaryBreederTileEntity().getTotalTime());
+                scaledProgress = Mth.clamp(118 * this.menu.times.get(k) / this.menu.getEntity().getTotalTime(), 0, this.menu.getEntity().getTotalTime());
                 blit(matrix, i+54, j + 21 + (k*20), 0, 246, scaledProgress, 10);
             }
 
@@ -98,7 +98,7 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
         }
     }
 
-    public ApiaryBreederTileEntity getApiaryBreederTileEntity() {
-        return apiaryBreederTileEntity;
+    public ApiaryBreederBlockEntity getApiaryBreederTileEntity() {
+        return apiaryBreederBlockEntity;
     }
 }

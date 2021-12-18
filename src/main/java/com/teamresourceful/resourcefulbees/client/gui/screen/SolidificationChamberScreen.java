@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.inventory.containers.HoneyCongealerContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.menus.SolidificationChamberMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.tileentity.SolidificationChamberBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -19,13 +19,13 @@ import org.jetbrains.annotations.NotNull;
 
 
 @OnlyIn(Dist.CLIENT)
-public class SolidificationChamberScreen extends AbstractContainerScreen<HoneyCongealerContainer> {
+public class SolidificationChamberScreen extends AbstractContainerScreen<SolidificationChamberMenu> {
 
     private final SolidificationChamberBlockEntity tileEntity;
 
-    public SolidificationChamberScreen(HoneyCongealerContainer container, Inventory inventory, Component displayName) {
+    public SolidificationChamberScreen(SolidificationChamberMenu container, Inventory inventory, Component displayName) {
         super(container, inventory, displayName);
-        tileEntity = container.getHoneyCongealerTileEntity();
+        tileEntity = container.getEntity();
         titleLabelY -= 3;
     }
 

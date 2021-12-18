@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeVoid;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeVoidEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModContainers;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -20,10 +20,10 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
     }
 
     public CentrifugeVoidContainer(int id, Inventory inv, CentrifugeVoidEntity entity) {
-        super(ModContainers.CENTRIFUGE_VOID_CONTAINER.get(), id, inv, entity);
+        super(ModMenus.CENTRIFUGE_VOID_CONTAINER.get(), id, inv, entity);
     }
 
-    protected void setupSlots() {
+    protected void addMenuSlots() {
         for (int r = 0; r < CentrifugeUtils.getRows(tier); r++) {
             for (int c = 0; c < CentrifugeUtils.getColumns(tier) * 2; c++) {
                 if (entity != null) this.addSlot(new FilterSlot(entity.getFilterInventory(), c + r * 4, 162 + c * 17, 46 + r * 17));

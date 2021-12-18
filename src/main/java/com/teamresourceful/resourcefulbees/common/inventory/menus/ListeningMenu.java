@@ -1,6 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.inventory.containers;
+package com.teamresourceful.resourcefulbees.common.inventory.menus;
 
-import com.teamresourceful.resourcefulbees.common.tileentity.SyncedBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.ISyncableGUI;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public interface ListeningMenu {
 
     @NotNull
-    SyncedBlockEntity getSyncedBlockEntity();
+    ISyncableGUI getSyncedBlockEntity();
 
     @NotNull
     Player getSyncedPlayer();

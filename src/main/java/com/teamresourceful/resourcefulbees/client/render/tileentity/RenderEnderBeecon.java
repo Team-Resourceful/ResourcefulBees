@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
-import com.teamresourceful.resourcefulbees.common.tileentity.EnderBeeconTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.CubeModel;
 import com.teamresourceful.resourcefulbees.common.utils.RenderCuboid;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,14 +18,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderEnderBeecon implements BlockEntityRenderer<EnderBeeconTileEntity> {
+public class RenderEnderBeecon implements BlockEntityRenderer<EnderBeeconBlockEntity> {
 
     public static final ResourceLocation TEXTURE_BEACON_BEAM = new ResourceLocation("textures/entity/beacon_beam.png");
 
     public RenderEnderBeecon(BlockEntityRendererProvider.Context renderer) {}
 
     @Override
-    public void render(EnderBeeconTileEntity tile, float partialTick, @NotNull PoseStack matrix, @NotNull MultiBufferSource renderer, int light, int overlayLight) {
+    public void render(EnderBeeconBlockEntity tile, float partialTick, @NotNull PoseStack matrix, @NotNull MultiBufferSource renderer, int light, int overlayLight) {
         if (tile.getLevel() == null) return;
         FluidStack stack = tile.getTank().getFluid();
         long gameTime = tile.getLevel().getGameTime();
@@ -57,7 +57,7 @@ public class RenderEnderBeecon implements BlockEntityRenderer<EnderBeeconTileEnt
     }
 
     @Override
-    public boolean shouldRenderOffScreen(@NotNull EnderBeeconTileEntity tile) {
+    public boolean shouldRenderOffScreen(@NotNull EnderBeeconBlockEntity tile) {
         return true;
     }
 }

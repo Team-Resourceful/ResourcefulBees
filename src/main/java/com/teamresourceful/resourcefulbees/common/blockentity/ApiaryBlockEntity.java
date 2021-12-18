@@ -1,15 +1,14 @@
-package com.teamresourceful.resourcefulbees.common.tileentity.multiblocks.apiary;
+package com.teamresourceful.resourcefulbees.common.blockentity;
 
 
 import com.teamresourceful.resourcefulbees.api.IBeeCompat;
 import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
-import com.teamresourceful.resourcefulbees.common.inventory.containers.ValidatedApiaryContainer;
+import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.tileentity.SyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,7 +18,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
@@ -46,7 +44,7 @@ import static com.teamresourceful.resourcefulbees.common.inventory.AutomationSen
 import static com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler.REMOVE_TRUE;
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 
-public class ApiaryTileEntity extends SyncedBlockEntity implements MenuProvider {
+public class ApiaryBlockEntity extends GUISyncedBlockEntity {
 
     public final List<ApiaryBee> bees = new ArrayList<>();
     protected ApiaryTier tier;
@@ -55,7 +53,7 @@ public class ApiaryTileEntity extends SyncedBlockEntity implements MenuProvider 
     private final AutomationSensitiveItemStackHandler inventory = new AutomationSensitiveItemStackHandler(27, ACCEPT_FALSE, REMOVE_TRUE);
     private final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> inventory);
 
-    public ApiaryTileEntity(ApiaryTier tier, BlockPos pos, BlockState state) {
+    public ApiaryBlockEntity(ApiaryTier tier, BlockPos pos, BlockState state) {
         super(tier.getBlockEntityType(), pos, state);
         this.tier = tier;
     }
@@ -132,7 +130,7 @@ public class ApiaryTileEntity extends SyncedBlockEntity implements MenuProvider 
         return (int) (bee.getMaxTimeInHive() * tier.getTimeModifier());
     }
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, ApiaryTileEntity apiaryTile) {
+    public static void serverTick(Level level, BlockPos pos, BlockState state, ApiaryBlockEntity apiaryTile) {
         ApiaryBee apiaryBee;
         Iterator<ApiaryBee> iterator = apiaryTile.bees.iterator();
         while (iterator.hasNext()) {
@@ -202,17 +200,29 @@ public class ApiaryTileEntity extends SyncedBlockEntity implements MenuProvider 
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         inventory.deserializeNBTWithoutCheckingSize(tag.getCompound(NBTConstants.NBT_INVENTORY));
-        loadBees(tag);
-        bees.removeIf(bee -> BeeInfoUtils.getEntityType(bee.entityData.getString("id")) == EntityType.PIG);
+        readSyncData(tag.getCompound(NBTConstants.SYNC_DATA));
     }
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put(NBTConstants.NBT_INVENTORY, inventory.serializeNBT());
-        tag.put(NBTConstants.NBT_BEES, this.writeBees());
+        tag.put(NBTConstants.SYNC_DATA, getSyncData());
     }
 
+    @Override
+    public @NotNull CompoundTag getSyncData() {
+        CompoundTag tag = new CompoundTag();
+        tag.put(NBTConstants.NBT_BEES, writeBees());
+        return tag;
+    }
+
+    @Override
+    public void readSyncData(@NotNull CompoundTag tag) {
+        bees.clear();
+        loadBees(tag);
+        bees.removeIf(bee -> BeeInfoUtils.getEntityType(bee.entityData.getString("id")) == EntityType.PIG);
+    }
     //endregion
 
     @NotNull
@@ -229,24 +239,11 @@ public class ApiaryTileEntity extends SyncedBlockEntity implements MenuProvider 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory inventory, @NotNull Player player) {
-        return level == null ? null : new ValidatedApiaryContainer(id, level, worldPosition, inventory);
+        return new ApiaryMenu(id, inventory, this);
     }
 
     public AutomationSensitiveItemStackHandler getInventory() {
         return inventory;
-    }
-
-    @Override
-    public @NotNull CompoundTag getData() {
-        CompoundTag tag = new CompoundTag();
-        tag.put(NBTConstants.NBT_BEES, writeBees());
-        return tag;
-    }
-
-    @Override
-    public void updateData(@NotNull CompoundTag tag) {
-        bees.clear();
-        loadBees(tag);
     }
 
     public static class ApiaryBee {

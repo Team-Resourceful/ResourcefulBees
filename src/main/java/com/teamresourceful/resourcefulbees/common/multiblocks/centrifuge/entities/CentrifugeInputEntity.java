@@ -116,7 +116,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     }
 
     @Override
-    protected void getOpenGUIPacket(FriendlyByteBuf buffer) {
+    public void getOpenGUIPacket(FriendlyByteBuf buffer) {
         super.getOpenGUIPacket(buffer);
         buffer.writeInt(1);
         buffer.writeInt(tier.getSlots());
@@ -301,7 +301,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
 
 
 
-    @Override
+/*    @Override
     public void sendGUINetworkPacket(ContainerListener player) {
         if (player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer)) {
             FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
@@ -313,7 +313,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     @Override
     public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
         processTime = buffer.readInt();
-    }
+    }*/
 
     private class FilterInventory extends AbstractFilterItemHandler {
 

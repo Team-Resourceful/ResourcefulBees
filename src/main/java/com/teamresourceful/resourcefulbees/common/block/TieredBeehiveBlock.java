@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.tileentity.TieredBeehiveTileEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -53,10 +53,10 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     private static final TextComponent NONE_TEXT = new TextComponent("     NONE");
     //public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 1, 4);
 
-    private final RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> entityType;
+    private final RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
     private final BeehiveTier tier;
 
-    public TieredBeehiveBlock(RegistryObject<BlockEntityType<TieredBeehiveTileEntity>> entityType, BeehiveTier tier, Properties properties) {
+    public TieredBeehiveBlock(RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType, BeehiveTier tier, Properties properties) {
         super(properties);
         this.entityType = entityType;
         this.tier = tier;
@@ -73,7 +73,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, entityType.get(), TieredBeehiveTileEntity::serverSideTick);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, entityType.get(), TieredBeehiveBlockEntity::serverSideTick);
     }
 
     /**
@@ -103,12 +103,12 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new TieredBeehiveTileEntity(entityType, pos, state);
+        return new TieredBeehiveBlockEntity(entityType, pos, state);
     }
 
     public boolean isHiveSmoked(BlockPos pos, Level world) {
         BlockEntity tileEntity = world.getBlockEntity(pos);
-        return tileEntity instanceof TieredBeehiveTileEntity && ((TieredBeehiveTileEntity) tileEntity).isSedated();
+        return tileEntity instanceof TieredBeehiveBlockEntity && ((TieredBeehiveBlockEntity) tileEntity).isSedated();
     }
 
     @Override
@@ -164,7 +164,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         itemstack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(handIn));
 
         BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof TieredBeehiveTileEntity beehiveTileEntity) {
+        if (tileEntity instanceof TieredBeehiveBlockEntity beehiveTileEntity) {
 
             if (!beehiveTileEntity.hasCombs()) {
                 if (isHiveSmoked(pos, world)) {
@@ -308,7 +308,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
     public boolean dropResourceHoneycomb(Level world, BlockPos pos, boolean useScraper) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TieredBeehiveTileEntity hive) {
+        if (blockEntity instanceof TieredBeehiveBlockEntity hive) {
             while (hive.hasCombs()) {
                 popResource(world, pos, hive.getResourceHoneycomb());
                 if (useScraper) break;
