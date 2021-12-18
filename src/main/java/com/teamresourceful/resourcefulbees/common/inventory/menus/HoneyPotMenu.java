@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.inventory.menus;
 
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import com.teamresourceful.resourcefulbees.common.blockentity.HoneyPotBlockEntity;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -72,5 +72,4 @@ public class HoneyPotMenu extends AbstractModContainerMenu<HoneyPotBlockEntity> 
         super.broadcastChanges();
         if (player instanceof ServerPlayer serverPlayer) entity.sendToPlayer(serverPlayer);
     }
-
 }

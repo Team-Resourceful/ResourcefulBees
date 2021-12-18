@@ -30,11 +30,16 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity implements ISyncableGUI {
+public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity {
 
     public static final int BLOCK_OUTPUT = 0;
 
-    private final FluidTank tank = new FluidTank(16000, fluid -> this.level != null && SolidificationRecipe.matches(level.getRecipeManager(), fluid));
+    private final FluidTank tank = new FluidTank(16000, fluid -> this.level != null && SolidificationRecipe.matches(level.getRecipeManager(), fluid)) {
+        @Override
+        protected void onContentsChanged() {
+            sendToPlayersTrackingChunk();
+        }
+    };
     private final LazyOptional<FluidTank> tankOptional = LazyOptional.of(() -> tank);
 
     private final AutomationSensitiveItemStackHandler inventory = new TileStackHandler(2, getAcceptor(), getRemover());

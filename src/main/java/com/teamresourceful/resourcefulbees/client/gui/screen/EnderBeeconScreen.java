@@ -55,21 +55,21 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
 
         BlockState state = menu.getEntity().getBlockState();
 
-        soundButton = addWidget(new OptionImageButton(  leftPos+109, topPos+84, 52, 200, state.hasProperty(EnderBeecon.SOUND) && !state.getValue(EnderBeecon.SOUND), BACKGROUND) {
+        soundButton = addRenderableWidget(new OptionImageButton(  leftPos+109, topPos+84, 52, 200, state.hasProperty(EnderBeecon.SOUND) && !state.getValue(EnderBeecon.SOUND), BACKGROUND) {
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
                 NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.SOUND, !selected, menu.getEntity().getBlockPos()));
             }
         });
-        beamButton = addWidget(new OptionImageButton(leftPos+132, topPos+84, 92, 200, state.hasProperty(EnderBeecon.BEAM) && !state.getValue(EnderBeecon.BEAM), BACKGROUND) {
+        beamButton = addRenderableWidget(new OptionImageButton(leftPos+132, topPos+84, 92, 200, state.hasProperty(EnderBeecon.BEAM) && !state.getValue(EnderBeecon.BEAM), BACKGROUND) {
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
                 NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.BEAM, !selected, menu.getEntity().getBlockPos()));
             }
         });
-        addWidget(new RangeSlider(leftPos + 155, topPos + 84, menu.getEntity().getRange() - 10f / 40f));
+        addRenderableWidget(new RangeSlider(leftPos + 155, topPos + 84, (menu.getEntity().getRange() - 10f) / 40f));
     }
 
     @Override

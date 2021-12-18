@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
-import com.teamresourceful.resourcefulbees.common.inventory.menus.ListeningMenu;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.SyncGUIMessage;
 import net.minecraft.core.BlockPos;
@@ -54,7 +53,6 @@ public interface ISyncableGUI extends MenuProvider {
     /**
      * Sends {@link GUISyncedBlockEntity#getSyncData()} to all players listening to the block.
      * This will only work if {@link GUISyncedBlockEntity#addListeningPlayer(ServerPlayer)} has been called some where to add players listening.
-     * @implNote See {@link ListeningMenu#addListener()} for where listeners are added.
      */
     default void sendToListeningPlayers() {
         if (getLevel() == null || getLevel().isClientSide) return;

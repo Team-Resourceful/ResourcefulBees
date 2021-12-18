@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HoneyPotBlockEntity extends GUISyncedBlockEntity implements ISyncableGUI {
+public class HoneyPotBlockEntity extends GUISyncedBlockEntity {
 
     private final HoneyPotFluidTank tank = new HoneyPotFluidTank() {
         @Override

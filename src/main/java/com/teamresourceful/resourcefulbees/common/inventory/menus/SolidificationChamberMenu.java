@@ -1,10 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.inventory.menus;
 
+import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
-import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -61,12 +60,6 @@ public class SolidificationChamberMenu extends AbstractModContainerMenu<Solidifi
     @Override
     protected void addMenuSlots() {
         this.addSlot(new OutputSlot(entity.getInventory(), SolidificationChamberBlockEntity.BLOCK_OUTPUT, 93, 54));
-    }
-
-    @Override
-    public void broadcastChanges() {
-        super.broadcastChanges();
-        if (player instanceof ServerPlayer serverPlayer) entity.sendToPlayer(serverPlayer);
     }
 
     @Override

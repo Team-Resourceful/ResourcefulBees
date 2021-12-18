@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -48,7 +49,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EnderBeecon extends AbstractTank {
+public class EnderBeecon extends RenderingBaseEntityBlock {
 
     protected static final VoxelShape VOXEL_SHAPE_TOP = Util.make(() -> {
         VoxelShape shape = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 1.0D, 14.0D);
@@ -98,7 +99,7 @@ public class EnderBeecon extends AbstractTank {
                 } else if (heldItem instanceof HoneyBottleItem) {
                     tank.emptyBottle(player, hand);
                 } else {
-                    capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+                    ModUtils.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
                 }
             }
             return InteractionResult.SUCCESS;

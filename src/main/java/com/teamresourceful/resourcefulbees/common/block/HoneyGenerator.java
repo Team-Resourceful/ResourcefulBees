@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.blockentity.HoneyGeneratorBlockEntity;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class HoneyGenerator extends AbstractTank {
+public class HoneyGenerator extends RenderingBaseEntityBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
 
@@ -49,7 +50,7 @@ public class HoneyGenerator extends AbstractTank {
         BlockEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof HoneyGeneratorBlockEntity) {
-            capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+            ModUtils.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
             return InteractionResult.SUCCESS;
         }
         return super.use(state, world, pos, player, hand, rayTraceResult);

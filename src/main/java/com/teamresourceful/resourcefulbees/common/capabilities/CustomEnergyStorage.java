@@ -19,8 +19,12 @@ public class CustomEnergyStorage extends EnergyStorage {
         onEnergyChanged();
     }
 
-    public void addEnergy(int energy) {
-        this.energy += energy;
+    public boolean canAddEnergy(int amount) {
+        return energy + amount >= capacity;
+    }
+
+    public void addEnergy(int amount) {
+        this.energy += amount;
         if (this.energy > getMaxEnergyStored()) {
             this.energy = getEnergyStored();
         }

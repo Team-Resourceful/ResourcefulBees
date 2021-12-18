@@ -21,7 +21,6 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.util.Mth;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +28,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
@@ -41,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants.NBT_BREEDER_COUNT;
 
-public class ApiaryBreederBlockEntity extends BlockEntity implements MenuProvider {
+public class ApiaryBreederBlockEntity extends GUISyncedBlockEntity {
 
     private static final int[] UPGRADE_SLOTS = {0, 1, 2, 3};
     private static final int[] PARENT_1_SLOTS = {4, 9, 14, 19, 24};
@@ -307,6 +305,16 @@ public class ApiaryBreederBlockEntity extends BlockEntity implements MenuProvide
 
     public @NotNull TileStackHandler getTileStackHandler() {
         return tileStackHandler;
+    }
+
+    @Override
+    public CompoundTag getSyncData() {
+        return null;
+    }
+
+    @Override
+    public void readSyncData(@NotNull CompoundTag tag) {
+
     }
 
     public class TileStackHandler extends AutomationSensitiveItemStackHandler {

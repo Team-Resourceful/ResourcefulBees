@@ -1,5 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.block;
+package com.teamresourceful.resourcefulbees.common.utils;
 
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -11,14 +12,13 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.network.NetworkHooks;
 
+public class ModUtils {
 
-public abstract class AbstractTank extends RenderingBaseEntityBlock {
-    protected AbstractTank(Properties properties) {
-        super(properties);
+    private ModUtils() {
+        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    //TODO consider switching this to an Interface with a default method so it can be used on blocks that can't extend this class I.E Centrifuge...
-    protected void capabilityOrGuiUse(BlockEntity tileEntity, Player player, Level world, BlockPos pos, InteractionHand hand){
+    public static void capabilityOrGuiUse(BlockEntity tileEntity, Player player, Level world, BlockPos pos, InteractionHand hand){
         if (player.getItemInHand(hand).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
             tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                     .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));

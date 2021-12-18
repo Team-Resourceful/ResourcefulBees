@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -33,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
-public class SolidificationChamber extends AbstractTank {
+public class SolidificationChamber extends RenderingBaseEntityBlock {
 
     protected static final VoxelShape VOXEL_SHAPE = Util.make(() -> {
         VoxelShape shape = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 5.0D, 15.0D);
@@ -64,7 +65,7 @@ public class SolidificationChamber extends AbstractTank {
                 } else if (item instanceof BottleItem) {
                     HoneyFluidTank.fillBottle(tank, player, hand);
                 } else {
-                    capabilityOrGuiUse(tileEntity, player, level, pos, hand);
+                    ModUtils.capabilityOrGuiUse(tileEntity, player, level, pos, hand);
                 }
             }
             return InteractionResult.SUCCESS;

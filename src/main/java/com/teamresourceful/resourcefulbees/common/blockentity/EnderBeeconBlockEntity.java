@@ -19,9 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -50,14 +48,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements ISyncableGUI {
+public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
 
     public static final Set<MobEffect> ALLOWED_EFFECTS = Sets.newHashSet(ModEffects.CALMING.get(), MobEffects.WATER_BREATHING, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION);
 
     private final HoneyFluidTank tank = new HoneyFluidTank(16000) {
         @Override
         protected void onContentsChanged() {
-            //sendToPlayersTrackingChunk();
+            sendToPlayersTrackingChunk();
             updateBeecon = true;
         }
     };
@@ -67,7 +65,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements ISyn
     private boolean beeconActive = false;
 
     private Set<MobEffect> effects = new LinkedHashSet<>();
-    private int range = 1;
+    private int range = 10;
 
     public EnderBeeconBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), pos, state);
@@ -104,7 +102,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements ISyn
         tank.readFromNBT(tag.getCompound(NBTConstants.NBT_TANK));
         effects = readEffectsFromNBT(tag.getList(NBTConstants.Beecon.ACTIVE_EFFECTS, Tag.TAG_STRING));
         range = tag.getInt(NBTConstants.Beecon.RANGE);
-        range = range > 0 ? range : 1;
+        range = Math.max(range, 10);
     }
     //endregion
 
@@ -119,22 +117,6 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements ISyn
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         readSyncData(tag.getCompound("SyncData"));
-    }
-
-    @Override
-    public @NotNull CompoundTag getUpdateTag() {
-        return getSyncData();
-    }
-
-    @Nullable
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        if (pkt.getTag() != null) readSyncData(pkt.getTag());
     }
 
     //endregion

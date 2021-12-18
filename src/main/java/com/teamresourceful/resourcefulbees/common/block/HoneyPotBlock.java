@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 import com.teamresourceful.resourcefulbees.common.lib.enums.HoneyPotState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.blockentity.HoneyPotBlockEntity;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -27,7 +28,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HoneyPotBlock extends AbstractTank {
+public class HoneyPotBlock extends RenderingBaseEntityBlock {
 
     private static final VoxelShape NO_LID = Util.make(() -> {
         VoxelShape shape = Shapes.box(0.125, 0, 0.125, 0.875, 0.625, 0.875);
@@ -65,7 +66,7 @@ public class HoneyPotBlock extends AbstractTank {
 
             if (item instanceof BottleItem) tank.fillBottle(player, hand);
             else if (item instanceof HoneyBottleItem) tank.emptyBottle(player, hand);
-            else capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+            else ModUtils.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
 
             return InteractionResult.SUCCESS;
         }

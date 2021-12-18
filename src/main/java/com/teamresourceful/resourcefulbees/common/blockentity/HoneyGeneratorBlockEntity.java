@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements ISyncableGUI {
+public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity {
 
     public static final int HONEY_DRAIN_AMOUNT = CommonConfig.HONEY_DRAIN_AMOUNT.get();
     public static final int ENERGY_FILL_AMOUNT = CommonConfig.ENERGY_FILL_AMOUNT.get();
@@ -47,7 +47,12 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
             setChanged();
         }
     };
-    private final HoneyFluidTank tank = new HoneyFluidTank(MAX_TANK_STORAGE);
+    private final HoneyFluidTank tank = new HoneyFluidTank(MAX_TANK_STORAGE) {
+        @Override
+        protected void onContentsChanged() {
+            setChanged();
+        }
+    };
 
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
     private final LazyOptional<FluidTank> tankOptional = LazyOptional.of(() -> tank);
@@ -68,44 +73,32 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, HoneyGeneratorBlockEntity entity) {
-        if ((entity.processStage == ProcessStage.COMPLETED || entity.processStage == ProcessStage.IDLE)) {
-            changeState(!entity.tank.isEmpty() && canProcessEnergy(entity) ? ProcessStage.PROCESSING : ProcessStage.IDLE, level, pos, state, entity);
-        }
-
+        if (entity.processStage.equals(ProcessStage.IDLE) && entity.canProcess()) entity.startProcess(level);
         if (entity.processStage.equals(ProcessStage.PROCESSING)) {
-            entity.processEnergy(level, pos, state, entity);
+            if (entity.canProcess()) entity.processEnergy();
+            else entity.processCompleted(level);
         }
-        sendOutPower(level, pos, entity);
+        entity.sendOutPower(level);
     }
 
-    private static void changeState(ProcessStage stage, Level level, BlockPos pos, BlockState state, HoneyGeneratorBlockEntity entity) {
-        if (stage == ProcessStage.IDLE && entity.processStage != stage) {
-            level.setBlockAndUpdate(pos, state.setValue(HoneyGenerator.PROPERTY_ON, false));
-        }
-        if (stage != ProcessStage.IDLE && entity.processStage == ProcessStage.IDLE) {
-            level.setBlockAndUpdate(pos, state.setValue(HoneyGenerator.PROPERTY_ON, true));
-        }
-        entity.processStage = stage;
-    }
-
-    private static void sendOutPower(Level level, BlockPos pos, HoneyGeneratorBlockEntity entity) {
-        if (entity.getStoredEnergy() > 0) {
+    private void sendOutPower(Level level) {
+        if (hasEnergy()) {
             Arrays.stream(Direction.values())
-                    .map(direction -> Pair.of(level.getBlockEntity(pos.relative(direction)), direction))
+                    .map(direction -> Pair.of(level.getBlockEntity(getBlockPos().relative(direction)), direction))
                     .filter(pair -> pair.getLeft() != null && pair.getRight() != null)
-                    .forEach(pair -> transferEnergy(pair, entity));
+                    .forEach(this::transferEnergy);
         }
     }
 
-    private static void transferEnergy(Pair<BlockEntity, Direction> tileEntityDirectionPair, HoneyGeneratorBlockEntity entity) {
+    private void transferEnergy(Pair<BlockEntity, Direction> tileEntityDirectionPair) {
         tileEntityDirectionPair.getLeft().getCapability(CapabilityEnergy.ENERGY, tileEntityDirectionPair.getRight().getOpposite())
                 .filter(IEnergyStorage::canReceive)
-                .ifPresent(handler -> transferEnergy(handler, entity));
+                .ifPresent(this::transferEnergy);
     }
 
-    private static void transferEnergy(IEnergyStorage handler, HoneyGeneratorBlockEntity entity) {
-        if (entity.getStoredEnergy() > 0) {
-            entity.energyStorage.consumeEnergy(handler.receiveEnergy(Math.min(entity.getStoredEnergy(), ENERGY_TRANSFER_AMOUNT), false));
+    private void transferEnergy(IEnergyStorage handler) {
+        if (hasEnergy()) {
+            energyStorage.consumeEnergy(handler.receiveEnergy(Math.min(getStoredEnergy(), ENERGY_TRANSFER_AMOUNT), false));
         }
     }
 
@@ -113,14 +106,41 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
         return energyStorage.getEnergyStored();
     }
 
-    public static boolean canProcessEnergy(HoneyGeneratorBlockEntity entity) {
-        return entity.getStoredEnergy() + ENERGY_FILL_AMOUNT <= entity.energyStorage.getMaxEnergyStored() && entity.tank.getFluidAmount() >= HONEY_DRAIN_AMOUNT;
+    private boolean hasEnergy() {
+        return getStoredEnergy() > 0;
     }
 
-    private void processEnergy(Level level, BlockPos pos, BlockState state, HoneyGeneratorBlockEntity entity) {
+    private boolean canProcess() {
+        return hasHoney() && energyStorage.canAddEnergy(ENERGY_FILL_AMOUNT) && canDrain();
+    }
+
+    private boolean hasHoney() {
+        return !tank.isEmpty();
+    }
+
+    private boolean canDrain() {
+        return tank.getFluidAmount() >= HONEY_DRAIN_AMOUNT;
+    }
+
+    private void startProcess(Level level) {
+        processStage = ProcessStage.PROCESSING;
+        level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(HoneyGenerator.PROPERTY_ON, true));
+    }
+
+    private void processEnergy() {
         tank.drain(HONEY_DRAIN_AMOUNT, IFluidHandler.FluidAction.EXECUTE);
         energyStorage.addEnergy(ENERGY_FILL_AMOUNT);
-        changeState(ProcessStage.COMPLETED, level, pos, state, entity);
+    }
+
+    private void processCompleted(Level level) {
+        processStage = ProcessStage.IDLE;
+        level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(HoneyGenerator.PROPERTY_ON, false));
+    }
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        sendToPlayersTrackingChunk();
     }
 
     @Override
