@@ -1,8 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.blockentity.CreativeGenBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentity.HoneyGeneratorBlockEntity;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,9 +20,8 @@ public class CreativeGen extends RenderingBaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new HoneyGeneratorBlockEntity(pos, state);
+        return new CreativeGenBlockEntity(pos, state);
     }
-
 
     @Nullable
     @Override
