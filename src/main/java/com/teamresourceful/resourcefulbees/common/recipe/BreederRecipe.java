@@ -108,7 +108,7 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
     public static record BreederPair(Ingredient parent, Optional<String> displayEntity, Ingredient feedItem){
         public static final Codec<BreederPair> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 CodecUtils.INGREDIENT_CODEC.fieldOf("parent").forGetter(BreederPair::parent),
-                Codec.STRING.optionalFieldOf("displayEntity").forGetter(BreederPair::displayEntity),
+                Codec.STRING.optionalFieldOf("entity").forGetter(BreederPair::displayEntity),
                 CodecUtils.INGREDIENT_CODEC.fieldOf("feedItem").forGetter(BreederPair::feedItem)
         ).apply(instance, BreederPair::new));
 
@@ -120,7 +120,7 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
     public static record BreederOutput(ItemStack output, ResourceLocation displayEntity, double weight, double chance){
         public static final Codec<BreederOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 CodecUtils.ITEM_STACK_CODEC.fieldOf("output").forGetter(BreederOutput::output),
-                ResourceLocation.CODEC.fieldOf("displayEntity").forGetter(BreederOutput::displayEntity),
+                ResourceLocation.CODEC.fieldOf("entity").forGetter(BreederOutput::displayEntity),
                 Codec.doubleRange(0.0d, Double.MAX_VALUE).fieldOf("weight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(BreederOutput::weight),
                 Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BreederOutput::chance)
         ).apply(instance, BreederOutput::new));
