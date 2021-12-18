@@ -73,7 +73,7 @@ sonarqube {
 }
 
 minecraft {
-    mappings channel: "official", version: "1.18.1"//"${mapping}"
+    mappings channel: "parchment", version: "BLEEDING-SNAPSHOT-1.18.1"//"${mapping}"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
