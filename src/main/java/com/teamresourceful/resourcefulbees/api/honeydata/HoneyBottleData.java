@@ -6,84 +6,49 @@ import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
+import net.minecraft.core.Registry;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collections;
 import java.util.List;
 
-public class HoneyBottleData {
+public record HoneyBottleData(String name, Color color, int hunger, float saturation, List<HoneyEffect> effects, Item honeyBottle) {
 
     public static Codec<HoneyBottleData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(HoneyBottleData::getName),
-                Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneyBottleData::getColor),
-                Codec.INT.fieldOf("hunger").orElse(1).forGetter(HoneyBottleData::getHunger),
-                Codec.FLOAT.fieldOf("saturation").orElse(1.0f).forGetter(HoneyBottleData::getSaturation),
-                HoneyEffect.CODEC.listOf().fieldOf("effects").orElse(Collections.emptyList()).forGetter(HoneyBottleData::getEffects)
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(HoneyBottleData::name),
+                Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneyBottleData::color),
+                Codec.INT.fieldOf("hunger").orElse(1).forGetter(HoneyBottleData::hunger),
+                Codec.FLOAT.fieldOf("saturation").orElse(1.0f).forGetter(HoneyBottleData::saturation),
+                HoneyEffect.CODEC.listOf().fieldOf("effects").orElse(Collections.emptyList()).forGetter(HoneyBottleData::effects),
+                Registry.ITEM.byNameCodec().fieldOf("honeyBottle").orElse(Items.HONEY_BOTTLE).forGetter(HoneyBottleData::honeyBottle)
         ).apply(instance, HoneyBottleData::new));
     }
 
-    private final String name;
-    private final Color color;
-    private final int hunger;
-    private final float saturation;
-    private final List<HoneyEffect> effects;
-    private final RegistryObject<Item> honeyBottle;
-
-    public HoneyBottleData(String name, Color color, int hunger, float saturation, List<HoneyEffect> effects){
-        this.name = name;
-        this.color = color;
-        this.hunger = hunger;
-        this.saturation = saturation;
-        this.effects = effects;
-
-        honeyBottle = ModItems.HONEY_BOTTLE_ITEMS.register(name + "_honey_bottle", () -> new CustomHoneyBottleItem(this));
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public int getHunger() {
-        return hunger;
-    }
-
-    public float getSaturation() {
-        return saturation;
-    }
-
-    public List<HoneyEffect> getEffects() {
-        return effects;
+    public HoneyBottleData {
+        if (HoneyRegistry.getRegistry().canGenerate()) {
+            ModItems.HONEY_BOTTLE_ITEMS.register(name + "_honey_bottle", () -> new CustomHoneyBottleItem(this));
+        }
     }
 
     public boolean hasEffects() {
         return effects != null && !effects.isEmpty();
     }
 
-    public RegistryObject<Item> getHoneyBottle() {
-        return honeyBottle;
-    }
-
     public Item.Properties getProperties() {
-        return new Item.Properties()
-                .tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY)
-                .craftRemainder(Items.GLASS_BOTTLE)
-                .stacksTo(16);
+        return new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY).craftRemainder(Items.GLASS_BOTTLE).stacksTo(16);
     }
 
     public FoodProperties getFood() {
         FoodProperties.Builder builder = new FoodProperties.Builder().nutrition(hunger).saturationMod(saturation);
-        if (hasEffects()) effects.forEach(honeyEffect -> builder.effect(honeyEffect::getInstance, honeyEffect.getChance()));
+        if (hasEffects())
+            effects.forEach(honeyEffect -> builder.effect(honeyEffect::getInstance, honeyEffect.chance()));
         return builder.build();
     }
 }

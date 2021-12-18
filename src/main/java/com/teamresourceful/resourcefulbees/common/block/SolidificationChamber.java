@@ -79,7 +79,7 @@ public class SolidificationChamber extends AbstractTank {
             return;
         }
         if (tank.getTank().getFluid().getFluid() instanceof CustomHoneyFluid fluid) {
-            if (fluid.getHoneyData().getColor().isRainbow()) {
+            if (fluid.getHoneyData().color().isRainbow()) {
                 level.sendBlockUpdated(pos, stateIn, stateIn, 2);
             }
         }

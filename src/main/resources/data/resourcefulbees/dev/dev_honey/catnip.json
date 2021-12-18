@@ -21,16 +21,23 @@
         "strength": 0,
         "chance": 1
       }
-    ]
+    ],
+    "honeyBottle": "resourcefulbees:catnip_honey_bottle"
   },
   "blockData": {
     "jumpFactor": 0.5,
-    "speedFactor": 0.4
+    "speedFactor": 0.4,
+    "honeyBlockItem": "resourcefulbees:catnip_honey_block",
+    "honeyBlock": "resourcefulbees:catnip_honey_block"
   },
   "fluidData": {
     "color": "#BD5331",
     "stillTexture": "resourcefulbees:block/honey/catnip_honey_still",
     "flowingTexture": "resourcefulbees:block/honey/catnip_honey_flow",
-    "overlayTexture": "resourcefulbees:block/honey/catnip_honey_overlay"
+    "overlayTexture": "resourcefulbees:block/honey/catnip_honey_overlay",
+    "stillFluid": "resourcefulbees:catnip_honey",
+    "flowingFluid": "resourcefulbees:catnip_honey_flowing",
+    "fluidBucket": "resourcefulbees:catnip_honey_bucket",
+    "fluidBlock": "resourcefulbees:catnip_honey"
   }
 }

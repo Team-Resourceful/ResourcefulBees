@@ -37,7 +37,7 @@ public class HoneyFluidAttributes extends FluidAttributes {
 
     @Override
     public int getColor(){
-        return data.getColor().getValue() | 0xff000000;
+        return data.color().getValue() | 0xff000000;
     }
 
     public static Builder builder(ResourceLocation stillTexture, ResourceLocation flowingTexture, HoneyFluidData data) {

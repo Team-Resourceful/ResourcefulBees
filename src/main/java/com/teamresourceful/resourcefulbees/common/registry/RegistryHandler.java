@@ -57,6 +57,7 @@ public class RegistryHandler {
 
     public static void registerDynamicHoney() {
         HoneyRegistry.getRegistry().getRawHoney().forEach(RegistryHandler::registerHoneyBottle);
+        HoneyRegistry.getRegistry().stopGeneration();
     }
 
     private static void registerBee(String name, float sizeModifier) {

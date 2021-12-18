@@ -6,7 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBlockData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
@@ -162,27 +161,17 @@ public class BeeInfoUtils {
         if (item == Items.HONEY_BOTTLE) {
             return ModFluids.HONEY_STILL.get().getSource();
         } else if (item instanceof CustomHoneyBottleItem honey) {
-            HoneyFluidData fluidData = HoneyRegistry.getRegistry().getHoneyData(honey.getHoneyData().getName()).getFluidData();
-            return fluidData.getStillFluid().get().getSource();
+            HoneyFluidData fluidData = HoneyRegistry.getRegistry().getHoneyData(honey.getHoneyData().name()).fluidData();
+            return fluidData.stillFluid();
         }
         return Fluids.EMPTY;
     }
 
     public static Item getHoneyBottleFromFluid(Fluid fluid) {
         if (fluid instanceof CustomHoneyFluid customfluid) {
-            return HoneyRegistry.getRegistry().getHoneyData(customfluid.getHoneyData().getName()).getBottleData().getHoneyBottle().get();
+            return HoneyRegistry.getRegistry().getHoneyData(customfluid.getHoneyData().name()).bottleData().honeyBottle();
         } else {
             return Items.HONEY_BOTTLE;
-        }
-    }
-
-    public static Item getHoneyBlockFromFluid(Fluid fluid) {
-        if (fluid instanceof CustomHoneyFluid customfluid) {
-            HoneyBlockData blockData = HoneyRegistry.getRegistry().getHoneyData(customfluid.getHoneyData().getName()).getBlockData();
-            if (blockData.getBlockItem() == null) return Items.AIR;
-            return blockData.getBlockItem().get();
-        } else {
-            return Items.HONEY_BLOCK;
         }
     }
 

@@ -1,6 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
+import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.IHoneyRegistry;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 
@@ -8,6 +10,7 @@ import java.util.*;
 
 public class HoneyRegistry implements IHoneyRegistry {
 
+    private boolean generate = true;
     private final Map<String, JsonObject> rawHoneyData = new LinkedHashMap<>();
     private final Map<String, HoneyData> honeyInfo = new LinkedHashMap<>();
 
@@ -46,6 +49,16 @@ public class HoneyRegistry implements IHoneyRegistry {
         return Collections.unmodifiableMap(honeyInfo);
     }
 
+    @Override
+    public boolean canGenerate() {
+        return generate;
+    }
+
+    @Override
+    public void stopGeneration() {
+        generate = false;
+    }
+
     /**
      * Returns a set containing all registered HoneyBottleData.
      * This is useful for iterating over all honey without worry of changing data
@@ -72,5 +85,11 @@ public class HoneyRegistry implements IHoneyRegistry {
 
     public Map<String, JsonObject> getRawHoney() {
         return rawHoneyData;
+    }
+
+    public void regenerateHoneyData() {
+        HoneyRegistry.getRegistry().getRawHoney().forEach((s, json) ->
+                honeyInfo.compute(s, (name, data) -> HoneyData.codec(name).parse(JsonOps.INSTANCE, json)
+                .getOrThrow(false, e -> ResourcefulBees.LOGGER.error("Could not create Custom Honey Data for {} honey", name))));
     }
 }

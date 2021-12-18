@@ -10,12 +10,19 @@
         "strength": 0,
         "chance": 1
       }
-    ]
+    ],
+    "honeyBottle": "resourcefulbees:rainbow_honey_bottle"
   },
   "blockData": {
-    "color": "rainbow"
+    "color": "rainbow",
+    "honeyBlockItem": "resourcefulbees:rainbow_honey_block",
+    "honeyBlock": "resourcefulbees:rainbow_honey_block"
   },
   "fluidData": {
-    "color": "rainbow"
+    "color": "rainbow",
+    "stillFluid": "resourcefulbees:rainbow_honey",
+    "flowingFluid": "resourcefulbees:rainbow_honey_flowing",
+    "fluidBucket": "resourcefulbees:rainbow_honey_bucket",
+    "fluidBlock": "resourcefulbees:rainbow_honey"
   }
 }

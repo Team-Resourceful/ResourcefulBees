@@ -32,7 +32,7 @@ public class CustomHoneyBottleItem extends HoneyBottleItem {
     }
 
     public int getHoneyBottleColor() {
-        return data.getColor().getValue();
+        return data.color().getValue();
     }
 
     public HoneyBottleData getHoneyData() {

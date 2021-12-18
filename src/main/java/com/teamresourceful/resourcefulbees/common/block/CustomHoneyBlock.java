@@ -45,8 +45,8 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
     protected final HoneyBlockData data;
 
     public CustomHoneyBlock(HoneyBlockData data) {
-        super(BlockBehaviour.Properties.of(Material.CLAY).speedFactor(data.getSpeedFactor()).jumpFactor(data.getJumpFactor()).noOcclusion().sound(SoundType.HONEY_BLOCK));
-        this.color = data.getColor();
+        super(BlockBehaviour.Properties.of(Material.CLAY).speedFactor(data.speedFactor()).jumpFactor(data.jumpFactor()).noOcclusion().sound(SoundType.HONEY_BLOCK));
+        this.color = data.color();
         this.data = data;
     }
 
