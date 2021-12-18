@@ -1,23 +1,29 @@
 package com.teamresourceful.resourcefulbees.common.ingredients;
 
-import net.minecraft.world.item.ItemStack;
+import com.google.gson.JsonObject;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.NBTIngredient;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class AmountSensitiveIngredient extends NBTIngredient {
+import java.util.Arrays;
+import java.util.stream.Stream;
 
-    private final ItemStack stack;
+public class AmountSensitiveIngredient extends Ingredient implements IAmountSensitive {
 
-    public AmountSensitiveIngredient(ItemStack stack) {
-        super(stack);
-        this.stack = stack;
+    public static final AmountSensitiveIngredient EMPTY = new AmountSensitiveIngredient(Stream.empty(), 0);
+
+    private final int count;
+
+    protected AmountSensitiveIngredient(Stream<? extends Value> value, int count) {
+        super(value);
+        this.count = count;
     }
 
+    @Override
     public int getAmount() {
-        return stack.getCount();
+        return count;
     }
 
     @Override
@@ -25,12 +31,28 @@ public class AmountSensitiveIngredient extends NBTIngredient {
         return Serializer.INSTANCE;
     }
 
-    @Override
-    public boolean test(@Nullable ItemStack input) {
-        return input != null && input.getCount() >= stack.getCount() && super.test(input);
-    }
+    public static class Serializer implements IIngredientSerializer<AmountSensitiveIngredient> {
 
-    public static class Serializer extends NBTIngredient.Serializer {
-        public static final AmountSensitiveIngredient.Serializer INSTANCE = new AmountSensitiveIngredient.Serializer();
+        public static final Serializer INSTANCE = new Serializer();
+
+        @Override
+        public @NotNull AmountSensitiveIngredient parse(@NotNull FriendlyByteBuf buffer) {
+            int size = buffer.readInt();
+            Stream<ItemValue> stream = Stream.generate(() -> new Ingredient.ItemValue(buffer.readItem())).limit(size);
+            AmountSensitiveIngredient ingredient = new AmountSensitiveIngredient(stream, buffer.readInt());
+            return ingredient.isEmpty() ? EMPTY : ingredient;
+        }
+
+        @Override
+        public @NotNull AmountSensitiveIngredient parse(@NotNull JsonObject json) {
+            AmountSensitiveIngredient ingredient = new AmountSensitiveIngredient(Stream.of(valueFromJson(json)), GsonHelper.getAsInt(json, "count", 1));
+            return ingredient.isEmpty() ? EMPTY : ingredient;
+        }
+
+        @Override
+        public void write(@NotNull FriendlyByteBuf buffer, @NotNull AmountSensitiveIngredient ingredient) {
+            buffer.writeCollection(Arrays.asList(ingredient.getItems()), FriendlyByteBuf::writeItem);
+            buffer.writeInt(ingredient.getAmount());
+        }
     }
 }

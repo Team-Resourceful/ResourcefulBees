@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
 import com.teamresourceful.resourcefulbees.common.ingredients.AmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.ingredients.BeeJarIngredient;
+import com.teamresourceful.resourcefulbees.common.ingredients.NBTAmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.init.*;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
@@ -109,6 +110,7 @@ public class ResourcefulBees {
         ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
         ModPotions.createMixes();
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "amount_sensitive"), AmountSensitiveIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "nbt_amount_sensitive"), NBTAmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
     }
 
