@@ -173,7 +173,7 @@ public class TranslationConstants {
         public static final TranslatableComponent BEECON = new TranslatableComponent("gui.resourcefulbees.ender_beecon");
 
         @Translate("Solidification Chamber")
-        public static final TranslatableComponent SOLIDIFICATION_CHAMBER = new TranslatableComponent("gui.resourcefulbees.solidfication_chamber");
+        public static final TranslatableComponent SOLIDIFICATION_CHAMBER = new TranslatableComponent("gui.resourcefulbees.solidification_chamber");
 
         @Translate("Honey Generator")
         public static final TranslatableComponent GENERATOR = new TranslatableComponent("gui.resourcefulbees.honey_generator");
