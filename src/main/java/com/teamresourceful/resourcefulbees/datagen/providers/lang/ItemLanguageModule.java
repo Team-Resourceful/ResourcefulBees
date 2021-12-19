@@ -17,8 +17,6 @@ public class ItemLanguageModule extends LanguageModule {
         provider.addItem(ModItems.BELLOW, "Bellow");
         provider.addItem(ModItems.SMOKERCAN, "Smoker Canister");
         provider.addItem(ModItems.WAX, "Beeswax");
-        provider.add("item.resourcefulbees.bee_jar_empty", "Empty Bee Jar");
-        provider.add("item.resourcefulbees.bee_jar_filled", "Filled Bee Jar");
         provider.addItem(ModItems.APIARY_BREEDER_UPGRADE, "Breeder Upgrade");
         provider.addItem(ModItems.APIARY_BREED_TIME_UPGRADE, "Breed Time Upgrade");
         provider.addItem(ModItems.HONEY_FLUID_BUCKET, "Honey Bucket");
