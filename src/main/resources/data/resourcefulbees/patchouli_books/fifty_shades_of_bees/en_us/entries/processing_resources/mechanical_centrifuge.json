@@ -1,0 +1,17 @@
+{
+  "name": "book.resourcefulbees.processing_resources.mechanical",
+  "icon": "resourcefulbees:mechanical_centrifuge",
+  "category": "resourcefulbees:processing_resources",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.processing_resources.mechanical.1"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:mechanical_centrifuge",
+      "text": "book.resourcefulbees.processing_resources.mechanical.2"
+    }
+  ]
+}

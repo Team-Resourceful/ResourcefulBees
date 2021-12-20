@@ -77,7 +77,7 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
     private boolean beeconActive = false;
 
     private Set<Effect> effects = new LinkedHashSet<>();
-    private int range = 1;
+    private int range = 10;
 
     public EnderBeeconTileEntity() {
         super(ModTileEntityTypes.ENDER_BEECON_TILE_ENTITY.get());
@@ -117,7 +117,7 @@ public class EnderBeeconTileEntity extends TileEntity implements ISyncableGUI, I
         tank.readFromNBT(nbt.getCompound(NBTConstants.NBT_TANK));
         effects = readEffectsFromNBT(nbt.getList(NBTConstants.Beecon.ACTIVE_EFFECTS, Constants.NBT.TAG_STRING));
         range = nbt.getInt(NBTConstants.Beecon.RANGE);
-        range = range > 0 ? range : 1;
+        range = Math.max(Math.min(range, 50), 10);
     }
 
     @Override

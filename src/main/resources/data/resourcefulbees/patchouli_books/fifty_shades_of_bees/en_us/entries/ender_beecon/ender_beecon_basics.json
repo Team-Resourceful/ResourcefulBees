@@ -1,17 +1,17 @@
 {
-  "name": "book.resourcefulbees.ender_beecon_category.basics",
+  "name": "book.resourcefulbees.ender_beecon.basics",
   "icon": "resourcefulbees:ender_beecon",
   "category": "resourcefulbees:ender_beecon",
   "sortnum": 1,
   "pages": [
     {
-      "title": "book.resourcefulbees.ender_beecon_category.basics",
+      "title": "book.resourcefulbees.ender_beecon.basics",
       "type": "crafting",
       "recipe": "resourcefulbees:ender_beecon"
     },
     {
       "type": "text",
-      "text": "book.resourcefulbees.ender_beecon_category.basics.1"
+      "text": "book.resourcefulbees.ender_beecon.basics.1"
     }
   ]
 }

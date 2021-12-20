@@ -1,0 +1,37 @@
+{
+  "name": "book.resourcefulbees.extras.dev_bees",
+  "icon": "resourcefulbees:gold_flower",
+  "category": "resourcefulbees:extras",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.extras.dev_bees.1"
+    },
+    {
+      "type": "resourcefulbees:bee_gif",
+      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/oreo_bee.png",
+      "title": "book.resourcefulbees.extras.dev_bees.oreo_bee"
+    },
+    {
+      "type": "resourcefulbees:bee_gif",
+      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/kitten_bee.png",
+      "title": "book.resourcefulbees.extras.dev_bees.kitten_bee"
+    },
+    {
+      "type": "resourcefulbees:bee_gif",
+      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/yeti_bee.png",
+      "title": "book.resourcefulbees.extras.dev_bees.yeti_bee"
+    },
+    {
+      "type": "resourcefulbees:bee_gif",
+      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/starry_bee.png",
+      "title": "book.resourcefulbees.extras.dev_bees.starry_bee"
+    },
+    {
+      "type": "resourcefulbees:bee_gif",
+      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/abbee_bee.png",
+      "title": "book.resourcefulbees.extras.dev_bees.abbee_bee"
+    }
+  ]
+}

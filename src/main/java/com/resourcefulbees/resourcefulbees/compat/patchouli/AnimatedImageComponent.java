@@ -21,7 +21,10 @@ public class AnimatedImageComponent implements ICustomComponent {
     IVariable height;
     IVariable width;
     IVariable scale;
+    IVariable frame;
     private transient ResourceLocation animatedImage;
+    private transient boolean showFrame;
+    private transient int frameSpeed;
     private transient int xOffset;
     private transient int yOffset;
     private transient int currentFrame = 0;
@@ -41,7 +44,7 @@ public class AnimatedImageComponent implements ICustomComponent {
 
     @Override
     public void render(@NotNull MatrixStack matrixStack, @NotNull IComponentRenderContext context, float v, int i, int i1) {
-        if (context.getTicksInBook() % 2 == 0) {
+        if (context.getTicksInBook() % frameSpeed == 0) {
             currentFrame++;
         }
         if (currentFrame >= frames) {
@@ -56,10 +59,13 @@ public class AnimatedImageComponent implements ICustomComponent {
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
         image = lookup.apply(image);
         scale = lookup.apply(scale);
+        frame = lookup.apply(frame);
         ticksPerFrame = lookup.apply(ticksPerFrame);
         this.animatedImage = new ResourceLocation(image.asString());
         texHeight = lookup.apply(texHeight);
         texWidth = lookup.apply(texWidth);
+        showFrame = frame.asBoolean();
+        frameSpeed = ticksPerFrame.asNumber().intValue();
         textureHeight = texHeight.asNumber().intValue();
         textureWidth = texWidth.asNumber().intValue();
         imageScale = scale.asNumber().floatValue();

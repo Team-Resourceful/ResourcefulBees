@@ -1,0 +1,17 @@
+{
+  "name": "book.resourcefulbees.beekeeping_tools.scraper",
+  "icon": "resourcefulbees:scraper",
+  "category": "resourcefulbees:beekeeping_tools",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:scraper",
+      "text": "book.resourcefulbees.beekeeping_tools.scraper.desc"
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.scraper.text"
+    }
+  ]
+}

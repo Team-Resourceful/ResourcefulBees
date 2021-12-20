@@ -1,0 +1,18 @@
+{
+  "components": [
+    {
+      "x": 58,
+      "y": 0,
+      "type": "custom",
+      "class": "com.resourcefulbees.resourcefulbees.compat.patchouli.PotionRecipeComponent",
+      "effectID": "#id",
+      "potionItemID": "#item"
+    },
+    {
+      "x" : 0,
+      "y" : 36,
+      "type": "text",
+      "text": "#text"
+    }
+  ]
+}

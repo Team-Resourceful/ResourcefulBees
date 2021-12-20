@@ -19,7 +19,8 @@
     "MixinLivingEntity",
     "MixinMinecraftServer",
     "MixinPlayerEntity",
-    "MixinUpdateBeehiveGoal"
+    "MixinUpdateBeehiveGoal",
+    "MixPredicateAccessor"
   ],
   "minVersion": "0.8.1"
 }

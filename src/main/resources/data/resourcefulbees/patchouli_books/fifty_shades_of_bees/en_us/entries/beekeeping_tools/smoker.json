@@ -1,0 +1,18 @@
+{
+  "name": "book.resourcefulbees.beekeeping_tools.smoker",
+  "icon": "resourcefulbees:smoker",
+  "category": "resourcefulbees:beekeeping_tools",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:bellow",
+      "recipe2": "resourcefulbees:smoker_can"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:smoker",
+      "text": "book.resourcefulbees.beekeeping_tools.smoker.text"
+    }
+  ]
+}

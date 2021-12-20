@@ -1,0 +1,21 @@
+{
+  "name": "book.resourcefulbees.collecting_resources.mutations",
+  "icon": "minecraft:blaze_powder",
+  "category": "resourcefulbees:collecting_resources",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/collecting_resources/mutations.png"
+        ],
+      "title": "book.resourcefulbees.collecting_resources.mutations",
+      "text": "book.resourcefulbees.collecting_resources.mutations.desc",
+      "border" : true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.collecting_resources.mutations.text"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "book.resourcefulbees.collecting_resources.honeycombs",
+  "icon": "minecraft:honeycomb",
+  "category": "resourcefulbees:collecting_resources",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/collecting_resources/honeycombs.png"
+        ],
+      "title": "book.resourcefulbees.collecting_resources.honeycombs",
+      "text": "book.resourcefulbees.collecting_resources.honeycombs.desc",
+      "border" : true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.collecting_resources.honeycombs.text"
+    }
+  ]
+}

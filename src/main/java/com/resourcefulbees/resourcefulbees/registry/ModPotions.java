@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.registry;
 
 import com.resourcefulbees.resourcefulbees.ResourcefulBees;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.lib.TagConstants;
 import com.resourcefulbees.resourcefulbees.recipe.TagPotionRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -39,7 +40,7 @@ public class ModPotions {
 
     public static void createMixes() {
         LOGGER.info("Generation Potion Mixes");
-        addMix(Potions.AWKWARD, HONEY_BOTTLE_TAG, CALMING_POTION.get());
+        addMix(Potions.AWKWARD, TagConstants.RESOURCEFUL_HONEY_BOTTLE, CALMING_POTION.get());
         addMix(CALMING_POTION.get(), Tags.Items.DUSTS_GLOWSTONE, LONG_CALMING_POTION.get());
     }
 

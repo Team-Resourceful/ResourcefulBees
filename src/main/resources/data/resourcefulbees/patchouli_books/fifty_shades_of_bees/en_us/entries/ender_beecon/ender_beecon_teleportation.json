@@ -1,5 +1,5 @@
 {
-  "name": "book.resourcefulbees.ender_beecon_category.teleportation",
+  "name": "book.resourcefulbees.ender_beecon.teleportation",
   "icon": "minecraft:ender_pearl",
   "category": "resourcefulbees:ender_beecon",
   "sortnum": 2,
@@ -9,24 +9,24 @@
       "images": [
         "resourcefulbees:textures/gui/patchouli/ender_beecon_teleportation.png"
       ],
-      "title": "book.resourcefulbees.ender_beecon_category.teleportation",
+      "title": "book.resourcefulbees.ender_beecon.teleportation",
       "border" : true
     },
     {
       "type": "text",
-      "text": "book.resourcefulbees.ender_beecon_category.teleportation.1"
+      "text": "book.resourcefulbees.ender_beecon.teleportation.1"
     },
     {
       "type": "image",
       "images": [
         "resourcefulbees:textures/gui/patchouli/ender_beecon_teleportation_range.png"
       ],
-      "title": "book.resourcefulbees.ender_beecon_category.teleportation.range",
+      "title": "book.resourcefulbees.ender_beecon.teleportation.range",
       "border" : true
     },
     {
       "type": "text",
-      "text": "book.resourcefulbees.ender_beecon_category.teleportation.2"
+      "text": "book.resourcefulbees.ender_beecon.teleportation.2"
     }
   ]
 }

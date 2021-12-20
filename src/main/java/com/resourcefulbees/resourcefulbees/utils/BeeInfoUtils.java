@@ -36,6 +36,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
@@ -51,6 +53,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.brewing.BrewingRecipe;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
@@ -477,5 +481,15 @@ public class BeeInfoUtils {
 
     public static Effect getEffect(String effectName) {
         return ForgeRegistries.POTIONS.getValue(ResourceLocation.tryParse(effectName));
+    }
+
+    public static BrewingRecipe getMix(Potion potion, ItemStack stack) {
+        List<BrewingRecipe> brews = BrewingRecipeRegistry.getRecipes().stream().filter(b -> b instanceof BrewingRecipe).map(b -> (BrewingRecipe) b).collect(Collectors.toList());
+        for (BrewingRecipe brew : brews) {
+            if (PotionUtils.getPotion(brew.getOutput()) == potion && brew.getOutput().getItem() == stack.getItem()) {
+                return brew;
+            }
+        }
+        return null;
     }
 }

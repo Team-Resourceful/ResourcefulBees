@@ -1,0 +1,13 @@
+{
+  "name": "book.resourcefulbees.processing_resources.powered",
+  "icon": "resourcefulbees:centrifuge",
+  "category": "resourcefulbees:processing_resources",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:centrifuge",
+      "text": "book.resourcefulbees.processing_resources.powered.1"
+    }
+  ]
+}

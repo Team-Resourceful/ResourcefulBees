@@ -1,5 +1,5 @@
 {
-  "name": "book.resourcefulbees.ender_beecon_category.options",
+  "name": "book.resourcefulbees.ender_beecon.options",
   "icon": "minecraft:spruce_sign",
   "category": "resourcefulbees:ender_beecon",
   "sortnum": 5,
@@ -7,25 +7,25 @@
     {
       "type": "resourcefulbees:animated_image",
       "image": "resourcefulbees:textures/gui/patchouli/ender_beecon_options.png",
-      "title": "book.resourcefulbees.ender_beecon_category.options",
+      "title": "book.resourcefulbees.ender_beecon.options",
       "border": true
     },
     {
       "type": "text",
-      "title": "book.resourcefulbees.ender_beecon_category.options.beam_color",
-      "text": "book.resourcefulbees.ender_beecon_category.options.1"
+      "title": "book.resourcefulbees.ender_beecon.options.beam_color",
+      "text": "book.resourcefulbees.ender_beecon.options.1"
     },
     {
       "type": "spotlight",
       "item": "minecraft:stick",
-      "title": "book.resourcefulbees.ender_beecon_category.options.show_beam",
-      "text": "book.resourcefulbees.ender_beecon_category.options.2"
+      "title": "book.resourcefulbees.ender_beecon.options.show_beam",
+      "text": "book.resourcefulbees.ender_beecon.options.2"
     },
     {
       "type": "spotlight",
       "item": "minecraft:white_wool",
-      "title": "book.resourcefulbees.ender_beecon_category.options.muting",
-      "text": "book.resourcefulbees.ender_beecon_category.options.3"
+      "title": "book.resourcefulbees.ender_beecon.options.muting",
+      "text": "book.resourcefulbees.ender_beecon.options.3"
     }
   ]
 }

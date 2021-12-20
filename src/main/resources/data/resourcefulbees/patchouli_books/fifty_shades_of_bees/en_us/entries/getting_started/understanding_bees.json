@@ -1,0 +1,21 @@
+{
+  "name": "book.resourcefulbees.getting_started.understanding_bees",
+  "icon": "resourcefulbees:beepedia",
+  "category": "resourcefulbees:getting_started",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/getting_started/understanding_bees.png"
+        ],
+      "title": "book.resourcefulbees.getting_started.understanding_bees",
+      "text": "book.resourcefulbees.getting_started.understanding_bees.desc",
+      "border" : true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.getting_started.understanding_bees.text"
+    }
+  ]
+}
