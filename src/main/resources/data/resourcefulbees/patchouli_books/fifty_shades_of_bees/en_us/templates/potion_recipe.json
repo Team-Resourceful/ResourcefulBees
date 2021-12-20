@@ -1,18 +1,127 @@
 {
+  "processor" : "com.resourcefulbees.resourcefulbees.compat.patchouli.ProcessorPotionRecipe",
   "components": [
     {
-      "x": 58,
-      "y": 0,
-      "type": "custom",
-      "class": "com.resourcefulbees.resourcefulbees.compat.patchouli.PotionRecipeComponent",
-      "effectID": "#id",
-      "potionItemID": "#item"
+      "type" : "header",
+      "text" : "#title",
+      "guard" : "#mix",
+      "x" : 58,
+      "y" : -5,
+      "centered" : true
     },
     {
+      "type" : "image",
+      "image" : "#background",
+      "guard" : "#mix",
+      "x" : 23,
+      "y" : 5,
+      "width" : "70",
+      "height" : "59",
+      "u" : 0,
+      "v" : 0,
+      "texture_width" : "70",
+      "texture_height" : "59"
+    },
+    {
+      "type" : "item",
+      "item" : "#input",
+      "guard" : "#mix",
+      "framed" : false,
+      "x" : 27,
+      "y" : 44
+    },
+    {
+      "type" : "item",
+      "item" : "#output",
+      "guard" : "#mix",
+      "link_recipe" : true,
+      "framed" : false,
+      "x" : 73,
+      "y" : 44
+    },
+    {
+      "type" : "item",
+      "item" : "#ingredient",
+      "guard" : "#mix",
+      "framed" : false,
+      "x" : 50,
+      "y" : 10
+    },
+    {
+      "type" : "item",
+      "item" : "#stand",
+      "guard" : "#mix",
+      "framed" : false,
+      "x" : 73,
+      "y" : 10
+    },
+    {
+      "type" : "header",
+      "text" : "#title2",
+      "guard" : "#mix2",
+      "x" : 58,
+      "y" : 70,
+      "centered" : true
+    },
+    {
+      "type" : "image",
+      "image" : "#background",
+      "guard" : "#mix2",
+      "x" : 23,
+      "y" : 80,
+      "width" : "70",
+      "height" : "59",
+      "u" : 0,
+      "v" : 0,
+      "texture_width" : "70",
+      "texture_height" : "59"
+    },
+    {
+      "type" : "item",
+      "item" : "#input2",
+      "guard" : "#mix2",
+      "framed" : false,
+      "x" : 27,
+      "y" : 119
+    },
+    {
+      "type" : "item",
+      "item" : "#output2",
+      "guard" : "#mix2",
+      "link_recipe" : true,
+      "framed" : false,
+      "x" : 73,
+      "y" : 119
+    },
+    {
+      "type" : "item",
+      "item" : "#ingredient2",
+      "guard" : "#mix2",
+      "framed" : false,
+      "x" : 50,
+      "y" : 85
+    },
+    {
+      "type" : "item",
+      "item" : "#stand",
+      "guard" : "#mix2",
+      "framed" : false,
+      "x" : 73,
+      "y" : 85
+    },
+    {
+      "type" : "text",
+      "text" : "#text",
+      "guard" : "#mix2null",
       "x" : 0,
-      "y" : 36,
-      "type": "text",
-      "text": "#text"
+      "y" : 70
+    },
+    {
+      "type" : "text",
+      "text" : "#text",
+      "guard" : "#mixnull",
+      "x" : 0,
+      "y" : -5
     }
   ]
 }

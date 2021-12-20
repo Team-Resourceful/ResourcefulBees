@@ -6,9 +6,16 @@
   "pages": [
     {
       "type": "resourcefulbees:potion_recipe",
-      "id": "resourcefulbees:calming",
-      "item" : "minecraft:potion",
-      "text": "book.resourcefulbees.beekeeping_tools.bee_box.desc"
+      "potion": "resourcefulbees:calming",
+      "stack" : "minecraft:potion",
+      "potion2": "resourcefulbees:long_calming",
+      "stack2" : "minecraft:potion"
+    },
+    {
+      "type": "resourcefulbees:potion_recipe",
+      "potion2": "resourcefulbees:calming",
+      "stack2" : "minecraft:splash_potion",
+      "text" : "book.resourcefulbees.beekeeping_tools.calming_potions.desc"
     },
     {
       "type": "text",
