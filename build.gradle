@@ -8,7 +8,7 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
         classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7.+'
     }
 }
 plugins {
@@ -73,7 +73,7 @@ sonarqube {
 }
 
 minecraft {
-    mappings channel: "parchment", version: "BLEEDING-SNAPSHOT-1.18.1"//"${mapping}"
+    mappings channel: "parchment", version: "${mapping}"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -152,16 +152,16 @@ dependencies {
     //compileOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")
     //runtimeOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")
 
-    //compileOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}:api")
-    //runtimeOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}")
+    compileOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}:api")
+    runtimeOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}")
 
     ///runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}")// core
     //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
     //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
     //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
-    //runtimeOnly fg.deobf ("curse.maven:create-328085:${create_version}")
-    //runtimeOnly fg.deobf ("curse.maven:flywheel-486392:${flywheel_version}")
+    runtimeOnly fg.deobf ("curse.maven:create-328085:${create_version}")
+    runtimeOnly fg.deobf ("curse.maven:flywheel-486392:${flywheel_version}")
 
     implementation fg.deobf("software.bernie.geckolib:geckolib-1.18-forge:${geckolib_version}")
 

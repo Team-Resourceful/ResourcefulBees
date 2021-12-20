@@ -20,7 +20,7 @@
     "invokers.DispenserBlockInvoker",
     "invokers.FindBeehiveGoalInvoker"
   ],
-  "minVersion": "0.8.1",
+  "minVersion": "0.8.5",
   "client": [
     "accessors.FontResourceManagerAccessor",
     "accessors.MinecraftAccessor"
