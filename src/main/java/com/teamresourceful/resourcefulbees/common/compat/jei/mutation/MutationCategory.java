@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.mutation;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
@@ -42,7 +41,7 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
         super(guiHelper, ID,
                 TranslationConstants.Jei.MUTATIONS,
                 guiHelper.drawableBuilder(GUI_BACK, -12, 0, 117, 75).addPadding(0, 0, 0, 0).build(),
-                guiHelper.createDrawableIngredient(new ItemStack(ModItems.MUTATION_ENTITY_ICON.get())),
+                guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(ModItems.MUTATION_ENTITY_ICON.get())),
                 IMutationRecipe.class);
     }
 
@@ -175,7 +174,6 @@ public class MutationCategory extends BaseCategory<IMutationRecipe> {
     @Override
     public void draw(@NotNull IMutationRecipe recipe, @NotNull PoseStack stack, double mouseX, double mouseY) {
         beeHive.draw(stack, 65, 10);
-        RenderSystem.applyModelViewMatrix();
         info.draw(stack, 63, 8);
         Font fontRenderer = Minecraft.getInstance().font;
         if (recipe.chance() < 1) {

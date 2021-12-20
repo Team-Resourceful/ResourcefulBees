@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -34,7 +35,7 @@ public abstract class BaseCategory<T> implements IRecipeCategory<T> {
         this.icon = icon;
         this.recipeClass = recipeClass;
 
-        this.beeHive = guiHelper.createDrawableIngredient(new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get()));
+        this.beeHive = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get()));
         this.info = guiHelper.createDrawable(ICONS, 16, 0, 9, 9);
         this.outputSlot = guiHelper.createDrawable(ICONS, 25, 0, 26, 26);
         this.slot = guiHelper.getSlotDrawable();
