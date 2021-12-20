@@ -34,8 +34,6 @@ public class CentrifugeController extends RectangularMultiblockController<Abstra
     private final Map<BlockPos, CentrifugeVoidEntity> dumps = new HashMap<>();
     private final CentrifugeEnergyStorage energyStorage = new CentrifugeEnergyStorage();
 
-    private final HashMap<BlockPos, ArrayList<BlockPos>> inputOutputMap = new HashMap<>();
-
     private CentrifugeTerminalEntity terminal;
 
     //region structure building and validation
@@ -124,31 +122,30 @@ public class CentrifugeController extends RectangularMultiblockController<Abstra
 
     @Override
     protected synchronized void onPartAttached(@Nonnull AbstractCentrifugeEntity tile) {
-        if (tile instanceof CentrifugeInputEntity) {
-            inputs.put(tile.getBlockPos(), (CentrifugeInputEntity) tile);
+        if (tile instanceof CentrifugeInputEntity input) {
+            inputs.put(input.getBlockPos(), input);
         }
-        if (tile instanceof CentrifugeProcessorEntity) {
-            processors.add((CentrifugeProcessorEntity) tile);
+        if (tile instanceof CentrifugeProcessorEntity processor) {
+            processors.add(processor);
         }
-        if (tile instanceof CentrifugeGearboxEntity) {
-            gearboxes.add((CentrifugeGearboxEntity) tile);
+        if (tile instanceof CentrifugeGearboxEntity gearbox) {
+            gearboxes.add(gearbox);
         }
-        if (tile instanceof CentrifugeItemOutputEntity) {
-            itemOutputs.put(tile.getBlockPos(), (CentrifugeItemOutputEntity) tile);
+        if (tile instanceof CentrifugeItemOutputEntity itemOutput) {
+            itemOutputs.put(itemOutput.getBlockPos(), itemOutput);
         }
-        if (tile instanceof CentrifugeFluidOutputEntity) {
-            fluidOutputs.put(tile.getBlockPos(), (CentrifugeFluidOutputEntity) tile);
+        if (tile instanceof CentrifugeFluidOutputEntity fluidOutput) {
+            fluidOutputs.put(fluidOutput.getBlockPos(), fluidOutput);
         }
-        if (tile instanceof CentrifugeVoidEntity) {
-            dumps.put(tile.getBlockPos(), (CentrifugeVoidEntity) tile);
+        if (tile instanceof CentrifugeVoidEntity voidEntity) {
+            dumps.put(voidEntity.getBlockPos(), voidEntity);
         }
-        if (tile instanceof CentrifugeEnergyPortEntity) {
-            CentrifugeEnergyPortEntity energyPort = (CentrifugeEnergyPortEntity) tile;
+        if (tile instanceof CentrifugeEnergyPortEntity energyPort) {
             energyPorts.add(energyPort);
             energyStorage.increaseCapacity(energyPort.getTier().getEnergyCapacity());
         }
-        if (tile instanceof CentrifugeTerminalEntity) {
-            terminals.add((CentrifugeTerminalEntity) tile);
+        if (tile instanceof CentrifugeTerminalEntity terminalEntity) {
+            terminals.add(terminalEntity);
         }
     }
 
@@ -177,14 +174,13 @@ public class CentrifugeController extends RectangularMultiblockController<Abstra
         if (tile instanceof CentrifugeVoidEntity) {
             dumps.remove(tile.getBlockPos());
         }
-        if (tile instanceof CentrifugeEnergyPortEntity) {
+        if (tile instanceof CentrifugeEnergyPortEntity energyPort) {
             energyPorts.remove(tile);
-            energyStorage.decreaseCapacity(((CentrifugeEnergyPortEntity) tile).getTier().getEnergyCapacity());
+            energyStorage.decreaseCapacity(energyPort.getTier().getEnergyCapacity());
         }
         if (tile instanceof CentrifugeTerminalEntity) {
             terminals.remove(tile);
         }
-
     }
     //endregion
 
@@ -236,6 +232,7 @@ public class CentrifugeController extends RectangularMultiblockController<Abstra
         //simulation.setActive(centrifugeActivity == CentrifugeActivity.ACTIVE); simulation stuff appears to be reactor specific and not phos specific
     }
 
+    //TODO consider removing Centrifuge Activity
     public synchronized void toggleActive() {
         setActive(centrifugeActivity == CentrifugeActivity.ACTIVE ? CentrifugeActivity.INACTIVE : CentrifugeActivity.ACTIVE);
     }
@@ -273,10 +270,8 @@ public class CentrifugeController extends RectangularMultiblockController<Abstra
     }
 
     public void updateCentrifugeState(CentrifugeState centrifugeState) {
-        //centrifugeState.setCentrifugeActivity(centrifugeActivity);
         centrifugeState.setMaxCentrifugeTier(terminal.getTier());
         centrifugeState.setTerminal(terminal.getBlockPos().asLong());
-        centrifugeState.setEnergyStored(energyStorage.getStored());
         centrifugeState.setEnergyCapacity(energyStorage.getCapacity());
         centrifugeState.setInputs(inputs.keySet());
         centrifugeState.setItemOutputs(itemOutputs.keySet());
@@ -288,6 +283,4 @@ public class CentrifugeController extends RectangularMultiblockController<Abstra
         centrifugeState.setRecipePowerModifier(getRecipePowerModifier());
         centrifugeState.setRecipeTimeModifier(getRecipeTimeModifier());
     }
-
-
 }

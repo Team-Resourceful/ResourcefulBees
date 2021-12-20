@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeVoid;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeVoidEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidEntity> {
 
     public CentrifugeVoidContainer(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeVoidEntity.class));
+        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeVoidEntity.class), new CentrifugeState().deserializeBytes(buffer));
     }
 
-    public CentrifugeVoidContainer(int id, Inventory inv, CentrifugeVoidEntity entity) {
-        super(ModMenus.CENTRIFUGE_VOID_CONTAINER.get(), id, inv, entity);
+    public CentrifugeVoidContainer(int id, Inventory inv, CentrifugeVoidEntity entity, CentrifugeState state) {
+        super(ModMenus.CENTRIFUGE_VOID_CONTAINER.get(), id, inv, entity, state);
     }
 
     protected void addMenuSlots() {
@@ -29,33 +30,22 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
                 if (entity != null) this.addSlot(new FilterSlot(entity.getFilterInventory(), c + r * 4, 162 + c * 17, 46 + r * 17));
             }
         }
-
         addPlayerInvSlots();
     }
 
     @Override
-    public @NotNull void clicked(int pSlotId, int pDragType, @NotNull ClickType pClickType, @NotNull Player pPlayer) {
-        if (pSlotId < tier.getSlots()) {
-            switch (pClickType) {
-                case PICKUP:
-                case PICKUP_ALL:
-                case SWAP: {
-                    FilterSlot slot = (FilterSlot) this.getSlot(pSlotId);
-                    ItemStack stack = getCarried(); //TODO SEE IF CORRECT, this does not exist anymore pPlayer.inventory.getCarried();
-                    if (stack.getCount() > 0) {
-                        ItemStack copy = stack.copy();
-                        copy.setCount(1);
-                        slot.set(copy);
-                    } else if (slot.getItem().getCount() > 0) {
-                        slot.set(ItemStack.EMPTY);
-                    }
-                    //TODO return slot.getItem().copy(); clicked no longer returns itemstack see what needs to be changed.
-                }
-                default:
-                    //TODO READ ABOVE return ItemStack.EMPTY;
+    public void clicked(int pSlotId, int pDragType, @NotNull ClickType pClickType, @NotNull Player pPlayer) {
+        if (pSlotId < tier.getSlots() && (pClickType.equals(ClickType.PICKUP) || pClickType.equals(ClickType.PICKUP_ALL) || pClickType.equals(ClickType.SWAP))) {
+            FilterSlot slot = (FilterSlot) this.getSlot(pSlotId);
+            ItemStack stack = getCarried();
+            if (stack.getCount() > 0) {
+                ItemStack copy = stack.copy();
+                copy.setCount(1);
+                slot.set(copy);
+            } else if (slot.getItem().getCount() > 0) {
+                slot.set(ItemStack.EMPTY);
             }
         }
-        //TODO READ ABOVE return super.clicked(pSlotId, pDragType, pClickType, pPlayer);
     }
 
     @Override

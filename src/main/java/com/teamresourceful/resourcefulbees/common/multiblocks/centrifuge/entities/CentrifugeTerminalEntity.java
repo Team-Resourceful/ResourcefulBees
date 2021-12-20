@@ -30,7 +30,6 @@ public class CentrifugeTerminalEntity extends AbstractGUICentrifugeEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-        controller().updateCentrifugeState(centrifugeState);
-        return new CentrifugeTerminalContainer(id, playerInventory, this);
+        return new CentrifugeTerminalContainer(id, playerInventory, this, centrifugeState);
     }
 }

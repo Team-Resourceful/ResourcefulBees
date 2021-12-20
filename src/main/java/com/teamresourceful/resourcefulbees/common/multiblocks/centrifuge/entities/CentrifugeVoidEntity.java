@@ -49,12 +49,10 @@ public class CentrifugeVoidEntity extends AbstractGUICentrifugeEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-        controller().updateCentrifugeState(centrifugeState);
-        return new CentrifugeVoidContainer(id, playerInventory, this);
+        return new CentrifugeVoidContainer(id, playerInventory, this, centrifugeState);
     }
 
     //region NBT HANDLING
-    //TODO DON'T SYNC INVENTORY THIS WAY!
     @Override
     protected void readNBT(@NotNull CompoundTag tag) {
         filterInventory.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));

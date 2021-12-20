@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeInput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeInputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -17,11 +18,11 @@ import org.jetbrains.annotations.NotNull;
 public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInputEntity> {
 
     public CentrifugeInputContainer(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeInputEntity.class));
+        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeInputEntity.class), new CentrifugeState().deserializeBytes(buffer));
     }
 
-    public CentrifugeInputContainer(int id, Inventory inv, CentrifugeInputEntity entity) {
-        super(ModMenus.CENTRIFUGE_INPUT_CONTAINER.get(), id, inv, entity);
+    public CentrifugeInputContainer(int id, Inventory inv, CentrifugeInputEntity entity, CentrifugeState state) {
+        super(ModMenus.CENTRIFUGE_INPUT_CONTAINER.get(), id, inv, entity, state);
     }
 
     protected void addMenuSlots() {
@@ -39,34 +40,23 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
                 }
             }
         }
-
         addPlayerInvSlots();
     }
 
     @Override
     public void clicked(int pSlotId, int pDragType, @NotNull ClickType pClickType, @NotNull Player pPlayer) {
-        if (pSlotId == CentrifugeInputEntity.RECIPE_SLOT) {
-            switch (pClickType) {
-                case PICKUP:
-                case PICKUP_ALL:
-                case SWAP: {
-                    FilterSlot slot = (FilterSlot) this.getSlot(0);
-                    ItemStack stack = getCarried(); //TODO MAKE SURE THIS IS CORRECT because inventory.getCarried() does not exist
-                    if (stack.getCount() > 0 && slot.mayPlace(stack)) {
-                        ItemStack copy = stack.copy();
-                        copy.setCount(1);
-                        slot.set(copy);
-                    } else if (slot.getItem().getCount() > 0) {
-                        slot.set(ItemStack.EMPTY);
-                    }
-                    if (entity != null) entity.updateRecipe();
-                    // TODO return slot.getItem().copy(); clicked no longer returns itemStack check what needs to be changed!
-                }
-                default:
-                    //TODO READ ABOVE return ItemStack.EMPTY;
+        if (pSlotId == CentrifugeInputEntity.RECIPE_SLOT && (pClickType.equals(ClickType.PICKUP) || pClickType.equals(ClickType.PICKUP_ALL) || pClickType.equals(ClickType.SWAP))) {
+            FilterSlot slot = (FilterSlot) this.getSlot(0);
+            ItemStack stack = getCarried();
+            if (stack.getCount() > 0 && slot.mayPlace(stack)) {
+                ItemStack copy = stack.copy();
+                copy.setCount(1);
+                slot.set(copy);
+            } else if (slot.getItem().getCount() > 0) {
+                slot.set(ItemStack.EMPTY);
             }
+            if (entity != null) entity.updateRecipe();
         }
-        //TODO READ ABOVE return super.clicked(pSlotId, pDragType, pClickType, pPlayer);
     }
 
     @Override

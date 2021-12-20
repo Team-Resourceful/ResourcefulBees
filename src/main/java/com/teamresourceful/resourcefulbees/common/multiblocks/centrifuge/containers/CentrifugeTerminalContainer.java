@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeTerminal;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeTerminalEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -12,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
 public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeTerminalEntity> {
 
     public CentrifugeTerminalContainer(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeTerminalEntity.class));
+        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeTerminalEntity.class), new CentrifugeState().deserializeBytes(buffer));
     }
 
-    public CentrifugeTerminalContainer(int id, Inventory inv, CentrifugeTerminalEntity entity) {
-        super(ModMenus.CENTRIFUGE_TERMINAL_CONTAINER.get(), id, inv, entity);
+    public CentrifugeTerminalContainer(int id, Inventory inv, CentrifugeTerminalEntity entity, CentrifugeState state) {
+        super(ModMenus.CENTRIFUGE_TERMINAL_CONTAINER.get(), id, inv, entity, state);
     }
 
     @Override
@@ -42,6 +43,11 @@ public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeT
 
     @Override
     protected void addMenuSlots() {
-        //addPlayerInvSlots();
+        //TERMINAL HAS NO SLOTS
+    }
+
+    @Override
+    protected void addPlayerInvSlots() {
+        //TERMINAL HAS NO SLOTS
     }
 }

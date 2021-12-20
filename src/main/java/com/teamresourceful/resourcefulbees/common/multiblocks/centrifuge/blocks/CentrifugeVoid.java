@@ -11,10 +11,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.registries.RegistryObject;
+import net.roguelogix.phosphophyllite.multiblock.IAssemblyStateBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CentrifugeVoid extends AbstractCentrifuge {
+public class CentrifugeVoid extends AbstractGUICentrifuge implements IAssemblyStateBlock {
 
     private final RegistryObject<BlockEntityType<CentrifugeVoidEntity>> entityType;
 

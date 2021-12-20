@@ -73,8 +73,7 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
-        controller().updateCentrifugeState(centrifugeState);
-        return new CentrifugeFluidOutputContainer(id, playerInventory, this);
+        return new CentrifugeFluidOutputContainer(id, playerInventory, this, centrifugeState);
     }
 
     //region NBT HANDLING

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeFluidOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeFluidOutputEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -12,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
 public class CentrifugeFluidOutputContainer extends CentrifugeContainer<CentrifugeFluidOutputEntity> {
 
     public CentrifugeFluidOutputContainer(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeFluidOutputEntity.class));
+        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeFluidOutputEntity.class), new CentrifugeState().deserializeBytes(buffer));
     }
 
-    public CentrifugeFluidOutputContainer(int id, Inventory inv, CentrifugeFluidOutputEntity entity) {
-        super(ModMenus.CENTRIFUGE_FLUID_OUTPUT_CONTAINER.get(), id, inv, entity);
+    public CentrifugeFluidOutputContainer(int id, Inventory inv, CentrifugeFluidOutputEntity entity, CentrifugeState state) {
+        super(ModMenus.CENTRIFUGE_FLUID_OUTPUT_CONTAINER.get(), id, inv, entity, state);
     }
 
     @Override

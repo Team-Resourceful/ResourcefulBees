@@ -16,7 +16,6 @@ import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -105,15 +104,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-        controller().updateCentrifugeState(centrifugeState);
-        return new CentrifugeInputContainer(id, playerInventory, this);
-    }
-
-    @Override
-    public void getOpenGUIPacket(FriendlyByteBuf buffer) {
-        super.getOpenGUIPacket(buffer);
-        buffer.writeInt(1);
-        buffer.writeInt(tier.getSlots());
+        return new CentrifugeInputContainer(id, playerInventory, this, centrifugeState);
     }
 
     public int getRecipeTime() {
@@ -124,6 +115,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         processStage = newStage;
     }
 
+    //TODO replicate honey generator client tick for process time tracking
     @Override
     public void tick() {
         if (level != null && !level.isClientSide) {
@@ -225,22 +217,12 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     //region NBT HANDLING
     @Override
     public void onAdded() {
-        if (level != null) {
-            filterRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(filterRecipeID);
-            processRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(processRecipeID);
-            itemOutputs.onLoad(CentrifugeItemOutputEntity.class, level); //TODO remove this in 1.18
-            fluidOutputs.onLoad(CentrifugeFluidOutputEntity.class, level); //TODO remove this in 1.18
-        }
+        assert level != null;
+        filterRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(filterRecipeID);
+        processRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(processRecipeID);
     }
 
-    //TODO see below!
-    //REQUIRED:: STOP BLOATING NETWORK PACKETS!! Client side containers should be populated with dummy ItemStackHandlers
-    // . as vanilla will handle syncing of the data. therefore not every single datapoint needs to be written to nbt
-    // . UpdatePackets and UpdateTags dont always need to read/write the same data!
-    // . this means the container classes will need to be tweaked appropriately
-
-    //Note about my attempt to solve the above issue: I need access to level and filter recipe, so I can perform
-    //the proper testing against the itemstacks
+    //TODO change data syncing to reduce packet bloating if possible
     @Override
     protected void readNBT(@NotNull CompoundTag tag) {
         inventoryHandler.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
@@ -252,13 +234,6 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         if (tag.contains(NBTConstants.NBT_FILTER_RECIPE)) filterRecipeID = ResourceLocation.tryParse(tag.getString(NBTConstants.NBT_FILTER_RECIPE));
         itemOutputs.deserialize(tag.getCompound(NBTConstants.NBT_ITEM_OUTPUTS));
         fluidOutputs.deserialize(tag.getCompound(NBTConstants.NBT_FLUID_OUTPUTS));
-        //TODO remove this block in 1.18 when onLoad is called properly
-        if (level != null && level.isClientSide) {
-            filterRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(filterRecipeID);
-            processRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(processRecipeID);
-            itemOutputs.onLoad(CentrifugeItemOutputEntity.class, level);
-            fluidOutputs.onLoad(CentrifugeFluidOutputEntity.class, level);
-        }
         super.readNBT(tag);
     }
 
@@ -292,22 +267,6 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         fluidOutputs.setSecond(fout.get(1), fout.get(1).getBlockPos());
         fluidOutputs.setThird(fout.get(2), fout.get(2).getBlockPos());
     }
-
-
-
-/*    @Override
-    public void sendGUINetworkPacket(ContainerListener player) {
-        if (player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer)) {
-            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-            buffer.writeInt(processTime);
-            NetPacketHandler.sendToPlayer(new SyncGUIMessage(this.worldPosition, buffer), serverPlayer);
-        }
-    }
-
-    @Override
-    public void handleGUINetworkPacket(FriendlyByteBuf buffer) {
-        processTime = buffer.readInt();
-    }*/
 
     private class FilterInventory extends AbstractFilterItemHandler {
 

@@ -5,10 +5,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.roguelogix.phosphophyllite.multiblock.IAssemblyStateBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CentrifugeCasing extends AbstractCentrifuge {
+public class CentrifugeCasing extends AbstractCentrifuge implements IAssemblyStateBlock {
     public CentrifugeCasing(@NotNull BlockBehaviour.Properties properties) {
         super(properties);
     }

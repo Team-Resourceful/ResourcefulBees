@@ -1,26 +1,17 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states;
 
+import com.google.common.collect.Sets;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraft.network.FriendlyByteBuf;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
-public class CentrifugeState implements INBTSerializable<CompoundTag> {
+public class CentrifugeState {
 
-    /*<T extends AbstractGUICentrifugeEntity>*/
-
-    //private CentrifugeActivity centrifugeActivity = CentrifugeActivity.INACTIVE;
     private CentrifugeTier maxCentrifugeTier = CentrifugeTier.ERROR;
     private String owner = "null";
-    private int energyStored = 0;
     private int energyCapacity = 0;
     private long terminal = 0;
     private Set<BlockPos> inputs = new HashSet<>();
@@ -32,17 +23,6 @@ public class CentrifugeState implements INBTSerializable<CompoundTag> {
     private int processors = 0;
     private int recipePowerModifier = 1;
     private double recipeTimeModifier = 1;
-
-/*    *//**
-     * Activity status for the Centrifuge - Not sure if we're gonna use this yet...
-     *//*
-    public CentrifugeActivity getCentrifugeActivity() {
-        return centrifugeActivity;
-    }
-
-    public void setCentrifugeActivity(CentrifugeActivity centrifugeActivity) {
-        this.centrifugeActivity = centrifugeActivity;
-    }*/
 
     /**
      * the maximum tier for this centrifuge - affects the maximum tier for blocks attached to it
@@ -72,17 +52,6 @@ public class CentrifugeState implements INBTSerializable<CompoundTag> {
 
     public void setTerminal(long terminal) {
         this.terminal = terminal;
-    }
-
-    /**
-     * the current energy stored in the centrifuge
-     */
-    public int getEnergyStored() {
-        return energyStored;
-    }
-
-    public void setEnergyStored(int energyStored) {
-        this.energyStored = energyStored;
     }
 
     /**
@@ -195,64 +164,34 @@ public class CentrifugeState implements INBTSerializable<CompoundTag> {
         this.recipeTimeModifier = recipeTimeModifier;
     }
 
-    @Override
-    public CompoundTag serializeNBT() {
-        CompoundTag nbt = new CompoundTag();
-        nbt.putString("Owner", owner);
-        nbt.putString("MaxTier", maxCentrifugeTier.getName());
-        nbt.putInt("EnergyStored", energyStored);
-        nbt.putInt("EnergyCapacity", energyCapacity);
-        nbt.putLong("Terminal", terminal);
-        nbt.put("Inputs", writeBlockList(inputs));
-        nbt.put("ItemOutputs", writeBlockList(itemOutputs));
-        nbt.put("FluidOutputs", writeBlockList(fluidOutputs));
-        nbt.put("Dumps", writeBlockList(dumps));
-        nbt.putInt("EnergyPorts", energyPorts);
-        nbt.putInt("Gearboxes", gearboxes);
-        nbt.putInt("Processors", processors);
-        nbt.putInt("RecipePowerModifier", recipePowerModifier);
-        nbt.putDouble("RecipeTimeModifier", recipeTimeModifier);
-        return nbt;
+    public void serializeBytes(FriendlyByteBuf buf) {
+        buf.writeUtf(owner);
+        buf.writeEnum(maxCentrifugeTier);
+        buf.writeInt(energyCapacity);
+        buf.writeLong(terminal);
+        buf.writeCollection(inputs, FriendlyByteBuf::writeBlockPos);
+        buf.writeCollection(itemOutputs, FriendlyByteBuf::writeBlockPos);
+        buf.writeCollection(fluidOutputs, FriendlyByteBuf::writeBlockPos);
+        buf.writeCollection(dumps, FriendlyByteBuf::writeBlockPos);
+        buf.writeInt(gearboxes);
+        buf.writeInt(processors);
+        buf.writeInt(recipePowerModifier);
+        buf.writeDouble(recipeTimeModifier);
     }
 
-    @Override
-    public void deserializeNBT(CompoundTag nbt) {
-        owner = nbt.getString("Owner");
-        maxCentrifugeTier = CentrifugeTier.byName(nbt.getString("MaxTier"));
-        energyStored = nbt.getInt("EnergyStored");
-        energyCapacity = nbt.getInt("EnergyCapacity");
-        terminal = nbt.getLong("Terminal");
-        inputs = readBlockList(nbt.getList("Inputs", 10));
-        itemOutputs = readBlockList(nbt.getList("ItemOutputs", 10));
-        fluidOutputs = readBlockList(nbt.getList("FluidOutputs", 10));
-        dumps = readBlockList(nbt.getList("Dumps", 10));
-        energyPorts = nbt.getInt("EnergyPorts");
-        gearboxes = nbt.getInt("Gearboxes");
-        processors = nbt.getInt("Processors");
-        recipePowerModifier = nbt.getInt("RecipePowerModifier");
-        recipeTimeModifier = nbt.getDouble("RecipeTimeModifier");
-    }
-
-    private static ListTag writeBlockList(Collection<BlockPos> set) {
-        ListTag listNBT = new ListTag();
-        AtomicInteger i = new AtomicInteger();
-        set.forEach(value -> {
-            CompoundTag nbt = new CompoundTag();
-            nbt.put(String.valueOf(i.getAndIncrement()), NbtUtils.writeBlockPos(value));
-            listNBT.add(nbt);
-        });
-        return listNBT;
-    }
-
-    private Set<BlockPos> readBlockList(ListTag listNBT) {
-        Set<BlockPos> blockSet = new HashSet<>();
-        if (!listNBT.isEmpty()) {
-            AtomicInteger i = new AtomicInteger();
-            return listNBT.stream()
-                    .map(CompoundTag.class::cast)
-                    .map(tag -> NbtUtils.readBlockPos(tag.getCompound(String.valueOf(i.getAndIncrement()))))
-                    .collect(Collectors.toSet());
-        }
-        return blockSet;
+    public CentrifugeState deserializeBytes(FriendlyByteBuf buf) {
+        owner = buf.readUtf();
+        maxCentrifugeTier = buf.readEnum(CentrifugeTier.class);
+        energyCapacity = buf.readInt();
+        terminal = buf.readLong();
+        inputs = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
+        itemOutputs = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
+        fluidOutputs = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
+        dumps = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
+        gearboxes = buf.readInt();
+        processors = buf.readInt();
+        recipePowerModifier = buf.readInt();
+        recipeTimeModifier = buf.readDouble();
+        return this;
     }
 }

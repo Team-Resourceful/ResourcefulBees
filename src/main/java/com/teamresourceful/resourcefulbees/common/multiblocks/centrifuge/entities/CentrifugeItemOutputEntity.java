@@ -47,8 +47,7 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-        controller().updateCentrifugeState(centrifugeState);
-        return new CentrifugeItemOutputContainer(id, playerInventory, this);
+        return new CentrifugeItemOutputContainer(id, playerInventory, this, centrifugeState);
     }
 
     public void setVoidExcess(boolean voidExcess) {

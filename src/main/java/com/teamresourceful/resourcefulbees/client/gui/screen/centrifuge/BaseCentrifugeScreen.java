@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +23,8 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     protected static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/background.png");
     protected static final ResourceLocation COMPONENTS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/components.png");
 
-    //protected static final Rectangle CLOSE = new Rectangle(345, 2, 13, 13);
-    //protected static final Rectangle BACK = new Rectangle(2, 2, 13, 13);
+    protected static final Rectangle CLOSE = new Rectangle(345, 2, 13, 13); //TODO replace Rectangle Class
+    protected static final Rectangle BACK = new Rectangle(2, 2, 13, 13);
 
     protected final CentrifugeTier tier;
     protected CentrifugeState centrifugeState;
@@ -33,7 +34,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         this.tier = pMenu.getTier();
         this.imageWidth = 360;
         this.imageHeight = 228;
-        this.centrifugeState = pMenu.getEntity() == null  ? new CentrifugeState() : pMenu.getEntity().getCentrifugeState();
+        this.centrifugeState = pMenu.getCentrifugeState();
     }
 
     public CentrifugeState getCentrifugeState() {
@@ -44,10 +45,10 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         int mouseAlteredX = (int) (mouseX-leftPos);
         int mouseAlteredY = (int) (mouseY-topPos);
-//        if (CLOSE.contains(mouseAlteredX, mouseAlteredY) && button == 0){
-//            closeScreen();
-//            return true;
-//        }
+        if (CLOSE.contains(mouseAlteredX, mouseAlteredY) && button == 0){
+            closeScreen();
+            return true;
+        }
 
         return super.mouseClicked(mouseX, mouseY, button);
     }

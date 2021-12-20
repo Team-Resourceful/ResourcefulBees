@@ -18,8 +18,7 @@ public abstract class MixinEnterBeehiveGoal {
     @Shadow(aliases = "field_226466_b_")
     private Bee this$0;
 
-    @SuppressWarnings("UnresolvedMixinReference")
-    @Inject(method = "<init>(Lnet/minecraft/entity/passive/BeeEntity;)V", at = @At(value = "RETURN"))
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/animal/Bee;)V", at = @At(value = "RETURN"))
     private void init(Bee beeEntity, CallbackInfo ci) {
         this.this$0 = beeEntity;
     }

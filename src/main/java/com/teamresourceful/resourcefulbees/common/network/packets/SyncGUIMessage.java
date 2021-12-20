@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.network.packets;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.ISyncableGUI;
-import com.teamresourceful.resourcefulbees.common.blockentity.GUISyncedBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -32,7 +31,7 @@ public record SyncGUIMessage(BlockPos pos, CompoundTag tag) {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null && player.level.isLoaded(message.pos)) {
                 BlockEntity tileEntity = player.level.getBlockEntity(message.pos);
-                if (tileEntity instanceof GUISyncedBlockEntity syncedBlockEntity) {
+                if (tileEntity instanceof ISyncableGUI syncedBlockEntity) {
                     syncedBlockEntity.readSyncData(message.tag);
                 }
             }

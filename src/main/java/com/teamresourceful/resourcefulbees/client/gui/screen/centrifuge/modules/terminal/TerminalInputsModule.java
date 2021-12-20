@@ -19,7 +19,6 @@ import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,22 +42,18 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
 
     //Display Tabs
     private final DisplayTab homeTab = new DisplayTab(24, 159, 69, 13, HOME_TEXT, screen);
+    private final DisplayTab itemOutsTab = new DisplayTab(24, 173, 69, 13, ITEM_OUTS_TEXT, screen);
+    private final DisplayTab fluidOutsTab = new DisplayTab(24, 187, 69, 13, FLUID_OUTS_TEXT, screen);
     //Display Modules
     private final HomeModule homeModule = new HomeModule(102, 39, 237, 164, this, screen);
+    private final OutputsModule itemOutputsModule = new OutputsModule(102, 39, 237, 164, this, screen);
+    private final OutputsModule fluidOutputsModule = new OutputsModule(102, 39, 237, 164, this, screen);
 
-    private final Map<DisplayTab, AbstractDisplayModule<?>> tabs = new HashMap<>();
+    private final Map<DisplayTab, AbstractDisplayModule<?>> tabs = Map.of(homeTab, homeModule, itemOutsTab, itemOutputsModule, fluidOutsTab, fluidOutputsModule);
     private Map.Entry<DisplayTab, AbstractDisplayModule<?>> loadedModule = Pair.of(homeTab, homeModule);
 
     public TerminalInputsModule(CentrifugeTerminalScreen screen) {
         super(screen);
-        //TODO switch this to Map.ofEntries after porting to 1.18
-        tabs.put(homeTab, homeModule);
-        DisplayTab itemOutsTab = new DisplayTab(24, 173, 69, 13, ITEM_OUTS_TEXT, screen);
-        OutputsModule itemOutputsModule = new OutputsModule(102, 39, 237, 164, this, screen);
-        tabs.put(itemOutsTab, itemOutputsModule);
-        DisplayTab fluidOutsTab = new DisplayTab(24, 187, 69, 13, FLUID_OUTS_TEXT, screen);
-        OutputsModule fluidOutputsModule = new OutputsModule(102, 39, 237, 164, this, screen);
-        tabs.put(fluidOutsTab, fluidOutputsModule);
         homeTab.setSelected(true);
         selectedEntity = Minecraft.getInstance().level != null ? (AbstractGUICentrifugeEntity) Minecraft.getInstance().level.getBlockEntity(CentrifugeUtils.getFromSet(navList, selectedBlock)) : null;
     }

@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 import com.teamresourceful.resourcefulbees.common.inventory.menus.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
@@ -13,12 +14,17 @@ public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity>
     private static final int INV_X_OFFSET = 144;
     private static final int INV_Y_OFFSET = 124;
     protected final CentrifugeTier tier;
+    protected final CentrifugeState centrifugeState;
 
-    protected CentrifugeContainer(@Nullable MenuType<?> type, int id, Inventory inv, T entity) {
+    protected CentrifugeContainer(@Nullable MenuType<?> type, int id, Inventory inv, T entity, CentrifugeState centrifugeState) {
         super(type, id, inv, entity);
         this.tier = entity.getTier();
+        this.centrifugeState = centrifugeState;
         addMenuSlots();
-        //if (entity != null && inv.player instanceof ServerPlayer serverPlayer) entity.sendInitGUIPacket(serverPlayer);
+    }
+
+    public CentrifugeState getCentrifugeState() {
+        return centrifugeState;
     }
 
     public CentrifugeTier getTier() {
@@ -46,14 +52,5 @@ public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity>
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inv, k, getPlayerInvXOffset() + k * 17, getPlayerInvYOffset() + 55));
         }
-    }
-
-    @Override
-    public void broadcastChanges() {
-        super.broadcastChanges();
-
-        /*for (ContainerListener listener : ((ContainerAccessor) this).getListeners()) {
-            entity.sendGUINetworkPacket(listener);
-        }*/
     }
 }

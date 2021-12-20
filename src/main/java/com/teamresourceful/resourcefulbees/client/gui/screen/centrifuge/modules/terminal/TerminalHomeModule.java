@@ -50,17 +50,16 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
             TERMINAL_FONT_8.draw(matrix, owner, 6, 0, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(matrix, StringUtils.repeat('-', owner.length()), 6, 8, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(matrix, "Max Tier: " + StringUtils.capitalize(centrifugeState.getMaxCentrifugeTier().getName()), 6, 16, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Energy Stored: " + centrifugeState.getEnergyStored() + "rf", 6, 24, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Energy Capacity: " + centrifugeState.getEnergyCapacity() + "rf", 6, 32, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Inputs: " + centrifugeState.getInputs().size(), 6, 40, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Item Outputs: " + centrifugeState.getItemOutputs().size(), 6, 48, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Fluid Outputs: " + centrifugeState.getFluidOutputs().size(), 6, 56, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Energy Ports: " + centrifugeState.getEnergyPorts(), 6, 64, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Voids: " + centrifugeState.getDumps().size(), 6, 72, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Gearboxes: " + centrifugeState.getGearboxes(), 6, 80, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Processors: " + centrifugeState.getProcessors(), 6, 88, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Recipe Power Modifier: " + centrifugeState.getRecipePowerModifier() * 100 + "%", 6, 96, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Recipe Time Modifier: " + ModConstants.DECIMAL_FORMAT.format(centrifugeState.getRecipeTimeModifier() * 100) + "%", 6, 104, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, "Energy Capacity: " + centrifugeState.getEnergyCapacity() + "rf", 6, 24, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, "Inputs: " + centrifugeState.getInputs().size(), 6, 32, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, "Item Outputs: " + centrifugeState.getItemOutputs().size(), 6, 40, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, "Fluid Outputs: " + centrifugeState.getFluidOutputs().size(), 6, 48, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, "Energy Ports: " + centrifugeState.getEnergyPorts(), 6, 56, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, "Voids: " + centrifugeState.getDumps().size(), 6, 64, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, "Gearboxes: " + centrifugeState.getGearboxes(), 6, 72, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, "Processors: " + centrifugeState.getProcessors(), 6, 80, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, "Recipe Power Modifier: " + centrifugeState.getRecipePowerModifier() * 100 + "%", 6, 88, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, "Recipe Time Modifier: " + ModConstants.DECIMAL_FORMAT.format(centrifugeState.getRecipeTimeModifier() * 96) + "%", 6, 104, FONT_COLOR_1);
             matrix.popPose();
             TERMINAL_FONT_8.draw(matrix, formatUserInput(commandInput), TEXT_X + 4f, 186, FONT_COLOR_1);
         } else {
@@ -93,21 +92,18 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
                 return true;
             case 257:
                 commandInput = commandInput.toLowerCase(Locale.ROOT);
-                switch (commandInput){
-                    case "clear":
+                switch (commandInput) {
+                    case "clear" -> {
                         consoleHistory.clear();
                         neofetch = false;
-                        break;
-                    case "neofetch":
-                        neofetch = true;
-                        break;
-                    default:
+                    }
+                    case "neofetch" -> neofetch = true;
+                    default -> {
                         CentrifugeTerminalEntity terminal = screen.getMenu().getEntity();
-                        if (terminal != null) {
-                            onTerminalResponse(formatUserInput(commandInput));
-                            NetPacketHandler.sendToServer(new CommandMessage(terminal.getBlockPos(), commandInput));
-                            neofetch = false;
-                        }
+                        onTerminalResponse(formatUserInput(commandInput));
+                        NetPacketHandler.sendToServer(new CommandMessage(terminal.getBlockPos(), commandInput));
+                        neofetch = false;
+                    }
                 }
                 commandInput = "";
                 return true;

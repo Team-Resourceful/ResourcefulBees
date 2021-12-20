@@ -44,7 +44,7 @@ public abstract class MixinBeeEntity extends Animal implements IBeeCompat {
     @Inject(at = @At("HEAD"), method = "doesHiveHaveSpace", cancellable = true)
     private void doesHiveHaveSpace(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
         BlockEntity blockEntity = this.level.getBlockEntity(pos);
-        if ((blockEntity instanceof TieredBeehiveBlockEntity && !((TieredBeehiveBlockEntity) blockEntity).isFull())
+        if ((blockEntity instanceof TieredBeehiveBlockEntity tieredHive && !tieredHive.isFull())
                 || (blockEntity instanceof ApiaryBlockEntity apiary && apiary.hasSpace())
                 || (blockEntity instanceof BeehiveBlockEntity beeHive && !beeHive.isFull())) {
             callback.setReturnValue(true);
