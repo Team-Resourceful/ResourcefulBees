@@ -74,18 +74,17 @@ public abstract class AbstractModContainerMenu<T extends BlockEntity> extends Ab
         return itemstack;
     }
 
-    //TODO standardize player inventory slot positions to reduce duplicate code format
     // Centrifuge should be the only one overriding due to slot dimensions of 17 vs 18
     protected void addPlayerInvSlots() {
-/*        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(inv, j + i * 9 + 9, getPlayerInvXOffset() + j * 18, getPlayerInvYOffset() + i * 18));
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(inv, k, getPlayerInvXOffset() + k * 18, getPlayerInvYOffset() + 55));
-        }*/
+            this.addSlot(new Slot(inv, k, getPlayerInvXOffset() + k * 18, getPlayerInvYOffset() + 58));
+        }
     }
 
     protected static <T extends BlockEntity> T getTileFromBuf(Level level, FriendlyByteBuf buf, Class<T> type) {

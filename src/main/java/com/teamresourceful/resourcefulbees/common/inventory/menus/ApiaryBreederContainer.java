@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.inventory.menus;
 
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBreederBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
 import com.teamresourceful.resourcefulbees.common.item.UpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBreederBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Mth;
@@ -12,7 +12,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -145,19 +144,6 @@ public class ApiaryBreederContainer extends AbstractModContainerMenu<ApiaryBreed
     }
 
     @Override
-    protected void addPlayerInvSlots() {
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(inv, j + i * 9 + 9, getPlayerInvXOffset() + j * 18, 28 + (getNumberOfBreeders() * 20) + (i * 18)));
-            }
-        }
-
-        for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(inv, k, getPlayerInvXOffset() + k * 18, 86 + getNumberOfBreeders() * 20));
-        }
-    }
-
-    @Override
     public int getContainerInputEnd() {
         return 4 + getNumberOfBreeders() * 5;
     }
@@ -174,12 +160,12 @@ public class ApiaryBreederContainer extends AbstractModContainerMenu<ApiaryBreed
 
     @Override
     public int getPlayerInvXOffset() {
-        return 33;
+        return 28 + (getNumberOfBreeders() * 20);
     }
 
     @Override
     public int getPlayerInvYOffset() {
-        return 0;
+        return 86 + getNumberOfBreeders() * 20;
     }
 
     @Override
