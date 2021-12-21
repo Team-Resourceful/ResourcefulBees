@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -7,6 +8,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -28,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Stream;
 
+@SuppressWarnings("deprecation")
 public class BeeHouseTopBlock extends Block {
 
     public static final VoxelShape TOP_Z_SHAPE = Stream.of(
@@ -106,9 +110,10 @@ public class BeeHouseTopBlock extends Block {
     }
 
     @Override
-    protected void spawnDestroyParticles(Level level, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState state) {
-        BlockPos posBelow = pos.below();
-        BlockState stateBelow = level.getBlockState(posBelow);
-        if (stateBelow.getBlock() instanceof BeeHouseBlock beeHouseBlock) beeHouseBlock.spawnDestroyParticles(level, player, posBelow, stateBelow);
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+        BlockState blockStateBelow = level.getBlockState(pos.below());
+        return blockStateBelow.getBlock() instanceof BeeHouseBlock ?
+                blockStateBelow.getCloneItemStack(target, level, pos, player) :
+                ModItems.T1_APIARY_ITEM.get().getDefaultInstance();
     }
 }
