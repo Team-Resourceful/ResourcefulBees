@@ -7,6 +7,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.api.beedata.itemsholder.IItemHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
@@ -62,6 +63,8 @@ public class CodecUtils {
 
     public static final Codec<Map<ApiaryTier, ItemStack>> APIARY_VARIATIONS = Codec.unboundedMap(ApiaryTier.CODEC, ITEM_STACK_CODEC);
     public static final Codec<Map<BeehiveTier, ItemStack>> BEEHIVE_VARIATIONS = Codec.unboundedMap(BeehiveTier.CODEC, ITEM_STACK_CODEC);
+
+    public static final Codec<IItemHolder> ITEM_HOLDER_CODEC = Codec.PASSTHROUGH.comapFlatMap(CodecUtils::decodeItemHolder, CodecUtils::encodeItemHolder);
 
     private static DataResult<Set<Item>> convertItemTagToSet(String input) {
         Tag<Item> tag = BeeInfoUtils.getItemTag(input);
@@ -122,5 +125,18 @@ public class CodecUtils {
     @SafeVarargs
     public static <E> Set<E> newLinkedHashSet(E... elements) {
         return new LinkedHashSet<>(Arrays.asList(elements));
+    }
+
+    public static DataResult<IItemHolder> decodeItemHolder(Dynamic<?> dynamic){
+        Object object = dynamic.getValue();
+        if (object instanceof JsonElement jsonElement) {
+            return DataResult.success(IItemHolder.fromJson(jsonElement));
+        } else {
+            return DataResult.error("value was some how not a JsonElement");
+        }
+    }
+
+    public static Dynamic<JsonElement> encodeItemHolder(IItemHolder holder) {
+        return new Dynamic<>(JsonOps.INSTANCE, holder.toJson());
     }
 }
