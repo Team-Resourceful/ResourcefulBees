@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConst
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -32,7 +33,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,28 +91,8 @@ public class ApiaryBlockEntity extends GUISyncedBlockEntity {
         if (nbt.getBoolean("HasNectar")) {
             bee.nectarDroppedOff();
             ItemStack stack = bee.getApiaryOutput(tier);
-            for (int i = 0; i < inventory.getSlots() && !stack.isEmpty(); i++) { stack = insertItem(i, stack); }
+            for (int i = 0; i < inventory.getSlots() && !stack.isEmpty(); i++) { stack = ModUtils.insertItem(inventory, i, stack); }
         }
-    }
-
-    private ItemStack insertItem(int slot, ItemStack stack) {
-        if (stack.isEmpty()) return ItemStack.EMPTY;
-
-        ItemStack existing = inventory.getStackInSlot(slot);
-        int limit = Math.min(64, stack.getMaxStackSize());
-
-        if (!existing.isEmpty()) {
-            if (!ItemHandlerHelper.canItemStacksStack(stack, existing)) return stack;
-            limit -= existing.getCount();
-        }
-
-        if (limit <= 0) return stack;
-
-        boolean reachedLimit = stack.getCount() > limit;
-        if (existing.isEmpty()) inventory.setStackInSlot(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
-        else existing.grow(reachedLimit ? limit : stack.getCount());
-
-        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount()- limit) : ItemStack.EMPTY;
     }
 
     public void tryEnterHive(@NotNull Entity bee, boolean hasNectar, int ticksInHive) {
