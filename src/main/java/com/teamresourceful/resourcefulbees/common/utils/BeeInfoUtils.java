@@ -65,6 +65,10 @@ public class BeeInfoUtils {
         return ForgeRegistries.MOB_EFFECTS.getValue(ResourceLocation.tryParse(effectName));
     }
 
+    public static Optional<EntityType<?>> getOptionalEntityType(String entityName) {
+         return getResourceLocation(entityName).filter(ForgeRegistries.ENTITIES::containsKey).map(ForgeRegistries.ENTITIES::getValue);
+    }
+
     public static @Nullable EntityType<?> getEntityType(String entityName) {
         return ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryParse(entityName));
     }

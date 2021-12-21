@@ -9,16 +9,10 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Locale;
-import java.util.Set;
 
 @Unmodifiable
 public class BeeFamily {
@@ -84,29 +78,6 @@ public class BeeFamily {
 
     public CustomBeeData getParent2Data() {
         return parent2Data;
-    }
-
-    public Set<ItemStack> getParent1FeedItemStacks() {
-        return parent1Data.getBreedData().getFeedItemStacks();
-    }
-
-    public Set<ItemStack> getParent2FeedItemStacks() {
-        return parent2Data.getBreedData().getFeedItemStacks();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public Entity createParent1DisplayEntity(ClientLevel level) {
-        return parent1Data.getEntityType().create(level);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public Entity createParent2DisplayEntity(ClientLevel level) {
-        return parent2Data.getEntityType().create(level);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public Entity createChildDisplayEntity(ClientLevel level) {
-        return childData.getEntityType().create(level);
     }
 
     public CustomBeeData getChildData() {

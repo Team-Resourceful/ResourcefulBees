@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -29,7 +30,7 @@ import java.util.Set;
 
 public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPair parent2, Optional<Ingredient> input, RandomCollection<BreederOutput> outputs, int time) implements Recipe<Container> {
 
-    public static final RecipeType<CentrifugeRecipe> BREEDER_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":breeder");
+    public static final RecipeType<BreederRecipe> BREEDER_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":breeder");
 
     public static final Codec<RandomCollection<BreederOutput>> RANDOM_COLLECTION_CODEC = CodecUtils.createSetCodec(BreederOutput.CODEC).comapFlatMap(BreederOutput::convertToRandomCollection, BreederOutput::convertToSet);
 
@@ -84,6 +85,11 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
         return BREEDER_RECIPE_TYPE;
     }
 
+    @Override
+    public @NotNull NonNullList<Ingredient> getIngredients() {
+        return NonNullList.of(Ingredient.EMPTY, parent1.parent(), parent1.feedItem(), parent2.parent(), parent2.feedItem());
+    }
+
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<BreederRecipe> {
 
         @Override
@@ -105,11 +111,12 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
         }
     }
 
-    public static record BreederPair(Ingredient parent, Optional<String> displayEntity, Ingredient feedItem){
+    public static record BreederPair(Ingredient parent, Optional<String> displayEntity, Ingredient feedItem, Optional<ItemStack> returnItem){
         public static final Codec<BreederPair> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 CodecUtils.INGREDIENT_CODEC.fieldOf("parent").forGetter(BreederPair::parent),
                 Codec.STRING.optionalFieldOf("entity").forGetter(BreederPair::displayEntity),
-                CodecUtils.INGREDIENT_CODEC.fieldOf("feedItem").forGetter(BreederPair::feedItem)
+                CodecUtils.INGREDIENT_CODEC.fieldOf("feedItem").forGetter(BreederPair::feedItem),
+                CodecUtils.ITEM_STACK_CODEC.optionalFieldOf("returnItem").forGetter(BreederPair::returnItem)
         ).apply(instance, BreederPair::new));
 
         public boolean matches(Container inventory, int offset) {
@@ -117,10 +124,10 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
         }
     }
 
-    public static record BreederOutput(ItemStack output, ResourceLocation displayEntity, double weight, double chance){
+    public static record BreederOutput(ItemStack output, Optional<String> displayEntity, double weight, double chance){
         public static final Codec<BreederOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 CodecUtils.ITEM_STACK_CODEC.fieldOf("output").forGetter(BreederOutput::output),
-                ResourceLocation.CODEC.fieldOf("entity").forGetter(BreederOutput::displayEntity),
+                Codec.STRING.optionalFieldOf("entity").forGetter(BreederOutput::displayEntity),
                 Codec.doubleRange(0.0d, Double.MAX_VALUE).fieldOf("weight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(BreederOutput::weight),
                 Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BreederOutput::chance)
         ).apply(instance, BreederOutput::new));

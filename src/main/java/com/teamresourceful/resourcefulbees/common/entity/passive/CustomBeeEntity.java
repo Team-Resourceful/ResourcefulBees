@@ -42,7 +42,6 @@ import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.NameTagItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -319,7 +318,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
 
     @Override
     public boolean isFood(@NotNull ItemStack stack) {
-        return this.getBreedData().getFeedItems().contains(stack.getItem());
+        return this.getBreedData().getFeedItems().matches(stack);
     }
 
     @Override
@@ -332,7 +331,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         if (this.isFood(itemstack)) {
             if (!this.level.isClientSide && this.getAge() == 0 && !this.isInLove()) {
                 this.usePlayerItem(player, hand, itemstack);
-                player.addItem(new ItemStack(getBreedData().getFeedReturnItem().orElse(Items.AIR)));
+                getBreedData().getFeedReturnItem().map(ItemStack::copy).ifPresent(player::addItem);
                 this.addFeedCount();
                 if (this.getFeedCount() >= getBreedData().getFeedAmount()) {
                     this.setInLove(player);

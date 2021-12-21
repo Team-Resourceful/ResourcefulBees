@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.api.beedata.breeding;
 
-import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
+import com.teamresourceful.resourcefulbees.api.beedata.itemsholder.IItemHolder;
+import com.teamresourceful.resourcefulbees.api.beedata.itemsholder.ItemHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import net.minecraft.core.Registry;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Unmodifiable;
@@ -15,11 +14,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Unmodifiable
 public class BreedData {
-    public static final BreedData DEFAULT = new BreedData(Collections.emptySet(), Collections.emptySet(), Optional.empty(), 0, 0, 0);
+    public static final BreedData DEFAULT = new BreedData(Collections.emptySet(), new ItemHolder(Items.POPPY), Optional.empty(), 0, 0, 0);
 
     /**
      * A {@link Codec<BreedData>} that can be parsed to create a
@@ -28,8 +26,8 @@ public class BreedData {
     public static Codec<BreedData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 CodecUtils.createSetCodec(BeeFamily.codec(name)).fieldOf("parents").orElse(new HashSet<>()).forGetter(BreedData::getFamilies),
-                CodecUtils.ITEM_SET_CODEC.fieldOf("feedItem").orElse(Sets.newHashSet(Items.POPPY)).forGetter(BreedData::getFeedItems),
-                Registry.ITEM.byNameCodec().optionalFieldOf("feedReturnItem").forGetter(BreedData::getFeedReturnItem),
+                CodecUtils.ITEM_HOLDER_CODEC.fieldOf("feedItem").orElse(new ItemHolder(Items.POPPY)).forGetter(BreedData::getFeedItems),
+                CodecUtils.ITEM_STACK_CODEC.optionalFieldOf("feedReturnItem").forGetter(BreedData::getFeedReturnItem),
                 Codec.intRange(1, Integer.MAX_VALUE).fieldOf("feedAmount").orElse(1).forGetter(BreedData::getFeedAmount),
                 Codec.intRange(Integer.MIN_VALUE, 0).fieldOf("childGrowthDelay").orElse(BeeConstants.CHILD_GROWTH_DELAY).forGetter(BreedData::getChildGrowthDelay),
                 Codec.intRange(0, Integer.MAX_VALUE).fieldOf("breedDelay").orElse(BeeConstants.BREED_DELAY).forGetter(BreedData::getBreedDelay)
@@ -37,16 +35,15 @@ public class BreedData {
     }
 
     protected Set<BeeFamily> families;
-    protected Set<Item> items;
-    //TODO Make this a list of items and remove the optional allowing for better custom returns!!
-    protected Optional<Item> feedReturnItem;
+    protected IItemHolder itemHolder;
+    protected Optional<ItemStack> feedReturnItem;
     protected int feedAmount;
     protected int childGrowthDelay;
     protected int breedDelay;
 
-    public BreedData(Set<BeeFamily> families, Set<Item> items, Optional<Item> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+    public BreedData(Set<BeeFamily> families, IItemHolder itemHolder, Optional<ItemStack> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
         this.families = families;
-        this.items = items;
+        this.itemHolder = itemHolder;
         this.feedReturnItem = feedReturnItem;
         this.feedAmount = feedAmount;
         this.childGrowthDelay = childGrowthDelay;
@@ -75,34 +72,18 @@ public class BreedData {
 
     /**
      * Gets the feed items used to trigger the associated bees "love" state.
-     * The value returned is a {@link Set}<{@link Item}>.
+     * The value returned is a {@link IItemHolder}>.
      *
-     * @return Returns a {@link Set}<{@link Item}>.
+     * @return Returns a {@link IItemHolder}.
      */
-    public Set<Item> getFeedItems() {
-        return items;
+    public IItemHolder getFeedItems() {
+        return itemHolder;
     }
 
     /**
-     * Gets the feed items used to trigger the associated bees "love" state and
-     * maps them to a {@link Set}<{@link ItemStack}> taking into account the
-     * feed amount for the bee.
-     *
-     * @return Returns a {@link Set}<{@link ItemStack}> taking into account the
-     * feed amount for the bee.
-     */
-    public Set<ItemStack> getFeedItemStacks() {
-        return getFeedItems().stream()
-                .map(item -> new ItemStack(item, getFeedAmount()))
-                .collect(Collectors.toSet());
-    }
-
-    /**
-     * TODO finish this after converting to a list
-     *
      * @return returns the leftovers from feeding the bee
      */
-    public Optional<Item> getFeedReturnItem() {
+    public Optional<ItemStack> getFeedReturnItem() {
         return feedReturnItem;
     }
 
@@ -145,12 +126,12 @@ public class BreedData {
 
     public static class Mutable extends BreedData {
 
-        public Mutable(Set<BeeFamily> families, Set<Item> items, Optional<Item> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+        public Mutable(Set<BeeFamily> families, IItemHolder items, Optional<ItemStack> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
             super(families, items, feedReturnItem, feedAmount, childGrowthDelay, breedDelay);
         }
 
         public Mutable() {
-            super(new HashSet<>(), new HashSet<>(), Optional.empty(), 0, 0, 0);
+            super(new HashSet<>(), new ItemHolder(Items.POPPY), Optional.empty(), 0, 0, 0);
         }
 
         public Mutable setFamilies(Set<BeeFamily> families) {
@@ -158,12 +139,12 @@ public class BreedData {
             return this;
         }
 
-        public Mutable setItems(Set<Item> items) {
-            this.items = items;
+        public Mutable setItems(IItemHolder itemHolder) {
+            this.itemHolder = itemHolder;
             return this;
         }
 
-        public Mutable setFeedReturnItem(Optional<Item> feedReturnItem) {
+        public Mutable setFeedReturnItem(Optional<ItemStack> feedReturnItem) {
             this.feedReturnItem = feedReturnItem;
             return this;
         }
@@ -185,6 +166,6 @@ public class BreedData {
 
         @Override
         public BreedData toImmutable() {
-            return new BreedData(this.families, this.items, this.feedReturnItem, this.feedAmount, this.childGrowthDelay, this.breedDelay);        }
+            return new BreedData(this.families, this.itemHolder, this.feedReturnItem, this.feedAmount, this.childGrowthDelay, this.breedDelay);        }
     }
 }

@@ -2,16 +2,14 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryBreederContainer;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBreederBlockEntity;
+import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryBreederContainer;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -32,8 +30,8 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
     }
 
     protected void preInit(){
-        this.imageWidth = 226;
-        this.imageHeight = 110 + this.menu.getNumberOfBreeders() * 20;
+        this.imageWidth = 198;
+        this.imageHeight = 148 + this.menu.getNumberOfBreeders() * 20;
     }
 
     @Override
@@ -58,34 +56,8 @@ public class ApiaryBreederScreen extends AbstractContainerScreen<ApiaryBreederCo
             init();
             this.menu.setRebuild(false);
         }
-
-
-        Minecraft client = this.minecraft;
-        if (client != null) {
-            RenderUtils.bindTexture(BACKGROUND);
-            int i = this.leftPos;
-            int j = this.topPos;
-            //upgrade slots
-            blit(matrix, i, j+16, 0, 16, 25, 82);
-            //Top of screen
-            blit(matrix, i+25, j, 25, 0, 176, 15);
-            //slots
-            int scaledProgress;
-            for (int z = 0; z < this.menu.getNumberOfBreeders(); z++){
-                blit(matrix, i+25, j+ 15 + (z*20), 25, 15, 176, 20);
-            }
-
-            for (int k = 0; k < this.menu.getNumberOfBreeders(); k++) {
-                scaledProgress = Mth.clamp(118 * this.menu.times.get(k) / this.menu.getEntity().getTotalTime(), 0, this.menu.getEntity().getTotalTime());
-                blit(matrix, i+54, j + 21 + (k*20), 0, 246, scaledProgress, 10);
-            }
-
-            blit(matrix, i+25, j+15 + (20 * this.menu.getNumberOfBreeders()), 25, 95, 176, 95);
-
-            int t = i + this.imageWidth - 24;
-            RenderUtils.bindTexture(TABS_BG);
-            blit(matrix, t -1, j + 12, 0,0, 25, 68, 128, 128);
-        }
+        RenderUtils.bindTexture(BACKGROUND);
+        blit(matrix, this.leftPos, this.topPos, 0, 0, 198, 188);
     }
 
     @Override
