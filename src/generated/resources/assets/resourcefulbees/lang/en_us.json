@@ -499,7 +499,7 @@
   "gui.resourcefulbees.size.regular": "Regular",
   "gui.resourcefulbees.size.small": "Small",
   "gui.resourcefulbees.size.tiny": "Tiny",
-  "gui.resourcefulbees.solidfication_chamber": "Solidification Chamber",
+  "gui.resourcefulbees.solidification_chamber": "Solidification Chamber",
   "gui.resourcefulbees.top.bees": "Bees: %s / %s",
   "gui.resourcefulbees.top.honeylevel": "Honey Level: %s",
   "gui.resourcefulbees.top.smoke_time": "Smoke Time:",

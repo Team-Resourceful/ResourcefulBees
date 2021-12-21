@@ -22,6 +22,8 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         ModBlocks.HIVES.getEntries().forEach(this::registerNest);
         ModBlocks.APIARIES.getEntries().forEach(this::registerApiary);
         registerCentrifuge();
+        //using sign generator as it does what we need and only generates a model with particle field.
+        simpleBlock(ModBlocks.BEEHOUSE_TOP.get(), models().sign("bee_house_top", modLoc("block/apiary/t1_apiary")));
     }
 
     private void registerApiary(RegistryObject<Block> registryObject) {
