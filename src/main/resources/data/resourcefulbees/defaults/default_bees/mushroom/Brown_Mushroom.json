@@ -48,7 +48,7 @@
   },
   "BreedData": {
     "isBreedable": true,
-    "feedItem": "minecraft:brown_mushroom",
+    "feedItem": ["minecraft:brown_mushroom"],
     "feedAmount": 4
   }
 }

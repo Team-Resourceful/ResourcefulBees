@@ -48,7 +48,7 @@
   },
   "BreedData": {
     "isBreedable": true,
-    "feedItem": "minecraft:warped_fungus",
+    "feedItem": ["minecraft:warped_fungus"],
     "feedAmount": 4
   },
   "TraitData" : {

@@ -48,7 +48,7 @@
   },
   "BreedData": {
     "isBreedable": true,
-    "feedItem": "minecraft:crimson_fungus",
+    "feedItem": ["minecraft:crimson_fungus"],
     "feedAmount": 4
   },
   "TraitData" : {
