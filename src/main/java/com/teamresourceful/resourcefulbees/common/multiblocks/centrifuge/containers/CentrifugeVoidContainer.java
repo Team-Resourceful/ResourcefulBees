@@ -24,13 +24,12 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
         super(ModMenus.CENTRIFUGE_VOID_CONTAINER.get(), id, inv, entity, state);
     }
 
-    protected void addMenuSlots() {
+    protected void addCentrifugeSlots() {
         for (int r = 0; r < CentrifugeUtils.getRows(tier); r++) {
             for (int c = 0; c < CentrifugeUtils.getColumns(tier) * 2; c++) {
-                if (entity != null) this.addSlot(new FilterSlot(entity.getFilterInventory(), c + r * 4, 162 + c * 17, 46 + r * 17));
+                this.addSlot(new FilterSlot(entity.getFilterInventory(), c + r * 4, 162 + c * 17, 46 + r * 17));
             }
         }
-        addPlayerInvSlots();
     }
 
     @Override

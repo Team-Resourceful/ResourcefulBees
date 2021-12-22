@@ -20,7 +20,8 @@ public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity>
         super(type, id, inv, entity);
         this.tier = entity.getTier();
         this.centrifugeState = centrifugeState;
-        addMenuSlots();
+        addCentrifugeSlots();
+        addPlayerSlots();
     }
 
     public CentrifugeState getCentrifugeState() {
@@ -41,8 +42,19 @@ public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity>
         return INV_Y_OFFSET;
     }
 
+    //TODO come up with a better way to handle below methods - low priority
+    protected abstract void addCentrifugeSlots();
+
+    protected final void addMenuSlots() {
+        //Need access to Centrifuge Tier
+    }
+
     @Override
-    protected void addPlayerInvSlots() {
+    protected final void addPlayerInvSlots() {
+        //Need to call after addCentrifugeSlots
+    }
+
+    protected void addPlayerSlots() {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(inv, j + i * 9 + 9, getPlayerInvXOffset() + j * 17, getPlayerInvYOffset() + i * 17));

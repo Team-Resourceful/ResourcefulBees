@@ -25,7 +25,7 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
         super(ModMenus.CENTRIFUGE_INPUT_CONTAINER.get(), id, inv, entity, state);
     }
 
-    protected void addMenuSlots() {
+    protected void addCentrifugeSlots() {
         if (entity != null) {
             this.addSlot(new FilterSlot(entity.getFilterInventory(), CentrifugeInputEntity.RECIPE_SLOT, 126, 64) {
                 @Override
@@ -40,7 +40,6 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
                 }
             }
         }
-        addPlayerInvSlots();
     }
 
     @Override

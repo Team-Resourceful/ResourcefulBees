@@ -42,12 +42,12 @@ public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeT
     }
 
     @Override
-    protected void addMenuSlots() {
+    protected void addCentrifugeSlots() {
         //TERMINAL HAS NO SLOTS
     }
 
     @Override
-    protected void addPlayerInvSlots() {
+    protected void addPlayerSlots() {
         //TERMINAL HAS NO SLOTS
     }
 }

@@ -42,7 +42,7 @@ public class CentrifugeFluidOutputContainer extends CentrifugeContainer<Centrifu
     }
 
     @Override
-    protected void addMenuSlots() {
-        addPlayerInvSlots();
+    protected void addCentrifugeSlots() {
+        //HAS FLUID TANKS
     }
 }
