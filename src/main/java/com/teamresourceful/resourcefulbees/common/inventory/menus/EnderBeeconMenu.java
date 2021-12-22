@@ -34,12 +34,12 @@ public class EnderBeeconMenu extends AbstractModContainerMenu<EnderBeeconBlockEn
 
     @Override
     public int getPlayerInvXOffset() {
-        return 118;
+        return 36;
     }
 
     @Override
     public int getPlayerInvYOffset() {
-        return 176;
+        return 118;
     }
 
     @Override

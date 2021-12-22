@@ -52,12 +52,12 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
 
     @Override
     public int getPlayerInvXOffset() {
-        return 86;
+        return 56;
     }
 
     @Override
     public int getPlayerInvYOffset() {
-        return 144;
+        return 86;
     }
 
     public boolean lockOrUnlockBee(int id) {

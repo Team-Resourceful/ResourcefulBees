@@ -29,8 +29,8 @@ public abstract class AbstractModContainerMenu<T extends BlockEntity> extends Ab
         this.player = inv.player;
         this.level = player.level;
         if (entity == null) return;
-        addPlayerInvSlots();
         addMenuSlots();
+        addPlayerInvSlots();
     }
 
     public @NotNull T getEntity() {
@@ -51,27 +51,27 @@ public abstract class AbstractModContainerMenu<T extends BlockEntity> extends Ab
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
+        ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
-            itemstack = itemstack1.copy();
+            ItemStack slotItem = slot.getItem();
+            itemStack = slotItem.copy();
 
             if (index < getInventoryStart()) {
-                if (!this.moveItemStackTo(itemstack1, getInventoryStart(), this.slots.size(), true)) {
+                if (!this.moveItemStackTo(slotItem, getInventoryStart(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(itemstack1, 0, getContainerInputEnd(), false)) {
+            } else if (!this.moveItemStackTo(slotItem, 0, getContainerInputEnd(), false)) {
                 return ItemStack.EMPTY;
             }
 
-            if (itemstack1.isEmpty()) {
+            if (slotItem.isEmpty()) {
                 slot.set(ItemStack.EMPTY);
             } else {
                 slot.setChanged();
             }
         }
-        return itemstack;
+        return itemStack;
     }
 
     // Centrifuge should be the only one overriding due to slot dimensions of 17 vs 18

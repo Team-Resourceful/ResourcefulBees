@@ -25,12 +25,12 @@ public class HoneyPotMenu extends AbstractModContainerMenu<HoneyPotBlockEntity> 
 
     @Override
     public int getPlayerInvXOffset() {
-        return 84;
+        return 8;
     }
 
     @Override
     public int getPlayerInvYOffset() {
-        return 142;
+        return 84;
     }
 
     @Override

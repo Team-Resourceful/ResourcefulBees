@@ -47,12 +47,12 @@ public class HoneyGeneratorMenu extends AbstractModContainerMenu<HoneyGeneratorB
 
     @Override
     public int getPlayerInvXOffset() {
-        return 84;
+        return 8;
     }
 
     @Override
     public int getPlayerInvYOffset() {
-        return 142;
+        return 84;
     }
 
     @Override
