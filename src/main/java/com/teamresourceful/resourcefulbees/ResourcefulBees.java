@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.gui.IncompatibleModWarning;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
 import com.teamresourceful.resourcefulbees.common.capabilities.Capabilities;
+import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.config.ConfigLoader;
 import com.teamresourceful.resourcefulbees.common.data.DataGen;
@@ -33,6 +34,8 @@ import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -122,8 +125,8 @@ public class ResourcefulBees {
 
     @SubscribeEvent
     public void onInterModEnqueue(InterModEnqueueEvent event) {
-//TODO        if (ModList.get().isLoaded("theoneprobe"))
-//            InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
+        if (ModList.get().isLoaded("theoneprobe"))
+            InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
     }
 
     @SubscribeEvent

@@ -147,8 +147,12 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.18.1:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:${jei_version}")
 
-    //compileOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:${top_version}:api")
-    //runtimeOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:${top_version}")
+    compileOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:${top_version}:api"){
+            transitive = false
+        }
+    runtimeOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:${top_version}"){
+            transitive = false
+        }
 
     //compileOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")
     //runtimeOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")

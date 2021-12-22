@@ -1,6 +1,3 @@
-//TODO reimplement when TOP has a 1.18 maven upload
-
-/*
 package com.teamresourceful.resourcefulbees.common.compat.top;
 
 import mcjty.theoneprobe.api.IBlockDisplayOverride;
@@ -22,4 +19,4 @@ public class TopCompat implements Function<ITheOneProbe, Void> {
         theOneProbe.registerEntityDisplayOverride(BEE_DISPLAY_OVERRIDE);
         return null;
     }
-}*/
+}
