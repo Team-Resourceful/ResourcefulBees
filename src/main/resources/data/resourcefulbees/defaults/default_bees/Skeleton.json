@@ -13,13 +13,17 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "input": ["minecraft:stone"],
+        "input": {
+          "type": "block",
+          "block": "minecraft:stone"
+        },
         "outputs": [
-          {"output": "minecraft:gravel"}
+          {
+            "type": "block",
+            "block": "minecraft:gravel"
+          }
         ]
       }
     ]

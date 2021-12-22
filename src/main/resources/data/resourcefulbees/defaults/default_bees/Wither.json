@@ -12,14 +12,21 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "inputID": ["minecraft:lava"],
+        "input": {
+          "type": "fluid",
+          "fluid": "minecraft:lava"
+        },
         "outputs": [
-          {"outputID": "minecraft:obsidian", "weight": 10},
-          {"outputID": "minecraft:stone", "weight": 10}
+          {
+            "type": "block",
+            "block": "minecraft:obsidian"
+          },
+          {
+            "type": "block",
+            "block": "minecraft:stone"
+          }
         ]
       }
     ]

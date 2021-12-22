@@ -14,14 +14,21 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "input": ["minecraft:stone"],
-        "outputs": [
-          {"output": "minecraft:iron_ore", "weight": 10},
-          {"output": "minecraft:cobblestone", "weight": 10}
+        "input": {
+          "type": "block",
+          "block": "minecraft:stone"
+        },
+        "outputs" : [
+          {
+            "type": "block",
+            "block": "minecraft:iron_ore"
+          },
+          {
+            "type": "block",
+            "block": "minecraft:cobblestone"
+          }
         ]
       }
     ]

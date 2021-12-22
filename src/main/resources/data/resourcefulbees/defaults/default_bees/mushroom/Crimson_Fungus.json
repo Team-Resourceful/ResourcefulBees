@@ -22,18 +22,26 @@
     "mutationCount": 15,
     "mutations": [
       {
-        "type" : "BLOCK",
-        "input": ["minecraft:red_mushroom"],
+        "input": {
+          "type": "block",
+          "block": "minecraft:red_mushroom"
+        },
         "outputs" : [
-          {"output": "minecraft:crimson_fungus"}
+          {
+            "type": "block",
+            "block": "minecraft:crimson_fungus"
+          }
         ]
       },
       {
-        "type": "ENTITY",
-        "entityInput": "minecraft:hoglin",
+        "input": {
+          "type": "entity",
+          "entity": "minecraft:hoglin"
+        },
         "outputs": [
           {
-            "output": "minecraft:hoglin",
+            "type": "entity",
+            "entity": "minecraft:hoglin",
             "tag": {
               "IsImmuneToZombification": true
             }

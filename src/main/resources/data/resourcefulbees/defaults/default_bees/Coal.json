@@ -14,15 +14,17 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "input": ["minecraft:stone"],
-        "chance": 0.75,
-        "outputs": [
+        "input": {
+          "type": "block",
+          "block": "minecraft:stone",
+          "chance": 0.75
+        },
+        "outputs" : [
           {
-            "output": "minecraft:coal_ore"
+            "type": "block",
+            "block": "minecraft:coal_ore"
           }
         ]
       }

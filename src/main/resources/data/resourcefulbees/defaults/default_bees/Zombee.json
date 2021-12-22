@@ -12,14 +12,22 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "input": ["minecraft:stone"],
+        "input": {
+          "type": "block",
+          "block": "minecraft:stone"
+        },
         "outputs": [
-          {"output": "minecraft:mossy_cobblestone", "weight": 10},
-          {"output": "minecraft:cobblestone", "weight": 30}
+          {
+            "type": "block",
+            "block": "minecraft:mossy_cobblestone"
+          },
+          {
+            "type": "block",
+            "block": "minecraft:cobblestone",
+            "weight": 30
+          }
         ]
       }
     ]

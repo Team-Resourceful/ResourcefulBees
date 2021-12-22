@@ -17,14 +17,21 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "input": ["minecraft:netherrack"],
-        "outputs": [
-          {"output": "minecraft:nether_quartz_ore", "weight": 10},
-          {"output": "minecraft:cobblestone", "weight": 10}
+        "input": {
+          "type": "block",
+          "block": "minecraft:netherrack"
+        },
+        "outputs" : [
+          {
+            "type": "block",
+            "block": "minecraft:nether_quartz_ore"
+          },
+          {
+            "type": "block",
+            "block": "minecraft:cobblestone"
+          }
         ]
       }
     ]

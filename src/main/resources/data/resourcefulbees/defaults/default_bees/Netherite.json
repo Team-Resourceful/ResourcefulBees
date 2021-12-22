@@ -13,14 +13,21 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "input": ["minecraft:blackstone"],
-        "outputs": [
-          {"output": "minecraft:gilded_blackstone", "weight": 10},
-          {"output": "minecraft:netherrack", "weight": 10}
+        "input": {
+          "type": "block",
+          "block": "minecraft:blackstone"
+        },
+        "outputs" : [
+          {
+            "type": "block",
+            "block": "minecraft:gilded_blackstone"
+          },
+          {
+            "type": "block",
+            "block": "minecraft:netherrack"
+          }
         ]
       }
     ]

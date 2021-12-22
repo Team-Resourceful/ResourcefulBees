@@ -22,18 +22,26 @@
     "mutationCount": 15,
     "mutations": [
       {
-        "type" : "BLOCK",
-        "input": ["minecraft:grass"],
+        "input": {
+          "type": "block",
+          "block": "minecraft:grass"
+        },
         "outputs" : [
-          {"output": "minecraft:brown_mushroom"}
+          {
+            "type": "block",
+            "block": "minecraft:brown_mushroom"
+          }
         ]
       },
       {
-        "type": "ENTITY",
-        "entityInput": "minecraft:cow",
+        "input": {
+          "type": "entity",
+          "entity": "minecraft:cow"
+        },
         "outputs": [
           {
-            "output": "minecraft:mooshroom",
+            "type": "entity",
+            "entity": "minecraft:mooshroom",
             "tag": {
               "Type": "brown"
             }

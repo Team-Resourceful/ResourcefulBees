@@ -13,14 +13,18 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "input": ["minecraft:stone"],
-        "chance": 0.75,
-        "outputs": [
-          {"output": "minecraft:lava"}
+        "input": {
+          "type": "block",
+          "block": "minecraft:stone",
+          "chance": 0.75
+        },
+        "outputs" : [
+          {
+            "type": "fluid",
+            "fluid": "minecraft:lava"
+          }
         ]
       }
     ]

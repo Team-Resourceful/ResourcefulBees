@@ -16,22 +16,31 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "input":[ "minecraft:lava"],
-        "chance": 0.75,
-        "outputs": [
-          {"outputID": "minecraft:mossy_cobblestone"}
+        "input": {
+          "type": "fluid",
+          "fluid": "minecraft:lava",
+          "chance": 0.75
+        },
+        "outputs" : [
+          {
+            "type": "block",
+            "block": "minecraft:mossy_cobblestone"
+          }
         ]
       },
       {
-        "type": "BLOCK",
-        "input": ["minecraft:coal_block"],
-        "chance": 0.25,
-        "outputs": [
-          {"output": "minecraft:tnt"}
+        "input": {
+          "type": "block",
+          "block": "minecraft:coal_block",
+          "chance": 0.25
+        },
+        "outputs" : [
+          {
+            "type": "block",
+            "block": "minecraft:tnt"
+          }
         ]
       }
     ]
