@@ -16,6 +16,7 @@ public class ModConstants {
     public static final Gson GSON = new Gson();
     public static final ResourceLocation SHADES_OF_BEES = new ResourceLocation("resourcefulbees:fifty_shades_of_bees");
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##0.0");
+    public static final DecimalFormat PERCENT_FORMAT = new DecimalFormat("##%");
     public static final int HONEY_PER_BOTTLE = 250;
     public static final MobCategory BEE_MOB_CATEGORY = MobCategory.create("RESOURCEFUL_BEES", "resourceful_bees", 20, true, false, 128);
 }

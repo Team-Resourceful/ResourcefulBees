@@ -1,8 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.bees;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
@@ -77,13 +75,13 @@ public class BeeBreedingPage extends BeeDataPage {
 //        beepedia.addButton(nextTab);
     }
 
-    private void registerData(List<EntityMutation> mutations, List<ItemMutation> itemBreedMutation) {
+//    private void registerData(List<EntityMutation> mutations, List<ItemMutation> itemBreedMutation) {
 //        BeepediaUtils.getChildren(beeData).forEach(beeFamily -> children.add(new BreedingObject(beeFamily)));
 //        beeData.getBreedData().getFamilies().forEach(beeFamily ->  parents.add(new BreedingObject(beeFamily)));
 //        children.removeIf(breedingObject -> breedingObject.isSelf);
 //        mutations.forEach(b -> entityMutationBreeding.add(new EntityMutationPage(b.getParent(), parent, b.getInput(), b.getOutputs(), MutationType.ENTITY, b.getMutationCount(), beepedia)));
 //        itemBreedMutation.forEach(b -> itemMutationBreeding.add(new ItemMutationPage(b.getParent(), parent, b.getInputs(), b.getOutputs(), MutationType.ITEM, b.getMutationCount(), beepedia)));
-    }
+//    }
 
     private void nextTab() {
 //        int tab = BeepediaScreen.currScreenState.getBreedingTab();

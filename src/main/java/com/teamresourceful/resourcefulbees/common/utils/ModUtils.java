@@ -2,6 +2,9 @@ package com.teamresourceful.resourcefulbees.common.utils;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
@@ -14,6 +17,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
+
+import java.util.stream.IntStream;
 
 public class ModUtils {
 
@@ -48,5 +53,21 @@ public class ModUtils {
         else existing.grow(reachedLimit ? limit : stack.getCount());
 
         return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount()- limit) : ItemStack.EMPTY;
+    }
+
+    public static boolean fuzzyMatchTag(Tag format, Tag input) {
+        if (format instanceof CompoundTag formatObj && input instanceof CompoundTag inputObj) {
+            return formatObj.size() <= inputObj.size() && formatObj.getAllKeys().stream().allMatch(key -> fuzzyMatchTag(formatObj.get(key), inputObj.get(key)));
+        }
+        if (format instanceof ListTag formatList && input instanceof ListTag inputList) {
+            return formatList.size() <= inputList.size() && IntStream.range(0, formatList.size()).allMatch(i -> fuzzyMatchTag(formatList.get(i), inputList.get(i)));
+        }
+        return format != null && format.equals(input);
+    }
+
+    public static CompoundTag nbtWithData(String key, Tag tag) {
+        CompoundTag compoundTag = new CompoundTag();
+        compoundTag.put(key, tag);
+        return compoundTag;
     }
 }

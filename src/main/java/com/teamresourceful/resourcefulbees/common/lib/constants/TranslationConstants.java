@@ -86,8 +86,8 @@ public class TranslationConstants {
         @Translate("Bee block mutation requires there to be a valid hive for the bee to go into & the bee to have nectar.")
         public static final TranslatableComponent MUTATION_INFO = new TranslatableComponent("gui.resourcefulbees.jei.category.mutation.info");
 
-        @Translate("Chance that this will succeed in mutating.")
-        public static final TranslatableComponent MUTATION_CHANCE_INFO = new TranslatableComponent("gui.resourcefulbees.jei.category.mutation_chance.info");
+        @Translate("Chance that this will be chosen succeed in mutating.")
+        public static final TranslatableComponent MUTATION_WEIGHT_CHANCE_INFO = new TranslatableComponent("gui.resourcefulbees.jei.category.mutation_weight_chance.info");
 
         @Translate("Weight: %d")
         public static final String CENTRIFUGE_WEIGHT = "gui.resourcefulbees.jei.category.centrifuge.weight";
