@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.advancements;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -13,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import vazkii.patchouli.api.PatchouliAPI;
 
 public class ModAdvancementProvider extends BaseAdvancementProvider {
 
@@ -78,7 +80,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 ))
                 .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/beepedia_complete")));
 
-        ItemStack fifityShadesOfBeesBook = ItemStack.EMPTY;// TODO PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
+        ItemStack fifityShadesOfBeesBook = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
 
         addAdvancement(createAdvancement(fifityShadesOfBeesBook, "fifty_shades_of_bees", root)
                 .addCriterion("has_guide_book", InventoryChangeTrigger.TriggerInstance.hasItems(

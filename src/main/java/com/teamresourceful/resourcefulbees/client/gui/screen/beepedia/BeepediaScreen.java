@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.client.gui.widget.TabImageButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipWidget;
 import com.teamresourceful.resourcefulbees.common.capabilities.BeepediaData;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeepediaEntityMessage;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -17,6 +18,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
+import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -78,7 +80,7 @@ public class BeepediaScreen extends TooltipScreen {
         int shadesButtonX = x + SCREEN_WIDTH + 2;
         int shadesButtonY = y + SCREEN_HEIGHT - 32;
 
-        ItemStack book =  ItemStack.EMPTY; // PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
+        ItemStack book =  PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
 
         homeButton = new ModImageButton(x + (SCREEN_WIDTH / 2) - 10, y + SCREEN_HEIGHT - 25, 20, 20, 20, 0, 20, BeepediaImages.HOME_BUTTONS, 60, 60, onPress -> BeepediaHandler.openHomeScreen());
         backButton = new ModImageButton(x + (SCREEN_WIDTH / 2) + 20, y + SCREEN_HEIGHT - 25, 20, 20, 40, 0, 20, BeepediaImages.HOME_BUTTONS, 60, 60, onPress -> BeepediaState.goBackState());
@@ -86,7 +88,7 @@ public class BeepediaScreen extends TooltipScreen {
             searchHandler.toggleSearch();
         });
         TabImageButton shadesButton = new TabImageButton(shadesButtonX + 6, shadesButtonY + 6, 18, 18, 0, 0, 18,
-                BeepediaImages.SHADES_BUTTON_IMAGE, book, 1, 1, onPress -> {}/*PatchouliAPI.get().openBookGUI(ModConstants.SHADES_OF_BEES)*/,
+                BeepediaImages.SHADES_BUTTON_IMAGE, book, 1, 1, onPress -> PatchouliAPI.get().openBookGUI(ModConstants.SHADES_OF_BEES),
                 18, 36, BeepediaLang.FIFTY_SHADES_BUTTON) {
         };
         // add buttons to button array

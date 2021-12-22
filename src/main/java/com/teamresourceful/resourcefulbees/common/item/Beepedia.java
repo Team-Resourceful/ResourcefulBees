@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.item;
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import com.teamresourceful.resourcefulbees.common.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
@@ -25,6 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.List;
 
@@ -71,7 +73,7 @@ public class Beepedia extends Item {
     public @NotNull InteractionResultHolder<ItemStack> use(Level world, Player player, @NotNull InteractionHand hand) {
         LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
         ItemStack itemstack = player.getItemInHand(hand);
-        ItemStack book = ItemStack.EMPTY; // TODO PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
+        ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
         boolean hasShades = player.getInventory().contains(book);
         if (world.isClientSide) {
             BeepediaUtils.loadBeepedia(itemstack, hasShades, data);
@@ -82,7 +84,7 @@ public class Beepedia extends Item {
     @Override
     public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
         LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
-        ItemStack book = ItemStack.EMPTY; // TODO PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
+        ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
         boolean hasShades = player.getInventory().contains(book);
         if (entity instanceof CustomBeeEntity) {
             if (!player.level.isClientSide) {

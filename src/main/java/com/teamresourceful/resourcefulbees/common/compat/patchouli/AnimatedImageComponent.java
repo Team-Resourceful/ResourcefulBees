@@ -1,12 +1,10 @@
-//TODO Reimplement when patchouli updates to 1.18 or move everything to wiki/custom book mod
 
-/*
 package com.teamresourceful.resourcefulbees.common.compat.patchouli;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.api.ICustomComponent;
@@ -43,16 +41,16 @@ public class AnimatedImageComponent implements ICustomComponent {
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrixStack, @NotNull IComponentRenderContext context, float v, int i, int i1) {
+    public void render(@NotNull PoseStack matrixStack, @NotNull IComponentRenderContext context, float v, int i, int i1) {
         if (context.getTicksInBook() % 2 == 0) {
             currentFrame++;
         }
         if (currentFrame >= frames) {
             currentFrame = 0;
         }
-        Minecraft.getInstance().getTextureManager().bind(animatedImage);
+        RenderUtils.bindTexture(animatedImage);
 
-        AbstractGui.blit(matrixStack, xOffset, yOffset, 0, (float) imageHeight * currentFrame, (int) (imageWidth * imageScale), (int) (imageHeight * imageScale), textureWidth, textureHeight);
+        Gui.blit(matrixStack, xOffset, yOffset, 0, (float) imageHeight * currentFrame, (int) (imageWidth * imageScale), (int) (imageHeight * imageScale), textureWidth, textureHeight);
     }
 
     @Override
@@ -71,4 +69,3 @@ public class AnimatedImageComponent implements ICustomComponent {
         this.frames = textureHeight / imageHeight;
     }
 }
-*/
