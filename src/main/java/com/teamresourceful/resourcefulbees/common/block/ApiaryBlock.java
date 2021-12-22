@@ -1,55 +1,37 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @SuppressWarnings("deprecation")
 public class ApiaryBlock extends BeeHouseBlock {
 
-  public static final VoxelShape FULL_Z_SHAPE = Stream.of(
+/*  public static final VoxelShape FULL_Z_SHAPE = Stream.of(
           Block.box(1, 0, 1, 15, 13, 15),
           Block.box(0, 13, 0, 16, 16, 16),
           Block.box(1, 16, 0, 15, 18, 16),
@@ -65,45 +47,43 @@ public class ApiaryBlock extends BeeHouseBlock {
           Block.box(0, 18, 3, 16, 20, 13),
           Block.box(0, 20, 5, 16, 22, 11),
           Block.box(-1, 22, 7, 17, 24, 9)
-  ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-
-  public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+  ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();*/
 
   private final ApiaryTier tier;
 
   public ApiaryBlock(final ApiaryTier tier) {
+    //TODO why tf is apiary using metal?!?
     super(BlockBehaviour.Properties.of(Material.METAL).strength(5f, 6f).sound(SoundType.METAL));
     this.tier = tier;
-    this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
   }
 
-  @Override
+/*  @Override
   public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
     if (!player.isShiftKeyDown() && !world.isClientSide) {
       MenuProvider blockEntity = state.getMenuProvider(world,pos);
       NetworkHooks.openGui((ServerPlayer) player, blockEntity, pos);
     }
     return InteractionResult.SUCCESS;
-  }
+  }*/
 
-  @Override
+/*  @Override
   public BlockState getStateForPlacement(BlockPlaceContext context) {
     if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {
       return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
     return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
-  }
+  }*/
 
-  @Override
+/*  @Override
   protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
     builder.add(FACING);
-  }
+  }*/
 
-  @Nullable
+/*  @Nullable
   @Override
   public MenuProvider getMenuProvider(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos) {
     return (MenuProvider)worldIn.getBlockEntity(pos);
-  }
+  }*/
 
   @OnlyIn(Dist.CLIENT)
   @Override
@@ -128,11 +108,11 @@ public class ApiaryBlock extends BeeHouseBlock {
     super.appendHoverText(stack, worldIn, tooltip, flagIn);
   }
 
-  @NotNull
+/*  @NotNull
   @Override
   public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos, @NotNull CollisionContext context) {
     return state.hasProperty(FACING) && state.getValue(FACING).getAxis().equals(Direction.Axis.Z) ? FULL_Z_SHAPE : FULL_X_SHAPE;
-  }
+  }*/
 
   @Nullable
   @Override
