@@ -13,9 +13,10 @@
     },
     {
       "type": "resourcefulbees:potion_recipe",
-      "potion2": "resourcefulbees:calming",
-      "stack2" : "minecraft:splash_potion",
-      "text" : "book.resourcefulbees.beekeeping_tools.calming_potions.desc"
+      "potion": "resourcefulbees:calming",
+      "stack" : "minecraft:splash_potion",
+      "text" : "book.resourcefulbees.beekeeping_tools.calming_potions.desc",
+      "hidden": "minecraft:splash_potion{Potion:'resourcefulbees:long_calming'}"
     },
     {
       "type": "text",

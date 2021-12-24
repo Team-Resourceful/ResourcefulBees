@@ -122,6 +122,14 @@
       "guard" : "#mixnull",
       "x" : 0,
       "y" : -5
+    },
+    {
+      "type" : "item",
+      "item" : "#hidden",
+      "guard" : "",
+      "link_recipe" : true,
+      "x" : 0,
+      "y" : -5
     }
   ]
 }

@@ -104,8 +104,12 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:${jei_version}")
 
-    compileOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
-    runtimeOnly fg.deobf ("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
+    compileOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:${top_version}:api"){
+        transitive = false
+    }
+    runtimeOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:${top_version}"){
+        transitive = false
+    }
 
     compileOnly fg.deobf ("team.chisel.ctm:CTM:MC1.16.1-1.1.2.6")
     runtimeOnly fg.deobf ("team.chisel.ctm:CTM:MC1.16.1-1.1.2.6")
@@ -135,6 +139,10 @@ jar {
                 "MixinConfigs": "${modid}.mixins.json"
         ])
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 jar.finalizedBy('reobfJar')

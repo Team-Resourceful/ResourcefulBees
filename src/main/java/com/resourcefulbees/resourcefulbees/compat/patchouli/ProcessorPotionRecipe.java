@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.compat.patchouli;
 
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import com.resourcefulbees.resourcefulbees.utils.RandomCollection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potion;
@@ -11,12 +12,15 @@ import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
 
+import java.util.List;
+
 public class ProcessorPotionRecipe implements IComponentProcessor {
 
     private BrewingRecipe mix = null;
     private BrewingRecipe mix2 = null;
 
     String text;
+    private IVariable hidden;
 
     @Override
     public void setup(IVariableProvider lookup) {
@@ -36,6 +40,9 @@ public class ProcessorPotionRecipe implements IComponentProcessor {
         }
         if (lookup.has("text")) {
             this.text = lookup.get("text").asString();
+        }
+        if (lookup.has("hidden")) {
+            this.hidden = lookup.get("hidden");
         }
     }
 
@@ -80,6 +87,8 @@ public class ProcessorPotionRecipe implements IComponentProcessor {
             case "background2":
             case "background":
                 return IVariable.wrap("textures/gui/patchouli/brewing_stand.png");
+            case "hidden":
+                return hidden;
             case "text":
                 return IVariable.wrap(text);
             default:
