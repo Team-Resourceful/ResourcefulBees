@@ -116,7 +116,7 @@
 	"gui.resourcefulbees.beepedia.tab.traits.auras.experience_explanation" : "This aura will grant §a%d§7 experience to all players within the bee's aura range.",
 
 	"gui.resourcefulbees.beepedia.tab.traits.auras.experience_drain" : "Experience Drain Aura",
-	"gui.resourcefulbees.beepedia.tab.traits.auras.experience_explanation_drain" : "This aura will remove §c%d§7 experience to all players within the bee's aura range.",
+	"gui.resourcefulbees.beepedia.tab.traits.auras.experience_drain_explanation" : "This aura will remove §c%d§7 experience to all players within the bee's aura range.",
 
 	"gui.resourcefulbees.beepedia.tab.traits.auras.error" : "AN ERROR OCCURED",
 	"gui.resourcefulbees.beepedia.tab.traits.auras.error_explanation" : "your aura is missing it's effect type.",
