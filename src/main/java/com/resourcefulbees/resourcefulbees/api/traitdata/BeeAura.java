@@ -41,7 +41,7 @@ public class BeeAura {
     }
 
     public boolean isBeneficial() {
-        if (this.auraType == AuraType.BURNING || this.auraType == AuraType.DAMAGING) return false;
+        if (this.auraType == AuraType.BURNING || this.auraType == AuraType.DAMAGING || this.auraType == AuraType.EXPERIENCE_DRAIN) return false;
         if (this.auraType == AuraType.HEALING || this.auraType == AuraType.EXPERIENCE) return true;
         if (this.auraType == AuraType.POTION && potionEffect != null) return potionEffect.isBeneficial();
         return true;
@@ -52,6 +52,7 @@ public class BeeAura {
         POTION,
         DAMAGING,
         HEALING,
-        EXPERIENCE;
+        EXPERIENCE,
+        EXPERIENCE_DRAIN;
     }
 }

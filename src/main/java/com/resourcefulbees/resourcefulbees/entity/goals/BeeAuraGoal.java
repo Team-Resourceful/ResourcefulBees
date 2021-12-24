@@ -81,6 +81,11 @@ public class BeeAuraGoal extends Goal {
                         type.set(ParticleTypes.ENCHANT);
                         flag.set(true);
                         break;
+                    case EXPERIENCE_DRAIN:
+                        removeExperience(playerEntity, aura);
+                        type.set(ParticleTypes.POOF);
+                        flag.set(true);
+                        break;
                     default:
                         // do nothing this aura is broken
                 }
@@ -88,6 +93,13 @@ public class BeeAuraGoal extends Goal {
             });
             if (Boolean.TRUE.equals(flag.get())) spawnParticles(entity, type.get());
         });
+    }
+
+    private void removeExperience(PlayerEntity playerEntity, BeeAura aura) {
+        if (playerEntity.level.isClientSide) return;
+        playerEntity.giveExperiencePoints(-aura.getExperience());
+        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) playerEntity;
+        serverPlayer.connection.send(new SPlaySoundPacket(SoundEvents.GRINDSTONE_USE.getLocation(), playerEntity.getSoundSource(), playerEntity.getPosition(0), 0.1f, (this.random.nextFloat() - this.random.nextFloat()) * 0.35F + 0.9F));
     }
 
     private void giveExperience(PlayerEntity playerEntity, BeeAura aura) {

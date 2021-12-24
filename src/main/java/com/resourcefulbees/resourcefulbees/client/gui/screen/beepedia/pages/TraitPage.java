@@ -80,6 +80,11 @@ public class TraitPage extends BeepediaPage {
                         text = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.experience_explanation", aura.strength);
                         item = new ItemStack(Items.EXPERIENCE_BOTTLE);
                         break;
+                    case EXPERIENCE_DRAIN:
+                        title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.experience_drain");
+                        text = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.experienced_drain_explanation", aura.strength);
+                        item = new ItemStack(Items.GRINDSTONE);
+                        break;
                     case DAMAGING:
                         title = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.damaging");
                         text = new TranslationTextComponent("gui.resourcefulbees.beepedia.tab.traits.auras.damaging_explanation", aura.strength);
