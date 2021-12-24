@@ -469,23 +469,28 @@
 
 
 	"book.resourcefulbees.getting_started" : "Getting Started",
-	"book.resourcefulbees.getting_started.desc": "todo",
+	"book.resourcefulbees.getting_started.desc": "This section go into how to get started with this mod, with things like how to find and capture bees, how to safely store them and how to keep track of what bees you've encountered.",
 
 	"book.resourcefulbees.getting_started.finding_bees" : "Finding Bees",
-	"book.resourcefulbees.getting_started.finding_bees.desc" : "todo",
-	"book.resourcefulbees.getting_started.finding_bees.text" : "todo",
+	"book.resourcefulbees.getting_started.finding_bees.desc" : "Around the world.",
+	"book.resourcefulbees.getting_started.finding_bees.text.1" : "Bees can be found within nests, they can also be found roaming the world, spawning in like other mobs.$(br2)If you want to find out where bees can spawn you can find out via the $(item)$(l:beekeeping_tools/beepedia)Beepedia$() or by looking up the bee in JEI.",
+	"book.resourcefulbees.getting_started.finding_bees.text.2" :  "Some bees do not spawn naturally and will instead need to be bred. You can find more information about breeding bees $(thing)$(l:getting_started/breeding_bees)here$().",
 
 	"book.resourcefulbees.getting_started.collecting_bees" : "Collecting Bees",
-	"book.resourcefulbees.getting_started.collecting_bees.desc" : "todo",
-	"book.resourcefulbees.getting_started.collecting_bees.text" : "todo",
+	"book.resourcefulbees.getting_started.collecting_bees.desc" : "Gotta catch em all.",
+	"book.resourcefulbees.getting_started.collecting_bees.text" : "Once you've found some bees you're going to want to collect them and take them home with you.$(br2)There are several ways to do this, your best bet is to use a $(item)$(l:beekeeping_tools/bee_jar)Bee Jar$() or a $(item)$(l:beekeeping_tools/bee_box)Bee Box$().$(br2)You can also do it the more traditional way with a lead or the bee's breeding item.",
 
 	"book.resourcefulbees.getting_started.understanding_bees" : "Understanding Bees",
-	"book.resourcefulbees.getting_started.understanding_bees.desc" : "todo",
+	"book.resourcefulbees.getting_started.understanding_bees.desc" : "Encyclobeedic knowledge.",
 	"book.resourcefulbees.getting_started.understanding_bees.text" : "todo",
 
 	"book.resourcefulbees.getting_started.keeping_bees" : "Keeping Bees",
 	"book.resourcefulbees.getting_started.keeping_bees.desc" : "todo",
 	"book.resourcefulbees.getting_started.keeping_bees.text" : "todo",
+
+	"book.resourcefulbees.getting_started.breeding_bees" : "Breeding Bees",
+	"book.resourcefulbees.getting_started.breeding_bees.desc" : "todo",
+	"book.resourcefulbees.getting_started.breeding_bees.text" : "todo",
 
 	"book.resourcefulbees.getting_started.protecting_bees" : "Protecting Bees",
 	"book.resourcefulbees.getting_started.protecting_bees.desc" : "todo",

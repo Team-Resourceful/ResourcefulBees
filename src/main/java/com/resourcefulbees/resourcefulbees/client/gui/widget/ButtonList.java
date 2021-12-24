@@ -2,7 +2,9 @@ package com.resourcefulbees.resourcefulbees.client.gui.widget;
 
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaPage;
 import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.resourcefulbees.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -58,8 +60,32 @@ public class ButtonList {
         }
     }
 
-    private void reduceList(String search, String s, BeepediaPage b) {
-        if (s.contains(search.toLowerCase()) || b.getSearch().toLowerCase().contains(search.toLowerCase())) {
+    private void reduceList(String toSearch, String s, BeepediaPage b) {
+        boolean found = false;
+        for (String search : toSearch.split(" ")) {
+            if (search.startsWith("#")) {
+                if (b instanceof BeePage) {
+                    if ("#discovered".contains(search.toLowerCase(Locale.ENGLISH))  && ((BeePage) b).beeUnlocked) {
+                        found = true;
+                    } else if ("#unknown".contains(search.toLowerCase(Locale.ENGLISH)) && !((BeePage) b).beeUnlocked) {
+                        found = true;
+                    }else if ("#mutates".contains(search.toLowerCase(Locale.ENGLISH)) && ((BeePage) b).beeData.getMutationData().hasMutation()){
+                        found = true;
+                    } else if ("#breedable".contains(search.toLowerCase(Locale.ENGLISH)) && ((BeePage) b).beeData.getBreedData().isBreedable()) {
+                        found = true;
+                    } else if ("#spawns".contains(search.toLowerCase(Locale.ENGLISH)) && ((BeePage) b).beeData.getSpawnData().canSpawnInWorld()) {
+                        found = true;
+                    } else if ("#easter".contains(search.toLowerCase(Locale.ENGLISH)) && ((BeePage) b).beeData.isEasterEggBee()) {
+                        found = true;
+                    } else if ("#special".contains(search.toLowerCase(Locale.ENGLISH)) && !((BeePage) b).beeData.getSpawnData().canSpawnInWorld() && !((BeePage) b).beeData.getBreedData().isBreedable()) {
+                        found = true;
+                    }
+                }
+            } else if (s.contains(search.toLowerCase()) || b.getSearch().toLowerCase().contains(search.toLowerCase())) {
+                found = true;
+            }
+        }
+        if (found) {
             reducedList.put(s, b);
             if (active) b.listButton.visible = true;
         } else {

@@ -2,7 +2,7 @@
   "name": "book.resourcefulbees.getting_started.protecting_bees",
   "icon": "resourcefulbees:ender_beecon",
   "category": "resourcefulbees:getting_started",
-  "sortnum": 5,
+  "sortnum": 6,
   "pages": [
     {
       "type": "image",
