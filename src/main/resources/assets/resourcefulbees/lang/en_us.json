@@ -482,10 +482,11 @@
 
 	"book.resourcefulbees.getting_started.understanding_bees" : "Understanding Bees",
 	"book.resourcefulbees.getting_started.understanding_bees.desc" : "Encyclobeedic knowledge.",
-	"book.resourcefulbees.getting_started.understanding_bees.text" : "todo",
+	"book.resourcefulbees.getting_started.understanding_bees.text.1" : "Once you have some bees you will likely want to know what they can do and what to do with them.$(br2)If you craft yourself a $(item)$(l:beekeeping_tools/beepedia)Beepedia$() you can learn a lot more about what each bee can do. If you press $(thing)$(k:key.use)$() on a bee you can open the bee's page in the $(item)$(l:beekeeping_tools/beepedia)Beepedia$().",
+	"book.resourcefulbees.getting_started.understanding_bees.text.2" : "You can also use JEI to search up information about bees.$(br2)Keep in mind that bees have both $(thing)$(k:key.use)$() and $(thing)$(k:key.attack)$() uses. You may also find information on how to breed or obtain bees by looking at the bee's spawn eggs or at the $(item)$(l:beekeeping_tools/bee_jar)Bee Jar's$() uses.",
 
 	"book.resourcefulbees.getting_started.keeping_bees" : "Keeping Bees",
-	"book.resourcefulbees.getting_started.keeping_bees.desc" : "todo",
+	"book.resourcefulbees.getting_started.keeping_bees.desc" : "We build Bee Houses.",
 	"book.resourcefulbees.getting_started.keeping_bees.text" : "todo",
 
 	"book.resourcefulbees.getting_started.breeding_bees" : "Breeding Bees",

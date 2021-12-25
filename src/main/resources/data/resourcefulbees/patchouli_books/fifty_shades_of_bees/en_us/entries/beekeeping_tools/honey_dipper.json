@@ -2,7 +2,7 @@
   "name": "book.resourcefulbees.beekeeping_tools.honey_dipper",
   "icon": "resourcefulbees:honey_dipper",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 6,
+  "sortnum": 7,
   "pages": [
     {
       "type": "crafting",

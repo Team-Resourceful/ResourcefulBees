@@ -2,7 +2,7 @@
   "name": "book.resourcefulbees.extras.dev_bees",
   "icon": "resourcefulbees:gold_flower",
   "category": "resourcefulbees:extras",
-  "sortnum": 1,
+  "sortnum": 4,
   "pages": [
     {
       "type": "text",

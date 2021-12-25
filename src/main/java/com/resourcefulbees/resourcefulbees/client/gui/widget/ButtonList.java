@@ -81,7 +81,8 @@ public class ButtonList {
                         found = true;
                     }
                 }
-            } else if (s.contains(search.toLowerCase()) || b.getSearch().toLowerCase().contains(search.toLowerCase())) {
+            }
+            if (s.contains(search.toLowerCase()) || b.getSearch().toLowerCase().contains(search.toLowerCase())) {
                 found = true;
             }
         }

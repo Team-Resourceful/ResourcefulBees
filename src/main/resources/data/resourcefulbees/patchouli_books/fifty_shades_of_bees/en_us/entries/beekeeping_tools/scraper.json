@@ -2,7 +2,7 @@
   "name": "book.resourcefulbees.beekeeping_tools.scraper",
   "icon": "resourcefulbees:scraper",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 3,
+  "sortnum": 4,
   "pages": [
     {
       "type": "crafting",

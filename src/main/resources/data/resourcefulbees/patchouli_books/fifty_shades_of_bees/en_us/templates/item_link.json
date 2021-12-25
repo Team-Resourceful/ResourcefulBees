@@ -1,0 +1,20 @@
+{
+  "processor" : "com.resourcefulbees.resourcefulbees.compat.patchouli.HiddenComponentProcessor",
+  "components": [
+    {
+      "x" : 0,
+      "y" : 0,
+      "type": "text",
+      "text": "#text"
+    },
+    {
+      "type" : "item",
+      "item" : "#items",
+      "group": "hidden",
+      "link_recipe": true,
+      "framed" : false,
+      "x" : 0,
+      "y" : 0
+    }
+  ]
+}

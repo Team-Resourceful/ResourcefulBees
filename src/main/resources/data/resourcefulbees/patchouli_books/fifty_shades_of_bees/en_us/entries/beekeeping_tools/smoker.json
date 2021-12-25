@@ -2,7 +2,7 @@
   "name": "book.resourcefulbees.beekeeping_tools.smoker",
   "icon": "resourcefulbees:smoker",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 4,
+  "sortnum": 5,
   "pages": [
     {
       "type": "crafting",

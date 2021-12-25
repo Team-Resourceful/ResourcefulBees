@@ -1,0 +1,16 @@
+{
+  "name": "book.resourcefulbees.extras.bottomless_honey_pot",
+  "icon": "resourcefulbees:bottomless_honey_pot",
+  "category": "resourcefulbees:extras",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.extras.bottomless_honey_pot"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:bottomless_honey_pot"
+    }
+  ]
+}

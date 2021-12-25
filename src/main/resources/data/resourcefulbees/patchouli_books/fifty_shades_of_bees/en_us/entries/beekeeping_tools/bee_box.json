@@ -10,7 +10,8 @@
       "text": "book.resourcefulbees.beekeeping_tools.bee_box.desc"
     },
     {
-      "type": "text",
+      "type": "resourcefulbees:item_link",
+      "items": "resourcefulbees:crafting_bee_box",
       "text": "book.resourcefulbees.beekeeping_tools.bee_box.text"
     }
   ]

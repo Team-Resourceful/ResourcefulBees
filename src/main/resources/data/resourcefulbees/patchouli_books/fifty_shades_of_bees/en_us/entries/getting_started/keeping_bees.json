@@ -12,10 +12,6 @@
       "title": "book.resourcefulbees.getting_started.keeping_bees",
       "text": "book.resourcefulbees.getting_started.keeping_bees.desc",
       "border" : true
-    },
-    {
-      "type": "text",
-      "text": "book.resourcefulbees.getting_started.keeping_bees.text"
     }
   ]
 }

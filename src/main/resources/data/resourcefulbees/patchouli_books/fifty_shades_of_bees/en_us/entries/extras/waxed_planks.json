@@ -1,0 +1,42 @@
+{
+  "name": "book.resourcefulbees.extras.waxed_planks",
+  "icon": "resourcefulbees:waxed_planks",
+  "category": "resourcefulbees:extras",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.extras.waxed_planks.1"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:waxed_planks",
+      "recipe2": "resourcefulbees:trimmed_waxed_planks"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:waxed_slab",
+      "recipe2": "resourcefulbees:waxed_stairs"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:waxed_fence",
+      "recipe2": "resourcefulbees:waxed_fence_gate"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:waxed_door",
+      "recipe2": "resourcefulbees:waxed_trapdoor"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:waxed_pressure_plate",
+      "recipe2": "resourcefulbees:waxed_button"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:waxed_sign",
+      "recipe2": "resourcefulbees:waxed_machine_block"
+    }
+  ]
+}
