@@ -2,15 +2,18 @@ package com.resourcefulbees.resourcefulbees.client.render.patreon;
 
 import com.mojang.util.UUIDTypeAdapter;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
+import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class PetInfo {
+
+    private static final int VERSION = 1;
+
+    private static final PetModelData FALLBACK_MODEL = new PetModelData(-1, "fallback", ModelTypes.DEFAULT.model, new ResourceLocation("textures/entity/bee/bee.png"), new HashSet<>());
 
     protected static PetModelData defaultModel = null;
 
@@ -39,7 +42,8 @@ public class PetInfo {
     }
 
     protected static void addModel(@NotNull PetModelData data) {
-        PET_MODELS.put(data.getId(), data);
+        if (data.getVersion() != -1 && data.getVersion() <= VERSION) PET_MODELS.put(data.getId(), data);
+        else PET_MODELS.put(data.getId(), FALLBACK_MODEL);
     }
 
     public static boolean hasPet(UUID uuid){

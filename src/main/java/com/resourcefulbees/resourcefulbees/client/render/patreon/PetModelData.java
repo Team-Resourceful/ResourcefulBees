@@ -22,6 +22,7 @@ public class PetModelData implements IAnimatable {
     }
 
     public static final Codec<PetModelData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.INT.fieldOf("version").orElse(-1).forGetter(PetModelData::getVersion),
             Codec.STRING.fieldOf("id").orElse("error").forGetter(PetModelData::getId),
             ResourceLocation.CODEC.fieldOf("model").orElse(ModelTypes.DEFAULT.model).forGetter(PetModelData::getModelLocation),
             ResourceLocation.CODEC.fieldOf("texture").orElse(new ResourceLocation("textures/entity/bee/bee.png")).forGetter(PetModelData::getTexture),
@@ -36,16 +37,22 @@ public class PetModelData implements IAnimatable {
     private final PetBeeModel<PetModelData> model = new PetBeeModel<>();
     private final AnimationFactory factory = new AnimationFactory(this);
 
+    private final int version;
     private final String id;
     private final ResourceLocation modelLocation;
     private final ResourceLocation texture;
     private final Set<LayerData> layers;
 
-    public PetModelData(String id, ResourceLocation modelLocation, ResourceLocation texture, Set<LayerData> layers) {
+    public PetModelData(int version, String id, ResourceLocation modelLocation, ResourceLocation texture, Set<LayerData> layers) {
+        this.version = version;
         this.id = id;
         this.modelLocation = modelLocation;
         this.texture = texture;
         this.layers = layers;
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     public String getId() {
