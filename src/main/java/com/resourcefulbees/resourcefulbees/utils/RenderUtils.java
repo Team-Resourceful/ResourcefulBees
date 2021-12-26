@@ -147,15 +147,13 @@ public class RenderUtils {
 
     public static void renderEntity(MatrixStack matrixStack, Entity entity, World world, float x, float y, float rotation, float renderScale) {
         if (world == null) return;
-        float scaledSize = 20;
+        float scaledSize;
         Minecraft mc = Minecraft.getInstance();
-        if (entity instanceof LivingEntity) {
-            if (mc.player != null) entity.tickCount = mc.player.tickCount;
-            if (entity instanceof CustomBeeEntity) {
-                scaledSize = 20 / ((CustomBeeEntity) entity).getBeeData().getSizeModifier();
-            } else {
-                scaledSize = 20 / (entity.getBbWidth() > entity.getBbHeight() ? entity.getBbWidth() : entity.getBbHeight());
-            }
+        if (mc.player != null) entity.tickCount = mc.player.tickCount;
+        if (entity instanceof CustomBeeEntity) {
+            scaledSize = 20 / ((CustomBeeEntity) entity).getBeeData().getSizeModifier();
+        } else {
+            scaledSize = 20 / Math.max(entity.getBbWidth(), entity.getBbHeight());
         }
         if (mc.player != null) {
             matrixStack.pushPose();

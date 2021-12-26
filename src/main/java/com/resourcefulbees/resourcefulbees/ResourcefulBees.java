@@ -3,6 +3,7 @@ package com.resourcefulbees.resourcefulbees;
 import com.resourcefulbees.resourcefulbees.api.ResourcefulBeesAPI;
 import com.resourcefulbees.resourcefulbees.capabilities.BeepediaData;
 import com.resourcefulbees.resourcefulbees.client.gui.IncompatibleModWarning;
+import com.resourcefulbees.resourcefulbees.client.render.patreon.PetLoader;
 import com.resourcefulbees.resourcefulbees.command.BeepediaCommand;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
 import com.resourcefulbees.resourcefulbees.config.Config;
@@ -12,7 +13,6 @@ import com.resourcefulbees.resourcefulbees.data.RecipeBuilder;
 import com.resourcefulbees.resourcefulbees.init.*;
 import com.resourcefulbees.resourcefulbees.item.BeeSpawnEggItem;
 import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
-import com.resourcefulbees.resourcefulbees.patreon.PatreonDataLoader;
 import com.resourcefulbees.resourcefulbees.recipe.HiveIngredient;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
@@ -188,6 +188,6 @@ public class ResourcefulBees {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DataGen::generateClientData);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::registerPatreonRender);
         DataGen.generateCommonData();
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PatreonDataLoader::loadAPI);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PetLoader::loadAPI);
     }
 }

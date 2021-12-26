@@ -37,13 +37,27 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.Objects;
 import java.util.Random;
 
-public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
+public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimatable {
 
     private static final DataParameter<Integer> FEED_COUNT = EntityDataManager.defineId(CustomBeeEntity.class, DataSerializers.INT);
+
+    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", true).addAnimation("animation.bee.fly.bobbing", true));
+        return PlayState.CONTINUE;
+    }
+
+    private final AnimationFactory factory = new AnimationFactory(this);
 
     protected final CustomBeeData beeData;
     protected int timeWithoutHive;  //<- does not need to be initialized to 0 that is done by default - oreo
@@ -307,4 +321,14 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee {
         return disruptorInRange > 0;
     }
     //endregion
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, this::predicate));
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return this.factory;
+    }
 }

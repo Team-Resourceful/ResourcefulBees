@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.api.beedata;
 
 import com.resourcefulbees.resourcefulbees.lib.ModelTypes;
+import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.util.Locale;
@@ -75,7 +76,9 @@ public class ColorData extends AbstractBeeData {
 
     private final ModelTypes modelType;
 
-    private ColorData(String primaryColor, String secondaryColor, String honeycombColor, String primaryLayerTexture, String secondaryLayerTexture, String emissiveLayerTexture, String gelLayerTexture, boolean isBeeColored, boolean isRainbowBee, boolean isGlowing, String glowColor, boolean isEnchanted, int glowingPulse, ModelTypes modelType) {
+    private final String modelLocation;
+
+    private ColorData(String primaryColor, String secondaryColor, String honeycombColor, String primaryLayerTexture, String secondaryLayerTexture, String emissiveLayerTexture, String gelLayerTexture, boolean isBeeColored, boolean isRainbowBee, boolean isGlowing, String glowColor, boolean isEnchanted, int glowingPulse, ModelTypes modelType, String modelLocation) {
         super("ColorData");
         this.primaryColor = primaryColor;
         this.secondaryColor = secondaryColor;
@@ -91,6 +94,7 @@ public class ColorData extends AbstractBeeData {
         this.isEnchanted = isEnchanted;
         this.glowingPulse = glowingPulse;
         this.modelType = modelType;
+        this.modelLocation = modelLocation;
     }
 
     public String getPrimaryColor() { return primaryColor == null ? WHITE :  primaryColor; }
@@ -162,6 +166,11 @@ public class ColorData extends AbstractBeeData {
 
     public ModelTypes getModelType() { return modelType != null ? modelType : ModelTypes.DEFAULT; }
 
+    public ResourceLocation getModeLocation() {
+        if (modelLocation != null) return new ResourceLocation(modelLocation);
+        return getModelType().model;
+    }
+
     public float[] getPrimaryColorFloats() {
         return new Color(getPrimaryColorInt()).getComponents(null);
     }
@@ -189,6 +198,7 @@ public class ColorData extends AbstractBeeData {
         private boolean isEnchanted;
         private int glowingPulse;
         private ModelTypes modelType;
+        private String modelLocation;
 
         public Builder(boolean isBeeColored) {
             this.isBeeColored = isBeeColored;
@@ -259,8 +269,13 @@ public class ColorData extends AbstractBeeData {
             return this;
         }
 
+        public Builder setModelLocation(String modelLocation) {
+            this.modelLocation = modelLocation;
+            return this;
+        }
+
         public ColorData createColorData() {
-            return new ColorData(primaryColor, secondaryColor, honeycombColor, primaryLayerTexture, secondaryLayerTexture, emissiveLayerTexture, gelLayerTexture, isBeeColored, isRainbowBee, isGlowing, glowColor, isEnchanted, glowingPulse, modelType);
+            return new ColorData(primaryColor, secondaryColor, honeycombColor, primaryLayerTexture, secondaryLayerTexture, emissiveLayerTexture, gelLayerTexture, isBeeColored, isRainbowBee, isGlowing, glowColor, isEnchanted, glowingPulse, modelType, modelLocation);
         }
     }
 
