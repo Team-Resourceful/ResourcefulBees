@@ -29,11 +29,6 @@ public class PetModelData implements IAnimatable {
             createLinkedSetCodec(LayerData.CODEC).fieldOf("layers").orElse(new LinkedHashSet<>()).forGetter(PetModelData::getLayers)
     ).apply(instance, PetModelData::new));
 
-<<<<<<< HEAD
-    private final int version;
-
-    private final String id;
-=======
     static {
         //noinspection unchecked
         AnimationController.addModelFetcher((IAnimatable object) -> object instanceof PetModelData ? ((PetModelData) object).getModel() : null);
@@ -41,21 +36,16 @@ public class PetModelData implements IAnimatable {
 
     private final PetBeeModel<PetModelData> model = new PetBeeModel<>();
     private final AnimationFactory factory = new AnimationFactory(this);
->>>>>>> parent of 60e5972a (patreon stuff)
 
+    private final int version;
     private final String id;
     private final ResourceLocation modelLocation;
     private final ResourceLocation texture;
     private final Set<LayerData> layers;
 
-<<<<<<< HEAD
 
     public PetModelData(int version, String id, ResourceLocation modelLocation, ResourceLocation texture, Set<LayerData> layers) {
-        super(modelLocation, texture);
         this.version = version;
-=======
-    public PetModelData(String id, ResourceLocation modelLocation, ResourceLocation texture, Set<LayerData> layers) {
->>>>>>> parent of 60e5972a (patreon stuff)
         this.id = id;
         this.modelLocation = modelLocation;
         this.texture = texture;

@@ -1,14 +1,14 @@
 {
   "components": [
     {
-      "x": 58,
-      "y": 58,
+      "x": 64,
+      "y": 100,
       "type": "custom",
       "class": "com.resourcefulbees.resourcefulbees.compat.patchouli.RenderInterfaceBee",
       "geoPath": "#model",
       "texturePath": "#texture",
       "layers": "#layers",
-      "scale": 1
+      "scale": 5
     },
     {
       "x": 58,

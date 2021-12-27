@@ -11,28 +11,38 @@
     {
       "type": "resourcefulbees:geo_bee",
       "model": "resourcefulbees:geo/base-nocloak.geo.json",
-      "texture": "resourcefulbees:textures/entity/custom/bee.png",
-      "layers" : [
-        {
-          "color": "#FFFFFF",
-          "texture": "resourcefulbees:textures/entity/custom/primary_layer.png"
-        }
-      ],
+      "texture": "resourcefulbees:textures/entity/oreo/oreo_bee.png",
+      "title": "book.resourcefulbees.extras.dev_bees.oreo_bee"
+    },
+    {
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/kitten.geo.json",
+      "texture": "resourcefulbees:textures/entity/kitten/bee.png",
       "title": "book.resourcefulbees.extras.dev_bees.kitten_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/yeti_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture": "resourcefulbees:textures/entity/yeti/yeti_bee.png",
       "title": "book.resourcefulbees.extras.dev_bees.yeti_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/starry_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/queen.geo.json",
+      "texture" : "resourcefulbees:textures/entity/starry/starry_bee_primary_layer.png",
+      "layers" : [
+        {
+          "texture" : "resourcefulbees:textures/entity/starry/starry_bee_emissive.png",
+          "isGlowing" : true,
+          "color" : "#FFA500"
+        }
+      ],
       "title": "book.resourcefulbees.extras.dev_bees.starry_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/abbee_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/bunny.geo.json",
+      "texture": "resourcefulbees:textures/entity/abbee/bee.png",
       "title": "book.resourcefulbees.extras.dev_bees.abbee_bee"
     }
   ]

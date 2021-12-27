@@ -37,7 +37,7 @@ public class RenderInterfaceBee implements ICustomComponent {
     @Override
     public void render(@NotNull MatrixStack matrix, @NotNull IComponentRenderContext context, float partialTicks, int mouseX, int mouseY) {
         InterfaceBeeRenderer renderer = new InterfaceBeeRenderer();
-        renderer.render(bee, matrix, partialTicks, context.getTicksInBook(), mouseX, mouseY, modelScale, -45);
+        renderer.render(bee, matrix, partialTicks, context.getTicksInBook(), xOffset, yOffset, modelScale, -135);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class RenderInterfaceBee implements ICustomComponent {
 
         Set<LayerData> vars = element.isJsonArray() ? layers.asStream().map(v -> LayerData.CODEC.parse(JsonOps.INSTANCE, v.unwrap()).result()).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet()) : new LinkedHashSet<>();
 
-        bee = new PetModelData("UI", new ResourceLocation(geo), new ResourceLocation(tex), vars);
+        bee = new PetModelData(0,"UI", new ResourceLocation(geo), new ResourceLocation(tex), vars);
         modelScale = scale.asNumber().floatValue();
     }
 }
