@@ -9,118 +9,189 @@
       "text": "book.resourcefulbees.extras.patreon.1"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/base_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/astronaut.geo.json",
+      "texture" : "resourcefulbees:textures/entity/astronaut/astronaut_bee.png",
+      "title": "book.resourcefulbees.extras.patreon.astronaut_bee"
+    },
+    {
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture": "resourcefulbees:textures/entity/custom/bee.png",
+      "layers" : [
+        {
+          "color": "#FFFFFF",
+          "texture": "resourcefulbees:textures/entity/custom/primary_layer.png"
+        }
+      ],
       "title": "book.resourcefulbees.extras.patreon.base_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/creeper_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture": "resourcefulbees:textures/entity/custom/bee.png",
+      "layers" : [
+        {
+          "color": "rainbow",
+          "texture": "resourcefulbees:textures/entity/custom/primary_layer.png"
+        },
+        {
+          "color": "#rainbow",
+          "isGlowing" : true,
+          "texture": "resourcefulbees:textures/entity/custom/emissive_layer.png"
+        }
+      ],
+      "title": "book.resourcefulbees.extras.patreon.rainbow_bee"
+    },
+    {
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/creeper/creeper_bee.png",
       "title": "book.resourcefulbees.extras.patreon.creeper_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/crimson_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/mushroom/crimson_alchemist_bee.png",
       "title": "book.resourcefulbees.extras.patreon.crimson_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/ghast_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/ghast/ghast_bee.png",
       "title": "book.resourcefulbees.extras.patreon.ghast_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/gilded_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/gilded/gilded_alchemist_bee.png",
       "title": "book.resourcefulbees.extras.patreon.gilded_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/golden_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/gilded/golden_flower_bee.png",
       "title": "book.resourcefulbees.extras.patreon.golden_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/kitten_bee_patreon.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/kitten.geo.json",
+      "texture" : "resourcefulbees:textures/entity/kitten/bee.png",
       "title": "book.resourcefulbees.extras.patreon.kitten_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/nether_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/mushroom/nether_wart_bee.png",
       "title": "book.resourcefulbees.extras.patreon.nether_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/oreo_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/oreo/oreo_bee.png",
       "title": "book.resourcefulbees.extras.patreon.oreo_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/pigman_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/pigman/pigman_bee.png",
       "title": "book.resourcefulbees.extras.patreon.pigman_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/skeleton_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/skeleton/skeleton_bee.png",
       "title": "book.resourcefulbees.extras.patreon.skeleton_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/slime_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/slime/slime_bee.png",
       "title": "book.resourcefulbees.extras.patreon.slime_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/vanilla_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/queen.geo.json",
+      "texture" : "resourcefulbees:textures/entity/starry/starry_bee_primary_layer.png",
+      "layers" : [
+        {
+          "texture" : "resourcefulbees:textures/entity/starry/starry_bee_emissive.png",
+          "isGlowing" : true,
+          "color" : "#FFA500"
+        }
+      ],
+      "title": "book.resourcefulbees.extras.patreon.starry_bee"
+    },
+    {
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "minecraft:textures/entity/bee/bee.png",
       "title": "book.resourcefulbees.extras.patreon.vanilla_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/warped_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/mushroom/warped_alchemist_bee.png",
       "title": "book.resourcefulbees.extras.patreon.warped_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/wither_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/wither/wither_bee.png",
       "title": "book.resourcefulbees.extras.patreon.wither_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/yeti_bee_patreon.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/yeti.geo.json",
+      "texture" : "resourcefulbees:textures/entity/yeti/yeti_bee.png",
       "title": "book.resourcefulbees.extras.patreon.yeti_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/asexual_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/yeti.geo.json",
+      "texture" : "resourcefulbees:textures/entity/zombie/zombie_bee.png",
+      "title": "book.resourcefulbees.extras.patreon.zombie_bee"
+    },
+    {
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/pride/asexual_bee.png",
       "title": "book.resourcefulbees.extras.patreon.asexual_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/bi_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/pride/bi_bee.png",
       "title": "book.resourcefulbees.extras.patreon.bi_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/lesbian_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/pride/lesbian_bee.png",
       "title": "book.resourcefulbees.extras.patreon.lesbian_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/nb_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/pride/nb_bee.png",
       "title": "book.resourcefulbees.extras.patreon.nb_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/pan_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/pride/pan_bee.png",
       "title": "book.resourcefulbees.extras.patreon.pan_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/pride_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/pride/pride_bee.png",
       "title": "book.resourcefulbees.extras.patreon.pride_bee"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/trans_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture" : "resourcefulbees:textures/entity/pride/trans_bee.png",
       "title": "book.resourcefulbees.extras.patreon.trans_bee"
     }
   ]

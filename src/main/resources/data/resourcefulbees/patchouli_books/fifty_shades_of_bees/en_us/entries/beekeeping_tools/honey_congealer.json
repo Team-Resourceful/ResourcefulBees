@@ -1,0 +1,16 @@
+{
+  "name": "book.resourcefulbees.beekeeping_tools.honey_congealer",
+  "icon": "resourcefulbees:honey_congealer",
+  "category": "resourcefulbees:beekeeping_tools",
+  "sortnum": 10,
+  "pages": [
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.honey_congealer"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:honey_congealer"
+    }
+  ]
+}

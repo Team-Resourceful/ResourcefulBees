@@ -22,7 +22,7 @@
     },
     {
       "type": "resourcefulbees:geo_bee",
-      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "model": "resourcefulbees:geo/yeti.geo.json",
       "texture": "resourcefulbees:textures/entity/yeti/yeti_bee.png",
       "title": "book.resourcefulbees.extras.dev_bees.yeti_bee"
     },

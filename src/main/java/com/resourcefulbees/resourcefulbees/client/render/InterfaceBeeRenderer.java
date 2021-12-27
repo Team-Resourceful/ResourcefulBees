@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.resourcefulbees.resourcefulbees.client.render.patreon.LayerData;
+import com.resourcefulbees.resourcefulbees.client.render.patreon.PetBeeModel;
 import com.resourcefulbees.resourcefulbees.client.render.patreon.PetModelData;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
@@ -20,12 +21,11 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 public class InterfaceBeeRenderer implements IGeoRenderer<PetModelData> {
 
-
-    public static final InterfaceBeeProvider INSTANCE = new InterfaceBeeProvider();
+    private final PetBeeModel<PetModelData> instance = new PetBeeModel<>();
 
     @Override
     public GeoModelProvider<PetModelData> getGeoModelProvider() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override
@@ -34,6 +34,7 @@ public class InterfaceBeeRenderer implements IGeoRenderer<PetModelData> {
     }
 
     public void render(PetModelData bee, @NotNull MatrixStack stack, float partialTicks, int tickCount, int x, int y, float modelScale, float rotation) {
+        instance.setLivingAnimations(bee, bee.hashCode());
         stack.pushPose();
         stack.translate(x, y, 10 * modelScale);
         stack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
@@ -44,9 +45,8 @@ public class InterfaceBeeRenderer implements IGeoRenderer<PetModelData> {
         IRenderTypeBuffer.Impl buffer = Minecraft.getInstance().renderBuffers().bufferSource();
         IVertexBuilder vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(bee.getTexture()));
 
-        GeoModel model = bee.getModel().getModel(bee);
+        GeoModel model = instance.getModel(bee);
 
-        RenderSystem.enableBlend();
         render(model, bee, partialTicks,
                 null, stack, null, vertexConsumer,
                 200, OverlayTexture.pack(OverlayTexture.u(0f), OverlayTexture.v(false)),
@@ -78,19 +78,6 @@ public class InterfaceBeeRenderer implements IGeoRenderer<PetModelData> {
                     null, stack, null, vertexConsumer,
                     100, OverlayTexture.pack(OverlayTexture.u(0f), OverlayTexture.v(false)),
                     color.getR(), color.getG(), color.getB(), 1.0F);
-        }
-    }
-
-    public static class InterfaceBeeProvider extends GeoModelProvider<PetModelData> {
-
-        @Override
-        public ResourceLocation getModelLocation(PetModelData instance) {
-            return instance.getModelLocation();
-        }
-
-        @Override
-        public ResourceLocation getTextureLocation(PetModelData instance) {
-            return instance.getTexture();
         }
     }
 }

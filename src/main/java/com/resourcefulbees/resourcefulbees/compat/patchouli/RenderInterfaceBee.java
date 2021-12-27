@@ -28,6 +28,8 @@ public class RenderInterfaceBee implements ICustomComponent {
     private transient int xOffset;
     private transient int yOffset;
 
+
+    private final InterfaceBeeRenderer renderer = new InterfaceBeeRenderer();
     @Override
     public void build(int x, int y, int page) {
         this.xOffset = x;
@@ -36,7 +38,6 @@ public class RenderInterfaceBee implements ICustomComponent {
 
     @Override
     public void render(@NotNull MatrixStack matrix, @NotNull IComponentRenderContext context, float partialTicks, int mouseX, int mouseY) {
-        InterfaceBeeRenderer renderer = new InterfaceBeeRenderer();
         renderer.render(bee, matrix, partialTicks, context.getTicksInBook(), xOffset, yOffset, modelScale, -135);
     }
 
@@ -54,6 +55,7 @@ public class RenderInterfaceBee implements ICustomComponent {
         Set<LayerData> vars = element.isJsonArray() ? layers.asStream().map(v -> LayerData.CODEC.parse(JsonOps.INSTANCE, v.unwrap()).result()).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet()) : new LinkedHashSet<>();
 
         bee = new PetModelData(0,"UI", new ResourceLocation(geo), new ResourceLocation(tex), vars);
+
         modelScale = scale.asNumber().floatValue();
     }
 }
