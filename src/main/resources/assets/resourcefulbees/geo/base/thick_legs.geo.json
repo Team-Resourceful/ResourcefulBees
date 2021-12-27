@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.unknown",
+				"identifier": "geometry.thick_legs",
 				"texture_width": 64,
 				"texture_height": 64,
 				"visible_bounds_width": 3,
@@ -24,6 +24,38 @@
 					]
 				},
 				{
+					"name": "leftAntenna",
+					"parent": "torso",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [1.5, 7, -8], "size": [1, 2, 3], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "rightAntenna",
+					"parent": "torso",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-2.5, 7, -8], "size": [1, 2, 3], "uv": [0, 5]}
+					]
+				},
+				{
+					"name": "rightWing",
+					"parent": "body",
+					"pivot": [-1.5, 9, -3],
+					"cubes": [
+						{"origin": [-10.5, 9, -3], "size": [9, 0, 6], "uv": [34, 30]}
+					]
+				},
+				{
+					"name": "leftWing",
+					"parent": "body",
+					"pivot": [1.5, 9, -3],
+					"cubes": [
+						{"origin": [1.5, 9, -3], "size": [9, 0, 6], "uv": [34, 36], "mirror": true}
+					]
+				},
+				{
 					"name": "stinger",
 					"parent": "torso",
 					"pivot": [0, 5, 0],
@@ -32,43 +64,12 @@
 					]
 				},
 				{
-					"name": "leftAntenna",
-					"parent": "torso",
-					"pivot": [0, 7, -5],
-					"cubes": [
-						{"origin": [1.5, 7, -8], "size": [1, 2, 3], "uv": [2, 0]}
-					]
-				},
-				{
-					"name": "rightAntenna",
-					"parent": "torso",
-					"pivot": [0, 7, -5],
-					"cubes": [
-						{"origin": [-2.5, 7, -8], "size": [1, 2, 3], "uv": [2, 3]}
-					]
-				},
-				{
-					"name": "rightWing",
-					"parent": "body",
-					"pivot": [-1.5, 9, -3],
-					"cubes": [
-						{"origin": [-10.5, 9, -3], "size": [9, 0, 6], "uv": [0, 18]}
-					]
-				},
-				{
-					"name": "leftWing",
-					"parent": "body",
-					"pivot": [1.5, 9, -3],
-					"cubes": [
-						{"origin": [1.5, 9, -3], "size": [9, 0, 6], "uv": [0, 18], "mirror": true}
-					]
-				},
-				{
 					"name": "frontLegs",
 					"parent": "body",
 					"pivot": [1.5, 2, -2],
 					"cubes": [
-						{"origin": [-1.5, 0, -2], "size": [3, 2, 0], "uv": [28, 1]}
+						{"origin": [-1.5, 0, -2], "size": [1, 2, 1], "uv": [24, 0]},
+						{"origin": [0.5, 0, -2], "size": [1, 2, 1], "uv": [28, 0]}
 					]
 				},
 				{
@@ -76,7 +77,8 @@
 					"parent": "body",
 					"pivot": [1.5, 2, 0],
 					"cubes": [
-						{"origin": [-2.5, 0, 0], "size": [5, 2, 0], "uv": [27, 3]}
+						{"origin": [-2.5, 0, 0], "size": [1, 2, 1], "uv": [24, 3]},
+						{"origin": [1.5, 0, 0], "size": [1, 2, 1], "uv": [28, 3]}
 					]
 				},
 				{
@@ -84,23 +86,8 @@
 					"parent": "body",
 					"pivot": [1.5, 2, 2],
 					"cubes": [
-						{"origin": [-2.5, 0, 2], "size": [5, 2, 0], "uv": [27, 5]}
-					]
-				},
-				{
-					"name": "nose",
-					"parent": "body",
-					"pivot": [0, 26, 0],
-					"cubes": [
-						{"origin": [-1, 1, -6.5], "size": [2, 4, 2], "uv": [26, 25]}
-					]
-				},
-				{
-					"name": "cloaked",
-					"parent": "body",
-					"pivot": [0, 0, 0],
-					"cubes": [
-						{"origin": [-3.5, 2, -5], "size": [7, 7, 10], "inflate": 0.4, "uv": [0, 25]}
+						{"origin": [-2.5, 0, 2], "size": [1, 2, 1], "uv": [24, 6]},
+						{"origin": [1.5, 0, 2], "size": [1, 2, 1], "uv": [28, 6]}
 					]
 				}
 			]

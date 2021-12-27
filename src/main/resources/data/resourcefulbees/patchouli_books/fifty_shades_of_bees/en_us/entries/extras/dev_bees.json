@@ -9,13 +9,15 @@
       "text": "book.resourcefulbees.extras.dev_bees.1"
     },
     {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/oreo_bee.png",
-      "title": "book.resourcefulbees.extras.dev_bees.oreo_bee"
-    },
-    {
-      "type": "resourcefulbees:bee_gif",
-      "image": "resourcefulbees:textures/gui/patchouli/bee_gifs/kitten_bee.png",
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/base-nocloak.geo.json",
+      "texture": "resourcefulbees:textures/entity/custom/bee.png",
+      "layers" : [
+        {
+          "color": "#FFFFFF",
+          "texture": "resourcefulbees:textures/entity/custom/primary_layer.png"
+        }
+      ],
       "title": "book.resourcefulbees.extras.dev_bees.kitten_bee"
     },
     {

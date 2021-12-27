@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class PetBeeModel<T extends PetData> extends AnimatedGeoModel<T> {
+public class PetBeeLayerModel<T extends PetData> extends AnimatedGeoModel<T> {
 
     public GeoModel getModel(PetData object){
         return this.getModel(getModelLocation(object));

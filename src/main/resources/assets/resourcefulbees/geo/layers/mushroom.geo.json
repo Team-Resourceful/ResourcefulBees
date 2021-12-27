@@ -1,0 +1,69 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.mushroom",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "body",
+					"pivot": [0, 5, 0]
+				},
+				{
+					"name": "mushroom",
+					"parent": "body",
+					"pivot": [0, 5, 0]
+				},
+				{
+					"name": "frontMushroom1",
+					"parent": "mushroom",
+					"pivot": [-1.5, 9, 0],
+					"cubes": [
+						{"origin": [-9.5, 7, -4], "size": [16, 16, 0], "inflate": -2, "uv": [32, 48]}
+					]
+				},
+				{
+					"name": "frontMushroom2",
+					"parent": "frontMushroom1",
+					"pivot": [-1.5, 9, -2],
+					"rotation": [0, -90.00021, 0],
+					"cubes": [
+						{"origin": [-9.5, 7, -4], "size": [16, 16, 0], "inflate": -2, "uv": [32, 48]}
+					]
+				},
+				{
+					"name": "backMushroom1",
+					"parent": "mushroom",
+					"pivot": [2.5, 9, 4],
+					"rotation": [0, -45.00011, 0],
+					"cubes": [
+						{"origin": [-5.5, 7, 2], "size": [16, 16, 0], "inflate": -2, "uv": [0, 48]}
+					]
+				},
+				{
+					"name": "backMushroom2",
+					"parent": "backMushroom1",
+					"pivot": [2.5, 9, 4],
+					"rotation": [0, -90.00021, 0],
+					"cubes": [
+						{"origin": [-5.5, 7, 2], "size": [16, 16, 0], "inflate": -2, "uv": [0, 48]}
+					]
+				},
+				{
+					"name": "cloaked",
+					"parent": "body",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-3.5, 2, -5], "size": [7, 7, 10], "inflate": 0.4, "uv": [0, 25]}
+					]
+				}
+			]
+		}
+	]
+}

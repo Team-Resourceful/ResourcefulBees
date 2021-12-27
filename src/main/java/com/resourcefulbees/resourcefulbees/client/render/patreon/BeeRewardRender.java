@@ -58,7 +58,7 @@ public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, P
                 packedLightIn, OverlayTexture.NO_OVERLAY,
                 1f,1f,1f,1f);
 
-        for (LayerData layer : data.getLayers()) renderLayer(playerEntity, stack, buffer, layer, data, model, partialTicks, packedLightIn);
+        for (LayerData layer : data.getLayers()) renderLayer(playerEntity, stack, buffer, layer, data, modelProvider.getModel(layer), partialTicks, packedLightIn);
 
         stack.popPose();
     }

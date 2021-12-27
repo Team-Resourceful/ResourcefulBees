@@ -1,0 +1,64 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.witch",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "body",
+					"pivot": [0, 5, 0]
+				},
+				{
+					"name": "witch",
+					"parent": "body",
+					"pivot": [0, 5, 0],
+					"cubes": [
+						{"origin": [-3, 9, -4.5], "size": [6, 1, 6], "uv": [0, 57]}
+					]
+				},
+				{
+					"name": "hat1",
+					"parent": "witch",
+					"pivot": [0, 5, 0],
+					"rotation": [0, 0, -17.49813],
+					"cubes": [
+						{"origin": [1.8, 13.6, -2], "size": [1, 1, 1], "uv": [24, 55]}
+					]
+				},
+				{
+					"name": "hat2",
+					"parent": "witch",
+					"pivot": [0, 5, 0],
+					"rotation": [0, 0, -9.99811],
+					"cubes": [
+						{"origin": [0.2, 11.9, -2.5], "size": [2, 2, 2], "uv": [16, 53]}
+					]
+				},
+				{
+					"name": "hat3",
+					"parent": "witch",
+					"pivot": [0, 5, 0],
+					"rotation": [0, 0, -3.99925],
+					"cubes": [
+						{"origin": [-1.6, 9.3, -3.5], "size": [4, 3, 4], "uv": [0, 50]}
+					]
+				},
+				{
+					"name": "cloaked",
+					"parent": "body",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-3.5, 2, -5], "size": [7, 7, 10], "inflate": 0.4, "uv": [0, 25]}
+					]
+				}
+			]
+		}
+	]
+}
