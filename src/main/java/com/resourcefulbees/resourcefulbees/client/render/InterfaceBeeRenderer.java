@@ -38,7 +38,7 @@ public class InterfaceBeeRenderer implements IGeoRenderer<PetModelData> {
         stack.pushPose();
         stack.translate(x, y, 10 * modelScale);
         stack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-        stack.scale((20 * modelScale), (20 * modelScale), (20 * modelScale));
+        stack.scale(-(20 * modelScale), (20 * modelScale), (20 * modelScale));
         stack.mulPose(Vector3f.YP.rotationDegrees(rotation));
         stack.mulPose(Vector3f.XP.rotationDegrees(-10.0F));
 

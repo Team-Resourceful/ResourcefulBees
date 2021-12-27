@@ -38,7 +38,7 @@ public class RenderInterfaceBee implements ICustomComponent {
 
     @Override
     public void render(@NotNull MatrixStack matrix, @NotNull IComponentRenderContext context, float partialTicks, int mouseX, int mouseY) {
-        renderer.render(bee, matrix, partialTicks, context.getTicksInBook(), xOffset, yOffset, modelScale, -135);
+        renderer.render(bee, matrix, partialTicks, context.getTicksInBook(), xOffset, yOffset, modelScale, 135);
     }
 
     @Override

@@ -16,6 +16,12 @@
       "type" : "header",
       "text" : "#title",
       "centered" : true
+    },
+    {
+      "x": 0,
+      "y": 120,
+      "type" : "text",
+      "text" : "#text"
     }
   ]
 }

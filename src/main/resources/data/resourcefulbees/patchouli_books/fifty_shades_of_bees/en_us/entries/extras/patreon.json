@@ -10,12 +10,6 @@
     },
     {
       "type": "resourcefulbees:geo_bee",
-      "model": "resourcefulbees:geo/astronaut.geo.json",
-      "texture" : "resourcefulbees:textures/entity/astronaut/astronaut_bee.png",
-      "title": "book.resourcefulbees.extras.patreon.astronaut_bee"
-    },
-    {
-      "type": "resourcefulbees:geo_bee",
       "model": "resourcefulbees:geo/base-nocloak.geo.json",
       "texture": "resourcefulbees:textures/entity/custom/bee.png",
       "layers" : [
@@ -24,7 +18,8 @@
           "texture": "resourcefulbees:textures/entity/custom/primary_layer.png"
         }
       ],
-      "title": "book.resourcefulbees.extras.patreon.base_bee"
+      "title": "book.resourcefulbees.extras.patreon.base_bee",
+      "text" : "book.resourcefulbees.extras.patreon.base_bee.desc"
     },
     {
       "type": "resourcefulbees:geo_bee",
@@ -36,12 +31,18 @@
           "texture": "resourcefulbees:textures/entity/custom/primary_layer.png"
         },
         {
-          "color": "#rainbow",
+          "color": "rainbow",
           "isGlowing" : true,
           "texture": "resourcefulbees:textures/entity/custom/emissive_layer.png"
         }
       ],
       "title": "book.resourcefulbees.extras.patreon.rainbow_bee"
+    },
+    {
+      "type": "resourcefulbees:geo_bee",
+      "model": "resourcefulbees:geo/astronaut.geo.json",
+      "texture" : "resourcefulbees:textures/entity/astronaut/astronaut_bee.png",
+      "title": "book.resourcefulbees.extras.patreon.astronaut_bee"
     },
     {
       "type": "resourcefulbees:geo_bee",

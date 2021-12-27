@@ -590,6 +590,7 @@
 	"book.resourcefulbees.extras.dev_bees.yeti_bee" : "Yeti Bee",
 	"book.resourcefulbees.extras.dev_bees.starry_bee" : "Starry Bee",
 	"book.resourcefulbees.extras.dev_bees.abbee_bee" : "AbBee",
+	"book.resourcefulbees.extras.dev_bees.abbee_bee.desc" : "This bee was created by absent- via Patreon.",
 
 	"book.resourcefulbees.extras.patreon" : "Patreon Pet Bees",
 	"book.resourcefulbees.extras.patreon.1" : "Patreon Bees",
@@ -621,6 +622,7 @@
 	"book.resourcefulbees.extras.patreon.yeti_bee" : "Yeti Bee",
 	"book.resourcefulbees.extras.patreon.zombie_bee" : "Zombie Bee",
 
+	"book.resourcefulbees.extras.patreon.base_bee.desc": "This bee can be any color you want.",
 
 
 	"advancements.resourcefulbees.apiary_breed_time_upgrade.title": "Faster Breeding",

@@ -43,7 +43,8 @@
       "type": "resourcefulbees:geo_bee",
       "model": "resourcefulbees:geo/bunny.geo.json",
       "texture": "resourcefulbees:textures/entity/abbee/bee.png",
-      "title": "book.resourcefulbees.extras.dev_bees.abbee_bee"
+      "title": "book.resourcefulbees.extras.dev_bees.abbee_bee",
+      "text" : "book.resourcefulbees.extras.dev_bees.abbee_bee.desc"
     }
   ]
 }
