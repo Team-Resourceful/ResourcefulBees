@@ -487,7 +487,7 @@
 
 	"book.resourcefulbees.getting_started.keeping_bees" : "Keeping Bees",
 	"book.resourcefulbees.getting_started.keeping_bees.desc" : "We build Bee Houses.",
-	"book.resourcefulbees.getting_started.keeping_bees.text" : "Bees are nice little things but they have minds of their own, so you're going to want to make a place for them ",
+	"book.resourcefulbees.getting_started.keeping_bees.text" : "Bees are nice little things but they have minds of their own, so you're going to want to make a place for them.",
 
 	"book.resourcefulbees.getting_started.breeding_bees" : "Breeding Bees",
 	"book.resourcefulbees.getting_started.breeding_bees.desc" : "todo",
@@ -502,33 +502,50 @@
 	"book.resourcefulbees.beekeeping_tools.desc": "todo",
 
 	"book.resourcefulbees.beekeeping_tools.bee_jar" : "Bee Jar",
-	"book.resourcefulbees.beekeeping_tools.bee_jar.desc" : "todo",
-	"book.resourcefulbees.beekeeping_tools.bee_jar.text" : "todo",
+	"book.resourcefulbees.beekeeping_tools.bee_jar.text" : "Bee jars are able to hold a single bee, simply $(thing)Right Click$() on a bee to collect it.$(br2)Releasing bees is done via another $(thing)Right Click$().",
+	"book.resourcefulbees.beekeeping_tools.bee_jar.desc" : "Bee jars can also be renamed in an anvil to which will rename the bee inside.",
 
 	"book.resourcefulbees.beekeeping_tools.bee_box" : "Bee Box",
-	"book.resourcefulbees.beekeeping_tools.bee_box.desc" : "todo",
-	"book.resourcefulbees.beekeeping_tools.bee_box.text" : "todo",
+	"book.resourcefulbees.beekeeping_tools.bee_box.text" : "Bee boxes are able to hold up to 10 bees at a time, simply $(thing)Right Click$() on a bee to collect it. They can also collect bees from bee hives, nests, or apiaries, simply $(thing)Sneak Right Click$() on a nest to collect all bees inside.",
+	"book.resourcefulbees.beekeeping_tools.bee_box.desc" : "To release bees simply $(thing)Right Click$() to release a single bee, to release all bees at once use $(thing)Sneak Right Click$().",
+
+	"book.resourcefulbees.beekeeping_tools.beehives" : "Beehives",
+	"book.resourcefulbees.beekeeping_tools.beehives.text.1" : "Bees need places to live, these nests and hives can be upgraded to store even more bees and combs.",
+	"book.resourcefulbees.beekeeping_tools.beehives.title" : "Resourceful Bee Nests",
+	"book.resourcefulbees.beekeeping_tools.beehives.text.2" : "Bee Nests can be found around the world, you can pick them up without silk touch but if you use silk touch you will collect any bees inside.",
 
 	"book.resourcefulbees.beekeeping_tools.scraper" : "Scraper",
-	"book.resourcefulbees.beekeeping_tools.scraper.desc" : "todo",
 	"book.resourcefulbees.beekeeping_tools.scraper.text" : "todo",
 
 	"book.resourcefulbees.beekeeping_tools.smoker" : "Smoker",
-	"book.resourcefulbees.beekeeping_tools.smoker.desc" : "todo",
 	"book.resourcefulbees.beekeeping_tools.smoker.text" : "todo",
 
 	"book.resourcefulbees.beekeeping_tools.beepedia" : "Beepedia",
-	"book.resourcefulbees.beekeeping_tools.beepedia.desc" : "todo",
 	"book.resourcefulbees.beekeeping_tools.beepedia.text" : "todo",
 
 	"book.resourcefulbees.beekeeping_tools.honey_dipper" : "Honey Dipper",
-	"book.resourcefulbees.beekeeping_tools.honey_dipper.desc" : "todo",
 	"book.resourcefulbees.beekeeping_tools.honey_dipper.text" : "todo",
 
 	"book.resourcefulbees.beekeeping_tools.calming_potions" : "Calming Potions",
-	"book.resourcefulbees.beekeeping_tools.calming_potions.desc" : "todo",
 	"book.resourcefulbees.beekeeping_tools.calming_potions.text" : "todo",
 
+	"book.resourcefulbees.beekeeping_tools.calming_potions" : "Calming Potions",
+	"book.resourcefulbees.beekeeping_tools.calming_potions.text" : "todo",
+
+	"book.resourcefulbees.beekeeping_tools.ender_beecon" : "Ender Beecon",
+	"book.resourcefulbees.beekeeping_tools.ender_beecon.text" : "todo",
+
+	"book.resourcefulbees.beekeeping_tools.honey_tanks" : "Honey Tanks",
+	"book.resourcefulbees.beekeeping_tools.honey_tanks.text" : "todo",
+
+	"book.resourcefulbees.beekeeping_tools.bottomless_honey_pot" : "Bottomless Honey Pot",
+	"book.resourcefulbees.beekeeping_tools.bottomless_honey_pot.text" : "todo",
+
+	"book.resourcefulbees.beekeeping_tools.honey_congealer" : "Honey Congealer",
+	"book.resourcefulbees.beekeeping_tools.honey_congealer.text" : "todo",
+
+	"book.resourcefulbees.beekeeping_tools.honey_glass" : "Honey Glass",
+	"book.resourcefulbees.beekeeping_tools.honey_glass.text" : "todo",
 
 	"book.resourcefulbees.collecting_resources" : "Collecting Resources",
 	"book.resourcefulbees.collecting_resources.desc": "todo",

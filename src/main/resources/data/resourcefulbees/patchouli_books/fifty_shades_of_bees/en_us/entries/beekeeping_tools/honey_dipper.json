@@ -5,13 +5,14 @@
   "sortnum": 7,
   "pages": [
     {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.honey_dipper.text",
+      "title" : "book.resourcefulbees.beekeeping_tools.honey_dipper"
+    },
+    {
       "type": "crafting",
       "recipe": "resourcefulbees:honey_dipper",
       "text": "book.resourcefulbees.beekeeping_tools.honey_dipper.desc"
-    },
-    {
-      "type": "text",
-      "text": "book.resourcefulbees.beekeeping_tools.honey_dipper.text"
     }
   ]
 }

@@ -5,13 +5,13 @@
   "sortnum": 6,
   "pages": [
     {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.beepedia.text"
+    },
+    {
       "type": "crafting",
       "recipe": "resourcefulbees:beepedia",
       "text": "book.resourcefulbees.beekeeping_tools.beepedia.desc"
-    },
-    {
-      "type": "text",
-      "text": "book.resourcefulbees.beekeeping_tools.beepedia.text"
     }
   ]
 }
