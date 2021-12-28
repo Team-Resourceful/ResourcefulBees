@@ -487,7 +487,7 @@
 
 	"book.resourcefulbees.getting_started.keeping_bees" : "Keeping Bees",
 	"book.resourcefulbees.getting_started.keeping_bees.desc" : "We build Bee Houses.",
-	"book.resourcefulbees.getting_started.keeping_bees.text" : "todo",
+	"book.resourcefulbees.getting_started.keeping_bees.text" : "Bees are nice little things but they have minds of their own, so you're going to want to make a place for them ",
 
 	"book.resourcefulbees.getting_started.breeding_bees" : "Breeding Bees",
 	"book.resourcefulbees.getting_started.breeding_bees.desc" : "todo",
@@ -579,9 +579,11 @@
 	"book.resourcefulbees.ender_beecon.options.2": "todo",
 	"book.resourcefulbees.ender_beecon.options.3": "todo",
 
+	"book.resourcefulbees.extras.waxed_planks": "Waxed Planks",
+	"book.resourcefulbees.extras.waxed_planks.text": "Have excess wax? Why not make some waxed planks?",
 
 	"book.resourcefulbees.extras": "Extras",
-	"book.resourcefulbees.extras.desc": "todo",
+	"book.resourcefulbees.extras.desc": "Extra things that this mod provides.",
 
 	"book.resourcefulbees.extras.dev_bees" : "Easter Egg Bees",
 	"book.resourcefulbees.extras.dev_bees.1" : "Rare bees that can be found throughout the world.",
@@ -623,7 +625,6 @@
 	"book.resourcefulbees.extras.patreon.zombie_bee" : "Zombie Bee",
 
 	"book.resourcefulbees.extras.patreon.base_bee.desc": "This bee can be any color you want.",
-
 
 	"advancements.resourcefulbees.apiary_breed_time_upgrade.title": "Faster Breeding",
 	"advancements.resourcefulbees.apiary_breed_time_upgrade.description": "Obtain a Breed Time Upgrade",

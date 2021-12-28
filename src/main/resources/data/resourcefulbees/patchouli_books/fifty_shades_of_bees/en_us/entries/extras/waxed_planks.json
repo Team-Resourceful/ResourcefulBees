@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "book.resourcefulbees.extras.waxed_planks.1"
+      "text": "book.resourcefulbees.extras.waxed_planks.text"
     },
     {
       "type": "crafting",
