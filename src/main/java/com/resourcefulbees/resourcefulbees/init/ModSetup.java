@@ -10,13 +10,14 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.ShearsItem;
 import net.minecraft.resources.FolderPack;
 import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.ResourcePackInfo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +25,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -84,9 +86,19 @@ public class ModSetup {
     }
 
     public static void registerDispenserBehaviors() {
-        ShearsDispenserBehavior.setDefaultShearsDispenseBehavior(((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehavior(new ItemStack(Items.SHEARS)));
+        ForgeRegistries.ITEMS.getValues().stream()
+                .filter(Objects::nonNull)
+                .filter(ShearsItem.class::isInstance)
+                .forEach(item -> {
+                    ShearsDispenserBehavior behavior = new ShearsDispenserBehavior();
+                    behavior.setDefaultShearsBehavior(((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehavior(new ItemStack(item)));
+                    DispenserBlock.registerBehavior(item, behavior);
+                });
 
-        DispenserBlock.registerBehavior(net.minecraft.item.Items.SHEARS.asItem(), new ShearsDispenserBehavior());
+
+/*        ShearsDispenserBehavior.setDefaultShearsDispenseBehavior(((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehavior(new ItemStack(Items.SHEARS)));
+
+        DispenserBlock.registerBehavior(net.minecraft.item.Items.SHEARS.asItem(), new ShearsDispenserBehavior());*/
 
         DispenserBlock.registerBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
     }
