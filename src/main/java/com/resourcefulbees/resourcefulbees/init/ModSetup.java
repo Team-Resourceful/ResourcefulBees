@@ -94,12 +94,6 @@ public class ModSetup {
                     behavior.setDefaultShearsBehavior(((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehavior(new ItemStack(item)));
                     DispenserBlock.registerBehavior(item, behavior);
                 });
-
-
-/*        ShearsDispenserBehavior.setDefaultShearsDispenseBehavior(((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehavior(new ItemStack(Items.SHEARS)));
-
-        DispenserBlock.registerBehavior(net.minecraft.item.Items.SHEARS.asItem(), new ShearsDispenserBehavior());*/
-
         DispenserBlock.registerBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
     }
 

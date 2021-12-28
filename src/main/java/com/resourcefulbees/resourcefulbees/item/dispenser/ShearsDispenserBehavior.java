@@ -16,16 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
 
-/*    private static IDispenseItemBehavior DEFAULT_SHEARS_DISPENSE_BEHAVIOR;
-
-    public static IDispenseItemBehavior getDefaultShearsDispenseBehavior() {
-        return DEFAULT_SHEARS_DISPENSE_BEHAVIOR;
-    }
-
-    public static void setDefaultShearsDispenseBehavior(IDispenseItemBehavior defaultShearsDispenseBehavior) {
-        DEFAULT_SHEARS_DISPENSE_BEHAVIOR = defaultShearsDispenseBehavior;
-    }*/
-
     private IDispenseItemBehavior defaultShearsBehavior;
 
     public void setDefaultShearsBehavior(IDispenseItemBehavior defaultShearsBehavior) {
