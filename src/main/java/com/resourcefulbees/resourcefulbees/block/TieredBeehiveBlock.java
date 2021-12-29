@@ -5,7 +5,6 @@ import com.resourcefulbees.resourcefulbees.item.UpgradeItem;
 import com.resourcefulbees.resourcefulbees.lib.NBTConstants;
 import com.resourcefulbees.resourcefulbees.registry.ModItems;
 import com.resourcefulbees.resourcefulbees.tileentity.TieredBeehiveTileEntity;
-import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import com.resourcefulbees.resourcefulbees.utils.TooltipBuilder;
 import net.minecraft.block.BeehiveBlock;
 import net.minecraft.block.Block;
@@ -17,6 +16,7 @@ import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShearsItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.state.IntegerProperty;
@@ -97,7 +97,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         ItemStack itemstack = player.getItemInHand(handIn);
 
         if (state.getValue(HONEY_LEVEL) >= 5) {
-            boolean isShear = Config.ALLOW_SHEARS.get() && itemstack.getItem().is(BeeInfoUtils.getItemTag(SHEARS_TAG));
+            boolean isShear = Config.ALLOW_SHEARS.get() && itemstack.getItem() instanceof ShearsItem;
             boolean isScraper = itemstack.getItem().equals(ModItems.SCRAPER.get());
 
             if (isShear || isScraper) {
