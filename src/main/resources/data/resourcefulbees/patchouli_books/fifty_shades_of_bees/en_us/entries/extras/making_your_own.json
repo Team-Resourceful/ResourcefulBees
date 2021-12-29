@@ -2,7 +2,7 @@
   "name": "book.resourcefulbees.extras.making_your_own",
   "icon": "resourcefulbees:bee_jar{Entity:'resourcefulbees:oreo_bee'}",
   "category": "resourcefulbees:extras",
-  "sortnum": 4,
+  "sortnum": 3,
   "pages": [
     {
       "type": "text",

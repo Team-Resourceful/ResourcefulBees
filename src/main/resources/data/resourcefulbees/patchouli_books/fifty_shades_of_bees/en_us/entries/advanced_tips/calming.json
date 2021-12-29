@@ -1,6 +1,6 @@
 {
   "name": "book.resourcefulbees.advanced_tips.calming",
-  "icon": "resourcefulbees:scraper",
+  "icon": "minecraft:potion{Potion:'resourcefulbees:calming'}",
   "category": "resourcefulbees:advanced_tips",
   "sortnum": 2,
   "pages": [

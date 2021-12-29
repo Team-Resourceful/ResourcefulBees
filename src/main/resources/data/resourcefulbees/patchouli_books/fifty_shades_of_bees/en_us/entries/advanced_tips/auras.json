@@ -1,5 +1,5 @@
 {
-  "name": "book.resourcefulbees.getting_started.collecting_resources",
+  "name": "book.resourcefulbees.advanced_tips.collecting_resources",
   "icon": "minecraft:lingering_potion{Potion:'minecraft:healing'}",
   "category": "resourcefulbees:advanced_tips",
   "sortnum": 2,

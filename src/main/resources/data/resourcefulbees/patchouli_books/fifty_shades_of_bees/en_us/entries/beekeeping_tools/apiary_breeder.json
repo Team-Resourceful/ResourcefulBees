@@ -16,7 +16,7 @@
         },
         {
             "type": "crafting",
-            "recipe1": "resourcefulbees:apiary_breed_time_upgrade"
+            "recipe": "resourcefulbees:apiary_breed_time_upgrade"
         }
     ]
 }

@@ -1,0 +1,17 @@
+{
+    "name": "book.resourcefulbees.beekeeping_tools.honey_generator",
+    "icon": "resourcefulbees:centrifuge",
+    "category": "resourcefulbees:beekeeping_tools",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.beekeeping_tools.honey_generator.1",
+            "title": "book.resourcefulbees.beekeeping_tools.honey_generator"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:honey_generator"
+        }
+    ]
+}

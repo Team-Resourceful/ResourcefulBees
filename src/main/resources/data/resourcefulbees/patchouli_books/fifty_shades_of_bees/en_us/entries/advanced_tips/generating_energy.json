@@ -1,6 +1,6 @@
 {
-  "name": "book.resourcefulbees.getting_started.collecting_resources",
-  "icon": "resourcefulbees:scraper",
+  "name": "book.resourcefulbees.advanced_tips.generating_energy",
+  "icon": "resourcefulbees:honey_generator",
   "category": "resourcefulbees:advanced_tips",
   "sortnum": 2,
   "pages": [

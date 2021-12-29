@@ -1,8 +1,8 @@
 {
   "name": "book.resourcefulbees.extras.dev_bees",
-  "icon": "resourcefulbees:gold_flower",
+  "icon": "resourcefulbees:oreo_cookie",
   "category": "resourcefulbees:extras",
-  "sortnum": 4,
+  "sortnum": 1,
   "pages": [
     {
       "type": "resourcefulbees:geo_bee",
@@ -12,8 +12,9 @@
     },
     {
       "type": "spotlight",
-      "item" : "resourcefulbees:epic_oreo",
-      "text": "book.resourcefulbees.extras.dev_bees.1"
+      "item" : "resourcefulbees:oreo_cookie",
+      "text": "book.resourcefulbees.extras.dev_bees.1",
+      "link_recipe": "true"
     },
     {
       "type": "resourcefulbees:geo_bee",
@@ -23,8 +24,9 @@
     },
     {
       "type": "spotlight",
-      "item" : "resourcefulbees:catnip_honey_bottle",
-      "text": "book.resourcefulbees.extras.dev_bees.2"
+      "item" : "resourcefulbees:catnip_honey_bottle,resourcefulbees:catnip_honey_block,resourcefulbees:catnip_honeycomb,resourcefulbees:catnip_honeycomb_block,resourcefulbees:catnip_honey_fluid_bucket",
+      "text": "book.resourcefulbees.extras.dev_bees.2",
+      "link_recipe": "true"
     },
     {
       "type": "resourcefulbees:geo_bee",
@@ -35,7 +37,8 @@
     {
       "type": "spotlight",
       "item" : "minecraft:ice",
-      "text": "book.resourcefulbees.extras.dev_bees.3"
+      "text": "book.resourcefulbees.extras.dev_bees.3",
+      "link_recipe": "true"
     },
     {
       "type": "resourcefulbees:geo_bee",
@@ -52,8 +55,9 @@
     },
     {
       "type": "spotlight",
-      "item" : "resourcefulbees:starry_honey_block",
-      "text": "book.resourcefulbees.extras.dev_bees.4"
+      "item" : "resourcefulbees:starry_honey_block,resourcefulbees:starry_honey_bottle,resourcefulbees:starry_honeycomb,resourcefulbees:starry_honeycomb_block,resourcefulbees:starry_honey_fluid_bucket",
+      "text": "book.resourcefulbees.extras.dev_bees.4",
+      "link_recipe": "true"
     },
     {
       "type": "resourcefulbees:geo_bee",
@@ -65,7 +69,8 @@
     {
       "type": "spotlight",
       "item" : "resourcefulbees:strawbeerry_milkshake",
-      "text": "book.resourcefulbees.extras.dev_bees.5"
-    },
+      "text": "book.resourcefulbees.extras.dev_bees.5",
+      "link_recipe": "true"
+    }
   ]
 }

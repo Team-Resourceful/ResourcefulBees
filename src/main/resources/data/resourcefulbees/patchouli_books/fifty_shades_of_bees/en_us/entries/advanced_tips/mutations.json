@@ -1,6 +1,6 @@
 {
-  "name": "book.resourcefulbees.collecting_resources.mutations",
-  "icon": "minecraft:blaze_powder",
+  "name": "book.resourcefulbees.advanced_tips.mutations",
+  "icon": "minecraft:fermented_spider_eye",
   "category": "resourcefulbees:advanced_tips",
   "sortnum": 3,
   "pages": [
