@@ -1,0 +1,17 @@
+{
+  "name": "book.resourcefulbees.advanced_tips.calming",
+  "icon": "resourcefulbees:scraper",
+  "category": "resourcefulbees:advanced_tips",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "resourcefulbees:effect",
+      "id": "resourcefulbees:calming",
+      "text": "book.resourcefulbees.advanced_tips.calming.desc"
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.advanced_tips.calming.text"
+    }
+  ]
+}

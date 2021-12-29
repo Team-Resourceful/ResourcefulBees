@@ -499,32 +499,41 @@
 
 
 	"book.resourcefulbees.beekeeping_tools" : "Beekeeping Tools",
-	"book.resourcefulbees.beekeeping_tools.desc": "todo",
+	"book.resourcefulbees.beekeeping_tools.desc": "This section will go in depth about all of the items and blocks you can use to enhance your beekeeping journey.",
 
 	"book.resourcefulbees.beekeeping_tools.bee_jar" : "Bee Jar",
 	"book.resourcefulbees.beekeeping_tools.bee_jar.text" : "Bee jars are able to hold a single bee, simply $(thing)Right Click$() on a bee to collect it.$(br2)Releasing bees is done via another $(thing)Right Click$().",
-	"book.resourcefulbees.beekeeping_tools.bee_jar.desc" : "Bee jars can also be renamed in an anvil to which will rename the bee inside.",
+	"book.resourcefulbees.beekeeping_tools.bee_jar.desc" : "Bee jars can also be renamed in an $(item)Anvil$() to which will rename the bee inside.",
 
 	"book.resourcefulbees.beekeeping_tools.bee_box" : "Bee Box",
-	"book.resourcefulbees.beekeeping_tools.bee_box.text" : "Bee boxes are able to hold up to 10 bees at a time, simply $(thing)Right Click$() on a bee to collect it. They can also collect bees from bee hives, nests, or apiaries, simply $(thing)Sneak Right Click$() on a nest to collect all bees inside.",
+	"book.resourcefulbees.beekeeping_tools.bee_box.text" : "Bee boxes are able to hold up to 10 bees at a time, simply $(thing)Right Click$() on a bee to collect it. They can also collect bees from $(item)$(l:beekeeping_tools/beehives)Bee Hives, Nests, or Apiaries$(), simply $(thing)Sneak Right Click$() on a nest to collect all bees inside. $(br2)$(#900)Don't forget to smoke the hive first!$()",
 	"book.resourcefulbees.beekeeping_tools.bee_box.desc" : "To release bees simply $(thing)Right Click$() to release a single bee, to release all bees at once use $(thing)Sneak Right Click$().",
 
 	"book.resourcefulbees.beekeeping_tools.beehives" : "Beehives",
 	"book.resourcefulbees.beekeeping_tools.beehives.text.1" : "Bees need places to live, these nests and hives can be upgraded to store even more bees and combs.",
 	"book.resourcefulbees.beekeeping_tools.beehives.title" : "Resourceful Bee Nests",
-	"book.resourcefulbees.beekeeping_tools.beehives.text.2" : "Bee Nests can be found around the world, you can pick them up without silk touch but if you use silk touch you will collect any bees inside.",
+	"book.resourcefulbees.beekeeping_tools.beehives.text.2" : "Bee Nests can be found around the world, you can pick them up without $(thing)Silk Touch$() but if you use $(thing)Silk Touch$() you will collect any bees inside.",
 
 	"book.resourcefulbees.beekeeping_tools.scraper" : "Scraper",
-	"book.resourcefulbees.beekeeping_tools.scraper.text" : "todo",
+	"book.resourcefulbees.beekeeping_tools.scraper.text" : "The scaper is an unbreakable tool that can be used to harvest $(item)$(l:beekeeping_tools/beehives)Bee Hives$().$(br2)The scaper can also be used in a $(item)Dispencer$() the same way $(item)Shears$() can.",
 
 	"book.resourcefulbees.beekeeping_tools.smoker" : "Smoker",
-	"book.resourcefulbees.beekeeping_tools.smoker.text" : "todo",
+	"book.resourcefulbees.beekeeping_tools.smoker.text.1" : "The smoker is a simple tool, if you use it on a $(item)$(l:beekeeping_tools/beehives)Bee Hive$() it will smoke it, preventing bees from angering if you attempt to harvest or collect the bees with a $(item)$(l:beekeeping_tools:bee_box)Bee Box$().",
 
 	"book.resourcefulbees.beekeeping_tools.beepedia" : "Beepedia",
-	"book.resourcefulbees.beekeeping_tools.beepedia.text" : "todo",
+	"book.resourcefulbees.beekeeping_tools.beepedia.text" : "The Beepedia is an amazing tool that allows you to find out anything you should need to know about bees.$(br2)If you $(thing)Right Click$() on a bee with this item you will open that bee's page and record it's data for later.",
+	"book.resourcefulbees.beekeeping_tools.beepedia.desc" : "The information stored within the beepedia is saved per player and will be kept even if you lose the item.",
+
+	"book.resourcefulbees.beekeeping_tools.beepedia.text.2" : "",
+	"book.resourcefulbees.beekeeping_tools.beepedia.text.2" : "The Beepedia allows you to search for bees combs or honey via the search box.$(br2)You can also use special search terms to filter bees by certain criteria.",
+
+	"book.resourcefulbees.beekeeping_tools.beepedia.title.2" : "Special Search Terms",
+	"book.resourcefulbees.beekeeping_tools.beepedia.text.3" : "$(#F80)#discovered$()$(br)- Bees that you have discovered.$(br2)$(#F80)#unknown$()$(br)-  Bees that you have yet to discover.$(br2)$(#F80)#mutates$()$(br)- Bees that have mutations.$(br2)$(#F80)#breedable$()$(br)- Bees that can be bred.",
+	"book.resourcefulbees.beekeeping_tools.beepedia.text.4" : "$(#F80)#spawns$()$(br)- Bees that spawn in the world.$(br2)$(#F80)#aura$()$(br)- Bees that have a $(thing)$(l:advanced_tips/auras)Special Aura$().$(br2)$(#F80)#easter$()$(br)- Easter Egg bees added by devs or Patrens.$(br2)$(#F80)#special$()$(br)- Bees that likely have special methods to obtain.",
 
 	"book.resourcefulbees.beekeeping_tools.honey_dipper" : "Honey Dipper",
-	"book.resourcefulbees.beekeeping_tools.honey_dipper.text" : "todo",
+	"book.resourcefulbees.beekeeping_tools.honey_dipper.text" : "The honey Dipper is a special tool that allows you to direct bees.$(br2)You can set where a bee's hive or flower position is, allowing for you to split up bees if they all crowd around a single flower.",
+	"book.resourcefulbees.beekeeping_tools.honey_dipper.desc": "To change a bee's settings simply $(thing)Right Click$() on a bee and then $(thing)Right Click$() on a hive or flower.",
 
 	"book.resourcefulbees.beekeeping_tools.calming_potions" : "Calming Potions",
 	"book.resourcefulbees.beekeeping_tools.calming_potions.text" : "todo",

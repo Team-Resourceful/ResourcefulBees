@@ -1,17 +1,14 @@
 {
   "name": "book.resourcefulbees.getting_started.protecting_bees",
   "icon": "resourcefulbees:ender_beecon",
-  "category": "resourcefulbees:getting_started",
+  "category": "resourcefulbees:advanced_tips",
   "sortnum": 6,
   "pages": [
     {
-      "type": "image",
-      "images": [
-        "resourcefulbees:textures/gui/patchouli/getting_started/protecting_bees.png"
-        ],
+      "type": "resourcefulbees:animated_image",
+      "image": "resourcefulbees:textures/gui/patchouli/ender_beecon_options.png",
       "title": "book.resourcefulbees.getting_started.protecting_bees",
-      "text": "book.resourcefulbees.getting_started.protecting_bees.desc",
-      "border" : true
+      "border": true
     },
     {
       "type": "text",

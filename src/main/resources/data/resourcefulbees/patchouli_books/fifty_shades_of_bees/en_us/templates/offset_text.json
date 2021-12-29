@@ -1,0 +1,41 @@
+{
+  "processor" : "com.resourcefulbees.resourcefulbees.compat.patchouli.HiddenComponentProcessor",
+  "components": [
+    {
+      "x" : 58,
+      "y" : 0,
+      "type": "header",
+      "text": "#title",
+      "centered": true
+    },
+    {
+      "x" : -1,
+      "y" : -1,
+      "guard" : "#title->exists",
+      "type" : "separator"
+    },
+    {
+      "x" : 0,
+      "y" : 8,
+      "guard" : "#title->exists",
+      "type": "text",
+      "text": "#text"
+    },
+    {
+      "x" : 0,
+      "y" : -12,
+      "type": "text",
+      "guard": "#title->exists->inv",
+      "text": "#text"
+    },
+    {
+      "type" : "item",
+      "item" : "#items",
+      "group": "hidden",
+      "link_recipe": true,
+      "framed" : false,
+      "x" : 0,
+      "y" : 0
+    }
+  ]
+}

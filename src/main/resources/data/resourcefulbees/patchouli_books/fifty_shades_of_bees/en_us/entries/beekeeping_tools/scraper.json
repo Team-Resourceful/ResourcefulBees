@@ -11,8 +11,7 @@
     },
     {
       "type": "crafting",
-      "recipe": "resourcefulbees:scraper",
-      "text": "book.resourcefulbees.beekeeping_tools.scraper.desc"
+      "recipe": "resourcefulbees:scraper"
     }
   ]
 }

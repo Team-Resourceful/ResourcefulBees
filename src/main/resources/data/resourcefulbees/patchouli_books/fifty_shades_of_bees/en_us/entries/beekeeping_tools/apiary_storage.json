@@ -1,17 +1,18 @@
 {
-    "name": "book.resourcefulbees.apiary_category.apiary_storage",
+    "name": "book.resourcefulbees.beekeeping_tools.apiary_storage",
     "icon": "resourcefulbees:apiary_storage",
-    "category": "resourcefulbees:apiary",
-    "sortnum": 3,
+    "category": "resourcefulbees:beekeeping_tools",
+    "sortnum": 2,
     "pages": [
         {
             "type": "text",
-            "text": "book.resourcefulbees.apiary_category.apiary_storage.1"
+            "text": "book.resourcefulbees.beekeeping_tools.apiary_storage.1",
+            "title": "book.resourcefulbees.beekeeping_tools.apiary_storage"
         },
         {
             "type": "crafting",
             "recipe": "resourcefulbees:apiary_storage",
-            "text": "book.resourcefulbees.apiary_category.apiary_storage.2"
+            "text": "book.resourcefulbees.beekeeping_tools.apiary_storage.2"
         },
         {
             "type": "crafting",
