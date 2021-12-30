@@ -13,6 +13,7 @@
     "EntityAccessor",
     "LivingEntityAccessor",
     "MixinBeeEntity",
+    "MixinDispenserBlock",
     "MixinEnterBeehiveGoal",
     "MixinEntity",
     "MixinFindBeehiveGoal",
