@@ -18,26 +18,6 @@
             "type": "crafting",
             "recipe": "resourcefulbees:t3_apiary",
             "recipe2": "resourcefulbees:t4_apiary"
-        },
-        {
-            "type": "crafting",
-            "recipe": "resourcefulbees:apiary_breeder_upgrade",
-            "recipe2": "resourcefulbees:apiary_breed_time_upgrade"
-        },
-        {
-            "type": "crafting",
-            "recipe": "resourcefulbees:apiary_storage",
-            "text": "book.resourcefulbees.advanced_tips.apiaries.storage.1"
-        },
-        {
-            "type": "crafting",
-            "recipe": "resourcefulbees:iron_storage_upgrade",
-            "recipe2": "resourcefulbees:gold_storage_upgrade"
-        },
-        {
-            "type": "crafting",
-            "recipe": "resourcefulbees:diamond_storage_upgrade",
-            "recipe2": "resourcefulbees:emerald_storage_upgrade"
         }
     ]
 }

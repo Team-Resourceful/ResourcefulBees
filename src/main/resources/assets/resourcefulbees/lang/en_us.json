@@ -452,7 +452,6 @@
 	"block.resourcefulbees.honey_glass.tooltip": "Allows bees to fly through.",
 	"block.resourcefulbees.honey_glass_player.tooltip": "Allows players to pass through.",
 
-
 	"effect.resourcefulbees.calming": "Calming",
 	"item.minecraft.potion.effect.calming": "Calming Potion",
 	"item.minecraft.potion.effect.long_calming": "Calming Potion",
@@ -462,6 +461,7 @@
 	"item.minecraft.lingering_potion.effect.long_calming": "Lingering Potion of Calming",
 	"item.minecraft.tipped_arrow.effect.calming": "Arrow of Calming",
 	"item.minecraft.tipped_arrow.effect.long_calming": "Arrow of Calming",
+
 
 
 	"book.resourcefulbees.name": "Fifty Shades of Bees",
@@ -522,7 +522,7 @@
 
 	"book.resourcefulbees.advanced_tips.multiblock_centrifuges" : "Centrifuging Part 1",
 
-	"book.resourcefulbees.advanced_tips.multiblock_centrifuges" : "Centrifuging Part 2",
+	"book.resourcefulbees.advanced_tips.elite_centrifuges" : "Centrifuging Part 2",
 
 	"book.resourcefulbees.advanced_tips.generating_energy" : "Generating Energy",
 
@@ -569,10 +569,7 @@
 	"book.resourcefulbees.beekeeping_tools.honey_dipper.desc": "To change a bee's settings simply $(thing)Right Click$() on a bee and then $(thing)Right Click$() on a hive or flower.",
 
 	"book.resourcefulbees.beekeeping_tools.calming_potions" : "Calming Potions",
-	"book.resourcefulbees.beekeeping_tools.calming_potions.text" : "todo",
-
-	"book.resourcefulbees.beekeeping_tools.calming_potions" : "Calming Potions",
-	"book.resourcefulbees.beekeeping_tools.calming_potions.text" : "todo",
+	"book.resourcefulbees.beekeeping_tools.calming_potions.text" : "Calming Potions are potions that give things the calming effect, however the $(thing)$(l:advanced_tips/calming)Calming Effect$() has no effects on players but it does on neutral mobs so splash or lingering Calming potions are your best friend.",
 
 	"book.resourcefulbees.beekeeping_tools.ender_beecon" : "Ender Beecon",
 	"book.resourcefulbees.beekeeping_tools.ender_beecon.text" : "todo",
@@ -592,14 +589,14 @@
 	"book.resourcefulbees.beekeeping_tools.apiaries" : "Apiaries",
 	"book.resourcefulbees.beekeeping_tools.apiaries.text" : "todo",
 
-	"book.resourcefulbees.beekeeping_tools.honey_generator" : "Honey Generator",
-	"book.resourcefulbees.beekeeping_tools.honey_generator.text" : "todo",
-
 	"book.resourcefulbees.beekeeping_tools.apiary_breeder" : "Apiary Breeder",
 	"book.resourcefulbees.beekeeping_tools.apiary_breeder.text" : "todo",
 
 	"book.resourcefulbees.beekeeping_tools.apiary_storage" : "Apiary Storage",
 	"book.resourcefulbees.beekeeping_tools.apiary_storage.text" : "todo",
+
+	"book.resourcefulbees.beekeeping_tools.honey_generator" : "Honey Generator",
+	"book.resourcefulbees.beekeeping_tools.honey_generator.text" : "todo",
 
 	"book.resourcefulbees.beekeeping_tools.mechanical_centrifuge" : "Manual Centrifuge",
 	"book.resourcefulbees.beekeeping_tools.mechanical_centrifuge.text" : "todo",

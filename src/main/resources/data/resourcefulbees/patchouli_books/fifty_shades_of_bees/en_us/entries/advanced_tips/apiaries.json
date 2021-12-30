@@ -9,27 +9,6 @@
             "text": "book.resourcefulbees.advanced_tips.apiaries.1"
         },
         {
-            "type": "multiblock",
-            "multiblock": {
-                "mapping": {
-                    "A": "resourcefulbees:t1_apiary[facing=east]",
-                    "S": "resourcefulbees:apiary_storage",
-                    "B": "resourcefulbees:apiary_breeder",
-                    "V": "minecraft:glass,minecraft:oak_planks,minecraft:oak_log,minecraft:stone,minecraft:cobblestone"
-                },
-                "pattern": [
-                    ["VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV"],
-                    ["VVVVVVV", "V     V", "V     V", "V     V", "V     V", "V     V", "VVVVVVV"],
-                    ["VVVVVVV", "V     V", "V     V", "V     V", "V     V", "V     V", "VVVVVVV"],
-                    ["VVVAVVV", "V     V", "V     V", "V     V", "V     V", "V     V", "VVVVVVV"],
-                    ["SVVBVVV", "V     V", "V     V", "V  0  V", "V     V", "V     V", "VVVVVVV"]
-                ],
-                "symmetrical": true
-            },
-            "enable_visualize": true,
-            "text": "book.resourcefulbees.apiary_category.multiblock.5"
-        },
-        {
             "type": "text",
             "text": "book.resourcefulbees.advanced_tips.apiaries.2"
         },
