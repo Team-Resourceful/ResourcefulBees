@@ -1,66 +1,30 @@
 package com.teamresourceful.resourcefulbees.api.beedata.mutation;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
-import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
-import net.minecraft.core.Registry;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.Unmodifiable;
+import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.IMutation;
+import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.MutationCodec;
+import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-@Unmodifiable
-public class Mutation {
+public record Mutation(IMutation input, RandomCollection<IMutation> outputs) {
 
     public static final Codec<Mutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            MutationType.CODEC.fieldOf("type").orElse(MutationType.NONE).forGetter(Mutation::getType),
-            CodecUtils.BLOCK_SET_CODEC.fieldOf("input").orElse(new HashSet<>()).forGetter(Mutation::getBlockInputs),
-            Registry.ENTITY_TYPE.byNameCodec().optionalFieldOf("entityInput").forGetter(Mutation::getEntityInput),
-            CompoundTag.CODEC.optionalFieldOf("tag").forGetter(Mutation::getInputTag),
-            Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Mutation::getChance),
-            MutationOutput.CODEC.listOf().fieldOf("outputs").orElse(new ArrayList<>()).forGetter(Mutation::getOutputs)
+            MutationCodec.CODEC.fieldOf("input").forGetter(Mutation::input),
+            MutationCodec.RANDOM_COLLECTION_CODEC.fieldOf("outputs").forGetter(Mutation::outputs)
     ).apply(instance, Mutation::new));
 
-    private final MutationType type;
-    private final Set<Block> blockInputs;
-    private final Optional<EntityType<?>> entityInput;
-    private final Optional<CompoundTag> inputTag;
-    private final double chance;
-    private final List<MutationOutput> outputs;
+    public static final Codec<Map<IMutation, RandomCollection<IMutation>>> MUTATION_MAP_CODEC = Mutation.CODEC.listOf().comapFlatMap(Mutation::convertToMap, Mutation::convertToList);
 
-    public Mutation(MutationType type, Set<Block> blockInputs, Optional<EntityType<?>> entityInput, Optional<CompoundTag> inputTag, double chance, List<MutationOutput> outputs) {
-        this.type = type;
-        this.blockInputs = blockInputs;
-        this.entityInput = entityInput;
-        this.inputTag = inputTag;
-        this.chance = chance;
-        this.outputs = outputs;
+    private static DataResult<Map<IMutation, RandomCollection<IMutation>>> convertToMap(List<Mutation> list) {
+        return DataResult.success(list.stream().collect(Collectors.toMap(Mutation::input, Mutation::outputs)));
     }
 
-    public MutationType getType() {
-        return this.type;
-    }
-
-    public Set<Block> getBlockInputs() {
-        return blockInputs;
-    }
-
-    public Optional<EntityType<?>> getEntityInput() {
-        return entityInput;
-    }
-
-    public double getChance() {
-        return chance;
-    }
-
-    public List<MutationOutput> getOutputs() {
-        return this.outputs;
-    }
-
-    public Optional<CompoundTag> getInputTag() {
-        return inputTag;
+    private static List<Mutation> convertToList(Map<IMutation, RandomCollection<IMutation>> map) {
+        return map.entrySet().stream().map(entry -> new Mutation(entry.getKey(), entry.getValue())).collect(Collectors.toList());
     }
 }

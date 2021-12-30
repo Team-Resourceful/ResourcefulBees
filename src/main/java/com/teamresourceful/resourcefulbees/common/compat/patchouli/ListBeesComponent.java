@@ -1,21 +1,18 @@
-//TODO Reimplement when patchouli updates to 1.18 or move everything to wiki/custom book mod
-
-/*
 package com.teamresourceful.resourcefulbees.common.compat.patchouli;
 
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.IComponentRenderContext;
@@ -50,13 +47,13 @@ public class ListBeesComponent implements ICustomComponent {
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrixStack, @NotNull IComponentRenderContext context, float partialTicks, int mouseX, int mouseY) {
+    public void render(@NotNull PoseStack matrixStack, @NotNull IComponentRenderContext context, float partialTicks, int mouseX, int mouseY) {
         prevPage.active = page != 0;
         nextPage.active = page != pageCount;
         renderEntity(matrixStack, context, page);
     }
 
-    private void renderEntity(MatrixStack matrixStack, IComponentRenderContext context, int page) {
+    private void renderEntity(PoseStack matrixStack, IComponentRenderContext context, int page) {
         Pair<EntityType<?>, Optional<Entity>> bee = bees.get(page);
         Optional<Entity> entityOptional = bee.getRight();
         if (entityOptional.isPresent()) {
@@ -72,7 +69,7 @@ public class ListBeesComponent implements ICustomComponent {
         }
     }
 
-    public static void renderEntity(MatrixStack ms, Entity entity, World world, float x, float y, float rotation, float renderScale, float offset) {
+    public static void renderEntity(PoseStack ms, Entity entity, Level world, float x, float y, float rotation, float renderScale, float offset) {
         entity.level = world;
         ms.pushPose();
         ms.translate(x, y, 50.0D);
@@ -80,8 +77,8 @@ public class ListBeesComponent implements ICustomComponent {
         ms.translate(0.0D, offset, 0.0D);
         ms.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
         ms.mulPose(Vector3f.YP.rotationDegrees(rotation));
-        EntityRendererManager erd = Minecraft.getInstance().getEntityRenderDispatcher();
-        IRenderTypeBuffer.Impl immediate = Minecraft.getInstance().renderBuffers().bufferSource();
+        EntityRenderDispatcher erd = Minecraft.getInstance().getEntityRenderDispatcher();
+        MultiBufferSource.BufferSource immediate = Minecraft.getInstance().renderBuffers().bufferSource();
         erd.setRenderShadow(false);
         erd.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, ms, immediate, 15728880);
         erd.setRenderShadow(true);
@@ -89,17 +86,17 @@ public class ListBeesComponent implements ICustomComponent {
         ms.popPose();
     }
 
-    private Entity initEntity(EntityType<?> left, ClientWorld world) {
+    private Entity initEntity(EntityType<?> left, ClientLevel world) {
         return left.create(world);
     }
 
     @Override
     public void onDisplayed(IComponentRenderContext context) {
-        this.prevPage = new Button(0, 50, 10, 10, new StringTextComponent("<"), b -> {
+        this.prevPage = new Button(0, 50, 10, 10, new TextComponent("<"), b -> {
             page++;
             if (page > pageCount) page = pageCount;
         });
-        this.nextPage = new Button(20, 50, 10, 10, new StringTextComponent(">"), b -> {
+        this.nextPage = new Button(20, 50, 10, 10, new TextComponent(">"), b -> {
             page--;
             if (page < 0) page = 0;
         });
@@ -115,4 +112,3 @@ public class ListBeesComponent implements ICustomComponent {
         //not used
     }
 }
-*/

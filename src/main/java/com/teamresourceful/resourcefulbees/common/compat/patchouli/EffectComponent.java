@@ -1,19 +1,16 @@
-//TODO Reimplement when patchouli updates to 1.18 or move everything to wiki/custom book mod
-
-/*
 package com.teamresourceful.resourcefulbees.common.compat.patchouli;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.IComponentRenderContext;
@@ -29,7 +26,7 @@ public class EffectComponent implements ICustomComponent {
     private transient static final ResourceLocation EFFECT_BACKGROUND = new ResourceLocation("patchouli", "textures/gui/crafting.png");
     private transient int xOffset;
     private transient int yOffset;
-    private transient ITextComponent effectName;
+    private transient Component effectName;
 
     @Override
     public void build(int componentX, int componentY, int pageNum) {
@@ -37,28 +34,26 @@ public class EffectComponent implements ICustomComponent {
         yOffset = componentY;
     }
 
-    private ITextComponent getEffectName(Effect effect) {
-        return new TranslationTextComponent(effect.getDescriptionId());
+    private Component getEffectName(MobEffect effect) {
+        return new TranslatableComponent(effect.getDescriptionId());
     }
 
     @Override
-    public void render(@NotNull MatrixStack matrixStack, @NotNull IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
-        FontRenderer text = Minecraft.getInstance().font;
-        TextureManager manager = Minecraft.getInstance().getTextureManager();
+    public void render(@NotNull PoseStack matrixStack, @NotNull IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
+        Font text = Minecraft.getInstance().font;
         float width = text.width(effectName);
-        text.draw(matrixStack, effectName.copy().withStyle(TextFormatting.BLACK), xOffset - width / 2, yOffset, -1);
-        manager.bind(EFFECT_BACKGROUND);
-        AbstractGui.blit(matrixStack, xOffset - 32, yOffset + 6, 1, 99, 64, 32, 128, 256);
-        manager.bind(this.effectSprite.atlas().location());
-        AbstractGui.blit(matrixStack, xOffset - 9, yOffset + 13, 1, 18, 18, this.effectSprite);
+        text.draw(matrixStack, effectName.copy().withStyle(ChatFormatting.BLACK), xOffset - width / 2, yOffset, -1);
+        RenderUtils.bindTexture(EFFECT_BACKGROUND);
+        Gui.blit(matrixStack, xOffset - 32, yOffset + 6, 1, 99, 64, 32, 128, 256);
+        RenderUtils.bindTexture(this.effectSprite.atlas().location());
+        Gui.blit(matrixStack, xOffset - 9, yOffset + 13, 1, 18, 18, this.effectSprite);
     }
 
     @Override
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
         effectID = lookup.apply(effectID);
-        Effect effect = ForgeRegistries.POTIONS.getValue(new ResourceLocation(effectID.asString()));
+        MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effectID.asString()));
         this.effectSprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
         this.effectName = getEffectName(effect);
     }
 }
-*/

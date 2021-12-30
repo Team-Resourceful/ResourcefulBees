@@ -17,14 +17,18 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "input": ["minecraft:obsidian"],
-        "chance": 0.5,
-        "outputs": [
-          {"output": "minecraft:end_stone"}
+        "input": {
+          "type": "block",
+          "block": "minecraft:obsidian",
+          "chance": 0.5
+        },
+        "outputs" : [
+          {
+            "type": "block",
+            "block": "minecraft:end_stone"
+          }
         ]
       }
     ]

@@ -13,19 +13,22 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutationCount": 5,
     "mutations": [
       {
-        "type": "BLOCK",
-        "input": ["minecraft:cobblestone"],
-        "outputs": [
+        "input": {
+          "type": "block",
+          "block": "minecraft:cobblestone"
+        },
+        "outputs" : [
           {
-            "output": "minecraft:mossy_cobblestone",
+            "type": "block",
+            "block": "minecraft:mossy_cobblestone",
             "weight": 99
           },
           {
-            "output": "minecraft:chest",
+            "type": "block",
+            "block": "minecraft:chest",
             "weight": 1,
             "tag": {
               "LootTable": "minecraft:chests/simple_dungeon"

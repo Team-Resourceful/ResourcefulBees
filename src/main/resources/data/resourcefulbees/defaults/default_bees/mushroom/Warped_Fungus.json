@@ -22,18 +22,26 @@
     "mutationCount": 15,
     "mutations": [
       {
-        "type" : "BLOCK",
-        "input": ["minecraft:brown_mushroom"],
+        "input": {
+          "type": "block",
+          "block": "minecraft:brown_mushroom"
+        },
         "outputs" : [
-          {"output": "minecraft:warped_fungus"}
+          {
+            "type": "block",
+            "block": "minecraft:warped_fungus"
+          }
         ]
       },
       {
-        "type": "ENTITY",
-        "entityInput": "minecraft:zoglin",
-        "outputs": [
+        "input": {
+          "type": "entity",
+          "entity": "minecraft:zoglin"
+        },
+        "outputs" : [
           {
-            "output": "minecraft:hoglin",
+            "type": "entity",
+            "entity": "minecraft:hoglin",
             "tag": {
               "IsImmuneToZombification": true
             }

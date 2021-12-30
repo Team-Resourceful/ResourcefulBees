@@ -13,14 +13,18 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "input": ["minecraft:honey_block"],
-        "chance": 0.8,
+        "input": {
+          "type": "block",
+          "block": "minecraft:honey_block",
+          "chance": 0.8
+        },
         "outputs": [
-          {"output": "minecraft:slime_block"}
+          {
+            "type": "block",
+            "block": "minecraft:slime_block"
+          }
         ]
       }
     ]

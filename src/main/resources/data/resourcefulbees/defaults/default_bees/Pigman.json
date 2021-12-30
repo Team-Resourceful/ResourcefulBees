@@ -13,14 +13,21 @@
     }
   },
   "MutationData": {
-    "hasMutation": true,
     "mutations" : [
       {
-        "type": "BLOCK",
-        "input": ["minecraft:netherrack"],
+        "input": {
+          "type": "block",
+          "block": "minecraft:netherrack"
+        },
         "outputs": [
-          {"output": "minecraft:glowstone", "weight": 10},
-          {"output": "minecraft:cobblestone", "weight": 10}
+          {
+            "type": "block",
+            "block": "minecraft:glowstone"
+          },
+          {
+            "type": "block",
+            "block": "minecraft:cobblestone"
+          }
         ]
       }
     ]

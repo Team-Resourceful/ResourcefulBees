@@ -2,8 +2,6 @@ package com.teamresourceful.resourcefulbees.common.utils;
 
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.EntityMutation;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.ItemMutation;
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
@@ -15,11 +13,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.common.util.LazyOptional;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,34 +48,6 @@ public class BeepediaUtils {
 
     public static TranslatableComponent getLightName(LightLevel light) {
         return light.getDisplay();
-    }
-
-    public static List<EntityMutation> getMutationsContaining(CustomBeeData beeData) {
-        List<EntityMutation> mutations = new LinkedList<>();
-        BeeRegistry.getRegistry().getBees().forEach((s, bee) ->  bee.getMutationData().getEntityMutations().forEach((entityType, randomCollection) ->  {
-            if (entityType.getRegistryName() != null && entityType.getRegistryName().equals(beeData.getRegistryID())) {
-                mutations.add(new EntityMutation(BeeInfoUtils.getEntityType(beeData.getRegistryID()), entityType, randomCollection, bee.getMutationData().getMutationCount()));
-            } else {
-                randomCollection.forEach(entityOutput -> {
-                    if (entityOutput.getEntityType().getRegistryName() != null && entityOutput.getEntityType().getRegistryName().equals(beeData.getRegistryID())) {
-                        mutations.add(new EntityMutation(beeData.getEntityType(), entityType, randomCollection, bee.getMutationData().getMutationCount()));
-                    }
-                });
-            }
-        }));
-        return mutations;
-    }
-
-    public static List<ItemMutation> getItemMutationsContaining(CustomBeeData beeData) {
-        List<ItemMutation> mutations = new LinkedList<>();
-        BeeRegistry.getRegistry().getBees().forEach((s, beeData1) ->   //THIS MAY BE BROKE AND NEED FIXING!
-                beeData1.getMutationData().getItemMutations().forEach((block, randomCollection) ->  randomCollection.forEach(itemOutput -> {
-                    if (itemOutput.getItem() == SpawnEggItem.byId(beeData.getEntityType())) {
-                        mutations.add(new ItemMutation(BeeInfoUtils.getEntityType(beeData1.getRegistryID()), block, randomCollection, beeData1.getMutationData().getMutationCount()));
-                    }
-                }))
-        );
-        return mutations;
     }
 
     public static List<BeeFamily> getChildren(CustomBeeData parent) {

@@ -110,7 +110,7 @@ public class JEICompat implements IModPlugin {
 
                 stats.append(aqua).append(" Has Mutation: ").append(purple).append(StringUtils.capitalize(String.valueOf(customBee.getMutationData().hasMutation()))).append("\n");
                 if (customBee.getMutationData().hasMutation()) {
-                    stats.append(aqua).append(" Mutation Count: ").append(purple).append(StringUtils.capitalize(String.valueOf(customBee.getMutationData().getMutationCount()))).append("\n");
+                    stats.append(aqua).append(" Mutation Count: ").append(purple).append(StringUtils.capitalize(String.valueOf(customBee.getMutationData().mutationCount()))).append("\n");
                 }
 
                 stats.append(aqua).append(" Is Breedable: ").append(purple).append(StringUtils.capitalize(String.valueOf(customBee.getBreedData().hasParents()))).append("\n");
