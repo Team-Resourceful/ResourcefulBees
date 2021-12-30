@@ -2,9 +2,13 @@ package com.resourcefulbees.resourcefulbees.block;
 
 import com.resourcefulbees.resourcefulbees.fluids.HoneyFlowingFluid;
 import com.resourcefulbees.resourcefulbees.tileentity.HoneyCongealerTileEntity;
+import com.resourcefulbees.resourcefulbees.tileentity.HoneyTankTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.GlassBottleItem;
+import net.minecraft.item.HoneyBottleItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -39,10 +43,21 @@ public class HoneyCongealer extends Block {
     @Override
     public @NotNull ActionResultType use(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult blockRayTraceResult) {
         TileEntity tileEntity = world.getBlockEntity(pos);
+        ItemStack heldItem = player.getItemInHand(hand);
+
+        boolean usingHoney = heldItem.getItem() instanceof HoneyBottleItem;
+        boolean usingBottle = heldItem.getItem() instanceof GlassBottleItem;
 
         if (tileEntity instanceof HoneyCongealerTileEntity) {
+            HoneyCongealerTileEntity tank = (HoneyCongealerTileEntity) tileEntity;
             if (!world.isClientSide) {
-                CentrifugeBlock.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+                if (usingBottle) {
+                    tank.fillBottle(player, hand);
+                } else if (usingHoney) {
+                    tank.emptyBottle(player, hand);
+                } else {
+                    CentrifugeBlock.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+                }
             }
             return ActionResultType.SUCCESS;
         }
