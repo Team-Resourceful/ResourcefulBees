@@ -2,11 +2,12 @@
   "name": "book.resourcefulbees.beekeeping_tools.bottomless_honey_pot",
   "icon": "resourcefulbees:bottomless_honey_pot",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 9,
+  "sortnum": 11,
   "pages": [
     {
       "type": "text",
-      "text": "book.resourcefulbees.extras.bottomless_honey_pot"
+      "text": "book.resourcefulbees.extras.bottomless_honey_pot",
+      "title": "book.resourcefulbees.beekeeping_tools.bottomless_honey_pot"
     },
     {
       "type": "crafting",

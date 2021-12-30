@@ -5,13 +5,35 @@
   "sortnum": 6,
   "pages": [
     {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.beepedia.text",
+      "title" : "book.resourcefulbees.beekeeping_tools.beepedia"
+    },
+    {
       "type": "crafting",
       "recipe": "resourcefulbees:beepedia",
       "text": "book.resourcefulbees.beekeeping_tools.beepedia.desc"
     },
     {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/beekeeping_tools/beepedia_search.png"
+      ],
+      "title": "book.resourcefulbees.beekeeping_tools.beepedia",
+      "border" : true
+    },
+    {
       "type": "text",
-      "text": "book.resourcefulbees.beekeeping_tools.beepedia.text"
+      "text": "book.resourcefulbees.beekeeping_tools.beepedia.text.2"
+    },
+    {
+      "type": "text",
+      "title": "book.resourcefulbees.beekeeping_tools.beepedia.title.2",
+      "text": "book.resourcefulbees.beekeeping_tools.beepedia.text.3"
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.beepedia.text.4"
     }
   ]
 }

@@ -15,7 +15,7 @@ public class HiddenComponentProcessor implements IComponentProcessor {
 
     @Override
     public IVariable process(String key) {
-        if (lookup.has(key)){
+        if (lookup.has(key)) {
             return lookup.get(key);
         }
         return IVariable.empty();

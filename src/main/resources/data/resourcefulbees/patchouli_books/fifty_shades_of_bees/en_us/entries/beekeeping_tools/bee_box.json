@@ -5,14 +5,15 @@
   "sortnum": 2,
   "pages": [
     {
+      "type": "resourcefulbees:item_link",
+      "items": "resourcefulbees:crafting_bee_box",
+      "text": "book.resourcefulbees.beekeeping_tools.bee_box.text",
+      "title": "book.resourcefulbees.beekeeping_tools.bee_box"
+    },
+    {
       "type": "crafting",
       "recipe": "resourcefulbees:bee_box",
       "text": "book.resourcefulbees.beekeeping_tools.bee_box.desc"
-    },
-    {
-      "type": "resourcefulbees:item_link",
-      "items": "resourcefulbees:crafting_bee_box",
-      "text": "book.resourcefulbees.beekeeping_tools.bee_box.text"
     }
   ]
 }

@@ -1,0 +1,22 @@
+{
+    "name": "book.resourcefulbees.beekeeping_tools.apiary_breeder",
+    "icon": "resourcefulbees:apiary_breeder",
+    "category": "resourcefulbees:beekeeping_tools",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.beekeeping_tools.apiary_breeder.1",
+            "title": "book.resourcefulbees.beekeeping_tools.apiary_breeder"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:apiary_breeder",
+            "recipe2": "resourcefulbees:apiary_breeder_upgrade"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:apiary_breed_time_upgrade"
+        }
+    ]
+}

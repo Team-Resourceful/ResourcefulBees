@@ -65,17 +65,19 @@ public class ButtonList {
         for (String search : toSearch.split(" ")) {
             if (search.startsWith("#")) {
                 if (b instanceof BeePage) {
-                    if ("#discovered".contains(search.toLowerCase(Locale.ENGLISH))  && ((BeePage) b).beeUnlocked) {
+                    if ("#discovered".contains(search.toLowerCase(Locale.ENGLISH)) && ((BeePage) b).beeUnlocked) {
                         found = true;
                     } else if ("#unknown".contains(search.toLowerCase(Locale.ENGLISH)) && !((BeePage) b).beeUnlocked) {
                         found = true;
-                    }else if ("#mutates".contains(search.toLowerCase(Locale.ENGLISH)) && ((BeePage) b).beeData.getMutationData().hasMutation()){
+                    } else if ("#mutates".contains(search.toLowerCase(Locale.ENGLISH)) && ((BeePage) b).beeData.getMutationData().hasMutation()) {
                         found = true;
                     } else if ("#breedable".contains(search.toLowerCase(Locale.ENGLISH)) && ((BeePage) b).beeData.getBreedData().isBreedable()) {
                         found = true;
                     } else if ("#spawns".contains(search.toLowerCase(Locale.ENGLISH)) && ((BeePage) b).beeData.getSpawnData().canSpawnInWorld()) {
                         found = true;
                     } else if ("#easter".contains(search.toLowerCase(Locale.ENGLISH)) && ((BeePage) b).beeData.isEasterEggBee()) {
+                        found = true;
+                    } else if ("#aura".contains(search.toLowerCase(Locale.ENGLISH)) && ((BeePage) b).beeData.getTraitData().hasBeeAuras()) {
                         found = true;
                     } else if ("#special".contains(search.toLowerCase(Locale.ENGLISH)) && !((BeePage) b).beeData.getSpawnData().canSpawnInWorld() && !((BeePage) b).beeData.getBreedData().isBreedable()) {
                         found = true;

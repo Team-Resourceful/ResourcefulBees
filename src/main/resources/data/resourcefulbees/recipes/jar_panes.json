@@ -6,10 +6,10 @@
     "GGG"
   ],
   "key": {
-    "G": { "tag": "forge:glass/colorless" }
+    "G": { "tag": "forge:glass_panes/colorless" }
   },
   "result": {
     "item": "resourcefulbees:bee_jar",
-    "count" : 8
+    "count": 3
   }
 }

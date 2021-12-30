@@ -1,24 +1,12 @@
 {
-    "name": "book.resourcefulbees.apiary_category.multiblock",
+    "name": "book.resourcefulbees.advanced_tips.apiaries",
     "icon": "resourcefulbees:t1_apiary",
-    "category": "resourcefulbees:apiary",
-    "sortnum": 1,
+    "category": "resourcefulbees:advanced_tips",
+    "sortnum": 2,
     "pages": [
         {
             "type": "text",
-            "text": "book.resourcefulbees.apiary_category.multiblock.1"
-        },
-        {
-            "type": "text",
-            "text": "book.resourcefulbees.apiary_category.multiblock.2"
-        },
-        {
-            "type": "text",
-            "text": "book.resourcefulbees.apiary_category.multiblock.3"
-        },
-        {
-            "type": "text",
-            "text": "book.resourcefulbees.apiary_category.multiblock.4"
+            "text": "book.resourcefulbees.advanced_tips.apiaries.1"
         },
         {
             "type": "multiblock",
@@ -44,11 +32,15 @@
         },
         {
             "type": "text",
-            "text": "book.resourcefulbees.apiary_category.multiblock.6"
+            "text": "book.resourcefulbees.advanced_tips.apiaries.2"
         },
         {
             "type": "text",
-            "text": "book.resourcefulbees.apiary_category.multiblock.7"
+            "text": "book.resourcefulbees.advanced_tips.apiaries.3"
+        },
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.advanced_tips.apiaries.4"
         }
     ]
 }

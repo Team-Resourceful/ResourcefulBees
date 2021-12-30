@@ -1,0 +1,17 @@
+{
+    "name": "book.resourcefulbees.beekeeping_tools.mechanical_centrifuge",
+    "icon": "resourcefulbees:mechanical_centrifuge",
+    "category": "resourcefulbees:beekeeping_tools",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "text",
+            "text": "book.resourcefulbees.beekeeping_tools.mechanical_centrifuge.1",
+            "title": "book.resourcefulbees.beekeeping_tools.mechanical_centrifuge"
+        },
+        {
+            "type": "crafting",
+            "recipe": "resourcefulbees:mechanical_centrifuge"
+        }
+    ]
+}

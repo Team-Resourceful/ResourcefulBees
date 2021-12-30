@@ -1,18 +1,20 @@
 {
   "name": "book.resourcefulbees.extras.dev_bees",
-  "icon": "resourcefulbees:gold_flower",
+  "icon": "resourcefulbees:oreo_cookie",
   "category": "resourcefulbees:extras",
-  "sortnum": 4,
+  "sortnum": 1,
   "pages": [
-    {
-      "type": "text",
-      "text": "book.resourcefulbees.extras.dev_bees.1"
-    },
     {
       "type": "resourcefulbees:geo_bee",
       "model": "resourcefulbees:geo/base-nocloak.geo.json",
       "texture": "resourcefulbees:textures/entity/oreo/oreo_bee.png",
       "title": "book.resourcefulbees.extras.dev_bees.oreo_bee"
+    },
+    {
+      "type": "spotlight",
+      "item" : "resourcefulbees:oreo_cookie",
+      "text": "book.resourcefulbees.extras.dev_bees.1",
+      "link_recipe": "true"
     },
     {
       "type": "resourcefulbees:geo_bee",
@@ -21,10 +23,22 @@
       "title": "book.resourcefulbees.extras.dev_bees.kitten_bee"
     },
     {
+      "type": "spotlight",
+      "item" : "resourcefulbees:catnip_honey_bottle,resourcefulbees:catnip_honey_block,resourcefulbees:catnip_honeycomb,resourcefulbees:catnip_honeycomb_block,resourcefulbees:catnip_honey_fluid_bucket",
+      "text": "book.resourcefulbees.extras.dev_bees.2",
+      "link_recipe": "true"
+    },
+    {
       "type": "resourcefulbees:geo_bee",
       "model": "resourcefulbees:geo/yeti.geo.json",
       "texture": "resourcefulbees:textures/entity/yeti/yeti_bee.png",
       "title": "book.resourcefulbees.extras.dev_bees.yeti_bee"
+    },
+    {
+      "type": "spotlight",
+      "item" : "minecraft:ice",
+      "text": "book.resourcefulbees.extras.dev_bees.3",
+      "link_recipe": "true"
     },
     {
       "type": "resourcefulbees:geo_bee",
@@ -40,11 +54,23 @@
       "title": "book.resourcefulbees.extras.dev_bees.starry_bee"
     },
     {
+      "type": "spotlight",
+      "item" : "resourcefulbees:starry_honey_block,resourcefulbees:starry_honey_bottle,resourcefulbees:starry_honeycomb,resourcefulbees:starry_honeycomb_block,resourcefulbees:starry_honey_fluid_bucket",
+      "text": "book.resourcefulbees.extras.dev_bees.4",
+      "link_recipe": "true"
+    },
+    {
       "type": "resourcefulbees:geo_bee",
       "model": "resourcefulbees:geo/bunny.geo.json",
       "texture": "resourcefulbees:textures/entity/abbee/bee.png",
       "title": "book.resourcefulbees.extras.dev_bees.abbee_bee",
       "text" : "book.resourcefulbees.extras.dev_bees.abbee_bee.desc"
+    },
+    {
+      "type": "spotlight",
+      "item" : "resourcefulbees:strawbeerry_milkshake",
+      "text": "book.resourcefulbees.extras.dev_bees.5",
+      "link_recipe": "true"
     }
   ]
 }

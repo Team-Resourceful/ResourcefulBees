@@ -6,7 +6,7 @@
     "CHC"
   ],
   "key": {
-    "H": { "item": "minecraft:honey_block" },
+    "H": { "tag": "resourcefulbees:resourceful_honey_block" },
     "B": { "tag": "minecraft:planks" },
     "C": { "tag": "resourcefulbees:resourceful_honeycomb_block"}
   },

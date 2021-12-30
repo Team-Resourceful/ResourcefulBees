@@ -60,7 +60,7 @@ public class BeeBox extends Item {
             if ((worldIn.getBlockEntity(pos) instanceof ApiaryTileEntity ||
                     worldIn.getBlockEntity(pos) instanceof BeehiveTileEntity) &&
                     context.getPlayer().isShiftKeyDown()) {
-                return stealBees(worldIn, stack, pos);
+                return stealBees(player, worldIn, stack, pos);
             }
             if (!isFilled(stack)) return ActionResultType.FAIL;
             if (context.getPlayer().isShiftKeyDown()) {
@@ -103,7 +103,7 @@ public class BeeBox extends Item {
         else stack.setTag(null);
     }
 
-    private ActionResultType stealBees(World worldIn, ItemStack stack, BlockPos pos) {
+    private ActionResultType stealBees(PlayerEntity player, World worldIn, ItemStack stack, BlockPos pos) {
         if (isTemp) return ActionResultType.FAIL;
         TileEntity tile = worldIn.getBlockEntity(pos);
 
@@ -119,6 +119,7 @@ public class BeeBox extends Item {
         if (tile instanceof ApiaryTileEntity) {
             ApiaryTileEntity apiary = (ApiaryTileEntity) tile;
             Map<String, ApiaryTileEntity.ApiaryBee> bees = apiary.bees;
+            if (apiary.bees.isEmpty()) return ActionResultType.FAIL;
             for (int i = 0; i < space; i++) {
                 if (apiary.bees.isEmpty()) break;
                 ApiaryTileEntity.ApiaryBee bee = bees.remove(bees.entrySet().iterator().next().getKey());
@@ -128,6 +129,11 @@ public class BeeBox extends Item {
             }
         } else if (tile instanceof BeehiveTileEntity) {
             BeehiveTileEntity hive = (BeehiveTileEntity) tile;
+            if (hive.stored.isEmpty()) return ActionResultType.FAIL;
+            if (!hive.isSedated()) {
+                hive.emptyAllLivingFromHive(player, worldIn.getBlockState(pos), BeehiveTileEntity.State.EMERGENCY);
+                return ActionResultType.SUCCESS;
+            }
             for (int i = 0; i < space; i++) {
                 Iterator<BeehiveTileEntity.Bee> beeIterator = hive.stored.listIterator();
                 if (beeIterator.hasNext()) {

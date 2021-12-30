@@ -5,14 +5,18 @@
   "sortnum": 5,
   "pages": [
     {
-      "type": "crafting",
-      "recipe": "resourcefulbees:bellow",
-      "recipe2": "resourcefulbees:smoker_can"
+      "type" : "text",
+      "text" : "book.resourcefulbees.beekeeping_tools.smoker.text.1",
+      "title" : "book.resourcefulbees.beekeeping_tools.smoker"
     },
     {
       "type": "crafting",
-      "recipe": "resourcefulbees:smoker",
-      "text": "book.resourcefulbees.beekeeping_tools.smoker.text"
+      "recipe": "resourcefulbees:smoker"
+    },
+    {
+      "type": "crafting",
+      "recipe" : "resourcefulbees:bellow",
+      "recipe2": "resourcefulbees:smoker_can"
     }
   ]
 }

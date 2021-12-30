@@ -1,0 +1,12 @@
+{
+  "name": "book.resourcefulbees.extras.making_your_own",
+  "icon": "resourcefulbees:bee_jar{Entity:'resourcefulbees:oreo_bee'}",
+  "category": "resourcefulbees:extras",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.extras.making_your_own.1"
+    }
+  ]
+}
