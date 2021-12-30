@@ -7,15 +7,15 @@
     {
       "type": "image",
       "images": [
-        "resourcefulbees:textures/gui/patchouli/getting_started/collecting_resources.png"
+        "resourcefulbees:textures/gui/patchouli/getting_started/collecting_honeycombs.png"
         ],
-      "title": "book.resourcefulbees.getting_started.collecting_resources",
-      "text": "book.resourcefulbees.getting_started.collecting_resources.desc",
+      "title": "book.resourcefulbees.getting_started.collecting_honeycombs",
+      "text": "book.resourcefulbees.getting_started.collecting_honeycombs.desc",
       "border" : true
     },
     {
       "type": "text",
-      "text": "book.resourcefulbees.getting_started.collecting_resources.text"
+      "text": "book.resourcefulbees.getting_started.collecting_honeycombs.text"
     }
   ]
 }

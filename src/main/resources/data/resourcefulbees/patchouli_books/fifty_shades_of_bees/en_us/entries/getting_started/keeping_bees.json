@@ -16,6 +16,18 @@
     {
       "type": "text",
       "text": "book.resourcefulbees.getting_started.keeping_bees.text"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/getting_started/keeping_bees2.png"
+        ],
+      "title": "book.resourcefulbees.getting_started.keeping_bees",
+      "border" : true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.getting_started.keeping_bees.text.2"
     }
   ]
 }

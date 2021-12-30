@@ -15,15 +15,14 @@
                     "A": "resourcefulbees:t1_apiary[facing=east]",
                     "S": "resourcefulbees:apiary_storage",
                     "B": "resourcefulbees:apiary_breeder",
-                    "V": "#resourcefulbees:valid_apiary"
+                    "V": "minecraft:glass,minecraft:oak_planks,minecraft:oak_log,minecraft:stone,minecraft:cobblestone"
                 },
                 "pattern": [
                     ["VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV"],
                     ["VVVVVVV", "V     V", "V     V", "V     V", "V     V", "V     V", "VVVVVVV"],
                     ["VVVVVVV", "V     V", "V     V", "V     V", "V     V", "V     V", "VVVVVVV"],
-                    ["VVVABVV", "V     V", "V     V", "V     V", "V     V", "V     V", "VVVVVVV"],
-                    ["VVVVVVV", "V     V", "V     V", "V  0  V", "V     V", "V     V", "VVVVVVV"],
-                    ["SVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV", "VVVVVVV"]
+                    ["VVVAVVV", "V     V", "V     V", "V     V", "V     V", "V     V", "VVVVVVV"],
+                    ["SVVBVVV", "V     V", "V     V", "V  0  V", "V     V", "V     V", "VVVVVVV"]
                 ],
                 "symmetrical": true
             },

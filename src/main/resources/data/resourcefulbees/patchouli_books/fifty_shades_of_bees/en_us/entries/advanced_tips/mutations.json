@@ -7,15 +7,15 @@
     {
       "type": "image",
       "images": [
-        "resourcefulbees:textures/gui/patchouli/collecting_resources/mutations.png"
+        "resourcefulbees:textures/gui/patchouli/collecting_honeycombs/mutations.png"
         ],
-      "title": "book.resourcefulbees.collecting_resources.mutations",
-      "text": "book.resourcefulbees.collecting_resources.mutations.desc",
+      "title": "book.resourcefulbees.collecting_honeycombs.mutations",
+      "text": "book.resourcefulbees.collecting_honeycombs.mutations.desc",
       "border" : true
     },
     {
       "type": "text",
-      "text": "book.resourcefulbees.collecting_resources.mutations.text"
+      "text": "book.resourcefulbees.collecting_honeycombs.mutations.text"
     }
   ]
 }

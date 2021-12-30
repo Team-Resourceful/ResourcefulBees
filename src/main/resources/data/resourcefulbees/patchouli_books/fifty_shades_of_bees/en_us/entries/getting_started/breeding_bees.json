@@ -2,7 +2,7 @@
   "name": "book.resourcefulbees.getting_started.breeding_bees",
   "icon": "resourcefulbees:gold_flower",
   "category": "resourcefulbees:getting_started",
-  "sortnum": 5,
+  "sortnum": 7,
   "pages": [
     {
       "type": "image",

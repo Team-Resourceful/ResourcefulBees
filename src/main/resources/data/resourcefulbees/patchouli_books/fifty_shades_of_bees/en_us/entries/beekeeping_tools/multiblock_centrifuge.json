@@ -1,5 +1,5 @@
 {
-    "name": "book.resourcefulbees.beekeeping_tools.centrifuge",
+    "name": "book.resourcefulbees.beekeeping_tools.multiblock_centrifuge",
     "icon": "resourcefulbees:centrifuge_controller",
     "category": "resourcefulbees:beekeeping_tools",
     "sortnum": 2,
