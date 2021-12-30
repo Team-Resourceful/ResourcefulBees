@@ -382,7 +382,9 @@ public class BeeInfoUtils {
         Item item = bottleOutput.getItem();
         if (item == Items.HONEY_BOTTLE) {
             return ModFluids.HONEY_STILL.get().getSource();
-        } else if (item == ModItems.CATNIP_HONEY_BOTTLE.get()) {
+        } else if (item == ModItems.STARRY_HONEY_BOTTLE.get()) {
+            return ModFluids.STARRY_HONEY_STILL.get().getSource();
+        }else if (item == ModItems.CATNIP_HONEY_BOTTLE.get()) {
             return ModFluids.CATNIP_HONEY_STILL.get().getSource();
         } else if (item instanceof CustomHoneyBottleItem) {
             CustomHoneyBottleItem honey = (CustomHoneyBottleItem) item;
@@ -392,7 +394,9 @@ public class BeeInfoUtils {
     }
 
     public static Item getHoneyBottle(Fluid fluid) {
-        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+        if (fluid == ModFluids.STARRY_HONEY_STILL.get()) {
+            return ModItems.STARRY_HONEY_BOTTLE.get();
+        } else if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
             return ModItems.CATNIP_HONEY_BOTTLE.get();
         } else if (fluid instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
@@ -403,7 +407,9 @@ public class BeeInfoUtils {
     }
 
     public static Item getHoneyBucket(Fluid fluid) {
-        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+        if (fluid == ModFluids.STARRY_HONEY_STILL.get()) {
+            return ModItems.STARRY_HONEY_FLUID_BUCKET.get();
+        } else if(fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
             return ModItems.CATNIP_HONEY_FLUID_BUCKET.get();
         } else if (fluid instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
@@ -414,7 +420,9 @@ public class BeeInfoUtils {
     }
 
     public static Item getHoneyBlock(Fluid fluid) {
-        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+        if (fluid == ModFluids.STARRY_HONEY_STILL.get()) {
+            return ModItems.STARRY_HONEY_BLOCK_ITEM.get();
+        } else if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
             return ModItems.CATNIP_HONEY_BLOCK_ITEM.get();
         } else if (fluid instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
@@ -435,17 +443,17 @@ public class BeeInfoUtils {
 
     public static List<ITextComponent> getBeeLore(EntityType<?> entityType, World world) {
         Entity entity = entityType.create(world);
-        if (entity instanceof CustomBeeEntity){
+        if (entity instanceof CustomBeeEntity) {
             return getBeeLore(((CustomBeeEntity) entity).getBeeData());
-        }else {
+        } else {
             return new ArrayList<>();
         }
     }
 
     public static List<ITextComponent> getBeeLore(Entity entity) {
-        if (entity instanceof CustomBeeEntity){
+        if (entity instanceof CustomBeeEntity) {
             return getBeeLore(((CustomBeeEntity) entity).getBeeData());
-        }else {
+        } else {
             return new ArrayList<>();
         }
     }
@@ -455,7 +463,7 @@ public class BeeInfoUtils {
         if (beeData.getLore() != null && !beeData.getLore().isEmpty()) {
             String lore = beeData.getLore();
             String[] loreTooltip = lore.split("\\r?\\n");
-            for (String s: loreTooltip) {
+            for (String s : loreTooltip) {
                 tooltip.add(new StringTextComponent(s).withStyle(beeData.getLoreColor()));
             }
         }
