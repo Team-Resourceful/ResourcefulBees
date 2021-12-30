@@ -16,14 +16,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
 
-    private static DispenseItemBehavior defaultShearsDispenseBehavior;
+    private final DispenseItemBehavior defaultBehavior;
 
-    public static DispenseItemBehavior getDefaultShearsDispenseBehavior() {
-        return defaultShearsDispenseBehavior;
-    }
-
-    public static void setDefaultShearsDispenseBehavior(DispenseItemBehavior defaultShearsDispenseBehavior) {
-        ShearsDispenserBehavior.defaultShearsDispenseBehavior = defaultShearsDispenseBehavior;
+    public ShearsDispenserBehavior(DispenseItemBehavior defaultBehavior) {
+        this.defaultBehavior = defaultBehavior;
     }
 
     @NotNull
@@ -32,7 +28,7 @@ public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
         ServerLevel world = source.getLevel();
         BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
         BlockState blockstate = world.getBlockState(blockpos);
-        if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
+        if (blockstate.getBlock() instanceof TieredBeehiveBlock tieredBeehiveBlock) {
             if (Boolean.TRUE.equals(CommonConfig.ALLOW_SHEARS.get())) {
                 int i = blockstate.getValue(BeehiveBlock.HONEY_LEVEL);
                 if (i >= 5) {
@@ -40,12 +36,12 @@ public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
                         stack.setCount(0);
                     }
 
-                    TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, false);
+                    TieredBeehiveBlock.dropResourceHoneycomb(tieredBeehiveBlock, world, blockpos, false);
                     ((BeehiveBlock) blockstate.getBlock()).releaseBeesAndResetHoneyLevel(world, blockstate, blockpos, null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
                 }
             }
         } else {
-            return getDefaultShearsDispenseBehavior().dispense(source, stack);
+            return defaultBehavior.dispense(source, stack);
         }
         return stack;
     }

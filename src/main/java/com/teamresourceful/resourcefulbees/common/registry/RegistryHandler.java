@@ -8,16 +8,11 @@ import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ScraperDispenserBehavior;
-import com.teamresourceful.resourcefulbees.common.item.dispenser.ShearsDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.invokers.DispenserBlockInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.*;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -77,8 +72,6 @@ public class RegistryHandler {
     }
 
     public static void registerDispenserBehaviors() {
-        ShearsDispenserBehavior.setDefaultShearsDispenseBehavior(((DispenserBlockInvoker) Blocks.DISPENSER).invokeGetBehavior(new ItemStack(Items.SHEARS)));
-        DispenserBlock.registerBehavior(Items.SHEARS.asItem(), new ShearsDispenserBehavior());
         DispenserBlock.registerBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
     }
 }
