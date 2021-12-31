@@ -8,7 +8,8 @@
       "type": "resourcefulbees:geo_bee",
       "model": "resourcefulbees:geo/base-nocloak.geo.json",
       "texture": "resourcefulbees:textures/entity/oreo/oreo_bee.png",
-      "title": "book.resourcefulbees.extras.dev_bees.oreo_bee"
+      "title": "book.resourcefulbees.extras.dev_bees.oreo_bee",
+      "text" : "book.resourcefulbees.extras.dev_bees.oreo_bee.desc"
     },
     {
       "type": "spotlight",
@@ -20,7 +21,8 @@
       "type": "resourcefulbees:geo_bee",
       "model": "resourcefulbees:geo/kitten.geo.json",
       "texture": "resourcefulbees:textures/entity/kitten/bee.png",
-      "title": "book.resourcefulbees.extras.dev_bees.kitten_bee"
+      "title": "book.resourcefulbees.extras.dev_bees.kitten_bee",
+      "text" : "book.resourcefulbees.extras.dev_bees.kitten_bee.desc"
     },
     {
       "type": "spotlight",
@@ -32,7 +34,8 @@
       "type": "resourcefulbees:geo_bee",
       "model": "resourcefulbees:geo/yeti.geo.json",
       "texture": "resourcefulbees:textures/entity/yeti/yeti_bee.png",
-      "title": "book.resourcefulbees.extras.dev_bees.yeti_bee"
+      "title": "book.resourcefulbees.extras.dev_bees.yeti_bee",
+      "text" : "book.resourcefulbees.extras.dev_bees.yeti_bee.desc"
     },
     {
       "type": "spotlight",
@@ -51,7 +54,8 @@
           "color" : "#FFA500"
         }
       ],
-      "title": "book.resourcefulbees.extras.dev_bees.starry_bee"
+      "title": "book.resourcefulbees.extras.dev_bees.starry_bee",
+      "text" : "book.resourcefulbees.extras.dev_bees.starry_bee.desc"
     },
     {
       "type": "spotlight",

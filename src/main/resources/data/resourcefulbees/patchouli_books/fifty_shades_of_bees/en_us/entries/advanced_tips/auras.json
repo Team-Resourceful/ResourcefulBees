@@ -2,20 +2,20 @@
   "name": "book.resourcefulbees.advanced_tips.auras",
   "icon": "minecraft:lingering_potion{Potion:'minecraft:healing'}",
   "category": "resourcefulbees:advanced_tips",
-  "sortnum": 2,
+  "sortnum": 10,
   "pages": [
     {
       "type": "image",
       "images": [
-        "resourcefulbees:textures/gui/patchouli/getting_started/collecting_honeycombs.png"
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/auras.png"
       ],
-      "title": "book.resourcefulbees.getting_started.collecting_honeycombs",
-      "text": "book.resourcefulbees.getting_started.collecting_honeycombs.desc",
+      "title": "book.resourcefulbees.advanced_tips.auras",
+      "text": "book.resourcefulbees.advanced_tips.auras.desc",
       "border": true
     },
     {
       "type": "text",
-      "text": "book.resourcefulbees.getting_started.collecting_honeycombs.text"
+      "text": "book.resourcefulbees.advanced_tips.auras.text"
     }
   ]
 }

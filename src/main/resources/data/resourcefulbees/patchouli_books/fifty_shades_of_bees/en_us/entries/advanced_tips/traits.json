@@ -2,20 +2,20 @@
   "name": "book.resourcefulbees.advanced_tips.traits",
   "icon": "minecraft:blaze_powder",
   "category": "resourcefulbees:advanced_tips",
-  "sortnum": 2,
+  "sortnum": 9,
   "pages": [
     {
       "type": "image",
       "images": [
-        "resourcefulbees:textures/gui/patchouli/getting_started/collecting_honeycombs.png"
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/traits.png"
       ],
-      "title": "book.resourcefulbees.getting_started.collecting_honeycombs",
-      "text": "book.resourcefulbees.getting_started.collecting_honeycombs.desc",
+      "title": "book.resourcefulbees.advanced_tips.traits",
+      "text": "book.resourcefulbees.advanced_tips.traits.desc",
       "border": true
     },
     {
       "type": "text",
-      "text": "book.resourcefulbees.getting_started.collecting_honeycombs.text"
+      "text": "book.resourcefulbees.advanced_tips.traits.text"
     }
   ]
 }

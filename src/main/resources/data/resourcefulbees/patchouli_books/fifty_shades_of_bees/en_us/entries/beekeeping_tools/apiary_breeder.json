@@ -17,10 +17,6 @@
         {
             "type": "crafting",
             "recipe": "resourcefulbees:apiary_breed_time_upgrade"
-        },
-        {
-            "type": "text",
-            "text": "book.resourcefulbees.beekeeping_tools.apiary_breeder.2"
         }
     ]
 }

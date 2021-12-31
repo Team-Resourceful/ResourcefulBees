@@ -1,0 +1,45 @@
+{
+  "name": "book.resourcefulbees.advanced_tips.powered_centrifuges",
+  "icon": "resourcefulbees:centrifuge",
+  "category": "resourcefulbees:advanced_tips",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/powered_centrifuges1.png"
+      ],
+      "title": "book.resourcefulbees.advanced_tips.powered_centrifuges",
+      "text": "book.resourcefulbees.advanced_tips.powered_centrifuges.desc",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.advanced_tips.powered_centrifuges.text.1"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/powered_centrifuges2.png"
+      ],
+      "title": "book.resourcefulbees.advanced_tips.powered_centrifuges",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.advanced_tips.powered_centrifuges.text.2"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/powered_centrifuges3.png"
+      ],
+      "title": "book.resourcefulbees.advanced_tips.powered_centrifuges",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.advanced_tips.powered_centrifuges.text.3"
+    }
+  ]
+}

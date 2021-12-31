@@ -2,20 +2,44 @@
   "name": "book.resourcefulbees.advanced_tips.mutations",
   "icon": "minecraft:fermented_spider_eye",
   "category": "resourcefulbees:advanced_tips",
-  "sortnum": 3,
+  "sortnum": 8,
   "pages": [
     {
       "type": "image",
       "images": [
-        "resourcefulbees:textures/gui/patchouli/collecting_honeycombs/mutations.png"
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/mutations1.png"
       ],
-      "title": "book.resourcefulbees.collecting_honeycombs.mutations",
-      "text": "book.resourcefulbees.collecting_honeycombs.mutations.desc",
+      "title": "book.resourcefulbees.advanced_tips.mutations",
+      "text": "book.resourcefulbees.advanced_tips.mutations.desc",
       "border": true
     },
     {
       "type": "text",
-      "text": "book.resourcefulbees.collecting_honeycombs.mutations.text"
+      "text": "book.resourcefulbees.advanced_tips.mutations.text.1"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/mutations2.png"
+      ],
+      "title": "book.resourcefulbees.advanced_tips.mutations",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.advanced_tips.mutations.text.2"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/mutations3.png"
+      ],
+      "title": "book.resourcefulbees.advanced_tips.mutations",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.advanced_tips.mutations.text.3"
     }
   ]
 }

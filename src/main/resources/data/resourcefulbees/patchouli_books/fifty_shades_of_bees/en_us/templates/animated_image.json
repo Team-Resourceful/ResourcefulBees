@@ -2,7 +2,7 @@
   "components": [
     {
       "x": 58,
-      "y": 0,
+      "y": -3,
       "type" : "header",
       "text" : "#title"
     },

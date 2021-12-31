@@ -1,19 +1,21 @@
 {
   "IMPORTANT": "THIS IS NOT A TEMPLATE, THIS IS A GUIDE ON HOW TO BUILD BEES AND WHAT INFORMATION IS DEFAULT FOR BEE GENERATION. (if i ever get given a bee with the defaults or comments left in I will be mad >:C - Dawn Felstar)",
-  "beeVersion": "0.9.9",
+  "beeVersion": "0.10.0",
   "defaults": {
     "flower": "all",
     "creator": "",
     "lore": "",
     "loreColor": "#FFFFFF",
     "baseLayerTexture": "custom/bee",
-    "baseModelType": "DEFAULT",
     "maxTimeInHive": 600,
     "sizeModifier": 1,
     "traits": [],
     "hasHoneycomb": false,
     "apiaryOutputAmounts": [8, 16, 4, 8],
-    "apiaryOutputTypes": ["COMB", "COMB", "BLOCK", "BLOCK"]
+    "apiaryOutputTypes": ["COMB", "COMB", "BLOCK", "BLOCK"],
+    "auraRange": 10,
+    "customCombDrop": null,
+    "customCombBlockDrop": null
   },
   "comments": {
     "defaults1": "almost all data in pre 1.0.0 bees are defaulted and you don't actually need to specify certain sections, in fact if you leave things in you may encounter issues.",
@@ -25,7 +27,10 @@
     "baseTexture3": "if you don't specify a baseLayerTexture it will default to our default custom bee texture.",
     "baseTexture1": "if you're using mostly primary and secondary textures set this to 'empty_layer'",
     "textures": "NEVER leave the contents of a texture empty i.e. (\"\"), this will tell the mod to load no texture and will give you a missing texture.",
-    "apiaryOutput": "Defaults to amounts and types are set in common.toml"
+    "apiaryOutput": "Defaults to amounts and types are set in common.toml",
+    "customCombDrop": "Replaces the generated comb that can be extracted from combs, like how the oreo bee gives oreo_cookies. this value is an itemID",
+    "customCombBlockDrop": "Replaces the generated comb block that can be obtained through the apiary. this value is an itemID",
+    "auraRange": "this is the range in blocks that any trait auras attached to the bee will use for effect range."
   },
   "ColorData": {
     "defaults": {
@@ -41,7 +46,8 @@
       "glowColor": "#FFFFFF",
       "isEnchanted": false,
       "glowingPulse": 0,
-      "modelType": "DEFAULT"
+      "modelType": "DEFAULT",
+      "modelLocation": null
     },
     "comments": {
       "isBeeColored": "If you set this to false primary and secondary textures are ignored.",
@@ -50,7 +56,8 @@
       "honeycombColor": "honeycomb color is needed for combs to color",
       "primarySecondaryColor": "If you want your bee's egg to be colored you need primary and secondary colors",
       "textures1": "you technically don't need the primary and secondary layer textures as it will always default to our base textures if not present.",
-      "textures2": "if IsEmissive is false you do not need to specify the emissive layer"
+      "textures2": "if IsEmissive is false you do not need to specify the emissive layer",
+      "modelLocation": "this is the location of a geckolib geo model file, you can use this to add custom models to bees."
     }
   },
   "MutationData": {
@@ -83,7 +90,8 @@
       "attackDamage": 1,
       "removeStingerOnAttack": false,
       "isPassive": false,
-      "inflictsPoison": false
+      "inflictsPoison": false,
+      "isInvulnerable": false
     },
     "comments": {
       "noCombatData": "if you do not specify CombatData the default is the following, this means if you specify even a single value, or even leave an empty CombatData the above will be used. this will be changed in 1.0.0 to be more consistent.",

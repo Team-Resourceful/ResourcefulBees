@@ -510,30 +510,54 @@
 	"book.resourcefulbees.advanced_tips": "Advanced Tips",
 	"book.resourcefulbees.advanced_tips.desc": "This section will go into advanced sections of the mod that you may encounter once you have gotten your bees set up.",
 
+
 	"book.resourcefulbees.advanced_tips.apiaries": "Apiaries",
-	"book.resourcefulbees.advanced_tips.apiaries.1": "The $(or)Apiary/$ is the next upgrade for the $(thing)$(l:getting_started/keeping_bees)Beehives/$. $(p)It can house more bees, produce more honeycombs and make $(thing)$(l:getting_started/breeding_bees)breeding/$ easier.",
-	"book.resourcefulbees.advanced_tips.apiaries.2": "The $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$ and $(or)$(l:beekeeping_tools/apiary_breeder)Apiary Breeder/$ can be placed anywhere in the multiblock's walls. $(p)The $(or)Apiary/$ size is 7x7x5. Once you place down the $(or)Apiary/$, you can click the preview button to see a highlight of where you have to place blocks. You can also use the arrow buttons to move the multiblock around the $(or)Apiary/$ block.",
-	"book.resourcefulbees.advanced_tips.apiaries.3": "When honeycombs are produced by the bees, they will show up in the $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$, which can then be removed manually, or automated via $(or)Hoppers/$ or pipes from other mods.$(p)The $(or)Apiary/$ comes with some restrictions: it can only house 9 unique bees, which means you can have as many bees as you want in the enclosure, but there cannot be",
-	"book.resourcefulbees.advanced_tips.apiaries.4": "more than one of the same type of bee in the $(or)Apiary/$ for them to enter.$(p)To give an example of the 'unique' limitation: you can have two or more $(or)Redstone/$ and $(or)Coal Bees/$ in the enclosure, but only one $(or)Redstone/$ and $(or)Coal Bee/$ inside the $(or)Apiary/$. Once a $(or)Redstone Bee/$ has left the $(or)Apiary/$, the other $(or)Redstone Bee/$ may now enter.",
-	"book.resourcefulbees.apiary_category.multiblock.5": "The multiblock must have an $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$ and optionally an $(or)$(l:beekeeping_tools/apiary_breeder)Apiary Breeder/$.",
+	"book.resourcefulbees.advanced_tips.apiaries.desc": "Home is where the heart bee.",
+
+	"book.resourcefulbees.advanced_tips.apiaries.1": "The $(or)Apiary/$ is the next upgrade for the $(thing)$(l:getting_started/keeping_bees)Beehives/$. $(p)It can house more bees, produce more honeycombs and make $(thing)$(l:getting_started/breeding_bees)Breeding/$ easier.$(br2)The apiary is part of a 7 x 7 x 5 multiblock which contains the main $(or)$(l:beekeeping_tools/apiaries)Apiary Block$() and an $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage Block$() and an optional $(or)$(l:beekeeping_tools/apiary_breeder)Apiary Breeder$() and some solid blocks.",
+
+	"book.resourcefulbees.advanced_tips.apiaries.2": "Once placed down the $(or)$(l:beekeeping_tools/apiaries)Apiary$() can then be set up to show a preview of the structure.$(br2)Blocks must be placed to fill the structure, you can use any blocks with collision or anything marked with the valid_apiary tag.$(br2)The $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$ and $(or)$(l:beekeeping_tools/apiary_breeder)Apiary Breeder/$ can be placed anywhere in the multiblock's walls.",
+
+	"book.resourcefulbees.advanced_tips.apiaries.3": "$(p)The $(or)Apiary/$ comes with some restrictions: it can only house 9 unique bees, which means no more than one of the same type of bee in the $(or)Apiary/$ at any one time.$(br2) however you can get past this limitation by keeping bees inside the enclosure.",
+
+	"book.resourcefulbees.advanced_tips.apiaries.4": "When honeycombs are produced by the bees, they will show up in the $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$, which can then be removed manually, or automated via $(or)Hoppers/$ or pipes from other mods.",
+
+	"book.resourcefulbees.advanced_tips.apiaries.5": "The $(or)$(l:beekeeping_tools/apiary_breeder)Apiary Breeder/$ will make breeding easier by allowing you to place the two bees, together with their food and a jar, inside it and not have the hassle of running around after them.$(p)If the breeding is successful, the new bee will be placed in the $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$.",
 
 	"book.resourcefulbees.advanced_tips.calming": "Calming",
-	"book.resourcefulbees.advanced_tips.calming.desc": "The Calming effect when applied to bees will prevent them from getting angry, it will also calm bees down if they are already angry.",
-	"book.resourcefulbees.advanced_tips.calming.text": "If a bee has the Angry trait it will calm them down, allowing you to keep them around other bees.$(br2)Bees can be granted the Calming effect in two ways, one is via a $(or)$(l:beekeeping_tools/calming_potions)Splash Potion of Calming$() or by using an $(or)$(l:beekeeping_tools/ender_beecon)Ender Beecon$().",
+
+	"book.resourcefulbees.advanced_tips.calming.desc": "Double double sweet and runny pint of wart and drop of honey.",
+	"book.resourcefulbees.advanced_tips.calming.text.1": "The Calming effect when applied to bees will prevent them from getting angry, it will also calm bees down if they are already angry.",
+
+	"book.resourcefulbees.advanced_tips.calming.text.2": "If a bee has the Angry trait it will calm them down, allowing you to keep them around other bees.$(br2)Bees can be granted the Calming effect in two ways, one is via a $(or)$(l:beekeeping_tools/calming_potions)Splash Potion of Calming$() or by using an $(or)$(l:beekeeping_tools/ender_beecon)Ender Beecon$().",
 
 	"book.resourcefulbees.advanced_tips.auras": "Auras",
+	"book.resourcefulbees.advanced_tips.auras.desc" : "AOBee",
+	"book.resourcefulbees.advanced_tips.auras.text" : "todo",
+
+	"book.resourcefulbees.advanced_tips.anger": "Anger",
+	"book.resourcefulbees.advanced_tips.anger.desc" : "Stinger: Enter stage left",
+	"book.resourcefulbees.advanced_tips.anger.text" : "todo",
 
 	"book.resourcefulbees.advanced_tips.traits": "Traits",
+	"book.resourcefulbees.advanced_tips.traits.desc": "All of the bee special.",
+	"book.resourcefulbees.advanced_tips.traits.text" : "todo",
 
-	"book.resourcefulbees.advanced_tips.multiblock_centrifuges": "Centrifuging Part 1",
-
-	"book.resourcefulbees.advanced_tips.elite_centrifuges": "Centrifuging Part 2",
+	"book.resourcefulbees.advanced_tips.powered_centrifuges": "Powered Centrifuging",
+	"book.resourcefulbees.advanced_tips.powered_centrifuges.desc": "You spin bee right round baby right round.",
+	"book.resourcefulbees.advanced_tips.powered_centrifuges.text.1" : "todo",
+	"book.resourcefulbees.advanced_tips.powered_centrifuges.text.2" : "todo",
+	"book.resourcefulbees.advanced_tips.powered_centrifuges.text.3" : "todo",
 
 	"book.resourcefulbees.advanced_tips.generating_energy": "Generating Energy",
+	"book.resourcefulbees.advanced_tips.generating_energy.desc": "Unmatched power of the hun.",
+	"book.resourcefulbees.advanced_tips.generating_energy.text" : "todo",
 
 	"book.resourcefulbees.advanced_tips.mutations": "Mutations",
-
-	"book.resourcefulbees.advanced_tips.protecting_bees": "Protecting Bees",
+	"book.resourcefulbees.advanced_tips.mutations.desc": "One thing Beecomes another.",
+	"book.resourcefulbees.advanced_tips.mutations.text.1" : "todo",
+	"book.resourcefulbees.advanced_tips.mutations.text.2" : "todo",
+	"book.resourcefulbees.advanced_tips.mutations.text.3" : "todo",
 
 	"book.resourcefulbees.advanced_tips.ender_beecon": "The Ender Beecon",
 	"book.resourcefulbees.advanced_tips.ender_beecon.desc": "Are you looking to protect your bees or grant some effects?",
@@ -608,8 +632,7 @@
 	"book.resourcefulbees.beekeeping_tools.apiaries.1": "The $(or)Apiary/$ block is the main part of the apiary multiblock. You must also use an $(thing)$(l:beekeeping_tools/apiary_storage)Apiary Storage$() for the multiblock.$(p)For more info on the multiblock and how it works, click $(thing)$(l:advanced_tips/apiaries)here$().",
 
 	"book.resourcefulbees.beekeeping_tools.apiary_breeder": "Apiary Breeder",
-	"book.resourcefulbees.beekeeping_tools.apiary_breeder.1": "The $(or)Apiary Breeder/$ will make breeding easier by allowing you to place the two bees, together with their food and a jar, inside it and not have the hassle of running around after them.$(p)If the breeding is successful, the new bee will be placed in the $(or)Apiary Storage/$.",
-	"book.resourcefulbees.beekeeping_tools.apiary_breeder.2": "You can also upgrade the $(or)Apiary Breeder/$ with $(or)Breeder Upgrade/$ and $(or)Breed Time Upgrade/$.$(p)They add more slots and also reduce the time needed for the breed.$(p)You can have up to four upgrades at any time.",
+	"book.resourcefulbees.beekeeping_tools.apiary_breeder.1": "You can upgrade the $(or)Apiary Breeder/$ with $(or)Breeder Upgrade/$ and $(or)Breed Time Upgrade/$.$(p)They add more slots and also reduce the time needed for the breed.$(p)You can have up to four upgrades at any time.",
 
 	"book.resourcefulbees.beekeeping_tools.apiary_storage": "Apiary Storage",
 	"book.resourcefulbees.beekeeping_tools.apiary_storage.1": "The $(or)Apiary Storage/$ is the block where all the $(or)Apiary/$ resources will go to.$(p)You can manually take out the items, or automate it with a $(or)Hopper/$.$(p)Each $(or)Apiary/$ must have one $(or)Apiary Storage/$.",
@@ -639,16 +662,24 @@
 	"book.resourcefulbees.extras.desc": "This section is for extra stuff you can do with this mod.$(br2)Helpful Links:$(li)$(6)$(l:https://discord.com/invite/resourcefulbees)Discord$()$(li)$(6)$(l:https://patreon.resourcefulbees.com)Patreon$()$(li)$(6)$(l:https://github.com/Resourceful-Bees/ResourcefulBees)Github$()$(li)$(6)$(l:https://wiki.resourcefulbees.com)Wiki$()",
 
 	"book.resourcefulbees.extras.dev_bees" : "Easter Egg Bees",
-	"book.resourcefulbees.extras.dev_bees.1" : "Rare bees that can be found throughout the world.",
-	"book.resourcefulbees.extras.dev_bees.kitten_bee" : "Kitten Bee",
 	"book.resourcefulbees.extras.dev_bees.oreo_bee" : "Oreo Bee",
+	"book.resourcefulbees.extras.dev_bees.1" : "The Epic oreo is a master class cookie that will give you vast power.",
+	"book.resourcefulbees.extras.dev_bees.oreo_bee.desc" : "Added By Crispy Oreo.",
+	"book.resourcefulbees.extras.dev_bees.kitten_bee" : "Kitten Bee",
+	"book.resourcefulbees.extras.dev_bees.2" : "Kitten bees produce $(or)Catnip Honey$() which you can drink to gain catlike powers for 2 minutes.",
+	"book.resourcefulbees.extras.dev_bees.kitten_bee.desc" : "Added By Dawn Felstar",
 	"book.resourcefulbees.extras.dev_bees.yeti_bee" : "Yeti Bee",
+	"book.resourcefulbees.extras.dev_bees.3" : "The yeti bee doesn't have a special item but it can freeze water.",
+	"book.resourcefulbees.extras.dev_bees.yeti_bee.desc" : "Added By Joosh",
 	"book.resourcefulbees.extras.dev_bees.starry_bee" : "Starry Bee",
+	"book.resourcefulbees.extras.dev_bees.4" : "Starry honey is a special honey that when you gather enough of it the $(thing)Starry Bee$() can trasmute it into a $(or)Nether Star$().",
+	"book.resourcefulbees.extras.dev_bees.starry_bee.desc" : "Added By Lady Lexxie.",
 	"book.resourcefulbees.extras.dev_bees.abbee_bee" : "AbBee",
-	"book.resourcefulbees.extras.dev_bees.abbee_bee.desc" : "This bee was created by absent- via Patreon.",
+	"book.resourcefulbees.extras.dev_bees.5" : "Strawbeerry Milkshake is a sweet little snack that will give you hops.",
+	"book.resourcefulbees.extras.dev_bees.abbee_bee.desc" : "Added By absent- via Patreon.",
 
 	"book.resourcefulbees.extras.patreon" : "Patreon Pet Bees",
-	"book.resourcefulbees.extras.patreon.1" : "Patreon Bees",
+	"book.resourcefulbees.extras.patreon.1" : "If you donate to our $(6)$(l:https://patreon.resourcefulbees.com)Patreon$() you can recive one of the following bees as a little pet that will circle around you.$(br2)If you donate to our highest tier you can make one of your own bees, which we will also add into the game.",
 	"book.resourcefulbees.extras.patreon.asexual_bee" : "Asexual Bee",
 	"book.resourcefulbees.extras.patreon.astronaut_bee" : "Astronaut Bee",
 	"book.resourcefulbees.extras.patreon.base_bee" : "Base Bee",

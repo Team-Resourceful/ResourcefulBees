@@ -2,16 +2,25 @@
   "name": "book.resourcefulbees.advanced_tips.calming",
   "icon": "minecraft:potion{Potion:'resourcefulbees:calming'}",
   "category": "resourcefulbees:advanced_tips",
-  "sortnum": 2,
+  "sortnum": 7,
   "pages": [
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/calming.png"
+      ],
+      "title": "book.resourcefulbees.advanced_tips.calming",
+      "text": "book.resourcefulbees.advanced_tips.calming.desc",
+      "border": true
+    },
     {
       "type": "resourcefulbees:effect",
       "id": "resourcefulbees:calming",
-      "text": "book.resourcefulbees.advanced_tips.calming.desc"
+      "text": "book.resourcefulbees.advanced_tips.calming.text.1"
     },
     {
       "type": "text",
-      "text": "book.resourcefulbees.advanced_tips.calming.text"
+      "text": "book.resourcefulbees.advanced_tips.calming.text.2"
     }
   ]
 }
