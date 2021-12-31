@@ -8,10 +8,10 @@
       "type": "image",
       "images": [
         "resourcefulbees:textures/gui/patchouli/getting_started/collecting_bees.png"
-        ],
+      ],
       "title": "book.resourcefulbees.getting_started.collecting_bees",
       "text": "book.resourcefulbees.getting_started.collecting_bees.desc",
-      "border" : true
+      "border": true
     },
     {
       "type": "text",

@@ -8,10 +8,10 @@
       "type": "image",
       "images": [
         "resourcefulbees:textures/gui/patchouli/getting_started/processing_combs.png"
-        ],
+      ],
       "title": "book.resourcefulbees.getting_started.processing_combs",
       "text": "book.resourcefulbees.getting_started.processing_combs.desc",
-      "border" : true
+      "border": true
     },
     {
       "type": "text",

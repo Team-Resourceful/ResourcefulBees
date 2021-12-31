@@ -8,10 +8,10 @@
       "type": "image",
       "images": [
         "resourcefulbees:textures/gui/patchouli/collecting_honeycombs/mutations.png"
-        ],
+      ],
       "title": "book.resourcefulbees.collecting_honeycombs.mutations",
       "text": "book.resourcefulbees.collecting_honeycombs.mutations.desc",
-      "border" : true
+      "border": true
     },
     {
       "type": "text",

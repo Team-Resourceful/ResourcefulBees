@@ -1,18 +1,37 @@
 {
-    "name": "book.resourcefulbees.beekeeping_tools.elite_centrifuge",
-    "icon": "resourcefulbees:elite_centrifuge_controller",
-    "category": "resourcefulbees:beekeeping_tools",
-    "sortnum": 2,
-    "pages": [
-        {
-            "type": "text",
-            "text": "book.resourcefulbees.beekeeping_tools.elite_centrifuge.1",
-            "title": "book.resourcefulbees.beekeeping_tools.elite_centrifuge"
+  "name": "book.resourcefulbees.beekeeping_tools.elite_centrifuge",
+  "icon": "resourcefulbees:elite_centrifuge_controller",
+  "category": "resourcefulbees:beekeeping_tools",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "multiblock",
+      "multiblock": {
+        "pattern": [
+          [ "BBB", "BBB", "BBB" ],
+          [ "BBB", "BBB", "BBB" ],
+          [ "BBB", "BBB", "BBB" ],
+          [ "BBB", "BBB", "BCB" ],
+          [ "BBB", "B0B", "BBB" ]
+        ],
+        "mapping": {
+          "C": "resourcefulbees:elite_centrifuge_controller[facing=east]",
+          "0": "resourcefulbees:elite_centrifuge_casing",
+          "B": "resourcefulbees:elite_centrifuge_casing"
         },
-        {
-            "type": "crafting",
-            "recipe": "resourcefulbees:elite_centrifuge_controller",
-            "recipe2": "resourcefulbees:elite_centrifuge_casing"
-        }
-    ]
+        "symmetrical": true,
+        "name": "book.resourcefulbees.beekeeping_tools.elite_centrifuge",
+        "text": "book.resourcefulbees.beekeeping_tools.elite_centrifuge.desc"
+      }
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.elite_centrifuge.1"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:elite_centrifuge_controller",
+      "recipe2": "resourcefulbees:elite_centrifuge_casing"
+    }
+  ]
 }

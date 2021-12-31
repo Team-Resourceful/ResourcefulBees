@@ -8,10 +8,10 @@
       "type": "image",
       "images": [
         "resourcefulbees:textures/gui/patchouli/getting_started/understanding_bees1.png"
-        ],
+      ],
       "title": "book.resourcefulbees.getting_started.understanding_bees",
       "text": "book.resourcefulbees.getting_started.understanding_bees.desc",
-      "border" : true
+      "border": true
     },
     {
       "type": "text",
@@ -23,7 +23,7 @@
         "resourcefulbees:textures/gui/patchouli/getting_started/understanding_bees2.png"
       ],
       "title": "book.resourcefulbees.getting_started.understanding_bees",
-      "border" : true
+      "border": true
     },
     {
       "type": "text",
