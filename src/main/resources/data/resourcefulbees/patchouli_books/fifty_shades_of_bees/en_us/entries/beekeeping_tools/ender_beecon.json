@@ -6,8 +6,13 @@
   "pages": [
     {
       "type": "text",
-      "text": "book.resourcefulbees.extras.ender_beecon",
+      "text": "book.resourcefulbees.beekeeping_tools.ender_beecon.text.1",
       "title": "book.resourcefulbees.beekeeping_tools.ender_beecon"
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.ender_beecon.text.2",
+      "title": "book.resourcefulbees.beekeeping_tools.ender_beecon.title.1"
     },
     {
       "type": "crafting",

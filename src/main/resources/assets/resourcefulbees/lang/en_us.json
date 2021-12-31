@@ -572,7 +572,9 @@
 	"book.resourcefulbees.beekeeping_tools.calming_potions.text" : "Calming Potions are potions that give things the calming effect, however the $(thing)$(l:advanced_tips/calming)Calming Effect$() has no effects on players but it does on neutral mobs so splash or lingering Calming potions are your best friend.",
 
 	"book.resourcefulbees.beekeeping_tools.ender_beecon" : "Ender Beecon",
-	"book.resourcefulbees.beekeeping_tools.ender_beecon.text" : "todo",
+	"book.resourcefulbees.beekeeping_tools.ender_beecon.text.1" : "The Ender Beecon is a block that takes honey to power it.",
+	"book.resourcefulbees.beekeeping_tools.ender_beecon.title.1" : "Ender Distruption",
+	"book.resourcefulbees.beekeeping_tools.ender_beecon.text.2" : "By default when the beecon has honey in it it will stop bees with the $(thing)$(l:advanced_tips/traits)Ender Trait$() from teleporting when it's within the beecon's effective range.",
 
 	"book.resourcefulbees.beekeeping_tools.honey_tanks" : "Honey Tanks",
 	"book.resourcefulbees.beekeeping_tools.honey_tanks.text" : "todo",
