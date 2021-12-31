@@ -2,8 +2,13 @@
   "name": "book.resourcefulbees.beekeeping_tools.multiblock_centrifuge",
   "icon": "resourcefulbees:centrifuge_controller",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 2,
+  "sortnum": 12,
   "pages": [
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.multiblock_centrifuge.1",
+      "title": "book.resourcefulbees.beekeeping_tools.multiblock_centrifuge"
+    },
     {
       "type": "multiblock",
       "multiblock": {
@@ -19,14 +24,8 @@
           "0": "resourcefulbees:centrifuge_casing",
           "B": "resourcefulbees:centrifuge_casing"
         },
-        "symmetrical": true,
-        "title": "book.resourcefulbees.beekeeping_tools.multiblock_centrifuge",
-        "text": "book.resourcefulbees.beekeeping_tools.multiblock_centrifuge.desc"
+        "symmetrical": true
       }
-    },
-    {
-      "type": "text",
-      "text": "book.resourcefulbees.beekeeping_tools.multiblock_centrifuge.1"
     },
     {
       "type": "crafting",

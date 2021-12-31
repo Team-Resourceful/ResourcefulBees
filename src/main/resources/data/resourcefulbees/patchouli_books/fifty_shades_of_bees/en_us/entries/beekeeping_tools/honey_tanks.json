@@ -2,7 +2,7 @@
   "name": "book.resourcefulbees.beekeeping_tools.honey_tanks",
   "icon": "resourcefulbees:wooden_honey_tank",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 9,
+  "sortnum": 15,
   "pages": [
     {
       "type": "text",

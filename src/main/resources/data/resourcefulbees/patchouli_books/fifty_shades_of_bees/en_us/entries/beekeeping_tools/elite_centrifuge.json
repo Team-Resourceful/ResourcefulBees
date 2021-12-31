@@ -2,8 +2,13 @@
   "name": "book.resourcefulbees.beekeeping_tools.elite_centrifuge",
   "icon": "resourcefulbees:elite_centrifuge_controller",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 2,
+  "sortnum": 13,
   "pages": [
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.elite_centrifuge.1",
+      "title": "book.resourcefulbees.beekeeping_tools.elite_centrifuge"
+    },
     {
       "type": "multiblock",
       "multiblock": {
@@ -19,15 +24,10 @@
           "0": "resourcefulbees:elite_centrifuge_casing",
           "B": "resourcefulbees:elite_centrifuge_casing"
         },
-        "symmetrical": true,
-        "name": "book.resourcefulbees.beekeeping_tools.elite_centrifuge",
-        "text": "book.resourcefulbees.beekeeping_tools.elite_centrifuge.desc"
+        "symmetrical": true
       }
     },
-    {
-      "type": "text",
-      "text": "book.resourcefulbees.beekeeping_tools.elite_centrifuge.1"
-    },
+
     {
       "type": "crafting",
       "recipe": "resourcefulbees:elite_centrifuge_controller",

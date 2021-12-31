@@ -2,7 +2,7 @@
     "name": "book.resourcefulbees.beekeeping_tools.apiaries",
     "icon": "resourcefulbees:t1_apiary",
     "category": "resourcefulbees:beekeeping_tools",
-    "sortnum": 2,
+    "sortnum": 16,
     "pages": [
         {
             "type": "text",

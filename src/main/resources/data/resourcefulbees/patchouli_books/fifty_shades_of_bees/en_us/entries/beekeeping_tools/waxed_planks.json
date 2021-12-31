@@ -1,12 +1,12 @@
 {
-  "name": "book.resourcefulbees.extras.waxed_planks",
+  "name": "book.resourcefulbees.beekeeping_tools.waxed_planks",
   "icon": "resourcefulbees:waxed_planks",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 1,
+  "sortnum": 22,
   "pages": [
     {
       "type": "text",
-      "text": "book.resourcefulbees.extras.waxed_planks.text"
+      "text": "book.resourcefulbees.beekeeping_tools.waxed_planks.text"
     },
     {
       "type": "crafting",

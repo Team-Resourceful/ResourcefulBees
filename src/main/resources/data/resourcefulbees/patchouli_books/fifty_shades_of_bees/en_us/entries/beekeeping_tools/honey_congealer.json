@@ -2,7 +2,7 @@
   "name": "book.resourcefulbees.beekeeping_tools.honey_congealer",
   "icon": "resourcefulbees:honey_congealer",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 12,
+  "sortnum": 20,
   "pages": [
     {
       "type": "text",

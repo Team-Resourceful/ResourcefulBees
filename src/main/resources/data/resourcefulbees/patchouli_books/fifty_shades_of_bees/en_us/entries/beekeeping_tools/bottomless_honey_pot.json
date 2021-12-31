@@ -2,7 +2,7 @@
   "name": "book.resourcefulbees.beekeeping_tools.bottomless_honey_pot",
   "icon": "resourcefulbees:bottomless_honey_pot",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 11,
+  "sortnum": 21,
   "pages": [
     {
       "type": "text",

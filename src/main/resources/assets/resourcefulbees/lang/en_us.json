@@ -471,53 +471,55 @@
 	"book.resourcefulbees.getting_started.desc": "This section go into how to get started with this mod, with things like how to find and capture bees, how to safely store them and how to keep track of what bees you've encountered.",
 
 	"book.resourcefulbees.getting_started.finding_bees": "Finding Bees",
-	"book.resourcefulbees.getting_started.finding_bees.desc": "Around the world.",
-	"book.resourcefulbees.getting_started.finding_bees.text.1": "Bees can be found within nests, they can also be found roaming the world, spawning in like other mobs.$(br2)If you want to find out where bees can spawn you can find out via the $(item)$(l:beekeeping_tools/beepedia)Beepedia$() or by looking up the bee in JEI.",
+	"book.resourcefulbees.getting_started.finding_bees.desc": "Around the world.$(br2)  Around the world.",
+	"book.resourcefulbees.getting_started.finding_bees.text.1": "Bees can be found within nests, they can also be found roaming the world, spawning in like other mobs.$(br2)If you want to find out where bees can spawn you can find out via the $(or)$(l:beekeeping_tools/beepedia)Beepedia$() or by looking up the bee in JEI.",
 	"book.resourcefulbees.getting_started.finding_bees.text.2":  "Some bees do not spawn naturally and will instead need to be bred. You can find more information about breeding bees $(thing)$(l:getting_started/breeding_bees)here$().",
 
 	"book.resourcefulbees.getting_started.collecting_bees": "Collecting Bees",
 	"book.resourcefulbees.getting_started.collecting_bees.desc": "Gotta catch em all.",
-	"book.resourcefulbees.getting_started.collecting_bees.text": "Once you've found some bees you're going to want to collect them and take them home with you.$(br2)There are several ways to do this, your best bet is to use a $(item)$(l:beekeeping_tools/bee_jar)Bee Jar$() or a $(item)$(l:beekeeping_tools/bee_box)Bee Box$().$(br2)You can also do it the more traditional way with a lead or the bee's breeding item.",
+	"book.resourcefulbees.getting_started.collecting_bees.text": "Once you've found some bees you're going to want to collect them and take them home with you.$(br2)There are several ways to do this, your best bet is to use a $(or)$(l:beekeeping_tools/bee_jar)Bee Jar$() or a $(or)$(l:beekeeping_tools/bee_box)Bee Box$().$(br2)You can also do it the more traditional way with a lead or the bee's breeding item.",
 
 	"book.resourcefulbees.getting_started.understanding_bees": "Understanding Bees",
 	"book.resourcefulbees.getting_started.understanding_bees.desc": "Encyclobeedic knowledge.",
-	"book.resourcefulbees.getting_started.understanding_bees.text.1": "Once you have some bees you will likely want to know what they can do and what to do with them.$(br2)If you craft yourself a $(item)$(l:beekeeping_tools/beepedia)Beepedia$() you can learn a lot more about what each bee can do. If you press $(thing)$(k:key.use)$() on a bee you can open the bee's page in the $(item)$(l:beekeeping_tools/beepedia)Beepedia$().",
-	"book.resourcefulbees.getting_started.understanding_bees.text.2": "You can also use JEI to search up information about bees.$(br2)Keep in mind that bees have both $(thing)$(k:key.use)$() and $(thing)$(k:key.attack)$() uses. You may also find information on how to breed or obtain bees by looking at the bee's spawn eggs or at the $(item)$(l:beekeeping_tools/bee_jar)Bee Jar's$() uses.",
+	"book.resourcefulbees.getting_started.understanding_bees.text.1": "Once you have some bees you will likely want to know what they can do and what to do with them.$(br2)If you craft yourself a $(or)$(l:beekeeping_tools/beepedia)Beepedia$() you can learn a lot more about what each bee can do. If you press $(thing)$(k:key.use)$() on a bee you can open the bee's page in the $(or)$(l:beekeeping_tools/beepedia)Beepedia$().",
+	"book.resourcefulbees.getting_started.understanding_bees.text.2": "You can also use JEI to search up information about bees.$(br2)Keep in mind that bees have both $(thing)$(k:key.use)$() and $(thing)$(k:key.attack)$() uses. You may also find information on how to breed or obtain bees by looking at the bee's spawn eggs or at the $(or)$(l:beekeeping_tools/bee_jar)Bee Jar's$() uses.",
 
 	"book.resourcefulbees.getting_started.keeping_bees": "Keeping Bees",
-	"book.resourcefulbees.getting_started.keeping_bees.desc": "We build Bee Houses.",
-	"book.resourcefulbees.getting_started.keeping_bees.text": "Bees are nice little things but they have minds of their own, so you're going to want to make a place for them.$(br2)First you're going to want to gather yourself some $(item)$(l:beekeeping_tools/beehives)Bee Hives$() and then you are going to want to make an enclosed area so they can't fly away.$(br2)",
-	"book.resourcefulbees.getting_started.keeping_bees.text.2": "Some bees have special flowers, bees cannot and will not pollinate or create honeycombs unless they have the right flowers.$(br2)Make sure to check what each bee needs for it's flower with the $(item)$(l:beekeeping_tools/beepedia)Beepedia$() or JEI.",
+	"book.resourcefulbees.getting_started.keeping_bees.desc": "Making a hive a home.",
+	"book.resourcefulbees.getting_started.keeping_bees.text": "Bees are nice little things but they have minds of their own, so you're going to want to make a place for them.$(br2)First you're going to want to gather yourself some $(or)$(l:beekeeping_tools/beehives)Bee Hives$() and then you are going to want to make an enclosed area so they can't fly away.$(br2)",
+	"book.resourcefulbees.getting_started.keeping_bees.text.2": "Some bees have special flowers, bees cannot and will not pollinate or create honeycombs unless they have the right flowers.$(br2)Make sure to check what each bee needs for it's flower with the $(or)$(l:beekeeping_tools/beepedia)Beepedia$() or JEI.",
 
 	"book.resourcefulbees.getting_started.protecting_bees": "Protecting Bees",
 	"book.resourcefulbees.getting_started.protecting_bees.desc": "todo",
 	"book.resourcefulbees.getting_started.protecting_bees.text": "todo",
 
 	"book.resourcefulbees.getting_started.collecting_honeycombs": "Collecting Honeycombs",
-	"book.resourcefulbees.getting_started.collecting_honeycombs.desc": "An example of an automatic hive harvester.",
-	"book.resourcefulbees.getting_started.collecting_honeycombs.text": "Automating the $(item)$(l:beekeeping_tools/beehives)Hives/$ can easily be done by using a $(item)Hopper/$ or any kind of redstone clock, together with a $(item)Dispenser/$ using a $(item)$(l:beekeeping_tools/scraper)Scraper/$.$(p)This will harvest all the combs without needing you to smoke the hive.",
+	"book.resourcefulbees.getting_started.collecting_honeycombs.desc": "You take the comb and you take the hun.",
+	"book.resourcefulbees.getting_started.collecting_honeycombs.text.1": "Once your hive has reached level 5 honey you can start to harvest it. either with $(or)Shears$() or a $(or)$(l:beekeeping_tools/scraper)Scraper$(), this will unleash combs into the world for you to pick up.$(br2)$(#900)Don't forget to smoke the hive first!$()",
+	"book.resourcefulbees.getting_started.collecting_honeycombs.text.2": "Automating the $(or)$(l:beekeeping_tools/beehives)Hives/$ can easily be done by using a $(or)Hopper/$ or any kind of redstone clock, together with a $(or)Dispenser/$ using a $(or)$(l:beekeeping_tools/scraper)Scraper/$.$(p)This will harvest all the combs without needing you to smoke the hive.",
 
 	"book.resourcefulbees.getting_started.processing_combs": "Processing Combs",
-	"book.resourcefulbees.getting_started.processing_combs.desc": "An image of the $(item)$(l:beekeeping_tools/mechanical_centrifuge)Manual Centrifuge/$ processing honeycombs.",
-	"book.resourcefulbees.getting_started.processing_combs.text": "To start off with, you will have to craft a $(item)$(l:beekeeping_tools/mechanical_centrifuge)Manual Centrifuge/$. You can then place your honeycombs and empty bottles in it to be processed.$(p)Note that only the multiblock centrifuges will take honeycomb blocks.$(p)You will need some $(item)Wax$() in order to craft the higher tier centrifuges.",
+	"book.resourcefulbees.getting_started.processing_combs.desc": "All you have to do is take a cup of combs, add it to the mix.",
+	"book.resourcefulbees.getting_started.processing_combs.text": "To start off with, you will have to craft a $(or)$(l:beekeeping_tools/mechanical_centrifuge)Manual Centrifuge/$. You can then place your honeycombs and empty bottles in it to be processed.$(p)Note that only the multiblock centrifuges will take honeycomb blocks.$(p)You will need some $(or)Wax$() in order to craft the higher tier centrifuges.",
 
 	"book.resourcefulbees.getting_started.breeding_bees": "Breeding Bees",
-	"book.resourcefulbees.getting_started.breeding_bees.desc": "todo",
-	"book.resourcefulbees.getting_started.breeding_bees.text": "todo",
+	"book.resourcefulbees.getting_started.breeding_bees.desc": "The Bees and the Bees?",
+	"book.resourcefulbees.getting_started.breeding_bees.text.1": "Bee breeding works very much like vanilla breeding, with one notable exception. Some bees may require multiple $(or)Breed items$() in order to fall in love.$(br2)The $(or)Breed item$() wont always bee a flower.$(br2)You can check what a bee needs to breed in the $(or)$(l:beekeeping_tools/beepedia)Beepedia$() or with JEI.",
+	"book.resourcefulbees.getting_started.breeding_bees.text.2":"Sometimes bees are obtainable through other means, sometimes this is through $(thing)$(l:advanced_tips/mutations)Mutations$(), and sometimes it's through less conventional means.$(br2)Your best bet to find out how to get a bee is through the $(or)$(l:beekeeping_tools/beepedia)Beepedia$() and or looking at the bee's tooltip.",
 
 	"book.resourcefulbees.advanced_tips": "Advanced Tips",
 	"book.resourcefulbees.advanced_tips.desc": "This section will go into advanced sections of the mod that you may encounter once you have gotten your bees set up.",
 
 	"book.resourcefulbees.advanced_tips.apiaries": "Apiaries",
-	"book.resourcefulbees.advanced_tips.apiaries.1": "The $(item)Apiary/$ is the next upgrade for the $(thing)$(l:getting_started/keeping_bees)Beehives/$. $(p)It can house more bees, produce more honeycombs and make $(thing)$(l:getting_started/breeding_bees)breeding/$ easier.",
-	"book.resourcefulbees.advanced_tips.apiaries.2": "The $(item)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$ and $(item)$(l:beekeeping_tools/apiary_breeder)Apiary Breeder/$ can be placed anywhere in the multiblock's walls. $(p)The $(item)Apiary/$ size is 7x7x5. Once you place down the $(item)Apiary/$, you can click the preview button to see a highlight of where you have to place blocks. You can also use the arrow buttons to move the multiblock around the $(item)Apiary/$ block.",
-	"book.resourcefulbees.advanced_tips.apiaries.3": "When honeycombs are produced by the bees, they will show up in the $(item)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$, which can then be removed manually, or automated via $(item)Hoppers/$ or pipes from other mods.$(p)The $(item)Apiary/$ comes with some restrictions: it can only house 9 unique bees, which means you can have as many bees as you want in the enclosure, but there cannot be",
-	"book.resourcefulbees.advanced_tips.apiaries.4": "more than one of the same type of bee in the $(item)Apiary/$ for them to enter.$(p)To give an example of the 'unique' limitation: you can have two or more $(item)Redstone/$ and $(item)Coal Bees/$ in the enclosure, but only one $(item)Redstone/$ and $(item)Coal Bee/$ inside the $(item)Apiary/$. Once a $(item)Redstone Bee/$ has left the $(item)Apiary/$, the other $(item)Redstone Bee/$ may now enter.",
-	"book.resourcefulbees.apiary_category.multiblock.5": "The multiblock must have an $(item)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$ and optionally an $(item)$(l:beekeeping_tools/apiary_breeder)Apiary Breeder/$.",
+	"book.resourcefulbees.advanced_tips.apiaries.1": "The $(or)Apiary/$ is the next upgrade for the $(thing)$(l:getting_started/keeping_bees)Beehives/$. $(p)It can house more bees, produce more honeycombs and make $(thing)$(l:getting_started/breeding_bees)breeding/$ easier.",
+	"book.resourcefulbees.advanced_tips.apiaries.2": "The $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$ and $(or)$(l:beekeeping_tools/apiary_breeder)Apiary Breeder/$ can be placed anywhere in the multiblock's walls. $(p)The $(or)Apiary/$ size is 7x7x5. Once you place down the $(or)Apiary/$, you can click the preview button to see a highlight of where you have to place blocks. You can also use the arrow buttons to move the multiblock around the $(or)Apiary/$ block.",
+	"book.resourcefulbees.advanced_tips.apiaries.3": "When honeycombs are produced by the bees, they will show up in the $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$, which can then be removed manually, or automated via $(or)Hoppers/$ or pipes from other mods.$(p)The $(or)Apiary/$ comes with some restrictions: it can only house 9 unique bees, which means you can have as many bees as you want in the enclosure, but there cannot be",
+	"book.resourcefulbees.advanced_tips.apiaries.4": "more than one of the same type of bee in the $(or)Apiary/$ for them to enter.$(p)To give an example of the 'unique' limitation: you can have two or more $(or)Redstone/$ and $(or)Coal Bees/$ in the enclosure, but only one $(or)Redstone/$ and $(or)Coal Bee/$ inside the $(or)Apiary/$. Once a $(or)Redstone Bee/$ has left the $(or)Apiary/$, the other $(or)Redstone Bee/$ may now enter.",
+	"book.resourcefulbees.apiary_category.multiblock.5": "The multiblock must have an $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$ and optionally an $(or)$(l:beekeeping_tools/apiary_breeder)Apiary Breeder/$.",
 
 	"book.resourcefulbees.advanced_tips.calming": "Calming",
 	"book.resourcefulbees.advanced_tips.calming.desc": "The Calming effect when applied to bees will prevent them from getting angry, it will also calm bees down if they are already angry.",
-	"book.resourcefulbees.advanced_tips.calming.text": "If a bee has the Angry trait it will calm them down, allowing you to keep them around other bees.$(br2)Bees can be granted the Calming effect in two ways, one is via a $(item)$(l:beekeeping_tools/calming_potions)Splash Potion of Calming$() or by using an $(item)$(l:beekeeping_tools/ender_beecon)Ender Beecon$().",
+	"book.resourcefulbees.advanced_tips.calming.text": "If a bee has the Angry trait it will calm them down, allowing you to keep them around other bees.$(br2)Bees can be granted the Calming effect in two ways, one is via a $(or)$(l:beekeeping_tools/calming_potions)Splash Potion of Calming$() or by using an $(or)$(l:beekeeping_tools/ender_beecon)Ender Beecon$().",
 
 	"book.resourcefulbees.advanced_tips.auras": "Auras",
 
@@ -533,16 +535,30 @@
 
 	"book.resourcefulbees.advanced_tips.protecting_bees": "Protecting Bees",
 
+	"book.resourcefulbees.advanced_tips.ender_beecon": "The Ender Beecon",
+	"book.resourcefulbees.advanced_tips.ender_beecon.desc": "Are you looking to protect your bees or grant some effects?",
+
+	"book.resourcefulbees.advanced_tips.ender_beecon.title.1" : "Beecon Effects",
+	"book.resourcefulbees.advanced_tips.ender_beecon.text.1" : "The Ender Beecon can grant up to 4 different effects at once, each effect requiring more and more honey to keep it active.$(br2)Effects:$(or)$(li)$(l:advanced_tips/calming)Calming$()$(or)$(li)Fire Resistance$()$(or)$(li)Water Breathing$()$(or)$(li)Regeneration$()",
+
+	"book.resourcefulbees.advanced_tips.ender_beecon.title.2" : "Ender Distruption",
+	"book.resourcefulbees.advanced_tips.ender_beecon.text.2" : "By default when the beecon has honey in it it will stop bees with the $(thing)$(l:advanced_tips/traits)Ender Trait$() from teleporting when it's within the beecon's effective range.",
+
+	"book.resourcefulbees.advanced_tips.ender_beecon.title.3" : "Filling the beecon",
+	"book.resourcefulbees.advanced_tips.ender_beecon.text.3" : "The Ender Beecon can be filled directly with $(or)Honey bottles$() or $(or)Buckets of Honey$()$(br2)It can also fill itself from any $(or)$(l:beekeeping_tools/honey_tanks)Tanks$() placed below it provided said tank has enough honey.",
+
+	"book.resourcefulbees.advanced_tips.ender_beecon.title.4" : "Beecon Options",
+	"book.resourcefulbees.advanced_tips.ender_beecon.text.4" : "The color of the beecon's beam is set to match the color of the honey that is inside, the exception being $(or)Vanilla$(), $(or)Catnip$(), or $(or)Starry$() honey which will show up as white.$(br2)You can also chose to silence or remove the beam from the beecon with the interface.",
 
 	"book.resourcefulbees.beekeeping_tools": "Beekeeping Tools",
 	"book.resourcefulbees.beekeeping_tools.desc": "This section will go in depth about all of the items and blocks you can use to enhance your beekeeping journey.",
 
 	"book.resourcefulbees.beekeeping_tools.bee_jar": "Bee Jar",
 	"book.resourcefulbees.beekeeping_tools.bee_jar.text": "Bee jars are able to hold a single bee, simply $(thing)Right Click$() on a bee to collect it.$(br2)Releasing bees is done via another $(thing)Right Click$().",
-	"book.resourcefulbees.beekeeping_tools.bee_jar.desc": "Bee jars can also be renamed in an $(item)Anvil$() to which will rename the bee inside.",
+	"book.resourcefulbees.beekeeping_tools.bee_jar.desc": "Bee jars can also be renamed in an $(or)Anvil$() to which will rename the bee inside.",
 
 	"book.resourcefulbees.beekeeping_tools.bee_box": "Bee Box",
-	"book.resourcefulbees.beekeeping_tools.bee_box.text": "Bee boxes are able to hold up to 10 bees at a time, simply $(thing)Right Click$() on a bee to collect it. They can also collect bees from $(item)$(l:beekeeping_tools/beehives)Bee Hives, Nests, or Apiaries$(), simply $(thing)Sneak Right Click$() on a nest to collect all bees inside. $(br2)$(#900)Don't forget to smoke the hive first!$()",
+	"book.resourcefulbees.beekeeping_tools.bee_box.text": "Bee boxes are able to hold up to 10 bees at a time, simply $(thing)Right Click$() on a bee to collect it. They can also collect bees from $(or)$(l:beekeeping_tools/beehives)Bee Hives, Nests, or Apiaries$(), simply $(thing)Sneak Right Click$() on a nest to collect all bees inside. $(br2)$(#900)Don't forget to smoke the hive first!$()",
 	"book.resourcefulbees.beekeeping_tools.bee_box.desc": "To release bees simply $(thing)Right Click$() to release a single bee, to release all bees at once use $(thing)Sneak Right Click$().",
 
 	"book.resourcefulbees.beekeeping_tools.beehives": "Beehives",
@@ -551,13 +567,13 @@
 	"book.resourcefulbees.beekeeping_tools.beehives.text.2": "Bee Nests can be found around the world, you can pick them up without $(thing)Silk Touch$() but if you use $(thing)Silk Touch$() you will collect any bees inside.",
 
 	"book.resourcefulbees.beekeeping_tools.scraper": "Scraper",
-	"book.resourcefulbees.beekeeping_tools.scraper.text": "The $(item)Scraper/$ is an unbreakable tool that can be used to harvest $(item)$(l:beekeeping_tools/beehives)Bee Hives$().$(br2)The scraper can also be used in a $(item)Dispenser$() the same way $(item)Shears$() can.",
+	"book.resourcefulbees.beekeeping_tools.scraper.text": "The $(or)Scraper/$ is an unbreakable tool that can be used to harvest $(or)$(l:beekeeping_tools/beehives)Bee Hives$().$(br2)The scraper can also be used in a $(or)Dispenser$() the same way $(or)Shears$() can.",
 
 	"book.resourcefulbees.beekeeping_tools.smoker": "Smoker",
-	"book.resourcefulbees.beekeeping_tools.smoker.text.1": "The $(item)Smoker/$ is a simple tool, if you use it on a $(item)$(l:beekeeping_tools/beehives)Bee Hive$() it will smoke it, preventing bees from angering if you attempt to harvest or collect the bees with a $(item)$(l:beekeeping_tools:bee_box)Bee Box$().",
+	"book.resourcefulbees.beekeeping_tools.smoker.text.1": "The $(or)Smoker/$ is a simple tool, if you use it on a $(or)$(l:beekeeping_tools/beehives)Bee Hive$() it will smoke it, preventing bees from angering if you attempt to harvest or collect the bees with a $(or)$(l:beekeeping_tools:bee_box)Bee Box$().",
 
 	"book.resourcefulbees.beekeeping_tools.beepedia": "Beepedia",
-	"book.resourcefulbees.beekeeping_tools.beepedia.text": "The $(item)Beepedia/$ is an amazing tool that allows you to find out anything you should need to know about bees.$(br2)If you $(thing)Right Click$() on a bee with this item you will open that bee's page and record it's data for later.",
+	"book.resourcefulbees.beekeeping_tools.beepedia.text": "The $(or)Beepedia/$ is an amazing tool that allows you to find out anything you should need to know about bees.$(br2)If you $(thing)Right Click$() on a bee with this item you will open that bee's page and record it's data for later.",
 	"book.resourcefulbees.beekeeping_tools.beepedia.desc": "The information stored within the beepedia is saved per player and will be kept even if you lose the item.",
 
 	"book.resourcefulbees.beekeeping_tools.beepedia.text.2": "The Beepedia allows you to search for bees combs or honey via the search box.$(br2)You can also use special search terms to filter bees by certain criteria.",
@@ -567,93 +583,57 @@
 	"book.resourcefulbees.beekeeping_tools.beepedia.text.4": "$(#F80)#spawns$()$(br)- Bees that spawn in the world.$(br2)$(#F80)#aura$()$(br)- Bees that have a $(thing)$(l:advanced_tips/auras)Special Aura$().$(br2)$(#F80)#easter$()$(br)- Easter Egg bees added by devs or Patrens.$(br2)$(#F80)#special$()$(br)- Bees that likely have special methods to obtain.",
 
 	"book.resourcefulbees.beekeeping_tools.honey_dipper": "Honey Dipper",
-	"book.resourcefulbees.beekeeping_tools.honey_dipper.text": "The $(item)Honey Dipper/$ is a special tool that allows you to direct bees.$(br2)You can set where a bee's hive or flower position is, allowing for you to split up bees if they all crowd around a single flower.",
+	"book.resourcefulbees.beekeeping_tools.honey_dipper.text": "The $(or)Honey Dipper/$ is a special tool that allows you to direct bees.$(br2)You can set where a bee's hive or flower position is, allowing for you to split up bees if they all crowd around a single flower.",
 	"book.resourcefulbees.beekeeping_tools.honey_dipper.desc": "To change a bee's settings simply $(thing)Right Click$() on a bee and then $(thing)Right Click$() on a hive or flower.",
 
 	"book.resourcefulbees.beekeeping_tools.calming_potions": "Calming Potions",
 	"book.resourcefulbees.beekeeping_tools.calming_potions.text": "Calming Potions are potions that give things the calming effect, however the $(thing)$(l:advanced_tips/calming)Calming Effect$() has no effects on players but it does on neutral mobs, so splash or lingering Calming potions are your best friend.",
 
 	"book.resourcefulbees.beekeeping_tools.ender_beecon" : "Ender Beecon",
-	"book.resourcefulbees.beekeeping_tools.ender_beecon.text.1" : "The Ender Beecon is a block that takes honey to power it.",
-	"book.resourcefulbees.beekeeping_tools.ender_beecon.title.1" : "Ender Distruption",
-	"book.resourcefulbees.beekeeping_tools.ender_beecon.text.2" : "By default when the beecon has honey in it it will stop bees with the $(thing)$(l:advanced_tips/traits)Ender Trait$() from teleporting when it's within the beecon's effective range.",
+	"book.resourcefulbees.beekeeping_tools.ender_beecon.text.1" : "The Ender Beecon is a device that takes honey to power it and gives bees within range effects that help keep them safe.$(br2)You can find more about it $(thing)$(l:advanced_tips/ender_beecon)in Advanced Tips$()",
 
 	"book.resourcefulbees.beekeeping_tools.honey_tanks": "Honey Tanks",
-	"book.resourcefulbees.beekeeping_tools.honey_tanks.1": "The $(item)Honey Tanks/$ can hold a certain amount of liquid honey.$(p)There are three tiers, each with their own capacity:$(li1)Wooden: 8,000mb$(li1)Nether: 32,000mb$(li1)Purpur: 128,000mb",
+	"book.resourcefulbees.beekeeping_tools.honey_tanks.1": "The $(or)Honey Tanks/$ can hold a certain amount of liquid honey.$(p)There are three tiers, each with their own capacity:$(li1)Wooden: 8,000mb$(li1)Nether: 32,000mb$(li1)Purpur: 128,000mb",
 
 	"book.resourcefulbees.beekeeping_tools.bottomless_honey_pot": "Bottomless Honey Pot",
-	"book.resourcefulbees.beekeeping_tools.bottomless_honey_pot.1": "The $(item)Bottomless Honey Pot/$ is a tank that will delete any liquid honey put in it.$(p)It is meant for automation with pipes, where you can delete excess honey.",
+	"book.resourcefulbees.beekeeping_tools.bottomless_honey_pot.1": "The $(or)Bottomless Honey Pot/$ is a tank that will delete any liquid honey put in it.$(p)It is meant for automation with pipes, where you can delete excess honey.",
 
 	"book.resourcefulbees.beekeeping_tools.honey_congealer": "Honey Congealer",
-	"book.resourcefulbees.beekeeping_tools.honey_congealer.1": "The $(item)Honey Congealer/$ is a simple block that requires no power. It will turn liquid honey into their respective honey blocks.$(p)Best to use with pipes from other mods.",
+	"book.resourcefulbees.beekeeping_tools.honey_congealer.1": "The $(or)Honey Congealer/$ is a simple block that requires no power. It will turn liquid honey into their respective honey blocks.$(p)Best to use with pipes from other mods.",
 
 	"book.resourcefulbees.beekeeping_tools.honey_glass": "Honey Glass",
-	"book.resourcefulbees.beekeeping_tools.honey_glass.1": "The $(item)Honey Glass/$ is a special type of glass that let either players or bees to go through it.$(p)It is suitable for apiaries so players can go in and out of the multiblock without breaking the walls.",
+	"book.resourcefulbees.beekeeping_tools.honey_glass.1": "The $(or)Honey Glass/$ is a special type of glass that let either players or bees to go through it.$(p)It is suitable for $(or)$(l:beekeeping_tools/apiaries)Apiaries$() so players can go in and out of the multiblock without breaking the walls or adding doors.",
 
 	"book.resourcefulbees.beekeeping_tools.apiaries": "Apiaries",
-	"book.resourcefulbees.beekeeping_tools.apiaries.1": "The $(item)Apiary/$ block is the main part of the apiary multiblock. You must also use an $(thing)$(l:beekeeping_tools/apiary_storage)Apiary Storage$() for the multiblock.$(p)For more info on the multiblock and how it works, click $(thing)$(l:advanced_tips/apiaries)here$().",
+	"book.resourcefulbees.beekeeping_tools.apiaries.1": "The $(or)Apiary/$ block is the main part of the apiary multiblock. You must also use an $(thing)$(l:beekeeping_tools/apiary_storage)Apiary Storage$() for the multiblock.$(p)For more info on the multiblock and how it works, click $(thing)$(l:advanced_tips/apiaries)here$().",
 
 	"book.resourcefulbees.beekeeping_tools.apiary_breeder": "Apiary Breeder",
-	"book.resourcefulbees.beekeeping_tools.apiary_breeder.1": "The $(item)Apiary Breeder/$ will make breeding easier by allowing you to place the two bees, together with their food and a jar, inside it and not have the hassle of running around after them.$(p)If the breeding is successful, the new bee will be placed in the $(item)Apiary Storage/$.",
-	"book.resourcefulbees.beekeeping_tools.apiary_breeder.2": "You can also upgrade the $(item)Apiary Breeder/$ with $(item)Breeder Upgrade/$ and $(item)Breed Time Upgrade/$.$(p)They add more slots and also reduce the time needed for the breed.$(p)You can have up to four upgrades at any time.",
+	"book.resourcefulbees.beekeeping_tools.apiary_breeder.1": "The $(or)Apiary Breeder/$ will make breeding easier by allowing you to place the two bees, together with their food and a jar, inside it and not have the hassle of running around after them.$(p)If the breeding is successful, the new bee will be placed in the $(or)Apiary Storage/$.",
+	"book.resourcefulbees.beekeeping_tools.apiary_breeder.2": "You can also upgrade the $(or)Apiary Breeder/$ with $(or)Breeder Upgrade/$ and $(or)Breed Time Upgrade/$.$(p)They add more slots and also reduce the time needed for the breed.$(p)You can have up to four upgrades at any time.",
 
 	"book.resourcefulbees.beekeeping_tools.apiary_storage": "Apiary Storage",
-	"book.resourcefulbees.beekeeping_tools.apiary_storage.1": "The $(item)Apiary Storage/$ is the block where all the $(item)Apiary/$ resources will go to.$(p)You can manually take out the items, or automate it with a $(item)Hopper/$.$(p)Each $(item)Apiary/$ must have one $(item)Apiary Storage/$.",
-	"book.resourcefulbees.beekeeping_tools.apiary_storage.2": "You can use $(item)Storage Upgrades/$ to increase the number of slots.$(p)You can only have one upgrade and a choice of four tiers.",
+	"book.resourcefulbees.beekeeping_tools.apiary_storage.1": "The $(or)Apiary Storage/$ is the block where all the $(or)Apiary/$ resources will go to.$(p)You can manually take out the items, or automate it with a $(or)Hopper/$.$(p)Each $(or)Apiary/$ must have one $(or)Apiary Storage/$.",
+	"book.resourcefulbees.beekeeping_tools.apiary_storage.2": "You can use $(or)Storage Upgrades/$ to increase the number of slots.$(p)You can only have one upgrade and a choice of four tiers.",
 
 	"book.resourcefulbees.beekeeping_tools.honey_generator": "Honey Generator",
-	"book.resourcefulbees.beekeeping_tools.honey_generator.1": "The $(item)Honey Generator/$ will turn liquid honey into RF. This can be used to power the centrifuges.$(p)Honey is inserted with either $(thing)Honey Bottles$() or directly pumped with pipes.",
+	"book.resourcefulbees.beekeeping_tools.honey_generator.1": "The $(or)Honey Generator/$ will turn liquid honey into power.$(br2)Honey can be added by using $(or)Honey Bottles$() or $(or)Buckets of Honey$() on it or inserted into the interface.$(br2)You can also add honey directly with pipes.",
 
 	"book.resourcefulbees.beekeeping_tools.mechanical_centrifuge": "Manual Centrifuge",
-	"book.resourcefulbees.beekeeping_tools.mechanical_centrifuge.1": "The $(item)Manual Centrifuge/$ is the most basic type of centrifuge.$(br)It requires no power, but you will have to actively turn it by holding down $(thing)Shift$() + $(thing)Right Click$().$(p)It is limited to only processing honeycombs, not blocks.",
+	"book.resourcefulbees.beekeeping_tools.mechanical_centrifuge.1": "The $(or)Manual Centrifuge/$ is the most basic type of centrifuge.$(br)It requires no power, but you will have to actively turn it by holding down $(thing)Shift$() + $(thing)Right Click$().$(p)It is limited to only processing honeycombs, not blocks.",
 
 	"book.resourcefulbees.beekeeping_tools.centrifuge": "Centrifuge",
-	"book.resourcefulbees.beekeeping_tools.centrifuge.1": "The $(item)Centrifuge/$ will use RF to turn your combs into resources.$(p)There is a limitation that it can only process honeycombs, not blocks.$(p)This process can be automated with $(item)Hoppers/$.",
+	"book.resourcefulbees.beekeeping_tools.centrifuge.1": "The $(or)Centrifuge/$ will use RF to turn your combs into resources.$(p)There is a limitation that it can only process honeycombs, not blocks.$(p)This process can be automated with $(or)Hoppers/$.",
 
 	"book.resourcefulbees.beekeeping_tools.multiblock_centrifuge": "Multiblock Centrifuge",
-	"book.resourcefulbees.beekeeping_tools.multiblock_centrifuge.1": "The $(item)Multiblock Centrifuge/$ is an upgraded version of the $(item)$(l:beekeeping_tools/centrifuge)Centrifuge/$ that will increase the amount of resources from the processing of combs and allow processing of comb blocks as well.$(p)This process can be automated with $(item)Hoppers/$.",
+	"book.resourcefulbees.beekeeping_tools.multiblock_centrifuge.1": "The $(or)Multiblock Centrifuge/$ is an upgraded version of the $(or)$(l:beekeeping_tools/centrifuge)Centrifuge/$ that will increase the amount of resources from the processing of combs and allow processing of comb blocks as well.$(p)This process can be automated with $(or)Hoppers/$.",
 	"book.resourcefulbees.beekeeping_tools.multiblock_centrifuge.desc": "The centrifuge is a 3x3x4 multiblock.",
 
 	"book.resourcefulbees.beekeeping_tools.elite_centrifuge": "Elite Centrifuge",
-	"book.resourcefulbees.beekeeping_tools.elite_centrifuge.1": "The $(item)Elite Centrifuge/$ is an upgraded version of the $(item)$(l:beekeeping_tools/multiblock_centrifuge)Multiblock Centrifuge/$.$(p)This process can be automated with $(item)Hoppers/$.",
+	"book.resourcefulbees.beekeeping_tools.elite_centrifuge.1": "The $(or)Elite Centrifuge/$ is an upgraded version of the $(or)$(l:beekeeping_tools/multiblock_centrifuge)Multiblock Centrifuge/$.$(p)This process can be automated with $(or)Hoppers/$.",
 	"book.resourcefulbees.beekeeping_tools.elite_centrifuge.desc": "The centrifuge is a 3x3x4 multiblock.",
 
-	"book.resourcefulbees.ender_beecon": "Ender Beecon",
-	"book.resourcefulbees.ender_beecon.desc": "Consumes honey to protect your bees.",
-
-	"book.resourcefulbees.ender_beecon.basics": "Beecon Basics",
-	"book.resourcefulbees.ender_beecon.basics.1": "The Ender Beecon is designed with giving all your bees freedom to mingle in mind.$(br2)It does this by effecting your bees in various ways. One major one is that it will prevent bees from despawning within it's effect range.$(br2)Other ways bees are effected can be found in later chapters.",
-
-	"book.resourcefulbees.ender_beecon.teleportation": "Ender Disruption",
-	"book.resourcefulbees.ender_beecon.teleportation.range": "Disruption Range",
-	"book.resourcefulbees.ender_beecon.teleportation.1": "If you have issues with bees teleporting away then the Ender Beecon is for you.$(br2)To prevent your bees from teleporting you simply need to supply your Ender Beecon with honey.$(br2)So long as the internal tank has honey in it it will prevent bees from teleporting.",
-	"book.resourcefulbees.ender_beecon.teleportation.2": "todo",
-
-	"book.resourcefulbees.ender_beecon.tanks": "Filling the Beecon",
-
-	"book.resourcefulbees.ender_beecon.tanks.1": "The Ender Beecon requires honey to function as such you",
-	"book.resourcefulbees.ender_beecon.tanks.2": "todo",
-	"book.resourcefulbees.ender_beecon.tanks.stacking": "Tank Stacking",
-	"book.resourcefulbees.ender_beecon.tanks.3": "todo",
-	"book.resourcefulbees.ender_beecon.tanks.4": "When you upgrade your tank from one tier to another it will retain any honey left in it.",
-
-	"book.resourcefulbees.ender_beecon.effects": "Effects",
-
-	"book.resourcefulbees.ender_beecon.effects.water_breathing": "Water Breathing when applied to bees will prevent them from drowning when coming in contact with water.$(br2)Now your bees can take a nice little drink without dying.",
-	"book.resourcefulbees.ender_beecon.effects.fire_resistance": "Fire Resistance does what it says on the tin, it will prevent all forms of fire damage from hurting your bees.$(br2)Now you can keep your nether bees around without worry.",
-	"book.resourcefulbees.ender_beecon.effects.regeneration": "Regeneration is for any other damage that bees can take, warning though it tends to be quite honey consuming to keep this active.",
-	"book.resourcefulbees.ender_beecon.effects.1": "The Ender Beecon can apply certain effects to your bees. While effects are active they will drain honey from the internal tank.$(br2)The more effects that are active the larger the effect range will be and the more honey the Beecon will consume.",
-
-	"book.resourcefulbees.ender_beecon.options": "Beecon Options",
-	"book.resourcefulbees.ender_beecon.options.beam_color": "Beam Color",
-	"book.resourcefulbees.ender_beecon.options.show_beam": "Toggling the Beam",
-	"book.resourcefulbees.ender_beecon.options.muting":  "Muting the Beecon",
-	"book.resourcefulbees.ender_beecon.options.1": "The Ender Beecon's beam will change color based on the type of honey that is inside the internal tank.$(br2)Default, Catnip, and Starry honey will leave the Beecon beam white if you don't want to stand out.$(br2)Rainbow colored honey will make the beam rainbow too.",
-	"book.resourcefulbees.ender_beecon.options.2": "todo",
-	"book.resourcefulbees.ender_beecon.options.3": "todo",
-
-	"book.resourcefulbees.extras.waxed_planks": "Waxed Planks",
-	"book.resourcefulbees.extras.waxed_planks.text": "Have excess wax? Why not make some waxed planks?",
+	"book.resourcefulbees.beekeeping_tools.waxed_planks": "Waxed Planks",
+	"book.resourcefulbees.beekeeping_tools.waxed_planks.text": "Have excess wax? Why not make some waxed planks?",
 
 	"book.resourcefulbees.extras": "Extras",
 	"book.resourcefulbees.extras.desc": "This section is for extra stuff you can do with this mod.$(br2)Helpful Links:$(li)$(6)$(l:https://discord.com/invite/resourcefulbees)Discord$()$(li)$(6)$(l:https://patreon.resourcefulbees.com)Patreon$()$(li)$(6)$(l:https://github.com/Resourceful-Bees/ResourcefulBees)Github$()$(li)$(6)$(l:https://wiki.resourcefulbees.com)Wiki$()",

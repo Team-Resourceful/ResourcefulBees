@@ -2,17 +2,12 @@
   "name": "book.resourcefulbees.beekeeping_tools.ender_beecon",
   "icon": "resourcefulbees:ender_beecon",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 9,
+  "sortnum": 14,
   "pages": [
     {
       "type": "text",
       "text": "book.resourcefulbees.beekeeping_tools.ender_beecon.text.1",
       "title": "book.resourcefulbees.beekeeping_tools.ender_beecon"
-    },
-    {
-      "type": "text",
-      "text": "book.resourcefulbees.beekeeping_tools.ender_beecon.text.2",
-      "title": "book.resourcefulbees.beekeeping_tools.ender_beecon.title.1"
     },
     {
       "type": "crafting",

@@ -2,7 +2,7 @@
   "name": "book.resourcefulbees.beekeeping_tools.honey_glass",
   "icon": "resourcefulbees:honey_glass",
   "category": "resourcefulbees:beekeeping_tools",
-  "sortnum": 13,
+  "sortnum": 19,
   "pages": [
     {
       "type": "text",
