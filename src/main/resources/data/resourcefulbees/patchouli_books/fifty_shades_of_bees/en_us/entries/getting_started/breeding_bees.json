@@ -1,0 +1,33 @@
+{
+  "name": "book.resourcefulbees.getting_started.breeding_bees",
+  "icon": "resourcefulbees:gold_flower",
+  "category": "resourcefulbees:getting_started",
+  "sortnum": 7,
+  "pages": [
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/getting_started/breeding_bees1.png"
+      ],
+      "title": "book.resourcefulbees.getting_started.breeding_bees",
+      "text": "book.resourcefulbees.getting_started.breeding_bees.desc",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.getting_started.breeding_bees.text.1"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/getting_started/breeding_bees2.png"
+      ],
+      "title": "book.resourcefulbees.getting_started.breeding_bees",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.getting_started.breeding_bees.text.2"
+    }
+  ]
+}

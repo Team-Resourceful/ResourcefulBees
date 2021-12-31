@@ -1,0 +1,21 @@
+{
+  "name": "book.resourcefulbees.getting_started.processing_combs",
+  "icon": "resourcefulbees:mechanical_centrifuge",
+  "category": "resourcefulbees:getting_started",
+  "sortnum": 6,
+  "pages": [
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/getting_started/processing_combs.png"
+      ],
+      "title": "book.resourcefulbees.getting_started.processing_combs",
+      "text": "book.resourcefulbees.getting_started.processing_combs.desc",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.getting_started.processing_combs.text"
+    }
+  ]
+}

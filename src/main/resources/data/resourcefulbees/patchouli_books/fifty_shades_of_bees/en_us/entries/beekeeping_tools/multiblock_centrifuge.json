@@ -1,0 +1,37 @@
+{
+  "name": "book.resourcefulbees.beekeeping_tools.multiblock_centrifuge",
+  "icon": "resourcefulbees:centrifuge_controller",
+  "category": "resourcefulbees:beekeeping_tools",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "multiblock",
+      "multiblock": {
+        "pattern": [
+          [ "BBB", "BBB", "BBB" ],
+          [ "BBB", "BBB", "BBB" ],
+          [ "BBB", "BBB", "BBB" ],
+          [ "BBB", "BBB", "BCB" ],
+          [ "BBB", "B0B", "BBB" ]
+        ],
+        "mapping": {
+          "C": "resourcefulbees:centrifuge_controller[facing=east]",
+          "0": "resourcefulbees:centrifuge_casing",
+          "B": "resourcefulbees:centrifuge_casing"
+        },
+        "symmetrical": true,
+        "title": "book.resourcefulbees.beekeeping_tools.multiblock_centrifuge",
+        "text": "book.resourcefulbees.beekeeping_tools.multiblock_centrifuge.desc"
+      }
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.multiblock_centrifuge.1"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:centrifuge_controller",
+      "recipe2": "resourcefulbees:centrifuge_casing"
+    }
+  ]
+}

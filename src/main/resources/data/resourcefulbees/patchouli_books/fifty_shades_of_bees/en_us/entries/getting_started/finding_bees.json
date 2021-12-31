@@ -1,0 +1,33 @@
+{
+  "name": "book.resourcefulbees.getting_started.finding_bees",
+  "icon": "minecraft:poppy",
+  "category": "resourcefulbees:getting_started",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/getting_started/finding_bees1.png"
+      ],
+      "title": "book.resourcefulbees.getting_started.finding_bees",
+      "text": "book.resourcefulbees.getting_started.finding_bees.desc",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.getting_started.finding_bees.text.1"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/getting_started/finding_bees2.png"
+      ],
+      "title": "book.resourcefulbees.getting_started.finding_bees",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.getting_started.finding_bees.text.2"
+    }
+  ]
+}

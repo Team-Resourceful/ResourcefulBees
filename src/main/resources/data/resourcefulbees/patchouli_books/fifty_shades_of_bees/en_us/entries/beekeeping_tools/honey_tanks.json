@@ -1,0 +1,22 @@
+{
+  "name": "book.resourcefulbees.beekeeping_tools.honey_tanks",
+  "icon": "resourcefulbees:wooden_honey_tank",
+  "category": "resourcefulbees:beekeeping_tools",
+  "sortnum": 9,
+  "pages": [
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.beekeeping_tools.honey_tanks.1",
+      "title": "book.resourcefulbees.beekeeping_tools.honey_tanks"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:wooden_honey_tank",
+      "recipe2": "resourcefulbees:nether_honey_tank"
+    },
+    {
+      "type": "crafting",
+      "recipe": "resourcefulbees:purpur_honey_tank"
+    }
+  ]
+}

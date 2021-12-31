@@ -1,0 +1,21 @@
+{
+  "name": "book.resourcefulbees.advanced_tips.mutations",
+  "icon": "minecraft:fermented_spider_eye",
+  "category": "resourcefulbees:advanced_tips",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/collecting_honeycombs/mutations.png"
+      ],
+      "title": "book.resourcefulbees.collecting_honeycombs.mutations",
+      "text": "book.resourcefulbees.collecting_honeycombs.mutations.desc",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.collecting_honeycombs.mutations.text"
+    }
+  ]
+}
