@@ -1,5 +1,54 @@
 **please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
 
+# ----- [0.10.0] -----
+ ### WARNING IF YOU HAVE ANY BEES USING THE KITTEN BASE BEE MODEL YOUR TEXTURES WILL NEED TO BE UPDATED, AND THE MODEL TYPE KITTEN WILL NEED TO BE ADDED.
+
+## New Additions
+- Added KITTEN, BUNNY, ASTRONAUT model types
+- Added Waxed Planks, Trimmed Waxed Planks, Waxed variants of wooden blocks (i.e. signs, fences, doors)
+- Beepedia Command, which allows you to lock or unlock bee entries in the beepedia.
+- Added Rainbow Glass Bee to default bees
+- Added Dev Bee: Starry Bee
+- Added Patreon Bee: AbBee
+- Added Starry Honey
+- Added StrawBeerry Milkshake
+- Added Auras
+  - Aura Types: EXPERIENCE, EXPERIENCE_DRAIN, DAMAGING, HEALING, POTION, BURNING
+- Added the ability for the usage of custom models of your own through GeckoLib
+- You can now rename bees by renaming a bee jar
+- You can now steal bees from beehives and apiaries using a bee box (make sure you smoke the hive first)
+- Added Rbees version number to beepedia home page
+- Added template textures for new model system
+- Added Trait Clingy: causes bees to follow players without the need for breed items
+- Added Trait Healer: using the new aura system will heal any player within range every 8 seconds
+
+## Removals
+- Due to now using GeckoLib for models BaseModelType is now no longer used.
+
+## Changes
+- Reworked the Fifty Shades of Bees
+- Bee Rendering now uses GeckoLib which should hopefully allow for better performance
+- The Beepedia now saves your progress to your player rather than the item meaning you can't lose your progress if you lose the ite.
+- Reworked the beepedia Interface and removed reliance on effects for beecon range.
+- Generate Defaults will now set itself to false when it runs itself for the first time
+- You can now release a single bee at a time from the bee box by simply right clicking
+- You can now see the name of the honey inside most tile entities within their interface
+
+## Bug fixes
+- Resourceful Honey now makes honey sounds
+- Resourceful Honey now has some fluid physics
+- Beepedia now lists Bee jars and Item mutations in a bee's breeding tab if the mutation results in a jar or egg that spawns that bee.
+- Honey pages in the beepedia now correctly lists all bees that output that honey even if the honey was added through custom centrifuge recipes.
+- Custom Honeys now display the correct amount of saturation added when eaten
+- Mutation Inputs no longer show fluid amounts
+- Fixed the Honey Dipper showing the lang key of custom bees when on a server
+- Fixed being unable to craft apiaries with tier 1 beehives upgraded to tier 4 using the upgrade items.
+- Fixed some bee hives de tiering when broken with silk touch
+- Apiary Visualiser now no longer shows the floor that we removed from the construction requirements
+- Apiary Visualiser now properly hides preview blocks when a valid block is found
+- Fixed most modded shears not working properly in dispensers with our hives
+- Fixed Item tooltips not showing up in the beepedia
+
 # ----- [0.9.9.8] -----
 - Fixed a bug with the last update where you could not make an apiary with a normal t4 beehive.
 
