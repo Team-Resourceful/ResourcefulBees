@@ -1,0 +1,17 @@
+{
+  "name": "book.resourcefulbees.extras.credits",
+  "icon": "minecraft:paper",
+  "category": "resourcefulbees:extras",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.extras.credits.text.1",
+      "title": "book.resourcefulbees.extras.credits"
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.extras.credits.text.2"
+    }
+  ]
+}

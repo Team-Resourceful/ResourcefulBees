@@ -711,6 +711,18 @@
 	"book.resourcefulbees.extras.patreon.base_bee.desc": "This bee can be any color you want.",
 
 	"book.resourcefulbees.extras.making_your_own" : "Making your own",
+	"book.resourcefulbees.extras.making_your_own.desc" : "Can Bee whatever you want it to Bee.",
+
+	"book.resourcefulbees.extras.making_your_own.text.1" : "The first thing you are going to want to do to make your own bee is to have a look at the $(item)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/dev_resources/Bee_Creation_Guide.json)Bee_Creation_Guide.json on our github$()$(br2)This guide will give you information on all of the default values our bees use as well as some tips on how to use each value.",
+	"book.resourcefulbees.extras.making_your_own.text.2" : "$(item)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/tree/1.16.5/src/main/resources/assets/resourcefulbees/textures/entity/template_textures)Click here$() to find all of the template textures you can use for each of our custom model types.$(br2)You are going to want to chose a base and a template, combine the two textures together to start making your own.$(br2)On the next page is links to all of the custom models we add.",
+
+	"book.resourcefulbees.extras.making_your_own.text.3" : "Custom Model Types:$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/base-nocloak.geo.json)DEFAULT$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/crystals.geo.json)ORE$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/gel.geo.json)GELATINOUS$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/dragon.geo.json)DRAGON$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/queen.geo.json)QUEEN$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/villager.geo.json)VILLAGER$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/mushroom.geo.json)MUSHROOM$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/crop.geo.json)CROP$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/armored.geo.json)ARMORED$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/guardian.geo.json)GUARDIAN$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/yeti.geo.json)YETI$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/witch.geo.json)WITCH$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/bunny.geo.json)BUNNY$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/kitten.geo.json)KITTEN$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/astronaut.geo.json)ASTRONAUT$()",
+
+	"book.resourcefulbees.extras.making_your_own.text.4" : "Bee Making Tools:$(li)$(item)$(l:https://www.blockbench.net/)Block Bench$()$(br)The go too tool for custom model making for minecraft.$(br)$(li)$(item)$(l:https://www.getpaint.net/)Paint.NET$()$(br)A simple free image editor.$(br)$(li)$(item)$(l:https://atom.io/)Atom$()$(br)An excellent text editor with lots of plugins.",
+
+	"book.resourcefulbees.extras.credits": "Credits",
+	"book.resourcefulbees.extras.credits.text.1": " Crispy Oreo$(br)   Lead Developer$(br2) ThatGravyBoat$(br)   Developer$(br2) Dawn Felstar$(br)   Developer, Artist$(br2) Ellah$(br)   Artist$(br2) Joosh$(br)   Artist",
+	"book.resourcefulbees.extras.credits.text.2": " Lady Lexxie$(br)   Official Pack Dev",
 
 	"advancements.resourcefulbees.apiary_breed_time_upgrade.title": "Faster Breeding",
 	"advancements.resourcefulbees.apiary_breed_time_upgrade.description": "Obtain a Breed Time Upgrade",
@@ -765,7 +777,7 @@
 	"advancements.resourcefulbees.oreo_bee.title": "Don't Eat This",
 	"advancements.resourcefulbees.oreo_bee.description": "Find and catch the elusive Oreo Bee",
 	"advancements.resourcefulbees.root.title": "Resourceful Bees",
-	"advancements.resourcefulbees.root.description": "By Epic Oreo, ThatGrayBoat, Dawn Felstar and Vik",
+	"advancements.resourcefulbees.root.description": "By Epic Oreo, ThatGravyBoat, Dawn Felstar and Vik",
 	"advancements.resourcefulbees.scraper.title": "Comb Harvesting Device",
 	"advancements.resourcefulbees.scraper.description": "Obtain a Scraper",
 	"advancements.resourcefulbees.smoker.title": "Bee Safety 101",

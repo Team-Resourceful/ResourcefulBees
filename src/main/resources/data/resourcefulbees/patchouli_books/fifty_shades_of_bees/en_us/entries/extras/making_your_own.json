@@ -5,8 +5,45 @@
   "sortnum": 3,
   "pages": [
     {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/extras/making_your_own1.png"
+      ],
+      "title": "book.resourcefulbees.extras.making_your_own",
+      "text": "book.resourcefulbees.extras.making_your_own.desc",
+      "border": true
+    },
+    {
       "type": "text",
-      "text": "book.resourcefulbees.extras.making_your_own.1"
+      "text": "book.resourcefulbees.extras.making_your_own.text.1"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/extras/making_your_own2.png"
+      ],
+      "title": "book.resourcefulbees.extras.making_your_own",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.extras.making_your_own.text.2"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/extras/making_your_own3.png"
+      ],
+      "title": "book.resourcefulbees.extras.making_your_own",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.extras.making_your_own.text.3"
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.extras.making_your_own.text.4"
     }
   ]
 }
