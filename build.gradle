@@ -25,6 +25,7 @@ apply plugin: 'signing'
 repositories {
     maven { url "https://nexus.resourcefulbees.com/repository/maven-public/" }
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    maven { url = "https://maven.theillusivec4.top/" }
     mavenCentral()
 }
 
@@ -118,6 +119,12 @@ dependencies {
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
+    compileOnly fg.deobf("vazkii.botania:Botania:1.16.5-421-SNAPSHOT")
+    runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-421-SNAPSHOT")
+
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.6.8")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.6.8")
+
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.16.5:${geckolib_version}")
 
     // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
@@ -141,6 +148,32 @@ jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "MixinConfigs": "${modid}.mixins.json"
         ])
+    }
+}
+
+//Minimize/optimize all png files, requires optipng on the PATH
+// Credits: BrainStone
+void minimizePNGFile(File file) {
+    long size = file.length()
+    exec {
+        executable "optipng"
+        args "-q", "-o7", "-zm1-9", "-strip", "all", file
+    }
+    long newSize = file.length()
+    if (newSize < size) {
+        System.out.format("Reduced File size of %s from %d bytes to %d bytes (reduced by %.2f%%)\n",
+                file, size, newSize, ((double) (size - newSize)) / ((double) size) * 100.0)
+    }
+}
+
+task optimizePng {
+    def pngPatterns = ["**/*.png"]
+    doLast {
+        //Ensure the logo is minimized (we add this file to each jar)
+        //Minimize any PNGs in the source sets
+        for (dir in sourceSets.main.resources.srcDirs) {
+            fileTree(dir: dir, includes: pngPatterns).each { minimizePNGFile(it) }
+        }
     }
 }
 
