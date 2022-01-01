@@ -156,7 +156,7 @@ public class BeeJar extends Item {
     @NotNull
     @Override
     public ActionResultType interactLivingEntity(@NotNull ItemStack stack, @NotNull PlayerEntity player, LivingEntity targetIn, @NotNull Hand hand) {
-        if (targetIn.getCommandSenderWorld().isClientSide() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive()) || (isFilled(stack))) {
+        if (targetIn.getCommandSenderWorld().isClientSide() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive()) || ((BeeEntity) targetIn).isAngry() || (isFilled(stack))) {
             return ActionResultType.FAIL;
         }
 

@@ -185,7 +185,7 @@ public class BeeBox extends Item {
     @NotNull
     @Override
     public ActionResultType interactLivingEntity(@NotNull ItemStack stack, @NotNull PlayerEntity player, LivingEntity targetIn, @NotNull Hand hand) {
-        if (targetIn.getCommandSenderWorld().isClientSide() || (!(targetIn instanceof BeeEntity) || !targetIn.isAlive())) {
+        if (targetIn.getCommandSenderWorld().isClientSide() || (!(targetIn instanceof BeeEntity) || ((BeeEntity) targetIn).isAngry() || !targetIn.isAlive())) {
             return ActionResultType.FAIL;
         }
         if (isTemp) return ActionResultType.FAIL;
