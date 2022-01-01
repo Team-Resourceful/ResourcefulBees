@@ -164,10 +164,4 @@ public class JEICompat implements IModPlugin {
             registration.addIngredientInfo(bee, ENTITY_INGREDIENT, stats.toString());
         }
     }
-
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        IIngredientManager ingredientManager = jeiRuntime.getIngredientManager();
-        ingredientManager.removeIngredientsAtRuntime(VanillaTypes.ITEM, Arrays.asList(ModItems.POLLEN.get().getDefaultInstance(), ModItems.FERTILIZER.get().getDefaultInstance()));
-    }
 }
