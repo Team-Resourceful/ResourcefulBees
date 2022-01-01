@@ -16,6 +16,18 @@
     {
       "type": "text",
       "text": "book.resourcefulbees.advanced_tips.auras.text"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/auras2.png"
+      ],
+      "title": "book.resourcefulbees.advanced_tips.auras",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.advanced_tips.auras.text.2"
     }
   ]
 }

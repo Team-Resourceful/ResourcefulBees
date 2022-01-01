@@ -16,6 +16,18 @@
     {
       "type": "text",
       "text": "book.resourcefulbees.advanced_tips.anger.text"
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/anger2.png"
+      ],
+      "title": "book.resourcefulbees.advanced_tips.anger",
+      "border": true
+    },
+    {
+      "type": "text",
+      "text": "book.resourcefulbees.advanced_tips.anger.text.2"
     }
   ]
 }

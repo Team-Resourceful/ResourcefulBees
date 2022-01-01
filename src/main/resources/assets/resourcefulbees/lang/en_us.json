@@ -315,6 +315,7 @@
 	"block.resourcefulbees.zombie_honeycomb_block": "Zombie Honeycomb Block",
 	"block.resourcefulbees.netherite_honeycomb_block": "Netherite Honeycomb Block",
 	"block.resourcefulbees.rgbee_honeycomb_block": "RGBee Honeycomb Block",
+	"block.resourcefulbees.rainbow_glass_honeycomb_block": "Rainbow Glass Honeycomb Block",
 	"block.resourcefulbees.dragon_honeycomb_block": "Dragon Honeycomb Block",
 	"block.resourcefulbees.rainbow_honey_block": "Rainbow Honey Block",
 	"block.resourcefulbees.catnip_honeycomb_block": "Catnip Honeycomb Block",
@@ -346,6 +347,7 @@
 	"item.resourcefulbees.zombie_honeycomb": "Zombie Honeycomb",
 	"item.resourcefulbees.netherite_honeycomb": "Netherite Honeycomb",
 	"item.resourcefulbees.rgbee_honeycomb": "RGBee Honeycomb",
+	"item.resourcefulbees.rainbow_glass_honeycomb": "Rainbow Glass Honeycomb",
 	"item.resourcefulbees.dragon_honeycomb": "Dragon Honeycomb",
 
 	"item.resourcefulbees.gold_bee_spawn_egg": "Gold Bee Spawn Egg",
@@ -364,6 +366,7 @@
 	"item.resourcefulbees.zombie_bee_spawn_egg": "Zombie Bee Spawn Egg",
 	"item.resourcefulbees.netherite_bee_spawn_egg": "Netherite Bee Spawn Egg",
 	"item.resourcefulbees.rgbee_bee_spawn_egg": "RGBee Spawn Egg",
+	"item.resourcefulbees.rainbow_glass_spawn_egg": "Rainbow Glass Honeycomb",
 	"item.resourcefulbees.oreo_bee_spawn_egg": "Oreo Bee Spawn Egg",
 	"item.resourcefulbees.starry_bee_spawn_egg": "Starry Bee Spawn Egg",
 	"item.resourcefulbees.abbee_bee_spawn_egg": "AbBee Spawn Egg",
@@ -392,6 +395,7 @@
 	"entity.resourcefulbees.zombie_bee": "Zombie Bee",
 	"entity.resourcefulbees.netherite_bee": "Netherite Bee",
 	"entity.resourcefulbees.rgbee_bee": "RGBee",
+	"entity.resourcefulbees.rainbow_glass_bee": "Rainbow Glass Bee",
 	"entity.resourcefulbees.oreo_bee": "Oreo Bee",
 	"entity.resourcefulbees.starry_bee": "Starry Bee",
 	"entity.resourcefulbees.abbee_bee": "AbBee",
@@ -481,8 +485,8 @@
 
 	"book.resourcefulbees.getting_started.understanding_bees": "Understanding Bees",
 	"book.resourcefulbees.getting_started.understanding_bees.desc": "Encyclobeedic knowledge.",
-	"book.resourcefulbees.getting_started.understanding_bees.text.1": "Once you have some bees you will likely want to know what they can do and what to do with them.$(br2)If you craft yourself a $(or)$(l:beekeeping_tools/beepedia)Beepedia$() you can learn a lot more about what each bee can do. If you press $(thing)$(k:key.use)$() on a bee you can open the bee's page in the $(or)$(l:beekeeping_tools/beepedia)Beepedia$().",
-	"book.resourcefulbees.getting_started.understanding_bees.text.2": "You can also use JEI to search up information about bees.$(br2)Keep in mind that bees have both $(thing)$(k:key.use)$() and $(thing)$(k:key.attack)$() uses. You may also find information on how to breed or obtain bees by looking at the bee's spawn eggs or at the $(or)$(l:beekeeping_tools/bee_jar)Bee Jar's$() uses.",
+	"book.resourcefulbees.getting_started.understanding_bees.text.1": "Once you have some bees you will likely want to know what they can do and what to do with them.$(br2)If you craft yourself a $(or)$(l:beekeeping_tools/beepedia)Beepedia$() you can learn a lot more about what each bee can do. If you press $(thing)Right Click$() on a bee you can open the bee's page in the $(or)$(l:beekeeping_tools/beepedia)Beepedia$().",
+	"book.resourcefulbees.getting_started.understanding_bees.text.2": "You can also use JEI to search up information about bees.$(br2)Keep in mind that bees have both $(thing)Right Click$() and $(thing)Left Click$() uses. You may also find information on how to breed or obtain bees by looking at the bee's spawn eggs or at the $(or)$(l:beekeeping_tools/bee_jar)Bee Jar's$() uses.",
 
 	"book.resourcefulbees.getting_started.keeping_bees": "Keeping Bees",
 	"book.resourcefulbees.getting_started.keeping_bees.desc": "Making a hive a home.",
@@ -518,7 +522,7 @@
 
 	"book.resourcefulbees.advanced_tips.apiaries.2": "Once placed down the $(or)$(l:beekeeping_tools/apiaries)Apiary$() can then be set up to show a preview of the structure.$(br2)Blocks must be placed to fill the structure, you can use any blocks with collision or anything marked with the valid_apiary tag.$(br2)The $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$ and $(or)$(l:beekeeping_tools/apiary_breeder)Apiary Breeder/$ can be placed anywhere in the multiblock's walls.",
 
-	"book.resourcefulbees.advanced_tips.apiaries.3": "$(p)The $(or)Apiary/$ comes with some restrictions: it can only house 9 unique bees, which means no more than one of the same type of bee in the $(or)Apiary/$ at any one time.$(br2) however you can get past this limitation by keeping bees inside the enclosure.",
+	"book.resourcefulbees.advanced_tips.apiaries.3": "The $(or)Apiary/$ comes with some restrictions: it can only house 9 unique bees, which means no more than one of the same type of bee in the $(or)Apiary/$ at any one time.$(br2) however you can get past this limitation by keeping bees inside the enclosure.",
 
 	"book.resourcefulbees.advanced_tips.apiaries.4": "When honeycombs are produced by the bees, they will show up in the $(or)$(l:beekeeping_tools/apiary_storage)Apiary Storage/$, which can then be removed manually, or automated via $(or)Hoppers/$ or pipes from other mods.",
 
@@ -532,32 +536,36 @@
 	"book.resourcefulbees.advanced_tips.calming.text.2": "If a bee has the Angry trait it will calm them down, allowing you to keep them around other bees.$(br2)Bees can be granted the Calming effect in two ways, one is via a $(or)$(l:beekeeping_tools/calming_potions)Splash Potion of Calming$() or by using an $(or)$(l:beekeeping_tools/ender_beecon)Ender Beecon$().",
 
 	"book.resourcefulbees.advanced_tips.auras": "Auras",
-	"book.resourcefulbees.advanced_tips.auras.desc" : "AOBee",
-	"book.resourcefulbees.advanced_tips.auras.text" : "todo",
+	"book.resourcefulbees.advanced_tips.auras.desc" : "Magical AOBees.",
+	"book.resourcefulbees.advanced_tips.auras.text" : "Auras are a special effect granted by various traits.$(br2)Auras are Area of Effects that occur once every $(or)8 seconds$() centered on the bee.$(br2)Auras can do all kinds of things from giving potion effects to granting xp and even setting you on fire.",
+	"book.resourcefulbees.advanced_tips.auras.text.2" : "The range of each Aura is determined by the bee.$(br2)Some auras can be disabled by the calming effect so it's best to check what each aura can do before encountering a bee with one.$(br2)You can search for bees with an aura by searching $(thing)#aura$() in the $(or)$(l:beekeeping_tools/beepedia)Beepedia$().",
 
 	"book.resourcefulbees.advanced_tips.anger": "Anger",
-	"book.resourcefulbees.advanced_tips.anger.desc" : "Stinger: Enter stage left",
-	"book.resourcefulbees.advanced_tips.anger.text" : "todo",
+	"book.resourcefulbees.advanced_tips.anger.desc" : "Stinger: Enter stage left.",
+	"book.resourcefulbees.advanced_tips.anger.text" : "One thing to always avoid doing is hitting your bees or harvesting hives without smoking first. Else you will incurr the wrath of your buzzy friends.$(br2)If bees become angry they will try to sting you and depending on the bee if they sting you they will likely lose their stinger.",
+	"book.resourcefulbees.advanced_tips.anger.text.2" : "Another thing to watch out for is bees with the $(thing)Angry Trait$() as they can only be calmed down with the $(or)$(l:advanced_tips/calming)Calming Effect$().$(br2)Another thing to note is that angry bees will also anger other bees around them so watch out.",
 
 	"book.resourcefulbees.advanced_tips.traits": "Traits",
-	"book.resourcefulbees.advanced_tips.traits.desc": "All of the bee special.",
-	"book.resourcefulbees.advanced_tips.traits.text" : "todo",
+	"book.resourcefulbees.advanced_tips.traits.desc": "All of them bee special.",
+	"book.resourcefulbees.advanced_tips.traits.text" : "Traits are special features that each bee can have multiple of.$(br2)Traits allow for various things such as various Immunities, damage types, damage effects, particles and more.$(br2)You can find out more about traits in the Traits section of the $(or)$(l:beekeeping_tools/beepedia)Beepedia$().",
 
 	"book.resourcefulbees.advanced_tips.powered_centrifuges": "Powered Centrifuging",
 	"book.resourcefulbees.advanced_tips.powered_centrifuges.desc": "You spin bee right round baby right round.",
-	"book.resourcefulbees.advanced_tips.powered_centrifuges.text.1" : "todo",
-	"book.resourcefulbees.advanced_tips.powered_centrifuges.text.2" : "todo",
-	"book.resourcefulbees.advanced_tips.powered_centrifuges.text.3" : "todo",
+	"book.resourcefulbees.advanced_tips.powered_centrifuges.text.1" : "Once you have some power set up you are going to want to start using a $(or)$(l:beekeeping_tools:centrifuge)Centrifuge$()$(br2)Powered Centrifuges can process combs that have liquids as well as items as outputs and have an internal storage tank that stores said liquids.",
+	"book.resourcefulbees.advanced_tips.powered_centrifuges.text.2" : "The next tier of centrifuge is the $(or)$(l:beekeeping_tools/multiblock_centrifuge)Multiblock Centrifuge$(), This centrifuge can process the block forms of honeycombs and has more storage and input slots.$(br2)This Centrifuge also has an increased processing speed compaired to the basic $(or)$(l:beekeeping_tools/centrifuge)Centrifuge$().",
+	"book.resourcefulbees.advanced_tips.powered_centrifuges.text.3" : "The final tier of centrifuge is the $(or)$(l:beekeeping_tools/elite_centrifuge)Elite Centrifuge$() which has the most input slots, most storage out of all of the centrifuges.$(br2)The processing speed for this centrifuge is twice as fast as the regular $(or)$(l:beekeeping_tools/multiblock_centrifuge)Multiblock Centrifuge$().",
 
 	"book.resourcefulbees.advanced_tips.generating_energy": "Generating Energy",
 	"book.resourcefulbees.advanced_tips.generating_energy.desc": "Unmatched power of the hun.",
-	"book.resourcefulbees.advanced_tips.generating_energy.text" : "todo",
+	"book.resourcefulbees.advanced_tips.generating_energy.text" : "Honey has untapped potential which we can harvest to create power using the $(or)$(l:beekeeping_tools/honey_generator)Honey Generator$().$(br2)If you don't have access to energy transfer you can still utilise the generator by simply placing the block next to the $(or)$(l:advanced_tips/powered_centrifuges)Centrifuge$() you want to process with.",
 
 	"book.resourcefulbees.advanced_tips.mutations": "Mutations",
 	"book.resourcefulbees.advanced_tips.mutations.desc": "One thing Beecomes another.",
-	"book.resourcefulbees.advanced_tips.mutations.text.1" : "todo",
-	"book.resourcefulbees.advanced_tips.mutations.text.2" : "todo",
-	"book.resourcefulbees.advanced_tips.mutations.text.3" : "todo",
+	"book.resourcefulbees.advanced_tips.mutations.text.1" : "Mutations are a bees way of changing the world around it.$(br2)Once a bee has pollen if a bee also has any mutations if it then flies over a block or entity it can mutate it will try to change it into something else.$(br2)There are three types of mutations, Block, Item, and Entity.",
+	"book.resourcefulbees.advanced_tips.mutations.text.2" : "If you want to figure out what mutation each bee has you can check via the $(or)$(l:beekeeping_tools/beepedia)Beepedia$() or through JEI.",
+	"book.resourcefulbees.advanced_tips.mutations.title.2" : "Block Mutations",
+	"book.resourcefulbees.advanced_tips.mutations.title.3" : "Item Mutations",
+	"book.resourcefulbees.advanced_tips.mutations.title.4" : "Entity Mutations",
 
 	"book.resourcefulbees.advanced_tips.ender_beecon": "The Ender Beecon",
 	"book.resourcefulbees.advanced_tips.ender_beecon.desc": "Are you looking to protect your bees or grant some effects?",
@@ -718,11 +726,12 @@
 
 	"book.resourcefulbees.extras.making_your_own.text.3" : "Custom Model Types:$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/base-nocloak.geo.json)DEFAULT$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/crystals.geo.json)ORE$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/gel.geo.json)GELATINOUS$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/dragon.geo.json)DRAGON$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/queen.geo.json)QUEEN$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/villager.geo.json)VILLAGER$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/mushroom.geo.json)MUSHROOM$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/crop.geo.json)CROP$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/armored.geo.json)ARMORED$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/guardian.geo.json)GUARDIAN$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/yeti.geo.json)YETI$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/witch.geo.json)WITCH$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/bunny.geo.json)BUNNY$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/kitten.geo.json)KITTEN$()$(item)$(li)$(l:https://github.com/Resourceful-Bees/ResourcefulBees/blob/1.16.5/src/main/resources/assets/resourcefulbees/geo/astronaut.geo.json)ASTRONAUT$()",
 
-	"book.resourcefulbees.extras.making_your_own.text.4" : "Bee Making Tools:$(li)$(item)$(l:https://www.blockbench.net/)Block Bench$()$(br)The go too tool for custom model making for minecraft.$(br)$(li)$(item)$(l:https://www.getpaint.net/)Paint.NET$()$(br)A simple free image editor.$(br)$(li)$(item)$(l:https://atom.io/)Atom$()$(br)An excellent text editor with lots of plugins.",
+	"book.resourcefulbees.extras.making_your_own.title.4" : "Bee Making Tools:",
+	"book.resourcefulbees.extras.making_your_own.text.4" : "$(li)$(item)$(l:https://www.blockbench.net/)Block Bench$()$(br)The go too tool for custom model making for minecraft.$(br)$(li)$(item)$(l:https://www.getpaint.net/)Paint.NET$()$(br)A simple free image editor.$(br)$(li)$(item)$(l:https://atom.io/)Atom$()$(br)An excellent text editor with lots of plugins.",
 
 	"book.resourcefulbees.extras.credits": "Credits",
-	"book.resourcefulbees.extras.credits.text.1": " Crispy Oreo$(br)   Lead Developer$(br2) ThatGravyBoat$(br)   Developer$(br2) Dawn Felstar$(br)   Developer, Artist$(br2) Ellah$(br)   Artist$(br2) Joosh$(br)   Artist",
-	"book.resourcefulbees.extras.credits.text.2": " Lady Lexxie$(br)   Official Pack Dev",
+	"book.resourcefulbees.extras.credits.text.1": " $(or)Crispy Oreo$()$(br)   Lead Developer$(br2) $(or)ThatGravyBoat$()$(br)   Developer$(br2) $(or)Dawn Felstar$()$(br)   Developer, Artist$(br2) $(or)Ellah$()$(br)   Artist$(br2) $(or)Joosh$()$(br)   Artist",
+	"book.resourcefulbees.extras.credits.text.2": "$(br) $(or)Lady Lexxie$()$(br)   Official Pack Dev",
 
 	"advancements.resourcefulbees.apiary_breed_time_upgrade.title": "Faster Breeding",
 	"advancements.resourcefulbees.apiary_breed_time_upgrade.description": "Obtain a Breed Time Upgrade",

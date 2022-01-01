@@ -1,0 +1,71 @@
+{
+  "flower": "tag:forge:ores/diamond",
+  "maxTimeInHive": 1200,
+  "hasHoneycomb": true,
+  "baseLayerTexture": "ores/custom_crystal/custom_bee_primary",
+  "lore" : "Glass Prebby",
+  "traits" : ["healer"],
+  "ColorData": {
+    "isBeeColored": true,
+    "modelType": "ORE",
+    "primaryLayerTexture": "empty_layer",
+    "secondaryLayerTexture": "ores/custom_crystal/custom_bee_secondary",
+    "emissiveLayerTexture": "ores/custom_crystal/custom_bee_emissive",
+    "honeycombColor": "#ffffff",
+    "isRainbowBee": true,
+    "isGlowing": true
+  },
+  "MutationData": {
+    "hasMutation": true,
+    "mutations" : [
+      {
+        "type": "BLOCK_TO_BLOCK",
+        "inputID": "tag:minecraft:sand",
+        "outputs": [
+          {"outputID": "minecraft:white_stained_glass"},
+          {"outputID": "minecraft:orange_stained_glass"},
+          {"outputID": "minecraft:magenta_stained_glass"},
+          {"outputID": "minecraft:light_blue_stained_glass"},
+          {"outputID": "minecraft:yellow_stained_glass"},
+          {"outputID": "minecraft:lime_stained_glass"},
+          {"outputID": "minecraft:pink_stained_glass"},
+          {"outputID": "minecraft:gray_stained_glass"},
+          {"outputID": "minecraft:light_gray_stained_glass"},
+          {"outputID": "minecraft:cyan_stained_glass"},
+          {"outputID": "minecraft:purple_stained_glass"},
+          {"outputID": "minecraft:blue_stained_glass"},
+          {"outputID": "minecraft:brown_stained_glass"},
+          {"outputID": "minecraft:green_stained_glass"},
+          {"outputID": "minecraft:red_stained_glass"},
+          {"outputID": "minecraft:black_stained_glass"}
+        ]
+      },
+      {
+        "type": "ENTITY",
+        "inputID": "entity:resourcefulbees:diamond_bee",
+        "outputs": [
+          {"outputID": "entity:resourcefulbees:rainbow_glass_bee"}
+        ]
+      }
+    ]
+  },
+  "CentrifugeData": {
+    "hasCentrifugeOutput": true,
+    "mainOutput": "minecraft:diamond",
+    "mainOutputCount": 1,
+    "bottleOutput": "resourcefulbees:rainbow_honey_bottle",
+    "bottleOutputWeight": 1
+  },
+  "SpawnData": {
+    "canSpawnInWorld": false
+  },
+  "BreedData": {
+    "isBreedable": true,
+    "parent1": "Diamond",
+    "parent2": "RGBee",
+    "feedItem": "tag:forge:gems/diamond"
+  },
+  "TraitData": {
+    "hasTraits": true
+  }
+}

@@ -43,7 +43,8 @@
     },
     {
       "type": "text",
-      "text": "book.resourcefulbees.extras.making_your_own.text.4"
+      "text": "book.resourcefulbees.extras.making_your_own.text.4",
+      "title": "book.resourcefulbees.extras.making_your_own.title.4"
     }
   ]
 }

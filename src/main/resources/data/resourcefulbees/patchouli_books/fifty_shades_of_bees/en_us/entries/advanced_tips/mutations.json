@@ -20,26 +20,31 @@
     {
       "type": "image",
       "images": [
-        "resourcefulbees:textures/gui/patchouli/advanced_tips/mutations2.png"
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/mutations2_1.png",
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/mutations2_2.png"
       ],
-      "title": "book.resourcefulbees.advanced_tips.mutations",
+      "title": "book.resourcefulbees.advanced_tips.mutations.title.2",
       "border": true
-    },
-    {
-      "type": "text",
-      "text": "book.resourcefulbees.advanced_tips.mutations.text.2"
     },
     {
       "type": "image",
       "images": [
         "resourcefulbees:textures/gui/patchouli/advanced_tips/mutations3.png"
       ],
-      "title": "book.resourcefulbees.advanced_tips.mutations",
+      "title": "book.resourcefulbees.advanced_tips.mutations.title.3",
+      "border": true
+    },
+    {
+      "type": "image",
+      "images": [
+        "resourcefulbees:textures/gui/patchouli/advanced_tips/mutations4.png"
+      ],
+      "title": "book.resourcefulbees.advanced_tips.mutations.title.4",
       "border": true
     },
     {
       "type": "text",
-      "text": "book.resourcefulbees.advanced_tips.mutations.text.3"
+      "text": "book.resourcefulbees.advanced_tips.mutations.text.2"
     }
   ]
 }
