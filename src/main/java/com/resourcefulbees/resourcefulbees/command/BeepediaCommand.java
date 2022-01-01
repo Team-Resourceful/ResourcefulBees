@@ -17,7 +17,9 @@ import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.command.arguments.GameProfileArgument;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -143,7 +145,7 @@ public class BeepediaCommand {
             case LOCK:
             case UNLOCK:
                 String translation = messageTypes.equals(MessageTypes.UNLOCK) ? "command.resourcefulbees.beepedia.bee_discovered" : "command.resourcefulbees.beepedia.bee_forgotten";
-                String beeName = BeeRegistry.getRegistry().getBeeData(bee).getTranslation().getString();
+                TranslationTextComponent beeName = BeeRegistry.getRegistry().getBeeData(bee).getTranslation();
                 playerEntity.displayClientMessage(new TranslationTextComponent(translation, beeName), false);
                 break;
             case COMPLETE:
@@ -186,6 +188,10 @@ public class BeepediaCommand {
         @Override
         public Collection<String> getExamples() {
             return VALID_BEES.stream().map(ResourceLocation::toString).collect(Collectors.toCollection(LinkedHashSet::new));
+        }
+
+        public static BeeArgument beeArgument() {
+            return new BeeArgument();
         }
     }
 }

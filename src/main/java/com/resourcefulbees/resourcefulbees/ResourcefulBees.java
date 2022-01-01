@@ -16,6 +16,9 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.recipe.HiveIngredient;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import net.minecraft.command.arguments.ArgumentSerializer;
+import net.minecraft.command.arguments.ArgumentTypes;
+import net.minecraft.command.arguments.GameProfileArgument;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -110,6 +113,7 @@ public class ResourcefulBees {
     }
 
     private void setupCommon(FMLCommonSetupEvent event) {
+        ArgumentTypes.register("bee", BeepediaCommand.BeeArgument.class, new ArgumentSerializer<>(BeepediaCommand.BeeArgument::beeArgument));
         ModPotions.createMixes();
     }
 
