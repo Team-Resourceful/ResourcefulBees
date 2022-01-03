@@ -1,0 +1,13 @@
+curseforge {
+    project {
+        apiKey = System.getenv("CURSE_API_KEY")
+        id = '384508'
+        changelog = file('changelog.md')
+        changelogType = 'markdown'
+        releaseType = 'release'
+        addGameVersion mc_version
+        mainArtifact(jar) {
+            displayName = "Resourceful Bees ${version}"
+        }
+    }
+}

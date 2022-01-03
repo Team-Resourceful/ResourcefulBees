@@ -14,37 +14,23 @@ buildscript {
 plugins {
     id "org.sonarqube" version "3.1.1"
     id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "maven-publish"
+    id "idea"
+    id "eclipse"
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'signing'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
-
 
 repositories {
     maven { url "https://nexus.resourcefulbees.com/repository/maven-public/" }
-    maven { url "https://maven.k-4u.nl/" }
-    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
-    maven {
-        url "https://www.cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
 }
 
-version = "${mod_version}"
+version = mod_version
 group = "com.resourcefulbees" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 evaluationDependsOnChildren()
-
-def releasesRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-releases/"
-def snapshotsRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-snapshots/"
-def ENV = System.getenv()
 
 sourceSets {
     main {
@@ -65,16 +51,13 @@ sourceSets {
     }
 }
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", "Resourceful-Bees_ResourcefulBees"
-        property "sonar.organization", "resourceful-bees"
-        property "sonar.host.url", "https://sonarcloud.io"
-    }
+
+plugins.withId("idea") {
+    sourceSets.main.output.resourcesDir("out/production/resources")
 }
 
 minecraft {
-    mappings channel: "parchment", version: "${mapping}"
+    mappings channel: "parchment", version: mapping
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -85,9 +68,8 @@ minecraft {
             arg "-mixin.config=phosphophyllite.mixins.json"
 
             property 'forge.logging.console.level', 'debug'
-            //property 'mixin.env.disableRefMap', 'true'
             property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            property 'mixin.env.refMapRemappingFile', "$projectDir/build/createSrgToMcp/output.srg"
             property 'fml.earlyprogresswindow','false'
             property 'mixin.debug.export', 'true'
 
@@ -107,7 +89,6 @@ minecraft {
             arg "-mixin.config=phosphophyllite.mixins.json"
 
             property 'forge.logging.console.level', 'debug'
-            //property 'mixin.env.disableRefMap', 'true'
             property 'fml.earlyprogresswindow','false'
 
             mods {
@@ -142,33 +123,33 @@ mixin {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}" //21
+    minecraft "net.minecraftforge:forge:$mc_version-$forge_version" //21
 
-    compileOnly fg.deobf("mezz.jei:jei-1.18.1:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.1:$jei_version:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.1:$jei_version")
 
-    compileOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:${top_version}:api"){
-            transitive = false
-        }
-    runtimeOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:${top_version}"){
-            transitive = false
-        }
+    compileOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:$top_version:api") {
+        transitive = false
+    }
+    runtimeOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:$top_version") {
+        transitive = false
+    }
 
-    //compileOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")
-    //runtimeOnly fg.deobf ("team.chisel.ctm:CTM:${ctm_version}")
+    compileOnly fg.deobf ("team.chisel.ctm:CTM:$ctm_version")
+    runtimeOnly fg.deobf ("team.chisel.ctm:CTM:$ctm_version")
 
-    compileOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}:api")
-    runtimeOnly fg.deobf ("vazkii.patchouli:Patchouli:${patchouli_version}")
+    compileOnly fg.deobf ("vazkii.patchouli:Patchouli:$patchouli_version:api")
+    runtimeOnly fg.deobf ("vazkii.patchouli:Patchouli:$patchouli_version")
 
     ///runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}")// core
     //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
     //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
     //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
-    runtimeOnly fg.deobf ("curse.maven:create-328085:${create_version}")
-    runtimeOnly fg.deobf ("curse.maven:flywheel-486392:${flywheel_version}")
+    runtimeOnly fg.deobf ("com.simibubi.create:Create:$create_version")
+    runtimeOnly fg.deobf ("com.jozufozu.flywheel:Flywheel-Forge:$flywheel_version")
 
-    implementation fg.deobf("software.bernie.geckolib:geckolib-1.18-forge:${geckolib_version}")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-1.18-forge:$geckolib_version")
 
     implementation project(':Phosphophyllite')
 
@@ -176,193 +157,9 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
 }
 
-jar {
-    manifest {
-        attributes([
-                "Specification-Title": "resourcefulbees",
-                "Specification-Vendor": "resourcefulbees",
-                "Specification-Version": "1", // We are version 1 of ourselves
-                "Implementation-Title": project.name,
-                "Implementation-Version": "${getArchiveVersion()}",
-                "Implementation-Vendor" :"resourcefulbees",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs": "${modid}.mixins.json"
-        ])
-    }
-}
-
-jar.finalizedBy('reobfJar')
-
-task sourcesJar(type: Jar) {
-    classifier = "sources"
-    from sourceSets.main.allJava
-}
-
-task javadocs(type: Javadoc) {
-    classpath = sourceSets.main.compileClasspath
-    source = sourceSets.main.java
-    include "com/resourcefulbees/**"
-
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.encoding = 'UTF-8'
-    options.charSet = 'UTF-8'
-}
-
-task javadocJar(type: Jar, dependsOn: javadocs) {
-    classifier = "javadoc"
-    from javadoc.destinationDir
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-artifacts {
-    archives jar
-    archives sourcesJar
-    archives javadocJar
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-            artifact sourcesJar
-            artifact javadocJar
-
-            pom {
-                name = 'ResourcefulBees'
-                description = 'A mod for minecraft to add own bees to minecraft through a powerful api.'
-                url = 'https://github.com/Resourceful-Bees/ResourcefulBees'
-
-                scm {
-                    connection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
-                    developerConnection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
-                    url = 'https://github.com/Resourceful-Bees/ResourcefulBees/'
-                }
-
-                licenses {
-                    license {
-                        name = 'GNU General Public License v3.0'
-                        url = 'https://raw.githubusercontent.com/Resourceful-Bees/ResourcefulBees/master/LICENSE'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = 'epic428'
-                        name = 'Epic_Oreo'
-                        roles = ['Developer']
-                        email = 'admin@resourcefulbees.com'
-                    }
-                    developer {
-                        id = 'thatgravyboat'
-                        name = 'ThatGravyBoat'
-                        roles = ['Developer']
-                        email = 'admin@resourcefulbees.com'
-                    }
-                    developer {
-                        id = 'dawn_felstar'
-                        name = 'Dawn Felstar'
-                        roles = ['Developer']
-                        email = 'admin@resourcefulbees.com'
-                    }
-                    developer {
-                        id = '19PixelsPlaced'
-                        name = 'Ellah'
-                        roles = ['Artist']
-                        email = 'admin@resourcefulbees.com'
-                    }
-                    developer {
-                        id = 'ruby_r1der'
-                        name = 'Joosh'
-                        roles = ['Artist']
-                        email = 'admin@resourcefulbees.com'
-                    }
-                }
-            }
-
-        }
-    }
-
-    repositories {
-        maven {
-            url = rootProject.version.endsWith("-SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
-            credentials {
-                username ENV.MAVEN_USER
-                password ENV.MAVEN_PASS
-            }
-        }
-    }
-}
-
-ext {
-    versionProperties = [
-            "version"     : mod_version,
-            "fmlVersion"  : forge_version.substring(0, forge_version.indexOf('.')),
-            "forgeVersion": forge_version,
-            "mcVersion"   : mc_version,
-            "phosVersion" : project.project(":Phosphophyllite").property("compatibility").toString(),
-            "geckoVersion": geckolib_version
-    ]
-}
-
-def mainReplaceResources = createReplaceResourcesTask("main", sourceSets.main)
-def datagenReplaceResources = createReplaceResourcesTask("datagen", sourceSets.main)
-
-def createReplaceResourcesTask(String output, SourceSet sourceset) {
-    return tasks.register("${output}ReplaceResources", Copy) {
-        it.outputs.upToDateWhen { false }
-
-        def modsToml = copySpec {
-            from(sourceset.resources) {
-                include "META-INF/mods.toml"
-                expand versionProperties
-            }
-        }
-
-        it.with modsToml
-        it.into "$buildDir/resources/${output}/"
-
-        if (new File("$rootDir/out/production/ResourcefulBees.${output}/").exists()) {
-            copy {
-                with modsToml
-                into "$rootDir/out/production/ResourcefulBees.${output}/"
-            }
-        }
-
-        if (new File("$rootDir/bin/${output}/").exists()) {
-            copy {
-                with modsToml
-                into "$rootDir/bin/${output}/"
-            }
-        }
-    }
-}
-
-processResources { setupProcessResources(processResources, mainReplaceResources) }
-processDatagenResources { setupProcessResources(processDatagenResources, datagenReplaceResources) }
-
-def setupProcessResources(ProcessResources process, TaskProvider replaceResources) {
-    process.duplicatesStrategy(DuplicatesStrategy.FAIL)
-    process.exclude("META-INF/mods.toml")
-    process.from("${projectDir}") { include 'logo.png' }
-    process.configure { finalizedBy(replaceResources)}
-}
-
-classes.configure { dependsOn(mainReplaceResources) }
-datagenClasses.configure { dependsOn(datagenReplaceResources) }
-
-curseforge {
-    apiKey = "${ENV.CURSE_API_KEY}"
-    project {
-        id = '384508'
-        changelog = file('changelog.md')
-        changelogType = 'markdown'
-        releaseType = 'release'
-        addGameVersion "${mc_version}"
-        mainArtifact(jar) {
-            displayName = "Resourceful Bees ${version}"
-        }
-    }
-}
+apply from: "gradle_files/injectModsToml.gradle"
+apply from: "gradle_files/modJars.gradle"
+apply from: "gradle_files/publishing.gradle"
+apply from: "gradle_files/curse-publish.gradle"
+apply from: "gradle_files/minimizePNGFile.gradle"
+apply from: "gradle_files/sonar.gradle"

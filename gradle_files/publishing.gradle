@@ -1,0 +1,76 @@
+def ENV = System.getenv()
+def releasesRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-releases/"
+def snapshotsRepoUrl = "https://nexus.resourcefulbees.com/repository/maven-snapshots/"
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = 'ResourcefulBees'
+                description = 'A mod for minecraft to add own bees to minecraft through a powerful api.'
+                url = 'https://github.com/Resourceful-Bees/ResourcefulBees'
+
+                scm {
+                    connection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
+                    developerConnection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
+                    url = 'https://github.com/Resourceful-Bees/ResourcefulBees/'
+                }
+
+                licenses {
+                    license {
+                        name = 'GNU General Public License v3.0'
+                        url = 'https://raw.githubusercontent.com/Resourceful-Bees/ResourcefulBees/master/LICENSE'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'epic428'
+                        name = 'Epic_Oreo'
+                        roles = ['Developer']
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'thatgravyboat'
+                        name = 'ThatGravyBoat'
+                        roles = ['Developer']
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'dawn_felstar'
+                        name = 'Dawn Felstar'
+                        roles = ['Developer']
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = '19PixelsPlaced'
+                        name = 'Ellah'
+                        roles = ['Artist']
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'ruby_r1der'
+                        name = 'Joosh'
+                        roles = ['Artist']
+                        email = 'admin@resourcefulbees.com'
+                    }
+                }
+            }
+
+        }
+    }
+
+    repositories {
+        maven {
+            url = rootProject.version.endsWith("-SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username ENV.MAVEN_USER
+                password ENV.MAVEN_PASS
+            }
+        }
+    }
+}
