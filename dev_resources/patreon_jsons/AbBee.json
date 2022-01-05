@@ -1,0 +1,38 @@
+{
+  "beeVersion": 0.10,
+  "flower": "tag:minecraft:beds",
+  "baseLayerTexture": "abbee/bee",
+  "creator": "absent-",
+  "lore": "Bunny Bun Bun.",
+  "loreColor": "rainbow",
+  "traits": ["clingy"],
+  "customCombDrop": "resourcefulbees:strawbeery_milkshake",
+  "customCombBlockDrop": "resourcefulbees:strawbeery_milkshake",
+  "sizeModifier": 0.75,
+  "maxTimeInHive": 500,
+  "hasHoneycomb": true,
+  "apiaryOutputAmounts": [1, 2, 3, 4, 5],
+  "ColorData" : {
+    "isBeeColored": false,
+    "modelType": "BUNNY",
+    "primaryColor": "#E5DED5",
+    "secondaryColor": "#FFB1C5"
+  },
+  "CombatData": {
+    "isPassive": false,
+    "attackDamage": 0,
+    "baseHealth": 20,
+    "removeStingerOnAttack": false
+  },
+  "SpawnData" : {
+    "canSpawnInWorld": true,
+    "spawnWeight": 3,
+    "biomeWhitelist": "tag:rare",
+    "lightLevel": "DAY",
+    "minGroupSize": 1,
+    "maxGroupSize": 1
+  },
+  "TraitData": {
+    "hasTraits": true
+  }
+}
