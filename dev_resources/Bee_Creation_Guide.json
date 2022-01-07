@@ -15,7 +15,8 @@
     "apiaryOutputTypes": ["COMB", "COMB", "BLOCK", "BLOCK"],
     "auraRange": 10,
     "customCombDrop": null,
-    "customCombBlockDrop": null
+    "customCombBlockDrop": null,
+    "honeycombRarity": "COMMON"
   },
   "comments": {
     "defaults1": "almost all data in pre 1.0.0 bees are defaulted and you don't actually need to specify certain sections, in fact if you leave things in you may encounter issues.",

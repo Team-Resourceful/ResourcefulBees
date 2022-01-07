@@ -292,7 +292,7 @@
 	"item.resourcefulbees.catnip_honey_fluid_bucket": "Catnip Honey Bucket",
 	"item.resourcefulbees.starry_honeycomb": "Starry Honeycomb",
 	"item.resourcefulbees.starry_honey_bottle": "Starry Honey Bottle",
-  "item.resourcefulbees.starry_honey_fluid_bucket": "Starry Honey Bucket",
+	"item.resourcefulbees.starry_honey_fluid_bucket": "Starry Honey Bucket",
 
 
 	"item.resourcefulbees.rainbow_honeycomb": "Rainbow Honeycomb",
@@ -580,7 +580,7 @@
 	"book.resourcefulbees.advanced_tips.ender_beecon.text.3" : "The Ender Beecon can be filled directly with $(or)Honey bottles$() or $(or)Buckets of Honey$()$(br2)It can also fill itself from any $(or)$(l:beekeeping_tools/honey_tanks)Tanks$() placed below it provided said tank has enough honey.",
 
 	"book.resourcefulbees.advanced_tips.ender_beecon.title.4" : "Beecon Options",
-	"book.resourcefulbees.advanced_tips.ender_beecon.text.4" : "The color of the beecon's beam is set to match the color of the honey that is inside, the exception being $(or)Vanilla$(), $(or)Catnip$(), or $(or)Starry$() honey which will show up as white.$(br2)You can also chose to silence or remove the beam from the beecon with the interface.",
+	"book.resourcefulbees.advanced_tips.ender_beecon.text.4" : "The color of the beecon's beam is set to match the color of the honey that is inside, the exception being $(or)Vanilla$(), or $(or)Catnip$() honey which will show up as white.$(br2)You can also chose to silence or remove the beam from the beecon with the interface.",
 
 	"book.resourcefulbees.beekeeping_tools": "Beekeeping Tools",
 	"book.resourcefulbees.beekeeping_tools.desc": "This section will go in depth about all of the items and blocks you can use to enhance your beekeeping journey.",
@@ -730,8 +730,8 @@
 	"book.resourcefulbees.extras.making_your_own.text.4" : "$(li)$(item)$(l:https://www.blockbench.net/)Block Bench$()$(br)The go too tool for custom model making for minecraft.$(br)$(li)$(item)$(l:https://www.getpaint.net/)Paint.NET$()$(br)A simple free image editor.$(br)$(li)$(item)$(l:https://atom.io/)Atom$()$(br)An excellent text editor with lots of plugins.",
 
 	"book.resourcefulbees.extras.credits": "Credits",
-	"book.resourcefulbees.extras.credits.text.1": " $(or)Crispy Oreo$()$(br)   Lead Developer$(br2) $(or)ThatGravyBoat$()$(br)   Developer$(br2) $(or)Dawn Felstar$()$(br)   Developer, Artist$(br2) $(or)Ellah$()$(br)   Artist$(br2) $(or)Joosh$()$(br)   Artist",
-	"book.resourcefulbees.extras.credits.text.2": "$(br) $(or)Lady Lexxie$()$(br)   Official Pack Dev",
+	"book.resourcefulbees.extras.credits.text.1": " $(or)Crispy Oreo$()$(br)   Lead Developer$(br2) $(or)ThatGravyBoat$()$(br)   Developer$(br2) $(or)Dawn Felstar$()$(br)   Developer, Artist$(br2) $(or)Joosh$()$(br)   Artist$(br2) $(or)Lady Lexxie$()$(br)   Official Pack Dev",
+	"book.resourcefulbees.extras.credits.text.2": "",
 
 	"advancements.resourcefulbees.apiary_breed_time_upgrade.title": "Faster Breeding",
 	"advancements.resourcefulbees.apiary_breed_time_upgrade.description": "Obtain a Breed Time Upgrade",

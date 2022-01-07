@@ -83,9 +83,6 @@ public class StarryBee {
                 .createCustomBee();
 
         data.setShouldResourcefulBeesDoForgeRegistration(true);
-        //data.setCombRegistryObject(ModItems.STARRY_HONEYCOMB);
-        //data.setCombBlockItemRegistryObject(ModItems.STARRY_HONEYCOMB_BLOCK_ITEM);
-        //data.setCombBlockRegistryObject(ModBlocks.STARRY_HONEYCOMB_BLOCK);
 
         return data;
     }
@@ -94,9 +91,10 @@ public class StarryBee {
 
     public static HoneyBottleData getHoneyBottleData() {
         if (honeyBottleData == null) {
-            HoneyBottleData.Builder builder = new HoneyBottleData.Builder("starry", 20, 1f, "#E36E1B");
+            HoneyBottleData.Builder builder = new HoneyBottleData.Builder("starry", 20, 1f, COLOR);
             HoneyEffect glowing = new HoneyEffect(Effects.GLOWING.getRegistryName().toString(), 2400, 0, 1);
             builder.addEffect(glowing);
+            builder.setRarity(Rarity.EPIC);
             honeyBottleData = builder.build();
             honeyBottleData.setShouldResourcefulBeesDoForgeRegistration(true);
         }

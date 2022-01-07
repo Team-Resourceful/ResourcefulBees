@@ -1,12 +1,20 @@
 **please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
 
+# ----- [0.10.2] -----
+### WARNING IF YOU HAVE PLACED ANY STARRY HONEY DOWN PRIOR TO THIS BUILD IT WILL DISAPPEAR DUE TO A REQUIRED REGISTRY ID CHANGE
+
+- Setting enableEasterEggBees to false will now remove registries relating to starry honey and starry honeycombs
+- Added honeycombRarity to bees and honeyRarity to honey jsons
+- Fixed a bug relating customCombBlockDrop falling to properly register the custom comb drops
+- Removed unused fertiliser recipe
+
 # ----- [0.10.1] -----
 - Fixed Bees being able to be picked up while angry
 - Fixed a crash relating to the calming potion's recipe registry
 - removed unused Pollen and Fertiliser Items
 
 # ----- [0.10.0] -----
- ### WARNING IF YOU HAVE ANY BEES USING THE KITTEN BASE BEE MODEL YOUR TEXTURES WILL NEED TO BE UPDATED, AND THE MODEL TYPE KITTEN WILL NEED TO BE ADDED.
+### WARNING IF YOU HAVE ANY BEES USING THE KITTEN BASE BEE MODEL YOUR TEXTURES WILL NEED TO BE UPDATED, AND THE MODEL TYPE KITTEN WILL NEED TO BE ADDED.
 
 ## New Additions
 - Added KITTEN, BUNNY, ASTRONAUT model types

@@ -7,6 +7,7 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.Rarity;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.RegistryObject;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class HoneyBottleData {
 
@@ -58,6 +60,8 @@ public class HoneyBottleData {
      * optional: defines if honey fluid should be generated
      */
     private boolean generateHoneyFluid = true;
+
+    private String honeyRarity = "COMMON";
 
     /**
      * optional: list of effects given by drinking the item
@@ -104,7 +108,7 @@ public class HoneyBottleData {
     public HoneyBottleData() {
     }
 
-    public HoneyBottleData(String name, int hunger, float saturation, String honeyColor, boolean isRainbow, boolean generateHoneyBlock, boolean generateHoneyFluid, boolean honeyBlockRecipe, List<HoneyEffect> effects) {
+    public HoneyBottleData(String name, int hunger, float saturation, String honeyColor, boolean isRainbow, boolean generateHoneyBlock, boolean generateHoneyFluid, boolean honeyBlockRecipe, List<HoneyEffect> effects, String rarity) {
         this.name = name;
         this.hunger = hunger;
         this.saturation = saturation;
@@ -114,6 +118,7 @@ public class HoneyBottleData {
         this.generateHoneyFluid = generateHoneyFluid;
         this.honeyBlockRecipe = honeyBlockRecipe;
         this.effects = effects;
+        this.honeyRarity = rarity;
     }
 
     public int getHoneyColorInt() {
@@ -146,6 +151,10 @@ public class HoneyBottleData {
 
     public boolean isRainbow() {
         return isRainbow;
+    }
+
+    public Rarity getHoneyRarity() {
+        return honeyRarity == null ? Rarity.COMMON : Rarity.valueOf(honeyRarity.toUpperCase(Locale.ENGLISH));
     }
 
     public List<HoneyEffect> getEffects() {
@@ -241,7 +250,8 @@ public class HoneyBottleData {
         return new Item.Properties()
                 .tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)
                 .craftRemainder(Items.GLASS_BOTTLE)
-                .stacksTo(16);
+                .stacksTo(16)
+                .rarity(getHoneyRarity());
     }
 
     public Food getFood() {
@@ -313,6 +323,7 @@ public class HoneyBottleData {
         private boolean honeyBlockRecipe = true;
         private boolean generateHoneyFluid = true;
         private final List<HoneyEffect> effects = new ArrayList<>();
+        private String rarity;
 
         public Builder(String name, int hunger, float saturation, String honeyColor) {
             this.name = name;
@@ -323,6 +334,11 @@ public class HoneyBottleData {
 
         public Builder setRainbow(boolean rainbow) {
             isRainbow = rainbow;
+            return this;
+        }
+
+        public Builder setRarity(Rarity rarity) {
+            this.rarity = rarity.name();
             return this;
         }
 
@@ -347,7 +363,7 @@ public class HoneyBottleData {
         }
 
         public HoneyBottleData build() {
-            return new HoneyBottleData(name, hunger, saturation, honeyColor, isRainbow, generateHoneyBlock, generateHoneyFluid, honeyBlockRecipe, effects);
+            return new HoneyBottleData(name, hunger, saturation, honeyColor, isRainbow, generateHoneyBlock, generateHoneyFluid, honeyBlockRecipe, effects, rarity);
         }
     }
 }
