@@ -80,7 +80,7 @@ public class RegistryHandler {
     public static void registerDynamicBees() {
         BeeRegistry.getRegistry().getBees().forEach((name, customBee) -> {
             if (customBee.shouldResourcefulBeesDoForgeRegistration()) {
-                if (customBee.hasHoneycomb() && checkCustomDrops(customBee)) {
+                if (customBee.hasHoneycomb() && !customBee.hasCustomDrop()) {
                     registerHoneycomb(name, customBee);
                 } else if (customBee.hasHoneycomb() && customBee.hasCustomDrop() && !customBee.isEasterEggBee()) {
                     fillCustomDrops(customBee);
@@ -88,21 +88,6 @@ public class RegistryHandler {
                 registerBee(name, customBee);
             }
         });
-    }
-
-    private static boolean checkCustomDrops(CustomBeeData customBee) {
-        if (!customBee.hasCustomDrop()) {
-            return true;
-        }
-
-        //TEMPORARY DISABLING OF CODE - epic
-        //need to write new parsing system first
-
-        //if (customBee.getCustomCombDrop() == null || customBee.getCustomCombBlockDrop() == null) {
-            return false;
-        //}
-
-        //return CUSTOM_DROP_REGEX.matcher(customBee.getCustomCombDrop()).matches() || CUSTOM_DROP_REGEX.matcher(customBee.getCustomCombBlockDrop()).matches();
     }
 
     public static void registerDynamicHoney() {
@@ -161,8 +146,8 @@ public class RegistryHandler {
 
     private static void registerHoneycomb(String name, CustomBeeData customBeeData) {
         final RegistryObject<Block> customHoneycombBlock = ModBlocks.BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(name, customBeeData.getColorData(), AbstractBlock.Properties.copy(Blocks.HONEYCOMB_BLOCK)));
-        final RegistryObject<Item> customHoneycomb = ModItems.ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(name, customBeeData.getColorData(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
-        final RegistryObject<Item> customHoneycombBlockItem = ModItems.ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES)));
+        final RegistryObject<Item> customHoneycomb = ModItems.ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(name, customBeeData.getColorData(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).rarity(customBeeData.getHoneycombRarity())));
+        final RegistryObject<Item> customHoneycombBlockItem = ModItems.ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES).rarity(customBeeData.getHoneycombRarity())));
 
         customBeeData.setCombBlockRegistryObject(customHoneycombBlock);
         customBeeData.setCombRegistryObject(customHoneycomb);

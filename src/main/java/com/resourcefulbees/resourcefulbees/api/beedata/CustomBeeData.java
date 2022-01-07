@@ -9,6 +9,7 @@ import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -93,12 +94,16 @@ public class CustomBeeData extends AbstractBeeData {
      */
     private String customCombBlockDrop;
 
+    private transient boolean hasCustomDrop;
+
     /**
      * How much should come out of apiaries in combs.
      */
     private int[] apiaryOutputAmounts = new int[]{Config.T1_APIARY_QUANTITY.get(), Config.T2_APIARY_QUANTITY.get(), Config.T3_APIARY_QUANTITY.get(), Config.T4_APIARY_QUANTITY.get()};
 
     private ApiaryOutput[] apiaryOutputTypes = BeeInfoUtils.getDefaultApiaryTypes();
+
+    private String honeycombRarity;
 
     private transient boolean shouldResourcefulBeesDoForgeRegistration;
 
@@ -180,7 +185,7 @@ public class CustomBeeData extends AbstractBeeData {
         isEasterEggBee = false;
     }
 
-    private CustomBeeData(String flower, String baseLayerTexture, BaseModelTypes baseModelType, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, ApiaryOutput[] apiaryOutputTypes, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData combatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData, boolean isEasterEggBee, String lore, String loreColor, String creator) {
+    private CustomBeeData(String flower, String baseLayerTexture, BaseModelTypes baseModelType, int maxTimeInHive, float sizeModifier, String[] traits, int[] apiaryOutputAmounts, ApiaryOutput[] apiaryOutputTypes, String name, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData combatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData, boolean isEasterEggBee, String lore, String loreColor, String creator, String honeycombRarity, boolean hasCustomDrop) {
         super("CustomBeeData");
         this.flower = flower;
         this.baseLayerTexture = baseLayerTexture;
@@ -203,6 +208,8 @@ public class CustomBeeData extends AbstractBeeData {
         this.lore = lore;
         this.loreColor = loreColor;
         this.creator = creator;
+        this.honeycombRarity = honeycombRarity;
+        this.hasCustomDrop = hasCustomDrop;
     }
 
     public String getCreator() {
@@ -268,6 +275,10 @@ public class CustomBeeData extends AbstractBeeData {
         return customCombBlockDrop;
     }
 
+    public Rarity getHoneycombRarity() {
+        return honeycombRarity == null ? Rarity.COMMON : Rarity.valueOf(honeycombRarity.toUpperCase(Locale.ROOT));
+    }
+
     public int[] getApiaryOutputAmounts() {
         return apiaryOutputAmounts;
     }
@@ -278,7 +289,7 @@ public class CustomBeeData extends AbstractBeeData {
 
 
     public boolean hasCustomDrop() {
-        return (customCombDrop != null && !customCombDrop.isEmpty() && customCombBlockDrop != null && !customCombBlockDrop.isEmpty()) || isEasterEggBee();
+        return (customCombDrop != null && !customCombDrop.isEmpty() && customCombBlockDrop != null && !customCombBlockDrop.isEmpty()) || hasCustomDrop;
     }
 
     public boolean hasHoneycomb() {
@@ -469,6 +480,8 @@ public class CustomBeeData extends AbstractBeeData {
         private final TraitData traitData;
         private boolean isEasterEggBee = false;
         private ApiaryOutput[] apiaryOutputTypes = BeeInfoUtils.getDefaultApiaryTypes();
+        private String honeycombRarity;
+        private boolean hasCustomDrop;
 
         public Builder(String name, String flower, boolean hasHoneycomb, MutationData mutationData, ColorData colorData, CombatData combatData, CentrifugeData centrifugeData, BreedData breedData, SpawnData spawnData, TraitData traitData) {
             this.name = name;
@@ -538,8 +551,18 @@ public class CustomBeeData extends AbstractBeeData {
             return this;
         }
 
+        public Builder setHoneycombRarity(String rarity) {
+            this.honeycombRarity = rarity;
+            return this;
+        }
+
+        public Builder hasCustomDrop() {
+            this.hasCustomDrop = true;
+            return this;
+        }
+
         public CustomBeeData createCustomBee() {
-            return new CustomBeeData(flower, baseLayerTexture, baseModelType, maxTimeInHive, sizeModifier, traits, apiaryOutputAmounts, apiaryOutputTypes, name, hasHoneycomb, mutationData, colorData, combatData, centrifugeData, breedData, spawnData, traitData, isEasterEggBee, lore, loreColor, creator);
+            return new CustomBeeData(flower, baseLayerTexture, baseModelType, maxTimeInHive, sizeModifier, traits, apiaryOutputAmounts, apiaryOutputTypes, name, hasHoneycomb, mutationData, colorData, combatData, centrifugeData, breedData, spawnData, traitData, isEasterEggBee, lore, loreColor, creator, honeycombRarity, hasCustomDrop);
         }
     }
 }

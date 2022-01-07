@@ -382,8 +382,6 @@ public class BeeInfoUtils {
         Item item = bottleOutput.getItem();
         if (item == Items.HONEY_BOTTLE) {
             return ModFluids.HONEY_STILL.get().getSource();
-        } else if (item == ModItems.STARRY_HONEY_BOTTLE.get()) {
-            return ModFluids.STARRY_HONEY_STILL.get().getSource();
         }else if (item == ModItems.CATNIP_HONEY_BOTTLE.get()) {
             return ModFluids.CATNIP_HONEY_STILL.get().getSource();
         } else if (item instanceof CustomHoneyBottleItem) {
@@ -394,9 +392,7 @@ public class BeeInfoUtils {
     }
 
     public static Item getHoneyBottle(Fluid fluid) {
-        if (fluid == ModFluids.STARRY_HONEY_STILL.get()) {
-            return ModItems.STARRY_HONEY_BOTTLE.get();
-        } else if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
             return ModItems.CATNIP_HONEY_BOTTLE.get();
         } else if (fluid instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
@@ -407,9 +403,7 @@ public class BeeInfoUtils {
     }
 
     public static Item getHoneyBucket(Fluid fluid) {
-        if (fluid == ModFluids.STARRY_HONEY_STILL.get()) {
-            return ModItems.STARRY_HONEY_FLUID_BUCKET.get();
-        } else if(fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+        if(fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
             return ModItems.CATNIP_HONEY_FLUID_BUCKET.get();
         } else if (fluid instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;
@@ -420,9 +414,7 @@ public class BeeInfoUtils {
     }
 
     public static Item getHoneyBlock(Fluid fluid) {
-        if (fluid == ModFluids.STARRY_HONEY_STILL.get()) {
-            return ModItems.STARRY_HONEY_BLOCK_ITEM.get();
-        } else if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
+        if (fluid == ModFluids.CATNIP_HONEY_STILL.get()) {
             return ModItems.CATNIP_HONEY_BLOCK_ITEM.get();
         } else if (fluid instanceof HoneyFlowingFluid) {
             HoneyFlowingFluid customfluid = (HoneyFlowingFluid) fluid;

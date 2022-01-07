@@ -1,6 +1,7 @@
 package com.resourcefulbees.resourcefulbees.entity.passive;
 
 import com.resourcefulbees.resourcefulbees.api.beedata.*;
+import com.resourcefulbees.resourcefulbees.lib.ApiaryOutput;
 import com.resourcefulbees.resourcefulbees.lib.BeeConstants;
 import com.resourcefulbees.resourcefulbees.lib.LightLevels;
 import com.resourcefulbees.resourcefulbees.lib.ModConstants;
@@ -47,12 +48,14 @@ public class OreoBee {
                 .setLore("A Delicious Bee")
                 .setLoreColor(BeeConstants.RAINBOW_COLOR)
                 .setTraits(new String[]{BeeConstants.OREO_BEE})
+                .setApiaryOutputTypes(new ApiaryOutput[]{ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.COMB})
                 .setApiaryOutputAmounts(new int[]{1, 2, 3, 4})
+                .hasCustomDrop()
                 .createCustomBee();
 
         data.setShouldResourcefulBeesDoForgeRegistration(true);
         data.setCombRegistryObject(ModItems.OREO_COOKIE);
-        data.setCombBlockItemRegistryObject(ModItems.OREO_COOKIE);
+        //data.setCombBlockItemRegistryObject(ModItems.OREO_COOKIE);
 
         return data;
     }

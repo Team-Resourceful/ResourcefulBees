@@ -7,9 +7,7 @@ import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.resourcefulbees.resourcefulbees.api.honeydata.HoneyEffect;
 import com.resourcefulbees.resourcefulbees.lib.*;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
-import com.resourcefulbees.resourcefulbees.registry.ModBlocks;
-import com.resourcefulbees.resourcefulbees.registry.ModFluids;
-import com.resourcefulbees.resourcefulbees.registry.ModItems;
+import net.minecraft.item.Rarity;
 import net.minecraft.potion.Effects;
 
 public class StarryBee {
@@ -20,6 +18,7 @@ public class StarryBee {
 
     public static void register() {
         BeeRegistry.getRegistry().registerBee(BeeConstants.STARRY_BEE, getOreoBeeData());
+        BeeRegistry.getRegistry().registerHoney(BeeConstants.STARRY_BEE, getHoneyBottleData());
     }
 
     private static final String COLOR = "#FFA500";
@@ -80,12 +79,13 @@ public class StarryBee {
                 .setApiaryOutputTypes(new ApiaryOutput[]{ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.COMB, ApiaryOutput.COMB})
                 .setApiaryOutputAmounts(new int[]{1, 1, 1, 1, 1})
                 .setTraits(new String[]{BeeConstants.STARRY_BEE})
+                .setHoneycombRarity(Rarity.EPIC.toString())
                 .createCustomBee();
 
         data.setShouldResourcefulBeesDoForgeRegistration(true);
-        data.setCombRegistryObject(ModItems.STARRY_HONEYCOMB);
-        data.setCombBlockItemRegistryObject(ModItems.STARRY_HONEYCOMB_BLOCK_ITEM);
-        data.setCombBlockRegistryObject(ModBlocks.STARRY_HONEYCOMB_BLOCK);
+        //data.setCombRegistryObject(ModItems.STARRY_HONEYCOMB);
+        //data.setCombBlockItemRegistryObject(ModItems.STARRY_HONEYCOMB_BLOCK_ITEM);
+        //data.setCombBlockRegistryObject(ModBlocks.STARRY_HONEYCOMB_BLOCK);
 
         return data;
     }
@@ -98,12 +98,7 @@ public class StarryBee {
             HoneyEffect glowing = new HoneyEffect(Effects.GLOWING.getRegistryName().toString(), 2400, 0, 1);
             builder.addEffect(glowing);
             honeyBottleData = builder.build();
-            honeyBottleData.setHoneyBlockRegistryObject(ModBlocks.STARRY_HONEY_BLOCK);
-            honeyBottleData.setHoneyStillFluidRegistryObject(ModFluids.STARRY_HONEY_STILL);
-            honeyBottleData.setHoneyFlowingFluidRegistryObject(ModFluids.STARRY_HONEY_FLOWING);
-            honeyBottleData.setHoneyBlockItemRegistryObject(ModItems.STARRY_HONEY_BLOCK_ITEM);
-            honeyBottleData.setHoneyBucketItemRegistryObject(ModItems.STARRY_HONEY_FLUID_BUCKET);
-            honeyBottleData.setHoneyBottleRegistryObject(ModItems.STARRY_HONEY_BOTTLE);
+            honeyBottleData.setShouldResourcefulBeesDoForgeRegistration(true);
         }
         return honeyBottleData;
     }

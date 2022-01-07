@@ -56,6 +56,7 @@ public class KittenBee {
                 .setCreator("Dawn Felstar")
                 .setLore("Cute little baby kitty bee.")
                 .setLoreColor(BeeConstants.RAINBOW_COLOR)
+                .hasCustomDrop()
                 .createCustomBee();
 
         data.setShouldResourcefulBeesDoForgeRegistration(true);

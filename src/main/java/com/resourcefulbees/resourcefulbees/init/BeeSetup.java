@@ -71,6 +71,7 @@ public class BeeSetup {
             KittenBee.register();
             YetiBee.register();
             StarryBee.register();
+            StarryBee.register();
         }
         if (Boolean.TRUE.equals(Config.ENABLE_CUSTOM_PATREON_BEES.get())) {
             AbBee.register();
