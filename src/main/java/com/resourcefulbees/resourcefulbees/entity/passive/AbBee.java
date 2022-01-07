@@ -48,6 +48,7 @@ public class AbBee {
                 .setLore("Bunny Bun Bun.")
                 .setLoreColor(BeeConstants.RAINBOW_COLOR)
                 .setApiaryOutputAmounts(new int[]{1, 2, 3, 4})
+                .hasCustomDrop()
                 .createCustomBee();
 
         data.setShouldResourcefulBeesDoForgeRegistration(true);
