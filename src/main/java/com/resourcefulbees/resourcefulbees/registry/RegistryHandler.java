@@ -185,10 +185,12 @@ public class RegistryHandler {
 
     private static void fillCustomDrops(CustomBeeData customBeeData) {
         RegistryObject<Item> customComb = RegistryObject.of(new ResourceLocation(customBeeData.getCustomCombDrop()), ForgeRegistries.ITEMS);
-        RegistryObject<Item> customCombBlock = RegistryObject.of(new ResourceLocation(customBeeData.getCustomCombBlockDrop()), ForgeRegistries.ITEMS);
+        RegistryObject<Item> customCombItemBlock = RegistryObject.of(new ResourceLocation(customBeeData.getCustomCombBlockDrop()), ForgeRegistries.ITEMS);
+        RegistryObject<Block> customCombBlock = RegistryObject.of(new ResourceLocation(customBeeData.getCustomCombBlockDrop()), ForgeRegistries.BLOCKS);
 
         customBeeData.setCombRegistryObject(customComb);
-        customBeeData.setCombBlockItemRegistryObject(customCombBlock);
+        customBeeData.setCombBlockItemRegistryObject(customCombItemBlock);
+        customBeeData.setCombBlockRegistryObject(customCombBlock);
     }
 
     @SubscribeEvent
