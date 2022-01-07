@@ -175,15 +175,7 @@ public class ModItems {
     public static final RegistryObject<Item> BEEPEDIA = ITEMS.register("beepedia", () -> new Beepedia(getItemProperties().stacksTo(1)));
     public static final RegistryObject<Item> HONEY_DIPPER = ITEMS.register("honey_dipper", () -> new HoneyDipper(getItemProperties().stacksTo(1)));
 
-    public static final RegistryObject<Item> SCRAPER = ITEMS.register("scraper", () -> new Item(getItemProperties().stacksTo(1)) {
-
-        @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.SCRAPER_TOOLTIP.withStyle(ChatFormatting.GOLD));
-            tooltip.add(TranslationConstants.Items.SCRAPER_TOOLTIP_1.withStyle(ChatFormatting.GOLD));
-            super.appendHoverText(stack, level, tooltip, flagIn);
-        }
-    });
+    public static final RegistryObject<Item> SCRAPER = ITEMS.register("scraper", () -> new ScraperItem(getItemProperties().stacksTo(1)));
 
     public static final RegistryObject<Item> SMOKER = ITEMS.register("smoker", () -> new Smoker(getItemProperties().setNoRepair().durability(CommonConfig.SMOKER_DURABILITY.get())));
     public static final RegistryObject<Item> BELLOW = ITEMS.register("bellow", () -> new Item(getItemProperties()));

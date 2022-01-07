@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -39,6 +38,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.text.WordUtils;
@@ -116,8 +116,8 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         ItemStack itemstack = player.getItemInHand(handIn);
 
         if (state.getValue(HONEY_LEVEL) >= 5) {
-            boolean isShear = CommonConfig.ALLOW_SHEARS.get() && itemstack.is(ModTags.Items.SHEARS);
-            boolean isScraper = itemstack.getItem().equals(ModItems.SCRAPER.get());
+            boolean isShear = CommonConfig.ALLOW_SHEARS.get() && itemstack.canPerformAction(ToolActions.SHEARS_HARVEST);
+            boolean isScraper = itemstack.canPerformAction(ModConstants.SCRAPE_HIVE);
 
             if (isShear || isScraper) {
                 InteractionResult success = performHoneyHarvest(state, world, pos, player, handIn, itemstack, isScraper);
