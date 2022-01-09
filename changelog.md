@@ -1,5 +1,9 @@
 **please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
 
+# ----- [0.10.3] -----
+- Fixed a Crash if you attempt to have a bee follow you with traitData missing in the json
+- Fixed Lost Bee Boxes not disintegrating if they were emptied using a basic right click 
+
 # ----- [0.10.2] -----
 ### WARNING IF YOU HAVE PLACED ANY STARRY HONEY DOWN PRIOR TO THIS BUILD IT WILL DISAPPEAR DUE TO A REQUIRED REGISTRY ID CHANGE
 

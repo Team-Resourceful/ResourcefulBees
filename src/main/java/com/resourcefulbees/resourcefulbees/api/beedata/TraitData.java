@@ -13,28 +13,28 @@ public class TraitData extends AbstractBeeData {
     /**
      * A list of Potion Effects and their strength.
      */
-    private transient Set<Pair<Effect, Integer>> potionDamageEffects;
+    private transient Set<Pair<Effect, Integer>> potionDamageEffects = new HashSet<>();
 
     /**
      * A list of damage sources the bee is immune to
      */
-    private transient Set<String> damageImmunities;
+    private transient Set<String> damageImmunities = new HashSet<>();
 
     /**
      * A list of effects the bee is immune to
      */
-    private transient Set<Effect> potionImmunities;
+    private transient Set<Effect> potionImmunities = new HashSet<>();
 
     /**
      * A list of damage types and their strength.
      */
-    private transient Set<Pair<String, Integer>> damageTypes;
+    private transient Set<Pair<String, Integer>> damageTypes = new HashSet<>();
 
     /**
      * A list of special abilities the bee has
      */
-    private transient Set<String> specialAbilities;
-    private transient Set<BasicParticleType> particleEffects;
+    private transient Set<String> specialAbilities = new HashSet<>();
+    private transient Set<BasicParticleType> particleEffects = new HashSet<>();
 
 
     private transient Set<BeeAura> beeAuras;
@@ -48,6 +48,7 @@ public class TraitData extends AbstractBeeData {
     public TraitData(boolean hasTraits) {
         super("TraitData");
         this.hasTraits = hasTraits;
+
     }
 
     public void addTrait(BeeTrait trait){
@@ -120,6 +121,8 @@ public class TraitData extends AbstractBeeData {
     }
 
     public static TraitData createDefault() {
-        return new TraitData(false);
+        TraitData traitData = new TraitData(false);
+        traitData.initializeTraitSets();
+        return traitData;
     }
 }

@@ -84,7 +84,10 @@ public class BeeBox extends Item {
                 loadEntity(pos, context, entity, worldIn, player);
             }
         });
-        if (listNBT.isEmpty()) stack.setTag(null);
+        if (listNBT.isEmpty()) {
+            stack.setTag(null);
+            if (isTemp) stack.shrink(1);
+        }
         else {
             CompoundNBT nbt = stack.getTag();
             nbt.put(NBTConstants.NBT_BEES, listNBT);
