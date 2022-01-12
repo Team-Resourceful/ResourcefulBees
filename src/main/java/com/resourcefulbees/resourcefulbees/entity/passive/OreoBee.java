@@ -55,7 +55,7 @@ public class OreoBee {
 
         data.setShouldResourcefulBeesDoForgeRegistration(true);
         data.setCombRegistryObject(ModItems.OREO_COOKIE);
-        //data.setCombBlockItemRegistryObject(ModItems.OREO_COOKIE);
+        data.setCombBlockItemRegistryObject(ModItems.OREO_COOKIE);
 
         return data;
     }
