@@ -200,6 +200,12 @@ task javadocs(type: Javadoc) {
     //options.charSet = 'UTF-8'
 }*/
 
+allprojects {
+	tasks.withType(Javadoc) {
+		options.addStringOption('Xdoclint:none', '-quiet')
+	}
+}
+
 javadoc {
 	source = sourceSets.main.java
 	// prevent java 8's strict doclint for javadocs from failing builds
