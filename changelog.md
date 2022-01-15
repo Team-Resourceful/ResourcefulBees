@@ -1,5 +1,8 @@
 **please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
 
+# ----- [0.10.4] -----
+- Fixed a ticking entity crash caused by a tweak to the Oreo bee data.
+
 # ----- [0.10.3] -----
 - Fixed a Crash if you attempt to have a bee follow you with traitData missing in the json
 - Fixed Lost Bee Boxes not disintegrating if they were emptied using a basic right click 
