@@ -192,10 +192,11 @@ task javadocs(type: Javadoc) {
     classpath = sourceSets.main.compileClasspath
     source = sourceSets.main.java
     include "com/resourcefulbees/**"
+    exclude "software/bernie/geckolib3/**"
 
     options.addStringOption('Xdoclint:none', '-quiet')
-    options.encoding = 'UTF-8'
-    options.charSet = 'UTF-8'
+    //options.encoding = 'UTF-8'
+    //options.charSet = 'UTF-8'
 }
 
 task javadocJar(type: Jar, dependsOn: javadocs) {
