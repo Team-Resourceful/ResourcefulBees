@@ -1,9 +1,10 @@
 
 package com.teamresourceful.resourcefulbees.common.recipe;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.mojang.serialization.*;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.Decoder;
+import com.mojang.serialization.Encoder;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
@@ -12,26 +13,21 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.ingredients.IAmountSensitive;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick) implements Recipe<Container> {
+public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick) implements CodecRecipe<Container> {
 
     public static final RecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":centrifuge");
 
@@ -56,42 +52,6 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
         return ingredient instanceof IAmountSensitive amountSensitive ? amountSensitive.getAmount() : 1;
     }
 
-    @Override
-    public boolean isSpecial() {
-        return true;
-    }
-
-
-    @Override
-    public @NotNull
-    ItemStack assemble(@NotNull Container inventory) {
-        return ItemStack.EMPTY;
-    }
-
-    /**
-     * Used to determine if this recipe can fit in a grid of the given width/height
-     */
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    /**
-     * Get the result of this recipe, usually for display purposes (e.g. recipe book). If your recipe has more than one
-     * possible result (e.g. it's dynamic and depends on its inputs), then return an empty stack.
-     */
-    @Override
-    public @NotNull
-    ItemStack getResultItem() {
-        return ItemStack.EMPTY;
-    }
-
-    @NotNull
-    @Override
-    public ResourceLocation getId() {
-        return id;
-    }
-
     @NotNull
     @Override
     public RecipeSerializer<?> getSerializer() {
@@ -102,40 +62,6 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
     @Override
     public RecipeType<?> getType() {
         return CENTRIFUGE_RECIPE_TYPE;
-    }
-
-    //REQUIRED This needs serious testing to ensure it is working properly before pushing update!!!
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CentrifugeRecipe> {
-
-        @Override
-        public @NotNull
-        CentrifugeRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
-            return CentrifugeRecipe.codec(id).parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not parse Centrifuge Recipe!!"));
-        }
-
-        /**
-         * THE REASON
-         * <br>-----------------------------<br>
-         * So if we used buffer.writeWithCodec we would exceed buffer max capacity and would error the client and won't allow
-         * the player to join.
-         * Writing a string with normal json also causes an error with buffer max capacity.
-         * From our testing Compressed json allows for a lot of data, (test case: tested with a pool of 1050 elements)
-         * and worked fine.
-         * Please don't be stupid and test as much as possible if trying to change this in the future.
-         */
-
-        @Override
-        public CentrifugeRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf buffer) {
-            Optional<CentrifugeRecipe> result = CentrifugeRecipe.codec(id).parse(JsonOps.COMPRESSED, ModConstants.GSON.fromJson(buffer.readUtf(), JsonArray.class)).result();
-            return result.orElse(null);
-
-        }
-
-        //REQUIRED TEST THIS ON SERVERS!!!!!!!!!!!
-        @Override
-        public void toNetwork(@NotNull FriendlyByteBuf buffer, @NotNull CentrifugeRecipe recipe) {
-            CentrifugeRecipe.codec(recipe.id).encodeStart(JsonOps.COMPRESSED, recipe).result().ifPresent(element -> buffer.writeUtf(element.toString()));
-        }
     }
 
     public record Output<T extends AbstractOutput>(double chance, RandomCollection<T> pool) {

@@ -1,34 +1,27 @@
 package com.teamresourceful.resourcefulbees.common.recipe;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPair parent2, Optional<Ingredient> input, RandomCollection<BreederOutput> outputs, int time) implements Recipe<Container> {
+public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPair parent2, Optional<Ingredient> input, RandomCollection<BreederOutput> outputs, int time) implements CodecRecipe<Container> {
 
     public static final RecipeType<BreederRecipe> BREEDER_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":breeder");
 
@@ -51,31 +44,6 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull Container inventory) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public @NotNull ItemStack getResultItem() {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public boolean isSpecial() {
-        return true;
-    }
-
-    @Override
-    public @NotNull ResourceLocation getId() {
-        return id;
-    }
-
-    @Override
     public @NotNull RecipeSerializer<?> getSerializer() {
         return ModRecipeSerializers.BREEDER_RECIPE.get();
     }
@@ -88,27 +56,6 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
     @Override
     public @NotNull NonNullList<Ingredient> getIngredients() {
         return NonNullList.of(Ingredient.EMPTY, parent1.parent(), parent1.feedItem(), parent2.parent(), parent2.feedItem());
-    }
-
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<BreederRecipe> {
-
-        @Override
-        public @NotNull BreederRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
-            return BreederRecipe.codec(id).parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not parse Solidification Recipe!!"));
-
-        }
-
-        @Nullable
-        @Override
-        public BreederRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf buffer) {
-            Optional<BreederRecipe> result = BreederRecipe.codec(id).parse(JsonOps.COMPRESSED, ModConstants.GSON.fromJson(buffer.readUtf(), JsonArray.class)).result();
-            return result.orElse(null);
-        }
-
-        @Override
-        public void toNetwork(@NotNull FriendlyByteBuf buffer, @NotNull BreederRecipe recipe) {
-            BreederRecipe.codec(recipe.id).encodeStart(JsonOps.COMPRESSED, recipe).result().ifPresent(element -> buffer.writeUtf(element.toString()));
-        }
     }
 
     public static record BreederPair(Ingredient parent, Optional<String> displayEntity, Ingredient feedItem, Optional<ItemStack> returnItem){
