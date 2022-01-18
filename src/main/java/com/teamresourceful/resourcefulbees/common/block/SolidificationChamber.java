@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -18,8 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
@@ -29,12 +27,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
-public class SolidificationChamber extends RenderingBaseEntityBlock {
+public class SolidificationChamber extends SidedTickingBlock<SolidificationChamberBlockEntity> {
 
     protected static final VoxelShape VOXEL_SHAPE = Util.make(() -> {
         VoxelShape shape = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 5.0D, 15.0D);
@@ -45,7 +42,10 @@ public class SolidificationChamber extends RenderingBaseEntityBlock {
     });
 
     public SolidificationChamber() {
-        super(Properties.of(Material.STONE).sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops());
+        super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY,
+                SolidificationChamberBlockEntity::serverTick,
+                null,
+                Properties.of(Material.STONE).sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops());
     }
 
     private static SolidificationChamberBlockEntity getBlockEntity(@NotNull BlockGetter level, @NotNull BlockPos pos) {
@@ -92,17 +92,5 @@ public class SolidificationChamber extends RenderingBaseEntityBlock {
     @Override
     public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return VOXEL_SHAPE;
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new SolidificationChamberBlockEntity(pos, state);
-    }
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> entityType) {
-        return level.isClientSide ? null : createTickerHelper(entityType, ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), SolidificationChamberBlockEntity::serverTick);
     }
 }
