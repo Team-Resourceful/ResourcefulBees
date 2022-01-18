@@ -180,13 +180,14 @@ public class Color {
     ).apply(instance, Color::new));
 
     public static DataResult<Color> decodeColor(Dynamic<?> dynamic) {
-        Optional<Color> colorResult = COLOR_CODEC.parse(dynamic).result();
+        //orElse is used here for future use so future codecs can be chained.
+        Color colorResult = COLOR_CODEC.parse(dynamic).result().orElse(null);
         if (dynamic.asNumber().result().isPresent()) {
             return DataResult.success(new Color(dynamic.asInt(0xffffff)));
         } else if (dynamic.asString().result().isPresent()) {
             return DataResult.success(Color.parse(dynamic.asString("WHITE")));
-        } else if (colorResult.isPresent()) {
-            return DataResult.success(colorResult.get());
+        } else if (colorResult != null) {
+            return DataResult.success(colorResult);
         }
         return DataResult.error("Color input not valid!");
     }

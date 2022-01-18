@@ -18,13 +18,11 @@ public class TextComponentCodec {
     public static final Codec<Component> CODEC = Codec.PASSTHROUGH.comapFlatMap(TextComponentCodec::decodeData, TextComponentCodec::encodeData);
 
     private static DataResult<Component> decodeData(Dynamic<?> dynamic) {
-        Object object = dynamic.getValue();
-        if (object instanceof JsonElement) {
-            MutableComponent component = Component.Serializer.fromJson(((JsonElement) object));
+        if (dynamic.getValue() instanceof JsonElement element) {
+            MutableComponent component = Component.Serializer.fromJson(element);
             return component != null ? DataResult.success(component) : DataResult.error("component became null");
-        } else {
-            return DataResult.error("value was some how not a JsonElement");
         }
+        return DataResult.error("value was some how not a JsonElement");
     }
 
     private static Dynamic<JsonElement> encodeData(Component component) {
