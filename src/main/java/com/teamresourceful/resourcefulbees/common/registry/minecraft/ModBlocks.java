@@ -2,6 +2,8 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.*;
+import com.teamresourceful.resourcefulbees.common.blockentity.AcceleratorBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.CreativeGenBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
@@ -161,8 +163,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> APIARY_BREEDER_BLOCK = BLOCKS.register("apiary_breeder", () -> new ApiaryBreederBlock(NEST_PROPERTIES));
     public static final RegistryObject<LiquidBlock> HONEY_FLUID_BLOCK = BLOCKS.register("honey_fluid_block", () -> new LiquidBlock(ModFluids.HONEY_STILL, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(CENTRIFUGE_PROPERTIES));
-    public static final RegistryObject<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new CreativeGen(CENTRIFUGE_PROPERTIES));
-    public static final RegistryObject<Block> ACCELERATOR = BLOCKS.register("accelerator", () -> new AcceleratorBlock(CENTRIFUGE_PROPERTIES));
+    public static final RegistryObject<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> SidedTickingBlock.server(ModBlockEntityTypes.CREATIVE_GEN_ENTITY, CreativeGenBlockEntity::serverTick, CENTRIFUGE_PROPERTIES));
+    public static final RegistryObject<Block> ACCELERATOR = BLOCKS.register("accelerator", () -> SidedTickingBlock.server(ModBlockEntityTypes.ACCELERATOR_TILE_ENTITY, AcceleratorBlockEntity::serverTick, CENTRIFUGE_PROPERTIES));
     public static final RegistryObject<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", EnderBeecon::new);
     public static final RegistryObject<Block> SOLIDIFICATION_CHAMBER = BLOCKS.register("solidification_chamber", SolidificationChamber::new);
     public static final RegistryObject<Block> HONEY_POT = BLOCKS.register("honey_pot", () -> new HoneyPotBlock(BlockBehaviour.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops()));
