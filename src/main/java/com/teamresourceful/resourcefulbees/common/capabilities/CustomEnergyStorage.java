@@ -20,7 +20,7 @@ public class CustomEnergyStorage extends EnergyStorage {
     }
 
     public boolean canAddEnergy(int amount) {
-        return energy + amount >= capacity;
+        return energy + amount <= capacity;
     }
 
     public void addEnergy(int amount) {

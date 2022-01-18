@@ -71,12 +71,6 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
         builder.add(HORIZONTAL_FACING);
     }
 
-    @Nullable
-    @Override
-    public MenuProvider getMenuProvider(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos) {
-        return (MenuProvider)worldIn.getBlockEntity(pos);
-    }
-
     @Override
     public boolean canSurvive(@NotNull BlockState state, @NotNull LevelReader level, @NotNull BlockPos pos) {
         BlockState topState = level.getBlockState(pos.above());

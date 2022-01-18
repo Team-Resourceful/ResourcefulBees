@@ -29,24 +29,6 @@ public class ApiaryBreederBlock extends BeeHouseBlock {
         super(properties);
     }
 
-/*    @NotNull
-    @Override
-    public InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult) {
-        if (!player.isShiftKeyDown() && !world.isClientSide) {
-            MenuProvider blockEntity = state.getMenuProvider(world,pos);
-            NetworkHooks.openGui((ServerPlayer) player, blockEntity, pos);
-        }
-        return InteractionResult.SUCCESS;
-    }*/
-
-
-/*    @Nullable
-    @Override
-    public MenuProvider getMenuProvider(@NotNull BlockState state, Level worldIn, @NotNull BlockPos pos) {
-        return (MenuProvider) worldIn.getBlockEntity(pos);
-    }*/
-
-
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {

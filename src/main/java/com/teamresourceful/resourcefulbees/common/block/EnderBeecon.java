@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -24,8 +24,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -49,7 +47,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EnderBeecon extends RenderingBaseEntityBlock {
+public class EnderBeecon extends SidedTickingBlock<EnderBeeconBlockEntity> {
 
     protected static final VoxelShape VOXEL_SHAPE_TOP = Util.make(() -> {
         VoxelShape shape = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 1.0D, 14.0D);
@@ -72,7 +70,7 @@ public class EnderBeecon extends RenderingBaseEntityBlock {
             .dynamicShape();
 
     public EnderBeecon() {
-        super(PROPERTIES);
+        super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY, EnderBeeconBlockEntity::serverTick, null, PROPERTIES);
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(BEAM, true).setValue(SOUND, true));
     }
 
@@ -156,19 +154,5 @@ public class EnderBeecon extends RenderingBaseEntityBlock {
                     .append(": [" + tank.getFluidAmount() + "/" + tank.getCapacity() + "]")
                     .withStyle(ChatFormatting.GOLD));
         }
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new EnderBeeconBlockEntity(pos, state);
-    }
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
-        return level.isClientSide ?
-                null :
-                createTickerHelper(type, ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), EnderBeeconBlockEntity::serverTick);
     }
 }
