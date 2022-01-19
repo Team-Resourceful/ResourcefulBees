@@ -1,2 +1,16 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://nexus.resourcefulbees.com/repository/maven-public/' }
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == 'net.minecraftforge.gradle')
+                useModule group: "net.minecraftforge.gradle", name: "ForgeGradle", version: requested.version
+            if (requested.id.id ==  'org.spongepowered.mixin')
+                useModule group: "org.spongepowered", name: "mixingradle", version: requested.version
+        }
+    }
+}
+
 rootProject.name = "resourcefulbees"
 include 'Phosphophyllite'
