@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "minecraft:honey_block",
-    "resourcefulbees:catnip_honey_block"
+    "resourcefulbees:catnip_honey_block",
+    { "required" : false, "id": "resourcefulbees:starry_honey_block" }
   ]
 }

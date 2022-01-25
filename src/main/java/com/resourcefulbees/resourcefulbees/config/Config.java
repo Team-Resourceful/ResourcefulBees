@@ -125,9 +125,9 @@ public class Config {
                     .define("generateBiomeDictionaries", false);
             USE_FORGE_DICTIONARIES = COMMON_BUILDER.comment("\nSet this to false when you want to use our custom Biome Dictionary system. [true/false]\nAt a later time we will look into either combining with the Forge system or making the Forge system data pack capable.")
                     .define("useForgeBiomeDictionaries", true);
-            ENABLE_EASTER_EGG_BEES = COMMON_BUILDER.comment("\nSet to true if you want easter egg bees to generate (WIP) [true/false]", "The only easter egg bee currently available is the Oreo bee")
+            ENABLE_EASTER_EGG_BEES = COMMON_BUILDER.comment("\nSet to true if you want easter egg bees to generate [true/false]", "Easter Egg bees are: Oreo, Kitten, Starry and Yeti")
                     .define("enableEasterEggBees", true);
-            ENABLE_CUSTOM_PATREON_BEES = COMMON_BUILDER.comment("\nSet to true if you want patreon custom bees to generate [true/false]", "The only easter egg bee currently available is the Oreo bee")
+            ENABLE_CUSTOM_PATREON_BEES = COMMON_BUILDER.comment("\nSet to true if you want patreon custom bees to generate [true/false]", "The only Patreon bee currently available is the AbBee")
                     .define("enableCustomPatreonBees", true);
             SMOKER_DURABILITY = COMMON_BUILDER.comment("\nSets the max durability for the smoker")
                     .defineInRange("smokerDurability", 1000, 100, 5000);

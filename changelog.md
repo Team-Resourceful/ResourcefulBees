@@ -1,5 +1,8 @@
 **please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
 
+# ----- [0.10.5] -----
+- Fixed honey not being able to be used in Resourceful Bees tank objects due to tags not loading properly when easter egg bees are disabled
+
 # ----- [0.10.4] -----
 - Fixed a ticking entity crash caused by a tweak to the Oreo bee data.
 

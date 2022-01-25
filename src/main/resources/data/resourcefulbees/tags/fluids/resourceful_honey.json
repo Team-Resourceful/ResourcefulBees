@@ -3,9 +3,9 @@
   "values": [
     "resourcefulbees:honey",
     "resourcefulbees:catnip_honey",
-    "resourcefulbees:starry_honey",
     "resourcefulbees:honey_flowing",
     "resourcefulbees:catnip_honey_flowing",
-    "resourcefulbees:starry_honey_flowing"
+    { "required" : false, "id": "resourcefulbees:starry_honey" },
+    { "required" : false, "id": "resourcefulbees:starry_honey_flowing" }
   ]
 }
