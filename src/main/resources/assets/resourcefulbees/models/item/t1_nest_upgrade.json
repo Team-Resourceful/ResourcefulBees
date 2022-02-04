@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "resourcefulbees:item/t1_hive_upgrade"
+    "layer0": "resourcefulbees:item/t1_nest_upgrade"
   }
 }

@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "resourcefulbees:t3_hive_upgrade"
+      "resourcefulbees:t1_nest_upgrade"
     ]
   },
   "criteria": {
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "resourcefulbees:t3_hive_upgrade"
+        "recipe": "resourcefulbees:t1_nest_upgrade"
       }
     }
   },

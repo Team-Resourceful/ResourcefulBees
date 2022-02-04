@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.ingredients.IAmountSensitive;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.BoundSafeContainerData;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.BreederMenu;
-import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgrade;
+import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.IUpgrade;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -217,7 +217,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
 
         private void updateBreedTime(TileStackHandler stackHandler) {
             var stackInSlot = stackHandler.getStackInSlot(0);
-            if (stackInSlot.getItem() instanceof BreederTimeUpgrade upgrade) {
+            if (stackInSlot.getItem() instanceof BreederTimeUpgradeItem upgrade) {
                 int reduction = upgrade.getUpgradeTier(stackInSlot);
                 if (reduction != timeReduction) {
                     timeReduction = reduction;

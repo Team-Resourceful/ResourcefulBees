@@ -2,7 +2,7 @@
   "parent": "resourcefulbees:resourcefulbees/t2_hive_upgrade",
   "display": {
     "icon": {
-      "item": "resourcefulbees:t3_hive_upgrade"
+      "item": "resourcefulbees:t3_nest_upgrade"
     },
     "title": {
       "translate": "advancements.resourcefulbees.t3_hive_upgrade.title"
@@ -22,7 +22,7 @@
         "items": [
           {
             "items": [
-              "resourcefulbees:t3_hive_upgrade"
+              "resourcefulbees:t3_nest_upgrade"
             ]
           }
         ]

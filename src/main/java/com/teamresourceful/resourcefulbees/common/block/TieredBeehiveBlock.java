@@ -2,6 +2,8 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
+import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.INestUpgrade;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
@@ -65,11 +67,6 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
     public BeehiveTier getTier() { return tier; }
 
-    //TODO maybe make the enum values modifiable via a config option
-    /*public int getMaxCombs() { return Math.round((float) CommonConfig.HIVE_MAX_COMBS.get() * getTierModifier()); }
-
-    public int getMaxBees() { return Math.round((float) CommonConfig.HIVE_MAX_BEES.get() * getTierModifier()); }*/
-
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
@@ -94,10 +91,7 @@ public class TieredBeehiveBlock extends BeehiveBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction direction = context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? context.getHorizontalDirection() : context.getHorizontalDirection().getOpposite();
-        /*if (context.getItemInHand().getTag() != null){
-            return this.defaultBlockState().setValue(FACING, direction).setValue(TIER_PROPERTY, context.getItemInHand().getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getInt(NBTConstants.NBT_TIER));
-        }*/
-        return this.defaultBlockState().setValue(FACING, direction);//.setValue(TIER_PROPERTY, tier.ordinal());
+        return this.defaultBlockState().setValue(FACING, direction);
     }
 
     @Nullable
@@ -125,37 +119,15 @@ public class TieredBeehiveBlock extends BeehiveBlock {
             }
         }
 
-        //TODO see todo below
-/*        if (UpgradeItem.isUpgradeItem(itemstack) && UpgradeItem.getUpgradeType(itemstack).equals(NBTConstants.NBT_HIVE_UPGRADE)) {
-            InteractionResult success = performHiveUpgrade(state, world, pos, itemstack);
-            if (success != null) {
-                return success;
+        if (itemstack.getItem() instanceof INestUpgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.NEST)) {
+            if (upgrade.getTier().from.equals(this.tier)) return upgrade.getTier().upgrader.performUpgrade(state, world, pos, itemstack);
+            else {
+                player.displayClientMessage(new TextComponent("You can not upgrade this nest with that upgrade."), true);
             }
-        }*/
+        }
 
         return InteractionResult.PASS;
     }
-
-
-    //TODO Upgrades need to be changed to switch the blockstate and copy over the hive/comb data
-/*    @Nullable
-    private InteractionResult performHiveUpgrade(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, ItemStack itemstack) {
-        CompoundTag data = ((UpgradeItem) itemstack.getItem()).getUpgradeData();
-        BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof TieredBeehiveTileEntity beehiveTileEntity) {
-            if (1 + beehiveTileEntity.getTier() == data.getInt(NBTConstants.NBT_TIER)) {
-                int newTier = data.getInt(NBTConstants.NBT_TIER);
-                beehiveTileEntity.setTier(newTier);
-                beehiveTileEntity.setTierModifier(data.getFloat(NBTConstants.NBT_TIER_MODIFIER));
-                beehiveTileEntity.recalculateHoneyLevel();
-                itemstack.shrink(1);
-                state = state.setValue(TIER_PROPERTY, newTier);
-                world.setBlockAndUpdate(pos, state);
-                return InteractionResult.SUCCESS;
-            }
-        }
-        return null;
-    }*/
 
     @Nullable
     private InteractionResult performHoneyHarvest(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, ItemStack itemstack, boolean isScraper) {

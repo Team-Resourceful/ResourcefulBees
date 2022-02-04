@@ -15,15 +15,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class BreederTimeUpgrade extends Item implements IIntUpgrade, IShiftingToolTip {
+public class BreederTimeUpgradeItem extends Item implements IIntUpgrade, IShiftingToolTip {
 
     private final int reduction;
 
-    public BreederTimeUpgrade(Properties pProperties) {
+    public BreederTimeUpgradeItem(Properties pProperties) {
         this(pProperties, 300);
     }
 
-    public BreederTimeUpgrade(Properties pProperties, int reduction) {
+    public BreederTimeUpgradeItem(Properties pProperties, int reduction) {
         super(pProperties);
         this.reduction = reduction;
     }

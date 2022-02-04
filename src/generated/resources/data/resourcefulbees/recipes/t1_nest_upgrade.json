@@ -1,22 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CSC",
+    "SSS",
     "SMS",
-    "CSC"
+    "SSS"
   ],
   "key": {
-    "C": {
-      "tag": "resourcefulbees:resourceful_honeycomb"
-    },
     "S": {
-      "tag": "forge:wax"
+      "item": "minecraft:grass"
     },
     "M": {
       "tag": "minecraft:planks"
     }
   },
   "result": {
-    "item": "resourcefulbees:t2_hive_upgrade"
+    "item": "resourcefulbees:t1_nest_upgrade"
   }
 }

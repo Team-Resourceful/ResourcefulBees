@@ -3,26 +3,19 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.*;
-import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgrade;
+import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgradeItem;
+import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.BeehiveUpgrade;
+import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.NestUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class ModItems {
@@ -209,61 +202,13 @@ public class ModItems {
     public static final RegistryObject<Item> HONEY_POT_ITEM = ITEMS.register("honey_pot", () -> new BlockItem(ModBlocks.HONEY_POT.get(), getItemProperties()));
 
     public static final RegistryObject<Item> BREED_TIME_UPGRADE = ITEMS.register("breed_time_upgrade", () ->
-            new BreederTimeUpgrade(getItemProperties().stacksTo(16)));
+            new BreederTimeUpgradeItem(getItemProperties().stacksTo(16)));
 
     public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, getItemProperties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    public static final RegistryObject<Item> T1_HIVE_UPGRADE = ITEMS.register("t1_hive_upgrade", () -> new UpgradeItem(getItemProperties().durability(0).stacksTo(16),
-            UpgradeItem.builder()
-                    .upgradeType(NBTConstants.NBT_HIVE_UPGRADE)
-                    .upgradeModification(NBTConstants.NBT_TIER, 1f)
-                    .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 1f)
-                    .build()) {
-        @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
-            super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        }
-    });
-
-    public static final RegistryObject<Item> T2_HIVE_UPGRADE = ITEMS.register("t2_hive_upgrade", () -> new UpgradeItem(getItemProperties().durability(0).stacksTo(16),
-            UpgradeItem.builder()
-                    .upgradeType(NBTConstants.NBT_HIVE_UPGRADE)
-                    .upgradeModification(NBTConstants.NBT_TIER, 2f)
-                    .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 1.5f)
-                    .build()) {
-        @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
-            super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        }
-    });
-
-    public static final RegistryObject<Item> T3_HIVE_UPGRADE = ITEMS.register("t3_hive_upgrade", () -> new UpgradeItem(getItemProperties().durability(0).stacksTo(16),
-            UpgradeItem.builder()
-                    .upgradeType(NBTConstants.NBT_HIVE_UPGRADE)
-                    .upgradeModification(NBTConstants.NBT_TIER, 3f)
-                    .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 2f)
-                    .build()) {
-        @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
-            super.appendHoverText(stack, level, tooltip, flagIn);
-        }
-    });
-
-    public static final RegistryObject<Item> T4_HIVE_UPGRADE = ITEMS.register("t4_hive_upgrade", () -> new UpgradeItem(getItemProperties().durability(0).stacksTo(16),
-            UpgradeItem.builder()
-                    .upgradeType(NBTConstants.NBT_HIVE_UPGRADE)
-                    .upgradeModification(NBTConstants.NBT_TIER, 4f)
-                    .upgradeModification(NBTConstants.NBT_TIER_MODIFIER, 4f)
-                    .build()) {
-        @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
-            super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        }
-    });
+    public static final RegistryObject<Item> T1_NEST_UPGRADE = ITEMS.register("t1_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T1_TO_T2, getItemProperties().stacksTo(16)));
+    public static final RegistryObject<Item> T2_NEST_UPGRADE = ITEMS.register("t2_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T2_TO_T3, getItemProperties().stacksTo(16)));
+    public static final RegistryObject<Item> T3_NEST_UPGRADE = ITEMS.register("t3_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T3_TO_T4, getItemProperties().stacksTo(16)));
 
     //region centrifuge items
     public static final RegistryObject<Item> CENTRIFUGE_CASING = CENTRIFUGE_ITEMS.register("centrifuge/casing", () -> new BlockItem(ModBlocks.CENTRIFUGE_CASING.get(), getItemProperties()));

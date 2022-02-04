@@ -41,12 +41,11 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 .addCriterion("has_nest", has(ModTags.Items.BEEHIVES))
                 .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/obtain_bee_nest")));
 
-        Advancement t1HiveUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T1_HIVE_UPGRADE, "t1_hive_upgrade", nest));
-        Advancement t2HiveUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T2_HIVE_UPGRADE, "t2_hive_upgrade", t1HiveUpgrade));
-        Advancement t3HiveUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T3_HIVE_UPGRADE, "t3_hive_upgrade", t2HiveUpgrade));
-        Advancement t4HiveUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T4_HIVE_UPGRADE, "t4_hive_upgrade", t3HiveUpgrade));
+        Advancement t1HiveUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T1_NEST_UPGRADE, "t1_hive_upgrade", nest));
+        Advancement t2HiveUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T2_NEST_UPGRADE, "t2_hive_upgrade", t1HiveUpgrade));
+        Advancement t3HiveUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T3_NEST_UPGRADE, "t3_hive_upgrade", t2HiveUpgrade));
 
-        Advancement t1ApiaryUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T1_APIARY_ITEM, "t1_apiary", t4HiveUpgrade));
+        Advancement t1ApiaryUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T1_APIARY_ITEM, "t1_apiary", t3HiveUpgrade));
         Advancement t2ApiaryUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T2_APIARY_ITEM, "t2_apiary", t1ApiaryUpgrade));
         Advancement t3ApiaryUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T3_APIARY_ITEM, "t3_apiary", t2ApiaryUpgrade));
         addAdvancement(createSimpleAdvancement(ModItems.T4_APIARY_ITEM, "t4_apiary", t3ApiaryUpgrade));
