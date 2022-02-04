@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.*;
+import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgrade;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
@@ -202,34 +203,13 @@ public class ModItems {
     public static final RegistryObject<Item> T2_APIARY_ITEM = ITEMS.register("t2_apiary", () -> new BlockItem(ModBlocks.T2_APIARY_BLOCK.get(), getNestProperties()));
     public static final RegistryObject<Item> T3_APIARY_ITEM = ITEMS.register("t3_apiary", () -> new BlockItem(ModBlocks.T3_APIARY_BLOCK.get(), getNestProperties()));
     public static final RegistryObject<Item> T4_APIARY_ITEM = ITEMS.register("t4_apiary", () -> new BlockItem(ModBlocks.T4_APIARY_BLOCK.get(), getNestProperties()));
-    public static final RegistryObject<Item> APIARY_BREEDER_ITEM = ITEMS.register("apiary_breeder", () -> new BlockItem(ModBlocks.APIARY_BREEDER_BLOCK.get(), getNestProperties()));
+    public static final RegistryObject<Item> BREEDER_ITEM = ITEMS.register("breeder", () -> new BlockItem(ModBlocks.BREEDER_BLOCK.get(), getNestProperties()));
     public static final RegistryObject<Item> ENDER_BEECON_ITEM = ITEMS.register("ender_beecon", () -> new BlockItem(ModBlocks.ENDER_BEECON.get(), getItemProperties()));
     public static final RegistryObject<Item> SOLIDIFICATION_CHAMBER_ITEM = ITEMS.register("solidification_chamber", () -> new BlockItem(ModBlocks.SOLIDIFICATION_CHAMBER.get(), getItemProperties()));
     public static final RegistryObject<Item> HONEY_POT_ITEM = ITEMS.register("honey_pot", () -> new BlockItem(ModBlocks.HONEY_POT.get(), getItemProperties()));
 
-    public static final RegistryObject<Item> APIARY_BREEDER_UPGRADE = ITEMS.register("apiary_breeder_upgrade", () -> new UpgradeItem(getItemProperties().durability(0).stacksTo(16),
-            UpgradeItem.builder()
-                    .upgradeType(NBTConstants.NBT_BREEDER_UPGRADE)
-                    .upgradeModification(NBTConstants.NBT_BREEDER_COUNT, 1)
-                    .build()) {
-        @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.BREEDER_UPGRADE.withStyle(ChatFormatting.GOLD));
-            super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        }
-    });
-
-    public static final RegistryObject<Item> APIARY_BREED_TIME_UPGRADE = ITEMS.register("apiary_breed_time_upgrade", () -> new UpgradeItem(getItemProperties().durability(0).stacksTo(16),
-            UpgradeItem.builder()
-                    .upgradeType(NBTConstants.NBT_BREEDER_UPGRADE)
-                    .upgradeModification(NBTConstants.NBT_BREED_TIME, 300)
-                    .build()) {
-        @Override
-        public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-            tooltip.add(TranslationConstants.Items.BREED_TIME_UPGRADE.withStyle(ChatFormatting.GOLD));
-            super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        }
-    });
+    public static final RegistryObject<Item> BREED_TIME_UPGRADE = ITEMS.register("breed_time_upgrade", () ->
+            new BreederTimeUpgrade(getItemProperties().stacksTo(16)));
 
     public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, getItemProperties().craftRemainder(Items.BUCKET).stacksTo(1)));
 

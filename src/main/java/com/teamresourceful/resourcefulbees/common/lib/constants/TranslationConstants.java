@@ -253,11 +253,8 @@ public class TranslationConstants {
         @Translate("Use on a previous tier nest to upgrade it")
         public static final TranslatableComponent HIVE_UPGRADE = new TranslatableComponent("item.resourcefulbees.hive_upgrade.tooltip.info");
 
-        @Translate("Adds additional breeders to the Apiary Breeder")
-        public static final TranslatableComponent BREEDER_UPGRADE = new TranslatableComponent("item.resourcefulbees.apiary_breeder_upgrade.tooltip.info");
-
-        @Translate("Reduces max breed time by 300 ticks.")
-        public static final TranslatableComponent BREED_TIME_UPGRADE = new TranslatableComponent("item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info");
+        @Translate("Reduces max breed time by %s ticks.")
+        public static final String BREED_TIME_UPGRADE = "item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info";
 
         @Translate("Fifty Shades of Bees")
         public static final TranslatableComponent BOOK_NAME = new TranslatableComponent("book.resourcefulbees.name");
@@ -291,6 +288,24 @@ public class TranslationConstants {
 
         @Translate("Filled Bee Jar")
         public static final String BEE_JAR_EMPTY = "item.resourcefulbees.bee_jar_empty";
+
+        @Translate("§8Hold [§7SHIFT§8] for %s")
+        public static final String SHIFT_TOOLTIP = "item.resourcefulbees.shift_tooltip";
+
+        @Translate("§8Hold [§fSHIFT§8] for %s")
+        public static final String SHIFT_TOOLTIP_HIGHLIGHT = "item.resourcefulbees.shift_tooltip_highlight";
+
+        @Translate("§8Hold [§7CTRL§8] for %s")
+        public static final String CTRL_TOOLTIP = "item.resourcefulbees.ctrl_tooltip";
+
+        @Translate("§8Hold [§fCTRL§8] for %s")
+        public static final String CTRL_TOOLTIP_HIGHLIGHT = "item.resourcefulbees.ctrl_tooltip_highlight";
+
+        @Translate("§8more info.")
+        public static final TranslatableComponent FOR_MORE_INFO = new TranslatableComponent("item.resourcefulbees.tooltip_info");
+
+        @Translate("§8statistics.")
+        public static final TranslatableComponent TOOLTIP_STATS = new TranslatableComponent("item.resourcefulbees.tooltip_stats");
     }
 
     public static class HoneyDipper {

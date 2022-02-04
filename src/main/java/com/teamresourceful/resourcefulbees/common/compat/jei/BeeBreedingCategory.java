@@ -30,7 +30,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Breedi
         super(guiHelper, ID,
                 TranslationConstants.Jei.BREEDING,
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 150, 118).addPadding(11, 11, 10, 10).build(),
-                guiHelper.createDrawableIngredient(VanillaTypes.ITEM, ModItems.APIARY_BREEDER_ITEM.get().getDefaultInstance()),
+                guiHelper.createDrawableIngredient(VanillaTypes.ITEM, ModItems.BREEDER_ITEM.get().getDefaultInstance()),
                 BreedingWrapper.class);
     }
 

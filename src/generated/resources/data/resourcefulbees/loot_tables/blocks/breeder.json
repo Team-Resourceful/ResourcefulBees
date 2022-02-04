@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "resourcefulbees:apiary_breeder"
+          "name": "resourcefulbees:breeder"
         }
       ],
       "conditions": [

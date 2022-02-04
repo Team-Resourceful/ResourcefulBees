@@ -17,7 +17,7 @@ public class BlockLanguageModule extends LanguageModule {
             provider.addBlock(ModBlocks.T2_APIARY_BLOCK, "Tier 2 Apiary");
             provider.addBlock(ModBlocks.T3_APIARY_BLOCK, "Tier 3 Apiary");
             provider.addBlock(ModBlocks.T4_APIARY_BLOCK, "Tier 4 Apiary");
-            provider.addBlock(ModBlocks.APIARY_BREEDER_BLOCK, "Apiary Breeder");
+            provider.addBlock(ModBlocks.BREEDER_BLOCK, "Breeder");
             provider.addBlock(ModBlocks.HONEY_GENERATOR, "Honey Generator");
             provider.addBlock(ModBlocks.ENDER_BEECON, "Ender Beecon");
             provider.addBlock(ModBlocks.SOLIDIFICATION_CHAMBER, "Solidification Chamber");

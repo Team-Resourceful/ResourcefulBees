@@ -56,10 +56,10 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
         addAdvancement(createSimpleAdvancement(ModItems.HONEY_DIPPER, "honey_dipper", nest));
         addAdvancement(createSimpleAdvancement(ModItems.SMOKER, "smoker", scraper));
 
-        //TODO fix this!
-        addAdvancement(createSimpleAdvancement(ModItems.APIARY_BREED_TIME_UPGRADE, "apiary_breed_time_upgrade", t4HiveUpgrade));
-        addAdvancement(createSimpleAdvancement(ModItems.APIARY_BREEDER_ITEM, "apiary_breeder", t4HiveUpgrade));
-        addAdvancement(createSimpleAdvancement(ModItems.APIARY_BREEDER_UPGRADE, "apiary_breeder_upgrade", t4HiveUpgrade));
+        ////TODO fix this!
+        //addAdvancement(createSimpleAdvancement(ModItems.APIARY_BREED_TIME_UPGRADE, "apiary_breed_time_upgrade", t4HiveUpgrade));
+        //addAdvancement(createSimpleAdvancement(ModItems.APIARY_BREEDER_ITEM, "apiary_breeder", t4HiveUpgrade));
+        //addAdvancement(createSimpleAdvancement(ModItems.APIARY_BREEDER_UPGRADE, "apiary_breeder_upgrade", t4HiveUpgrade));
 
         CompoundTag beepediaNbt = new CompoundTag();
         beepediaNbt.putBoolean("Complete", false);

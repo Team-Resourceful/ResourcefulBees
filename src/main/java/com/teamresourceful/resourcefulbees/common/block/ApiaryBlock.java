@@ -2,11 +2,11 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.item.IShiftingToolTip;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ApiaryBlock extends BeeHouseBlock {
+public class ApiaryBlock extends BeeHouseBlock implements IShiftingToolTip {
 
   private final ApiaryTier tier;
 
@@ -39,24 +39,8 @@ public class ApiaryBlock extends BeeHouseBlock {
 
   @OnlyIn(Dist.CLIENT)
   @Override
-  public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-    if(Screen.hasShiftDown()) {
-      tooltip.add(new TranslatableComponent(TranslationConstants.BeeHive.MAX_BEES, CommonConfig.APIARY_MAX_BEES.get())
-              .append(TranslationConstants.BeeHive.UNIQUE.withStyle(ChatFormatting.BOLD))
-              .withStyle(ChatFormatting.GOLD)
-      );
-
-      int timeReduction = 100 - (int)(tier.getTimeModifier() * 100);
-      tooltip.add(new TranslatableComponent(TranslationConstants.BeeHive.HIVE_TIME, "-", timeReduction).withStyle(ChatFormatting.GOLD));
-      TranslatableComponent outputType = tier.getOutputType().equals(ApiaryOutputType.COMB) ? TranslationConstants.Apiary.HONEYCOMB : TranslationConstants.Apiary.HONEYCOMB_BLOCK;
-
-      tooltip.add(new TranslatableComponent(TranslationConstants.Apiary.OUTPUT_TYPE, outputType).withStyle(ChatFormatting.GOLD));
-      tooltip.add(new TranslatableComponent(TranslationConstants.Apiary.OUTPUT_QUANTITY, tier.getOutputAmount()).withStyle(ChatFormatting.GOLD));
-    } else {
-      tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(ChatFormatting.YELLOW));
-    }
-
-    super.appendHoverText(stack, worldIn, tooltip, flagIn);
+  public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+    setupTooltip(stack, level, components, flag);
   }
 
   @Nullable
@@ -71,5 +55,25 @@ public class ApiaryBlock extends BeeHouseBlock {
     return level.isClientSide ?
             null :
             createTickerHelper(type, tier.getBlockEntityType(), ApiaryBlockEntity::serverTick);
+  }
+
+  @Override
+  public Component getShiftingDisplay() {
+    return TranslationConstants.Items.TOOLTIP_STATS;
+  }
+
+  @Override
+  public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+    components.add(new TranslatableComponent(TranslationConstants.BeeHive.MAX_BEES, CommonConfig.APIARY_MAX_BEES.get())
+            .append(TranslationConstants.BeeHive.UNIQUE.withStyle(ChatFormatting.BOLD))
+            .withStyle(ChatFormatting.GOLD)
+    );
+
+    int timeReduction = 100 - (int)(tier.getTimeModifier() * 100);
+    components.add(new TranslatableComponent(TranslationConstants.BeeHive.HIVE_TIME, "-", timeReduction).withStyle(ChatFormatting.GOLD));
+    TranslatableComponent outputType = tier.getOutputType().equals(ApiaryOutputType.COMB) ? TranslationConstants.Apiary.HONEYCOMB : TranslationConstants.Apiary.HONEYCOMB_BLOCK;
+
+    components.add(new TranslatableComponent(TranslationConstants.Apiary.OUTPUT_TYPE, outputType).withStyle(ChatFormatting.GOLD));
+    components.add(new TranslatableComponent(TranslationConstants.Apiary.OUTPUT_QUANTITY, tier.getOutputAmount()).withStyle(ChatFormatting.GOLD));
   }
 }

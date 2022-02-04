@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.*;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.blockentity.*;
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBreederBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -259,8 +259,8 @@ public class ModBlockEntityTypes {
     public static final RegistryObject<BlockEntityType<CreativeGenBlockEntity>> CREATIVE_GEN_ENTITY = BLOCK_ENTITY_TYPES.register("creative_gen", () -> BlockEntityType.Builder
             .of(CreativeGenBlockEntity::new, ModBlocks.CREATIVE_GEN.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<ApiaryBreederBlockEntity>> APIARY_BREEDER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("apiary_breeder", () -> BlockEntityType.Builder
-            .of(ApiaryBreederBlockEntity::new, ModBlocks.APIARY_BREEDER_BLOCK.get())
+    public static final RegistryObject<BlockEntityType<BreederBlockEntity>> BREEDER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("breeder", () -> BlockEntityType.Builder
+            .of(BreederBlockEntity::new, ModBlocks.BREEDER_BLOCK.get())
             .build(null));
     public static final RegistryObject<BlockEntityType<AcceleratorBlockEntity>> ACCELERATOR_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("accelerator", () -> BlockEntityType.Builder
             .of(AcceleratorBlockEntity::new, ModBlocks.ACCELERATOR.get())

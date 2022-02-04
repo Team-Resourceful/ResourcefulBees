@@ -23,8 +23,8 @@ public class ModMenus {
             .create(HoneyGeneratorMenu::new));
     public static final RegistryObject<MenuType<ApiaryMenu>> VALIDATED_APIARY_CONTAINER = CONTAINER_TYPES.register("validated_apiary", () -> IForgeMenuType
             .create(ApiaryMenu::new));
-    public static final RegistryObject<MenuType<ApiaryBreederContainer>> APIARY_BREEDER_CONTAINER = CONTAINER_TYPES.register("apiary_breeder", () -> IForgeMenuType
-            .create(ApiaryBreederContainer::new));
+    public static final RegistryObject<MenuType<BreederMenu>> BREEDER_MENU = CONTAINER_TYPES.register("breeder", () -> IForgeMenuType
+            .create(BreederMenu::new));
     public static final RegistryObject<MenuType<EnderBeeconMenu>> ENDER_BEECON_CONTAINER = CONTAINER_TYPES.register("ender_beecon", () -> IForgeMenuType
             .create(EnderBeeconMenu::new));
     public static final RegistryObject<MenuType<SolidificationChamberMenu>> SOLIDIFICATION_CHAMBER_CONTAINER = CONTAINER_TYPES.register("solidification_chamber", () -> IForgeMenuType

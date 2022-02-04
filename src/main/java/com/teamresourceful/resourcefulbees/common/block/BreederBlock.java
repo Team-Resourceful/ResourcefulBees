@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBreederBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -23,9 +23,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ApiaryBreederBlock extends BeeHouseBlock {
+public class BreederBlock extends BeeHouseBlock {
 
-    public ApiaryBreederBlock(Properties properties) {
+    public BreederBlock(Properties properties) {
         super(properties);
     }
 
@@ -41,14 +41,12 @@ public class ApiaryBreederBlock extends BeeHouseBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new ApiaryBreederBlockEntity(pos, state);
+        return new BreederBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
-        return level.isClientSide() ?
-                null :
-                createTickerHelper(type, ModBlockEntityTypes.APIARY_BREEDER_TILE_ENTITY.get(), ApiaryBreederBlockEntity::serverTick);
+        return level.isClientSide() ? null : createTickerHelper(type, ModBlockEntityTypes.BREEDER_BLOCK_ENTITY.get(), BreederBlockEntity::serverTick);
     }
 }

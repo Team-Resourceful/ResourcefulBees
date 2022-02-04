@@ -94,18 +94,16 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean isHiveValid() {
-        if (!this.hasHive()) {
-            return false;
-        } else {
+        if (this.hasHive()) {
             BlockPos pos = this.getHivePos();
             if (pos != null) {
                 BlockEntity blockEntity = this.level.getBlockEntity(pos);
                 return blockEntity instanceof TieredBeehiveBlockEntity && ((TieredBeehiveBlockEntity) blockEntity).isAllowedBee()
                         || blockEntity instanceof ApiaryBlockEntity && ((ApiaryBlockEntity) blockEntity).isAllowedBee()
                         || blockEntity instanceof BeehiveBlockEntity;
-            } else
-                return false;
+            }
         }
+        return false;
     }
 
     @Override

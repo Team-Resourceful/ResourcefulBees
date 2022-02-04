@@ -140,7 +140,7 @@ public class ClientEventHandlers {
 
     private static void registerScreens() {
         MenuScreens.register(ModMenus.VALIDATED_APIARY_CONTAINER.get(), ValidatedApiaryScreen::new);
-        MenuScreens.register(ModMenus.APIARY_BREEDER_CONTAINER.get(), ApiaryBreederScreen::new);
+        MenuScreens.register(ModMenus.BREEDER_MENU.get(), BreederScreen::new);
         MenuScreens.register(ModMenus.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
         MenuScreens.register(ModMenus.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
         MenuScreens.register(ModMenus.SOLIDIFICATION_CHAMBER_CONTAINER.get(), SolidificationChamberScreen::new);

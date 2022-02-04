@@ -40,12 +40,12 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
     }
 
     private void registerBreeder() {
-        String name = ModBlocks.APIARY_BREEDER_BLOCK.getId().getPath();
+        String name = ModBlocks.BREEDER_BLOCK.getId().getPath();
         ModelFile model = models().getBuilder(name)
                 .parent(models().getExistingFile(modLoc("block/beehouse")))
                 .texture("particle", modLoc("block/breeder"))
                 .texture("texture", modLoc("block/breeder"));
-        getVariantBuilder(ModBlocks.APIARY_BREEDER_BLOCK.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(model)
+        getVariantBuilder(ModBlocks.BREEDER_BLOCK.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(model)
                 .rotationY(((int)(state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180 ) % 360))
                 .build()
         );

@@ -10,11 +10,7 @@ public class NBTConstants {
     public static final String NBT_BEEPEDIA_DATA = "BeepediaData";
     public static final String NBT_BEES = "Bees";
     public static final String NBT_BEE_NAME = "DisplayName";
-    public static final String NBT_BEE_TYPE = "BeeType";
     public static final String NBT_BLOCK_ENTITY_TAG = "BlockEntityTag";
-    public static final String NBT_BREEDER_COUNT = "BreederCount";
-    public static final String NBT_BREEDER_UPGRADE = "Breeder";
-    public static final String NBT_BREED_TIME = "BreedTimeModifier";
     public static final String NBT_COLOR = "Color";
     public static final String NBT_DISPLAY = "display";
     public static final String NBT_ENERGY = "energy";
@@ -48,5 +44,10 @@ public class NBTConstants {
 
         public static final String RANGE = "range";
         public static final String ACTIVE_EFFECTS = "active_effects";
+    }
+
+    public static class Breeder {
+
+        public static final String TIME_REDUCTION = "TimeReduction";
     }
 }
