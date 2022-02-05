@@ -1,10 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.ingredients;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +38,16 @@ public class AmountSensitiveIngredient extends Ingredient implements IAmountSens
     @Override
     public @NotNull IIngredientSerializer<? extends Ingredient> getSerializer() {
         return Serializer.INSTANCE;
+    }
+
+    @Override
+    public @NotNull JsonElement toJson() {
+        if (super.toJson() instanceof JsonObject json) {
+            json.addProperty("type", CraftingHelper.getID(getSerializer()).toString());
+            json.addProperty("count", count);
+            return json;
+        }
+        throw new IllegalStateException("Ingredient was not single.");
     }
 
     public static class Serializer implements IIngredientSerializer<AmountSensitiveIngredient> {

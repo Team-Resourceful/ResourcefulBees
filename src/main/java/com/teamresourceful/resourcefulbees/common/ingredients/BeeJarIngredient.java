@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.ingredients;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
@@ -13,6 +14,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,6 +60,15 @@ public class BeeJarIngredient extends Ingredient {
     @Override
     public @NotNull IIngredientSerializer<? extends Ingredient> getSerializer() {
         return Serializer.INSTANCE;
+    }
+
+    @Override
+    public @NotNull JsonElement toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("type", CraftingHelper.getID(getSerializer()).toString());
+        json.addProperty("id", id.toString());
+        json.addProperty("color", color);
+        return json;
     }
 
     public static class Serializer implements IIngredientSerializer<BeeJarIngredient> {
