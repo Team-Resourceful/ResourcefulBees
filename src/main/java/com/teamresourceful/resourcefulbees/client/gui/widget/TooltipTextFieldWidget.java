@@ -7,8 +7,10 @@ import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.narration.NarratedElementType;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -18,6 +20,7 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -44,50 +47,46 @@ public class TooltipTextFieldWidget extends TooltipWidget{
     private String suggestion;
     private Consumer<String> responder;
     private Predicate<String> filter = Objects::nonNull;
-    private BiFunction<String, Integer, FormattedCharSequence> formatter = (p_195610_0_, p_195610_1_) -> {
-        return FormattedCharSequence.forward(p_195610_0_, Style.EMPTY);
-    };
+    private BiFunction<String, Integer, FormattedCharSequence> formatter = (text, pos) -> FormattedCharSequence.forward(text, Style.EMPTY);
 
-    public TooltipTextFieldWidget(Font p_i232260_1_, int p_i232260_2_, int p_i232260_3_, int p_i232260_4_, int p_i232260_5_, Component p_i232260_6_) {
-        this(p_i232260_1_, p_i232260_2_, p_i232260_3_, p_i232260_4_, p_i232260_5_, null, p_i232260_6_);
+    public TooltipTextFieldWidget(Font font, int x, int y, int width, int height, Component message) {
+        this(font, x, y, width, height, null, message);
     }
 
-    public TooltipTextFieldWidget(Font p_i232259_1_, int p_i232259_2_, int p_i232259_3_, int p_i232259_4_, int p_i232259_5_, @Nullable EditBox p_i232259_6_, Component p_i232259_7_) {
-        super(p_i232259_2_, p_i232259_3_, p_i232259_4_, p_i232259_5_, p_i232259_7_);
-        this.font = p_i232259_1_;
-        if (p_i232259_6_ != null) {
-            this.setValue(p_i232259_6_.getValue());
+    public TooltipTextFieldWidget(Font font, int x, int y, int width, int height, @Nullable EditBox box, Component message) {
+        super(x, y, width, height, message);
+        this.font = font;
+        if (box != null) {
+            this.setValue(box.getValue());
         }
 
     }
 
-    public void setResponder(Consumer<String> p_212954_1_) {
-        this.responder = p_212954_1_;
+    public void setResponder(Consumer<String> responder) {
+        this.responder = responder;
     }
 
-    public void setFormatter(BiFunction<String, Integer, FormattedCharSequence> p_195607_1_) {
-        this.formatter = p_195607_1_;
+    public void setFormatter(BiFunction<String, Integer, FormattedCharSequence> formatter) {
+        this.formatter = formatter;
     }
 
     public void tick() {
         ++this.frame;
     }
 
+    @NotNull
+    @Override
     protected MutableComponent createNarrationMessage() {
         return new TranslatableComponent("gui.narrate.editBox", this.getMessage(), this.value);
     }
 
-    public void setValue(String p_146180_1_) {
-        if (this.filter.test(p_146180_1_)) {
-            if (p_146180_1_.length() > this.maxLength) {
-                this.value = p_146180_1_.substring(0, this.maxLength);
-            } else {
-                this.value = p_146180_1_;
-            }
+    public void setValue(String text) {
+        if (this.filter.test(text)) {
+            this.value = text.length() > this.maxLength ? text.substring(0, this.maxLength) : text;
 
             this.moveCursorToEnd();
             this.setHighlightPos(this.cursorPos);
-            this.onValueChange(p_146180_1_);
+            this.onValueChange(text);
         }
     }
 
@@ -96,20 +95,20 @@ public class TooltipTextFieldWidget extends TooltipWidget{
     }
 
     public String getHighlighted() {
-        int i = this.cursorPos < this.highlightPos ? this.cursorPos : this.highlightPos;
-        int j = this.cursorPos < this.highlightPos ? this.highlightPos : this.cursorPos;
+        int i = Math.min(this.cursorPos, this.highlightPos);
+        int j = Math.max(this.cursorPos, this.highlightPos);
         return this.value.substring(i, j);
     }
 
-    public void setFilter(Predicate<String> p_200675_1_) {
-        this.filter = p_200675_1_;
+    public void setFilter(Predicate<String> filter) {
+        this.filter = filter;
     }
 
-    public void insertText(String p_146191_1_) {
-        int i = this.cursorPos < this.highlightPos ? this.cursorPos : this.highlightPos;
-        int j = this.cursorPos < this.highlightPos ? this.highlightPos : this.cursorPos;
+    public void insertText(String text) {
+        int i = Math.min(this.cursorPos, this.highlightPos);
+        int j = Math.max(this.cursorPos, this.highlightPos);
         int k = this.maxLength - this.value.length() - (i - j);
-        String s = SharedConstants.filterText(p_146191_1_);
+        String s = SharedConstants.filterText(text);
         int l = s.length();
         if (k < l) {
             s = s.substring(0, k);
@@ -125,39 +124,37 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         }
     }
 
-    private void onValueChange(String p_212951_1_) {
+    private void onValueChange(String text) {
         if (this.responder != null) {
-            this.responder.accept(p_212951_1_);
+            this.responder.accept(text);
         }
-
-        //TODO this.nextNarration = Util.getMillis() + 500L;
     }
 
-    private void deleteText(int p_212950_1_) {
+    private void deleteText(int pos) {
         if (Screen.hasControlDown()) {
-            this.deleteWords(p_212950_1_);
+            this.deleteWords(pos);
         } else {
-            this.deleteChars(p_212950_1_);
+            this.deleteChars(pos);
         }
 
     }
 
-    public void deleteWords(int p_146177_1_) {
+    public void deleteWords(int pos) {
         if (!this.value.isEmpty()) {
             if (this.highlightPos != this.cursorPos) {
                 this.insertText("");
             } else {
-                this.deleteChars(this.getWordPosition(p_146177_1_) - this.cursorPos);
+                this.deleteChars(this.getWordPosition(pos) - this.cursorPos);
             }
         }
     }
 
-    public void deleteChars(int p_146175_1_) {
+    public void deleteChars(int pos) {
         if (!this.value.isEmpty()) {
             if (this.highlightPos != this.cursorPos) {
                 this.insertText("");
             } else {
-                int i = this.getCursorPos(p_146175_1_);
+                int i = this.getCursorPos(pos);
                 int j = Math.min(i, this.cursorPos);
                 int k = Math.max(i, this.cursorPos);
                 if (j != k) {
@@ -171,18 +168,14 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         }
     }
 
-    public int getWordPosition(int p_146187_1_) {
-        return this.getWordPosition(p_146187_1_, this.getCursorPosition());
+    public int getWordPosition(int pos) {
+        return this.getWordPosition(pos, this.getCursorPosition());
     }
 
-    private int getWordPosition(int p_146183_1_, int p_146183_2_) {
-        return this.getWordPosition(p_146183_1_, p_146183_2_, true);
-    }
-
-    private int getWordPosition(int p_146197_1_, int p_146197_2_, boolean p_146197_3_) {
-        int i = p_146197_2_;
-        boolean flag = p_146197_1_ < 0;
-        int j = Math.abs(p_146197_1_);
+    private int getWordPosition(int pos, int cursorPos) {
+        int i = cursorPos;
+        boolean flag = pos < 0;
+        int j = Math.abs(pos);
 
         for(int k = 0; k < j; ++k) {
             if (!flag) {
@@ -191,12 +184,12 @@ public class TooltipTextFieldWidget extends TooltipWidget{
                 if (i == -1) {
                     i = l;
                 } else {
-                    while(p_146197_3_ && i < l && this.value.charAt(i) == ' ') {
+                    while(i < l && this.value.charAt(i) == ' ') {
                         ++i;
                     }
                 }
             } else {
-                while(p_146197_3_ && i > 0 && this.value.charAt(i - 1) == ' ') {
+                while(i > 0 && this.value.charAt(i - 1) == ' ') {
                     --i;
                 }
 
@@ -209,16 +202,16 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         return i;
     }
 
-    public void moveCursor(int p_146182_1_) {
-        this.moveCursorTo(this.getCursorPos(p_146182_1_));
+    public void moveCursor(int pos) {
+        this.moveCursorTo(this.getCursorPos(pos));
     }
 
-    private int getCursorPos(int p_238516_1_) {
-        return Util.offsetByCodepoints(this.value, this.cursorPos, p_238516_1_);
+    private int getCursorPos(int pos) {
+        return Util.offsetByCodepoints(this.value, this.cursorPos, pos);
     }
 
-    public void moveCursorTo(int p_146190_1_) {
-        this.setCursorPosition(p_146190_1_);
+    public void moveCursorTo(int pos) {
+        this.setCursorPosition(pos);
         if (!this.shiftPressed) {
             this.setHighlightPos(this.cursorPos);
         }
@@ -226,8 +219,8 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         this.onValueChange(this.value);
     }
 
-    public void setCursorPosition(int p_212422_1_) {
-        this.cursorPos = Mth.clamp(p_212422_1_, 0, this.value.length());
+    public void setCursorPosition(int pos) {
+        this.cursorPos = Mth.clamp(pos, 0, this.value.length());
     }
 
     public void moveCursorToStart() {
@@ -238,69 +231,33 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         this.moveCursorTo(this.value.length());
     }
 
-    public boolean keyPressed(int p_231046_1_, int p_231046_2_, int p_231046_3_) {
-        if (!this.canConsumeInput()) {
-            return false;
-        } else {
+    @Override
+    public boolean keyPressed(int key, int scan, int modifiers) {
+        if (this.canConsumeInput()) {
             this.shiftPressed = Screen.hasShiftDown();
-            if (Screen.isSelectAll(p_231046_1_)) {
+            if (Screen.isSelectAll(key)) {
                 this.moveCursorToEnd();
                 this.setHighlightPos(0);
                 return true;
-            } else if (Screen.isCopy(p_231046_1_)) {
-                Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
-                return true;
-            } else if (Screen.isPaste(p_231046_1_)) {
-                if (this.isEditable) {
-                    this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
-                }
-
-                return true;
-            } else if (Screen.isCut(p_231046_1_)) {
-                Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
-                if (this.isEditable) {
-                    this.insertText("");
-                }
-
+            } else if (runCutPasteCopyOperations(key)) {
                 return true;
             } else {
-                switch(p_231046_1_) {
+                switch(key) {
+                    case 261:
                     case 259:
                         if (this.isEditable) {
                             this.shiftPressed = false;
-                            this.deleteText(-1);
+                            this.deleteText(key == 261 ? 1 : -1);
                             this.shiftPressed = Screen.hasShiftDown();
-                        }
-
-                        return true;
-                    case 260:
-                    case 264:
-                    case 265:
-                    case 266:
-                    case 267:
-                    default:
-                        return false;
-                    case 261:
-                        if (this.isEditable) {
-                            this.shiftPressed = false;
-                            this.deleteText(1);
-                            this.shiftPressed = Screen.hasShiftDown();
-                        }
-
-                        return true;
-                    case 262:
-                        if (Screen.hasControlDown()) {
-                            this.moveCursorTo(this.getWordPosition(1));
-                        } else {
-                            this.moveCursor(1);
                         }
 
                         return true;
                     case 263:
+                    case 262:
                         if (Screen.hasControlDown()) {
-                            this.moveCursorTo(this.getWordPosition(-1));
+                            this.moveCursorTo(this.getWordPosition(key == 262 ? 1 : -1));
                         } else {
-                            this.moveCursor(-1);
+                            this.moveCursor(1);
                         }
 
                         return true;
@@ -310,40 +267,59 @@ public class TooltipTextFieldWidget extends TooltipWidget{
                     case 269:
                         this.moveCursorToEnd();
                         return true;
+                    case 260:
+                    case 264:
+                    case 265:
+                    case 266:
+                    case 267:
+                    default:
+                        return false;
                 }
             }
         }
+        return false;
+    }
+
+    private boolean runCutPasteCopyOperations(int key) {
+        if (Screen.isCopy(key) || Screen.isCut(key)) {
+            Minecraft.getInstance().keyboardHandler.setClipboard(this.getHighlighted());
+            if (this.isEditable && Screen.isCut(key)) this.insertText("");
+            return true;
+        }
+        if (Screen.isPaste(key)) {
+            if (this.isEditable)
+                this.insertText(Minecraft.getInstance().keyboardHandler.getClipboard());
+            return true;
+        }
+        return false;
     }
 
     public boolean canConsumeInput() {
         return this.isVisible() && this.isFocused() && this.isEditable();
     }
 
-    public boolean charTyped(char p_231042_1_, int p_231042_2_) {
-        if (!this.canConsumeInput()) {
-            return false;
-        } else if (SharedConstants.isAllowedChatCharacter(p_231042_1_)) {
-            if (this.isEditable) {
-                this.insertText(Character.toString(p_231042_1_));
-            }
-
+    @Override
+    public boolean charTyped(char point, int modifiers) {
+        if (this.canConsumeInput() && SharedConstants.isAllowedChatCharacter(point)) {
+            if (this.isEditable) this.insertText(Character.toString(point));
             return true;
         } else {
             return false;
         }
     }
 
-    public boolean mouseClicked(double p_231044_1_, double p_231044_3_, int p_231044_5_) {
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!this.isVisible()) {
             return false;
         } else {
-            boolean flag = p_231044_1_ >= (double)this.x && p_231044_1_ < (double)(this.x + this.width) && p_231044_3_ >= (double)this.y && p_231044_3_ < (double)(this.y + this.height);
+            boolean flag = mouseX >= this.x && mouseX < (this.x + this.width) && mouseY >= this.y && mouseY < (this.y + this.height);
             if (this.canLoseFocus) {
                 this.setFocus(flag);
             }
 
-            if (this.isFocused() && flag && p_231044_5_ == 0) {
-                int i = Mth.floor(p_231044_1_) - this.x;
+            if (this.isFocused() && flag && button == 0) {
+                int i = Mth.floor(mouseX) - this.x;
                 if (this.bordered) {
                     i -= 4;
                 }
@@ -357,16 +333,17 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         }
     }
 
-    public void setFocus(boolean p_146195_1_) {
-        super.setFocused(p_146195_1_);
+    public void setFocus(boolean focus) {
+        super.setFocused(focus);
     }
 
-    public void renderButton(PoseStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {
+    @Override
+    public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         if (this.isVisible()) {
             if (this.isBordered()) {
                 int i = this.isFocused() ? -1 : -6250336;
-                fill(p_230431_1_, this.x - 1, this.y - 1, this.x + this.width + 1, this.y + this.height + 1, i);
-                fill(p_230431_1_, this.x, this.y, this.x + this.width, this.y + this.height, -16777216);
+                fill(stack, this.x - 1, this.y - 1, this.x + this.width + 1, this.y + this.height + 1, i);
+                fill(stack, this.x, this.y, this.x + this.width, this.y + this.height, -16777216);
             }
 
             int i2 = this.isEditable ? this.textColor : this.textColorUneditable;
@@ -384,7 +361,7 @@ public class TooltipTextFieldWidget extends TooltipWidget{
 
             if (!s.isEmpty()) {
                 String s1 = flag ? s.substring(0, j) : s;
-                j1 = this.font.drawShadow(p_230431_1_, this.formatter.apply(s1, this.displayPos), (float)l, (float)i1, i2);
+                j1 = this.font.drawShadow(stack, this.formatter.apply(s1, this.displayPos), l, i1, i2);
             }
 
             boolean flag2 = this.cursorPos < this.value.length() || this.value.length() >= this.getMaxLength();
@@ -397,18 +374,18 @@ public class TooltipTextFieldWidget extends TooltipWidget{
             }
 
             if (!s.isEmpty() && flag && j < s.length()) {
-                this.font.drawShadow(p_230431_1_, this.formatter.apply(s.substring(j), this.cursorPos), (float)j1, (float)i1, i2);
+                this.font.drawShadow(stack, this.formatter.apply(s.substring(j), this.cursorPos), j1, i1, i2);
             }
 
             if (!flag2 && this.suggestion != null) {
-                this.font.drawShadow(p_230431_1_, this.suggestion, (float)(k1 - 1), (float)i1, -8355712);
+                this.font.drawShadow(stack, this.suggestion, (k1 - 1), i1, -8355712);
             }
 
             if (flag1) {
                 if (flag2) {
-                    Gui.fill(p_230431_1_, k1, i1 - 1, k1 + 1, i1 + 1 + 9, -3092272);
+                    GuiComponent.fill(stack, k1, i1 - 1, k1 + 1, i1 + 1 + 9, -3092272);
                 } else {
-                    this.font.drawShadow(p_230431_1_, "_", (float)k1, (float)i1, i2);
+                    this.font.drawShadow(stack, "_", k1, i1, i2);
                 }
             }
 
@@ -420,25 +397,25 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         }
     }
 
-    private void renderHighlight(int p_146188_1_, int p_146188_2_, int p_146188_3_, int p_146188_4_) {
-        if (p_146188_1_ < p_146188_3_) {
-            int i = p_146188_1_;
-            p_146188_1_ = p_146188_3_;
-            p_146188_3_ = i;
+    private void renderHighlight(int x1, int y1, int x2, int y2) {
+        if (x1 < x2) {
+            int i = x1;
+            x1 = x2;
+            x2 = i;
         }
 
-        if (p_146188_2_ < p_146188_4_) {
-            int j = p_146188_2_;
-            p_146188_2_ = p_146188_4_;
-            p_146188_4_ = j;
+        if (y1 < y2) {
+            int j = y1;
+            y1 = y2;
+            y2 = j;
         }
 
-        if (p_146188_3_ > this.x + this.width) {
-            p_146188_3_ = this.x + this.width;
+        if (x2 > this.x + this.width) {
+            x2 = this.x + this.width;
         }
 
-        if (p_146188_1_ > this.x + this.width) {
-            p_146188_1_ = this.x + this.width;
+        if (x1 > this.x + this.width) {
+            x1 = this.x + this.width;
         }
 
         Tesselator tessellator = Tesselator.getInstance();
@@ -448,19 +425,19 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         RenderSystem.enableColorLogicOp();
         RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-        bufferbuilder.vertex(p_146188_1_, p_146188_4_, 0.0D).endVertex();
-        bufferbuilder.vertex(p_146188_3_, p_146188_4_, 0.0D).endVertex();
-        bufferbuilder.vertex(p_146188_3_, p_146188_2_, 0.0D).endVertex();
-        bufferbuilder.vertex(p_146188_1_, p_146188_2_, 0.0D).endVertex();
+        bufferbuilder.vertex(x1, y2, 0.0D).endVertex();
+        bufferbuilder.vertex(x2, y2, 0.0D).endVertex();
+        bufferbuilder.vertex(x2, y1, 0.0D).endVertex();
+        bufferbuilder.vertex(x1, y1, 0.0D).endVertex();
         tessellator.end();
         RenderSystem.disableColorLogicOp();
         RenderSystem.enableTexture();
     }
 
-    public void setMaxLength(int p_146203_1_) {
-        this.maxLength = p_146203_1_;
-        if (this.value.length() > p_146203_1_) {
-            this.value = this.value.substring(0, p_146203_1_);
+    public void setMaxLength(int length) {
+        this.maxLength = length;
+        if (this.value.length() > length) {
+            this.value = this.value.substring(0, length);
             this.onValueChange(this.value);
         }
 
@@ -478,48 +455,50 @@ public class TooltipTextFieldWidget extends TooltipWidget{
         return this.bordered;
     }
 
-    public void setBordered(boolean p_146185_1_) {
-        this.bordered = p_146185_1_;
+    public void setBordered(boolean bordered) {
+        this.bordered = bordered;
     }
 
-    public void setTextColor(int p_146193_1_) {
-        this.textColor = p_146193_1_;
+    public void setTextColor(int color) {
+        this.textColor = color;
     }
 
-    public void setTextColorUneditable(int p_146204_1_) {
-        this.textColorUneditable = p_146204_1_;
+    public void setTextColorUneditable(int color) {
+        this.textColorUneditable = color;
     }
 
-    public boolean changeFocus(boolean p_231049_1_) {
-        return this.visible && this.isEditable ? super.changeFocus(p_231049_1_) : false;
+    @Override
+    public boolean changeFocus(boolean focus) {
+        return this.visible && this.isEditable && super.changeFocus(focus);
     }
 
+    @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
-        return this.visible && mouseX >= (double)this.x && mouseX < (double)(this.x + this.width) && mouseY >= (double)this.y && mouseY < (double)(this.y + this.height);
+        return this.visible && mouseX >= this.x && mouseX < (this.x + this.width) && mouseY >= this.y && mouseY < (this.y + this.height);
     }
 
-    protected void onFocusedChanged(boolean p_230995_1_) {
-        if (p_230995_1_) {
+    @Override
+    protected void onFocusedChanged(boolean focus) {
+        if (focus) {
             this.frame = 0;
         }
-
     }
 
     private boolean isEditable() {
         return this.isEditable;
     }
 
-    public void setEditable(boolean p_146184_1_) {
-        this.isEditable = p_146184_1_;
+    public void setEditable(boolean editable) {
+        this.isEditable = editable;
     }
 
     public int getInnerWidth() {
         return this.isBordered() ? this.width - 8 : this.width;
     }
 
-    public void setHighlightPos(int p_146199_1_) {
+    public void setHighlightPos(int pos) {
         int i = this.value.length();
-        this.highlightPos = Mth.clamp(p_146199_1_, 0, i);
+        this.highlightPos = Mth.clamp(pos, 0, i);
         if (this.font != null) {
             if (this.displayPos > i) {
                 this.displayPos = i;
@@ -543,27 +522,32 @@ public class TooltipTextFieldWidget extends TooltipWidget{
 
     }
 
-    public void setCanLoseFocus(boolean p_146205_1_) {
-        this.canLoseFocus = p_146205_1_;
+    public void setCanLoseFocus(boolean canLoseFocus) {
+        this.canLoseFocus = canLoseFocus;
     }
 
     public boolean isVisible() {
         return this.visible;
     }
 
-    public void setVisible(boolean p_146189_1_) {
-        this.visible = p_146189_1_;
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
-    public void setSuggestion(@Nullable String p_195612_1_) {
-        this.suggestion = p_195612_1_;
+    public void setSuggestion(@Nullable String suggestion) {
+        this.suggestion = suggestion;
     }
 
-    public int getScreenX(int p_195611_1_) {
-        return p_195611_1_ > this.value.length() ? this.x : this.x + this.font.width(this.value.substring(0, p_195611_1_));
+    public int getScreenX(int start) {
+        return start > this.value.length() ? this.x : this.x + this.font.width(this.value.substring(0, start));
     }
 
-    public void setX(int p_212952_1_) {
-        this.x = p_212952_1_;
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    @Override
+    public void updateNarration(@NotNull NarrationElementOutput pNarrationElementOutput) {
+        pNarrationElementOutput.add(NarratedElementType.TITLE, new TranslatableComponent("narration.edit_box", this.getValue()));
     }
 }

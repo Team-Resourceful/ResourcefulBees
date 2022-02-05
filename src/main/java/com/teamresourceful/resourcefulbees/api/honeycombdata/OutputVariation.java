@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 @Unmodifiable
 public class OutputVariation {
 
-    public static final List<ApiaryOutputType> DEFAULT_APIARY_OUTPUT_TYPES = Arrays.asList(CommonConfig.T1_APIARY_OUTPUT.get(), CommonConfig.T2_APIARY_OUTPUT.get(), CommonConfig.T3_APIARY_OUTPUT.get(), CommonConfig.T4_APIARY_OUTPUT.get());
+    private static final List<ApiaryOutputType> DEFAULT_APIARY_OUTPUT_TYPES = Arrays.asList(CommonConfig.T1_APIARY_OUTPUT.get(), CommonConfig.T2_APIARY_OUTPUT.get(), CommonConfig.T3_APIARY_OUTPUT.get(), CommonConfig.T4_APIARY_OUTPUT.get());
     private static final String MISSING_ID = "Identifier is REQUIRED!";
     private static final String MISSING_APIARY_COMB = " : Default comb must be present when list is empty and config contains combs!!!";
     private static final String MISSING_APIARY_BLOCK = " : Default block must be present when list is empty and config contains blocks!!!";
@@ -33,15 +33,15 @@ public class OutputVariation {
     ).apply(instance, OutputVariation::new));
 
     private final String identifier;
-    private final Map<BeehiveTier, ItemStack> hiveCombs;
-    private final Map<ApiaryTier, ItemStack> apiaryCombs;
+    private final EnumMap<BeehiveTier, ItemStack> hiveCombs;
+    private final EnumMap<ApiaryTier, ItemStack> apiaryCombs;
     private final Optional<ItemStack> defaultComb;
     private final Optional<ItemStack> defaultCombBlock;
 
     private OutputVariation(String identifier, Map<BeehiveTier, ItemStack> hiveCombs, Map<ApiaryTier, ItemStack> apiaryCombs, Optional<ItemStack> defaultComb, Optional<ItemStack> defaultCombBlock) {
         this.identifier = identifier;
-        this.hiveCombs = new HashMap<>(hiveCombs);
-        this.apiaryCombs = new HashMap<>(apiaryCombs);
+        this.hiveCombs = new EnumMap<>(hiveCombs);
+        this.apiaryCombs = new EnumMap<>(apiaryCombs);
         this.defaultComb = defaultComb;
         this.defaultComb.ifPresent(comb -> comb.setCount(1));
         this.defaultCombBlock = defaultCombBlock;
@@ -54,11 +54,11 @@ public class OutputVariation {
         return identifier;
     }
 
-    private Map<BeehiveTier, ItemStack> getHiveCombs() {
+    private EnumMap<BeehiveTier, ItemStack> getHiveCombs() {
         return hiveCombs;
     }
 
-    private Map<ApiaryTier, ItemStack> getApiaryCombs() {
+    private EnumMap<ApiaryTier, ItemStack> getApiaryCombs() {
         return apiaryCombs;
     }
 

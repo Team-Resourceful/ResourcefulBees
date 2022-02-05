@@ -64,7 +64,7 @@ public class BeeAuraGoal extends Goal {
 
     private static void playSound(SoundEvent sound, Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            var packet = new ClientboundSoundEntityPacket(sound, player.getSoundSource(), player, 0.1f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.35F + 0.9F);
+            var packet = new ClientboundSoundEntityPacket(sound, player.getSoundSource(), player, 0.1f, (player.getRandom().nextFloat() - player.getRandom().nextFloat(1)) * 0.35F + 0.9F);
             serverPlayer.connection.send(packet);
         }
     }

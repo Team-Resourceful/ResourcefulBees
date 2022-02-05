@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefulbees.common.mixin.accessors.FontResourceMa
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -101,7 +101,6 @@ public class RenderUtils {
         float green = RenderCuboid.getGreen(color);
         float blue = RenderCuboid.getBlue(color);
         float alpha = RenderCuboid.getAlpha(color);
-        //noinspection deprecation
         RenderSystem.setShaderColor(red, green, blue, alpha);
         RenderUtils.drawTiledSprite(matrix, xPos, yPos, height, width, height, sprite, 16, 16, zOffset);
         resetColor();
@@ -148,7 +147,7 @@ public class RenderUtils {
 
         RenderSystem.setShaderColor(((fluidColor >> 16) & 0xFF)/ 255.0F, ((fluidColor >> 8) & 0xFF)/ 255.0F, (fluidColor & 0xFF)/ 255.0F,  ((fluidColor >> 24) & 0xFF)/ 255.0F);
         for (int i = 0; i < splits; i++)
-            Gui.blit(matrix,x, y + (i * 16), blitOffset, width, i+1 == splits && remainder != 0 ? remainder : 16, sprite);
+            GuiComponent.blit(matrix,x, y + (i * 16), blitOffset, width, i+1 == splits && remainder != 0 ? remainder : 16, sprite);
     }
 
     public static void bindTexture(ResourceLocation location) {

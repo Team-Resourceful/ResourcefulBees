@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.compat.patchouli;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import vazkii.patchouli.api.IComponentRenderContext;
@@ -50,7 +50,7 @@ public class AnimatedImageComponent implements ICustomComponent {
         }
         RenderUtils.bindTexture(animatedImage);
 
-        Gui.blit(matrixStack, xOffset, yOffset, 0, (float) imageHeight * currentFrame, (int) (imageWidth * imageScale), (int) (imageHeight * imageScale), textureWidth, textureHeight);
+        GuiComponent.blit(matrixStack, xOffset, yOffset, 0, (float) imageHeight * currentFrame, (int) (imageWidth * imageScale), (int) (imageHeight * imageScale), textureWidth, textureHeight);
     }
 
     @Override

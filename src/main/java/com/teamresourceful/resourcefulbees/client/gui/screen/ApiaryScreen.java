@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class ValidatedApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
+public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
     private static final ResourceLocation VALIDATED_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/validated.png");
     private int beeIndexOffset;
@@ -37,7 +37,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
     private boolean clickedOnScroll;
     private final ApiaryBlockEntity apiaryBlockEntity;
 
-    public ValidatedApiaryScreen(ApiaryMenu screenContainer, Inventory inv, Component titleIn) {
+    public ApiaryScreen(ApiaryMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.imageWidth = 224;
         this.imageHeight = 168;
@@ -81,7 +81,7 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
             int i1 = this.topPos + 34;
             int j1 = this.beeIndexOffset + 7;
             this.drawRecipesBackground(matrix, mouseX, mouseY, l, i1, j1);
-            this.drawBees(matrix, l, i1, j1);
+            this.drawBees(l, i1, j1);
         }
     }
 
@@ -144,13 +144,10 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
     }
 
-    private void drawBees(PoseStack matrix, int left, int top, int beeIndexOffsetMax) {
+    private void drawBees(int left, int top, int beeIndexOffsetMax) {
         for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.getBeeCount(); ++i) {
             int j = i - this.beeIndexOffset;
             int i1 = top + j * 18 + 2;
-            //Entity bee = BeeRegistry.getRegistry().getBeeData(this.menu.getApiaryBee(i).beeType).getEntityType().create(Minecraft.getInstance().level);
-            //RenderUtils.renderEntity(matrix, bee, Minecraft.getInstance().level, left, i1, -45, 2);
-
 
             ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
             CompoundTag data = new CompoundTag();
@@ -159,7 +156,6 @@ public class ValidatedApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
             String entityID = tag.getString("id");
 
             data.putString(NBTConstants.NBT_ENTITY, entityID);
-            //data.putString(NBTConstants.NBT_COLOR, this.menu.getApiaryBee(i).beeColor);
 
             beeJar.setTag(data);
             this.itemRenderer.renderAndDecorateItem(beeJar, left, i1);

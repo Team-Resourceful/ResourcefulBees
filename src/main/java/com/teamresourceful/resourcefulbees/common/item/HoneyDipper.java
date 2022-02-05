@@ -108,14 +108,12 @@ public class HoneyDipper extends Item {
     }
 
     private boolean setEntityFlowerPos(Player player, LivingEntity entity) {
-        if (selectedBee instanceof CustomBeeEntity customBee) {
-            if (entityTypesMatch(entity, customBee.getCoreData().getEntityFlower())) {
-                customBee.setFlowerEntityID(entity.getId());
-                customBee.setSavedFlowerPos(entity.blockPosition());
-                sendMessageToPlayer(player, MessageTypes.FLOWER, entity.blockPosition());
-                selectedBee = null;
-                return true;
-            }
+        if (selectedBee instanceof CustomBeeEntity customBee && entityTypesMatch(entity, customBee.getCoreData().getEntityFlower())) {
+            customBee.setFlowerEntityID(entity.getId());
+            customBee.setSavedFlowerPos(entity.blockPosition());
+            sendMessageToPlayer(player, MessageTypes.FLOWER, entity.blockPosition());
+            selectedBee = null;
+            return true;
         }
         return false;
     }

@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -23,7 +23,7 @@ public class EffectComponent implements ICustomComponent {
 
     IVariable effectID;
     private transient TextureAtlasSprite effectSprite;
-    private transient static final ResourceLocation EFFECT_BACKGROUND = new ResourceLocation("patchouli", "textures/gui/crafting.png");
+    private static final transient ResourceLocation EFFECT_BACKGROUND = new ResourceLocation("patchouli", "textures/gui/crafting.png");
     private transient int xOffset;
     private transient int yOffset;
     private transient Component effectName;
@@ -44,9 +44,9 @@ public class EffectComponent implements ICustomComponent {
         float width = text.width(effectName);
         text.draw(matrixStack, effectName.copy().withStyle(ChatFormatting.BLACK), xOffset - width / 2, yOffset, -1);
         RenderUtils.bindTexture(EFFECT_BACKGROUND);
-        Gui.blit(matrixStack, xOffset - 32, yOffset + 6, 1, 99, 64, 32, 128, 256);
+        GuiComponent.blit(matrixStack, xOffset - 32, yOffset + 6, 1, 99, 64, 32, 128, 256);
         RenderUtils.bindTexture(this.effectSprite.atlas().location());
-        Gui.blit(matrixStack, xOffset - 9, yOffset + 13, 1, 18, 18, this.effectSprite);
+        GuiComponent.blit(matrixStack, xOffset - 9, yOffset + 13, 1, 18, 18, this.effectSprite);
     }
 
     @Override

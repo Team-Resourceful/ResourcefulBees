@@ -140,11 +140,6 @@ public class Pane extends TooltipWidget {
     }
 
     @Override
-    protected boolean clicked(double pMouseX, double pMouseY) {
-        return super.clicked(pMouseX, pMouseY);
-    }
-
-    @Override
     public void drawTooltips(@NotNull PoseStack matrix, Screen screen, int mouseX, int mouseY) {
         super.drawTooltips(matrix, screen, mouseX, mouseY);
         children.forEach(c -> c.renderToolTip(matrix, mouseX, mouseY));

@@ -48,7 +48,7 @@ public interface IItemHolder {
                     .map(ForgeRegistries.ITEMS::getValue).collect(Collectors.toSet()));
         } else if (element instanceof JsonPrimitive primitive && primitive.isString()) {
             Tag<Item> tag = SerializationTags.getInstance().getTagOrThrow(Registry.ITEM_REGISTRY, new ResourceLocation(primitive.getAsString()),
-                    (tagPassed) -> new JsonSyntaxException("Unknown item tag '" + tagPassed + "'"));
+                    tagPassed -> new JsonSyntaxException("Unknown item tag '" + tagPassed + "'"));
             return new TagItemHolder(tag);
         } else {
             throw new IllegalArgumentException("Type is not a array or string, like a typo. Element provided: " + element);

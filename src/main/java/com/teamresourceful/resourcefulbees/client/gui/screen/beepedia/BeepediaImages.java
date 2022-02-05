@@ -1,12 +1,17 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class BeepediaImages {
+
+    private BeepediaImages() {
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+    }
 
     public static final ResourceLocation arrowImage = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/arrows.png");
     public static final ResourceLocation LIST_IMAGE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/list_button.png");

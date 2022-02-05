@@ -189,15 +189,24 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
 
         Block nest;
-        BlockState platformBlockState = null;
+        BlockState platformBlockState;
         switch (category) {
-            case THEEND -> nest = ModBlocks.PURPUR_BEE_NEST.get();
+            case THEEND -> {
+                nest = ModBlocks.PURPUR_BEE_NEST.get();
+                platformBlockState = Blocks.END_STONE.defaultBlockState();
+            }
             case NETHER -> {
                 nest = getNetherNest(headsOrTails, biomeKey.orElse(null));
                 platformBlockState = Blocks.OBSIDIAN.defaultBlockState();
             }
-            case SAVANNA, DESERT, MESA -> nest = ModBlocks.ACACIA_BEE_NEST.get();
-            case JUNGLE -> nest = ModBlocks.JUNGLE_BEE_NEST.get();
+            case SAVANNA, DESERT, MESA -> {
+                nest = ModBlocks.ACACIA_BEE_NEST.get();
+                platformBlockState = Blocks.ACACIA_WOOD.defaultBlockState();
+            }
+            case JUNGLE -> {
+                nest = ModBlocks.JUNGLE_BEE_NEST.get();
+                platformBlockState = Blocks.JUNGLE_WOOD.defaultBlockState();
+            }
             case BEACH, OCEAN -> {
                 nest = ModBlocks.PRISMARINE_BEE_NEST.get();
                 platformBlockState = isFrozenBiome(biomeKey.orElse(null)) ?
@@ -207,12 +216,18 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
                 platformBlockState = Blocks.PACKED_ICE.defaultBlockState();
                 nest = ModBlocks.SPRUCE_BEE_NEST.get();
             }
-            case MUSHROOM -> nest = selectNest(headsOrTails, ModBlocks.RED_MUSHROOM_BEE_NEST.get(), ModBlocks.BROWN_MUSHROOM_BEE_NEST.get());
+            case MUSHROOM -> {
+                nest = selectNest(headsOrTails, ModBlocks.RED_MUSHROOM_BEE_NEST.get(), ModBlocks.BROWN_MUSHROOM_BEE_NEST.get());
+                platformBlockState = Blocks.OAK_WOOD.defaultBlockState();
+            }
             case SWAMP -> {
                 nest = ModBlocks.OAK_BEE_NEST.get();
                 platformBlockState = Blocks.STRIPPED_SPRUCE_WOOD.defaultBlockState();
             }
-            case FOREST -> nest = selectNest(headsOrTails, ModBlocks.BIRCH_BEE_NEST.get(), ModBlocks.DARK_OAK_BEE_NEST.get());
+            case FOREST -> {
+                nest = selectNest(headsOrTails, ModBlocks.BIRCH_BEE_NEST.get(), ModBlocks.DARK_OAK_BEE_NEST.get());
+                platformBlockState = Blocks.OAK_WOOD.defaultBlockState();
+            }
             case RIVER -> {
                 platformBlockState = isFrozenBiome(biomeKey.orElse(null)) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.OAK_WOOD.defaultBlockState();
                 nest = overworldBlocks.next();

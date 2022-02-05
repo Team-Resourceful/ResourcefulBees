@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.beepedia;
 
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -7,6 +8,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class BeepediaLang {
+
+    private BeepediaLang() {
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+    }
+
     public static final Component INTERFACE_NAME = new TranslatableComponent("gui.resourcefulbees.beepedia");
     public static final TranslatableComponent TAB_BEES = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.bees");
     public static final TranslatableComponent TAB_TRAITS = new TranslatableComponent("gui.resourcefulbees.beepedia.tab.traits");
@@ -25,7 +31,7 @@ public class BeepediaLang {
     public static final TranslatableComponent ERROR_TITLE = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.breeding.error_title");
     public static final TranslatableComponent FIFTY_SHADES_BUTTON = new TranslatableComponent("book.resourcefulbees.name");
     public static final TranslatableComponent BEE_SEARCH_STARRED = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_search.starred");
-    public static final TranslatableComponent BEE_SEARCH_NOT_STARRED = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_search.not_starred");;
+    public static final TranslatableComponent BEE_SEARCH_NOT_STARRED = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_search.not_starred");
     public static final TranslatableComponent BEE_SEARCH_WORLD = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_search.world");
     public static final TranslatableComponent BEE_SEARCH_NOT_WORLD = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_search.not_world");
     public static final TranslatableComponent BEE_SEARCH_BREEDABLE = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_search.breedable");

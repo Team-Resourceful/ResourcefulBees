@@ -65,7 +65,7 @@ public class TooltipWidget extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+    public void renderButton(@NotNull PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
         // do nothing please... seriously don't do anything
     }
 
@@ -77,13 +77,13 @@ public class TooltipWidget extends AbstractWidget {
         // implement to use
     }
 
-    public void playDownSound(SoundManager pHandler) {
+    public void playDownSound(@NotNull SoundManager pHandler) {
         if (mute) return;
         pHandler.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
-
+    public void updateNarration(@NotNull NarrationElementOutput pNarrationElementOutput) {
+        //Dont know how to specifically do stuff with this its just needed now.
     }
 }
