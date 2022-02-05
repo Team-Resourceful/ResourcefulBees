@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class DamageUtils {
 
-    public static final Map<String, DamageSource> BASIC_SOURCE_MAP = Util.make(() -> {
+    private static final Map<String, DamageSource> BASIC_SOURCE_MAP = Util.make(() -> {
         Map<String, DamageSource> map = new HashMap<>();
         map.put("infire", DamageSource.IN_FIRE);
         map.put("lightningbolt", DamageSource.LIGHTNING_BOLT);

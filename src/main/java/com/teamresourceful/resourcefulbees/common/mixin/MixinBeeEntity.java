@@ -39,7 +39,7 @@ public abstract class MixinBeeEntity extends Animal implements IBeeCompat {
 
     @Shadow public abstract void dropOffNectar();
 
-    @Shadow public abstract void setStayOutOfHiveCountdown(int p_27916_);
+    @Shadow public abstract void setStayOutOfHiveCountdown(int stayOutOfHiveCountdown);
 
     @Inject(at = @At("HEAD"), method = "doesHiveHaveSpace", cancellable = true)
     private void doesHiveHaveSpace(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {

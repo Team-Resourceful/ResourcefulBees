@@ -77,6 +77,7 @@ public class TooltipWidget extends AbstractWidget {
         // implement to use
     }
 
+    @Override
     public void playDownSound(@NotNull SoundManager pHandler) {
         if (mute) return;
         pHandler.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));

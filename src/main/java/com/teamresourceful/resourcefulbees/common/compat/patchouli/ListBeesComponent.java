@@ -26,7 +26,7 @@ import java.util.function.UnaryOperator;
 
 public class ListBeesComponent implements ICustomComponent {
 
-    final transient float defaultRotation = -45.0F;
+    private static final transient float DEFAULT_ROTATION = -45.0F;
     transient float renderScale;
     transient float offset;
     transient int page;
@@ -57,7 +57,7 @@ public class ListBeesComponent implements ICustomComponent {
         Pair<EntityType<?>, Optional<Entity>> bee = bees.get(page);
         Optional<Entity> entityOptional = bee.getRight();
         if (entityOptional.isPresent()) {
-            renderEntity(matrixStack, entityOptional.get(), context.getGui().getMinecraft().level, xOffset, yOffset, this.defaultRotation, this.renderScale, this.offset);
+            renderEntity(matrixStack, entityOptional.get(), context.getGui().getMinecraft().level, xOffset, yOffset, DEFAULT_ROTATION, this.renderScale, this.offset);
         } else {
             Entity entity = initEntity(bee.getLeft(), context.getGui().getMinecraft().level);
             if (entity == null) {

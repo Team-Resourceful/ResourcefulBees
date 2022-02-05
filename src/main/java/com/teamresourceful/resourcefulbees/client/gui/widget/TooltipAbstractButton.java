@@ -8,16 +8,18 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public abstract class TooltipAbstractButton extends TooltipWidget {
 
-    public TooltipAbstractButton(int x, int y, int width, int height, Component message) {
+    protected TooltipAbstractButton(int x, int y, int width, int height, Component message) {
         super(x, y, width, height, message);
     }
 
     public abstract void onPress();
 
+    @Override
     public void onClick(double mouseX, double mouseY) {
         this.onPress();
     }
 
+    @Override
     public boolean keyPressed(int keycode, int scanCode, int modifiers) {
         if (this.active && this.visible) {
             if (keycode != 257 && keycode != 32 && keycode != 335) {

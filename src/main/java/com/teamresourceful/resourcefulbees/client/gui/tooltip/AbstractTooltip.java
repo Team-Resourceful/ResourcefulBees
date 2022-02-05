@@ -27,7 +27,7 @@ public abstract class AbstractTooltip {
     private final int hoverWidth;
     private final int hoverHeight;
 
-    public AbstractTooltip(int x, int y, int hoverWidth, int hoverHeight) {
+    protected AbstractTooltip(int x, int y, int hoverWidth, int hoverHeight) {
         this.x = x;
         this.y = y;
         this.hoverWidth = hoverWidth;

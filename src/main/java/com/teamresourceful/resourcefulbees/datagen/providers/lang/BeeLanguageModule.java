@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;
 
-public class BeeLanguageModule extends LanguageModule {
+public class BeeLanguageModule implements LanguageModule {
     @Override
     public void addEntries(BaseLanguageProvider provider) {
         provider.addBee("gold", "Gold");

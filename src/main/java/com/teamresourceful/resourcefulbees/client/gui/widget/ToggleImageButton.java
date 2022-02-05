@@ -19,7 +19,7 @@ public class ToggleImageButton extends TooltipButton {
     private final int yDiffTex;
     private final ResourceLocation resourceLocation;
     public boolean enabled = false;
-    public IPressable pressable;
+    public final IPressable pressable;
 
     public ToggleImageButton(int xPos, int yPos, int xOffset, boolean enabled, ButtonTemplate template, IPressable pressable, Component message) {
         this(xPos, yPos, template.width, template.height, template.xTexStart + xOffset, enabled, template.yTexStart, template.yTexDiff, template.resourceLocation, template.textureWidth, template.textureHeight, pressable, message);
@@ -55,7 +55,7 @@ public class ToggleImageButton extends TooltipButton {
         }
 
         RenderSystem.enableDepthTest();
-        blit(matrixStack, this.x, this.y, (float)this.xTexStart, (float)i, this.width, this.height, this.textureWidth, this.textureHeight);
+        blit(matrixStack, this.x, this.y, this.xTexStart, i, this.width, this.height, this.textureWidth, this.textureHeight);
     }
 
     @OnlyIn(Dist.CLIENT)

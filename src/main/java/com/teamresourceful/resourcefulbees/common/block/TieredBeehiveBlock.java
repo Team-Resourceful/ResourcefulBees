@@ -136,19 +136,16 @@ public class TieredBeehiveBlock extends BeehiveBlock {
         itemstack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(handIn));
 
         BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof TieredBeehiveBlockEntity beehiveTileEntity) {
-
-            if (!beehiveTileEntity.hasCombs()) {
-                if (isHiveSmoked(pos, world)) {
-                    this.resetHoneyLevel(world, state, pos);
-                } else {
-                    if (beehiveTileEntity.hasBees() && !(player instanceof FakePlayer)) {
-                        this.angerBeesNearby(world, pos);
-                    }
-                    this.releaseBeesAndResetHoneyLevel(world, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
+        if (tileEntity instanceof TieredBeehiveBlockEntity beehiveTileEntity && !beehiveTileEntity.hasCombs()) {
+            if (isHiveSmoked(pos, world)) {
+                this.resetHoneyLevel(world, state, pos);
+            } else {
+                if (beehiveTileEntity.hasBees() && !(player instanceof FakePlayer)) {
+                    this.angerBeesNearby(world, pos);
                 }
-                return InteractionResult.SUCCESS;
+                this.releaseBeesAndResetHoneyLevel(world, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
             }
+            return InteractionResult.SUCCESS;
         }
         return null;
     }

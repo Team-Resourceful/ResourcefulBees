@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;
 
-public class AdvancementLanguageModule extends LanguageModule {
+public class AdvancementLanguageModule implements LanguageModule {
 
     @Override
     public void addEntries(BaseLanguageProvider provider) {

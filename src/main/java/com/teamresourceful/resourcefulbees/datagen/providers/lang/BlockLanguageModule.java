@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.text.WordUtils;
 
-public class BlockLanguageModule extends LanguageModule {
+public class BlockLanguageModule implements LanguageModule {
 
     @Override
     public void addEntries(BaseLanguageProvider provider) {

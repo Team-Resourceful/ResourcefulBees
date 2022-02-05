@@ -85,10 +85,10 @@ public class BeeRegistry implements IBeeRegistry {
                 CustomBeeData.codec(s).parse(JsonOps.INSTANCE, jsonObject)
                 .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", s))));
         //MinecraftForge.EVENT_BUS.post(new RegisterBeeEvent(beeData));
-        CUSTOM_DATA.values().forEach(customBeeData -> {
+        CUSTOM_DATA.values().forEach(customBeeData ->
             //post init stuff gets called here
-            customBeeData.getBreedData().getFamilies().forEach(BeeFamily::postInit);
-        });
+            customBeeData.getBreedData().getFamilies().forEach(BeeFamily::postInit)
+        );
         BeeRegistry.buildFamilyTree();
         BeeRegistry.buildSpawnableBiomes();
     }

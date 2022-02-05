@@ -10,7 +10,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.util.Arrays;
 import java.util.Set;
 
-public class CentrifugeLanguageModule extends LanguageModule {
+public class CentrifugeLanguageModule implements LanguageModule {
 
     private static final Set<String> TYPES = Set.of("void", "terminal", "input/item", "input/energy", "output/item", "output/fluid");
 

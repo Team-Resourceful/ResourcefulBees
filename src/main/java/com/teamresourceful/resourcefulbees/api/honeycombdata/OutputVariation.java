@@ -40,8 +40,10 @@ public class OutputVariation {
 
     private OutputVariation(String identifier, Map<BeehiveTier, ItemStack> hiveCombs, Map<ApiaryTier, ItemStack> apiaryCombs, Optional<ItemStack> defaultComb, Optional<ItemStack> defaultCombBlock) {
         this.identifier = identifier;
-        this.hiveCombs = new EnumMap<>(hiveCombs);
-        this.apiaryCombs = new EnumMap<>(apiaryCombs);
+        this.hiveCombs = new EnumMap<>(BeehiveTier.class);
+        this.hiveCombs.putAll(hiveCombs);
+        this.apiaryCombs = new EnumMap<>(ApiaryTier.class);
+        this.apiaryCombs.putAll(apiaryCombs);
         this.defaultComb = defaultComb;
         this.defaultComb.ifPresent(comb -> comb.setCount(1));
         this.defaultCombBlock = defaultCombBlock;

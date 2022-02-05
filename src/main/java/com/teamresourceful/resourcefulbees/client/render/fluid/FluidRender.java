@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +26,6 @@ public class FluidRender {
 
     public static void honeyOverlay(RenderBlockOverlayEvent event) {
         if (event.getPlayer().level.getBlockState(event.getBlockPos()).getBlock() == ModBlocks.HONEY_FLUID_BLOCK.get()) {
-            Minecraft minecraftIn = Minecraft.getInstance();
             RenderUtils.bindTexture(HONEY_UNDERWATER);
             BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
             float f = event.getPlayer().getBrightness();

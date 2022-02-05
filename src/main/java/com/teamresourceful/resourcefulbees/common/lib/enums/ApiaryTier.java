@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -28,11 +29,11 @@ public enum ApiaryTier implements IExtensibleEnum, StringRepresentable {
     private final int maxBees;
     private final double timeModifier;
     private final Supplier<ApiaryOutputType> outputType;
-    private final Supplier<Integer> outputAmount;
+    private final IntSupplier outputAmount;
     private final Supplier<BlockEntityType<? extends ApiaryBlockEntity>> blockEntityType;
     private final Supplier<Item> item;
 
-    ApiaryTier(String name, int maxBees, double timeModifier, Supplier<ApiaryOutputType> outputType, Supplier<Integer> outputAmount, Supplier<BlockEntityType<? extends ApiaryBlockEntity>> blockEntityType, Supplier<Item> item) {
+    ApiaryTier(String name, int maxBees, double timeModifier, Supplier<ApiaryOutputType> outputType, IntSupplier outputAmount, Supplier<BlockEntityType<? extends ApiaryBlockEntity>> blockEntityType, Supplier<Item> item) {
         this.name = name;
         this.maxBees = maxBees;
         this.timeModifier = timeModifier;
@@ -59,7 +60,7 @@ public enum ApiaryTier implements IExtensibleEnum, StringRepresentable {
     }
 
     public Integer getOutputAmount() {
-        return outputAmount.get();
+        return outputAmount.getAsInt();
     }
 
     public BlockEntityType<? extends ApiaryBlockEntity> getBlockEntityType() {
@@ -75,7 +76,7 @@ public enum ApiaryTier implements IExtensibleEnum, StringRepresentable {
     }
 
     @SuppressWarnings("unused")
-    public static ApiaryTier create(String name, String id, int maxBees, double timeModifier, Supplier<ApiaryOutputType> outputType, Supplier<Integer> outputAmount, Supplier<BlockEntityType<? extends ApiaryBlockEntity>> blockEntityType, Supplier<Item> item) {
+    public static ApiaryTier create(String name, String id, int maxBees, double timeModifier, Supplier<ApiaryOutputType> outputType, IntSupplier outputAmount, Supplier<BlockEntityType<? extends ApiaryBlockEntity>> blockEntityType, Supplier<Item> item) {
         throw new IllegalStateException("Enum not extended");
     }
 

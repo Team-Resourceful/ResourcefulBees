@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;
 
-public class ItemLanguageModule extends LanguageModule {
+public class ItemLanguageModule implements LanguageModule {
     @Override
     public void addEntries(BaseLanguageProvider provider) {
         provider.addItem(ModItems.OREO_COOKIE, "Epic Oreo");

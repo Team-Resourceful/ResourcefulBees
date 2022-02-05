@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;
 
-public class BookLanguageModule extends LanguageModule {
+public class BookLanguageModule implements LanguageModule {
     @Override
     public void addEntries(BaseLanguageProvider provider) {
         provider.add("book.resourcefulbees.landing_text", "Welcome Resourceful Beekeeper! This guide is much less filled with bee erotica than it is information about beekeeping. We hope that it serves you well in understanding the basics.$(br)$(o)$(#ff0000)Please keep in mind that MOST, if not ALL, bees are added by pack developers!$()");

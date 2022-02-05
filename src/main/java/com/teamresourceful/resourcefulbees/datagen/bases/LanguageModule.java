@@ -1,5 +1,5 @@
 package com.teamresourceful.resourcefulbees.datagen.bases;
 
-public abstract class LanguageModule {
-    public abstract void addEntries(BaseLanguageProvider provider);
+public interface LanguageModule {
+    void addEntries(BaseLanguageProvider provider);
 }

@@ -119,7 +119,7 @@ public class ApiaryBlockEntity extends GUISyncedBlockEntity {
             else apiaryBee.setTicksInHive(Math.min(apiaryBee.getTicksInHive() + 1, Integer.MAX_VALUE - 1));
         }
 
-        if (apiaryTile.bees.size() > 0 && level.getRandom().nextDouble() < 0.005D) {
+        if (!apiaryTile.bees.isEmpty() && level.getRandom().nextDouble() < 0.005D) {
             level.playSound(null, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, SoundEvents.BEEHIVE_WORK, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 
