@@ -20,7 +20,7 @@ import java.util.Set;
 
 @Unmodifiable
 public class TraitData extends BeeTrait {
-    public static final TraitData DEFAULT = new TraitData("this is a test string", Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
+    public static final TraitData DEFAULT = new TraitData("this is a test string", Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
 
     /**
      * Returns a {@link Codec<TraitData>} that can be parsed to create a
@@ -36,20 +36,21 @@ public class TraitData extends BeeTrait {
         return RecordCodecBuilder.create(instance -> instance.group(
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(BeeTrait::getName),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("traits").orElse(new HashSet<>()).forGetter(TraitData::getTraits),
-                CodecUtils.createSetCodec(PotionDamageEffect.CODEC).fieldOf("potionDamageEffects").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionDamageEffects),
+                CodecUtils.createSetCodec(PotionEffect.CODEC).fieldOf("potionDamageEffects").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionDamageEffects),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("damageImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getDamageImmunities),
                 CodecUtils.createSetCodec(Registry.MOB_EFFECT.byNameCodec()).fieldOf("potionImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionImmunities),
                 CodecUtils.createSetCodec(DamageType.CODEC).fieldOf("damageTypes").orElse(new HashSet<>()).forGetter(BeeTrait::getDamageTypes),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("specialAbilities").orElse(new HashSet<>()).forGetter(BeeTrait::getSpecialAbilities),
-                CodecUtils.createSetCodec(Registry.PARTICLE_TYPE.byNameCodec()).fieldOf("particles").orElse(new HashSet<>()).forGetter(BeeTrait::getParticleEffects)
+                CodecUtils.createSetCodec(Registry.PARTICLE_TYPE.byNameCodec()).fieldOf("particles").orElse(new HashSet<>()).forGetter(BeeTrait::getParticleEffects),
+                CodecUtils.createSetCodec(BeeAura.CODEC).fieldOf("auras").orElse(new HashSet<>()).forGetter(BeeTrait::getAuras)
         ).apply(instance, TraitData::new));
     }
 
     protected Set<String> traits;
     private final boolean hasTraits;
 
-    private TraitData(String name, Set<String> traits, Set<PotionDamageEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects) {
-        super(name, null, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects);
+    private TraitData(String name, Set<String> traits, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<BeeAura> auras) {
+        super(name, null, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects, auras);
         this.traits = traits;
         this.traits.forEach(this::addTrait);
         this.hasTraits = setHasTraits();
@@ -93,16 +94,17 @@ public class TraitData extends BeeTrait {
         damageTypes.addAll(trait.getDamageTypes());
         specialAbilities.addAll(trait.getSpecialAbilities());
         particleEffects.addAll(trait.getParticleEffects());
+        auras.addAll(trait.getAuras());
     }
     //endregion
 
     public static class Mutable extends TraitData {
-        public Mutable(String name, Set<String> traits, Set<PotionDamageEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects) {
-            super(name, traits, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects);
+        public Mutable(String name, Set<String> traits, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<BeeAura> auras) {
+            super(name, traits, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects, auras);
         }
 
         public Mutable() {
-            super("error", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+            super("error", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         }
 
         public TraitData.Mutable setTraits(Set<String> traits) {
@@ -120,12 +122,12 @@ public class TraitData extends BeeTrait {
             return this;
         }
 
-        public TraitData.Mutable addDamagePotionEffects(Set<PotionDamageEffect> potionDamageEffects) {
+        public TraitData.Mutable addDamagePotionEffects(Set<PotionEffect> potionDamageEffects) {
             this.potionDamageEffects.addAll(potionDamageEffects);
             return this;
         }
 
-        public TraitData.Mutable addDamagePotionEffect(PotionDamageEffect potionDamageEffect) {
+        public TraitData.Mutable addDamagePotionEffect(PotionEffect potionDamageEffect) {
             this.potionDamageEffects.add(potionDamageEffect);
             return this;
         }
@@ -180,9 +182,19 @@ public class TraitData extends BeeTrait {
             return this;
         }
 
+        public TraitData.Mutable addAuras(Collection<BeeAura> auras) {
+            this.auras.addAll(auras);
+            return this;
+        }
+
+        public TraitData.Mutable addAura(BeeAura aura) {
+            this.auras.add(aura);
+            return this;
+        }
+
         @Override
         public TraitData toImmutable() {
-            return new TraitData(this.name, this.traits, this.potionDamageEffects, this.damageImmunities, this.potionImmunities, this.damageTypes, this.specialAbilities, this.particleEffects);
+            return new TraitData(this.name, this.traits, this.potionDamageEffects, this.damageImmunities, this.potionImmunities, this.damageTypes, this.specialAbilities, this.particleEffects, this.auras);
         }
     }
 }

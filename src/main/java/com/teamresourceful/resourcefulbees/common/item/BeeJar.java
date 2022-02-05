@@ -90,7 +90,7 @@ public class BeeJar extends Item {
             bee.setTarget(player);
             if (bee instanceof ResourcefulBee customBee) {
                 TraitData traitData = customBee.getTraitData();
-                if (traitData.getDamageTypes().stream().anyMatch(damageType -> damageType.getType().equals(TraitConstants.EXPLOSIVE))) {
+                if (traitData.getDamageTypes().stream().anyMatch(damageType -> damageType.type().equals(TraitConstants.EXPLOSIVE))) {
                     customBee.setExplosiveCooldown(60);
                 }
             }

@@ -51,7 +51,6 @@ public class CommonConfig {
     public static IntValue HONEY_DRAIN_AMOUNT;
     public static IntValue HONEY_PROCESS_TIME;
     public static IntValue CONGEALER_TIME_MODIFIER;
-    public static IntValue MAX_PIPE_FLOW;
     public static IntValue ENERGY_FILL_AMOUNT;
     public static IntValue ENERGY_TRANSFER_AMOUNT;
     public static IntValue MAX_ENERGY_CAPACITY;
@@ -78,7 +77,6 @@ public class CommonConfig {
     public static BooleanValue HONEY_GENERATE_BLOCKS;
     public static BooleanValue HONEY_BLOCK_RECIPES;
 
-    public static IntValue BEECON_RANGE_PER_EFFECT;
     public static DoubleValue BEECON_CALMING_VALUE;
     public static DoubleValue BEECON_WATER_BREATHING_VALUE;
     public static DoubleValue BEECON_FIRE_RESISTANCE_VALUE;
@@ -89,6 +87,7 @@ public class CommonConfig {
 
     public static BooleanValue BYPASS_PERFORMANT_CHECK;
     public static BooleanValue BEEPEDIA_HIDE_LOCKED;
+    public static IntValue DEFAULT_AURA_RANGE;
 
     public static BooleanValue MANUAL_MODE;
 
@@ -119,8 +118,6 @@ public class CommonConfig {
         CONGEALER_TIME_MODIFIER = COMMON_BUILDER.comment("\nMultiplier to the amount of ticks needed to process honey into honey blocks in the congealer." +
                 "\nThis value is multiplying the honeyProcessTime.")
                 .defineInRange("congealerTimeMultiplier", 4, 1, 16);
-        MAX_PIPE_FLOW = COMMON_BUILDER.comment("\nAmount of honey Honey Pipes can transfer per tick.")
-                .defineInRange("maxHoneyPipeFlow", 250, 10, 16000);
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.push("Recipe Options");
@@ -239,6 +236,8 @@ public class CommonConfig {
                 "Bees will not scan surroundings for flowers or hives and will instead go to their designated spot until changed.",
                 "WARNING: For now, this will prevent bees from having their wander goal attached which effectively makes them dumb (seriously, they'll just hover in one spot), however it would also significantly improve performance until pathfinding can be optimized.")
                 .define("use_experimental_manual_mode", false);
+        DEFAULT_AURA_RANGE = COMMON_BUILDER.comment("\nThe default radius that all bees will use for their auras.")
+                .defineInRange("beeAuraRange", 10, 3, 20);
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.push("Honeycomb Options");

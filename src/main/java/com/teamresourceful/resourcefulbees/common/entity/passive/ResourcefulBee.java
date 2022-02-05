@@ -90,6 +90,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
         if (Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get())) this.goalSelector.addGoal(8, new BeeWanderGoal(this));
         this.goalSelector.addGoal(9, new FloatGoal(this));
+        this.goalSelector.addGoal(10, new BeeAuraGoal(this));
     }
 
     @Override
@@ -205,14 +206,14 @@ public class ResourcefulBee extends CustomBeeEntity {
                 int i = getDifficultyModifier();
                 if (info.hasTraits() && info.hasDamageTypes()) {
                     info.getDamageTypes().forEach(damageType -> {
-                        if (damageType.getType().equals(TraitConstants.SET_ON_FIRE))
-                            entityIn.setSecondsOnFire(i * damageType.getAmplifier());
-                        if (damageType.getType().equals(TraitConstants.EXPLOSIVE))
-                            this.explode(i / damageType.getAmplifier());
+                        if (damageType.type().equals(TraitConstants.SET_ON_FIRE))
+                            entityIn.setSecondsOnFire(i * damageType.amplifier());
+                        if (damageType.type().equals(TraitConstants.EXPLOSIVE))
+                            this.explode(i / damageType.amplifier());
                     });
                 }
                 if (i > 0 && info.hasTraits() && info.hasPotionDamageEffects()) {
-                    info.getPotionDamageEffects().forEach(damageEffect -> ((LivingEntity) entityIn).addEffect(new MobEffectInstance(damageEffect.getEffect(), i * 20, damageEffect.getStrength())));
+                    info.getPotionDamageEffects().forEach(damageEffect -> ((LivingEntity) entityIn).addEffect(new MobEffectInstance(damageEffect.effect(), i * 20, damageEffect.strength())));
                 }
                 if (canPoison(info))
                     ((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 0));

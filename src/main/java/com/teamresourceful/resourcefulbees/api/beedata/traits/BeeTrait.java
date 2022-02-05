@@ -19,7 +19,7 @@ import java.util.*;
 
 @Unmodifiable
 public class BeeTrait {
-    public static final BeeTrait DEFAULT = new BeeTrait("this is a test string", null, Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
+    public static final BeeTrait DEFAULT = new BeeTrait("this is a test string", null, Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
 
     /**
      * Returns a {@link Codec<BeeTrait>} that can be parsed to create a
@@ -36,25 +36,27 @@ public class BeeTrait {
         return RecordCodecBuilder.create(instance -> instance.group(
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(BeeTrait::getName),
                 Registry.ITEM.byNameCodec().fieldOf("displayItem").orElse(ModItems.TRAIT_ICON.get()).forGetter(BeeTrait::getDisplayItem),
-                CodecUtils.createSetCodec(PotionDamageEffect.CODEC).fieldOf("potionDamageEffects").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionDamageEffects),
+                CodecUtils.createSetCodec(PotionEffect.CODEC).fieldOf("potionDamageEffects").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionDamageEffects),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("damageImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getDamageImmunities),
                 CodecUtils.createSetCodec(Registry.MOB_EFFECT.byNameCodec()).fieldOf("potionImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionImmunities),
                 CodecUtils.createSetCodec(DamageType.CODEC).fieldOf("damageTypes").orElse(new HashSet<>()).forGetter(BeeTrait::getDamageTypes),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("specialAbilities").orElse(new HashSet<>()).forGetter(BeeTrait::getSpecialAbilities),
-                CodecUtils.createSetCodec(Registry.PARTICLE_TYPE.byNameCodec()).fieldOf("particleType").orElse(new HashSet<>()).forGetter(BeeTrait::getParticleEffects)
+                CodecUtils.createSetCodec(Registry.PARTICLE_TYPE.byNameCodec()).fieldOf("particleType").orElse(new HashSet<>()).forGetter(BeeTrait::getParticleEffects),
+                CodecUtils.createSetCodec(BeeAura.CODEC).fieldOf("auras").orElse(new HashSet<>()).forGetter(BeeTrait::getAuras)
         ).apply(instance, BeeTrait::new));
     }
 
     protected String name;
     protected Item displayItem;
-    protected final Set<PotionDamageEffect> potionDamageEffects;
+    protected final Set<PotionEffect> potionDamageEffects;
     protected final Set<String> damageImmunities;
     protected final Set<MobEffect> potionImmunities;
     protected final Set<DamageType> damageTypes;
     protected final Set<String> specialAbilities;
     protected final Set<ParticleType<?>> particleEffects;
+    protected final Set<BeeAura> auras;
 
-    protected BeeTrait(String name, Item displayItem, Set<PotionDamageEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects) {
+    protected BeeTrait(String name, Item displayItem, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<BeeAura> auras) {
         this.name = name.toLowerCase(Locale.ENGLISH).replace(" ", "_");
         this.displayItem = displayItem == null ? Items.BLAZE_POWDER : displayItem; //covers trait data object codec
         this.potionDamageEffects = potionDamageEffects;
@@ -63,6 +65,7 @@ public class BeeTrait {
         this.damageTypes = damageTypes;
         this.specialAbilities = specialAbilities;
         this.particleEffects = particleEffects;
+        this.auras = auras;
     }
 
     /**
@@ -84,9 +87,9 @@ public class BeeTrait {
      * Potion damage effects are status effects sustained by players when the bee
      * attacks them. The strength for the effect can be customized.
      *
-     * @return Returns a {@link Set} of {@link PotionDamageEffect}s.
+     * @return Returns a {@link Set} of {@link PotionEffect}s.
      */
-    public Set<PotionDamageEffect> getPotionDamageEffects() { return potionDamageEffects; }
+    public Set<PotionEffect> getPotionDamageEffects() { return potionDamageEffects; }
 
     /**
      * Damage immunities ar damage source immunities that the bee has
@@ -138,6 +141,8 @@ public class BeeTrait {
      * @return Returns a {@link Set} of {@link ParticleType}s.
      */
     public Set<ParticleType<?>> getParticleEffects() { return particleEffects; }
+
+    public Set<BeeAura> getAuras() { return auras; }
 
     public String getTranslationKey() {
         return String.format("trait.%s.%s", ResourcefulBees.MOD_ID, name);
@@ -191,18 +196,26 @@ public class BeeTrait {
         return !particleEffects.isEmpty();
     }
 
+    /**
+     *
+     * @return Returns <tt>true</tt> if the internal set is not empty.
+     */
+    public boolean hasAuras() {
+        return !auras.isEmpty();
+    }
+
     public BeeTrait toImmutable() {
         return this;
     }
 
     public static class Mutable extends BeeTrait {
 
-        public Mutable(String name, Item displayItem, Set<PotionDamageEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects) {
-            super(name, displayItem, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects);
+        public Mutable(String name, Item displayItem, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<BeeAura> auras) {
+            super(name, displayItem, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects, auras);
         }
 
         public Mutable() {
-            super("error", null, new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+            super("error", null, new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         }
 
         public Mutable setName(String name) {
@@ -215,12 +228,12 @@ public class BeeTrait {
             return this;
         }
 
-        public Mutable addDamagePotionEffects(Set<PotionDamageEffect> potionDamageEffects) {
+        public Mutable addDamagePotionEffects(Set<PotionEffect> potionDamageEffects) {
             this.potionDamageEffects.addAll(potionDamageEffects);
             return this;
         }
 
-        public Mutable addDamagePotionEffect(PotionDamageEffect potionDamageEffect) {
+        public Mutable addDamagePotionEffect(PotionEffect potionDamageEffect) {
             this.potionDamageEffects.add(potionDamageEffect);
             return this;
         }
@@ -275,9 +288,19 @@ public class BeeTrait {
             return this;
         }
 
+        public Mutable addAuras(Collection<BeeAura> auras) {
+            this.auras.addAll(auras);
+            return this;
+        }
+
+        public Mutable addAura(BeeAura aura) {
+            this.auras.add(aura);
+            return this;
+        }
+
         @Override
         public BeeTrait toImmutable() {
-            return new BeeTrait(name, displayItem, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects);
+            return new BeeTrait(name, displayItem, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects, auras);
         }
     }
 }
