@@ -23,7 +23,7 @@ public abstract class BaseBlockStateProvider extends BlockStateProvider {
         this.itemModelProvider = new BaseItemModelProvider(gen, exFileHelper) { @Override protected void registerModels() {} };
     }
 
-    protected String name(Block block) {
+    protected String id(Block block) {
         return block.getRegistryName().getPath();
     }
 
@@ -45,12 +45,12 @@ public abstract class BaseBlockStateProvider extends BlockStateProvider {
 
     protected void horizontalCentrifuge(Block block) {
         ResourceLocation topAndSide = blockTexture(ModBlocks.CENTRIFUGE_CASING.get());
-        ModelFile model = models().orientable(name(block), topAndSide, blockTexture(block), topAndSide);
+        ModelFile model = models().orientable(id(block), topAndSide, blockTexture(block), topAndSide);
         horizontalBlockWithItem(block, model);
     }
 
     protected void horizontalCentrifugeBottom(Block block) {
-        ModelFile model = models().orientableWithBottom(name(block), blockTexture(ModBlocks.CENTRIFUGE_CASING.get()), blockTexture(block), blockTexture(block), blockTexture(ModBlocks.CENTRIFUGE_CASING.get()));
+        ModelFile model = models().orientableWithBottom(id(block), blockTexture(ModBlocks.CENTRIFUGE_CASING.get()), blockTexture(block), blockTexture(block), blockTexture(ModBlocks.CENTRIFUGE_CASING.get()));
         horizontalBlockWithItem(block, model);
     }
 
@@ -60,7 +60,7 @@ public abstract class BaseBlockStateProvider extends BlockStateProvider {
     }
 
     protected void orientableVerticalWithItem(Block block) {
-        ModelFile model = models().orientableVertical(name(block), blockTexture(ModBlocks.CENTRIFUGE_CASING.get()), blockTexture(block));
+        ModelFile model = models().orientableVertical(id(block), blockTexture(ModBlocks.CENTRIFUGE_CASING.get()), blockTexture(block));
         this.simpleBlock(block, model);
         this.simpleBlockItem(block, model);
     }

@@ -83,7 +83,7 @@ public class Pane extends TooltipWidget {
             matrixStack.pushPose();
             matrixStack.translate(0, 0, 100);
             matrixStack.scale(0.5f, 0.5f, 1.0f);
-            Minecraft.getInstance().font.draw(matrixStack, "[" + child.x + ", " + child.y + "]", child.x * 2, child.y * 2 - 9, Color.DEFAULT.getValue());
+            Minecraft.getInstance().font.draw(matrixStack, "[" + child.x + ", " + child.y + "]", child.x * 2f, child.y * 2f - 9f, Color.DEFAULT.getValue());
             matrixStack.popPose();
         }
 

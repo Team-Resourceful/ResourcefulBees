@@ -58,7 +58,7 @@ public abstract class TooltipScreen extends Screen {
             matrix.pushPose();
             matrix.translate(0, 0, 100);
             matrix.scale(0.5f, 0.5f, 1.0f);
-            Minecraft.getInstance().font.draw(matrix,"[" + child.x + ", " + child.y + "]", child.x * 2, child.y * 2 - 9, Color.DEFAULT.getValue());
+            Minecraft.getInstance().font.draw(matrix,"[" + child.x + ", " + child.y + "]", child.x * 2f, child.y * 2f - 9f, Color.DEFAULT.getValue());
             matrix.popPose();
         }
         matrix.popPose();

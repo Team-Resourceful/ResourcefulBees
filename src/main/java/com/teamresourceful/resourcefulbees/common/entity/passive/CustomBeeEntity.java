@@ -383,14 +383,12 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
 
     @Override
     public ItemStack getHiveOutput(BeehiveTier tier) {
-        if (getHoneycombData().isEmpty()) return ItemStack.EMPTY;
-        return Objects.requireNonNullElse(getHoneycombData().get().getHiveOutput(tier), ItemStack.EMPTY);
+        return getHoneycombData().map(data -> data.getHiveOutput(tier)).orElse(ItemStack.EMPTY);
     }
 
     @Override
     public ItemStack getApiaryOutput(ApiaryTier tier) {
-        if (getHoneycombData().isEmpty()) return ItemStack.EMPTY;
-        return Objects.requireNonNullElse(getHoneycombData().get().getApiaryOutput(tier), ItemStack.EMPTY);
+        return getHoneycombData().map(data -> data.getApiaryOutput(tier)).orElse(ItemStack.EMPTY);
     }
 
     @Override

@@ -35,11 +35,11 @@ public class BeeCombatPage extends BeeDataPage {
         TranslatableComponent passiveName = new TranslatableComponent(TranslationConstants.Beepedia.Info.PASSIVE, BeepediaUtils.getYesNo(beeData.getCombatData().isPassive()));
         TranslatableComponent poisonName = new TranslatableComponent(TranslationConstants.Beepedia.Info.POISON, BeepediaUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
 
-        font.draw(matrix, healthName.withStyle(ChatFormatting.GRAY), x, y + 34, -1);
-        font.draw(matrix, damageName.withStyle(ChatFormatting.GRAY), x + 86, y + 34, -1);
-        font.draw(matrix, passiveName.withStyle(ChatFormatting.GRAY), x, y + 46, -1);
-        font.draw(matrix, poisonName.withStyle(ChatFormatting.GRAY), x + 86, y + 46, -1);
-        font.draw(matrix, stingerName.withStyle(ChatFormatting.GRAY), x, y + 58, -1);
+        font.draw(matrix, healthName.withStyle(ChatFormatting.GRAY), x, y + 34f, -1);
+        font.draw(matrix, damageName.withStyle(ChatFormatting.GRAY), x + 86f, y + 34f, -1);
+        font.draw(matrix, passiveName.withStyle(ChatFormatting.GRAY), x, y + 46f, -1);
+        font.draw(matrix, poisonName.withStyle(ChatFormatting.GRAY), x + 86f, y + 46f, -1);
+        font.draw(matrix, stingerName.withStyle(ChatFormatting.GRAY), x, y + 58f, -1);
     }
 
     @Override

@@ -209,27 +209,27 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
         @Override
         public void renderText(PoseStack matrix, int mouseX, int mouseY) {
             if (module.selectedEntity != null) {
-                TERMINAL_FONT_12.draw(matrix, module.selectedEntity.getDisplayName(), 220 - TERMINAL_FONT_12.width(module.selectedEntity.getDisplayName()) / 2f, 45.5f, RenderUtils.FONT_COLOR_1);
+                TERMINAL_FONT_12.draw(matrix, module.selectedEntity.getDisplayName(), 220f - TERMINAL_FONT_12.width(module.selectedEntity.getDisplayName()) / 2f, 45.5f, RenderUtils.FONT_COLOR_1);
 
                 //Render Info Pane
                 //CentrifugeInputEntity inputEntity = (CentrifugeInputEntity) module.selectedEntity;
                 int tX = x + 5;
                 int tY = y + 36;
 
-                TERMINAL_FONT_8.draw(matrix, String.valueOf(1), x+113f-25, y+24f, RenderUtils.FONT_COLOR_1);
-                TERMINAL_FONT_8.draw(matrix, String.valueOf(2), x+124f-25, y+24f, RenderUtils.FONT_COLOR_1);
-                TERMINAL_FONT_8.draw(matrix, String.valueOf(3), x+135f-25, y+24f, RenderUtils.FONT_COLOR_1);
+                TERMINAL_FONT_8.draw(matrix, String.valueOf(1), x+113f-25f, y+24f, RenderUtils.FONT_COLOR_1);
+                TERMINAL_FONT_8.draw(matrix, String.valueOf(2), x+124f-25f, y+24f, RenderUtils.FONT_COLOR_1);
+                TERMINAL_FONT_8.draw(matrix, String.valueOf(3), x+135f-25f, y+24f, RenderUtils.FONT_COLOR_1);
 
                 Set<BlockPos> outputBlocks = screen.getCentrifugeState().getItemOutputs();
                 int i = 0;
                 for (BlockPos pos: outputBlocks) {
                     AbstractGUICentrifugeEntity outputTile = (AbstractGUICentrifugeEntity) screen.getMinecraft().level.getBlockEntity(pos);
                     TERMINAL_FONT_8.draw(matrix, outputTile.getDisplayName(), tX, tY + i*20f, RenderUtils.FONT_COLOR_1);
-                    TERMINAL_FONT_8.draw(matrix, CentrifugeUtils.formatBlockPos(pos), tX, tY + 8 + i*20f, RenderUtils.FONT_COLOR_1);
+                    TERMINAL_FONT_8.draw(matrix, CentrifugeUtils.formatBlockPos(pos), tX, tY + 8f + i*20f, RenderUtils.FONT_COLOR_1);
 
                     for (int j = 0; j < 3; j++) {
                         String text = ((CentrifugeInputEntity) module.selectedEntity).getItemOutputs().get(j).getPos().equals(pos) ? "[✗]" : "[ ]";
-                        TERMINAL_FONT_8.draw(matrix, text, tX + 80 + j * 11, tY + i * 20, RenderUtils.FONT_COLOR_1);
+                        TERMINAL_FONT_8.draw(matrix, text, tX + 80f + j * 11f, tY + i * 20f, RenderUtils.FONT_COLOR_1);
 
 
 
@@ -252,11 +252,11 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
                 for (BlockPos pos: outputBlocks) {
                     AbstractGUICentrifugeEntity outputTile = (AbstractGUICentrifugeEntity) screen.getMinecraft().level.getBlockEntity(pos);
                     TERMINAL_FONT_8.draw(matrix, outputTile.getDisplayName(), tX, tY + i*20f, RenderUtils.FONT_COLOR_1);
-                    TERMINAL_FONT_8.draw(matrix, CentrifugeUtils.formatBlockPos(pos), tX, tY + 8 + i*20f, RenderUtils.FONT_COLOR_1);
+                    TERMINAL_FONT_8.draw(matrix, CentrifugeUtils.formatBlockPos(pos), tX, tY + 8f + i*20f, RenderUtils.FONT_COLOR_1);
 
                     for (int j = 0; j < 3; j++) {
                         String text = ((CentrifugeInputEntity) module.selectedEntity).getItemOutputs().get(j).getPos().equals(pos) ? "[✗]" : "[ ]";
-                        TERMINAL_FONT_8.draw(matrix, text, tX + 80 + j * 11, tY + i * 20, RenderUtils.FONT_COLOR_1);
+                        TERMINAL_FONT_8.draw(matrix, text, tX + 80f + j * 11, tY + i * 20f, RenderUtils.FONT_COLOR_1);
 
 
 

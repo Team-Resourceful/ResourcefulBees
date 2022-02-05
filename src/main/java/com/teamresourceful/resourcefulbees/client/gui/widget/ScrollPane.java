@@ -37,7 +37,7 @@ public class ScrollPane extends Pane {
 
     @Override
     public void modifyPane(PoseStack matrix) {
-        matrix.translate(x, y + scrollOffset, 0);
+        matrix.translate(x, y + (double)scrollOffset, 0);
     }
 
     @Override

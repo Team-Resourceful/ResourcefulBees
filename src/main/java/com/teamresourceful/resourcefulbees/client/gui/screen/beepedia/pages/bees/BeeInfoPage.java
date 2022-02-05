@@ -54,8 +54,9 @@ public class BeeInfoPage extends BeeDataPage {
                 slot = 0;
             }
         } else {
-            if (beeData.getCoreData().getEntityFlower().isPresent() && (entityFlower.getLeft() == null || !entityFlower.getKey().equals(beeData.getCoreData().getEntityFlower().get()))) {
-                entityFlower = Pair.of(beeData.getCoreData().getEntityFlower().get(), beeData.getCoreData().getEntityFlower().get().create(Minecraft.getInstance().level));
+            var entityFlower = beeData.getCoreData().getEntityFlower();
+            if (entityFlower.isPresent() && (this.entityFlower.getLeft() == null || !this.entityFlower.getKey().equals(entityFlower.get()))) {
+                this.entityFlower = Pair.of(entityFlower.get(), entityFlower.get().create(Minecraft.getInstance().level));
             }
         }
     }
@@ -65,9 +66,9 @@ public class BeeInfoPage extends BeeDataPage {
         Font font = Minecraft.getInstance().font;
         SIZE_NAME.append(BeepediaUtils.getSizeName(beeData.getRenderData().sizeModifier()));
         TIME_NAME.append(beeData.getCoreData().getMaxTimeInHive() / 20 + "s");
-        font.draw(matrix, TITLE.withStyle(ChatFormatting.WHITE), x, y + 8, -1);
-        font.draw(matrix, SIZE_NAME.withStyle(ChatFormatting.GRAY),x, y + 22, -1);
-        font.draw(matrix, TIME_NAME.withStyle(ChatFormatting.GRAY), x + 86, y + 22, -1);
+        font.draw(matrix, TITLE.withStyle(ChatFormatting.WHITE), x, y + 8f, -1);
+        font.draw(matrix, SIZE_NAME.withStyle(ChatFormatting.GRAY),x, y + 22f, -1);
+        font.draw(matrix, TIME_NAME.withStyle(ChatFormatting.GRAY), x + 86f, y + 22f, -1);
     }
 
     @Override
@@ -75,11 +76,11 @@ public class BeeInfoPage extends BeeDataPage {
         if (beeData == null) throw new IllegalStateException("preInit not implemented");
         Font font = Minecraft.getInstance().font;
         if (!beeData.getCoreData().getBlockFlowers().isEmpty()) {
-            font.draw(matrix, FLOWER_NAME.withStyle(ChatFormatting.GRAY), x, y + 75, -1);
-//            beepedia.drawSlot(matrix, blockFlowers.get(slot), x + 36, y + 70);
+            font.draw(matrix, FLOWER_NAME.withStyle(ChatFormatting.GRAY), x, y + 75f, -1);
+//            beepedia.drawSlot(matrix, blockFlowers.get(slot), x + 36f, y + 70f);
         } else if (beeData.getCoreData().getEntityFlower().isPresent()) {
-            font.draw(matrix, FLOWER_NAME.withStyle(ChatFormatting.GRAY), x, y + 80, -1);
-            RenderUtils.renderEntity(matrix, entityFlower.getValue(), Minecraft.getInstance().level, x + 45, y + 75, -45, 1.25f);
+            font.draw(matrix, FLOWER_NAME.withStyle(ChatFormatting.GRAY), x, y + 80f, -1);
+            RenderUtils.renderEntity(matrix, entityFlower.getValue(), Minecraft.getInstance().level, x + 45f, y + 75f, -45f, 1.25f);
         }
     }
 
