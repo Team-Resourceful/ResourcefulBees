@@ -82,18 +82,12 @@ public class HoneyDipper extends Item {
     private void sendMessageToPlayer(Player playerEntity, MessageTypes messageTypes, BlockPos pos) {
         assert selectedBee != null : "bee went null before message was sent to player";
         switch (messageTypes) {
-            case FLOWER:
-            case HIVE:
+            case FLOWER, HIVE -> {
                 String translation = messageTypes.equals(MessageTypes.FLOWER) ? TranslationConstants.HoneyDipper.FLOWER_SET : TranslationConstants.HoneyDipper.HIVE_SET;
                 playerEntity.displayClientMessage(new TranslatableComponent(translation, selectedBee.getDisplayName(), NbtUtils.writeBlockPos(pos)), false);
-                break;
-            case BEE_CLEARED:
-                playerEntity.displayClientMessage(TranslationConstants.HoneyDipper.SELECTION_CLEARED, false);
-                break;
-            case BEE_SELECTED:
-                playerEntity.displayClientMessage(new TranslatableComponent(TranslationConstants.HoneyDipper.BEE_SET, selectedBee.getDisplayName()), false);
-                break;
-            default: //Do Nothing
+            }
+            case BEE_CLEARED -> playerEntity.displayClientMessage(TranslationConstants.HoneyDipper.SELECTION_CLEARED, false);
+            case BEE_SELECTED -> playerEntity.displayClientMessage(new TranslatableComponent(TranslationConstants.HoneyDipper.BEE_SET, selectedBee.getDisplayName()), false);
         }
     }
 

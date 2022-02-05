@@ -16,8 +16,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,31 +45,20 @@ public class BeeSpawnEggItem extends SpawnEggItem {
 
     @Override
     public @NotNull InteractionResult useOn(UseOnContext context) {
-        ItemStack itemstack = context.getItemInHand();
-        Player player = context.getPlayer();
-        if (player != null) {
-            Level world = context.getLevel();
-            if (world.isClientSide) {
-                return InteractionResult.SUCCESS;
-            } else {
+        ItemStack stack = context.getItemInHand();
+        if (context.getPlayer() != null) {
+            if (context.getLevel() instanceof ServerLevel level) {
                 BlockPos blockPos = context.getClickedPos();
                 Direction direction = context.getClickedFace();
-                BlockState blockstate = world.getBlockState(blockPos);
 
-                BlockPos blockPos1;
-                if (blockstate.getCollisionShape(world, blockPos).isEmpty()) {
-                    blockPos1 = blockPos;
-                } else {
-                    blockPos1 = blockPos.relative(direction);
+                BlockPos pos = level.getBlockState(blockPos).getCollisionShape(level, blockPos).isEmpty() ? blockPos : blockPos.relative(direction);
+
+                EntityType<?> entityType = this.getType(stack.getTag());
+                if (entityType.spawn(level, stack, context.getPlayer(), pos, MobSpawnType.SPAWN_EGG, true, !Objects.equals(blockPos, pos) && direction == Direction.UP) != null) {
+                    stack.shrink(1);
                 }
-
-                EntityType<?> entityType = this.getType(itemstack.getTag());
-                if (entityType.spawn((ServerLevel) world, itemstack, context.getPlayer(), blockPos1, MobSpawnType.SPAWN_EGG, true, !Objects.equals(blockPos, blockPos1) && direction == Direction.UP) != null) {
-                    itemstack.shrink(1);
-                }
-
-                return InteractionResult.CONSUME;
             }
+            return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
         }
         return InteractionResult.SUCCESS;
     }

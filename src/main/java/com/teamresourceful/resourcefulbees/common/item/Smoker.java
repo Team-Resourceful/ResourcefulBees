@@ -1,10 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
+import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -19,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class Smoker extends Item {
+public class Smoker extends Item implements IShiftingToolTip {
 
     public Smoker(Properties properties) {
         super(properties);
@@ -63,7 +63,8 @@ public class Smoker extends Item {
 			double z = player.getZ() + vec3d.z * 2;
 
             AABB aabb = new AABB((player.getX() + vec3d.x), (player.getY() + vec3d.y), (player.getZ() + vec3d.z), (player.getX() + vec3d.x), (player.getY() + vec3d.y), (player.getZ() + vec3d.z)).inflate(2.5D);
-            level.getEntitiesOfClass(Bee.class, aabb).stream()
+            level.getEntitiesOfClass(Bee.class, aabb)
+                    .stream()
                     .filter(NeutralMob::isAngry)
                     .forEach(bee -> {
                         bee.setRemainingPersistentAngerTime(0);
@@ -87,12 +88,20 @@ public class Smoker extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        if(Screen.hasShiftDown()) {
-            tooltip.add(TranslationConstants.Items.SMOKER_TOOLTIP.withStyle(ChatFormatting.GOLD));
-            tooltip.add(TranslationConstants.Items.SMOKER_TOOLTIP1.withStyle(ChatFormatting.GOLD));
-        } else {
-            tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(ChatFormatting.YELLOW));
-        }
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+        setupTooltip(stack, level, components, flag);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public Component getShiftingDisplay() {
+        return TranslationConstants.Items.FOR_MORE_INFO;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+        components.add(TranslationConstants.Items.SMOKER_TOOLTIP.withStyle(ChatFormatting.GOLD));
+        components.add(TranslationConstants.Items.SMOKER_TOOLTIP1.withStyle(ChatFormatting.GOLD));
     }
 }

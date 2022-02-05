@@ -40,7 +40,7 @@ public interface IShiftingToolTip {
     Component getShiftingDisplay();
 
     @OnlyIn(Dist.CLIENT)
-    void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag);
+    void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag);
 
     @OnlyIn(Dist.CLIENT)
     default Component getControlDisplay() {
@@ -48,7 +48,7 @@ public interface IShiftingToolTip {
     }
 
     @OnlyIn(Dist.CLIENT)
-    default void appendControlTooltip(@NotNull ItemStack stack, @Nullable BlockGetter pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+    default void appendControlTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
 
     }
 
