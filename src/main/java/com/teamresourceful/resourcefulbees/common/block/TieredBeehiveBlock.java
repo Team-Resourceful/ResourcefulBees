@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.item.IShiftingToolTip;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.INestUpgrade;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -9,7 +10,6 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -50,7 +50,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 
-public class TieredBeehiveBlock extends BeehiveBlock {
+public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip {
 
     private static final TextComponent NONE_TEXT = new TextComponent("     NONE");
     //public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 1, 4);
@@ -170,61 +170,13 @@ public class TieredBeehiveBlock extends BeehiveBlock {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        if (Screen.hasShiftDown()) {
-            createAdvancedTooltip(stack, tooltip);
-        } else {
-            //createNormalTooltip(tooltip, stack);
-        }
-
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
-    }
-
-
-    //TODO create a better tooltip
-/*    private void createNormalTooltip(@NotNull List<Component> tooltip, ItemStack stack) {
-        if (stack.hasTag()) {
-            CompoundTag stackTag = stack.getTag();
-            if (stackTag != null && !stackTag.isEmpty() && stackTag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
-                CompoundTag blockEntityTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
-                localTier = blockEntityTag.getInt(NBTConstants.NBT_TIER);
-                localTierModifier = blockEntityTag.getFloat(NBTConstants.NBT_TIER_MODIFIER);
-            }
-        }
-
-
-        tooltip.add(TranslationConstants.Items.MORE_INFO.withStyle(ChatFormatting.YELLOW));
-        tooltip.add(new TranslatableComponent(TranslationConstants.BeeHive.MAX_BEES, Math.round(CommonConfig.HIVE_MAX_BEES.get() * localTierModifier)).withStyle(ChatFormatting.GOLD));
-        tooltip.add(new TranslatableComponent(TranslationConstants.BeeHive.MAX_COMBS, Math.round(CommonConfig.HIVE_MAX_COMBS.get() * localTierModifier)).withStyle(ChatFormatting.GOLD));
-
-
-        if (localTier != 1) {
-            int timeReduction = localTier > 1 ? (int) ((localTier * .05) * 100) : (int) (.05 * 100);
-            String sign = localTier > 1 ? "-" : "+";
-            tooltip.add(new TranslatableComponent(TranslationConstants.BeeHive.HIVE_TIME, sign, timeReduction).withStyle(ChatFormatting.GOLD));
-        }
-    }*/
-
-    private void createAdvancedTooltip(@NotNull ItemStack stack, @NotNull List<Component> tooltip) {
-        if (stack.hasTag()) {
-            CompoundTag stackTag = stack.getTag();
-            if (stackTag != null && !stackTag.isEmpty() && stackTag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
-                CompoundTag blockEntityTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
-                createBeesTooltip(tooltip, blockEntityTag);
-                createHoneycombsTooltip(tooltip, blockEntityTag);
-            }
-        } else {
-            tooltip.add(TranslationConstants.BeeHive.BEES.withStyle(ChatFormatting.GOLD));
-            tooltip.add(NONE_TEXT);
-            tooltip.add(TextComponent.EMPTY);
-            tooltip.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
-            tooltip.add(NONE_TEXT);
-        }
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+        setupTooltip(stack, level, components, flag);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HONEY_LEVEL, FACING);//, TIER_PROPERTY);
+        builder.add(HONEY_LEVEL, FACING);
     }
 
     private void createHoneycombsTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {
@@ -285,5 +237,57 @@ public class TieredBeehiveBlock extends BeehiveBlock {
             return !hive.hasCombs();
         }
         return false;
+    }
+
+    @Override
+    public Component getShiftingDisplay() {
+        return TranslationConstants.Items.FOR_MORE_INFO;
+    }
+
+    @Override
+    public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+//        if (stack.hasTag()) {
+//            CompoundTag stackTag = stack.getTag();
+//            if (stackTag != null && !stackTag.isEmpty() && stackTag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
+//                CompoundTag blockEntityTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
+//                localTier = blockEntityTag.getInt(NBTConstants.NBT_TIER);
+//                localTierModifier = blockEntityTag.getFloat(NBTConstants.NBT_TIER_MODIFIER);
+//            }
+//        }
+//
+//
+//        components.add(TranslationConstants.Items.MORE_INFO.withStyle(ChatFormatting.YELLOW));
+//        components.add(new TranslatableComponent(TranslationConstants.BeeHive.MAX_BEES, Math.round(CommonConfig.HIVE_MAX_BEES.get() * localTierModifier)).withStyle(ChatFormatting.GOLD));
+//        components.add(new TranslatableComponent(TranslationConstants.BeeHive.MAX_COMBS, Math.round(CommonConfig.HIVE_MAX_COMBS.get() * localTierModifier)).withStyle(ChatFormatting.GOLD));
+//
+//
+//        if (localTier != 1) {
+//            int timeReduction = localTier > 1 ? (int) ((localTier * .05) * 100) : (int) (.05 * 100);
+//            String sign = localTier > 1 ? "-" : "+";
+//            components.add(new TranslatableComponent(TranslationConstants.BeeHive.HIVE_TIME, sign, timeReduction).withStyle(ChatFormatting.GOLD));
+//        }
+    }
+
+    @Override
+    public Component getControlDisplay() {
+        return TranslationConstants.Items.TOOLTIP_STATS;
+    }
+
+    @Override
+    public void appendControlTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+        if (stack.hasTag()) {
+            CompoundTag stackTag = stack.getTag();
+            if (stackTag != null && !stackTag.isEmpty() && stackTag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
+                CompoundTag blockEntityTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
+                createBeesTooltip(components, blockEntityTag);
+                createHoneycombsTooltip(components, blockEntityTag);
+            }
+        } else {
+            components.add(TranslationConstants.BeeHive.BEES.withStyle(ChatFormatting.GOLD));
+            components.add(NONE_TEXT);
+            components.add(TextComponent.EMPTY);
+            components.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
+            components.add(NONE_TEXT);
+        }
     }
 }

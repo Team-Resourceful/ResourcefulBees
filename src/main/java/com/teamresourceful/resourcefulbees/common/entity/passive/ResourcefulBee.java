@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.entity.passive;
 
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
@@ -11,10 +10,10 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeEntityInvoker;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.FindBeehiveGoalInvoker;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitAbilityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -45,33 +44,15 @@ public class ResourcefulBee extends CustomBeeEntity {
     private RBeePollinateGoal pollinateGoal;
     private int explosiveCooldown = 0;
 
-    public ResourcefulBee(EntityType<? extends Bee> type, Level world, String beeType) {
-        super(type, world, beeType);
+    public ResourcefulBee(EntityType<? extends Bee> type, Level level, String beeType) {
+        super(type, level, beeType);
+        //THIS NEEDS TO BE ONLY LOADED ON THE SERVER AS IT WOULD NOT MATCH HOW VANILLA LOADS GOALS OTHERWISE.
+        if (level instanceof ServerLevel) registerConditionalGoals();
     }
 
     @Override
     protected void registerGoals() {
-        //this method is called before constructor finishes making passed data impossible to access.
-        String namespaceID = this.getEncodeId();
-        assert namespaceID != null;
-        String beeType = namespaceID.substring(namespaceID.lastIndexOf(":") + 1, namespaceID.length() - 4);
-        CustomBeeData customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
-        boolean isPassive = customBeeData.getCombatData().isPassive();
-        boolean isBreedable = customBeeData.getBreedData().hasParents();
-        boolean hasMutation = customBeeData.getMutationData().hasMutation();
-
-        if (!isPassive) {
-            this.goalSelector.addGoal(0, new Bee.BeeAttackGoal(this, 1.4, true));
-            this.targetSelector.addGoal(1, (new BeeAngerGoal(this)).setAlertOthers());
-            this.targetSelector.addGoal(2, new Bee.BeeBecomeAngryTargetGoal(this));
-        }
         this.goalSelector.addGoal(1, new EnterBeehiveGoal2());
-
-        if (isBreedable) {
-            this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D, beeType));
-            this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D));
-            this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
-        }
         this.pollinateGoal = new RBeePollinateGoal(this);
         this.goalSelector.addGoal(4, this.pollinateGoal);
 
@@ -84,13 +65,37 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         ((BeeEntityAccessor)this).setGoToKnownFlowerGoal(new Bee.BeeGoToKnownFlowerGoal());
         this.goalSelector.addGoal(6, ((BeeEntityAccessor)this).getGoToKnownFlowerGoal());
-
-        if (hasMutation) {
-            this.goalSelector.addGoal(7, new BeeMutateGoal(this));
-        }
         if (Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get())) this.goalSelector.addGoal(8, new BeeWanderGoal(this));
         this.goalSelector.addGoal(9, new FloatGoal(this));
         this.goalSelector.addGoal(10, new BeeAuraGoal(this));
+    }
+
+    /**
+     * This method is used to register goals that require data passed into the constructor, and should only be used for that.
+     * This is required because vanilla calls registerGoals() in the mob constructor so we can't get any of the data we pass in through the constructor.
+     * <br>
+     * <br>
+     * Vanilla falls into this problem themself with the fox and rabbit to and have a similar method.
+     * The only difference is they call theirs on finalize spawn because they choose a type on spawn but we choose it before in construction and pass it in.
+     * But the premise still apply that they wait because they need data that would not be available in the normal registerGoals method.
+     * <br>
+     * See {@link net.minecraft.world.entity.animal.Fox#setTargetGoals()}
+     */
+    @SuppressWarnings("JavadocReference")
+    protected void registerConditionalGoals() {
+        if (!getCombatData().isPassive()) {
+            this.goalSelector.addGoal(0, new Bee.BeeAttackGoal(this, 1.4, true));
+            this.targetSelector.addGoal(1, (new BeeAngerGoal(this)).setAlertOthers());
+            this.targetSelector.addGoal(2, new Bee.BeeBecomeAngryTargetGoal(this));
+        }
+        if (getBreedData().hasParents()) {
+            this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D, beeType));
+            this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D));
+            this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
+        }
+        if (getMutationData().hasMutation()) {
+            this.goalSelector.addGoal(7, new BeeMutateGoal(this));
+        }
     }
 
     @Override
@@ -195,36 +200,40 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     @Override
-    public boolean doHurtTarget(@NotNull Entity entityIn) {
+    public boolean doHurtTarget(@NotNull Entity entity) {
         float damage = (float) getAttributeValue(Attributes.ATTACK_DAMAGE);
-        TraitData info = getTraitData();
-        boolean flag = entityIn.hurt(DamageSource.sting(this), damage);
-        if (flag) {
-            this.doEnchantDamageEffects(this, entityIn);
-            if (entityIn instanceof LivingEntity) {
-                ((LivingEntity) entityIn).setStingerCount(((LivingEntity) entityIn).getStingerCount() + 1);
-                int i = getDifficultyModifier();
-                if (info.hasTraits() && info.hasDamageTypes()) {
-                    info.getDamageTypes().forEach(damageType -> {
-                        if (damageType.type().equals(TraitConstants.SET_ON_FIRE))
-                            entityIn.setSecondsOnFire(i * damageType.amplifier());
-                        if (damageType.type().equals(TraitConstants.EXPLOSIVE))
-                            this.explode(i / damageType.amplifier());
-                    });
-                }
-                if (i > 0 && info.hasTraits() && info.hasPotionDamageEffects()) {
-                    info.getPotionDamageEffects().forEach(damageEffect -> ((LivingEntity) entityIn).addEffect(new MobEffectInstance(damageEffect.effect(), i * 20, damageEffect.strength())));
-                }
-                if (canPoison(info))
-                    ((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 0));
+        if (entity.hurt(DamageSource.sting(this), damage)) {
+            this.doEnchantDamageEffects(this, entity);
+            if (entity instanceof LivingEntity target) {
+                target.setStingerCount(target.getStingerCount() + 1);
+                applyTraitEffectsAndDamage(target, getDifficultyModifier());
             }
 
             this.stopBeingAngry();
             ((BeeEntityInvoker) this).callSetFlag(4, CommonConfig.BEE_DIES_FROM_STING.get() && this.getCombatData().removeStingerOnAttack());
             this.playSound(SoundEvents.BEE_STING, 1.0F, 1.0F);
+            return true;
         }
 
-        return flag;
+        return false;
+    }
+
+    private void applyTraitEffectsAndDamage(@NotNull LivingEntity target, int diffMod) {
+        TraitData info = getTraitData();
+        if (info.hasTraits() && info.hasDamageTypes()) {
+            info.getDamageTypes().forEach(damageType -> {
+                if (damageType.type().equals(TraitConstants.SET_ON_FIRE))
+                    target.setSecondsOnFire(diffMod * damageType.amplifier());
+                if (damageType.type().equals(TraitConstants.EXPLOSIVE))
+                    this.explode(diffMod / damageType.amplifier());
+            });
+        }
+        int duration = diffMod * 20;
+        if (diffMod > 0 && info.hasTraits() && info.hasPotionDamageEffects()) {
+            info.getPotionDamageEffects().forEach(effect -> target.addEffect(effect.createInstance(duration)));
+        }
+        if (canPoison(info))
+            target.addEffect(new MobEffectInstance(MobEffects.POISON, duration, 0));
     }
 
     private int getDifficultyModifier() {
@@ -232,7 +241,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             case EASY -> 5;
             case NORMAL -> 10;
             case HARD -> 18;
-            default -> 0;
+            case PEACEFUL -> 0;
         };
     }
 
@@ -246,25 +255,21 @@ public class ResourcefulBee extends CustomBeeEntity {
             this.dead = true;
             this.level.explode(this, this.getX(), this.getY(), this.getZ(), random.nextFloat() * radius, explosiveCooldown > 0 ? Explosion.BlockInteraction.NONE : mode);
             this.discard();
-            this.spawnLingeringCloud();
+            this.spawnLingeringCloud(this.getActiveEffects().stream().map(MobEffectInstance::new).toList());
         }
     }
 
-    private void spawnLingeringCloud() {
-        Collection<MobEffectInstance> collection = this.getActiveEffects();
-        if (!collection.isEmpty()) {
-            AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
-            areaeffectcloudentity.setRadius(2.5F);
-            areaeffectcloudentity.setRadiusOnUse(-0.5F);
-            areaeffectcloudentity.setWaitTime(10);
-            areaeffectcloudentity.setDuration(areaeffectcloudentity.getDuration() / 2);
-            areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / areaeffectcloudentity.getDuration());
+    private void spawnLingeringCloud(Collection<MobEffectInstance> effects) {
+        if (!effects.isEmpty()) {
+            AreaEffectCloud cloud = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
+            cloud.setRadius(2.5F);
+            cloud.setRadiusOnUse(-0.5F);
+            cloud.setWaitTime(10);
+            cloud.setDuration(cloud.getDuration() / 2);
+            cloud.setRadiusPerTick(-cloud.getRadius() / cloud.getDuration());
+            effects.forEach(cloud::addEffect);
 
-            for (MobEffectInstance effectinstance : collection) {
-                areaeffectcloudentity.addEffect(new MobEffectInstance(effectinstance));
-            }
-
-            this.level.addFreshEntity(areaeffectcloudentity);
+            this.level.addFreshEntity(cloud);
         }
 
     }

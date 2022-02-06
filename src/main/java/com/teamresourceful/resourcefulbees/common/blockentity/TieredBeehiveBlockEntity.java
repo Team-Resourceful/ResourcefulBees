@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.sounds.SoundEvents;
@@ -31,14 +32,13 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.SMOKE_TIME;
@@ -46,7 +46,7 @@ import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConsta
 public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
 
     private final RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
-    private List<ItemStack> honeycombs = new LinkedList<>();
+    private Queue<ItemStack> honeycombs = new LinkedList<>();
     protected boolean isSmoked = false;
     protected int ticksSmoked = -1;
     protected int ticksSinceBeesFlagged;
@@ -100,38 +100,35 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
             return false;
         } else {
             CompoundTag nbt = ((BeehiveBeeDataAccessor) tileBee).getEntityData();
-            nbt.remove("Passengers");
-            nbt.remove("Leash");
-            nbt.remove("UUID");
+            BeehiveEntityAccessor.callRemoveIgnoredBeeTags(nbt);
+            nbt.put("HivePos", NbtUtils.writeBlockPos(hive.getBlockPos()));
+            nbt.putBoolean("NoGravity", true);
             Direction direction = state.getValue(BeehiveBlock.FACING);
             BlockPos relative = hive.worldPosition.relative(direction);
-            if (hive.level == null) {
-                return false;
-            } else {
-                if (!hive.level.getBlockState(relative).getCollisionShape(hive.level, relative).isEmpty() && beehiveState != BeeReleaseStatus.EMERGENCY) {
-                    return false;
-                }
-                Entity entity = EntityType.loadEntityRecursive(nbt, hive.level, entity1 -> entity1);
-                if (entity != null) {
-                    BeeInfoUtils.setEntityLocationAndAngle(hive.worldPosition, direction, entity);
-                    if (entity instanceof IBeeCompat compat && beehiveState == BeeReleaseStatus.HONEY_DELIVERED) {
-                        compat.nectarDroppedOff();
-                        if (getHoneyLevel(state) < 5) {
-                            ItemStack comb = compat.getHiveOutput(hive.getBlock().getTier());
-                            if (!comb.isEmpty()) hive.honeycombs.add(0, comb);
-                            recalculateHoneyLevel(hive);
-                        }
 
-                        if (entity instanceof Animal animal) {
-                            BeeInfoUtils.ageBee(((BeehiveBeeDataAccessor) tileBee).getTicksInHive(), animal);
-                        }
-                        if (entities != null) entities.add(entity);
+            if (hive.level == null) return false;
+            if (!hive.level.getBlockState(relative).getCollisionShape(hive.level, relative).isEmpty() && beehiveState != BeeReleaseStatus.EMERGENCY) {
+                return false;
+            }
+            Entity entity = EntityType.loadEntityRecursive(nbt, hive.level, entity1 -> entity1);
+            if (entity != null) {
+                BeeInfoUtils.setEntityLocationAndAngle(hive.worldPosition, direction, entity);
+                if (entity instanceof IBeeCompat compat && beehiveState == BeeReleaseStatus.HONEY_DELIVERED) {
+                    compat.nectarDroppedOff();
+                    if (getHoneyLevel(state) < 5) {
+                        compat.getOptionalHiveOutput(hive.getBlock().getTier()).ifPresent(hive.honeycombs::add);
+                        recalculateHoneyLevel(hive);
                     }
-                    hive.level.playSound(null, hive.worldPosition.getX(), hive.worldPosition.getY(),  hive.worldPosition.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
-                    return hive.level.addFreshEntity(entity);
-                } else {
-                    return true;
+
+                    if (entity instanceof Animal animal) {
+                        BeeInfoUtils.ageBee(((BeehiveBeeDataAccessor) tileBee).getTicksInHive(), animal);
+                    }
+                    if (entities != null) entities.add(entity);
                 }
+                hive.level.playSound(null, hive.worldPosition.getX(), hive.worldPosition.getY(),  hive.worldPosition.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
+                return hive.level.addFreshEntity(entity);
+            } else {
+                return true;
             }
         }
     }
@@ -182,10 +179,8 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
         }
         tickOccupants(hive, state, ((BeehiveEntityAccessor) hive).getBees());
         if (hive.hasBees() && level.getRandom().nextDouble() < 0.005D) {
-            double d0 = blockPos.getX() + 0.5D;
-            double d1 = blockPos.getY();
-            double d2 = blockPos.getZ() + 0.5D;
-            level.playSound(null, d0, d1, d2, SoundEvents.BEEHIVE_WORK, SoundSource.BLOCKS, 1.0F, 1.0F);
+            var vec = Vec3.atBottomCenterOf(blockPos);
+            level.playSound(null, vec.x(), vec.y(), vec.z(), SoundEvents.BEEHIVE_WORK, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 
         DebugPackets.sendHiveInfo(level, blockPos, state, hive);
@@ -218,7 +213,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
 
     public boolean hasBees() { return !((BeehiveEntityAccessor) this).getBees().isEmpty(); }
 
-    public ItemStack getResourceHoneycomb(){ return honeycombs.remove(0); }
+    public ItemStack getResourceHoneycomb(){ return honeycombs.remove(); }
 
     public boolean hasCombs(){ return numberOfCombs() > 0; }
 
@@ -238,25 +233,25 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
-        List<ItemStack> combs = honeycombs;
-        if (!combs.isEmpty()) tag.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs(combs));
+        if (!honeycombs.isEmpty()) tag.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs(honeycombs));
         tag.putBoolean(NBTConstants.NBT_SMOKED_TE, isSmoked);
     }
 
-    public ListTag writeHoneycombs(List<ItemStack> combs) {
+    public ListTag writeHoneycombs(Queue<ItemStack> combs) {
         ListTag nbtTagList = new ListTag();
         for (ItemStack honeycomb : combs) nbtTagList.add(honeycomb.save(new CompoundTag()));
         return nbtTagList;
     }
 
-    public List<ItemStack> getHoneycombs(CompoundTag nbt) {
-        List<ItemStack> itemStacks = new LinkedList<>();
-        ListTag tagList = nbt.getList(NBTConstants.NBT_HONEYCOMBS_TE, Tag.TAG_COMPOUND);
-        tagList.forEach(compound -> itemStacks.add(0, ItemStack.of((CompoundTag) compound)));
-        return itemStacks;
+    public Queue<ItemStack> getHoneycombs(CompoundTag nbt) {
+        return nbt.getList(NBTConstants.NBT_HONEYCOMBS_TE, Tag.TAG_COMPOUND)
+                .stream()
+                .map(CompoundTag.class::cast)
+                .map(ItemStack::of)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    public List<ItemStack> getHoneycombs() {
-        return Collections.unmodifiableList(honeycombs);
+    public Collection<ItemStack> getHoneycombs() {
+        return Collections.unmodifiableCollection(honeycombs);
     }
 }

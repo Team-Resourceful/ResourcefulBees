@@ -10,7 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SidedTickingBlock<E extends BlockEntity> extends RenderingBaseEntityBlock{
+public class SidedTickingBlock<E extends BlockEntity> extends RenderingBaseEntityBlock {
 
     private final RegistryObject<BlockEntityType<E>> blockEntity;
     private final BlockEntityTicker<E> serverTick;

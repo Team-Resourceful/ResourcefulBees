@@ -31,17 +31,14 @@ public class BeeBreedGoal extends BreedGoal {
 
     @Override
     public boolean canUse() {
-        if (!this.animal.isInLove()) {
-            return false;
-        } else {
+        if (this.animal.isInLove()) {
             this.partner = ((BreedGoalInvoker)this).callGetFreePartner();
             if (partner instanceof ICustomBee parent1){
                 ICustomBee parent2 = ((ICustomBee) animal);
                 return BeeRegistry.getRegistry().canParentsBreed(parent1.getBeeType(), parent2.getBeeType());
             }
-            else
-                return false;
         }
+        return false;
     }
 
     @Override
@@ -70,7 +67,7 @@ public class BeeBreedGoal extends BreedGoal {
 
     private void spawnChildInLevel(BeeFamily beeFamily, AgeableMob selectedChild) {
         selectedChild.setAge(beeFamily.getChildData().getBreedData().getChildGrowthDelay());
-        selectedChild.moveTo(animal.position()); //TODO check effect of this vs the 5-arg #moveTo
+        selectedChild.moveTo(animal.position());
         this.level.addFreshEntity(selectedChild);
         this.level.broadcastEntityEvent(this.animal, (byte)18);
         if (this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
