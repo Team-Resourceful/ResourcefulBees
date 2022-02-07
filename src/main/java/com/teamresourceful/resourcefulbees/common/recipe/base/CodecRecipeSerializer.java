@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.recipe;
+package com.teamresourceful.resourcefulbees.common.recipe.base;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

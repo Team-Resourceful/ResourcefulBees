@@ -3,7 +3,7 @@
     "flower": "forge:storage_blocks/lapis",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "diamond",
+  "honeycombVariation": "lapis",
   "RenderData": {
     "texture": "ores/lapis/lapis_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

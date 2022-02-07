@@ -68,7 +68,7 @@ public class BeeLanguageModule implements LanguageModule {
         provider.addHoneycomb("lapis", "Lapis");
         provider.addHoneycomb("coal", "Coal");
         provider.addHoneycomb("ender", "Ender");
-        provider.addHoneycomb("creeper", "Beeper");
+        provider.addHoneycomb("beeper", "Beeper");
         provider.addHoneycomb("pigman", "Pigman");
         provider.addHoneycomb("skeleton", "Skeleton");
         provider.addHoneycomb("wither", "Wither");
@@ -77,5 +77,6 @@ public class BeeLanguageModule implements LanguageModule {
         provider.addHoneycomb("rgbee", "RGBee");
         provider.addHoneycomb("dragon", "Dragon");
         provider.addHoneycomb("catnip", "Catnip");
+        provider.addHoneycomb("slimy", "Slimy");
     }
 }

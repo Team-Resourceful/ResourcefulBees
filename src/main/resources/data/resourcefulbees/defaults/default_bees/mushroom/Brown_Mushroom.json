@@ -8,7 +8,6 @@
     "texture": "mushroom/bee_brown",
     "model": "resourcefulbees:geo/flower_moss.geo.json"
   },
-  "honeycombVariation": "diamond",
   "CentrifugeData": {
     "itemOutputs": [
       {

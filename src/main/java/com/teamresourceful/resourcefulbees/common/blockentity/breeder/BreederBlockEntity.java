@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.common.item.upgrade.IUpgrade;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.BreederRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;

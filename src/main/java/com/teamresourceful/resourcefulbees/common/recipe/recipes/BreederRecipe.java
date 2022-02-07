@@ -1,10 +1,11 @@
-package com.teamresourceful.resourcefulbees.common.recipe;
+package com.teamresourceful.resourcefulbees.common.recipe.recipes;
 
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.recipe.base.CodecRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.core.NonNullList;

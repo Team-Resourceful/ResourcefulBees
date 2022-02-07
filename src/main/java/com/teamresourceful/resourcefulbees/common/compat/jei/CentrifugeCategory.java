@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
@@ -42,7 +42,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         super(guiHelper, ID,
                 TranslationConstants.Jei.CENTRIFUGE,
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 134, 66).addPadding(0, 0, 0, 0).build(),
-                guiHelper.createDrawableIngredient(ModItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance()),
+                guiHelper.createDrawableIngredient(VanillaTypes.ITEM, ModItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance()),
                 CentrifugeRecipeAdapter.class);
     }
 

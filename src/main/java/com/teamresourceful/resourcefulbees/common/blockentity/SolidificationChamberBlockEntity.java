@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveI
 import com.teamresourceful.resourcefulbees.common.inventory.menus.SolidificationChamberMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.SolidificationRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

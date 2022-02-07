@@ -1,0 +1,14 @@
+{
+  "honeycomb": {
+    "color": "#62B64A",
+    "edible": true,
+    "block": true
+  },
+  "variations": [
+    {
+      "identifier": "slimy",
+      "defaultComb": {"id":  "resourcefulbees:slimy_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees:slimy_honeycomb_block"}
+    }
+  ]
+}

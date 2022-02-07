@@ -3,7 +3,7 @@
     "flower": ["minecraft:obsidian"],
     "maxTimeInHive": 2400
   },
-  "honeycombVariation": "diamond",
+  "honeycombVariation": "dragon",
   "RenderData": {
     "texture": "dragon/dragon_bee",
     "model": "resourcefulbees:geo/dragon.geo.json",

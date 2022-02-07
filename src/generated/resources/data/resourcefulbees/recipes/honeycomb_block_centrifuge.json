@@ -1,0 +1,51 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "fluidOutputs": [],
+  "time": 200,
+  "energyPerTick": 10,
+  "ingredient": {
+    "item": "minecraft:honeycomb_block"
+  },
+  "itemOutputs": [
+    {
+      "chance": 1.0,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:sugar",
+            "count": 9
+          },
+          "weight": 10.0,
+          "chance": 1.0
+        }
+      ]
+    },
+    {
+      "chance": 1.0,
+      "pool": [
+        {
+          "item": {
+            "id": "resourcefulbees:wax",
+            "count": 9
+          },
+          "weight": 10.0,
+          "chance": 0.25
+        }
+      ]
+    },
+    {
+      "chance": 1.0,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:honey_bottle",
+            "count": 9
+          },
+          "weight": 10.0,
+          "chance": 0.2
+        }
+      ]
+    }
+  ],
+  "conditions": []
+}

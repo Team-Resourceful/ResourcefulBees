@@ -1,0 +1,14 @@
+{
+  "honeycomb": {
+    "color": "#2F4E32",
+    "edible": true,
+    "block": true
+  },
+  "variations": [
+    {
+      "identifier": "zombee",
+      "defaultComb": {"id":  "resourcefulbees:zombee_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees:zombee_honeycomb_block"}
+    }
+  ]
+}

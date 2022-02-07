@@ -3,6 +3,7 @@
     "flower": "forge:mushrooms",
     "maxTimeInHive": 1200
   },
+  "honeycombVariation": "slimy",
   "RenderData": {
     "model": "resourcefulbees:geo/slime.geo.json",
     "texture": "slime/slime_bee",

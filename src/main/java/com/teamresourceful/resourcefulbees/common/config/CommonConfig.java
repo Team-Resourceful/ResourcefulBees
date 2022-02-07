@@ -9,6 +9,7 @@ public class CommonConfig {
     //TODO Rewrite config names in 1.17 to be more informative also update comments if needed
 
     public static BooleanValue GENERATE_DEFAULTS;
+    public static BooleanValue GENERATE_DEFAULT_RECIPES;
     public static BooleanValue GENERATE_BIOME_DICTIONARIES;
     public static BooleanValue USE_FORGE_DICTIONARIES;
     public static BooleanValue ENABLE_EASTER_EGG_BEES;
@@ -103,6 +104,8 @@ public class CommonConfig {
         COMMON_BUILDER.push("General Options");
         GENERATE_DEFAULTS = COMMON_BUILDER.comment("\nSet this to false when you want to overwrite the default bee files. [true/false]\nThis should be run at least once for initial generation.")
                 .define("generateDefaults", true);
+        GENERATE_DEFAULT_RECIPES = COMMON_BUILDER.comment("\nSet this to false when you want to overwrite the default bees recipes. [true/false]")
+                .define("generateDefaultsRecipes", true);
         GENERATE_BIOME_DICTIONARIES = COMMON_BUILDER.comment("\nSet this to false when you want to overwrite the default provided Biome Dictionary files. [true/false]\nThis should be run at least once for initial generation.")
                 .define("generateBiomeDictionaries", false);
         USE_FORGE_DICTIONARIES = COMMON_BUILDER.comment("\nSet this to false when you want to use our custom Biome Dictionary system. [true/false]\nAt a later time we will look into either combining with the Forge system or making the Forge system data pack capable.")

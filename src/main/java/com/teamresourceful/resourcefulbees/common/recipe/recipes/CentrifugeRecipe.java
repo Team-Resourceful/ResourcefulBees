@@ -1,5 +1,5 @@
 
-package com.teamresourceful.resourcefulbees.common.recipe;
+package com.teamresourceful.resourcefulbees.common.recipe.recipes;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
@@ -13,6 +13,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.ingredients.IAmountSensitive;
+import com.teamresourceful.resourcefulbees.common.recipe.base.CodecRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.resources.ResourceLocation;

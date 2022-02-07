@@ -2,7 +2,10 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.*;
+import com.teamresourceful.resourcefulbees.common.recipe.base.CodecRecipeSerializer;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -17,7 +20,6 @@ public class ModRecipeSerializers {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ResourcefulBees.MOD_ID);
 
     public static final RegistryObject<RecipeSerializer<?>> CENTRIFUGE_RECIPE = RECIPE_SERIALIZERS.register("centrifuge", () -> new CodecRecipeSerializer<>(CentrifugeRecipe::codec));
-    public static final RegistryObject<RecipeSerializer<?>> APIARY_UPGRADE_RECIPE = RECIPE_SERIALIZERS.register("hive_upgrade_recipe", ApiaryUpgradeRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<?>> SOLIDIFICATION_RECIPE = RECIPE_SERIALIZERS.register("solidification", () -> new CodecRecipeSerializer<>(SolidificationRecipe::codec));
     public static final RegistryObject<RecipeSerializer<?>> BREEDER_RECIPE = RECIPE_SERIALIZERS.register("breeder", () -> new CodecRecipeSerializer<>(BreederRecipe::codec));
 

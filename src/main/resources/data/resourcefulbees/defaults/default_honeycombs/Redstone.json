@@ -1,0 +1,14 @@
+{
+  "honeycomb": {
+    "color": "#AA0F01",
+    "edible": true,
+    "block": true
+  },
+  "variations": [
+    {
+      "identifier": "redstone",
+      "defaultComb": {"id":  "resourcefulbees:redstone_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees:redstone_honeycomb_block"}
+    }
+  ]
+}

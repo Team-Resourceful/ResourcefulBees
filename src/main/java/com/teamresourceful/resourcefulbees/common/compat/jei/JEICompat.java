@@ -8,9 +8,9 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.mutation.MutationCa
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
-import com.teamresourceful.resourcefulbees.common.recipe.BreederRecipe;
-import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
-import com.teamresourceful.resourcefulbees.common.recipe.SolidificationRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.IModPlugin;

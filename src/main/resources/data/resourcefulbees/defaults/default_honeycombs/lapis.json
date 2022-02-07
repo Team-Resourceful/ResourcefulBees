@@ -1,0 +1,14 @@
+{
+  "honeycomb": {
+    "color": "#345EC3",
+    "edible": true,
+    "block": true
+  },
+  "variations": [
+    {
+      "identifier": "lapis",
+      "defaultComb": {"id":  "resourcefulbees:lapis_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees:lapis_honeycomb_block"}
+    }
+  ]
+}

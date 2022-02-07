@@ -1,0 +1,14 @@
+{
+  "honeycomb": {
+    "color": "#D4CABA",
+    "edible": true,
+    "block": true
+  },
+  "variations": [
+    {
+      "identifier": "nether_quartz",
+      "defaultComb": {"id":  "resourcefulbees:nether_quartz_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees:nether_quartz_honeycomb_block"}
+    }
+  ]
+}

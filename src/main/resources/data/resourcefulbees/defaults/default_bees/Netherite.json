@@ -3,7 +3,7 @@
     "flower": "forge:storage_blocks/netherite",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "diamond",
+  "honeycombVariation": "netherite",
   "RenderData": {
     "texture": "ores/netherite/netherite_bee",
     "ColorData": {

@@ -3,7 +3,7 @@
     "flower": ["minecraft:chorus_flower"],
     "maxTimeInHive": 1800
   },
-  "honeycombVariation": "diamond",
+  "honeycombVariation": "ender",
   "RenderData": {
     "texture": "custom/bee",
     "layers": [

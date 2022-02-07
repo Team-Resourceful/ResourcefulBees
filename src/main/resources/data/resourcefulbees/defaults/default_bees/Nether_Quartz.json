@@ -3,7 +3,7 @@
     "flower": "forge:storage_blocks/quartz",
     "maxTimeInHive": 1000
   },
-  "honeycombVariation": "diamond",
+  "honeycombVariation": "quartz",
   "RenderData": {
     "texture": "custom/bee",
     "layers": [

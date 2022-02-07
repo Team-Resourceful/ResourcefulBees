@@ -19,6 +19,7 @@ import com.teamresourceful.resourcefulbees.common.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.ingredients.NBTAmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.init.*;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.recipe.conditions.LoadDevRecipes;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.*;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
@@ -115,6 +116,7 @@ public class ResourcefulBees {
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "amount_sensitive"), AmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "nbt_amount_sensitive"), NBTAmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(LoadDevRecipes.Serializer.INSTANCE);
     }
 
     @SubscribeEvent

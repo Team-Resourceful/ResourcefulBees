@@ -3,7 +3,7 @@
     "flower": "minecraft:bee_growables",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "diamond",
+  "honeycombVariation": "zombie",
   "RenderData": {
     "texture": "zombie/zombie_bee",
     "ColorData": {

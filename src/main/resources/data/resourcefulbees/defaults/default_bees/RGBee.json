@@ -3,7 +3,7 @@
     "flower": "minecraft:flowers",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "diamond",
+  "honeycombVariation": "rgb",
   "RenderData": {
     "texture": "custom/bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

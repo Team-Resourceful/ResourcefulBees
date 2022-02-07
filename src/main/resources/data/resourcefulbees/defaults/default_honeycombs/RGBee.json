@@ -1,0 +1,14 @@
+{
+  "honeycomb": {
+    "color": "RAINBOW",
+    "edible": true,
+    "block": true
+  },
+  "variations": [
+    {
+      "identifier": "rgbee",
+      "defaultComb": {"id":  "resourcefulbees:rgbee_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees:rgbee_honeycomb_block"}
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "honeycomb": {
+    "color": "#654740",
+    "edible": true,
+    "block": true
+  },
+  "variations": [
+    {
+      "identifier": "netherite",
+      "defaultComb": {"id":  "resourcefulbees:netherite_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees:netherite_honeycomb_block"}
+    }
+  ]
+}

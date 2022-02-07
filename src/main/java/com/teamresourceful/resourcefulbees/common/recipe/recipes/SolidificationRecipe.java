@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.recipe;
+package com.teamresourceful.resourcefulbees.common.recipe.recipes;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
+import com.teamresourceful.resourcefulbees.common.recipe.base.CodecRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;

@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.OutputLocations;
-import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

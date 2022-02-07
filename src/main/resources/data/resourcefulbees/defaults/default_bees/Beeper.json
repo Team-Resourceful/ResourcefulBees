@@ -3,7 +3,7 @@
     "flower": "minecraft:flowers",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "diamond",
+  "honeycombVariation": "beeper",
   "RenderData": {
     "texture": "/creeper/creeper_bee",
     "layers": [

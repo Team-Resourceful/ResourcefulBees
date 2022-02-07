@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
@@ -111,27 +110,20 @@ public class HoneycombRegistry {
                 .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.warn("Could not create honeycomb registry item from {} json file.", s));
     }
 
-    @Unmodifiable
-    private static class RegistryData {
+    private static record RegistryData(String name, Color color, boolean edible, boolean block, boolean enchanted) {
 
         private static Codec<RegistryData> codec(String name) {
             return RecordCodecBuilder.create(instance -> instance.group(
-                    MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(registryData -> registryData.name),
-                    Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(registryData -> registryData.color),
-                    Codec.BOOL.fieldOf("edible").orElse(true).forGetter(registryData -> registryData.isEdible),
-                    Codec.BOOL.fieldOf("block").orElse(true).forGetter(registryData -> registryData.hasBlock),
-                    Codec.BOOL.fieldOf("enchanted").orElse(false).forGetter(registryData -> registryData.enchanted)
+                    MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(RegistryData::name),
+                    Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(RegistryData::color),
+                    Codec.BOOL.fieldOf("edible").orElse(true).forGetter(RegistryData::edible),
+                    Codec.BOOL.fieldOf("block").orElse(true).forGetter(RegistryData::block),
+                    Codec.BOOL.fieldOf("enchanted").orElse(false).forGetter(RegistryData::enchanted)
             ).apply(instance, RegistryData::new));
         }
 
-        private String name;
-        private Color color;
-        private boolean isEdible;
-        private boolean hasBlock;
-        private boolean enchanted;
-
-        private RegistryData(String name, Color color, boolean isEdible, boolean hasBlock, boolean enchanted) {
-            if (hasBlock) {
+        private RegistryData {
+            if (block) {
                 RegistryObject<Block> customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(color, BlockBehaviour.Properties.copy(Blocks.HONEYCOMB_BLOCK)));
                 final RegistryObject<Item> blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_COMBS)) {
                     @Override
@@ -139,12 +131,12 @@ public class HoneycombRegistry {
                         return enchanted || stack.isEnchanted();
                     }
                 });
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, isEdible, blockItem, enchanted));
+                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, edible, blockItem, enchanted));
             } else {
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, isEdible, null, enchanted));
+                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, edible, null, enchanted));
             }
-
         }
+
     }
 
     //endregion

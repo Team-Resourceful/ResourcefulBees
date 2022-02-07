@@ -3,7 +3,7 @@
     "flower": "storage_blocks/redstone",
     "maxTimeInHive": 800
   },
-  "honeycombVariation": "diamond",
+  "honeycombVariation": "redstone",
   "RenderData": {
     "texture": "ores/redstone/redstone_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

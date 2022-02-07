@@ -9,6 +9,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
@@ -24,6 +25,23 @@ public class ModRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> recipes) {
+
+        CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB), new ResourceLocation(ResourcefulBees.MOD_ID, "honeycomb_centrifuge"))
+                .time(200)
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(Items.SUGAR.getDefaultInstance(), 10, 1))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(ModItems.WAX.get().getDefaultInstance(), 10, 0.25))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(Items.HONEY_BOTTLE.getDefaultInstance(), 10, 0.20))
+                .rf(5)
+                .save(recipes);
+
+        CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB_BLOCK), new ResourceLocation(ResourcefulBees.MOD_ID, "honeycomb_block_centrifuge"))
+                .time(200)
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 9), 10, 1))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(ModItems.WAX.get(), 9), 10, 0.25))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.HONEY_BOTTLE, 9), 10, 0.20))
+                .rf(10)
+                .save(recipes);
+
         RecipeCriteria hasPlanks = new RecipeCriteria("has_planks", has(ItemTags.PLANKS));
         RecipeCriteria hasHoneycombBlock = new RecipeCriteria("has_honeycomb_block", has(ModTags.Items.HONEYCOMB_BLOCK));
         RecipeCriteria hasIron = new RecipeCriteria("has_iron", has(Tags.Items.INGOTS_IRON));

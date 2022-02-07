@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.recipe;
+package com.teamresourceful.resourcefulbees.common.recipe.base;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;

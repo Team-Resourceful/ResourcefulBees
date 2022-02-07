@@ -86,7 +86,7 @@ public class OutputVariation {
      * be provided for the list to be created!
      * */
     private void fixHiveCombs() {
-        ItemStack lastStack = defaultComb.orElse(null);
+        ItemStack lastStack = defaultComb.map(ItemStack::copy).orElse(null);
         if (lastStack == null && hiveCombs.isEmpty()) throw new IllegalArgumentException("HiveCombs list can't be empty without a default comb supplied!!");
         for (BeehiveTier tier : BeehiveTier.values()) {
             ItemStack comb = hiveCombs.get(tier);
@@ -102,12 +102,19 @@ public class OutputVariation {
      * */
     private void fixApiaryCombs() {
         ItemStack lastStack = null;
-        if (apiaryCombs.isEmpty()) checkDefaultsAreOK();
+        boolean wasEmpty = apiaryCombs.isEmpty();
+        if (wasEmpty) checkDefaultsAreOK();
         for (ApiaryTier tier : ApiaryTier.values()) {
             ItemStack comb = apiaryCombs.get(tier);
-            if (comb != null) { lastStack = comb; continue; }
-            if (lastStack == null) {
-                lastStack = tier.getOutputType().isComb() ? defaultComb.get() : defaultCombBlock.get();
+            if (comb != null) {
+                lastStack = comb;
+                continue;
+            }
+            if (lastStack == null || wasEmpty) {
+                //We check if its was empty to make sure it with create the proper list based off the config value instead
+                //of copying the first config value to all slots.
+                //noinspection OptionalGetWithoutIsPresent
+                lastStack = tier.getOutputType().isComb() ? defaultComb.get().copy() : defaultCombBlock.get().copy();
                 lastStack.setCount(tier.getOutputAmount());
             }
             apiaryCombs.put(tier, lastStack);

@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.CentrifugeRecipe;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;

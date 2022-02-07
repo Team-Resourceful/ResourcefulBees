@@ -3,7 +3,6 @@
     "flower": ["minecraft:nether_wart"],
     "maxTimeInHive": 1000
   },
-  "honeycombVariation": "diamond",
   "RenderData": {
     "texture": "pigman/pigman_bee",
     "ColorData": {

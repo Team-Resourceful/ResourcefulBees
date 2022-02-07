@@ -3,7 +3,7 @@
     "flower": "forge:storage_blocks/gold",
     "maxTimeInHive": 800
   },
-  "honeycombVariation": "diamond",
+  "honeycombVariation": "gold",
   "RenderData": {
     "texture": "ores/gold/gold_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",
