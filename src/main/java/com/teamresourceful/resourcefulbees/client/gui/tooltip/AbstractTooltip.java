@@ -3,19 +3,21 @@ package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,12 +60,12 @@ public abstract class AbstractTooltip {
         List<Component> tooltips = new LinkedList<>();
         if (!nbt.isEmpty()) {
             if (Screen.hasShiftDown()) {
-                String tag = "ERROR"; // TODO nbt.getPrettyDisplay(" ", 0).getString();
-                for (String s: tag.split("\n")) {
-                    tooltips.add(new TextComponent(s).withStyle(ChatFormatting.DARK_PURPLE));
-                }
+                Arrays.stream(NbtUtils.prettyPrint(nbt).split("\n"))
+                        .map(TextComponent::new)
+                        .map(c -> c.withStyle(ChatFormatting.DARK_PURPLE))
+                        .forEach(tooltips::add);
             } else {
-                tooltips.add(new TranslatableComponent("gui.resourcefulbees.jei.tooltip.show_nbt"));
+                tooltips.add(TranslationConstants.Jei.NBT.withStyle(ChatFormatting.DARK_PURPLE));
             }
         }
         return tooltips;

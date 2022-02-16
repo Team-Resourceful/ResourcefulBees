@@ -43,22 +43,11 @@ public abstract class MixinEnterBeehiveGoal {
         }
     }
 
-    //TODO convert this to an inject
-    /**
-     * @author epic_oreo
-     * @reason crashes when switching to vanilla code due to hivePos being null. retained vanilla checks in overwrite.
-     */
-    @Overwrite()
-    public void start() {
-        if (this$0.getHivePos() != null) {
-            BlockEntity tileentity = this$0.level.getBlockEntity(this$0.getHivePos());
-            if (tileentity != null) {
-                if (tileentity instanceof BeehiveBlockEntity hive) {
-                    hive.addOccupant(this$0, this$0.hasNectar());
-                } else if (tileentity instanceof ApiaryBlockEntity apiary) {
-                    apiary.tryEnterHive(this$0, this$0.hasNectar(), 0);
-                }
-            }
+    @Inject(method = "start", at = @At("HEAD"), cancellable = true)
+    public void onStart(CallbackInfo ci) {
+        if (this$0.getHivePos() != null && this$0.level.getBlockEntity(this$0.getHivePos()) instanceof ApiaryBlockEntity apiary) {
+            apiary.tryEnterHive(this$0, this$0.hasNectar(), 0);
+            ci.cancel();
         }
     }
 }
