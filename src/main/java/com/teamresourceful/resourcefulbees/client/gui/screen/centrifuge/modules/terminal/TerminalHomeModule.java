@@ -17,6 +17,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.FormattedCharSequence;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +49,7 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
             //TODO make these translatable texts
             String owner = centrifugeState.getOwner()+"@centrifuge";
             TERMINAL_FONT_8.draw(matrix, owner, 6, 0, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, StringUtils.repeat('-', owner.length()), 6, 8, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, StringUtils.repeat('─', owner.length()), 6, 8, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(matrix, "Max Tier: " + StringUtils.capitalize(centrifugeState.getMaxCentrifugeTier().getName()), 6, 16, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(matrix, "Energy Capacity: " + centrifugeState.getEnergyCapacity() + "rf", 6, 24, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(matrix, "Inputs: " + centrifugeState.getInputs().size(), 6, 32, FONT_COLOR_1);
@@ -61,7 +62,11 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
             TERMINAL_FONT_8.draw(matrix, "Recipe Power Modifier: " + centrifugeState.getRecipePowerModifier() * 100 + "%", 6, 88, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(matrix, "Recipe Time Modifier: " + ModConstants.DECIMAL_FORMAT.format(centrifugeState.getRecipeTimeModifier() * 96) + "%", 6, 104, FONT_COLOR_1);
             matrix.popPose();
-            TERMINAL_FONT_8.draw(matrix, formatUserInput(commandInput), TEXT_X + 4f, 186, FONT_COLOR_1);
+            float pos = 180;
+            for (Component component : formatUserInput(commandInput)) {
+                TERMINAL_FONT_8.draw(matrix, component, TEXT_X + 4f, pos, FONT_COLOR_1);
+                pos += 10f;
+            }
         } else {
             matrix.pushPose();
             matrix.translate(TEXT_X - 2f, 66, 0);
@@ -72,25 +77,28 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
                 TERMINAL_FONT_8.draw(matrix, consoleHistory.get(i), 6, pos, FONT_COLOR_1);
             }
             pos += pos > 0 ? 10f : 0f;
-            TERMINAL_FONT_8.draw(matrix, formatUserInput(commandInput), 6, pos, FONT_COLOR_1);
+            for (Component component : formatUserInput(commandInput)) {
+                TERMINAL_FONT_8.draw(matrix, component, 6, pos, FONT_COLOR_1);
+                pos += 10f;
+            }
             matrix.popPose();
         }
     }
 
     @Override
     public boolean onCharTyped(char typedChar, int modifiers) {
-        if (commandInput.length() < 34) commandInput += typedChar;
+        if (TERMINAL_FONT_8.width(commandInput + typedChar) <= 200) commandInput += typedChar;
         return true;
     }
 
     @Override
     public boolean onKeyPressed(int key, int scan, int modifiers) {
         switch (key) {
-            case 69: return true;
-            case 259:
+            case GLFW.GLFW_KEY_E: return true;
+            case GLFW.GLFW_KEY_BACKSPACE:
                 commandInput = StringUtils.chop(commandInput);
                 return true;
-            case 257:
+            case GLFW.GLFW_KEY_ENTER:
                 commandInput = commandInput.toLowerCase(Locale.ROOT);
                 switch (commandInput) {
                     case "clear" -> {
@@ -100,7 +108,7 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
                     case "neofetch" -> neofetch = true;
                     default -> {
                         CentrifugeTerminalEntity terminal = screen.getMenu().getEntity();
-                        onTerminalResponse(formatUserInput(commandInput));
+                        formatUserInput(commandInput).forEach(this::onTerminalResponse);
                         NetPacketHandler.sendToServer(new CommandMessage(terminal.getBlockPos(), commandInput));
                         neofetch = false;
                     }
@@ -154,18 +162,22 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
         matrix.popPose();
     }
 
-    private Component formatUserInput(String input) {
-        MutableComponent component = new TextComponent(Minecraft.getInstance().getUser().getName()).withStyle(ChatFormatting.BLUE);
+    private List<Component> formatUserInput(String input) {
+        List<Component> components = new ArrayList<>();
+        MutableComponent component = new TextComponent("╭─").withStyle(ChatFormatting.GRAY);
+        component.append(new TextComponent(Minecraft.getInstance().getUser().getName()).withStyle(ChatFormatting.BLUE));
         component.append(new TextComponent("@").withStyle(ChatFormatting.WHITE));
         component.append(new TextComponent("centrifuge").withStyle(ChatFormatting.GREEN));
-        component.append(new TextComponent("> ").withStyle(ChatFormatting.GRAY));
+        components.add(component);
+        MutableComponent inputComponent = new TextComponent("╰─> ").withStyle(ChatFormatting.GRAY);
         String[] splits = input.split(" ");
         if (splits.length > 1) {
-            component.append(new TextComponent(splits[0]).withStyle(ChatFormatting.YELLOW));
-            component.append(new TextComponent(" " + String.join(" ", Arrays.copyOfRange(splits, 1, splits.length))).withStyle(ChatFormatting.AQUA));
+            inputComponent.append(new TextComponent(splits[0]).withStyle(ChatFormatting.YELLOW));
+            inputComponent.append(new TextComponent(" " + String.join(" ", Arrays.copyOfRange(splits, 1, splits.length))).withStyle(ChatFormatting.AQUA));
         } else {
-            component.append(new TextComponent(input).withStyle(ChatFormatting.YELLOW));
+            inputComponent.append(new TextComponent(input).withStyle(ChatFormatting.YELLOW));
         }
-        return component;
+        components.add(inputComponent);
+        return components;
     }
 }
