@@ -1,18 +1,33 @@
 package com.teamresourceful.resourcefulbees.client.pets;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.JsonOps;
+import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import org.apache.commons.io.IOUtils;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.forgespi.language.IModFileInfo;
 
-import java.io.BufferedInputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 
 public class PetLoader {
+
+    private static final String URL = "https://gist.githubusercontent.com/ThatGravyBoat/28b0d4dc1e1fa2ec341d7ef245519e4c/raw/d97751204f17370ac8cc7352d668d1f3b6cb8d93/users.json";
+
+    private static final HttpClient CLIENT = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_2)
+            .followRedirects(HttpClient.Redirect.NORMAL)
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
+
 
     private PetLoader()  {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -20,13 +35,18 @@ public class PetLoader {
 
     public static void loadAPI() {
         try {
-            URL url = new URL("https://gist.githubusercontent.com/ThatGravyBoat/28b0d4dc1e1fa2ec341d7ef245519e4c/raw/d97751204f17370ac8cc7352d668d1f3b6cb8d93/users.json");
-            URLConnection connection = url.openConnection();
-            connection.setConnectTimeout(10000);
-            connection.setReadTimeout(10000);
+            IModFileInfo modFile = ModList.get().getModFileById(ResourcefulBees.MOD_ID);
+            String version = modFile != null ? modFile.versionString() : "Unknown Version";
 
-            String rep = IOUtils.toString(new BufferedInputStream(connection.getInputStream()), StandardCharsets.UTF_8);
-            JsonObject json = ModConstants.GSON.fromJson(rep, JsonObject.class);
+            HttpRequest request = HttpRequest.newBuilder(new URI(URL))
+                    .GET()
+                    .version(HttpClient.Version.HTTP_2)
+                    .header("User-Agent", "Minecraft Mod (" + ResourcefulBees.MOD_ID + "/" + version + ")")
+                    .build();
+
+            HttpResponse<String> send = CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+
+            JsonObject json = ModConstants.GSON.fromJson(send.body(), JsonObject.class);
 
             JsonElement models = json.get("models");
             if (models instanceof JsonArray modelData) {
