@@ -2,63 +2,69 @@ package com.resourcefulbees.resourcefulbees.entity.goals;
 
 import com.resourcefulbees.resourcefulbees.entity.passive.ModBeeEntity;
 import com.resourcefulbees.resourcefulbees.utils.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Objects;
 
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+
+import javax.annotation.Nullable;
+
 public class BeeWanderGoal extends Goal {
+
     private final ModBeeEntity modBeeEntity;
+    //TODO Goodvise code start
+    private Path path;
+    private int tickToRefreshPath = 0;
+    //TODO Goodvise code end
 
     public BeeWanderGoal(ModBeeEntity modBeeEntity) {
         this.modBeeEntity = modBeeEntity;
-        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
-    /**
-     * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-     * method as well.
-     */
     public boolean canUse() {
-        return modBeeEntity.getNavigation().isDone() && modBeeEntity.getRandom().nextInt(10) == 0;
+        return this.modBeeEntity.getRandom().nextInt(10) == 0 && this.modBeeEntity.getNavigation().isDone();
     }
 
-    /**
-     * Returns whether an in-progress EntityAIBase should continue executing
-     */
-    @Override
     public boolean canContinueToUse() {
-        return modBeeEntity.getNavigation().isInProgress();
+        return this.modBeeEntity.getNavigation().isInProgress();
     }
 
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
-    @Override
     public void start() {
-        Vector3d vector3d = this.getRandomLocation();
-        if (vector3d != null) {
-            modBeeEntity.getNavigation().moveTo(modBeeEntity.getNavigation().createPath(new BlockPos(vector3d), 1), 1.0D);
+        //TODO Goodvise code start
+        if ((this.path == null || this.tickToRefreshPath++ % 10 == 0)) {
+
+            Vector3d vector3d = this.getRandomLocation();
+
+            if (vector3d == null) {
+                return;
+            }
+
+            this.path = this.modBeeEntity.getNavigation().createPath(new BlockPos(vector3d), 1);
         }
 
+        if (this.path != null) {
+            this.modBeeEntity.getNavigation().moveTo(this.path, 1.0D);
+        }
+        //TODO Goodvise code end
     }
 
     @Nullable
     private Vector3d getRandomLocation() {
         Vector3d vector3d;
-        if (modBeeEntity.isHiveValid() && !modBeeEntity.checkIsWithinDistance(Objects.requireNonNull(modBeeEntity.hivePos), 22)) {
-            Vector3d vector3d1 = Vector3d.atCenterOf(modBeeEntity.hivePos);
-            vector3d = vector3d1.subtract(modBeeEntity.position()).normalize();
+        if (this.modBeeEntity.isHiveValid() && !this.modBeeEntity.checkIsWithinDistance(Objects.requireNonNull(this.modBeeEntity.hivePos), 22)) {
+            Vector3d vector3d1 = Vector3d.atCenterOf(this.modBeeEntity.hivePos);
+            vector3d = vector3d1.subtract(this.modBeeEntity.position()).normalize();
         } else {
-            vector3d = modBeeEntity.getViewVector(0.0F);
+            vector3d = this.modBeeEntity.getViewVector(0.0F);
         }
 
-        int randHorz = modBeeEntity.getRandom().nextInt(8) + 8;
-
-        Vector3d vector3d2 = RandomPositionGenerator.findAirTarget(modBeeEntity, randHorz, 7, vector3d);
-        return vector3d2 != null ? vector3d2 : RandomPositionGenerator.findGroundTarget(modBeeEntity, randHorz, 6, -4, vector3d);
+        int randHorz = this.modBeeEntity.getRandom().nextInt(8) + 8;
+        Vector3d vector3d2 = RandomPositionGenerator.findAirTarget(this.modBeeEntity, randHorz, 7, vector3d);
+        return vector3d2 != null ? vector3d2 : RandomPositionGenerator.findGroundTarget(this.modBeeEntity, randHorz, 6, -4, vector3d);
     }
 }
