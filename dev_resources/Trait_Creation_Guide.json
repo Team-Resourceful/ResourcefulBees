@@ -36,6 +36,7 @@
     "specialAbilities" : "see validSpecialAbilities for more info",
     "beeAuras": "these are special effects applied to any players within the auraRange (default: 10 blocks) every 8 seconds",
     "particleName": "the name of a particle, this particle will periodically be emmitted from the bee",
+    "calmingDisabled": "when true enables the ability for the aura to be disabled by the calming effect.",
     "validSpecialAbilities" : [
       "flammable": "sets the bee on fire periodically",
       "teleport": "during the day teleports the bee randomly unless their teleportation is blocked by a hive or a Ender Beecon",
