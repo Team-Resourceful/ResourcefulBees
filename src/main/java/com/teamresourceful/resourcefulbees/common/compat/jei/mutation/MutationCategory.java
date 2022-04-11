@@ -14,10 +14,13 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConst
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.ingredient.ITooltipCallback;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
+import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -55,67 +58,35 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
     }
 
     @Override
-    public void setIngredients(@NotNull MutationRecipe recipe, @NotNull IIngredients ingredients) {
-        //TODO when switch pattern matches release switch to it.
-        if (recipe.input() instanceof IItemRender itemRender) {
-            ingredients.setInput(VanillaTypes.ITEM, itemRender.itemRender());
-        }else if (recipe.input() instanceof IFluidRender fluidRender) {
-            ingredients.setInput(VanillaTypes.FLUID, fluidRender.fluidRender());
-        } else if (recipe.input() instanceof IEntityRender entityRender) {
-            ingredients.setInputs(JEICompat.ENTITY_INGREDIENT, List.of(new EntityIngredient(recipe.bee(), 45f), new EntityIngredient(entityRender.entityRender(), 45f, recipe.input().tag())));
-        }
+    public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull MutationRecipe recipe, @NotNull IFocusGroup focuses) {
+        super.setRecipe(builder, recipe, focuses);
 
-        if (ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).isEmpty()) {
-            ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.bee(), 45f));
-        }
+        IRecipeSlotBuilder input = builder.addSlot(RecipeIngredientRole.INPUT, 16, 53)
+                .setSlotName("input")
+                .addTooltipCallback(getToolTip(recipe));
 
-        if (recipe.output() instanceof IItemRender itemRender) {
-            ingredients.setOutput(VanillaTypes.ITEM, itemRender.itemRender());
-        }else if (recipe.output() instanceof IFluidRender fluidRender) {
-            ingredients.setOutput(VanillaTypes.FLUID, fluidRender.fluidRender());
-        } else if (recipe.output() instanceof IEntityRender entityRender) {
-            ingredients.setOutput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.entityRender(), -45f));
-        }
+        if (recipe.input() instanceof IItemRender itemRender) input.addIngredient(VanillaTypes.ITEM, itemRender.itemRender());
+        if (recipe.input() instanceof IFluidRender fluidRender) input.addIngredient(VanillaTypes.FLUID, fluidRender.fluidRender());
+        if (recipe.input() instanceof IEntityRender entityRender) input.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.entityRender(), 45f, recipe.input().tag()));
+
+        builder.addSlot(RecipeIngredientRole.INPUT, 17, 8)
+                .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.bee(), 45f))
+                .setSlotName("bee");
+
+        IRecipeSlotBuilder output = builder.addSlot(RecipeIngredientRole.OUTPUT, 90, 48)
+                .setSlotName("output")
+                .addTooltipCallback(getToolTip(recipe));
+
+        if (recipe.output() instanceof IItemRender itemRender) output.addIngredient(VanillaTypes.ITEM, itemRender.itemRender());
+        if (recipe.output() instanceof IFluidRender fluidRender) output.addIngredient(VanillaTypes.FLUID, fluidRender.fluidRender());
+        if (recipe.output() instanceof IEntityRender entityRender) output.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.entityRender(), -45f, recipe.output().tag()));
     }
 
-    @Override
-    public void setRecipe(@NotNull IRecipeLayout recipeLayout, @NotNull MutationRecipe recipe, @NotNull IIngredients ingredients) {
-        var entityIngredients = recipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
-        var itemIngredients = recipeLayout.getIngredientsGroup(VanillaTypes.ITEM);
-        var fluidIngredients = recipeLayout.getIngredientsGroup(VanillaTypes.FLUID);
-
-        entityIngredients.init(0, true, 16, 7);
-
-        if (recipe.input() instanceof IItemRender) {
-            itemIngredients.init(1, true, 15, 52);
-        }else if (recipe.input() instanceof IFluidRender) {
-            fluidIngredients.init(1, true, 16, 53);
-        } else if (recipe.input() instanceof IEntityRender) {
-            entityIngredients.init(1, true, 15, 52);
-        }
-
-        if (recipe.output() instanceof IItemRender) {
-            itemIngredients.init(2, false, 89, 47);
-        }else if (recipe.output() instanceof IFluidRender) {
-            fluidIngredients.init(2, false, 90, 48);
-        } else if (recipe.output() instanceof IEntityRender) {
-            entityIngredients.init(2, false, 89, 47);
-        }
-
-        entityIngredients.set(ingredients);
-        itemIngredients.set(ingredients);
-        fluidIngredients.set(ingredients);
-
-        entityIngredients.addTooltipCallback(getToolTip(recipe));
-        itemIngredients.addTooltipCallback(getToolTip(recipe));
-        fluidIngredients.addTooltipCallback(getToolTip(recipe));
-    }
-
-    private static <T> ITooltipCallback<T> getToolTip(MutationRecipe recipe) {
-        return (slotIndex, input, ingredient, tooltip) -> {
-            if (slotIndex == 1) setTagToolTip(recipe.input().tag(), tooltip);
-            if (slotIndex == 2) setTagToolTip(recipe.output().tag(), tooltip);
-        };
+    private static IRecipeSlotTooltipCallback getToolTip(MutationRecipe recipe) {
+        return (view, tooltip) -> view.getSlotName().ifPresent(name -> {
+            if ("input".equals(name)) setTagToolTip(recipe.input().tag(), tooltip);
+            if ("output".equals(name)) setTagToolTip(recipe.output().tag(), tooltip);
+        });
     }
 
     private static void setTagToolTip(Optional<CompoundTag> tag, List<Component> tooltip) {
@@ -127,7 +98,7 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
     }
 
     @Override
-    public @NotNull List<Component> getTooltipStrings(@NotNull MutationRecipe recipe, double mouseX, double mouseY) {
+    public @NotNull List<Component> getTooltipStrings(@NotNull MutationRecipe recipe, @NotNull IRecipeSlotsView view, double mouseX, double mouseY) {
         if (mouseX >= 63 && mouseX <= 72 && mouseY >= 8 && mouseY <= 17) {
             return Collections.singletonList(TranslationConstants.Jei.MUTATION_INFO);
         }
@@ -139,11 +110,12 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
             tooltip.add(new TextComponent("Chance: " + ModConstants.PERCENT_FORMAT.format(recipe.output().chance())));
             return tooltip;
         }
-        return super.getTooltipStrings(recipe, mouseX, mouseY);
+        return super.getTooltipStrings(recipe, view, mouseX, mouseY);
     }
 
     @Override
-    public void draw(@NotNull MutationRecipe recipe, @NotNull PoseStack stack, double mouseX, double mouseY) {
+    public void draw(@NotNull MutationRecipe recipe, @NotNull IRecipeSlotsView view, @NotNull PoseStack stack, double mouseX, double mouseY) {
+        super.draw(recipe, view, stack, mouseX, mouseY);
         beeHive.draw(stack, 65, 10);
         info.draw(stack, 63, 8);
         Font fontRenderer = Minecraft.getInstance().font;

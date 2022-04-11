@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.mixin;
 
 import com.teamresourceful.resourcefulbees.api.IBeeCompat;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
-import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;

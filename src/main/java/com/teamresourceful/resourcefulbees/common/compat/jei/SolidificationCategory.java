@@ -5,14 +5,11 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConst
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.network.chat.TextComponent;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 public class SolidificationCategory extends BaseCategory<SolidificationRecipe> {
@@ -30,21 +27,15 @@ public class SolidificationCategory extends BaseCategory<SolidificationRecipe> {
     }
 
     @Override
-    public void setIngredients(@NotNull SolidificationRecipe recipe, @NotNull IIngredients ingredients) {
-        ingredients.setInput(VanillaTypes.FLUID, recipe.fluid());
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.stack());
+    public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull SolidificationRecipe recipe, @NotNull IFocusGroup focuses) {
+        super.setRecipe(builder, recipe, focuses);
+        builder.addSlot(RecipeIngredientRole.INPUT, 21, 11)
+                .addIngredient(VanillaTypes.FLUID, recipe.fluid())
+                .setFluidRenderer(recipe.fluid().getAmount(), true, 16, 16)
+                .setSlotName("input");
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 49, 54)
+                .addIngredient(VanillaTypes.ITEM, recipe.stack())
+                .setSlotName("output");
     }
-
-    @Override
-    public void setRecipe(IRecipeLayout layout, @NotNull SolidificationRecipe recipe, @NotNull IIngredients ingredients) {
-        IGuiIngredientGroup<ItemStack> guiItemStacks = layout.getIngredientsGroup(VanillaTypes.ITEM);
-        IGuiIngredientGroup<FluidStack> guiFluidStacks = layout.getIngredientsGroup(VanillaTypes.FLUID);
-        guiFluidStacks.init(0, true, 21, 11);
-        guiItemStacks.init(0, false, 48, 53);
-        guiFluidStacks.addTooltipCallback((index, isInput, ingredient, tooltip) -> tooltip.add(new TextComponent("Amount: " + recipe.fluid().getAmount() + "mb")));
-        guiFluidStacks.set(ingredients);
-        guiItemStacks.set(ingredients);
-    }
-
 
 }

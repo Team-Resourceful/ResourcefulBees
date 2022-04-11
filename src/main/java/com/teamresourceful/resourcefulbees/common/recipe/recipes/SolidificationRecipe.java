@@ -24,7 +24,7 @@ import java.util.Optional;
 
 public record SolidificationRecipe(ResourceLocation id, FluidStack fluid, ItemStack stack) implements CodecRecipe<Container> {
 
-    public static final RecipeType<CentrifugeRecipe> SOLIDIFICATION_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":solidification");
+    public static final RecipeType<SolidificationRecipe> SOLIDIFICATION_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":solidification");
 
     public static Codec<SolidificationRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -35,7 +35,7 @@ public record SolidificationRecipe(ResourceLocation id, FluidStack fluid, ItemSt
     }
 
     public static Optional<SolidificationRecipe> findRecipe(RecipeManager manager, FluidStack fluid) {
-        return ((RecipeManagerAccessorInvoker) manager).callByType(SOLIDIFICATION_RECIPE_TYPE).values()
+        return ((RecipeManagerAccessorInvoker) manager).callByType(SolidificationRecipe.SOLIDIFICATION_RECIPE_TYPE).values()
                 .stream().filter(SolidificationRecipe.class::isInstance)
                 .map(SolidificationRecipe.class::cast)
                 .filter(recipe -> recipe.fluid().isFluidEqual(fluid)).findFirst();

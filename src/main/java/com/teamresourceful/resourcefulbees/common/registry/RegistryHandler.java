@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.RegistryObject;
 
 public class RegistryHandler {
 
@@ -43,7 +44,7 @@ public class RegistryHandler {
     //Dynamic|Iterative Registration Stuff below this line
 
     public static void addEntityAttributes(EntityAttributeCreationEvent event) {
-        ModEntities.getModBees().forEach((s, entityType) -> event.put(entityType, CustomBeeEntity.createBeeAttributes(s).build()));
+        ModEntities.getModBees().forEach((s, entityType) -> event.put(entityType.get(), CustomBeeEntity.createBeeAttributes(s).build()));
     }
 
     public static void registerDynamicBees() {
@@ -56,11 +57,10 @@ public class RegistryHandler {
     }
 
     private static void registerBee(String name, float sizeModifier) {
-        final EntityType<? extends CustomBeeEntity> beeEntityType = EntityType.Builder
-                .<ResourcefulBee>of((type, world) -> new ResourcefulBee(type, world, name), ModConstants.BEE_MOB_CATEGORY)
+        RegistryObject<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.ENTITY_TYPES.register(name + "_bee",
+                () -> EntityType.Builder.<ResourcefulBee>of((type, world) -> new ResourcefulBee(type, world, name), ModConstants.BEE_MOB_CATEGORY)
                 .sized(0.7F * sizeModifier, 0.6F * sizeModifier)
-                .build(name + "_bee");
-        ModEntities.ENTITY_TYPES.register(name + "_bee", () -> beeEntityType);
+                .build(name + "_bee"));
         ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> new BeeSpawnEggItem(beeEntityType, name));
         ModEntities.getModBees().put(name, beeEntityType);
     }

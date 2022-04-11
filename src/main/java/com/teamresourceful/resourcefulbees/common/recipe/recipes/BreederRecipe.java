@@ -24,9 +24,8 @@ import java.util.Set;
 
 public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPair parent2, Optional<Ingredient> input, RandomCollection<BreederOutput> outputs, int time) implements CodecRecipe<Container> {
 
-    public static final RecipeType<BreederRecipe> BREEDER_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":breeder");
-
     public static final Codec<RandomCollection<BreederOutput>> RANDOM_COLLECTION_CODEC = CodecUtils.createSetCodec(BreederOutput.CODEC).comapFlatMap(BreederOutput::convertToRandomCollection, BreederOutput::convertToSet);
+    public static final RecipeType<BreederRecipe> BREEDER_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":breeder");
 
     public static Codec<BreederRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(

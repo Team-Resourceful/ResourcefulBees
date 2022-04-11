@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collector;
@@ -48,6 +49,13 @@ public class RandomCollection<E> {
         Objects.requireNonNull(action);
         for (E e : map.values()) {
             action.accept(e);
+        }
+    }
+
+    public void forEachWithSelf(BiConsumer<RandomCollection<E>, ? super E> action) {
+        Objects.requireNonNull(action);
+        for (E e : map.values()) {
+            action.accept(this, e);
         }
     }
 

@@ -3,7 +3,11 @@
   "ingredient": { "item": "minecraft:diamond" },
   "itemOutputs": [
     {
-      "pool": [{"item": { "id": "minecraft:coal", "count": 12 }}]
+      "pool": [
+        {"item": { "id": "minecraft:coal", "count": 12 }},
+        {"item": { "id": "minecraft:stick", "count": 12 }},
+        {"item": { "id": "minecraft:stone", "count": 12 }}
+      ]
     },
     {
       "pool": [{"item": { "id": "minecraft:bone_meal", "count": 2 }}]

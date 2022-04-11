@@ -7,9 +7,10 @@ import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -45,33 +46,35 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Breedi
     }
 
     @Override
-    public void setIngredients(@NotNull BreedingWrapper recipe, @NotNull IIngredients ingredients) {
-        List<EntityIngredient> entities = new ArrayList<>();
-        recipe.parent1.displayEntity().flatMap(BeeInfoUtils::getOptionalEntityType)
-                .ifPresent(entityType -> entities.add(new EntityIngredient(entityType, 45f)));
-        recipe.parent2.displayEntity().flatMap(BeeInfoUtils::getOptionalEntityType)
-                .ifPresent(entityType -> entities.add(new EntityIngredient(entityType, 45f)));
-        recipe.output.displayEntity().flatMap(BeeInfoUtils::getOptionalEntityType)
-                .ifPresent(entityType -> ingredients.setOutput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityType, 45f)));
-        ingredients.setInputs(JEICompat.ENTITY_INGREDIENT, entities);
-        ingredients.setInputIngredients(recipe.ogRecipe().getIngredients());
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.output.output());
-    }
+    public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull BreedingWrapper recipe, @NotNull IFocusGroup focuses) {
+        super.setRecipe(builder, recipe, focuses);
 
-    @Override
-    public void setRecipe(@NotNull IRecipeLayout recipeLayout, @NotNull BreedingWrapper recipe, @NotNull IIngredients ingredients) {
-        var itemGroup = recipeLayout.getIngredientsGroup(VanillaTypes.ITEM);
-        itemGroup.init(0, true, 10, 21);
-        itemGroup.init(1, true, 10, 39);
-        itemGroup.init(2, true, 10, 93);
-        itemGroup.init(3, true, 10, 111);
-        itemGroup.init(4, false, 137, 93);
-        itemGroup.set(ingredients);
-        var entityGroup = recipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
-        recipe.parent1.displayEntity().ifPresent(i -> entityGroup.init(0, true, 55, 29));
-        recipe.parent2.displayEntity().ifPresent(i -> entityGroup.init(1, true, 55, 101));
-        recipe.output.displayEntity().ifPresent(i -> entityGroup.init(2, false, 137, 66));
-        entityGroup.set(ingredients);
+        builder.addSlot(RecipeIngredientRole.INPUT, 11, 22)
+                .addIngredients(recipe.ogRecipe().getIngredients().get(0)).setSlotName("parent_1_entity");
+        builder.addSlot(RecipeIngredientRole.INPUT, 11, 40)
+                .addIngredients(recipe.ogRecipe().getIngredients().get(1)).setSlotName("parent_1_item");
+        builder.addSlot(RecipeIngredientRole.INPUT, 11, 94)
+                .addIngredients(recipe.ogRecipe().getIngredients().get(2)).setSlotName("parent_2_entity");
+        builder.addSlot(RecipeIngredientRole.INPUT, 11, 112)
+                .addIngredients(recipe.ogRecipe().getIngredients().get(3)).setSlotName("parent_2_item");
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 138, 94)
+                .addIngredient(VanillaTypes.ITEM, recipe.output().output()).setSlotName("output_item");
+
+        recipe.parent1.displayEntity().flatMap(BeeInfoUtils::getOptionalEntityType)
+                .ifPresent(entityType -> builder.addSlot(RecipeIngredientRole.OUTPUT, 56, 30)
+                        .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityType, 45f))
+                        .setSlotName("parent_1_entity_display"));
+
+        recipe.parent2.displayEntity().flatMap(BeeInfoUtils::getOptionalEntityType)
+                .ifPresent(entityType -> builder.addSlot(RecipeIngredientRole.OUTPUT, 56, 102)
+                        .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityType, 45f))
+                        .setSlotName("parent_2_entity_display"));
+
+        recipe.output.displayEntity().flatMap(BeeInfoUtils::getOptionalEntityType)
+                .ifPresent(entityType -> builder.addSlot(RecipeIngredientRole.OUTPUT, 138, 67)
+                        .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityType, 45f))
+                        .setSlotName("output_entity"));
+
     }
 
     public static record BreedingWrapper(BreederRecipe.BreederPair parent1, BreederRecipe.BreederPair parent2, Optional<Ingredient> input, BreederRecipe.BreederOutput output, BreederRecipe ogRecipe){

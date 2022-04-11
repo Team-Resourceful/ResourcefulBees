@@ -79,13 +79,14 @@ public class EnderBeecon extends SidedTickingBlock<EnderBeeconBlockEntity> {
     @Deprecated
     public InteractionResult use(@NotNull BlockState state, Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
 
-        Item heldItem = player.getItemInHand(hand).getItem();
+        ItemStack itemInHand = player.getItemInHand(hand);
+        Item heldItem = itemInHand.getItem();
         BlockEntity tileEntity = world.getBlockEntity(pos);
 
         if (tileEntity instanceof EnderBeeconBlockEntity beecon) {
             HoneyFluidTank tank = beecon.getTank();
             if (!world.isClientSide) {
-                boolean usingWool = ItemTags.WOOL.contains(heldItem);
+                boolean usingWool = itemInHand.is(ItemTags.WOOL);
                 boolean usingStick = heldItem.equals(Items.STICK);
 
                 if (usingWool) {

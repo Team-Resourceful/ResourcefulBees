@@ -31,7 +31,7 @@ public final class ColorHandler {
         ItemColors colors = event.getItemColors();
         registerItems(colors, HoneycombItem::getColor, ModItems.HONEYCOMB_ITEMS.getEntries());
         registerItems(colors, HoneycombBlock::getItemColor, ModItems.HONEYCOMB_BLOCK_ITEMS.getEntries());
-        registerItems(colors, BeeSpawnEggItem::getColor, ModItems.SPAWN_EGG_ITEMS.getEntries());
+        //registerItems(colors, BeeSpawnEggItem::getColor, ModItems.SPAWN_EGG_ITEMS.getEntries());
         registerItems(colors, CustomHoneyBucketItem::getColor, ModItems.HONEY_BUCKET_ITEMS.getEntries());
         registerItems(colors, CustomHoneyBottleItem::getColor, ModItems.HONEY_BOTTLE_ITEMS.getEntries());
         registerItems(colors, CustomHoneyBlock::getItemColor, ModItems.HONEY_BLOCK_ITEMS.getEntries());

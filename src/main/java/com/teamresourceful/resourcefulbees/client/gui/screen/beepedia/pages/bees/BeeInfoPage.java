@@ -11,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -18,9 +19,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class BeeInfoPage extends BeeDataPage {
@@ -31,7 +29,7 @@ public class BeeInfoPage extends BeeDataPage {
     private static final TranslatableComponent FLOWER_NAME = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
 
     private Pair<EntityType<?>, Entity> entityFlower = Pair.of(null, null);
-    private List<Block> blockFlowers = new LinkedList<>();
+    private HolderSet<Block> blockFlowers = HolderSet.direct();
     private CustomBeeData beeData;
     private int slot = 0;
 
@@ -48,9 +46,9 @@ public class BeeInfoPage extends BeeDataPage {
     public void preInit(BeepediaScreen beepedia, ScreenArea screenArea, CustomBeeData beeData) {
         super.preInit(beepedia, screenArea, beeData);
         if (Minecraft.getInstance().level == null) return;
-        if (!beeData.getCoreData().getBlockFlowers().isEmpty()) {
-            if (!beeData.getCoreData().getBlockFlowers().containsAll(blockFlowers)) {
-                blockFlowers = new LinkedList<>(beeData.getCoreData().getBlockFlowers());
+        if (beeData.getCoreData().getBlockFlowers().size() > 0) {
+            if (beeData.getCoreData().getBlockFlowers() != blockFlowers) {
+                blockFlowers = beeData.getCoreData().getBlockFlowers();
                 slot = 0;
             }
         } else {
@@ -75,7 +73,7 @@ public class BeeInfoPage extends BeeDataPage {
     public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
         if (beeData == null) throw new IllegalStateException("preInit not implemented");
         Font font = Minecraft.getInstance().font;
-        if (!beeData.getCoreData().getBlockFlowers().isEmpty()) {
+        if (beeData.getCoreData().getBlockFlowers().size() > 0) {
             font.draw(matrix, FLOWER_NAME.withStyle(ChatFormatting.GRAY), x, y + 75f, -1);
 //            beepedia.drawSlot(matrix, blockFlowers.get(slot), x + 36f, y + 70f);
         } else if (beeData.getCoreData().getEntityFlower().isPresent()) {
@@ -106,7 +104,7 @@ public class BeeInfoPage extends BeeDataPage {
     public void tick(int ticksActive) {
         if (beeData == null) throw new IllegalStateException("preInit not implemented");
         if (Screen.hasShiftDown()) return;
-        if (ticksActive % 20 == 0 && !blockFlowers.isEmpty()) {
+        if (ticksActive % 20 == 0 && blockFlowers.size() > 0) {
             slot++;
             if (slot > blockFlowers.size()) slot = 0;
         }

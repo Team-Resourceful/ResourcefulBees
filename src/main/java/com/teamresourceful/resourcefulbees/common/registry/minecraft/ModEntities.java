@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,13 +20,13 @@ public class ModEntities {
     }
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, ResourcefulBees.MOD_ID);
-    private static final Map<String, EntityType<? extends CustomBeeEntity>> MOD_BEES = new HashMap<>();
+    private static final Map<String, RegistryObject<EntityType<? extends CustomBeeEntity>>> MOD_BEES = new HashMap<>();
 
-    public static Map<String, EntityType<? extends CustomBeeEntity>> getModBees() {
+    public static Map<String, RegistryObject<EntityType<? extends CustomBeeEntity>>> getModBees() {
         return MOD_BEES;
     }
 
-    public static Set<EntityType<? extends CustomBeeEntity>> getSetOfModBees() {
+    public static Set<RegistryObject<EntityType<? extends CustomBeeEntity>>> getSetOfModBees() {
         return new HashSet<>(MOD_BEES.values());
     }
 }

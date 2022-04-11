@@ -42,7 +42,7 @@ public class RandomPositionGenerator {
 
 
         //is bee within distance of home position?
-        boolean inDistanceOfHome = bee.hasRestriction() && bee.getRestrictCenter().closerThan(bee.position(), (bee.getRestrictRadius() + horizontalOffset) + 1.0D);
+        boolean inDistanceOfHome = bee.hasRestriction() && bee.getRestrictCenter().closerThan(bee.blockPosition(), (bee.getRestrictRadius() + horizontalOffset) + 1.0D);
 
         boolean flag1 = false;
         double d0 = Double.NEGATIVE_INFINITY;

@@ -10,12 +10,12 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -45,7 +45,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
         super(guiHelper, ID,
                 TranslationConstants.Jei.HIVE,
                 guiHelper.createBlankDrawable(160, 26),
-                guiHelper.createDrawableIngredient(new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get())),
+                guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get())),
                 HiveCategory.Recipe.class);
 
         hiveBackground = guiHelper.drawableBuilder(HIVE_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
@@ -82,28 +82,24 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     }
 
     @Override
-    public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.comb);
-        ingredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(recipe.hives));
-        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.entityType, 45.0f));
+    public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull Recipe recipe, @NotNull IFocusGroup focuses) {
+        super.setRecipe(builder, recipe, focuses);
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 139, 5)
+                .addIngredient(VanillaTypes.ITEM, recipe.comb)
+                .setSlotName("comb");
+        builder.addSlot(RecipeIngredientRole.INPUT, 63, 5)
+                .addIngredients(VanillaTypes.ITEM, recipe.hives)
+                .setSlotName("hive");
+        builder.addSlot(RecipeIngredientRole.INPUT, 11, 3)
+                .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.entityType, 45.0f))
+                .setSlotName("bee");
     }
 
     @Override
-    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
-        IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-        itemStacks.init(0, false, 138, 4);
-        itemStacks.init(1, true, 62, 4);
-        itemStacks.set(ingredients);
-
-        IGuiIngredientGroup<EntityIngredient> ingredientStacks = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
-        ingredientStacks.init(0, true, 10, 2);
-        ingredientStacks.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
-    }
-
-    @Override
-    public void draw(@NotNull Recipe recipe, @NotNull PoseStack matrixStack, double mouseX, double mouseY) {
-        if (recipe.isApiary) this.apiaryBackground.draw(matrixStack);
-        else this.hiveBackground.draw(matrixStack);
+    public void draw(@NotNull Recipe recipe, @NotNull IRecipeSlotsView view, @NotNull PoseStack stack, double mouseX, double mouseY) {
+        super.draw(recipe, view, stack, mouseX, mouseY);
+        if (recipe.isApiary) this.apiaryBackground.draw(stack);
+        else this.hiveBackground.draw(stack);
     }
 
     public static class Recipe {

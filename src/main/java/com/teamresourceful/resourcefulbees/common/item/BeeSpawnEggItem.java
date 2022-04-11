@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.ColorData;
+import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import net.minecraft.core.BlockPos;
@@ -14,21 +15,22 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  This class is required for use to disable the use of bees in spawners as a lot of devs use bee spawn eggs in crafting recipes.
  **/
-public class BeeSpawnEggItem extends SpawnEggItem {
+public class BeeSpawnEggItem extends ForgeSpawnEggItem {
     private final CustomBeeData beeData;
 
-	public BeeSpawnEggItem(EntityType<? extends Mob> entityType, String beeType) {
+	public BeeSpawnEggItem(Supplier<EntityType<? extends CustomBeeEntity>> entityType, String beeType) {
 		super(entityType, 0xffcc33, 0x303030, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_BEES));
 		this.beeData = BeeRegistry.getRegistry().getBeeData(beeType);
 	}
@@ -38,8 +40,9 @@ public class BeeSpawnEggItem extends SpawnEggItem {
         return beeData;
     }
 
-    public static int getColor(ItemStack stack, int tintIndex) {
-        ColorData colorData = ((BeeSpawnEggItem)stack.getItem()).beeData.getRenderData().colorData();
+    @Override
+    public int getColor(int tintIndex) {
+        ColorData colorData = beeData.getRenderData().colorData();
         return tintIndex == 0 ? colorData.spawnEggPrimaryColor().getValue(): colorData.spawnEggSecondaryColor().getValue();
     }
 

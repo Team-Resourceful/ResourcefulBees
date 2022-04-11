@@ -6,12 +6,11 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityI
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -32,7 +31,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
         super(guiHelper, ID,
             TranslationConstants.Jei.FLOWERS,
             guiHelper.drawableBuilder(GUI_BACK, 0, 0, 100, 75).addPadding(0, 0, 0, 0).build(),
-            guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.GOLD_FLOWER.get())),
+            guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(ModBlocks.GOLD_FLOWER.get())),
             FlowersCategory.Recipe.class);
     }
 
@@ -43,17 +42,17 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
     public static List<Recipe> getFlowersRecipes() {
         List<Recipe> recipes = new ArrayList<>();
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
-            if (!beeData.getCoreData().getBlockFlowers().isEmpty()) {
+            if (beeData.getCoreData().getBlockFlowers().size() > 0) {
                 Set<ItemStack> stacks = new HashSet<>();
                 Set<FluidStack> fluids = new HashSet<>();
 
                 beeData.getCoreData().getBlockFlowers().forEach(block -> {
                     if (block instanceof LiquidBlock liquidBlock){
                         fluids.add(new FluidStack(liquidBlock.getFluid().getSource(), 1000 ));
-                    }else if (block.asItem() != Items.AIR){
-                        stacks.add(block.asItem().getDefaultInstance());
+                    }else if (block.value().asItem() != Items.AIR){
+                        stacks.add(block.value().asItem().getDefaultInstance());
                     }else {
-                        stacks.add(getErrorItem(block));
+                        stacks.add(getErrorItem(block.value()));
                     }
                 });
 
@@ -71,35 +70,18 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
     }
 
     @Override
-    public void setIngredients(@NotNull Recipe recipe, @NotNull IIngredients ingredients) {
-        ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeData.getEntityType(), 45.0f));
-        recipe.getItemStacks().ifPresent(items -> ingredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(new ArrayList<>(items))));
-        recipe.getFluidStacks().ifPresent(fluids -> ingredients.setInputLists(VanillaTypes.FLUID, Collections.singletonList(new ArrayList<>(fluids))));
-        recipe.getEntityType().ifPresent(entity -> ingredients.setInput(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entity, 45.0f)));
-    }
+    public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull Recipe recipe, @NotNull IFocusGroup focuses) {
+        super.setRecipe(builder, recipe, focuses);
 
-    @Override
-    public void setRecipe(@NotNull IRecipeLayout iRecipeLayout, @NotNull Recipe recipe, @NotNull IIngredients ingredients) {
-        IGuiIngredientGroup<EntityIngredient> entityIngredients = iRecipeLayout.getIngredientsGroup(JEICompat.ENTITY_INGREDIENT);
-        entityIngredients.init(0, true, 41, 10);
-        entityIngredients.set(0, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(0));
+        builder.addSlot(RecipeIngredientRole.INPUT, 41, 10)
+                .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeData.getEntityType(), 45.0f))
+                .setSlotName("bee");
 
-        recipe.getFluidStacks().ifPresent(f -> {
-            IGuiFluidStackGroup fluidIngredients = iRecipeLayout.getFluidStacks();
-            fluidIngredients.init(1,true,41,55);
-            fluidIngredients.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
-        });
+        IRecipeSlotBuilder flower = builder.addSlot(RecipeIngredientRole.INPUT, 41, 55).setSlotName("flower");
 
-        recipe.getItemStacks().ifPresent(i -> {
-            IGuiItemStackGroup itemIngredients = iRecipeLayout.getItemStacks();
-            itemIngredients.init(1, true, 41, 55);
-            itemIngredients.set(1, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-        });
-
-        recipe.getEntityType().ifPresent(e -> {
-            entityIngredients.init(1, true, 42, 56);
-            entityIngredients.set(1, ingredients.getInputs(JEICompat.ENTITY_INGREDIENT).get(1));
-        });
+        recipe.getFluidStacks().ifPresent(stacks -> flower.addIngredients(VanillaTypes.FLUID, new ArrayList<>(stacks)));
+        recipe.getItemStacks().ifPresent(stacks -> flower.addIngredients(VanillaTypes.ITEM, new ArrayList<>(stacks)));
+        recipe.getEntityType().ifPresent(entity -> flower.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entity, 45.0f)));
     }
 
     static class Recipe {

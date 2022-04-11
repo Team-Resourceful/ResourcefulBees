@@ -25,7 +25,7 @@ public abstract class MixinEnterBeehiveGoal {
 
     @Inject(at = @At("HEAD"), method = "canBeeUse()Z", cancellable = true)
     public void canBeeStart(CallbackInfoReturnable<Boolean> cir) {
-        if (this$0.hasHive() && this$0.wantsToEnterHive() && this$0.getHivePos() != null && this$0.getHivePos().closerThan(this$0.position(), 2.0D)) {
+        if (this$0.hasHive() && this$0.wantsToEnterHive() && this$0.getHivePos() != null && this$0.getHivePos().closerThan(this$0.blockPosition(), 2.0D)) {
             BlockEntity blockEntity = this$0.level.getBlockEntity(this$0.getHivePos());
             if (blockEntity instanceof BeehiveBlockEntity hive) {
                 if (!hive.isFull()) {

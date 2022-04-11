@@ -12,6 +12,7 @@ import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlock
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
@@ -166,9 +167,9 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         BlockPos pos = context.origin();
         Random rand = context.random();
 
-        Biome biome = worldIn.getBiome(pos);
-        Optional<ResourceKey<Biome>> biomeKey = worldIn.getBiomeName(pos);
-        Biome.BiomeCategory category = biome.getBiomeCategory();
+        Holder<Biome> biome = worldIn.getBiome(pos);
+        Optional<ResourceKey<Biome>> biomeKey = biome.unwrapKey();
+        Biome.BiomeCategory category = Biome.getBiomeCategory(biome);
 
         boolean headsOrTails = rand.nextBoolean();
         BlockPos newPos = getYPos(worldIn, rand, category, pos);

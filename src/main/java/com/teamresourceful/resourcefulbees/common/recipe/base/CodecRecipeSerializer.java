@@ -10,6 +10,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,9 +20,11 @@ import java.util.function.Function;
 
 public class CodecRecipeSerializer<R extends Recipe<?>> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<R>{
 
+    private final RecipeType<R> recipeType;
     private final Function<ResourceLocation, Codec<R>> codecInitializer;
 
-    public CodecRecipeSerializer(Function<ResourceLocation, Codec<R>> codecInitializer) {
+    public CodecRecipeSerializer(RecipeType<R> recipeType, Function<ResourceLocation, Codec<R>> codecInitializer) {
+        this.recipeType = recipeType;
         this.codecInitializer = codecInitializer;
     }
 
@@ -40,5 +43,9 @@ public class CodecRecipeSerializer<R extends Recipe<?>> extends ForgeRegistryEnt
     @Override
     public void toNetwork(@NotNull FriendlyByteBuf buffer, @NotNull R recipe) {
         codecInitializer.apply(recipe.getId()).encodeStart(JsonOps.COMPRESSED, recipe).result().ifPresent(element -> buffer.writeUtf(element.toString()));
+    }
+
+    public RecipeType<R> type() {
+        return recipeType;
     }
 }

@@ -1,15 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
-import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -20,10 +14,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -35,7 +25,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
@@ -44,8 +33,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,35 +68,11 @@ public class BeeInfoUtils {
         return Optional.ofNullable(ResourceLocation.tryParse(resource));
     }
 
-    @Nullable
-    public static Tag<Item> getItemTag(String itemTag) {
-        return getResourceLocation(itemTag).map(ItemTags.getAllTags()::getTag).orElse(null);
-    }
-
-    @Nullable
-    public static Tag<Fluid> getFluidTag(String fluidTag) {
-        return getResourceLocation(fluidTag).map(FluidTags.getAllTags()::getTag).orElse(null);
-    }
-
-    @Nullable
-    public static Tag<Block> getBlockTag(String blockTag) {
-        return getResourceLocation(blockTag).map(BlockTags.getAllTags()::getTag).orElse(null);
-    }
-
     public static void flagBeesInRange(BlockPos pos, Level world) {
         if (world != null) {
             List<CustomBeeEntity> list = world.getEntitiesOfClass(CustomBeeEntity.class, new AABB(pos).inflate(10));
             list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
         }
-    }
-
-    public static List<String> getLoreLines(CompoundTag outputNBT) {
-        if (outputNBT.isEmpty()) return new LinkedList<>();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonParser jp = new JsonParser();
-        JsonElement je = jp.parse(outputNBT.toString());
-        String nbtString = "NBT: " + gson.toJson(je);
-        return Arrays.asList(nbtString.split("\n"));
     }
 
     public static void ageBee(int ticksInHive, Animal animal) {
@@ -153,11 +116,6 @@ public class BeeInfoUtils {
         nbt.putString(NBTConstants.NBT_COLOR, beeColor);
         BeehiveEntityAccessor.callRemoveIgnoredBeeTags(nbt);
         return nbt;
-    }
-
-    public static boolean isBeeInJarOurs(@NotNull ItemStack stack) {
-        //noinspection ConstantConditions
-        return BeeJar.isFilled(stack) && stack.getTag().getString(NBTConstants.NBT_ENTITY).startsWith(ResourcefulBees.MOD_ID);
     }
 
     public static Fluid getHoneyFluidFromBottle(ItemStack bottleOutput) {

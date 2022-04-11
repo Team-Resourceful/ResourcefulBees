@@ -84,7 +84,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(this);
-        setRecipeManager(event.getDataPackRegistries().getRecipeManager());
+        setRecipeManager(event.getServerResources().getRecipeManager());
         //REQUIRED Check if this can be put in another place
         //its here so it can have the items in the data before the
         //recipes are generated.
@@ -99,11 +99,13 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         ResourceLocation parent1Id = family.getParent1Data().getRegistryID();
         BeeJarIngredient beeJarParent1 = new BeeJarIngredient(parent1Id, family.getParent1Data().getRenderData().colorData().jarColor().getValue());
         BreedData parent1BreedData = family.getParent1Data().getBreedData();
-        BreederRecipe.BreederPair parent1 = new BreederRecipe.BreederPair(beeJarParent1, Optional.of(parent1Id.toString()), parent1BreedData.getFeedItems().getIngredient(), parent1BreedData.getFeedReturnItem());
+        var parent1FeedItems = Ingredient.of(parent1BreedData.getFeedItems().stream().map(ItemStack::new));
+        BreederRecipe.BreederPair parent1 = new BreederRecipe.BreederPair(beeJarParent1, Optional.of(parent1Id.toString()), parent1FeedItems, parent1BreedData.getFeedReturnItem());
         ResourceLocation parent2Id = family.getParent2Data().getRegistryID();
         BreedData parent2BreedData = family.getParent2Data().getBreedData();
         BeeJarIngredient beeJarParent2 = new BeeJarIngredient(parent2Id, family.getParent2Data().getRenderData().colorData().jarColor().getValue());
-        BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parent2Id.toString()),  parent2BreedData.getFeedItems().getIngredient(), parent2BreedData.getFeedReturnItem());
+        var parent2FeedItems = Ingredient.of(parent2BreedData.getFeedItems().stream().map(ItemStack::new));
+        BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parent2Id.toString()),  parent2FeedItems, parent2BreedData.getFeedReturnItem());
         return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(RandomCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
     }
 

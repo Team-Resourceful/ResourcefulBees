@@ -318,7 +318,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
 
     @Override
     public boolean isFood(@NotNull ItemStack stack) {
-        return this.getBreedData().getFeedItems().matches(stack);
+        return this.getBreedData().getFeedItems().contains(stack.getItem().builtInRegistryHolder());
     }
 
     @Override

@@ -3,9 +3,11 @@ package com.teamresourceful.resourcefulbees.api.beedata.breeding;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
-import com.teamresourceful.resourcefulbees.api.beedata.itemsholder.IItemHolder;
-import com.teamresourceful.resourcefulbees.api.beedata.itemsholder.ItemHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Unmodifiable;
@@ -17,7 +19,7 @@ import java.util.Set;
 
 @Unmodifiable
 public class BreedData {
-    public static final BreedData DEFAULT = new BreedData(Collections.emptySet(), new ItemHolder(Items.POPPY), Optional.empty(), 0, 0, 0);
+    public static final BreedData DEFAULT = new BreedData(Collections.emptySet(), HolderSet.direct(Item::builtInRegistryHolder, Items.POPPY), Optional.empty(), 0, 0, 0);
 
     /**
      * A {@link Codec<BreedData>} that can be parsed to create a
@@ -26,7 +28,7 @@ public class BreedData {
     public static Codec<BreedData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 CodecUtils.createSetCodec(BeeFamily.codec(name)).fieldOf("parents").orElse(new HashSet<>()).forGetter(BreedData::getFamilies),
-                CodecUtils.ITEM_HOLDER_CODEC.fieldOf("feedItem").orElse(new ItemHolder(Items.POPPY)).forGetter(BreedData::getFeedItems),
+                RegistryCodecs.homogeneousList(Registry.ITEM_REGISTRY).fieldOf("feedItem").orElse(HolderSet.direct(Item::builtInRegistryHolder, Items.POPPY)).forGetter(BreedData::getFeedItems),
                 CodecUtils.ITEM_STACK_CODEC.optionalFieldOf("feedReturnItem").forGetter(BreedData::getFeedReturnItem),
                 Codec.intRange(1, Integer.MAX_VALUE).fieldOf("feedAmount").orElse(1).forGetter(BreedData::getFeedAmount),
                 Codec.intRange(Integer.MIN_VALUE, 0).fieldOf("childGrowthDelay").orElse(BeeConstants.CHILD_GROWTH_DELAY).forGetter(BreedData::getChildGrowthDelay),
@@ -35,13 +37,13 @@ public class BreedData {
     }
 
     protected Set<BeeFamily> families;
-    protected IItemHolder itemHolder;
+    protected HolderSet<Item> itemHolder;
     protected Optional<ItemStack> feedReturnItem;
     protected int feedAmount;
     protected int childGrowthDelay;
     protected int breedDelay;
 
-    public BreedData(Set<BeeFamily> families, IItemHolder itemHolder, Optional<ItemStack> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+    public BreedData(Set<BeeFamily> families, HolderSet<Item> itemHolder, Optional<ItemStack> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
         this.families = families;
         this.itemHolder = itemHolder;
         this.feedReturnItem = feedReturnItem;
@@ -72,11 +74,11 @@ public class BreedData {
 
     /**
      * Gets the feed items used to trigger the associated bees "love" state.
-     * The value returned is a {@link IItemHolder}>.
+     * The value returned is a {@link HolderSet}>.
      *
-     * @return Returns a {@link IItemHolder}.
+     * @return Returns a {@link HolderSet}.
      */
-    public IItemHolder getFeedItems() {
+    public HolderSet<Item> getFeedItems() {
         return itemHolder;
     }
 
@@ -126,12 +128,12 @@ public class BreedData {
 
     public static class Mutable extends BreedData {
 
-        public Mutable(Set<BeeFamily> families, IItemHolder items, Optional<ItemStack> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+        public Mutable(Set<BeeFamily> families, HolderSet<Item> items, Optional<ItemStack> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
             super(families, items, feedReturnItem, feedAmount, childGrowthDelay, breedDelay);
         }
 
         public Mutable() {
-            super(new HashSet<>(), new ItemHolder(Items.POPPY), Optional.empty(), 0, 0, 0);
+            super(new HashSet<>(), HolderSet.direct(Item::builtInRegistryHolder, Items.POPPY), Optional.empty(), 0, 0, 0);
         }
 
         public Mutable setFamilies(Set<BeeFamily> families) {
@@ -139,7 +141,7 @@ public class BreedData {
             return this;
         }
 
-        public Mutable setItems(IItemHolder itemHolder) {
+        public Mutable setItems(HolderSet<Item> itemHolder) {
             this.itemHolder = itemHolder;
             return this;
         }

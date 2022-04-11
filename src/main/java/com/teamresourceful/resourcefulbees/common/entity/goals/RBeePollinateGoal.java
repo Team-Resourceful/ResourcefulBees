@@ -247,11 +247,11 @@ public class RBeePollinateGoal extends Goal {
 
     public Predicate<BlockPos> getFlowerBlockPredicate() {
         return pos -> {
-            if (bee.level != null && !bee.getCoreData().getBlockFlowers().isEmpty()){
+            if (bee.getCoreData().getBlockFlowers().size() > 0){
                 if (!MathUtils.inRangeInclusive(pos.getY(), 0, 256)) return false;
                 BlockState state = bee.level.getBlockState(pos);
                 if (state.isAir()) return false;
-                return bee.getCoreData().getBlockFlowers().contains(state.getBlock());
+                return state.is(bee.getCoreData().getBlockFlowers());
             }
             return false;
         };

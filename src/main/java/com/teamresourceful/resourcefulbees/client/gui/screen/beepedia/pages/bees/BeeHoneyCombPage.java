@@ -6,13 +6,10 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPa
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class BeeHoneyCombPage extends BeeDataPage {
@@ -26,7 +23,7 @@ public class BeeHoneyCombPage extends BeeDataPage {
 //
 //    final List<RecipeObject> recipes = new ArrayList<>();
 
-    private static final List<Item> hives = BeeInfoUtils.getItemTag("minecraft:beehives").getValues();
+    //private static final List<Item> hives = BeeInfoUtils.getItemTag("minecraft:beehives").getValues();
 
     private static final Item[] APIARIES = {ModItems.T1_APIARY_ITEM.get(), ModItems.T2_APIARY_ITEM.get(), ModItems.T3_APIARY_ITEM.get(), ModItems.T4_APIARY_ITEM.get()};
 

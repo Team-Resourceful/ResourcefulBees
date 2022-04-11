@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.NbtUtils;
@@ -24,9 +24,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,15 +45,15 @@ public class HoneyDipper extends Item {
     @Override
     public @NotNull InteractionResult useOn(@NotNull UseOnContext useContext) {
         if (!useContext.getLevel().isClientSide()) {
-            Block clickedBlock = useContext.getLevel().getBlockState(useContext.getClickedPos()).getBlock();
+            BlockState clickedBlock = useContext.getLevel().getBlockState(useContext.getClickedPos());
 
             if (selectedBee instanceof CustomBeeEntity) {
                 CoreData beeData = ((CustomBeeEntity) selectedBee).getCoreData();
-                if (!beeData.getBlockFlowers().isEmpty() && beeData.getBlockFlowers().contains(clickedBlock)) {
+                if (clickedBlock.is(beeData.getBlockFlowers())) {
                     setFlowerPosition(useContext);
                     return InteractionResult.SUCCESS;
                 }
-            } else if (selectedBee != null && BlockTags.FLOWERS.contains(clickedBlock)) {
+            } else if (selectedBee != null && clickedBlock.is(BlockTags.FLOWERS)) {
                 setFlowerPosition(useContext);
                 return InteractionResult.SUCCESS;
             }

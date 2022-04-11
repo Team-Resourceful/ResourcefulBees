@@ -15,7 +15,7 @@ import net.minecraft.data.HashCache;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -98,7 +98,7 @@ public abstract class BaseAdvancementProvider implements DataProvider {
         return inventoryTrigger(ItemPredicate.Builder.item().of(pItemLike).build());
     }
 
-    protected static InventoryChangeTrigger.TriggerInstance has(Tag<Item> pTag) {
+    protected static InventoryChangeTrigger.TriggerInstance has(TagKey<Item> pTag) {
         return inventoryTrigger(ItemPredicate.Builder.item().of(pTag).build());
     }
 

@@ -3,8 +3,6 @@ package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.tags.Tag;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 
@@ -27,10 +25,6 @@ public class RecipeHelper {
                 .shaped(result)
                 .define('S', sides).define('M', middle)
                 .pattern("SSS", "SMS", "SSS");
-    }
-
-    public static AdvancedShapedRecipeBuilder createCornerWithChestRecipe(Ingredient previous, Tag<Item> corners, ItemLike result) {
-        return createCornerWithMid(previous, Ingredient.of(corners), Ingredient.of(net.minecraftforge.common.Tags.Items.CHESTS), result);
     }
 
     public static AdvancedShapedRecipeBuilder createCornerWithMid(Ingredient middle, Ingredient corners, Ingredient sides, ItemLike result) {

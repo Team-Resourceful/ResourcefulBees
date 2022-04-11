@@ -19,8 +19,8 @@ public class ModRecipeSerializers {
 
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ResourcefulBees.MOD_ID);
 
-    public static final RegistryObject<RecipeSerializer<?>> CENTRIFUGE_RECIPE = RECIPE_SERIALIZERS.register("centrifuge", () -> new CodecRecipeSerializer<>(CentrifugeRecipe::codec));
-    public static final RegistryObject<RecipeSerializer<?>> SOLIDIFICATION_RECIPE = RECIPE_SERIALIZERS.register("solidification", () -> new CodecRecipeSerializer<>(SolidificationRecipe::codec));
-    public static final RegistryObject<RecipeSerializer<?>> BREEDER_RECIPE = RECIPE_SERIALIZERS.register("breeder", () -> new CodecRecipeSerializer<>(BreederRecipe::codec));
+    public static final RegistryObject<RecipeSerializer<?>> CENTRIFUGE_RECIPE = RECIPE_SERIALIZERS.register("centrifuge", () -> new CodecRecipeSerializer<>(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE, CentrifugeRecipe::codec));
+    public static final RegistryObject<RecipeSerializer<?>> SOLIDIFICATION_RECIPE = RECIPE_SERIALIZERS.register("solidification", () -> new CodecRecipeSerializer<>(SolidificationRecipe.SOLIDIFICATION_RECIPE_TYPE, SolidificationRecipe::codec));
+    public static final RegistryObject<RecipeSerializer<?>> BREEDER_RECIPE = RECIPE_SERIALIZERS.register("breeder", () -> new CodecRecipeSerializer<>(BreederRecipe.BREEDER_RECIPE_TYPE, BreederRecipe::codec));
 
 }

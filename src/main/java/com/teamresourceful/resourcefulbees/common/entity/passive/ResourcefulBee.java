@@ -153,12 +153,8 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean isFlowerValid(@NotNull BlockPos pos) {
-        if (getCoreData().getEntityFlower().isPresent()) {
-            return this.level.getEntity(this.getFlowerEntityID()) != null;
-        } else if (!getCoreData().getBlockFlowers().isEmpty()) {
-            return this.level.isLoaded(pos) && getCoreData().getBlockFlowers().contains(this.level.getBlockState(pos).getBlock());
-        }
-        return false;
+        if (getCoreData().getEntityFlower().isPresent()) return this.level.getEntity(this.getFlowerEntityID()) != null;
+        return this.level.isLoaded(pos) && this.level.getBlockState(pos).is(getCoreData().getBlockFlowers());
     }
 
     @Override
@@ -294,7 +290,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public boolean canBeeUse() {
-            if (ResourcefulBee.this.hasHive() && ResourcefulBee.this.wantsToEnterHive() && ResourcefulBee.this.getHivePos() != null && ResourcefulBee.this.getHivePos().closerThan(ResourcefulBee.this.position(), 2.0D)) {
+            if (ResourcefulBee.this.hasHive() && ResourcefulBee.this.wantsToEnterHive() && ResourcefulBee.this.getHivePos() != null && ResourcefulBee.this.getHivePos().closerThan(ResourcefulBee.this.blockPosition(), 2.0D)) {
                 BlockEntity blockEntity = ResourcefulBee.this.level.getBlockEntity(ResourcefulBee.this.getHivePos());
                 if (blockEntity instanceof BeehiveBlockEntity beehiveBlockEntity) {
                     if (!beehiveBlockEntity.isFull()) {
