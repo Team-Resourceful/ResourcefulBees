@@ -177,7 +177,7 @@ public class BeeJar extends Item {
         player.setItemInHand(hand, stack);
         player.swing(hand);
         target.remove(true);
-        return ActionResultType.PASS;
+        return ActionResultType.SUCCESS;
     }
 
     public static void renameJar(ItemStack stack, Entity target, String name) {
