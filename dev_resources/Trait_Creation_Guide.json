@@ -1,0 +1,84 @@
+{
+  "defaults": {
+    "beepediaItemID": null,
+    "potionDamageEffects" : [
+      {
+        "effectID" : null,
+        "strength": 0
+      }
+    ],
+    "damageImmunities" : [],
+    "potionImmunities" : [],
+    "damageTypes": [
+      {
+        "damageTypeName": null,
+        "amplifier" : 0
+      }
+    ],
+    "specialAbilities": [],
+    "beeAuras" : [
+      {
+        "auraType" : null,
+        "strength": 0,
+        "damageType": null,
+        "calmingDisabled": false,
+        "effectID": null
+      }
+    ],
+    "particleName" : null
+  },
+  "comments": {
+    "beepediaItemID" : "this is the item that will show up to represent the effect in the beepedia.",
+    "potionDamageEffects" : "these potion effects will be inflicted on sting",
+    "damageImmunities" : "these damage types will be ignored in damage calculations",
+    "potionImmunities" : "these potion types will be ignored when applied to the bee",
+    "damageTypes" : "these are used to add extra damage to the bee's sting attack, this will be added ontop of the bee's base damage",
+    "specialAbilities" : "see validSpecialAbilities for more info",
+    "beeAuras": "these are special effects applied to any players within the auraRange (default: 10 blocks) every 8 seconds",
+    "particleName": "the name of a particle, this particle will periodically be emmitted from the bee",
+    "calmingDisabled": "when true enables the ability for the aura to be disabled by the calming effect.",
+    "validSpecialAbilities" : [
+      "flammable": "sets the bee on fire periodically",
+      "teleport": "during the day teleports the bee randomly unless their teleportation is blocked by a hive or a Ender Beecon",
+      "slimy": "makes slimy sounds and slime particles",
+      "angry": "makes the bee angry at the nearest player that approaches, will anger nearby bees too, can be quelled with the calming effect",
+      "spider": "allows the bee to ignore cobwebs",
+      "clingy": "causes the bee to follow the nearest player without the need for a breed item"
+    ],
+    "validAuraTypes": [
+      "BURNING" : "applies the burning effect on aura proc",
+      "POTION" : "applies a potion effect on aura proc (requires effectID, strength increases potion strength)",
+      "DAMAGING" : "inflicts damage of a specific type on aura proc (uses damageType and strength, strength indicates the damage dealt, damageType defaults to `generic`)",
+      "HEALING" : "grants health on aura proc (strength determines the amount of healing provided)",
+      "EXPERIENCE": "grants an amount of experience on aura proc (strength determines the amount of experience granted)",
+      "EXPERIENCE_DRAIN": "removes an amount of experience on aura proc (strength determines the amount of experience removed)"
+    ],
+    "validDamageTypes" : [
+      "infire",
+      "lightningbolt",
+      "onfire",
+      "lava",
+      "hotfloor",
+      "inwall",
+      "cramming",
+      "drown",
+      "starve",
+      "cactus",
+      "fall",
+      "flyintowall",
+      "outofworld",
+      "magic",
+      "wither",
+      "anvil",
+      "fallingblock",
+      "dragonbreath",
+      "dryout",
+      "sweetberrybush",
+      "explosion",
+      "sting",
+      "mobattack",
+      "thorns",
+      "generic"
+    ]
+  }
+}
