@@ -176,7 +176,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     public boolean mutateEntity() {
         AxisAlignedBB box = this.getMutationBoundingBox();
         List<Entity> entityList = this.level.getEntities(this, box, entity ->
-                getBeeData().getMutationData().getEntityMutations().get(entity.getType()) != null);
+                getBeeData().getMutationData().getEntityMutations().get(entity.getType()) != null && entity.isAlive());
         if (!entityList.isEmpty()) {
             Map<EntityType<?>, Pair<Double, RandomCollection<EntityOutput>>> entityMutations = getBeeData().getMutationData().getEntityMutations();
             Pair<Double, RandomCollection<EntityOutput>> output = entityMutations.get(entityList.get(0).getType());
