@@ -18,6 +18,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.*;
+import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public class CodecUtils {
@@ -26,35 +27,20 @@ public class CodecUtils {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    //Codec for getting an ItemStack
+    //region ItemStack Codec
     public static final Codec<ItemStack> ITEM_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Registry.ITEM.byNameCodec().fieldOf("id").forGetter(ItemStack::getItem),
             Codec.INT.fieldOf("count").orElse(1).forGetter(ItemStack::getCount),
             CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
     ).apply(instance, CodecUtils::createItemStack));
 
-    //Codec for converting an ItemStack to an Ingredient
-    public static final Codec<Ingredient> INGREDIENT_CODEC = Codec.PASSTHROUGH.comapFlatMap(CodecUtils::decodeIngredient, CodecUtils::encodeIngredient);
-
-    //Codec for getting a FluidStack
-    public static final Codec<FluidStack> FLUID_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.FLUID.byNameCodec().fieldOf("id").forGetter(FluidStack::getFluid),
-            Codec.INT.fieldOf("amount").orElse(1000).forGetter(FluidStack::getAmount),
-            CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
-    ).apply(instance, CodecUtils::createFluidStack));
-
-    public static final Codec<Map<ApiaryTier, ItemStack>> APIARY_VARIATIONS = Codec.unboundedMap(ApiaryTier.CODEC, ITEM_STACK_CODEC);
-    public static final Codec<Map<BeehiveTier, ItemStack>> BEEHIVE_VARIATIONS = Codec.unboundedMap(BeehiveTier.CODEC, ITEM_STACK_CODEC);
-
-    //helper method to create an item stack with an optional tag
     private static ItemStack createItemStack(ItemLike item, int count, Optional<CompoundTag> tagOptional) {
         return new ItemStack(item, count, tagOptional.orElse(null));
     }
+    //endregion
 
-    //helper method to create a fluid stack with an optional tag
-    private static FluidStack createFluidStack(Fluid fluid, int amount, Optional<CompoundTag> tagOptional) {
-        return new FluidStack(fluid, amount, tagOptional.orElse(null));
-    }
+    //region Ingredient Codec
+    public static final Codec<Ingredient> INGREDIENT_CODEC = Codec.PASSTHROUGH.comapFlatMap(CodecUtils::decodeIngredient, CodecUtils::encodeIngredient);
 
     private static DataResult<Ingredient> decodeIngredient(Dynamic<?> dynamic) {
         Object object = dynamic.getValue();
@@ -69,6 +55,23 @@ public class CodecUtils {
     private static Dynamic<JsonElement> encodeIngredient(Ingredient ingredient) {
         return new Dynamic<>(JsonOps.INSTANCE, ingredient.toJson()).convert(JsonOps.COMPRESSED);
     }
+    //endregion
+
+    //region FluidStack Codec
+    public static final Codec<FluidStack> FLUID_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Registry.FLUID.byNameCodec().fieldOf("id").forGetter(FluidStack::getFluid),
+            Codec.INT.fieldOf("amount").orElse(1000).forGetter(FluidStack::getAmount),
+            CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
+    ).apply(instance, CodecUtils::createFluidStack));
+
+    private static FluidStack createFluidStack(Fluid fluid, int amount, Optional<CompoundTag> tagOptional) {
+        return new FluidStack(fluid, amount, tagOptional.orElse(null));
+    }
+    //endregion
+
+    public static final Codec<Map<ApiaryTier, ItemStack>> APIARY_VARIATIONS = Codec.unboundedMap(ApiaryTier.CODEC, ITEM_STACK_CODEC);
+    public static final Codec<Map<BeehiveTier, ItemStack>> BEEHIVE_VARIATIONS = Codec.unboundedMap(BeehiveTier.CODEC, ITEM_STACK_CODEC);
+
 
     public static <A> Codec<Set<A>> createSetCodec(Codec<A> codec) {
         return codec.listOf().xmap(HashSet::new, ArrayList::new);
@@ -78,8 +81,19 @@ public class CodecUtils {
         return codec.listOf().xmap(LinkedHashSet::new, LinkedList::new);
     }
 
-    @SafeVarargs
-    public static <E> Set<E> newLinkedHashSet(E... elements) {
-        return new LinkedHashSet<>(Arrays.asList(elements));
+    public static <T> Codec<T> passthrough(Function<T, JsonElement> encoder, Function<JsonElement, T> decoder) {
+        return Codec.PASSTHROUGH.comapFlatMap(dynamic -> decoder(dynamic, decoder), item -> encoder(item, encoder));
+    }
+
+    private static <T> DataResult<T> decoder(Dynamic<?> dynamic, Function<JsonElement, T> decoder) {
+        if (dynamic.getValue() instanceof JsonElement jsonElement) {
+            return DataResult.success(decoder.apply(jsonElement));
+        } else {
+            return DataResult.error("value was some how not a JsonElement");
+        }
+    }
+
+    private static <T> Dynamic<JsonElement> encoder(T input, Function<T, JsonElement> encoder) {
+        return new Dynamic<>(JsonOps.INSTANCE, encoder.apply(input));
     }
 }

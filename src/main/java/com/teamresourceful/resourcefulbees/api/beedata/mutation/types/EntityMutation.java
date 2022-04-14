@@ -8,8 +8,8 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IEntityRender;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.common.utils.RestrictedEntityPredicate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -23,11 +23,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public record EntityMutation(EntityType<?> type, Optional<CompoundTag> tag, double chance, double weight) implements IMutation, IEntityRender {
+public record EntityMutation(RestrictedEntityPredicate predicate, double chance, double weight) implements IMutation, IEntityRender {
 
     public static final Codec<EntityMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.ENTITY_TYPE.byNameCodec().fieldOf("entity").forGetter(EntityMutation::type),
-            CompoundTag.CODEC.optionalFieldOf("tag").forGetter(EntityMutation::tag),
+            RestrictedEntityPredicate.CODEC.fieldOf("entity").forGetter(EntityMutation::predicate),
             Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(EntityMutation::chance),
             Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(EntityMutation::weight)
     ).apply(instance, EntityMutation::new));
@@ -36,8 +35,7 @@ public record EntityMutation(EntityType<?> type, Optional<CompoundTag> tag, doub
     @Override
     public BlockPos check(ServerLevel level, Bee bee, BlockPos pos) {
         AABB box = bee.getBoundingBox().expandTowards(new Vec3(0, -2, 0));
-        List<Entity> entityList = level.getEntities(bee, box, entity ->
-                entity.getType().equals(type) && (tag.isEmpty() || ModUtils.fuzzyMatchTag(tag.get(), entity.serializeNBT())));
+        List<Entity> entityList = level.getEntities(bee, box, entity -> predicate().matches(level, entity));
         if (entityList.isEmpty()) return null;
         BlockPos entityPos = entityList.get(0).blockPosition();
         entityList.get(0).discard();
@@ -46,12 +44,17 @@ public record EntityMutation(EntityType<?> type, Optional<CompoundTag> tag, doub
 
     @Override
     public boolean activate(ServerLevel level, Bee bee, BlockPos pos) {
-        CompoundTag entityTag = tag.map(nbt -> ModUtils.nbtWithData("EntityTag", nbt)).orElse(new CompoundTag());
-        Entity entity = type.spawn(level, entityTag, null, null, pos, MobSpawnType.CONVERSION, false, false);
+        CompoundTag entityTag = predicate().getTag().map(nbt -> ModUtils.nbtWithData("EntityTag", nbt)).orElse(new CompoundTag());
+        Entity entity = predicate().entityType().spawn(level, entityTag, null, null, pos, MobSpawnType.CONVERSION, false, false);
         if (entity != null) {
             level.levelEvent(2005, pos.below(1), 0);
         }
         return true;
+    }
+
+    @Override
+    public Optional<CompoundTag> tag() {
+        return predicate().getTag();
     }
 
     @Override
@@ -64,6 +67,6 @@ public record EntityMutation(EntityType<?> type, Optional<CompoundTag> tag, doub
 
     @Override
     public EntityType<?> entityRender() {
-        return type;
+        return predicate().entityType();
     }
 }

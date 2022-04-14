@@ -35,12 +35,16 @@
       {
         "input": {
           "type": "entity",
-          "entity": "minecraft:cow"
+          "entity": {
+            "type": "minecraft:cow"
+          }
         },
         "outputs" : [
           {
             "type": "entity",
-            "entity": "minecraft:mooshroom"
+            "entity": {
+              "type": "minecraft:mooshroom"
+            }
           }
         ]
       }

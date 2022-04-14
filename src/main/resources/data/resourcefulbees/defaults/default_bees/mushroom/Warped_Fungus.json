@@ -35,14 +35,16 @@
       {
         "input": {
           "type": "entity",
-          "entity": "minecraft:zoglin"
+          "entity": {
+            "type": "minecraft:zoglin"
+          }
         },
         "outputs" : [
           {
             "type": "entity",
-            "entity": "minecraft:hoglin",
-            "tag": {
-              "IsImmuneToZombification": true
+            "entity": {
+              "type": "minecraft:hoglin",
+              "nbt": "{\"IsImmuneToZombification\": true}"
             }
           }
         ]

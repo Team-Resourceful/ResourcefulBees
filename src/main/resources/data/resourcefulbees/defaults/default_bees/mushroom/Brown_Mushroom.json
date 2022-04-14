@@ -35,14 +35,16 @@
       {
         "input": {
           "type": "entity",
-          "entity": "minecraft:cow"
+          "entity": {
+            "type": "minecraft:cow"
+          }
         },
         "outputs": [
           {
             "type": "entity",
-            "entity": "minecraft:mooshroom",
-            "tag": {
-              "Type": "brown"
+            "entity": {
+              "type": "minecraft:mooshroom",
+              "nbt": "{\"Type\": \"brown\"}"
             }
           }
         ]
