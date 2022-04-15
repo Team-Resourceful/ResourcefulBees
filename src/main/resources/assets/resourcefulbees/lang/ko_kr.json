@@ -1,5 +1,5 @@
 {
-	"itemGroup.resourcefulbees": "다재다능한 벌",
+	"itemGroup.resourcefulbees": "Resourceful Bees",
 
 	"resourcefulbees.information.bee_type.vanilla": "벌 유형: 마인크래프트",
 	"resourcefulbees.information.bee_type.unknown": "벌 유형: 알려지지않음",
@@ -490,7 +490,7 @@
 
 	"book.resourcefulbees.getting_started.keeping_bees": "Keeping Bees",
 	"book.resourcefulbees.getting_started.keeping_bees.desc": "벌통을 집으로.",
-	"book.resourcefulbees.getting_started.keeping_bees.text": "벌은 귀엽지만 자기만의 마음이 있기 때문에 벌을 위한 장소를 만들고 싶어질 것입니다.$(br2)First you're going to want to gather yourself some $(or)$(l:beekeeping_tools/beehives)Bee Hives$() and then you are going to want to make an enclosed area so they can't fly away.$(br2)",
+	"book.resourcefulbees.getting_started.keeping_bees.text": "벌은 귀엽지만 자기만의 마음이 있기 때문에 벌을 위한 장소를 만들고 싶어질 것입니다.$(br2)먼저 $(or)$(l:beekeeping_tools/beehives)벌집$()을 몇 개 모은 다음 날아가지 못하도록 밀쳬된 공간을 만들어야합니다.$(br2)",
 	"book.resourcefulbees.getting_started.keeping_bees.text.2": "일부 벌은 특별한 꽃을 가지고 있으며, 벌은 올바른 꽃이 없으면 수분을 하거나 벌집을 만들 수 없고 만들지 않을 것입니다.$(br2)$(or)$(l:beekeeping_tools/beepedia)비피디아$()나 JEI로 각 벌들이 꽃으로써 필요한 것이 무엇인지 확인하세요.",
 
 	"book.resourcefulbees.getting_started.protecting_bees": "벌 지키기",
