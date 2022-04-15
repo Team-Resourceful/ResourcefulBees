@@ -79,10 +79,10 @@
 	"gui.resourcefulbees.ender_beecon": "엔더 벌호기",
 	"gui.resourcefulbees.jei.category.bee_pollination_entity_flowers": "벌 개체 꽃",
 
-	"item.resourcefulbees.beepedia": "벌피디아",
-	"item.resourcefulbees.creative_beepedia": "크리에이티브 벌피디아",
+	"item.resourcefulbees.beepedia": "비피디아",
+	"item.resourcefulbees.creative_beepedia": "크리에이티브 비피디아",
 	"item.resourcefulbees.information.beepedia": "정보를 보려면 벌에게 사용하세요",
-	"gui.resourcefulbees.beepedia": "벌피디아 v1.12",
+	"gui.resourcefulbees.beepedia": "비피디아 v1.12",
 	"gui.resourcefulbees.beepedia.home.discord": "저희 디스코드에 참여하세요!",
 	"gui.resourcefulbees.beepedia.home.patreon": "패트리온에서 저희를 후원하세요!",
 	"gui.resourcefulbees.beepedia.home.issues": "버그/문제를 찾았나요? 여기에 제출하세요.",
@@ -137,7 +137,7 @@
 	"gui.resourcefulbees.beepedia.bee_subtab.info.health": "체력: ",
  	"gui.resourcefulbees.beepedia.bee_subtab.info.damage": "피해: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.poison": "독성: ",
-	"gui.resourcefulbees.beepedia.bee_subtab.info.found": "Found By: ",
+	"gui.resourcefulbees.beepedia.bee_subtab.info.found": "발견자: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.time": "벌통 안에 있는 시간: ",
 	"gui.resourcefulbees.beepedia.bee_subtab.info.aura_range": "오라 범위: ",
 
@@ -476,7 +476,7 @@
 
 	"book.resourcefulbees.getting_started.finding_bees": "벌 찾기",
 	"book.resourcefulbees.getting_started.finding_bees.desc": "세계일주.$(br2)  세계일주.",
-	"book.resourcefulbees.getting_started.finding_bees.text.1": "꿀벌은 벌집 안에서 찾을 수 있으며, 다른 몹처럼 생성되어 떠돌아다니는 것도 볼 수 있습니다.$(br2)꿀벌이 생성될 수 있는 위치를 찾으려면 $(or)$(l:beekeeping_tools/beepedia)벌피디아$() 또는 JEI에서 벌을 검색하여 찾을 수 있습니다.",
+	"book.resourcefulbees.getting_started.finding_bees.text.1": "꿀벌은 벌집 안에서 찾을 수 있으며, 다른 몹처럼 생성되어 떠돌아다니는 것도 볼 수 있습니다.$(br2)꿀벌이 생성될 수 있는 위치를 찾으려면 $(or)$(l:beekeeping_tools/beepedia)비피디아$() 또는 JEI에서 벌을 검색하여 찾을 수 있습니다.",
 	"book.resourcefulbees.getting_started.finding_bees.text.2":  "일부 꿀벌은 자연적으로 생성되지 않으며 대신 번식시켜야 합니다. 벌 번식에 대한 더 많은 정보를 $(thing)$(l:getting_started/breeding_bees)여기$()에서 찾을 수 있습니다.",
 
 	"book.resourcefulbees.getting_started.collecting_bees": "벌 수집하기",
@@ -484,8 +484,8 @@
 	"book.resourcefulbees.getting_started.collecting_bees.text": "꿀벌을 찾으면 수집하여 집으로 가져가고 싶을 것입니다.$(br2)이걸 할 수 있는 많은 방법이 있지만, 최고의 방법은 $(or)$(l:beekeeping_tools/bee_jar)벌 병$()이나 $(or)$(l:beekeeping_tools/bee_box)벌 상자$()를 이용하는 것입니다.$(br2)끈이나 벌의 번식 아이템을 이용하는 좀 더 전통적인 방법을 쓸 수도 있습니다.",
 
 	"book.resourcefulbees.getting_started.understanding_bees": "벌 이해하기",
-	"book.resourcefulbees.getting_started.understanding_bees.desc": "벌피디아 지식.",
-	"book.resourcefulbees.getting_started.understanding_bees.text.1": "일단 벌이 있으면 벌이 무엇을 할 수 있고 무엇을 해야하는 지 알고 싶을 것입니다.$(br2)$(or)$(l:beekeeping_tools/beepedia)벌피디아$()를 만들면 각 꿀벌이 할 수 있는 일에 대해 더 많이 배울 수 있습니다. 벌에 $(thing)오른쪽 클릭$()을 하면 $(or)$(l:beekeeping_tools/beepedia)벌피디아$()의 그 벌의 페이지를 펼칠 수 있습니다.",
+	"book.resourcefulbees.getting_started.understanding_bees.desc": "비피디아 지식.",
+	"book.resourcefulbees.getting_started.understanding_bees.text.1": "일단 벌이 있으면 벌이 무엇을 할 수 있고 무엇을 해야하는 지 알고 싶을 것입니다.$(br2)$(or)$(l:beekeeping_tools/beepedia)비피디아$()를 만들면 각 꿀벌이 할 수 있는 일에 대해 더 많이 배울 수 있습니다. 벌에 $(thing)오른쪽 클릭$()을 하면 $(or)$(l:beekeeping_tools/beepedia)비피디아$()의 그 벌의 페이지를 펼칠 수 있습니다.",
 	"book.resourcefulbees.getting_started.understanding_bees.text.2": "JEI를 사용하여 꿀벌에 대한 정보를 검색할 수도 있습니다.$(br2)벌은 $(thing)오른쪽 클릭$()과 $(thing)왼쪽 클릭$() 용도가 모두 있다는 것을 명심하세요. 꿀벌의 생성 알이나 $(or)$(l:beekeeping_tools/bee_jar)벌 병$() 의 용도를 보면 벌을 번식시키거나 얻는 방법에 대한 정보를 찾을 수도 있습니다.",
 
 	"book.resourcefulbees.getting_started.keeping_bees": "Keeping Bees",
@@ -557,7 +557,7 @@
 
 	"book.resourcefulbees.advanced_tips.generating_energy": "에너지 생산",
 	"book.resourcefulbees.advanced_tips.generating_energy.desc": "꿀의 타의 추종을 불허하는 힘.",
-	"book.resourcefulbees.advanced_tips.generating_energy.text" : "Honey has untapped potential which we can harvest to create power using the $(or)$(l:beekeeping_tools/honey_generator)Honey Generator$().$(br2)If you don't have access to energy transfer you can still utilise the generator by simply placing the block next to the $(or)$(l:advanced_tips/powered_centrifuges)Centrifuge$() you want to process with.",
+	"book.resourcefulbees.advanced_tips.generating_energy.text" : "꿀에는 $(or)$(l:beekeeping_tools/honey_generator)꿀 발전기$()를 사용하여 전력을 생성할 수 있는 미개척된 잠재력이 있습니다.$(br2)에너지를 전달할 수 있는 방법이 없다면 작동시키려는 $(or)$(l:advanced_tips/powered_centrifuges)원심분리기$() 옆에 배치하기만 하면 발전기를 사용할 수 있습니다.",
 
 	"book.resourcefulbees.advanced_tips.mutations": "돌연변이",
 	"book.resourcefulbees.advanced_tips.mutations.desc": "어떤 것이 다른 것이 된다.",
@@ -591,7 +591,7 @@
 
 	"book.resourcefulbees.beekeeping_tools.bee_box": "벌 상자",
 	"book.resourcefulbees.beekeeping_tools.bee_box.text": "벌 상자는 동시에 벌 열 마리를 가둘 수 있습니다. 간단히 벌에다 $(thing)오른쪽 클릭$()을 하면 모을 수 있습니다. 또한 $(or)$(l:beekeeping_tools/beehives)벌통, 양봉장$()에 간단히 $(thing)웅크려 오른쪽 클릭$()하여 안의 벌을 모을 수 있습니다. $(br2)$(#900)먼저 벌통을 훈연하는 것을 잊지마세요!$()",
-	"book.resourcefulbees.beekeeping_tools.bee_box.desc": "To release bees simply $(thing)Right Click$() to release a single bee, to release all bees at once use $(thing)Sneak Right Click$().",
+	"book.resourcefulbees.beekeeping_tools.bee_box.desc": "벌 한마리를 놓아주려면 간단히 $(thing)오른쪽 클릭$()을 하면 되고, 한 번에 모든 벌들을 놓아주려면 $(thing)웅크려서 오른쪽 클릭$()을 하면 됩니다.",
 
 	"book.resourcefulbees.beekeeping_tools.beehives": "벌통",
 	"book.resourcefulbees.beekeeping_tools.beehives.text.1": "벌들을 살 장소가 필요합니다. 이 벌통은 더 많은 벌과 벌집을 저장하도록 업그레이드할 수 있습니다.",
@@ -785,7 +785,7 @@
 	"advancements.resourcefulbees.mechanical_centrifuge.description": "수동 원심 분리기를 얻으세요",
 	"advancements.resourcefulbees.oreo_bee.title": "먹지마세요",
 	"advancements.resourcefulbees.oreo_bee.description": "찾기 어려운 오레오 벌을 찾아서 잡으세요",
-	"advancements.resourcefulbees.root.title": "다재다능한 벌",
+	"advancements.resourcefulbees.root.title": "Resourceful Bees",
 	"advancements.resourcefulbees.root.description": "By Epic Oreo, ThatGravyBoat, Dawn Felstar and Vik",
 	"advancements.resourcefulbees.scraper.title": "벌집 수확 장치",
 	"advancements.resourcefulbees.scraper.description": "스크레이퍼를 얻으세요",
