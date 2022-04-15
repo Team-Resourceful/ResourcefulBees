@@ -24,12 +24,16 @@
         "outputs" : [
           {
             "type": "block",
-            "block": "minecraft:ice",
+            "block": {
+              "id": "minecraft:ice"
+            },
             "weight": 7
           },
           {
             "type": "block",
-            "block": "minecraft:packed_ice",
+            "block": {
+              "id": "minecraft:packed_ice"
+            },
             "weight": 3
           }
         ]

@@ -8,7 +8,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IEntityRender;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
-import com.teamresourceful.resourcefulbees.common.utils.RestrictedEntityPredicate;
+import com.teamresourceful.resourcefulbees.common.utils.predicates.RestrictedEntityPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;

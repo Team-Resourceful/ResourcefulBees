@@ -4,8 +4,6 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;
-import mezz.jei.api.recipe.IFocus;
-import mezz.jei.api.recipe.IFocusFactory;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -15,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.stream.StreamSupport;
 
 public class EntityIngredientHelper implements IIngredientHelper<EntityIngredient> {
 
@@ -24,22 +21,6 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
         return JEICompat.ENTITY_INGREDIENT;
     }
 
-    @NotNull
-    @Override
-    public IFocus<?> translateFocus(@NotNull IFocus<EntityIngredient> focus, @NotNull IFocusFactory focusFactory) {
-        return focus;
-    }
-
-    @Nullable
-    @Override
-    public EntityIngredient getMatch(Iterable<EntityIngredient> iterable, @NotNull EntityIngredient entityIngredient, @NotNull UidContext context) {
-        return StreamSupport.stream(iterable.spliterator(), false)
-                .filter(ingredient -> {
-                    if (ingredient.getEntityType().getRegistryName() == null) return false;
-                    return ingredient.getEntityType().getRegistryName().equals(entityIngredient.getEntityType().getRegistryName());
-                })
-                .findFirst().orElse(null);
-    }
 
     @NotNull
     @Override
@@ -67,20 +48,21 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
         return this.getUniqueId(entityIngredient, UidContext.Ingredient);
     }
 
-    @NotNull
     @Override
-    public String getModId(@NotNull EntityIngredient entityIngredient) {
-        ResourceLocation id = entityIngredient.getEntityType().getRegistryName();
-        if (id == null) return "minecraft";
-        return id.getNamespace();
+    public String getModId(@NotNull EntityIngredient ingredient) {
+        return getResourceLocation(ingredient).getNamespace();
     }
 
-    @NotNull
     @Override
-    public String getResourceId(EntityIngredient entityIngredient) {
-        ResourceLocation id = entityIngredient.getEntityType().getRegistryName();
-        if (id == null) return "error";
-        return id.getPath();
+    public String getResourceId(@NotNull EntityIngredient ingredient) {
+        return getResourceLocation(ingredient).getPath();
+    }
+
+    @Override
+    public @NotNull ResourceLocation getResourceLocation(EntityIngredient ingredient) {
+        ResourceLocation id = ingredient.getEntityType().getRegistryName();
+        if (id == null) return new ResourceLocation("error");
+        return id;
     }
 
     @NotNull

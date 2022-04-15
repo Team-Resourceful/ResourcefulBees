@@ -7,9 +7,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IItemRender;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.common.utils.predicates.RestrictedBlockPredicate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -24,11 +23,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record BlockMutation(Block block, Optional<CompoundTag> tag, double chance, double weight) implements IMutation, IItemRender {
+public record BlockMutation(RestrictedBlockPredicate predicate, double chance, double weight) implements IMutation, IItemRender {
 
     public static final Codec<BlockMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.BLOCK.byNameCodec().fieldOf("block").forGetter(BlockMutation::block),
-            CompoundTag.CODEC.optionalFieldOf("tag").forGetter(BlockMutation::tag),
+            RestrictedBlockPredicate.CODEC.fieldOf("block").forGetter(BlockMutation::predicate),
             Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(BlockMutation::chance),
             Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(BlockMutation::weight)
     ).apply(instance, BlockMutation::new));
@@ -37,16 +35,9 @@ public record BlockMutation(Block block, Optional<CompoundTag> tag, double chanc
     public @Nullable BlockPos check(ServerLevel level, Bee bee, BlockPos pos) {
         for (int i = 0; i < 2; i++) {
             pos = pos.below(1);
-            if (level.getBlockState(pos).getBlock().equals(block)){
-                if (tag.isEmpty()) {
-                    level.removeBlock(pos, false);
-                    return pos;
-                }
-                BlockEntity entity = level.getBlockEntity(pos);
-                if (entity != null && ModUtils.fuzzyMatchTag(tag.get(), entity.saveWithoutMetadata())){
-                    level.removeBlock(pos, false);
-                    return pos;
-                }
+            if (predicate.matches(level, pos)) {
+                level.removeBlock(pos, false);
+                return pos;
             }
         }
         return null;
@@ -56,10 +47,15 @@ public record BlockMutation(Block block, Optional<CompoundTag> tag, double chanc
     public boolean activate(ServerLevel level, Bee bee, BlockPos pos) {
         if (!level.getBlockState(pos).getMaterial().isReplaceable()) return false;
         //TODO see about changing this to using blockstate processor or something.
-        BlockState state = block.defaultBlockState();
+        BlockState state = this.predicate.block().defaultBlockState();
         level.setBlock(pos, state, Block.UPDATE_ALL);
-        tag.ifPresent(nbt -> BlockEntity.loadStatic(pos, state, nbt));
+        predicate.getTag().ifPresent(nbt -> BlockEntity.loadStatic(pos, state, nbt));
         return true;
+    }
+
+    @Override
+    public Optional<CompoundTag> tag() {
+        return predicate.getTag();
     }
 
     @Override
@@ -73,9 +69,9 @@ public record BlockMutation(Block block, Optional<CompoundTag> tag, double chanc
     @Override
     public ItemStack itemRender() {
         ItemStack stack = new ItemStack(Items.BARRIER);
-        Item item = block().asItem();
+        Item item = predicate.block().asItem();
         if (item.equals(Items.AIR)) {
-            stack.setHoverName(new TextComponent("Block: " + block().getRegistryName()));
+            stack.setHoverName(new TextComponent("Block: " + predicate.block().getRegistryName()));
         } else {
             stack = new ItemStack(item);
         }

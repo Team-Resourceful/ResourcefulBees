@@ -7,15 +7,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IItemRender;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.common.utils.predicates.RestrictedItemPredicate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -24,11 +22,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public record ItemMutation(Item item, Optional<CompoundTag> tag, double chance, double weight) implements IMutation, IItemRender {
+public record ItemMutation(RestrictedItemPredicate predicate, double chance, double weight) implements IMutation, IItemRender {
 
     public static final Codec<ItemMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.ITEM.byNameCodec().fieldOf("item").forGetter(ItemMutation::item),
-            CompoundTag.CODEC.optionalFieldOf("tag").forGetter(ItemMutation::tag),
+            RestrictedItemPredicate.CODEC.fieldOf("item").forGetter(ItemMutation::predicate),
             Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(ItemMutation::chance),
             Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(ItemMutation::weight)
     ).apply(instance, ItemMutation::new));
@@ -36,11 +33,7 @@ public record ItemMutation(Item item, Optional<CompoundTag> tag, double chance, 
     @Override
     public @Nullable BlockPos check(ServerLevel level, Bee bee, BlockPos pos) {
         AABB box = bee.getBoundingBox().expandTowards(new Vec3(0, -2, 0));
-        List<Entity> entityList = level.getEntities(bee, box, entity ->
-                entity instanceof ItemEntity itemEntity &&
-                itemEntity.getItem().is(item) &&
-                (tag.isEmpty() || ModUtils.fuzzyMatchTag(tag.get(), itemEntity.getItem().getTag()))
-        );
+        List<Entity> entityList = level.getEntities(bee, box, entity -> entity instanceof ItemEntity itemEntity && predicate.matches(itemEntity.getItem()));
         if (entityList.isEmpty()) return null;
         BlockPos entityPos = entityList.get(0).blockPosition();
         entityList.get(0).discard();
@@ -49,10 +42,15 @@ public record ItemMutation(Item item, Optional<CompoundTag> tag, double chance, 
 
     @Override
     public boolean activate(ServerLevel level, Bee bee, BlockPos pos) {
-        ItemStack stack = new ItemStack(item);
-        tag.ifPresent(stack::setTag);
+        ItemStack stack = new ItemStack(predicate.item());
+        predicate.getTag().ifPresent(stack::setTag);
         level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), stack));
         return true;
+    }
+
+    @Override
+    public Optional<CompoundTag> tag() {
+        return predicate.getTag();
     }
 
     @Override
@@ -65,6 +63,6 @@ public record ItemMutation(Item item, Optional<CompoundTag> tag, double chance, 
 
     @Override
     public ItemStack itemRender() {
-        return new ItemStack(item, 1, tag.orElse(null));
+        return new ItemStack(predicate.item(), 1, predicate.getTag().orElse(null));
     }
 }

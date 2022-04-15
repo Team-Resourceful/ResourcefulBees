@@ -17,16 +17,22 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:blackstone"
+          "block": {
+            "id": "minecraft:blackstone"
+          }
         },
         "outputs" : [
           {
             "type": "block",
-            "block": "minecraft:gilded_blackstone"
+            "block": {
+              "id": "minecraft:gilded_blackstone"
+            }
           },
           {
             "type": "block",
-            "block": "minecraft:netherrack"
+            "block": {
+              "id": "minecraft:netherrack"
+            }
           }
         ]
       }

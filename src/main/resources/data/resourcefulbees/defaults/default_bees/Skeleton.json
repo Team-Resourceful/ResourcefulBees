@@ -17,12 +17,16 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:stone"
+          "block": {
+            "id": "minecraft:stone"
+          }
         },
         "outputs": [
           {
             "type": "block",
-            "block": "minecraft:gravel"
+            "block": {
+              "id": "minecraft:gravel"
+            }
           }
         ]
       }

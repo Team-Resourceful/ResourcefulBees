@@ -21,11 +21,15 @@
         "outputs": [
           {
             "type": "block",
-            "block": "minecraft:obsidian"
+            "block": {
+              "id": "minecraft:obsidian"
+            }
           },
           {
             "type": "block",
-            "block": "minecraft:stone"
+            "block": {
+              "id": "minecraft:stone"
+            }
           }
         ]
       }

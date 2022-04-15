@@ -18,16 +18,22 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:stone"
+          "block": {
+            "id": "minecraft:stone"
+          }
         },
         "outputs" : [
           {
             "type": "block",
-            "block": "minecraft:gold_ore"
+            "block": {
+              "id": "minecraft:gold_ore"
+            }
           },
           {
             "type": "block",
-            "block": "minecraft:cobblestone"
+            "block": {
+              "id": "minecraft:cobblestone"
+            }
           }
         ]
       }

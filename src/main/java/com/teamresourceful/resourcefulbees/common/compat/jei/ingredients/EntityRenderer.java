@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +15,14 @@ import java.util.List;
 public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
 
     @Override
-    public void render(@NotNull PoseStack stack, int x, int y, @Nullable EntityIngredient entityIngredient) {
+    public void render(@NotNull PoseStack stack, @NotNull EntityIngredient ingredient) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level != null && entityIngredient != null && mc.player != null && entityIngredient.getEntity() != null) {
-            if (entityIngredient.getEntity() instanceof CustomBeeEntity) {
+        if (mc.level != null && ingredient.getEntity() != null) {
+            int y = 0;
+            if (ingredient.getEntity() instanceof CustomBeeEntity) {
                 y -= 5;
             }
-            RenderUtils.renderEntity(stack, entityIngredient.getEntity(), mc.level, x, y, entityIngredient.getRotation(), 1);
+            RenderUtils.renderEntity(stack, ingredient.getEntity(), mc.level, -2, y, ingredient.getRotation(), 1);
         }
     }
 

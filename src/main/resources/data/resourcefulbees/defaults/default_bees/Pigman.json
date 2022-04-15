@@ -16,16 +16,22 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:netherrack"
+          "block": {
+            "id": "minecraft:netherrack"
+          }
         },
         "outputs": [
           {
             "type": "block",
-            "block": "minecraft:glowstone"
+            "block": {
+              "id": "minecraft:glowstone"
+            }
           },
           {
             "type": "block",
-            "block": "minecraft:cobblestone"
+            "block": {
+              "id": "minecraft:cobblestone"
+            }
           }
         ]
       }

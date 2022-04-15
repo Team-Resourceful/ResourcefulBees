@@ -18,13 +18,17 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:honey_block",
+          "block": {
+            "id": "minecraft:honey_block"
+          },
           "chance": 0.8
         },
         "outputs": [
           {
             "type": "block",
-            "block": "minecraft:slime_block"
+            "block": {
+              "id": "minecraft:slime_block"
+            }
           }
         ]
       }

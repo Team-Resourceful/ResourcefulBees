@@ -17,7 +17,9 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:stone",
+          "block": {
+            "id": "minecraft:stone"
+          },
           "chance": 0.75
         },
         "outputs" : [

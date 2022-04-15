@@ -23,12 +23,16 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:red_mushroom"
+          "block": {
+            "id": "minecraft:red_mushroom"
+          }
         },
         "outputs" : [
           {
             "type": "block",
-            "block": "minecraft:crimson_fungus"
+            "block": {
+              "id": "minecraft:crimson_fungus"
+            }
           }
         ]
       },

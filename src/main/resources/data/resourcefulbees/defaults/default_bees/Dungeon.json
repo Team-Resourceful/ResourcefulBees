@@ -18,21 +18,25 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:cobblestone"
+          "block": {
+            "id": "minecraft:cobblestone"
+          }
         },
         "outputs" : [
           {
             "type": "block",
-            "block": "minecraft:mossy_cobblestone",
+            "block": {
+              "id": "minecraft:mossy_cobblestone"
+            },
             "weight": 99
           },
           {
             "type": "block",
-            "block": "minecraft:chest",
-            "weight": 1,
-            "tag": {
-              "LootTable": "minecraft:chests/simple_dungeon"
-            }
+            "block": {
+              "id": "minecraft:chest",
+              "tag": "{\"LootTable\": \"minecraft:chests/simple_dungeon\"}"
+            },
+            "weight": 1
           }
         ]
       }

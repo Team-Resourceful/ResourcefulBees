@@ -23,12 +23,19 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:grass"
+          "block": {
+            "id": "minecraft:grass",
+            "location": {
+              "biome": "grove"
+            }
+          }
         },
         "outputs" : [
           {
             "type": "block",
-            "block": "minecraft:brown_mushroom"
+            "block": {
+              "id": "minecraft:brown_mushroom"
+            }
           }
         ]
       },

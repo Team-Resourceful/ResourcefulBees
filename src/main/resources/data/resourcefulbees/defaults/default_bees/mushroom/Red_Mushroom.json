@@ -23,12 +23,16 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:grass"
+          "block": {
+            "id": "minecraft:grass"
+          }
         },
         "outputs" : [
           {
             "type": "block",
-            "block": "minecraft:red_mushroom"
+            "block": {
+              "id": "minecraft:red_mushroom"
+            }
           }
         ]
       },

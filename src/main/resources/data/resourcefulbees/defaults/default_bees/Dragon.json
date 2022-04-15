@@ -23,13 +23,17 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:stone",
+          "block": {
+              "id": "minecraft:stone"
+          },
           "chance": 0.5
         },
         "outputs" : [
           {
             "type": "block",
-            "block": "minecraft:end_stone"
+            "block": {
+              "id": "minecraft:end_stone"
+            }
           }
         ]
       }

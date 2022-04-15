@@ -11,6 +11,12 @@ plugins {
 
 repositories {
     maven { url "https://nexus.resourcefulbees.com/repository/maven-public/" }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 version = mod_version
@@ -137,6 +143,7 @@ dependencies {
     //runtimeOnly fg.deobf ("com.jozufozu.flywheel:Flywheel-Forge:$flywheel_version")
 
     implementation fg.deobf("software.bernie.geckolib:geckolib-1.18-forge:$geckolib_version")
+    runtimeOnly fg.deobf("curse.maven:dashboard-602450:3726213")
 
     implementation project(':Phosphophyllite')
 

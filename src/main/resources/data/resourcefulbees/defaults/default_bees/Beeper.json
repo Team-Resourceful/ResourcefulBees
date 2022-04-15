@@ -26,20 +26,26 @@
         "outputs" : [
           {
             "type": "block",
-            "block": "minecraft:mossy_cobblestone"
+            "block": {
+              "id": "minecraft:mossy_cobblestone"
+            }
           }
         ]
       },
       {
         "input": {
           "type": "block",
-          "block": "minecraft:coal_block",
+          "block": {
+            "id": "minecraft:coal_block"
+          },
           "chance": 0.25
         },
         "outputs" : [
           {
             "type": "block",
-            "block": "minecraft:tnt"
+            "block": {
+              "id": "minecraft:tnt"
+            }
           }
         ]
       }

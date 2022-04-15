@@ -16,16 +16,22 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:stone"
+          "block": {
+            "id": "minecraft:stone"
+          }
         },
         "outputs": [
           {
             "type": "block",
-            "block": "minecraft:mossy_cobblestone"
+            "block": {
+              "id": "minecraft:mossy_cobblestone"
+            }
           },
           {
             "type": "block",
-            "block": "minecraft:cobblestone",
+            "block": {
+              "id": "minecraft:cobblestone"
+            },
             "weight": 30
           }
         ]

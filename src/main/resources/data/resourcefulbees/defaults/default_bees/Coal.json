@@ -18,13 +18,17 @@
       {
         "input": {
           "type": "block",
-          "block": "minecraft:stone",
+          "block": {
+              "id": "minecraft:stone"
+          },
           "chance": 0.75
         },
         "outputs" : [
           {
             "type": "block",
-            "block": "minecraft:coal_ore"
+            "block": {
+              "id": "minecraft:coal_ore"
+            }
           }
         ]
       }
