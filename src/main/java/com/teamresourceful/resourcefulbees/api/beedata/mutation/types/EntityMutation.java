@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -33,9 +32,9 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
 
     @Nullable
     @Override
-    public BlockPos check(ServerLevel level, Bee bee, BlockPos pos) {
-        AABB box = bee.getBoundingBox().expandTowards(new Vec3(0, -2, 0));
-        List<Entity> entityList = level.getEntities(bee, box, entity -> predicate().matches(level, entity));
+    public BlockPos check(ServerLevel level, BlockPos pos) {
+        AABB box = new AABB(pos).expandTowards(new Vec3(0, -2, 0));
+        List<Entity> entityList = level.getEntities((Entity) null, box, entity -> predicate().matches(level, entity));
         if (entityList.isEmpty()) return null;
         BlockPos entityPos = entityList.get(0).blockPosition();
         entityList.get(0).discard();
@@ -43,7 +42,7 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
     }
 
     @Override
-    public boolean activate(ServerLevel level, Bee bee, BlockPos pos) {
+    public boolean activate(ServerLevel level, BlockPos pos) {
         CompoundTag entityTag = predicate().getTag().map(nbt -> ModUtils.nbtWithData("EntityTag", nbt)).orElse(new CompoundTag());
         Entity entity = predicate().entityType().spawn(level, entityTag, null, null, pos, MobSpawnType.CONVERSION, false, false);
         if (entity != null) {

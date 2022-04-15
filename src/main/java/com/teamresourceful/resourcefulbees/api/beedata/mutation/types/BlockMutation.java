@@ -12,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -32,7 +31,7 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
     ).apply(instance, BlockMutation::new));
 
     @Override
-    public @Nullable BlockPos check(ServerLevel level, Bee bee, BlockPos pos) {
+    public @Nullable BlockPos check(ServerLevel level, BlockPos pos) {
         for (int i = 0; i < 2; i++) {
             pos = pos.below(1);
             if (predicate.matches(level, pos)) {
@@ -44,7 +43,7 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
     }
 
     @Override
-    public boolean activate(ServerLevel level, Bee bee, BlockPos pos) {
+    public boolean activate(ServerLevel level, BlockPos pos) {
         if (!level.getBlockState(pos).getMaterial().isReplaceable()) return false;
         //TODO see about changing this to using blockstate processor or something.
         BlockState state = this.predicate.block().defaultBlockState();

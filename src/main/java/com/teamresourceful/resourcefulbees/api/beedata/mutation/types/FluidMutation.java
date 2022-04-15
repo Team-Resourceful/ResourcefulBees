@@ -11,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
@@ -29,7 +28,7 @@ public record FluidMutation(Fluid fluid, double chance, double weight) implement
     ).apply(instance, FluidMutation::new));
 
     @Override
-    public @Nullable BlockPos check(ServerLevel level, Bee bee, BlockPos pos) {
+    public @Nullable BlockPos check(ServerLevel level, BlockPos pos) {
         for (int i = 0; i < 2; i++) {
             pos = pos.below(1);
             if (level.getFluidState(pos).is(fluid)){
@@ -41,7 +40,7 @@ public record FluidMutation(Fluid fluid, double chance, double weight) implement
     }
 
     @Override
-    public boolean activate(ServerLevel level, Bee bee, BlockPos pos) {
+    public boolean activate(ServerLevel level, BlockPos pos) {
         if (!level.getBlockState(pos).getMaterial().isReplaceable()) return false;
         level.setBlock(pos, fluid.defaultFluidState().createLegacyBlock(), Block.UPDATE_ALL);
         return true;

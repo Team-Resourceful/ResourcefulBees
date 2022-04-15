@@ -12,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
@@ -31,9 +30,10 @@ public record ItemMutation(RestrictedItemPredicate predicate, double chance, dou
     ).apply(instance, ItemMutation::new));
 
     @Override
-    public @Nullable BlockPos check(ServerLevel level, Bee bee, BlockPos pos) {
-        AABB box = bee.getBoundingBox().expandTowards(new Vec3(0, -2, 0));
-        List<Entity> entityList = level.getEntities(bee, box, entity -> entity instanceof ItemEntity itemEntity && predicate.matches(itemEntity.getItem()));
+    public @Nullable BlockPos check(ServerLevel level, BlockPos pos) {
+        AABB box = new AABB(pos).expandTowards(new Vec3(0, -2, 0));
+        List<Entity> entityList = level.getEntities((Entity) null, box,
+                entity -> entity instanceof ItemEntity itemEntity && predicate.matches(itemEntity.getItem()));
         if (entityList.isEmpty()) return null;
         BlockPos entityPos = entityList.get(0).blockPosition();
         entityList.get(0).discard();
@@ -41,7 +41,7 @@ public record ItemMutation(RestrictedItemPredicate predicate, double chance, dou
     }
 
     @Override
-    public boolean activate(ServerLevel level, Bee bee, BlockPos pos) {
+    public boolean activate(ServerLevel level, BlockPos pos) {
         ItemStack stack = new ItemStack(predicate.item());
         predicate.getTag().ifPresent(stack::setTag);
         level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), stack));
