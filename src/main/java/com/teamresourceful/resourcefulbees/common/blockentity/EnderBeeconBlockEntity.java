@@ -46,7 +46,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
 
@@ -110,13 +112,13 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put("SyncData", getSyncData());
+        tag.put(NBTConstants.SYNC_DATA, getSyncData());
     }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
-        readSyncData(tag.getCompound("SyncData"));
+        readSyncData(tag.getCompound(NBTConstants.SYNC_DATA));
     }
 
     //endregion
@@ -146,8 +148,6 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
     }
 
     private static void startUpCheck(@NotNull Level level, BlockPos pos, BlockState state, EnderBeeconBlockEntity entity) {
-        if (level.isClientSide) return;
-
         boolean flag = entity.tank.getFluidAmount() > 0;
         if (entity.updateBeecon) {
             if (flag && !entity.beeconActive) {
@@ -164,15 +164,14 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
     }
 
     private static void pullFluidFromBelow(@NotNull Level level, BlockPos pos, BlockState state, EnderBeeconBlockEntity entity) {
+        if (entity.tank.getSpace() == 0) return;
         BlockEntity tileEntity = level.getBlockEntity(pos.below());
         if (tileEntity == null) return;
-        if (entity.tank.getSpace() == 0) return;
         tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP).ifPresent(handler -> {
             for (int i = 0; i < handler.getTanks(); i++) {
                 FluidStack stack = handler.getFluidInTank(i);
                 if (entity.tank.isFluidValid(stack) && (entity.tank.getFluid().isFluidEqual(stack) || entity.tank.getFluid().isEmpty())) {
-                    int pullAmount = CommonConfig.BEECON_PULL_AMOUNT.get();
-                    if (pullAmount > entity.tank.getSpace()) pullAmount = entity.tank.getSpace();
+                    int pullAmount = Math.min(CommonConfig.BEECON_PULL_AMOUNT.get(), entity.tank.getSpace());
                     FluidStack amountDrained = handler.drain(new FluidStack(stack.getFluid(), pullAmount), IFluidHandler.FluidAction.EXECUTE);
                     entity.tank.fill(amountDrained, IFluidHandler.FluidAction.EXECUTE);
                 }
@@ -217,7 +216,9 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
 
     private static void addEffectsToBees(@NotNull Level level, List<Bee> bees, EnderBeeconBlockEntity entity) {
         if (entity.doEffects()) {
-            for (Bee mob : bees) for (MobEffect effect : entity.effects) mob.addEffect(new MobEffectInstance(effect, 120, 0, false, false));
+            for (Bee mob : bees)
+                for (MobEffect effect : entity.effects)
+                    mob.addEffect(new MobEffectInstance(effect, 120, 0, false, false));
         }
     }
 
@@ -230,8 +231,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
     }
 
     public boolean doEffects() {
-        if (tank.isEmpty()) return false;
-        return !effects.isEmpty();
+        return !tank.isEmpty() && !effects.isEmpty();
     }
 
     public void handleBeeconUpdate(BeeconChangeMessage.Option option, int value) {
@@ -269,24 +269,22 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
     //region effect nbt
 
     public ListTag writeEffectsToNBT(ListTag nbt) {
-        for (MobEffect effect : effects) {
-            ResourceLocation effectId = effect.getRegistryName();
-            if (effectId != null) nbt.add(StringTag.valueOf(effectId.toString()));
-        }
+        effects.stream()
+                .map(MobEffect::getRegistryName)
+                .filter(Objects::nonNull)
+                .map(ResourceLocation::toString)
+                .map(StringTag::valueOf)
+                .forEachOrdered(nbt::add);
         return nbt;
     }
 
     public Set<MobEffect> readEffectsFromNBT(ListTag nbt) {
-        Set<MobEffect> beeconEffects = new LinkedHashSet<>();
-        for (Tag inbt : nbt) {
-            if (inbt instanceof StringTag) {
-                MobEffect effect = BeeInfoUtils.getEffect(inbt.getAsString());
-                if (effect != null) {
-                    beeconEffects.add(effect);
-                }
-            }
-        }
-        return beeconEffects;
+        return nbt.stream()
+                .filter(StringTag.class::isInstance)
+                .map(Tag::getAsString)
+                .map(BeeInfoUtils::getEffect)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 
     public double getEffectValue(MobEffect effect) {

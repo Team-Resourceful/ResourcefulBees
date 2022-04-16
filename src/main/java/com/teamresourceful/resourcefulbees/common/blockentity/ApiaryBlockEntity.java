@@ -15,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.sounds.SoundEvents;
@@ -165,15 +166,13 @@ public class ApiaryBlockEntity extends GUISyncedBlockEntity {
     }
 
     public void loadBees(CompoundTag nbt) {
-        ListTag listTag = nbt.getList(NBTConstants.NBT_BEES, 10);
-
-        if (!listTag.isEmpty()) {
-            for (int i = 0; i < listTag.size(); ++i) {
-                CompoundTag data = listTag.getCompound(i);
+        nbt.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND)
+            .stream()
+            .map(CompoundTag.class::cast)
+            .forEachOrdered(data -> {
                 Component displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? Component.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : new TextComponent("Temp Bee Name");
                 this.bees.add(new ApiaryBee(data.getCompound("EntityData"), data.getInt("TicksInHive"), data.getInt("MinOccupationTicks"), displayName, data.getBoolean(NBTConstants.NBT_LOCKED)));
-            }
-        }
+            });
     }
 
     @Override
@@ -192,16 +191,14 @@ public class ApiaryBlockEntity extends GUISyncedBlockEntity {
 
     @Override
     public @NotNull CompoundTag getSyncData() {
-        CompoundTag tag = new CompoundTag();
-        tag.put(NBTConstants.NBT_BEES, writeBees());
-        return tag;
+        return ModUtils.nbtWithData(NBTConstants.NBT_BEES, writeBees());
     }
 
     @Override
     public void readSyncData(@NotNull CompoundTag tag) {
         bees.clear();
         loadBees(tag);
-        bees.removeIf(bee -> BeeInfoUtils.getEntityType(bee.entityData.getString("id")) == EntityType.PIG);
+        bees.removeIf(bee -> BeeInfoUtils.getOptionalEntityType(bee.entityData.getString("id")).isEmpty());
     }
     //endregion
 

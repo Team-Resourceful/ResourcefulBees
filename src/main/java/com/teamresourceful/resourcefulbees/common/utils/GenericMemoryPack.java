@@ -31,8 +31,8 @@ public abstract class GenericMemoryPack implements PackResources {
     private final PackType allowedType;
     private final String id;
 
-    protected GenericMemoryPack(PackType type, String id, String meta) {
-        this.metaData = ModConstants.GSON.fromJson(meta, JsonObject.class);
+    protected GenericMemoryPack(PackType type, String id, JsonObject meta) {
+        this.metaData = meta;
         this.allowedType = type;
         this.id = id;
     }
@@ -71,8 +71,8 @@ public abstract class GenericMemoryPack implements PackResources {
                 .filter(location->location.getNamespace().equals(namespace))
                 .filter(location->location.getPath().split("/").length < maxFolderWalk)
                 .filter(location->location.getPath().startsWith(path))
-                .filter(location-> predicate.test(location.getPath().substring(Math.max(location.getPath().lastIndexOf('/'), 0)))
-                ).collect(Collectors.toList());
+                .filter(location-> predicate.test(location.getPath().substring(Math.max(location.getPath().lastIndexOf('/'), 0))))
+                .collect(Collectors.toList());
     }
 
     @Override

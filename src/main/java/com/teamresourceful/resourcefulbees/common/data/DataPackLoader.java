@@ -1,7 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
+import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.utils.GenericMemoryPack;
 import net.minecraft.SharedConstants;
+import net.minecraft.Util;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
@@ -26,12 +28,12 @@ public class DataPackLoader implements RepositorySource {
             });
 
             Pack pack = Pack.create(
-                    DATAPACK_NAME,
-                    true,
-                    () -> dataPack,
-                    factory,
-                    Pack.Position.BOTTOM,
-                    PackSource.BUILT_IN
+                DATAPACK_NAME,
+                true,
+                () -> dataPack,
+                factory,
+                Pack.Position.BOTTOM,
+                PackSource.BUILT_IN
             );
             packList.accept(pack);
         }
@@ -39,8 +41,13 @@ public class DataPackLoader implements RepositorySource {
 
     private static class MemoryDataPack extends GenericMemoryPack {
 
+        private static final JsonObject META = Util.make(new JsonObject(), meta -> {
+           meta.addProperty("pack_format", PackType.SERVER_DATA.getVersion(SharedConstants.getCurrentVersion()));
+           meta.addProperty("description", "Data for resourcefulbees tags.");
+        });
+
         protected MemoryDataPack() {
-            super(PackType.SERVER_DATA, DATAPACK_NAME, "{\"pack_format\": "+ PackType.SERVER_DATA.getVersion(SharedConstants.getCurrentVersion()) +", \"description\": \"Data for resourcefulbees tags.\"}");
+            super(PackType.SERVER_DATA, DATAPACK_NAME, META);
         }
     }
 

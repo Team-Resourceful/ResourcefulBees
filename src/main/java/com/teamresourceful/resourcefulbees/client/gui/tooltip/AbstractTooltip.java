@@ -10,6 +10,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -71,7 +72,7 @@ public abstract class AbstractTooltip {
         return tooltips;
     }
 
-    public static List<Component> getBeeLore(EntityType<?> entityType, Level world) {
+    public static List<MutableComponent> getBeeLore(EntityType<?> entityType, Level world) {
         Entity entity = entityType.create(world);
         if (entity instanceof CustomBeeEntity customBee){
             return getBeeLore(customBee.getCoreData());
@@ -80,7 +81,7 @@ public abstract class AbstractTooltip {
         }
     }
 
-    public static List<Component> getBeeLore(Entity entity) {
+    public static List<MutableComponent> getBeeLore(Entity entity) {
         if (entity instanceof CustomBeeEntity customBee){
             return getBeeLore(customBee.getCoreData());
         }else {
@@ -88,7 +89,7 @@ public abstract class AbstractTooltip {
         }
     }
 
-    public static List<Component> getBeeLore(CoreData coreData) {
+    public static List<MutableComponent> getBeeLore(CoreData coreData) {
         return coreData.getLore();
     }
 }

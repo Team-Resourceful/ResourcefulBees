@@ -8,11 +8,11 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.utils.TextComponentCodec;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -46,18 +46,18 @@ public class CoreData {
                 Registry.ENTITY_TYPE.byNameCodec().optionalFieldOf("entityFlower").forGetter(CoreData::getEntityFlower),
                 Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(CoreData::getMaxTimeInHive),
                 Codec.intRange(3, 20).fieldOf("auraRange").orElse(CommonConfig.DEFAULT_AURA_RANGE.get()).forGetter(CoreData::getAuraRange),
-                TextComponentCodec.CODEC.listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(CoreData::getLore)
+                CodecUtils.passthrough(Component.Serializer::toJsonTree, Component.Serializer::fromJson).listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(CoreData::getLore)
         ).apply(instance, CoreData::new));
     }
 
     protected HolderSet<Block> blockFlowers;
     protected Optional<EntityType<?>> entityFlower;
-    protected List<Component> lore;
+    protected List<MutableComponent> lore;
     protected int maxTimeInHive;
     protected int auraRange;
     protected String name;
 
-    private CoreData(String name, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, int auraRange, List<Component> lore){
+    private CoreData(String name, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, int auraRange, List<MutableComponent> lore){
         this.name = name;
         this.blockFlowers = blockFlowers;
         this.entityFlower = entityFlower;
@@ -144,7 +144,7 @@ public class CoreData {
      *
      * @return Returns an {@link Optional<List<Component>>} containing extra bee information.
      */
-    public List<Component> getLore() {
+    public List<MutableComponent> getLore() {
         return lore;
     }
 
@@ -154,7 +154,7 @@ public class CoreData {
 
     public static class Mutable extends CoreData {
 
-        public Mutable(String name, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, int auraRange, List<Component> lore) {
+        public Mutable(String name, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, int auraRange, List<MutableComponent> lore) {
             super(name, blockFlowers, entityFlower, maxTimeInHive, auraRange, lore);
         }
 
@@ -172,7 +172,7 @@ public class CoreData {
             return this;
         }
 
-        public Mutable setLore(List<Component> lore) {
+        public Mutable setLore(List<MutableComponent> lore) {
             this.lore = lore;
             return this;
         }
