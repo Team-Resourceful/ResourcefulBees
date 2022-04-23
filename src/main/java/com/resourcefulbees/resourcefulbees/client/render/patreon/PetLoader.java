@@ -16,6 +16,8 @@ public class PetLoader {
 
     private static final Gson gson = new Gson();
 
+    public static String specialMessage = null;
+
     private PetLoader()  {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
@@ -52,6 +54,11 @@ public class PetLoader {
             JsonElement defaultBee = json.get("default");
             if (defaultBee instanceof JsonPrimitive) {
                 PetInfo.defaultModel = PetInfo.getModel(defaultBee.getAsString());
+            }
+
+            JsonElement message = json.get("message");
+            if (message instanceof JsonPrimitive && ((JsonPrimitive) message).isString()) {
+                specialMessage = message.getAsString();
             }
         }catch (Exception ignored){
             //Does nothing

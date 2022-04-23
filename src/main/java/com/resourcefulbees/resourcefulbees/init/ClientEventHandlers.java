@@ -7,6 +7,7 @@ import com.resourcefulbees.resourcefulbees.client.render.entity.GeckoBeeRenderer
 import com.resourcefulbees.resourcefulbees.client.render.fluid.FluidRender;
 import com.resourcefulbees.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.resourcefulbees.resourcefulbees.client.render.patreon.BeeRewardRender;
+import com.resourcefulbees.resourcefulbees.client.render.patreon.PetLoader;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderEnderBeecon;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyCongealer;
 import com.resourcefulbees.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
@@ -16,20 +17,27 @@ import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.PreviewHandler;
 import com.resourcefulbees.resourcefulbees.utils.color.ColorHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.tileentity.SignTileEntityRenderer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientEventHandlers {
 
@@ -39,6 +47,8 @@ public class ClientEventHandlers {
 
     private static boolean setupsDone = false;
 
+    private static boolean firstLoad = true;
+
     public static void clientStuff() {
         MinecraftForge.EVENT_BUS.addListener(PreviewHandler::onWorldRenderLast);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::registerModels);
@@ -46,12 +56,27 @@ public class ClientEventHandlers {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::doClientStuff);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
+        MinecraftForge.EVENT_BUS.addListener(ClientEventHandlers::onFirstLoad);
         MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
 
         Atlases.addWoodType(ModBlocks.WAXED_WOOD_TYPE);
 
+    }
+
+    public static void onFirstLoad(TickEvent.ClientTickEvent event) {
+        if (!event.phase.equals(TickEvent.Phase.START)) return;
+        Minecraft instance = Minecraft.getInstance();
+        ClientPlayerEntity player = instance.player;
+        if (firstLoad && !instance.isPaused() && player != null && instance.level != null && PetLoader.specialMessage != null) {
+            firstLoad = false;
+            List<ITextComponent> components = new ArrayList<>();
+            for (String s : PetLoader.specialMessage.split("\n")) {
+                components.add(new StringTextComponent(String.format(s, player.getGameProfile().getName())));
+            }
+            components.forEach(msg -> player.displayClientMessage(msg, false));
+        }
     }
 
     public static void recipesLoaded(RecipesUpdatedEvent event){
