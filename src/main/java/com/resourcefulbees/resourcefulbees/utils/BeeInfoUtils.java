@@ -86,7 +86,10 @@ public class BeeInfoUtils {
             }
         }
 
-        BeeRegistry.getRegistry().familyTree.computeIfAbsent(Pair.of(bee.getName(), bee.getName()), k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
+        if (bee.getBreedData().canSelfBreed()) {
+            BeeRegistry.getRegistry().familyTree.computeIfAbsent(Pair.of(bee.getName(), bee.getName()),
+                    k -> new RandomCollection<>()).add(bee.getBreedData().getBreedWeight(), bee);
+        }
     }
 
     public static Pair<String, String> sortParents(String parent1, String parent2) {

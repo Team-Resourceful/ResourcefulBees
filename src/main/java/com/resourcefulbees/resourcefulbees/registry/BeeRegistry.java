@@ -180,7 +180,7 @@ public class BeeRegistry implements IBeeRegistry {
     }
 
     public float getBreedChance(String parent1, String parent2, CustomBeeData childData) {
-        return parent1.equals(parent2) ? 1F : childData.getBreedData().getBreedChance();
+        return parent1.equals(parent2) ? childData.getBreedData().getSelfBreedChance() : childData.getBreedData().getBreedChance();
     }
 
     public Map<Pair<String, String>, RandomCollection<CustomBeeData>> getChildren(CustomBeeData parent) {

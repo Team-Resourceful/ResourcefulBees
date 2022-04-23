@@ -59,8 +59,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
                         }
                     }
 
-
-                    recipes.add(getSelfRecipe(beeData));
+                    if (beeData.getBreedData().canSelfBreed()) recipes.add(getSelfRecipe(beeData));
                 });
         return recipes;
     }
@@ -175,14 +174,18 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Recipe
         private final int p2FeedAmount;
 
         public Recipe(CustomBeeData data){
-            this(data, data, data);
+            this(data, data, data, data.getBreedData().getSelfBreedChance());
         }
 
         public Recipe(CustomBeeData parent1, CustomBeeData parent2, CustomBeeData child) {
+            this(parent1, parent2, child, child.getBreedData().getBreedChance());
+        }
+
+        public Recipe(CustomBeeData parent1, CustomBeeData parent2, CustomBeeData child, float chance) {
             this.parent1 = parent1.getName();
             this.parent2 = parent2.getName();
             this.child = child.getName();
-            this.chance = child.getBreedData().getBreedChance();
+            this.chance = chance;
             this.p1FeedItems = parent1.getBreedData().hasFeedItems() ? parent1.getBreedData().getFeedItems() : null;
             this.p2FeedItems = parent2.getBreedData().hasFeedItems() ? parent2.getBreedData().getFeedItems() : null;
             this.p1FeedAmount = parent1.getBreedData().getFeedAmount();

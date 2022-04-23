@@ -17,6 +17,16 @@ public class BreedData extends AbstractBeeData {
     private boolean isBreedable;
 
     /**
+     * If bee can breed with itself to make the same type.
+     */
+    private final boolean cantSelfBreed;
+
+    /**
+     * The the chance that when trying to breed this bee with itself the breed will succeed, if the breed fails, items will be consumed but no bee will be made.
+     */
+    private final float selfBreedChance;
+
+    /**
      * The weight specified for that bee. The weight is calculated against all the other bees the bees parents can make with the same item.
      */
     private final double breedWeight;
@@ -59,9 +69,11 @@ public class BreedData extends AbstractBeeData {
 
     private transient HashSet<Item> feedingItems;
 
-    private BreedData( boolean isBreedable, double breedWeight, float breedChance, String parent1, String parent2, String feedItem, String feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+    private BreedData( boolean isBreedable, boolean cantSelfBreed, float selfBreedChance, double breedWeight, float breedChance, String parent1, String parent2, String feedItem, String feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
         super("BreedData");
         this.isBreedable = isBreedable;
+        this.cantSelfBreed = cantSelfBreed;
+        this.selfBreedChance = selfBreedChance;
         this.breedWeight = breedWeight;
         this.breedChance = breedChance;
         this.parent1 = parent1;
@@ -74,11 +86,15 @@ public class BreedData extends AbstractBeeData {
     }
 
     public boolean isBreedable() {
-        return isBreedable;
+        return isBreedable && (canSelfBreed() || hasParents());
     }
 
     public void setBreedable(boolean breedable) {
         isBreedable = breedable;
+    }
+
+    public boolean canSelfBreed() {
+        return !cantSelfBreed;
     }
 
     public double getBreedWeight() {
@@ -87,6 +103,10 @@ public class BreedData extends AbstractBeeData {
 
     public float getBreedChance() {
         return breedChance <= 0 ? BeeConstants.DEFAULT_BREED_CHANCE : breedChance;
+    }
+
+    public float getSelfBreedChance() {
+        return selfBreedChance <= 0 ? 1f : selfBreedChance;
     }
 
     public String getParent1() {
@@ -142,6 +162,8 @@ public class BreedData extends AbstractBeeData {
      */
     public static class Builder {
         private final boolean isBreedable;
+        private boolean cantSelfBreed;
+        private float selfBreedChance;
         private double breedWeight;
         private float breedChance;
         private String parent1, parent2;
@@ -153,6 +175,16 @@ public class BreedData extends AbstractBeeData {
 
         public Builder(boolean isBreedable) {
             this.isBreedable = isBreedable;
+        }
+
+        public Builder setCantSelfBreed(boolean selfBreed) {
+            this.cantSelfBreed = selfBreed;
+            return this;
+        }
+
+        public Builder setSelfBreedChance(float breedChance) {
+            this.selfBreedChance = breedChance;
+            return this;
         }
 
         public Builder setBreedWeight(double breedWeight) {
@@ -201,7 +233,7 @@ public class BreedData extends AbstractBeeData {
         }
 
         public BreedData createBreedData() {
-            return new BreedData(isBreedable, breedWeight, breedChance, parent1, parent2, feedItem, feedReturnItem, feedAmount, childGrowthDelay, breedDelay);
+            return new BreedData(isBreedable, cantSelfBreed, selfBreedChance, breedWeight, breedChance, parent1, parent2, feedItem, feedReturnItem, feedAmount, childGrowthDelay, breedDelay);
         }
     }
 
