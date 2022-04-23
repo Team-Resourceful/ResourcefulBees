@@ -23,10 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -152,10 +149,12 @@ public class DataGen {
     }
 
     private static void generateValidApiaryTag() {
+        //noinspection ConstantConditions
         TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/valid_apiary.json"),
                 ForgeRegistries.BLOCKS.getValues().stream()
                         .filter(block -> ((BlockAccessor)block).getHasCollision() )
                         .map(Block::asItem)
+                        .filter(Objects::nonNull) // This is possible to be null because of mods such as Placeable Items.
                         .filter(item -> item != Items.AIR)
                         .map(ForgeRegistryEntry::getRegistryName)
                         .collect(Collectors.toSet()));
