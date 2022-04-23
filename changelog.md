@@ -1,5 +1,13 @@
 **please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
 
+# ----- [0.10.6] -----
+- Merged Korean translations.
+- Changed Bee Jar to be successful instead of pass to fix compatability issues with other mods.
+- Fixed crash with placeable items mod.
+- Added `selfBreedChance` and `cantSelfBreed` to breed data.
+- Possible fix for an issue where multiple entities can come from 1 mutation.
+- Updated Patreon loader to allow for special messages.
+
 # ----- [0.10.5] -----
 - Fixed honey not being able to be used in Resourceful Bees tank objects due to tags not loading properly when easter egg bees are disabled
 
