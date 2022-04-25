@@ -500,7 +500,7 @@
 	"book.resourcefulbees.getting_started.collecting_honeycombs": "벌집 모으기",
 	"book.resourcefulbees.getting_started.collecting_honeycombs.desc": "벌집을 가지면 꿀은 가지는 거지.",
 	"book.resourcefulbees.getting_started.collecting_honeycombs.text.1": "벌집이 꿀 레벨 5에 도달하면 꿀 수확을 시작할 수 있습니다. $(or)가위$() 또는 $(or)$(l:beekeeping_tools/scraper)스크레이퍼$()를 사용하면 벌집을 주을 수 있도록 세상에 나올 것입니다.$(br2)$(#900)먼저 벌통을 훈연하는 것을 잊지 마세요!$()",
-	"book.resourcefulbees.getting_started.collecting_honeycombs.text.2": "$(or)$(l:beekeeping_tools/beehives)벌집/$ 자동화는 $(or)깔때기/$나 모든 종류의 레드스톤 시계를 $(or)$(l:beekeeping_tools/scraper)스크레이퍼/$를 사용하는 $(or)발사기/$와 함께 사용하여 쉽게 수행할 수 있습니다.$(p)이렇게 하면 벌집을 훈연할 필요 없이 모든 벌집들을 수확할 것입니다.",
+	"book.resourcefulbees.getting_started.collecting_honeycombs.text.2": "$(or)$(l:beekeeping_tools/beehives)벌집/$ 자동화는 $(or)호퍼/$나 모든 종류의 레드스톤 시계를 $(or)$(l:beekeeping_tools/scraper)스크레이퍼/$를 사용하는 $(or)발사기/$와 함께 사용하여 쉽게 수행할 수 있습니다.$(p)이렇게 하면 벌집을 훈연할 필요 없이 모든 벌집들을 수확할 것입니다.",
 
 	"book.resourcefulbees.getting_started.processing_combs": "벌집 처리하기",
 	"book.resourcefulbees.getting_started.processing_combs.desc": "벌집 한 컵을 가지고 혼합물에 추가하기만 하면 됩니다.",
@@ -524,7 +524,7 @@
 
 	"book.resourcefulbees.advanced_tips.apiaries.3": "$(or)양봉장/$에는 몇 가지 제한사항이 있습니다: 양봉장은 9마리의 고유한 벌들만 수용할 수 있습니다. 즉, $(or)양봉장/$에는 동시에 같은 종류의 꿀벌이 한 마리 이상 있을 수 없다는 것을 의미합니다.$(br2) 그러나 닫힌 공간 안에 꿀벌을 보관하면 이 제한을 극복할 수 있습니다.",
 
-	"book.resourcefulbees.advanced_tips.apiaries.4": "벌이 벌집을 생성하면 $(or)$(l:beekeeping_tools/apiary_storage)양봉장 저장고/$에 나타나며 수동으로 꺼내거나 $(or)깔때기/$ 또는 다른 모드의 파이프로 자동화할 수 있습니다.",
+	"book.resourcefulbees.advanced_tips.apiaries.4": "벌이 벌집을 생성하면 $(or)$(l:beekeeping_tools/apiary_storage)양봉장 저장고/$에 나타나며 수동으로 꺼내거나 $(or)호퍼/$ 또는 다른 모드의 파이프로 자동화할 수 있습니다.",
 
 	"book.resourcefulbees.advanced_tips.apiaries.5": "$(or)$(l:beekeeping_tools/apiary_breeder)양봉장 번식장치/$를 사용하면 두 마리의 꿀벌과 먹이, 벌 병을 그 안에 넣고 뒤쫓아다니는 번거로움 없이 사육할 수 있어 번식이 더 쉬워집니다.$(p)번식에 성공하면 새로운 벌은 $(or)$(l:beekeeping_tools/apiary_storage)양봉장 저장고/$에 저장됩니다.",
 
@@ -643,7 +643,7 @@
 	"book.resourcefulbees.beekeeping_tools.apiary_breeder.1": "$(or)양봉장 번식장치/$를 $(or)번식장치 업그레이드/$와 $(or)번식 시간 업그레이드/$로 업그레이드할 수 있습니다.$(p)이것들은 더 많은 슬롯을 추가하고 번식에 필요한 시간을 줄입니다.$(p)언제든지 최대 4개의 업그레이드까지 적용할 수 있습니다.",
 
 	"book.resourcefulbees.beekeeping_tools.apiary_storage": "양봉장 저장고",
-	"book.resourcefulbees.beekeeping_tools.apiary_storage.1": "$(or)양봉장 저장고/$는 모든 $(or)양봉장/$의 자원들이 향하는 곳입니다.$(p)아이템을 수동으로 꺼내거나 $(or)깔때기/$로 자동화 할 수 있습니다.$(p)각각의 $(or)양봉장/$은 적어도 하나의 $(or)양봉장 저장고/$를 가져야 합니다.",
+	"book.resourcefulbees.beekeeping_tools.apiary_storage.1": "$(or)양봉장 저장고/$는 모든 $(or)양봉장/$의 자원들이 향하는 곳입니다.$(p)아이템을 수동으로 꺼내거나 $(or)호퍼/$로 자동화 할 수 있습니다.$(p)각각의 $(or)양봉장/$은 적어도 하나의 $(or)양봉장 저장고/$를 가져야 합니다.",
 	"book.resourcefulbees.beekeeping_tools.apiary_storage.2": "$(or)저장고 업그레이드/$를 사용하여 슬롯 수를 늘릴 수 있습니다.$(p)4개의 티어 중에서 하나만 선택할 수 있습니다.",
 
 	"book.resourcefulbees.beekeeping_tools.honey_generator": "꿀 발전기",
@@ -653,14 +653,14 @@
 	"book.resourcefulbees.beekeeping_tools.mechanical_centrifuge.1": "$(or)수동 원심 분리기/$는 원심 분리기의 가장 기본적인 유형입니다.$(br)전력이 필요없지만 $(thing)웅크리기$() + $(thing)오른쪽 클릭$()으로 돌려야 합니다.$(p)블록이 아닌 벌집 처리만 가능합니다.",
 
 	"book.resourcefulbees.beekeeping_tools.centrifuge": "원심 분리기",
-	"book.resourcefulbees.beekeeping_tools.centrifuge.1": "$(or)원심 분리기/$는 RF를 사용하여 벌집을 자원으로 바꿉니다.$(p)블록이 아닌 벌집 처리만 가능합니다.$(p)$(or)깔때기/$로 자동화할 수 있습니다.",
+	"book.resourcefulbees.beekeeping_tools.centrifuge.1": "$(or)원심 분리기/$는 RF를 사용하여 벌집을 자원으로 바꿉니다.$(p)블록이 아닌 벌집 처리만 가능합니다.$(p)$(or)호퍼/$로 자동화할 수 있습니다.",
 
 	"book.resourcefulbees.beekeeping_tools.multiblock_centrifuge": "멀티 블록 원심 분리기",
-	"book.resourcefulbees.beekeeping_tools.multiblock_centrifuge.1": "$(or)멀티 블록 원심 분리기/$는 벌집 처리에서 나오는 자원의 양을 늘리고 벌집 블록도 처리할 수 있는$(or)$(l:beekeeping_tools/centrifuge)원심 분리기/$의 업그레이드 버전입니다.$(p)$(or)깔때기/$로 자동화할 수 있습니다.",
+	"book.resourcefulbees.beekeeping_tools.multiblock_centrifuge.1": "$(or)멀티 블록 원심 분리기/$는 벌집 처리에서 나오는 자원의 양을 늘리고 벌집 블록도 처리할 수 있는$(or)$(l:beekeeping_tools/centrifuge)원심 분리기/$의 업그레이드 버전입니다.$(p)$(or)호퍼/$로 자동화할 수 있습니다.",
 	"book.resourcefulbees.beekeeping_tools.multiblock_centrifuge.desc": "이 원심 분리기는 3x3x4 멀티 블록 입니다.",
 
 	"book.resourcefulbees.beekeeping_tools.elite_centrifuge": "엘리트 원심 분리기",
-	"book.resourcefulbees.beekeeping_tools.elite_centrifuge.1": "$(or)엘리트 원심 분리기/$는 $(or)$(l:beekeeping_tools/multiblock_centrifuge)멀티 블록 원심 분리기/$의 업그레이드 버전입니다.$(p)$(or)깔때기/$로 자동화할 수 있습니다.",
+	"book.resourcefulbees.beekeeping_tools.elite_centrifuge.1": "$(or)엘리트 원심 분리기/$는 $(or)$(l:beekeeping_tools/multiblock_centrifuge)멀티 블록 원심 분리기/$의 업그레이드 버전입니다.$(p)$(or)호퍼/$로 자동화할 수 있습니다.",
 	"book.resourcefulbees.beekeeping_tools.elite_centrifuge.desc": "이 원심 분리기는 3x3x4 멀티 블록 입니다.",
 
 	"book.resourcefulbees.beekeeping_tools.waxed_planks": "밀랍칠한 나무 판자",
