@@ -5,10 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.Bee;
-import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class BeeAngerGoal extends HurtByTargetGoal {
     private final ResourcefulBee bee;
@@ -32,12 +29,11 @@ public class BeeAngerGoal extends HurtByTargetGoal {
 
     @Override
     protected void alertOthers() {
-        double d0 = this.getFollowDistance();
-        AABB axisalignedbb = AABB.unitCubeFromLowerCorner(this.mob.position()).inflate(d0, 10.0D, d0);
-        List<Bee> list = this.mob.level.getEntitiesOfClass(Bee.class, axisalignedbb);
-        list.forEach(beeEntity -> {
-            if (this.mob.getLastHurtByMob() != null)
-                this.alertOther(beeEntity, this.mob.getLastHurtByMob());
-        });
+        if (this.mob.getLastHurtByMob() != null) {
+            double dist = this.getFollowDistance();
+            for (Bee bee : this.mob.level.getEntitiesOfClass(Bee.class, this.mob.getBoundingBox().inflate(dist, 10.0D, dist))) {
+                this.alertOther(bee, this.mob.getLastHurtByMob());
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.capabilities;
 
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -21,14 +22,12 @@ public class BeepediaData implements IBeepediaData {
 
     @Override
     public CompoundTag serializeNBT() {
-        CompoundTag nbt = new CompoundTag();
         ListTag list = new ListTag();
-        int i = 0;
-        for (ResourceLocation bee : bees) {
-            list.add(i++, StringTag.valueOf(bee.toString()));
-        }
-        nbt.put(NBTConstants.NBT_BEEPEDIA_DATA, list);
-        return nbt;
+        bees.stream()
+                .map(ResourceLocation::toString)
+                .map(StringTag::valueOf)
+                .forEachOrdered(list::add);
+        return ModUtils.nbtWithData(NBTConstants.NBT_BEEPEDIA_DATA, list);
     }
 
     @Override
