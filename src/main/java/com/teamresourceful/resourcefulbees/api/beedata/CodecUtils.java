@@ -43,7 +43,7 @@ public class CodecUtils {
     public static final Codec<Ingredient> INGREDIENT_CODEC = Codec.PASSTHROUGH.comapFlatMap(CodecUtils::decodeIngredient, CodecUtils::encodeIngredient);
 
     private static DataResult<Ingredient> decodeIngredient(Dynamic<?> dynamic) {
-        Object object = dynamic.getValue();
+        Object object = dynamic.convert(JsonOps.INSTANCE).getValue();
         if (object instanceof JsonElement jsonElement) {
             return DataResult.success(Ingredient.fromJson(jsonElement));
         } else {
