@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures
 import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -86,13 +87,15 @@ public class BeeSetup {
 
     public static void registerBeePlacements() {
         ModEntities.getModBees().forEach((s, entityType) -> {
-            boolean canSpawnInWorld = BeeRegistry.getRegistry().getBeeData(s).getSpawnData().canSpawnInWorld();
+            SpawnData spawnData = BeeRegistry.getRegistry().getBeeData(s).getSpawnData();
+            boolean canSpawnInWorld = spawnData.canSpawnInWorld();
             if (canSpawnInWorld) {
-                SpawnPlacements.register(entityType.get(),
-                        SpawnPlacements.Type.ON_GROUND,
-                        Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                        CustomBeeEntity::canBeeSpawn);
+                SpawnPlacements.register(entityType.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, createPredicate(spawnData));
             }
         });
+    }
+
+    public static <T extends Mob> SpawnPlacements.SpawnPredicate<T> createPredicate(SpawnData spawnData) {
+        return (type, level, reason, pos, random) -> CustomBeeEntity.canBeeSpawn(spawnData, level, reason, pos);
     }
 }

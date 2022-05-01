@@ -11,6 +11,8 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.InclusiveRange;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -68,6 +70,25 @@ public class CodecUtils {
         return new FluidStack(fluid, amount, tagOptional.orElse(null));
     }
     //endregion
+
+    public static final Codec<InclusiveRange<Integer>> Y_LEVEL = codec(Codec.INT, 0, 256);
+    public static final Codec<InclusiveRange<Integer>> SPAWN_GROUP = codec(Codec.INT, 0, 8);
+
+    public static <T extends Comparable<T>> Codec<InclusiveRange<T>> codec(Codec<T> p_184575_, T min, T max) {
+        Function<InclusiveRange<T>, DataResult<InclusiveRange<T>>> function = (range) -> {
+            if (range.minInclusive().compareTo(min) < 0) {
+                return DataResult.error(String.format("Range limit too low, expected at least %s [%s-%s]", min, range.minInclusive(), range.maxInclusive()));
+            } else if (range.maxInclusive().compareTo(max) > 0) {
+                return DataResult.error(String.format("Range limit too high, expected at most %s [%s-%s]", max, range.minInclusive(), range.maxInclusive()));
+            }
+            return DataResult.success(range);
+        };
+        return codec(p_184575_).flatXmap(function, function);
+    }
+
+    public static <T extends Comparable<T>> Codec<InclusiveRange<T>> codec(Codec<T> p_184573_) {
+        return ExtraCodecs.intervalCodec(p_184573_, "min", "max", InclusiveRange::create, InclusiveRange::minInclusive, InclusiveRange::maxInclusive);
+    }
 
     public static final Codec<Map<ApiaryTier, ItemStack>> APIARY_VARIATIONS = Codec.unboundedMap(ApiaryTier.CODEC, ITEM_STACK_CODEC);
     public static final Codec<Map<BeehiveTier, ItemStack>> BEEHIVE_VARIATIONS = Codec.unboundedMap(BeehiveTier.CODEC, ITEM_STACK_CODEC);

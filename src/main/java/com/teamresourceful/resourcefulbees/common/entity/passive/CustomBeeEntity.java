@@ -58,7 +58,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 
 public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimatable, IBeeCompat {
 
@@ -220,15 +219,13 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
             if (!hasCustomName() && this.tickCount % 100 == 0) {
                 if (hasHiveInRange() || hasSavedFlowerPos() || isPassenger() || isPersistenceRequired() || isLeashed() || hasNectar() || disruptorInRange > 0 || isBaby()) {
                     timeWithoutHive = 0;
-                } else {
-                    timeWithoutHive += 100;
-                    if (timeWithoutHive >= 12000) this.discard();
+                } else if ((timeWithoutHive += 100) >= 12000) {
+                    this.discard();
                 }
                 hasHiveInRange = false;
             }
-            if (this.tickCount % 100 == 0) {
-                disruptorInRange--;
-                if (disruptorInRange < 0) disruptorInRange = 0;
+            if (this.tickCount % 100 == 0 && (disruptorInRange--) < 0) {
+                disruptorInRange = 0;
             }
         }
         super.aiStep();
@@ -242,31 +239,11 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         this.hasHiveInRange = hasHiveInRange;
     }
 
-    @SuppressWarnings("unused")
-    public static boolean canBeeSpawn(EntityType<? extends AgeableMob> typeIn, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, Random randomIn) {
-        String namespaceID = EntityType.getKey(typeIn).toString();
-        String beeType = namespaceID.substring(namespaceID.lastIndexOf(":") + 1, namespaceID.length() - 4);
-        SpawnData spawnData = BeeRegistry.getRegistry().getBeeData(beeType).getSpawnData();
-
-        switch (reason) {
-            case NATURAL:
-            case CHUNK_GENERATION:
-                if (spawnData.canSpawnInWorld()) {
-                    if (!MathUtils.inRangeInclusive(pos.getY(), spawnData.getMinYLevel(), spawnData.getMaxYLevel())) {
-                        return false;
-                    }
-                    return switch (spawnData.getLightLevel()) {
-                        case DAY -> worldIn.getMaxLocalRawBrightness(pos) >= 8;
-                        case NIGHT -> worldIn.getMaxLocalRawBrightness(pos) <= 7;
-                        case ANY -> true;
-                    };
-                }
-                break;
-            default:
-                return true;
-        }
-
-        return true;
+    public static boolean canBeeSpawn(SpawnData data, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos) {
+        return switch (reason) {
+            case NATURAL, CHUNK_GENERATION -> MathUtils.inRangeInclusive(pos.getY(), data.getMinYLevel(), data.getMaxYLevel()) && data.getLightLevel().canSpawn(worldIn, pos);
+            default -> true;
+        };
     }
 
     @Override

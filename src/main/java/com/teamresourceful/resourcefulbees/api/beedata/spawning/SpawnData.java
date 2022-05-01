@@ -6,9 +6,9 @@ import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LightLevel;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BiomeDictionary;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.InclusiveRange;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import org.apache.commons.lang3.text.WordUtils;
@@ -21,7 +21,7 @@ import java.util.StringJoiner;
 
 @Unmodifiable
 public class SpawnData {
-    public static final SpawnData DEFAULT = new SpawnData(false, 0, 0, 0, Collections.emptySet(), Collections.emptySet(), LightLevel.ANY, 0, 0);
+    public static final SpawnData DEFAULT = new SpawnData(false, 0, new InclusiveRange<>(0, 0), Collections.emptySet(), Collections.emptySet(), LightLevel.ANY, new InclusiveRange<>(0, 0));
     private static final Set<ResourceLocation> DEFAULT_WHITELIST = Collections.singleton(new ResourceLocation("tag:overworld"));
     private static final Set<ResourceLocation> DEFAULT_BLACKLIST = Collections.singleton(new ResourceLocation("tag:ocean"));
 
@@ -32,37 +32,31 @@ public class SpawnData {
     public static final Codec<SpawnData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.BOOL.fieldOf("canSpawnInWorld").orElse(false).forGetter(SpawnData::canSpawnInWorld),
             Codec.intRange(0, 1000).fieldOf("spawnWeight").orElse(8).forGetter(SpawnData::getSpawnWeight),
-            Codec.intRange(0, 8).fieldOf("minGroupSize").orElse(0).forGetter(SpawnData::getMinGroupSize),
-            Codec.intRange(0, 8).fieldOf("maxGroupSize").orElse(3).forGetter(SpawnData::getMaxGroupSize),
+            CodecUtils.SPAWN_GROUP.fieldOf("groupSize").orElse(new InclusiveRange<>(0, 3)).forGetter(SpawnData::getGroupSize),
             CodecUtils.createSetCodec(ResourceLocation.CODEC).fieldOf("biomeWhitelist").orElse(DEFAULT_WHITELIST).forGetter(SpawnData::getBiomeWhitelist),
             CodecUtils.createSetCodec(ResourceLocation.CODEC).fieldOf("biomeBlacklist").orElse(DEFAULT_BLACKLIST).forGetter(SpawnData::getBiomeBlacklist),
             LightLevel.CODEC.fieldOf("lightLevel").orElse(LightLevel.ANY).forGetter(SpawnData::getLightLevel),
-            Codec.intRange(0, 256).fieldOf("minYLevel").orElse(50).forGetter(SpawnData::getMinYLevel),
-            Codec.intRange(0, 256).fieldOf("maxYLevel").orElse(256).forGetter(SpawnData::getMaxYLevel)
+            CodecUtils.Y_LEVEL.fieldOf("yLevel").orElse(new InclusiveRange<>(50, 256)).forGetter(SpawnData::getGroupSize)
             ).apply(instance, SpawnData::new)
     );
 
     protected boolean canSpawnInWorld;
     protected int spawnWeight;
-    protected int minGroupSize;
-    protected int maxGroupSize;
+    protected InclusiveRange<Integer> groupSize;
     protected Set<ResourceLocation> biomeWhitelist;
     protected Set<ResourceLocation> biomeBlacklist;
     protected LightLevel lightLevel;
-    protected int minYLevel;
-    protected int maxYLevel;
+    protected InclusiveRange<Integer> yLevel;
     private final Set<ResourceLocation> spawnableBiomes = new HashSet<>();
 
-    private SpawnData(boolean canSpawnInWorld, int spawnWeight, int minGroupSize, int maxGroupSize, Set<ResourceLocation> biomeWhitelist, Set<ResourceLocation> biomeBlacklist, LightLevel lightLevel, int minYLevel, int maxYLevel) {
+    private SpawnData(boolean canSpawnInWorld, int spawnWeight, InclusiveRange<Integer> groupSize, Set<ResourceLocation> biomeWhitelist, Set<ResourceLocation> biomeBlacklist, LightLevel lightLevel, InclusiveRange<Integer> yLevel) {
         this.canSpawnInWorld = canSpawnInWorld;
         this.spawnWeight = spawnWeight;
-        this.minGroupSize = minGroupSize;
-        this.maxGroupSize = maxGroupSize;
+        this.groupSize = groupSize;
         this.biomeWhitelist = biomeWhitelist;
         this.biomeBlacklist = biomeBlacklist;
         this.lightLevel = lightLevel;
-        this.minYLevel = minYLevel;
-        this.maxYLevel = maxYLevel;
+        this.yLevel = yLevel;
         if (!biomeWhitelist.isEmpty()) buildSpawnableBiomes();
     }
 
@@ -98,7 +92,7 @@ public class SpawnData {
      * the associated bees spawn to biomes.
      */
     public MobSpawnSettings.SpawnerData getSpawnerData(EntityType<?> entityType, boolean isFlowerForest) {
-        return new MobSpawnSettings.SpawnerData(entityType, isFlowerForest ? spawnWeight + CommonConfig.BEE_FLOWER_FOREST_MULTIPLIER.get() : spawnWeight, minGroupSize, maxGroupSize);
+        return new MobSpawnSettings.SpawnerData(entityType, isFlowerForest ? spawnWeight + CommonConfig.BEE_FLOWER_FOREST_MULTIPLIER.get() : spawnWeight, getMinGroupSize(), getMaxGroupSize());
     }
 
     /**
@@ -106,14 +100,20 @@ public class SpawnData {
      * @return Returns the minimum quantity of the associated bee type that will spawn
      * in a single spawn event.
      */
-    public int getMinGroupSize() { return minGroupSize; }
+    public int getMinGroupSize() { return groupSize.minInclusive(); }
 
     /**
      *
      * @return Returns the maximum quantity of the associated bee type that can spawn in a single
      *  spawn event.
      */
-    public int getMaxGroupSize() { return maxGroupSize; }
+    public int getMaxGroupSize() { return groupSize.maxInclusive(); }
+
+    /**
+     *
+     * @return Returns the group size InclusiveRange.
+     */
+    public InclusiveRange<Integer> getGroupSize() { return groupSize; }
 
     /**
      * Bee spawns are established after applying the biome blacklist to this list. The default
@@ -150,7 +150,7 @@ public class SpawnData {
      *
      * @return Returns the minimum y-level the associated bee will spawn at.
      */
-    public int getMinYLevel() { return minYLevel; }
+    public int getMinYLevel() { return yLevel.minInclusive(); }
 
     /**
      * y-level spawn restrictions can seem a bit buggy when set for underground spawns
@@ -159,7 +159,12 @@ public class SpawnData {
      *
      * @return Returns the maximum y-level the associated bee will spawn at.
      */
-    public int getMaxYLevel() { return maxYLevel; }
+    public int getMaxYLevel() { return yLevel.maxInclusive(); }
+
+    /**
+     * @return Returns y-level InclusiveRange.
+     */
+    public InclusiveRange<Integer> getYLevel() { return yLevel; }
 
     /**
      * Bee spawns are established after applying the biome blacklist to the biome whitelist. The
@@ -231,17 +236,17 @@ public class SpawnData {
     }
 
     public boolean canSpawnAtYLevel(BlockPos nestPos) {
-        return MathUtils.inRangeInclusive(nestPos.getY(), minYLevel, maxYLevel);
+        return yLevel.isValueInRange(nestPos.getY());
     }
     //endregion
 
     public static class Mutable extends SpawnData {
-        public Mutable(boolean canSpawnInWorld, int spawnWeight, int minGroupSize, int maxGroupSize, Set<ResourceLocation> biomeWhitelist, Set<ResourceLocation> biomeBlacklist, LightLevel lightLevel, int minYLevel, int maxYLevel) {
-            super(canSpawnInWorld, spawnWeight, minGroupSize, maxGroupSize, biomeWhitelist, biomeBlacklist, lightLevel, minYLevel, maxYLevel);
+        public Mutable(boolean canSpawnInWorld, int spawnWeight, InclusiveRange<Integer> groupSize, Set<ResourceLocation> biomeWhitelist, Set<ResourceLocation> biomeBlacklist, LightLevel lightLevel, InclusiveRange<Integer> yLevel) {
+            super(canSpawnInWorld, spawnWeight, groupSize, biomeWhitelist, biomeBlacklist, lightLevel, yLevel);
         }
 
         public Mutable() {
-            super(false, 8, 0, 3, DEFAULT_WHITELIST, DEFAULT_BLACKLIST, LightLevel.ANY, 50, 256);
+            super(false, 8, new InclusiveRange<>(0, 3), DEFAULT_WHITELIST, DEFAULT_BLACKLIST, LightLevel.ANY, new InclusiveRange<>(50, 256));
         }
 
         public Mutable setCanSpawnInWorld(boolean canSpawnInWorld) {
@@ -254,13 +259,8 @@ public class SpawnData {
             return this;
         }
 
-        public Mutable setMinGroupSize(int minGroupSize) {
-            this.minGroupSize = minGroupSize;
-            return this;
-        }
-
-        public Mutable setMaxGroupSize(int maxGroupSize) {
-            this.maxGroupSize = maxGroupSize;
+        public Mutable setGroupSize(InclusiveRange<Integer> groupSize) {
+            this.groupSize = groupSize;
             return this;
         }
 
@@ -279,19 +279,14 @@ public class SpawnData {
             return this;
         }
 
-        public Mutable setMinYLevel(int minYLevel) {
-            this.minYLevel = minYLevel;
-            return this;
-        }
-
-        public Mutable setMaxYLevel(int maxYLevel) {
-            this.maxYLevel = maxYLevel;
+        public Mutable setMinYLevel(InclusiveRange<Integer> yLevel) {
+            this.yLevel = yLevel;
             return this;
         }
 
         @Override
         public SpawnData toImmutable() {
-            return new SpawnData(this.canSpawnInWorld, this.spawnWeight, this.minGroupSize, this.maxGroupSize, this.biomeWhitelist, this.biomeBlacklist, this.lightLevel, this.minYLevel, this.maxYLevel);
+            return new SpawnData(this.canSpawnInWorld, this.spawnWeight, this.groupSize, this.biomeWhitelist, this.biomeBlacklist, this.lightLevel, this.yLevel);
         }
     }
 }
