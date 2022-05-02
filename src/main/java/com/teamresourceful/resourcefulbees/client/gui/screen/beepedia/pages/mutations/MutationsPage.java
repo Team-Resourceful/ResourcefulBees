@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeePage;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -13,8 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.text.DecimalFormat;
 
 
 @OnlyIn(Dist.CLIENT)
@@ -83,8 +82,7 @@ public abstract class MutationsPage {
 
     protected void drawWeight(PoseStack matrix, Double right, int xPos, int yPos) {
         Font font = Minecraft.getInstance().font;
-        DecimalFormat decimalFormat = new DecimalFormat("##%");
-        TextComponent text = new TextComponent(decimalFormat.format(right));
+        TextComponent text = new TextComponent(ModConstants.PERCENT_FORMAT.format(right));
         int padding = font.width(text) / 2;
         font.draw(matrix, text.withStyle(ChatFormatting.GRAY), (float) xPos - padding, yPos, -1);
     }

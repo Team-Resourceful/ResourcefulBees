@@ -1,17 +1,14 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.common.blockentity.HoneyPotBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.enums.HoneyPotState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.blockentity.HoneyPotBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BottleItem;
-import net.minecraft.world.item.HoneyBottleItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -58,17 +55,9 @@ public class HoneyPotBlock extends RenderingBaseEntityBlock {
     @NotNull
     @Override
     public InteractionResult use(@NotNull BlockState state, Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
-        BlockEntity tileEntity = world.getBlockEntity(pos);
-
-        if (tileEntity instanceof HoneyPotBlockEntity entity) {
-            Item item = player.getItemInHand(hand).getItem();
-            HoneyPotBlockEntity.HoneyPotFluidTank tank = entity.getTank();
-
-            if (item instanceof BottleItem) tank.fillBottle(player, hand);
-            else if (item instanceof HoneyBottleItem) tank.emptyBottle(player, hand);
-            else ModUtils.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
-
-            return InteractionResult.SUCCESS;
+        if (world.getBlockEntity(pos) instanceof HoneyPotBlockEntity pot) {
+            ModUtils.checkBottleAndCapability(pot.getTank(), pot, player, world, pos, hand);
+            return InteractionResult.sidedSuccess(world.isClientSide());
         }
         return super.use(state, world, pos, player, hand, result);
     }

@@ -266,7 +266,7 @@ public class BeeHoneyCombPage extends BeeDataPage {
 //        private void drawChance(MatrixStack matrix, double right, int xPos, int yPos) {
 //            if (right == 1) return;
 //            FontRenderer font = Minecraft.getInstance().font;
-//            DecimalFormat decimalFormat = new DecimalFormat("##%");
+//            DecimalFormat decimalFormat = new DecimalFormat("##%"); //When this gets added back change it to modconstants static field.
 //            StringTextComponent text = new StringTextComponent(decimalFormat.format(right));
 //            int padding = font.width(text) / 2;
 //            font.draw(matrix, text.withStyle(TextFormatting.GRAY), (float) xPos - padding, yPos, -1);

@@ -20,7 +20,6 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.AnimalEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
@@ -180,8 +179,8 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
             return true;
         }
-        if (info.hasTraits() && info.hasDamageImmunities()) {
-            return info.getDamageImmunities().stream().anyMatch(source.msgId::equalsIgnoreCase);
+        if (info.hasTraits() && info.hasDamageImmunities() && info.getDamageImmunities().stream().anyMatch(source.msgId::equalsIgnoreCase)) {
+            return true;
         }
         return super.isInvulnerableTo(source);
     }
@@ -191,7 +190,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         TraitData info = getTraitData();
         if (info.hasTraits() && info.hasPotionImmunities()) {
             MobEffect potionEffect = effectInstance.getEffect();
-            return info.getPotionImmunities().stream().noneMatch(potionEffect::equals);
+            return info.getPotionImmunities().stream().noneMatch(potionEffect::equals) || super.canBeAffected(effectInstance);
         }
         return super.canBeAffected(effectInstance);
     }
@@ -241,7 +240,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
 
     public static boolean canBeeSpawn(SpawnData data, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos) {
         return switch (reason) {
-            case NATURAL, CHUNK_GENERATION -> MathUtils.inRangeInclusive(pos.getY(), data.getMinYLevel(), data.getMaxYLevel()) && data.getLightLevel().canSpawn(worldIn, pos);
+            case NATURAL, CHUNK_GENERATION -> data.getYLevel().isValueInRange(pos.getY()) && data.getLightLevel().canSpawn(worldIn, pos);
             default -> true;
         };
     }

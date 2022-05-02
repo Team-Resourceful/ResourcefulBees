@@ -38,7 +38,6 @@ public record BeeconChangeMessage(Option option, int value, BlockPos pos) {
         context.get().setPacketHandled(true);
     }
 
-
     public enum Option {
         EFFECT_ON,
         EFFECT_OFF,

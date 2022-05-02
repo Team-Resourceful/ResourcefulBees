@@ -168,6 +168,10 @@ public class Color {
         return f;
     }
 
+    public Style getAsStyle() {
+        return Style.EMPTY.withColor(getTextColor());
+    }
+
     //endregion
 
     //region Codec utils
@@ -196,10 +200,6 @@ public class Color {
     //region Rainbow
 
     public static void initRainbow() { new Timer().scheduleAtFixedRate(new ColorChange(), 0, 40); }
-
-    public Style getAsStyle() {
-        return Style.EMPTY.withColor(getTextColor());
-    }
 
     private static class ColorChange extends TimerTask {
         @Override

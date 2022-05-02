@@ -204,6 +204,13 @@ public class BeeTrait {
         return !auras.isEmpty();
     }
 
+    /**
+     * @return Returns <tt>true</tt> if there is no damageTypes and no potionDamageEffects.
+     */
+    public boolean canPoison() {
+        return !hasDamageTypes() && !hasPotionDamageEffects();
+    }
+
     public BeeTrait toImmutable() {
         return this;
     }

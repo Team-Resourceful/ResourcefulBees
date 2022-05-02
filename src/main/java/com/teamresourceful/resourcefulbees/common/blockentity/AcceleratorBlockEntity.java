@@ -34,13 +34,14 @@ public class AcceleratorBlockEntity extends BlockEntity {
     private static <T extends BlockEntity> void tickBlock(Level level, BlockPos pos, BlockState state, T blockEntity) {
         if (blockEntity == null) return;
         try {
+            //noinspection unchecked
             BlockEntityTicker<T> ticker = (BlockEntityTicker<T>) state.getTicker(level, blockEntity.getType());
             if (!blockEntity.isRemoved() && ticker != null && !(blockEntity instanceof AcceleratorBlockEntity)) {
                 for (int i = 0; i < 384; i++) {
                     ticker.tick(level, pos, state, blockEntity);
                 }
             }
-        }catch (ClassCastException e) {
+        }catch (Exception e) {
             //DO NOTHING, This should never happen.
         }
     }

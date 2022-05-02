@@ -11,7 +11,7 @@ public enum LightLevel {
     NIGHT(TranslationConstants.LightLevel.NIGHT),
     ANY(TranslationConstants.LightLevel.ANY);
 
-    TranslatableComponent component;
+    private final TranslatableComponent component;
 
     LightLevel(TranslatableComponent component) {
         this.component = component;

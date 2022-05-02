@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -8,7 +9,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -31,8 +31,7 @@ public class FluidTooltip extends AbstractTooltip {
         List<Component> tooltips = new ArrayList<>();
         tooltips.add(fluid.getDisplayName());
         if (fluid.getAmount() > 1 || showFluid) {
-            DecimalFormat decimalFormat = new DecimalFormat("##0.0");
-            String amount = fluid.getAmount() < 500 || Screen.hasShiftDown() ? String.format("%,d", fluid.getAmount()) + " mb" : decimalFormat.format((float) fluid.getAmount() / 1000) + " B";
+            String amount = fluid.getAmount() < 500 || Screen.hasShiftDown() ? String.format("%,d", fluid.getAmount()) + " mb" : ModConstants.DECIMAL_FORMAT.format((float) fluid.getAmount() / 1000) + " B";
             tooltips.add(new TextComponent(amount));
         }
         tooltips.add(new TextComponent(String.valueOf(fluid.getFluid().getRegistryName())).withStyle(ChatFormatting.DARK_GRAY));

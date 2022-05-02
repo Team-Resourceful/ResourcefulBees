@@ -53,10 +53,7 @@ public class RandomCollection<E> {
     }
 
     public void forEachWithSelf(BiConsumer<RandomCollection<E>, ? super E> action) {
-        Objects.requireNonNull(action);
-        for (E e : map.values()) {
-            action.accept(this, e);
-        }
+        forEach(element -> action.accept(this, element));
     }
 
     public Stream<E> stream() {

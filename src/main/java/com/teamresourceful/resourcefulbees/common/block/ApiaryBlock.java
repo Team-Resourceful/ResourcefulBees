@@ -52,9 +52,7 @@ public class ApiaryBlock extends BeeHouseBlock implements IShiftingToolTip {
   @Nullable
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
-    return level.isClientSide ?
-            null :
-            createTickerHelper(type, tier.getBlockEntityType(), ApiaryBlockEntity::serverTick);
+    return level.isClientSide ? null : createTickerHelper(type, tier.getBlockEntityType(), ApiaryBlockEntity::serverTick);
   }
 
   @Override

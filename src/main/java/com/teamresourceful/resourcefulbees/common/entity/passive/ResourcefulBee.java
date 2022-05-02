@@ -104,8 +104,8 @@ public class ResourcefulBee extends CustomBeeEntity {
             BlockPos pos = this.getHivePos();
             if (pos != null) {
                 BlockEntity blockEntity = this.level.getBlockEntity(pos);
-                return blockEntity instanceof TieredBeehiveBlockEntity && ((TieredBeehiveBlockEntity) blockEntity).isAllowedBee()
-                        || blockEntity instanceof ApiaryBlockEntity && ((ApiaryBlockEntity) blockEntity).isAllowedBee()
+                return blockEntity instanceof TieredBeehiveBlockEntity tieredHive && tieredHive.isAllowedBee()
+                        || blockEntity instanceof ApiaryBlockEntity apiary && apiary.isAllowedBee()
                         || blockEntity instanceof BeehiveBlockEntity;
             }
         }
@@ -216,20 +216,23 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     private void applyTraitEffectsAndDamage(@NotNull LivingEntity target, int diffMod) {
         TraitData info = getTraitData();
-        if (info.hasTraits() && info.hasDamageTypes()) {
-            info.getDamageTypes().forEach(damageType -> {
-                if (damageType.type().equals(TraitConstants.SET_ON_FIRE))
-                    target.setSecondsOnFire(diffMod * damageType.amplifier());
-                if (damageType.type().equals(TraitConstants.EXPLOSIVE))
-                    this.explode(diffMod / damageType.amplifier());
-            });
+        if (info.hasTraits() && diffMod > 0) {
+            if (info.hasDamageTypes()) {
+                info.getDamageTypes().forEach(damageType -> {
+                    if (damageType.type().equals(TraitConstants.SET_ON_FIRE))
+                        target.setSecondsOnFire(diffMod * damageType.amplifier());
+                    if (damageType.type().equals(TraitConstants.EXPLOSIVE))
+                        this.explode(diffMod / damageType.amplifier());
+                });
+            }
+            int duration = diffMod * 20;
+            if (info.hasPotionDamageEffects()) {
+                info.getPotionDamageEffects().forEach(effect -> target.addEffect(effect.createInstance(duration)));
+            }
+            if (canPoison(info)) {
+                target.addEffect(new MobEffectInstance(MobEffects.POISON, duration, 0));
+            }
         }
-        int duration = diffMod * 20;
-        if (diffMod > 0 && info.hasTraits() && info.hasPotionDamageEffects()) {
-            info.getPotionDamageEffects().forEach(effect -> target.addEffect(effect.createInstance(duration)));
-        }
-        if (canPoison(info))
-            target.addEffect(new MobEffectInstance(MobEffects.POISON, duration, 0));
     }
 
     private int getDifficultyModifier() {
@@ -242,7 +245,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private boolean canPoison(TraitData info) {
-        return (CommonConfig.BEES_INFLICT_POISON.get() && this.getCombatData().inflictsPoison()) && info.hasTraits() && !info.hasPotionDamageEffects() && !info.hasDamageTypes();
+        return CommonConfig.BEES_INFLICT_POISON.get() && this.getCombatData().inflictsPoison() && info.canPoison();
     }
 
     private void explode(int radius) {
@@ -285,7 +288,6 @@ public class ResourcefulBee extends CustomBeeEntity {
     public class EnterBeehiveGoal2 extends Bee.BeeEnterHiveGoal {
         public EnterBeehiveGoal2() {
             super();
-            //constructor
         }
 
         @Override
@@ -311,20 +313,13 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
 
         @Override
-        public boolean canBeeContinueToUse() {
-            return false;
-        }
-
-        @Override
         public void start() {
             if (ResourcefulBee.this.getHivePos() != null) {
                 BlockEntity blockEntity = ResourcefulBee.this.level.getBlockEntity(ResourcefulBee.this.getHivePos());
-                if (blockEntity != null) {
-                    if (blockEntity instanceof BeehiveBlockEntity beehiveBlockEntity) {
-                        beehiveBlockEntity.addOccupant(ResourcefulBee.this, ResourcefulBee.this.hasNectar());
-                    } else if (blockEntity instanceof ApiaryBlockEntity apiaryBlockEntity) {
-                        apiaryBlockEntity.tryEnterHive(ResourcefulBee.this, ResourcefulBee.this.hasNectar(), 0);
-                    }
+                if (blockEntity instanceof BeehiveBlockEntity hive) {
+                    hive.addOccupant(ResourcefulBee.this, ResourcefulBee.this.hasNectar());
+                } else if (blockEntity instanceof ApiaryBlockEntity apiary) {
+                    apiary.tryEnterHive(ResourcefulBee.this, ResourcefulBee.this.hasNectar(), 0);
                 }
             }
         }
@@ -372,10 +367,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public boolean canBeeUse() {
-            if (Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get())) {
-                return super.canBeeUse();
-            }
-            return false;
+            return Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get()) && super.canBeeUse();
         }
     }
 }

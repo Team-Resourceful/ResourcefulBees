@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
+import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -8,6 +9,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BottleItem;
+import net.minecraft.world.item.HoneyBottleItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,6 +25,17 @@ public class ModUtils {
 
     private ModUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
+    public static void checkBottleAndCapability(HoneyFluidTank tank, BlockEntity entity, Player player, Level world, BlockPos pos, InteractionHand hand) {
+        Item item = player.getItemInHand(hand).getItem();
+        if (item instanceof BottleItem) {
+            tank.fillBottle(player, hand);
+        } else if (item instanceof HoneyBottleItem) {
+            tank.emptyBottle(player, hand);
+        } else {
+            ModUtils.capabilityOrGuiUse(entity, player, world, pos, hand);
+        }
     }
 
     public static void capabilityOrGuiUse(BlockEntity tileEntity, Player player, Level world, BlockPos pos, InteractionHand hand){

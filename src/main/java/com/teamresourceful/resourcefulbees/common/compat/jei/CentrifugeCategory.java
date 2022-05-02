@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -27,13 +28,10 @@ import net.minecraftforge.client.gui.GuiUtils;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.CentrifugeRecipeAdapter> {
-
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#%");
 
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge");
@@ -130,7 +128,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             List<Component> tooltip = new ArrayList<>();
             if (displayname != null) tooltip.add(displayname);
             if (weight != null) {
-                tooltip.add(new TranslatableComponent(TranslationConstants.Jei.CENTRIFUGE_WEIGHT, DECIMAL_FORMAT.format(weight)));
+                tooltip.add(new TranslatableComponent(TranslationConstants.Jei.CENTRIFUGE_WEIGHT, ModConstants.DECIMAL_PERCENT_FORMAT.format(weight)));
             } else {
                 tooltip.add(TranslationConstants.Jei.CENTRIFUGE_WEIGHT_EMPTY);
             }
@@ -139,7 +137,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         inBounds = MathUtils.inRangeInclusive((int) mouseX, min, max) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
         if (inBounds) {
             if (outputSize > i)
-                return Collections.singletonList(new TranslatableComponent(TranslationConstants.Jei.CENTRIFUGE_CHANCE, DECIMAL_FORMAT.format(chance)));
+                return Collections.singletonList(new TranslatableComponent(TranslationConstants.Jei.CENTRIFUGE_CHANCE, ModConstants.DECIMAL_PERCENT_FORMAT.format(chance)));
             else {
                 return Collections.singletonList(TranslationConstants.Jei.CENTRIFUGE_CHANCE_EMPTY);
             }

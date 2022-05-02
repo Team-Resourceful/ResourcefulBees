@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
-import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -16,14 +15,15 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -78,30 +78,19 @@ public class EnderBeecon extends SidedTickingBlock<EnderBeeconBlockEntity> {
     @Override
     @Deprecated
     public InteractionResult use(@NotNull BlockState state, Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
+        if (world.getBlockEntity(pos) instanceof EnderBeeconBlockEntity beecon) {
+            if (!world.isClientSide()) {
+                ItemStack stack = player.getItemInHand(hand);
 
-        ItemStack itemInHand = player.getItemInHand(hand);
-        Item heldItem = itemInHand.getItem();
-        BlockEntity tileEntity = world.getBlockEntity(pos);
-
-        if (tileEntity instanceof EnderBeeconBlockEntity beecon) {
-            HoneyFluidTank tank = beecon.getTank();
-            if (!world.isClientSide) {
-                boolean usingWool = itemInHand.is(ItemTags.WOOL);
-                boolean usingStick = heldItem.equals(Items.STICK);
-
-                if (usingWool) {
+                if (stack.is(ItemTags.WOOL)) {
                     world.setBlock(pos, state.cycle(SOUND), Block.UPDATE_ALL);
-                } else if (usingStick) {
+                } else if (stack.is(Items.STICK)) {
                     world.setBlock(pos, state.cycle(BEAM), Block.UPDATE_ALL);
-                } else if (heldItem instanceof BottleItem) {
-                    tank.fillBottle(player, hand);
-                } else if (heldItem instanceof HoneyBottleItem) {
-                    tank.emptyBottle(player, hand);
                 } else {
-                    ModUtils.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+                    ModUtils.checkBottleAndCapability(beecon.getTank(), beecon, player, world, pos, hand);
                 }
             }
-            return InteractionResult.SUCCESS;
+            return InteractionResult.sidedSuccess(world.isClientSide());
         }
         return super.use(state, world, pos, player, hand, rayTraceResult);
     }

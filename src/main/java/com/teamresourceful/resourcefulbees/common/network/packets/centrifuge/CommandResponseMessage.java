@@ -20,8 +20,7 @@ public record CommandResponseMessage(Component response) {
 
     public static void handle(CommandResponseMessage message, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
-            Minecraft minecraft = Minecraft.getInstance();
-            if (minecraft.screen instanceof CentrifugeTerminalScreen terminal) {
+            if (Minecraft.getInstance().screen instanceof CentrifugeTerminalScreen terminal) {
                 terminal.sendResponse(message.response);
             }
         });
