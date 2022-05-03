@@ -7,7 +7,6 @@ public class BeeConstants {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-
     public static final String MOD_NAME = "Resourceful Bees";
     public static final String ENTITY_TEXTURES_DIR = "textures/entity/";
     public static final String STRING_DEFAULT_ITEM_COLOR = "-1";

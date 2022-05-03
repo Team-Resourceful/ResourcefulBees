@@ -21,7 +21,20 @@ public class BlockLanguageModule implements LanguageModule {
             provider.addBlock(ModBlocks.HONEY_GENERATOR, "Honey Generator");
             provider.addBlock(ModBlocks.ENDER_BEECON, "Ender Beecon");
             provider.addBlock(ModBlocks.SOLIDIFICATION_CHAMBER, "Solidification Chamber");
-            provider.addBlock(ModBlocks.HONEY_POT, "Honey Pot");
+            provider.addBlock(ModBlocks.WAXED_PLANKS, "Waxed Planks");
+            provider.addBlock(ModBlocks.TRIMMED_WAXED_PLANKS, "Trimmed Waxed Planks");
+            provider.addBlock(ModBlocks.WAXED_MACHINE_BLOCK, "Waxed Machine Block");
+            provider.addBlock(ModBlocks.WAXED_SLAB, "Waxed Slab");
+            provider.addBlock(ModBlocks.WAXED_STAIRS, "Waxed Stairs");
+            provider.addBlock(ModBlocks.WAXED_PRESSURE_PLATE, "Waxed Pressure Plate");
+            provider.addBlock(ModBlocks.WAXED_BUTTON, "Waxed Button");
+            provider.addBlock(ModBlocks.WAXED_SIGN, "Waxed Sign");
+            provider.addBlock(ModBlocks.WAXED_DOOR, "Waxed Door");
+            provider.addBlock(ModBlocks.WAXED_TRAPDOOR, "Waxed Trapdoor");
+            provider.addBlock(ModBlocks.WAXED_FENCE, "Waxed Fence");
+            provider.addBlock(ModBlocks.WAXED_FENCE_GATE, "Waxed Fence Gate");
+
+        provider.addBlock(ModBlocks.HONEY_POT, "Honey Pot");
 
             ModBlocks.HIVES.getEntries().forEach(registryObject -> addNest(provider, registryObject));
     }

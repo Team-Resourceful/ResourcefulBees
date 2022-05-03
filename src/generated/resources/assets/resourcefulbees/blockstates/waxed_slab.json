@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=top": {
+      "model": "resourcefulbees:block/waxed_slab_top"
+    },
+    "type=bottom": {
+      "model": "resourcefulbees:block/waxed_slab"
+    },
+    "type=double": {
+      "model": "resourcefulbees:block/waxed_planks"
+    }
+  }
+}

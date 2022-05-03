@@ -1,0 +1,10 @@
+{
+    "ctm":{
+        "ctm_version": 1,
+        "type":"CTM",
+        "layer":"SOLID",
+        "textures":[
+            "resourcefulbees:block/trimmed_waxed_planks_ctm"
+        ]
+    }
+}

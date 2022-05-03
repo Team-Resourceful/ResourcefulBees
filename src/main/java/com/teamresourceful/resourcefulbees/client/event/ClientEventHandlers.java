@@ -28,7 +28,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.Direction;
@@ -66,6 +68,7 @@ public class ClientEventHandlers {
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onBlockHighlight);
 
+        Sheets.addWoodType(ModBlocks.WAXED_WOOD_TYPE);
     }
 
     public static void onBlockHighlight(DrawSelectionEvent.HighlightBlock event) {
@@ -123,6 +126,7 @@ public class ClientEventHandlers {
         BlockEntityRenderers.register(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), RenderSolidificationChamber::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
+        BlockEntityRenderers.register(ModBlockEntityTypes.WAXED_SIGN_ENTITY.get(), SignRenderer::new);
     }
 
     private static void registerRenderTypes() {
@@ -130,6 +134,10 @@ public class ClientEventHandlers {
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.ENDER_BEECON.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.SOLIDIFICATION_CHAMBER.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WAXED_DOOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WAXED_TRAPDOOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.HONEY_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.HONEY_GLASS_PLAYER.get(), RenderType.translucent());
 
         // bee nests need cutout for overlay
         ModBlocks.HIVES.getEntries().stream()

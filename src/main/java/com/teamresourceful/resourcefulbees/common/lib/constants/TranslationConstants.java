@@ -306,6 +306,12 @@ public class TranslationConstants {
 
         @Translate("§8statistics.")
         public static final TranslatableComponent TOOLTIP_STATS = new TranslatableComponent("item.resourcefulbees.tooltip_stats");
+
+        @Translate("§6Honey Glass (Bee)")
+        public static final TranslatableComponent HONEY_GLASS = new TranslatableComponent("block.resourcefulbees.honey_glass.tooltip");
+
+        @Translate("§6Honey Glass (Player)")
+        public static final TranslatableComponent HONEY_GLASS_PLAYER = new TranslatableComponent("block.resourcefulbees.honey_glass_player.tooltip");
     }
 
     public static class HoneyDipper {

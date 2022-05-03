@@ -36,7 +36,7 @@ public class BaseBlockLootTable extends BlockLoot {
         this.add(registryObject.get(), factory);
     }
 
-    protected void dropSelf(RegistryObject<Block> registryObject) {
+    protected void dropSelf(RegistryObject<? extends Block> registryObject) {
         this.dropSelf(registryObject.get());
     }
 

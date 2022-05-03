@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.loottables;
 
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockLootTable;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
@@ -35,6 +36,21 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.ENDER_BEECON);
         dropSelf(ModBlocks.HONEY_POT);
         //endregion
+
+        dropSelf(ModBlocks.WAXED_MACHINE_BLOCK);
+        dropSelf(ModBlocks.WAXED_PLANKS);
+        createDoorTable(ModBlocks.WAXED_DOOR.get());
+        dropSelf(ModBlocks.WAXED_BUTTON);
+        dropSelf(ModBlocks.WAXED_FENCE);
+        dropSelf(ModBlocks.WAXED_FENCE_GATE);
+        dropSelf(ModBlocks.WAXED_PRESSURE_PLATE);
+        dropSelf(ModBlocks.WAXED_SLAB);
+        dropSelf(ModBlocks.WAXED_STAIRS);
+        dropSelf(ModBlocks.WAXED_TRAPDOOR);
+        dropOther(ModBlocks.WAXED_SIGN.get(), ModItems.WAXED_SIGN.get());
+        dropOther(ModBlocks.WAXED_WALL_SIGN.get(), ModItems.WAXED_SIGN.get());
+        dropSelf(ModBlocks.TRIMMED_WAXED_PLANKS);
+
         ModBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
     }
 
