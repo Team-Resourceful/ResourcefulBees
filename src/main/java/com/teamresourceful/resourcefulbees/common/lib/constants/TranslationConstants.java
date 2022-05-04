@@ -229,14 +229,6 @@ public class TranslationConstants {
         @Translate("Hold CTRL for Multiblock Info")
         public static final TranslatableComponent MULTIBLOCK_INFO = new TranslatableComponent("item.resourcefulbees.ctrl_info");
 
-        @Translate("Contains Lost bees, use while sneaking to release them. (Consumed on use)")
-        public static final TranslatableComponent TEMP_INFO = new TranslatableComponent("item.resourcefulbees.information.bee_box.temp_info");
-
-        @Translate("Can be used to hold up to 10 bees. Use while sneaking to release them.")
-        public static final TranslatableComponent INFO = new TranslatableComponent("item.resourcefulbees.information.bee_box.info");
-
-        @Translate("Bees:")
-        public static final TranslatableComponent BEES = new TranslatableComponent("item.resourcefulbees.information.bee_box.bees");
 
         @Translate("Right click the hive to smoke it.")
         public static final TranslatableComponent SMOKER_TOOLTIP = new TranslatableComponent("item.resourcefulbees.smoker.tooltip");
@@ -286,7 +278,7 @@ public class TranslationConstants {
         @Translate("Filled Bee Jar")
         public static final String BEE_JAR_FILLED = "item.resourcefulbees.bee_jar_filled";
 
-        @Translate("Filled Bee Jar")
+        @Translate("Empty Bee Jar")
         public static final String BEE_JAR_EMPTY = "item.resourcefulbees.bee_jar_empty";
 
         @Translate("§8Hold [§7SHIFT§8] for %s")
@@ -312,6 +304,21 @@ public class TranslationConstants {
 
         @Translate("§6Honey Glass (Player)")
         public static final TranslatableComponent HONEY_GLASS_PLAYER = new TranslatableComponent("block.resourcefulbees.honey_glass_player.tooltip");
+
+        @Translate(" - %s")
+        public static final String BEE_BOX_ENTITY_NAME = "item.resourcefulbees.bee_box.entity_name";
+
+        @Translate("Can hold up to %s bees.")
+        public static final String BEE_BOX_TOOLTIP = "item.resourcefulbees.information.bee_box.info";
+
+        @Translate("Contains lost bees. Consumed on use.")
+        public static final TranslatableComponent BEE_BOX_TOOLTIP_TEMP = new TranslatableComponent("item.resourcefulbees.information.bee_box.temp_info");
+
+        @Translate("Bees:")
+        public static final TranslatableComponent BEES = new TranslatableComponent("item.resourcefulbees.information.bee_box.bees");
+
+        @Translate("No Bees.")
+        public static final TranslatableComponent NO_BEES = new TranslatableComponent("item.resourcefulbees.information.bee_box.no_bees");
     }
 
     public static class HoneyDipper {

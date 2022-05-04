@@ -51,7 +51,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
         addAdvancement(createSimpleAdvancement(ModItems.T4_APIARY_ITEM, "t4_apiary", t3ApiaryUpgrade));
 
         Advancement beeBox = addAdvancement(createSimpleAdvancement(ModItems.BEE_BOX, "bee_box", beeJar));
-        addAdvancement(createSimpleChallengeAchivement(ModItems.CRAFTING_BEE_BOX, "crafting_bee_box", beeBox));
+        addAdvancement(createSimpleChallengeAchivement(ModItems.BEE_BOX_TEMP, "crafting_bee_box", beeBox));
         addAdvancement(createSimpleAdvancement(ModItems.HONEY_DIPPER, "honey_dipper", nest));
         addAdvancement(createSimpleAdvancement(ModItems.SMOKER, "smoker", scraper));
 

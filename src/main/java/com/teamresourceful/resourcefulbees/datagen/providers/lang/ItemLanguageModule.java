@@ -8,7 +8,7 @@ public class ItemLanguageModule implements LanguageModule {
     @Override
     public void addEntries(BaseLanguageProvider provider) {
         provider.addItem(ModItems.OREO_COOKIE, "Epic Oreo");
-        provider.addItem(ModItems.CRAFTING_BEE_BOX, "Lost Bee Box");
+        provider.addItem(ModItems.BEE_BOX_TEMP, "Lost Bee Box");
         provider.addItem(ModItems.BEE_BOX, "Bee Box");
         provider.addItem(ModItems.BEEPEDIA, "Beepedia");
         provider.addItem(ModItems.HONEY_DIPPER, "Honey Dipper");

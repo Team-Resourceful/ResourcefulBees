@@ -2,7 +2,7 @@
   "parent": "resourcefulbees:resourcefulbees/bee_box",
   "display": {
     "icon": {
-      "item": "resourcefulbees:crafting_bee_box"
+      "item": "resourcefulbees:bee_box_temp"
     },
     "title": {
       "translate": "advancements.resourcefulbees.crafting_bee_box.title"
@@ -22,7 +22,7 @@
         "items": [
           {
             "items": [
-              "resourcefulbees:crafting_bee_box"
+              "resourcefulbees:bee_box_temp"
             ]
           }
         ]

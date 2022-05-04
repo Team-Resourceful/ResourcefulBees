@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -20,6 +21,9 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class ModUtils {
 
@@ -71,5 +75,17 @@ public class ModUtils {
         CompoundTag compoundTag = new CompoundTag();
         compoundTag.put(key, tag);
         return compoundTag;
+    }
+
+    public static <T extends Tag> ListTag listTag(@Nullable List<T> tags) {
+        ListTag list = new ListTag();
+        if (tags != null && !tags.isEmpty()) {
+            list.addAll(tags);
+        }
+        return list;
+    }
+
+    public static <T extends Tag> List<T> fromListTag(ListTag list, Class<T> tagClass) {
+        return list.stream().filter(tagClass::isInstance).map(tagClass::cast).toList();
     }
 }

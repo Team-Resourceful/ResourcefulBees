@@ -176,6 +176,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", EnderBeecon::new);
     public static final RegistryObject<Block> SOLIDIFICATION_CHAMBER = BLOCKS.register("solidification_chamber", SolidificationChamber::new);
     public static final RegistryObject<Block> HONEY_POT = BLOCKS.register("honey_pot", () -> new HoneyPotBlock(BlockBehaviour.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> BEE_BOX = BLOCKS.register("bee_box", () -> new BeeBoxBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(0.5f)));
+    public static final RegistryObject<Block> BEE_BOX_TEMP = BLOCKS.register("bee_box_temp", () -> new BeeBoxBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(0.5f)));
 
     //region Centrifuge Multiblock Blocks
     public static final RegistryObject<Block> CENTRIFUGE_CASING = CENTRIFUGE_BLOCKS.register("centrifuge/casing", () -> new CentrifugeCasing(CENTRIFUGE_PROPERTIES));

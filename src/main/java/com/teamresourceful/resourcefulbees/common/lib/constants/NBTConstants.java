@@ -9,6 +9,7 @@ public class NBTConstants {
     public static final String ENTITY_DATA = "EntityData";
     public static final String NBT_BEEPEDIA_DATA = "BeepediaData";
     public static final String NBT_BEES = "Bees";
+    public static final String NBT_DISPLAYNAMES = "DisplayNames";
     public static final String NBT_BEE_NAME = "DisplayName";
     public static final String NBT_BLOCK_ENTITY_TAG = "BlockEntityTag";
     public static final String NBT_COLOR = "Color";

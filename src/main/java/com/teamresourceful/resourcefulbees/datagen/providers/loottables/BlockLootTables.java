@@ -3,18 +3,29 @@ package com.teamresourceful.resourcefulbees.datagen.providers.loottables;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockLootTable;
+import net.minecraft.advancements.critereon.EntityFlagsPredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.CopyBlockState;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.RegistryObject;
 
 public class BlockLootTables extends BaseBlockLootTable {
+
+    private static final LootItemCondition.Builder WHEN_PLAYER_SHIFTING = LootItemEntityPropertyCondition.hasProperties(
+        LootContext.EntityTarget.THIS,
+        EntityPredicate.Builder.entity().flags(EntityFlagsPredicate.Builder.flags().setCrouching(true).build()).build()
+    );
 
     @Override
     protected void addTables() {
@@ -52,6 +63,29 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.TRIMMED_WAXED_PLANKS);
 
         ModBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
+        addBeeBox(ModBlocks.BEE_BOX, false);
+        addBeeBox(ModBlocks.BEE_BOX_TEMP, true);
+    }
+
+    private void addBeeBox(RegistryObject<Block> box, boolean temp) {
+        Block block = box.get();
+
+        LootPoolEntryContainer.Builder<?> drop = LootItem.lootTableItem(block)
+            .when(WHEN_PLAYER_SHIFTING)
+            .apply(
+                CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+                        .copy("Bees", "BlockEntityTag.Bees")
+            );
+
+        if (!temp) {
+            drop = drop.otherwise(LootItem.lootTableItem(block));
+        }
+
+        add(block, LootTable.lootTable().withPool(
+            LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .add(drop)
+        ));
     }
 
     private void addNest(RegistryObject<Block> nest) {
@@ -63,22 +97,25 @@ public class BlockLootTables extends BaseBlockLootTable {
         return LootPool.lootPool()
                 .setRolls(ConstantValue.exactly(1))
                 .add(
+                    LootItem.lootTableItem(block)
+                    .when(HAS_SILK_TOUCH)
+                    .apply(
+                        CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+                        .copy("Bees", "BlockEntityTag.Bees")
+                        .copy("Tier", "BlockEntityTag.Tier")
+                        .copy("TierModifier", "BlockEntityTag.TierModifier")
+                    )
+                    .apply(
+                        CopyBlockState.copyState(block).copy(BeehiveBlock.HONEY_LEVEL)
+                    )
+                    .otherwise(
                         LootItem.lootTableItem(block)
-                        .when(HAS_SILK_TOUCH)
                         .apply(
-                                CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
-                                .copy("Bees", "BlockEntityTag.Bees")
-                                .copy("Tier", "BlockEntityTag.Tier")
-                                .copy("TierModifier", "BlockEntityTag.TierModifier")
+                            CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
+                            .copy("Tier", "BlockEntityTag.Tier")
+                            .copy("TierModifier", "BlockEntityTag.TierModifier")
                         )
-                        .apply(
-                            CopyBlockState.copyState(block).copy(BeehiveBlock.HONEY_LEVEL)
-                        )
-                        .otherwise(
-                                LootItem.lootTableItem(block).apply(
-                                        CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("Tier", "BlockEntityTag.Tier").copy("TierModifier", "BlockEntityTag.TierModifier")
-                            )
-                        )
+                    )
                 );
     }
 }

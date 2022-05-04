@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "predicate": {
+                "flags": {
+                  "is_sneaking": true
+                }
+              },
+              "entity": "this"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "Bees",
+                  "target": "BlockEntityTag.Bees",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "resourcefulbees:bee_box_temp"
+        }
+      ]
+    }
+  ]
+}
