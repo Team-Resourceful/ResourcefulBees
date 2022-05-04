@@ -30,6 +30,11 @@
                       "source": "Bees",
                       "target": "BlockEntityTag.Bees",
                       "op": "replace"
+                    },
+                    {
+                      "source": "DisplayNames",
+                      "target": "BlockEntityTag.DisplayNames",
+                      "op": "replace"
                     }
                   ]
                 }

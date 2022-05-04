@@ -75,6 +75,7 @@ public class BlockLootTables extends BaseBlockLootTable {
             .apply(
                 CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
                         .copy("Bees", "BlockEntityTag.Bees")
+                        .copy("DisplayNames", "BlockEntityTag.DisplayNames")
             );
 
         if (!temp) {
