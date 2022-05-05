@@ -24,6 +24,7 @@ import java.util.Objects;
 public class BeeBreedGoal extends BreedGoal {
 
     private final String beeType;
+
     public BeeBreedGoal(Animal animal, double speedIn, String beeType) {
         super(animal, speedIn);
         this.beeType = beeType;
@@ -84,13 +85,12 @@ public class BeeBreedGoal extends BreedGoal {
     }
 
     protected void spawnParticles() {
-        if (!level.isClientSide()) {
-            ServerLevel worldServer = (ServerLevel) level;
+        if (level instanceof ServerLevel serverLevel) {
             for(int i = 0; i < 5; ++i) {
                 double d0 = level.random.nextGaussian() * 0.02D;
                 double d1 = level.random.nextGaussian() * 0.02D;
                 double d2 = level.random.nextGaussian() * 0.02D;
-                worldServer.sendParticles(ParticleTypes.ANGRY_VILLAGER,
+                serverLevel.sendParticles(ParticleTypes.ANGRY_VILLAGER,
                         this.animal.getRandomX(1.0D),
                         this.animal.getRandomY(),
                         this.animal.getRandomZ(1.0D),
@@ -100,10 +100,8 @@ public class BeeBreedGoal extends BreedGoal {
     }
 
     private void resetBreed() {
-        int p1BreedDelay = ((ICustomBee)this.animal).getBreedData().getBreedDelay();
-        int p2BreedDelay = ((ICustomBee)this.partner).getBreedData().getBreedDelay();
-        this.animal.setAge(p1BreedDelay);
-        this.partner.setAge(p2BreedDelay);
+        this.animal.setAge(((ICustomBee)this.animal).getBreedData().getBreedDelay());
+        this.partner.setAge(((ICustomBee)this.partner).getBreedData().getBreedDelay());
         this.animal.resetLove();
         this.partner.resetLove();
     }

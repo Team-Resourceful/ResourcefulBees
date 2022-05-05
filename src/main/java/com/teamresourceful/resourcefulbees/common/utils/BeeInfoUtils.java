@@ -99,12 +99,9 @@ public class BeeInfoUtils {
         entity.moveTo(d1, d2, d3, entity.getYRot(), entity.getXRot());
     }
 
-    public static @NotNull CompoundTag createJarBeeTag(Bee bee, String nbtTagID) {
-        String type = EntityType.getKey(bee.getType()).toString();
+    public static @NotNull CompoundTag createJarBeeTag(Bee bee) {
         CompoundTag nbt = new CompoundTag();
-        nbt.putString(nbtTagID, type);
-
-        bee.saveWithoutId(nbt);
+        bee.saveAsPassenger(nbt);
 
         String beeColor = bee instanceof ICustomBee iBee ? iBee.getRenderData().colorData().jarColor().toString() : BeeConstants.VANILLA_BEE_COLOR;
 
@@ -125,11 +122,10 @@ public class BeeInfoUtils {
     }
 
     public static Item getHoneyBottleFromFluid(Fluid fluid) {
-        if (fluid instanceof CustomHoneyFluid customfluid) {
-            return HoneyRegistry.getRegistry().getHoneyData(customfluid.getHoneyData().name()).bottleData().honeyBottle();
-        } else {
-            return Items.HONEY_BOTTLE;
+        if (fluid instanceof CustomHoneyFluid honeyFluid) {
+            return HoneyRegistry.getRegistry().getHoneyData(honeyFluid.getHoneyData().name()).bottleData().honeyBottle();
         }
+        return Items.HONEY_BOTTLE;
     }
 
 }

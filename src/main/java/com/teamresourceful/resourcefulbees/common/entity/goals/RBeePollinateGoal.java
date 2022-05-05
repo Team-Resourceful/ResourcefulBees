@@ -72,18 +72,14 @@ public class RBeePollinateGoal extends Goal {
     }
 
     public boolean canBeeContinue() {
-        if (!this.running) {
-            return false;
-        } else if (bee.getSavedFlowerPos() == null) {
-            return false;
-        } else if (this.completedPollination()) {
-            return bee.getRandom().nextFloat() < 0.2F;
-        } else if (!bee.isFlowerValid(bee.getSavedFlowerPos())) {
+        if (!this.running) return false;
+        if (bee.getSavedFlowerPos() == null) return false;
+        if (this.completedPollination()) return bee.getRandom().nextFloat() < 0.2F;
+        if (!bee.isFlowerValid(bee.getSavedFlowerPos())) {
             bee.setSavedFlowerPos(null);
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     private boolean completedPollination() {

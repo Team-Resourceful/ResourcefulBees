@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
-import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
@@ -8,10 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -46,19 +41,9 @@ public class BeeBoxBlockEntity extends BlockEntity {
     //endregion
 
     public void summonBees(Level level, BlockPos pos, Player player) {
-        if (bees != null) {
-            if (!(level instanceof ServerLevel serverLevel)) return;
-            for (CompoundTag bee : bees) {
-                EntityType.by(bee).ifPresent(entityType -> {
-                    Entity entity = entityType.create(serverLevel);
-                    if (entity != null) {
-                        entity.load(bee);
-                        entity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-                        serverLevel.addFreshEntity(entity);
-                        if (entity instanceof Bee beeEntity) BeeJar.updateCapturedBee(beeEntity, player);
-                    }
-                });
-            }
+        if (this.bees != null) {
+            if (level.isClientSide()) return;
+            this.bees.forEach(bee -> ModUtils.summonEntity(bee, level, player, pos));
         }
     }
 

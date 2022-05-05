@@ -8,11 +8,12 @@ import net.minecraft.world.entity.animal.Bee;
 import org.jetbrains.annotations.NotNull;
 
 public class BeeAngerGoal extends HurtByTargetGoal {
+
     private final ResourcefulBee bee;
 
-    public BeeAngerGoal(ResourcefulBee beeIn) {
-        super(beeIn);
-        bee = beeIn;
+    public BeeAngerGoal(ResourcefulBee bee) {
+        super(bee);
+        this.bee = bee;
     }
 
     @Override

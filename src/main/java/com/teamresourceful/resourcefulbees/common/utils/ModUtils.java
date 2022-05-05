@@ -1,7 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
+import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
+import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -9,6 +13,8 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BottleItem;
 import net.minecraft.world.item.HoneyBottleItem;
@@ -87,5 +93,31 @@ public class ModUtils {
 
     public static <T extends Tag> List<T> fromListTag(ListTag list, Class<T> tagClass) {
         return list.stream().filter(tagClass::isInstance).map(tagClass::cast).toList();
+    }
+
+    public static void updateCapturedBee(Bee bee, Player player) {
+        bee.setSavedFlowerPos(null);
+        ((BeeEntityAccessor) bee).setHivePos(null);
+        if (bee.isAngry()) {
+            bee.setTarget(player);
+            if (bee instanceof ResourcefulBee customBee) {
+                TraitData traitData = customBee.getTraitData();
+                if (traitData.getDamageTypes().stream().anyMatch(damageType -> damageType.type().equals(TraitConstants.EXPLOSIVE))) {
+                    customBee.setExplosiveCooldown(60);
+                }
+            }
+        }
+    }
+
+    public static void summonEntity(CompoundTag tag, Level level, Player player, BlockPos pos) {
+        if (tag == null) return;
+        EntityType.by(tag)
+            .map(type -> type.create(level))
+            .ifPresent(entity -> {
+                entity.load(tag);
+                entity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+                level.addFreshEntity(entity);
+                if (entity instanceof Bee beeEntity) ModUtils.updateCapturedBee(beeEntity, player);
+            });
     }
 }

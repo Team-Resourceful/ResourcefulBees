@@ -130,7 +130,7 @@ public class RandomPositionGenerator {
     }
 
     static BlockPos findValidPositionAbove(BlockPos blockPos3, int randInt3, int worldHeight, Predicate<BlockPos> posPredicate) {
-        if (randInt3 < 3) throw new IllegalArgumentException("aboveSolidAmount was " + randInt3 + ", expected >= 0");
+        if (randInt3 < 0) throw new IllegalArgumentException("aboveSolidAmount was " + randInt3 + ", expected >= 0");
         if (!posPredicate.test(blockPos3)) return blockPos3;
 
         BlockPos blockpos = blockPos3.above();

@@ -58,7 +58,7 @@ public class BeeBoxItem extends BlockItem implements IShiftingToolTip {
 
         if (bees.size() == BeeConstants.MAX_BEES_BEE_BOX) return InteractionResult.FAIL;
 
-        bees.add(BeeInfoUtils.createJarBeeTag(target, NBTConstants.NBT_ID));
+        bees.add(BeeInfoUtils.createJarBeeTag(target));
         displayNames.add(StringTag.valueOf(Component.Serializer.toJson(target.getType().getDescription())));
 
         blockTag.put(NBTConstants.NBT_BEES, bees);

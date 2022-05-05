@@ -7,7 +7,6 @@ import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.level.Level;
 
 import java.util.Map;
 
@@ -29,8 +28,7 @@ public class BeeMutateGoal extends Goal {
 
     @Override
     public void tick() {
-        Level level = bee.getLevel();
-        if (!(level instanceof ServerLevel serverLevel)) return;
+        if (!(bee.getLevel() instanceof ServerLevel serverLevel)) return;
         if (bee.tickCount % 5 == 0) {
             MutationData mutationData = bee.getMutationData();
             if (mutationData.hasMutation()) {

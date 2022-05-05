@@ -35,14 +35,9 @@ public class BeeTemptGoal extends Goal {
         if (this.delayTemptCounter > 0) {
             --this.delayTemptCounter;
             return false;
-        } else {
-            this.closestPlayer = this.beeEntity.level.getNearestPlayer(ENTITY_PREDICATE, this.beeEntity);
-            if (this.closestPlayer == null) {
-                return false;
-            } else {
-                return this.isTempting(this.closestPlayer.getMainHandItem()) || this.isTempting(this.closestPlayer.getOffhandItem());
-            }
         }
+        this.closestPlayer = this.beeEntity.level.getNearestPlayer(ENTITY_PREDICATE, this.beeEntity);
+        return this.closestPlayer != null && (this.isTempting(this.closestPlayer.getMainHandItem()) || this.isTempting(this.closestPlayer.getOffhandItem()));
     }
 
     protected boolean isTempting(ItemStack stack) {

@@ -10,7 +10,10 @@ import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -42,8 +45,16 @@ public class BeeJarIngredient extends Ingredient {
 
     public static ItemStack getBeeJar(ResourceLocation id, int color) {
         ItemStack stack = new ItemStack(ModItems.BEE_JAR.get());
-        stack.getOrCreateTag().putString(NBTConstants.NBT_ENTITY, id.toString());
-        stack.getOrCreateTag().putString(NBTConstants.NBT_COLOR, new Color(color).toString());
+
+        CompoundTag stackTag = new CompoundTag();
+        CompoundTag entityTag = new CompoundTag();
+
+        entityTag.putString(NBTConstants.NBT_ID, id.toString());
+        entityTag.putString(NBTConstants.NBT_COLOR, new Color(color).toString());
+        stackTag.putString(NBTConstants.NBT_DISPLAYNAME, Component.Serializer.toJson(new TranslatableComponent("entity." + id.getNamespace() + "." + id.getPath())));
+
+        stackTag.put(NBTConstants.NBT_ENTITY, entityTag);
+        stack.setTag(stackTag);
         return stack;
     }
 
@@ -54,7 +65,8 @@ public class BeeJarIngredient extends Ingredient {
 
     @Override
     public boolean test(@Nullable ItemStack input) {
-        return input != null && input.getItem() instanceof BeeJar && input.hasTag() && input.getTag().getString(NBTConstants.NBT_ENTITY).equals(id.toString());
+        if (input == null || !(input.getItem() instanceof BeeJar)) return false;
+        return BeeJar.isFilled(input) && input.getOrCreateTag().getCompound(NBTConstants.NBT_ENTITY).getString(NBTConstants.NBT_ID).equals(id.toString());
     }
 
     @Override
