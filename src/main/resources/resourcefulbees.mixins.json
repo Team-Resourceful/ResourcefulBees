@@ -15,7 +15,6 @@
     "accessors.BeehiveBeeDataAccessor",
     "accessors.BeehiveEntityAccessor",
     "accessors.BlockAccessor",
-    "accessors.ContainerAccessor",
     "accessors.NbtPredicateAccessor",
     "invokers.BeeEntityInvoker",
     "invokers.BreedGoalInvoker",

@@ -42,19 +42,17 @@ public enum DamageTypes {
     private final Function<LivingEntity, DamageSource> source;
     private final boolean genericOnNull;
 
+    DamageTypes(DamageSource source) {
+        this(livingEntity -> source);
+    }
 
     DamageTypes(Function<LivingEntity, DamageSource> source) {
-        this.source = source;
-        this.genericOnNull = true;
+        this(source, true);
     }
 
     DamageTypes(Function<LivingEntity, DamageSource> source, boolean genericOnNull) {
         this.source = source;
         this.genericOnNull = genericOnNull;
-    }
-
-    DamageTypes(DamageSource source) {
-        this(livingEntity -> source);
     }
 
     public DamageSource getSource(@Nullable LivingEntity livingEntity) {

@@ -50,10 +50,10 @@ public class BeeJarIngredient extends Ingredient {
         CompoundTag entityTag = new CompoundTag();
 
         entityTag.putString(NBTConstants.NBT_ID, id.toString());
-        entityTag.putString(NBTConstants.NBT_COLOR, new Color(color).toString());
-        stackTag.putString(NBTConstants.NBT_DISPLAYNAME, Component.Serializer.toJson(new TranslatableComponent("entity." + id.getNamespace() + "." + id.getPath())));
+        entityTag.putString(NBTConstants.BeeJar.COLOR, new Color(color).toString());
+        stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, Component.Serializer.toJson(new TranslatableComponent("entity." + id.getNamespace() + "." + id.getPath())));
 
-        stackTag.put(NBTConstants.NBT_ENTITY, entityTag);
+        stackTag.put(NBTConstants.BeeJar.ENTITY, entityTag);
         stack.setTag(stackTag);
         return stack;
     }
@@ -66,7 +66,7 @@ public class BeeJarIngredient extends Ingredient {
     @Override
     public boolean test(@Nullable ItemStack input) {
         if (input == null || !(input.getItem() instanceof BeeJar)) return false;
-        return BeeJar.isFilled(input) && input.getOrCreateTag().getCompound(NBTConstants.NBT_ENTITY).getString(NBTConstants.NBT_ID).equals(id.toString());
+        return BeeJar.isFilled(input) && input.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY).getString(NBTConstants.NBT_ID).equals(id.toString());
     }
 
     @Override

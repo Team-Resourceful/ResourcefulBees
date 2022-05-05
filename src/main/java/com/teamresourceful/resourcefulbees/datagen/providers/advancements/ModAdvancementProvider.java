@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -119,9 +120,9 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
     private static ItemStack createBeejar(String id, String color) {
         ItemStack stack = ModItems.BEE_JAR.get().getDefaultInstance();
         CompoundTag nbt = new CompoundTag();
-        nbt.putString(NBTConstants.NBT_ENTITY, id);
-        nbt.putString(NBTConstants.NBT_COLOR, color);
-        stack.setTag(nbt);
+        nbt.putString(NBTConstants.NBT_ID, id);
+        nbt.putString(NBTConstants.BeeJar.COLOR, color);
+        stack.setTag(ModUtils.nbtWithData(NBTConstants.BeeJar.ENTITY, nbt));
         return stack;
     }
 }

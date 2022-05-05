@@ -226,15 +226,15 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
     @Override
     public void load(@NotNull CompoundTag nbt) {
         super.load(nbt);
-        if (nbt.contains(NBTConstants.NBT_HONEYCOMBS_TE)) honeycombs = getHoneycombs(nbt);
-        if (nbt.contains(NBTConstants.NBT_SMOKED_TE)) this.isSmoked = nbt.getBoolean(NBTConstants.NBT_SMOKED_TE);
+        if (nbt.contains(NBTConstants.BeeHive.HONEYCOMBS)) honeycombs = getHoneycombs(nbt);
+        if (nbt.contains(NBTConstants.BeeHive.SMOKED)) this.isSmoked = nbt.getBoolean(NBTConstants.BeeHive.SMOKED);
     }
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
-        if (!honeycombs.isEmpty()) tag.put(NBTConstants.NBT_HONEYCOMBS_TE, writeHoneycombs(honeycombs));
-        tag.putBoolean(NBTConstants.NBT_SMOKED_TE, isSmoked);
+        if (!honeycombs.isEmpty()) tag.put(NBTConstants.BeeHive.HONEYCOMBS, writeHoneycombs(honeycombs));
+        tag.putBoolean(NBTConstants.BeeHive.SMOKED, isSmoked);
     }
 
     public ListTag writeHoneycombs(Queue<ItemStack> combs) {
@@ -244,7 +244,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
     }
 
     public Queue<ItemStack> getHoneycombs(CompoundTag nbt) {
-        return nbt.getList(NBTConstants.NBT_HONEYCOMBS_TE, Tag.TAG_COMPOUND)
+        return nbt.getList(NBTConstants.BeeHive.HONEYCOMBS, Tag.TAG_COMPOUND)
                 .stream()
                 .map(CompoundTag.class::cast)
                 .map(ItemStack::of)

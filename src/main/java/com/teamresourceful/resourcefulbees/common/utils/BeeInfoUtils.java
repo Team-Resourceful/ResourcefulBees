@@ -1,16 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
-import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -22,12 +17,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Bee;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
@@ -53,10 +43,6 @@ public class BeeInfoUtils {
 
     public static Optional<EntityType<?>> getOptionalEntityType(String entityName) {
          return getResourceLocation(entityName).filter(ForgeRegistries.ENTITIES::containsKey).map(ForgeRegistries.ENTITIES::getValue);
-    }
-
-    public static @Nullable EntityType<?> getEntityType(String entityName) {
-        return ForgeRegistries.ENTITIES.getValue(ResourceLocation.tryParse(entityName));
     }
 
     public static @Nullable EntityType<?> getEntityType(ResourceLocation entityId) {
@@ -105,27 +91,9 @@ public class BeeInfoUtils {
 
         String beeColor = bee instanceof ICustomBee iBee ? iBee.getRenderData().colorData().jarColor().toString() : BeeConstants.VANILLA_BEE_COLOR;
 
-        nbt.putString(NBTConstants.NBT_COLOR, beeColor);
+        nbt.putString(NBTConstants.BeeJar.COLOR, beeColor);
         BeehiveEntityAccessor.callRemoveIgnoredBeeTags(nbt);
         return nbt;
-    }
-
-    public static Fluid getHoneyFluidFromBottle(ItemStack bottleOutput) {
-        Item item = bottleOutput.getItem();
-        if (item == Items.HONEY_BOTTLE) {
-            return ModFluids.HONEY_STILL.get().getSource();
-        } else if (item instanceof CustomHoneyBottleItem honey) {
-            HoneyFluidData fluidData = HoneyRegistry.getRegistry().getHoneyData(honey.getHoneyData().name()).fluidData();
-            return fluidData.stillFluid();
-        }
-        return Fluids.EMPTY;
-    }
-
-    public static Item getHoneyBottleFromFluid(Fluid fluid) {
-        if (fluid instanceof CustomHoneyFluid honeyFluid) {
-            return HoneyRegistry.getRegistry().getHoneyData(honeyFluid.getHoneyData().name()).bottleData().honeyBottle();
-        }
-        return Items.HONEY_BOTTLE;
     }
 
 }

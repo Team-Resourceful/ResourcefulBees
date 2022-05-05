@@ -64,12 +64,12 @@ public class Smoker extends Item implements IShiftingToolTip {
 
             AABB aabb = new AABB((player.getX() + vec3d.x), (player.getY() + vec3d.y), (player.getZ() + vec3d.z), (player.getX() + vec3d.x), (player.getY() + vec3d.y), (player.getZ() + vec3d.z)).inflate(2.5D);
             level.getEntitiesOfClass(Bee.class, aabb)
-                    .stream()
-                    .filter(NeutralMob::isAngry)
-                    .forEach(bee -> {
-                        bee.setRemainingPersistentAngerTime(0);
-                        bee.setLastHurtByMob(null);
-                    });
+                .stream()
+                .filter(NeutralMob::isAngry)
+                .forEach(bee -> {
+                    bee.setRemainingPersistentAngerTime(0);
+                    bee.setLastHurtByMob(null);
+                });
 
             serverLevel.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y + 1.3D, z, 50, 0, 0, 0, 0.01F);
 	    }

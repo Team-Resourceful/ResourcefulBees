@@ -181,9 +181,9 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
 
     private void createHoneycombsTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {
         tooltip.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
-        if (blockEntityTag.contains(NBTConstants.NBT_HONEYCOMBS_TE, Tag.TAG_LIST)) {
+        if (blockEntityTag.contains(NBTConstants.BeeHive.HONEYCOMBS, Tag.TAG_LIST)) {
             HashMap<String, Integer> combs = new HashMap<>();
-            ListTag combList = blockEntityTag.getList(NBTConstants.NBT_HONEYCOMBS_TE, Tag.TAG_LIST);
+            ListTag combList = blockEntityTag.getList(NBTConstants.BeeHive.HONEYCOMBS, Tag.TAG_LIST);
 
             for (int i = 0; i < combList.size(); i++) {
                 String id = combList.getCompound(i).getString("id");

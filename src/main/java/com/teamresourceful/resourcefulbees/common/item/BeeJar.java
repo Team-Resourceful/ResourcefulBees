@@ -33,7 +33,7 @@ public class BeeJar extends Item {
 
     private static Color getColor(ItemStack stack) {
         if (!stack.hasTag()) return null;
-        String color = stack.getOrCreateTag().getCompound(NBTConstants.NBT_ENTITY).getString(NBTConstants.NBT_COLOR);
+        String color = stack.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY).getString(NBTConstants.BeeJar.COLOR);
         return color.isBlank() || color.equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR) ? null : Color.parse(color);
     }
 
@@ -48,12 +48,12 @@ public class BeeJar extends Item {
     }
 
     public static boolean isFilled(ItemStack stack) {
-        return !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().contains(NBTConstants.NBT_ENTITY)
-                && stack.getOrCreateTag().getCompound(NBTConstants.NBT_ENTITY).contains(NBTConstants.NBT_ID);
+        return !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().contains(NBTConstants.BeeJar.ENTITY)
+                && stack.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY).contains(NBTConstants.NBT_ID);
     }
 
     public static boolean hasEntityDisplay(ItemStack stack) {
-        return !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().contains(NBTConstants.NBT_DISPLAYNAME);
+        return !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().contains(NBTConstants.BeeJar.DISPLAY_NAME);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class BeeJar extends Item {
             Level level = context.getLevel();
             if (level.isClientSide() || !isFilled(stack)) return InteractionResult.FAIL;
 
-            ModUtils.summonEntity(stack.getOrCreateTag().getCompound(NBTConstants.NBT_ENTITY), level, player, context.getClickedPos().relative(context.getClickedFace()));
+            ModUtils.summonEntity(stack.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY), level, player, context.getClickedPos().relative(context.getClickedFace()));
 
             if (!player.isCreative()) {
                 if (stack.getCount() > 1) {
@@ -90,8 +90,8 @@ public class BeeJar extends Item {
 
         CompoundTag stackTag = stack.getOrCreateTag();
 
-        stackTag.put(NBTConstants.NBT_ENTITY, BeeInfoUtils.createJarBeeTag(target));
-        stackTag.putString(NBTConstants.NBT_DISPLAYNAME, Component.Serializer.toJson(target.getType().getDescription()));
+        stackTag.put(NBTConstants.BeeJar.ENTITY, BeeInfoUtils.createJarBeeTag(target));
+        stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, Component.Serializer.toJson(target.getType().getDescription()));
 
         if (stack.getCount() > 1) {
             ItemStack newJar = new ItemStack(ModItems.BEE_JAR.get());
@@ -114,7 +114,7 @@ public class BeeJar extends Item {
     public @NotNull Component getName(@NotNull ItemStack stack) {
         MutableComponent component = super.getName(stack).copy();
         if (BeeJar.hasEntityDisplay(stack)) {
-            MutableComponent display = Component.Serializer.fromJson(stack.getOrCreateTag().getString(NBTConstants.NBT_DISPLAYNAME));
+            MutableComponent display = Component.Serializer.fromJson(stack.getOrCreateTag().getString(NBTConstants.BeeJar.DISPLAY_NAME));
             if (display != null) {
                 Color color = getColor(stack);
                 display = color != null ? display.withStyle(Style.EMPTY.withColor(color.getValue())) : display.withStyle(ChatFormatting.GRAY);

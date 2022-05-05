@@ -15,9 +15,6 @@ public interface BeeEntityInvoker {
     void callSetFlag(int i, boolean flag);
 
     @Invoker
-    boolean callIsHiveValid();
-
-    @Invoker
     boolean callWantsToEnterHive();
 
     @Invoker
