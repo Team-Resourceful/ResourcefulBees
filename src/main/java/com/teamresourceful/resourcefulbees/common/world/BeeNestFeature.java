@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -104,21 +103,20 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         return pos;
     }
 
-    private Block selectNest(boolean headsOrTails, Block blockOne, Block blockTwo){
+    private static Block selectNest(boolean headsOrTails, Block blockOne, Block blockTwo){
         return headsOrTails ? blockOne : blockTwo;
     }
 
-    private Block getNetherNest(boolean headsOrTails, @Nullable ResourceKey<Biome> biomeKey){
+    private static Block getNetherNest(boolean headsOrTails, @Nullable ResourceKey<Biome> biomeKey){
         if (Biomes.WARPED_FOREST.equals(biomeKey)) {
             return selectNest(headsOrTails, ModBlocks.WARPED_BEE_NEST.get(), ModBlocks.WARPED_NYLIUM_BEE_NEST.get());
         } else if (Biomes.CRIMSON_FOREST.equals(biomeKey)) {
             return selectNest(headsOrTails, ModBlocks.CRIMSON_BEE_NEST.get(), ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get());
-        } else {
-            return selectNest(headsOrTails, ModBlocks.NETHER_BEE_NEST.get(), ModBlocks.WITHER_BEE_NEST.get());
         }
+        return selectNest(headsOrTails, ModBlocks.NETHER_BEE_NEST.get(), ModBlocks.WITHER_BEE_NEST.get());
     }
 
-    private boolean isFrozenBiome(@Nullable ResourceKey<Biome> biomeKey){
+    private static boolean isFrozenBiome(@Nullable ResourceKey<Biome> biomeKey){
         return biomeKey != null && (biomeKey.equals(Biomes.FROZEN_OCEAN) || biomeKey.equals(Biomes.FROZEN_RIVER) || biomeKey.equals(Biomes.DEEP_FROZEN_OCEAN));
     }
 
@@ -139,25 +137,23 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
                 CompoundTag compoundNBT = new CompoundTag();
                 bee.save(compoundNBT);
                 int timeInHive = rand.nextInt(data.getCoreData().getMaxTimeInHive());
-                BeehiveBlockEntity.BeeData beehiveTileEntityBee = new BeehiveBlockEntity.BeeData(compoundNBT, 0, timeInHive);
-                ((BeehiveEntityAccessor)nest).getBees().add(beehiveTileEntityBee);
+                ((BeehiveEntityAccessor)nest).getBees().add(new BeehiveBlockEntity.BeeData(compoundNBT, 0, timeInHive));
             }
         }
     }
 
-    private void setNestBees(BlockPos nestPos, @Nullable ResourceKey<Biome> biomeKey, WorldGenLevel worldIn, Random rand){
-        BlockEntity tileEntity = worldIn.getBlockEntity(nestPos);
-
-        if (tileEntity instanceof TieredBeehiveBlockEntity nestTE) {
+    private void setNestBees(BlockPos nestPos, @Nullable ResourceKey<Biome> biomeKey, WorldGenLevel level, Random rand){
+        if (level.getBlockEntity(nestPos) instanceof TieredBeehiveBlockEntity nest) {
             int maxBees = Math.round(CommonConfig.HIVE_MAX_BEES.get() * 0.5f);
 
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 if (biomeKey != null && BeeRegistry.isSpawnableBiome(biomeKey.location())) {
-                    CustomBeeData beeData = BeeRegistry.getSpawnableBiome(biomeKey.location()).next();
-                    if (beeData.getSpawnData().canSpawnAtYLevel(nestPos)) continue;
-                    EntityType<?> entityType = beeData.getEntityType();
-                    addBeeToNest(entityType, worldIn, nestPos, beeData, rand, nestTE);
-                } else logMissingBiome(biomeKey);
+                    CustomBeeData data = BeeRegistry.getSpawnableBiome(biomeKey.location()).next();
+                    if (data.getSpawnData().canSpawnAtYLevel(nestPos)) continue;
+                    addBeeToNest(data.getEntityType(), level, nestPos, data, rand, nest);
+                } else {
+                    logMissingBiome(biomeKey);
+                }
             }
         }
     }
@@ -167,94 +163,70 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     public boolean place(@NotNull FeaturePlaceContext<NoneFeatureConfiguration> context) {
         if(Boolean.FALSE.equals(CommonConfig.GENERATE_BEE_NESTS.get())) return false;
 
-        WorldGenLevel worldIn = context.level();
+        WorldGenLevel level = context.level();
         BlockPos pos = context.origin();
         Random rand = context.random();
 
-        Holder<Biome> biome = worldIn.getBiome(pos);
-        Optional<ResourceKey<Biome>> biomeKey = biome.unwrapKey();
-        Biome.BiomeCategory category = Biome.getBiomeCategory(biome);
+        Holder<Biome> biomeHolder = level.getBiome(pos);
+        Optional<ResourceKey<Biome>> biomeKey = biomeHolder.unwrapKey();
+        Biome.BiomeCategory category = Biome.getBiomeCategory(biomeHolder);
 
-        boolean headsOrTails = rand.nextBoolean();
-        BlockPos newPos = getYPos(worldIn, rand, category, pos);
+        BlockPos newPos = getYPos(level, rand, category, pos);
 
         if (newPos.getY() == 0) return false;
 
-        Direction direction;
-
         BlockPos finalNewPos = newPos.mutable();
         List<Direction> possibleDirections = Direction.Plane.HORIZONTAL.stream()
-                .filter(dir -> worldIn.isEmptyBlock(finalNewPos.relative(dir, 1)))
+                .filter(dir -> level.isEmptyBlock(finalNewPos.relative(dir, 1)))
                 .collect(Collectors.toList());
 
-        if(!possibleDirections.isEmpty()) {
-            direction = possibleDirections.get(rand.nextInt(possibleDirections.size()));
-        } else {
-            return false;
-        }
+        if (possibleDirections.isEmpty()) return false;
+        Direction direction = possibleDirections.get(rand.nextInt(possibleDirections.size()));
 
-        Block nest;
-        BlockState platformBlockState;
-        switch (category) {
-            case THEEND -> {
-                nest = ModBlocks.PURPUR_BEE_NEST.get();
-                platformBlockState = Blocks.END_STONE.defaultBlockState();
-            }
-            case NETHER -> {
-                nest = getNetherNest(headsOrTails, biomeKey.orElse(null));
-                platformBlockState = Blocks.OBSIDIAN.defaultBlockState();
-            }
-            case SAVANNA, DESERT, MESA -> {
-                nest = ModBlocks.ACACIA_BEE_NEST.get();
-                platformBlockState = Blocks.ACACIA_WOOD.defaultBlockState();
-            }
-            case JUNGLE -> {
-                nest = ModBlocks.JUNGLE_BEE_NEST.get();
-                platformBlockState = Blocks.JUNGLE_WOOD.defaultBlockState();
-            }
-            case BEACH, OCEAN -> {
-                nest = ModBlocks.PRISMARINE_BEE_NEST.get();
-                platformBlockState = isFrozenBiome(biomeKey.orElse(null)) ?
-                        Blocks.PACKED_ICE.defaultBlockState() : Blocks.STRIPPED_OAK_WOOD.defaultBlockState();
-            }
-            case ICY, TAIGA -> {
-                platformBlockState = Blocks.PACKED_ICE.defaultBlockState();
-                nest = ModBlocks.SPRUCE_BEE_NEST.get();
-            }
-            case MUSHROOM -> {
-                nest = selectNest(headsOrTails, ModBlocks.RED_MUSHROOM_BEE_NEST.get(), ModBlocks.BROWN_MUSHROOM_BEE_NEST.get());
-                platformBlockState = Blocks.OAK_WOOD.defaultBlockState();
-            }
-            case SWAMP -> {
-                nest = ModBlocks.OAK_BEE_NEST.get();
-                platformBlockState = Blocks.STRIPPED_SPRUCE_WOOD.defaultBlockState();
-            }
-            case FOREST -> {
-                nest = selectNest(headsOrTails, ModBlocks.BIRCH_BEE_NEST.get(), ModBlocks.DARK_OAK_BEE_NEST.get());
-                platformBlockState = Blocks.OAK_WOOD.defaultBlockState();
-            }
-            case RIVER -> {
-                platformBlockState = isFrozenBiome(biomeKey.orElse(null)) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.OAK_WOOD.defaultBlockState();
-                nest = overworldBlocks.next();
-            }
-            default -> {
-                platformBlockState = Blocks.OAK_WOOD.defaultBlockState();
-                nest = overworldBlocks.next();
-            }
-        }
+        Block nest = getNest(category, biomeKey, rand.nextBoolean());
+        BlockState platformBlockState = getNestPlatform(category, biomeKey);
         BlockState newState = nest.defaultBlockState().setValue(BeehiveBlock.FACING, direction);
 
         BlockPos belowHive = newPos.offset(0,-1,0);
-        if (worldIn.getBlockState(belowHive).getBlock().equals(Blocks.WATER)) {
-            generateHivePlatform(worldIn, belowHive, platformBlockState, direction, Blocks.WATER);
+        if (level.getBlockState(belowHive).getBlock().equals(Blocks.WATER)) {
+            generateHivePlatform(level, belowHive, platformBlockState, direction, Blocks.WATER);
         }
-        if (category.equals(Biome.BiomeCategory.NETHER) && worldIn.getBlockState(belowHive).getBlock().equals(Blocks.LAVA)) {
-            generateHivePlatform(worldIn, belowHive, platformBlockState, direction, Blocks.LAVA);
+        if (category.equals(Biome.BiomeCategory.NETHER) && level.getBlockState(belowHive).getBlock().equals(Blocks.LAVA)) {
+            generateHivePlatform(level, belowHive, platformBlockState, direction, Blocks.LAVA);
         }
 
-        worldIn.setBlock(newPos, newState, 1);
+        level.setBlock(newPos, newState, 1);
 
-        setNestBees(newPos, biomeKey.orElse(null), worldIn, rand);
+        setNestBees(newPos, biomeKey.orElse(null), level, rand);
         return true;
+    }
+
+    private static Block getNest(Biome.BiomeCategory category, Optional<ResourceKey<Biome>> biomeKey, boolean headsOrTails) {
+        return switch (category) {
+            case THEEND -> ModBlocks.PURPUR_BEE_NEST.get();
+            case NETHER -> getNetherNest(headsOrTails, biomeKey.orElse(null));
+            case SAVANNA, DESERT, MESA -> ModBlocks.ACACIA_BEE_NEST.get();
+            case JUNGLE -> ModBlocks.JUNGLE_BEE_NEST.get();
+            case BEACH, OCEAN -> ModBlocks.PRISMARINE_BEE_NEST.get();
+            case ICY, TAIGA -> ModBlocks.SPRUCE_BEE_NEST.get();
+            case MUSHROOM -> selectNest(headsOrTails, ModBlocks.RED_MUSHROOM_BEE_NEST.get(), ModBlocks.BROWN_MUSHROOM_BEE_NEST.get());
+            case SWAMP -> ModBlocks.OAK_BEE_NEST.get();
+            case FOREST -> selectNest(headsOrTails, ModBlocks.BIRCH_BEE_NEST.get(), ModBlocks.DARK_OAK_BEE_NEST.get());
+            default -> overworldBlocks.next();
+        };
+    }
+
+    private static BlockState getNestPlatform(Biome.BiomeCategory category, Optional<ResourceKey<Biome>> biomeKey) {
+        return switch (category) {
+            case THEEND -> Blocks.END_STONE.defaultBlockState();
+            case NETHER -> Blocks.OBSIDIAN.defaultBlockState();
+            case SAVANNA, DESERT, MESA -> Blocks.ACACIA_WOOD.defaultBlockState();
+            case JUNGLE -> Blocks.JUNGLE_WOOD.defaultBlockState();
+            case BEACH, OCEAN -> isFrozenBiome(biomeKey.orElse(null)) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.STRIPPED_OAK_WOOD.defaultBlockState();
+            case ICY, TAIGA -> Blocks.PACKED_ICE.defaultBlockState();
+            case SWAMP -> Blocks.STRIPPED_SPRUCE_WOOD.defaultBlockState();
+            case RIVER -> isFrozenBiome(biomeKey.orElse(null)) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.OAK_WOOD.defaultBlockState();
+            default -> Blocks.OAK_WOOD.defaultBlockState();
+        };
     }
 }

@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
@@ -35,8 +36,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.VANILLA_BEE_COLOR;
 
 public class BeeInfoUtils {
 
@@ -100,18 +99,14 @@ public class BeeInfoUtils {
         entity.moveTo(d1, d2, d3, entity.getYRot(), entity.getXRot());
     }
 
-    public static @NotNull CompoundTag createJarBeeTag(Bee beeEntity, String nbtTagID) {
-        String type = EntityType.getKey(beeEntity.getType()).toString();
+    public static @NotNull CompoundTag createJarBeeTag(Bee bee, String nbtTagID) {
+        String type = EntityType.getKey(bee.getType()).toString();
         CompoundTag nbt = new CompoundTag();
         nbt.putString(nbtTagID, type);
 
-        beeEntity.saveWithoutId(nbt);
+        bee.saveWithoutId(nbt);
 
-        String beeColor = VANILLA_BEE_COLOR;
-
-        if (beeEntity instanceof ICustomBee iCustomBee) {
-            beeColor = iCustomBee.getRenderData().colorData().jarColor().toString();
-        }
+        String beeColor = bee instanceof ICustomBee iBee ? iBee.getRenderData().colorData().jarColor().toString() : BeeConstants.VANILLA_BEE_COLOR;
 
         nbt.putString(NBTConstants.NBT_COLOR, beeColor);
         BeehiveEntityAccessor.callRemoveIgnoredBeeTags(nbt);

@@ -79,7 +79,7 @@ public class RandomPositionGenerator {
                         targetPos = findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level.getMaxBuildHeight(),
                                 pos -> bee.level.getBlockState(pos).getMaterial().isSolid());
                     } else {
-                        targetPos = findValidPositionBelow(targetPos, random.nextInt(3) + 1,
+                        targetPos = findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level.getMinBuildHeight(),
                                 pos -> bee.level.getBlockState(pos).getMaterial().isSolid());
                     }
 
@@ -130,50 +130,40 @@ public class RandomPositionGenerator {
     }
 
     static BlockPos findValidPositionAbove(BlockPos blockPos3, int randInt3, int worldHeight, Predicate<BlockPos> posPredicate) {
-        if (randInt3 < 0) {
-            throw new IllegalArgumentException("aboveSolidAmount was " + randInt3 + ", expected >= 0");
-        } else if (!posPredicate.test(blockPos3)) {
-            return blockPos3;
-        } else {
-            BlockPos blockpos;
-            for(blockpos = blockPos3.above(); blockpos.getY() < worldHeight && posPredicate.test(blockpos); blockpos = blockpos.above()) {
-                //do nothing
-            }
+        if (randInt3 < 3) throw new IllegalArgumentException("aboveSolidAmount was " + randInt3 + ", expected >= 0");
+        if (!posPredicate.test(blockPos3)) return blockPos3;
 
-            BlockPos blockpos1;
-            BlockPos blockpos2;
-            for(blockpos1 = blockpos; blockpos1.getY() < worldHeight && blockpos1.getY() - blockpos.getY() < randInt3; blockpos1 = blockpos2) {
-                blockpos2 = blockpos1.above();
-                if (posPredicate.test(blockpos2)) {
-                    break;
-                }
-            }
+        BlockPos blockpos = blockPos3.above();
+        while (blockpos.getY() < worldHeight && posPredicate.test(blockpos)) blockpos = blockpos.above();
 
-            return blockpos1;
+        BlockPos blockpos1;
+        BlockPos blockpos2;
+        for(blockpos1 = blockpos; blockpos1.getY() < worldHeight && blockpos1.getY() - blockpos.getY() < randInt3; blockpos1 = blockpos2) {
+            blockpos2 = blockpos1.above();
+            if (posPredicate.test(blockpos2)) {
+                break;
+            }
         }
+
+        return blockpos1;
     }
 
-    static BlockPos findValidPositionBelow(BlockPos blockPos3, int randInt3, Predicate<BlockPos> posPredicate) {
-        if (randInt3 < 0) {
-            throw new IllegalArgumentException("aboveSolidAmount was " + randInt3 + ", expected >= 0");
-        } else if (!posPredicate.test(blockPos3)) {
-            return blockPos3;
-        } else {
-            BlockPos blockpos;
-            for(blockpos = blockPos3.below(); blockpos.getY() > 0 && posPredicate.test(blockpos); blockpos = blockpos.below()) {
-                //do nothing
-            }
+    static BlockPos findValidPositionBelow(BlockPos blockPos3, int randInt3, int worldFloor, Predicate<BlockPos> posPredicate) {
+        if (randInt3 < 0) throw new IllegalArgumentException("aboveSolidAmount was " + randInt3 + ", expected >= 0");
+        if (!posPredicate.test(blockPos3)) return blockPos3;
 
-            BlockPos blockpos1;
-            BlockPos blockpos2;
-            for(blockpos1 = blockpos; blockpos1.getY() > 0 && blockpos.getY() - blockpos1.getY() < randInt3; blockpos1 = blockpos2) {
-                blockpos2 = blockpos1.below();
-                if (posPredicate.test(blockpos2)) {
-                    break;
-                }
-            }
+        BlockPos blockpos = blockPos3.below();
+        while (blockpos.getY() > worldFloor && posPredicate.test(blockpos)) blockpos = blockpos.below();
 
-            return blockpos1;
+        BlockPos blockpos1;
+        BlockPos blockpos2;
+        for(blockpos1 = blockpos; blockpos1.getY() > worldFloor && blockpos.getY() - blockpos1.getY() < randInt3; blockpos1 = blockpos2) {
+            blockpos2 = blockpos1.below();
+            if (posPredicate.test(blockpos2)) {
+                break;
+            }
         }
+
+        return blockpos1;
     }
 }
