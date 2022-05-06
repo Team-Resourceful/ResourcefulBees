@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.api.beedata.CombatData;
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
@@ -42,8 +41,6 @@ public interface ICustomBee {
     RenderData getRenderData();
 
     BreedData getBreedData();
-
-    CentrifugeData getCentrifugeData();
 
     CombatData getCombatData();
 

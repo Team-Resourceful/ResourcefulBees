@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
@@ -31,7 +30,7 @@ public class CustomBeeData {
      * A default implementation of {@link CustomBeeData} that can be
      * used to prevent {@link NullPointerException}'s
      */
-    public static final CustomBeeData DEFAULT = new CustomBeeData(CoreData.DEFAULT, "", RenderData.DEFAULT, BreedData.DEFAULT, CentrifugeData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
+    public static final CustomBeeData DEFAULT = new CustomBeeData(CoreData.DEFAULT, "", RenderData.DEFAULT, BreedData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
 
     /**
      * Returns a {@link Codec<CustomBeeData>} that can be parsed to create a
@@ -49,7 +48,6 @@ public class CustomBeeData {
                 Codec.STRING.fieldOf("honeycombVariation").orElse("").forGetter(s -> s.honeycombIdentifier),
                 RenderData.CODEC.fieldOf("RenderData").orElseGet((Consumer<String>) s -> ResourcefulBees.LOGGER.error("RenderData is REQUIRED!"), null).forGetter(CustomBeeData::getRenderData),
                 BreedData.codec(name).fieldOf("BreedData").orElse(BreedData.DEFAULT).forGetter(CustomBeeData::getBreedData),
-                CentrifugeData.CODEC.fieldOf("CentrifugeData").orElse(CentrifugeData.DEFAULT).forGetter(CustomBeeData::getCentrifugeData),
                 CombatData.CODEC.fieldOf("CombatData").orElse(CombatData.DEFAULT).forGetter(CustomBeeData::getCombatData),
                 MutationData.CODEC.fieldOf("MutationData").orElse(MutationData.DEFAULT).forGetter(CustomBeeData::getMutationData),
                 SpawnData.CODEC.fieldOf("SpawnData").orElse(SpawnData.DEFAULT).forGetter(CustomBeeData::getSpawnData),
@@ -61,7 +59,6 @@ public class CustomBeeData {
     protected String honeycombIdentifier;
     protected RenderData renderData;
     protected BreedData breedData;
-    protected CentrifugeData centrifugeData;
     protected CombatData combatData;
     protected MutationData mutationData;
     protected SpawnData spawnData;
@@ -71,12 +68,11 @@ public class CustomBeeData {
     protected EntityType<?> entityType;
     protected TranslatableComponent displayName;
 
-    private CustomBeeData(CoreData coreData, String honeycombIdentifier, RenderData renderData, BreedData breedData, CentrifugeData centrifugeData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
+    private CustomBeeData(CoreData coreData, String honeycombIdentifier, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
         this.coreData = coreData;
         this.honeycombIdentifier = honeycombIdentifier;
         this.renderData = renderData;
         this.breedData = breedData;
-        this.centrifugeData = centrifugeData;
         this.combatData = combatData;
         this.mutationData = mutationData;
         this.spawnData = spawnData;
@@ -91,7 +87,6 @@ public class CustomBeeData {
         this.honeycombIdentifier = mutable.honeycombIdentifier;
         this.renderData = mutable.renderData;
         this.breedData = mutable.breedData.toImmutable();
-        this.centrifugeData = mutable.centrifugeData.toImmutable();
         this.combatData = mutable.combatData.toImmutable();
         this.mutationData = mutable.mutationData;
         this.spawnData = mutable.spawnData;
@@ -149,19 +144,6 @@ public class CustomBeeData {
      */
     public BreedData getBreedData() {
         return breedData;
-    }
-
-    /**
-     * Returns a {@link CentrifugeData} object containing information regarding the
-     * centrifuge recipe for the bees honeycomb.
-     *
-     * Omitting this object from the bee json results in a default object where the bee
-     * <b>does not</b> have a centrifuge recipe for its honeycomb.
-     *
-     * @return Returns an immutable {@link CentrifugeData} object.
-     */
-    public CentrifugeData getCentrifugeData() {
-        return centrifugeData;
     }
 
     /**
@@ -247,12 +229,12 @@ public class CustomBeeData {
 
     //TODO: javadoc this sub class
     public static class Mutable extends CustomBeeData {
-        public Mutable(CoreData coreData, String honeycombIdentifier, RenderData renderData, BreedData breedData, CentrifugeData centrifugeData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
-            super(coreData, honeycombIdentifier, renderData, breedData, centrifugeData, combatData, mutationData, spawnData, traitData);
+        public Mutable(CoreData coreData, String honeycombIdentifier, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
+            super(coreData, honeycombIdentifier, renderData, breedData, combatData, mutationData, spawnData, traitData);
         }
 
         public Mutable() {
-            super(CoreData.DEFAULT, "", RenderData.DEFAULT, BreedData.DEFAULT, CentrifugeData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
+            super(CoreData.DEFAULT, "", RenderData.DEFAULT, BreedData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
         }
 
         public Mutable setCoreData(CoreData coreData) {
@@ -272,11 +254,6 @@ public class CustomBeeData {
 
         public Mutable setBreedData(BreedData breedData) {
             this.breedData = breedData;
-            return this;
-        }
-
-        public Mutable setCentrifugeData(CentrifugeData centrifugeData) {
-            this.centrifugeData = centrifugeData;
             return this;
         }
 

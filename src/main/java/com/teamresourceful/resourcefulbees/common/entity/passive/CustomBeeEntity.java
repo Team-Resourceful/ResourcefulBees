@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
-import com.teamresourceful.resourcefulbees.api.beedata.centrifuge.CentrifugeData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
@@ -120,10 +119,6 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
 
     public BreedData getBreedData() {
         return customBeeData.getBreedData();
-    }
-
-    public CentrifugeData getCentrifugeData() {
-        return customBeeData.getCentrifugeData();
     }
 
     public CombatData getCombatData() {
