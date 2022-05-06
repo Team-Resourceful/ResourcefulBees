@@ -6,7 +6,6 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
@@ -42,10 +41,10 @@ public class CoreData {
     public static Codec<CoreData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(CoreData::getName),
-                RegistryCodecs.homogeneousList(Registry.BLOCK_REGISTRY).fieldOf("flower").orElse(HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY)).forGetter(CoreData::getBlockFlowers),
+                RegistryCodecs.homogeneousList(Registry.BLOCK_REGISTRY).fieldOf("flower").orElse(HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY))
+                        .forGetter(CoreData::getBlockFlowers),
                 Registry.ENTITY_TYPE.byNameCodec().optionalFieldOf("entityFlower").forGetter(CoreData::getEntityFlower),
                 Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(CoreData::getMaxTimeInHive),
-                Codec.intRange(3, 20).fieldOf("auraRange").orElse(CommonConfig.DEFAULT_AURA_RANGE.get()).forGetter(CoreData::getAuraRange),
                 CodecUtils.passthrough(Component.Serializer::toJsonTree, Component.Serializer::fromJson).listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(CoreData::getLore)
         ).apply(instance, CoreData::new));
     }
@@ -54,15 +53,13 @@ public class CoreData {
     protected Optional<EntityType<?>> entityFlower;
     protected List<MutableComponent> lore;
     protected int maxTimeInHive;
-    protected int auraRange;
     protected String name;
 
-    private CoreData(String name, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, int auraRange, List<MutableComponent> lore){
+    private CoreData(String name, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, List<MutableComponent> lore){
         this.name = name;
         this.blockFlowers = blockFlowers;
         this.entityFlower = entityFlower;
         this.maxTimeInHive = maxTimeInHive;
-        this.auraRange = auraRange;
         this.lore = lore;
     }
 
@@ -71,7 +68,6 @@ public class CoreData {
         this.blockFlowers = HolderSet.direct();
         this.entityFlower = Optional.empty();
         this.maxTimeInHive = BeeConstants.MAX_TIME_IN_HIVE;
-        this.auraRange = CommonConfig.DEFAULT_AURA_RANGE.get();
         this.lore = new ArrayList<>();
     }
 
@@ -119,15 +115,6 @@ public class CoreData {
     }
 
     /**
-     * Gets the range of a bees aura.
-     *
-     * @return Returns the range as an {@link Integer}.
-     */
-    public int getAuraRange() {
-        return auraRange;
-    }
-
-    /**
      * The name value passed into the constructor which is
      * usually obtained from the bee json file name.
      * <i>Note: Name is synonymous with "bee type"</i>
@@ -154,8 +141,8 @@ public class CoreData {
 
     public static class Mutable extends CoreData {
 
-        public Mutable(String name, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, int auraRange, List<MutableComponent> lore) {
-            super(name, blockFlowers, entityFlower, maxTimeInHive, auraRange, lore);
+        public Mutable(String name, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, List<MutableComponent> lore) {
+            super(name, blockFlowers, entityFlower, maxTimeInHive, lore);
         }
 
         public Mutable(String name) {
@@ -182,11 +169,6 @@ public class CoreData {
             return this;
         }
 
-        public Mutable setAuraRange(int auraRange) {
-            this.auraRange = auraRange;
-            return this;
-        }
-
         public Mutable setName(String name) {
             this.name = name;
             return this;
@@ -194,7 +176,7 @@ public class CoreData {
 
         @Override
         public CoreData toImmutable() {
-            return new CoreData(this.name, this.blockFlowers, this.entityFlower, this.maxTimeInHive, this.auraRange, this.lore);
+            return new CoreData(this.name, this.blockFlowers, this.entityFlower, this.maxTimeInHive, this.lore);
         }
     }
 }

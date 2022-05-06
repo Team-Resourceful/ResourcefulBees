@@ -37,7 +37,7 @@ public class BeeAuraGoal extends Goal {
     public void tick() {
         super.tick();
         if (this.bee.tickCount % 160 == 0) {
-            AABB box = new AABB(this.bee.blockPosition()).inflate(this.bee.getCoreData().getAuraRange());
+            AABB box = new AABB(this.bee.blockPosition()).inflate(this.bee.getTraitData().getAuraRange());
             List<Player> players = this.bee.getLevel().getNearbyPlayers(TargetingConditions.DEFAULT, this.bee, box);
 
             for (BeeAura aura : this.bee.getTraitData().getAuras()) {

@@ -18,7 +18,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -43,14 +42,12 @@ public class HoneyGenerator extends SidedTickingBlock<HoneyGeneratorBlockEntity>
 
     @NotNull
     @Override
-    public InteractionResult use(@NotNull BlockState state, Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
-        BlockEntity tileEntity = world.getBlockEntity(pos);
-
-        if (tileEntity instanceof HoneyGeneratorBlockEntity) {
-            ModUtils.capabilityOrGuiUse(tileEntity, player, world, pos, hand);
+    public InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
+        if (level.getBlockEntity(pos) instanceof HoneyGeneratorBlockEntity generator) {
+            ModUtils.capabilityOrGuiUse(generator, player, level, pos, hand);
             return InteractionResult.SUCCESS;
         }
-        return super.use(state, world, pos, player, hand, rayTraceResult);
+        return super.use(state, level, pos, player, hand, rayTraceResult);
     }
 
     @Override

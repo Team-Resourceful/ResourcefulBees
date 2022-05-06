@@ -6,6 +6,7 @@ import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
@@ -20,7 +21,7 @@ import java.util.Set;
 
 @Unmodifiable
 public class TraitData extends BeeTrait {
-    public static final TraitData DEFAULT = new TraitData("this is a test string", Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
+    public static final TraitData DEFAULT = new TraitData("this is a test string", CommonConfig.DEFAULT_AURA_RANGE.get(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
 
     /**
      * Returns a {@link Codec<TraitData>} that can be parsed to create a
@@ -35,6 +36,7 @@ public class TraitData extends BeeTrait {
     public static Codec<TraitData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(BeeTrait::getName),
+                Codec.intRange(3, 20).fieldOf("auraRange").orElse(CommonConfig.DEFAULT_AURA_RANGE.get()).forGetter(TraitData::getAuraRange),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("traits").orElse(new HashSet<>()).forGetter(TraitData::getTraits),
                 CodecUtils.createSetCodec(PotionEffect.CODEC).fieldOf("potionDamageEffects").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionDamageEffects),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("damageImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getDamageImmunities),
@@ -46,14 +48,25 @@ public class TraitData extends BeeTrait {
         ).apply(instance, TraitData::new));
     }
 
+    protected int auraRange;
     protected Set<String> traits;
     private final boolean hasTraits;
 
-    private TraitData(String name, Set<String> traits, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<BeeAura> auras) {
+    private TraitData(String name, int auraRange, Set<String> traits, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<BeeAura> auras) {
         super(name, null, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects, auras);
+        this.auraRange = auraRange;
         this.traits = traits;
         this.traits.forEach(this::addTrait);
         this.hasTraits = setHasTraits();
+    }
+
+    /**
+     * Gets the range of a bees aura.
+     *
+     * @return Returns the range as an {@link Integer}.
+     */
+    public int getAuraRange() {
+        return auraRange;
     }
 
     /**
@@ -99,12 +112,17 @@ public class TraitData extends BeeTrait {
     //endregion
 
     public static class Mutable extends TraitData {
-        public Mutable(String name, Set<String> traits, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<BeeAura> auras) {
-            super(name, traits, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects, auras);
+        public Mutable(String name, int auraRange, Set<String> traits, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<BeeAura> auras) {
+            super(name, auraRange, traits, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects, auras);
         }
 
         public Mutable() {
-            super("error", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+            super("error", CommonConfig.DEFAULT_AURA_RANGE.get(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        }
+
+        public TraitData.Mutable setAuraRange(int range) {
+            this.auraRange = range;
+            return this;
         }
 
         public TraitData.Mutable setTraits(Set<String> traits) {
@@ -194,7 +212,7 @@ public class TraitData extends BeeTrait {
 
         @Override
         public TraitData toImmutable() {
-            return new TraitData(this.name, this.traits, this.potionDamageEffects, this.damageImmunities, this.potionImmunities, this.damageTypes, this.specialAbilities, this.particleEffects, this.auras);
+            return new TraitData(this.name, this.auraRange, this.traits, this.potionDamageEffects, this.damageImmunities, this.potionImmunities, this.damageTypes, this.specialAbilities, this.particleEffects, this.auras);
         }
     }
 }
