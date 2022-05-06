@@ -16,8 +16,8 @@ import com.teamresourceful.resourcefulbees.client.render.tileentity.BeeHouseSele
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderEnderBeecon;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderSolidificationChamber;
-import com.teamresourceful.resourcefulbees.common.block.BeeHouseBlock;
-import com.teamresourceful.resourcefulbees.common.block.BeeHouseTopBlock;
+import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
+import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseTopBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;

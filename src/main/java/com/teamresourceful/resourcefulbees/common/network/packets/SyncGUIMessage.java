@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.network.packets;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.ISyncableGUI;
+import com.teamresourceful.resourcefulbees.common.blockentity.base.ISyncableGUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;

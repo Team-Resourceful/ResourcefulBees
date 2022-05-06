@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.ISyncableGUI;
+import com.teamresourceful.resourcefulbees.common.blockentity.base.ISyncableGUI;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.CentrifugeController;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;

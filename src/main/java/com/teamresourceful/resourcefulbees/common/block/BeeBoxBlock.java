@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.common.block.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.BeeBoxBlockEntity;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;

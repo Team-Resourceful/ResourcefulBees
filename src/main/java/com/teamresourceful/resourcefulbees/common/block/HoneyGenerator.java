@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.common.block.base.SidedTickingBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.HoneyGeneratorBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;

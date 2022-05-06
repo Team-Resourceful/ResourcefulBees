@@ -2,6 +2,8 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.*;
+import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseTopBlock;
+import com.teamresourceful.resourcefulbees.common.block.base.SidedTickingBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.AcceleratorBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.CreativeGenBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
