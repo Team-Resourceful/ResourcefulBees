@@ -31,6 +31,10 @@ public class SelectableList<E> extends AbstractList<E> {
         return get(this.index);
     }
 
+    public int getSelectedIndex() {
+        return this.index;
+    }
+
     @Override
     public E get(int index) {
         if (index < 0 || index >= size()) return defaultValue;

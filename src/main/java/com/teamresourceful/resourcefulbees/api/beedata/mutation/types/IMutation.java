@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 
-import com.google.gson.JsonElement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -29,5 +28,5 @@ public interface IMutation {
 
     Optional<CompoundTag> tag();
 
-    JsonElement toJson();
+    IMutationSerializer serializer();
 }

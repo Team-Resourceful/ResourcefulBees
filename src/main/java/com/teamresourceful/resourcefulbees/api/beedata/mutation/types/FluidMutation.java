@@ -1,10 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IFluidRender;
 import net.minecraft.core.BlockPos;
@@ -21,11 +17,7 @@ import java.util.Optional;
 
 public record FluidMutation(Fluid fluid, double chance, double weight) implements IMutation, IFluidRender {
 
-    public static final Codec<FluidMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.FLUID.byNameCodec().fieldOf("fluid").forGetter(FluidMutation::fluid),
-            Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(FluidMutation::chance),
-            Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(FluidMutation::weight)
-    ).apply(instance, FluidMutation::new));
+    public static final Serializer SERIALIZER = new Serializer();
 
     @Override
     public @Nullable BlockPos check(ServerLevel level, BlockPos pos) {
@@ -52,15 +44,31 @@ public record FluidMutation(Fluid fluid, double chance, double weight) implement
     }
 
     @Override
-    public JsonElement toJson() {
-        Optional<JsonElement> json = CODEC.encodeStart(JsonOps.INSTANCE, this).result();
-        if (json.isEmpty() || !(json.get() instanceof JsonObject jsonObject)) return JsonNull.INSTANCE;
-        jsonObject.addProperty("type", "fluid");
-        return jsonObject;
+    public IMutationSerializer serializer() {
+        return SERIALIZER;
     }
 
     @Override
     public FluidStack fluidRender() {
         return new FluidStack(fluid, 1000);
+    }
+
+    private static class Serializer implements IMutationSerializer {
+
+        public static final Codec<FluidMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Registry.FLUID.byNameCodec().fieldOf("fluid").forGetter(FluidMutation::fluid),
+                Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(FluidMutation::chance),
+                Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(FluidMutation::weight)
+        ).apply(instance, FluidMutation::new));
+
+        @Override
+        public Codec<FluidMutation> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public String id() {
+            return "fluid";
+        }
     }
 }

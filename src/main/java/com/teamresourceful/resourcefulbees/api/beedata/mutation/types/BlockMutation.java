@@ -1,10 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IItemRender;
 import com.teamresourceful.resourcefulbees.common.utils.predicates.RestrictedBlockPredicate;
@@ -24,11 +20,7 @@ import java.util.Optional;
 
 public record BlockMutation(RestrictedBlockPredicate predicate, double chance, double weight) implements IMutation, IItemRender {
 
-    public static final Codec<BlockMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            RestrictedBlockPredicate.CODEC.fieldOf("block").forGetter(BlockMutation::predicate),
-            Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(BlockMutation::chance),
-            Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(BlockMutation::weight)
-    ).apply(instance, BlockMutation::new));
+    public static final Serializer SERIALIZER = new Serializer();
 
     @Override
     public @Nullable BlockPos check(ServerLevel level, BlockPos pos) {
@@ -58,11 +50,8 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
     }
 
     @Override
-    public JsonElement toJson() {
-        Optional<JsonElement> json = CODEC.encodeStart(JsonOps.INSTANCE, this).result();
-        if (json.isEmpty() || !(json.get() instanceof JsonObject jsonObject)) return JsonNull.INSTANCE;
-        jsonObject.addProperty("type", "block");
-        return jsonObject;
+    public IMutationSerializer serializer() {
+        return SERIALIZER;
     }
 
     @Override
@@ -75,5 +64,25 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
             stack = new ItemStack(item);
         }
         return stack;
+    }
+
+
+    private static class Serializer implements IMutationSerializer {
+
+        public static final Codec<BlockMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                RestrictedBlockPredicate.CODEC.fieldOf("block").forGetter(BlockMutation::predicate),
+                Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(BlockMutation::chance),
+                Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(BlockMutation::weight)
+        ).apply(instance, BlockMutation::new));
+
+        @Override
+        public Codec<BlockMutation> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public String id() {
+            return "block";
+        }
     }
 }

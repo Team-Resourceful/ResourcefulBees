@@ -1,10 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IEntityRender;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
@@ -24,11 +20,7 @@ import java.util.Optional;
 
 public record EntityMutation(RestrictedEntityPredicate predicate, double chance, double weight) implements IMutation, IEntityRender {
 
-    public static final Codec<EntityMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            RestrictedEntityPredicate.CODEC.fieldOf("entity").forGetter(EntityMutation::predicate),
-            Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(EntityMutation::chance),
-            Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(EntityMutation::weight)
-    ).apply(instance, EntityMutation::new));
+    public static final Serializer SERIALIZER = new Serializer();
 
     @Nullable
     @Override
@@ -57,15 +49,31 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
     }
 
     @Override
-    public JsonElement toJson() {
-        Optional<JsonElement> json = CODEC.encodeStart(JsonOps.INSTANCE, this).result();
-        if (json.isEmpty() || !(json.get() instanceof JsonObject jsonObject)) return JsonNull.INSTANCE;
-        jsonObject.addProperty("type", "entity");
-        return jsonObject;
+    public IMutationSerializer serializer() {
+        return SERIALIZER;
     }
 
     @Override
     public EntityType<?> entityRender() {
         return predicate().entityType();
+    }
+
+    private static class Serializer implements IMutationSerializer {
+
+        public static final Codec<EntityMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                RestrictedEntityPredicate.CODEC.fieldOf("entity").forGetter(EntityMutation::predicate),
+                Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(EntityMutation::chance),
+                Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(EntityMutation::weight)
+        ).apply(instance, EntityMutation::new));
+
+        @Override
+        public Codec<EntityMutation> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public String id() {
+            return "entity";
+        }
     }
 }

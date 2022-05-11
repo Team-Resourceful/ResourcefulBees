@@ -1,14 +1,20 @@
 package com.teamresourceful.resourcefulbees.common.capabilities;
 
 import com.teamresourceful.resourcefulbees.common.utils.SelectableList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
-public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler {
+public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBTSerializable<CompoundTag> {
 
     protected int capacity;
     protected SelectableList<FluidStack> fluids = SelectableList.of(FluidStack.EMPTY);
@@ -131,5 +137,29 @@ public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler {
             }
         }
         return FluidStack.EMPTY;
+    }
+
+    @Override
+    public CompoundTag serializeNBT() {
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("Index", this.fluids.getSelectedIndex());
+        ListTag listTag = new ListTag();
+        for (FluidStack fluid : this.fluids) {
+            listTag.add(fluid.writeToNBT(new CompoundTag()));
+        }
+        tag.put("Fluids", listTag);
+        return tag;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag nbt) {
+        List<FluidStack> nbtFluids = new ArrayList<>();
+        for (Tag tag : nbt.getList("Fluids", Tag.TAG_COMPOUND)) {
+            nbtFluids.add(FluidStack.loadFluidStackFromNBT((CompoundTag)tag));
+        }
+        if (!nbtFluids.isEmpty()) {
+            this.fluids = new SelectableList<>(FluidStack.EMPTY, nbtFluids);
+            this.fluids.setSelectedIndex(nbt.getInt("Index"));
+        }
     }
 }

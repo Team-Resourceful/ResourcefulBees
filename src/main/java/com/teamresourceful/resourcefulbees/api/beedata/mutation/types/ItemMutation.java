@@ -1,10 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IItemRender;
 import com.teamresourceful.resourcefulbees.common.utils.predicates.RestrictedItemPredicate;
@@ -23,11 +19,7 @@ import java.util.Optional;
 
 public record ItemMutation(RestrictedItemPredicate predicate, double chance, double weight) implements IMutation, IItemRender {
 
-    public static final Codec<ItemMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            RestrictedItemPredicate.CODEC.fieldOf("item").forGetter(ItemMutation::predicate),
-            Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(ItemMutation::chance),
-            Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(ItemMutation::weight)
-    ).apply(instance, ItemMutation::new));
+    public static final Serializer SERIALIZER = new Serializer();
 
     @Override
     public @Nullable BlockPos check(ServerLevel level, BlockPos pos) {
@@ -54,15 +46,31 @@ public record ItemMutation(RestrictedItemPredicate predicate, double chance, dou
     }
 
     @Override
-    public JsonElement toJson() {
-        Optional<JsonElement> json = CODEC.encodeStart(JsonOps.INSTANCE, this).result();
-        if (json.isEmpty() || !(json.get() instanceof JsonObject jsonObject)) return JsonNull.INSTANCE;
-        jsonObject.addProperty("type", "item");
-        return jsonObject;
+    public IMutationSerializer serializer() {
+        return SERIALIZER;
     }
 
     @Override
     public ItemStack itemRender() {
         return new ItemStack(predicate.item(), 1, predicate.getTag().orElse(null));
+    }
+
+    private static class Serializer implements IMutationSerializer {
+
+        public static final Codec<ItemMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                RestrictedItemPredicate.CODEC.fieldOf("item").forGetter(ItemMutation::predicate),
+                Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(ItemMutation::chance),
+                Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(ItemMutation::weight)
+        ).apply(instance, ItemMutation::new));
+
+        @Override
+        public Codec<? extends IMutation> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public String id() {
+            return "item";
+        }
     }
 }
