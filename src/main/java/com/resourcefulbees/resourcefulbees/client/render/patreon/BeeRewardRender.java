@@ -2,6 +2,7 @@ package com.resourcefulbees.resourcefulbees.client.render.patreon;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.utils.color.Color;
 import com.resourcefulbees.resourcefulbees.utils.color.RainbowColor;
 import net.minecraft.client.Minecraft;
@@ -33,6 +34,7 @@ public class BeeRewardRender extends LayerRenderer<AbstractClientPlayerEntity, P
     @Override
     public void render(@NotNull MatrixStack stack, @NotNull IRenderTypeBuffer buffer, int packedLightIn, @NotNull AbstractClientPlayerEntity playerEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!PetInfo.hasPet(playerEntity.getUUID()) || playerEntity.isInvisible()) return;
+        if (!Config.SHOW_OWN_BEE.get() && playerEntity.equals(Minecraft.getInstance().player)) return;
         PetModelData data = PetInfo.getPet(playerEntity.getUUID());
         if (data == null) return;
 

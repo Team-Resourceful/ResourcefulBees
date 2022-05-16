@@ -105,6 +105,7 @@ public class Config {
 
     public static BooleanValue GENERATE_ENGLISH_LANG;
     public static BooleanValue SHOW_DEBUG_INFO;
+    public static BooleanValue SHOW_OWN_BEE;
     public static class CommonConfig {
 
 
@@ -304,6 +305,8 @@ public class Config {
                     .define("generateEnglishLang", false);
             SHOW_DEBUG_INFO = CLIENT_BUILDER.comment("\nWhen set to true will display some debug info in console. [true/false]")
                     .define("showDebugInfo", false);
+            SHOW_OWN_BEE = CLIENT_BUILDER.comment("\nWhen set to true will display your own bee pet if you have one. [true/false]")
+                    .define("showOwnBee", true);
             CLIENT_BUILDER.pop();
 
             CLIENT_CONFIG = CLIENT_BUILDER.build();

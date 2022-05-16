@@ -1,5 +1,8 @@
 **please continue to report any bugs/issues to https://issues.resourcefullbees.com/**
 
+# ----- [0.10.7] -----
+- Added client config options to disable your own bee pet on your client.
+
 # ----- [0.10.6] -----
 - Merged Korean translations.
 - Changed Bee Jar to be successful instead of pass to fix compatability issues with other mods.
