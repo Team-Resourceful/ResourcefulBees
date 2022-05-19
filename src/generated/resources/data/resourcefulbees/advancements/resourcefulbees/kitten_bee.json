@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "resourcefulbees:bee_jar",
-      "nbt": "{Color:\"#EAA939\",Entity:\"resourcefulbees:kitten_bee\"}"
+      "nbt": "{Entity:{Color:\"#EAA939\",id:\"resourcefulbees:kitten_bee\"}}"
     },
     "title": {
       "translate": "advancements.resourcefulbees.kitten_bee.title"
@@ -25,7 +25,7 @@
             "items": [
               "resourcefulbees:bee_jar"
             ],
-            "nbt": "{Count:1b,id:\"resourcefulbees:bee_jar\",tag:{Color:\"#EAA939\",Entity:\"resourcefulbees:kitten_bee\"}}"
+            "nbt": "{Count:1b,id:\"resourcefulbees:bee_jar\",tag:{Entity:{Color:\"#EAA939\",id:\"resourcefulbees:kitten_bee\"}}}"
           }
         ]
       }
