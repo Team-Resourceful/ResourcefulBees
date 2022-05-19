@@ -1,10 +1,12 @@
-package com.teamresourceful.resourcefulbees.common.utils.predicates;
+package com.teamresourceful.resourcefulbees.common.codecs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.NbtPredicateAccessor;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.EntityFlagsPredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.MobEffectsPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -20,14 +22,14 @@ public record RestrictedEntityPredicate(EntityType<?> entityType, LocationPredic
         Registry.ENTITY_TYPE.byNameCodec().fieldOf("type").forGetter(RestrictedEntityPredicate::entityType),
         CodecUtils.passthrough(LocationPredicate::serializeToJson, LocationPredicate::fromJson).fieldOf("location").orElse(LocationPredicate.ANY).forGetter(RestrictedEntityPredicate::location),
         CodecUtils.passthrough(MobEffectsPredicate::serializeToJson, MobEffectsPredicate::fromJson).fieldOf("effects").orElse(MobEffectsPredicate.ANY).forGetter(RestrictedEntityPredicate::effects),
-        CodecUtils.passthrough(NbtPredicate::serializeToJson, NbtPredicate::fromJson).fieldOf("nbt").orElse(NbtPredicate.ANY).forGetter(RestrictedEntityPredicate::nbt),
+        NbtPredicate.CODEC.fieldOf("nbt").orElse(NbtPredicate.ANY).forGetter(RestrictedEntityPredicate::nbt),
         CodecUtils.passthrough(EntityFlagsPredicate::serializeToJson, EntityFlagsPredicate::fromJson).fieldOf("flags").orElse(EntityFlagsPredicate.ANY).forGetter(RestrictedEntityPredicate::flags),
         CodecUtils.passthrough(EntityPredicate::serializeToJson, EntityPredicate::fromJson).fieldOf("target").orElse(EntityPredicate.ANY).forGetter(RestrictedEntityPredicate::targetedEntity)
     ).apply(instance, RestrictedEntityPredicate::new));
 
     public Optional<CompoundTag> getTag() {
         if (nbt() == null) return Optional.empty();
-        return Optional.ofNullable(((NbtPredicateAccessor)nbt).getTag());
+        return Optional.ofNullable(nbt().tag());
     }
 
     public boolean matches(ServerLevel level, Entity entity) {

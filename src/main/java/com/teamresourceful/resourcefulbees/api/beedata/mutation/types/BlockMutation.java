@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IItemRender;
-import com.teamresourceful.resourcefulbees.common.utils.predicates.RestrictedBlockPredicate;
+import com.teamresourceful.resourcefulbees.common.codecs.RestrictedBlockPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
