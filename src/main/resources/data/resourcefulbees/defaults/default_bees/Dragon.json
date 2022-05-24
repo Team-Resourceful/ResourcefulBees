@@ -10,7 +10,7 @@
     "layers": [
       { "texture": "dragon/dragon_bee_primary", "color": "#222222" },
       { "texture": "dragon/dragon_bee_secondary", "color": "#171717" },
-      { "isGlowing": true, "texture": "dragon/dragon_bee_emissive", "color": "#E400FF" }
+      { "layerEffect": "GLOW", "texture": "dragon/dragon_bee_emissive", "color": "#E400FF" }
     ],
     "ColorData": {
       "spawnEggPrimaryColor": "#171717",

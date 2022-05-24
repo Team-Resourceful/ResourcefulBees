@@ -68,26 +68,30 @@ public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerMod
     public void renderLayer(AbstractClientPlayer playerEntity, PoseStack stack, @NotNull MultiBufferSource buffer, LayerData layerData, PetModelData data, GeoModel model, float partialTicks, int packedLightIn) {
         ResourceLocation texture = layerData.beeTexture().normalTexture();
 
-        if (layerData.isEnchanted()) {
-            RenderType renderType = RenderType.entityGlint();
-            renderer.render(model, data, partialTicks,
-                    renderType, stack, buffer, buffer.getBuffer(renderType),
-                    packedLightIn, OverlayTexture.NO_OVERLAY,
-                    0.0F, 0.0F, 0.0F, 0.0F);
-        } else if (layerData.isEmissive()) {
-            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.eyes(texture));
-            if (layerData.pulseFrequency() == 0 || playerEntity.tickCount % layerData.pulseFrequency() == 0.0f) {
+        switch (layerData.effect()) {
+            case NONE -> {
+                VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(texture));
                 renderer.render(model, data, partialTicks,
                         null, stack, null, vertexConsumer,
-                        15728640, OverlayTexture.NO_OVERLAY,
+                        packedLightIn, OverlayTexture.pack(OverlayTexture.u(0f), OverlayTexture.v(false)),
                         layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
             }
-        } else {
-            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(texture));
-            renderer.render(model, data, partialTicks,
-                    null, stack, null, vertexConsumer,
-                    packedLightIn, OverlayTexture.pack(OverlayTexture.u(0f), OverlayTexture.v(false)),
-                    layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
+            case ENCHANTED -> {
+                RenderType renderType = RenderType.entityGlint();
+                renderer.render(model, data, partialTicks,
+                        renderType, stack, buffer, buffer.getBuffer(renderType),
+                        packedLightIn, OverlayTexture.NO_OVERLAY,
+                        0.0F, 0.0F, 0.0F, 0.0F);
+            }
+            case GLOW -> {
+                VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.eyes(texture));
+                if (layerData.pulseFrequency() == 0 || playerEntity.tickCount % layerData.pulseFrequency() == 0.0f) {
+                    renderer.render(model, data, partialTicks,
+                            null, stack, null, vertexConsumer,
+                            15728640, OverlayTexture.NO_OVERLAY,
+                            layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
+                }
+            }
         }
 
     }

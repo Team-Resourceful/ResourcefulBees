@@ -9,8 +9,8 @@
     "model": "resourcefulbees:geo/crystal.geo.json",
     "layers": [
       { "isPollen": true, "color": "rainbow", "texture": "ores/custom/custom_bee_secondary" },
-      { "isPollen" : true, "isGlowing": true, "color": "rainbow", "texture": "ores/custom/custom_bee_emissive" },
-      { "isGlowing": true, "color": "rainbow", "texture": "custom/emissive_layer" }
+      { "isPollen" : true, "layerEffect": "GLOW", "color": "rainbow", "texture": "ores/custom/custom_bee_emissive" },
+      { "layerEffect": "GLOW", "color": "rainbow", "texture": "custom/emissive_layer" }
     ],
     "ColorData": {
       "spawnEggPrimaryColor": "rainbow",
