@@ -10,6 +10,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Nameable;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.roguelogix.phosphophyllite.multiblock.MultiblockController;
@@ -31,6 +32,16 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
 
     protected AbstractGUICentrifugeEntity(BlockEntityType<?> tileEntityTypeIn, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, tier, pos, state);
+    }
+
+    @Override
+    public final BlockPos getBlkPos() {
+        return this.getBlockPos();
+    }
+
+    @Override
+    public final @Nullable Level getLvl() {
+        return this.getLevel();
     }
 
     public CentrifugeState getCentrifugeState() {

@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,9 +15,21 @@ import java.util.List;
 
 public interface ISyncableGUI extends MenuProvider {
 
-    BlockPos getBlockPos();
+    /**
+     * Wrapper method for {@link BlockEntity#getBlockPos()} due to obfuscation
+     * issues in production
+     *
+     * @return returns the block pos of the attached block entity
+     */
+    BlockPos getBlkPos();
 
-    @Nullable Level getLevel();
+    /**
+     * Wrapper method for {@link BlockEntity#getLevel()} due to obfuscation
+     * issues in production
+     *
+     * @return returns the level the entity is currently in
+     */
+    @Nullable Level getLvl();
 
     List<ServerPlayer> getListeners();
 
@@ -29,7 +42,7 @@ public interface ISyncableGUI extends MenuProvider {
      * @param player The player in which you want to send the data to.
      */
     default void sendToPlayer(ServerPlayer player) {
-        if (getLevel() == null || getLevel().isClientSide) return;
+        if (getLvl() == null || getLvl().isClientSide) return;
         NetPacketHandler.sendToPlayer(new SyncGUIMessage(this), player);
     }
 
@@ -37,8 +50,8 @@ public interface ISyncableGUI extends MenuProvider {
      * Sends {@link GUISyncedBlockEntity#getSyncData()} to all players tracking that chunk.
      */
     default void sendToPlayersTrackingChunk(){
-        if (getLevel() == null || getLevel().isClientSide) return;
-        NetPacketHandler.sendToAllLoaded(new SyncGUIMessage(this), getLevel(), getBlockPos());
+        if (getLvl() == null || getLvl().isClientSide) return;
+        NetPacketHandler.sendToAllLoaded(new SyncGUIMessage(this), getLvl(), getBlkPos());
     }
 
     /**
@@ -46,8 +59,8 @@ public interface ISyncableGUI extends MenuProvider {
      * @param range the range in which to get players to send the data to.
      */
     default void sendToPlayersInRange(double range){
-        if (getLevel() == null || getLevel().isClientSide) return;
-        NetPacketHandler.sendToPlayersInRange(new SyncGUIMessage(this), getLevel(), getBlockPos(), range);
+        if (getLvl() == null || getLvl().isClientSide) return;
+        NetPacketHandler.sendToPlayersInRange(new SyncGUIMessage(this), getLvl(), getBlkPos(), range);
     }
 
     /**
@@ -55,7 +68,7 @@ public interface ISyncableGUI extends MenuProvider {
      * This will only work if {@link GUISyncedBlockEntity#addListeningPlayer(ServerPlayer)} has been called some where to add players listening.
      */
     default void sendToListeningPlayers() {
-        if (getLevel() == null || getLevel().isClientSide) return;
+        if (getLvl() == null || getLvl().isClientSide) return;
         NetPacketHandler.sendToPlayers(new SyncGUIMessage(this), getListeners());
     }
 

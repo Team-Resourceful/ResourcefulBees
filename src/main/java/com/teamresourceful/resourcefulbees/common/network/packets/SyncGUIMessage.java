@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 public record SyncGUIMessage(BlockPos pos, CompoundTag tag) {
 
     public SyncGUIMessage(ISyncableGUI syncedBlockEntity) {
-        this(syncedBlockEntity.getBlockPos(), syncedBlockEntity.getSyncData());
+        this(syncedBlockEntity.getBlkPos(), syncedBlockEntity.getSyncData());
     }
 
     public static void encode(SyncGUIMessage message, FriendlyByteBuf buffer){
