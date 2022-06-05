@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.utils;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraftforge.fml.ModList;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -26,11 +27,11 @@ public class FileUtils {
         return String.format("Failed to load source: %s!", path);
     }
 
-    private static boolean isZip(Path f) {
+    private static boolean isZip(@NotNull Path f) {
         return f.toString().endsWith(".zip");
     }
 
-    private static boolean isJson(Path f) {
+    private static boolean isJson(@NotNull Path f) {
         return f.toString().endsWith(".json");
     }
 
@@ -55,7 +56,7 @@ public class FileUtils {
         }
     }
 
-    private static void readFileAndParse(Path filePath, BiConsumer<Reader, String> parser) {
+    private static void readFileAndParse(@NotNull Path filePath, @NotNull BiConsumer<Reader, String> parser) {
         try (Reader r = Files.newBufferedReader(filePath)) {
             String name = filePath.getFileName().toString();
             name = name.substring(0, name.indexOf('.'));
@@ -77,7 +78,7 @@ public class FileUtils {
         }
     }
 
-    private static void copyFile(Path targetPath, Path source) {
+    private static void copyFile(@NotNull Path targetPath, Path source) {
         try {
             Files.copy(source, Paths.get(targetPath.toString(), source.getFileName().toString()), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
@@ -85,7 +86,7 @@ public class FileUtils {
         }
     }
 
-    public static void setupDevResources(String devPath, BiConsumer<Reader, String> parser) {
+    public static void setupDevResources(@NotNull String devPath, @NotNull BiConsumer<Reader, String> parser) {
         if (Files.isRegularFile(MOD_ROOT)) { //production
             try(FileSystem fileSystem = FileSystems.newFileSystem(MOD_ROOT)) {
                 streamFilesAndParse(fileSystem.getPath(devPath), parser);
