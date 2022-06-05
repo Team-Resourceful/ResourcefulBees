@@ -11,10 +11,9 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -26,21 +25,19 @@ import java.util.Optional;
 public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.BreedingWrapper> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/breeding.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "breeding");
+    public static final RecipeType<BeeBreedingCategory.BreedingWrapper> RECIPE = new RecipeType<>(ID, BeeBreedingCategory.BreedingWrapper.class);
 
     public BeeBreedingCategory(IGuiHelper guiHelper) {
-        super(guiHelper, ID,
+        super(guiHelper, RECIPE,
                 TranslationConstants.Jei.BREEDING,
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 150, 118).addPadding(11, 11, 10, 10).build(),
-                guiHelper.createDrawableIngredient(VanillaTypes.ITEM, ModItems.BREEDER_ITEM.get().getDefaultInstance()),
-                BreedingWrapper.class);
+                guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ModItems.BREEDER_ITEM.get().getDefaultInstance()));
     }
 
-    public static List<BreedingWrapper> getRecipes(Collection<Recipe<Container>> recipes) {
+    public static List<BreedingWrapper> getRecipes(Collection<BreederRecipe> recipes) {
         List<BreedingWrapper> wrappers = new ArrayList<>();
-        for (Recipe<Container> recipe : recipes) {
-            if (recipe instanceof BreederRecipe breederRecipe) {
-                breederRecipe.outputs().forEach(output -> wrappers.add(new BreedingWrapper(breederRecipe, output)));
-            }
+        for (BreederRecipe recipe : recipes) {
+            recipe.outputs().forEach(output -> wrappers.add(new BreedingWrapper(recipe, output)));
         }
         return wrappers;
     }
@@ -58,7 +55,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Breedi
         builder.addSlot(RecipeIngredientRole.INPUT, 11, 112)
                 .addIngredients(recipe.ogRecipe().getIngredients().get(3)).setSlotName("parent_2_item");
         builder.addSlot(RecipeIngredientRole.OUTPUT, 138, 94)
-                .addIngredient(VanillaTypes.ITEM, recipe.output().output()).setSlotName("output_item");
+                .addIngredient(VanillaTypes.ITEM_STACK, recipe.output().output()).setSlotName("output_item");
 
         recipe.parent1.displayEntity().flatMap(BeeInfoUtils::getOptionalEntityType)
                 .ifPresent(entityType -> builder.addSlot(RecipeIngredientRole.OUTPUT, 56, 30)

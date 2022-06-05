@@ -12,10 +12,14 @@ public class BeeDisplayOverride implements IEntityDisplayOverride {
 
     @Override
     public boolean overrideStandardInfo(ProbeMode probeMode, IProbeInfo iProbeInfo, Player player, Level level, Entity entity, IProbeHitEntityData iProbeHitEntityData) {
-        return entity instanceof Bee bee && createBeeProbData(iProbeInfo, bee, probeMode);
+        if (entity instanceof Bee bee) {
+            createBeeProbData(iProbeInfo, bee, probeMode);
+            return true;
+        }
+        return false;
     }
 
-    private boolean createBeeProbData(IProbeInfo iProbeInfo, Bee beeEntity, ProbeMode probeMode) {
+    private void createBeeProbData(IProbeInfo iProbeInfo, Bee beeEntity, ProbeMode probeMode) {
         iProbeInfo.horizontal()
                 .entity(beeEntity)
                 .vertical()
@@ -26,7 +30,6 @@ public class BeeDisplayOverride implements IEntityDisplayOverride {
             iProbeInfo.text(new TextComponent("Flower Pos: ").append(beeEntity.getSavedFlowerPos() == null ? "none" : beeEntity.getSavedFlowerPos().toShortString()))
                     .text(new TextComponent("Hive Pos: ").append(beeEntity.getHivePos() == null ? "none" : beeEntity.getHivePos().toShortString()));
         }
-        return true;
     }
 }
 

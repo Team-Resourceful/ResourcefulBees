@@ -66,7 +66,7 @@ public class HoneyRegistry implements IHoneyRegistry {
      * @return Returns a set containing all registered HoneyBottleData.
      */
     public Set<HoneyData> getSetOfHoney() {
-        return Collections.unmodifiableSet(new HashSet<>(honeyInfo.values()));
+        return Set.copyOf(honeyInfo.values());
     }
 
     /**
@@ -79,6 +79,7 @@ public class HoneyRegistry implements IHoneyRegistry {
      */
     @SuppressWarnings("UnusedReturnValue")
     public boolean registerHoney(String honeyType, HoneyData honeyData) {
+        if (honeyInfo.containsKey(honeyType)) return false;
         honeyInfo.putIfAbsent(honeyType, honeyData);
         return true;
     }

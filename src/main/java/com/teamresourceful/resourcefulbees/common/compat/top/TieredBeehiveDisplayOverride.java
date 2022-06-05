@@ -26,10 +26,14 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
     @Override
     public boolean overrideStandardInfo(ProbeMode probeMode, IProbeInfo iProbeInfo, Player player, Level level, BlockState blockState, IProbeHitData iProbeHitData) {
         BlockEntity tileEntity = level.getBlockEntity(iProbeHitData.getPos());
-        return tileEntity instanceof TieredBeehiveBlockEntity tieredBeehiveBlockEntity && createHiveProbeData(probeMode, iProbeInfo, blockState, tieredBeehiveBlockEntity);
+        if (tileEntity instanceof TieredBeehiveBlockEntity tieredHive) {
+            createHiveProbeData(probeMode, iProbeInfo, blockState, tieredHive);
+            return true;
+        }
+        return false;
     }
 
-    private boolean createHiveProbeData(ProbeMode mode, IProbeInfo probeInfo, BlockState blockState, TieredBeehiveBlockEntity tileEntity) {
+    private void createHiveProbeData(ProbeMode mode, IProbeInfo probeInfo, BlockState blockState, TieredBeehiveBlockEntity tileEntity) {
         probeInfo.horizontal()
                 .item(new ItemStack(blockState.getBlock().asItem()))
                 .vertical()
@@ -48,7 +52,6 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
         if (mode.equals(ProbeMode.EXTENDED)) {
             createHoneycombData(probeInfo, tileEntity);
         }
-        return true;
     }
 
     private String getHiveMaxBees(BlockState state) {

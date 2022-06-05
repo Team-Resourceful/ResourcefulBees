@@ -4,13 +4,13 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemGroupResourcefulBees {
@@ -31,7 +31,7 @@ public class ItemGroupResourcefulBees {
         @Override
         public void fillItemList(@NotNull NonNullList<ItemStack> stacks) {
             Item beepedia = ModItems.BEEPEDIA.get();
-            for(Item item : Registry.ITEM) {
+            for(Item item : ForgeRegistries.ITEMS) {
                 item.fillItemCategory(this, stacks);
                 if (item.equals(beepedia)) {
                     ItemStack creativeBeepedia = new ItemStack(ModItems.BEEPEDIA.get());

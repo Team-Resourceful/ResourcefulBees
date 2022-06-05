@@ -43,7 +43,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity {
     };
     private final LazyOptional<FluidTank> tankOptional = LazyOptional.of(() -> tank);
 
-    private final AutomationSensitiveItemStackHandler inventory = new TileStackHandler(2, getAcceptor(), getRemover());
+    private final AutomationSensitiveItemStackHandler inventory = new TileStackHandler();
     private final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(this::getInventory);
 
     private boolean dirty;
@@ -111,14 +111,6 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity {
         return inventory;
     }
 
-    public AutomationSensitiveItemStackHandler.IAcceptor getAcceptor() {
-        return (slot, stack, automation) -> false;
-    }
-
-    public AutomationSensitiveItemStackHandler.IRemover getRemover() {
-        return (slot, automation) -> !automation || slot == BLOCK_OUTPUT;
-    }
-
     public static void serverTick(Level level, BlockPos pos, BlockState state, SolidificationChamberBlockEntity entity) {
         if (entity.canProcessHoney()) {
             if (entity.processingFill >= CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get()) {
@@ -169,8 +161,8 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity {
     }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
-        protected TileStackHandler(int slots, IAcceptor acceptor, IRemover remover) {
-            super(slots, acceptor, remover);
+        protected TileStackHandler() {
+            super(2, (slot, stack, automation) -> false, (slot, automation) -> !automation || slot == BLOCK_OUTPUT);
         }
 
         @Override

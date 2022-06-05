@@ -184,6 +184,7 @@ public class SpawnData {
      */
     public String getSpawnableBiomesAsString() {
         StringJoiner returnList = new StringJoiner(", ");
+        //noinspection deprecation
         spawnableBiomes.forEach(resourceLocation -> returnList.add(WordUtils.capitalize(resourceLocation.getPath().replace("_", " "))));
         return returnList.toString();
     }

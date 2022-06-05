@@ -37,7 +37,7 @@ public class Pane extends TooltipWidget {
     }
 
     public Pane(ScreenArea screenArea, Component message) {
-        this(screenArea.xPos, screenArea.yPos, screenArea.width, screenArea.height, message);
+        this(screenArea.xPos(), screenArea.yPos(), screenArea.width(), screenArea.height(), message);
     }
 
     public void toggleScissor() {

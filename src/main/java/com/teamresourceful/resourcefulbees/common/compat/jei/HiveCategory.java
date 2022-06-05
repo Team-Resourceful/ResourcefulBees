@@ -16,6 +16,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -35,6 +36,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
     public static final ResourceLocation HIVE_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/honeycomb.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
+    public static final RecipeType<HiveCategory.Recipe> RECIPE = new RecipeType<>(ID, HiveCategory.Recipe.class);
 
     protected static final List<ItemStack> NESTS_0 = getStacksFromRegister(ModItems.T1_NEST_ITEMS);
 
@@ -42,11 +44,10 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     private final IDrawable apiaryBackground;
 
     public HiveCategory(IGuiHelper guiHelper) {
-        super(guiHelper, ID,
+        super(guiHelper, RECIPE,
                 TranslationConstants.Jei.HIVE,
                 guiHelper.createBlankDrawable(160, 26),
-                guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get())),
-                HiveCategory.Recipe.class);
+                guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get())));
 
         hiveBackground = guiHelper.drawableBuilder(HIVE_BACK, 0, 0, 160, 26).addPadding(0, 0, 0, 0).build();
         apiaryBackground = guiHelper.drawableBuilder(HIVE_BACK, 0, 26, 160, 26).addPadding(0, 0, 0, 0).build();
@@ -85,10 +86,10 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull Recipe recipe, @NotNull IFocusGroup focuses) {
         super.setRecipe(builder, recipe, focuses);
         builder.addSlot(RecipeIngredientRole.OUTPUT, 139, 5)
-                .addIngredient(VanillaTypes.ITEM, recipe.comb)
+                .addIngredient(VanillaTypes.ITEM_STACK, recipe.comb)
                 .setSlotName("comb");
         builder.addSlot(RecipeIngredientRole.INPUT, 63, 5)
-                .addIngredients(VanillaTypes.ITEM, recipe.hives)
+                .addIngredients(VanillaTypes.ITEM_STACK, recipe.hives)
                 .setSlotName("hive");
         builder.addSlot(RecipeIngredientRole.INPUT, 11, 3)
                 .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.entityType, 45.0f))

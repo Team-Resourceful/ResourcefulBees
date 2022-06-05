@@ -74,20 +74,12 @@ public class ListPage extends BeepediaPage {
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         Component title;
         Font font = Minecraft.getInstance().font;
-        switch (BeepediaState.currentState.selectedList) {
-            case COMBS:
-                title = BeepediaLang.TAB_COMBS;
-                break;
-            case HONEY:
-                title = BeepediaLang.TAB_HONEY;
-                break;
-            case TRAITS:
-                title = BeepediaLang.TAB_TRAITS;
-                break;
-            default:
-                title = BeepediaLang.TAB_BEES;
-                break;
-        }
+        title = switch (BeepediaState.currentState.selectedList) {
+            case COMBS -> BeepediaLang.TAB_COMBS;
+            case HONEY -> BeepediaLang.TAB_HONEY;
+            case TRAITS -> BeepediaLang.TAB_TRAITS;
+            default -> BeepediaLang.TAB_BEES;
+        };
         font.draw(matrix, title, x + 10.0f, y + 20.0f, 16777215);
     }
 

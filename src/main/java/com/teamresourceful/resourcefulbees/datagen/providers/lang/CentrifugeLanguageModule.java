@@ -33,6 +33,7 @@ public class CentrifugeLanguageModule implements LanguageModule {
     private static String formatType(String type) {
         if (!type.contains("/")) return StringUtils.capitalize(type);
         String[] splits = type.split("/");
+        //noinspection deprecation
         return WordUtils.capitalize(splits[1] + " " + splits[0]);
     }
 

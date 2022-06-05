@@ -20,7 +20,7 @@ import vazkii.patchouli.api.PatchouliAPI;
 public class ModAdvancementProvider extends BaseAdvancementProvider {
 
     public ModAdvancementProvider(DataGenerator generator) {
-        super("Resourceful Bees", generator);
+        super(generator);
     }
 
     @Override

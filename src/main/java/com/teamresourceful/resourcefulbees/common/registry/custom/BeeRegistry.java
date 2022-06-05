@@ -181,7 +181,7 @@ public class BeeRegistry implements IBeeRegistry {
      * {@link CustomBeeData} map
      */
     public Set<CustomBeeData> getSetOfBees() {
-        return Collections.unmodifiableSet(new HashSet<>(CUSTOM_DATA.values()));
+        return Set.copyOf(CUSTOM_DATA.values());
     }
 
     //region Setup

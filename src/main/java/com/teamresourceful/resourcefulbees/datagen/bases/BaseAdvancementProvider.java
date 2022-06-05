@@ -33,12 +33,10 @@ public abstract class BaseAdvancementProvider implements DataProvider {
     public static final String TITLE_SUFFIX = ".title";
     public static final String DESCRIPTION_SUFFIX = ".description";
 
-    private final String modDisplayName;
     private final DataGenerator generator;
     private final Map<ResourceLocation, Advancement> advancements = new HashMap<>();
 
-    protected BaseAdvancementProvider(String modDisplayName, DataGenerator pGenerator) {
-        this.modDisplayName = modDisplayName;
+    protected BaseAdvancementProvider(DataGenerator pGenerator) {
         this.generator = pGenerator;
     }
 
@@ -131,6 +129,6 @@ public abstract class BaseAdvancementProvider implements DataProvider {
 
     @Override
     public @NotNull String getName() {
-        return modDisplayName + " Advancement Provider";
+        return "Resourceful Bees Advancement Provider";
     }
 }

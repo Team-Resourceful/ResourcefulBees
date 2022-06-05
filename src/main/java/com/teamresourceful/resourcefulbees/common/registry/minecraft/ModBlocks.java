@@ -14,8 +14,6 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -243,12 +241,4 @@ public class ModBlocks {
     });
     public static final RegistryObject<Block> TRIMMED_WAXED_PLANKS = BLOCKS.register("trimmed_waxed_planks", () -> new Block(WAXED_PLANKS_PROPERTIES));
     public static final RegistryObject<Block> WAXED_MACHINE_BLOCK = BLOCKS.register("waxed_machine_block", () -> new Block(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-
-    private static Boolean never(BlockState blockState, BlockGetter reader, BlockPos pos, EntityType<?> entityType) {
-        return false;
-    }
-
-    private static boolean never(BlockState blockState, BlockGetter reader, BlockPos pos) {
-        return false;
-    }
 }

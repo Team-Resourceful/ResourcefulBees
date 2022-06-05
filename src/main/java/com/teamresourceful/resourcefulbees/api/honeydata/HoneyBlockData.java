@@ -12,12 +12,12 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupRe
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
-import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public record HoneyBlockData(boolean generate, String name, Color color, float jumpFactor, float speedFactor, Item blockItem, Block block) {
@@ -33,8 +33,8 @@ public record HoneyBlockData(boolean generate, String name, Color color, float j
                 Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneyBlockData::color),
                 Codec.FLOAT.fieldOf("jumpFactor").orElse(0.5f).forGetter(HoneyBlockData::jumpFactor),
                 Codec.FLOAT.fieldOf("speedFactor").orElse(0.4f).forGetter(HoneyBlockData::speedFactor),
-                Registry.ITEM.byNameCodec().fieldOf("honeyBlockItem").orElse(Items.HONEY_BLOCK).forGetter(HoneyBlockData::blockItem),
-                Registry.BLOCK.byNameCodec().fieldOf("honeyBlock").orElse(Blocks.HONEY_BLOCK).forGetter(HoneyBlockData::block)
+                ForgeRegistries.ITEMS.getCodec().fieldOf("honeyBlockItem").orElse(Items.HONEY_BLOCK).forGetter(HoneyBlockData::blockItem),
+                ForgeRegistries.BLOCKS.getCodec().fieldOf("honeyBlock").orElse(Blocks.HONEY_BLOCK).forGetter(HoneyBlockData::block)
         ).apply(instance, HoneyBlockData::new));
     }
 
