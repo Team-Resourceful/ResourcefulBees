@@ -6,19 +6,19 @@ import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Optional;
 
 public record RestrictedBlockPredicate(Block block, NbtPredicate nbt, LocationPredicate location, StatePropertiesPredicate properties) {
 
     public static final Codec<RestrictedBlockPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.BLOCK.byNameCodec().fieldOf("id").forGetter(RestrictedBlockPredicate::block),
+            ForgeRegistries.BLOCKS.getCodec().fieldOf("id").forGetter(RestrictedBlockPredicate::block),
             NbtPredicate.CODEC.fieldOf("nbt").orElse(NbtPredicate.ANY).forGetter(RestrictedBlockPredicate::nbt),
             CodecUtils.passthrough(LocationPredicate::serializeToJson, LocationPredicate::fromJson).fieldOf("location").orElse(LocationPredicate.ANY).forGetter(RestrictedBlockPredicate::location),
             CodecUtils.passthrough(StatePropertiesPredicate::serializeToJson, StatePropertiesPredicate::fromJson).fieldOf("properties").orElse(StatePropertiesPredicate.ANY).forGetter(RestrictedBlockPredicate::properties)

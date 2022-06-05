@@ -37,8 +37,7 @@ public class SpawnData {
             CodecUtils.createSetCodec(ResourceLocation.CODEC).fieldOf("biomeBlacklist").orElse(DEFAULT_BLACKLIST).forGetter(SpawnData::getBiomeBlacklist),
             LightLevel.CODEC.fieldOf("lightLevel").orElse(LightLevel.ANY).forGetter(SpawnData::getLightLevel),
             CodecUtils.Y_LEVEL.fieldOf("yLevel").orElse(new InclusiveRange<>(50, 256)).forGetter(SpawnData::getGroupSize)
-            ).apply(instance, SpawnData::new)
-    );
+    ).apply(instance, SpawnData::new));
 
     protected boolean canSpawnInWorld;
     protected int spawnWeight;
