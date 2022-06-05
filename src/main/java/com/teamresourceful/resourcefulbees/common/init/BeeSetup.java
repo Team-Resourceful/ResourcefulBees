@@ -35,16 +35,18 @@ public class BeeSetup {
     }
 
     public static void setupBees() {
-        if (Boolean.TRUE.equals(CommonConfig.ENABLE_EASTER_EGG_BEES.get())) {
-            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_bees", BeeSetup::parseBee, "Could not stream dev bees!");
+        if (Boolean.TRUE.equals(CommonConfig.ENABLE_DEV_BEES.get())) {
+            LOGGER.info("Loading Dev Bees...");
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_bees", BeeSetup::parseBee);
         }
 
         if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
-            FileUtils.setupDefaultFiles("/data/resourcefulbees/defaults/default_bees", ModPaths.BEES);
+            LOGGER.info("Copying Default Bees...");
+            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_bees", ModPaths.BEES);
         }
 
         LOGGER.info("Loading Custom Bees...");
-        FileUtils.streamFilesAndParse(ModPaths.BEES, BeeSetup::parseBee, "Could not stream bees!");
+        FileUtils.streamFilesAndParse(ModPaths.BEES, BeeSetup::parseBee);
 
         BeeRegistry.getRegistry().regenerateCustomBeeData();
     }

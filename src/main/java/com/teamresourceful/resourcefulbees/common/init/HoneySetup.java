@@ -20,19 +20,21 @@ public class HoneySetup {
     }
 
     public static void setupHoney() {
-        if (Boolean.TRUE.equals(CommonConfig.ENABLE_EASTER_EGG_BEES.get())) {
-            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honey", HoneySetup::parseHoney, "Could not stream dev honey!");
+        if (Boolean.TRUE.equals(CommonConfig.ENABLE_DEV_BEES.get())) {
+            LOGGER.info("Loading Dev Honeys...");
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honey", HoneySetup::parseHoney);
         }
 
         if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
-            FileUtils.setupDefaultFiles("/data/resourcefulbees/defaults/default_honey", ModPaths.HONEY);
+            LOGGER.info("Copying Default Honeys...");
+            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_honey", ModPaths.HONEY);
         }
 
-        LOGGER.info("Loading Custom Honeys..");
-        FileUtils.streamFilesAndParse(ModPaths.HONEY, HoneySetup::parseHoney, "Could not stream honey!");
+        LOGGER.info("Loading Custom Honeys...");
+        FileUtils.streamFilesAndParse(ModPaths.HONEY, HoneySetup::parseHoney);
     }
 
-    static void parseHoney(Reader reader, String name) {
+    private static void parseHoney(Reader reader, String name) {
         JsonObject jsonObject = GsonHelper.fromJson(ModConstants.GSON, reader, JsonObject.class);
         HoneyRegistry.getRegistry().cacheRawHoneyData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
     }

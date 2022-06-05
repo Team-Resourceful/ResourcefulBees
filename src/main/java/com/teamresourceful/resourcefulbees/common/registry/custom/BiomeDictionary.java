@@ -15,14 +15,13 @@ import java.io.Reader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 import static net.minecraftforge.common.BiomeDictionary.Type;
 import static net.minecraftforge.common.BiomeDictionary.getBiomes;
 
 public class BiomeDictionary extends HashMap<String, Set<ResourceLocation>> {
-
+    //TODO switch to using Biome Tags
     protected static final BiomeDictionary INSTANCE = new BiomeDictionary();
 
     public static BiomeDictionary get() {
@@ -30,11 +29,12 @@ public class BiomeDictionary extends HashMap<String, Set<ResourceLocation>> {
     }
 
     public static void build() {
-        LOGGER.info("Building Biome Dictionary...");
         if (Boolean.TRUE.equals(CommonConfig.GENERATE_BIOME_DICTIONARIES.get())) {
-            FileUtils.setupDefaultFiles("/data/resourcefulbees/biome_dictionary", ModPaths.BIOME_DICTIONARY);
+            LOGGER.info("Copying Default Biome Dictionaries...");
+            FileUtils.copyDefaultFiles("/data/resourcefulbees/biome_dictionary", ModPaths.BIOME_DICTIONARY);
         }
-        FileUtils.streamFilesAndParse(ModPaths.BIOME_DICTIONARY, BiomeDictionary::parseType, "Could not stream biome dictionary!!");
+        LOGGER.info("Building Biome Dictionary...");
+        FileUtils.streamFilesAndParse(ModPaths.BIOME_DICTIONARY, BiomeDictionary::parseType);
     }
 
     private static void parseType(Reader reader, String name) {
@@ -44,8 +44,8 @@ public class BiomeDictionary extends HashMap<String, Set<ResourceLocation>> {
         get().put(name, biomeType);
     }
 
-    public static Collection<? extends ResourceLocation> getForgeBiomeLocations(Type type) {
-        return getBiomes(type).stream().map(ResourceKey::location).collect(Collectors.toList());
+    public static Collection<ResourceLocation> getForgeBiomeLocations(Type type) {
+        return getBiomes(type).stream().map(ResourceKey::location).toList();
     }
 
     public static Type getForgeType(ResourceLocation resourceLocation) {

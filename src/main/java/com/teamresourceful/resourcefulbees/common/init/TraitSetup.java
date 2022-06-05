@@ -23,16 +23,18 @@ public class TraitSetup {
     }
 
     public static void buildCustomTraits() {
-        if (Boolean.TRUE.equals(CommonConfig.ENABLE_EASTER_EGG_BEES.get())) {
-            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_traits", TraitSetup::parseTrait, "Could not stream dev traits!");
+        if (Boolean.TRUE.equals(CommonConfig.ENABLE_DEV_BEES.get())) {
+            LOGGER.info("Loading Dev Traits...");
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_traits", TraitSetup::parseTrait);
         }
 
         if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
-            FileUtils.setupDefaultFiles("/data/resourcefulbees/defaults/default_traits", ModPaths.BEE_TRAITS);
+            LOGGER.info("Copying Default Traits...");
+            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_traits", ModPaths.BEE_TRAITS);
         }
 
-        LOGGER.info("Registering Custom Traits...");
-        FileUtils.streamFilesAndParse(ModPaths.BEE_TRAITS, TraitSetup::parseTrait, "Could not stream custom traits!");
+        LOGGER.info("Loading Custom Traits...");
+        FileUtils.streamFilesAndParse(ModPaths.BEE_TRAITS, TraitSetup::parseTrait);
     }
 
     private static void parseTrait(Reader reader, String name) {

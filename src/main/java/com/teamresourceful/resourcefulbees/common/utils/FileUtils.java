@@ -4,125 +4,96 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraftforge.fml.ModList;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystem;
+import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
 public class FileUtils {
 
-    public static final String JSON = ".json";
-    public static final String ZIP = ".zip";
-    public static final Path MOD_ROOT = ModList.get().getModFileById(ResourcefulBees.MOD_ID).getFile().getFilePath();
+    private static final Path MOD_ROOT = ModList.get().getModFileById(ResourcefulBees.MOD_ID).getFile().getFilePath();
 
     private FileUtils() {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
-    public static void streamFilesAndParse(Path directoryPath, BiConsumer<Reader, String> instructions, String errorMessage) {
-        try (Stream<Path> zipStream = Files.walk(directoryPath);
-             Stream<Path> jsonStream = Files.walk(directoryPath)) {
-            zipStream.filter(f -> f.getFileName().toString().endsWith(ZIP)).forEach(path -> addZippedFile(path, instructions));
-            jsonStream.filter(f -> f.getFileName().toString().endsWith(JSON)).forEach(path -> addFile(path, instructions));
+    private static String failedToLoadSourceError(Path path) {
+        return String.format("Failed to load source: %s!", path);
+    }
+
+    private static boolean isZip(Path f) {
+        return f.toString().endsWith(".zip");
+    }
+
+    private static boolean isJson(Path f) {
+        return f.toString().endsWith(".json");
+    }
+
+    public static void streamFilesAndParse(Path source, BiConsumer<Reader, String> parser) {
+        streamFiles(source, FileUtils::isJson, path -> readFileAndParse(path, parser));
+        streamFiles(source, FileUtils::isZip, path -> openZipAndParse(path, parser));
+    }
+
+    private static void streamFiles(Path source, Predicate<Path> filter, Consumer<Path> handler) {
+        try (Stream<Path> pathStream = Files.walk(source)) {
+            pathStream.filter(filter).forEach(handler);
         } catch (IOException e) {
-            LOGGER.error(errorMessage, e);
+            LOGGER.error(failedToLoadSourceError(source), e);
         }
     }
 
-    private static void addFile(Path path, BiConsumer<Reader, String> instructions) {
-        File f = path.toFile();
+    private static void openZipAndParse(Path source, BiConsumer<Reader, String> parser) {
+        try(FileSystem zip = FileSystems.newFileSystem(source)) {
+            zip.getRootDirectories().forEach(rootPath -> streamFiles(rootPath, FileUtils::isJson, path -> readFileAndParse(path, parser)));
+        } catch (IOException e) {
+            LOGGER.error(failedToLoadSourceError(source), e);
+        }
+    }
+
+    private static void readFileAndParse(Path filePath, BiConsumer<Reader, String> parser) {
+        try (Reader r = Files.newBufferedReader(filePath)) {
+            String name = filePath.getFileName().toString();
+            name = name.substring(0, name.indexOf('.'));
+            parser.accept(r, name);
+        } catch (IOException e) {
+            LOGGER.error("Could not read file: {}", filePath, e);
+        }
+    }
+
+    public static void copyDefaultFiles(String dataPath, Path targetPath) {
+        if (Files.isRegularFile(MOD_ROOT)) {
+            try(FileSystem fileSystem = FileSystems.newFileSystem(MOD_ROOT)) {
+                streamFiles(fileSystem.getPath(dataPath), FileUtils::isJson, path -> copyFile(targetPath, path));
+            } catch (IOException e) {
+                LOGGER.error(failedToLoadSourceError(MOD_ROOT), e);
+            }
+        } else if (Files.isDirectory(MOD_ROOT)) {
+            streamFiles(Paths.get(MOD_ROOT.toString(), dataPath), FileUtils::isJson, path1 -> copyFile(targetPath, path1));
+        }
+    }
+
+    private static void copyFile(Path targetPath, Path source) {
         try {
-            parseType(f, instructions);
+            Files.copy(source, Paths.get(targetPath.toString(), source.getFileName().toString()), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            LOGGER.warn("File not found: {}", path);
+            LOGGER.error("Could not copy file: {}, Target: {}", source, targetPath);
         }
     }
 
-    private static void addZippedFile(Path file, BiConsumer<Reader, String> instructions) {
-        try (ZipFile zf = new ZipFile(file.toString())) {
-            zf.stream()
-                    .filter(zipEntry -> zipEntry.getName().endsWith(JSON))
-                    .forEach(zipEntry -> {
-                        try {
-                            parseType(zf, zipEntry, instructions);
-                        } catch (IOException e) {
-                            LOGGER.error("Could not parse zip entry: {}", zipEntry.getName());
-                        }
-                    });
-        } catch (IOException e) {
-            LOGGER.warn("Could not read Zip File: {}", file.getFileName());
-        }
-    }
-
-    private static void parseType(File file, BiConsumer<Reader, String> consumer) throws IOException {
-        String name = file.getName();
-        name = name.substring(0, name.indexOf('.'));
-
-        Reader r = Files.newBufferedReader(file.toPath());
-
-        consumer.accept(r, name);
-    }
-
-    private static void parseType(ZipFile zf, ZipEntry zipEntry, BiConsumer<Reader, String> consumer) throws IOException {
-        String name = zipEntry.getName();
-        name = name.substring(name.lastIndexOf("/") + 1, name.indexOf('.'));
-
-        InputStream input = zf.getInputStream(zipEntry);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
-
-        consumer.accept(reader, name);
-    }
-
-    public static void setupDefaultFiles(String dataPath, Path targetPath) {
-        if (Files.isRegularFile(MOD_ROOT)) {
+    public static void setupDevResources(String devPath, BiConsumer<Reader, String> parser) {
+        if (Files.isRegularFile(MOD_ROOT)) { //production
             try(FileSystem fileSystem = FileSystems.newFileSystem(MOD_ROOT)) {
-                Path path = fileSystem.getPath(dataPath);
-                if (Files.exists(path)) {
-                    copyFiles(path, targetPath);
-                }
+                streamFilesAndParse(fileSystem.getPath(devPath), parser);
             } catch (IOException e) {
-                LOGGER.error("Could not load source {}!!", MOD_ROOT);
-                e.printStackTrace();
+                LOGGER.error(failedToLoadSourceError(MOD_ROOT), e);
             }
-        } else if (Files.isDirectory(MOD_ROOT)) {
-            copyFiles(Paths.get(MOD_ROOT.toString(), dataPath), targetPath);
-        }
-    }
-
-    private static void copyFiles(Path source, Path targetPath) {
-        try (Stream<Path> sourceStream = Files.walk(source)) {
-            sourceStream.filter(f -> f.getFileName().toString().endsWith(JSON))
-                    .forEach(path -> {
-                        try {
-                            Files.copy(path, Paths.get(targetPath.toString(), path.getFileName().toString()), StandardCopyOption.REPLACE_EXISTING);
-                        } catch (IOException e) {
-                            LOGGER.error("Could not copy file: {}, Target: {}", path, targetPath);
-                        }
-                    });
-        } catch (IOException e) {
-            LOGGER.error("Could not stream source files: {}", source);
-        }
-    }
-
-    public static void setupDevResources(String devPath, BiConsumer<Reader, String> parser, String errorMessage) {
-        if (Files.isRegularFile(MOD_ROOT)) {
-            try(FileSystem fileSystem = FileSystems.newFileSystem(MOD_ROOT)) {
-                Path path = fileSystem.getPath(devPath);
-                if (Files.exists(path)) {
-                    FileUtils.streamFilesAndParse(path, parser, errorMessage);
-                }
-            } catch (IOException e) {
-                LOGGER.error("Could not load source {}!", MOD_ROOT);
-                e.printStackTrace();
-            }
-        } else if (Files.isDirectory(MOD_ROOT)) {
-            FileUtils.streamFilesAndParse(Paths.get(MOD_ROOT.toString(), devPath), parser, errorMessage);
+        } else if (Files.isDirectory(MOD_ROOT)) { //userDev
+            streamFilesAndParse(Paths.get(MOD_ROOT.toString(), devPath), parser);
         }
     }
 }
