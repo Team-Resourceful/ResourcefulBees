@@ -1,6 +1,6 @@
 {
   "CoreData":{
-    "flower": "minecraft:flowers",
+    "flower": "#minecraft:flowers",
     "maxTimeInHive": 600
   },
   "honeycombVariation": "beeper",

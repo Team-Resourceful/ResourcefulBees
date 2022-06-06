@@ -1,6 +1,6 @@
 {
   "CoreData":{
-    "flower": "forge:mushrooms",
+    "flower": "#forge:mushrooms",
     "maxTimeInHive": 1200
   },
   "honeycombVariation": "slimy",

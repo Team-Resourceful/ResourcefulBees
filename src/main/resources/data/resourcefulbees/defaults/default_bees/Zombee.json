@@ -1,6 +1,6 @@
 {
   "CoreData": {
-    "flower": "minecraft:bee_growables",
+    "flower": "#minecraft:bee_growables",
     "maxTimeInHive": 600
   },
   "honeycombVariation": "zombie",

@@ -1,6 +1,6 @@
 {
   "CoreData": {
-    "flower": "forge:storage_blocks/netherite",
+    "flower": "#forge:storage_blocks/netherite",
     "maxTimeInHive": 600
   },
   "honeycombVariation": "netherite",

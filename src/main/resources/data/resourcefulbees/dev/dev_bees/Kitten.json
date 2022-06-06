@@ -1,6 +1,6 @@
 {
   "CoreData": {
-    "flower": "minecraft:beds",
+    "flower": "#minecraft:beds",
     "maxTimeInHive": 600,
     "lore": [
       {

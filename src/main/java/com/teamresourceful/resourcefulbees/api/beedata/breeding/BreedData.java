@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.api.beedata.breeding;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
+import com.teamresourceful.resourcefulbees.api.beedata.TagAndListSetCodec;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -28,7 +28,7 @@ public class BreedData {
     public static Codec<BreedData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 CodecUtils.createSetCodec(BeeFamily.codec(name)).fieldOf("parents").orElse(new HashSet<>()).forGetter(BreedData::getFamilies),
-                RegistryCodecs.homogeneousList(Registry.ITEM_REGISTRY).fieldOf("feedItem").orElse(HolderSet.direct(Item::builtInRegistryHolder, Items.POPPY)).forGetter(BreedData::getFeedItems),
+                TagAndListSetCodec.of(Registry.ITEM).fieldOf("feedItem").orElse(HolderSet.direct(Item::builtInRegistryHolder, Items.POPPY)).forGetter(BreedData::getFeedItems),
                 CodecUtils.ITEM_STACK_CODEC.optionalFieldOf("feedReturnItem").forGetter(BreedData::getFeedReturnItem),
                 Codec.intRange(1, Integer.MAX_VALUE).fieldOf("feedAmount").orElse(1).forGetter(BreedData::getFeedAmount),
                 Codec.intRange(Integer.MIN_VALUE, 0).fieldOf("childGrowthDelay").orElse(BeeConstants.CHILD_GROWTH_DELAY).forGetter(BreedData::getChildGrowthDelay),

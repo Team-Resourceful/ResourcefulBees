@@ -1,6 +1,6 @@
 {
   "CoreData":{
-    "flower": "forge:storage_blocks/emerald"
+    "flower": "#forge:storage_blocks/emerald"
   },
   "honeycombVariation": "emerald",
   "RenderData": {

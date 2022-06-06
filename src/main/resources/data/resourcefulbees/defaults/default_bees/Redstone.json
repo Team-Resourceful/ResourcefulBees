@@ -1,6 +1,6 @@
 {
   "CoreData": {
-    "flower": "storage_blocks/redstone",
+    "flower": "#forge:storage_blocks/redstone",
     "maxTimeInHive": 800
   },
   "honeycombVariation": "redstone",

@@ -1,6 +1,6 @@
 {
   "CoreData": {
-    "flower": "tag:minecraft:mushroom_grow_block",
+    "flower": "#minecraft:mushroom_grow_block",
     "creator": "Team Resourceful",
     "maxTimeInHive": 1200
   },

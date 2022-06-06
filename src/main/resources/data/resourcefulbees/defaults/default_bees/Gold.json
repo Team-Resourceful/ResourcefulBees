@@ -1,6 +1,6 @@
 {
   "CoreData": {
-    "flower": "forge:storage_blocks/gold",
+    "flower": "#forge:storage_blocks/gold",
     "maxTimeInHive": 800
   },
   "honeycombVariation": "gold",

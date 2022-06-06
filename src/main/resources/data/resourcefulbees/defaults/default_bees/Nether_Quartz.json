@@ -1,6 +1,6 @@
 {
   "CoreData": {
-    "flower": "forge:storage_blocks/quartz",
+    "flower": "#forge:storage_blocks/quartz",
     "maxTimeInHive": 1000
   },
   "honeycombVariation": "quartz",
