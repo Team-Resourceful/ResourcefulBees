@@ -90,6 +90,6 @@ public abstract class AbstractTooltip {
     }
 
     public static List<MutableComponent> getBeeLore(CoreData coreData) {
-        return coreData.getLore();
+        return coreData.lore();
     }
 }

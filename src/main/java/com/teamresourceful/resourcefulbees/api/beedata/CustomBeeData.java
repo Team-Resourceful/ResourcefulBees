@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.beedata;
 
+import com.google.common.base.Suppliers;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -9,28 +10,37 @@ import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
-import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-@Unmodifiable
-@SuppressWarnings("unused")
-public class CustomBeeData {
+/**
+ * @param coreData Returns a {@link CoreData} object containing basic information regarding the bee such as its bee type, flowers used for pollination, and its max time in hive.
+ * @param renderData Returns a {@link RenderData} object containing all necessary information for rendering the bee in the world.
+ * @param breedData Returns a {@link BreedData} object containing the breeding rules for the bee.
+ * @param combatData Returns a {@link CombatData} object containing information about the bees combat info such as health and attack damage.
+ * @param mutationData Returns a {@link MutationData} object containing information regarding the various block and entity mutations a bee may perform.
+ * @param spawnData Returns a {@link SpawnData} object containing the spawning rules for a bee.
+ * @param traitData Returns a {@link TraitData} object containing information regarding the various traits a bee may have.
+ * @param rawData Returns a {@link JsonObject} containing the raw unadulterated data from the bees json file.
+ * @param registryID
+ * @param displayName
+ * @param entityType
+ */
+public record CustomBeeData(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData,
+                            JsonObject rawData, ResourceLocation registryID, TranslatableComponent displayName, Supplier<EntityType<?>> entityType
+) {
     /**
      * A default implementation of {@link CustomBeeData} that can be
      * used to prevent {@link NullPointerException}'s
      */
-    public static final CustomBeeData DEFAULT = new CustomBeeData(CoreData.DEFAULT, "", RenderData.DEFAULT, BreedData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
+    public static final CustomBeeData DEFAULT = CustomBeeData.of(CoreData.DEFAULT, RenderData.DEFAULT, BreedData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
 
     /**
      * Returns a {@link Codec<CustomBeeData>} that can be parsed to create a
@@ -44,262 +54,30 @@ public class CustomBeeData {
      */
     public static Codec<CustomBeeData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                CoreData.codec(name).fieldOf("CoreData").orElseGet((Consumer<String>) s -> ResourcefulBees.LOGGER.error("CoreData is REQUIRED!"), null).forGetter(CustomBeeData::getCoreData),
-                Codec.STRING.fieldOf("honeycombVariation").orElse("").forGetter(s -> s.honeycombIdentifier),
-                RenderData.CODEC.fieldOf("RenderData").orElseGet((Consumer<String>) s -> ResourcefulBees.LOGGER.error("RenderData is REQUIRED!"), null).forGetter(CustomBeeData::getRenderData),
-                BreedData.codec(name).fieldOf("BreedData").orElse(BreedData.DEFAULT).forGetter(CustomBeeData::getBreedData),
-                CombatData.CODEC.fieldOf("CombatData").orElse(CombatData.DEFAULT).forGetter(CustomBeeData::getCombatData),
-                MutationData.CODEC.fieldOf("MutationData").orElse(MutationData.DEFAULT).forGetter(CustomBeeData::getMutationData),
-                SpawnData.CODEC.fieldOf("SpawnData").orElse(SpawnData.DEFAULT).forGetter(CustomBeeData::getSpawnData),
-                TraitData.codec(name).fieldOf("TraitData").orElse(TraitData.DEFAULT).forGetter(CustomBeeData::getTraitData)
-        ).apply(instance, CustomBeeData::new));
+                CoreData.codec(name).fieldOf("CoreData").orElseGet((Consumer<String>) s -> ResourcefulBees.LOGGER.error("CoreData is REQUIRED!"), null).forGetter(CustomBeeData::coreData),
+                RenderData.CODEC.fieldOf("RenderData").orElseGet((Consumer<String>) s -> ResourcefulBees.LOGGER.error("RenderData is REQUIRED!"), null).forGetter(CustomBeeData::renderData),
+                BreedData.codec(name).fieldOf("BreedData").orElse(BreedData.DEFAULT).forGetter(CustomBeeData::breedData),
+                CombatData.CODEC.fieldOf("CombatData").orElse(CombatData.DEFAULT).forGetter(CustomBeeData::combatData),
+                MutationData.CODEC.fieldOf("MutationData").orElse(MutationData.DEFAULT).forGetter(CustomBeeData::mutationData),
+                SpawnData.CODEC.fieldOf("SpawnData").orElse(SpawnData.DEFAULT).forGetter(CustomBeeData::spawnData),
+                TraitData.codec(name).fieldOf("TraitData").orElse(TraitData.DEFAULT).forGetter(CustomBeeData::traitData)
+        ).apply(instance, CustomBeeData::of));
     }
 
-    protected CoreData coreData;
-    protected String honeycombIdentifier;
-    protected RenderData renderData;
-    protected BreedData breedData;
-    protected CombatData combatData;
-    protected MutationData mutationData;
-    protected SpawnData spawnData;
-    protected TraitData traitData;
-    protected JsonObject rawData;
-    protected ResourceLocation registryID;
-    protected EntityType<?> entityType;
-    protected TranslatableComponent displayName;
-
-    private CustomBeeData(CoreData coreData, String honeycombIdentifier, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
-        this.coreData = coreData;
-        this.honeycombIdentifier = honeycombIdentifier;
-        this.renderData = renderData;
-        this.breedData = breedData;
-        this.combatData = combatData;
-        this.mutationData = mutationData;
-        this.spawnData = spawnData;
-        this.traitData = traitData;
-        this.rawData = BeeRegistry.getRegistry().getRawBeeData(coreData.getName());
-        this.registryID = new ResourceLocation(ResourcefulBees.MOD_ID, coreData.getName() + "_bee");
-        this.displayName = new TranslatableComponent("entity.resourcefulbees." + coreData.getName() + "_bee");
-    }
-
-    private CustomBeeData(Mutable mutable) {
-        this.coreData = mutable.coreData.toImmutable();
-        this.honeycombIdentifier = mutable.honeycombIdentifier;
-        this.renderData = mutable.renderData;
-        this.breedData = mutable.breedData.toImmutable();
-        this.combatData = mutable.combatData.toImmutable();
-        this.mutationData = mutable.mutationData;
-        this.spawnData = mutable.spawnData;
-        this.traitData = mutable.traitData;
-        this.rawData = mutable.rawData;
-        this.registryID = mutable.registryID;
-        this.entityType = mutable.entityType;
-        this.displayName = mutable.displayName;
-    }
-
-    /**
-     * Returns a {@link CoreData} object containing basic information regarding the bee
-     * such as its bee type, flowers used for pollination, and its max time in hive.
-     *
-     * This object is <b>required</b> in the bee json.
-     *
-     * @return Returns the {@link CoreData} Object for the bee
-     */
-    public CoreData getCoreData() {
-        return coreData;
-    }
-
-    /**
-     * Returns an {@link Optional}&lt;{@link OutputVariation}&gt; object containing information regarding the
-     * honeycomb a bee produces if it is specified to produce one.
-     *
-     * Omitting this object from the bee json results in a default object where the bee
-     * <b>does not</b> produce a honeycomb.
-     *
-     * @return Returns an {@link Optional}&lt;{@link OutputVariation}&gt; with the contained data being immutable.
-     */
-    public Optional<OutputVariation> getHoneycombData() {
-        return Optional.ofNullable(HoneycombRegistry.getOutputVariation(honeycombIdentifier));
-    }
-
-    /**
-     * Returns a {@link RenderData} object containing all necessary information
-     * for rendering the bee in the world.
-     *
-     * This object is <b>required</b> in the bee json.
-     *
-     * @return Returns an immutable {@link RenderData} object.
-     */
-    public RenderData getRenderData() {
-        return renderData;
-    }
-
-    /**
-     * Returns a {@link BreedData} object containing the breeding rules for the bee.
-     *
-     * Omitting this object from the bee json results in a default object where the bee
-     * <b>cannot</b> be created through breeding.
-     *
-     * @return Returns an immutable {@link BreedData} object.
-     */
-    public BreedData getBreedData() {
-        return breedData;
-    }
-
-    /**
-     * Returns a {@link CombatData} object containing information regarding the
-     * honeycomb a bee produces if it is specified to produce one.
-     *
-     * Omitting this object from the bee json results in a default object where the bee
-     * <b>does not</b> produce a honeycomb.
-     *
-     * @return Returns an immutable {@link CombatData} object.
-     */
-    public CombatData getCombatData() {
-        return combatData;
-    }
-
-    /**
-     * Returns a {@link MutationData} object containing information regarding the
-     * various block and entity mutations a bee may perform.
-     *
-     * Omitting this object from the bee json results in a default object where the bee
-     * <b>does not</b> mutate and blocks or entities.
-     *
-     * @return Returns an immutable {@link MutationData} object.
-     */
-    public MutationData getMutationData() {
-        return mutationData;
-    }
-
-    /**
-     * Returns a {@link SpawnData} object containing the spawning rules for a bee.
-     *
-     * Omitting this object from the bee json results in a default object where the bee
-     * <b>does not</b> spawn in the world.
-     *
-     * @return Returns an immutable {@link SpawnData} object.
-     */
-    public SpawnData getSpawnData() {
-        return spawnData;
-    }
-
-    /**
-     * Returns a {@link TraitData} object containing information regarding the
-     * various traits a bee may have.
-     *
-     * Omitting this object from the bee json results in a default object where the bee
-     * <b>does not</b> have any traits.
-     *
-     * @return Returns an immutable {@link TraitData} object.
-     */
-    public TraitData getTraitData() {
-        return traitData;
+    private static CustomBeeData of(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
+        JsonObject rawData = BeeRegistry.getRegistry().getRawBeeData(coreData.name());
+        ResourceLocation registryId = new ResourceLocation(ResourcefulBees.MOD_ID, coreData.name() + "_bee");
+        TranslatableComponent displayName = new TranslatableComponent("entity.resourcefulbees." + coreData.name() + "_bee");
+        Supplier<EntityType<?>> beeEntity = Suppliers.memoize(() -> getEntity(registryId));
+        return new CustomBeeData(coreData, renderData, breedData, combatData, mutationData, spawnData, traitData, rawData, registryId, displayName, beeEntity);
     }
 
     public @NotNull EntityType<?> getEntityType() {
-        if (entityType == null) {
-            this.entityType = BeeInfoUtils.getEntityType(registryID);
-        }
-        return entityType == null ? EntityType.BEE : entityType;
+        return entityType().get();
     }
 
-    public ResourceLocation getRegistryID() {
-        return registryID;
-    }
-
-    /**
-     * Returns a {@link JsonObject} containing the raw unadulterated data from the bees json file.
-     * This object may not be reflective of any file changes made during runtime.
-     *
-     * @return Returns a {@link JsonObject} containing the raw unadulterated data from the bees json file.
-     */
-    @Nullable
-    public JsonObject getRawData() {
-        return rawData;
-    }
-
-    public TranslatableComponent getDisplayName() {
-        return displayName;
-    }
-
-    public CustomBeeData toImmutable() {
-        return this;
-    }
-
-    //TODO: javadoc this sub class
-    public static class Mutable extends CustomBeeData {
-        public Mutable(CoreData coreData, String honeycombIdentifier, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
-            super(coreData, honeycombIdentifier, renderData, breedData, combatData, mutationData, spawnData, traitData);
-        }
-
-        public Mutable() {
-            super(CoreData.DEFAULT, "", RenderData.DEFAULT, BreedData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
-        }
-
-        public Mutable setCoreData(CoreData coreData) {
-            this.coreData = coreData;
-            return this;
-        }
-
-        public Mutable setHoneycombData(String honeycombIdentifier) {
-            this.honeycombIdentifier = honeycombIdentifier;
-            return this;
-        }
-
-        public Mutable setRenderData(RenderData renderData) {
-            this.renderData = renderData;
-            return this;
-        }
-
-        public Mutable setBreedData(BreedData breedData) {
-            this.breedData = breedData;
-            return this;
-        }
-
-        public Mutable setCombatData(CombatData combatData) {
-            this.combatData = combatData;
-            return this;
-        }
-
-        public Mutable setMutationData(MutationData mutationData) {
-            this.mutationData = mutationData;
-            return this;
-        }
-
-        public Mutable setSpawnData(SpawnData spawnData) {
-            this.spawnData = spawnData;
-            return this;
-        }
-
-        public Mutable setTraitData(TraitData traitData) {
-            this.traitData = traitData;
-            return this;
-        }
-
-        public Mutable setRegistryID(ResourceLocation registryID) {
-            this.registryID = registryID;
-            return this;
-        }
-
-        public Mutable setDisplayName(TranslatableComponent displayName) {
-            this.displayName = displayName;
-            return this;
-        }
-
-        public Mutable setRawData(JsonObject rawData) {
-            this.rawData = rawData;
-            return this;
-        }
-
-        public Mutable setEntityType(EntityType<?> entityType) {
-            this.entityType = entityType;
-            return this;
-        }
-
-        @Override
-        public CustomBeeData toImmutable() {
-            return new CustomBeeData(this);
-        }
+    private static EntityType<?> getEntity(ResourceLocation id) {
+        EntityType<?> entity = BeeInfoUtils.getEntityType(id);
+        return entity == null ? EntityType.BEE : entity;
     }
 }

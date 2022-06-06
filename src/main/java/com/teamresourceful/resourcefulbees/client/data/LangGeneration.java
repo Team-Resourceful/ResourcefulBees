@@ -36,7 +36,7 @@ public class LangGeneration {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
         BeeRegistry.getRegistry().getSetOfBees().forEach((customBeeData -> {
-            String name = customBeeData.getCoreData().getName();
+            String name = customBeeData.coreData().name();
             String displayName = fullyCapitalize(StringUtils.replace(name, "_", " "));
             //entity
             builder.append("\"").append(ENTITY_RESOURCEFULBEES).append(name).append("_bee\": \"").append(displayName).append(" Bee \",\n");

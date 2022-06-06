@@ -48,7 +48,7 @@ public class RegistryHandler {
     }
 
     public static void registerDynamicBees() {
-        BeeRegistry.getRegistry().getBees().forEach((name, beeData) -> registerBee(name, beeData.getRenderData().sizeModifier()));
+        BeeRegistry.getRegistry().getBees().forEach((name, beeData) -> registerBee(name, beeData.renderData().sizeModifier()));
     }
 
     public static void registerDynamicHoney() {

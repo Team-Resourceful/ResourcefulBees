@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.beedata.breeding;
 
+import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
@@ -10,54 +11,35 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Locale;
+import java.util.function.Supplier;
 
-@Unmodifiable
-public class BeeFamily {
+public record BeeFamily(
+        double weight, double chance, Pair<String, String> parents, String child,
+        Supplier<CustomBeeData> parent1Data,
+        Supplier<CustomBeeData> parent2Data,
+        Supplier<CustomBeeData> childData
+) {
 
     public static Codec<BeeFamily> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                Codec.doubleRange(0.0d, Double.MAX_VALUE).fieldOf("weight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(BeeFamily::getWeight),
-                Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BeeFamily::getChance),
+                Codec.doubleRange(0.0d, Double.MAX_VALUE).fieldOf("weight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(BeeFamily::weight),
+                Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BeeFamily::chance),
                 Codec.STRING.fieldOf("parent1").orElse("").forGetter(BeeFamily::getParent1),
                 Codec.STRING.fieldOf("parent2").orElse("").forGetter(BeeFamily::getParent2),
-                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(BeeFamily::getChild)
-        ).apply(instance, BeeFamily::new));
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(BeeFamily::child)
+        ).apply(instance, BeeFamily::of));
     }
 
-    protected double weight;
-    protected double chance;
-    protected Pair<String, String> parents;
-    private CustomBeeData parent1Data = CustomBeeData.DEFAULT;
-    private CustomBeeData parent2Data = CustomBeeData.DEFAULT;
-    private CustomBeeData childData = CustomBeeData.DEFAULT;
-    protected String childName;
-
-    private BeeFamily(double weight, double chance, String parent1, String parent2, String childName) {
-        this.weight = weight;
-        this.chance = chance;
-        this.parents = BeeInfoUtils.sortParents(parent1, parent2);
-        this.childName = childName.toLowerCase(Locale.ENGLISH).replace(" ", "_");
+    public static BeeFamily of(double weight, double chance, String parent1, String parent2, String childName) {
+        Pair<String, String> parents = BeeInfoUtils.sortParents(parent1, parent2);
+        String child = childName.toLowerCase(Locale.ENGLISH).replace(" ", "_");
+        return new BeeFamily(weight, chance, parents, child, createData(parents.getLeft()), createData(parents.getRight()), createData(child));
     }
 
-    public void postInit() {
-        this.parent1Data = BeeRegistry.getRegistry().getBeeData(parents.getLeft());
-        this.parent2Data = BeeRegistry.getRegistry().getBeeData(parents.getRight());
-        this.childData = BeeRegistry.getRegistry().getBeeData(childName);
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public double getChance() {
-        return chance;
-    }
-
-    public Pair<String, String> getParents() {
-        return parents;
+    private static Supplier<CustomBeeData> createData(String id) {
+        return Suppliers.memoize(() -> BeeRegistry.getRegistry().getBeeData(id));
     }
 
     public String getParent1() {
@@ -68,62 +50,19 @@ public class BeeFamily {
         return parents.getRight();
     }
 
-    public String getChild() {
-        return childName;
-    }
-
     public CustomBeeData getParent1Data() {
-        return parent1Data;
+        return this.parent1Data.get();
     }
 
     public CustomBeeData getParent2Data() {
-        return parent2Data;
+        return this.parent2Data.get();
     }
 
     public CustomBeeData getChildData() {
-        return childData;
+        return this.childData.get();
     }
 
     public boolean hasValidParents() {
         return !getParent1().isEmpty() && !getParent2().isEmpty() && BeeRegistry.containsBeeType(getParent1()) && BeeRegistry.containsBeeType(getParent2());
-    }
-
-    public BeeFamily toImmutable() {
-        return this;
-    }
-
-    public static class Mutable extends BeeFamily {
-        public Mutable(double weight, double chance, String parent1, String parent2, String childName) {
-            super(weight, chance, parent1, parent2, childName);
-        }
-
-        public Mutable() {
-            super(1.0d, 1.0d, "", "", "");
-        }
-
-        public BeeFamily setWeight(double weight) {
-            this.weight = weight;
-            return this;
-        }
-
-        public BeeFamily setChance(double chance) {
-            this.chance = chance;
-            return this;
-        }
-
-        public BeeFamily setParents(Pair<String, String> parents) {
-            this.parents = parents;
-            return this;
-        }
-
-        public BeeFamily setChildName(String childName) {
-            this.childName = childName;
-            return this;
-        }
-
-        @Override
-        public BeeFamily toImmutable() {
-            return new BeeFamily(this.weight, this.chance, this.getParent1(), this.getParent2(), this.childName);
-        }
     }
 }

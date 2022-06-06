@@ -1,9 +1,9 @@
 {
   "CoreData": {
     "flower": "#forge:storage_blocks/quartz",
+    "honeycombVariation": "quartz",
     "maxTimeInHive": 1000
   },
-  "honeycombVariation": "quartz",
   "RenderData": {
     "texture": "custom/bee",
     "layers": [

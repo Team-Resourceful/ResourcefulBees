@@ -43,13 +43,13 @@ public class RotatingItemSlot extends EmptySlot {
     }
 
     private void reset(CustomBeeData beeData) {
-        this.beeID = beeData.getRegistryID();
+        this.beeID = beeData.registryID();
         this.items = new ArrayList<>(itemSupplier.get());
         this.rotation = 0;
     }
 
     public void tick(int tick, CustomBeeData beeData) {
-        if (!beeData.getRegistryID().equals(beeID)) {
+        if (!beeData.registryID().equals(beeID)) {
             reset(beeData);
         }
         if (items.isEmpty()) return;

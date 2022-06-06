@@ -44,11 +44,11 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
     public static List<Recipe> getFlowersRecipes() {
         List<Recipe> recipes = new ArrayList<>();
         BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
-            if (beeData.getCoreData().getBlockFlowers().size() > 0) {
+            if (beeData.coreData().blockFlowers().size() > 0) {
                 Set<ItemStack> stacks = new HashSet<>();
                 Set<FluidStack> fluids = new HashSet<>();
 
-                beeData.getCoreData().getBlockFlowers().forEach(block -> {
+                beeData.coreData().blockFlowers().forEach(block -> {
                     if (block instanceof LiquidBlock liquidBlock){
                         fluids.add(new FluidStack(liquidBlock.getFluid().getSource(), 1000 ));
                     }else if (block.value().asItem() != Items.AIR){
@@ -64,8 +64,8 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
                     recipes.add(Recipe.getFluidRecipe(beeData, fluids));
                 }
 
-            } else if (beeData.getCoreData().getEntityFlower().isPresent()){
-                recipes.add(Recipe.getEntityRecipe(beeData, beeData.getCoreData().getEntityFlower().get()));
+            } else if (beeData.coreData().entityFlower().isPresent()){
+                recipes.add(Recipe.getEntityRecipe(beeData, beeData.coreData().entityFlower().get()));
             }
         }));
         return recipes;

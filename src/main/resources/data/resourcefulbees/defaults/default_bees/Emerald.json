@@ -1,8 +1,8 @@
 {
   "CoreData":{
-    "flower": "#forge:storage_blocks/emerald"
+    "flower": "#forge:storage_blocks/emerald",
+    "honeycombVariation": "emerald"
   },
-  "honeycombVariation": "emerald",
   "RenderData": {
     "texture": "ores/emerald/emerald_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

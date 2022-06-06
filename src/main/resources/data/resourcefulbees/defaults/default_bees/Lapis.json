@@ -1,9 +1,9 @@
 {
   "CoreData": {
     "flower": "#forge:storage_blocks/lapis",
+    "honeycombVariation": "lapis",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "lapis",
   "RenderData": {
     "texture": "ores/lapis/lapis_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

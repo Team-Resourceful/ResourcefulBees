@@ -58,6 +58,6 @@ public class BeepediaUtils {
     }
 
     private static boolean parentMatchesBee(Pair<String, String> parents, CustomBeeData beeData) {
-        return parents.getRight().equals(beeData.getCoreData().getName()) || parents.getLeft().equals(beeData.getCoreData().getName());
+        return parents.getRight().equals(beeData.coreData().name()) || parents.getLeft().equals(beeData.coreData().name());
     }
 }

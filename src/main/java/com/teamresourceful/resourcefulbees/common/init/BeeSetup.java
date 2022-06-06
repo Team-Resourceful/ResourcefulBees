@@ -70,7 +70,7 @@ public class BeeSetup {
     private static void addSpawnSetting(CustomBeeData customBeeData, BiomeLoadingEvent event, boolean isFlowerForest) {
         EntityType<?> entityType = customBeeData.getEntityType();
         if (event.getName() != null) {
-            SpawnData spawnData = customBeeData.getSpawnData();
+            SpawnData spawnData = customBeeData.spawnData();
             event.getSpawns().getSpawner(ModConstants.BEE_MOB_CATEGORY)
                     .add(spawnData.getSpawnerData(entityType, isFlowerForest));
         }
@@ -89,7 +89,7 @@ public class BeeSetup {
 
     public static void registerBeePlacements() {
         ModEntities.getModBees().forEach((s, entityType) -> {
-            SpawnData spawnData = BeeRegistry.getRegistry().getBeeData(s).getSpawnData();
+            SpawnData spawnData = BeeRegistry.getRegistry().getBeeData(s).spawnData();
             boolean canSpawnInWorld = spawnData.canSpawnInWorld();
             if (canSpawnInWorld) {
                 SpawnPlacements.register(entityType.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, createPredicate(spawnData));

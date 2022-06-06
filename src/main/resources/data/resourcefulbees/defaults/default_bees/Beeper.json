@@ -1,9 +1,9 @@
 {
   "CoreData":{
     "flower": "#minecraft:flowers",
+    "honeycombVariation": "beeper",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "beeper",
   "RenderData": {
     "texture": "/creeper/creeper_bee",
     "layers": [

@@ -1,9 +1,9 @@
 {
   "CoreData": {
     "flower": ["minecraft:wither_rose"],
+    "honeycombVariation": "wither",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "wither",
   "RenderData": {
     "texture": "wither/wither_bee",
     "ColorData": {

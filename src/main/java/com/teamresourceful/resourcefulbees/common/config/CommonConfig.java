@@ -93,6 +93,8 @@ public class CommonConfig {
 
     public static BooleanValue MANUAL_MODE;
 
+    public static BooleanValue SHOW_DEBUG_INFO;
+
     private CommonConfig() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
@@ -265,6 +267,8 @@ public class CommonConfig {
         commonBuilder.push("Mod Options");
         BYPASS_PERFORMANT_CHECK = commonBuilder.comment("Set this to true if you wish to live life on the edge!", "Seriously though it is recommended this only be used for testing purposes!!!")
                 .define("bypassPerformantCheck", false);
+        SHOW_DEBUG_INFO = commonBuilder.comment("\nWhen set to true will display some debug info in console. [true/false]")
+                .define("showDebugInfo", false);
         commonBuilder.pop();
 
         COMMON_CONFIG = commonBuilder.build();

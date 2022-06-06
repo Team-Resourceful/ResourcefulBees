@@ -1,6 +1,7 @@
 {
   "CoreData": {
     "flower": "#minecraft:flowers",
+    "honeycombVariation": "oreo",
     "maxTimeInHive": 6000,
     "lore": [
       {
@@ -13,7 +14,6 @@
       }
     ]
   },
-  "honeycombVariation": "oreo",
   "RenderData": {
     "texture": "/oreo/oreo_bee",
     "ColorData": {

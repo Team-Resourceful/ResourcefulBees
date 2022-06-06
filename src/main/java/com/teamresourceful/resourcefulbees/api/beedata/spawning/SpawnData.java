@@ -189,10 +189,6 @@ public class SpawnData {
         return returnList.toString();
     }
 
-    public SpawnData toImmutable() {
-        return this;
-    }
-
     //region Setup
     private void buildSpawnableBiomes() {
         biomeWhitelist.stream()
@@ -239,54 +235,4 @@ public class SpawnData {
         return yLevel.isValueInRange(nestPos.getY());
     }
     //endregion
-
-    public static class Mutable extends SpawnData {
-        public Mutable(boolean canSpawnInWorld, int spawnWeight, InclusiveRange<Integer> groupSize, Set<ResourceLocation> biomeWhitelist, Set<ResourceLocation> biomeBlacklist, LightLevel lightLevel, InclusiveRange<Integer> yLevel) {
-            super(canSpawnInWorld, spawnWeight, groupSize, biomeWhitelist, biomeBlacklist, lightLevel, yLevel);
-        }
-
-        public Mutable() {
-            super(false, 8, new InclusiveRange<>(0, 3), DEFAULT_WHITELIST, DEFAULT_BLACKLIST, LightLevel.ANY, new InclusiveRange<>(50, 256));
-        }
-
-        public Mutable setCanSpawnInWorld(boolean canSpawnInWorld) {
-            this.canSpawnInWorld = canSpawnInWorld;
-            return this;
-        }
-
-        public Mutable setSpawnWeight(int spawnWeight) {
-            this.spawnWeight = spawnWeight;
-            return this;
-        }
-
-        public Mutable setGroupSize(InclusiveRange<Integer> groupSize) {
-            this.groupSize = groupSize;
-            return this;
-        }
-
-        public Mutable setBiomeWhitelist(Set<ResourceLocation> biomeWhitelist) {
-            this.biomeWhitelist = biomeWhitelist;
-            return this;
-        }
-
-        public Mutable setBiomeBlacklist(Set<ResourceLocation> biomeBlacklist) {
-            this.biomeBlacklist = biomeBlacklist;
-            return this;
-        }
-
-        public Mutable setLightLevel(LightLevel lightLevel) {
-            this.lightLevel = lightLevel;
-            return this;
-        }
-
-        public Mutable setMinYLevel(InclusiveRange<Integer> yLevel) {
-            this.yLevel = yLevel;
-            return this;
-        }
-
-        @Override
-        public SpawnData toImmutable() {
-            return new SpawnData(this.canSpawnInWorld, this.spawnWeight, this.groupSize, this.biomeWhitelist, this.biomeBlacklist, this.lightLevel, this.yLevel);
-        }
-    }
 }

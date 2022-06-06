@@ -57,7 +57,7 @@ public class BeeBreedGoal extends BreedGoal {
             awardPlayerAdvancement(selectedChild);
             resetBreed();
 
-            if (beeFamily.getChance() >= level.random.nextFloat()) {
+            if (beeFamily.chance() >= level.random.nextFloat()) {
                 spawnChildInLevel(beeFamily, selectedChild);
             } else {
                 this.animal.playSound(SoundEvents.BEE_HURT, 2.0f, 1.0f);
@@ -67,7 +67,7 @@ public class BeeBreedGoal extends BreedGoal {
     }
 
     private void spawnChildInLevel(BeeFamily beeFamily, AgeableMob selectedChild) {
-        selectedChild.setAge(beeFamily.getChildData().getBreedData().getChildGrowthDelay());
+        selectedChild.setAge(beeFamily.getChildData().breedData().childGrowthDelay());
         selectedChild.moveTo(animal.position());
         this.level.addFreshEntity(selectedChild);
         this.level.broadcastEntityEvent(this.animal, (byte)18);
@@ -100,8 +100,8 @@ public class BeeBreedGoal extends BreedGoal {
     }
 
     private void resetBreed() {
-        this.animal.setAge(((ICustomBee)this.animal).getBreedData().getBreedDelay());
-        this.partner.setAge(((ICustomBee)this.partner).getBreedData().getBreedDelay());
+        this.animal.setAge(((ICustomBee)this.animal).getBreedData().breedDelay());
+        this.partner.setAge(((ICustomBee)this.partner).getBreedData().breedDelay());
         this.animal.resetLove();
         this.partner.resetLove();
     }

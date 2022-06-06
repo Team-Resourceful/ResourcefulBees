@@ -67,7 +67,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
     private static Stream<Recipe> createRecipes(CustomBeeData beeData){
         List<Recipe> recipes = new ArrayList<>();
-        beeData.getHoneycombData().ifPresent(honeycombData -> {
+        beeData.coreData().getHoneycombData().ifPresent(honeycombData -> {
             for (BeehiveTier tier : BeehiveTier.values()) {
                 recipes.add(new Recipe(honeycombData.getHiveOutput(tier), getStacksFromRegister(tier.getDisplayItems()), beeData.getEntityType(), false));
             }

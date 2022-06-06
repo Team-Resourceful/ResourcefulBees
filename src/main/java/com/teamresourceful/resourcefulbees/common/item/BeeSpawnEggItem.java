@@ -42,7 +42,7 @@ public class BeeSpawnEggItem extends ForgeSpawnEggItem {
 
     @Override
     public int getColor(int tintIndex) {
-        ColorData colorData = beeData.getRenderData().colorData();
+        ColorData colorData = beeData.renderData().colorData();
         return tintIndex == 0 ? colorData.spawnEggPrimaryColor().getValue(): colorData.spawnEggSecondaryColor().getValue();
     }
 

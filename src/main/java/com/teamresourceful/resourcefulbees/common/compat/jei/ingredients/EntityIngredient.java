@@ -60,8 +60,8 @@ public class EntityIngredient {
         List<Component> tooltip = new ArrayList<>();
 
         if (entity != null) {
-            if (entity instanceof CustomBeeEntity) {
-                tooltip.addAll(((CustomBeeEntity) entity).getCoreData().getLore());
+            if (entity instanceof CustomBeeEntity customBee) {
+                tooltip.addAll(customBee.getCoreData().lore());
                 tooltip.add(TranslationConstants.Jei.CLICK_INFO.withStyle(ChatFormatting.GOLD));
             }
             if (Minecraft.getInstance().options.advancedItemTooltips && entityType.getRegistryName() != null) {

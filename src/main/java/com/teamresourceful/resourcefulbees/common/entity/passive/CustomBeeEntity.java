@@ -82,16 +82,16 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
     }
 
     public static AttributeSupplier.Builder createBeeAttributes(String key) {
-        CombatData combatData = BeeRegistry.getRegistry().getBeeData(key).getCombatData();
+        CombatData combatData = BeeRegistry.getRegistry().getBeeData(key).combatData();
         return createMobAttributes()
-                .add(Attributes.MAX_HEALTH, combatData.getBaseHealth())
+                .add(Attributes.MAX_HEALTH, combatData.baseHealth())
                 .add(Attributes.FLYING_SPEED, 0.6D)
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
-                .add(Attributes.ATTACK_DAMAGE, combatData.getAttackDamage())
+                .add(Attributes.ATTACK_DAMAGE, combatData.attackDamage())
                 .add(Attributes.FOLLOW_RANGE, 48.0D)
-                .add(Attributes.ARMOR, combatData.getArmor())
-                .add(Attributes.ARMOR_TOUGHNESS, combatData.getArmorToughness())
-                .add(Attributes.ATTACK_KNOCKBACK, combatData.getKnockback());
+                .add(Attributes.ARMOR, combatData.armor())
+                .add(Attributes.ARMOR_TOUGHNESS, combatData.armorToughness())
+                .add(Attributes.ATTACK_KNOCKBACK, combatData.knockback());
     }
 
     //region BEE INFO RELATED METHODS BELOW
@@ -102,39 +102,39 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
 
     @Nullable
     public JsonObject getRawBeeData() {
-        return customBeeData.getRawData();
+        return customBeeData.rawData();
     }
 
     public CoreData getCoreData() {
-        return customBeeData.getCoreData();
+        return customBeeData.coreData();
     }
 
     public Optional<OutputVariation> getHoneycombData() {
-        return customBeeData.getHoneycombData();
+        return getCoreData().getHoneycombData();
     }
 
     public RenderData getRenderData() {
-        return customBeeData.getRenderData();
+        return customBeeData.renderData();
     }
 
     public BreedData getBreedData() {
-        return customBeeData.getBreedData();
+        return customBeeData.breedData();
     }
 
     public CombatData getCombatData() {
-        return customBeeData.getCombatData();
+        return customBeeData.combatData();
     }
 
     public MutationData getMutationData() {
-        return customBeeData.getMutationData();
+        return customBeeData.mutationData();
     }
 
     public SpawnData getSpawnData() {
-        return customBeeData.getSpawnData();
+        return customBeeData.spawnData();
     }
 
     public TraitData getTraitData() {
-        return customBeeData.getTraitData();
+        return customBeeData.traitData();
     }
 
     public int getFlowerEntityID() {
@@ -289,7 +289,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
 
     @Override
     public boolean isFood(@NotNull ItemStack stack) {
-        return this.getBreedData().getFeedItems().contains(stack.getItem().builtInRegistryHolder());
+        return this.getBreedData().feedItems().contains(stack.getItem().builtInRegistryHolder());
     }
 
     @Override
@@ -302,9 +302,9 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         if (this.isFood(itemstack)) {
             if (!this.level.isClientSide && this.getAge() == 0 && !this.isInLove()) {
                 this.usePlayerItem(player, hand, itemstack);
-                getBreedData().getFeedReturnItem().map(ItemStack::copy).ifPresent(player::addItem);
+                getBreedData().feedReturnItem().map(ItemStack::copy).ifPresent(player::addItem);
                 this.addFeedCount();
-                if (this.getFeedCount() >= getBreedData().getFeedAmount()) {
+                if (this.getFeedCount() >= getBreedData().feedAmount()) {
                     this.setInLove(player);
                 }
                 player.swing(hand, true);
@@ -364,7 +364,7 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
 
     @Override
     public int getMaxTimeInHive() {
-        return getBeeData().getCoreData().getMaxTimeInHive();
+        return getBeeData().coreData().maxTimeInHive();
     }
 
     @Override

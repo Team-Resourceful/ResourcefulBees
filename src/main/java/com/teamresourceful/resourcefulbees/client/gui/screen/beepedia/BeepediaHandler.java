@@ -103,7 +103,7 @@ public class BeepediaHandler {
         allPages.add(combPage);
         allPages.add(helpPage);
 
-        BeeRegistry.getRegistry().getBees().forEach((s, b) -> beeStats.put(b.getRegistryID().toString(), new BeeBeepediaStats(b)));
+        BeeRegistry.getRegistry().getBees().forEach((s, b) -> beeStats.put(b.registryID().toString(), new BeeBeepediaStats(b)));
         TraitRegistry.getRegistry().getTraits().forEach((s, t) -> traitStats.put(s, new TraitBeepediaStats(t)));
         HoneyRegistry.getRegistry().getHoneyBottles().forEach((s, h) -> honeyStats.put(h.getRegistryID().toString(), new HoneyBeepediaStats(h)));
         init = true;
