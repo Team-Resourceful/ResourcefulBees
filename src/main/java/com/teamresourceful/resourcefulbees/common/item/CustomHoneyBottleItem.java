@@ -2,9 +2,11 @@ package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.HoneyBottleItem;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class CustomHoneyBottleItem extends HoneyBottleItem {
 
@@ -20,8 +22,9 @@ public class CustomHoneyBottleItem extends HoneyBottleItem {
         return tintIndex == 0 ? ((CustomHoneyBottleItem) stack.getItem()).getHoneyBottleColor() : BeeConstants.DEFAULT_ITEM_COLOR;
     }
 
+    @Nullable
     @Override
-    public FoodProperties getFoodProperties() {
+    public FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
         if (food == null) food = data.getFood();
         return food;
     }
