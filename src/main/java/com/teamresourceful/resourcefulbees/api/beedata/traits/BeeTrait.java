@@ -8,11 +8,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
@@ -35,13 +35,13 @@ public class BeeTrait {
     public static Codec<BeeTrait> getCodec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(BeeTrait::getName),
-                ForgeRegistries.ITEMS.getCodec().fieldOf("displayItem").orElse(ModItems.TRAIT_ICON.get()).forGetter(BeeTrait::getDisplayItem),
+                Registry.ITEM.byNameCodec().fieldOf("displayItem").orElse(ModItems.TRAIT_ICON.get()).forGetter(BeeTrait::getDisplayItem),
                 CodecUtils.createSetCodec(PotionEffect.CODEC).fieldOf("potionDamageEffects").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionDamageEffects),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("damageImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getDamageImmunities),
-                CodecUtils.createSetCodec(ForgeRegistries.MOB_EFFECTS.getCodec()).fieldOf("potionImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionImmunities),
+                CodecUtils.createSetCodec(Registry.MOB_EFFECT.byNameCodec()).fieldOf("potionImmunities").orElse(new HashSet<>()).forGetter(BeeTrait::getPotionImmunities),
                 CodecUtils.createSetCodec(DamageType.CODEC).fieldOf("damageTypes").orElse(new HashSet<>()).forGetter(BeeTrait::getDamageTypes),
                 CodecUtils.createSetCodec(Codec.STRING).fieldOf("specialAbilities").orElse(new HashSet<>()).forGetter(BeeTrait::getSpecialAbilities),
-                CodecUtils.createSetCodec(ForgeRegistries.PARTICLE_TYPES.getCodec()).fieldOf("particleType").orElse(new HashSet<>()).forGetter(BeeTrait::getParticleEffects),
+                CodecUtils.createSetCodec(Registry.PARTICLE_TYPE.byNameCodec()).fieldOf("particleType").orElse(new HashSet<>()).forGetter(BeeTrait::getParticleEffects),
                 CodecUtils.createSetCodec(BeeAura.CODEC).fieldOf("auras").orElse(new HashSet<>()).forGetter(BeeTrait::getAuras)
         ).apply(instance, BeeTrait::new));
     }

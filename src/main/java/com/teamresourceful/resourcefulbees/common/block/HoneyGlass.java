@@ -29,8 +29,9 @@ public class HoneyGlass extends GlassBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getVisualShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        if (context instanceof EntityCollisionContext entityContext && !context.equals(CollisionContext.empty())) {
+    @SuppressWarnings("deprecation")
+    public @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+        if (context instanceof EntityCollisionContext entityContext) {
             if ((collidePlayer && isBeeContext(entityContext)) || (isPlayerContext(entityContext) && !collidePlayer)) return Shapes.empty();
             else return state.getShape(level, pos);
         }

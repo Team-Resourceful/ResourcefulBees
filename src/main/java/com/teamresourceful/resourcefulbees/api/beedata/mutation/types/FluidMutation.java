@@ -4,13 +4,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IFluidRender;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -56,7 +56,7 @@ public record FluidMutation(Fluid fluid, double chance, double weight) implement
     private static class Serializer implements IMutationSerializer {
 
         public static final Codec<FluidMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                ForgeRegistries.FLUIDS.getCodec().fieldOf("fluid").forGetter(FluidMutation::fluid),
+                Registry.FLUID.byNameCodec().fieldOf("fluid").forGetter(FluidMutation::fluid),
                 Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(FluidMutation::chance),
                 Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(FluidMutation::weight)
         ).apply(instance, FluidMutation::new));

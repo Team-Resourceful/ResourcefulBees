@@ -9,6 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.InclusiveRange;
@@ -17,7 +18,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 import java.util.function.Function;
@@ -31,7 +31,7 @@ public class CodecUtils {
 
     //region ItemStack Codec
     public static final Codec<ItemStack> ITEM_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ForgeRegistries.ITEMS.getCodec().fieldOf("id").forGetter(ItemStack::getItem),
+            Registry.ITEM.byNameCodec().fieldOf("id").forGetter(ItemStack::getItem),
             Codec.INT.fieldOf("count").orElse(1).forGetter(ItemStack::getCount),
             CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
     ).apply(instance, CodecUtils::createItemStack));
@@ -61,7 +61,7 @@ public class CodecUtils {
 
     //region FluidStack Codec
     public static final Codec<FluidStack> FLUID_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ForgeRegistries.FLUIDS.getCodec().fieldOf("id").forGetter(FluidStack::getFluid),
+            Registry.FLUID.byNameCodec().fieldOf("id").forGetter(FluidStack::getFluid),
             Codec.INT.fieldOf("amount").orElse(1000).forGetter(FluidStack::getAmount),
             CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
     ).apply(instance, CodecUtils::createFluidStack));

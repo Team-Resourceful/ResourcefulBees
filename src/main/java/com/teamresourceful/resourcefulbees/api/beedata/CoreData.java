@@ -15,7 +15,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
@@ -44,7 +43,7 @@ public class CoreData {
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(CoreData::getName),
                 RegistryCodecs.homogeneousList(Registry.BLOCK_REGISTRY).fieldOf("flower").orElse(HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY))
                         .forGetter(CoreData::getBlockFlowers),
-                ForgeRegistries.ENTITIES.getCodec().optionalFieldOf("entityFlower").forGetter(CoreData::getEntityFlower),
+                Registry.ENTITY_TYPE.byNameCodec().optionalFieldOf("entityFlower").forGetter(CoreData::getEntityFlower),
                 Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(CoreData::getMaxTimeInHive),
                 CodecUtils.passthrough(Component.Serializer::toJsonTree, Component.Serializer::fromJson).listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(CoreData::getLore)
         ).apply(instance, CoreData::new));
