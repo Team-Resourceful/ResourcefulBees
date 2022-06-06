@@ -10,10 +10,10 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
-import net.minecraft.core.Registry;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +27,7 @@ public record HoneyBottleData(String name, Color color, int hunger, float satura
                 Codec.INT.fieldOf("hunger").orElse(1).forGetter(HoneyBottleData::hunger),
                 Codec.FLOAT.fieldOf("saturation").orElse(1.0f).forGetter(HoneyBottleData::saturation),
                 HoneyEffect.CODEC.listOf().fieldOf("effects").orElse(Collections.emptyList()).forGetter(HoneyBottleData::effects),
-                Registry.ITEM.byNameCodec().fieldOf("honeyBottle").orElse(Items.HONEY_BOTTLE).forGetter(HoneyBottleData::honeyBottle)
+                ForgeRegistries.ITEMS.getCodec().fieldOf("honeyBottle").orElse(Items.HONEY_BOTTLE).forGetter(HoneyBottleData::honeyBottle)
         ).apply(instance, HoneyBottleData::new));
     }
 

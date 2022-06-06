@@ -191,6 +191,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
                 combs.merge(comb, 1, Integer::sum);
             }
 
+            //noinspection deprecation
             combs.forEach((comb, count) -> tooltip.add(new TextComponent("     ")
                     .append(String.valueOf(count))
                     .append("x ")
@@ -217,6 +218,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
                 }
             }
 
+            //noinspection deprecation
             bees.forEach((name, count) -> tooltip.add(new TextComponent("     ")
                     .append(String.valueOf(count))
                     .append("x ")

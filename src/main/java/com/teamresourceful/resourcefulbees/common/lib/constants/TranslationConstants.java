@@ -236,9 +236,6 @@ public class TranslationConstants {
         @Translate("Bees won't get angry for 30s when shearing honeycombs.")
         public static final TranslatableComponent SMOKER_TOOLTIP1 = new TranslatableComponent("item.resourcefulbees.smoker.tooltip.1");
 
-        @Translate("Selected Bee: ")
-        public static final TranslatableComponent HONEY_DIPPER_TOOLTIP = new TranslatableComponent("item.resourcefulbees.honey_dipper.tooltip");
-
         @Translate("Queen Bee Banner")
         public static final TranslatableComponent QUEEN_BEE_BANNER = new TranslatableComponent("block.resourcefulbees.queen_bee_banner");
 
@@ -247,9 +244,6 @@ public class TranslationConstants {
 
         @Translate("Reduces max breed time by %s ticks.")
         public static final String BREED_TIME_UPGRADE = "item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info";
-
-        @Translate("Fifty Shades of Bees")
-        public static final TranslatableComponent BOOK_NAME = new TranslatableComponent("book.resourcefulbees.name");
 
         @Translate("Consumes honey, grants bees safety.")
         public static final TranslatableComponent BEECON_TOOLTIP = new TranslatableComponent("block.resourcefulbees.beecon.tooltip.info");

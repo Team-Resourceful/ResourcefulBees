@@ -8,7 +8,7 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 public class PetBeeRenderer implements IGeoRenderer<PetModelData> {
 
     @Override
-    public PetBeeModel getGeoModelProvider() {
+    public PetBeeModel<PetModelData> getGeoModelProvider() {
         return null;
     }
 

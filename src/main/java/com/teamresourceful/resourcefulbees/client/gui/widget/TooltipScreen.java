@@ -193,10 +193,12 @@ public abstract class TooltipScreen extends Screen {
         widgets.forEach(w -> w.active = active);
     }
 
+    @SafeVarargs
     public static <T extends TooltipWidget> void setButtonsVisibility(boolean b, @NotNull T... widgets) {
         setButtonsVisibility(b, Arrays.asList(widgets));
     }
 
+    @SafeVarargs
     public static <T extends TooltipWidget> void setButtonsActive(boolean b, @NotNull T... widgets) {
         setButtonsActive(b, Arrays.asList(widgets));
     }

@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BreederBlockEntity extends BlockEntity implements MenuProvider {
 
-    private final BreederBlockEntity.TileStackHandler inventory = new BreederBlockEntity.TileStackHandler(29);
+    private final BreederBlockEntity.TileStackHandler inventory = new BreederBlockEntity.TileStackHandler();
     private final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(this::getInventory);
 
     private final BreederRecipe[] recipes = {null, null};
@@ -173,8 +173,8 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
 
     public class TileStackHandler extends AutomationSensitiveItemStackHandler {
 
-        protected TileStackHandler(int slots) {
-            super(slots);
+        protected TileStackHandler() {
+            super(29);
         }
 
         @Override

@@ -25,6 +25,7 @@ public abstract class RenderingBaseEntityBlock extends BaseEntityBlock {
 
     @Nullable
     protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> typeIn, BlockEntityType<E> typeCheck, BlockEntityTickerSingleton<? super E> ticker) {
+        //noinspection unchecked
         return typeIn == typeCheck ? (pLevel, pPos, pState, pBlockEntity) -> ticker.tick((E) pBlockEntity) : null;
     }
 

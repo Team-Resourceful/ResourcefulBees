@@ -60,11 +60,10 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
         return 86;
     }
 
-    public boolean lockOrUnlockBee(int id) {
+    public void lockOrUnlockBee(int id) {
         if (id >= 0 && id < entity.getBeeCount()) {
             NetPacketHandler.sendToServer(new LockBeeMessage(entity.getBlockPos(), id));
         }
-        return true;
     }
 
     public ApiaryBlockEntity.ApiaryBee getApiaryBee(int i) {

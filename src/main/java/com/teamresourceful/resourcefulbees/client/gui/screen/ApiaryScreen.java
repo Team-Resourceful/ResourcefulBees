@@ -198,7 +198,8 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
                 int i1 = l - this.beeIndexOffset;
                 double d0 = mouseX - (i);
                 double d1 = mouseY - (j + i1 * 18);
-                if (d0 >= 18.0D && d1 >= 0.0D && d0 <= 36.0D && d1 <= 18.0D && this.menu.lockOrUnlockBee(l)) {
+                if (d0 >= 18.0D && d1 >= 0.0D && d0 <= 36.0D && d1 <= 18.0D) {
+                    this.menu.lockOrUnlockBee(l);
                     Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                     return true;
                 }

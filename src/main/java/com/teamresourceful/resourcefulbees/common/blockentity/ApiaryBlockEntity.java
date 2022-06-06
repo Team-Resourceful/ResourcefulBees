@@ -49,7 +49,7 @@ import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConsta
 public class ApiaryBlockEntity extends GUISyncedBlockEntity {
 
     public final List<ApiaryBee> bees = new ArrayList<>();
-    protected ApiaryTier tier;
+    protected final ApiaryTier tier;
     protected int ticksSinceBeesFlagged;
 
     private final AutomationSensitiveItemStackHandler inventory = new AutomationSensitiveItemStackHandler(27, ACCEPT_FALSE, REMOVE_TRUE);

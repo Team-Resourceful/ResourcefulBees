@@ -16,9 +16,9 @@ import java.util.function.Predicate;
 
 public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBTSerializable<CompoundTag> {
 
-    protected int capacity;
+    protected final int capacity;
     protected SelectableList<FluidStack> fluids = SelectableList.of(FluidStack.EMPTY);
-    protected Predicate<FluidStack> validator;
+    protected final Predicate<FluidStack> validator;
 
     public SelectableMultiFluidTank(int capacity) {
         this(capacity, f -> true);

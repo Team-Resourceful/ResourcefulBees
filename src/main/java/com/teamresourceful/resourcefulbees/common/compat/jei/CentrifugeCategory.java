@@ -13,17 +13,17 @@ import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraftforge.client.gui.GuiUtils;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
@@ -35,21 +35,20 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
 
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge");
+    public static final RecipeType<CentrifugeCategory.CentrifugeRecipeAdapter> RECIPE = new RecipeType<>(ID, CentrifugeCategory.CentrifugeRecipeAdapter.class);
+
 
     public CentrifugeCategory(IGuiHelper guiHelper) {
-        super(guiHelper, ID,
+        super(guiHelper, RECIPE,
                 TranslationConstants.Jei.CENTRIFUGE,
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 134, 66).addPadding(0, 0, 0, 0).build(),
-                guiHelper.createDrawableIngredient(VanillaTypes.ITEM, ModItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance()),
-                CentrifugeRecipeAdapter.class);
+                guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ModItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance()));
     }
 
-    public static List<CentrifugeRecipeAdapter> getRecipes(Collection<Recipe<Container>> recipes) {
+    public static List<CentrifugeRecipeAdapter> getRecipes(Collection<CentrifugeRecipe> recipes) {
         List<CentrifugeRecipeAdapter> newRecipes = new ArrayList<>();
-        for (Recipe<Container> recipe : recipes) {
-            if (recipe instanceof CentrifugeRecipe){
-                newRecipes.add(new CentrifugeRecipeAdapter(((CentrifugeRecipe) recipe)));
-            }
+        for (CentrifugeRecipe recipe : recipes) {
+            newRecipes.add(new CentrifugeRecipeAdapter(recipe));
         }
         return newRecipes;
     }
@@ -66,12 +65,12 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         for (int i = 0; i < 3; i++) {
             if (i < itemStacks.size())
                 builder.addSlot(RecipeIngredientRole.OUTPUT, 72, 7 + (i * 18))
-                        .addIngredients(VanillaTypes.ITEM, itemStacks.get(i))
+                        .addIngredients(VanillaTypes.ITEM_STACK, itemStacks.get(i))
                         .setSlotName("item_output_"+i);
 
             if (i < fluidStacks.size())
                 builder.addSlot(RecipeIngredientRole.OUTPUT, 108, 7 + (i * 18))
-                        .addIngredients(VanillaTypes.FLUID, fluidStacks.get(i))
+                        .addIngredients(ForgeTypes.FLUID_STACK, fluidStacks.get(i))
                         .setSlotName("fluid_output_"+i);
         }
     }
@@ -99,7 +98,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         for (int i = 0; i < 3; i++) {
             if (recipe.getRecipe().itemOutputs().size() > i) {
                 String id = "item_output_"+i;
-                Optional<ItemStack> itemStack = view.findSlotByName(id).flatMap(slot -> slot.getDisplayedIngredient(VanillaTypes.ITEM));
+                Optional<ItemStack> itemStack = view.findSlotByName(id).flatMap(slot -> slot.getDisplayedIngredient(VanillaTypes.ITEM_STACK));
                 if (itemStack.isPresent()) {
                     Double itemWeight = recipe.getItemWeight(id, itemStack.get());
                     double itemChance = recipe.getRecipe().itemOutputs().get(i).chance();
@@ -110,7 +109,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
 
             if (recipe.getRecipe().fluidOutputs().size() > i) {
                 String id = "fluid_output_"+i;
-                Optional<FluidStack> fluidStack = view.findSlotByName(id).flatMap(slot -> slot.getDisplayedIngredient(VanillaTypes.FLUID));
+                Optional<FluidStack> fluidStack = view.findSlotByName(id).flatMap(slot -> slot.getDisplayedIngredient(ForgeTypes.FLUID_STACK));
                 if (fluidStack.isPresent()) {
                     Double itemWeight = recipe.getFluidWeight(id, fluidStack.get());
                     double itemChance = recipe.getRecipe().fluidOutputs().get(i).chance();

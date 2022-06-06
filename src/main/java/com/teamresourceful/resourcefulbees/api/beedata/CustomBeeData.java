@@ -78,7 +78,7 @@ public class CustomBeeData {
         this.spawnData = spawnData;
         this.traitData = traitData;
         this.rawData = BeeRegistry.getRegistry().getRawBeeData(coreData.getName());
-        this.registryID = new ResourceLocation(ResourcefulBees.MOD_ID + ":" + coreData.getName() + "_bee");
+        this.registryID = new ResourceLocation(ResourcefulBees.MOD_ID, coreData.getName() + "_bee");
         this.displayName = new TranslatableComponent("entity.resourcefulbees." + coreData.getName() + "_bee");
     }
 

@@ -200,6 +200,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
     }
 
     //TODO make something (item, etc) to speed up bees xD
+    @SuppressWarnings("SameParameterValue")
     private static void increaseTicksInHive(BeeData beeData, int amount) {
         ((BeehiveBeeDataAccessor)beeData).setTicksInHive(((BeehiveBeeDataAccessor) beeData).getTicksInHive() + amount);
     }

@@ -6,11 +6,13 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityI
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -26,13 +28,13 @@ import java.util.*;
 public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/flowers.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "bee_pollination_flowers");
+    public static final RecipeType<FlowersCategory.Recipe> RECIPE = new RecipeType<>(ID, FlowersCategory.Recipe.class);
 
     public FlowersCategory(IGuiHelper guiHelper) {
-        super(guiHelper, ID,
+        super(guiHelper, RECIPE,
             TranslationConstants.Jei.FLOWERS,
             guiHelper.drawableBuilder(GUI_BACK, 0, 0, 100, 75).addPadding(0, 0, 0, 0).build(),
-            guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(ModBlocks.GOLD_FLOWER.get())),
-            FlowersCategory.Recipe.class);
+            guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.GOLD_FLOWER.get())));
     }
 
     private static ItemStack getErrorItem(Block block){
@@ -79,8 +81,8 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
 
         IRecipeSlotBuilder flower = builder.addSlot(RecipeIngredientRole.INPUT, 41, 55).setSlotName("flower");
 
-        recipe.getFluidStacks().ifPresent(stacks -> flower.addIngredients(VanillaTypes.FLUID, new ArrayList<>(stacks)));
-        recipe.getItemStacks().ifPresent(stacks -> flower.addIngredients(VanillaTypes.ITEM, new ArrayList<>(stacks)));
+        recipe.getFluidStacks().ifPresent(stacks -> flower.addIngredients(ForgeTypes.FLUID_STACK, new ArrayList<>(stacks)));
+        recipe.getItemStacks().ifPresent(stacks -> flower.addIngredients(VanillaTypes.ITEM_STACK, new ArrayList<>(stacks)));
         recipe.getEntityType().ifPresent(entity -> flower.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entity, 45.0f)));
     }
 

@@ -7,7 +7,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
-import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.recipe.base.CodecRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import net.minecraft.resources.ResourceLocation;
@@ -35,9 +34,9 @@ public record SolidificationRecipe(ResourceLocation id, FluidStack fluid, ItemSt
     }
 
     public static Optional<SolidificationRecipe> findRecipe(RecipeManager manager, FluidStack fluid) {
-        return ((RecipeManagerAccessorInvoker) manager).callByType(SolidificationRecipe.SOLIDIFICATION_RECIPE_TYPE).values()
-                .stream().filter(SolidificationRecipe.class::isInstance)
-                .map(SolidificationRecipe.class::cast)
+        return manager
+                .getAllRecipesFor(SolidificationRecipe.SOLIDIFICATION_RECIPE_TYPE)
+                .stream()
                 .filter(recipe -> recipe.fluid().isFluidEqual(fluid)).findFirst();
     }
 

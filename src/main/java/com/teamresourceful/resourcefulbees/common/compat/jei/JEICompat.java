@@ -7,7 +7,6 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityR
 import com.teamresourceful.resourcefulbees.common.compat.jei.mutation.MutationCategory;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
-import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
@@ -15,6 +14,7 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.registration.*;
@@ -56,13 +56,13 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T1_APIARY_ITEM.get()), HiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T2_APIARY_ITEM.get()), HiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T3_APIARY_ITEM.get()), HiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T4_APIARY_ITEM.get()), HiveCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.BREEDER_ITEM.get()), BeeBreedingCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get()), SolidificationCategory.ID);
-        for (ItemStack stack:HiveCategory.NESTS_0) registration.addRecipeCatalyst(stack, HiveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T1_APIARY_ITEM.get()), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T2_APIARY_ITEM.get()), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T3_APIARY_ITEM.get()), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.T4_APIARY_ITEM.get()), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.BREEDER_ITEM.get()), BeeBreedingCategory.RECIPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get()), SolidificationCategory.RECIPE);
+        for (ItemStack stack:HiveCategory.NESTS_0) registration.addRecipeCatalyst(stack, HiveCategory.RECIPE);
     }
 
     @Override
@@ -70,12 +70,12 @@ public class JEICompat implements IModPlugin {
         ClientLevel clientWorld = Minecraft.getInstance().level;
         if (clientWorld != null) {
             RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-            registration.addRecipes(HiveCategory.getHoneycombRecipes(), HiveCategory.ID);
-            registration.addRecipes(BeeBreedingCategory.getRecipes(((RecipeManagerAccessorInvoker)recipeManager).callByType(BreederRecipe.BREEDER_RECIPE_TYPE).values()), BeeBreedingCategory.ID);
-            registration.addRecipes(MutationCategory.getMutationRecipes(), MutationCategory.ID);
-            registration.addRecipes(FlowersCategory.getFlowersRecipes(), FlowersCategory.ID);
-            registration.addRecipes(CentrifugeCategory.getRecipes(((RecipeManagerAccessorInvoker)recipeManager).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).values()), CentrifugeCategory.ID);
-            registration.addRecipes(((RecipeManagerAccessorInvoker)recipeManager).callByType(SolidificationRecipe.SOLIDIFICATION_RECIPE_TYPE).values(), SolidificationCategory.ID);
+            registration.addRecipes(HiveCategory.RECIPE, HiveCategory.getHoneycombRecipes());
+            registration.addRecipes(BeeBreedingCategory.RECIPE, BeeBreedingCategory.getRecipes(recipeManager.getAllRecipesFor(BreederRecipe.BREEDER_RECIPE_TYPE)));
+            registration.addRecipes(MutationCategory.RECIPE, MutationCategory.getMutationRecipes());
+            registration.addRecipes(FlowersCategory.RECIPE, FlowersCategory.getFlowersRecipes());
+            registration.addRecipes(CentrifugeCategory.RECIPE, CentrifugeCategory.getRecipes(recipeManager.getAllRecipesFor(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE)));
+            registration.addRecipes(SolidificationCategory.RECIPE, recipeManager.getAllRecipesFor(SolidificationRecipe.SOLIDIFICATION_RECIPE_TYPE));
             registerInfoDesc(registration);
         }
     }
@@ -92,7 +92,9 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(ModItems.BEEPEDIA.get(), (ingredient, context) -> ingredient.hasTag() && ingredient.getTag() != null && ingredient.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
+        registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK,
+                ModItems.BEEPEDIA.get(),
+                (ingredient, context) -> ingredient.hasTag() && ingredient.getTag() != null && ingredient.getTag().contains(Beepedia.CREATIVE_TAG) ? "creative.beepedia" : "");
     }
 
     public void registerInfoDesc(IRecipeRegistration registration) {

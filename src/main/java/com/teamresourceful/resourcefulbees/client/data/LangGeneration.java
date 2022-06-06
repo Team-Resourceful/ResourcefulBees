@@ -37,10 +37,9 @@ public class LangGeneration {
         builder.append("{\n");
         BeeRegistry.getRegistry().getSetOfBees().forEach((customBeeData -> {
             String name = customBeeData.getCoreData().getName();
-            String displayName = WordUtils.capitalizeFully(StringUtils.replace(name, "_", " "));
+            String displayName = fullyCapitalize(StringUtils.replace(name, "_", " "));
             //entity
-            generateLangEntry(builder, ENTITY_RESOURCEFULBEES, name, "_bee", displayName, "Bee");
-
+            builder.append("\"").append(ENTITY_RESOURCEFULBEES).append(name).append("_bee\": \"").append(displayName).append(" Bee \",\n");
         }));
 
         generateLang(ModItems.SPAWN_EGG_ITEMS, ITEM_RESOURCEFULBEES, builder);
@@ -57,7 +56,7 @@ public class LangGeneration {
 
         TraitRegistry.getRegistry().getTraits().forEach((name, trait) -> {
             String displayName = StringUtils.replace(name, "_", " ");
-            displayName = WordUtils.capitalizeFully(displayName);
+            displayName = fullyCapitalize(displayName);
             builder.append(String.format("\"%s\" : \"%s\",%n", trait.getTranslationKey(), displayName));
         });
 
@@ -77,18 +76,6 @@ public class LangGeneration {
         }
     }
 
-    private static void generateLangEntry(StringBuilder builder, String prefix, String name, String suffix, String displayName, String displaySuffix){
-        builder.append("\"")
-                .append(prefix)
-                .append(name)
-                .append(suffix)
-                .append("\": \"")
-                .append(displayName)
-                .append(" ")
-                .append(displaySuffix)
-                .append("\",\n");
-    }
-
     private static void generateLangEntry(StringBuilder builder, String prefix, String name, String displayName){
         builder.append("\"")
                 .append(prefix)
@@ -105,9 +92,18 @@ public class LangGeneration {
                         generateLangEntry(builder,
                                 prefix,
                                 registryObject.getId().getPath(),
-                                WordUtils.capitalizeFully(StringUtils.replace(registryObject.getId().getPath(), "_", " "))
+                                fullyCapitalize(StringUtils.replace(registryObject.getId().getPath(), "_", " "))
                         )
                 );
+    }
+
+    /**
+     * We wrap this to remove the decoration warning and if it does finally
+     * get deprecated we can just make our own here.
+     */
+    private static String fullyCapitalize(String input) {
+        //noinspection deprecation
+        return WordUtils.capitalizeFully(input);
     }
 
 }
