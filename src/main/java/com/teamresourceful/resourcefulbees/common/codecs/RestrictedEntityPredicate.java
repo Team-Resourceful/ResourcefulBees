@@ -7,19 +7,19 @@ import net.minecraft.advancements.critereon.EntityFlagsPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.MobEffectsPredicate;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Optional;
 
 public record RestrictedEntityPredicate(EntityType<?> entityType, LocationPredicate location, MobEffectsPredicate effects, NbtPredicate nbt, EntityFlagsPredicate flags, EntityPredicate targetedEntity) {
 
     public static final Codec<RestrictedEntityPredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        ForgeRegistries.ENTITIES.getCodec().fieldOf("type").forGetter(RestrictedEntityPredicate::entityType),
+        Registry.ENTITY_TYPE.byNameCodec().fieldOf("type").forGetter(RestrictedEntityPredicate::entityType),
         CodecUtils.passthrough(LocationPredicate::serializeToJson, LocationPredicate::fromJson).fieldOf("location").orElse(LocationPredicate.ANY).forGetter(RestrictedEntityPredicate::location),
         CodecUtils.passthrough(MobEffectsPredicate::serializeToJson, MobEffectsPredicate::fromJson).fieldOf("effects").orElse(MobEffectsPredicate.ANY).forGetter(RestrictedEntityPredicate::effects),
         NbtPredicate.CODEC.fieldOf("nbt").orElse(NbtPredicate.ANY).forGetter(RestrictedEntityPredicate::nbt),

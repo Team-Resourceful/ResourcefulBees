@@ -17,6 +17,7 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.color.Color;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -32,7 +33,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public record HoneyFluidData(boolean generate, String name, Color color, ResourceLocation stillTexture, ResourceLocation flowingTexture, ResourceLocation overlayTexture, SoundEvent pickupSound, SoundEvent emptySound, int density, int temperature, int viscosity, Fluid stillFluid, Fluid flowingFluid, Item fluidBucket, Block fluidBlock) {
@@ -53,15 +53,15 @@ public record HoneyFluidData(boolean generate, String name, Color color, Resourc
                 ResourceLocation.CODEC.fieldOf("stillTexture").orElse(CUSTOM_FLUID_STILL).forGetter(HoneyFluidData::stillTexture),
                 ResourceLocation.CODEC.fieldOf("flowingTexture").orElse(CUSTOM_FLUID_FLOWING).forGetter(HoneyFluidData::flowingTexture),
                 ResourceLocation.CODEC.fieldOf("overlayTexture").orElse(CUSTOM_FLUID_OVERLAY).forGetter(HoneyFluidData::overlayTexture),
-                ForgeRegistries.SOUND_EVENTS.getCodec().fieldOf("pickupSound").orElse(SoundEvents.BUCKET_FILL).forGetter(HoneyFluidData::pickupSound),
-                ForgeRegistries.SOUND_EVENTS.getCodec().fieldOf("emptySound").orElse(SoundEvents.BUCKET_EMPTY).forGetter(HoneyFluidData::emptySound),
+                Registry.SOUND_EVENT.byNameCodec().fieldOf("pickupSound").orElse(SoundEvents.BUCKET_FILL).forGetter(HoneyFluidData::pickupSound),
+                Registry.SOUND_EVENT.byNameCodec().fieldOf("emptySound").orElse(SoundEvents.BUCKET_EMPTY).forGetter(HoneyFluidData::emptySound),
                 Codec.INT.fieldOf("density").orElse(1300).forGetter(HoneyFluidData::density),
                 Codec.INT.fieldOf("temperature").orElse(300).forGetter(HoneyFluidData::temperature),
                 Codec.INT.fieldOf("viscosity").orElse(1800).forGetter(HoneyFluidData::viscosity),
-                ForgeRegistries.FLUIDS.getCodec().fieldOf("stillFluid").forGetter(HoneyFluidData::stillFluid),
-                ForgeRegistries.FLUIDS.getCodec().fieldOf("flowingFluid").forGetter(HoneyFluidData::flowingFluid),
-                ForgeRegistries.ITEMS.getCodec().fieldOf("fluidBucket").forGetter(HoneyFluidData::fluidBucket),
-                ForgeRegistries.BLOCKS.getCodec().fieldOf("fluidBlock").forGetter(HoneyFluidData::fluidBlock)
+                Registry.FLUID.byNameCodec().fieldOf("stillFluid").forGetter(HoneyFluidData::stillFluid),
+                Registry.FLUID.byNameCodec().fieldOf("flowingFluid").forGetter(HoneyFluidData::flowingFluid),
+                Registry.ITEM.byNameCodec().fieldOf("fluidBucket").forGetter(HoneyFluidData::fluidBucket),
+                Registry.BLOCK.byNameCodec().fieldOf("fluidBlock").forGetter(HoneyFluidData::fluidBlock)
         ).apply(instance, HoneyFluidData::new));
     }
 
