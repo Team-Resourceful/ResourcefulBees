@@ -189,6 +189,12 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
             this.module = module;
         }
 
+        private String getOutputPos(OutputLocations<?> itemOutputs, int index, BlockPos pos) {
+            BlockPos output = itemOutputs.get(index).getPos();
+            //TODO make this translatable
+            return output != null && output.equals(pos) ? "[✗]" : "[ ]";
+        }
+
         @Override
         public void renderBackground(PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
 /*            int tX = screen.getGuiLeft() + x + 110;
@@ -228,8 +234,8 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
                     TERMINAL_FONT_8.draw(matrix, CentrifugeUtils.formatBlockPos(pos), tX, tY + 8f + i*20f, RenderUtils.FONT_COLOR_1);
 
                     for (int j = 0; j < 3; j++) {
-                        String text = ((CentrifugeInputEntity) module.selectedEntity).getItemOutputs().get(j).getPos().equals(pos) ? "[✗]" : "[ ]";
-                        TERMINAL_FONT_8.draw(matrix, text, tX + 80f + j * 11f, tY + i * 20f, RenderUtils.FONT_COLOR_1);
+                        String text = getOutputPos(((CentrifugeInputEntity) module.selectedEntity).getItemOutputs(), j, pos);
+                        TERMINAL_FONT_8.draw(matrix, text, tX + 80 + j * 11, tY + i * 20, RenderUtils.FONT_COLOR_1);
 
 
 
@@ -242,7 +248,7 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
                     i++;
                 }
 
-                tX += 125;
+/*                tX += 125;
 
                 TERMINAL_FONT_8.draw(matrix, String.valueOf(1), x+263f-50, y+24f, RenderUtils.FONT_COLOR_1);
                 TERMINAL_FONT_8.draw(matrix, String.valueOf(2), x+274f-50, y+24f, RenderUtils.FONT_COLOR_1);
@@ -255,8 +261,8 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
                     TERMINAL_FONT_8.draw(matrix, CentrifugeUtils.formatBlockPos(pos), tX, tY + 8f + i*20f, RenderUtils.FONT_COLOR_1);
 
                     for (int j = 0; j < 3; j++) {
-                        String text = ((CentrifugeInputEntity) module.selectedEntity).getItemOutputs().get(j).getPos().equals(pos) ? "[✗]" : "[ ]";
-                        TERMINAL_FONT_8.draw(matrix, text, tX + 80f + j * 11, tY + i * 20f, RenderUtils.FONT_COLOR_1);
+                        String text = getOutputPos(((CentrifugeInputEntity) module.selectedEntity).getItemOutputs(), j, pos);
+                        TERMINAL_FONT_8.draw(matrix, text, tX + 80 + j * 11, tY + i * 20, RenderUtils.FONT_COLOR_1);
 
 
 
@@ -267,7 +273,7 @@ public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTermi
                     }
 
                     i++;
-                }
+                }*/
             }
         }
     }

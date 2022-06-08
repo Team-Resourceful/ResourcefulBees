@@ -55,6 +55,8 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
                 slot.set(ItemStack.EMPTY);
             }
             if (entity != null) entity.updateRecipe();
+        } else {
+            super.clicked(pSlotId, pDragType, pClickType, pPlayer);
         }
     }
 
