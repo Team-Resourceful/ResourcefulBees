@@ -44,7 +44,7 @@ plugins.withId("idea") {
 }
 
 minecraft {
-    mappings channel: "parchment", version: mapping
+    mappings channel: "official", version: "1.19"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -112,32 +112,31 @@ mixin {
 dependencies {
     minecraft "net.minecraftforge:forge:$mc_version-$forge_version" //21
 
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:$jei_version:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:$jei_version")
+    //compileOnly fg.deobf("mezz.jei:jei-1.18.2:$jei_version:api")
+    //runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:$jei_version")
 
-    compileOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:$top_version:api") {
-        transitive = false
-    }
-    runtimeOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:$top_version") {
-        transitive = false
-    }
+    //compileOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:$top_version:api") {
+    //    transitive = false
+    //}
+    //runtimeOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:$top_version") {
+    //    transitive = false
+    //}
 
     //compileOnly fg.deobf ("team.chisel.ctm:CTM:$ctm_version")
     //runtimeOnly fg.deobf ("team.chisel.ctm:CTM:$ctm_version")
 
-    compileOnly fg.deobf ("vazkii.patchouli:Patchouli:$patchouli_version:api")
-    runtimeOnly fg.deobf ("vazkii.patchouli:Patchouli:$patchouli_version")
-
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}")// core
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
+    //compileOnly fg.deobf ("vazkii.patchouli:Patchouli:$patchouli_version:api")
+    //runtimeOnly fg.deobf ("vazkii.patchouli:Patchouli:$patchouli_version")
+    //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}")// core
+    //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
+    //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
     //runtimeOnly fg.deobf ("com.simibubi.create:Create:$create_version")
     //runtimeOnly fg.deobf ("com.jozufozu.flywheel:Flywheel-Forge:$flywheel_version")
 
     implementation fg.deobf("software.bernie.geckolib:geckolib-1.18-forge:$geckolib_version")
-    runtimeOnly fg.deobf("tech.thatgravyboat.dashboard:Forge:1.0.0")
+    //runtimeOnly fg.deobf("tech.thatgravyboat.dashboard:Forge:1.0.0")
 
     implementation project(':Phosphophyllite')
 
