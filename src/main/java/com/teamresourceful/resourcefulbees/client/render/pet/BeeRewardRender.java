@@ -42,7 +42,7 @@ public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerMod
 
         stack.mulPose(Vector3f.XP.rotationDegrees(180));
         stack.scale(0.25f,0.25f,0.25f);
-        stack.mulPose(Vector3f.YP.rotationDegrees((ageInTicks * 0.01F /2f)* 360f));
+        stack.mulPose(Vector3f.YP.rotationDegrees((ageInTicks * 0.01F /2f) * 360f));
         stack.translate(0f,(1.5 * Mth.sin(ageInTicks/10 - 30f)),3f);
         stack.mulPose(Vector3f.YP.rotationDegrees(-90));
 

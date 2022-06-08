@@ -128,10 +128,10 @@ dependencies {
     compileOnly fg.deobf ("vazkii.patchouli:Patchouli:$patchouli_version:api")
     runtimeOnly fg.deobf ("vazkii.patchouli:Patchouli:$patchouli_version")
 
-    ///runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}")// core
-    //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
-    //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    //runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
+    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}")// core
+    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
+    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
     //runtimeOnly fg.deobf ("com.simibubi.create:Create:$create_version")
     //runtimeOnly fg.deobf ("com.jozufozu.flywheel:Flywheel-Forge:$flywheel_version")

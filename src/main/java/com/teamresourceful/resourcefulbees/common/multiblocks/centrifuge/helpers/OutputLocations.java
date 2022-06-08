@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
+@SuppressWarnings("all")
 public class OutputLocations<T extends BlockEntity & ICentrifugeOutput<?>> {
 
     //TODO decide if most of the methods in this class should be moved to the inner class or not
@@ -89,7 +90,7 @@ public class OutputLocations<T extends BlockEntity & ICentrifugeOutput<?>> {
         outputs[i].rollsLeft--;
     }*/
 
-    // merge this back into #deserialize in 1.18
+    // this is going to need to stay for the time being
     public void onLoad(Class<T> clazz, @Nullable Level level) {
         for (int i = 0; i < 3; i++) {
             BlockPos pos = outputs[i].pos;
@@ -97,7 +98,7 @@ public class OutputLocations<T extends BlockEntity & ICentrifugeOutput<?>> {
         }
     }
 
-    public void deserialize(CompoundTag tag) {
+    public void deserialize(CompoundTag tag) { //, Class<T> clazz, @Nullable Level level) {
         if (tag.contains(NBTConstants.NBT_LOCATIONS)) {
             ListTag listTag = tag.getList(NBTConstants.NBT_LOCATIONS, Tag.TAG_COMPOUND);
             for (int i = 0; i < listTag.size(); i++) {
@@ -105,7 +106,9 @@ public class OutputLocations<T extends BlockEntity & ICentrifugeOutput<?>> {
                 if (location.getInt("id") != i) continue;
                 BlockPos pos = NbtUtils.readBlockPos(location.getCompound("pos"));
                 outputs[i].pos = pos;
-                //set(i, WorldUtils.getTileEntity(clazz, level, pos), pos); //TODO reimplement this in 1.18
+                //this.set(i, WorldUtils.getTileEntity(clazz, level, pos), pos);
+                // due to LevelChunk#promotePendingBlockEntity I can't safely use this method
+                // here bc the level isn't set until AFTER the nbt data is read.
             }
         }
     }
@@ -114,7 +117,8 @@ public class OutputLocations<T extends BlockEntity & ICentrifugeOutput<?>> {
         ListTag nbtTagList = new ListTag();
         for (int i = 0; i < 3; i++) {
             Output<T> output = outputs[i];
-            if (output.tile == null || output.pos == null) continue;
+            //if (output.tile == null || output.pos == null) continue; retaining in case I have to revert this.
+            if (output.pos == null) continue;
             CompoundTag nbt = new CompoundTag();
             nbt.putInt("id", i);
             nbt.put("pos", NbtUtils.writeBlockPos(output.pos));
@@ -127,6 +131,7 @@ public class OutputLocations<T extends BlockEntity & ICentrifugeOutput<?>> {
     }
 
     public static class Output<T extends ICentrifugeOutput<?>> {
+        //TODO look into switching this to a memoized supplier
         private @Nullable T tile = null;
         private @Nullable BlockPos pos = null;
         private boolean deposited = false;

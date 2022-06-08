@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.inventory.AbstractFilterItemHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
-import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeInputContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
@@ -41,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implements ITickableMultiblockTile, IOnAssemblyTile {
 
@@ -218,8 +218,10 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     @Override
     public void onAdded() {
         assert level != null;
-        filterRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(filterRecipeID);
-        processRecipe = (CentrifugeRecipe) ((RecipeManagerAccessorInvoker) level.getRecipeManager()).callByType(CentrifugeRecipe.CENTRIFUGE_RECIPE_TYPE).get(processRecipeID);
+        filterRecipe = (CentrifugeRecipe) level.getRecipeManager().byKey(filterRecipeID).orElse(null);
+        processRecipe = (CentrifugeRecipe) level.getRecipeManager().byKey(processRecipeID).orElse(null);
+        itemOutputs.onLoad(CentrifugeItemOutputEntity.class, level);
+        fluidOutputs.onLoad(CentrifugeFluidOutputEntity.class, level);
     }
 
     //TODO change data syncing to reduce packet bloating if possible
@@ -258,15 +260,20 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     // REQUIRED remove this method and logic after implementing linking code in gui - this is only for dev/testing
     @Override
     public void onAssembly() {
-        List<CentrifugeItemOutputEntity> iout = this.controller().getItemOutputs();
-        itemOutputs.setFirst(iout.get(0), iout.get(0).getBlockPos());
-        itemOutputs.setSecond(iout.get(1), iout.get(1).getBlockPos());
-        itemOutputs.setThird(iout.get(2), iout.get(2).getBlockPos());
-        List<CentrifugeFluidOutputEntity> fout = this.controller().getFluidOutputs();
-        fluidOutputs.setFirst(fout.get(0), fout.get(0).getBlockPos());
-        fluidOutputs.setSecond(fout.get(1), fout.get(1).getBlockPos());
-        fluidOutputs.setThird(fout.get(2), fout.get(2).getBlockPos());
+        linkOutputs(this.controller().getItemOutputs(), itemOutputs);
+        linkOutputs(this.controller().getFluidOutputs(), fluidOutputs);
     }
+
+    private <T extends AbstractOutput, A extends BlockEntity & ICentrifugeOutput<T>> void linkOutputs(List<A> outputs, OutputLocations<A> outputLocations) {
+        Optional<A> out = outputs.stream().findAny();
+        outputLocations.setFirst(out.orElse(null), out.orElseThrow(RuntimeException::new).getBlockPos());
+        out = outputs.stream().findAny();
+        outputLocations.setSecond(out.orElse(null), out.orElseThrow(RuntimeException::new).getBlockPos());
+        out = outputs.stream().findAny();
+        outputLocations.setThird(out.orElse(null), out.orElseThrow(RuntimeException::new).getBlockPos());
+    }
+
+    //END REMOVE
 
     private class FilterInventory extends AbstractFilterItemHandler {
 
