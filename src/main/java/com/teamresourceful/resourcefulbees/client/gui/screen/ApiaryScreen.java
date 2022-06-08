@@ -15,7 +15,6 @@ import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -111,8 +110,8 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
                 int ticksInHive = apiaryBee.getTicksInHive();
                 beeInfo.add(apiaryBee.displayName);
-                beeInfo.add(new TranslatableComponent(TranslationConstants.Apiary.TICKS_HIVE, ticksInHive));
-                beeInfo.add(new TranslatableComponent(TranslationConstants.Apiary.TICKS_LEFT, Math.max(apiaryBee.minOccupationTicks - ticksInHive, 0)));
+                beeInfo.add(Component.translatable(TranslationConstants.Apiary.TICKS_HIVE, ticksInHive));
+                beeInfo.add(Component.translatable(TranslationConstants.Apiary.TICKS_LEFT, Math.max(apiaryBee.minOccupationTicks - ticksInHive, 0)));
                 this.renderComponentTooltip(matrix, beeInfo, mouseX, mouseY);
             }
         }

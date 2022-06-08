@@ -13,7 +13,6 @@ import com.teamresourceful.resourcefulbees.common.utils.color.Color;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -51,7 +50,7 @@ public class BeeJarIngredient extends Ingredient {
 
         entityTag.putString(NBTConstants.NBT_ID, id.toString());
         entityTag.putString(NBTConstants.BeeJar.COLOR, new Color(color).toString());
-        stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, Component.Serializer.toJson(new TranslatableComponent("entity." + id.getNamespace() + "." + id.getPath())));
+        stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, Component.Serializer.toJson(Component.translatable("entity." + id.getNamespace() + "." + id.getPath())));
 
         stackTag.put(NBTConstants.BeeJar.ENTITY, entityTag);
         stack.setTag(stackTag);

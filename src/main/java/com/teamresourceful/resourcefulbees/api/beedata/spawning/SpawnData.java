@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LightLevel;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BiomeDictionary;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.InclusiveRange;
@@ -206,29 +205,29 @@ public class SpawnData {
     }
 
     private void addBiomesFromTag(ResourceLocation resourceLocation) {
-        if (Boolean.TRUE.equals(CommonConfig.USE_FORGE_DICTIONARIES.get())) {
-            net.minecraftforge.common.BiomeDictionary.Type type = BiomeDictionary.getForgeType(resourceLocation);
-            if (type != null) {
-                spawnableBiomes.addAll(BiomeDictionary.getForgeBiomeLocations(type));
-            }
-        }  else {
-            if (BiomeDictionary.get().containsKey(resourceLocation.getPath())) {
-                spawnableBiomes.addAll(BiomeDictionary.get().get(resourceLocation.getPath()));
-            }
-        }
+//        if (Boolean.TRUE.equals(CommonConfig.USE_FORGE_DICTIONARIES.get())) {
+//            net.minecraftforge.common.BiomeDictionary.Type type = BiomeDictionary.getForgeType(resourceLocation);
+//            if (type != null) {
+//                spawnableBiomes.addAll(BiomeDictionary.getForgeBiomeLocations(type));
+//            }
+//        }  else {
+//            if (BiomeDictionary.get().containsKey(resourceLocation.getPath())) {
+//                spawnableBiomes.addAll(BiomeDictionary.get().get(resourceLocation.getPath()));
+//            }
+//        }
     }
 
     private void removeBiomesFromTag(ResourceLocation resourceLocation) {
-        if (Boolean.TRUE.equals(CommonConfig.USE_FORGE_DICTIONARIES.get())) {
-            net.minecraftforge.common.BiomeDictionary.Type type = BiomeDictionary.getForgeType(resourceLocation);
-            if (type != null) {
-                spawnableBiomes.removeAll(BiomeDictionary.getForgeBiomeLocations(type));
-            }
-        }  else {
-            if (BiomeDictionary.get().containsKey(resourceLocation.getPath())) {
-                spawnableBiomes.removeAll(BiomeDictionary.get().get(resourceLocation.getPath()));
-            }
-        }
+//        if (Boolean.TRUE.equals(CommonConfig.USE_FORGE_DICTIONARIES.get())) {
+//            net.minecraftforge.common.BiomeDictionary.Type type = BiomeDictionary.getForgeType(resourceLocation);
+//            if (type != null) {
+//                spawnableBiomes.removeAll(BiomeDictionary.getForgeBiomeLocations(type));
+//            }
+//        }  else {
+//            if (BiomeDictionary.get().containsKey(resourceLocation.getPath())) {
+//                spawnableBiomes.removeAll(BiomeDictionary.get().get(resourceLocation.getPath()));
+//            }
+//        }
     }
 
     public boolean canSpawnAtYLevel(BlockPos nestPos) {

@@ -12,7 +12,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -76,7 +76,7 @@ public class HomePage extends BeepediaPage {
     }
 
     private Component getProgress() {
-        TranslatableComponent prefix = BeepediaLang.COLLECTION_PROGRESS.plainCopy();
+        MutableComponent prefix = BeepediaLang.COLLECTION_PROGRESS.plainCopy();
         prefix.append(String.format("%d / %d", beepedia.isCreative ? bees.size() : beepedia.data.getBeeList().size(), bees.size()));
         prefix.withStyle(ChatFormatting.GRAY);
         return prefix;

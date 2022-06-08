@@ -12,7 +12,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -118,7 +117,7 @@ public class BeeJar extends Item {
             if (display != null) {
                 Color color = getColor(stack);
                 display = color != null ? display.withStyle(Style.EMPTY.withColor(color.getValue())) : display.withStyle(ChatFormatting.GRAY);
-                component.append(new TranslatableComponent(TranslationConstants.Items.BEE_BOX_ENTITY_NAME, display));
+                component.append(Component.translatable(TranslationConstants.Items.BEE_BOX_ENTITY_NAME, display));
             }
         }
         return component;

@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
@@ -11,7 +12,6 @@ import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 
@@ -38,7 +38,7 @@ public class RandomPositionGenerator {
     @Nullable
     private static Vec3 findTarget(PathfinderMob bee, int horizontalOffset, int verticalOffset, int zero, @Nullable Vec3 vector3d, boolean pathOnWater, ToDoubleFunction<BlockPos> blockWeightOfBeePOS) {
         PathNavigation pathnavigator = bee.getNavigation();
-        Random random = bee.getRandom();
+        RandomSource random = bee.getRandom();
 
 
         //is bee within distance of home position?
@@ -105,7 +105,7 @@ public class RandomPositionGenerator {
         return flag1 ? Vec3.atBottomCenterOf(beePos) : null;
     }
 
-    private static BlockPos getRandomOffset(Random random, int horizontalOffset, int verticalOffset, int minusTwo, @Nullable Vec3 directionVec) {
+    private static BlockPos getRandomOffset(RandomSource random, int horizontalOffset, int verticalOffset, int minusTwo, @Nullable Vec3 directionVec) {
         if (directionVec != null) {
             double d3 = Mth.atan2(directionVec.z, directionVec.x) - HALF_PI;
             double d4 = d3 + (2 * random.nextFloat() - 1) * HALF_PI;

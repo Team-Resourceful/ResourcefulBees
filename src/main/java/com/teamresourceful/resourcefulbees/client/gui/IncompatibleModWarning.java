@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.DirectJoinServerScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.event.ScreenOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -41,7 +41,7 @@ public class IncompatibleModWarning {
         private int ticksElapsed = 0;
 
         protected ModWarningScreen(Screen parent) {
-            super(new TextComponent(""));
+            super(Component.empty());
             this.parent = parent;
         }
 

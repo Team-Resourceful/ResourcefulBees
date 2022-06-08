@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ public class OptionImageButton extends TooltipAbstractButton {
     private final ResourceLocation texture;
 
     public OptionImageButton(int xPos, int yPos, int u, int v, boolean selected, ResourceLocation texture) {
-        super(xPos, yPos, 20, 20, TextComponent.EMPTY);
+        super(xPos, yPos, 20, 20, Component.empty());
         this.texture = texture;
         this.selected = selected;
         this.u = u;

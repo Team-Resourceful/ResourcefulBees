@@ -5,8 +5,6 @@ public class TraitConstants {
     private TraitConstants() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
-
-    public static final String ENDER = "ender";
     public static final String SLIMY = "slimy";
     public static final String FLAMMABLE = "flammable";
     public static final String TELEPORT = "teleport";

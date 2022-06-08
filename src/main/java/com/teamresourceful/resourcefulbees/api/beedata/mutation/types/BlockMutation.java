@@ -5,8 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IItemRender;
 import com.teamresourceful.resourcefulbees.common.codecs.RestrictedBlockPredicate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -59,7 +60,7 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
         ItemStack stack = new ItemStack(Items.BARRIER);
         Item item = predicate.block().asItem();
         if (item.equals(Items.AIR)) {
-            stack.setHoverName(new TextComponent("Block: " + predicate.block().getRegistryName()));
+            stack.setHoverName(Component.literal("Block: " + Registry.BLOCK.getKey(predicate.block())));
         } else {
             stack = new ItemStack(item);
         }

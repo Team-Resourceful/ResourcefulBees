@@ -16,7 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -52,7 +52,7 @@ import java.util.List;
 
 public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip {
 
-    private static final TextComponent NONE_TEXT = new TextComponent("     NONE");
+    private static final MutableComponent NONE_TEXT = Component.literal("     NONE");
     //public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 1, 4);
 
     private final RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
@@ -122,7 +122,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
         if (itemstack.getItem() instanceof INestUpgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.NEST)) {
             if (upgrade.getTier().from.equals(this.tier)) return upgrade.getTier().upgrader.performUpgrade(state, world, pos, itemstack);
             else {
-                player.displayClientMessage(new TextComponent("You can not upgrade this nest with that upgrade."), true);
+                player.displayClientMessage(Component.literal("You can not upgrade this nest with that upgrade."), true);
             }
         }
 
@@ -192,7 +192,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
             }
 
             //noinspection deprecation
-            combs.forEach((comb, count) -> tooltip.add(new TextComponent("     ")
+            combs.forEach((comb, count) -> tooltip.add(Component.literal("     ")
                     .append(String.valueOf(count))
                     .append("x ")
                     .append(WordUtils.capitalize(comb))));
@@ -219,14 +219,14 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
             }
 
             //noinspection deprecation
-            bees.forEach((name, count) -> tooltip.add(new TextComponent("     ")
+            bees.forEach((name, count) -> tooltip.add(Component.literal("     ")
                     .append(String.valueOf(count))
                     .append("x ")
                     .append(WordUtils.capitalize(name))));
         } else {
             tooltip.add(NONE_TEXT);
         }
-        tooltip.add(TextComponent.EMPTY);
+        tooltip.add(Component.empty());
     }
 
     public boolean dropResourceHoneycomb(Level world, BlockPos pos, boolean useScraper) {
@@ -287,7 +287,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
         } else {
             components.add(TranslationConstants.BeeHive.BEES.withStyle(ChatFormatting.GOLD));
             components.add(NONE_TEXT);
-            components.add(TextComponent.EMPTY);
+            components.add(Component.empty());
             components.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
             components.add(NONE_TEXT);
         }

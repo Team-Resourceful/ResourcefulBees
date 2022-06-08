@@ -8,7 +8,8 @@ import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAcces
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -112,7 +113,7 @@ public class HoneyDipper extends Item {
     }
 
     private boolean entityTypesMatch(LivingEntity entity, Optional<EntityType<?>> entityType) {
-        return entityType.isPresent() && entity.getType().getRegistryName() != null && entity.getType().getRegistryName().equals(entityType.get().getRegistryName());
+        return entityType.map(type -> type.equals(entity.getType())).orElse(false);
     }
 
     @Override
@@ -147,18 +148,18 @@ public class HoneyDipper extends Item {
     }
 
     private enum MessageTypes {
-        FLOWER(args -> new TranslatableComponent(TranslationConstants.HoneyDipper.FLOWER_SET, args)),
-        HIVE(args -> new TranslatableComponent(TranslationConstants.HoneyDipper.HIVE_SET, args)),
-        BEE_SELECTED(args -> new TranslatableComponent(TranslationConstants.HoneyDipper.BEE_SET, args)),
+        FLOWER(args -> Component.translatable(TranslationConstants.HoneyDipper.FLOWER_SET, args)),
+        HIVE(args -> Component.translatable(TranslationConstants.HoneyDipper.HIVE_SET, args)),
+        BEE_SELECTED(args -> Component.translatable(TranslationConstants.HoneyDipper.BEE_SET, args)),
         BEE_CLEARED(args -> TranslationConstants.HoneyDipper.SELECTION_CLEARED);
 
-        private final Function<Object[], TranslatableComponent> component;
+        private final Function<Object[], MutableComponent> component;
 
-        MessageTypes(Function<Object[], TranslatableComponent> component) {
+        MessageTypes(Function<Object[], MutableComponent> component) {
             this.component = component;
         }
 
-        public TranslatableComponent create(Object... args) {
+        public MutableComponent create(Object... args) {
             return this.component.apply(args);
         }
     }

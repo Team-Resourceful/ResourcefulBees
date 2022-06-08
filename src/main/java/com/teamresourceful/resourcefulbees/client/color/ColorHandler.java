@@ -2,7 +2,10 @@ package com.teamresourceful.resourcefulbees.client.color;
 
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
-import com.teamresourceful.resourcefulbees.common.item.*;
+import com.teamresourceful.resourcefulbees.common.item.BeeJar;
+import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
+import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
+import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -17,7 +20,6 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -46,7 +48,7 @@ public final class ColorHandler {
 
     private static void registerItems(ItemColors handler, ItemColor itemColor, Collection<RegistryObject<Item>> items) {
         if (items.isEmpty()) return;
-        List<Item> itemList = items.stream().filter(RegistryObject::isPresent).map(RegistryObject::get).collect(Collectors.toList());
+        List<Item> itemList = items.stream().filter(RegistryObject::isPresent).map(RegistryObject::get).toList();
         try {
             handler.register(itemColor, itemList.toArray(new Item[]{}));
         } catch (NullPointerException ex) {
@@ -56,7 +58,7 @@ public final class ColorHandler {
 
     private static void registerBlocks(BlockColors handler, BlockColor blockColor, Collection<RegistryObject<Block>> blocks) {
         if (blocks.isEmpty()) return;
-        List<Block> blockList = blocks.stream().filter(RegistryObject::isPresent).map(RegistryObject::get).collect(Collectors.toList());
+        List<Block> blockList = blocks.stream().filter(RegistryObject::isPresent).map(RegistryObject::get).toList();
         try {
             handler.register(blockColor, blockList.toArray(new Block[]{}));
         } catch (NullPointerException ex) {

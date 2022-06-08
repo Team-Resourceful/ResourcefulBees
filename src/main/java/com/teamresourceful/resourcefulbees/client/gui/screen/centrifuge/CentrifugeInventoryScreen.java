@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,7 +54,7 @@ public abstract class CentrifugeInventoryScreen<T extends CentrifugeContainer<?>
 
     @Override
     @Nullable List<Component> getInfoTooltip() {
-        return Lists.newArrayList(new TextComponent("INFO TEXT"));
+        return Lists.newArrayList(Component.literal("INFO TEXT"));
     }
 
     @Override

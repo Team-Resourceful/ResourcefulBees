@@ -12,7 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
@@ -75,9 +74,9 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
     public void renderEnergyTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY, DecimalFormat decimalFormat) {
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 136, this.leftPos + 148) && MathUtils.inRangeInclusive(mouseY, this.topPos + 16, this.topPos + 70)) {
             if (Screen.hasShiftDown() || this.menu.getEnergy().getEnergyStored() < 500)
-                this.renderTooltip(matrix, new TextComponent(this.menu.getEnergy().getEnergyStored() + " RF"), mouseX, mouseY);
+                this.renderTooltip(matrix, Component.literal(this.menu.getEnergy().getEnergyStored() + " RF"), mouseX, mouseY);
             else
-                this.renderTooltip(matrix, new TextComponent(decimalFormat.format((double) this.menu.getEnergy().getEnergyStored() / 1000) + " kRF"), mouseX, mouseY);
+                this.renderTooltip(matrix, Component.literal(decimalFormat.format((double) this.menu.getEnergy().getEnergyStored() / 1000) + " kRF"), mouseX, mouseY);
         }
     }
 
@@ -85,9 +84,9 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 28, this.leftPos + 40) && MathUtils.inRangeInclusive(mouseY, this.topPos + 16, this.topPos + 70)) {
             FluidStack fluid = this.menu.getEntity().getTank().getFluid();
             if (Screen.hasShiftDown() || fluid.getAmount() < 500)
-                this.renderTooltip(matrix, new TextComponent(fluid.getAmount() + " MB"), mouseX, mouseY);
+                this.renderTooltip(matrix, Component.literal(fluid.getAmount() + " MB"), mouseX, mouseY);
             else
-                this.renderTooltip(matrix, new TextComponent(decimalFormat.format((double) fluid.getAmount() / 1000) + " Buckets"), mouseX, mouseY);
+                this.renderTooltip(matrix, Component.literal(decimalFormat.format((double) fluid.getAmount() / 1000) + " Buckets"), mouseX, mouseY);
         }
     }
 }

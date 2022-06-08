@@ -26,7 +26,7 @@ public class ModPOIs {
     public static final DeferredRegister<PoiType> POIS = DeferredRegister.create(ForgeRegistries.POI_TYPES, ResourcefulBees.MOD_ID);
 
 
-    public static final RegistryObject<PoiType> TIERED_BEEHIVE_POI = POIS.register("tiered_beehive_poi", () -> new PoiType("tiered_beehive_poi", ImmutableSet.copyOf(getPOIBlockStates()), 1, 1));
+    public static final RegistryObject<PoiType> TIERED_BEEHIVE_POI = POIS.register("tiered_beehive_poi", () -> new PoiType(ImmutableSet.copyOf(getPOIBlockStates()), 1, 1));
 
     private static Set<BlockState> getPOIBlockStates() {
         Set<BlockState> states = new HashSet<>();

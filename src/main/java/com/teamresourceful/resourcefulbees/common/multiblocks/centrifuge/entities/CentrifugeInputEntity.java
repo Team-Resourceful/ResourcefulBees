@@ -16,7 +16,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
@@ -98,7 +97,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent("gui.centrifuge.input.item." + tier.getName());
+        return Component.translatable("gui.centrifuge.input.item." + tier.getName());
     }
 
     @Nullable

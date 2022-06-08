@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -23,7 +22,7 @@ public class CentrifugeTerminalEntity extends AbstractGUICentrifugeEntity {
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent("gui.centrifuge.terminal." + tier.getName());
+        return Component.translatable("gui.centrifuge.terminal." + tier.getName());
     }
 
     //TODO see if this can be handled generically via the superclass AbstractGUICentrifugeEntity

@@ -15,6 +15,8 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -88,7 +90,8 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         //REQUIRED Check if this can be put in another place
         //its here so it can have the items in the data before the
         //recipes are generated.
-        BeeRegistry.getRegistry().regenerateCustomBeeData();
+        //TODO check if this is proper. BUILTIN.get()
+        BeeRegistry.getRegistry().regenerateCustomBeeData(RegistryAccess.BUILTIN.get());
         HoneyRegistry.getRegistry().regenerateHoneyData();
         LOGGER.info("Adding Reload Listener: 'resourcefulbees recipe manager'");
     }
@@ -117,7 +120,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
     private Recipe<?> makeHoneycombRecipe(HoneycombItem comb) {
         Ingredient honeycombItem = Ingredient.of(comb);
         return new ShapedRecipe(
-                Objects.requireNonNull(comb.getStorageBlockItem().getRegistryName()),
+                Objects.requireNonNull(Registry.ITEM.getKey(comb.getStorageBlockItem())),
                 "",
                 3,
                 3,
@@ -230,7 +233,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
 
     private Recipe<?> makeCombBlockToCombRecipe(HoneycombItem comb) {
         return new ShapelessRecipe(
-                Objects.requireNonNull(comb.getRegistryName()),
+                Objects.requireNonNull(Registry.ITEM.getKey(comb)),
                 "",
                 new ItemStack(comb, 9),
                 NonNullList.of(Ingredient.EMPTY, Ingredient.of(comb.getStorageBlockItem()))

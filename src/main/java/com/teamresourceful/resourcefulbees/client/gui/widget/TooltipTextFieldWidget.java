@@ -15,7 +15,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
@@ -77,7 +76,7 @@ public class TooltipTextFieldWidget extends TooltipWidget{
     @NotNull
     @Override
     protected MutableComponent createNarrationMessage() {
-        return new TranslatableComponent("gui.narrate.editBox", this.getMessage(), this.value);
+        return Component.translatable("gui.narrate.editBox", this.getMessage(), this.value);
     }
 
     public void setValue(String text) {
@@ -548,6 +547,6 @@ public class TooltipTextFieldWidget extends TooltipWidget{
 
     @Override
     public void updateNarration(@NotNull NarrationElementOutput pNarrationElementOutput) {
-        pNarrationElementOutput.add(NarratedElementType.TITLE, new TranslatableComponent("narration.edit_box", this.getValue()));
+        pNarrationElementOutput.add(NarratedElementType.TITLE, Component.translatable("narration.edit_box", this.getValue()));
     }
 }

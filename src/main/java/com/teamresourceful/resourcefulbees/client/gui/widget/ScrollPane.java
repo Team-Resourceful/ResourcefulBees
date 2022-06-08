@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,7 +23,7 @@ public class ScrollPane extends Pane {
     }
 
     public ScrollPane(int xPos, int yPos, int viewWidth, int viewHeight) {
-        this(xPos, yPos, viewWidth, viewHeight, 0, new TextComponent(""));
+        this(xPos, yPos, viewWidth, viewHeight, 0, Component.empty());
     }
 
     public ScrollPane(int xPos, int yPos, int viewWidth, int viewHeight, Component message) {
@@ -32,7 +31,7 @@ public class ScrollPane extends Pane {
     }
 
     public ScrollPane(int xPos, int yPos, int viewWidth, int viewHeight, int startHeight) {
-        this(xPos, yPos, viewWidth, viewHeight, startHeight, new TextComponent(""));
+        this(xPos, yPos, viewWidth, viewHeight, startHeight, Component.empty());
     }
 
     @Override

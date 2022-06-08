@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.FormattedCharSequence;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -164,18 +163,18 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
 
     private List<Component> formatUserInput(String input) {
         List<Component> components = new ArrayList<>();
-        MutableComponent component = new TextComponent("╭─").withStyle(ChatFormatting.GRAY);
-        component.append(new TextComponent(Minecraft.getInstance().getUser().getName()).withStyle(ChatFormatting.BLUE));
-        component.append(new TextComponent("@").withStyle(ChatFormatting.WHITE));
-        component.append(new TextComponent("centrifuge").withStyle(ChatFormatting.GREEN));
+        MutableComponent component = Component.literal("╭─").withStyle(ChatFormatting.GRAY);
+        component.append(Component.literal(Minecraft.getInstance().getUser().getName()).withStyle(ChatFormatting.BLUE));
+        component.append(Component.literal("@").withStyle(ChatFormatting.WHITE));
+        component.append(Component.literal("centrifuge").withStyle(ChatFormatting.GREEN));
         components.add(component);
-        MutableComponent inputComponent = new TextComponent("╰─> ").withStyle(ChatFormatting.GRAY);
+        MutableComponent inputComponent = Component.literal("╰─> ").withStyle(ChatFormatting.GRAY);
         String[] splits = input.split(" ");
         if (splits.length > 1) {
-            inputComponent.append(new TextComponent(splits[0]).withStyle(ChatFormatting.YELLOW));
-            inputComponent.append(new TextComponent(" " + String.join(" ", Arrays.copyOfRange(splits, 1, splits.length))).withStyle(ChatFormatting.AQUA));
+            inputComponent.append(Component.literal(splits[0]).withStyle(ChatFormatting.YELLOW));
+            inputComponent.append(Component.literal(" " + String.join(" ", Arrays.copyOfRange(splits, 1, splits.length))).withStyle(ChatFormatting.AQUA));
         } else {
-            inputComponent.append(new TextComponent(input).withStyle(ChatFormatting.YELLOW));
+            inputComponent.append(Component.literal(input).withStyle(ChatFormatting.YELLOW));
         }
         components.add(inputComponent);
         return components;

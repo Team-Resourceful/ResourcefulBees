@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.common.init;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
@@ -11,17 +10,11 @@ import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 
 import java.io.Reader;
 import java.util.Locale;
@@ -48,8 +41,9 @@ public class BeeSetup {
         LOGGER.info("Loading Custom Bees...");
         FileUtils.streamFilesAndParse(ModPaths.BEES, BeeSetup::parseBee);
 
-        BeeRegistry.getRegistry().regenerateCustomBeeData();
+        BeeRegistry.getRegistry().regenerateCustomBeeData(null);
     }
+
 
     private static void parseBee(Reader reader, String name) {
         JsonObject jsonObject = GsonHelper.fromJson(ModConstants.GSON, reader, JsonObject.class);
@@ -57,6 +51,7 @@ public class BeeSetup {
         BeeRegistry.getRegistry().cacheRawBeeData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
     }
 
+    /* TODO Replace with BiomeModifier
     public static void onBiomeLoad(BiomeLoadingEvent event) {
         if (event.getName() != null && BeeRegistry.isSpawnableBiome(event.getName())) {
             boolean isFlowerForest = event.getName().equals(Biomes.FLOWER_FOREST.getRegistryName());
@@ -86,6 +81,7 @@ public class BeeSetup {
             event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.OVERWORLD_NESTS);
         }
     }
+     */
 
     public static void registerBeePlacements() {
         ModEntities.getModBees().forEach((s, entityType) -> {

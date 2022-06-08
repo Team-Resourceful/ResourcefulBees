@@ -3,15 +3,12 @@ package com.teamresourceful.resourcefulbees.common.item;
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
 import com.teamresourceful.resourcefulbees.common.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -26,7 +23,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.List;
 
@@ -73,7 +69,7 @@ public class Beepedia extends Item {
     public @NotNull InteractionResultHolder<ItemStack> use(Level world, Player player, @NotNull InteractionHand hand) {
         LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
         ItemStack itemstack = player.getItemInHand(hand);
-        ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
+        ItemStack book = ItemStack.EMPTY; //TODO PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
         boolean hasShades = player.getInventory().contains(book);
         if (world.isClientSide) {
             BeepediaUtils.loadBeepedia(itemstack, hasShades, data);
@@ -84,7 +80,7 @@ public class Beepedia extends Item {
     @Override
     public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
         LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
-        ItemStack book = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
+        ItemStack book = ItemStack.EMPTY; //TODO PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
         boolean hasShades = player.getInventory().contains(book);
         if (entity instanceof CustomBeeEntity) {
             if (!player.level.isClientSide) {
@@ -105,7 +101,7 @@ public class Beepedia extends Item {
     public @NotNull Component getName(ItemStack stack) {
         if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
             if (stack.getTag().getBoolean(CREATIVE_TAG)) return TranslationConstants.Items.CREATIVE_BEEPEDIA.withStyle(ChatFormatting.LIGHT_PURPLE);
-            if (stack.getTag().getBoolean(COMPLETE_TAG)) return new TextComponent("✦ ").withStyle(ChatFormatting.GREEN).append(super.getName(stack).copy().withStyle(ChatFormatting.WHITE));
+            if (stack.getTag().getBoolean(COMPLETE_TAG)) return Component.literal("✦ ").withStyle(ChatFormatting.GREEN).append(super.getName(stack).copy().withStyle(ChatFormatting.WHITE));
         }
         return super.getName(stack);
     }
@@ -119,7 +115,7 @@ public class Beepedia extends Item {
             boolean complete = stack.getTag().getBoolean(COMPLETE_TAG) || stack.getTag().getBoolean(CREATIVE_TAG);
             int total = BeeRegistry.getRegistry().getBees().size();
             int count = stack.getTag().getList(NBTConstants.NBT_BEES, 8).size();
-            tooltip.add(new TranslatableComponent(TranslationConstants.Beepedia.PROGRESS, complete? total : count, total).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable(TranslationConstants.Beepedia.PROGRESS, complete? total : count, total).withStyle(ChatFormatting.GRAY));
         }
 
     }

@@ -3,8 +3,6 @@ package com.teamresourceful.resourcefulbees.common.item;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -22,16 +20,16 @@ public interface IShiftingToolTip {
         boolean shiftDown = Screen.hasShiftDown();
         boolean ctrlDown = !shiftDown && Screen.hasControlDown();
         String shift = shiftDown ? TranslationConstants.Items.SHIFT_TOOLTIP_HIGHLIGHT : TranslationConstants.Items.SHIFT_TOOLTIP;
-        components.add(new TranslatableComponent(shift, getShiftingDisplay()));
+        components.add(Component.translatable(shift, getShiftingDisplay()));
         if (getControlDisplay() != null) {
             String ctrl = ctrlDown ? TranslationConstants.Items.CTRL_TOOLTIP_HIGHLIGHT : TranslationConstants.Items.CTRL_TOOLTIP;
-            components.add(new TranslatableComponent(ctrl, getControlDisplay()));
+            components.add(Component.translatable(ctrl, getControlDisplay()));
         }
         if (shiftDown){
-            components.add(TextComponent.EMPTY);
+            components.add(Component.empty());
             appendShiftTooltip(stack, pLevel, components, flag);
         } else if (ctrlDown) {
-            components.add(TextComponent.EMPTY);
+            components.add(Component.empty());
             appendControlTooltip(stack, pLevel, components, flag);
         }
     }

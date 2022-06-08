@@ -5,16 +5,15 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.gui.widget.BeeconEffectWidget;
 import com.teamresourceful.resourcefulbees.client.gui.widget.OptionImageButton;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
+import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
-import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.player.Inventory;
@@ -141,13 +140,13 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
     public class RangeSlider extends AbstractSliderButton {
 
         public RangeSlider(int pX, int pY, double pValue) {
-            super(pX, pY, 66, 20, TextComponent.EMPTY, pValue);
+            super(pX, pY, 66, 20, Component.empty(), pValue);
             updateMessage();
         }
 
         @Override
         protected void updateMessage() {
-            setMessage(new TextComponent("Range: " + (int)((value * 40)+10)));
+            setMessage(Component.literal("Range: " + (int)((value * 40)+10)));
         }
 
         @Override

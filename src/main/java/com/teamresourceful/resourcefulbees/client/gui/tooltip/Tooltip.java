@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -20,7 +19,7 @@ public class Tooltip extends AbstractTooltip {
 
     public Tooltip(int x, int y, int hoverWidth, int hoverHeight, String text) {
         super(x, y, hoverWidth, hoverHeight);
-        this.textList = () -> Arrays.stream(text.split("\\r?\\n")).map(TextComponent::new).collect(Collectors.toList());
+        this.textList = () -> Arrays.stream(text.split("\\r?\\n")).map(Component::literal).collect(Collectors.toList());
     }
 
     public Tooltip(int x, int y, int hoverWidth, int hoverHeight, Component text) {

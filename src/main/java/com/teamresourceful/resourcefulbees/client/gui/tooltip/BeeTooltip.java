@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -51,7 +50,7 @@ public class BeeTooltip extends AbstractTooltip {
     public static List<Component> getAdvancedTooltip(CustomBeeData beeData, boolean showName) {
         List<Component> tooltips = getTooltip(beeData, showName);
         if (beeData.registryID() == null) return getTooltip(beeData, showName);
-        tooltips.add(new TextComponent(beeData.registryID().toString()).withStyle(ChatFormatting.DARK_GRAY));
+        tooltips.add(Component.literal(beeData.registryID().toString()).withStyle(ChatFormatting.DARK_GRAY));
         return tooltips;
     }
 }

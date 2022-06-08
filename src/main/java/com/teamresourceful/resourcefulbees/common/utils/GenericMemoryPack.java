@@ -65,14 +65,17 @@ public abstract class GenericMemoryPack implements PackResources {
     }
 
     @Override
-    public @NotNull Collection<ResourceLocation> getResources(@NotNull PackType type, @NotNull String namespace, @NotNull String path, int maxFolderWalk, @NotNull Predicate<String> predicate) {
+    public @NotNull Collection<ResourceLocation> getResources(PackType type, String namespace, String path, Predicate<ResourceLocation> predicate) {
         if (!isTypeAllowed(type)) return Collections.emptyList();
         return data.keySet().stream()
                 .filter(location-> location.getNamespace().equals(namespace))
-                .filter(location-> location.getPath().split("/").length < maxFolderWalk)
                 .filter(location-> location.getPath().startsWith(path))
-                .filter(location-> predicate.test(location.getPath().substring(Math.max(location.getPath().lastIndexOf('/'), 0))))
+                .filter(location-> predicate.test(createPath(namespace, location.getPath().substring(Math.max(location.getPath().lastIndexOf('/'), 0)))))
                 .collect(Collectors.toList());
+    }
+
+    private static ResourceLocation createPath(String namespace, String input) {
+        return ResourceLocation.tryParse(namespace + ":" + input);
     }
 
     @Override

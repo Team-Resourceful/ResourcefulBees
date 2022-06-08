@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -29,11 +28,11 @@ public class Pane extends TooltipWidget {
     }
 
     public Pane(int xPos, int yPos, int viewWidth, int viewHeight) {
-        this(xPos, yPos, viewWidth, viewHeight, new TextComponent(""));
+        this(xPos, yPos, viewWidth, viewHeight, Component.empty());
     }
 
     public Pane(ScreenArea screenArea) {
-        this(screenArea, new TextComponent(""));
+        this(screenArea, Component.empty());
     }
 
     public Pane(ScreenArea screenArea, Component message) {

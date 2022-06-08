@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEnt
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,8 +29,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class SolidificationChamber extends SidedTickingBlock<SolidificationChamberBlockEntity> {
@@ -75,7 +74,7 @@ public class SolidificationChamber extends SidedTickingBlock<SolidificationChamb
     }
 
     @Override
-    public void animateTick(@NotNull BlockState stateIn, @NotNull Level level, @NotNull BlockPos pos, @NotNull Random rand) {
+    public void animateTick(@NotNull BlockState stateIn, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         SolidificationChamberBlockEntity tank = getBlockEntity(level, pos);
         if (tank == null) return;
         if (tank.getTank().getFluid().getFluid() instanceof CustomHoneyFluid fluid && fluid.getHoneyData().color().isRainbow()) {

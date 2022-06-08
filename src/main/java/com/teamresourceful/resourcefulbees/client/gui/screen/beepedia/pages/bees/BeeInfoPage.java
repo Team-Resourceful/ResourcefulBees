@@ -12,7 +12,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderSet;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
@@ -23,10 +24,10 @@ import org.apache.commons.lang3.tuple.Pair;
 @OnlyIn(Dist.CLIENT)
 public class BeeInfoPage extends BeeDataPage {
 
-    private static final TranslatableComponent TITLE = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info");
-    private static final TranslatableComponent SIZE_NAME = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.size");
-    private static final TranslatableComponent TIME_NAME = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.time");
-    private static final TranslatableComponent FLOWER_NAME = new TranslatableComponent("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
+    private static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.info");
+    private static final MutableComponent SIZE_NAME = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.info.size");
+    private static final MutableComponent TIME_NAME = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.info.time");
+    private static final MutableComponent FLOWER_NAME = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
 
     private Pair<EntityType<?>, Entity> entityFlower = Pair.of(null, null);
     private HolderSet<Block> blockFlowers = HolderSet.direct();

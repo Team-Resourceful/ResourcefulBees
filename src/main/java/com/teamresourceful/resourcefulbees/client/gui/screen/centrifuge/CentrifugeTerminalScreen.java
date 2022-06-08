@@ -11,7 +11,6 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeTerminalContainer;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -27,12 +26,12 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
     // method calls, and data that can most likely be generalized even further. figure out how to condense
     // this even further
 
-    private static final Component TERMINAL_TEXT = new TextComponent("Terminal");
-    private static final Component HOME_TEXT = new TextComponent("Home");
-    private static final Component INPUTS_TEXT = new TextComponent("Inputs");
-    private static final Component ITEM_OUTS_TEXT = new TextComponent("Item Outputs");
-    private static final Component FLUID_OUTS_TEXT = new TextComponent("Fluid Outputs");
-    private static final Component DUMPS_TEXT = new TextComponent("Dumps");
+    private static final Component TERMINAL_TEXT = Component.literal("Terminal");
+    private static final Component HOME_TEXT = Component.literal("Home");
+    private static final Component INPUTS_TEXT = Component.literal("Inputs");
+    private static final Component ITEM_OUTS_TEXT = Component.literal("Item Outputs");
+    private static final Component FLUID_OUTS_TEXT = Component.literal("Fluid Outputs");
+    private static final Component DUMPS_TEXT = Component.literal("Dumps");
 
     //Display Tabs
     private final DisplayTab home = new DisplayTab(24, 58, 69, 13, HOME_TEXT, this);
@@ -102,7 +101,7 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
 
     @Override
     @Nullable List<Component> getInfoTooltip() {
-        return Lists.newArrayList(new TextComponent("INFO TEXT"));
+        return Lists.newArrayList(Component.literal("INFO TEXT"));
     }
 
     @Override

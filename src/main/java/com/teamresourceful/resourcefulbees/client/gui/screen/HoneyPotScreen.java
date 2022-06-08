@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
@@ -55,7 +54,7 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
 
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos+129, this.leftPos+141) && MathUtils.inRangeInclusive(mouseY, this.topPos+16, this.topPos+70)) {
             FluidStack fluidStack = menu.getEntity().getTank().getFluid();
-            Component component = getDisplayName(fluidStack).copy().append(new TextComponent(" : " + fluidStack.getAmount() + "mB"));
+            Component component = getDisplayName(fluidStack).copy().append(Component.literal(" : " + fluidStack.getAmount() + "mB"));
             renderTooltip(matrix, component, mouseX, mouseY);
         }
     }

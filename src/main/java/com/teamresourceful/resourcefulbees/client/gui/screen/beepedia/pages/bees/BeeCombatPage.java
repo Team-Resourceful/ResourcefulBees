@@ -10,7 +10,8 @@ import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,11 +30,11 @@ public class BeeCombatPage extends BeeDataPage {
     @Override
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         Font font = Minecraft.getInstance().font;
-        TranslatableComponent healthName = new TranslatableComponent(TranslationConstants.Beepedia.Info.HEALTH, beeData.combatData().baseHealth());
-        TranslatableComponent damageName = new TranslatableComponent(TranslationConstants.Beepedia.Info.DAMAGE, beeData.combatData().attackDamage());
-        TranslatableComponent stingerName = new TranslatableComponent(TranslationConstants.Beepedia.Info.STINGER, BeepediaUtils.getYesNo(beeData.combatData().removeStingerOnAttack()));
-        TranslatableComponent passiveName = new TranslatableComponent(TranslationConstants.Beepedia.Info.PASSIVE, BeepediaUtils.getYesNo(beeData.combatData().isPassive()));
-        TranslatableComponent poisonName = new TranslatableComponent(TranslationConstants.Beepedia.Info.POISON, BeepediaUtils.getYesNo(beeData.combatData().inflictsPoison()));
+        MutableComponent healthName = Component.translatable(TranslationConstants.Beepedia.Info.HEALTH, beeData.combatData().baseHealth());
+        MutableComponent damageName = Component.translatable(TranslationConstants.Beepedia.Info.DAMAGE, beeData.combatData().attackDamage());
+        MutableComponent stingerName = Component.translatable(TranslationConstants.Beepedia.Info.STINGER, BeepediaUtils.getYesNo(beeData.combatData().removeStingerOnAttack()));
+        MutableComponent passiveName = Component.translatable(TranslationConstants.Beepedia.Info.PASSIVE, BeepediaUtils.getYesNo(beeData.combatData().isPassive()));
+        MutableComponent poisonName = Component.translatable(TranslationConstants.Beepedia.Info.POISON, BeepediaUtils.getYesNo(beeData.combatData().inflictsPoison()));
 
         font.draw(matrix, healthName.withStyle(ChatFormatting.GRAY), x, y + 34f, -1);
         font.draw(matrix, damageName.withStyle(ChatFormatting.GRAY), x + 86f, y + 34f, -1);

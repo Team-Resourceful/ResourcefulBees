@@ -4,9 +4,9 @@ import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeEntityInvoke
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPOIs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.PoiTypeTags;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
-import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.animal.Bee;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,9 +38,8 @@ public abstract class MixinUpdateBeehiveGoal {
     public void findNearbyHivesWithSpace(CallbackInfoReturnable<List<BlockPos>> cir) {
         BlockPos blockpos = this$0.blockPosition();
         PoiManager poiManager = ((ServerLevel) this$0.level).getPoiManager();
-        Stream<PoiRecord> stream = poiManager.getInRange(pointOfInterestType -> pointOfInterestType == PoiType.BEEHIVE
-                || pointOfInterestType == PoiType.BEE_NEST
-                || pointOfInterestType == ModPOIs.TIERED_BEEHIVE_POI.get(), blockpos, 20, PoiManager.Occupancy.ANY);
+        //TODO Change to a master tag of tags.
+        Stream<PoiRecord> stream = poiManager.getInRange(poi -> poi.is(PoiTypeTags.BEE_HOME) || poi.value() == ModPOIs.TIERED_BEEHIVE_POI.get(), blockpos, 20, PoiManager.Occupancy.ANY);
         cir.setReturnValue(stream.map(PoiRecord::getPos)
                 .filter(((BeeEntityInvoker) this$0)::callDoesHiveHaveSpace)
                 .sorted(Comparator.comparingDouble(blockPos -> blockPos.distSqr(blockpos)))

@@ -26,12 +26,6 @@ public class LoadDevRecipes implements ICondition {
         return Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULT_RECIPES.get());
     }
 
-
-    @Override
-    public boolean test() {
-        return false;
-    }
-
     public static class Serializer implements IConditionSerializer<LoadDevRecipes> {
 
         public static final Serializer INSTANCE = new Serializer();

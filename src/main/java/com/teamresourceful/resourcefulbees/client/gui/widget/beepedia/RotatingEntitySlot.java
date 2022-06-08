@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.tooltip.EntityTooltip;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -28,7 +28,7 @@ public class RotatingEntitySlot extends EmptySlot{
     private int rotation;
 
     public RotatingEntitySlot(int x, int y, int width, int height, Supplier<? extends Collection<EntityType<?>>> entitySupplier, CustomBeeData beeData, boolean showNBT) {
-        super(x, y, width, height, new TextComponent(""));
+        super(x, y, width, height, Component.literal(""));
         this.entitySupplier = entitySupplier;
         EntityTooltip tooltip = new EntityTooltip(this.x, this.y, this.width, this.height, () -> entities.get(rotation)).setDoNBT(showNBT);
         setTooltips(Collections.singletonList(tooltip));

@@ -41,7 +41,7 @@ public class ModelHandler {
         if (!block.isPresent()) return;
 
         if (renderType != null) ItemBlockRenderTypes.setRenderLayer(block.get(), renderType);
-        if (!resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + block.getId().getPath() + JSON_FILE_EXTENSION))) {
+        if (resourceManager.getResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + block.getId().getPath() + JSON_FILE_EXTENSION)).isEmpty()) {
             block.get().getStateDefinition().getPossibleStates().forEach(state -> {
                 String propertyMapString = BlockModelShaper.statePropertiesToString(state.getValues());
                 ModelResourceLocation defaultModelLocation = new ModelResourceLocation(parentModel, propertyMapString);
@@ -52,7 +52,7 @@ public class ModelHandler {
     }
 
     private static void registerGenericItem(RegistryObject<Item> item, String parentModel, ResourceManager resourceManager) {
-        if (item.isPresent() && !resourceManager.hasResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + item.getId().getPath() + JSON_FILE_EXTENSION))) {
+        if (item.isPresent() && resourceManager.getResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + item.getId().getPath() + JSON_FILE_EXTENSION)).isEmpty()) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(parentModel, MODEL_INVENTORY_TAG);
             ForgeModelBakery.addSpecialModel(defaultModelLocation);
             MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(item.getId(), MODEL_INVENTORY_TAG));

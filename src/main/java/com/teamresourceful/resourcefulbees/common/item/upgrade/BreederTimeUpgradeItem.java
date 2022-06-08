@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.common.item.IShiftingToolTip;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -40,7 +39,7 @@ public class BreederTimeUpgradeItem extends Item implements IIntUpgrade, IShifti
 
     @Override
     public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(new TranslatableComponent(TranslationConstants.Items.BREED_TIME_UPGRADE, getUpgradeTier(stack)));
+        components.add(Component.translatable(TranslationConstants.Items.BREED_TIME_UPGRADE, getUpgradeTier(stack)));
     }
 
     @Override

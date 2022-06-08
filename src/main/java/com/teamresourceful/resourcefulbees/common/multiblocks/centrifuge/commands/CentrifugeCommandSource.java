@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandResponseMessage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 
 public record CentrifugeCommandSource(CentrifugeController controller, ServerPlayer player) {
@@ -19,11 +18,11 @@ public record CentrifugeCommandSource(CentrifugeController controller, ServerPla
     }
 
     public void sendError(String message) {
-        sendError(new TextComponent(message));
+        sendError(Component.literal(message));
     }
 
     public void sendMessage(String message) {
-        sendMessage(new TextComponent(message));
+        sendMessage(Component.literal(message));
     }
 
     public void sendError(Component component) {

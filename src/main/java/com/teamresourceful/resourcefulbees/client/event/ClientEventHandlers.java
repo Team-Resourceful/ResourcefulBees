@@ -34,6 +34,8 @@ import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.event.DrawSelectionEvent;
@@ -96,7 +98,10 @@ public class ClientEventHandlers {
     private static void startSetups() {
         if (!setupsDone) {
             setupsDone = true;
-            BeeRegistry.getRegistry().regenerateCustomBeeData();
+
+            Level level = Minecraft.getInstance().level;
+            RegistryAccess access = level == null ? null : level.registryAccess();
+            BeeRegistry.getRegistry().regenerateCustomBeeData(access);
         }
     }
 

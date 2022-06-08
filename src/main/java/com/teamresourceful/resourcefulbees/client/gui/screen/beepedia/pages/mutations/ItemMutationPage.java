@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.pages.BeeP
 import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
@@ -30,9 +30,9 @@ public class ItemMutationPage extends MutationsPage {
         initOutputs(outputs);
     }
 
-    public ItemMutationPage(Entity bee, BeePage parent, Tag<Block> blocks, RandomCollection<ItemOutput> outputs, MutationType type, int mutationCount, BeepediaScreen beepedia) {
+    public ItemMutationPage(Entity bee, BeePage parent, TagKey<Block> blocks, RandomCollection<ItemOutput> outputs, MutationType type, int mutationCount, BeepediaScreen beepedia) {
         super(bee, parent, type, mutationCount, beepedia);
-        inputs = blocks.getValues();
+        inputs = null; //TODO blocks.getValues();
         initOutputs(outputs);
     }
 

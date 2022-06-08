@@ -10,7 +10,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -93,7 +92,7 @@ public class BeeBoxItem extends BlockItem implements IShiftingToolTip {
         if (this.temp) {
             components.add(TranslationConstants.Items.BEE_BOX_TOOLTIP_TEMP.withStyle(ChatFormatting.GOLD));
         } else {
-            components.add(new TranslatableComponent(TranslationConstants.Items.BEE_BOX_TOOLTIP, BeeConstants.MAX_BEES_BEE_BOX).withStyle(ChatFormatting.GOLD));
+            components.add(Component.translatable(TranslationConstants.Items.BEE_BOX_TOOLTIP, BeeConstants.MAX_BEES_BEE_BOX).withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -116,7 +115,7 @@ public class BeeBoxItem extends BlockItem implements IShiftingToolTip {
                 .map(StringTag.class::cast)
                 .forEach(displayJson -> {
                     Component display = Component.Serializer.fromJson(displayJson.getAsString());
-                    components.add(new TranslatableComponent(TranslationConstants.Items.BEE_BOX_ENTITY_NAME, display).withStyle(ChatFormatting.GRAY));
+                    components.add(Component.translatable(TranslationConstants.Items.BEE_BOX_ENTITY_NAME, display).withStyle(ChatFormatting.GRAY));
                 });
         }
     }

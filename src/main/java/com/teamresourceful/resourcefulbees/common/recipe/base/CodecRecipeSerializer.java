@@ -11,14 +11,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
 
-public class CodecRecipeSerializer<R extends Recipe<?>> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<R>{
+public class CodecRecipeSerializer<R extends Recipe<?>> implements RecipeSerializer<R>{
 
     private final RecipeType<R> recipeType;
     private final Function<ResourceLocation, Codec<R>> codecInitializer;

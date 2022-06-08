@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -62,16 +62,16 @@ public class ApiaryBlock extends BeeHouseBlock implements IShiftingToolTip {
 
   @Override
   public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-    components.add(new TranslatableComponent(TranslationConstants.BeeHive.MAX_BEES, CommonConfig.APIARY_MAX_BEES.get())
+    components.add(Component.translatable(TranslationConstants.BeeHive.MAX_BEES, CommonConfig.APIARY_MAX_BEES.get())
             .append(TranslationConstants.BeeHive.UNIQUE.withStyle(ChatFormatting.BOLD))
             .withStyle(ChatFormatting.GOLD)
     );
 
     int timeReduction = 100 - (int)(tier.getTimeModifier() * 100);
-    components.add(new TranslatableComponent(TranslationConstants.BeeHive.HIVE_TIME, "-", timeReduction).withStyle(ChatFormatting.GOLD));
-    TranslatableComponent outputType = tier.getOutputType().isComb() ? TranslationConstants.Apiary.HONEYCOMB : TranslationConstants.Apiary.HONEYCOMB_BLOCK;
+    components.add(Component.translatable(TranslationConstants.BeeHive.HIVE_TIME, "-", timeReduction).withStyle(ChatFormatting.GOLD));
+    MutableComponent outputType = tier.getOutputType().isComb() ? TranslationConstants.Apiary.HONEYCOMB : TranslationConstants.Apiary.HONEYCOMB_BLOCK;
 
-    components.add(new TranslatableComponent(TranslationConstants.Apiary.OUTPUT_TYPE, outputType).withStyle(ChatFormatting.GOLD));
-    components.add(new TranslatableComponent(TranslationConstants.Apiary.OUTPUT_QUANTITY, tier.getOutputAmount()).withStyle(ChatFormatting.GOLD));
+    components.add(Component.translatable(TranslationConstants.Apiary.OUTPUT_TYPE, outputType).withStyle(ChatFormatting.GOLD));
+    components.add(Component.translatable(TranslationConstants.Apiary.OUTPUT_QUANTITY, tier.getOutputAmount()).withStyle(ChatFormatting.GOLD));
   }
 }

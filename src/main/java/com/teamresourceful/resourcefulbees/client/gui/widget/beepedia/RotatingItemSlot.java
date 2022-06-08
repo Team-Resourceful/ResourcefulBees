@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.gui.tooltip.ItemTooltip;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,7 +23,7 @@ public class RotatingItemSlot extends EmptySlot {
     private int rotation;
 
     public RotatingItemSlot(int x, int y, int width, int height, CustomBeeData beeData, Supplier<? extends Collection<ItemStack>> items, boolean showNBT) {
-        super(x, y, width, height, new TextComponent(""));
+        super(x, y, width, height, Component.literal(""));
         this.itemSupplier = items;
         reset(beeData);
         ItemTooltip tooltip = new ItemTooltip(this.x, this.y, this.width, this.height, () -> this.items.get(rotation)).setDoNBT(showNBT);

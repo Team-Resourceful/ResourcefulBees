@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.client.gui.tooltip.Tooltip;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
@@ -44,7 +43,7 @@ public class ItemSlot extends EmptySlot {
     }
 
     public ItemSlot(int x, int y, int width, int height, Supplier<ItemStack> stack, Supplier<Component> tooltip) {
-        super(x, y, width, height, new TextComponent(""));
+        super(x, y, width, height, Component.literal(""));
         this.tooltip = tooltip == null ? new ItemTooltip(this.x, this.y, this.width, this.height, stack) : new Tooltip(this.x, this.y, this.width, this.height, tooltip);
         this.stack = stack;
         setTooltips(Collections.singletonList(this.tooltip));

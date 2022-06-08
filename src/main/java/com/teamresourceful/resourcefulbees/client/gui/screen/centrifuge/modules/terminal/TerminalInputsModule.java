@@ -15,7 +15,6 @@ import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,9 +27,9 @@ import static com.teamresourceful.resourcefulbees.common.utils.RenderUtils.TERMI
 public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTerminalScreen> {
 
     //TODO change these to translation texts
-    private static final Component HOME_TEXT = new TextComponent("Home");
-    private static final Component ITEM_OUTS_TEXT = new TextComponent("Item Outputs");
-    private static final Component FLUID_OUTS_TEXT = new TextComponent("Fluid Outputs");
+    private static final Component HOME_TEXT = Component.literal("Home");
+    private static final Component ITEM_OUTS_TEXT = Component.literal("Item Outputs");
+    private static final Component FLUID_OUTS_TEXT = Component.literal("Fluid Outputs");
 
     //Nav Buttons
     //TODO make these a 3 texture "button" or modify DisplayTab to handle such cases by passing in uv values

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -25,7 +25,7 @@ public class ArrowButton extends Button {
     private final int xTexStart;
 
     public ArrowButton(int xIn, int yIn, Direction direction, OnPress onPressIn) {
-        super(xIn, yIn, 12, 12, TextComponent.EMPTY, onPressIn);
+        super(xIn, yIn, 12, 12, Component.empty(), onPressIn);
         switch (direction) {
             case UP -> xTexStart = 0;
             case DOWN -> xTexStart = 12;

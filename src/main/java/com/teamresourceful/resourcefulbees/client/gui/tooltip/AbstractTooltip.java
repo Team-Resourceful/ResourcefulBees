@@ -11,7 +11,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -62,7 +61,7 @@ public abstract class AbstractTooltip {
         if (!nbt.isEmpty()) {
             if (Screen.hasShiftDown()) {
                 Arrays.stream(NbtUtils.prettyPrint(nbt).split("\n"))
-                        .map(TextComponent::new)
+                        .map(Component::literal)
                         .map(c -> c.withStyle(ChatFormatting.DARK_PURPLE))
                         .forEach(tooltips::add);
             } else {

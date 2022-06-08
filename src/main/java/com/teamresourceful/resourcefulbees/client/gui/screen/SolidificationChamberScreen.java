@@ -2,14 +2,13 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.SolidificationChamberMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
@@ -60,9 +59,9 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
             this.renderTooltip(matrix, mouseX, mouseY);
             if (mouseX >= this.leftPos + 67 && mouseX <= this.leftPos + 81 && mouseY >= this.topPos + 12 && mouseY <= this.topPos + 74) {
                 if (Screen.hasShiftDown() || tileEntity.getTank().getFluidAmount() < 1000) {
-                    this.renderTooltip(matrix, new TextComponent(tileEntity.getTank().getFluidAmount() + " MB"), mouseX, mouseY);
+                    this.renderTooltip(matrix, Component.literal(tileEntity.getTank().getFluidAmount() + " MB"), mouseX, mouseY);
                 } else {
-                    this.renderTooltip(matrix, new TextComponent(ModConstants.DECIMAL_FORMAT.format((double) tileEntity.getTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
+                    this.renderTooltip(matrix, Component.literal(ModConstants.DECIMAL_FORMAT.format((double) tileEntity.getTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
                 }
             }
         }

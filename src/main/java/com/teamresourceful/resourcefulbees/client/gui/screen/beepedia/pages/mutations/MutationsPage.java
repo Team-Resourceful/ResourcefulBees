@@ -9,7 +9,8 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.MutationType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -82,7 +83,7 @@ public abstract class MutationsPage {
 
     protected void drawWeight(PoseStack matrix, Double right, int xPos, int yPos) {
         Font font = Minecraft.getInstance().font;
-        TextComponent text = new TextComponent(ModConstants.PERCENT_FORMAT.format(right));
+        MutableComponent text = Component.literal(ModConstants.PERCENT_FORMAT.format(right));
         int padding = font.width(text) / 2;
         font.draw(matrix, text.withStyle(ChatFormatting.GRAY), (float) xPos - padding, yPos, -1);
     }

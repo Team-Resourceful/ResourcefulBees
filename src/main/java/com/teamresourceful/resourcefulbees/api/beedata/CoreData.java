@@ -64,7 +64,7 @@ public record CoreData(String name, String honeycomb, HolderSet<Block> blockFlow
      */
     public String getEntityFlowerRegistryID() {
         return entityFlower
-                .map(EntityType::getRegistryName)
+                .map(Registry.ENTITY_TYPE::getKey)
                 .map(ResourceLocation::toString)
                 .orElse(null);
     }

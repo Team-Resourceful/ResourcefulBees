@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.AuraType;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -64,8 +63,7 @@ public class BeeAuraGoal extends Goal {
 
     private static void playSound(SoundEvent sound, Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            var packet = new ClientboundSoundEntityPacket(sound, player.getSoundSource(), player, 0.1f, (player.getRandom().nextFloat() - player.getRandom().nextFloat(1)) * 0.35F + 0.9F);
-            serverPlayer.connection.send(packet);
+            serverPlayer.playSound(sound, 0.1f, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.35F + 0.9F);
         }
     }
 

@@ -12,7 +12,8 @@ import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +35,7 @@ import java.util.function.Supplier;
  * @param entityType
  */
 public record CustomBeeData(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData,
-                            JsonObject rawData, ResourceLocation registryID, TranslatableComponent displayName, Supplier<EntityType<?>> entityType
+                            JsonObject rawData, ResourceLocation registryID, MutableComponent displayName, Supplier<EntityType<?>> entityType
 ) {
     /**
      * A default implementation of {@link CustomBeeData} that can be
@@ -67,7 +68,7 @@ public record CustomBeeData(CoreData coreData, RenderData renderData, BreedData 
     private static CustomBeeData of(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
         JsonObject rawData = BeeRegistry.getRegistry().getRawBeeData(coreData.name());
         ResourceLocation registryId = new ResourceLocation(ResourcefulBees.MOD_ID, coreData.name() + "_bee");
-        TranslatableComponent displayName = new TranslatableComponent("entity.resourcefulbees." + coreData.name() + "_bee");
+        MutableComponent displayName = Component.translatable("entity.resourcefulbees." + coreData.name() + "_bee");
         Supplier<EntityType<?>> beeEntity = Suppliers.memoize(() -> getEntity(registryId));
         return new CustomBeeData(coreData, renderData, breedData, combatData, mutationData, spawnData, traitData, rawData, registryId, displayName, beeEntity);
     }

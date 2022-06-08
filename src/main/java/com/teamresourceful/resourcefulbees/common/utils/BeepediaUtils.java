@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.LightLevel;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 import org.apache.commons.lang3.tuple.Pair;
@@ -34,7 +34,7 @@ public class BeepediaUtils {
         Minecraft.getInstance().setScreen(new BeepediaScreen(complete, hasShades, data));
     }
 
-    public static TranslatableComponent getSizeName(float sizeModifier) {
+    public static MutableComponent getSizeName(float sizeModifier) {
         if (sizeModifier < 0.75) return TranslationConstants.Sizes.TINY;
         else if (sizeModifier < 1) return TranslationConstants.Sizes.SMALL;
         else if (sizeModifier == 1) return TranslationConstants.Sizes.REGULAR;
@@ -46,7 +46,7 @@ public class BeepediaUtils {
         return bool ? TranslationConstants.Booleans.YES : TranslationConstants.Booleans.NO;
     }
 
-    public static TranslatableComponent getLightName(LightLevel light) {
+    public static MutableComponent getLightName(LightLevel light) {
         return light.getDisplay();
     }
 

@@ -8,13 +8,12 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collections;
@@ -62,7 +61,7 @@ public class DataGen {
                         .filter(block -> ((BlockAccessor)block).getHasCollision() )
                         .map(Block::asItem)
                         .filter(item -> item != Items.AIR)
-                        .map(ForgeRegistryEntry::getRegistryName)
+                        .map(Registry.ITEM::getKey)
                         .collect(Collectors.toSet()));
     }
 
@@ -70,7 +69,7 @@ public class DataGen {
         TAGS.put(new ResourceLocation("minecraft", "tags/entity_types/beehive_inhabitors.json"),
                 ModEntities.getSetOfModBees().stream()
                         .map(RegistryObject::get)
-                        .map(EntityType::getRegistryName)
+                        .map(Registry.ENTITY_TYPE::getKey)
                         .collect(Collectors.toSet()));
     }
 

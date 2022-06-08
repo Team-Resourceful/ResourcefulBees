@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -32,9 +31,9 @@ public class FluidTooltip extends AbstractTooltip {
         tooltips.add(fluid.getDisplayName());
         if (fluid.getAmount() > 1 || showFluid) {
             String amount = fluid.getAmount() < 500 || Screen.hasShiftDown() ? String.format("%,d", fluid.getAmount()) + " mb" : ModConstants.DECIMAL_FORMAT.format((float) fluid.getAmount() / 1000) + " B";
-            tooltips.add(new TextComponent(amount));
+            tooltips.add(Component.literal(amount));
         }
-        tooltips.add(new TextComponent(String.valueOf(fluid.getFluid().getRegistryName())).withStyle(ChatFormatting.DARK_GRAY));
+        tooltips.add(Component.literal(String.valueOf(fluid.getFluid())).withStyle(ChatFormatting.DARK_GRAY));
         return tooltips;
     }
 
@@ -42,8 +41,7 @@ public class FluidTooltip extends AbstractTooltip {
     public List<Component> getAdvancedTooltip() {
         FluidStack fluid = this.fluidSupplier.get();
         List<Component> tooltips = getTooltip();
-        if (fluid.getFluid().getRegistryName() == null) return getTooltip();
-        tooltips.add(new TextComponent(fluid.getFluid().getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY));
+        tooltips.add(Component.literal(String.valueOf(fluid.getFluid())).withStyle(ChatFormatting.DARK_GRAY));
         return tooltips;
     }
 }

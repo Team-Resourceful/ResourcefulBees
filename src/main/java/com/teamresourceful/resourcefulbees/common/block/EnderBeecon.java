@@ -11,7 +11,6 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -141,7 +140,7 @@ public class EnderBeecon extends SidedTickingBlock<EnderBeeconBlockEntity> {
         FluidTank tank = new FluidTank(16000).readFromNBT(stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getCompound(NBTConstants.NBT_TANK));
         FluidStack fluid = tank.getFluid();
         if (!fluid.isEmpty()) {
-            tooltip.add(new TranslatableComponent(fluid.getTranslationKey())
+            tooltip.add(Component.translatable(fluid.getTranslationKey())
                     .append(": [" + tank.getFluidAmount() + "/" + tank.getCapacity() + "]")
                     .withStyle(ChatFormatting.GOLD));
         }

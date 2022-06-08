@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.client.gui.tooltip;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -50,8 +50,7 @@ public class EntityTooltip extends AbstractTooltip{
     public List<Component> getAdvancedTooltip() {
         Entity entity = entitySupplier.get();
         List<Component> tooltips = getTooltip();
-        if (entity.getType().getRegistryName() == null) return getTooltip();
-        tooltips.add(new TextComponent(entity.getType().getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY));
+        tooltips.add(Component.literal(String.valueOf(Registry.ENTITY_TYPE.getKey(entity.getType()))).withStyle(ChatFormatting.DARK_GRAY));
         return tooltips;
     }
 

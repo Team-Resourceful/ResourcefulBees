@@ -1,6 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
@@ -9,6 +11,8 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Unmodifiable;
@@ -80,9 +84,11 @@ public class BeeRegistry implements IBeeRegistry {
      * data has populated correctly. Finally, the family trees and spawnable biomes
      * maps are constructed.
      */
-    public void regenerateCustomBeeData() {
+    public void regenerateCustomBeeData(RegistryAccess access) {
+        DynamicOps<JsonElement> ops = access == null ? JsonOps.INSTANCE : RegistryOps.create(JsonOps.INSTANCE, access);
+
         RAW_DATA.forEach((s, jsonObject) -> CUSTOM_DATA.compute(s, (s1, customBeeDataCodec) ->
-                CustomBeeData.codec(s).parse(JsonOps.INSTANCE, jsonObject)
+                CustomBeeData.codec(s).parse(ops, jsonObject)
                 .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", s))));
         //MinecraftForge.EVENT_BUS.post(new RegisterBeeEvent(beeData));
         BeeRegistry.buildFamilyTree();

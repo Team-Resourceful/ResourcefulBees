@@ -16,6 +16,7 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -271,7 +272,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
 
     public ListTag writeEffectsToNBT(ListTag nbt) {
         effects.stream()
-                .map(MobEffect::getRegistryName)
+                .map(Registry.MOB_EFFECT::getKey)
                 .filter(Objects::nonNull)
                 .map(ResourceLocation::toString)
                 .map(StringTag::valueOf)
@@ -294,7 +295,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
         else if (MobEffects.FIRE_RESISTANCE.equals(effect)) return CommonConfig.BEECON_FIRE_RESISTANCE_VALUE.get();
         else if (MobEffects.REGENERATION.equals(effect)) return CommonConfig.BEECON_REGENERATION_VALUE.get();
 
-        ResourcefulBees.LOGGER.error("Effect {} does not have an effect value", effect.getRegistryName());
+        ResourcefulBees.LOGGER.error("Effect {} does not have an effect value", effect.getDescriptionId());
         return 1D;
     }
 

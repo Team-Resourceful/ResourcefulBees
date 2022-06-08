@@ -70,7 +70,7 @@ public class ResourcefulBees {
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> IncompatibleModWarning::init);
 
-        BiomeDictionary.build();
+        //BiomeDictionary.build();
 
         HoneycombSetup.setupHoneycombs();
         //HoneycombRegistry.registerHoneycombItems();
@@ -89,7 +89,7 @@ public class ResourcefulBees {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onPackFinders);
-        MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
+        //MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
         MinecraftForge.EVENT_BUS.addListener(Beekeeper::setupBeekeeper);
         MinecraftForge.EVENT_BUS.addListener(this::cloneEvent);
@@ -102,7 +102,7 @@ public class ResourcefulBees {
     @SubscribeEvent
     public void serverLoaded(ServerStartedEvent event) {
         if (event.getServer().isDedicatedServer()){
-            BeeRegistry.getRegistry().regenerateCustomBeeData();
+            BeeRegistry.getRegistry().regenerateCustomBeeData(event.getServer().registryAccess());
         }
     }
 
