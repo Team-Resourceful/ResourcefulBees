@@ -43,15 +43,15 @@ public class BeeTooltip extends AbstractTooltip {
 
     public static List<Component> getTooltip(CustomBeeData beeData, boolean showName) {
         List<Component> tooltips = new LinkedList<>();
-        if (showName) tooltips.add(beeData.getDisplayName());
-        tooltips.addAll(getBeeLore(beeData.getCoreData()));
+        if (showName) tooltips.add(beeData.displayName());
+        tooltips.addAll(getBeeLore(beeData.coreData()));
         return tooltips;
     }
 
     public static List<Component> getAdvancedTooltip(CustomBeeData beeData, boolean showName) {
         List<Component> tooltips = getTooltip(beeData, showName);
-        if (beeData.getRegistryID() == null) return getTooltip(beeData, showName);
-        tooltips.add(new TextComponent(beeData.getRegistryID().toString()).withStyle(ChatFormatting.DARK_GRAY));
+        if (beeData.registryID() == null) return getTooltip(beeData, showName);
+        tooltips.add(new TextComponent(beeData.registryID().toString()).withStyle(ChatFormatting.DARK_GRAY));
         return tooltips;
     }
 }

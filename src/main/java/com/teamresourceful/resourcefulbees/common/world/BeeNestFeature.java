@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.common.world;
 import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
@@ -36,7 +35,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
@@ -121,7 +119,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private void logMissingBiome(ResourceKey<Biome> biomeKey){
-        if (biomeKey != null && ClientConfig.SHOW_DEBUG_INFO.get()) {
+        if (biomeKey != null && CommonConfig.SHOW_DEBUG_INFO.get()) {
             ResourcefulBees.LOGGER.warn("*****************************************************");
             ResourcefulBees.LOGGER.warn("Could not load bees into nest during chunk generation");
             ResourcefulBees.LOGGER.warn("Biome: {}", biomeKey.location());
@@ -136,7 +134,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
                 bee.setPos(nestPos.getX(), nestPos.getY(), nestPos.getZ());
                 CompoundTag compoundNBT = new CompoundTag();
                 bee.save(compoundNBT);
-                int timeInHive = rand.nextInt(data.getCoreData().getMaxTimeInHive());
+                int timeInHive = rand.nextInt(data.coreData().maxTimeInHive());
                 ((BeehiveEntityAccessor)nest).getBees().add(new BeehiveBlockEntity.BeeData(compoundNBT, 0, timeInHive));
             }
         }
@@ -149,7 +147,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 if (biomeKey != null && BeeRegistry.isSpawnableBiome(biomeKey.location())) {
                     CustomBeeData data = BeeRegistry.getSpawnableBiome(biomeKey.location()).next();
-                    if (data.getSpawnData().canSpawnAtYLevel(nestPos)) continue;
+                    if (data.spawnData().canSpawnAtYLevel(nestPos)) continue;
                     addBeeToNest(data.getEntityType(), level, nestPos, data, rand, nest);
                 } else {
                     logMissingBiome(biomeKey);
@@ -178,7 +176,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         BlockPos finalNewPos = newPos.mutable();
         List<Direction> possibleDirections = Direction.Plane.HORIZONTAL.stream()
                 .filter(dir -> level.isEmptyBlock(finalNewPos.relative(dir, 1)))
-                .collect(Collectors.toList());
+                .toList();
 
         if (possibleDirections.isEmpty()) return false;
         Direction direction = possibleDirections.get(rand.nextInt(possibleDirections.size()));

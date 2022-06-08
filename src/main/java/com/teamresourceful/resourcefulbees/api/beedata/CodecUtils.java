@@ -6,6 +6,8 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
@@ -20,6 +22,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
@@ -116,5 +119,10 @@ public class CodecUtils {
 
     private static <T> Dynamic<JsonElement> encoder(T input, Function<T, JsonElement> encoder) {
         return new Dynamic<>(JsonOps.INSTANCE, encoder.apply(input));
+    }
+
+    public static Consumer<String> debugLog() {
+        if (Boolean.FALSE.equals(CommonConfig.SHOW_DEBUG_INFO.get())) return s -> {};
+        return ResourcefulBees.LOGGER::warn;
     }
 }

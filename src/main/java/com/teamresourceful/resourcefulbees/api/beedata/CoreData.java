@@ -6,27 +6,34 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
-@Unmodifiable
-public class CoreData {
+/**
+ * @param name the bees name or id also known as bee type is used as an id for the bee in multiple locations.
+ * @param blockFlowers These blocks represent the flowers the bee uses for pollinating.
+ * @param entityFlower An optional entity which can be used for pollinating. Defaulted to empty if no entity is provided.
+ * @param maxTimeInHive Gets the maximum time a bee can spend in the hive before time modifications are performed.
+ * @param lore lore provided by pack devs in bee json.
+ */
+public record CoreData(String name, String honeycomb, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, List<MutableComponent> lore) {
     /**
      * A default instance of {@link CoreData} that can be
      * used to minimize {@link NullPointerException}'s. This implementation sets the
      * bees name/type to "error".
      */
-    public static final CoreData DEFAULT = new CoreData("error");
+    public static final CoreData DEFAULT = new CoreData("error", "", HolderSet.direct(), Optional.empty(), BeeConstants.MAX_TIME_IN_HIVE, new ArrayList<>());
 
     /**
      * Returns a {@link Codec<CoreData>} that can be parsed to create a
@@ -40,57 +47,13 @@ public class CoreData {
      */
     public static Codec<CoreData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(CoreData::getName),
-                RegistryCodecs.homogeneousList(Registry.BLOCK_REGISTRY).fieldOf("flower").orElse(HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY))
-                        .forGetter(CoreData::getBlockFlowers),
-                Registry.ENTITY_TYPE.byNameCodec().optionalFieldOf("entityFlower").forGetter(CoreData::getEntityFlower),
-                Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(CoreData::getMaxTimeInHive),
-                CodecUtils.passthrough(Component.Serializer::toJsonTree, Component.Serializer::fromJson).listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(CoreData::getLore)
+                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(CoreData::name),
+                Codec.STRING.fieldOf("honeycombVariation").orElse("").forGetter(CoreData::honeycomb),
+                TagAndListSetCodec.of(Registry.BLOCK).fieldOf("flower").orElse(HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY)).forGetter(CoreData::blockFlowers),
+                Registry.ENTITY_TYPE.byNameCodec().optionalFieldOf("entityFlower").forGetter(CoreData::entityFlower),
+                Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(CoreData::maxTimeInHive),
+                CodecUtils.passthrough(Component.Serializer::toJsonTree, Component.Serializer::fromJson).listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(CoreData::lore)
         ).apply(instance, CoreData::new));
-    }
-
-    protected HolderSet<Block> blockFlowers;
-    protected Optional<EntityType<?>> entityFlower;
-    protected List<MutableComponent> lore;
-    protected int maxTimeInHive;
-    protected String name;
-
-    private CoreData(String name, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, List<MutableComponent> lore){
-        this.name = name;
-        this.blockFlowers = blockFlowers;
-        this.entityFlower = entityFlower;
-        this.maxTimeInHive = maxTimeInHive;
-        this.lore = lore;
-    }
-
-    private CoreData(String name) {
-        this.name = name;
-        this.blockFlowers = HolderSet.direct();
-        this.entityFlower = Optional.empty();
-        this.maxTimeInHive = BeeConstants.MAX_TIME_IN_HIVE;
-        this.lore = new ArrayList<>();
-    }
-
-    /**
-     * These blocks represent the flowers the bee uses for pollinating.
-     * The default value for this is an empty set.
-     *
-     * @return Returns a {@link Set<Block>} backed by a {@link HashSet}
-     * representing the bees pollination flowers.
-     */
-    public HolderSet<Block> getBlockFlowers() {
-        return blockFlowers;
-    }
-
-    /**
-     * Gets an optional entity the bee can use for pollinating
-     * if one was specified in the bee json. The default value
-     * is an optional of null.
-     *
-     * @return Returns an {@link Optional<EntityType>} for pollinating.
-     */
-    public Optional<EntityType<?>> getEntityFlower() {
-        return entityFlower;
     }
 
     /**
@@ -100,83 +63,21 @@ public class CoreData {
      * @return Returns the entity flower registry ID as a {@link String}.
      */
     public String getEntityFlowerRegistryID() {
-        return entityFlower.map(entityType -> entityType.getRegistryName() != null ? entityType.getRegistryName().toString() : null)
+        return entityFlower
+                .map(EntityType::getRegistryName)
+                .map(ResourceLocation::toString)
                 .orElse(null);
     }
-
     /**
-     * Gets the maximum time a bee can spend in the hive before time
-     * modifications are performed.
+     * Returns an {@link Optional}&lt;{@link OutputVariation}&gt; object containing information regarding the
+     * honeycomb a bee produces if it is specified to produce one.
      *
-     * @return Returns the maximum time in hive as an {@link Integer}.
-     */
-    public int getMaxTimeInHive() {
-        return maxTimeInHive;
-    }
-
-    /**
-     * The name value passed into the constructor which is
-     * usually obtained from the bee json file name.
-     * <i>Note: Name is synonymous with "bee type"</i>
+     * Omitting this object from the bee json results in a default object where the bee
+     * <b>does not</b> produce a honeycomb.
      *
-     * @return Returns the name (or "bee type") for the bee.
+     * @return Returns an {@link Optional}&lt;{@link OutputVariation}&gt; with the contained data being immutable.
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets any information or lore data optionally provided to the bee.
-     * This data is useful for pack devs to add extra notes about a bee.
-     *
-     * @return Returns an {@link Optional} containing extra bee information.
-     */
-    public List<MutableComponent> getLore() {
-        return lore;
-    }
-
-    public CoreData toImmutable() {
-        return this;
-    }
-
-    public static class Mutable extends CoreData {
-
-        public Mutable(String name, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, List<MutableComponent> lore) {
-            super(name, blockFlowers, entityFlower, maxTimeInHive, lore);
-        }
-
-        public Mutable(String name) {
-            super(name);
-        }
-
-        public Mutable setBlockFlowers(HolderSet<Block> blockFlowers) {
-            this.blockFlowers = blockFlowers;
-            return this;
-        }
-
-        public Mutable setEntityFlower(Optional<EntityType<?>> entityFlower) {
-            this.entityFlower = entityFlower;
-            return this;
-        }
-
-        public Mutable setLore(List<MutableComponent> lore) {
-            this.lore = lore;
-            return this;
-        }
-
-        public Mutable setMaxTimeInHive(int maxTimeInHive) {
-            this.maxTimeInHive = maxTimeInHive;
-            return this;
-        }
-
-        public Mutable setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        @Override
-        public CoreData toImmutable() {
-            return new CoreData(this.name, this.blockFlowers, this.entityFlower, this.maxTimeInHive, this.lore);
-        }
+    public Optional<OutputVariation> getHoneycombData() {
+        return Optional.ofNullable(HoneycombRegistry.getOutputVariation(honeycomb()));
     }
 }

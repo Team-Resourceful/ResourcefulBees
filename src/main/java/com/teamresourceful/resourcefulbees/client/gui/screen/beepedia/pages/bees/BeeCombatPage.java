@@ -29,11 +29,11 @@ public class BeeCombatPage extends BeeDataPage {
     @Override
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         Font font = Minecraft.getInstance().font;
-        TranslatableComponent healthName = new TranslatableComponent(TranslationConstants.Beepedia.Info.HEALTH, beeData.getCombatData().getBaseHealth());
-        TranslatableComponent damageName = new TranslatableComponent(TranslationConstants.Beepedia.Info.DAMAGE, beeData.getCombatData().getAttackDamage());
-        TranslatableComponent stingerName = new TranslatableComponent(TranslationConstants.Beepedia.Info.STINGER, BeepediaUtils.getYesNo(beeData.getCombatData().removeStingerOnAttack()));
-        TranslatableComponent passiveName = new TranslatableComponent(TranslationConstants.Beepedia.Info.PASSIVE, BeepediaUtils.getYesNo(beeData.getCombatData().isPassive()));
-        TranslatableComponent poisonName = new TranslatableComponent(TranslationConstants.Beepedia.Info.POISON, BeepediaUtils.getYesNo(beeData.getCombatData().inflictsPoison()));
+        TranslatableComponent healthName = new TranslatableComponent(TranslationConstants.Beepedia.Info.HEALTH, beeData.combatData().baseHealth());
+        TranslatableComponent damageName = new TranslatableComponent(TranslationConstants.Beepedia.Info.DAMAGE, beeData.combatData().attackDamage());
+        TranslatableComponent stingerName = new TranslatableComponent(TranslationConstants.Beepedia.Info.STINGER, BeepediaUtils.getYesNo(beeData.combatData().removeStingerOnAttack()));
+        TranslatableComponent passiveName = new TranslatableComponent(TranslationConstants.Beepedia.Info.PASSIVE, BeepediaUtils.getYesNo(beeData.combatData().isPassive()));
+        TranslatableComponent poisonName = new TranslatableComponent(TranslationConstants.Beepedia.Info.POISON, BeepediaUtils.getYesNo(beeData.combatData().inflictsPoison()));
 
         font.draw(matrix, healthName.withStyle(ChatFormatting.GRAY), x, y + 34f, -1);
         font.draw(matrix, damageName.withStyle(ChatFormatting.GRAY), x + 86f, y + 34f, -1);

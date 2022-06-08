@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.yeti",
+				"identifier": "geometry.mushroom",
 				"texture_width": 64,
 				"texture_height": 64,
 				"visible_bounds_width": 3,
@@ -106,26 +106,43 @@
 					]
 				},
 				{
-					"name": "yeti_horns",
+					"name": "mushroom",
 					"parent": "body",
 					"pivot": [0, 5, 0]
 				},
 				{
-					"name": "cube_r13",
-					"parent": "yeti_horns",
-					"pivot": [-2, 9, -4],
-					"rotation": [0, 0, -54.99822],
+					"name": "frontMushroom1",
+					"parent": "mushroom",
+					"pivot": [-1.5, 9, 0],
 					"cubes": [
-						{"origin": [-4, 9, -4.5], "size": [2, 3, 2], "uv": [34, 12], "mirror": true}
+						{"origin": [-9.5, 7, -4], "size": [16, 16, 0], "inflate": -2, "uv": [32, 48]}
 					]
 				},
 				{
-					"name": "cube_r14",
-					"parent": "yeti_horns",
-					"pivot": [2, 9, -4],
-					"rotation": [0, 0, 54.99822],
+					"name": "frontMushroom2",
+					"parent": "frontMushroom1",
+					"pivot": [-1.5, 9, -2],
+					"rotation": [0, -90.00021, 0],
 					"cubes": [
-						{"origin": [2, 9, -4.5], "size": [2, 3, 2], "uv": [34, 12]}
+						{"origin": [-9.5, 7, -4], "size": [16, 16, 0], "inflate": -2, "uv": [32, 48]}
+					]
+				},
+				{
+					"name": "backMushroom1",
+					"parent": "mushroom",
+					"pivot": [2.5, 9, 4],
+					"rotation": [0, -45.00011, 0],
+					"cubes": [
+						{"origin": [-5.5, 7, 2], "size": [16, 16, 0], "inflate": -2, "uv": [0, 48]}
+					]
+				},
+				{
+					"name": "backMushroom2",
+					"parent": "backMushroom1",
+					"pivot": [2.5, 9, 4],
+					"rotation": [0, -90.00021, 0],
+					"cubes": [
+						{"origin": [-5.5, 7, 2], "size": [16, 16, 0], "inflate": -2, "uv": [0, 48]}
 					]
 				}
 			]

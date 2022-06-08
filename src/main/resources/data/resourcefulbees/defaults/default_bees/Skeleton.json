@@ -1,9 +1,9 @@
 {
   "CoreData": {
     "flower": ["minecraft:bone_block"],
+    "honeycombVariation": "skeleton",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "skeleton",
   "RenderData": {
     "texture": "skeleton/skeleton_bee",
     "ColorData": {

@@ -48,7 +48,7 @@ public class RotatingEntitySlot extends EmptySlot{
     }
 
     private void reset(CustomBeeData beeData) {
-        this.beeID = beeData.getRegistryID();
+        this.beeID = beeData.registryID();
         Minecraft minecraft = Minecraft.getInstance();
         this.entities = entitySupplier.get().stream().map(e -> {
             assert minecraft.level != null;

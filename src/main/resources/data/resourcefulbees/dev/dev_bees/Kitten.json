@@ -1,6 +1,7 @@
 {
   "CoreData": {
-    "flower": "minecraft:beds",
+    "flower": "#minecraft:beds",
+    "honeycombVariation": "catnip",
     "maxTimeInHive": 600,
     "lore": [
       {
@@ -13,7 +14,6 @@
       }
     ]
   },
-  "honeycombVariation": "catnip",
   "CentrifugeData": {
     "hasCentrifugeOutput": true,
     "itemOutputs": [

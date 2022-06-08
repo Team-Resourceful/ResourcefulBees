@@ -1,9 +1,9 @@
 {
   "CoreData": {
     "flower": ["minecraft:coal_block"],
+    "honeycombVariation": "coal",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "coal",
   "RenderData": {
     "texture": "ores/coal/coal_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

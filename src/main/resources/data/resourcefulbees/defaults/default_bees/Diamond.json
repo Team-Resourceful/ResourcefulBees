@@ -1,9 +1,9 @@
 {
   "CoreData": {
-    "flower": "forge:storage_blocks/diamond",
+    "flower": "#forge:storage_blocks/diamond",
+    "honeycombVariation": "diamond",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "diamond",
   "RenderData": {
     "texture": "ores/diamond/diamond_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

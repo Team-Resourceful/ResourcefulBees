@@ -11,10 +11,8 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -85,11 +83,6 @@ public class TraitData extends BeeTrait {
      */
     public boolean hasTraits() { return hasTraits; }
 
-    @Override
-    public TraitData toImmutable() {
-        return this;
-    }
-
     //region Setup
     private boolean setHasTraits() {
         return !traits.isEmpty() || hasPotionDamageEffects() || hasDamageImmunities() || hasPotionImmunities() || hasDamageTypes() || hasSpecialAbilities() || hasParticleEffects();
@@ -110,109 +103,4 @@ public class TraitData extends BeeTrait {
         auras.addAll(trait.getAuras());
     }
     //endregion
-
-    public static class Mutable extends TraitData {
-        public Mutable(String name, int auraRange, Set<String> traits, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<BeeAura> auras) {
-            super(name, auraRange, traits, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects, auras);
-        }
-
-        public Mutable() {
-            super("error", CommonConfig.DEFAULT_AURA_RANGE.get(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
-        }
-
-        public TraitData.Mutable setAuraRange(int range) {
-            this.auraRange = range;
-            return this;
-        }
-
-        public TraitData.Mutable setTraits(Set<String> traits) {
-            this.traits = traits;
-            return this;
-        }
-
-        public TraitData.Mutable setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public TraitData.Mutable setDisplayItem(Item displayItem) {
-            this.displayItem = displayItem;
-            return this;
-        }
-
-        public TraitData.Mutable addDamagePotionEffects(Set<PotionEffect> potionDamageEffects) {
-            this.potionDamageEffects.addAll(potionDamageEffects);
-            return this;
-        }
-
-        public TraitData.Mutable addDamagePotionEffect(PotionEffect potionDamageEffect) {
-            this.potionDamageEffects.add(potionDamageEffect);
-            return this;
-        }
-
-        public TraitData.Mutable addDamageImmunities(Collection<String> damageImmunities) {
-            this.damageImmunities.addAll(damageImmunities);
-            return this;
-        }
-
-        public TraitData.Mutable addDamageImmunity(String damageImmunity) {
-            this.damageImmunities.add(damageImmunity);
-            return this;
-        }
-
-        public TraitData.Mutable addPotionImmunities(Collection<MobEffect> potionImmunities) {
-            this.potionImmunities.addAll(potionImmunities);
-            return this;
-        }
-
-        public TraitData.Mutable addPotionImmunity(MobEffect potionImmunity) {
-            this.potionImmunities.add(potionImmunity);
-            return this;
-        }
-
-        public TraitData.Mutable addDamageTypes(Collection<DamageType> damageTypes) {
-            this.damageTypes.addAll(damageTypes);
-            return this;
-        }
-
-        public TraitData.Mutable addDamageType(DamageType damageType) {
-            this.damageTypes.add(damageType);
-            return this;
-        }
-
-        public TraitData.Mutable addSpecialAbilities(Collection<String> specialAbilities) {
-            this.specialAbilities.addAll(specialAbilities);
-            return this;
-        }
-
-        public TraitData.Mutable addSpecialAbility(String specialAbility) {
-            this.specialAbilities.add(specialAbility);
-            return this;
-        }
-
-        public TraitData.Mutable addParticleEffects(Collection<ParticleType<?>> particleEffect) {
-            this.particleEffects.addAll(particleEffect);
-            return this;
-        }
-
-        public TraitData.Mutable addParticleEffect(ParticleType<?> particleEffect) {
-            this.particleEffects.add(particleEffect);
-            return this;
-        }
-
-        public TraitData.Mutable addAuras(Collection<BeeAura> auras) {
-            this.auras.addAll(auras);
-            return this;
-        }
-
-        public TraitData.Mutable addAura(BeeAura aura) {
-            this.auras.add(aura);
-            return this;
-        }
-
-        @Override
-        public TraitData toImmutable() {
-            return new TraitData(this.name, this.auraRange, this.traits, this.potionDamageEffects, this.damageImmunities, this.potionImmunities, this.damageTypes, this.specialAbilities, this.particleEffects, this.auras);
-        }
-    }
 }

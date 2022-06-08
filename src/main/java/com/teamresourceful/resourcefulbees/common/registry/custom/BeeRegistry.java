@@ -85,10 +85,6 @@ public class BeeRegistry implements IBeeRegistry {
                 CustomBeeData.codec(s).parse(JsonOps.INSTANCE, jsonObject)
                 .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", s))));
         //MinecraftForge.EVENT_BUS.post(new RegisterBeeEvent(beeData));
-        CUSTOM_DATA.values().forEach(customBeeData ->
-            //post init stuff gets called here
-            customBeeData.getBreedData().getFamilies().forEach(BeeFamily::postInit)
-        );
         BeeRegistry.buildFamilyTree();
         BeeRegistry.buildSpawnableBiomes();
     }
@@ -135,7 +131,7 @@ public class BeeRegistry implements IBeeRegistry {
      * @return Returns random bee type as a string.
      */
     public double getAdjustedWeightForChild(BeeFamily beeFamily) {
-        return FAMILY_TREE.get(beeFamily.getParents()).getAdjustedWeight(beeFamily.getWeight());
+        return FAMILY_TREE.get(beeFamily.parents()).getAdjustedWeight(beeFamily.weight());
     }
 
     /**
@@ -188,22 +184,22 @@ public class BeeRegistry implements IBeeRegistry {
     private static void buildSpawnableBiomes() {
         SPAWNABLE_BIOMES.clear();
         CUSTOM_DATA.values().stream()
-                .filter(customBeeData -> customBeeData.getSpawnData().canSpawnInWorld())
-                .forEach(customBeeData -> customBeeData.getSpawnData().getSpawnableBiomes()
-                .forEach(resourceLocation -> SPAWNABLE_BIOMES.computeIfAbsent(resourceLocation, k -> new RandomCollection<>()).add(customBeeData.getSpawnData().getSpawnWeight(), customBeeData)));
+                .filter(customBeeData -> customBeeData.spawnData().canSpawnInWorld())
+                .forEach(customBeeData -> customBeeData.spawnData().getSpawnableBiomes()
+                .forEach(resourceLocation -> SPAWNABLE_BIOMES.computeIfAbsent(resourceLocation, k -> new RandomCollection<>()).add(customBeeData.spawnData().getSpawnWeight(), customBeeData)));
     }
 
     private static void buildFamilyTree() {
         FAMILY_TREE.clear();
         CUSTOM_DATA.values().stream()
-                .filter(customBeeData -> customBeeData.getBreedData().hasParents())
-                .flatMap(customBeeData -> customBeeData.getBreedData().getFamilies().stream())
+                .filter(customBeeData -> customBeeData.breedData().hasParents())
+                .flatMap(customBeeData -> customBeeData.breedData().families().stream())
                 .filter(BeeFamily::hasValidParents)
                 .forEach(BeeRegistry::addBreedPairToFamilyTree);
     }
 
     private static void addBreedPairToFamilyTree(BeeFamily beeFamily) {
-        FAMILY_TREE.computeIfAbsent(beeFamily.getParents(), k -> new RandomCollection<>()).add(beeFamily.getWeight(), beeFamily);
+        FAMILY_TREE.computeIfAbsent(beeFamily.parents(), k -> new RandomCollection<>()).add(beeFamily.weight(), beeFamily);
     }
     //endregion
 }

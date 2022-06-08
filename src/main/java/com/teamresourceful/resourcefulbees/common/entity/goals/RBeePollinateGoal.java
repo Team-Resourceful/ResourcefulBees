@@ -55,7 +55,7 @@ public class RBeePollinateGoal extends Goal {
             return false;
         } else if (bee.getRandom().nextFloat() < 0.7F) {
             return false;
-        } else if ((Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get()) || bee.getCoreData().getEntityFlower().isPresent()) && bee.getSavedFlowerPos() == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
+        } else if ((Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get()) || bee.getCoreData().entityFlower().isPresent()) && bee.getSavedFlowerPos() == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
             Optional<BlockPos> optional = this.findFlower(5.0D);
             if (optional.isPresent()) {
                 bee.setSavedFlowerPos(optional.get());
@@ -141,7 +141,7 @@ public class RBeePollinateGoal extends Goal {
         ++this.ticks;
         if (this.ticks > 600) {
             this.clearTask();
-        } else if ((bee.getCoreData().getEntityFlower().isPresent() || bee.getFlowerEntityID() >= 0)) {
+        } else if ((bee.getCoreData().entityFlower().isPresent() || bee.getFlowerEntityID() >= 0)) {
             handleEntityFlower();
             handleBlockFlower();
         }
@@ -199,7 +199,7 @@ public class RBeePollinateGoal extends Goal {
     }
 
     private void handleEntityFlower() {
-        if (bee.tickCount % 5 == 0 && bee.getCoreData().getEntityFlower().isPresent()) {
+        if (bee.tickCount % 5 == 0 && bee.getCoreData().entityFlower().isPresent()) {
             Entity flowerEntity = bee.level.getEntity(bee.getFlowerEntityID());
             if (flowerEntity != null) {
                 boundingBox = new Vec3(flowerEntity.getBoundingBox().getCenter().x(), flowerEntity.getBoundingBox().maxY, flowerEntity.getBoundingBox().getCenter().z());
@@ -218,7 +218,7 @@ public class RBeePollinateGoal extends Goal {
 
     public Optional<BlockPos> findFlower(double range) {
         BlockPos beePos = bee.blockPosition();
-        Optional<EntityType<?>> entityFlower = bee.getCoreData().getEntityFlower();
+        Optional<EntityType<?>> entityFlower = bee.getCoreData().entityFlower();
         if (entityFlower.isPresent()) {
             List<?> entityList = bee.level.getEntities(entityFlower.get(), (new AABB(bee.blockPosition())).inflate(range),
                     entity -> entity.getEncodeId() != null && entity.getEncodeId().equals(bee.getCoreData().getEntityFlowerRegistryID()));
@@ -243,11 +243,11 @@ public class RBeePollinateGoal extends Goal {
 
     public Predicate<BlockPos> getFlowerBlockPredicate() {
         return pos -> {
-            if (bee.getCoreData().getBlockFlowers().size() > 0){
+            if (bee.getCoreData().blockFlowers().size() > 0){
                 if (!MathUtils.inRangeInclusive(pos.getY(), 0, 256)) return false;
                 BlockState state = bee.level.getBlockState(pos);
                 if (state.isAir()) return false;
-                return state.is(bee.getCoreData().getBlockFlowers());
+                return state.is(bee.getCoreData().blockFlowers());
             }
             return false;
         };

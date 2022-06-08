@@ -46,13 +46,13 @@ public class BeeInfoPage extends BeeDataPage {
     public void preInit(BeepediaScreen beepedia, ScreenArea screenArea, CustomBeeData beeData) {
         super.preInit(beepedia, screenArea, beeData);
         if (Minecraft.getInstance().level == null) return;
-        if (beeData.getCoreData().getBlockFlowers().size() > 0) {
-            if (beeData.getCoreData().getBlockFlowers() != blockFlowers) {
-                blockFlowers = beeData.getCoreData().getBlockFlowers();
+        if (beeData.coreData().blockFlowers().size() > 0) {
+            if (beeData.coreData().blockFlowers() != blockFlowers) {
+                blockFlowers = beeData.coreData().blockFlowers();
                 slot = 0;
             }
         } else {
-            var entityFlower = beeData.getCoreData().getEntityFlower();
+            var entityFlower = beeData.coreData().entityFlower();
             if (entityFlower.isPresent() && (this.entityFlower.getLeft() == null || !this.entityFlower.getKey().equals(entityFlower.get()))) {
                 this.entityFlower = Pair.of(entityFlower.get(), entityFlower.get().create(Minecraft.getInstance().level));
             }
@@ -62,8 +62,8 @@ public class BeeInfoPage extends BeeDataPage {
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         if (beeData == null) throw new IllegalStateException("preInit not implemented");
         Font font = Minecraft.getInstance().font;
-        SIZE_NAME.append(BeepediaUtils.getSizeName(beeData.getRenderData().sizeModifier()));
-        TIME_NAME.append(beeData.getCoreData().getMaxTimeInHive() / 20 + "s");
+        SIZE_NAME.append(BeepediaUtils.getSizeName(beeData.renderData().sizeModifier()));
+        TIME_NAME.append(beeData.coreData().maxTimeInHive() / 20 + "s");
         font.draw(matrix, TITLE.withStyle(ChatFormatting.WHITE), x, y + 8f, -1);
         font.draw(matrix, SIZE_NAME.withStyle(ChatFormatting.GRAY),x, y + 22f, -1);
         font.draw(matrix, TIME_NAME.withStyle(ChatFormatting.GRAY), x + 86f, y + 22f, -1);
@@ -73,10 +73,10 @@ public class BeeInfoPage extends BeeDataPage {
     public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
         if (beeData == null) throw new IllegalStateException("preInit not implemented");
         Font font = Minecraft.getInstance().font;
-        if (beeData.getCoreData().getBlockFlowers().size() > 0) {
+        if (beeData.coreData().blockFlowers().size() > 0) {
             font.draw(matrix, FLOWER_NAME.withStyle(ChatFormatting.GRAY), x, y + 75f, -1);
 //            beepedia.drawSlot(matrix, blockFlowers.get(slot), x + 36f, y + 70f);
-        } else if (beeData.getCoreData().getEntityFlower().isPresent()) {
+        } else if (beeData.coreData().entityFlower().isPresent()) {
             font.draw(matrix, FLOWER_NAME.withStyle(ChatFormatting.GRAY), x, y + 80f, -1);
             RenderUtils.renderEntity(matrix, entityFlower.getValue(), Minecraft.getInstance().level, x + 45f, y + 75f, -45f, 1.25f);
         }

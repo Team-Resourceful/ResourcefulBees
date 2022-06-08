@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.yeti",
+				"identifier": "geometry.witch",
 				"texture_width": 64,
 				"texture_height": 64,
 				"visible_bounds_width": 3,
@@ -106,26 +106,38 @@
 					]
 				},
 				{
-					"name": "yeti_horns",
+					"name": "witch",
 					"parent": "body",
-					"pivot": [0, 5, 0]
-				},
-				{
-					"name": "cube_r13",
-					"parent": "yeti_horns",
-					"pivot": [-2, 9, -4],
-					"rotation": [0, 0, -54.99822],
+					"pivot": [0, 5, 0],
 					"cubes": [
-						{"origin": [-4, 9, -4.5], "size": [2, 3, 2], "uv": [34, 12], "mirror": true}
+						{"origin": [-3, 9, -4.5], "size": [6, 1, 6], "uv": [0, 57]}
 					]
 				},
 				{
-					"name": "cube_r14",
-					"parent": "yeti_horns",
-					"pivot": [2, 9, -4],
-					"rotation": [0, 0, 54.99822],
+					"name": "hat1",
+					"parent": "witch",
+					"pivot": [0, 5, 0],
+					"rotation": [0, 0, -17.49813],
 					"cubes": [
-						{"origin": [2, 9, -4.5], "size": [2, 3, 2], "uv": [34, 12]}
+						{"origin": [1.8, 13.6, -2], "size": [1, 1, 1], "uv": [24, 55]}
+					]
+				},
+				{
+					"name": "hat2",
+					"parent": "witch",
+					"pivot": [0, 5, 0],
+					"rotation": [0, 0, -9.99811],
+					"cubes": [
+						{"origin": [0.2, 11.9, -2.5], "size": [2, 2, 2], "uv": [16, 53]}
+					]
+				},
+				{
+					"name": "hat3",
+					"parent": "witch",
+					"pivot": [0, 5, 0],
+					"rotation": [0, 0, -3.99925],
+					"cubes": [
+						{"origin": [-1.6, 9.3, -3.5], "size": [4, 3, 4], "uv": [0, 50]}
 					]
 				}
 			]

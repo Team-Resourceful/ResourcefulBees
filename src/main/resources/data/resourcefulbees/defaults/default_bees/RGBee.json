@@ -1,9 +1,9 @@
 {
   "CoreData": {
-    "flower": "minecraft:flowers",
+    "flower": "#minecraft:flowers",
+    "honeycombVariation": "rgb",
     "maxTimeInHive": 600
   },
-  "honeycombVariation": "rgb",
   "RenderData": {
     "texture": "custom/bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

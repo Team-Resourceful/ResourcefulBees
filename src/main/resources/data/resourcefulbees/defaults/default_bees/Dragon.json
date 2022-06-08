@@ -1,9 +1,9 @@
 {
   "CoreData": {
     "flower": ["minecraft:obsidian"],
+    "honeycombVariation": "dragon",
     "maxTimeInHive": 2400
   },
-  "honeycombVariation": "dragon",
   "RenderData": {
     "texture": "dragon/dragon_bee",
     "model": "resourcefulbees:geo/dragon.geo.json",

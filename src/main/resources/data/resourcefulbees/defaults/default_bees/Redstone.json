@@ -1,9 +1,9 @@
 {
   "CoreData": {
-    "flower": "storage_blocks/redstone",
+    "flower": "#forge:storage_blocks/redstone",
+    "honeycombVariation": "redstone",
     "maxTimeInHive": 800
   },
-  "honeycombVariation": "redstone",
   "RenderData": {
     "texture": "ores/redstone/redstone_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",

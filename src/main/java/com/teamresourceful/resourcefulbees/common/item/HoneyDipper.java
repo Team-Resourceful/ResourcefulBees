@@ -51,7 +51,7 @@ public class HoneyDipper extends Item {
             if (!(entity instanceof Bee bee)) return InteractionResult.FAIL;
 
             if (bee instanceof CustomBeeEntity customBee) {
-                if (clickedBlock.is(customBee.getCoreData().getBlockFlowers())) {
+                if (clickedBlock.is(customBee.getCoreData().blockFlowers())) {
                     setFlowerPosition(bee, context);
                     return InteractionResult.SUCCESS;
                 }
@@ -100,7 +100,7 @@ public class HoneyDipper extends Item {
                 return InteractionResult.SUCCESS;
             }
 
-            if (stackEntity instanceof CustomBeeEntity customBee && entityTypesMatch(entity, customBee.getCoreData().getEntityFlower())) {
+            if (stackEntity instanceof CustomBeeEntity customBee && entityTypesMatch(entity, customBee.getCoreData().entityFlower())) {
                 customBee.setFlowerEntityID(entity.getId());
                 customBee.setSavedFlowerPos(entity.blockPosition());
                 sendMessageToPlayer(customBee, player, MessageTypes.FLOWER, entity.blockPosition());

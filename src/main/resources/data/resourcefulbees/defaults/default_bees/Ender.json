@@ -1,9 +1,9 @@
 {
   "CoreData": {
     "flower": ["minecraft:chorus_flower"],
+    "honeycombVariation": "ender",
     "maxTimeInHive": 1800
   },
-  "honeycombVariation": "ender",
   "RenderData": {
     "texture": "custom/bee",
     "layers": [

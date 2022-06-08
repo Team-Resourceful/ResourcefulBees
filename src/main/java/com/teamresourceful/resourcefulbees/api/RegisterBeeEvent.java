@@ -19,7 +19,7 @@ public class RegisterBeeEvent extends Event {
 
     //Automatically calls toImmutable on data objects
     public boolean registerBee(String beeType, @NotNull CustomBeeData customBeeData) {
-        return !beeData.containsKey(beeType) && beeData.put(beeType, Objects.requireNonNull(customBeeData.toImmutable(), "Cannot register 'null' bee data!")) == null;
+        return !beeData.containsKey(beeType) && beeData.put(beeType, Objects.requireNonNull(customBeeData, "Cannot register 'null' bee data!")) == null;
     }
 
     @Override

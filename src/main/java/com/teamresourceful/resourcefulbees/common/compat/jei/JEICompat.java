@@ -106,9 +106,9 @@ public class JEICompat implements IModPlugin {
                 String purple = ChatFormatting.DARK_PURPLE.toString();
 
 
-                stats.append(aqua).append(" Base Health: ").append(purple).append(customBee.getCombatData().getBaseHealth()).append("\n");
-                stats.append(aqua).append(" Attack Damage: ").append(purple).append(customBee.getCombatData().getAttackDamage()).append("\n");
-                stats.append(aqua).append(" Max Time in Hive: ").append(purple).append(customBee.getCoreData().getMaxTimeInHive()).append(" ticks\n");
+                stats.append(aqua).append(" Base Health: ").append(purple).append(customBee.getCombatData().baseHealth()).append("\n");
+                stats.append(aqua).append(" Attack Damage: ").append(purple).append(customBee.getCombatData().attackDamage()).append("\n");
+                stats.append(aqua).append(" Max Time in Hive: ").append(purple).append(customBee.getCoreData().maxTimeInHive()).append(" ticks\n");
 
                 stats.append(aqua).append(" Has Mutation: ").append(purple).append(StringUtils.capitalize(String.valueOf(customBee.getMutationData().hasMutation()))).append("\n");
                 if (customBee.getMutationData().hasMutation()) {
@@ -119,7 +119,9 @@ public class JEICompat implements IModPlugin {
                 if (customBee.getBreedData().hasParents()) {
                     stats.append(aqua).append(" Parents: ").append(purple);
 
-                    customBee.getBreedData().getFamilies().forEach(family -> stats.append(StringUtils.capitalize(family.getParent1())).append(" Bee, ")
+                    customBee.getBreedData()
+                            .families()
+                            .forEach(family -> stats.append(StringUtils.capitalize(family.getParent1())).append(" Bee, ")
                             .append(StringUtils.capitalize(family.getParent2())).append(" Bee\n"));
                 }
 
