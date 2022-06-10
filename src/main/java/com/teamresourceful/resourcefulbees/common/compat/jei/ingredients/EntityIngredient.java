@@ -6,10 +6,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class EntityIngredient {
     }
 
     public Component getDisplayName() {
-        return new TranslatableComponent(entityType.getDescriptionId());
+        return Component.translatable(entityType.getDescriptionId());
     }
 
     public List<Component> getTooltip() {
@@ -64,8 +64,11 @@ public class EntityIngredient {
                 tooltip.addAll(customBee.getCoreData().lore());
                 tooltip.add(TranslationConstants.Jei.CLICK_INFO.withStyle(ChatFormatting.GOLD));
             }
-            if (Minecraft.getInstance().options.advancedItemTooltips && entityType.getRegistryName() != null) {
-                tooltip.add(new TextComponent(entityType.getRegistryName().toString()).withStyle(ChatFormatting.DARK_GRAY));
+            if (Minecraft.getInstance().options.advancedItemTooltips) {
+                ResourceLocation key = ForgeRegistries.ENTITIES.getKey(entityType);
+                if (key != null) {
+                    tooltip.add(Component.literal(key.toString()).withStyle(ChatFormatting.DARK_GRAY));
+                }
             }
         }
         return tooltip;
@@ -73,6 +76,7 @@ public class EntityIngredient {
 
     @Override
     public String toString() {
-        return entityType.getRegistryName() != null ? entityType.getRegistryName().toString() : entityType.toString();
+        ResourceLocation key = ForgeRegistries.ENTITIES.getKey(entityType);
+        return key != null ? key.toString() : entityType.toString();
     }
 }

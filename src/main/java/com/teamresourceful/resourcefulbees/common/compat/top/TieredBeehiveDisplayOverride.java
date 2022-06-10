@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlock
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import mcjty.theoneprobe.api.*;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -42,10 +42,10 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
 
         probeInfo.horizontal()
                 .vertical()
-                .text(new TranslatableComponent(TranslationConstants.Top.TIER, getHiveTier(blockState)))
-                .text(new TranslatableComponent(TranslationConstants.Top.BEES, getHiveBeeCount(tileEntity), getHiveMaxBees(blockState)))
-                .text(new TranslatableComponent(TranslationConstants.Top.HONEY_LEVEL, getHoneyLevel(tileEntity)))
-                .text(new TranslatableComponent(TranslationConstants.Top.SMOKED, getSmokedStatus(tileEntity)));
+                .text(Component.translatable(TranslationConstants.Top.TIER, getHiveTier(blockState)))
+                .text(Component.translatable(TranslationConstants.Top.BEES, getHiveBeeCount(tileEntity), getHiveMaxBees(blockState)))
+                .text(Component.translatable(TranslationConstants.Top.HONEY_LEVEL, getHoneyLevel(tileEntity)))
+                .text(Component.translatable(TranslationConstants.Top.SMOKED, getSmokedStatus(tileEntity)));
 
         createSmokedProbeData(probeInfo, tileEntity);
 

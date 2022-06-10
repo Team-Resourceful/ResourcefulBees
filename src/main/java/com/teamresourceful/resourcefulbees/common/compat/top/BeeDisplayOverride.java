@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.compat.top;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import mcjty.theoneprobe.api.*;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
@@ -27,8 +27,8 @@ public class BeeDisplayOverride implements IEntityDisplayOverride {
                 .text(CompoundText.create().style(TextStyleClass.MODNAME).text(BeeConstants.MOD_NAME));
 
         if (probeMode.equals(ProbeMode.EXTENDED)) {
-            iProbeInfo.text(new TextComponent("Flower Pos: ").append(beeEntity.getSavedFlowerPos() == null ? "none" : beeEntity.getSavedFlowerPos().toShortString()))
-                    .text(new TextComponent("Hive Pos: ").append(beeEntity.getHivePos() == null ? "none" : beeEntity.getHivePos().toShortString()));
+            iProbeInfo.text(Component.literal("Flower Pos: ").append(beeEntity.getSavedFlowerPos() == null ? "none" : beeEntity.getSavedFlowerPos().toShortString()))
+                    .text(Component.literal("Hive Pos: ").append(beeEntity.getHivePos() == null ? "none" : beeEntity.getHivePos().toShortString()));
         }
     }
 }
