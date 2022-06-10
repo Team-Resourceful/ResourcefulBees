@@ -79,7 +79,7 @@ public record HoneyFluidData(boolean generate, String name, Color color, Resourc
             RegistryObject<FlowingFluid> stillFluidRegistry = ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey", () -> new CustomHoneyFluid.Source(properties[0], this));
             RegistryObject<FlowingFluid> flowingFluidRegistry = ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_flowing", () -> new CustomHoneyFluid.Flowing(properties[0], this));
             RegistryObject<Item> fluidBucketRegistry = ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", () -> new CustomHoneyBucketItem(stillFluidRegistry, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY).craftRemainder(Items.BUCKET).stacksTo(1), this));
-            RegistryObject<LiquidBlock> blockFluidRegistry = ModBlocks.HONEY_FLUID_BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluidRegistry, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops(), this));
+            RegistryObject<LiquidBlock> blockFluidRegistry = ModBlocks.HONEY_FLUID_BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluidRegistry, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable(), this));
 
             properties[0] = new ForgeFlowingFluid.Properties(stillFluidRegistry, flowingFluidRegistry, builder)
                     .bucket(fluidBucketRegistry)

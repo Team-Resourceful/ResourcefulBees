@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class CustomBeeModel<E extends CustomBeeEntity> extends AnimatedGeoModel<E> {
 
     @Override
-    public ResourceLocation getModelLocation(E bee) {
+    public ResourceLocation getModelResource(E bee) {
         return bee.getRenderData().model();
     }
 
     @Override
-    public ResourceLocation getTextureLocation(E bee) {
+    public ResourceLocation getTextureResource(E bee) {
         return bee.getRenderData().texture().getTexture(bee);
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(E bee) {
+    public ResourceLocation getAnimationResource(E bee) {
         return bee.getRenderData().animations();
     }
 }

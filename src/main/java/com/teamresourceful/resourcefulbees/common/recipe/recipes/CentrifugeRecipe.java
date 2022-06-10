@@ -6,7 +6,6 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
@@ -15,6 +14,7 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.ingredients.IAmountSensitive;
 import com.teamresourceful.resourcefulbees.common.recipe.base.CodecRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick) implements CodecRecipe<Container> {
-
-    public static final RecipeType<CentrifugeRecipe> CENTRIFUGE_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":centrifuge");
 
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -62,7 +60,7 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
     @NotNull
     @Override
     public RecipeType<?> getType() {
-        return CENTRIFUGE_RECIPE_TYPE;
+        return ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get();
     }
 
     public record Output<T extends AbstractOutput>(double chance, RandomCollection<T> pool) {

@@ -8,21 +8,21 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class PetBeeModel<T extends PetModelData> extends AnimatedGeoModel<T> {
 
     public GeoModel getModel(PetModelData object){
-        return this.getModel(getModelLocation(object));
+        return this.getModel(getModelResource(object));
     }
 
     @Override
-    public ResourceLocation getModelLocation(PetModelData object) {
+    public ResourceLocation getModelResource(PetModelData object) {
         return object.getModelLocation();
     }
 
     @Override
-    public ResourceLocation getTextureLocation(PetModelData object) {
+    public ResourceLocation getTextureResource(PetModelData object) {
         return object.getTexture();
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(PetModelData animatable) {
+    public ResourceLocation getAnimationResource(PetModelData animatable) {
         return RenderData.BASE_ANIMATION;
     }
 }

@@ -7,6 +7,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Consumer;
 
@@ -22,6 +23,6 @@ public record HoneyData(String name, HoneyBottleData bottleData, HoneyBlockData 
     }
 
     public ResourceLocation getRegistryID() {
-        return bottleData.honeyBottle().getRegistryName();
+        return ForgeRegistries.ITEMS.getKey(bottleData.honeyBottle());
     }
 }

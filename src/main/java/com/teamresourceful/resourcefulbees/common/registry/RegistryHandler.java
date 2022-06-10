@@ -37,6 +37,7 @@ public class RegistryHandler {
         ModPotions.POTIONS.register(bus);
         ModMenus.CONTAINER_TYPES.register(bus);
         ModRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
+        ModRecipeTypes.RECIPE_TYPES.register(bus);
         ModVillagerProfessions.PROFESSIONS.register(bus);
         ModFeatures.FEATURES.register(bus);
     }

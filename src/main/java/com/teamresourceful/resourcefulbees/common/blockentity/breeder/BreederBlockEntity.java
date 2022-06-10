@@ -11,6 +11,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
@@ -77,7 +78,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
                 getItem(BreederConstants.PARENT_2_SLOTS.get(i)), getItem(BreederConstants.FEED_2_SLOTS.get(i)),
                 getItem(BreederConstants.EMPTY_JAR_SLOTS.get(i))
         );
-        recipes[i] = level.getRecipeManager().getRecipeFor(BreederRecipe.BREEDER_RECIPE_TYPE, container, level).orElse(null);
+        recipes[i] = level.getRecipeManager().getRecipeFor(ModRecipeTypes.BREEDER_RECIPE_TYPE.get(), container, level).orElse(null);
         if (recipes[i] != null) {
             endTimes.set(i, recipes[i].time()-timeReduction);
         }

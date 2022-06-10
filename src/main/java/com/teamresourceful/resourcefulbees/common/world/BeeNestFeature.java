@@ -234,7 +234,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
             return Blocks.JUNGLE_WOOD.defaultBlockState();
         } else if (biome.is(BiomeTags.IS_BEACH) || biome.is(BiomeTags.IS_OCEAN)) {
             return isFrozenBiome(biomeKey.orElse(null)) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.STRIPPED_OAK_WOOD.defaultBlockState();
-        } else if (biome.is(Tags.Biomes.IS_COLD_OVERWORLD) || biome.is(Tags.Biomes.IS_CONIFEROUS)) {
+        } else if (biome.is(Tags.Biomes.IS_COLD_OVERWORLD) || biome.is(BiomeTags.IS_TAIGA)) {
             return Blocks.PACKED_ICE.defaultBlockState();
         } else if (biome.is(Tags.Biomes.IS_SWAMP)) {
             return  Blocks.STRIPPED_SPRUCE_WOOD.defaultBlockState();

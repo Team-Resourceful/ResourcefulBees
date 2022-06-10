@@ -5,10 +5,10 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.recipe.base.CodecRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -23,8 +23,6 @@ import java.util.Optional;
 
 public record SolidificationRecipe(ResourceLocation id, FluidStack fluid, ItemStack stack) implements CodecRecipe<Container> {
 
-    public static final RecipeType<SolidificationRecipe> SOLIDIFICATION_RECIPE_TYPE = RecipeType.register(ResourcefulBees.MOD_ID + ":solidification");
-
     public static Codec<SolidificationRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 MapCodec.of(Encoder.empty(), Decoder.unit(() -> id)).forGetter(SolidificationRecipe::getId),
@@ -35,7 +33,7 @@ public record SolidificationRecipe(ResourceLocation id, FluidStack fluid, ItemSt
 
     public static Optional<SolidificationRecipe> findRecipe(RecipeManager manager, FluidStack fluid) {
         return manager
-                .getAllRecipesFor(SolidificationRecipe.SOLIDIFICATION_RECIPE_TYPE)
+                .getAllRecipesFor(ModRecipeTypes.SOLIDIFICATION_RECIPE_TYPE.get())
                 .stream()
                 .filter(recipe -> recipe.fluid().isFluidEqual(fluid)).findFirst();
     }
@@ -58,6 +56,6 @@ public record SolidificationRecipe(ResourceLocation id, FluidStack fluid, ItemSt
     @Override
     public @NotNull
     RecipeType<?> getType() {
-        return SOLIDIFICATION_RECIPE_TYPE;
+        return ModRecipeTypes.SOLIDIFICATION_RECIPE_TYPE.get();
     }
 }
