@@ -1,19 +1,20 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
-import com.teamresourceful.resourcefulbees.common.entity.passive.ModBeeEntity;
 import com.teamresourceful.resourcefulbees.common.utils.RandomPositionGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Objects;
 
 public class BeeWanderGoal extends Goal {
-    private final ModBeeEntity modBeeEntity;
+    private final Bee modBeeEntity;
 
-    public BeeWanderGoal(ModBeeEntity modBeeEntity) {
+    public BeeWanderGoal(Bee modBeeEntity) {
         this.modBeeEntity = modBeeEntity;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
@@ -49,7 +50,7 @@ public class BeeWanderGoal extends Goal {
     @Nullable
     private Vec3 getRandomLocation() {
         Vec3 vector3d;
-        if (modBeeEntity.isHiveValid() && !modBeeEntity.checkIsWithinDistance(Objects.requireNonNull(modBeeEntity.getHivePos()), 22)) {
+        if (modBeeEntity.isHiveValid() && !checkIsWithinDistance(modBeeEntity, Objects.requireNonNull(modBeeEntity.getHivePos()), 22)) {
             Vec3 vector3d1 = Vec3.atCenterOf(modBeeEntity.getHivePos());
             vector3d = vector3d1.subtract(modBeeEntity.position()).normalize();
         } else {
@@ -60,5 +61,9 @@ public class BeeWanderGoal extends Goal {
 
         Vec3 vector3d2 = RandomPositionGenerator.findAirTarget(modBeeEntity, randHorz, 7, vector3d);
         return vector3d2 != null ? vector3d2 : RandomPositionGenerator.findGroundTarget(modBeeEntity, randHorz, 6, -4, vector3d);
+    }
+
+    public static boolean checkIsWithinDistance(Bee bee, @NotNull BlockPos hivePos, int i) {
+        return hivePos.closerThan(bee.blockPosition(), i);
     }
 }

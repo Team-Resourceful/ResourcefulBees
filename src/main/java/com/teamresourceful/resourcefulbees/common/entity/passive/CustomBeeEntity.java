@@ -58,7 +58,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import java.util.Objects;
 import java.util.Optional;
 
-public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimatable, IBeeCompat {
+public class CustomBeeEntity extends Bee implements ICustomBee, IAnimatable, IBeeCompat {
 
     private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
 
