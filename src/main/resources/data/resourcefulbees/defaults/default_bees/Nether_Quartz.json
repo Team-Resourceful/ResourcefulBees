@@ -42,17 +42,6 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {"item": {"id": "minecraft:quartz", "count": 2}}
-    ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": ["tag:nether"],
-    "lightLevel": "NIGHT"
-  },
   "BreedData": {
     "isBreedable": true,
     "parents": [

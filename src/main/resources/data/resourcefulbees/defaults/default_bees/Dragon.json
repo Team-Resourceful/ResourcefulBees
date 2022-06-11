@@ -39,13 +39,6 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {"item": {"id": "minecraft:dragon_egg"}, "chance": 0.01},
-      {"item": {"id": "minecraft:dragon_breath"}, "chance": 0.50}
-    ]
-  },
   "BreedData": {
     "isBreedable": true,
     "parents": [

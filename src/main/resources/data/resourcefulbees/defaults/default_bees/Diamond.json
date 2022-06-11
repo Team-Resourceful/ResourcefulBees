@@ -30,20 +30,6 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {"item": {"id": "minecraft:diamond"}}
-    ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true,
-    "spawnWeight": 2,
-    "groupSize": {
-      "min": 1,
-      "max": 1
-    }
-  },
   "BreedData": {
     "isBreedable": true,
     "parents": [

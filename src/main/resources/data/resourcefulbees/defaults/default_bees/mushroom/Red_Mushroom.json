@@ -8,15 +8,6 @@
     "texture": "mushroom/bee_red",
     "model": "resourcefulbees:geo/flower_moss.geo.json"
   },
-  "CentrifugeData": {
-    "itemOutputs": [
-      {
-        "pool": [{
-          "item": {"id": "minecraft:red_mushroom"}
-        }]
-      }
-    ]
-  },
   "MutationData": {
     "mutationCount": 15,
     "mutations": [
@@ -53,10 +44,6 @@
         ]
       }
     ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": "tag:MUSHROOM,SPOOKY,CONIFEROUS"
   },
   "BreedData": {
     "isBreedable": true,

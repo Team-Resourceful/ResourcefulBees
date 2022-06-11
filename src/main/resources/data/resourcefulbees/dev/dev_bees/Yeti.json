@@ -13,17 +13,6 @@
     },
     "sizeModifier": 1.25
   },
-  "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": ["tag:rare"],
-    "biomeBlacklist": [""],
-    "spawnWeight": 3,
-    "groupSize": {
-      "min": 1,
-      "max": 1
-    },
-    "lightLevel": "DAY"
-  },
   "TraitData": {
     "hasTraits": true,
     "traits": [ "oreo" ]

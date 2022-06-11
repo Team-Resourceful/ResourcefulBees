@@ -31,16 +31,6 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {"item": {"id": "minecraft:emerald"}}
-    ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": ["tag:mountain","tag:hills"]
-  },
   "BreedData": {
     "parents": [
       {

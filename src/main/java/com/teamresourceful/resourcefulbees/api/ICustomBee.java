@@ -7,7 +7,6 @@ import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
-import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import net.minecraft.world.entity.AgeableMob;
 
@@ -45,8 +44,6 @@ public interface ICustomBee {
     CombatData getCombatData();
 
     MutationData getMutationData();
-
-    SpawnData getSpawnData();
 
     /**
      * Gets "this" bee's current number of times fed.

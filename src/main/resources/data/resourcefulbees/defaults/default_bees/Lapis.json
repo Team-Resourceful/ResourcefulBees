@@ -39,15 +39,6 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {"item": {"id": "minecraft:lapis_lazuli", "count": 8}}
-    ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true
-  },
   "BreedData": {
     "isBreedable": true,
     "parents": [

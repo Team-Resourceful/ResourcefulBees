@@ -35,12 +35,6 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {"item": {"id": "minecraft:nether_star", "count": 8}, "chance": 0.01}
-    ]
-  },
   "BreedData": {
     "isBreedable": true,
     "parents": [

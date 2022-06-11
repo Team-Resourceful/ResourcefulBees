@@ -40,10 +40,6 @@
       }
     ]
   },
-  "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": ["tag:cold", "tag:snowy"]
-  },
   "BreedData": {
     "isBreedable": true,
     "parents": [

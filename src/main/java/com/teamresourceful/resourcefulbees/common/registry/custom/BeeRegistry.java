@@ -13,7 +13,6 @@ import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -26,7 +25,6 @@ public class BeeRegistry implements IBeeRegistry {
     private static final Map<String, JsonObject> RAW_DATA = new LinkedHashMap<>();
     private static final Map<String, CustomBeeData> CUSTOM_DATA = new LinkedHashMap<>();
     private static final Map<Pair<String, String>, RandomCollection<BeeFamily>> FAMILY_TREE = new LinkedHashMap<>();
-    private static final Map<ResourceLocation, RandomCollection<CustomBeeData>> SPAWNABLE_BIOMES = new LinkedHashMap<>();
 
     /**
      * Returns an instance of the {@link BeeRegistry} for accessing data from the registry.
@@ -39,22 +37,6 @@ public class BeeRegistry implements IBeeRegistry {
      */
     public static BeeRegistry getRegistry() {
         return INSTANCE;
-    }
-
-    public static boolean isSpawnableBiome(ResourceLocation biome) {
-        return SPAWNABLE_BIOMES.containsKey(biome);
-    }
-
-    public static RandomCollection<CustomBeeData> getSpawnableBiome(ResourceLocation biome) {
-        return SPAWNABLE_BIOMES.get(biome);
-    }
-
-    public static CustomBeeData getBeeData(ResourceLocation beeType) {
-        return CUSTOM_DATA.getOrDefault(beeType.getPath().replaceAll("_bee$", ""), CustomBeeData.DEFAULT);
-    }
-
-    public static boolean containsBeeType(ResourceLocation beeType) {
-        return CUSTOM_DATA.containsKey(beeType.getPath().replaceAll("_bee$", ""));
     }
 
     public static boolean containsBeeType(String beeType) {
@@ -92,7 +74,6 @@ public class BeeRegistry implements IBeeRegistry {
                 .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", s))));
         //MinecraftForge.EVENT_BUS.post(new RegisterBeeEvent(beeData));
         BeeRegistry.buildFamilyTree();
-        BeeRegistry.buildSpawnableBiomes();
     }
 
     /**
@@ -187,13 +168,6 @@ public class BeeRegistry implements IBeeRegistry {
     }
 
     //region Setup
-    private static void buildSpawnableBiomes() {
-        SPAWNABLE_BIOMES.clear();
-        CUSTOM_DATA.values().stream()
-                .filter(customBeeData -> customBeeData.spawnData().canSpawnInWorld())
-                .forEach(customBeeData -> customBeeData.spawnData().getSpawnableBiomes()
-                .forEach(resourceLocation -> SPAWNABLE_BIOMES.computeIfAbsent(resourceLocation, k -> new RandomCollection<>()).add(customBeeData.spawnData().getSpawnWeight(), customBeeData)));
-    }
 
     private static void buildFamilyTree() {
         FAMILY_TREE.clear();

@@ -8,15 +8,6 @@
     "texture": "mushroom/bee_crimson",
     "model": "resourcefulbees:geo/flower_moss.geo.json"
   },
-  "CentrifugeData": {
-    "itemOutputs": [
-      {
-        "pool": [{
-          "item": {"id": "minecraft:crimson_fungus"}
-        }]
-      }
-    ]
-  },
   "MutationData": {
     "mutationCount": 15,
     "mutations": [
@@ -54,10 +45,6 @@
         ]
       }
     ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": "crimson_forest"
   },
   "BreedData": {
     "isBreedable": true,

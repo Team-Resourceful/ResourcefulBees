@@ -11,11 +11,7 @@ public class CommonConfig {
 
     public static BooleanValue GENERATE_DEFAULTS;
     public static BooleanValue GENERATE_DEFAULT_RECIPES;
-    public static BooleanValue GENERATE_BIOME_DICTIONARIES;
-    public static BooleanValue USE_FORGE_DICTIONARIES;
     public static BooleanValue ENABLE_DEV_BEES;
-
-    public static IntValue BEE_FLOWER_FOREST_MULTIPLIER;
 
     public static BooleanValue GENERATE_BEE_NESTS;
 
@@ -109,10 +105,6 @@ public class CommonConfig {
                 .define("generateDefaults", true);
         GENERATE_DEFAULT_RECIPES = commonBuilder.comment("\nSet this to false when you want to overwrite the default bees recipes. [true/false]")
                 .define("generateDefaultsRecipes", true);
-        GENERATE_BIOME_DICTIONARIES = commonBuilder.comment("\nSet this to false when you want to overwrite the default provided Biome Dictionary files. [true/false]\nThis should be run at least once for initial generation.")
-                .define("generateBiomeDictionaries", false);
-        USE_FORGE_DICTIONARIES = commonBuilder.comment("\nSet this to false when you want to use our custom Biome Dictionary system. [true/false]\nAt a later time we will look into either combining with the Forge system or making the Forge system data pack capable.")
-                .define("useForgeBiomeDictionaries", true);
         ENABLE_DEV_BEES = commonBuilder.comment("\nSet to true if you want dev bees to generate. [true/false]")
                 .define("enableDevBees", true);
         SMOKER_DURABILITY = commonBuilder.comment("\nSets the max durability for the smoker")
@@ -217,8 +209,6 @@ public class CommonConfig {
         commonBuilder.push("Spawning Options");
         GENERATE_BEE_NESTS = commonBuilder.comment("\nShould bee nests generate in world? \nNote: They will only generate in biomes where bees can spawn")
                 .define("generateBeeNests", true);
-        BEE_FLOWER_FOREST_MULTIPLIER = commonBuilder.comment("The value added to weight for bees in a flower forests")
-                .defineInRange("beesMoreCommonInFlowerForests", 4, 0, 9);
         OVERWORLD_NEST_GENERATION_CHANCE = commonBuilder.comment("\nChance for nest to spawn when generating chunks in overworld category biomes. [1/x]\nA higher value means the nest is less likely to spawn.")
                 .defineInRange("overworld_nest_generation_chance", 48, 4, 100);
         NETHER_NEST_GENERATION_CHANCE = commonBuilder.comment("\nChance for nest to spawn when generating chunks in nether category biomes. [1/x]\nA higher value means the nest is less likely to spawn.")

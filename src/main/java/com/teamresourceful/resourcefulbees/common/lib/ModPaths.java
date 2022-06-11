@@ -18,7 +18,6 @@ public class ModPaths {
     }
 
     public static final Path BEES = createCustomPath("bees");
-    public static final Path BIOME_DICTIONARY = createCustomPath("biome_dictionary");
     public static final Path BEE_TRAITS = createCustomPath("bee_traits");
     public static final Path RESOURCES = createCustomPath("resources");
     public static final Path HONEY = createCustomPath("honey");

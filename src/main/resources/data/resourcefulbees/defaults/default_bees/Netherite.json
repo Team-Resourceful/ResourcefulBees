@@ -38,17 +38,6 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {"item": {"id": "minecraft:netherite_ingot"}}
-    ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": ["tag:nether"],
-    "lightLevel": "NIGHT"
-  },
   "BreedData": {
     "isBreedable": true,
     "parents": [

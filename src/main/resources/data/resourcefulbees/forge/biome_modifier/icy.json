@@ -1,0 +1,15 @@
+{
+  "type": "resourcefulbees:spawns",
+  "whitelist": [
+    "#forge:is_cold/overworld"
+  ],
+  "blacklist": [
+    "#minecraft:is_ocean"
+  ],
+  "spawns": {
+    "type": "resourcefulbees:icy_bee",
+    "weight": 8,
+    "minCount": 0,
+    "maxCount": 3
+  }
+}

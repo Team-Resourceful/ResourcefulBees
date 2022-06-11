@@ -38,16 +38,6 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {"item": {"id": "minecraft:rotten_flesh"}}
-    ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true,
-    "lightLevel": "NIGHT"
-  },
   "BreedData": {
     "isBreedable": true,
     "parents": [

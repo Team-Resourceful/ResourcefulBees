@@ -5,6 +5,7 @@ import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ScraperDispenserBehavior;
@@ -40,6 +41,7 @@ public class RegistryHandler {
         ModRecipeTypes.RECIPE_TYPES.register(bus);
         ModVillagerProfessions.PROFESSIONS.register(bus);
         ModFeatures.FEATURES.register(bus);
+        ModBiomeModifiers.MODIFIERS.register(bus);
     }
 
     //Dynamic|Iterative Registration Stuff below this line
@@ -59,9 +61,7 @@ public class RegistryHandler {
 
     private static void registerBee(String name, float sizeModifier) {
         RegistryObject<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.ENTITY_TYPES.register(name + "_bee",
-                () -> EntityType.Builder.<ResourcefulBee>of((type, world) -> new ResourcefulBee(type, world, name), ModConstants.BEE_MOB_CATEGORY)
-                .sized(0.7F * sizeModifier, 0.6F * sizeModifier)
-                .build(name + "_bee"));
+                () -> CustomBeeEntityType.of(name, (type, world) -> new ResourcefulBee(type, world, name), 0.7F * sizeModifier, 0.6F * sizeModifier));
         ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> new BeeSpawnEggItem(beeEntityType, name));
         ModEntities.getModBees().put(name, beeEntityType);
     }

@@ -18,44 +18,6 @@
       "jarColor": "rainbow"
     }
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {
-        "pool": [{"item": {"id": "resourcefulbees:wax"}}]
-      },
-      {
-        "pool": [
-          {"item": {"id": "minecraft:white_dye"}},
-          {"item": {"id": "minecraft:orange_dye"}},
-          {"item": {"id": "minecraft:magenta_dye"}},
-          {"item": {"id": "minecraft:light_blue_dye"}},
-          {"item": {"id": "minecraft:yellow_dye"}},
-          {"item": {"id": "minecraft:lime_dye"}},
-          {"item": {"id": "minecraft:pink_dye"}},
-          {"item": {"id": "minecraft:gray_dye"}},
-          {"item": {"id": "minecraft:light_gray_dye"}},
-          {"item": {"id": "minecraft:cyan_dye"}},
-          {"item": {"id": "minecraft:purple_dye"}},
-          {"item": {"id": "minecraft:blue_dye"}},
-          {"item": {"id": "minecraft:brown_dye"}},
-          {"item": {"id": "minecraft:green_dye"}},
-          {"item": {"id": "minecraft:red_dye"}},
-          {"item": {"id": "minecraft:black_dye"}}
-        ]
-      }
-    ],
-    "fluidOutputs": [
-      {
-        "pool": [
-          {"fluid": {"id": "resourcefulbees:rainbow_honey", "amount":  250}}
-        ]
-      }
-    ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true
-  },
   "BreedData": {
     "isBreedable": true,
     "parents": [

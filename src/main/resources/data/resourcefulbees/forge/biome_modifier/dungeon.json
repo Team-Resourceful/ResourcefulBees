@@ -1,0 +1,15 @@
+{
+  "type": "resourcefulbees:spawns",
+  "whitelist": [
+    "#minecraft:is_overworld"
+  ],
+  "blacklist": [
+    "#minecraft:is_ocean"
+  ],
+  "spawns": {
+    "type": "resourcefulbees:dungeon_bee",
+    "weight": 8,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

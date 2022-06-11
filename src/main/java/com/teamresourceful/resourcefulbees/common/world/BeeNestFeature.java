@@ -2,11 +2,13 @@ package com.teamresourceful.resourcefulbees.common.world;
 
 import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.dynamic.SpawnerRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 import net.minecraft.core.BlockPos;
@@ -16,7 +18,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
@@ -129,31 +130,35 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void addBeeToNest(@Nullable EntityType<?> entityType, WorldGenLevel worldIn, BlockPos nestPos, CustomBeeData data, RandomSource rand, TieredBeehiveBlockEntity nest){
+    private void addBeeToNest(@Nullable EntityType<?> entityType, WorldGenLevel worldIn, BlockPos nestPos, RandomSource rand, TieredBeehiveBlockEntity nest){
         if (entityType != null) {
-            Entity bee = entityType.create(worldIn.getLevel());
-            if (bee != null) {
+            if (entityType.create(worldIn.getLevel()) instanceof CustomBeeEntity bee) {
                 bee.setPos(nestPos.getX(), nestPos.getY(), nestPos.getZ());
                 CompoundTag compoundNBT = new CompoundTag();
                 bee.save(compoundNBT);
-                int timeInHive = rand.nextInt(data.coreData().maxTimeInHive());
+                int timeInHive = rand.nextInt(bee.getCoreData().maxTimeInHive());
                 ((BeehiveEntityAccessor)nest).getBees().add(new BeehiveBlockEntity.BeeData(compoundNBT, 0, timeInHive));
             }
         }
     }
 
-    private void setNestBees(BlockPos nestPos, @Nullable ResourceKey<Biome> biomeKey, WorldGenLevel level, RandomSource rand){
+    private void setNestBees(BlockPos nestPos, Holder<Biome> holder, WorldGenLevel level, RandomSource rand){
         if (level.getBlockEntity(nestPos) instanceof TieredBeehiveBlockEntity nest) {
             int maxBees = Math.round(CommonConfig.HIVE_MAX_BEES.get() * 0.5f);
 
+            Biome biome = holder.get();
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
-                if (biomeKey != null && BeeRegistry.isSpawnableBiome(biomeKey.location())) {
-                    CustomBeeData data = BeeRegistry.getSpawnableBiome(biomeKey.location()).next();
-                    if (data.spawnData().canSpawnAtYLevel(nestPos)) continue;
-                    addBeeToNest(data.getEntityType(), level, nestPos, data, rand, nest);
-                } else {
-                    logMissingBiome(biomeKey);
-                }
+                biome.getMobSettings()
+                        .getMobs(ModConstants.BEE_MOB_CATEGORY)
+                        .getRandom(rand)
+                        .map(data -> data.type)
+                        .filter(type -> type instanceof CustomBeeEntityType<?>)
+                        .map(type -> (CustomBeeEntityType<?>) type)
+                        .ifPresentOrElse(bee -> {
+                            if (SpawnerRegistry.getData(bee.getBeeType()).yLevel().isValueInRange(nestPos.getY())) {
+                                addBeeToNest(bee, level, nestPos, rand, nest);
+                            }
+                        }, () -> logMissingBiome(holder.unwrapKey().orElse(null)));
             }
         }
     }
@@ -196,7 +201,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
         level.setBlock(newPos, newState, 1);
 
-        setNestBees(newPos, biomeKey.orElse(null), level, rand);
+        setNestBees(newPos, biomeHolder, level, rand);
         return true;
     }
 

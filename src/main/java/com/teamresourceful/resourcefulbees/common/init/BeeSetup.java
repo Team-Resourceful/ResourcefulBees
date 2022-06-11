@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.common.init;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
@@ -51,49 +50,12 @@ public class BeeSetup {
         BeeRegistry.getRegistry().cacheRawBeeData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
     }
 
-    /* TODO Replace with BiomeModifier
-    public static void onBiomeLoad(BiomeLoadingEvent event) {
-        if (event.getName() != null && BeeRegistry.isSpawnableBiome(event.getName())) {
-            boolean isFlowerForest = event.getName().equals(Biomes.FLOWER_FOREST.getRegistryName());
-            BeeRegistry.getSpawnableBiome(event.getName()).forEach(customBeeData -> addSpawnSetting(customBeeData, event, isFlowerForest));
-            if (Boolean.TRUE.equals(CommonConfig.GENERATE_BEE_NESTS.get())) {
-                addNestFeature(event);
-            }
-        }
-    }
-
-    private static void addSpawnSetting(CustomBeeData customBeeData, BiomeLoadingEvent event, boolean isFlowerForest) {
-        EntityType<?> entityType = customBeeData.getEntityType();
-        if (event.getName() != null) {
-            SpawnData spawnData = customBeeData.spawnData();
-            event.getSpawns().getSpawner(ModConstants.BEE_MOB_CATEGORY)
-                    .add(spawnData.getSpawnerData(entityType, isFlowerForest));
-        }
-    }
-
-    private static void addNestFeature(BiomeLoadingEvent event) {
-        Biome.BiomeCategory category = event.getCategory();
-        if (category == Biome.BiomeCategory.NETHER) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.NETHER_NESTS);
-        } else if (category == Biome.BiomeCategory.THEEND) {
-            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.THE_END_NESTS);
-        } else {
-            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.ConfiguredFeatures.OVERWORLD_NESTS);
-        }
-    }
-     */
-
     public static void registerBeePlacements() {
-        ModEntities.getModBees().forEach((s, entityType) -> {
-            SpawnData spawnData = BeeRegistry.getRegistry().getBeeData(s).spawnData();
-            boolean canSpawnInWorld = spawnData.canSpawnInWorld();
-            if (canSpawnInWorld) {
-                SpawnPlacements.register(entityType.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, createPredicate(spawnData));
-            }
-        });
+        ModEntities.getModBees().forEach((s, entityType) ->
+                SpawnPlacements.register(entityType.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, createPredicate(s)));
     }
 
-    public static <T extends Mob> SpawnPlacements.SpawnPredicate<T> createPredicate(SpawnData spawnData) {
-        return (type, level, reason, pos, random) -> CustomBeeEntity.canBeeSpawn(spawnData, level, reason, pos);
+    public static <T extends Mob> SpawnPlacements.SpawnPredicate<T> createPredicate(String beeType) {
+        return (type, level, reason, pos, random) -> CustomBeeEntity.canBeeSpawn(beeType, level, reason, pos);
     }
 }

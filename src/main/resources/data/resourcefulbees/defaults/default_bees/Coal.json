@@ -34,29 +34,6 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "itemOutputs": [
-      {
-        "chance": 1,
-        "pool": [
-          {"item": {"id": "minecraft:coal", "count": 16}, "weight": 5},
-          {"item": {"id": "minecraft:dragon_egg"}, "weight": 1},
-          {"item": {"id": "minecraft:dragon_breath"}, "weight": 50}
-        ]
-      },
-      {
-        "chance": 0.5,
-        "pool": [
-          {"item": {"id": "minecraft:coal", "count": 16}, "weight": 5},
-          {"item": {"id": "minecraft:dragon_egg"}, "weight": 1},
-          {"item": {"id": "minecraft:dragon_breath"}, "weight": 50}
-        ]
-      }
-    ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true
-  },
   "BreedData": {
     "parents": [
       {

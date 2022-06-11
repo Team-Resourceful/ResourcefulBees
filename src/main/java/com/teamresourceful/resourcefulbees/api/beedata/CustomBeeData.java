@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
-import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
@@ -27,21 +26,20 @@ import java.util.function.Supplier;
  * @param breedData Returns a {@link BreedData} object containing the breeding rules for the bee.
  * @param combatData Returns a {@link CombatData} object containing information about the bees combat info such as health and attack damage.
  * @param mutationData Returns a {@link MutationData} object containing information regarding the various block and entity mutations a bee may perform.
- * @param spawnData Returns a {@link SpawnData} object containing the spawning rules for a bee.
  * @param traitData Returns a {@link TraitData} object containing information regarding the various traits a bee may have.
  * @param rawData Returns a {@link JsonObject} containing the raw unadulterated data from the bees json file.
  * @param registryID
  * @param displayName
  * @param entityType
  */
-public record CustomBeeData(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData,
+public record CustomBeeData(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, TraitData traitData,
                             JsonObject rawData, ResourceLocation registryID, MutableComponent displayName, Supplier<EntityType<?>> entityType
 ) {
     /**
      * A default implementation of {@link CustomBeeData} that can be
      * used to prevent {@link NullPointerException}'s
      */
-    public static final CustomBeeData DEFAULT = CustomBeeData.of(CoreData.DEFAULT, RenderData.DEFAULT, BreedData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, SpawnData.DEFAULT, TraitData.DEFAULT);
+    public static final CustomBeeData DEFAULT = CustomBeeData.of(CoreData.DEFAULT, RenderData.DEFAULT, BreedData.DEFAULT, CombatData.DEFAULT, MutationData.DEFAULT, TraitData.DEFAULT);
 
     /**
      * Returns a {@link Codec<CustomBeeData>} that can be parsed to create a
@@ -60,17 +58,16 @@ public record CustomBeeData(CoreData coreData, RenderData renderData, BreedData 
                 BreedData.codec(name).fieldOf("BreedData").orElse(BreedData.DEFAULT).forGetter(CustomBeeData::breedData),
                 CombatData.CODEC.fieldOf("CombatData").orElse(CombatData.DEFAULT).forGetter(CustomBeeData::combatData),
                 MutationData.CODEC.fieldOf("MutationData").orElse(MutationData.DEFAULT).forGetter(CustomBeeData::mutationData),
-                SpawnData.CODEC.fieldOf("SpawnData").orElse(SpawnData.DEFAULT).forGetter(CustomBeeData::spawnData),
                 TraitData.codec(name).fieldOf("TraitData").orElse(TraitData.DEFAULT).forGetter(CustomBeeData::traitData)
         ).apply(instance, CustomBeeData::of));
     }
 
-    private static CustomBeeData of(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, SpawnData spawnData, TraitData traitData) {
+    private static CustomBeeData of(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, TraitData traitData) {
         JsonObject rawData = BeeRegistry.getRegistry().getRawBeeData(coreData.name());
         ResourceLocation registryId = new ResourceLocation(ResourcefulBees.MOD_ID, coreData.name() + "_bee");
         MutableComponent displayName = Component.translatable("entity.resourcefulbees." + coreData.name() + "_bee");
         Supplier<EntityType<?>> beeEntity = Suppliers.memoize(() -> getEntity(registryId));
-        return new CustomBeeData(coreData, renderData, breedData, combatData, mutationData, spawnData, traitData, rawData, registryId, displayName, beeEntity);
+        return new CustomBeeData(coreData, renderData, breedData, combatData, mutationData, traitData, rawData, registryId, displayName, beeEntity);
     }
 
     public @NotNull EntityType<?> getEntityType() {

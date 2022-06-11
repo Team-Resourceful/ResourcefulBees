@@ -37,19 +37,6 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {"item": {"id": "minecraft:ender_pearl"}},
-      {"item": {"id": "minecraft:dragon_breath"}}
-    ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": ["tag:end"],
-    "lightLevel": "NIGHT",
-    "spawnWeight": 20
-  },
   "BreedData": {
     "isBreedable": true,
     "parents": [

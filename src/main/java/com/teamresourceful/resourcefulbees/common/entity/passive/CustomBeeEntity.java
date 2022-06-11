@@ -10,15 +10,16 @@ import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
-import com.teamresourceful.resourcefulbees.api.beedata.spawning.SpawnData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.spawndata.SpawnData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.AnimalEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.dynamic.SpawnerRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
@@ -129,10 +130,6 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         return customBeeData.mutationData();
     }
 
-    public SpawnData getSpawnData() {
-        return customBeeData.spawnData();
-    }
-
     public TraitData getTraitData() {
         return customBeeData.traitData();
     }
@@ -233,11 +230,14 @@ public class CustomBeeEntity extends ModBeeEntity implements ICustomBee, IAnimat
         this.hasHiveInRange = hasHiveInRange;
     }
 
-    public static boolean canBeeSpawn(SpawnData data, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos) {
-        return switch (reason) {
-            case NATURAL, CHUNK_GENERATION -> data.getYLevel().isValueInRange(pos.getY()) && data.getLightLevel().canSpawn(worldIn, pos);
-            default -> true;
-        };
+    public static boolean canBeeSpawn(String beeType, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos) {
+        switch (reason) {
+            case NATURAL, CHUNK_GENERATION -> {
+                SpawnData data = SpawnerRegistry.getData(beeType);
+                return data.yLevel().isValueInRange(pos.getY()) && data.lightLevel().canSpawn(worldIn, pos);
+            }
+        }
+        return true;
     }
 
     @Override

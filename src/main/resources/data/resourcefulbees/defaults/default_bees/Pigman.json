@@ -37,17 +37,6 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {"item": {"id": "minecraft:glowstone_dust"}}
-    ]
-  },
-  "SpawnData": {
-    "canSpawnInWorld": true,
-    "biomeWhitelist": ["tag:nether"],
-    "lightLevel": "NIGHT"
-  },
   "BreedData": {
     "isBreedable": true,
     "parents": [
