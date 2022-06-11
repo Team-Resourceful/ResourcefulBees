@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.ingredients.BeeJarIngredient;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;

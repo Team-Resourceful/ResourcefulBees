@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.ingredients.IAmountSensitive;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.IAmountSensitive;
 import com.teamresourceful.resourcefulbees.common.recipe.base.CodecRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;

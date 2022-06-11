@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blockentity.breeder;
 
-import com.teamresourceful.resourcefulbees.common.ingredients.IAmountSensitive;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.IAmountSensitive;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.BoundSafeContainerData;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.BreederMenu;

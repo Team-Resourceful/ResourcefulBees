@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.ingredients;
+package com.teamresourceful.resourcefulbees.common.recipe.ingredients;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
