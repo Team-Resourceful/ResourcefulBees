@@ -34,6 +34,7 @@ public class RegistryHandler {
         ModFluids.initializeRegistries(bus);
         ModEntities.ENTITY_TYPES.register(bus);
         ModBlockEntityTypes.BLOCK_ENTITY_TYPES.register(bus);
+        ModEnchantments.ENCHANTMENTS.register(bus);
         ModPOIs.POIS.register(bus);
         ModPotions.POTIONS.register(bus);
         ModMenus.CONTAINER_TYPES.register(bus);
@@ -69,7 +70,9 @@ public class RegistryHandler {
     private static void registerHoneyBottle(String name, JsonObject honeyData) {
         HoneyData honeyBottleData = HoneyData.codec(name).parse(JsonOps.INSTANCE, honeyData)
                 .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not create Custom Honey Data for {} honey", name));
-        HoneyRegistry.getRegistry().registerHoney(name, honeyBottleData);
+        if (!HoneyRegistry.getRegistry().registerHoney(name, honeyBottleData)) {
+            ResourcefulBees.LOGGER.error("Duplicate honeys with name {}", name);
+        }
     }
 
     public static void registerDispenserBehaviors() {

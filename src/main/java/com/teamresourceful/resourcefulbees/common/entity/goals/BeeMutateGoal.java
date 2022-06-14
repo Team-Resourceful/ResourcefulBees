@@ -15,7 +15,6 @@ public class BeeMutateGoal extends Goal {
     private final ResourcefulBee bee;
 
     public BeeMutateGoal(ResourcefulBee bee) {
-        super();
         this.bee = bee;
     }
 

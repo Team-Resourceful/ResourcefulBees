@@ -15,12 +15,12 @@ import com.teamresourceful.resourcefulbees.common.data.DataGen;
 import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitiveIngredient;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.NBTAmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.init.*;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.recipe.conditions.LoadDevRecipes;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitiveIngredient;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.NBTAmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.*;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.SpawnerRegistry;
@@ -93,7 +93,7 @@ public class ResourcefulBees {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onPackFinders);
-        //MinecraftForge.EVENT_BUS.addListener(BeeSetup::onBiomeLoad);
+
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
         MinecraftForge.EVENT_BUS.addListener(Beekeeper::setupBeekeeper);
         MinecraftForge.EVENT_BUS.addListener(this::cloneEvent);
