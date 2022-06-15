@@ -9,11 +9,10 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -58,13 +57,13 @@ public abstract class BaseAdvancementProvider implements DataProvider {
 
     protected static Advancement.Builder createAdvancement(ItemStack item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item, new TranslatableComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslatableComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.TASK, true, true, false)
+                .display(item, Component.translatable(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), Component.translatable(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.TASK, true, true, false)
                 .parent(parent);
     }
 
     protected static Advancement.Builder createAdvancement(RegistryObject<Item> item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item.get().getDefaultInstance(), new TranslatableComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslatableComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.TASK, true, true, false)
+                .display(item.get().getDefaultInstance(), Component.translatable(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), Component.translatable(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.TASK, true, true, false)
                 .parent(parent);
     }
 
@@ -74,20 +73,20 @@ public abstract class BaseAdvancementProvider implements DataProvider {
                 .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/"+id));
     }
 
-    protected static Advancement.Builder createChallengeAchivement(ItemStack item, String id, Advancement parent) {
+    protected static Advancement.Builder createChallengeAchievement(ItemStack item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item, new TranslatableComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslatableComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.CHALLENGE, true, true, true)
+                .display(item, Component.translatable(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), Component.translatable(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.CHALLENGE, true, true, true)
                 .parent(parent);
     }
 
-    protected static Advancement.Builder createChallengeAchivement(RegistryObject<Item> item, String id, Advancement parent) {
+    protected static Advancement.Builder createChallengeAchievement(RegistryObject<Item> item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
-                .display(item.get().getDefaultInstance(), new TranslatableComponent(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), new TranslatableComponent(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.CHALLENGE, true, true, true)
+                .display(item.get().getDefaultInstance(), Component.translatable(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), Component.translatable(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.CHALLENGE, true, true, true)
                 .parent(parent);
     }
 
-    protected static Advancement createSimpleChallengeAchivement(RegistryObject<Item> item, String id, Advancement parent) {
-        return createChallengeAchivement(item, id, parent)
+    protected static Advancement createSimpleChallengeAchievement(RegistryObject<Item> item, String id, Advancement parent) {
+        return createChallengeAchievement(item, id, parent)
                 .addCriterion("has_"+id, has(item.get()))
                 .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/"+id));
     }
@@ -112,14 +111,14 @@ public abstract class BaseAdvancementProvider implements DataProvider {
     }
 
     @Override
-    public void run(@NotNull HashCache cache) throws IOException {
+    public void run(@NotNull CachedOutput cache) throws IOException {
         Path path = this.generator.getOutputFolder();
 
         buildAdvancements();
 
         for (Advancement advancement : this.advancements.values()) {
             Path path1 = createPath(path, advancement);
-            DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path1);
+            DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path1);
         }
     }
 

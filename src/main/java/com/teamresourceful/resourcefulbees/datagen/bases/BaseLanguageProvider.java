@@ -5,7 +5,8 @@ import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.common.lib.annotations.Translate;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -46,7 +47,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
             if (field.isAnnotationPresent(Translate.class)) {
                 String key = null;
                 if (field.getType().isAssignableFrom(String.class)) key = getOrNull(field);
-                else if (field.getType().isAssignableFrom(TranslatableComponent.class)) key = getTranslationKeyOrNull(field);
+                else if (field.getType().isAssignableFrom(Component.class)) key = getTranslationKeyOrNull(field);
 
                 if (key != null) add(key, field.getAnnotation(Translate.class).value());
             }
@@ -60,7 +61,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
 
     @Nullable
     private static String getTranslationKeyOrNull(Field field) {
-        try { return ((TranslatableComponent) field.get(null)).getKey(); }catch (Exception e) { return null; }
+        try { return ((TranslatableContents) field.get(null)).getKey(); }catch (Exception e) { return null; }
     }
 
     public void addAdvancement(String id, String title, String desc) {
@@ -96,8 +97,8 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
     }
 
     public void add(CreativeModeTab group, String name) {
-        final Component displayName = group.getDisplayName();
-        if (displayName instanceof TranslatableComponent translatableComponent) {
+        final ComponentContents displayName = group.getDisplayName().getContents();
+        if (displayName instanceof TranslatableContents translatableComponent) {
             add(translatableComponent.getKey(), name);
         }
     }

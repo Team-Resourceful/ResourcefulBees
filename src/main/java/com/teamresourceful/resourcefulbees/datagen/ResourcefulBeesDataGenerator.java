@@ -28,21 +28,14 @@ public class ResourcefulBeesDataGenerator {
         ResourcefulBees.LOGGER.info("Data Generator Loaded!");
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-        if (event.includeClient()) {
-            generator.addProvider(new ModBlockStateProvider(generator, existingFileHelper));
-        }
-        if (event.includeServer()) {
-            generator.addProvider(new ModLootTableProvider(generator));
-            ModBlockTagProvider blockTagProvider = new ModBlockTagProvider(generator, existingFileHelper);
-            generator.addProvider(blockTagProvider);
-            generator.addProvider(new ModItemTagProvider(generator, blockTagProvider, existingFileHelper));
-            generator.addProvider(new ModFluidTagProvider(generator, existingFileHelper));
-            generator.addProvider(new ModRecipeProvider(generator));
-            generator.addProvider(new ModAdvancementProvider(generator));
-        }
-
-        if (event.includeClient()) {
-            generator.addProvider(new ModLanguageProvider(generator));
-        }
+        generator.addProvider(event.includeClient(), new ModBlockStateProvider(generator, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ModLootTableProvider(generator));
+        ModBlockTagProvider blockTagProvider = new ModBlockTagProvider(generator, existingFileHelper);
+        generator.addProvider(event.includeServer(), blockTagProvider);
+        generator.addProvider(event.includeServer(), new ModItemTagProvider(generator, blockTagProvider, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ModFluidTagProvider(generator, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ModRecipeProvider(generator));
+        generator.addProvider(event.includeServer(), new ModAdvancementProvider(generator));
+        generator.addProvider(event.includeClient(), new ModLanguageProvider(generator));
     }
 }

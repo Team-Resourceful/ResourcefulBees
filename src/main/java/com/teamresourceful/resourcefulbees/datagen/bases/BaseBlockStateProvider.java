@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Objects;
 
@@ -23,11 +24,11 @@ public abstract class BaseBlockStateProvider extends BlockStateProvider {
     }
 
     protected String id(Block block) {
-        return Objects.requireNonNull(block.getRegistryName()).getPath();
+        return Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath();
     }
 
     protected String idFull(Block block) {
-        return Objects.requireNonNull(block.getRegistryName()).toString();
+        return Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).toString();
     }
 
     @Override
