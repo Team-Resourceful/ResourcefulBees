@@ -19,7 +19,9 @@
     "honeyBlock": "resourcefulbees:rainbow_honey_block"
   },
   "fluidData": {
-    "color": "rainbow",
+    "rendering" : {
+      "color": "rainbow"
+    },
     "stillFluid": "resourcefulbees:rainbow_honey",
     "flowingFluid": "resourcefulbees:rainbow_honey_flowing",
     "fluidBucket": "resourcefulbees:rainbow_honey_bucket",

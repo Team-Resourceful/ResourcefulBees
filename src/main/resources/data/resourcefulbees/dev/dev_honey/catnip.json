@@ -31,10 +31,12 @@
     "honeyBlock": "resourcefulbees:catnip_honey_block"
   },
   "fluidData": {
-    "color": "#BD5331",
-    "stillTexture": "resourcefulbees:block/honey/catnip_honey_still",
-    "flowingTexture": "resourcefulbees:block/honey/catnip_honey_flow",
-    "overlayTexture": "resourcefulbees:block/honey/catnip_honey_overlay",
+    "rendering": {
+      "color": "#BD5331",
+      "stillTexture": "resourcefulbees:block/honey/catnip_honey_still",
+      "flowingTexture": "resourcefulbees:block/honey/catnip_honey_flow",
+      "overlayTexture": "resourcefulbees:block/honey/catnip_honey_overlay"
+    },
     "stillFluid": "resourcefulbees:catnip_honey",
     "flowingFluid": "resourcefulbees:catnip_honey_flowing",
     "fluidBucket": "resourcefulbees:catnip_honey_bucket",

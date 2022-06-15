@@ -77,7 +77,7 @@ public class SolidificationChamber extends SidedTickingBlock<SolidificationChamb
     public void animateTick(@NotNull BlockState stateIn, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         SolidificationChamberBlockEntity tank = getBlockEntity(level, pos);
         if (tank == null) return;
-        if (tank.getTank().getFluid().getFluid() instanceof CustomHoneyFluid fluid && fluid.getHoneyData().color().isRainbow()) {
+        if (tank.getTank().getFluid().getFluid() instanceof CustomHoneyFluid fluid && fluid.getHoneyData().renderData().color().isRainbow()) {
             level.sendBlockUpdated(pos, stateIn, stateIn, 2);
         }
         super.animateTick(stateIn, level, pos, rand);

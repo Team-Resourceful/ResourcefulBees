@@ -20,6 +20,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.fluids.FluidStack;
 
 public class RenderUtils {
@@ -64,11 +66,12 @@ public class RenderUtils {
     public static void drawFluid(PoseStack matrix, int height, int width, FluidStack fluidStack, int x, int y, int blitOffset) {
         Minecraft mc = Minecraft.getInstance();
         bindTexture(InventoryMenu.BLOCK_ATLAS);
-        TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStack.getFluid().getAttributes().getStillTexture());
+        IFluidTypeRenderProperties props = RenderProperties.get(fluidStack.getFluid());
+        TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(props.getStillTexture(fluidStack));
         int remainder = height % 16;
         int splits = (height - remainder) / 16;
         if (remainder != 0) splits++;
-        int fluidColor = fluidStack.getFluid().getAttributes().getColor();
+        int fluidColor = props.getColorTint(fluidStack);
 
         RenderSystem.setShaderColor(((fluidColor >> 16) & 0xFF)/ 255.0F, ((fluidColor >> 8) & 0xFF)/ 255.0F, (fluidColor & 0xFF)/ 255.0F,  ((fluidColor >> 24) & 0xFF)/ 255.0F);
         for (int i = 0; i < splits; i++)

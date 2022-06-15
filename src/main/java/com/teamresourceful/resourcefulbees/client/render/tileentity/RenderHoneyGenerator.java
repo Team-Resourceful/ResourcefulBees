@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,8 +26,9 @@ public class RenderHoneyGenerator implements BlockEntityRenderer<HoneyGeneratorB
         FluidStack stack = tile.getTank().getFluid();
         if (!stack.isEmpty()) {
             float percentage = tile.getTank().getFluidAmount() / (float)tile.getTank().getCapacity();
-            int color = stack.getFluid().getAttributes().getColor();
-            ResourceLocation stillTexture = stack.getFluid().getAttributes().getStillTexture();
+            IFluidTypeRenderProperties props = RenderProperties.get(stack.getFluid());
+            int color = props.getColorTint(stack);
+            ResourceLocation stillTexture = props.getStillTexture(stack);
             VertexConsumer builder = renderer.getBuffer(Sheets.translucentCullBlockSheet());
             Vector3f start = new Vector3f(0.0625f, 0.0625f, 0.0625f);
             Vector3f end = new Vector3f(0.9375f, 0.0625f + percentage * 0.875f, 0.9375f);

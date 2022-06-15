@@ -24,7 +24,7 @@ public class CustomHoneyFluidBlock extends LiquidBlock {
 
     @Override
     public void animateTick(@NotNull BlockState stateIn, @NotNull Level world, @NotNull BlockPos pos, @NotNull RandomSource rand) {
-        if (data.color().isRainbow()) world.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
+        if (data.renderData().color().isRainbow()) world.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
         super.animateTick(stateIn, world, pos, rand);
     }
 }
