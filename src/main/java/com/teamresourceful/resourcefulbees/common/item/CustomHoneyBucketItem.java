@@ -27,7 +27,7 @@ public class CustomHoneyBucketItem extends BucketItem {
     }
 
     public int getHoneyBucketColor() {
-        return data.color().getValue();
+        return data.renderData().color().getValue();
     }
 
     @Override

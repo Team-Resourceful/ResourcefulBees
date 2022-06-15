@@ -1,9 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.recipe.recipes;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.Decoder;
-import com.mojang.serialization.Encoder;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.recipe.base.CodecRecipe;
@@ -25,7 +22,7 @@ public record SolidificationRecipe(ResourceLocation id, FluidStack fluid, ItemSt
 
     public static Codec<SolidificationRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                MapCodec.of(Encoder.empty(), Decoder.unit(() -> id)).forGetter(SolidificationRecipe::getId),
+                RecordCodecBuilder.point(id),
                 CodecUtils.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(SolidificationRecipe::fluid),
                 CodecUtils.ITEM_STACK_CODEC.fieldOf("result").forGetter(SolidificationRecipe::stack)
         ).apply(instance, SolidificationRecipe::new));

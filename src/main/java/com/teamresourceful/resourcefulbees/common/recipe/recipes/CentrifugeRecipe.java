@@ -2,17 +2,14 @@
 package com.teamresourceful.resourcefulbees.common.recipe.recipes;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.Decoder;
-import com.mojang.serialization.Encoder;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.IAmountSensitive;
 import com.teamresourceful.resourcefulbees.common.recipe.base.CodecRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.IAmountSensitive;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
 import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
@@ -32,7 +29,7 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
 
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                MapCodec.of(Encoder.empty(), Decoder.unit(() -> id)).forGetter(CentrifugeRecipe::id),
+                RecordCodecBuilder.point(id),
                 CodecUtils.INGREDIENT_CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::ingredient),
                 Output.ITEM_OUTPUT_CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::itemOutputs),
                 Output.FLUID_OUTPUT_CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::fluidOutputs),
