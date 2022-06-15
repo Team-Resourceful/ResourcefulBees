@@ -28,7 +28,7 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
 
     public static Codec<BreederRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
-            MapCodec.of(Encoder.empty(), Decoder.unit(() -> id)).forGetter(BreederRecipe::getId),
+            RecordCodecBuilder.point(id),
             BreederPair.CODEC.fieldOf("parent1").forGetter(BreederRecipe::parent1),
             BreederPair.CODEC.fieldOf("parent2").forGetter(BreederRecipe::parent2),
             CodecUtils.INGREDIENT_CODEC.optionalFieldOf("input").forGetter(BreederRecipe::input),
