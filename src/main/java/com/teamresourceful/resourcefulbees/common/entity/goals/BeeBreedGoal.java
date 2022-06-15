@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.common.entity.goals;
 
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
-import com.teamresourceful.resourcefulbees.common.mixin.invokers.BreedGoalInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.particles.ParticleTypes;
@@ -33,10 +32,8 @@ public class BeeBreedGoal extends BreedGoal {
     @Override
     public boolean canUse() {
         if (this.animal.isInLove()) {
-            this.partner = ((BreedGoalInvoker)this).callGetFreePartner();
-            if (partner instanceof ICustomBee parent1){
-                ICustomBee parent2 = ((ICustomBee) animal);
-                return BeeRegistry.getRegistry().canParentsBreed(parent1.getBeeType(), parent2.getBeeType());
+            if (super.canUse() && this.partner instanceof ICustomBee parent1){
+                return BeeRegistry.getRegistry().canParentsBreed(parent1.getBeeType(), ((ICustomBee) animal).getBeeType());
             }
         }
         return false;

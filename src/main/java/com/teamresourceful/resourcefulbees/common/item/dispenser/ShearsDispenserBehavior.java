@@ -40,7 +40,7 @@ public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
                     ((BeehiveBlock) blockstate.getBlock()).releaseBeesAndResetHoneyLevel(world, blockstate, blockpos, null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
                 }
             }
-        } else {
+        } else if (defaultBehavior != DispenseItemBehavior.NOOP) {
             return defaultBehavior.dispense(source, stack);
         }
         return stack;

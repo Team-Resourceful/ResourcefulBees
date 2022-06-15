@@ -17,7 +17,6 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.AnimalEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.SpawnerRegistry;
 import net.minecraft.core.BlockPos;
@@ -278,7 +277,7 @@ public class CustomBeeEntity extends Bee implements ICustomBee, IAnimatable, IBe
     }
 
     public void setLoveTime(int time) {
-        ((AnimalEntityAccessor) this).setLove(time);
+        super.setInLoveTime(time);
     }
 
     @Override

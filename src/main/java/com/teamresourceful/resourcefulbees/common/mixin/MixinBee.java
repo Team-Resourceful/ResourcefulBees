@@ -21,9 +21,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Bee.class)
-public abstract class MixinBeeEntity extends Animal implements IBeeCompat {
+public abstract class MixinBee extends Animal implements IBeeCompat {
 
-    protected MixinBeeEntity(EntityType<? extends Animal> entityType, Level world) {
+    protected MixinBee(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
     }
 

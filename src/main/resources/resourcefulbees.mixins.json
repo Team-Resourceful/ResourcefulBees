@@ -4,22 +4,17 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "resourcefulbees.refmap.json",
   "mixins": [
-    "MixinBeeEntity",
+    "MixinBee",
     "MixinBlock",
     "MixinDispenserBlock",
-    "MixinEnterBeehiveGoal",
-    "MixinFindBeehiveGoal",
-    "MixinUpdateBeehiveGoal",
-    "RecipeManagerAccessorInvoker",
-    "accessors.AnimalEntityAccessor",
+    "MixinBeeEnterHiveGoal",
+    "accessors.RecipeManagerAccessor",
     "accessors.BeeEntityAccessor",
     "accessors.BeehiveBeeDataAccessor",
     "accessors.BeehiveEntityAccessor",
     "accessors.BlockAccessor",
-    "invokers.BeeEntityInvoker",
-    "invokers.BreedGoalInvoker",
-    "invokers.DispenserBlockInvoker",
-    "invokers.FindBeehiveGoalInvoker"
+    "invokers.BeeInvoker",
+    "invokers.BeeGoToHiveGoalInvoker"
   ],
   "minVersion": "0.8.5",
   "client": [

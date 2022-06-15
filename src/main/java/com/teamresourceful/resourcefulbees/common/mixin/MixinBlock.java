@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 
 @Mixin(Block.class)
-public class MixinBlock {
+public abstract class MixinBlock {
 
     @Inject(method = "playerDestroy", at = @At("HEAD"))
     public void onPlayerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity be, ItemStack stack, CallbackInfo ci) {

@@ -8,8 +8,8 @@ import com.teamresourceful.resourcefulbees.common.entity.goals.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeEntityInvoker;
-import com.teamresourceful.resourcefulbees.common.mixin.invokers.FindBeehiveGoalInvoker;
+import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
+import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeGoToHiveGoalInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitAbilityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -131,8 +131,8 @@ public class ResourcefulBee extends CustomBeeEntity {
     @Override
     public boolean wantsToEnterHive() {
         if (((BeeEntityAccessor)this).getStayOutOfHiveCountdown() <= 0 && !this.pollinateGoal.isPollinating() && !this.hasStung() && this.getTarget() == null) {
-            boolean flag = ((BeeEntityInvoker)this).callIsTiredOfLookingForNectar() || this.hasNectar();
-            return flag && !((BeeEntityInvoker)this).callIsHiveNearFire();
+            boolean flag = ((BeeInvoker)this).callIsTiredOfLookingForNectar() || this.hasNectar();
+            return flag && !((BeeInvoker)this).callIsHiveNearFire();
         } else {
             return false;
         }
@@ -206,7 +206,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             }
 
             this.stopBeingAngry();
-            ((BeeEntityInvoker) this).callSetFlag(4, CommonConfig.BEE_DIES_FROM_STING.get() && this.getCombatData().removeStingerOnAttack());
+            ((BeeInvoker) this).callSetFlag(4, CommonConfig.BEE_DIES_FROM_STING.get() && this.getCombatData().removeStingerOnAttack());
             this.playSound(SoundEvents.BEE_STING, 1.0F, 1.0F);
             return true;
         }
@@ -333,7 +333,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public boolean canBeeUse() {
-            return getHivePos() != null && !hasRestriction() && wantsToEnterHive() && !((FindBeehiveGoalInvoker)this).callHasReachedTarget(getHivePos()) && isHiveValid();
+            return getHivePos() != null && !hasRestriction() && wantsToEnterHive() && !((BeeGoToHiveGoalInvoker)this).callHasReachedTarget(getHivePos()) && isHiveValid();
         }
 
         @Override

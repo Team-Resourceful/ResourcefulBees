@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.entity.goals;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeEntityInvoker;
+import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -120,7 +120,7 @@ public class RBeePollinateGoal extends Goal {
     public void stop() {
         if (this.completedPollination()) {
             bee.resetTicksWithoutNectarSinceExitingHive();
-            ((BeeEntityInvoker) bee).callSetFlag(8, true);
+            ((BeeInvoker) bee).callSetFlag(8, true);
         }
 
         this.running = false;

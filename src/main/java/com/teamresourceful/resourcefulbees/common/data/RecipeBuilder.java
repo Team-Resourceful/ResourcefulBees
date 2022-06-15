@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
-import com.teamresourceful.resourcefulbees.common.mixin.RecipeManagerAccessorInvoker;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.RecipeManagerAccessor;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
@@ -80,7 +80,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     public void addRecipe(Recipe<?> recipe) {
-        ((RecipeManagerAccessorInvoker)getRecipeManager()).getRecipes().computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
+        ((RecipeManagerAccessor)getRecipeManager()).getRecipes().computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -241,7 +241,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     public static RecipeManager getRecipeManager() {
-        RecipeManagerAccessorInvoker recipeManagerInvoker = (RecipeManagerAccessorInvoker)recipeManager;
+        RecipeManagerAccessor recipeManagerInvoker = (RecipeManagerAccessor)recipeManager;
         if (!recipeManagerInvoker.getRecipes().getClass().equals(HashMap.class)) {
             recipeManagerInvoker.setRecipes(new HashMap<>(recipeManagerInvoker.getRecipes()));
             recipeManagerInvoker.getRecipes().replaceAll((t, v) -> new HashMap<>(recipeManagerInvoker.getRecipes().get(t)));
