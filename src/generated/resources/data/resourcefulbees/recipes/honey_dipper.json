@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " CW",
-    " SC",
-    "S  "
-  ],
   "key": {
     "C": {
       "tag": "resourcefulbees:resourceful_honeycomb"
@@ -16,6 +11,11 @@
       "tag": "forge:wax"
     }
   },
+  "pattern": [
+    " CW",
+    " SC",
+    "S  "
+  ],
   "result": {
     "item": "resourcefulbees:honey_dipper"
   }

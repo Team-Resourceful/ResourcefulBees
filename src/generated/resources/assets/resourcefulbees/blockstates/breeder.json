@@ -1,5 +1,9 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "resourcefulbees:block/breeder",
+      "y": 90
+    },
     "facing=north": {
       "model": "resourcefulbees:block/breeder"
     },
@@ -10,10 +14,6 @@
     "facing=west": {
       "model": "resourcefulbees:block/breeder",
       "y": 270
-    },
-    "facing=east": {
-      "model": "resourcefulbees:block/breeder",
-      "y": 90
     }
   }
 }

@@ -1,24 +1,7 @@
 {
   "parent": "resourcefulbees:resourcefulbees/bee_jar",
-  "display": {
-    "icon": {
-      "item": "resourcefulbees:bee_jar",
-      "nbt": "{Entity:{Color:\"#edc343\",id:\"minecraft:bee\"}}"
-    },
-    "title": {
-      "translate": "advancements.resourcefulbees.collect_bee.title"
-    },
-    "description": {
-      "translate": "advancements.resourcefulbees.collect_bee.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
     "has_filled_jar": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -28,7 +11,24 @@
             "nbt": "{Count:1b,id:\"resourcefulbees:bee_jar\",tag:{Entity:{Color:\"#edc343\",id:\"minecraft:bee\"}}}"
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.resourcefulbees.collect_bee.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "resourcefulbees:bee_jar",
+      "nbt": "{Entity:{Color:\"#edc343\",id:\"minecraft:bee\"}}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.resourcefulbees.collect_bee.title"
     }
   },
   "requirements": [

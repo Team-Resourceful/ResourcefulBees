@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.datagen.providers.recipes.ModRecipePr
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModBlockTagProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModFluidTagProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModItemTagProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModPoiTagProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,6 +33,7 @@ public class ResourcefulBeesDataGenerator {
         generator.addProvider(event.includeServer(), new ModLootTableProvider(generator));
         ModBlockTagProvider blockTagProvider = new ModBlockTagProvider(generator, existingFileHelper);
         generator.addProvider(event.includeServer(), blockTagProvider);
+        generator.addProvider(event.includeServer(), new ModPoiTagProvider(generator, existingFileHelper));
         generator.addProvider(event.includeServer(), new ModItemTagProvider(generator, blockTagProvider, existingFileHelper));
         generator.addProvider(event.includeServer(), new ModFluidTagProvider(generator, existingFileHelper));
         generator.addProvider(event.includeServer(), new ModRecipeProvider(generator));

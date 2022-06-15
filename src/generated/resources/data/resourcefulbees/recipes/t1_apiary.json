@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "resourcefulbees:resourceful_honeycomb_block"
+    },
+    "M": {
+      "item": "minecraft:nether_star"
+    },
+    "S": {
+      "tag": "resourcefulbees:t3_nests"
+    }
+  },
   "pattern": [
     "CSC",
     "SMS",
     "CSC"
   ],
-  "key": {
-    "C": {
-      "tag": "resourcefulbees:resourceful_honeycomb_block"
-    },
-    "S": {
-      "tag": "resourcefulbees:t3_nests"
-    },
-    "M": {
-      "item": "minecraft:nether_star"
-    }
-  },
   "result": {
     "item": "resourcefulbees:t1_apiary"
   }

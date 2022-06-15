@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "PPP",
-    "WIW",
-    "PPP"
-  ],
   "key": {
     "I": {
       "tag": "forge:ingots/iron"
@@ -16,6 +11,11 @@
       "tag": "forge:wax"
     }
   },
+  "pattern": [
+    "PPP",
+    "WIW",
+    "PPP"
+  ],
   "result": {
     "item": "resourcefulbees:bee_box"
   }

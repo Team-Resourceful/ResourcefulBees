@@ -2,7 +2,6 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -13,30 +12,30 @@
               "conditions": [
                 {
                   "condition": "minecraft:entity_properties",
+                  "entity": "this",
                   "predicate": {
                     "flags": {
                       "is_sneaking": true
                     }
-                  },
-                  "entity": "this"
+                  }
                 }
               ],
               "functions": [
                 {
                   "function": "minecraft:copy_nbt",
-                  "source": "block_entity",
                   "ops": [
                     {
+                      "op": "replace",
                       "source": "Bees",
-                      "target": "BlockEntityTag.Bees",
-                      "op": "replace"
+                      "target": "BlockEntityTag.Bees"
                     },
                     {
+                      "op": "replace",
                       "source": "DisplayNames",
-                      "target": "BlockEntityTag.DisplayNames",
-                      "op": "replace"
+                      "target": "BlockEntityTag.DisplayNames"
                     }
-                  ]
+                  ],
+                  "source": "block_entity"
                 }
               ],
               "name": "resourcefulbees:bee_box"
@@ -47,7 +46,8 @@
             }
           ]
         }
-      ]
+      ],
+      "rolls": 1.0
     }
   ]
 }

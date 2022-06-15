@@ -1,18 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "minecraft:campfire"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
   "pattern": [
     "II ",
     "I I",
     "ICI"
   ],
-  "key": {
-    "I": {
-      "tag": "forge:ingots/iron"
-    },
-    "C": {
-      "item": "minecraft:campfire"
-    }
-  },
   "result": {
     "item": "resourcefulbees:smoker_can"
   }

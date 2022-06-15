@@ -1,13 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "I@I",
-    "SGR",
-    "IBI"
-  ],
   "key": {
-    "I": {
-      "tag": "forge:ingots/iron"
+    "@": {
+      "tag": "forge:storage_blocks/iron"
     },
     "B": {
       "item": "minecraft:bucket"
@@ -15,16 +10,21 @@
     "G": {
       "tag": "forge:glass"
     },
-    "S": {
-      "item": "minecraft:iron_bars"
+    "I": {
+      "tag": "forge:ingots/iron"
     },
     "R": {
       "tag": "forge:dusts/redstone"
     },
-    "@": {
-      "tag": "forge:storage_blocks/iron"
+    "S": {
+      "item": "minecraft:iron_bars"
     }
   },
+  "pattern": [
+    "I@I",
+    "SGR",
+    "IBI"
+  ],
   "result": {
     "item": "resourcefulbees:honey_generator"
   }

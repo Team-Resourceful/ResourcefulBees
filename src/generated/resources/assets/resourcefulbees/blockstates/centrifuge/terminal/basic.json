@@ -1,30 +1,13 @@
 {
   "variants": {
+    "assembled=false,centrifuge_activity=active,facing=east": {
+      "model": "resourcefulbees:block/centrifuge/terminal/basic",
+      "y": 90
+    },
     "assembled=false,centrifuge_activity=active,facing=north": {
       "model": "resourcefulbees:block/centrifuge/terminal/basic"
     },
-    "assembled=true,centrifuge_activity=active,facing=north": {
-      "model": "resourcefulbees:block/centrifuge/terminal/basic"
-    },
-    "assembled=false,centrifuge_activity=inactive,facing=north": {
-      "model": "resourcefulbees:block/centrifuge/terminal/basic"
-    },
-    "assembled=true,centrifuge_activity=inactive,facing=north": {
-      "model": "resourcefulbees:block/centrifuge/terminal/basic"
-    },
     "assembled=false,centrifuge_activity=active,facing=south": {
-      "model": "resourcefulbees:block/centrifuge/terminal/basic",
-      "y": 180
-    },
-    "assembled=true,centrifuge_activity=active,facing=south": {
-      "model": "resourcefulbees:block/centrifuge/terminal/basic",
-      "y": 180
-    },
-    "assembled=false,centrifuge_activity=inactive,facing=south": {
-      "model": "resourcefulbees:block/centrifuge/terminal/basic",
-      "y": 180
-    },
-    "assembled=true,centrifuge_activity=inactive,facing=south": {
       "model": "resourcefulbees:block/centrifuge/terminal/basic",
       "y": 180
     },
@@ -32,33 +15,50 @@
       "model": "resourcefulbees:block/centrifuge/terminal/basic",
       "y": 270
     },
-    "assembled=true,centrifuge_activity=active,facing=west": {
+    "assembled=false,centrifuge_activity=inactive,facing=east": {
       "model": "resourcefulbees:block/centrifuge/terminal/basic",
-      "y": 270
+      "y": 90
+    },
+    "assembled=false,centrifuge_activity=inactive,facing=north": {
+      "model": "resourcefulbees:block/centrifuge/terminal/basic"
+    },
+    "assembled=false,centrifuge_activity=inactive,facing=south": {
+      "model": "resourcefulbees:block/centrifuge/terminal/basic",
+      "y": 180
     },
     "assembled=false,centrifuge_activity=inactive,facing=west": {
       "model": "resourcefulbees:block/centrifuge/terminal/basic",
       "y": 270
     },
-    "assembled=true,centrifuge_activity=inactive,facing=west": {
-      "model": "resourcefulbees:block/centrifuge/terminal/basic",
-      "y": 270
-    },
-    "assembled=false,centrifuge_activity=active,facing=east": {
-      "model": "resourcefulbees:block/centrifuge/terminal/basic",
-      "y": 90
-    },
     "assembled=true,centrifuge_activity=active,facing=east": {
       "model": "resourcefulbees:block/centrifuge/terminal/basic",
       "y": 90
     },
-    "assembled=false,centrifuge_activity=inactive,facing=east": {
+    "assembled=true,centrifuge_activity=active,facing=north": {
+      "model": "resourcefulbees:block/centrifuge/terminal/basic"
+    },
+    "assembled=true,centrifuge_activity=active,facing=south": {
       "model": "resourcefulbees:block/centrifuge/terminal/basic",
-      "y": 90
+      "y": 180
+    },
+    "assembled=true,centrifuge_activity=active,facing=west": {
+      "model": "resourcefulbees:block/centrifuge/terminal/basic",
+      "y": 270
     },
     "assembled=true,centrifuge_activity=inactive,facing=east": {
       "model": "resourcefulbees:block/centrifuge/terminal/basic",
       "y": 90
+    },
+    "assembled=true,centrifuge_activity=inactive,facing=north": {
+      "model": "resourcefulbees:block/centrifuge/terminal/basic"
+    },
+    "assembled=true,centrifuge_activity=inactive,facing=south": {
+      "model": "resourcefulbees:block/centrifuge/terminal/basic",
+      "y": 180
+    },
+    "assembled=true,centrifuge_activity=inactive,facing=west": {
+      "model": "resourcefulbees:block/centrifuge/terminal/basic",
+      "y": 270
     }
   }
 }

@@ -1,24 +1,7 @@
 {
   "parent": "resourcefulbees:resourcefulbees/collect_bee",
-  "display": {
-    "icon": {
-      "item": "resourcefulbees:bee_jar",
-      "nbt": "{Entity:{Color:\"#442920\",id:\"resourcefulbees:oreo_bee\"}}"
-    },
-    "title": {
-      "translate": "advancements.resourcefulbees.oreo_bee.title"
-    },
-    "description": {
-      "translate": "advancements.resourcefulbees.oreo_bee.description"
-    },
-    "frame": "challenge",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": true
-  },
   "criteria": {
     "has_oreo_jar": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -28,7 +11,24 @@
             "nbt": "{Count:1b,id:\"resourcefulbees:bee_jar\",tag:{Entity:{Color:\"#442920\",id:\"resourcefulbees:oreo_bee\"}}}"
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.resourcefulbees.oreo_bee.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "item": "resourcefulbees:bee_jar",
+      "nbt": "{Entity:{Color:\"#442920\",id:\"resourcefulbees:oreo_bee\"}}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.resourcefulbees.oreo_bee.title"
     }
   },
   "requirements": [

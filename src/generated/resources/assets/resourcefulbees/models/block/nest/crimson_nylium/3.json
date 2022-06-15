@@ -1,11 +1,11 @@
 {
   "parent": "resourcefulbees:block/nest",
   "textures": {
-    "particle": "resourcefulbees:block/nest/crimson_nylium/side",
     "bottom": "resourcefulbees:block/nest/crimson_nylium/bottom",
-    "top": "resourcefulbees:block/nest/crimson_nylium/top",
     "front": "resourcefulbees:block/nest/crimson_nylium/front",
+    "particle": "resourcefulbees:block/nest/crimson_nylium/side",
     "side": "resourcefulbees:block/nest/crimson_nylium/side",
-    "tier": "resourcefulbees:block/nest/tier_overlay/tier_3"
+    "tier": "resourcefulbees:block/nest/tier_overlay/tier_3",
+    "top": "resourcefulbees:block/nest/crimson_nylium/top"
   }
 }

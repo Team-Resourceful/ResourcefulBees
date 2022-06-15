@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "tag": "forge:glass"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "S": {
+      "tag": "forge:stone"
+    },
+    "W": {
+      "tag": "forge:wax"
+    }
+  },
   "pattern": [
     " G ",
     "IGI",
     "SWS"
   ],
-  "key": {
-    "I": {
-      "tag": "forge:ingots/iron"
-    },
-    "G": {
-      "tag": "forge:glass"
-    },
-    "W": {
-      "tag": "forge:wax"
-    },
-    "S": {
-      "tag": "forge:stone"
-    }
-  },
   "result": {
     "item": "resourcefulbees:solidification_chamber"
   }

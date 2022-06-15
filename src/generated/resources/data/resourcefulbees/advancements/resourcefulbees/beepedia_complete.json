@@ -1,23 +1,7 @@
 {
   "parent": "resourcefulbees:resourcefulbees/beepedia_unlock_bee",
-  "display": {
-    "icon": {
-      "item": "resourcefulbees:beepedia"
-    },
-    "title": {
-      "translate": "advancements.resourcefulbees.beepedia_complete.title"
-    },
-    "description": {
-      "translate": "advancements.resourcefulbees.beepedia_complete.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
     "has_completed_beepedia": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -27,7 +11,23 @@
             "nbt": "{Complete:1b}"
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.resourcefulbees.beepedia_complete.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "resourcefulbees:beepedia"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.resourcefulbees.beepedia_complete.title"
     }
   },
   "requirements": [

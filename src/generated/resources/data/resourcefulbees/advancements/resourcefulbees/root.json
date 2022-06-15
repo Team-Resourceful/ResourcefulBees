@@ -1,30 +1,30 @@
 {
-  "display": {
-    "icon": {
-      "item": "resourcefulbees:gold_flower"
-    },
-    "title": {
-      "translate": "advancements.resourcefulbees.root.title"
-    },
-    "description": {
-      "translate": "advancements.resourcefulbees.root.description"
-    },
-    "frame": "task",
-    "show_toast": false,
-    "announce_to_chat": false,
-    "hidden": false,
-    "background": "resourcefulbees:textures/gui/advancements/backgrounds/resourcefulbees.png"
-  },
   "criteria": {
     "inventory_changed": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "tag": "resourcefulbees:resourceful_honeycomb"
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "resourcefulbees:textures/gui/advancements/backgrounds/resourcefulbees.png",
+    "description": {
+      "translate": "advancements.resourcefulbees.root.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "resourcefulbees:gold_flower"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.resourcefulbees.root.title"
     }
   },
   "requirements": [

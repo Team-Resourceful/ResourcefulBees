@@ -1,18 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "M": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "item": "minecraft:grass"
+    }
+  },
   "pattern": [
     "SSS",
     "SMS",
     "SSS"
   ],
-  "key": {
-    "S": {
-      "item": "minecraft:grass"
-    },
-    "M": {
-      "tag": "minecraft:planks"
-    }
-  },
   "result": {
     "item": "resourcefulbees:t1_nest_upgrade"
   }

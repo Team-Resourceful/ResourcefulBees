@@ -1,0 +1,15 @@
+// 1.19	2022-06-15T03:55:29.2904343	Resourceful Bees Item Tag Provider
+4546095bedc2f00f5b292731ce930510bc0fe87a data/forge/tags/items/honey_bottle.json
+36a491a695201f5b03b2c0cca537c626edbc6f3f data/forge/tags/items/mushrooms.json
+8fb2c86ef1e8e3e5c111578b51da91908ea5deb9 data/forge/tags/items/shears.json
+73be7b5ade3737979ca0a35c875e0c5a80f848f3 data/forge/tags/items/storage_blocks.json
+97db687cb55b4a5035a83a364f8a26096ca17e7f data/forge/tags/items/storage_blocks/wax.json
+6a27f753764c8cb4f67d5209c793c4f0f51ea70a data/forge/tags/items/wax.json
+3ad7892a06e0a67fc3840e52cb57652955979913 data/minecraft/tags/items/beehives.json
+70cd4e1a0eaf500fa1b392262afeaeaaff74a6d4 data/minecraft/tags/items/small_flowers.json
+d878c230cd5cb1b54fbe6e53f3ef71379d080c6f data/resourcefulbees/tags/items/resourceful_honeycomb.json
+d6cf88ab73624a67b1cffc6e2fe8d4b95b053a79 data/resourcefulbees/tags/items/resourceful_honeycomb_block.json
+21d7702fa0214254a6971f7bc5092297e3683297 data/resourcefulbees/tags/items/t0_nests.json
+728d04608d2d71bd1b62d9a93df54cddcb34b782 data/resourcefulbees/tags/items/t1_nests.json
+6fd9a4611cdb1297e3a4cd5ed506acc9bfb857ef data/resourcefulbees/tags/items/t2_nests.json
+634bd8db2d990099074615c6a5f1c14f69d69bac data/resourcefulbees/tags/items/t3_nests.json

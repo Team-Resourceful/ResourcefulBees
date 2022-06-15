@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "resourcefulbees:nest/acacia/1",
     "resourcefulbees:nest/birch/1",
@@ -68,6 +67,10 @@
     "resourcefulbees:nest/spruce/4",
     "resourcefulbees:nest/warped/4",
     "resourcefulbees:nest/warped_nylium/4",
-    "resourcefulbees:nest/wither/4"
+    "resourcefulbees:nest/wither/4",
+    "resourcefulbees:t1_apiary",
+    "resourcefulbees:t2_apiary",
+    "resourcefulbees:t3_apiary",
+    "resourcefulbees:t4_apiary"
   ]
 }

@@ -1,11 +1,11 @@
 {
   "parent": "resourcefulbees:block/nest",
   "textures": {
-    "particle": "resourcefulbees:block/nest/prismarine/side",
     "bottom": "resourcefulbees:block/nest/prismarine/bottom",
-    "top": "resourcefulbees:block/nest/prismarine/top",
     "front": "resourcefulbees:block/nest/prismarine/front",
+    "particle": "resourcefulbees:block/nest/prismarine/side",
     "side": "resourcefulbees:block/nest/prismarine/side",
-    "tier": "resourcefulbees:block/nest/tier_overlay/tier_1"
+    "tier": "resourcefulbees:block/nest/tier_overlay/tier_1",
+    "top": "resourcefulbees:block/nest/prismarine/top"
   }
 }

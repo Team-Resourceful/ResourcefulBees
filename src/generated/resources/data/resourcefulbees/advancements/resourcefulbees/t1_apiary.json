@@ -1,23 +1,7 @@
 {
   "parent": "resourcefulbees:resourcefulbees/t3_hive_upgrade",
-  "display": {
-    "icon": {
-      "item": "resourcefulbees:t1_apiary"
-    },
-    "title": {
-      "translate": "advancements.resourcefulbees.t1_apiary.title"
-    },
-    "description": {
-      "translate": "advancements.resourcefulbees.t1_apiary.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
     "has_t1_apiary": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -26,7 +10,23 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.resourcefulbees.t1_apiary.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "resourcefulbees:t1_apiary"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.resourcefulbees.t1_apiary.title"
     }
   },
   "requirements": [

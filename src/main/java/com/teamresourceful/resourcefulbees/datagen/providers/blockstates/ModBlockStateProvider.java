@@ -37,9 +37,9 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         simpleBlockWithItem(ModBlocks.TRIMMED_WAXED_PLANKS.get(), models().cubeAll("trimmed_waxed_planks", modLoc("block/trimmed_waxed_planks")));
         simpleBlockWithItem(ModBlocks.WAXED_MACHINE_BLOCK.get(), models().cubeAll("waxed_machine_block", modLoc("block/waxed_machine_block")));
         buttonBlockWithItem(ModBlocks.WAXED_BUTTON.get(), modLoc("block/waxed_planks"));
-        doorBlock(ModBlocks.WAXED_DOOR.get(), modLoc("block/waxed_door_bottom"), modLoc("block/waxed_door_top"));
-        fenceBlockWithItem(ModBlocks.WAXED_FENCE.get(), modLoc("block/waxed_planks"));
-        fenceGateBlockWithItem(ModBlocks.WAXED_FENCE_GATE.get(), modLoc("block/waxed_planks"));
+        //doorBlock(ModBlocks.WAXED_DOOR.get(), modLoc("block/waxed_door_bottom"), modLoc("block/waxed_door_top"));
+        //fenceBlockWithItem(ModBlocks.WAXED_FENCE.get(), modLoc("block/waxed_planks"));
+        //fenceGateBlockWithItem(ModBlocks.WAXED_FENCE_GATE.get(), modLoc("block/waxed_planks"));
         preasurePlateBlockWithItem(ModBlocks.WAXED_PRESSURE_PLATE.get(), modLoc("block/waxed_planks"));
         slabBlockWithItem(ModBlocks.WAXED_SLAB.get(), modLoc("block/waxed_planks"));
         trapdoorBlockWithItem(ModBlocks.WAXED_TRAPDOOR.get(), modLoc("block/waxed_trapdoor"));

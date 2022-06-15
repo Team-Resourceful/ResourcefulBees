@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/orientable_vertical",
   "textures": {
-    "side": "resourcefulbees:block/centrifuge/casing",
-    "front": "resourcefulbees:block/centrifuge/input/item/elite"
+    "front": "resourcefulbees:block/centrifuge/input/item/elite",
+    "side": "resourcefulbees:block/centrifuge/casing"
   }
 }

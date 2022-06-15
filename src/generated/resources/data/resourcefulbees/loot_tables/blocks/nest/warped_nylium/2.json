@@ -2,7 +2,6 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -28,28 +27,28 @@
               "functions": [
                 {
                   "function": "minecraft:copy_nbt",
-                  "source": "block_entity",
                   "ops": [
                     {
+                      "op": "replace",
                       "source": "Bees",
-                      "target": "BlockEntityTag.Bees",
-                      "op": "replace"
+                      "target": "BlockEntityTag.Bees"
                     },
                     {
+                      "op": "replace",
                       "source": "Tier",
-                      "target": "BlockEntityTag.Tier",
-                      "op": "replace"
+                      "target": "BlockEntityTag.Tier"
                     },
                     {
+                      "op": "replace",
                       "source": "TierModifier",
-                      "target": "BlockEntityTag.TierModifier",
-                      "op": "replace"
+                      "target": "BlockEntityTag.TierModifier"
                     }
-                  ]
+                  ],
+                  "source": "block_entity"
                 },
                 {
-                  "function": "minecraft:copy_state",
                   "block": "resourcefulbees:nest/warped_nylium/2",
+                  "function": "minecraft:copy_state",
                   "properties": [
                     "honey_level"
                   ]
@@ -62,26 +61,27 @@
               "functions": [
                 {
                   "function": "minecraft:copy_nbt",
-                  "source": "block_entity",
                   "ops": [
                     {
+                      "op": "replace",
                       "source": "Tier",
-                      "target": "BlockEntityTag.Tier",
-                      "op": "replace"
+                      "target": "BlockEntityTag.Tier"
                     },
                     {
+                      "op": "replace",
                       "source": "TierModifier",
-                      "target": "BlockEntityTag.TierModifier",
-                      "op": "replace"
+                      "target": "BlockEntityTag.TierModifier"
                     }
-                  ]
+                  ],
+                  "source": "block_entity"
                 }
               ],
               "name": "resourcefulbees:nest/warped_nylium/2"
             }
           ]
         }
-      ]
+      ],
+      "rolls": 1.0
     }
   ]
 }

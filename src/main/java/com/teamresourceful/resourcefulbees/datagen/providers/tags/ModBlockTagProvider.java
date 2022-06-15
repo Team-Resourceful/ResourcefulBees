@@ -28,6 +28,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         tag(net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS).addTags(ModTags.Blocks.WAX);
         TagAppender<Block> hiveBuilder = tag(BlockTags.BEEHIVES);
         ModBlocks.HIVES.getEntries().stream().map(RegistryObject::get).forEach(hiveBuilder::add);
+        ModBlocks.APIARIES.getEntries().stream().map(RegistryObject::get).forEach(hiveBuilder::add);
 
         TagAppender<Block> axeTagBuilder = tag(BlockTags.MINEABLE_WITH_AXE);
         ModBlocks.APIARIES.getEntries().stream().map(RegistryObject::get).forEach(axeTagBuilder::add);
