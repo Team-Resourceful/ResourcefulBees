@@ -30,8 +30,8 @@ public class BeeCombatPage extends BeeDataPage {
     @Override
     public void renderBackground(PoseStack matrix, float partialTick, int mouseX, int mouseY) {
         Font font = Minecraft.getInstance().font;
-        MutableComponent healthName = Component.translatable(TranslationConstants.Beepedia.Info.HEALTH, beeData.combatData().baseHealth());
-        MutableComponent damageName = Component.translatable(TranslationConstants.Beepedia.Info.DAMAGE, beeData.combatData().attackDamage());
+        MutableComponent healthName = Component.empty(); //Component.translatable(TranslationConstants.Beepedia.Info.HEALTH, beeData.combatData().baseHealth());
+        MutableComponent damageName = Component.empty(); //Component.translatable(TranslationConstants.Beepedia.Info.DAMAGE, beeData.combatData().attackDamage());
         MutableComponent stingerName = Component.translatable(TranslationConstants.Beepedia.Info.STINGER, BeepediaUtils.getYesNo(beeData.combatData().removeStingerOnAttack()));
         MutableComponent passiveName = Component.translatable(TranslationConstants.Beepedia.Info.PASSIVE, BeepediaUtils.getYesNo(beeData.combatData().isPassive()));
         MutableComponent poisonName = Component.translatable(TranslationConstants.Beepedia.Info.POISON, BeepediaUtils.getYesNo(beeData.combatData().inflictsPoison()));

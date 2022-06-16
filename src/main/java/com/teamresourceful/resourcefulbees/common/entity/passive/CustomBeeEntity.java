@@ -35,7 +35,6 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -83,15 +82,10 @@ public class CustomBeeEntity extends Bee implements ICustomBee, IAnimatable, IBe
 
     public static AttributeSupplier.Builder createBeeAttributes(String key) {
         CombatData combatData = BeeRegistry.getRegistry().getBeeData(key).combatData();
-        return createMobAttributes()
-                .add(Attributes.MAX_HEALTH, combatData.baseHealth())
-                .add(Attributes.FLYING_SPEED, 0.6D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3D)
-                .add(Attributes.ATTACK_DAMAGE, combatData.attackDamage())
-                .add(Attributes.FOLLOW_RANGE, 48.0D)
-                .add(Attributes.ARMOR, combatData.armor())
-                .add(Attributes.ARMOR_TOUGHNESS, combatData.armorToughness())
-                .add(Attributes.ATTACK_KNOCKBACK, combatData.knockback());
+        AttributeSupplier.Builder builder = createMobAttributes();
+        CombatData.DEFAULT_ATTRIBUTES.forEach(builder::add);
+        combatData.attributes().forEach(builder::add);
+        return builder;
     }
 
     //region BEE INFO RELATED METHODS BELOW

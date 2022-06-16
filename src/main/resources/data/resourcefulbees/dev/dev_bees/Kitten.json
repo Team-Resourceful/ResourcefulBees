@@ -37,8 +37,9 @@
   },
   "CombatData": {
     "removeStingerOnAttack": false,
-    "attackDamage": 0,
     "inflictsPoison": false,
-    "baseHealth": 10
+    "attributes": {
+      "generic.attack_damage": 0
+    }
   }
 }

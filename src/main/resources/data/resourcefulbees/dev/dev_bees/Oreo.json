@@ -29,11 +29,13 @@
   },
   "CombatData": {
     "removeStingerOnAttack": false,
-    "attackDamage": 0,
     "inflictsPoison": false,
-    "baseHealth": 2,
-    "armor": 5.0,
-    "armorToughness": 10.0,
-    "knockback": 3.0
+    "attributes": {
+      "generic.attack_damage": 0,
+      "generic.max_health": 2,
+      "generic.armor": 5,
+      "generic.armor_toughness": 10,
+      "generic.attack_knockback": 3
+    }
   }
 }
