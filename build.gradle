@@ -112,8 +112,8 @@ mixin {
 dependencies {
     minecraft "net.minecraftforge:forge:$mc_version-$forge_version" //21
 
-    //compileOnly fg.deobf("mezz.jei:jei-1.18.2:$jei_version:api")
-    //runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:$jei_version")
+    compileOnly fg.deobf("mezz.jei:jei-$mc_version-forge-api:$jei_version")
+    implementation fg.deobf("mezz.jei:jei-$mc_version-forge:$jei_version")
 
     compileOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:$top_version:api") {
         transitive = false
