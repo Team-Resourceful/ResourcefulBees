@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -112,8 +112,8 @@ public class HoneyDipper extends Item {
         return super.interactLivingEntity(stack, player, entity, hand);
     }
 
-    private boolean entityTypesMatch(LivingEntity entity, Optional<EntityType<?>> entityType) {
-        return entityType.map(type -> type.equals(entity.getType())).orElse(false);
+    private boolean entityTypesMatch(LivingEntity entity, HolderSet<EntityType<?>> holders) {
+        return holders.contains(entity.getType().builtInRegistryHolder());
     }
 
     @Override

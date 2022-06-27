@@ -2,9 +2,6 @@ package com.teamresourceful.resourcefulbees.api.beedata;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.Decoder;
-import com.mojang.serialization.Encoder;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
@@ -13,12 +10,13 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @param name the bees name or id also known as bee type is used as an id for the bee in multiple locations.
@@ -27,13 +25,13 @@ import java.util.*;
  * @param maxTimeInHive Gets the maximum time a bee can spend in the hive before time modifications are performed.
  * @param lore lore provided by pack devs in bee json.
  */
-public record CoreData(String name, String honeycomb, HolderSet<Block> blockFlowers, Optional<EntityType<?>> entityFlower, int maxTimeInHive, List<MutableComponent> lore) {
+public record CoreData(String name, String honeycomb, HolderSet<Block> blockFlowers, HolderSet<EntityType<?>> entityFlower, int maxTimeInHive, List<MutableComponent> lore) {
     /**
      * A default instance of {@link CoreData} that can be
      * used to minimize {@link NullPointerException}'s. This implementation sets the
      * bees name/type to "error".
      */
-    public static final CoreData DEFAULT = new CoreData("error", "", HolderSet.direct(), Optional.empty(), BeeConstants.MAX_TIME_IN_HIVE, new ArrayList<>());
+    public static final CoreData DEFAULT = new CoreData("error", "", HolderSet.direct(), HolderSet.direct(), BeeConstants.MAX_TIME_IN_HIVE, new ArrayList<>());
 
     /**
      * Returns a {@link Codec<CoreData>} that can be parsed to create a
@@ -47,27 +45,20 @@ public record CoreData(String name, String honeycomb, HolderSet<Block> blockFlow
      */
     public static Codec<CoreData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(CoreData::name),
+                RecordCodecBuilder.point(name),
                 Codec.STRING.fieldOf("honeycombVariation").orElse("").forGetter(CoreData::honeycomb),
                 TagAndListSetCodec.of(Registry.BLOCK).fieldOf("flower").orElse(HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY)).forGetter(CoreData::blockFlowers),
-                Registry.ENTITY_TYPE.byNameCodec().optionalFieldOf("entityFlower").forGetter(CoreData::entityFlower),
+                TagAndListSetCodec.of(Registry.ENTITY_TYPE).fieldOf("entityFlower").orElse(HolderSet.direct()).forGetter(CoreData::entityFlower),
                 Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(CoreData::maxTimeInHive),
                 CodecUtils.passthrough(Component.Serializer::toJsonTree, Component.Serializer::fromJson).listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(CoreData::lore)
         ).apply(instance, CoreData::new));
     }
 
-    /**
-     * Gets the registry ID for the entity flower if one is present.
-     * If one is not present the value returned is null.
-     *
-     * @return Returns the entity flower registry ID as a {@link String}.
-     */
-    public String getEntityFlowerRegistryID() {
-        return entityFlower
-                .map(Registry.ENTITY_TYPE::getKey)
-                .map(ResourceLocation::toString)
-                .orElse(null);
+    public boolean isEntityPresent() {
+        return entityFlower().size() > 0;
     }
+
+
     /**
      * Returns an {@link Optional}&lt;{@link OutputVariation}&gt; object containing information regarding the
      * honeycomb a bee produces if it is specified to produce one.

@@ -8,12 +8,11 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 public class EntityIngredientHelper implements IIngredientHelper<EntityIngredient> {
 
@@ -40,7 +39,8 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
     @NotNull
     @Override
     public ItemStack getCheatItemStack(EntityIngredient ingredient) {
-        return Objects.requireNonNull(ForgeSpawnEggItem.fromEntityType(ingredient.getEntityType())).getDefaultInstance();
+        SpawnEggItem spawnEggItem = ForgeSpawnEggItem.fromEntityType(ingredient.getEntityType());
+        return spawnEggItem == null ? ItemStack.EMPTY : spawnEggItem.getDefaultInstance();
     }
 
     @NotNull

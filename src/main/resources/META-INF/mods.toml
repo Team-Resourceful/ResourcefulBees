@@ -2,14 +2,15 @@ modLoader="javafml"
 loaderVersion="[${fmlVersion},)"
 license="https://www.gnu.org/licenses/lgpl-3.0.en.html"
 issueTrackerURL="https://github.com/Resourceful-Bees/ResourcefulBees/issues/new/choose"
+
 [[mods]]
-modId="resourcefulbees"
-version="${version}"
-displayName="Resourceful Bees"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"
-logoFile="logo.png"
-authors="Epic_Oreo, ThatGravyBoat, Dawn Felstar, (Textures) Vik, (Textures) QBert, (Textures) Joosh"
-description="This mod provides pack makers with useful capabilities for creating custom Resource Bees."
+    modId="resourcefulbees"
+    version="${version}"
+    displayName="Resourceful Bees"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"
+    logoFile="logo.png"
+    authors="Epic_Oreo, ThatGravyBoat, Dawn Felstar, (Textures) Vik, (Textures) QBert, (Textures) Joosh"
+    description="This mod provides pack makers with useful capabilities for creating custom Resource Bees."
 
 [[dependencies.resourcefulbees]]
     modId="geckolib3"

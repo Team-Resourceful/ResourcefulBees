@@ -19,9 +19,6 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
-import java.util.List;
-
-import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
 public final class ColorHandler {
 
@@ -47,21 +44,17 @@ public final class ColorHandler {
 
     private static void registerItems(ItemColors handler, ItemColor itemColor, Collection<RegistryObject<Item>> items) {
         if (items.isEmpty()) return;
-        List<Item> itemList = items.stream().filter(RegistryObject::isPresent).map(RegistryObject::get).toList();
-        try {
-            handler.register(itemColor, itemList.toArray(new Item[]{}));
-        } catch (NullPointerException ex) {
-            LOGGER.error("ItemColor Registration Failed", ex);
-        }
+        items.stream()
+            .filter(RegistryObject::isPresent)
+            .map(RegistryObject::get)
+            .forEach(item -> handler.register(itemColor, item));
     }
 
     private static void registerBlocks(BlockColors handler, BlockColor blockColor, Collection<RegistryObject<Block>> blocks) {
         if (blocks.isEmpty()) return;
-        List<Block> blockList = blocks.stream().filter(RegistryObject::isPresent).map(RegistryObject::get).toList();
-        try {
-            handler.register(blockColor, blockList.toArray(new Block[]{}));
-        } catch (NullPointerException ex) {
-            LOGGER.error("BlockColor Registration Failed", ex);
-        }
+        blocks.stream()
+            .filter(RegistryObject::isPresent)
+            .map(RegistryObject::get)
+            .forEach(block -> handler.register(blockColor, block));
     }
 }

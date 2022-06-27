@@ -45,15 +45,20 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Breedi
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull BreedingWrapper recipe, @NotNull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 11, 22)
-                .addIngredients(recipe.ogRecipe().getIngredients().get(0)).setSlotName("parent_1_entity");
+                .addIngredients(recipe.ogRecipe().getIngredients().get(0))
+                .setSlotName("parent_1_entity");
         builder.addSlot(RecipeIngredientRole.INPUT, 11, 40)
-                .addIngredients(recipe.ogRecipe().getIngredients().get(1)).setSlotName("parent_1_item");
+                .addIngredients(recipe.ogRecipe().getIngredients().get(1))
+                .setSlotName("parent_1_item");
         builder.addSlot(RecipeIngredientRole.INPUT, 11, 94)
-                .addIngredients(recipe.ogRecipe().getIngredients().get(2)).setSlotName("parent_2_entity");
+                .addIngredients(recipe.ogRecipe().getIngredients().get(2))
+                .setSlotName("parent_2_entity");
         builder.addSlot(RecipeIngredientRole.INPUT, 11, 112)
-                .addIngredients(recipe.ogRecipe().getIngredients().get(3)).setSlotName("parent_2_item");
+                .addIngredients(recipe.ogRecipe().getIngredients().get(3))
+                .setSlotName("parent_2_item");
         builder.addSlot(RecipeIngredientRole.OUTPUT, 138, 94)
-                .addIngredient(VanillaTypes.ITEM_STACK, recipe.output().output()).setSlotName("output_item");
+                .addIngredient(VanillaTypes.ITEM_STACK, recipe.output().output())
+                .setSlotName("output_item");
 
         recipe.parent1.displayEntity().flatMap(BeeInfoUtils::getOptionalEntityType)
                 .ifPresent(entityType -> builder.addSlot(RecipeIngredientRole.OUTPUT, 56, 30)

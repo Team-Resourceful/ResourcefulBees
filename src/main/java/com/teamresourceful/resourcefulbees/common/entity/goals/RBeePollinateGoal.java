@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAcces
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderSet;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,7 +17,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -55,7 +55,7 @@ public class RBeePollinateGoal extends Goal {
             return false;
         } else if (bee.getRandom().nextFloat() < 0.7F) {
             return false;
-        } else if ((Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get()) || bee.getCoreData().entityFlower().isPresent()) && bee.getSavedFlowerPos() == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
+        } else if ((Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get()) || bee.getCoreData().isEntityPresent()) && bee.getSavedFlowerPos() == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
             Optional<BlockPos> optional = this.findFlower(5.0D);
             if (optional.isPresent()) {
                 bee.setSavedFlowerPos(optional.get());
@@ -141,7 +141,7 @@ public class RBeePollinateGoal extends Goal {
         ++this.ticks;
         if (this.ticks > 600) {
             this.clearTask();
-        } else if ((bee.getCoreData().entityFlower().isPresent() || bee.getFlowerEntityID() >= 0)) {
+        } else if ((bee.getCoreData().isEntityPresent() || bee.getFlowerEntityID() >= 0)) {
             handleEntityFlower();
             handleBlockFlower();
         }
@@ -199,7 +199,7 @@ public class RBeePollinateGoal extends Goal {
     }
 
     private void handleEntityFlower() {
-        if (bee.tickCount % 5 == 0 && bee.getCoreData().entityFlower().isPresent()) {
+        if (bee.tickCount % 5 == 0 && bee.getCoreData().isEntityPresent()) {
             Entity flowerEntity = bee.level.getEntity(bee.getFlowerEntityID());
             if (flowerEntity != null) {
                 boundingBox = new Vec3(flowerEntity.getBoundingBox().getCenter().x(), flowerEntity.getBoundingBox().maxY, flowerEntity.getBoundingBox().getCenter().z());
@@ -218,24 +218,24 @@ public class RBeePollinateGoal extends Goal {
 
     public Optional<BlockPos> findFlower(double range) {
         BlockPos beePos = bee.blockPosition();
-        Optional<EntityType<?>> entityFlower = bee.getCoreData().entityFlower();
-        if (entityFlower.isPresent()) {
-            List<?> entityList = bee.level.getEntities(entityFlower.get(), (new AABB(bee.blockPosition())).inflate(range),
-                    entity -> entity.getEncodeId() != null && entity.getEncodeId().equals(bee.getCoreData().getEntityFlowerRegistryID()));
-            if (!entityList.isEmpty()) {
-                Entity firstEntity = (Entity) entityList.get(0);
-                bee.setFlowerEntityID(firstEntity.getId());
-                return Optional.of(firstEntity.blockPosition());
-            }
+        HolderSet<EntityType<?>> holders = bee.getCoreData().entityFlower();
+        if (holders.size() > 0) {
+            return bee.level.getEntities(bee, new AABB(bee.blockPosition()).inflate(range), entity -> holders.contains(entity.getType().builtInRegistryHolder()))
+                    .stream()
+                    .filter(Entity::isAlive)
+                    .findFirst()
+                    .map(entity -> {
+                        bee.setFlowerEntityID(entity.getId());
+                        return entity.blockPosition();
+                    });
         } else {
             BlockPos.MutableBlockPos flowerPos = beePos.mutable();
             for (BlockPos blockPos : positionOffsets){
-                flowerPos.setWithOffset(beePos, blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                flowerPos.setWithOffset(beePos, blockPos);
                 if (getFlowerBlockPredicate().test(flowerPos)){
                     return Optional.of(flowerPos);
                 }
             }
-            return Optional.empty();
         }
 
         return Optional.empty();

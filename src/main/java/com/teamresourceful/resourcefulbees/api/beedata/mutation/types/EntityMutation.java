@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IEntityRender;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefulbees.common.codecs.RestrictedEntityPredicate;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -12,7 +12,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
     @Nullable
     @Override
     public BlockPos check(ServerLevel level, BlockPos pos) {
-        AABB box = new AABB(pos).expandTowards(new Vec3(0, -2, 0));
+        AABB box = new AABB(pos).expandTowards(0, -2, 0);
         List<Entity> entityList = level.getEntities((Entity) null, box, entity -> predicate().matches(level, entity));
         if (entityList.isEmpty()) return null;
         BlockPos entityPos = entityList.get(0).blockPosition();

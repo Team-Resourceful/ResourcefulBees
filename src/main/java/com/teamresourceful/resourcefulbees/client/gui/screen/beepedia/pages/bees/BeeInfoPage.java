@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaPa
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
-import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -53,10 +52,10 @@ public class BeeInfoPage extends BeeDataPage {
                 slot = 0;
             }
         } else {
-            var entityFlower = beeData.coreData().entityFlower();
-            if (entityFlower.isPresent() && (this.entityFlower.getLeft() == null || !this.entityFlower.getKey().equals(entityFlower.get()))) {
-                this.entityFlower = Pair.of(entityFlower.get(), entityFlower.get().create(Minecraft.getInstance().level));
-            }
+            //var entityFlower = beeData.coreData().entityFlower();
+            //if (beeData.coreData().isEntityPresent() && (this.entityFlower.getLeft() == null || !this.entityFlower.getKey().equals(entityFlower.get()))) {
+            //    this.entityFlower = Pair.of(entityFlower.get(), entityFlower.get().create(Minecraft.getInstance().level));
+            //}
         }
     }
 
@@ -77,9 +76,9 @@ public class BeeInfoPage extends BeeDataPage {
         if (beeData.coreData().blockFlowers().size() > 0) {
             font.draw(matrix, FLOWER_NAME.withStyle(ChatFormatting.GRAY), x, y + 75f, -1);
 //            beepedia.drawSlot(matrix, blockFlowers.get(slot), x + 36f, y + 70f);
-        } else if (beeData.coreData().entityFlower().isPresent()) {
+        } else if (beeData.coreData().isEntityPresent()) {
             font.draw(matrix, FLOWER_NAME.withStyle(ChatFormatting.GRAY), x, y + 80f, -1);
-            RenderUtils.renderEntity(matrix, entityFlower.getValue(), Minecraft.getInstance().level, x + 45f, y + 75f, -45f, 1.25f);
+            //RenderUtils.renderEntity(matrix, entityFlower.getValue(), Minecraft.getInstance().level, x + 45f, y + 75f, -45f, 1.25f);
         }
     }
 

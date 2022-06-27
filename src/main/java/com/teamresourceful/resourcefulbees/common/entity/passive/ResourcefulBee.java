@@ -153,7 +153,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean isFlowerValid(@NotNull BlockPos pos) {
-        if (getCoreData().entityFlower().isPresent()) return this.level.getEntity(this.getFlowerEntityID()) != null;
+        if (getCoreData().isEntityPresent()) return this.level.getEntity(this.getFlowerEntityID()) != null;
         return this.level.isLoaded(pos) && this.level.getBlockState(pos).is(getCoreData().blockFlowers());
     }
 

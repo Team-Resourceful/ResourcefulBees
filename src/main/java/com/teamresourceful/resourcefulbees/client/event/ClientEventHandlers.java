@@ -135,6 +135,7 @@ public class ClientEventHandlers {
     }
 
     private static void registerRenderTypes() {
+        //TODO Wait for render_type to be added into model jsons to remove this.
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.ENDER_BEECON.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.SOLIDIFICATION_CHAMBER.get(), RenderType.translucent());

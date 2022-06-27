@@ -45,7 +45,7 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
     public MutationCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
                 TranslationConstants.Jei.MUTATIONS,
-                guiHelper.drawableBuilder(GUI_BACK, -12, 0, 117, 75).addPadding(0, 0, 0, 0).build(),
+                guiHelper.drawableBuilder(GUI_BACK, -12, 0, 117, 75).build(),
                 guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModItems.MUTATION_ENTITY_ICON.get())));
     }
 
