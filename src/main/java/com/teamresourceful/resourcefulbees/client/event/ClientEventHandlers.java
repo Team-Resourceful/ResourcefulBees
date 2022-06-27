@@ -48,7 +48,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ClientEventHandlers {
+public final class ClientEventHandlers {
 
     //TODO some methods here get called from distRunWhenOn's and could probably be merged into the FMLClientSetupEvent instead
     private ClientEventHandlers() {
@@ -64,7 +64,7 @@ public class ClientEventHandlers {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::addLayers);
-        MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
+        //MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);

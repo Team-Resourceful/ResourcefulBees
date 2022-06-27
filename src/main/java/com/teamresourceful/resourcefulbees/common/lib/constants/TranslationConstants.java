@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.lib.annotations.Translate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
-public class TranslationConstants {
+public final class TranslationConstants {
 
     /**
      * NOTE: TranslatableComponents should be USED ONLY for static contexts they should be never used if .append is happening to them.

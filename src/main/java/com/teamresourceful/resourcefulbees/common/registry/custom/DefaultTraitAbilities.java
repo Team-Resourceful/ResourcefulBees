@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 
-public class DefaultTraitAbilities {
+public final class DefaultTraitAbilities {
 
     private DefaultTraitAbilities() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ModEntities {
+public final class ModEntities {
 
     private ModEntities() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ModUtils {
+public final class ModUtils {
 
     private ModUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

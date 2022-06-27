@@ -13,7 +13,7 @@ import java.util.Locale;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
-public class HoneySetup {
+public final class HoneySetup {
 
     private HoneySetup() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

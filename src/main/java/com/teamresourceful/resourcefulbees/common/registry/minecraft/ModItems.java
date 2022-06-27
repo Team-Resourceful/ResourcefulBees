@@ -18,7 +18,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 @SuppressWarnings("unused")
-public class ModItems {
+public final class ModItems {
 
     private ModItems() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

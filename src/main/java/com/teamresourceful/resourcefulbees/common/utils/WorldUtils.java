@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 
-public class WorldUtils {
+public final class WorldUtils {
 
     private WorldUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

@@ -5,8 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
-@SuppressWarnings("all")
-public class CommonConfig {
+public final class CommonConfig {
     //TODO Rewrite config names in 1.17 to be more informative also update comments if needed
 
     public static BooleanValue GENERATE_DEFAULTS;

@@ -8,7 +8,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
 
-public class ConfigLoader {
+public final class ConfigLoader {
 
     private ConfigLoader() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

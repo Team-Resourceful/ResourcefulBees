@@ -6,7 +6,7 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 
-public class RecipeHelper {
+public final class RecipeHelper {
 
     private RecipeHelper() {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 import java.util.Set;
 
-public class CentrifugeUtils {
+public final class CentrifugeUtils {
 
     private CentrifugeUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

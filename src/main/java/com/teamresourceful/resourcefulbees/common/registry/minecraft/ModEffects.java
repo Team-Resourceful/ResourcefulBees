@@ -11,7 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
-public class ModEffects {
+public final class ModEffects {
 
     private ModEffects() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

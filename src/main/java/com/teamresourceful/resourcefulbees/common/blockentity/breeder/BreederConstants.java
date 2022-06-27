@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 
 import java.util.List;
 
-public class BreederConstants {
+public final class BreederConstants {
 
     private BreederConstants() {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);

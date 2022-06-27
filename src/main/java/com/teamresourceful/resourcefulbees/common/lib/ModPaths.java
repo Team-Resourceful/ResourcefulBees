@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
-public class ModPaths {
+public final class ModPaths {
     private ModPaths() {
         throw new IllegalArgumentException(ModConstants.UTILITY_CLASS);
     }

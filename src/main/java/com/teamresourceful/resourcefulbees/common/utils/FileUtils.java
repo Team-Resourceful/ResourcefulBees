@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
-public class FileUtils {
+public final class FileUtils {
 
     private static final Path MOD_ROOT = ModList.get().getModFileById(ResourcefulBees.MOD_ID).getFile().getFilePath();
 

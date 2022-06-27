@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemGroupResourcefulBees {
+public final class ItemGroupResourcefulBees {
 
     private ItemGroupResourcefulBees() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

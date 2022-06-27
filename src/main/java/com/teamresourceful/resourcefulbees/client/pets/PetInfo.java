@@ -8,7 +8,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class PetInfo {
+@SuppressWarnings("ProtectedMemberInFinalClass")
+public final class PetInfo {
 
     private static final int VERSION = 1;
 

@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 
 @OnlyIn(Dist.CLIENT)
-public class FluidRender {
+public final class FluidRender {
 
     private FluidRender() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public class ModBlocks {
+public final class ModBlocks {
 
     private ModBlocks() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -216,8 +216,8 @@ public class ModBlocks {
     //endregion
 
     //region Waxed Blocks
-    public static final RegistryObject<Block> HONEY_GLASS = BLOCKS.register("honey_glass", () -> new HoneyGlass(BlockBehaviour.Properties.copy(Blocks.GLASS).noCollission(), true));
-    public static final RegistryObject<Block> HONEY_GLASS_PLAYER = BLOCKS.register("honey_glass_player", () -> new HoneyGlass(BlockBehaviour.Properties.copy(Blocks.GLASS).noCollission(), false));
+    public static final RegistryObject<Block> HONEY_GLASS = BLOCKS.register("honey_glass", () -> new HoneyGlass(BlockBehaviour.Properties.copy(Blocks.GLASS).isSuffocating((a,b,c) -> false).isViewBlocking((a,b,c) -> false).noCollission(), true));
+    public static final RegistryObject<Block> HONEY_GLASS_PLAYER = BLOCKS.register("honey_glass_player", () -> new HoneyGlass(BlockBehaviour.Properties.copy(Blocks.GLASS).isSuffocating((a,b,c) -> false).isViewBlocking((a,b,c) -> false).noCollission(), false));
     public static final RegistryObject<Block> WAXED_PLANKS = BLOCKS.register("waxed_planks", () -> new Block(WAXED_PLANKS_PROPERTIES));
     public static final RegistryObject<StairBlock> WAXED_STAIRS = BLOCKS.register("waxed_stairs", () -> new StairBlock(() -> WAXED_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).dynamicShape()));
     public static final RegistryObject<SlabBlock> WAXED_SLAB = BLOCKS.register("waxed_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).dynamicShape()));

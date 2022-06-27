@@ -10,7 +10,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ModMenus {
+public final class ModMenus {
 
     private ModMenus() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

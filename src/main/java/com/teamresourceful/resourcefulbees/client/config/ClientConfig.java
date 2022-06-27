@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.config;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class ClientConfig {
+public final class ClientConfig {
 
     public static ForgeConfigSpec.BooleanValue GENERATE_ENGLISH_LANG;
     public static ForgeConfigSpec.BooleanValue SHOW_TIERS_IN_JEI;

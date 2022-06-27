@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraftforge.fml.ModLoadingContext;
 
 @SuppressWarnings("unused")
-public class ResourcefulBeesAPI {
+public final class ResourcefulBeesAPI {
 
     private ResourcefulBeesAPI() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

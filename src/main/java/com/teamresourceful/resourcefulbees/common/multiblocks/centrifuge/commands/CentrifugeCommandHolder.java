@@ -12,7 +12,7 @@ import net.minecraftforge.fml.loading.FMLLoader;
 
 import java.util.Collection;
 
-public class CentrifugeCommandHolder {
+public final class CentrifugeCommandHolder {
 
     private CentrifugeCommandHolder() {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);

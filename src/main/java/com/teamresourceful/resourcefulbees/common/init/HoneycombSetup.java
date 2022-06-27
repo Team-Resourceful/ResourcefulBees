@@ -15,7 +15,7 @@ import java.util.Locale;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
-public class HoneycombSetup {
+public final class HoneycombSetup {
 
     private HoneycombSetup() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

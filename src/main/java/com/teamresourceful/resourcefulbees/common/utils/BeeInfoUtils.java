@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class BeeInfoUtils {
+public final class BeeInfoUtils {
 
     private BeeInfoUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

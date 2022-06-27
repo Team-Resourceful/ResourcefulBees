@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
-public class NBTConstants {
+public final class NBTConstants {
 
     private NBTConstants() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

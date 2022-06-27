@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
-public class BeeHouseSelectionBox {
+public final class BeeHouseSelectionBox {
 
     private static final Color SELECTION_COLOR = new Color(0x66000000);
 

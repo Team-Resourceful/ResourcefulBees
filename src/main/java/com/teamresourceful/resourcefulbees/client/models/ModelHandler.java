@@ -26,7 +26,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Map;
 
-public class ModelHandler {
+public final class ModelHandler {
 
     private static final Multimap<ResourceLocation, ResourceLocation> MODEL_MAP = LinkedHashMultimap.create();
     private static final String MODEL_INVENTORY_TAG = "inventory";

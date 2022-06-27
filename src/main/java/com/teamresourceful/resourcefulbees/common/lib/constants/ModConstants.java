@@ -7,7 +7,7 @@ import net.minecraftforge.common.ToolAction;
 
 import java.text.DecimalFormat;
 
-public class ModConstants {
+public final class ModConstants {
 
     private ModConstants() {
         throw new IllegalStateException(UTILITY_CLASS);

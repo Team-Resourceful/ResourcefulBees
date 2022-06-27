@@ -7,7 +7,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class BeepediaImages {
+public final class BeepediaImages {
 
     private BeepediaImages() {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);

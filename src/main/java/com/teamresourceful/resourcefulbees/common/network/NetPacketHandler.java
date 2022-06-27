@@ -17,7 +17,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 import java.util.List;
 
-public class NetPacketHandler {
+public final class NetPacketHandler {
 
     private NetPacketHandler() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

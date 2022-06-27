@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid = ResourcefulBees.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ResourcefulBeesDataGenerator {
+public final class ResourcefulBeesDataGenerator {
 
     private ResourcefulBeesDataGenerator() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

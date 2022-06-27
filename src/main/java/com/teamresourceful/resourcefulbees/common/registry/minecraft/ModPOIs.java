@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class ModPOIs {
+public final class ModPOIs {
 
     private ModPOIs() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

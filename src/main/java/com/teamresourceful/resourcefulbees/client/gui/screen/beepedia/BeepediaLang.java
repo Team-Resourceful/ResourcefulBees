@@ -7,7 +7,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class BeepediaLang {
+public final class BeepediaLang {
 
     private BeepediaLang() {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);

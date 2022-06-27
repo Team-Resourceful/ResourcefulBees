@@ -11,7 +11,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ModBiomeModifiers {
+public final class ModBiomeModifiers {
 
     private ModBiomeModifiers() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

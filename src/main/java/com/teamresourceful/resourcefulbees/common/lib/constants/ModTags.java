@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.versions.forge.ForgeVersion;
 
-public class ModTags {
+public final class ModTags {
 
     private ModTags() {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);

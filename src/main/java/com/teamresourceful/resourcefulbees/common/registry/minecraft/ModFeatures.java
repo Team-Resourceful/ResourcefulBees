@@ -18,7 +18,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ModFeatures {
+public final class ModFeatures {
 
     private ModFeatures() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

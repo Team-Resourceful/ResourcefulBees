@@ -17,7 +17,7 @@ import java.util.function.ToDoubleFunction;
 
 import static com.teamresourceful.resourcefulbees.common.utils.MathUtils.HALF_PI;
 
-public class RandomPositionGenerator {
+public final class RandomPositionGenerator {
 
     private RandomPositionGenerator() {
         throw new IllegalArgumentException(ModConstants.UTILITY_CLASS);

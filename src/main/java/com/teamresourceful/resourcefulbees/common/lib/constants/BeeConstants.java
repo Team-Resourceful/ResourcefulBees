@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
-public class BeeConstants {
+public final class BeeConstants {
 
 
     private BeeConstants() {

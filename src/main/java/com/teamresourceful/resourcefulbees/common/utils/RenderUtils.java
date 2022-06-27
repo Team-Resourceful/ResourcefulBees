@@ -24,7 +24,7 @@ import net.minecraftforge.client.IFluidTypeRenderProperties;
 import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.fluids.FluidStack;
 
-public class RenderUtils {
+public final class RenderUtils {
 
     public static final int FONT_COLOR_1 = 0xffc9c9c9;
     public static final int FONT_COLOR_2 = 0xff2cafc7;

@@ -20,7 +20,7 @@ import java.util.Locale;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
-public class BeeSetup {
+public final class BeeSetup {
 
     private BeeSetup() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

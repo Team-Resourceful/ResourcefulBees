@@ -20,7 +20,7 @@ import java.nio.file.Paths;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
-public class LangGeneration {
+public final class LangGeneration {
 
     public static final String ITEM_RESOURCEFULBEES = "item.resourcefulbees.";
     public static final String BLOCK_RESOURCEFULBEES = "block.resourcefulbees.";

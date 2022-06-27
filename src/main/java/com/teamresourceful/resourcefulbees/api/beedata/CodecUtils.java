@@ -25,8 +25,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@SuppressWarnings("unused")
-public class CodecUtils {
+public final class CodecUtils {
 
     private CodecUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -75,7 +74,6 @@ public class CodecUtils {
     //endregion
 
     public static final Codec<InclusiveRange<Integer>> Y_LEVEL = codec(Codec.INT, -512, 512);
-    public static final Codec<InclusiveRange<Integer>> SPAWN_GROUP = codec(Codec.INT, 0, 8);
 
     public static <T extends Comparable<T>> Codec<InclusiveRange<T>> codec(Codec<T> p_184575_, T min, T max) {
         Function<InclusiveRange<T>, DataResult<InclusiveRange<T>>> function = (range) -> {

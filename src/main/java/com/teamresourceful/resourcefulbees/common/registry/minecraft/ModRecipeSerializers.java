@@ -11,7 +11,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ModRecipeSerializers {
+public final class ModRecipeSerializers {
 
     private ModRecipeSerializers() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

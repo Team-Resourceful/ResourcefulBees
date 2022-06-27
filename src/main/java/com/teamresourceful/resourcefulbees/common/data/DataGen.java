@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DataGen {
+public final class DataGen {
 
     private DataGen() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

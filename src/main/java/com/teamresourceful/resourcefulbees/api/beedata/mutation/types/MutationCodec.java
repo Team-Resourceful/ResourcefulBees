@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
 
 import java.util.*;
 
-public class MutationCodec {
+public final class MutationCodec {
 
     private MutationCodec() {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);

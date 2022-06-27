@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 
-public class ItemModelPropertiesHandler {
+public final class ItemModelPropertiesHandler {
 
     private ItemModelPropertiesHandler() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

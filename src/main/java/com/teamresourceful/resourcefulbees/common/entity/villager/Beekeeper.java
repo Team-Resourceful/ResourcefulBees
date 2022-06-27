@@ -14,7 +14,7 @@ import net.minecraftforge.event.village.VillagerTradesEvent;
 
 import java.util.List;
 
-public class Beekeeper {
+public final class Beekeeper {
 
     private Beekeeper() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

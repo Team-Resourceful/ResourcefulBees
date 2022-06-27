@@ -110,7 +110,7 @@ public class HoneycombRegistry {
                 .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.warn("Could not create honeycomb registry item from {} json file.", s));
     }
 
-    private static record RegistryData(String name, Color color, boolean edible, boolean block, boolean enchanted) {
+    private record RegistryData(String name, Color color, boolean edible, boolean block, boolean enchanted) {
 
         private static Codec<RegistryData> codec(String name) {
             return RecordCodecBuilder.create(instance -> instance.group(

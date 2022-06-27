@@ -16,7 +16,7 @@ import java.util.Locale;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
-public class TraitSetup {
+public final class TraitSetup {
 
     private TraitSetup() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

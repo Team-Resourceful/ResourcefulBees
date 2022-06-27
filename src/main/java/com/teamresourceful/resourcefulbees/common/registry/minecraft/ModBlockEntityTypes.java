@@ -13,7 +13,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ModBlockEntityTypes {
+public final class ModBlockEntityTypes {
 
     private ModBlockEntityTypes() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

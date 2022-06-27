@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class BeepediaUtils {
+public final class BeepediaUtils {
 
     private BeepediaUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

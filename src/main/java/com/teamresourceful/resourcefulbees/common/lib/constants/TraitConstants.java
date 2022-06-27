@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
-public class TraitConstants {
+public final class TraitConstants {
 
     private TraitConstants() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

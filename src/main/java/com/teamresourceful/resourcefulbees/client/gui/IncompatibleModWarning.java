@@ -14,7 +14,7 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
-public class IncompatibleModWarning {
+public final class IncompatibleModWarning {
 
     private static boolean hasBeenShownOnce;
     private static boolean isPerformantLoaded;

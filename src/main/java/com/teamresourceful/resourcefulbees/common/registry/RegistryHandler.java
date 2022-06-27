@@ -20,7 +20,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryObject;
 
-public class RegistryHandler {
+public final class RegistryHandler {
 
     private RegistryHandler() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);

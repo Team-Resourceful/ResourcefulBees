@@ -21,7 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
-public class BeepediaHandler {
+public final class BeepediaHandler {
 
     private static BeepediaPage selectedPage;
 
@@ -30,7 +30,7 @@ public class BeepediaHandler {
     }
 
 
-    protected static final LinkedList<Queue<String>> pastStates = new LinkedList<>();
+    private static final LinkedList<Queue<String>> pastStates = new LinkedList<>();
 
     private static final ScreenArea SUB_SCREEN_AREA = new ScreenArea(122, 0, BeepediaScreen.SCREEN_WIDTH - 122, BeepediaScreen.SCREEN_HEIGHT);
 
@@ -39,7 +39,7 @@ public class BeepediaHandler {
      * <p>
      * if state is null show loading screen
      */
-    protected static BeepediaState currScreenState = null;
+    private static BeepediaState currScreenState = null;
 
 
     /**

@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import net.minecraft.world.level.block.Block;
 
-public class HiveUpgradeUtils {
+public final class HiveUpgradeUtils {
 
     private HiveUpgradeUtils() {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);

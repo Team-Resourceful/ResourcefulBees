@@ -11,7 +11,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ModFluids {
+public final class ModFluids {
 
     private ModFluids() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
