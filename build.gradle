@@ -112,6 +112,11 @@ mixin {
 dependencies {
     minecraft "net.minecraftforge:forge:$mc_version-$forge_version" //21
 
+    implementation fg.deobf("com.teamresourceful.resourcefullib:$resourcefullib_version")
+    jarJar fg.deobf("com.teamresourceful.resourcefullib:$resourcefullib_version") {
+        jarJar.ranged(it, "[1.0.0,)")
+    }
+
     compileOnly fg.deobf("mezz.jei:jei-$mc_version-forge-api:$jei_version")
     implementation fg.deobf("mezz.jei:jei-$mc_version-forge:$jei_version")
 
@@ -142,6 +147,13 @@ dependencies {
 
     compileOnly 'org.jetbrains:annotations:22.0.0'
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
+}
+
+jarJar{
+    enable()
+    dependencies {
+        include(dependency("com.teamresourceful.resourcefullib:$resourcefullib_version"))
+    }
 }
 
 apply from: "gradle_files/injectModsToml.gradle"
