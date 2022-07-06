@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
-import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -164,16 +164,12 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
         }
 
         public CentrifugeRecipe.Output<ItemOutput> build() {
-            return new CentrifugeRecipe.Output<>(chance, itemOutputs.stream().collect(RandomCollection.getCollector(ItemOutput::getWeight)));
+            return new CentrifugeRecipe.Output<>(chance, RandomCollection.of(itemOutputs, ItemOutput::getWeight));
         }
 
     }
 
-    public static record FluidOutputBuilder(double chance, List<FluidOutput> fluidOutputs) {
-
-        public FluidOutputBuilder(double chance) {
-            this(chance, new ArrayList<>());
-        }
+    public record FluidOutputBuilder(double chance, List<FluidOutput> fluidOutputs) {
 
         public FluidOutputBuilder addOutput(FluidOutput output) {
             fluidOutputs.add(output);

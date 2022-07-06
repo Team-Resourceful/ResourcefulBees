@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.render;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collections;
@@ -26,7 +26,7 @@ public record RenderData(Set<LayerData> layers, ColorData colorData, ResourceLoc
      * A {@link Codec<RenderData>} that can be parsed to create a {@link RenderData} object.
      */
     public static final Codec<RenderData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            CodecUtils.createLinkedSetCodec(LayerData.CODEC).fieldOf("layers").orElse(new HashSet<>()).forGetter(RenderData::layers),
+            CodecExtras.linkedSet(LayerData.CODEC).fieldOf("layers").orElse(new HashSet<>()).forGetter(RenderData::layers),
             ColorData.CODEC.fieldOf("ColorData").orElse(ColorData.DEFAULT).forGetter(RenderData::colorData),
             ResourceLocation.CODEC.fieldOf("model").orElse(BASE_MODEL).forGetter(RenderData::model),
             BeeTexture.CODEC.fieldOf("texture").orElse(BeeTexture.MISSING_TEXTURE).forGetter(RenderData::texture),

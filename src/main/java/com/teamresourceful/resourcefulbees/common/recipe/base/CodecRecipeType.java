@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.recipe.base;
 
+import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class CodecRecipeType<T extends CodecRecipe<?>> implements RecipeType<T> {

@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
-import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
+import com.teamresourceful.resourcefullib.common.utils.FileUtils;
 import net.minecraft.util.GsonHelper;
 
 import java.io.Reader;
@@ -25,12 +25,12 @@ public final class TraitSetup {
     public static void buildCustomTraits() {
         if (Boolean.TRUE.equals(CommonConfig.ENABLE_DEV_BEES.get())) {
             LOGGER.info("Loading Dev Traits...");
-            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_traits", TraitSetup::parseTrait);
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_traits", TraitSetup::parseTrait, ModConstants.MOD_ROOT);
         }
 
         if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
             LOGGER.info("Copying Default Traits...");
-            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_traits", ModPaths.BEE_TRAITS);
+            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_traits", ModPaths.BEE_TRAITS, ModConstants.MOD_ROOT);
         }
 
         LOGGER.info("Loading Custom Traits...");

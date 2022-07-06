@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -28,8 +29,8 @@ public class OutputVariation {
             Codec.STRING.fieldOf("identifier").orElseGet((Consumer<String>) s -> ResourcefulBees.LOGGER.error(MISSING_ID), null).forGetter(OutputVariation::getIdentifier),
             CodecUtils.BEEHIVE_VARIATIONS.fieldOf("hiveCombs").orElseGet(HashMap::new).forGetter(OutputVariation::getHiveCombs),
             CodecUtils.APIARY_VARIATIONS.fieldOf("apiaryCombs").orElseGet(HashMap::new).forGetter(OutputVariation::getApiaryCombs),
-            CodecUtils.ITEM_STACK_CODEC.optionalFieldOf("defaultComb").forGetter(OutputVariation::getDefaultComb),
-            CodecUtils.ITEM_STACK_CODEC.optionalFieldOf("defaultCombBlock").forGetter(OutputVariation::getDefaultCombBlock)
+            ItemStackCodec.CODEC.optionalFieldOf("defaultComb").forGetter(OutputVariation::getDefaultComb),
+            ItemStackCodec.CODEC.optionalFieldOf("defaultCombBlock").forGetter(OutputVariation::getDefaultCombBlock)
     ).apply(instance, OutputVariation::new));
 
     private final String identifier;

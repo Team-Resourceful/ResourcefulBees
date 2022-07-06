@@ -1,13 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.recipe.recipes;
 
-import com.mojang.serialization.*;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.base.CodecRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
-import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
+import com.teamresourceful.resourcefullib.common.codecs.recipes.IngredientCodec;
+import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
+import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
+import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -24,14 +27,14 @@ import java.util.Set;
 
 public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPair parent2, Optional<Ingredient> input, RandomCollection<BreederOutput> outputs, int time) implements CodecRecipe<Container> {
 
-    public static final Codec<RandomCollection<BreederOutput>> RANDOM_COLLECTION_CODEC = CodecUtils.createSetCodec(BreederOutput.CODEC).comapFlatMap(BreederOutput::convertToRandomCollection, BreederOutput::convertToSet);
+    public static final Codec<RandomCollection<BreederOutput>> RANDOM_COLLECTION_CODEC = CodecExtras.set(BreederOutput.CODEC).comapFlatMap(BreederOutput::convertToRandomCollection, BreederOutput::convertToSet);
 
     public static Codec<BreederRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
             RecordCodecBuilder.point(id),
             BreederPair.CODEC.fieldOf("parent1").forGetter(BreederRecipe::parent1),
             BreederPair.CODEC.fieldOf("parent2").forGetter(BreederRecipe::parent2),
-            CodecUtils.INGREDIENT_CODEC.optionalFieldOf("input").forGetter(BreederRecipe::input),
+            IngredientCodec.CODEC.optionalFieldOf("input").forGetter(BreederRecipe::input),
             BreederRecipe.RANDOM_COLLECTION_CODEC.fieldOf("outputs").forGetter(BreederRecipe::outputs),
             Codec.intRange(100, 72000).fieldOf("time").orElse(1200).forGetter(BreederRecipe::time)
         ).apply(instance, BreederRecipe::new));
@@ -59,10 +62,10 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
 
     public record BreederPair(Ingredient parent, Optional<String> displayEntity, Ingredient feedItem, Optional<ItemStack> returnItem){
         public static final Codec<BreederPair> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                CodecUtils.INGREDIENT_CODEC.fieldOf("parent").forGetter(BreederPair::parent),
+                IngredientCodec.CODEC.fieldOf("parent").forGetter(BreederPair::parent),
                 Codec.STRING.optionalFieldOf("entity").forGetter(BreederPair::displayEntity),
-                CodecUtils.INGREDIENT_CODEC.fieldOf("feedItem").forGetter(BreederPair::feedItem),
-                CodecUtils.ITEM_STACK_CODEC.optionalFieldOf("returnItem").forGetter(BreederPair::returnItem)
+                IngredientCodec.CODEC.fieldOf("feedItem").forGetter(BreederPair::feedItem),
+                ItemStackCodec.CODEC.optionalFieldOf("returnItem").forGetter(BreederPair::returnItem)
         ).apply(instance, BreederPair::new));
 
         public boolean matches(Container inventory, int offset) {
@@ -72,7 +75,7 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
 
     public record BreederOutput(ItemStack output, Optional<String> displayEntity, double weight, double chance){
         public static final Codec<BreederOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                CodecUtils.ITEM_STACK_CODEC.fieldOf("output").forGetter(BreederOutput::output),
+                ItemStackCodec.CODEC.fieldOf("output").forGetter(BreederOutput::output),
                 Codec.STRING.optionalFieldOf("entity").forGetter(BreederOutput::displayEntity),
                 Codec.doubleRange(0.0d, Double.MAX_VALUE).fieldOf("weight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(BreederOutput::weight),
                 Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BreederOutput::chance)

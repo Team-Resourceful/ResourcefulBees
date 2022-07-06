@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.data;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefulbees.common.utils.GenericMemoryPack;
+import com.teamresourceful.resourcefullib.common.utils.GenericMemoryPack;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.server.packs.PackType;
