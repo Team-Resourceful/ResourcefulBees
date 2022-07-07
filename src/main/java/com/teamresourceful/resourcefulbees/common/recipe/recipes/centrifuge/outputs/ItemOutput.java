@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.api.beedata.outputs;
+package com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs;
 
 import com.google.common.base.MoreObjects;
 import com.mojang.serialization.Codec;
@@ -13,16 +13,15 @@ public class ItemOutput extends AbstractOutput {
 
     public static final Codec<ItemOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ItemStackCodec.CODEC.fieldOf("item").orElse(ItemStack.EMPTY).forGetter(ItemOutput::getItemStack),
-            Codec.doubleRange(1.0d, 1000d).fieldOf("weight").orElse(1.0d).forGetter(ItemOutput::getWeight),
-            Codec.doubleRange(0.0d, 1.0).fieldOf("chance").orElse(1.0d).forGetter(ItemOutput::getChance)
+            Codec.doubleRange(1.0d, 1000d).fieldOf("weight").orElse(1.0d).forGetter(ItemOutput::getWeight)
     ).apply(instance, ItemOutput::new));
 
-    public static final ItemOutput EMPTY = new ItemOutput(ItemStack.EMPTY, 0, 0);
+    public static final ItemOutput EMPTY = new ItemOutput(ItemStack.EMPTY, 0);
 
     protected final ItemStack itemStack;
 
-    public ItemOutput(ItemStack itemStack, double weight, double chance) {
-        super(weight, chance);
+    public ItemOutput(ItemStack itemStack, double weight) {
+        super(weight);
         this.itemStack = itemStack;
     }
 
@@ -43,7 +42,6 @@ public class ItemOutput extends AbstractOutput {
         return MoreObjects.toStringHelper(this)
                 .add("Item", getItem())
                 .add("Count", getCount())
-                .add("Chance", getChance())
                 .add("Weight", getWeight()).toString();
     }
 }

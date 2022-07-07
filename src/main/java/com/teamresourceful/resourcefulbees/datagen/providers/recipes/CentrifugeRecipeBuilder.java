@@ -4,9 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.outputs.FluidOutput;
-import com.teamresourceful.resourcefulbees.api.beedata.outputs.ItemOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
 import net.minecraft.advancements.CriterionTriggerInstance;
@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class CentrifugeRecipeBuilder implements RecipeBuilder {
@@ -36,6 +37,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
 
     private Integer time;
     private Integer rfPerTick;
+    private Integer uses;
 
     private final List<JsonObject> conditions = new ArrayList<>();
 
@@ -55,6 +57,11 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
 
     public CentrifugeRecipeBuilder rf(int rfPerTick) {
         this.rfPerTick = rfPerTick;
+        return this;
+    }
+
+    public CentrifugeRecipeBuilder uses(int uses) {
+        this.uses = uses;
         return this;
     }
 
@@ -100,18 +107,18 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
 
     @Override
     public void save(@NotNull Consumer<FinishedRecipe> consumer, @NotNull ResourceLocation id) {
-        consumer.accept(new CentrifugeFinishedRecipe(this.ingredient, this.id, itemOutputs, fluidOutputs, time, rfPerTick, conditions));
+        consumer.accept(new CentrifugeFinishedRecipe(this.ingredient, this.id, itemOutputs, fluidOutputs, time, rfPerTick, Optional.ofNullable(uses), conditions));
     }
 
     public record CentrifugeFinishedRecipe(Ingredient ingredient, ResourceLocation id,
                                            List<CentrifugeRecipe.Output<ItemOutput>> itemOutputs,
                                            List<CentrifugeRecipe.Output<FluidOutput>> fluidOutputs,
-                                           Integer time, Integer rfPerTick,
+                                           Integer time, Integer rfPerTick, Optional<Integer> uses,
                                            List<JsonObject> conditions) implements FinishedRecipe {
 
         @Override
         public void serializeRecipeData(@NotNull JsonObject json) {
-            CentrifugeRecipe recipe = new CentrifugeRecipe(id(), ingredient(), itemOutputs(), fluidOutputs(), time(), rfPerTick());
+            CentrifugeRecipe recipe = new CentrifugeRecipe(id(), ingredient(), itemOutputs(), fluidOutputs(), time(), rfPerTick(), uses());
             CentrifugeRecipe.codec(id())
                     .encodeStart(JsonOps.INSTANCE, recipe)
                     .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("COULD NOT SERIALIZE DATA GEN RECIPE"))
@@ -148,7 +155,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
         }
     }
 
-    public static record ItemOutputBuilder(double chance, List<ItemOutput> itemOutputs) {
+    public record ItemOutputBuilder(double chance, List<ItemOutput> itemOutputs) {
 
         public ItemOutputBuilder(double chance) {
             this(chance, new ArrayList<>());
@@ -159,8 +166,8 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
             return this;
         }
 
-        public ItemOutputBuilder addOutput(ItemStack stack, double weight, double chance) {
-            return addOutput(new ItemOutput(stack, weight, chance));
+        public ItemOutputBuilder addOutput(ItemStack stack, double weight) {
+            return addOutput(new ItemOutput(stack, weight));
         }
 
         public CentrifugeRecipe.Output<ItemOutput> build() {
@@ -176,8 +183,8 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
             return this;
         }
 
-        public FluidOutputBuilder addOutput(FluidStack stack, double weight, double chance) {
-            return addOutput(new FluidOutput(stack, weight, chance));
+        public FluidOutputBuilder addOutput(FluidStack stack, double weight) {
+            return addOutput(new FluidOutput(stack, weight));
         }
 
         public CentrifugeRecipe.Output<FluidOutput> build() {

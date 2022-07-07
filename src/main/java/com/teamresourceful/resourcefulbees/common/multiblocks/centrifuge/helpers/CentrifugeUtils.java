@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.SimpleContainer;

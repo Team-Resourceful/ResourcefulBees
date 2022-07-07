@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.api.beedata.outputs;
+package com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs;
 
 import com.google.common.base.MoreObjects;
 import com.mojang.serialization.Codec;
@@ -14,16 +14,15 @@ public class FluidOutput extends AbstractOutput {
 
     public static final Codec<FluidOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             CodecUtils.FLUID_STACK_CODEC.fieldOf("fluid").orElse(FluidStack.EMPTY).forGetter(FluidOutput::getFluidStack),
-            Codec.doubleRange(1.0d, Double.MAX_VALUE).fieldOf("weight").orElse(1.0d).forGetter(FluidOutput::getWeight),
-            Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(FluidOutput::getChance)
+            Codec.doubleRange(1.0d, Double.MAX_VALUE).fieldOf("weight").orElse(1.0d).forGetter(FluidOutput::getWeight)
     ).apply(instance, FluidOutput::new));
 
-    public static final FluidOutput EMPTY = new FluidOutput(FluidStack.EMPTY, 0, 0);
+    public static final FluidOutput EMPTY = new FluidOutput(FluidStack.EMPTY, 0);
 
     private final FluidStack fluid;
 
-    public FluidOutput(FluidStack fluid, double weight, double chance) {
-        super(weight, chance);
+    public FluidOutput(FluidStack fluid, double weight) {
+        super(weight);
         this.fluid = fluid;
     }
 
@@ -48,7 +47,6 @@ public class FluidOutput extends AbstractOutput {
         return MoreObjects.toStringHelper(this)
                 .add("Fluid", getFluid())
                 .add("Amount", getAmount())
-                .add("Chance", getChance())
                 .add("Weight", getWeight()).toString();
     }
 }

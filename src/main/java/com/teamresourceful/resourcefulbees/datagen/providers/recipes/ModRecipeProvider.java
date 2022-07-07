@@ -28,17 +28,17 @@ public class ModRecipeProvider extends RecipeProvider {
 
         CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB), new ResourceLocation(ResourcefulBees.MOD_ID, "honeycomb_centrifuge"))
                 .time(200)
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(Items.SUGAR.getDefaultInstance(), 10, 1))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(ModItems.WAX.get().getDefaultInstance(), 10, 0.25))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(Items.HONEY_BOTTLE.getDefaultInstance(), 10, 0.20))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(Items.SUGAR.getDefaultInstance(), 10))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(ModItems.WAX.get().getDefaultInstance(), 10))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.20).addOutput(Items.HONEY_BOTTLE.getDefaultInstance(), 10))
                 .rf(5)
                 .save(recipes);
 
         CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB_BLOCK), new ResourceLocation(ResourcefulBees.MOD_ID, "honeycomb_block_centrifuge"))
                 .time(200)
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 9), 10, 1))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(ModItems.WAX.get(), 9), 10, 0.25))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.HONEY_BOTTLE, 9), 10, 0.20))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 9), 10))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(new ItemStack(ModItems.WAX.get(), 9), 10))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.20).addOutput(new ItemStack(Items.HONEY_BOTTLE, 9), 10))
                 .rf(10)
                 .save(recipes);
 
