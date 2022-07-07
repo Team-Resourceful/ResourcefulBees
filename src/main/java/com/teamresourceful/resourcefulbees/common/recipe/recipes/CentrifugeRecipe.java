@@ -25,8 +25,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick) implements CodecRecipe<Container> {
+public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick, Optional<Integer> uses) implements CodecRecipe<Container> {
 
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -35,7 +36,8 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
                 Output.ITEM_OUTPUT_CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::itemOutputs),
                 Output.FLUID_OUTPUT_CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::fluidOutputs),
                 Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::time),
-                Codec.INT.fieldOf("energyPerTick").orElse(CommonConfig.RF_TICK_CENTRIFUGE.get()).forGetter(CentrifugeRecipe::energyPerTick)
+                Codec.INT.fieldOf("energyPerTick").orElse(CommonConfig.RF_TICK_CENTRIFUGE.get()).forGetter(CentrifugeRecipe::energyPerTick),
+                Codec.INT.optionalFieldOf("uses").forGetter(CentrifugeRecipe::uses)
         ).apply(instance, CentrifugeRecipe::new));
     }
 
@@ -59,6 +61,10 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
     @Override
     public RecipeType<?> getType() {
         return ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get();
+    }
+
+    public int getUses() {
+        return uses().orElse(time / 20);
     }
 
     public record Output<T extends AbstractOutput>(double chance, RandomCollection<T> pool) {

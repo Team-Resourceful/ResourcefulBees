@@ -39,6 +39,10 @@ public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBT
         return amount;
     }
 
+    public boolean isFull() {
+        return getTotalAmount() >= capacity;
+    }
+
     @NotNull
     @Override
     public FluidStack getFluid() {
@@ -101,7 +105,11 @@ public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBT
 
     @Override
     public int fill(FluidStack resource, FluidAction action) {
-        if (resource.isEmpty() || !isFluidValid(resource)) return 0;
+        return forceFill(resource, action, false);
+    }
+
+    public int forceFill(FluidStack resource, FluidAction action, boolean forced) {
+        if (resource.isEmpty() || (!isFluidValid(resource) && !forced)) return 0;
         if (getTotalAmount() == capacity) return 0;
         if (action.simulate()) {
             if (fluids.isEmpty()) {
