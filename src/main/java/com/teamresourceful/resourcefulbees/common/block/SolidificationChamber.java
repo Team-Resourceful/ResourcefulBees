@@ -56,9 +56,9 @@ public class SolidificationChamber extends SidedTickingBlock<SolidificationChamb
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         BlockEntity tileEntity = level.getBlockEntity(pos);
 
-        if (tileEntity instanceof SolidificationChamberBlockEntity) {
+        if (tileEntity instanceof SolidificationChamberBlockEntity solidificationChamber) {
             if (!level.isClientSide) {
-                FluidTank tank = ((SolidificationChamberBlockEntity) tileEntity).getTank();
+                FluidTank tank = solidificationChamber.getTank();
                 Item item = player.getItemInHand(hand).getItem();
                 if (item instanceof HoneyBottleItem) {
                     HoneyFluidTank.emptyBottle(tank, player, hand);

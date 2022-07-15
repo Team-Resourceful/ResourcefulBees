@@ -9,14 +9,15 @@ import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
+import java.util.function.Function;
 
 public final class ColorHandler {
 
@@ -46,11 +47,11 @@ public final class ColorHandler {
             .forEach(item -> handler.register(itemColor, item));
     }
 
-    private static void registerBlocks(RegisterColorHandlersEvent.Block handler, BlockColor blockColor, Collection<RegistryObject<Block>> blocks) {
+    private static void registerBlocks(RegisterColorHandlersEvent.Block handler, Function<BlockState, Integer> blockColor, Collection<RegistryObject<Block>> blocks) {
         if (blocks.isEmpty()) return;
         blocks.stream()
             .filter(RegistryObject::isPresent)
             .map(RegistryObject::get)
-            .forEach(block -> handler.register(blockColor, block));
+            .forEach(block -> handler.register((state, a, b, c) -> blockColor.apply(state), block));
     }
 }

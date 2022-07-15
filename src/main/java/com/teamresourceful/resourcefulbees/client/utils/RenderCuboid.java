@@ -6,6 +6,7 @@ import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
@@ -39,58 +40,57 @@ public final class RenderCuboid {
         renderCube(start, end, sprite, matrix, buffer, argb, light, overlay);
     }
 
-    public static void renderCube(Vec3 start, Vec3 end, TextureAtlasSprite sprite, PoseStack matrix, VertexConsumer buffer, int argb, int light, int overlay) {
+    public static void renderCube(Vec3 start, Vec3 end, TextureAtlasSprite sprite, PoseStack poseStack, VertexConsumer buffer, int argb, int light, int overlay) {
         Vec3 size = end.subtract(start);
-        matrix.pushPose();
-        matrix.translate(start.x(), start.y(), start.z());
-        PoseStack.Pose lastMatrix = matrix.last();
-        Matrix4f matrix4f = lastMatrix.pose();
-        Matrix3f normal = lastMatrix.normal();
-        Direction[] directions = Direction.values();
+        try (var stack = new CloseablePoseStack(poseStack)) {
+            stack.translate(start.x(), start.y(), start.z());
+            PoseStack.Pose lastMatrix = stack.last();
+            Matrix4f matrix4f = lastMatrix.pose();
+            Matrix3f normal = lastMatrix.normal();
+            Direction[] directions = Direction.values();
 
-        for (Direction direction : directions) {
-            Direction face = direction;
-            if (sprite != null) {
-                Direction.Axis u = face.getAxis() == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
-                Direction.Axis v = face.getAxis() == Direction.Axis.Y ? Direction.Axis.Z : Direction.Axis.Y;
-                float other = face.getAxisDirection() == Direction.AxisDirection.POSITIVE ? (float) getValue(size, face.getAxis()) : 0.0F;
-                face = face.getAxisDirection() == Direction.AxisDirection.NEGATIVE ? face : face.getOpposite();
-                Direction opposite = face.getOpposite();
-                float minU = sprite.getU0();
-                float maxU = sprite.getU1();
-                float minV = sprite.getV1();
-                float maxV = sprite.getV0();
-                double sizeU = getValue(size, u);
-                double sizeV = getValue(size, v);
-                for (int uIndex = 0; uIndex < sizeU; ++uIndex) {
-                    float[] baseUV = new float[]{minU, maxU, minV, maxV};
-                    double addU = 1.0D;
-                    if (uIndex + addU > sizeU) {
-                        addU = sizeU - uIndex;
-                        baseUV[1] = baseUV[0] + (baseUV[1] - baseUV[0]) * (float) addU;
-                    }
-                    for (int vIndex = 0; vIndex < sizeV; ++vIndex) {
-                        float[] uv = Arrays.copyOf(baseUV, 4);
-                        double addV = 1.0D;
-                        if (vIndex + addV > sizeV) {
-                            addV = sizeV - vIndex;
-                            uv[3] = uv[2] + (uv[3] - uv[2]) * (float) addV;
+            for (Direction direction : directions) {
+                Direction face = direction;
+                if (sprite != null) {
+                    Direction.Axis u = face.getAxis() == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
+                    Direction.Axis v = face.getAxis() == Direction.Axis.Y ? Direction.Axis.Z : Direction.Axis.Y;
+                    float other = face.getAxisDirection() == Direction.AxisDirection.POSITIVE ? (float) getValue(size, face.getAxis()) : 0.0F;
+                    face = face.getAxisDirection() == Direction.AxisDirection.NEGATIVE ? face : face.getOpposite();
+                    Direction opposite = face.getOpposite();
+                    float minU = sprite.getU0();
+                    float maxU = sprite.getU1();
+                    float minV = sprite.getV1();
+                    float maxV = sprite.getV0();
+                    double sizeU = getValue(size, u);
+                    double sizeV = getValue(size, v);
+                    for (int uIndex = 0; uIndex < sizeU; ++uIndex) {
+                        float[] baseUV = new float[]{minU, maxU, minV, maxV};
+                        double addU = 1.0D;
+                        if (uIndex + addU > sizeU) {
+                            addU = sizeU - uIndex;
+                            baseUV[1] = baseUV[0] + (baseUV[1] - baseUV[0]) * (float) addU;
                         }
-                        float[] xyz = new float[]{uIndex, (float) (uIndex + addU), vIndex, (float) (vIndex + addV)};
-                        renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, true, false, argb, light, overlay);
-                        renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, true, true, argb, light, overlay);
-                        renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, false, true, argb, light, overlay);
-                        renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, false, false, argb, light, overlay);
-                        renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, false, false, argb, light, overlay);
-                        renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, false, true, argb, light, overlay);
-                        renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, true, true, argb, light, overlay);
-                        renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, true, false, argb, light, overlay);
+                        for (int vIndex = 0; vIndex < sizeV; ++vIndex) {
+                            float[] uv = Arrays.copyOf(baseUV, 4);
+                            double addV = 1.0D;
+                            if (vIndex + addV > sizeV) {
+                                addV = sizeV - vIndex;
+                                uv[3] = uv[2] + (uv[3] - uv[2]) * (float) addV;
+                            }
+                            float[] xyz = new float[]{uIndex, (float) (uIndex + addU), vIndex, (float) (vIndex + addV)};
+                            renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, true, false, argb, light, overlay);
+                            renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, true, true, argb, light, overlay);
+                            renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, false, true, argb, light, overlay);
+                            renderPoint(matrix4f, normal, buffer, face, u, v, other, uv, xyz, false, false, argb, light, overlay);
+                            renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, false, false, argb, light, overlay);
+                            renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, false, true, argb, light, overlay);
+                            renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, true, true, argb, light, overlay);
+                            renderPoint(matrix4f, normal, buffer, opposite, u, v, other, uv, xyz, true, false, argb, light, overlay);
+                        }
                     }
                 }
             }
         }
-
-        matrix.popPose();
     }
 
     private static void renderPoint(Matrix4f matrix4f, Matrix3f normal, VertexConsumer buffer, Direction face, Direction.Axis u, Direction.Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV, int color, int light, int overlay) {

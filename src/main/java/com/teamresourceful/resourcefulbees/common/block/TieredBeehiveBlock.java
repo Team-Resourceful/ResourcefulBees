@@ -101,8 +101,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
     }
 
     public boolean isHiveSmoked(BlockPos pos, Level world) {
-        BlockEntity tileEntity = world.getBlockEntity(pos);
-        return tileEntity instanceof TieredBeehiveBlockEntity && ((TieredBeehiveBlockEntity) tileEntity).isSedated();
+        return world.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity hive && hive.isSedated();
     }
 
     @Override
@@ -135,8 +134,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
         dropResourceHoneycomb(world, pos, isScraper);
         itemstack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(handIn));
 
-        BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof TieredBeehiveBlockEntity beehiveTileEntity && !beehiveTileEntity.hasCombs()) {
+        if (world.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity beehiveTileEntity && !beehiveTileEntity.hasCombs()) {
             if (isHiveSmoked(pos, world)) {
                 this.resetHoneyLevel(world, state, pos);
             } else {
