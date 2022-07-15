@@ -66,7 +66,7 @@ public class BeeHouseTopBlock extends Block {
             BlockState stateBelow = world.getBlockState(posBelow);
             MenuProvider blockEntity = stateBelow.getMenuProvider(world,posBelow);
             if (blockEntity != null)
-                NetworkHooks.openGui((ServerPlayer) player, blockEntity, posBelow);
+                NetworkHooks.openScreen((ServerPlayer) player, blockEntity, posBelow);
         }
         return InteractionResult.SUCCESS;
     }

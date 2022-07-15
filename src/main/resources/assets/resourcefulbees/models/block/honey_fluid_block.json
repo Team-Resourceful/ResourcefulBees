@@ -1,4 +1,5 @@
 {
+  "render_type": "translucent",
   "textures": {
     "particle": "resourcefulbees:block/honey/honey_still"
   }

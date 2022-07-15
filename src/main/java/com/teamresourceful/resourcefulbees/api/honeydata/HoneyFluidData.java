@@ -25,7 +25,7 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.RegistryObject;
@@ -56,13 +56,14 @@ public record HoneyFluidData(boolean generate, String name, FluidRenderData rend
 
             ForgeFlowingFluid.Properties[] properties = {null};
 
+            RegistryObject<FluidType> fluidType = ModFluids.FLUID_TYPES.register(name + "_honey", () -> honeyFluid(attributes.getProperties(), renderData));
             RegistryObject<FlowingFluid> stillFluidRegistry = ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey", () -> new CustomHoneyFluid.Source(properties[0], this));
             RegistryObject<FlowingFluid> flowingFluidRegistry = ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_flowing", () -> new CustomHoneyFluid.Flowing(properties[0], this));
             RegistryObject<Item> fluidBucketRegistry = ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", () -> new CustomHoneyBucketItem(stillFluidRegistry, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY).craftRemainder(Items.BUCKET).stacksTo(1), this));
             RegistryObject<LiquidBlock> blockFluidRegistry = ModBlocks.HONEY_FLUID_BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluidRegistry, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable(), this));
 
 
-            properties[0] = new ForgeFlowingFluid.Properties(() -> honeyFluid(attributes.getProperties(), renderData), stillFluidRegistry, flowingFluidRegistry)
+            properties[0] = new ForgeFlowingFluid.Properties(fluidType, stillFluidRegistry, flowingFluidRegistry)
                     .bucket(fluidBucketRegistry)
                     .block(blockFluidRegistry)
                     .tickRate(20);
@@ -73,7 +74,7 @@ public record HoneyFluidData(boolean generate, String name, FluidRenderData rend
         // We are forced to use an anon object here because forge calls initClient in base constructor therefore making it so we cant pass data in.
         return new FluidType(properties) {
             @Override
-            public void initializeClient(Consumer<IFluidTypeRenderProperties> consumer) {
+            public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
                 consumer.accept(new HoneyFluidRenderProperties(renderData));
             }
         };

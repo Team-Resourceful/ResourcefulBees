@@ -11,8 +11,7 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
-import net.minecraftforge.client.RenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,15 +25,15 @@ public class RenderHoneyGenerator implements BlockEntityRenderer<HoneyGeneratorB
         FluidStack stack = tile.getTank().getFluid();
         if (!stack.isEmpty()) {
             float percentage = tile.getTank().getFluidAmount() / (float)tile.getTank().getCapacity();
-            IFluidTypeRenderProperties props = RenderProperties.get(stack.getFluid());
-            int color = props.getColorTint(stack);
+            IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(stack.getFluid());
+            int color = props.getTintColor(stack);
             ResourceLocation stillTexture = props.getStillTexture(stack);
             VertexConsumer builder = renderer.getBuffer(Sheets.translucentCullBlockSheet());
             Vector3f start = new Vector3f(0.0625f, 0.0625f, 0.0625f);
             Vector3f end = new Vector3f(0.9375f, 0.0625f + percentage * 0.875f, 0.9375f);
             CubeModel model = new CubeModel(start, end);
             model.setTextures(stillTexture);
-            RenderCuboid.INSTANCE.renderCube(model, matrix, builder, color, light, overlayLight);
+            RenderCuboid.renderCube(model, matrix, builder, color, light, overlayLight);
         }
     }
 }

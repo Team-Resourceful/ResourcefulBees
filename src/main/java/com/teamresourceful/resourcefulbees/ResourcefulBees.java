@@ -74,10 +74,7 @@ public class ResourcefulBees {
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> IncompatibleModWarning::init);
 
-        //BiomeDictionary.build();
-
         HoneycombSetup.setupHoneycombs();
-        //HoneycombRegistry.registerHoneycombItems();
 
         BeeSetup.setupBees();
         RegistryHandler.registerDynamicBees();
@@ -131,7 +128,7 @@ public class ResourcefulBees {
     @SubscribeEvent
     public void cloneEvent(PlayerEvent.Clone event) {
         event.getOriginal().getCapability(Capabilities.BEEPEDIA_DATA).ifPresent(cap ->
-                event.getPlayer().getCapability(Capabilities.BEEPEDIA_DATA).ifPresent(c -> c.deserializeNBT(cap.serializeNBT())));
+                event.getEntity().getCapability(Capabilities.BEEPEDIA_DATA).ifPresent(c -> c.deserializeNBT(cap.serializeNBT())));
     }
 
     @SubscribeEvent

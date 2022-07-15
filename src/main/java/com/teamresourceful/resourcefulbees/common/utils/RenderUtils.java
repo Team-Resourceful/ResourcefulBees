@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.FontResourceManagerAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.MinecraftAccessor;
+import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -19,8 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
-import net.minecraftforge.client.RenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
 public final class RenderUtils {
@@ -36,7 +36,7 @@ public final class RenderUtils {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static void renderEntity(PoseStack matrixStack, Entity entity, Level world, float x, float y, float rotation, float renderScale) {
+    public static void renderEntity(PoseStack stack, Entity entity, Level world, float x, float y, float rotation, float renderScale) {
         if (world == null) return;
         float scaledSize;
         Minecraft mc = Minecraft.getInstance();
@@ -47,30 +47,30 @@ public final class RenderUtils {
             scaledSize = 20 / (Math.max(entity.getBbWidth(), entity.getBbHeight()));
         }
         if (mc.player != null) {
-            matrixStack.pushPose();
-            matrixStack.translate(10, 20 * renderScale, 0.5);
-            matrixStack.translate(x, y, 1);
-            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-            matrixStack.translate(0, 0, 100);
-            matrixStack.scale(-(scaledSize * renderScale), (scaledSize * renderScale), 30);
-            matrixStack.mulPose(Vector3f.YP.rotationDegrees(rotation));
-            EntityRenderDispatcher entityrenderermanager = mc.getEntityRenderDispatcher();
-            MultiBufferSource.BufferSource renderTypeBuffer = mc.renderBuffers().bufferSource();
-            entityrenderermanager.render(entity, 0, 0, 0.0D, mc.getFrameTime(), 1, matrixStack, renderTypeBuffer, 15728880);
-            renderTypeBuffer.endBatch();
+            try (var ignored = new CloseablePoseStack(stack)) {
+                stack.translate(10, 20 * renderScale, 0.5);
+                stack.translate(x, y, 1);
+                stack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
+                stack.translate(0, 0, 100);
+                stack.scale(-(scaledSize * renderScale), (scaledSize * renderScale), 30);
+                stack.mulPose(Vector3f.YP.rotationDegrees(rotation));
+                EntityRenderDispatcher entityrenderermanager = mc.getEntityRenderDispatcher();
+                MultiBufferSource.BufferSource renderTypeBuffer = mc.renderBuffers().bufferSource();
+                entityrenderermanager.render(entity, 0, 0, 0.0D, mc.getFrameTime(), 1, stack, renderTypeBuffer, 15728880);
+                renderTypeBuffer.endBatch();
+            }
         }
-        matrixStack.popPose();
     }
 
     public static void drawFluid(PoseStack matrix, int height, int width, FluidStack fluidStack, int x, int y, int blitOffset) {
         Minecraft mc = Minecraft.getInstance();
         bindTexture(InventoryMenu.BLOCK_ATLAS);
-        IFluidTypeRenderProperties props = RenderProperties.get(fluidStack.getFluid());
+        IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluidStack.getFluid());
         TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(props.getStillTexture(fluidStack));
         int remainder = height % 16;
         int splits = (height - remainder) / 16;
         if (remainder != 0) splits++;
-        int fluidColor = props.getColorTint(fluidStack);
+        int fluidColor = props.getTintColor(fluidStack);
 
         RenderSystem.setShaderColor(((fluidColor >> 16) & 0xFF)/ 255.0F, ((fluidColor >> 8) & 0xFF)/ 255.0F, (fluidColor & 0xFF)/ 255.0F,  ((fluidColor >> 24) & 0xFF)/ 255.0F);
         for (int i = 0; i < splits; i++)

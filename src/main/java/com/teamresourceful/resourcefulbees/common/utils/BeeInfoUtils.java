@@ -42,11 +42,11 @@ public final class BeeInfoUtils {
     }
 
     public static Optional<EntityType<?>> getOptionalEntityType(String entityName) {
-         return getResourceLocation(entityName).filter(ForgeRegistries.ENTITIES::containsKey).map(ForgeRegistries.ENTITIES::getValue);
+         return getResourceLocation(entityName).filter(ForgeRegistries.ENTITY_TYPES::containsKey).map(ForgeRegistries.ENTITY_TYPES::getValue);
     }
 
     public static @Nullable EntityType<?> getEntityType(ResourceLocation entityId) {
-        return ForgeRegistries.ENTITIES.getValue(entityId);
+        return ForgeRegistries.ENTITY_TYPES.getValue(entityId);
     }
 
     public static Optional<ResourceLocation> getResourceLocation(String resource) {

@@ -29,9 +29,8 @@ public abstract class MixinBeeEnterHiveGoal {
     @Inject(
         method = "canBeeUse",
         at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/Level;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;",
-            shift = At.Shift.AFTER
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/world/level/Level;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;"
         ),
         cancellable = true
     )

@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.render.tileentity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -17,8 +18,7 @@ public final class BeeHouseSelectionBox {
     }
 
     public static void renderSelectionBox(VertexConsumer consumer, PoseStack poseStack, Vec3 cameraPos, BlockPos blockPos, double offset, boolean shouldFlip) {
-        poseStack.pushPose();
-        {
+        try (var ignored = new CloseablePoseStack(poseStack)) {
             float x = (float)(blockPos.getX() - cameraPos.x());
             float y = (float)(blockPos.getY() - cameraPos.y() - offset);
             float z = (float)(blockPos.getZ() - cameraPos.z());
@@ -116,7 +116,6 @@ public final class BeeHouseSelectionBox {
             renderFromPointToPoint(poseStack, consumer, x, y, z, 0.5625f, 1.375f, 1f, 0.5625f, 1.4f, 1f, shouldFlip);
             renderFromPointToPoint(poseStack, consumer, x, y, z, 0.5625f, 1.375f, 0f, 0.5625f, 1.4f, 0f, shouldFlip);
         }
-        poseStack.popPose();
     }
 
     private static void renderFromPointToPoint(PoseStack poseStack, VertexConsumer consumer, float x, float y, float z, float startX, float startY, float startZ, float endX, float endY, float endZ, boolean flip) {

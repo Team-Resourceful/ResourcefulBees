@@ -31,15 +31,15 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
     }
 
     private void registerWaxedBlocks() {
-        simpleBlockWithItem(ModBlocks.HONEY_GLASS_PLAYER.get(), models().cubeAll("honey_glass_player", mcLoc("block/honey_block_bottom")));
-        simpleBlockWithItem(ModBlocks.HONEY_GLASS.get(), models().cubeAll("honey_glass", mcLoc("block/honey_block_bottom")));
+        simpleBlockWithItem(ModBlocks.HONEY_GLASS_PLAYER.get(), models().cubeAll("honey_glass_player", mcLoc("block/honey_block_bottom")).renderType("translucent"));
+        simpleBlockWithItem(ModBlocks.HONEY_GLASS.get(), models().cubeAll("honey_glass", mcLoc("block/honey_block_bottom")).renderType("translucent"));
         simpleBlockWithItem(ModBlocks.WAXED_PLANKS.get(), models().cubeAll("waxed_planks", modLoc("block/waxed_planks")));
         simpleBlockWithItem(ModBlocks.TRIMMED_WAXED_PLANKS.get(), models().cubeAll("trimmed_waxed_planks", modLoc("block/trimmed_waxed_planks")));
         simpleBlockWithItem(ModBlocks.WAXED_MACHINE_BLOCK.get(), models().cubeAll("waxed_machine_block", modLoc("block/waxed_machine_block")));
         buttonBlockWithItem(ModBlocks.WAXED_BUTTON.get(), modLoc("block/waxed_planks"));
-        //doorBlock(ModBlocks.WAXED_DOOR.get(), modLoc("block/waxed_door_bottom"), modLoc("block/waxed_door_top"));
-        //fenceBlockWithItem(ModBlocks.WAXED_FENCE.get(), modLoc("block/waxed_planks"));
-        //fenceGateBlockWithItem(ModBlocks.WAXED_FENCE_GATE.get(), modLoc("block/waxed_planks"));
+        doorBlock(ModBlocks.WAXED_DOOR.get(), modLoc("block/waxed_door_bottom"), modLoc("block/waxed_door_top"));
+        fenceBlockWithItem(ModBlocks.WAXED_FENCE.get(), modLoc("block/waxed_planks"));
+        fenceGateBlockWithItem(ModBlocks.WAXED_FENCE_GATE.get(), modLoc("block/waxed_planks"));
         preasurePlateBlockWithItem(ModBlocks.WAXED_PRESSURE_PLATE.get(), modLoc("block/waxed_planks"));
         slabBlockWithItem(ModBlocks.WAXED_SLAB.get(), modLoc("block/waxed_planks"));
         trapdoorBlockWithItem(ModBlocks.WAXED_TRAPDOOR.get(), modLoc("block/waxed_trapdoor"));
@@ -64,7 +64,8 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         ModelFile model = models().getBuilder(name)
                 .parent(models().getExistingFile(modLoc("block/beehouse")))
                 .texture("particle", modLoc("block/breeder"))
-                .texture("texture", modLoc("block/breeder"));
+                .texture("texture", modLoc("block/breeder"))
+                .renderType("cutout");
         getVariantBuilder(ModBlocks.BREEDER_BLOCK.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(model)
                 .rotationY(((int)(state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180 ) % 360))
                 .build()

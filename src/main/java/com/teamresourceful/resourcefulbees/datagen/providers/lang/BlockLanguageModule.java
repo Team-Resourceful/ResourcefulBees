@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;
 import net.minecraft.world.level.block.Block;
@@ -33,6 +34,7 @@ public class BlockLanguageModule implements LanguageModule {
         provider.addBlock(ModBlocks.WAXED_TRAPDOOR, "Waxed Trapdoor");
         provider.addBlock(ModBlocks.WAXED_FENCE, "Waxed Fence");
         provider.addBlock(ModBlocks.WAXED_FENCE_GATE, "Waxed Fence Gate");
+        provider.addFluid(ModFluids.HONEY, "Honey");
 
         provider.addBlock(ModBlocks.HONEY_POT, "Honey Pot");
 

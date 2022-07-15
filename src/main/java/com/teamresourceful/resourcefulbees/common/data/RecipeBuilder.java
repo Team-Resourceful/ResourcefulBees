@@ -114,7 +114,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
 
     private BreederRecipe.BreederOutput makeOutput(BeeFamily family) {
         ItemStack childBeeJar = BeeJarIngredient.getBeeJar(family.getChildData().registryID(), family.getChildData().renderData().colorData().jarColor().getValue());
-        return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().renderData().toString()), family.weight(), family.chance());
+        return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().registryID().toString()), family.weight(), family.chance());
     }
 
     private Recipe<?> makeHoneycombRecipe(HoneycombItem comb) {

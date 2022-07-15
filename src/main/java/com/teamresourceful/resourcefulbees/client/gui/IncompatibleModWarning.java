@@ -8,7 +8,7 @@ import net.minecraft.client.gui.screens.DirectJoinServerScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.event.ScreenOpenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.jetbrains.annotations.NotNull;
@@ -28,10 +28,10 @@ public final class IncompatibleModWarning {
         MinecraftForge.EVENT_BUS.addListener(IncompatibleModWarning::guiOpened);
     }
 
-    private static void guiOpened(ScreenOpenEvent event) {
+    private static void guiOpened(ScreenEvent.Opening event) {
         Screen curr = event.getScreen();
         if (isPerformantLoaded && !hasBeenShownOnce && (curr instanceof SelectWorldScreen || curr instanceof DirectJoinServerScreen) && Boolean.FALSE.equals(CommonConfig.BYPASS_PERFORMANT_CHECK.get())) {
-            event.setScreen(new ModWarningScreen(curr));
+            event.setNewScreen(new ModWarningScreen(curr));
             hasBeenShownOnce = true;
         }
     }

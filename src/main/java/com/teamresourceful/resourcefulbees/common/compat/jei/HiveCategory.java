@@ -102,18 +102,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
         else this.hiveBackground.draw(stack);
     }
 
-    public static class Recipe {
-        private final ItemStack comb;
-        private final EntityType<?> entityType;
-        private final List<ItemStack> hives;
-        private final boolean isApiary;
-
-        public Recipe(ItemStack comb, List<ItemStack> hives, EntityType<?> entityType, boolean isApiary) {
-            this.comb = comb;
-            this.entityType = entityType;
-            this.hives = hives;
-            this.isApiary = isApiary;
-        }
+    public record Recipe(ItemStack comb, List<ItemStack> hives, EntityType<?> entityType, boolean isApiary) {
 
         public Recipe(ItemStack comb, ItemStack hive, EntityType<?> entityType, boolean isApiary) {
             this(comb,Collections.singletonList(hive), entityType, isApiary);

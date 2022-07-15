@@ -22,11 +22,10 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -38,15 +37,14 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.client.event.DrawSelectionEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
+import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegistryObject;
 
 public final class ClientEventHandlers {
 
@@ -58,13 +56,12 @@ public final class ClientEventHandlers {
     private static boolean setupsDone = false;
 
     public static void clientStuff() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::registerModels);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::onAddAdditional);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::onModelBake);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::clientSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::addLayers);
-        //MinecraftForge.EVENT_BUS.addListener(FluidRender::honeyOverlay);
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
@@ -73,7 +70,7 @@ public final class ClientEventHandlers {
         Sheets.addWoodType(ModBlocks.WAXED_WOOD_TYPE);
     }
 
-    public static void onBlockHighlight(DrawSelectionEvent.HighlightBlock event) {
+    public static void onBlockHighlight(RenderHighlightEvent.Block event) {
         BlockState state = event.getCamera().getEntity().level.getBlockState(event.getTarget().getBlockPos());
         if (state.getBlock() instanceof BeeHouseBlock || state.getBlock() instanceof BeeHouseTopBlock) {
             event.setCanceled(true);
@@ -120,7 +117,6 @@ public final class ClientEventHandlers {
                         manager -> new CustomBeeRenderer<>(manager, BeeRegistry.getRegistry().getBeeData(s).renderData())));
 
         registerScreens();
-        registerRenderTypes();
 
         ItemModelPropertiesHandler.registerProperties();
         registerTERs();
@@ -132,24 +128,6 @@ public final class ClientEventHandlers {
         BlockEntityRenderers.register(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), RenderSolidificationChamber::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.WAXED_SIGN_ENTITY.get(), SignRenderer::new);
-    }
-
-    private static void registerRenderTypes() {
-        //TODO Wait for render_type to be added into model jsons to remove this.
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.GOLD_FLOWER.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ENDER_BEECON.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.SOLIDIFICATION_CHAMBER.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WAXED_DOOR.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.WAXED_TRAPDOOR.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.HONEY_GLASS.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.HONEY_GLASS_PLAYER.get(), RenderType.translucent());
-
-        // bee nests need cutout for overlay
-        ModBlocks.HIVES.getEntries().stream()
-                .filter(RegistryObject::isPresent)
-                .map(RegistryObject::get)
-                .forEach(nest -> ItemBlockRenderTypes.setRenderLayer(nest, RenderType.cutout()));
     }
 
     private static void registerScreens() {

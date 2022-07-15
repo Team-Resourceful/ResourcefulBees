@@ -13,9 +13,9 @@ import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModItemTagProv
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModPoiTagProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid = ResourcefulBees.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ResourcefulBeesDataGenerator {

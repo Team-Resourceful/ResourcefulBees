@@ -18,6 +18,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -26,6 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
@@ -46,22 +48,24 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
 
     public static List<Recipe> getFlowersRecipes() {
         List<Recipe> recipes = new ArrayList<>();
-        BEE_REGISTRY.getBees().forEach(((s, beeData) -> {
+        BEE_REGISTRY.getBees().forEach((s, beeData) -> {
             if (beeData.coreData().blockFlowers().size() > 0) {
                 Set<ItemStack> stacks = new HashSet<>();
                 Set<FluidStack> fluids = new HashSet<>();
 
-                beeData.coreData().blockFlowers().forEach(block -> {
-                    if (block.isBound()) {
-                        if (block.value() instanceof LiquidBlock liquidBlock) {
-                            fluids.add(new FluidStack(liquidBlock.getFluid().getSource(), 1000));
-                        } else if (block.value().asItem() != Items.AIR) {
-                            stacks.add(block.value().asItem().getDefaultInstance());
+                beeData.coreData()
+                    .blockFlowers()
+                    .stream()
+                    .filter(Holder::isBound)
+                    .map(Holder::value)
+                    .forEach(value -> {
+                        if (value instanceof LiquidBlock liquid) {
+                            fluids.add(new FluidStack(liquid.getFluid(), 1000));
                         } else {
-                            stacks.add(getErrorItem(block.value()));
+                            Item item = value.asItem();
+                            stacks.add(item != Items.AIR ? new ItemStack(value.asItem()) : getErrorItem(value));
                         }
-                    }
-                });
+                    });
 
                 if (!stacks.isEmpty()){
                     recipes.add(Recipe.getItemRecipe(beeData, stacks));
@@ -72,7 +76,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
             } else if (beeData.coreData().isEntityPresent()){
                 recipes.add(Recipe.getEntityRecipe(beeData, beeData.coreData().entityFlower()));
             }
-        }));
+        });
         return recipes;
     }
 
@@ -83,53 +87,22 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
                 .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeData.getEntityType(), 45.0f))
                 .setSlotName("bee");
 
-        IRecipeSlotBuilder flower = builder
-                .addSlot(RecipeIngredientRole.INPUT, 41, 55)
-                .setSlotName("flower");
-
-        recipe.getFluidStacks().ifPresent(stacks -> flower.addIngredients(ForgeTypes.FLUID_STACK, new ArrayList<>(stacks)));
-        recipe.getItemStacks().ifPresent(stacks -> flower.addIngredients(VanillaTypes.ITEM_STACK, new ArrayList<>(stacks)));
-        recipe.getEntityType().ifPresent(entity -> flower.addIngredients(JEICompat.ENTITY_INGREDIENT, new ArrayList<>(entity)));
+        recipe.builder.accept(builder.addSlot(RecipeIngredientRole.INPUT, 41, 55).setSlotName("flower"));
     }
 
-    static class Recipe {
-        private Set<FluidStack> fluids;
-        private Set<ItemStack> items;
-        private Set<EntityIngredient> entityType;
-        private final CustomBeeData beeData;
-
-        public Recipe(CustomBeeData beeData){
-            this.beeData = beeData;
-        }
+    record Recipe(CustomBeeData beeData, Consumer<IRecipeSlotBuilder> builder) {
 
         public static Recipe getFluidRecipe(CustomBeeData beeData, Set<FluidStack> fluids){
-            Recipe recipe = new Recipe(beeData);
-            recipe.fluids = fluids;
-            return recipe;
+            return new Recipe(beeData, slot -> slot.addIngredients(ForgeTypes.FLUID_STACK, new ArrayList<>(fluids)));
         }
 
         public static Recipe getItemRecipe(CustomBeeData beeData, Set<ItemStack> items){
-            Recipe recipe = new Recipe(beeData);
-            recipe.items = items;
-            return recipe;
+            return new Recipe(beeData, slot -> slot.addIngredients(VanillaTypes.ITEM_STACK, new ArrayList<>(items)));
         }
 
         public static Recipe getEntityRecipe(CustomBeeData beeData, HolderSet<EntityType<?>> entityType){
-            Recipe recipe = new Recipe(beeData);
-            recipe.entityType = entityType.stream().filter(Holder::isBound).map(Holder::value).map(e -> new EntityIngredient(e, 45f)).collect(Collectors.toSet());
-            return recipe;
-        }
-
-        public Optional<Set<FluidStack>> getFluidStacks() {
-            return Optional.ofNullable(fluids);
-        }
-
-        public Optional<Set<ItemStack>> getItemStacks() {
-            return Optional.ofNullable(items);
-        }
-
-        public Optional<Set<EntityIngredient>> getEntityType() {
-            return Optional.ofNullable(entityType);
+            var entityTypes = entityType.stream().filter(Holder::isBound).map(Holder::value).map(e -> new EntityIngredient(e, 45f)).collect(Collectors.toSet());
+            return new Recipe(beeData, slot -> slot.addIngredients(JEICompat.ENTITY_INGREDIENT, new ArrayList<>(entityTypes)));
         }
     }
 }

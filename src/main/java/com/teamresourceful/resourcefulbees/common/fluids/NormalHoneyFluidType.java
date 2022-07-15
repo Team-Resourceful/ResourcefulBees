@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.fluids;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Rarity;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.FluidType;
 
@@ -26,7 +26,7 @@ public class NormalHoneyFluidType extends FluidType {
     }
 
     @Override
-    public void initializeClient(Consumer<IFluidTypeRenderProperties> consumer) {
+    public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
         consumer.accept(NormalHoneyRenderProperties.INSTANCE);
     }
 }
