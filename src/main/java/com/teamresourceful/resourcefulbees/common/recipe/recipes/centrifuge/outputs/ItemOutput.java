@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Unmodifiable;
 
 @Unmodifiable
-public class ItemOutput extends AbstractOutput {
+public class ItemOutput implements AbstractOutput {
 
     public static final Codec<ItemOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ItemStackCodec.CODEC.fieldOf("item").orElse(ItemStack.EMPTY).forGetter(ItemOutput::getItemStack),
@@ -19,9 +19,10 @@ public class ItemOutput extends AbstractOutput {
     public static final ItemOutput EMPTY = new ItemOutput(ItemStack.EMPTY, 0);
 
     protected final ItemStack itemStack;
+    protected final double weight;
 
     public ItemOutput(ItemStack itemStack, double weight) {
-        super(weight);
+        this.weight = weight;
         this.itemStack = itemStack;
     }
 
@@ -35,6 +36,11 @@ public class ItemOutput extends AbstractOutput {
 
     public int getCount() {
         return itemStack.getCount();
+    }
+
+    @Override
+    public double getWeight() {
+        return 0;
     }
 
     @Override

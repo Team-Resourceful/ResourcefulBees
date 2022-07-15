@@ -10,7 +10,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Unmodifiable;
 
 @Unmodifiable
-public class FluidOutput extends AbstractOutput {
+public class FluidOutput implements AbstractOutput {
 
     public static final Codec<FluidOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             CodecUtils.FLUID_STACK_CODEC.fieldOf("fluid").orElse(FluidStack.EMPTY).forGetter(FluidOutput::getFluidStack),
@@ -20,9 +20,10 @@ public class FluidOutput extends AbstractOutput {
     public static final FluidOutput EMPTY = new FluidOutput(FluidStack.EMPTY, 0);
 
     private final FluidStack fluid;
+    private final double weight;
 
     public FluidOutput(FluidStack fluid, double weight) {
-        super(weight);
+        this.weight = weight;
         this.fluid = fluid;
     }
 
@@ -40,6 +41,11 @@ public class FluidOutput extends AbstractOutput {
 
     public Fluid getFluid() {
         return fluid.getFluid();
+    }
+
+    @Override
+    public double getWeight() {
+        return weight;
     }
 
     @Override
