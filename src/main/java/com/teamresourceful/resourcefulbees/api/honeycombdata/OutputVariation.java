@@ -36,8 +36,8 @@ public record OutputVariation(String id,
     private static OutputVariation of(String identifier, Map<BeehiveTier, ItemStack> hiveCombs, Map<ApiaryTier, ItemStack> apiaryCombs, Optional<ItemStack> defaultComb, Optional<ItemStack> defaultCombBlock) {
         defaultComb.ifPresent(comb -> comb.setCount(1));
         defaultCombBlock.ifPresent(block -> block.setCount(1));
-        hiveCombs = fixHiveCombs(new EnumMap<>(hiveCombs), defaultComb);
-        apiaryCombs = fixApiaryCombs(identifier, new EnumMap<>(apiaryCombs), defaultComb, defaultCombBlock);
+        hiveCombs = fixHiveCombs(hiveCombs, defaultComb);
+        apiaryCombs = fixApiaryCombs(identifier, apiaryCombs, defaultComb, defaultCombBlock);
         return new OutputVariation(identifier, hiveCombs, apiaryCombs, defaultComb, defaultCombBlock);
     }
 
@@ -62,7 +62,7 @@ public record OutputVariation(String id,
             if (comb != null) { lastStack = comb; continue; }
             hiveCombs.put(tier, lastStack);
         }
-        return Collections.unmodifiableMap(hiveCombs);
+        return Collections.unmodifiableMap(new EnumMap<>(hiveCombs));
     }
 
     /**
@@ -89,7 +89,7 @@ public record OutputVariation(String id,
             }
             apiaryCombs.put(tier, lastStack);
         }
-        return Collections.unmodifiableMap(apiaryCombs);
+        return Collections.unmodifiableMap(new EnumMap<>(apiaryCombs));
     }
 
     private static void checkDefaultsAreOK(String id, Optional<ItemStack> defaultComb, Optional<ItemStack> defaultCombBlock) {

@@ -8,6 +8,7 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +26,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         tag(ModTags.Blocks.WAX).add(ModBlocks.WAX_BLOCK.get());
         tag(ModTags.Blocks.MUSHROOM).add(Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM);
         //noinspection unchecked
-        tag(net.minecraftforge.common.Tags.Blocks.STORAGE_BLOCKS).addTags(ModTags.Blocks.WAX);
+        tag(Tags.Blocks.STORAGE_BLOCKS).addTags(ModTags.Blocks.WAX);
         TagAppender<Block> hiveBuilder = tag(BlockTags.BEEHIVES);
         ModBlocks.HIVES.getEntries().stream().map(RegistryObject::get).forEach(hiveBuilder::add);
         ModBlocks.APIARIES.getEntries().stream().map(RegistryObject::get).forEach(hiveBuilder::add);

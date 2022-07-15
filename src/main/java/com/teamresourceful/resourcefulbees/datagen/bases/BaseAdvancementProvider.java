@@ -1,7 +1,5 @@
 package com.teamresourceful.resourcefulbees.datagen.bases;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
@@ -27,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class BaseAdvancementProvider implements DataProvider {
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
+
     public static final String TRANSLATIONS_PREFIX = "advancements.resourcefulbees.";
     public static final String TITLE_SUFFIX = ".title";
     public static final String DESCRIPTION_SUFFIX = ".description";
