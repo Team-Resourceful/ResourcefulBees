@@ -93,7 +93,7 @@ public class HoneycombRegistry {
     }
 
     private static void computeVariation(OutputVariation variation) {
-        VARIATION_DATA.compute(variation.getIdentifier(), (s1, outputVariation1) -> variation);
+        VARIATION_DATA.compute(variation.id(), (s1, outputVariation1) -> variation);
     }
 
     //endregion
