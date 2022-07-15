@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.registry.dynamic.SpawnerRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
 import net.minecraft.core.BlockPos;
@@ -153,7 +153,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
                         .map(data -> data.type)
                         .filter(type -> type instanceof CustomBeeEntityType<?>)
                         .map(type -> (CustomBeeEntityType<?>) type)
-                        .filter(bee -> SpawnerRegistry.getData(bee.getBeeType()).yLevel().isValueInRange(nestPos.getY()))
+                        .filter(bee -> ModSpawnData.getData(level, bee.getBeeType()).canSpawnAtY(nestPos.getY()))
                         .ifPresentOrElse(bee -> addBeeToNest(bee, rand, nest), () -> logMissingBiome(holder.unwrapKey().orElse(null)));
             }
         }

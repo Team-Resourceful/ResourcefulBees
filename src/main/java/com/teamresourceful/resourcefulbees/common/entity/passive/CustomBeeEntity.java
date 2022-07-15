@@ -18,7 +18,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.dynamic.SpawnerRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
@@ -223,11 +223,11 @@ public class CustomBeeEntity extends Bee implements ICustomBee, IAnimatable, IBe
         this.hasHiveInRange = hasHiveInRange;
     }
 
-    public static boolean canBeeSpawn(String beeType, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos) {
+    public static boolean canBeeSpawn(String beeType, LevelAccessor level, MobSpawnType reason, BlockPos pos) {
         switch (reason) {
             case NATURAL, CHUNK_GENERATION -> {
-                SpawnData data = SpawnerRegistry.getData(beeType);
-                return data.yLevel().isValueInRange(pos.getY()) && data.lightLevel().canSpawn(worldIn, pos);
+                SpawnData data = ModSpawnData.getData(level, beeType);
+                return data.canSpawnAtY(pos.getY()) && data.lightLevel().canSpawn(level, pos);
             }
         }
         return true;
