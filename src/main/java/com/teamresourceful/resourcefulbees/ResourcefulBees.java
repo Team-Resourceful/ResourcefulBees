@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
-import com.teamresourceful.resourcefulbees.client.gui.IncompatibleModWarning;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
 import com.teamresourceful.resourcefulbees.common.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
@@ -67,8 +66,6 @@ public class ResourcefulBees {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
 
         ConfigLoader.load(CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
-
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> IncompatibleModWarning::init);
 
         HoneycombSetup.setupHoneycombs();
 
