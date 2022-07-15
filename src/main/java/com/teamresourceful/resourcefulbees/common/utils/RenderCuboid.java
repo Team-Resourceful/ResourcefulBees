@@ -5,15 +5,17 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 
 public class RenderCuboid {
-    private static final Vector3f VEC_ZERO = new Vector3f(0.0F, 0.0F, 0.0F);
-
 
     private static Vector3f withValue(Vector3f vector, Direction.Axis axis, float value) {
         return switch (axis) {
@@ -23,7 +25,7 @@ public class RenderCuboid {
         };
     }
 
-    public static double getValue(Vector3f vector, Direction.Axis axis) {
+    public static double getValue(Vec3 vector, Direction.Axis axis) {
         return switch (axis) {
             case X -> vector.x();
             case Y -> vector.y();
@@ -31,10 +33,15 @@ public class RenderCuboid {
         };
     }
 
-    public static void renderCube(CubeModel cube, PoseStack matrix, VertexConsumer buffer, int argb, int light, int overlay) {
-        Vector3f size = cube.getSize();
+    public static void renderCube(Vec3 start, Vec3 end, ResourceLocation texture, PoseStack matrix, VertexConsumer buffer, int argb, int light, int overlay) {
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(texture);
+        renderCube(start, end, sprite, matrix, buffer, argb, light, overlay);
+    }
+
+    public static void renderCube(Vec3 start, Vec3 end, TextureAtlasSprite sprite, PoseStack matrix, VertexConsumer buffer, int argb, int light, int overlay) {
+        Vec3 size = end.subtract(start);
         matrix.pushPose();
-        matrix.translate(cube.getStart().x(), cube.getStart().y(), cube.getStart().z());
+        matrix.translate(start.x(), start.y(), start.z());
         PoseStack.Pose lastMatrix = matrix.last();
         Matrix4f matrix4f = lastMatrix.pose();
         Matrix3f normal = lastMatrix.normal();
@@ -42,7 +49,6 @@ public class RenderCuboid {
 
         for (Direction direction : directions) {
             Direction face = direction;
-            TextureAtlasSprite sprite = cube.sprites[face.ordinal()];
             if (sprite != null) {
                 Direction.Axis u = face.getAxis() == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
                 Direction.Axis v = face.getAxis() == Direction.Axis.Y ? Direction.Axis.Z : Direction.Axis.Y;
@@ -89,7 +95,7 @@ public class RenderCuboid {
     private static void renderPoint(Matrix4f matrix4f, Matrix3f normal, VertexConsumer buffer, Direction face, Direction.Axis u, Direction.Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV, int color, int light, int overlay) {
         int uArray = minU ? 0 : 1;
         int vArray = minV ? 2 : 3;
-        Vector3f vertex = withValue(VEC_ZERO, u, xyz[uArray]);
+        Vector3f vertex = withValue(Vector3f.ZERO, u, xyz[uArray]);
         vertex = withValue(vertex, v, xyz[vArray]);
         vertex = withValue(vertex, face.getAxis(), other);
         Vec3i normalForFace = face.getNormal();

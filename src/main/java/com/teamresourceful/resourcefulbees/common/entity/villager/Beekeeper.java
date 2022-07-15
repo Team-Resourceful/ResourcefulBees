@@ -6,10 +6,14 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModVillagerProfessions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 
 import java.util.List;
@@ -31,8 +35,8 @@ public final class Beekeeper {
         if (event.getType() == ModVillagerProfessions.BEEKEEPER.get()) {
             ItemStack queenBeeBanner = new ItemStack(Items.BLACK_BANNER);
             CompoundTag compoundnbt = queenBeeBanner.getOrCreateTagElement("BlockEntityTag");
-            //ListTag listnbt = new BannerPattern.Builder().addPattern(BannerPattern.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).addPattern(BannerPattern.STRIPE_DOWNRIGHT, DyeColor.YELLOW).addPattern(BannerPattern.STRIPE_DOWNLEFT, DyeColor.YELLOW).addPattern(BannerPattern.STRIPE_BOTTOM, DyeColor.YELLOW).addPattern(BannerPattern.TRIANGLE_TOP, DyeColor.YELLOW).addPattern(BannerPattern.CURLY_BORDER, DyeColor.YELLOW).toListTag();
-            //compoundnbt.put("Patterns", listnbt);
+            ListTag listnbt = new BannerPattern.Builder().addPattern(BannerPatterns.RHOMBUS_MIDDLE, DyeColor.LIGHT_BLUE).addPattern(BannerPatterns.STRIPE_DOWNRIGHT, DyeColor.YELLOW).addPattern(BannerPatterns.STRIPE_DOWNLEFT, DyeColor.YELLOW).addPattern(BannerPatterns.STRIPE_BOTTOM, DyeColor.YELLOW).addPattern(BannerPatterns.TRIANGLE_TOP, DyeColor.YELLOW).addPattern(BannerPatterns.CURLY_BORDER, DyeColor.YELLOW).toListTag();
+            compoundnbt.put("Patterns", listnbt);
             queenBeeBanner.setHoverName(TranslationConstants.Items.QUEEN_BEE_BANNER.withStyle(ChatFormatting.GOLD));
             queenBeeBanner.setCount(1);
 

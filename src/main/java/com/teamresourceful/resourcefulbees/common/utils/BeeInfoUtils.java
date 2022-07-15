@@ -24,7 +24,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Optional;
 
 public final class BeeInfoUtils {
@@ -53,10 +52,9 @@ public final class BeeInfoUtils {
         return Optional.ofNullable(ResourceLocation.tryParse(resource));
     }
 
-    public static void flagBeesInRange(BlockPos pos, Level world) {
-        if (world != null) {
-            List<CustomBeeEntity> list = world.getEntitiesOfClass(CustomBeeEntity.class, new AABB(pos).inflate(10));
-            list.forEach(customBeeEntity -> customBeeEntity.setHasHiveInRange(true));
+    public static void flagBeesInRange(BlockPos pos, Level level) {
+        if (level != null) {
+            level.getEntitiesOfClass(CustomBeeEntity.class, new AABB(pos).inflate(10)).forEach(bee -> bee.setHasHiveInRange(true));
         }
     }
 
