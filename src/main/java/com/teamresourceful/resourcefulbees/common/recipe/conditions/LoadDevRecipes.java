@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
-public class LoadDevRecipes implements ICondition {
+public final class LoadDevRecipes implements ICondition {
 
     public static final LoadDevRecipes INSTANCE = new LoadDevRecipes();
     private static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "dev_recipes");
