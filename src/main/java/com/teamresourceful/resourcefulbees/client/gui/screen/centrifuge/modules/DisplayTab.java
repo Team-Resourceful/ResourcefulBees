@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.BaseCentrifugeScreen;
-import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 

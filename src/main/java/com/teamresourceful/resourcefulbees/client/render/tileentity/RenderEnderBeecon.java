@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
-import com.teamresourceful.resourcefulbees.common.utils.RenderCuboid;
+import com.teamresourceful.resourcefulbees.client.utils.RenderCuboid;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BeaconRenderer;

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;

@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGenerator
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

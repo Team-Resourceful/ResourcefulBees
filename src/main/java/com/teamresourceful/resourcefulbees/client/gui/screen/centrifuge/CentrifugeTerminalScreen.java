@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.terminal.TerminalInputsModule;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.terminal.TerminalOutputsModule;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeTerminalContainer;
-import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.apache.commons.lang3.tuple.Pair;

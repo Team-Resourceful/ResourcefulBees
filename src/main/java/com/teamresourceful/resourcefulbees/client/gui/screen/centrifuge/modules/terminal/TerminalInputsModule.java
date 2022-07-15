@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.OutputLocations;
-import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -21,8 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Set;
 
-import static com.teamresourceful.resourcefulbees.common.utils.RenderUtils.TERMINAL_FONT_12;
-import static com.teamresourceful.resourcefulbees.common.utils.RenderUtils.TERMINAL_FONT_8;
+import static com.teamresourceful.resourcefulbees.client.utils.RenderUtils.TERMINAL_FONT_12;
+import static com.teamresourceful.resourcefulbees.client.utils.RenderUtils.TERMINAL_FONT_8;
 
 public class TerminalInputsModule extends AbstractTerminalModule<CentrifugeTerminalScreen> {
 

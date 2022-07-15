@@ -1,10 +1,11 @@
-package com.teamresourceful.resourcefulbees.common.utils;
+package com.teamresourceful.resourcefulbees.client.utils;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
@@ -15,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 
-public class RenderCuboid {
+public final class RenderCuboid {
 
     private static Vector3f withValue(Vector3f vector, Direction.Axis axis, float value) {
         return switch (axis) {
@@ -103,6 +104,10 @@ public class RenderCuboid {
         Vector3f norm = new Vector3f(normalForFace.getX() + adjustment, normalForFace.getY() + adjustment, normalForFace.getZ() + adjustment);
         norm.normalize();
         buffer.vertex(matrix4f, vertex.x(), vertex.y(), vertex.z()).color(color).uv(uv[uArray], uv[vArray]).overlayCoords(overlay).uv2(light).normal(normal, norm.x(), norm.y(), norm.z()).endVertex();
+    }
+
+    private RenderCuboid() {
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 }
 

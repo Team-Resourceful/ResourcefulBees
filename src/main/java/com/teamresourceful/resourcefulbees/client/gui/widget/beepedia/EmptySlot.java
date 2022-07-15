@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.widget.beepedia;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaImages;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipWidget;
-import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
