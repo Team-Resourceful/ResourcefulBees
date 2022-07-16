@@ -40,7 +40,7 @@ public class ItemOutput implements AbstractOutput {
 
     @Override
     public double getWeight() {
-        return 0;
+        return weight;
     }
 
     @Override

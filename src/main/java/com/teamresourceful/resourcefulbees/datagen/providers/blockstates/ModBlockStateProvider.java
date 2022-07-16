@@ -28,6 +28,8 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         simpleBlock(ModBlocks.BEEHOUSE_TOP.get(), models().sign("bee_house_top", modLoc("block/apiary/t1_apiary")));
         simpleBlockWithItem(ModBlocks.BEE_BOX.get(), models().cubeBottomTop("bee_box", modLoc("block/bee_box_side"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top")));
         simpleBlockWithItem(ModBlocks.BEE_BOX_TEMP.get(), models().cubeBottomTop("bee_box_temp", modLoc("block/bee_box_side_temp"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top_temp")));
+        simpleBlock(ModBlocks.CREATIVE_GEN.get(), cubeAll(ModBlocks.CREATIVE_GEN.get()));
+        simpleBlockWithItem(ModBlocks.GOLD_FLOWER.get(), models().cross(id(ModBlocks.GOLD_FLOWER.get()), modLoc("block/gold_flower")));
     }
 
     private void registerWaxedBlocks() {
@@ -44,7 +46,8 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         slabBlockWithItem(ModBlocks.WAXED_SLAB.get(), modLoc("block/waxed_planks"));
         trapdoorBlockWithItem(ModBlocks.WAXED_TRAPDOOR.get(), modLoc("block/waxed_trapdoor"));
         stairBlockWithItem(ModBlocks.WAXED_STAIRS.get(), modLoc("block/waxed_planks"));
-        this.signBlock(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get(), modLoc("block/waxed_planks"));
+        signBlock(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get(), modLoc("block/waxed_planks"));
+        simpleBlockWithItem(ModBlocks.WAX_BLOCK.get(), cubeAll(ModBlocks.WAX_BLOCK.get()));
     }
 
     private void registerApiary(RegistryObject<Block> registryObject) {
@@ -57,6 +60,7 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
                 .rotationY(((int)(state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180 ) % 360))
                 .build()
         );
+        this.simpleBlockItem(registryObject.get(), model);
     }
 
     private void registerBreeder() {
@@ -70,6 +74,7 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
                 .rotationY(((int)(state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180 ) % 360))
                 .build()
         );
+        this.simpleBlockItem(ModBlocks.BREEDER_BLOCK.get(), model);
     }
 
     private void registerNest(RegistryObject<Block> registryObject) {
