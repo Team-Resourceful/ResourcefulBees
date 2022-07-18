@@ -65,7 +65,7 @@ public class EntityIngredient {
                 tooltip.add(TranslationConstants.Jei.CLICK_INFO.withStyle(ChatFormatting.GOLD));
             }
             if (Minecraft.getInstance().options.advancedItemTooltips) {
-                ResourceLocation key = ForgeRegistries.ENTITIES.getKey(entityType);
+                ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(entityType);
                 if (key != null) {
                     tooltip.add(Component.literal(key.toString()).withStyle(ChatFormatting.DARK_GRAY));
                 }
@@ -76,7 +76,7 @@ public class EntityIngredient {
 
     @Override
     public String toString() {
-        ResourceLocation key = ForgeRegistries.ENTITIES.getKey(entityType);
+        ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(entityType);
         return key != null ? key.toString() : entityType.toString();
     }
 }

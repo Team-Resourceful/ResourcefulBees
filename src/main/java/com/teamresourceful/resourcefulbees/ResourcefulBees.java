@@ -1,11 +1,9 @@
 package com.teamresourceful.resourcefulbees;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
-import com.teamresourceful.resourcefulbees.api.spawndata.SpawnData;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
-import com.teamresourceful.resourcefulbees.client.gui.IncompatibleModWarning;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
 import com.teamresourceful.resourcefulbees.common.capabilities.Capabilities;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
@@ -23,8 +21,6 @@ import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngre
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.NBTAmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.*;
-import com.teamresourceful.resourcefulbees.common.registry.dynamic.SpawnerRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.dynamic.base.DynamicRegistryListener;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPotions;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +29,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -72,12 +67,7 @@ public class ResourcefulBees {
 
         ConfigLoader.load(CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> IncompatibleModWarning::init);
-
-        //BiomeDictionary.build();
-
         HoneycombSetup.setupHoneycombs();
-        //HoneycombRegistry.registerHoneycombItems();
 
         BeeSetup.setupBees();
         RegistryHandler.registerDynamicBees();
@@ -104,11 +94,6 @@ public class ResourcefulBees {
     }
 
     @SubscribeEvent
-    public void onAddReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(new DynamicRegistryListener<>(SpawnerRegistry.INSTANCE, SpawnData.CODEC, "resourcefulbees/spawndata"));
-    }
-
-    @SubscribeEvent
     public void serverLoaded(ServerStartedEvent event) {
         if (event.getServer().isDedicatedServer()){
             BeeRegistry.getRegistry().regenerateCustomBeeData(event.getServer().registryAccess());
@@ -131,7 +116,7 @@ public class ResourcefulBees {
     @SubscribeEvent
     public void cloneEvent(PlayerEvent.Clone event) {
         event.getOriginal().getCapability(Capabilities.BEEPEDIA_DATA).ifPresent(cap ->
-                event.getPlayer().getCapability(Capabilities.BEEPEDIA_DATA).ifPresent(c -> c.deserializeNBT(cap.serializeNBT())));
+                event.getEntity().getCapability(Capabilities.BEEPEDIA_DATA).ifPresent(c -> c.deserializeNBT(cap.serializeNBT())));
     }
 
     @SubscribeEvent

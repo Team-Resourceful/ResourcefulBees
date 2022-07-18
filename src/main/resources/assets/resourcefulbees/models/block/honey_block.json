@@ -1,4 +1,5 @@
 {
+  "render_type": "translucent",
   "parent": "block/block",
   "textures": {
     "particle": "resourcefulbees:block/honey_block_top",

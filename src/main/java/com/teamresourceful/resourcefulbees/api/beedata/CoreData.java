@@ -6,6 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
+import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
@@ -47,10 +49,10 @@ public record CoreData(String name, String honeycomb, HolderSet<Block> blockFlow
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(name),
                 Codec.STRING.fieldOf("honeycombVariation").orElse("").forGetter(CoreData::honeycomb),
-                TagAndListSetCodec.of(Registry.BLOCK).fieldOf("flower").orElse(HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY)).forGetter(CoreData::blockFlowers),
-                TagAndListSetCodec.of(Registry.ENTITY_TYPE).fieldOf("entityFlower").orElse(HolderSet.direct()).forGetter(CoreData::entityFlower),
+                HolderSetCodec.of(Registry.BLOCK).fieldOf("flower").orElse(HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY)).forGetter(CoreData::blockFlowers),
+                HolderSetCodec.of(Registry.ENTITY_TYPE).fieldOf("entityFlower").orElse(HolderSet.direct()).forGetter(CoreData::entityFlower),
                 Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(CoreData::maxTimeInHive),
-                CodecUtils.passthrough(Component.Serializer::toJsonTree, Component.Serializer::fromJson).listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(CoreData::lore)
+                CodecExtras.passthrough(Component.Serializer::toJsonTree, Component.Serializer::fromJson).listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(CoreData::lore)
         ).apply(instance, CoreData::new));
     }
 

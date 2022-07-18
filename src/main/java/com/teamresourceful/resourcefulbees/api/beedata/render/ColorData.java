@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.render;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.utils.color.Color;
+import com.teamresourceful.resourcefullib.common.color.Color;
 
 public record ColorData(Color spawnEggPrimaryColor, Color spawnEggSecondaryColor, Color jarColor) {
 

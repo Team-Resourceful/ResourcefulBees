@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.utils.color.Color;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -93,7 +93,7 @@ public class HoneycombRegistry {
     }
 
     private static void computeVariation(OutputVariation variation) {
-        VARIATION_DATA.compute(variation.getIdentifier(), (s1, outputVariation1) -> variation);
+        VARIATION_DATA.compute(variation.id(), (s1, outputVariation1) -> variation);
     }
 
     //endregion

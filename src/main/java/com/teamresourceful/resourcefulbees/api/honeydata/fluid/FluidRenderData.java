@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.api.honeydata.fluid;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.utils.color.Color;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.resources.ResourceLocation;
 
 public record FluidRenderData(Color color, ResourceLocation still, ResourceLocation flowing, ResourceLocation overlay) {

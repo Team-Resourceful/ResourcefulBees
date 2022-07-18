@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.common.fluids;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import org.jetbrains.annotations.Nullable;
 
-public class NormalHoneyRenderProperties implements IFluidTypeRenderProperties {
+public class NormalHoneyRenderProperties implements IClientFluidTypeExtensions {
 
     public static final ResourceLocation FLUID_STILL = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/honey_still");
     public static final ResourceLocation FLUID_FLOWING = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/honey_flow");

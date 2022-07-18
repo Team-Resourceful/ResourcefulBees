@@ -5,15 +5,15 @@ import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.RecipeManagerAccessor;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -114,7 +114,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
 
     private BreederRecipe.BreederOutput makeOutput(BeeFamily family) {
         ItemStack childBeeJar = BeeJarIngredient.getBeeJar(family.getChildData().registryID(), family.getChildData().renderData().colorData().jarColor().getValue());
-        return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().renderData().toString()), family.weight(), family.chance());
+        return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().registryID().toString()), family.weight(), family.chance());
     }
 
     private Recipe<?> makeHoneycombRecipe(HoneycombItem comb) {

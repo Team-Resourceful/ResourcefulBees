@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.common.fluids;
 import com.teamresourceful.resourcefulbees.api.honeydata.fluid.FluidRenderData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import org.jetbrains.annotations.Nullable;
 
-public class HoneyFluidRenderProperties implements IFluidTypeRenderProperties {
+public class HoneyFluidRenderProperties implements IClientFluidTypeExtensions {
 
     private final FluidRenderData data;
 
@@ -15,7 +15,7 @@ public class HoneyFluidRenderProperties implements IFluidTypeRenderProperties {
     }
 
     @Override
-    public int getColorTint() {
+    public int getTintColor() {
         return data.color().getValue() | 0xff000000;
     }
 

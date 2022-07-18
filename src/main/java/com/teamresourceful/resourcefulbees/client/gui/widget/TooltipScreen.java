@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.common.utils.color.Color;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;

@@ -25,6 +25,7 @@ public final class LangGeneration {
     public static final String ITEM_RESOURCEFULBEES = "item.resourcefulbees.";
     public static final String BLOCK_RESOURCEFULBEES = "block.resourcefulbees.";
     public static final String ENTITY_RESOURCEFULBEES = "entity.resourcefulbees.";
+    public static final String FLUID_RESOURCEFULBEES = "fluid_type.resourcefulbees.";
 
     private LangGeneration() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -53,6 +54,7 @@ public final class LangGeneration {
 
         generateLang(ModItems.HONEY_BUCKET_ITEMS, ITEM_RESOURCEFULBEES, builder);
         generateLang(ModFluids.STILL_HONEY_FLUIDS, "fluid.resourcefulbees.", builder);
+        generateLang(ModFluids.FLUID_TYPES, FLUID_RESOURCEFULBEES, builder);
 
         TraitRegistry.getRegistry().getTraits().forEach((name, trait) -> {
             String displayName = StringUtils.replace(name, "_", " ");

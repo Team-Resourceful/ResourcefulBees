@@ -9,6 +9,7 @@ import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +38,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.WAX).add(ModItems.WAX.get());
         tag(ModTags.Items.WAX_BLOCK).add(ModItems.WAX_BLOCK_ITEM.get());
         //noinspection unchecked
-        tag(net.minecraftforge.common.Tags.Items.STORAGE_BLOCKS).addTags(ModTags.Items.WAX_BLOCK);
+        tag(Tags.Items.STORAGE_BLOCKS).addTags(ModTags.Items.WAX_BLOCK);
         tag(ModTags.Items.SHEARS).add(Items.SHEARS);
         tag(ModTags.Items.MUSHROOM).add(Items.RED_MUSHROOM).add(Items.BROWN_MUSHROOM);
         tag(ModTags.Items.HONEY_BOTTLES).add(Items.HONEY_BOTTLE);

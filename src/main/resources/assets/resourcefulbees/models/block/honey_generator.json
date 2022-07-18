@@ -1,4 +1,5 @@
 {
+	"render_type": "translucent",
 	"credit": "Made with Blockbench",
 	"parent": "block/orientable",
 	"textures": {

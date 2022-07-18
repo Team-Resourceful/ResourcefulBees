@@ -5,7 +5,8 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.IMutation;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.MutationCodec;
-import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
+import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ public record Mutation(IMutation input, RandomCollection<IMutation> outputs) {
 
     public static final Codec<Mutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             MutationCodec.CODEC.fieldOf("input").forGetter(Mutation::input),
-            MutationCodec.RANDOM_COLLECTION_CODEC.fieldOf("outputs").forGetter(Mutation::outputs)
+            CodecExtras.randomCollection(MutationCodec.CODEC, IMutation::weight).fieldOf("outputs").forGetter(Mutation::outputs)
     ).apply(instance, Mutation::new));
 
     public static final Codec<Map<IMutation, RandomCollection<IMutation>>> MUTATION_MAP_CODEC = Mutation.CODEC.listOf().comapFlatMap(Mutation::convertToMap, Mutation::convertToList);

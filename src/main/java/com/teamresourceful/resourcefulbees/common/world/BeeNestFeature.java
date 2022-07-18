@@ -8,9 +8,9 @@ import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.registry.dynamic.SpawnerRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -132,7 +132,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private void addBeeToNest(CustomBeeEntityType<?> entityType, RandomSource rand, TieredBeehiveBlockEntity nest) {
-        ResourceLocation id = ForgeRegistries.ENTITIES.getKey(entityType);
+        ResourceLocation id = ForgeRegistries.ENTITY_TYPES.getKey(entityType);
         if (id != null) {
             CompoundTag tag = new CompoundTag();
             tag.putString(NBTConstants.NBT_ID, id.toString());
@@ -153,7 +153,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
                         .map(data -> data.type)
                         .filter(type -> type instanceof CustomBeeEntityType<?>)
                         .map(type -> (CustomBeeEntityType<?>) type)
-                        .filter(bee -> SpawnerRegistry.getData(bee.getBeeType()).yLevel().isValueInRange(nestPos.getY()))
+                        .filter(bee -> ModSpawnData.getData(level, bee.getBeeType()).canSpawnAtY(nestPos.getY()))
                         .ifPresentOrElse(bee -> addBeeToNest(bee, rand, nest), () -> logMissingBiome(holder.unwrapKey().orElse(null)));
             }
         }
@@ -202,11 +202,11 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private static Block getNest(Holder<Biome> biome, Optional<ResourceKey<Biome>> biomeKey, boolean headsOrTails) {
-        if (biome.is(Tags.Biomes.IS_END)) {
+        if (biome.is(BiomeTags.IS_END)) {
             return ModBlocks.PURPUR_BEE_NEST.get();
         } else if (biome.is(BiomeTags.IS_NETHER)) {
             return getNetherNest(headsOrTails, biomeKey.orElse(null));
-        } else if (biome.is(Tags.Biomes.IS_SAVANNA) || biome.is(Tags.Biomes.IS_DRY_OVERWORLD)) {
+        } else if (biome.is(BiomeTags.IS_SAVANNA) || biome.is(Tags.Biomes.IS_DRY_OVERWORLD)) {
             return ModBlocks.ACACIA_BEE_NEST.get();
         } else if (biome.is(BiomeTags.IS_JUNGLE)) {
             return ModBlocks.JUNGLE_BEE_NEST.get();
@@ -225,11 +225,11 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private static BlockState getNestPlatform(Holder<Biome> biome, Optional<ResourceKey<Biome>> biomeKey) {
-        if (biome.is(Tags.Biomes.IS_END)) {
+        if (biome.is(BiomeTags.IS_END)) {
             return Blocks.END_STONE.defaultBlockState();
         } else if (biome.is(BiomeTags.IS_NETHER)) {
             return Blocks.OBSIDIAN.defaultBlockState();
-        } else if (biome.is(Tags.Biomes.IS_SAVANNA) || biome.is(Tags.Biomes.IS_DRY_OVERWORLD)) {
+        } else if (biome.is(BiomeTags.IS_SAVANNA) || biome.is(Tags.Biomes.IS_DRY_OVERWORLD)) {
             return Blocks.ACACIA_WOOD.defaultBlockState();
         } else if (biome.is(BiomeTags.IS_JUNGLE)) {
             return Blocks.JUNGLE_WOOD.defaultBlockState();

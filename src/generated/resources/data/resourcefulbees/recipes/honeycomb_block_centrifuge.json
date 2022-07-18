@@ -11,7 +11,6 @@
       "chance": 1.0,
       "pool": [
         {
-          "chance": 1.0,
           "item": {
             "count": 9,
             "id": "minecraft:sugar"
@@ -21,10 +20,9 @@
       ]
     },
     {
-      "chance": 1.0,
+      "chance": 0.25,
       "pool": [
         {
-          "chance": 0.25,
           "item": {
             "count": 9,
             "id": "resourcefulbees:wax"
@@ -34,10 +32,9 @@
       ]
     },
     {
-      "chance": 1.0,
+      "chance": 0.2,
       "pool": [
         {
-          "chance": 0.2,
           "item": {
             "count": 9,
             "id": "minecraft:honey_bottle"

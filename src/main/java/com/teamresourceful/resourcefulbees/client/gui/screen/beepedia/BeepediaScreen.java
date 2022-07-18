@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipWidget;
 import com.teamresourceful.resourcefulbees.common.capabilities.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeepediaEntityMessage;
-import com.teamresourceful.resourcefulbees.common.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

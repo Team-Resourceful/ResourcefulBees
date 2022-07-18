@@ -24,9 +24,8 @@ public abstract class MixinDispenserBlock {
     @Inject(
         method = "dispenseFrom",
         at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/block/DispenserBlock;getDispenseMethod(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/core/dispenser/DispenseItemBehavior;",
-            shift = At.Shift.AFTER
+            value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/world/level/block/DispenserBlock;getDispenseMethod(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/core/dispenser/DispenseItemBehavior;"
         ),
         locals = LocalCapture.CAPTURE_FAILHARD,
         cancellable = true

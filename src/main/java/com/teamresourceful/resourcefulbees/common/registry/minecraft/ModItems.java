@@ -268,11 +268,4 @@ public final class ModItems {
     public static final RegistryObject<Item> TRIMMED_WAXED_PLANKS = ITEMS.register("trimmed_waxed_planks", () -> new BlockItem(ModBlocks.TRIMMED_WAXED_PLANKS.get(), getItemProperties()));
     public static final RegistryObject<Item> WAXED_MACHINE_BLOCK = ITEMS.register("waxed_machine_block", () -> new BlockItem(ModBlocks.WAXED_MACHINE_BLOCK.get(), getItemProperties()));
     //endregion
-
-    // HIDDEN ITEMS
-    public static final RegistryObject<Item> MUTATION_ICON = ITEMS.register("mutation_icon", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> MUTATION_BLOCK_ICON = ITEMS.register("mutation_block_icon", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> MUTATION_ITEM_ICON = ITEMS.register("mutation_item_icon", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> MUTATION_ENTITY_ICON = ITEMS.register("mutation_entity_icon", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> TRAIT_ICON = ITEMS.register("trait_icon", () -> new Item(new Item.Properties()));
 }

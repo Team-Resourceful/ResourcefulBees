@@ -10,12 +10,14 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public abstract class BaseLanguageProvider extends LanguageProvider {
 
@@ -89,8 +91,13 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         if (fluid) {
             add("item.resourcefulbees."+id+"_honey_bucket", name+" Honey Bucket");
             add("fluid.resourcefulbees."+id+"_honey", name+" Honey");
+            add("fluid_type.resourcefulbees."+id+"_honey", name+" Honey");
         }
         add(LangGeneration.ITEM_RESOURCEFULBEES+id+"_honey_bottle", name +" Honey Bottle");
+    }
+
+    public void addFluid(Supplier<FluidType> fluid, String name) {
+        add(fluid.get().getDescriptionId(), name);
     }
 
     public void addPotion(RegistryObject<Potion> key, String name){

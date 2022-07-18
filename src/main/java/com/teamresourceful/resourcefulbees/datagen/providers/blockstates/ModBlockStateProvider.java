@@ -28,23 +28,26 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         simpleBlock(ModBlocks.BEEHOUSE_TOP.get(), models().sign("bee_house_top", modLoc("block/apiary/t1_apiary")));
         simpleBlockWithItem(ModBlocks.BEE_BOX.get(), models().cubeBottomTop("bee_box", modLoc("block/bee_box_side"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top")));
         simpleBlockWithItem(ModBlocks.BEE_BOX_TEMP.get(), models().cubeBottomTop("bee_box_temp", modLoc("block/bee_box_side_temp"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top_temp")));
+        simpleBlock(ModBlocks.CREATIVE_GEN.get(), cubeAll(ModBlocks.CREATIVE_GEN.get()));
+        simpleBlockWithItem(ModBlocks.GOLD_FLOWER.get(), models().cross(id(ModBlocks.GOLD_FLOWER.get()), modLoc("block/gold_flower")));
     }
 
     private void registerWaxedBlocks() {
-        simpleBlockWithItem(ModBlocks.HONEY_GLASS_PLAYER.get(), models().cubeAll("honey_glass_player", mcLoc("block/honey_block_bottom")));
-        simpleBlockWithItem(ModBlocks.HONEY_GLASS.get(), models().cubeAll("honey_glass", mcLoc("block/honey_block_bottom")));
+        simpleBlockWithItem(ModBlocks.HONEY_GLASS_PLAYER.get(), models().cubeAll("honey_glass_player", mcLoc("block/honey_block_bottom")).renderType("translucent"));
+        simpleBlockWithItem(ModBlocks.HONEY_GLASS.get(), models().cubeAll("honey_glass", mcLoc("block/honey_block_bottom")).renderType("translucent"));
         simpleBlockWithItem(ModBlocks.WAXED_PLANKS.get(), models().cubeAll("waxed_planks", modLoc("block/waxed_planks")));
         simpleBlockWithItem(ModBlocks.TRIMMED_WAXED_PLANKS.get(), models().cubeAll("trimmed_waxed_planks", modLoc("block/trimmed_waxed_planks")));
         simpleBlockWithItem(ModBlocks.WAXED_MACHINE_BLOCK.get(), models().cubeAll("waxed_machine_block", modLoc("block/waxed_machine_block")));
         buttonBlockWithItem(ModBlocks.WAXED_BUTTON.get(), modLoc("block/waxed_planks"));
-        //doorBlock(ModBlocks.WAXED_DOOR.get(), modLoc("block/waxed_door_bottom"), modLoc("block/waxed_door_top"));
-        //fenceBlockWithItem(ModBlocks.WAXED_FENCE.get(), modLoc("block/waxed_planks"));
-        //fenceGateBlockWithItem(ModBlocks.WAXED_FENCE_GATE.get(), modLoc("block/waxed_planks"));
+        doorBlock(ModBlocks.WAXED_DOOR.get(), modLoc("block/waxed_door_bottom"), modLoc("block/waxed_door_top"));
+        fenceBlockWithItem(ModBlocks.WAXED_FENCE.get(), modLoc("block/waxed_planks"));
+        fenceGateBlockWithItem(ModBlocks.WAXED_FENCE_GATE.get(), modLoc("block/waxed_planks"));
         preasurePlateBlockWithItem(ModBlocks.WAXED_PRESSURE_PLATE.get(), modLoc("block/waxed_planks"));
         slabBlockWithItem(ModBlocks.WAXED_SLAB.get(), modLoc("block/waxed_planks"));
         trapdoorBlockWithItem(ModBlocks.WAXED_TRAPDOOR.get(), modLoc("block/waxed_trapdoor"));
         stairBlockWithItem(ModBlocks.WAXED_STAIRS.get(), modLoc("block/waxed_planks"));
-        this.signBlock(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get(), modLoc("block/waxed_planks"));
+        signBlock(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get(), modLoc("block/waxed_planks"));
+        simpleBlockWithItem(ModBlocks.WAX_BLOCK.get(), cubeAll(ModBlocks.WAX_BLOCK.get()));
     }
 
     private void registerApiary(RegistryObject<Block> registryObject) {
@@ -57,6 +60,7 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
                 .rotationY(((int)(state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180 ) % 360))
                 .build()
         );
+        this.simpleBlockItem(registryObject.get(), model);
     }
 
     private void registerBreeder() {
@@ -64,11 +68,13 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         ModelFile model = models().getBuilder(name)
                 .parent(models().getExistingFile(modLoc("block/beehouse")))
                 .texture("particle", modLoc("block/breeder"))
-                .texture("texture", modLoc("block/breeder"));
+                .texture("texture", modLoc("block/breeder"))
+                .renderType("cutout");
         getVariantBuilder(ModBlocks.BREEDER_BLOCK.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(model)
                 .rotationY(((int)(state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180 ) % 360))
                 .build()
         );
+        this.simpleBlockItem(ModBlocks.BREEDER_BLOCK.get(), model);
     }
 
     private void registerNest(RegistryObject<Block> registryObject) {

@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.api;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraftforge.fml.ModLoadingContext;
+import org.jetbrains.annotations.ApiStatus;
 
 @SuppressWarnings("unused")
 public final class ResourcefulBeesAPI {
@@ -22,6 +23,7 @@ public final class ResourcefulBeesAPI {
      */
     private static ITraitRegistry traitRegistry;
 
+    @ApiStatus.Internal
     public static void setBeeRegistry(IBeeRegistry beeRegistry) {
         if (ResourcefulBeesAPI.beeRegistry == null && ModLoadingContext.get().getActiveContainer().getModId().equals(MOD_ID)) {
             ResourcefulBeesAPI.beeRegistry = beeRegistry;
@@ -29,6 +31,7 @@ public final class ResourcefulBeesAPI {
         }
     }
 
+    @ApiStatus.Internal
     public static void setTraitRegistry(ITraitRegistry traitRegistry) {
         if (ResourcefulBeesAPI.traitRegistry == null && ModLoadingContext.get().getActiveContainer().getModId().equals(MOD_ID)) {
             ResourcefulBeesAPI.traitRegistry = traitRegistry;

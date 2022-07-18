@@ -24,8 +24,7 @@ public class BeeBoxBlock extends RenderingBaseEntityBlock {
     @Override
     public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         if (!level.isClientSide() && player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-            if (blockEntity instanceof BeeBoxBlockEntity beeBox && beeBox.hasBees()) {
+            if (level.getBlockEntity(pos) instanceof BeeBoxBlockEntity beeBox && beeBox.hasBees()) {
                 ItemStack itemstack = new ItemStack(this);
                 BlockItem.setBlockEntityData(itemstack, beeBox.getType(), beeBox.saveWithFullMetadata());
                 ItemEntity itementity = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), itemstack);

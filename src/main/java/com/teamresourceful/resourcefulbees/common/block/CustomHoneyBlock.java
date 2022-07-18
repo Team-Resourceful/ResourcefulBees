@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyBlockData;
-import com.teamresourceful.resourcefulbees.common.utils.color.Color;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -32,7 +32,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -59,16 +58,15 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
         return color;
     }
 
-    @SuppressWarnings("unused")
-    public static int getBlockColor(BlockState state, @Nullable BlockGetter world, @Nullable BlockPos pos, int tintIndex) {
+    public static int getBlockColor(BlockState state) {
         return ((CustomHoneyBlock) state.getBlock()).getHoneyColor().getValue();
     }
 
     @SuppressWarnings("unused")
     public static int getItemColor(ItemStack stack, int tintIndex) {
         BlockItem blockItem = (BlockItem) stack.getItem();
-        if (!(blockItem.getBlock() instanceof CustomHoneyBlock)) return -1;
-        return ((CustomHoneyBlock) blockItem.getBlock()).getHoneyColor().getValue();
+        if (!(blockItem.getBlock() instanceof CustomHoneyBlock customHoney)) return -1;
+        return customHoney.getHoneyColor().getValue();
     }
 
     @Override
@@ -111,18 +109,14 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
     }
 
     private boolean isSliding(BlockPos pos, Entity entity) {
-        if (entity.isOnGround()) {
-            return false;
-        } else if (entity.getY() > pos.getY() + 0.9375D - 1.0E-7D) {
-            return false;
-        } else if (entity.getDeltaMovement().y >= -0.08D) {
-            return false;
-        } else {
-            double d0 = Math.abs(pos.getX() + 0.5D - entity.getX());
-            double d1 = Math.abs(pos.getZ() + 0.5D - entity.getZ());
-            double d2 = 0.4375D + (entity.getBbWidth() / 2.0F);
-            return d0 + 1.0E-7D > d2 || d1 + 1.0E-7D > d2;
-        }
+        if (entity.isOnGround()) return false;
+        else if (entity.getY() > pos.getY() + 0.9375D - 1.0E-7D) return false;
+        else if (entity.getDeltaMovement().y >= -0.08D) return false;
+
+        double d0 = Math.abs(pos.getX() + 0.5D - entity.getX());
+        double d1 = Math.abs(pos.getZ() + 0.5D - entity.getZ());
+        double d2 = 0.4375D + (entity.getBbWidth() / 2.0F);
+        return d0 + 1.0E-7D > d2 || d1 + 1.0E-7D > d2;
     }
 
     @Override

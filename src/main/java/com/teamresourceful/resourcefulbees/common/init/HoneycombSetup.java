@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
-import com.teamresourceful.resourcefulbees.common.utils.FileUtils;
+import com.teamresourceful.resourcefullib.common.utils.FileUtils;
 import net.minecraft.util.GsonHelper;
 
 import java.io.Reader;
@@ -24,12 +24,12 @@ public final class HoneycombSetup {
     public static void setupHoneycombs() {
         if (Boolean.TRUE.equals(CommonConfig.ENABLE_DEV_BEES.get())) {
             LOGGER.info("Loading Dev Honeycombs...");
-            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honeycombs", HoneycombSetup::parseHoneycomb);
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honeycombs", HoneycombSetup::parseHoneycomb, ModConstants.MOD_ROOT);
         }
 
         if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
             LOGGER.info("Copying Default Honeycombs...");
-            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_honeycombs", ModPaths.HONEYCOMBS);
+            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_honeycombs", ModPaths.HONEYCOMBS, ModConstants.MOD_ROOT);
         }
 
         LOGGER.info("Loading Custom Honeycombs...");

@@ -1,5 +1,6 @@
 {
   "parent": "resourcefulbees:block/beehouse",
+  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "resourcefulbees:block/breeder",
     "texture": "resourcefulbees:block/breeder"

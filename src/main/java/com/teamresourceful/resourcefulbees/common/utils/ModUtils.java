@@ -53,7 +53,7 @@ public final class ModUtils {
             tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                     .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
         } else if (!player.isShiftKeyDown() && !world.isClientSide) {
-            NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) tileEntity, pos);
+            NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tileEntity, pos);
         }
     }
 

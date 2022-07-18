@@ -3,13 +3,13 @@ package com.teamresourceful.resourcefulbees.api.beedata.render;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
-import com.teamresourceful.resourcefulbees.common.utils.color.Color;
+import com.teamresourceful.resourcefullib.common.color.Color;
 
 /**
  * @param pulseFrequency the ticks between pulses for glowing effect.
  * @param beeTexture the texture in which the layer uses.
  */
-public record LayerData(Color color, BeeTexture beeTexture, LayerEffect effect,  boolean isPollen, float pulseFrequency) {
+public record LayerData(Color color, BeeTexture beeTexture, LayerEffect effect, boolean isPollen, float pulseFrequency) {
     public static final LayerData DEFAULT = new LayerData(Color.DEFAULT, BeeTexture.MISSING_TEXTURE, LayerEffect.NONE, false, 0);
 
     /**

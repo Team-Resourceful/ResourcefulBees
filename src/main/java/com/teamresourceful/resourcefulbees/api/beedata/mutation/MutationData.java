@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.IMutation;
-import com.teamresourceful.resourcefulbees.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
 
 import java.util.Collections;
 import java.util.HashMap;

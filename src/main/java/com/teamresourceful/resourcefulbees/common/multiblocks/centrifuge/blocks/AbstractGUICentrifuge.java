@@ -24,7 +24,7 @@ public abstract class AbstractGUICentrifuge extends AbstractCentrifuge {
     public @NotNull InteractionResult onUse(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (hand == InteractionHand.MAIN_HAND && state.hasProperty(ASSEMBLED) && Boolean.TRUE.equals(state.getValue(ASSEMBLED))) {
             if (!level.isClientSide && level.getBlockEntity(pos) instanceof AbstractGUICentrifugeEntity entity) {
-                NetworkHooks.openGui((ServerPlayer) player, entity, entity::getOpenGUIPacket);
+                NetworkHooks.openScreen((ServerPlayer) player, entity, entity::getOpenGUIPacket);
             }
             return InteractionResult.SUCCESS;
         }

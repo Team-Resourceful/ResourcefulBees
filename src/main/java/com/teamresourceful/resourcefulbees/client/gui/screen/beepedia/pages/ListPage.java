@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.*;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.enums.BeepediaListTypes;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ButtonTemplate;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ToggleItemImageButton;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
@@ -61,7 +60,7 @@ public class ListPage extends BeepediaPage {
         int y = this.y + 8;
         ButtonTemplate template = new ButtonTemplate(20, 20, 0, 0, 20, 20, 60, BeepediaImages.BUTTON_IMAGE);
         bees = createButton(x, y, template, BeepediaListTypes.BEES, BeepediaLang.TAB_BEES, Items.BEEHIVE);
-        traits = createButton(x + 21, y, template, BeepediaListTypes.TRAITS, BeepediaLang.TAB_TRAITS, ModItems.TRAIT_ICON.get());
+        traits = createButton(x + 21, y, template, BeepediaListTypes.TRAITS, BeepediaLang.TAB_TRAITS, Items.NETHER_STAR);
         honey = createButton(x + 42, y, template, BeepediaListTypes.HONEY, BeepediaLang.TAB_HONEY, Items.HONEY_BOTTLE);
         combs = createButton(x + 63, y, template, BeepediaListTypes.COMBS, BeepediaLang.TAB_COMBS, Items.HONEYCOMB);
         children.add(bees);

@@ -12,6 +12,7 @@ import com.teamresourceful.resourcefulbees.common.item.dispenser.ScraperDispense
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.*;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -43,6 +44,11 @@ public final class RegistryHandler {
         ModVillagerProfessions.PROFESSIONS.register(bus);
         ModFeatures.FEATURES.register(bus);
         ModBiomeModifiers.MODIFIERS.register(bus);
+        initOwnRegistries(bus);
+    }
+
+    private static void initOwnRegistries(IEventBus bus) {
+        ModSpawnData.SPAWN_DATA.register(bus);
     }
 
     //Dynamic|Iterative Registration Stuff below this line

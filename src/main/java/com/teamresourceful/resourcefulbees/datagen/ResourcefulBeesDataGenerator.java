@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.datagen.providers.advancements.ModAdvancementProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.blockstates.ModBlockStateProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.items.ModItemModelProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.lang.ModLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.loottables.ModLootTableProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.recipes.ModRecipeProvider;
@@ -13,9 +14,9 @@ import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModItemTagProv
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModPoiTagProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid = ResourcefulBees.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ResourcefulBeesDataGenerator {
@@ -30,6 +31,7 @@ public final class ResourcefulBeesDataGenerator {
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         generator.addProvider(event.includeClient(), new ModBlockStateProvider(generator, existingFileHelper));
+        generator.addProvider(event.includeClient(), new ModItemModelProvider(generator, existingFileHelper));
         generator.addProvider(event.includeServer(), new ModLootTableProvider(generator));
         ModBlockTagProvider blockTagProvider = new ModBlockTagProvider(generator, existingFileHelper);
         generator.addProvider(event.includeServer(), blockTagProvider);

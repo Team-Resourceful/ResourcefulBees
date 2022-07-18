@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -35,11 +34,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Breedi
     }
 
     public static List<BreedingWrapper> getRecipes(Collection<BreederRecipe> recipes) {
-        List<BreedingWrapper> wrappers = new ArrayList<>();
-        for (BreederRecipe recipe : recipes) {
-            recipe.outputs().forEach(output -> wrappers.add(new BreedingWrapper(recipe, output)));
-        }
-        return wrappers;
+        return recipes.stream().flatMap(recipe -> recipe.outputs().stream().map(output -> new BreedingWrapper(recipe, output))).toList();
     }
 
     @Override

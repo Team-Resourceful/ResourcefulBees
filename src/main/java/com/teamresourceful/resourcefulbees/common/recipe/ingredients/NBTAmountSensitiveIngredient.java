@@ -7,11 +7,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.NBTIngredient;
+import net.minecraftforge.common.crafting.StrictNBTIngredient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class NBTAmountSensitiveIngredient extends NBTIngredient implements IAmountSensitive {
+public class NBTAmountSensitiveIngredient extends StrictNBTIngredient implements IAmountSensitive {
 
     private final ItemStack stack;
 

@@ -51,7 +51,7 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
 
     @Override
     public @NotNull ResourceLocation getResourceLocation(EntityIngredient ingredient) {
-        ResourceLocation id = ForgeRegistries.ENTITIES.getKey(ingredient.getEntityType());
+        ResourceLocation id = ForgeRegistries.ENTITY_TYPES.getKey(ingredient.getEntityType());
         if (id == null) return new ResourceLocation("error");
         return id;
     }

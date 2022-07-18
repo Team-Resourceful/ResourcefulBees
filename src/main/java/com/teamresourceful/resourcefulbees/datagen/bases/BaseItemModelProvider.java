@@ -6,13 +6,9 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.util.Lazy;
 
 public abstract class BaseItemModelProvider extends ItemModelProvider {
-
-    public final Lazy<ModelFile> EMPTY_MODEL = Lazy.of(() -> getExistingFile(mcLoc("air")));
 
     protected BaseItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, ResourcefulBees.MOD_ID, existingFileHelper);

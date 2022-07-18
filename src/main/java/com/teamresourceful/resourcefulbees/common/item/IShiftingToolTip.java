@@ -28,7 +28,7 @@ public interface IShiftingToolTip {
         if (shiftDown){
             components.add(Component.empty());
             appendShiftTooltip(stack, pLevel, components, flag);
-        } else if (ctrlDown) {
+        } else if (ctrlDown && getControlDisplay() != null) {
             components.add(Component.empty());
             appendControlTooltip(stack, pLevel, components, flag);
         }

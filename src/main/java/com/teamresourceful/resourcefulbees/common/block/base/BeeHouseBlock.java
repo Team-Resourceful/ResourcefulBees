@@ -61,7 +61,7 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
     public InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult) {
         if (!player.isShiftKeyDown() && !world.isClientSide) {
             MenuProvider blockEntity = state.getMenuProvider(world,pos);
-            NetworkHooks.openGui((ServerPlayer) player, blockEntity, pos);
+            NetworkHooks.openScreen((ServerPlayer) player, blockEntity, pos);
         }
         return InteractionResult.SUCCESS;
     }

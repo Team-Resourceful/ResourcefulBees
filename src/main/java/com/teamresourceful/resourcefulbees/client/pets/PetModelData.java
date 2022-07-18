@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.api.beedata.render.BeeTexture;
 import com.teamresourceful.resourcefulbees.api.beedata.render.LayerData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -24,7 +25,7 @@ public class PetModelData implements IAnimatable {
             Codec.STRING.fieldOf("id").orElse("error").forGetter(PetModelData::getId),
             ResourceLocation.CODEC.fieldOf("model").orElse(RenderData.BASE_MODEL).forGetter(PetModelData::getModelLocation),
             ResourceLocation.CODEC.fieldOf("texture").orElse(BeeTexture.MISSING_TEXTURE.normalTexture()).forGetter(PetModelData::getTexture),
-            CodecUtils.createLinkedSetCodec(LayerData.CODEC).fieldOf("layers").orElse(new LinkedHashSet<>()).forGetter(PetModelData::getLayers)
+            CodecExtras.linkedSet(LayerData.CODEC).fieldOf("layers").orElse(new LinkedHashSet<>()).forGetter(PetModelData::getLayers)
     ).apply(instance, PetModelData::new));
 
     static {
