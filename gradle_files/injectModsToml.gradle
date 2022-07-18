@@ -4,7 +4,7 @@ def injectModsToml = { ProcessResources process ->
             "fmlVersion": forge_version.substring(0, forge_version.indexOf('.')),
             "forgeVersion": forge_version,
             "mcVersion": mc_version,
-            "phosVersion": project.project(":Phosphophyllite").property("compatibility").toString(),
+            "phosVersion": project(":Phosphophyllite").property("compatibility").toString(),
             "geckoVersion": geckolib_version
     ]
 
@@ -17,3 +17,20 @@ def injectModsToml = { ProcessResources process ->
 
 processResources(injectModsToml)
 processDatagenResources(injectModsToml)
+
+project(":Phosphophyllite") {
+    processResources {
+        def phosProperties = [
+                "version": project(":Phosphophyllite").property("version").toString(),
+                "fmlVersion": forge_version.substring(0, forge_version.indexOf('.')),
+                "forgeVersion": forge_version,
+                "mcVersion": mc_version,
+        ]
+
+        inputs.properties phosProperties
+
+        filesMatching("META-INF/mods.toml") {
+            expand(phosProperties)
+        }
+    }
+}

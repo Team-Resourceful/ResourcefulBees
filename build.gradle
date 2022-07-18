@@ -41,6 +41,9 @@ sourceSets {
 
 plugins.withId("idea") {
     sourceSets.main.output.resourcesDir("out/production/resources")
+    project(":Phosphophyllite") {
+        sourceSets.main.output.resourcesDir("out/production/resources")
+    }
 }
 
 minecraft {
