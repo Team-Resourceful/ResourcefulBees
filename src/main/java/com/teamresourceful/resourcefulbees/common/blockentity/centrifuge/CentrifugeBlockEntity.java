@@ -1,13 +1,16 @@
-package com.teamresourceful.resourcefulbees.common.blockentity;
+package com.teamresourceful.resourcefulbees.common.blockentity.centrifuge;
 
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.InventorySyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.capabilities.SelectableMultiFluidTank;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
+import com.teamresourceful.resourcefulbees.common.inventory.menus.CentrifugeMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,18 +29,32 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class CentrifugeBlockEntity extends InventorySyncedBlockEntity {
+public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements IAnimatable {
 
     private final SelectableMultiFluidTank tank = new SelectableMultiFluidTank(32000, fluid -> false);
     private final LazyOptional<SelectableMultiFluidTank> tankOptional = LazyOptional.of(() -> tank);
+    private final AnimationFactory factory = new AnimationFactory(this);
+
+    private boolean firstCheck = true;
 
     private CentrifugeRecipe cachedRecipe;
-    private int uses = 0;
+    private int rotations = 0;
     private boolean outputFull = false;
 
-    protected CentrifugeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    public CentrifugeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+    }
+
+    public CentrifugeBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), pos, state);
     }
 
     //region NBT
@@ -67,9 +84,14 @@ public class CentrifugeBlockEntity extends InventorySyncedBlockEntity {
     //endregion
 
     private void updateCachedRecipe() {
+        firstCheck = false;
         var tempRecipe = CentrifugeUtils.getRecipe(getLevel(), getInventory().getStackInSlot(0)).orElse(null);
         if (tempRecipe != cachedRecipe) {
-            uses = 0;
+            rotations = 0;
+            if (level != null) {
+                level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(CentrifugeBlock.ROTATION, 1));
+                level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(CentrifugeBlock.USABLE, tempRecipe != null));
+            }
         }
         cachedRecipe = tempRecipe;
     }
@@ -77,39 +99,56 @@ public class CentrifugeBlockEntity extends InventorySyncedBlockEntity {
     /**
      * This method is the method used by other blocks to activate this block, this block does not start to initiate any of the processing itself.
      */
-    public void use() {
+    public int use() {
         if (canProcess()) {
-            if (uses >= cachedRecipe.getUses()) {
+            BlockState state = getBlockState();
+            if (state.getValue(CentrifugeBlock.ROTATION) == 8) {
+                rotations++;
+            }
+            if (rotations >= cachedRecipe.getRotations()) {
                 finishRecipe();
+                if (level != null)
+                    level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(CentrifugeBlock.ROTATION, 1));
+                return 1;
             } else {
-                uses++;
+                if (level != null) {
+                    var cycle = getBlockState().cycle(CentrifugeBlock.ROTATION);
+                    level.setBlockAndUpdate(getBlockPos(), cycle);
+                    return cycle.getValue(CentrifugeBlock.ROTATION);
+                }
             }
         } else {
-            uses = 0;
+            rotations = 0;
+            if (level != null) {
+                level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(CentrifugeBlock.ROTATION, 1));
+            }
         }
+        return 1;
     }
 
     private boolean canProcess() {
+        if (cachedRecipe == null && firstCheck) updateCachedRecipe();
         return cachedRecipe != null && (cachedRecipe.itemOutputs().isEmpty() || !outputFull) && (cachedRecipe.fluidOutputs().isEmpty() || !tank.isFull());
     }
 
     private void finishRecipe() {
-        uses = 0;
+        rotations = 0;
         if (cachedRecipe != null && level != null && !level.isClientSide()) {
             getInventory().getStackInSlot(0).shrink(1);
             cachedRecipe.itemOutputs()
                     .stream()
-                    .filter(item -> item.chance() < level.random.nextDouble())
+                    .filter(item -> level.random.nextDouble() < item.chance())
                     .map(item -> item.pool().next())
                     .map(ItemOutput::getItemStack)
                     .forEach(this::deliverItem);
             cachedRecipe.fluidOutputs()
                     .stream()
-                    .filter(fluid -> fluid.chance() < level.random.nextDouble())
+                    .filter(fluid -> level.random.nextDouble() < fluid.chance())
                     .map(fluid -> fluid.pool().next())
                     .map(FluidOutput::getFluidStack)
                     .forEach(this::deliverFluid);
             outputFull = getInventory().getItems().stream().noneMatch(ItemStack::isEmpty);
+            updateCachedRecipe();
         }
     }
 
@@ -137,13 +176,43 @@ public class CentrifugeBlockEntity extends InventorySyncedBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int syncID, @NotNull Inventory inventory, @NotNull Player player) {
-        return null;
+        if (level == null) return null;
+        return new CentrifugeMenu(syncID, inventory, this);
     }
 
     @Override
     public AutomationSensitiveItemStackHandler createInventory() {
         return new TileStackHandler();
     }
+
+    //region Animation
+    protected  <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+        int value = getBlockState().getValue(CentrifugeBlock.ROTATION);
+        var animationBuilder = new AnimationBuilder();
+        switch (value) {
+            case 1 -> animationBuilder.addAnimation("animation.centrifuge.360", false).addAnimation("animation.centrifuge.0", false);
+            case 2 -> animationBuilder.addAnimation("animation.centrifuge.45", false);
+            case 3 -> animationBuilder.addAnimation("animation.centrifuge.90", false);
+            case 4 -> animationBuilder.addAnimation("animation.centrifuge.135", false);
+            case 5 -> animationBuilder.addAnimation("animation.centrifuge.180", false);
+            case 6 -> animationBuilder.addAnimation("animation.centrifuge.225", false);
+            case 7 -> animationBuilder.addAnimation("animation.centrifuge.270", false);
+            case 8 -> animationBuilder.addAnimation("animation.centrifuge.315", false);
+        }
+        event.getController().setAnimation(animationBuilder);
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
+    }
+    //endregion
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
         protected TileStackHandler() {

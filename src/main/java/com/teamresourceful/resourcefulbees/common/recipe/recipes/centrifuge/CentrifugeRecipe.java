@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick, Optional<Integer> uses) implements CodecRecipe<Container> {
+public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick, Optional<Integer> rotations) implements CodecRecipe<Container> {
 
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -37,7 +37,7 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
                 Output.FLUID_OUTPUT_CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::fluidOutputs),
                 Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::time),
                 Codec.INT.fieldOf("energyPerTick").orElse(CommonConfig.RF_TICK_CENTRIFUGE.get()).forGetter(CentrifugeRecipe::energyPerTick),
-                Codec.INT.optionalFieldOf("uses").forGetter(CentrifugeRecipe::uses)
+                Codec.INT.optionalFieldOf("rotations").forGetter(CentrifugeRecipe::rotations)
         ).apply(instance, CentrifugeRecipe::new));
     }
 
@@ -63,8 +63,8 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
         return ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get();
     }
 
-    public int getUses() {
-        return uses().orElse(time / 20);
+    public int getRotations() {
+        return rotations().orElse(((time / 20)/8) * 2);
     }
 
     public record Output<T extends AbstractOutput>(double chance, RandomCollection<T> pool) {

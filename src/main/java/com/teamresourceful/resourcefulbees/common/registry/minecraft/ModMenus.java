@@ -32,6 +32,9 @@ public final class ModMenus {
     public static final RegistryObject<MenuType<HoneyPotMenu>> HONEY_POT_CONTAINER = CONTAINER_TYPES.register("honey_pot", () -> IForgeMenuType
             .create(HoneyPotMenu::new));
 
+    public static final RegistryObject<MenuType<CentrifugeMenu>> CENTRIFUGE_MENU = CONTAINER_TYPES.register("centrifuge", () -> IForgeMenuType
+            .create(CentrifugeMenu::new));
+
     // region Centrifuge Containers
     public static final RegistryObject<MenuType<CentrifugeTerminalContainer>> CENTRIFUGE_TERMINAL_CONTAINER = CONTAINER_TYPES.register("centrifuge/terminal", () -> IForgeMenuType
             .create(CentrifugeTerminalContainer::new));

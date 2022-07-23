@@ -4,6 +4,8 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.*;
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseTopBlock;
 import com.teamresourceful.resourcefulbees.common.block.base.SidedTickingBlock;
+import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeBlock;
+import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeCrankBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.AcceleratorBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.CreativeGenBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
@@ -214,6 +216,10 @@ public final class ModBlocks {
     public static final RegistryObject<Block> CENTRIFUGE_ELITE_FLUID_OUTPUT = CENTRIFUGE_BLOCKS.register("centrifuge/output/fluid/elite", () -> new CentrifugeFluidOutput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ELITE_FLUID_OUTPUT_ENTITY));
     public static final RegistryObject<Block> CENTRIFUGE_ULTIMATE_FLUID_OUTPUT = CENTRIFUGE_BLOCKS.register("centrifuge/output/fluid/ultimate", () -> new CentrifugeFluidOutput(CENTRIFUGE_PROPERTIES, ModBlockEntityTypes.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT_ENTITY));
     //endregion
+
+    public static final RegistryObject<Block> BASIC_CENTRIFUGE = CENTRIFUGE_BLOCKS.register("centrifuge", () -> new CentrifugeBlock(BlockBehaviour.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL).noOcclusion()));
+    public static final RegistryObject<Block> CENTRIFUGE_CRANK = CENTRIFUGE_BLOCKS.register("centrifuge_crank", () -> new CentrifugeCrankBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2).sound(SoundType.WOOD).noOcclusion()));
+
 
     //region Waxed Blocks
     public static final RegistryObject<Block> HONEY_GLASS = BLOCKS.register("honey_glass", () -> new HoneyGlass(BlockBehaviour.Properties.copy(Blocks.GLASS).isSuffocating((a,b,c) -> false).isViewBlocking((a,b,c) -> false).noCollission(), true));

@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.utils;
 import org.apache.commons.lang3.Validate;
 
 import java.util.AbstractList;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SelectableList<E> extends AbstractList<E> {
@@ -14,7 +14,7 @@ public class SelectableList<E> extends AbstractList<E> {
 
     @SafeVarargs
     public static <E> SelectableList<E> of(E pDefaultValue, E... pElements) {
-        return new SelectableList<>(pDefaultValue, Arrays.asList(pElements));
+        return new SelectableList<>(pDefaultValue, new ArrayList<>(List.of(pElements)));
     }
 
     public SelectableList(E defaultValue, List<E> list) {
@@ -33,6 +33,12 @@ public class SelectableList<E> extends AbstractList<E> {
 
     public int getSelectedIndex() {
         return this.index;
+    }
+
+    @Override
+    public void add(int index, E element) {
+        Validate.notNull(element);
+        list.add(index, element);
     }
 
     @Override

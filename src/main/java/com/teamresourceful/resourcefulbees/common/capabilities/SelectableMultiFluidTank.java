@@ -166,8 +166,10 @@ public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBT
             nbtFluids.add(FluidStack.loadFluidStackFromNBT((CompoundTag)tag));
         }
         if (!nbtFluids.isEmpty()) {
-            this.fluids = new SelectableList<>(FluidStack.EMPTY, nbtFluids);
-            this.fluids.setSelectedIndex(nbt.getInt("Index"));
+            List<FluidStack> fluids = nbtFluids.stream().filter(Predicate.not(FluidStack::isEmpty)).toList();
+            FluidStack selectedFluid = nbtFluids.get(nbt.getInt("Index"));
+            this.fluids = new SelectableList<>(FluidStack.EMPTY, fluids);
+            this.fluids.setSelectedIndex(Math.max(fluids.indexOf(selectedFluid), 0));
         }
     }
 }

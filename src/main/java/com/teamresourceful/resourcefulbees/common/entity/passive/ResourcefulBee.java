@@ -133,9 +133,8 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (((BeeEntityAccessor)this).getStayOutOfHiveCountdown() <= 0 && !this.pollinateGoal.isPollinating() && !this.hasStung() && this.getTarget() == null) {
             boolean flag = ((BeeInvoker)this).callIsTiredOfLookingForNectar() || this.hasNectar();
             return flag && !((BeeInvoker)this).callIsHiveNearFire();
-        } else {
-            return false;
         }
+        return false;
     }
 
     private void resetCropCounter() {

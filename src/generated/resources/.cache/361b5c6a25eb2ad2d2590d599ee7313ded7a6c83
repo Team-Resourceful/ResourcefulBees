@@ -1,8 +1,8 @@
-// 1.19	2022-06-15T03:55:29.2884384	Resourceful Bees Block Tag Provider
+// 1.19	2022-07-19T11:46:30.275468	Resourceful Bees Block Tag Provider
 36a491a695201f5b03b2c0cca537c626edbc6f3f data/forge/tags/blocks/mushrooms.json
 73be7b5ade3737979ca0a35c875e0c5a80f848f3 data/forge/tags/blocks/storage_blocks.json
 97db687cb55b4a5035a83a364f8a26096ca17e7f data/forge/tags/blocks/storage_blocks/wax.json
 d655beef8361273e2310a7d1593a55aecad54f09 data/minecraft/tags/blocks/beehives.json
 d35a44825e0d062cee94a7ca32e84ffa51fca09c data/minecraft/tags/blocks/mineable/axe.json
-42c07b6b3722d05fbbae26e2ab4fc3022dfac12c data/minecraft/tags/blocks/mineable/pickaxe.json
+75f427010bc7e93538e175e4852e94c8e7109a1e data/minecraft/tags/blocks/mineable/pickaxe.json
 d6cf88ab73624a67b1cffc6e2fe8d4b95b053a79 data/resourcefulbees/tags/blocks/resourceful_honeycomb_block.json

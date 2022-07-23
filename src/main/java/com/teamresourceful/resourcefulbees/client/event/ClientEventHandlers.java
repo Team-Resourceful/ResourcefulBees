@@ -16,6 +16,8 @@ import com.teamresourceful.resourcefulbees.client.render.tileentity.BeeHouseSele
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderEnderBeecon;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderHoneyGenerator;
 import com.teamresourceful.resourcefulbees.client.render.tileentity.RenderSolidificationChamber;
+import com.teamresourceful.resourcefulbees.client.render.tileentity.centrifuge.CentrifugeCrankRenderer;
+import com.teamresourceful.resourcefulbees.client.render.tileentity.centrifuge.CentrifugeRenderer;
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseTopBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -128,6 +130,8 @@ public final class ClientEventHandlers {
         BlockEntityRenderers.register(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), RenderSolidificationChamber::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.WAXED_SIGN_ENTITY.get(), SignRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), CentrifugeRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get(), CentrifugeCrankRenderer::new);
     }
 
     private static void registerScreens() {
@@ -137,6 +141,7 @@ public final class ClientEventHandlers {
         MenuScreens.register(ModMenus.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
         MenuScreens.register(ModMenus.SOLIDIFICATION_CHAMBER_CONTAINER.get(), SolidificationChamberScreen::new);
         MenuScreens.register(ModMenus.HONEY_POT_CONTAINER.get(), HoneyPotScreen::new);
+        MenuScreens.register(ModMenus.CENTRIFUGE_MENU.get(), NormalCentrifugeScreen::new);
 
         //centrifuge
         MenuScreens.register(ModMenus.CENTRIFUGE_INPUT_CONTAINER.get(), CentrifugeInputScreen::new);

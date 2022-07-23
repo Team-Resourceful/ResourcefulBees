@@ -178,6 +178,10 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
 
     public record FluidOutputBuilder(double chance, List<FluidOutput> fluidOutputs) {
 
+        public FluidOutputBuilder(double chance) {
+            this(chance, new ArrayList<>());
+        }
+
         public FluidOutputBuilder addOutput(FluidOutput output) {
             fluidOutputs.add(output);
             return this;

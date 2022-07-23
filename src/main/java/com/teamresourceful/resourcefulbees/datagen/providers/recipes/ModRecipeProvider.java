@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -30,7 +32,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .time(200)
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(Items.SUGAR.getDefaultInstance(), 10))
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(ModItems.WAX.get().getDefaultInstance(), 10))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.20).addOutput(Items.HONEY_BOTTLE.getDefaultInstance(), 10))
+                .addOutput(new CentrifugeRecipeBuilder.FluidOutputBuilder(0.20).addOutput(new FluidStack(ModFluids.HONEY_STILL.get(), 250), 10))
                 .rf(5)
                 .save(recipes);
 
@@ -38,7 +40,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .time(200)
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 9), 10))
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(new ItemStack(ModItems.WAX.get(), 9), 10))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.20).addOutput(new ItemStack(Items.HONEY_BOTTLE, 9), 10))
+                .addOutput(new CentrifugeRecipeBuilder.FluidOutputBuilder(0.20).addOutput(new FluidStack(ModFluids.HONEY_STILL.get(), 250*9), 10))
                 .rf(10)
                 .save(recipes);
 
