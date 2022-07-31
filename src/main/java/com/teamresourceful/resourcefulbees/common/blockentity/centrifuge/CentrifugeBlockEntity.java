@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.blockentity.centrifuge;
 
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeBlock;
+import com.teamresourceful.resourcefulbees.common.blockentity.base.ISelectableTankBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.InventorySyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.capabilities.SelectableMultiFluidTank;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
@@ -15,6 +16,7 @@ import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -37,7 +39,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements IAnimatable {
+public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements IAnimatable, ISelectableTankBlock {
 
     private final SelectableMultiFluidTank tank = new SelectableMultiFluidTank(32000, fluid -> false);
     private final LazyOptional<SelectableMultiFluidTank> tankOptional = LazyOptional.of(() -> tank);
@@ -74,12 +76,14 @@ public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements
     public CompoundTag getSyncData() {
         CompoundTag tag = new CompoundTag();
         tag.put(NBTConstants.NBT_TANK, tank.serializeNBT());
+        tag.putInt(NBTConstants.ROTATIONS, rotations);
         return tag;
     }
 
     @Override
     public void readSyncData(@NotNull CompoundTag tag) {
         tank.deserializeNBT(tag.getCompound(NBTConstants.NBT_TANK));
+        rotations = tag.getInt(NBTConstants.ROTATIONS);
     }
     //endregion
 
@@ -170,7 +174,7 @@ public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.literal("Test");
+        return CommonComponents.EMPTY;
     }
 
     @Nullable
@@ -213,6 +217,17 @@ public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements
         return factory;
     }
     //endregion
+
+    @Override
+    public void setFluid(int tank, FluidStack fluid) {
+        ISelectableTankBlock.super.setFluid(tank, fluid);
+        sendToListeningPlayers();
+    }
+
+    @Override
+    public SelectableMultiFluidTank getTank(int tank) {
+        return this.tank;
+    }
 
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
         protected TileStackHandler() {

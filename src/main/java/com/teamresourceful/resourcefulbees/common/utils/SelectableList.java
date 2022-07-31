@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.Validate;
 
 import java.util.AbstractList;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SelectableList<E> extends AbstractList<E> {
@@ -14,7 +14,7 @@ public class SelectableList<E> extends AbstractList<E> {
 
     @SafeVarargs
     public static <E> SelectableList<E> of(E pDefaultValue, E... pElements) {
-        return new SelectableList<>(pDefaultValue, new ArrayList<>(List.of(pElements)));
+        return new SelectableList<>(pDefaultValue, Lists.newArrayList(pElements));
     }
 
     public SelectableList(E defaultValue, List<E> list) {

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBTSerializable<CompoundTag> {
 
@@ -31,6 +32,15 @@ public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBT
 
     public void setIndex(int index) {
         this.fluids.setSelectedIndex(index);
+    }
+
+    public void setFluid(FluidStack fluid) {
+        for (int i = 0; i < this.fluids.size(); i++) {
+            if (this.fluids.get(i).isFluidEqual(fluid)) {
+                setIndex(i);
+                return;
+            }
+        }
     }
 
     private int getTotalAmount() {
@@ -85,6 +95,11 @@ public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBT
         return isFluidValid(stack);
     }
 
+    public SelectableList<FluidStack> getFluids() {
+        return fluids;
+    }
+
+    //region Fill
     public int addOrUpdateStack(FluidStack stack) {
         if (fluids.isEmpty()) {
             int amount = Math.min(capacity, stack.getAmount());
@@ -119,7 +134,9 @@ public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBT
         }
         return addOrUpdateStack(resource);
     }
+    //endregion
 
+    //region Drain
     @NotNull
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
@@ -146,7 +163,9 @@ public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBT
         }
         return FluidStack.EMPTY;
     }
+    //endregion
 
+    //region NBT
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
@@ -166,10 +185,11 @@ public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBT
             nbtFluids.add(FluidStack.loadFluidStackFromNBT((CompoundTag)tag));
         }
         if (!nbtFluids.isEmpty()) {
-            List<FluidStack> fluids = nbtFluids.stream().filter(Predicate.not(FluidStack::isEmpty)).toList();
+            List<FluidStack> fluids = nbtFluids.stream().filter(Predicate.not(FluidStack::isEmpty)).collect(Collectors.toList());
             FluidStack selectedFluid = nbtFluids.get(nbt.getInt("Index"));
             this.fluids = new SelectableList<>(FluidStack.EMPTY, fluids);
             this.fluids.setSelectedIndex(Math.max(fluids.indexOf(selectedFluid), 0));
         }
     }
+    //endregion
 }

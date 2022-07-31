@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.client.components.SelectableFluidWidget;
 import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.CentrifugeMenu;
@@ -19,6 +20,13 @@ public class NormalCentrifugeScreen extends AbstractContainerScreen<CentrifugeMe
         super(container, inventory, displayName);
         tileEntity = container.getEntity();
         titleLabelY -= 3;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        clearWidgets();
+        addRenderableWidget(new SelectableFluidWidget(this, tileEntity.getTank(0), 0, tileEntity.getBlkPos(), this.leftPos + 152, this.topPos + 11, 16, 64, Component.literal("Centrifuge Tank!")));
     }
 
     @Override

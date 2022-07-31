@@ -27,6 +27,7 @@ public final class NBTConstants {
     public static final String NBT_PROCESS_STAGE = "processStage";
     public static final String NBT_PROCESS_TIME = "processTime";
     public static final String NBT_TANK = "Tank";
+    public static final String ROTATIONS = "Rotations";
     public static final String SYNC_DATA = "SyncData";
 
     public static class Beecon {

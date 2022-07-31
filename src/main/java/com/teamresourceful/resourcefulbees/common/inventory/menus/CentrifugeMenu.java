@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +18,10 @@ public class CentrifugeMenu extends AbstractModContainerMenu<CentrifugeBlockEnti
 
     public CentrifugeMenu(int id, Inventory inv, CentrifugeBlockEntity entity) {
         super(ModMenus.CENTRIFUGE_MENU.get(), id, inv, entity);
+        if (player instanceof ServerPlayer serverPlayer) {
+            entity.sendToPlayer(serverPlayer);
+            entity.addListeningPlayer(serverPlayer);
+        }
     }
 
     @Override
@@ -57,5 +62,13 @@ public class CentrifugeMenu extends AbstractModContainerMenu<CentrifugeBlockEnti
     @Override
     public boolean stillValid(@NotNull Player player) {
         return true;
+    }
+
+    @Override
+    public void removed(@NotNull Player player) {
+        super.removed(player);
+        if (player instanceof ServerPlayer serverPlayer) {
+            this.entity.removeListeningPlayer(serverPlayer);
+        }
     }
 }

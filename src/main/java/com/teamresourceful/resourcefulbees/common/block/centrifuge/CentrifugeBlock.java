@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.block.centrifuge;
 
 import com.teamresourceful.resourcefulbees.common.block.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -20,7 +20,6 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,9 +42,7 @@ public class CentrifugeBlock extends RenderingBaseEntityBlock {
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
         if (level.getBlockEntity(pos) instanceof CentrifugeBlockEntity centrifuge) {
-            if (!level.isClientSide) {
-                NetworkHooks.openScreen((ServerPlayer) player, centrifuge, pos);
-            }
+            ModUtils.capabilityOrGuiUse(centrifuge, player, level, pos, hand);
             return InteractionResult.SUCCESS;
         }
         return super.use(state, level, pos, player, hand, result);

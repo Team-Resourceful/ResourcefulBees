@@ -16,5 +16,13 @@
       "pool": [{"item": { "id": "minecraft:gunpowder", "count": 4 }}]
     }
   ],
+  "fluidOutputs": [
+    {
+      "pool": [
+        {"fluid": { "id": "minecraft:lava", "amount": 1000 }},
+        {"fluid": { "id": "minecraft:water", "amount": 1000 }}
+      ]
+    }
+  ],
   "time": 200
 }
