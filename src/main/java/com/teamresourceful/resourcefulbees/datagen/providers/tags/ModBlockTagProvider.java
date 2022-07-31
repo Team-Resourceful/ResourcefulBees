@@ -21,6 +21,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void addTags() {
         tag(ModTags.Blocks.HONEYCOMB).add(Blocks.HONEYCOMB_BLOCK);
         tag(ModTags.Blocks.WAX).add(ModBlocks.WAX_BLOCK.get());
@@ -38,6 +39,10 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         TagAppender<Block> pickaxeTagBuilder = tag(BlockTags.MINEABLE_WITH_PICKAXE);
         ModBlocks.CENTRIFUGE_BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(pickaxeTagBuilder::add);
         pickaxeTagBuilder.add(ModBlocks.HONEY_GENERATOR.get(), ModBlocks.ENDER_BEECON.get(), ModBlocks.SOLIDIFICATION_CHAMBER.get(), ModBlocks.HONEY_POT.get());
+
+        tag(ModTags.Blocks.HEAT_SOURCES).add(Blocks.TORCH, Blocks.SOUL_TORCH, Blocks.WALL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.LAVA, Blocks.LAVA_CAULDRON,
+                Blocks.MAGMA_BLOCK, Blocks.LANTERN, Blocks.SEA_LANTERN, Blocks.SOUL_LANTERN, Blocks.JACK_O_LANTERN);
+        tag(ModTags.Blocks.HEAT_SOURCES).addTags(BlockTags.CAMPFIRES, BlockTags.FIRE, BlockTags.CANDLES);
     }
 
     @Override

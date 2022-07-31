@@ -14,7 +14,7 @@ public final class ModTags {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
-    public static class Items {
+    public static final class Items {
         public static final TagKey<Item> HONEYCOMB_BLOCK = createItemTag(ResourcefulBees.MOD_ID, "resourceful_honeycomb_block");
         public static final TagKey<Item> HONEYCOMB = createItemTag(ResourcefulBees.MOD_ID, "resourceful_honeycomb");
         public static final TagKey<Item> WAX = createItemTag(ForgeVersion.MOD_ID, "wax");
@@ -30,22 +30,26 @@ public final class ModTags {
         public static final TagKey<Item> MUSHROOM = createItemTag(ForgeVersion.MOD_ID, "mushrooms");
         public static final TagKey<Item> HONEY_BOTTLES = createItemTag(ForgeVersion.MOD_ID, "honey_bottle");
 
+        public static final TagKey<Item> HEAT_SOURCES = createItemTag(ForgeVersion.MOD_ID, "heat_sources");
+
         private static TagKey<Item> createItemTag(String mod, String path) {
             return ItemTags.create(new ResourceLocation(mod, path));
         }
     }
 
-    public static class Blocks {
+    public static final class Blocks {
         public static final TagKey<Block> HONEYCOMB = createBlockTag(ResourcefulBees.MOD_ID, "resourceful_honeycomb_block");
         public static final TagKey<Block> WAX = createBlockTag(ForgeVersion.MOD_ID, "storage_blocks/wax");
         public static final TagKey<Block> MUSHROOM = createBlockTag(ForgeVersion.MOD_ID, "mushrooms");
+
+        public static final TagKey<Block> HEAT_SOURCES = createBlockTag(ForgeVersion.MOD_ID, "heat_sources");
 
         private static TagKey<Block> createBlockTag(String mod, String path) {
             return BlockTags.create(new ResourceLocation(mod, path));
         }
     }
 
-    public static class Fluids {
+    public static final class Fluids {
         public static final TagKey<Fluid> HONEY = FluidTags.create(new ResourceLocation(ForgeVersion.MOD_ID, "honey"));
     }
 }

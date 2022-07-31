@@ -6,9 +6,11 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
@@ -22,6 +24,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void addTags() {
         tag(ModTags.Items.HONEYCOMB).add(Items.HONEYCOMB);
         tag(ModTags.Items.HONEYCOMB_BLOCK).add(Items.HONEYCOMB_BLOCK);
@@ -37,11 +40,12 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ItemTags.SMALL_FLOWERS).add(ModItems.GOLD_FLOWER_ITEM.get());
         tag(ModTags.Items.WAX).add(ModItems.WAX.get());
         tag(ModTags.Items.WAX_BLOCK).add(ModItems.WAX_BLOCK_ITEM.get());
-        //noinspection unchecked
         tag(Tags.Items.STORAGE_BLOCKS).addTags(ModTags.Items.WAX_BLOCK);
         tag(ModTags.Items.SHEARS).add(Items.SHEARS);
         tag(ModTags.Items.MUSHROOM).add(Items.RED_MUSHROOM).add(Items.BROWN_MUSHROOM);
         tag(ModTags.Items.HONEY_BOTTLES).add(Items.HONEY_BOTTLE);
+        tag(ModTags.Items.HEAT_SOURCES).add(Items.TORCH, Items.SOUL_TORCH, Items.LAVA_BUCKET, Items.CAMPFIRE, Items.SOUL_CAMPFIRE, Items.MAGMA_BLOCK, Items.LANTERN, Items.SEA_LANTERN, Items.SOUL_LANTERN, Items.JACK_O_LANTERN);
+        tag(ModTags.Items.HEAT_SOURCES).addTags(ItemTags.CANDLES);
     }
 
     @SafeVarargs

@@ -5,16 +5,17 @@
   "refmap": "resourcefulbees.refmap.json",
   "mixins": [
     "MixinBee",
+    "MixinBeeEnterHiveGoal",
     "MixinBlock",
     "MixinDispenserBlock",
-    "MixinBeeEnterHiveGoal",
-    "accessors.RecipeManagerAccessor",
+    "MixinHoneyBlock",
     "accessors.BeeEntityAccessor",
     "accessors.BeehiveBeeDataAccessor",
     "accessors.BeehiveEntityAccessor",
     "accessors.BlockAccessor",
-    "invokers.BeeInvoker",
-    "invokers.BeeGoToHiveGoalInvoker"
+    "accessors.RecipeManagerAccessor",
+    "invokers.BeeGoToHiveGoalInvoker",
+    "invokers.BeeInvoker"
   ],
   "minVersion": "0.8.5",
   "client": [
