@@ -11,6 +11,7 @@ plugins {
 
 repositories {
     maven { url "https://nexus.resourcefulbees.com/repository/maven-public/" }
+    mavenCentral()
 }
 
 version = mod_version
@@ -149,7 +150,7 @@ dependencies {
 
     implementation project(':Phosphophyllite')
 
-    compileOnly 'org.jetbrains:annotations:22.0.0'
+    compileOnly 'org.jetbrains:annotations:23.0.0'
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
 }
 
