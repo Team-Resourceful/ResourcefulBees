@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.roguelogix.phosphophyllite.modular.block.PhosphophylliteBlock;
-import net.roguelogix.phosphophyllite.multiblock.rectangular.IRectangularMultiblockBlock;
+import net.roguelogix.phosphophyllite.multiblock2.rectangular.IRectangularMultiblockBlock;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractCentrifuge extends PhosphophylliteBlock implements IRectangularMultiblockBlock {

@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.roguelogix.phosphophyllite.multiblock.IAssemblyStateBlock;
+import net.roguelogix.phosphophyllite.multiblock2.IAssemblyStateBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +16,11 @@ public class CentrifugeCasing extends AbstractCentrifuge implements IAssemblySta
 
     @Override
     public boolean isGoodForFrame() {
+        return true;
+    }
+
+    @Override
+    public boolean isGoodForCorner() {
         return true;
     }
 
