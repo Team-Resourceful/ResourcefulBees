@@ -23,8 +23,8 @@ public abstract class MixinHoneyBlock extends Block {
 
     @Override
     public void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource source) {
-        if (Direction.stream().anyMatch(heatSourcePredicate(level, pos))) {
-            this.melt(level, pos);
+        if (Direction.stream().anyMatch(resourcefulbees$heatSourcePredicate(level, pos))) {
+            this.resourcefulbees$melt(level, pos);
         }
     }
 
@@ -34,15 +34,15 @@ public abstract class MixinHoneyBlock extends Block {
     }
 
     @NotNull
-    private static Predicate<Direction> heatSourcePredicate(@NotNull ServerLevel level, @NotNull BlockPos pos) {
-        return direction -> blockInDirectionIsHeatSource(level, pos, direction);
+    private static Predicate<Direction> resourcefulbees$heatSourcePredicate(@NotNull ServerLevel level, @NotNull BlockPos pos) {
+        return direction -> resourcefulbees$blockInDirectionIsHeatSource(level, pos, direction);
     }
 
-    private static boolean blockInDirectionIsHeatSource(@NotNull ServerLevel level, @NotNull BlockPos pos, Direction direction) {
+    private static boolean resourcefulbees$blockInDirectionIsHeatSource(@NotNull ServerLevel level, @NotNull BlockPos pos, Direction direction) {
         return level.getBlockState(pos.relative(direction)).is(ModTags.Blocks.HEAT_SOURCES);
     }
 
-    private void melt(Level level, BlockPos pos) {
+    private void resourcefulbees$melt(Level level, BlockPos pos) {
         level.setBlockAndUpdate(pos, ModBlocks.HONEY_FLUID_BLOCK.get().defaultBlockState());
         level.neighborChanged(pos, ModBlocks.HONEY_FLUID_BLOCK.get(), pos);
     }
