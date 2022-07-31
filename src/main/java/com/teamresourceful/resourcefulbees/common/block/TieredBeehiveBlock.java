@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.compat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.IShiftingToolTip;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
@@ -17,6 +18,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -77,13 +79,13 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
      * Static method for use with Dispenser logic
      *
      * @param block      the block
-     * @param world      the world
+     * @param level      the level
      * @param pos        the blocks position
      * @param useScraper set to true if scraper logic should run
      * @return returns true if the hive has been emptied
      */
-    public static boolean dropResourceHoneycomb(TieredBeehiveBlock block, Level world, BlockPos pos, boolean useScraper) {
-        return block.dropResourceHoneycomb(world, pos, useScraper);
+    public static boolean dropResourceHoneycomb(TieredBeehiveBlock block, Level level, BlockPos pos, boolean useScraper) {
+        return block.dropResourceHoneycomb(level, pos, useScraper);
     }
 
 
@@ -100,12 +102,12 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
         return new TieredBeehiveBlockEntity(entityType, pos, state);
     }
 
-    public boolean isHiveSmoked(BlockPos pos, Level world) {
-        return world.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity hive && hive.isSedated();
+    public boolean isHiveSmoked(BlockPos pos, Level level) {
+        return level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity hive && hive.isSedated();
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
         ItemStack itemstack = player.getItemInHand(handIn);
 
         if (state.getValue(HONEY_LEVEL) >= 5) {
@@ -113,13 +115,13 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
             boolean isScraper = itemstack.canPerformAction(ModConstants.SCRAPE_HIVE);
 
             if (isShear || isScraper) {
-                InteractionResult success = performHoneyHarvest(state, world, pos, player, handIn, itemstack, isScraper);
+                InteractionResult success = performHoneyHarvest(state, level, pos, player, handIn, itemstack, isScraper);
                 if (success != null) return success;
             }
         }
 
         if (itemstack.getItem() instanceof INestUpgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.NEST)) {
-            if (upgrade.getTier().from.equals(this.tier)) return upgrade.getTier().upgrader.performUpgrade(state, world, pos, itemstack);
+            if (upgrade.getTier().from.equals(this.tier)) return upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
             else {
                 player.displayClientMessage(Component.literal("You can not upgrade this nest with that upgrade."), true);
             }
@@ -129,39 +131,40 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
     }
 
     @Nullable
-    private InteractionResult performHoneyHarvest(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, ItemStack itemstack, boolean isScraper) {
-        world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
-        dropResourceHoneycomb(world, pos, isScraper);
+    private InteractionResult performHoneyHarvest(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, ItemStack itemstack, boolean isScraper) {
+        level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
+        dropResourceHoneycomb(level, pos, isScraper);
         itemstack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(handIn));
 
-        if (world.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity beehiveTileEntity && !beehiveTileEntity.hasCombs()) {
-            if (isHiveSmoked(pos, world)) {
-                this.resetHoneyLevel(world, state, pos);
+        if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity beehiveTileEntity && !beehiveTileEntity.hasCombs()) {
+            if (isHiveSmoked(pos, level)) {
+                this.resetHoneyLevel(level, state, pos);
             } else {
-                if (beehiveTileEntity.hasBees() && !(player instanceof FakePlayer)) {
-                    this.angerBeesNearby(world, pos);
+                if (beehiveTileEntity.hasBees() && !(player instanceof FakePlayer) && player instanceof ServerPlayer serverPlayer && !ModCompatHelper.shouldNotAngerBees(serverPlayer)) {
+                    this.angerBeesNearby(level, pos);
                 }
-                this.releaseBeesAndResetHoneyLevel(world, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
+                this.releaseBeesAndResetHoneyLevel(level, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
             }
             return InteractionResult.SUCCESS;
         }
         return null;
     }
 
-    private void angerBeesNearby(Level world, BlockPos pos) {
+    private void angerBeesNearby(Level level, BlockPos pos) {
         AABB aabb = new AABB(pos).inflate(8.0D, 6.0D, 8.0D);
-        List<Bee> beeEntityList = world.getEntitiesOfClass(Bee.class, aabb);
+        List<Bee> beeEntityList = level.getEntitiesOfClass(Bee.class, aabb);
         if (!beeEntityList.isEmpty()) {
-            List<Player> playerEntityList = world.getEntitiesOfClass(Player.class, aabb);
+            List<Player> nearbyPlayers = level.getEntitiesOfClass(Player.class, aabb);
 
-            if (!playerEntityList.isEmpty()) {
+            if (!nearbyPlayers.isEmpty()) {
                 beeEntityList.stream()
-                        .filter(beeEntity -> beeEntity.getTarget() == null)
-                        .forEach(beeEntity -> {
-                            Player randomPlayer = playerEntityList.get(world.random.nextInt(playerEntityList.size()));
-                            if (!(randomPlayer instanceof FakePlayer))
-                                beeEntity.setTarget(randomPlayer);
-                        });
+                    .filter(beeEntity -> beeEntity.getTarget() == null)
+                    .forEach(beeEntity -> {
+                        Player randomPlayer = nearbyPlayers.get(level.random.nextInt(nearbyPlayers.size()));
+                        if (!(randomPlayer instanceof FakePlayer)) {
+                            beeEntity.setTarget(randomPlayer);
+                        }
+                    });
             }
         }
     }
@@ -227,11 +230,10 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
         tooltip.add(Component.empty());
     }
 
-    public boolean dropResourceHoneycomb(Level world, BlockPos pos, boolean useScraper) {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TieredBeehiveBlockEntity hive) {
+    public boolean dropResourceHoneycomb(Level level, BlockPos pos, boolean useScraper) {
+        if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity hive) {
             while (hive.hasCombs()) {
-                popResource(world, pos, hive.getResourceHoneycomb());
+                popResource(level, pos, hive.getResourceHoneycomb());
                 if (useScraper) break;
             }
             return !hive.hasCombs();

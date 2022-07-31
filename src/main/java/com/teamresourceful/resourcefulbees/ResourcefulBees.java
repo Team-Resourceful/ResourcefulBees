@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
 import com.teamresourceful.resourcefulbees.common.capabilities.Capabilities;
+import com.teamresourceful.resourcefulbees.common.compat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.config.ConfigLoader;
@@ -58,6 +59,7 @@ public class ResourcefulBees {
         GeckoLib.initialize();
         ModSetup.initialize();
         RegistryHandler.init();
+        ModCompatHelper.registerCompats();
         ResourcefulBeesAPI.setBeeRegistry(BeeRegistry.getRegistry());
         ResourcefulBeesAPI.setTraitRegistry(TraitRegistry.getRegistry());
         DefaultTraitAbilities.registerDefaultAbilities(TraitAbilityRegistry.getRegistry());
