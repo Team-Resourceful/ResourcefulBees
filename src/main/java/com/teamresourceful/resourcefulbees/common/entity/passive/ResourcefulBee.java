@@ -65,7 +65,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         ((BeeEntityAccessor)this).setGoToKnownFlowerGoal(new Bee.BeeGoToKnownFlowerGoal());
         this.goalSelector.addGoal(6, ((BeeEntityAccessor)this).getGoToKnownFlowerGoal());
-        if (Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get())) this.goalSelector.addGoal(8, new BeeWanderGoal(this));
+        this.goalSelector.addGoal(8, Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get()) ? new BeeWanderGoal(this) : new WanderWorkerGoal(this));
         this.goalSelector.addGoal(9, new FloatGoal(this));
         this.goalSelector.addGoal(10, new BeeAuraGoal(this));
     }

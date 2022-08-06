@@ -109,7 +109,7 @@ public final class RandomPositionGenerator {
         if (directionVec != null) {
             double d3 = Mth.atan2(directionVec.z, directionVec.x) - HALF_PI;
             double d4 = d3 + (2 * random.nextFloat() - 1) * HALF_PI;
-            double d0 = Math.sqrt(random.nextDouble()) * Mth.SQRT_OF_TWO * horizontalOffset;
+            double d0 = random.nextDouble() * Mth.SQRT_OF_TWO * horizontalOffset;
             double d1 = -d0 * Math.sin(d4);
             double d2 = d0 * Math.cos(d4);
             if ((Math.abs(d1) <= horizontalOffset) && (Math.abs(d2) <= horizontalOffset)) {
@@ -129,7 +129,7 @@ public final class RandomPositionGenerator {
         }
     }
 
-    static BlockPos findValidPositionAbove(BlockPos blockPos3, int randInt3, int worldHeight, Predicate<BlockPos> posPredicate) {
+    public static BlockPos findValidPositionAbove(BlockPos blockPos3, int randInt3, int worldHeight, Predicate<BlockPos> posPredicate) {
         if (randInt3 < 0) throw new IllegalArgumentException("aboveSolidAmount was " + randInt3 + ", expected >= 0");
         if (!posPredicate.test(blockPos3)) return blockPos3;
 
@@ -148,7 +148,7 @@ public final class RandomPositionGenerator {
         return blockpos1;
     }
 
-    static BlockPos findValidPositionBelow(BlockPos blockPos3, int randInt3, int worldFloor, Predicate<BlockPos> posPredicate) {
+    public static BlockPos findValidPositionBelow(BlockPos blockPos3, int randInt3, int worldFloor, Predicate<BlockPos> posPredicate) {
         if (randInt3 < 0) throw new IllegalArgumentException("aboveSolidAmount was " + randInt3 + ", expected >= 0");
         if (!posPredicate.test(blockPos3)) return blockPos3;
 
