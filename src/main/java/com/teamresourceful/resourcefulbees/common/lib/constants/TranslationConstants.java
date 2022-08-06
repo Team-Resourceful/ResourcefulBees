@@ -511,4 +511,25 @@ public final class TranslationConstants {
         public static final MutableComponent CLOSE = Component.translatable("gui.resourcefulbees.centrifuge.close");
     }
 
+    public static class BeeLocator {
+
+        @Translate("Cancel")
+        public static final MutableComponent CANCEL = Component.translatable("gui.resourcefulbees.bee_locator.cancel");
+
+        @Translate("Search")
+        public static final MutableComponent SEARCH = Component.translatable("gui.resourcefulbees.bee_locator.search");
+
+        @Translate("None")
+        public static final MutableComponent NONE = Component.translatable("gui.resourcefulbees.bee_locator.none");
+
+        @Translate("Selected: %s")
+        public static final String SELECTED = "gui.resourcefulbees.bee_locator.selected";
+
+        @Translate("%s / %s")
+        public static final String LOCATION = "gui.resourcefulbees.bee_locator.location";
+
+        @Translate("%sm")
+        public static final String DISTANCE = "gui.resourcefulbees.bee_locator.distance";
+    }
+
 }

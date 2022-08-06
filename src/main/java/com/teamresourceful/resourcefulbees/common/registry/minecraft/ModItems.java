@@ -209,6 +209,7 @@ public final class ModItems {
     public static final RegistryObject<Item> T1_NEST_UPGRADE = ITEMS.register("t1_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T1_TO_T2, getItemProperties().stacksTo(16)));
     public static final RegistryObject<Item> T2_NEST_UPGRADE = ITEMS.register("t2_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T2_TO_T3, getItemProperties().stacksTo(16)));
     public static final RegistryObject<Item> T3_NEST_UPGRADE = ITEMS.register("t3_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T3_TO_T4, getItemProperties().stacksTo(16)));
+    public static final RegistryObject<Item> BEE_LOCATOR = ITEMS.register("bee_locator", () -> new BeeLocator(getItemProperties().stacksTo(1)));
 
     //region centrifuge items
     public static final RegistryObject<Item> CENTRIFUGE_CASING = CENTRIFUGE_ITEMS.register("centrifuge/casing", () -> new BlockItem(ModBlocks.CENTRIFUGE_CASING.get(), getItemProperties()));

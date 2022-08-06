@@ -7,7 +7,7 @@
     "#minecraft:is_ocean"
   ],
   "spawns": {
-    "type": "resourcefulbees:creeper_bee",
+    "type": "resourcefulbees:beeper_bee",
     "weight": 8,
     "minCount": 0,
     "maxCount": 3

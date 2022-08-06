@@ -22,7 +22,7 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
             if (ingredient.getEntity() instanceof CustomBeeEntity) {
                 y -= 5;
             }
-            RenderUtils.renderEntity(stack, ingredient.getEntity(), mc.level, -2, y, ingredient.getRotation(), 1);
+            RenderUtils.renderEntity(stack, ingredient.getEntity(), -2, y, ingredient.getRotation(), 1);
         }
     }
 

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.client.event;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
+import com.teamresourceful.resourcefulbees.client.gui.overlay.BeeLocatorOverlay;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeInputScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeItemOutputScreen;
@@ -41,6 +42,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
@@ -64,12 +66,17 @@ public final class ClientEventHandlers {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onItemColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::addLayers);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::onRegisterGuiOverlay);
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onBlockHighlight);
 
         Sheets.addWoodType(ModBlocks.WAXED_WOOD_TYPE);
+    }
+
+    public static void onRegisterGuiOverlay(RegisterGuiOverlaysEvent event) {
+        event.registerAboveAll("bee_locator", BeeLocatorOverlay.INSTANCE);
     }
 
     public static void onBlockHighlight(RenderHighlightEvent.Block event) {

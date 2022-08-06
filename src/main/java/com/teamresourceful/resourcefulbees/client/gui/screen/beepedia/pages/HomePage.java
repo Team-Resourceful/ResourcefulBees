@@ -63,7 +63,7 @@ public class HomePage extends BeepediaPage {
         double scale = beepedia.getMinecraft().getWindow().getGuiScale();
         int scissorY = (int) (beepedia.getMinecraft().getWindow().getHeight() - (y + 80) * scale);
         GL11.glScissor((int) (x * scale), scissorY, (int) (width * scale), (int) ((73) * scale));
-        RenderUtils.renderEntity(matrix, bees.get(counter), beepedia.getMinecraft().level, x + (width / 2F) - 12F, y + 10f, -45, 3);
+        RenderUtils.renderEntity(matrix, bees.get(counter), x + (width / 2F) - 12F, y + 10f, -45, 3);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         Font font = Minecraft.getInstance().font;

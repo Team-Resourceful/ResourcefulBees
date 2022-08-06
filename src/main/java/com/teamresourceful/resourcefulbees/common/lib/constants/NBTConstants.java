@@ -53,4 +53,9 @@ public final class NBTConstants {
         public static final String SMOKED = "Smoked";
         public static final String HONEYCOMBS = "Honeycombs";
     }
+
+    public static class BeeLocator {
+        public static final String LAST_BIOME = "LastBiome";
+        public static final String LAST_BEE = "LastBee";
+    }
 }

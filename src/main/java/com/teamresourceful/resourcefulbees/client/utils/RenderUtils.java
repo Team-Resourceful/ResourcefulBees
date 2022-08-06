@@ -19,7 +19,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -36,8 +35,7 @@ public final class RenderUtils {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static void renderEntity(PoseStack stack, Entity entity, Level world, float x, float y, float rotation, float renderScale) {
-        if (world == null) return;
+    public static void renderEntity(PoseStack stack, Entity entity, float x, float y, float rotation, float renderScale) {
         float scaledSize;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) entity.tickCount = mc.player.tickCount;
