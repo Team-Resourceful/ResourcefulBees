@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.network.packets;
 
-import com.teamresourceful.resourcefulbees.common.item.BeeLocator;
+import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocator;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
