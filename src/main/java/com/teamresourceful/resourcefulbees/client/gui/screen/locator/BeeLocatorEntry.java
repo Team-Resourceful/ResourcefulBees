@@ -44,7 +44,7 @@ public class BeeLocatorEntry extends ObjectSelectionList.Entry<BeeLocatorEntry> 
         Minecraft instance = Minecraft.getInstance();
         Font font = instance.font;
         GuiComponent.drawString(stack, font, displayName, left + 30, top + 5, 10526880);
-        try (var pose = new CloseablePoseStack(stack)) {
+        try (var ignored = new CloseablePoseStack(stack)) {
             RenderUtils.renderEntity(stack, this.displayEntity, left + 5, top + 5, 45F, 1f);
         }
     }

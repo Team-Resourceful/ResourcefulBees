@@ -7,9 +7,11 @@ import com.teamresourceful.resourcefulbees.api.beedata.render.LayerData;
 import com.teamresourceful.resourcefulbees.client.pets.PetBeeModel;
 import com.teamresourceful.resourcefulbees.client.pets.PetInfo;
 import com.teamresourceful.resourcefulbees.client.pets.PetModelData;
+import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -38,31 +40,28 @@ public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerMod
         PetModelData data = PetInfo.getPet(playerEntity.getUUID());
         if (data == null) return;
 
-        stack.pushPose();
+        try (var ignored = new CloseablePoseStack(stack)) {
 
-        stack.mulPose(Vector3f.XP.rotationDegrees(180));
-        stack.scale(0.25f,0.25f,0.25f);
-        stack.mulPose(Vector3f.YP.rotationDegrees((ageInTicks * 0.01F /2f) * 360f));
-        stack.translate(0f,(1.5 * Mth.sin(ageInTicks/10 - 30f)),3f);
-        stack.mulPose(Vector3f.YP.rotationDegrees(-90));
+            stack.mulPose(Vector3f.XP.rotationDegrees(180));
+            stack.scale(0.25f, 0.25f, 0.25f);
+            stack.mulPose(Vector3f.YP.rotationDegrees((ageInTicks * 0.01F / 2f) * 360f));
+            stack.translate(0f, (1.5 * Mth.sin(ageInTicks / 10 - 30f)), 3f);
+            stack.mulPose(Vector3f.YP.rotationDegrees(-90));
 
-        RenderType cutoutNoCullRenderType = RenderType.entityCutoutNoCull(data.getTexture());
-        VertexConsumer ivertexbuilder = buffer.getBuffer(cutoutNoCullRenderType);
+            RenderType renderType = RenderType.entityCutoutNoCull(data.getTexture());
+            VertexConsumer consumer = buffer.getBuffer(renderType);
 
-        @SuppressWarnings("unchecked")
-        PetBeeModel<PetModelData> modelProvider = data.getModel();
-        GeoModel model = modelProvider.getModel(data);
+            PetBeeModel<PetModelData> provider = data.getModel();
+            GeoModel model = provider.getModel(data);
 
-        AnimationEvent<PetModelData> event = new AnimationEvent<>(data, 0, 0, Minecraft.getInstance().getFrameTime(), false, Collections.emptyList());
-        modelProvider.setLivingAnimations(data, renderer.getUniqueID(data), event);
-        renderer.render(model, data, partialTicks,
-                cutoutNoCullRenderType, stack, buffer, ivertexbuilder,
-                packedLightIn, OverlayTexture.NO_OVERLAY,
-                1f,1f,1f,1f);
+            AnimationEvent<PetModelData> event = new AnimationEvent<>(data, 0, 0, Minecraft.getInstance().getFrameTime(), false, Collections.emptyList());
+            provider.setLivingAnimations(data, renderer.getUniqueID(data), event);
+            renderer.render(model, data, partialTicks, renderType, stack, buffer, consumer, packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
 
-        for (LayerData layer : data.getLayers()) renderLayer(playerEntity, stack, buffer, layer, data, model, partialTicks, packedLightIn);
-
-        stack.popPose();
+            for (LayerData layer : data.getLayers()) {
+                renderLayer(playerEntity, stack, buffer, layer, data, model, partialTicks, packedLightIn);
+            }
+        }
     }
 
     public void renderLayer(AbstractClientPlayer playerEntity, PoseStack stack, @NotNull MultiBufferSource buffer, LayerData layerData, PetModelData data, GeoModel model, float partialTicks, int packedLightIn) {
@@ -73,7 +72,7 @@ public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerMod
                 VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(texture));
                 renderer.render(model, data, partialTicks,
                         null, stack, null, vertexConsumer,
-                        packedLightIn, OverlayTexture.pack(OverlayTexture.u(0f), OverlayTexture.v(false)),
+                        packedLightIn, OverlayTexture.NO_OVERLAY,
                         layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
             }
             case ENCHANTED -> {
@@ -88,7 +87,7 @@ public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerMod
                 if (layerData.pulseFrequency() == 0 || playerEntity.tickCount % layerData.pulseFrequency() == 0.0f) {
                     renderer.render(model, data, partialTicks,
                             null, stack, null, vertexConsumer,
-                            15728640, OverlayTexture.NO_OVERLAY,
+                            LightTexture.FULL_SKY, OverlayTexture.NO_OVERLAY,
                             layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
                 }
             }

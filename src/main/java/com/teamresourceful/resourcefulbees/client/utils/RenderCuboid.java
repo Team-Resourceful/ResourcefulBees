@@ -13,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -35,15 +36,15 @@ public final class RenderCuboid {
         };
     }
 
-    public static void renderCube(Vec3 start, Vec3 end, ResourceLocation texture, PoseStack matrix, VertexConsumer buffer, int argb, int light, int overlay) {
+    public static void renderCube(AABB box, ResourceLocation texture, PoseStack matrix, VertexConsumer buffer, int argb, int light, int overlay) {
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(texture);
-        renderCube(start, end, sprite, matrix, buffer, argb, light, overlay);
+        renderCube(box, sprite, matrix, buffer, argb, light, overlay);
     }
 
-    public static void renderCube(Vec3 start, Vec3 end, TextureAtlasSprite sprite, PoseStack poseStack, VertexConsumer buffer, int argb, int light, int overlay) {
-        Vec3 size = end.subtract(start);
+    public static void renderCube(AABB box, TextureAtlasSprite sprite, PoseStack poseStack, VertexConsumer buffer, int argb, int light, int overlay) {
+        Vec3 size = new Vec3(box.getXsize(), box.getYsize(), box.getZsize());
         try (var stack = new CloseablePoseStack(poseStack)) {
-            stack.translate(start.x(), start.y(), start.z());
+            stack.translate(box.minX, box.minY, box.minZ);
             PoseStack.Pose lastMatrix = stack.last();
             Matrix4f matrix4f = lastMatrix.pose();
             Matrix3f normal = lastMatrix.normal();

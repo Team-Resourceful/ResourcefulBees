@@ -47,7 +47,7 @@ public class BeeJar extends Item {
     }
 
     public static boolean isFilled(ItemStack stack) {
-        return !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().contains(NBTConstants.BeeJar.ENTITY)
+        return stack.getItem() instanceof BeeJar && !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().contains(NBTConstants.BeeJar.ENTITY)
                 && stack.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY).contains(NBTConstants.NBT_ID);
     }
 

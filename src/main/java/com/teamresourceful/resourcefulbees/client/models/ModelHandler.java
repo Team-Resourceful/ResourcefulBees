@@ -80,7 +80,7 @@ public final class ModelHandler {
             resourceLocations.forEach(modelLocation ->
                 modelRegistry.computeIfPresent(modelLocation, (resourceLocation1, iBakedModel) -> {
                     if (iBakedModel.getParticleIcon(ModelData.EMPTY) instanceof MissingTextureAtlasSprite) return defaultModel;
-                    else return iBakedModel;
+                    return iBakedModel;
                 })
             );
         }));

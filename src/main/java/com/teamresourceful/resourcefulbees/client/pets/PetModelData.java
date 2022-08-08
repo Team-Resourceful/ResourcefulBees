@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.client.pets;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.api.beedata.render.BeeTexture;
 import com.teamresourceful.resourcefulbees.api.beedata.render.LayerData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
@@ -30,7 +29,7 @@ public class PetModelData implements IAnimatable {
 
     static {
         //noinspection unchecked
-        AnimationController.addModelFetcher((IAnimatable object) -> object instanceof PetModelData ? ((PetModelData) object).getModel() : null);
+        AnimationController.addModelFetcher((IAnimatable object) -> object instanceof PetModelData ? ((PetModelData) object).getModelRaw() : null);
     }
 
     private final PetBeeModel<PetModelData> model = new PetBeeModel<>();
@@ -58,8 +57,12 @@ public class PetModelData implements IAnimatable {
         return id;
     }
 
+    public PetBeeModel<PetModelData> getModel() {
+        return model;
+    }
+
     @SuppressWarnings("rawtypes")
-    public PetBeeModel getModel() {
+    public PetBeeModel getModelRaw() {
         return model;
     }
 

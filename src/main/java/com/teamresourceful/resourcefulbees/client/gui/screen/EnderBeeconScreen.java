@@ -2,15 +2,15 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.client.gui.widget.BeeconEffectWidget;
-import com.teamresourceful.resourcefulbees.client.gui.widget.OptionImageButton;
+import com.teamresourceful.resourcefulbees.client.components.BasicImageButton;
+import com.teamresourceful.resourcefulbees.client.components.BeeconEffectWidget;
+import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -44,8 +44,6 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
     }
 
     private final List<BeeconEffectWidget> powerButtons = new LinkedList<>();
-    private OptionImageButton soundButton;
-    private OptionImageButton beamButton;
 
     @Override
     protected void init() {
@@ -54,14 +52,14 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
 
         BlockState state = menu.getEntity().getBlockState();
 
-        soundButton = addRenderableWidget(new OptionImageButton(  leftPos+109, topPos+84, 52, 200, state.hasProperty(EnderBeecon.SOUND) && !state.getValue(EnderBeecon.SOUND), BACKGROUND) {
+        addRenderableWidget(new BasicImageButton(leftPos+109, topPos+84, 52, 200, state.hasProperty(EnderBeecon.SOUND) && !state.getValue(EnderBeecon.SOUND), BACKGROUND) {
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
                 NetPacketHandler.sendToServer(new BeeconChangeMessage(BeeconChangeMessage.Option.SOUND, !selected, menu.getEntity().getBlockPos()));
             }
         });
-        beamButton = addRenderableWidget(new OptionImageButton(leftPos+132, topPos+84, 92, 200, state.hasProperty(EnderBeecon.BEAM) && !state.getValue(EnderBeecon.BEAM), BACKGROUND) {
+        addRenderableWidget(new BasicImageButton(leftPos+132, topPos+84, 92, 200, state.hasProperty(EnderBeecon.BEAM) && !state.getValue(EnderBeecon.BEAM), BACKGROUND) {
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
@@ -85,7 +83,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
         int buttonStartY = this.topPos + 17;
         powerButtons.clear();
         for (MobEffect allowedEffect : EnderBeeconBlockEntity.ALLOWED_EFFECTS) {
-            BeeconEffectWidget button = new BeeconEffectWidget(this.leftPos + 9, buttonStartY, allowedEffect, menu.getEntity());
+            BeeconEffectWidget button = new BeeconEffectWidget(this, this.leftPos + 9, buttonStartY, allowedEffect, menu.getEntity());
             button.active = true;
             button.setSelected(tileEntity.hasEffect(allowedEffect));
             powerButtons.add(button);
@@ -122,8 +120,6 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
             widget.render(matrix, mouseX, mouseY, partialTicks);
             if (widget.isMouseOver(mouseX, mouseY)) widget.renderToolTip(matrix, mouseX, mouseY);
         }
-        if (soundButton.isHovered(mouseX, mouseY)) soundButton.renderToolTip(matrix, mouseX, mouseY);
-        if (beamButton.isHovered(mouseX, mouseY)) beamButton.renderToolTip(matrix, mouseX, mouseY);
     }
 
     @Override

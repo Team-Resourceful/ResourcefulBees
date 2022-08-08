@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.font.FontSet;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -52,10 +53,10 @@ public final class RenderUtils {
                 stack.translate(0, 0, 100);
                 stack.scale(-(scaledSize * renderScale), (scaledSize * renderScale), 30);
                 stack.mulPose(Vector3f.YP.rotationDegrees(rotation));
-                EntityRenderDispatcher entityrenderermanager = mc.getEntityRenderDispatcher();
-                MultiBufferSource.BufferSource renderTypeBuffer = mc.renderBuffers().bufferSource();
-                entityrenderermanager.render(entity, 0, 0, 0.0D, mc.getFrameTime(), 1, stack, renderTypeBuffer, 15728880);
-                renderTypeBuffer.endBatch();
+                EntityRenderDispatcher entityRenderer = mc.getEntityRenderDispatcher();
+                MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
+                entityRenderer.render(entity, 0, 0, 0.0D, mc.getFrameTime(), 1, stack, buffer, LightTexture.FULL_BRIGHT);
+                buffer.endBatch();
             }
         }
     }

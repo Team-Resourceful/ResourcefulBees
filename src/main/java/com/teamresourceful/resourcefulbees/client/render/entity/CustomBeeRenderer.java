@@ -29,16 +29,16 @@ public class CustomBeeRenderer<E extends CustomBeeEntity> extends GeoEntityRende
 
 
     @Override
-    public void renderEarly(E bee, PoseStack stackIn, float ticks, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        super.renderEarly(bee, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
-        stackIn.scale(bee.getRenderData().sizeModifier(), bee.getRenderData().sizeModifier(), bee.getRenderData().sizeModifier());
+    public void renderEarly(E bee, PoseStack stack, float ticks, MultiBufferSource bufferSource, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float partialTicks) {
+        super.renderEarly(bee, stack, ticks, bufferSource, consumer, light, overlay, red, green, blue, partialTicks);
+        stack.scale(bee.getRenderData().sizeModifier(), bee.getRenderData().sizeModifier(), bee.getRenderData().sizeModifier());
         if (bee.isBaby()){
-            stackIn.scale(0.5f, 0.5f, 0.5f);
+            stack.scale(0.5f, 0.5f, 0.5f);
         }
     }
 
     @Override
-    public RenderType getRenderType(E animatable, float partialTicks, PoseStack stack, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+    public RenderType getRenderType(E animatable, float partialTicks, PoseStack stack, MultiBufferSource bufferSource, VertexConsumer consumer, int light, ResourceLocation textureLocation) {
         return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 }

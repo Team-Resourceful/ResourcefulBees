@@ -1,15 +1,16 @@
-package com.teamresourceful.resourcefulbees.client.gui.widget;
+package com.teamresourceful.resourcefulbees.client.components;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -20,18 +21,19 @@ public class BeeconEffectWidget extends AbstractWidget {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
 
-    private final EnderBeeconBlockEntity tile;
 
+    private final Screen screen;
+    private final EnderBeeconBlockEntity tile;
     private final MobEffect effect;
     private final TextureAtlasSprite effectSprite;
-
     private boolean selected;
 
-    public BeeconEffectWidget(int x, int y, MobEffect effect, EnderBeeconBlockEntity tile) {
+    public BeeconEffectWidget(Screen screen, int x, int y, MobEffect effect, EnderBeeconBlockEntity tile) {
         super(x, y, 88, 22, Component.literal("Beecon Effect Button"));
-        this.effectSprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
-        this.effect = effect;
+        this.screen = screen;
         this.tile = tile;
+        this.effect = effect;
+        this.effectSprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
     }
 
     public boolean isSelected() {
@@ -68,19 +70,18 @@ public class BeeconEffectWidget extends AbstractWidget {
     }
 
     @Override
-    public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
+    public void renderToolTip(@NotNull PoseStack stack, int mouseX, int mouseY) {
         Minecraft mc = Minecraft.getInstance();
 
         if (mc.screen == null) return;
 
 
         if (MathUtils.inRangeInclusive(mouseX, x+60, x+85) && MathUtils.inRangeInclusive(mouseY, y+4, y+19)) {
-
-            //TODO GuiUtils.drawHoveringText(matrix, Collections.singletonList(new TextComponent(this.selected ? "Active" : "Not Active")), mouseX, mouseY, mc.screen.width, mc.screen.height, -1, mc.font);
+            this.screen.renderTooltip(stack, Component.literal(this.selected ? "Active" : "Not Active"), mouseX, mouseY);
         }
 
         if (MathUtils.inRangeInclusive(mouseX, x+4, x+22) && MathUtils.inRangeInclusive(mouseY, y+4, y+22)) {
-            //TODO GuiUtils.drawHoveringText(matrix, Collections.singletonList(effect.getDisplayName()), mouseX, mouseY, mc.screen.width, mc.screen.height, -1, mc.font);
+            this.screen.renderTooltip(stack, effect.getDisplayName(), mouseX, mouseY);
         }
 
     }

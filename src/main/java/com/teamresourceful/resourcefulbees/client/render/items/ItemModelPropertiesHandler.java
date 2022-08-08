@@ -14,10 +14,8 @@ public final class ItemModelPropertiesHandler {
     }
 
     public static void registerProperties() {
-        ItemProperties.register(ModItems.BEE_JAR.get(), new ResourceLocation("filled"),
-                (itemStack, clientWorld, livingEntity, seed) -> itemStack.getItem() instanceof BeeJar && BeeJar.isFilled(itemStack) ? 1.0F : 0.0F);
-        ItemProperties.register(ModItems.BEEPEDIA.get(), new ResourceLocation("creative"),
-                (itemStack, clientWorld, livingEntity, seed) -> itemStack.getItem() instanceof Beepedia && Beepedia.isCreative(itemStack) ? 1.0F : 0.0F);
+        ItemProperties.register(ModItems.BEE_JAR.get(), new ResourceLocation("filled"), (stack, level, entity, seed) -> BeeJar.isFilled(stack) ? 1.0F : 0.0F);
+        ItemProperties.register(ModItems.BEEPEDIA.get(), new ResourceLocation("creative"), (stack, level, entity, seed) -> Beepedia.isCreative(stack) ? 1.0F : 0.0F);
     }
 
 }

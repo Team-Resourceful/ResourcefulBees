@@ -64,7 +64,7 @@ public class BeeJarIngredient extends Ingredient {
 
     @Override
     public boolean test(@Nullable ItemStack input) {
-        if (input == null || !(input.getItem() instanceof BeeJar)) return false;
+        if (input == null) return false;
         return BeeJar.isFilled(input) && input.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY).getString(NBTConstants.NBT_ID).equals(id.toString());
     }
 
