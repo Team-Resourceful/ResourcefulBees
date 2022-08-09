@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentity;
 import com.google.common.collect.Sets;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
+import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
@@ -52,7 +53,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
+public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker {
 
     public static final Set<MobEffect> ALLOWED_EFFECTS = Sets.newHashSet(ModEffects.CALMING.get(), MobEffects.WATER_BREATHING, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION);
 
@@ -125,57 +126,67 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
 
     //endregion
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, EnderBeeconBlockEntity entity) {
+    @Override
+    public Side getSide() {
+        return Side.SERVER;
+    }
+
+    @Override
+    public void serverTick(Level level, BlockPos pos, BlockState state) {
         if (level == null) return;
 
         // do drain tank
-        if (entity.doEffects()) {
-            entity.tank.drain(entity.getDrain(), IFluidHandler.FluidAction.EXECUTE);
+        if (this.doEffects()) {
+            this.tank.drain(this.getDrain(), IFluidHandler.FluidAction.EXECUTE);
         }
 
         // give effects
-        if (level.getGameTime() % 80L == 0L && !entity.tank.isEmpty()) {
-            List<Bee> bees = level.getEntitiesOfClass(Bee.class, getEffectBox(level, pos, entity.range));
+        if (level.getGameTime() % 80L == 0L && !this.tank.isEmpty()) {
+            List<Bee> bees = level.getEntitiesOfClass(Bee.class, getEffectBox(level, pos, this.range));
             bees.stream().filter(CustomBeeEntity.class::isInstance).map(CustomBeeEntity.class::cast).forEach(CustomBeeEntity::setHasDisruptorInRange);
-            addEffectsToBees(level, bees, entity);
+            this.effects
+                    .stream()
+                    .map(effect -> new MobEffectInstance(effect, 120, 0, false, false))
+                    .forEach(effect -> bees.forEach(bee -> bee.addEffect(new MobEffectInstance(effect))));
+
             if (state.hasProperty(EnderBeecon.SOUND) && Boolean.TRUE.equals(state.getValue(EnderBeecon.SOUND)))
                 level.playSound(null, pos, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 1f, 1f);
         }
 
         // pull from below containers
-        pullFluidFromBelow(level, pos, state, entity);
+        pullFluidFromBelow(level, pos);
 
         // play activation sounds
-        startUpCheck(level, pos, state, entity);
+        startUpCheck(level, pos, state);
     }
 
-    private static void startUpCheck(@NotNull Level level, BlockPos pos, BlockState state, EnderBeeconBlockEntity entity) {
-        boolean flag = entity.tank.getFluidAmount() > 0;
-        if (entity.updateBeecon) {
-            if (flag && !entity.beeconActive) {
+    private void startUpCheck(@NotNull Level level, BlockPos pos, BlockState state) {
+        boolean flag = this.tank.getFluidAmount() > 0;
+        if (this.updateBeecon) {
+            if (flag && !this.beeconActive) {
                 if (state.hasProperty(EnderBeecon.SOUND) && Boolean.TRUE.equals(state.getValue(EnderBeecon.SOUND)))
                     level.playSound(null, pos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1f, 1f);
-                entity.beeconActive = true;
-            } else if (!flag && entity.beeconActive) {
+                this.beeconActive = true;
+            } else if (!flag && this.beeconActive) {
                 if (state.hasProperty(EnderBeecon.SOUND) && Boolean.TRUE.equals(state.getValue(EnderBeecon.SOUND)))
                     level.playSound(null, pos, SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 1f, 1f);
-                entity.beeconActive = false;
+                this.beeconActive = false;
             }
         }
-        entity.updateBeecon = false;
+        this.updateBeecon = false;
     }
 
-    private static void pullFluidFromBelow(@NotNull Level level, BlockPos pos, BlockState state, EnderBeeconBlockEntity entity) {
-        if (entity.tank.getSpace() == 0) return;
+    private void pullFluidFromBelow(@NotNull Level level, BlockPos pos) {
+        if (this.tank.getSpace() == 0) return;
         BlockEntity tileEntity = level.getBlockEntity(pos.below());
         if (tileEntity == null) return;
         tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP).ifPresent(handler -> {
             for (int i = 0; i < handler.getTanks(); i++) {
                 FluidStack stack = handler.getFluidInTank(i);
-                if (entity.tank.isFluidValid(stack) && (entity.tank.getFluid().isFluidEqual(stack) || entity.tank.getFluid().isEmpty())) {
-                    int pullAmount = Math.min(CommonConfig.BEECON_PULL_AMOUNT.get(), entity.tank.getSpace());
+                if (this.tank.isFluidValid(stack) && (this.tank.getFluid().isFluidEqual(stack) || this.tank.getFluid().isEmpty())) {
+                    int pullAmount = Math.min(CommonConfig.BEECON_PULL_AMOUNT.get(), this.tank.getSpace());
                     FluidStack amountDrained = handler.drain(new FluidStack(stack.getFluid(), pullAmount), IFluidHandler.FluidAction.EXECUTE);
-                    entity.tank.fill(amountDrained, IFluidHandler.FluidAction.EXECUTE);
+                    this.tank.fill(amountDrained, IFluidHandler.FluidAction.EXECUTE);
                 }
             }
         });
@@ -214,14 +225,6 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity {
     public static AABB getEffectBox(@NotNull Level level, BlockPos pos, int range) {
         AABB aabb = new AABB(pos).inflate(range);
         return new AABB(aabb.minX, 0, aabb.minZ, aabb.maxX, level.getMaxBuildHeight(), aabb.maxZ);
-    }
-
-    private static void addEffectsToBees(@NotNull Level level, List<Bee> bees, EnderBeeconBlockEntity entity) {
-        if (entity.doEffects()) {
-            for (Bee mob : bees)
-                for (MobEffect effect : entity.effects)
-                    mob.addEffect(new MobEffectInstance(effect, 120, 0, false, false));
-        }
     }
 
     public int getRange() {

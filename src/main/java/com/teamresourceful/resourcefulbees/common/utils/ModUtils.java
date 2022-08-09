@@ -24,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
@@ -37,22 +38,22 @@ public final class ModUtils {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    public static void checkBottleAndCapability(HoneyFluidTank tank, BlockEntity entity, Player player, Level world, BlockPos pos, InteractionHand hand) {
+    public static void checkBottleAndCapability(FluidTank tank, BlockEntity entity, Player player, Level level, BlockPos pos, InteractionHand hand) {
         Item item = player.getItemInHand(hand).getItem();
         if (item instanceof BottleItem) {
-            tank.fillBottle(player, hand);
+            HoneyFluidTank.fillBottle(tank, player, hand);
         } else if (item instanceof HoneyBottleItem) {
-            tank.emptyBottle(player, hand);
+            HoneyFluidTank.emptyBottle(tank, player, hand);
         } else {
-            ModUtils.capabilityOrGuiUse(entity, player, world, pos, hand);
+            ModUtils.capabilityOrGuiUse(entity, player, level, pos, hand);
         }
     }
 
-    public static void capabilityOrGuiUse(BlockEntity tileEntity, Player player, Level world, BlockPos pos, InteractionHand hand){
+    public static void capabilityOrGuiUse(BlockEntity tileEntity, Player player, Level level, BlockPos pos, InteractionHand hand){
         if (player.getItemInHand(hand).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
             tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                    .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, world, pos, null));
-        } else if (!player.isShiftKeyDown() && !world.isClientSide) {
+                    .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, level, pos, null));
+        } else if (!player.isShiftKeyDown() && !level.isClientSide()) {
             NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tileEntity, pos);
         }
     }

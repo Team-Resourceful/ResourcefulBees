@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.block.HoneyGenerator;
+import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
@@ -34,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity {
+public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker {
 
     public static final int HONEY_DRAIN_AMOUNT = CommonConfig.HONEY_DRAIN_AMOUNT.get();
     public static final int ENERGY_FILL_AMOUNT = CommonConfig.ENERGY_FILL_AMOUNT.get();
@@ -65,21 +66,28 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity {
         super(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), pos, state);
     }
 
-    public static void clientTick(Level level, BlockPos pos, BlockState state, HoneyGeneratorBlockEntity entity) {
-        if (entity.processStage == ProcessStage.IDLE) entity.processingTime = 0;
+    @Override
+    public Side getSide() {
+        return Side.BOTH;
+    }
+
+    @Override
+    public void clientTick(Level level, BlockPos pos, BlockState state) {
+        if (this.processStage == ProcessStage.IDLE) this.processingTime = 0;
         else {
-            entity.processingTime++;
-            entity.processingTime %= 10;
+            this.processingTime++;
+            this.processingTime %= 10;
         }
     }
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, HoneyGeneratorBlockEntity entity) {
-        if (entity.processStage.equals(ProcessStage.IDLE) && entity.canProcess()) entity.startProcess(level);
-        if (entity.processStage.equals(ProcessStage.PROCESSING)) {
-            if (entity.canProcess()) entity.processEnergy();
-            else entity.processCompleted(level);
+    @Override
+    public void serverTick(Level level, BlockPos pos, BlockState state) {
+        if (this.processStage.equals(ProcessStage.IDLE) && this.canProcess()) this.startProcess(level);
+        if (this.processStage.equals(ProcessStage.PROCESSING)) {
+            if (this.canProcess()) this.processEnergy();
+            else this.processCompleted(level);
         }
-        entity.sendOutPower(level);
+        this.sendOutPower(level);
     }
 
     private void sendOutPower(Level level) {

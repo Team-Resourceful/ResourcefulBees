@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.block.base.SidedTickingBlock;
+import com.teamresourceful.resourcefulbees.common.block.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
@@ -47,7 +47,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EnderBeecon extends SidedTickingBlock<EnderBeeconBlockEntity> {
+public class EnderBeecon extends TickingBlock<EnderBeeconBlockEntity> {
 
     protected static final VoxelShape VOXEL_SHAPE_TOP = Util.make(() -> {
         VoxelShape shape = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 1.0D, 14.0D);
@@ -70,7 +70,7 @@ public class EnderBeecon extends SidedTickingBlock<EnderBeeconBlockEntity> {
             .dynamicShape();
 
     public EnderBeecon() {
-        super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY, EnderBeeconBlockEntity::serverTick, null, PROPERTIES);
+        super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY, PROPERTIES);
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(BEAM, true).setValue(SOUND, true));
     }
 

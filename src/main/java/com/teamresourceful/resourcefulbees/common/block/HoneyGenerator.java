@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.block.base.SidedTickingBlock;
+import com.teamresourceful.resourcefulbees.common.block.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.HoneyGeneratorBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -32,12 +32,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class HoneyGenerator extends SidedTickingBlock<HoneyGeneratorBlockEntity> {
+public class HoneyGenerator extends TickingBlock<HoneyGeneratorBlockEntity> {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty PROPERTY_ON = BooleanProperty.create("on");
 
     public HoneyGenerator(Properties properties) {
-        super(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY, HoneyGeneratorBlockEntity::serverTick, HoneyGeneratorBlockEntity::clientTick, properties);
+        super(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY, properties);
         registerDefaultState(defaultBlockState().setValue(PROPERTY_ON, false).setValue(FACING, Direction.NORTH));
     }
 

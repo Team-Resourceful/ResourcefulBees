@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
+import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -8,13 +9,19 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class AcceleratorBlockEntity extends BlockEntity {
+public class AcceleratorBlockEntity extends BlockEntity implements InstanceBlockEntityTicker {
 
     public AcceleratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.ACCELERATOR_TILE_ENTITY.get(), pos, state);
     }
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, AcceleratorBlockEntity entity) {
+    @Override
+    public Side getSide() {
+        return Side.SERVER;
+    }
+
+    @Override
+    public void serverTick(Level level, BlockPos pos, BlockState state) {
         accelerateTick(level, pos.below());
         accelerateTick(level, pos.above());
         accelerateTick(level, pos.north());

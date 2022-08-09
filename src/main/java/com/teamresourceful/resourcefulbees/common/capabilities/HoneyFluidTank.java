@@ -19,6 +19,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -39,10 +40,12 @@ public class HoneyFluidTank extends FluidTank {
     }
 
     public static void fillBottle(FluidTank tank, Player player, InteractionHand hand){
-        FluidStack fluidStack = new FluidStack(tank.getFluid(), ModConstants.HONEY_PER_BOTTLE);
-        ItemStack itemStack = new ItemStack(getHoneyBottleFromFluid(tank.getFluid().getFluid()), 1);
+        FluidStack tankFluid = tank.getFluid();
+        FluidStack fluidStack = new FluidStack(tankFluid, ModConstants.HONEY_PER_BOTTLE);
+        ItemStack itemStack = new ItemStack(getHoneyBottleFromFluid(tankFluid.getFluid()), 1);
+        if (itemStack.isEmpty()) return;
         if (tank.isEmpty()) return;
-        if (tank.getFluidAmount() >= ModConstants.HONEY_PER_BOTTLE) {
+        if (tankFluid.getAmount() >= ModConstants.HONEY_PER_BOTTLE) {
             tank.drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
             ItemStack stack = player.getItemInHand(hand);
             if (stack.getCount() > 1) {
@@ -61,7 +64,9 @@ public class HoneyFluidTank extends FluidTank {
 
     public static void emptyBottle(FluidTank tank, Player player, InteractionHand hand){
         FluidStack fluidStack = new FluidStack(getHoneyFluidFromBottle(player.getItemInHand(hand)), ModConstants.HONEY_PER_BOTTLE);
-        if (!tank.getFluid().isFluidEqual(fluidStack) && !tank.isEmpty()) {
+        if (fluidStack.isEmpty()) return;
+        FluidStack tankFluid = tank.getFluid();
+        if (!tankFluid.isFluidEqual(fluidStack) && !tank.isEmpty()) {
             return;
         }
         if (tank.getFluidAmount() + ModConstants.HONEY_PER_BOTTLE <= tank.getTankCapacity(0)) {
@@ -88,10 +93,14 @@ public class HoneyFluidTank extends FluidTank {
         return Fluids.EMPTY;
     }
 
+    @Nullable
     public static Item getHoneyBottleFromFluid(Fluid fluid) {
         if (fluid instanceof CustomHoneyFluid honeyFluid) {
             return HoneyRegistry.getRegistry().getHoneyData(honeyFluid.getHoneyData().name()).bottleData().honeyBottle();
         }
-        return Items.HONEY_BOTTLE;
+        if (fluid.is(ModTags.Fluids.HONEY)) {
+            return Items.HONEY_BOTTLE;
+        }
+        return null;
     }
 }

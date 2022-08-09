@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
+import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
@@ -31,7 +32,7 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity {
+public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker {
 
     public static final int BLOCK_OUTPUT = 0;
 
@@ -111,18 +112,24 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity {
         return inventory;
     }
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, SolidificationChamberBlockEntity entity) {
-        if (entity.canProcessHoney()) {
-            if (entity.processingFill >= CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get()) {
-                entity.processHoney();
-                entity.processingFill = 0;
+    @Override
+    public Side getSide() {
+        return Side.SERVER;
+    }
+
+    @Override
+    public void serverTick(Level level, BlockPos pos, BlockState state) {
+        if (this.canProcessHoney()) {
+            if (this.processingFill >= CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get()) {
+                this.processHoney();
+                this.processingFill = 0;
             }
-            entity.processingFill++;
+            this.processingFill++;
         }
 
-        if (entity.dirty) {
-            entity.dirty = false;
-            entity.setChanged();
+        if (this.dirty) {
+            this.dirty = false;
+            this.setChanged();
         }
     }
 

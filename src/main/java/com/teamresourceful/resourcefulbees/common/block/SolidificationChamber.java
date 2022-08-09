@@ -1,8 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.block.base.SidedTickingBlock;
+import com.teamresourceful.resourcefulbees.common.block.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
-import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
@@ -12,26 +11,19 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BottleItem;
-import net.minecraft.world.item.HoneyBottleItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
-public class SolidificationChamber extends SidedTickingBlock<SolidificationChamberBlockEntity> {
+public class SolidificationChamber extends TickingBlock<SolidificationChamberBlockEntity> {
 
     protected static final VoxelShape VOXEL_SHAPE = Util.make(() -> {
         VoxelShape shape = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 5.0D, 15.0D);
@@ -41,11 +33,8 @@ public class SolidificationChamber extends SidedTickingBlock<SolidificationChamb
         return shape;
     });
 
-    public SolidificationChamber() {
-        super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY,
-                SolidificationChamberBlockEntity::serverTick,
-                null,
-                Properties.of(Material.STONE).sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops());
+    public SolidificationChamber(Properties properties) {
+        super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY, properties);
     }
 
     private static SolidificationChamberBlockEntity getBlockEntity(@NotNull BlockGetter level, @NotNull BlockPos pos) {
@@ -54,19 +43,9 @@ public class SolidificationChamber extends SidedTickingBlock<SolidificationChamb
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
-        BlockEntity tileEntity = level.getBlockEntity(pos);
-
-        if (tileEntity instanceof SolidificationChamberBlockEntity solidificationChamber) {
+        if (level.getBlockEntity(pos) instanceof SolidificationChamberBlockEntity chamber) {
             if (!level.isClientSide) {
-                FluidTank tank = solidificationChamber.getTank();
-                Item item = player.getItemInHand(hand).getItem();
-                if (item instanceof HoneyBottleItem) {
-                    HoneyFluidTank.emptyBottle(tank, player, hand);
-                } else if (item instanceof BottleItem) {
-                    HoneyFluidTank.fillBottle(tank, player, hand);
-                } else {
-                    ModUtils.capabilityOrGuiUse(tileEntity, player, level, pos, hand);
-                }
+                ModUtils.checkBottleAndCapability(chamber.getTank(), chamber, player, level, pos, hand);
             }
             return InteractionResult.SUCCESS;
         }
