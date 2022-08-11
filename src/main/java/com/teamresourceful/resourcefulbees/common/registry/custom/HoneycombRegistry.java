@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class HoneycombRegistry {
 
@@ -78,6 +79,25 @@ public class HoneycombRegistry {
      */
     public Map<String, OutputVariation> getVariations() {
         return Collections.unmodifiableMap(VARIATION_DATA);
+    }
+
+    /**
+     * A helper method that returns an unmodifiable set of the values contained in the internal
+     * {@link OutputVariation} map. This is useful for iterating over all variations without
+     * worry of changing registry data as the objects contained in the map are immutable.
+     *
+     * @return Returns an unmodifiable set of the values contained in the internal
+     * {@link OutputVariation} map
+     */
+    public Set<OutputVariation> getSetOfVariations() {
+        return Set.copyOf(VARIATION_DATA.values());
+    }
+
+    /**
+     * A helper method that returns a stream using the {@link HoneycombRegistry#getSetOfVariations()} method.
+     */
+    public Stream<OutputVariation> getStreamOfVariations() {
+        return getSetOfVariations().stream();
     }
 
     //region Regeneration Methods

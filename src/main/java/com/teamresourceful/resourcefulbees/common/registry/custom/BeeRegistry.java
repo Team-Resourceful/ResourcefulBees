@@ -17,6 +17,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 @Unmodifiable
 public class BeeRegistry implements IBeeRegistry {
@@ -165,6 +166,13 @@ public class BeeRegistry implements IBeeRegistry {
      */
     public Set<CustomBeeData> getSetOfBees() {
         return Set.copyOf(CUSTOM_DATA.values());
+    }
+
+    /**
+     * A helper method that returns a stream using the {@link BeeRegistry#getSetOfBees()} method.
+     */
+    public Stream<CustomBeeData> getStreamOfBees() {
+        return Set.copyOf(CUSTOM_DATA.values()).stream();
     }
 
     //region Setup

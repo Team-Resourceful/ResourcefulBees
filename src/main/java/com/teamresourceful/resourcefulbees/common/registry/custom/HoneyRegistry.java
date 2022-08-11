@@ -6,7 +6,11 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.IHoneyRegistry;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 public class HoneyRegistry implements IHoneyRegistry {
 
@@ -67,6 +71,13 @@ public class HoneyRegistry implements IHoneyRegistry {
      */
     public Set<HoneyData> getSetOfHoney() {
         return Set.copyOf(honeyInfo.values());
+    }
+
+    /**
+     * A helper method that returns a stream using the {@link HoneyRegistry#getSetOfHoney()} method.
+     */
+    public Stream<HoneyData> getStreamOfHoney() {
+        return getSetOfHoney().stream();
     }
 
     /**
