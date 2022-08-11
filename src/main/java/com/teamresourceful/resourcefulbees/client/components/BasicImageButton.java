@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.components;
 
 import com.teamresourceful.resourcefulbees.client.components.base.ImageButton;
-import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 
 public class BasicImageButton extends ImageButton {
@@ -12,7 +11,7 @@ public class BasicImageButton extends ImageButton {
     private boolean selected;
 
     public BasicImageButton(int x, int y, int u, int v, boolean selected, ResourceLocation texture) {
-        super(x, y, 20, 20, CommonComponents.EMPTY);
+        super(x, y, 20, 20);
         this.u = u;
         this.v = v;
         this.selected = selected;
