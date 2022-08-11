@@ -65,7 +65,7 @@ public record CustomBeeData(CoreData coreData, RenderData renderData, BreedData 
     private static CustomBeeData of(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, TraitData traitData) {
         JsonObject rawData = BeeRegistry.getRegistry().getRawBeeData(coreData.name());
         ResourceLocation registryId = new ResourceLocation(ResourcefulBees.MOD_ID, coreData.name() + "_bee");
-        MutableComponent displayName = Component.translatable("entity.resourcefulbees." + coreData.name() + "_bee");
+        MutableComponent displayName = Component.translatable("bee_type.resourcefulbees." + coreData.name());
         Supplier<EntityType<?>> beeEntity = Suppliers.memoize(() -> getEntity(registryId));
         return new CustomBeeData(coreData, renderData, breedData, combatData, mutationData, traitData, rawData, registryId, displayName, beeEntity);
     }

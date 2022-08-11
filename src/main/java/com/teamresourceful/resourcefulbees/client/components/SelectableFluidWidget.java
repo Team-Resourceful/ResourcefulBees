@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
 import com.teamresourceful.resourcefulbees.common.capabilities.SelectableMultiFluidTank;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.SelectFluidMessage;
-import com.teamresourceful.resourcefulbees.common.utils.SelectableList;
+import com.teamresourceful.resourcefullib.common.utils.SelectableList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
