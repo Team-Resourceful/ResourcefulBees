@@ -29,6 +29,7 @@ public final class LangGeneration {
     public static final String ENTITY_RESOURCEFULBEES = "entity.resourcefulbees.";
     public static final String FLUID_TYPE_RESOURCEFULBEES = "fluid_type.resourcefulbees.";
     public static final String FLUID_RESOURCEFULBEES = "fluid.resourcefulbees.";
+    public static final String BEE_RESOURCEFULBEES = "bee_type.resourcefulbees.";
 
     private LangGeneration() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -43,7 +44,10 @@ public final class LangGeneration {
         BeeRegistry.getRegistry().getSetOfBees().stream()
                 .map(CustomBeeData::coreData)
                 .map(CoreData::name)
-                .forEach(name -> object.addProperty(ENTITY_RESOURCEFULBEES + name + "_bee", replaceAndCapitalize(name) + " Bee"));
+                .forEach(name -> {
+                    object.addProperty(ENTITY_RESOURCEFULBEES + name + "_bee", replaceAndCapitalize(name) + " Bee");
+                    object.addProperty(BEE_RESOURCEFULBEES + name, replaceAndCapitalize(name));
+                });
 
         generateLang(ModItems.SPAWN_EGG_ITEMS, ITEM_RESOURCEFULBEES, object);
         generateLang(ModItems.HONEYCOMB_ITEMS, ITEM_RESOURCEFULBEES, object);

@@ -79,6 +79,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
     public void addBee(String id, String name) {
         add(LangGeneration.ITEM_RESOURCEFULBEES+id+"_bee_spawn_egg", name +" Bee Spawn Egg");
         add("entity.resourcefulbees."+id+"_bee", name +" Bee");
+        add("bee_type.resourcefulbees."+id, name);
     }
 
     public void addHoneycomb(String id, String name) {
