@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.item.locator;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.utils.Vec2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.NbtUtils;
