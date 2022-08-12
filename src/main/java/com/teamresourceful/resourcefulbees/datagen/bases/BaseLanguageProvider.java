@@ -85,6 +85,19 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
     public void addHoneycomb(String id, String name) {
         add(LangGeneration.ITEM_RESOURCEFULBEES+id+"_honeycomb", name +" Honeycomb");
         add(LangGeneration.BLOCK_RESOURCEFULBEES+id+"_honeycomb_block", name +" Honeycomb Block");
+        addHoneycombType(id, name);
+    }
+
+    public void addHoneycombType(String id, String name) {
+        add(LangGeneration.COMB_RESOURCEFULBEES+id, name);
+    }
+
+    public void addTraitType(String id, String name) {
+        add(LangGeneration.TRAIT_RESOURCEFULBEES+id, name);
+    }
+
+    public void addTraitTypeDescription(String id, String name) {
+        add(LangGeneration.TRAIT_RESOURCEFULBEES+"desc."+id, name);
     }
 
     public void addHoney(String id, String name, boolean fluid, boolean block) {
@@ -95,6 +108,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
             add("fluid_type.resourcefulbees."+id+"_honey", name+" Honey");
         }
         add(LangGeneration.ITEM_RESOURCEFULBEES+id+"_honey_bottle", name +" Honey Bottle");
+        add(LangGeneration.HONEY_RESOURCEFULBEES+id, name);
     }
 
     public void addFluid(Supplier<FluidType> fluid, String name) {

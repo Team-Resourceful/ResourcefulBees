@@ -3,10 +3,15 @@ package com.teamresourceful.resourcefulbees.client.data;
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
+import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
@@ -30,6 +35,9 @@ public final class LangGeneration {
     public static final String FLUID_TYPE_RESOURCEFULBEES = "fluid_type.resourcefulbees.";
     public static final String FLUID_RESOURCEFULBEES = "fluid.resourcefulbees.";
     public static final String BEE_RESOURCEFULBEES = "bee_type.resourcefulbees.";
+    public static final String HONEY_RESOURCEFULBEES = "honey_type.resourcefulbees.";
+    public static final String COMB_RESOURCEFULBEES = "comb_type.resourcefulbees.";
+    public static final String TRAIT_RESOURCEFULBEES = "trait_type.resourcefulbees.";
 
     private LangGeneration() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -41,13 +49,29 @@ public final class LangGeneration {
 
         JsonObject object = new JsonObject();
 
-        BeeRegistry.getRegistry().getSetOfBees().stream()
+        BeeRegistry.getRegistry()
+                .getStreamOfBees()
                 .map(CustomBeeData::coreData)
                 .map(CoreData::name)
                 .forEach(name -> {
                     object.addProperty(ENTITY_RESOURCEFULBEES + name + "_bee", replaceAndCapitalize(name) + " Bee");
                     object.addProperty(BEE_RESOURCEFULBEES + name, replaceAndCapitalize(name));
                 });
+
+        HoneycombRegistry.getRegistry()
+                .getStreamOfVariations()
+                .map(OutputVariation::id)
+                .forEach(name -> object.addProperty(COMB_RESOURCEFULBEES + name, replaceAndCapitalize(name)));
+
+        HoneyRegistry.getRegistry()
+                .getStreamOfHoney()
+                .map(HoneyData::name)
+                .forEach(name -> object.addProperty(HONEY_RESOURCEFULBEES + name, replaceAndCapitalize(name)));
+
+        TraitRegistry.getRegistry()
+                .getStreamOfTraits()
+                .map(BeeTrait::getName)
+                .forEach(name -> object.addProperty(TRAIT_RESOURCEFULBEES + name, replaceAndCapitalize(name)));
 
         generateLang(ModItems.SPAWN_EGG_ITEMS, ITEM_RESOURCEFULBEES, object);
         generateLang(ModItems.HONEYCOMB_ITEMS, ITEM_RESOURCEFULBEES, object);
@@ -57,8 +81,6 @@ public final class LangGeneration {
         generateLang(ModBlocks.HONEY_FLUID_BLOCKS, BLOCK_RESOURCEFULBEES, object);
         generateLang(ModFluids.STILL_HONEY_FLUIDS, FLUID_RESOURCEFULBEES, object);
         generateLang(ModFluids.FLUID_TYPES, FLUID_TYPE_RESOURCEFULBEES, object);
-
-        TraitRegistry.getRegistry().getTraits().forEach((name, trait) -> object.addProperty(trait.getTranslationKey(), replaceAndCapitalize(name)));
 
         String langPath = ModPaths.RESOURCES + "/assets/resourcefulbees/lang/";
         try {

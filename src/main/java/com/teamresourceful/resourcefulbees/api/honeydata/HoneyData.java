@@ -6,6 +6,7 @@ import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -24,5 +25,9 @@ public record HoneyData(String name, HoneyBottleData bottleData, HoneyBlockData 
 
     public ResourceLocation getRegistryID() {
         return ForgeRegistries.ITEMS.getKey(bottleData.honeyBottle());
+    }
+
+    public Component getDisplayName() {
+        return Component.translatable("honey_type.resourcefulbees." + name());
     }
 }

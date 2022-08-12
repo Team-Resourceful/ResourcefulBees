@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
@@ -98,5 +99,9 @@ public record OutputVariation(String id,
         } else if (DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK && defaultCombBlock.isEmpty()) {
             throw new IllegalArgumentException(id + " : Default block must be present when list is empty and config contains blocks!!!");
         }
+    }
+
+    public Component getDisplayName() {
+        return Component.translatable("comb_type.resourcefulbees." + id());
     }
 }

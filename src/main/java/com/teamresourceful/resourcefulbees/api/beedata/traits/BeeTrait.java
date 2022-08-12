@@ -5,10 +5,10 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -146,8 +146,12 @@ public class BeeTrait {
 
     public Set<BeeAura> getAuras() { return auras; }
 
-    public String getTranslationKey() {
-        return String.format("trait.%s.%s", ResourcefulBees.MOD_ID, name);
+    public Component getDisplayName() {
+        return Component.translatable("trait_type.resourcefulbees." + name);
+    }
+
+    public Component getDescription() {
+        return Component.translatable("trait_type.resourcefulbees.desc." + name);
     }
 
     /**
