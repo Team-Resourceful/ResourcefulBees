@@ -54,11 +54,8 @@ public class BeeLanguageModule implements LanguageModule {
         provider.addTraitType("teleport", "Teleport");
         provider.addTraitType("flammable", "Flammable");
         provider.addTraitType("spider", "Spider");
-        provider.addTraitTypeDescription("teleport", "During the day the bee can randomly teleport to an empty position within 4 blocks. This ability is stopped by the Ender Beecon and Bee Hives.");
-        provider.addTraitTypeDescription("flammable", "This effect will randomly light the bee on fire.");
-        provider.addTraitTypeDescription("angry", "Bees with this effect will become aggressive and cause bees around to join them. They can and will attack you, Calming effects will stop them from being angry.");
-        provider.addTraitTypeDescription("slimy", "Slimy bees will make squishy sounds and spurt out slime particles at random.");
-        provider.addTraitTypeDescription("spider", "Allows bees to fly through spiderwebs without issues.");
+        provider.addTraitType("zombie", "Hunger");
+        provider.addTraitType("healer", "Healer");
         provider.addHoneycomb("iron", "Iron");
         provider.addHoneycomb("gold", "Gold");
         provider.addHoneycomb("emerald", "Emerald");
@@ -79,5 +76,16 @@ public class BeeLanguageModule implements LanguageModule {
         provider.addHoneycomb("catnip", "Catnip");
         provider.addHoneycomb("slimy", "Slimy");
         provider.addHoneycombType("oreo", "Oreo");
+
+        provider.addTraitAbility("teleport", "Teleport");
+        provider.addTraitAbilityDescription("teleport", "During the day the bee can randomly teleport to an empty position within 4 blocks. This ability is stopped by the Ender Beecon and Bee Hives.");
+        provider.addTraitAbility("flammable", "Flammable");
+        provider.addTraitAbilityDescription("flammable", "This effect will randomly light the bee on fire.");
+        provider.addTraitAbility("angry", "Angry");
+        provider.addTraitAbilityDescription("angry", "Bees with this effect will become aggressive and cause bees around to join them. They can and will attack you, Calming effects will stop them from being angry.");
+        provider.addTraitAbility("slimy", "Slimy");
+        provider.addTraitAbilityDescription("slimy", "Slimy bees will make squishy sounds and spurt out slime particles at random.");
+        provider.addTraitAbility("spider", "Spider");
+        provider.addTraitAbilityDescription("spider", "Allows bees to fly through spiderwebs without issues.");
     }
 }

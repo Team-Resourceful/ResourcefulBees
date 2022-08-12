@@ -96,8 +96,12 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         add(LangGeneration.TRAIT_RESOURCEFULBEES+id, name);
     }
 
-    public void addTraitTypeDescription(String id, String name) {
-        add(LangGeneration.TRAIT_RESOURCEFULBEES+"desc."+id, name);
+    public void addTraitAbility(String id, String name) {
+        add("trait_ability.resourcefulbees."+id, name);
+    }
+
+    public void addTraitAbilityDescription(String id, String name) {
+        add("trait_ability.resourcefulbees.desc."+id, name);
     }
 
     public void addHoney(String id, String name, boolean fluid, boolean block) {

@@ -1,12 +1,10 @@
 package com.teamresourceful.resourcefulbees.api;
 
-import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
-
-import java.util.function.Consumer;
+import com.teamresourceful.resourcefulbees.api.trait.TraitAbility;
 
 public interface ITraitAbilityRegistry {
 
-    boolean register(String name, Consumer<ResourcefulBee> consumer);
+    boolean register(String name, TraitAbility consumer);
     boolean hasAbility(String name);
-    Consumer<ResourcefulBee> getAbility(String name);
+    TraitAbility getAbility(String name);
 }

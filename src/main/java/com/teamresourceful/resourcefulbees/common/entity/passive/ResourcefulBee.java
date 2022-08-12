@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.entity.passive;
 
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
+import com.teamresourceful.resourcefulbees.api.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
@@ -177,7 +178,8 @@ public class ResourcefulBee extends CustomBeeEntity {
         info.getSpecialAbilities().stream()
                 .map(registry::getAbility)
                 .filter(Objects::nonNull)
-                .forEach(consumer -> consumer.accept(this));
+                .filter(TraitAbility::canRun)
+                .forEach(ability -> ability.run(this));
 
         super.customServerAiStep();
     }

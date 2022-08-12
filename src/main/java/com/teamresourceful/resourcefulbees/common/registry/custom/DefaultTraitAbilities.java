@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
+import com.teamresourceful.resourcefulbees.api.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
@@ -7,13 +8,19 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
+
+import java.util.function.Consumer;
 
 public final class DefaultTraitAbilities {
 
@@ -22,10 +29,11 @@ public final class DefaultTraitAbilities {
     }
 
     public static void registerDefaultAbilities(TraitAbilityRegistry registry) {
-        registry.register(TraitConstants.TELEPORT, DefaultTraitAbilities::enderAbility);
-        registry.register(TraitConstants.SLIMY, DefaultTraitAbilities::slimeAbility);
-        registry.register(TraitConstants.FLAMMABLE, DefaultTraitAbilities::fireAbility);
-        registry.register(TraitConstants.ANGRY, DefaultTraitAbilities::angryAbility);
+        registry.register(TraitConstants.TELEPORT, new DefaultAbility("teleport", Items.ENDER_PEARL, DefaultTraitAbilities::enderAbility));
+        registry.register(TraitConstants.SLIMY, new DefaultAbility("slimy", Items.SLIME_BALL, DefaultTraitAbilities::slimeAbility));
+        registry.register(TraitConstants.FLAMMABLE, new DefaultAbility("flammable", Items.BLAZE_POWDER, DefaultTraitAbilities::fireAbility));
+        registry.register(TraitConstants.ANGRY, new DefaultAbility("angry", Items.IRON_AXE, DefaultTraitAbilities::angryAbility));
+        registry.register(TraitConstants.SPIDER, new DefaultAbility("spider", Items.COBWEB, null));
     }
 
     private static void enderAbility(ResourcefulBee bee) {
@@ -80,6 +88,34 @@ public final class DefaultTraitAbilities {
             Entity player = bee.level.getNearestPlayer(bee, 20);
             bee.setPersistentAngerTarget(player != null ? player.getUUID() : null);
             bee.setRemainingPersistentAngerTime(1000);
+        }
+    }
+
+    public record DefaultAbility(String id, Item item, Consumer<ResourcefulBee> ability) implements TraitAbility {
+
+        @Override
+        public ItemStack getIcon() {
+            return new ItemStack(item);
+        }
+
+        @Override
+        public Component getTitle() {
+            return Component.translatable("trait_ability.resourceful_bees." + id);
+        }
+
+        @Override
+        public Component getDescription() {
+            return Component.translatable("trait_ability.resourceful_bees.desc." + id);
+        }
+
+        @Override
+        public boolean canRun() {
+            return ability != null;
+        }
+
+        @Override
+        public void run(ResourcefulBee bee) {
+            ability.accept(bee);
         }
     }
 
