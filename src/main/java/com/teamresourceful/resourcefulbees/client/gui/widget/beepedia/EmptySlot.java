@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.widget.beepedia;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaImages;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipWidget;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -19,7 +19,7 @@ public class EmptySlot extends TooltipWidget {
     @Override
     public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        RenderUtils.bindTexture(BeepediaImages.BUTTON_IMAGE);
+        ClientUtils.bindTexture(BeepediaImages.BUTTON_IMAGE);
 
         // TODO: 24/10/2021 Finish this class
     }

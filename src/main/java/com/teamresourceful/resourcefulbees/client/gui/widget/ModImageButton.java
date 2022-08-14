@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,7 +43,7 @@ public class ModImageButton extends TooltipButton {
 
     @Override
     public void renderButton(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTick) {
-        RenderUtils.bindTexture(this.resourceLocation);
+        ClientUtils.bindTexture(this.resourceLocation);
         RenderSystem.disableDepthTest();
         int i = this.yTexStart;
         if (!this.active) {

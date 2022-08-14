@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConst
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import mezz.jei.api.constants.VanillaTypes;
@@ -76,7 +76,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     @Override
     public void draw(@NotNull CentrifugeRecipeAdapter recipe, @NotNull IRecipeSlotsView view, @NotNull PoseStack stack, double mouseX, double mouseY) {
         super.draw(recipe, view, stack, mouseX, mouseY);
-        RenderUtils.bindTexture(GUI_BACK);
+        ClientUtils.bindTexture(GUI_BACK);
         for (int i = 0; i < 3; i++) {
             int finalI = i;
             view.findSlotByName("item_output_"+i).ifPresent(slot -> drawWeightAndChance(stack, 61, mouseX, mouseY, finalI));

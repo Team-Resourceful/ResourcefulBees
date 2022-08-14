@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.*;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ModImageButton;
 import com.teamresourceful.resourcefulbees.client.gui.widget.ScreenArea;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -63,7 +63,7 @@ public class HomePage extends BeepediaPage {
         double scale = beepedia.getMinecraft().getWindow().getGuiScale();
         int scissorY = (int) (beepedia.getMinecraft().getWindow().getHeight() - (y + 80) * scale);
         GL11.glScissor((int) (x * scale), scissorY, (int) (width * scale), (int) ((73) * scale));
-        RenderUtils.renderEntity(matrix, bees.get(counter), x + (width / 2F) - 12F, y + 10f, -45, 3);
+        ClientUtils.renderEntity(matrix, bees.get(counter), x + (width / 2F) - 12F, y + 10f, -45, 3);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         Font font = Minecraft.getInstance().font;
@@ -71,7 +71,7 @@ public class HomePage extends BeepediaPage {
         int padding = font.width(completeStatus) / 2;
         font.draw(matrix, completeStatus, x + (width / 2F) - padding, y + 115F, -1);
         font.draw(matrix, BeepediaLang.ITEM_GROUP.withStyle(ChatFormatting.GRAY), x + 52F, y + 81F, -1);
-        RenderUtils.bindTexture(BeepediaImages.LOGO);
+        ClientUtils.bindTexture(BeepediaImages.LOGO);
         Gui.blit(matrix, x + (width / 2) - 52, y + 90, 0, 0, 104, 16, 104, 16);
     }
 

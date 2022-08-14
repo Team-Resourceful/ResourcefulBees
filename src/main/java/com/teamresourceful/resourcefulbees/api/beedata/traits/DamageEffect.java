@@ -3,8 +3,11 @@ package com.teamresourceful.resourcefulbees.api.beedata.traits;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.enums.DamageTypes;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.Nullable;
 
 public record DamageEffect(DamageTypes source, int strength) {
@@ -18,5 +21,14 @@ public record DamageEffect(DamageTypes source, int strength) {
 
     public DamageSource getDamageSource(@Nullable LivingEntity livingEntity) {
         return source().getSource(livingEntity);
+    }
+
+    public Component getDisplayName() {
+        return Component.literal(
+                String.format("%s %s",
+                        WordUtils.capitalizeFully(source.name().replace("_", " ")),
+                        ModUtils.createRomanNumeral(strength)
+                )
+        );
     }
 }

@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.terminal.TerminalInputsModule;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.terminal.TerminalOutputsModule;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeTerminalContainer;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.apache.commons.lang3.tuple.Pair;
@@ -70,7 +70,7 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
     @Override
     protected void renderLabels(@NotNull PoseStack matrix, int mouseX, int mouseY) {
         super.renderLabels(matrix, mouseX, mouseY);
-        RenderUtils.TERMINAL_FONT_12.draw(matrix, TERMINAL_TEXT, 58f - (RenderUtils.TERMINAL_FONT_12.width(TERMINAL_TEXT)/2f),45.5f, RenderUtils.FONT_COLOR_1);
+        ClientUtils.TERMINAL_FONT_12.draw(matrix, TERMINAL_TEXT, 58f - (ClientUtils.TERMINAL_FONT_12.width(TERMINAL_TEXT)/2f),45.5f, ClientUtils.FONT_COLOR_1);
         tabs.keySet().forEach(tab -> tab.renderText(matrix, mouseX, mouseY));
         loadedModule.getValue().renderText(matrix, mouseX, mouseY);
     }

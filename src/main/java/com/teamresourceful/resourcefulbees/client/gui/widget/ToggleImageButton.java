@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,7 +46,7 @@ public class ToggleImageButton extends TooltipButton {
     @Override
     public void renderButton(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         super.renderButton(matrixStack, mouseX, mouseY, partialTicks);
-        RenderUtils.bindTexture(this.resourceLocation);
+        ClientUtils.bindTexture(this.resourceLocation);
         int i = this.yTexStart;
         if (this.isMouseOver(mouseX, mouseY) && active) {
             i += this.yDiffTex;

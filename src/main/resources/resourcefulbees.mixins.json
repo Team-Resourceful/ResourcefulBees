@@ -20,6 +20,7 @@
   "minVersion": "0.8.5",
   "client": [
     "accessors.FontResourceManagerAccessor",
-    "accessors.MinecraftAccessor"
+    "accessors.MinecraftAccessor",
+    "invokers.ScreenInvoker"
   ]
 }

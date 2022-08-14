@@ -3,12 +3,13 @@ package com.teamresourceful.resourcefulbees.common.utils;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaScreen;
+import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LightLevel;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefullib.client.screens.state.ScreenStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -31,7 +32,8 @@ public final class BeepediaUtils {
         if (itemstack.hasTag() && itemstack.getTag() != null && !itemstack.isEmpty()) {
             complete = itemstack.getTag().getBoolean(Beepedia.COMPLETE_TAG) || itemstack.getTag().getBoolean(Beepedia.CREATIVE_TAG);
         }
-        Minecraft.getInstance().setScreen(new BeepediaScreen(complete, hasShades, data));
+        Minecraft.getInstance().setScreen(ScreenStateManager.getScreen(BeepediaScreen.STATE_ID, BeepediaScreen::new));
+        //Minecraft.getInstance().setScreen(new BeepediaScreen(complete, hasShades, data));
     }
 
     public static MutableComponent getSizeName(float sizeModifier) {

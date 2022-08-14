@@ -2,15 +2,12 @@ package com.teamresourceful.resourcefulbees.client.utils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.FontResourceManagerAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.MinecraftAccessor;
-import com.teamresourceful.resourcefulbees.common.utils.Bound;
-import com.teamresourceful.resourcefulbees.common.utils.Vec2i;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -25,14 +22,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.BufferUtils;
 
-import java.nio.FloatBuffer;
-
-public final class RenderUtils {
+public final class ClientUtils {
 
     public static final int FONT_COLOR_1 = 0xffc9c9c9;
     public static final int FONT_COLOR_2 = 0xff2cafc7;
@@ -41,7 +34,7 @@ public final class RenderUtils {
     private static final FontSet FONT_12 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(new ResourceLocation(ResourcefulBees.MOD_ID, "jetbrains_mono_12"));
     public static final Font TERMINAL_FONT_12 = new Font(resourceLocation -> FONT_12);
 
-    private RenderUtils() {
+    private ClientUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
@@ -96,26 +89,5 @@ public final class RenderUtils {
             x = x - (font.width(component) / 2);
             font.draw(stack, component, x, y, color);
         }
-    }
-
-    public static Bound getScissorBounds(Minecraft minecraft, PoseStack stack, int x, int y, int width, int height) {
-
-        float guiScale = (float)minecraft.getWindow().getGuiScale();
-        Vec2i translation = getTranslation(stack);
-        float translationX = translation.x() * guiScale;
-        float translationY = translation.z() * guiScale;
-        return new Bound((int) (translationX+ x * guiScale), (int) (Minecraft.getInstance().getWindow().getHeight() - y * guiScale - translationY - height * guiScale), (int) (width * guiScale), (int) (height * guiScale));
-    }
-
-    public static Vec2i getTranslation(PoseStack stack) {
-        Matrix4f pose = stack.last().pose();
-        FloatBuffer floatBuffer = BufferUtils.createFloatBuffer(16);
-        pose.store(floatBuffer);
-        return new Vec2i((int)floatBuffer.get(12), (int)floatBuffer.get(13));
-    }
-
-    public static void renderItem(PoseStack stack, ItemStack item, int x, int y) {
-        Vec2i translation = getTranslation(stack);
-        Minecraft.getInstance().getItemRenderer().renderGuiItem(item, translation.x() + x, translation.z() + y);
     }
 }

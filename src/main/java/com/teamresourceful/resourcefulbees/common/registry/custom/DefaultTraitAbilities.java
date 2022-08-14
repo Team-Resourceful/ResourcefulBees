@@ -100,12 +100,12 @@ public final class DefaultTraitAbilities {
 
         @Override
         public Component getTitle() {
-            return Component.translatable("trait_ability.resourceful_bees." + id);
+            return Component.translatable("trait_ability.resourcefulbees." + id);
         }
 
         @Override
         public Component getDescription() {
-            return Component.translatable("trait_ability.resourceful_bees.desc." + id);
+            return Component.translatable("trait_ability.resourcefulbees.desc." + id);
         }
 
         @Override

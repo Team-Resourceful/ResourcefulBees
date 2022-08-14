@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.components.SelectableFluidWidget;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.CentrifugeMenu;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -33,7 +33,7 @@ public class NormalCentrifugeScreen extends AbstractContainerScreen<CentrifugeMe
     protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/basic.png");
         if (tileEntity != null) {
-            RenderUtils.bindTexture(texture);
+            ClientUtils.bindTexture(texture);
             int i = this.leftPos;
             int j = this.topPos;
             this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);

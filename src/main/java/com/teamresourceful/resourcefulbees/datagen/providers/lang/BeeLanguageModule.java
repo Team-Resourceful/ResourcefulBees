@@ -87,5 +87,10 @@ public class BeeLanguageModule implements LanguageModule {
         provider.addTraitAbilityDescription("slimy", "Slimy bees will make squishy sounds and spurt out slime particles at random.");
         provider.addTraitAbility("spider", "Spider");
         provider.addTraitAbilityDescription("spider", "Allows bees to fly through spiderwebs without issues.");
+
+        provider.addTraitDamageType("setOnFire", "Set On Fire");
+        provider.addTraitDamageTypeDescription("setOnFire", "Sets player on fire on attack.");
+        provider.addTraitDamageType("explosive", "Explosive");
+        provider.addTraitDamageTypeDescription("explosive", "Explodes on attack.");
     }
 }

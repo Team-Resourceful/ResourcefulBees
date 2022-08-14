@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.components;
 
-import com.teamresourceful.resourcefulbees.client.components.base.ImageButton;
+import com.teamresourceful.resourcefullib.client.components.ImageButton;
 import net.minecraft.resources.ResourceLocation;
 
 public class BasicImageButton extends ImageButton {

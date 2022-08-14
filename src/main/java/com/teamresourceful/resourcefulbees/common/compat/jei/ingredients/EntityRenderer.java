@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -22,7 +22,7 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
             if (ingredient.getEntity() instanceof CustomBeeEntity) {
                 y -= 5;
             }
-            RenderUtils.renderEntity(stack, ingredient.getEntity(), -2, y, ingredient.getRotation(), 1);
+            ClientUtils.renderEntity(stack, ingredient.getEntity(), -2, y, ingredient.getRotation(), 1);
         }
     }
 

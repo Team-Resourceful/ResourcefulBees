@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.locator;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.client.Minecraft;
@@ -45,7 +45,7 @@ public class BeeLocatorEntry extends ObjectSelectionList.Entry<BeeLocatorEntry> 
         Font font = instance.font;
         GuiComponent.drawString(stack, font, displayName, left + 30, top + 5, 10526880);
         try (var ignored = new CloseablePoseStack(stack)) {
-            RenderUtils.renderEntity(stack, this.displayEntity, left + 5, top + 5, 45F, 1f);
+            ClientUtils.renderEntity(stack, this.displayEntity, left + 5, top + 5, 45F, 1f);
         }
     }
 

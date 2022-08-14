@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +30,7 @@ public class TabToggleImageButton extends TabImageButton {
 
     @Override
     public void renderButton(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        RenderUtils.bindTexture(this.resourceLocation);
+        ClientUtils.bindTexture(this.resourceLocation);
         RenderSystem.disableDepthTest();
         int i = this.xTexStart;
         int j = this.yTexStart;

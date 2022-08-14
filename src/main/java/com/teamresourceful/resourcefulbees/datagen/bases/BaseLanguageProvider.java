@@ -104,6 +104,14 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         add("trait_ability.resourcefulbees.desc."+id, name);
     }
 
+    public void addTraitDamageType(String id, String name) {
+        add("damage_type.resourcefulbees."+id, name);
+    }
+
+    public void addTraitDamageTypeDescription(String id, String name) {
+        add("damage_type.resourcefulbees.desc."+id, name);
+    }
+
     public void addHoney(String id, String name, boolean fluid, boolean block) {
         if (block) add(LangGeneration.BLOCK_RESOURCEFULBEES+id+"_honey_block", name +" Honey Block");
         if (fluid) {

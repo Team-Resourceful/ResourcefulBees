@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyPotMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -26,7 +26,7 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
         this.renderBackground(matrix);
 
         if (this.minecraft == null) return;
-        RenderUtils.bindTexture(BACKGROUND);
+        ClientUtils.bindTexture(BACKGROUND);
         blit(matrix, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         FluidStack fluidStack = menu.getEntity().getTank().getFluid();
@@ -37,7 +37,7 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
         this.font.drawShadow(matrix, fluidStack.getAmount()+"mB",this.leftPos + 40f, this.topPos + 47f, 0xffffff);
 
         int height = (int) ((fluidStack.getAmount() / 64000f) * 54);
-        RenderUtils.drawFluid(matrix, height, 12, fluidStack, this.leftPos+129, this.topPos+16+(54-height), this.getBlitOffset());
+        ClientUtils.drawFluid(matrix, height, 12, fluidStack, this.leftPos+129, this.topPos+16+(54-height), this.getBlitOffset());
     }
 
     private Component getDisplayName(FluidStack stack) {

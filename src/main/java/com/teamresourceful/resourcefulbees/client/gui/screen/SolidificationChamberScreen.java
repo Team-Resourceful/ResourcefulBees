@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.SolidificationChamberMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -32,19 +32,19 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
     protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/solidification/solidification.png");
         if (tileEntity != null) {
-            RenderUtils.bindTexture(texture);
+            ClientUtils.bindTexture(texture);
             int i = this.leftPos;
             int j = this.topPos;
             this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
             FluidStack fluidStack = tileEntity.getTank().getFluid();
             int height = (int) ((fluidStack.getAmount() / 16000f) * 62);
-            RenderUtils.drawFluid(matrix, height, 14, fluidStack, i + 67, j + 12+(62-height), getBlitOffset());
+            ClientUtils.drawFluid(matrix, height, 14, fluidStack, i + 67, j + 12+(62-height), getBlitOffset());
         }
     }
 
     private void renderProgressBar(PoseStack matrix) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/solidification/solidification.png");
-        RenderUtils.bindTexture(texture);
+        ClientUtils.bindTexture(texture);
         int i = this.leftPos;
         int j = this.topPos;
         this.blit(matrix, i + 84, j + 17, 176, 0, 24, (int) (34 * tileEntity.getProcessPercent()));

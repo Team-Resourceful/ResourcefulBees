@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipScreen;
 import com.teamresourceful.resourcefulbees.client.gui.widget.TooltipWidget;
 import com.teamresourceful.resourcefulbees.common.capabilities.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.network.packets.BeepediaEntityMessage;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -110,7 +110,7 @@ public class BeepediaScreen extends TooltipScreen {
     private void drawShadesButton(PoseStack matrix) {
         int shadesButtonX = x + SCREEN_WIDTH + 2;
         int shadesButtonY = y + SCREEN_HEIGHT - 32;
-        RenderUtils.bindTexture(BeepediaImages.SHADES_BACKGROUND);
+        ClientUtils.bindTexture(BeepediaImages.SHADES_BACKGROUND);
         blit(matrix, shadesButtonX, shadesButtonY, 0, 0, 30, 30, 30, 30);
     }
 
@@ -122,7 +122,7 @@ public class BeepediaScreen extends TooltipScreen {
         int x = this.x;
         int y = this.y;
         if (client != null) {
-            RenderUtils.bindTexture(BeepediaImages.BACKGROUND);
+            ClientUtils.bindTexture(BeepediaImages.BACKGROUND);
             blit(matrix, x, y, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT);
             client.font.draw(matrix, BeepediaLang.VERSION_NUMBER, x + 12.0f, y + SCREEN_HEIGHT - 20.0f, 5592405);
         }

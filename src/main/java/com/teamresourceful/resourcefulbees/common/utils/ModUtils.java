@@ -34,6 +34,9 @@ import java.util.List;
 
 public final class ModUtils {
 
+    private static final String[] TENS = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+    private static final String[] UNITS = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+
     private ModUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
@@ -120,5 +123,9 @@ public final class ModUtils {
                 level.addFreshEntity(entity);
                 if (entity instanceof Bee beeEntity) ModUtils.updateCapturedBee(beeEntity, player);
             });
+    }
+
+    public static String createRomanNumeral(int value) {
+        return TENS[value % 100 / 10] + UNITS[value % 10];
     }
 }

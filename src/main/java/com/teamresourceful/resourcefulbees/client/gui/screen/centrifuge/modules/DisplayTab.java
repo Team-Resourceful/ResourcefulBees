@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.BaseCentrifugeScreen;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,8 +44,8 @@ public class DisplayTab extends AbstractDisplayModule<BaseCentrifugeScreen<?>> {
     @Override
     public void renderText(PoseStack matrix, int mouseX, int mouseY) {
         if (displayText != null) {
-            int color = isSelected || isMouseOver(mouseX, mouseY) ? RenderUtils.FONT_COLOR_2 : RenderUtils.FONT_COLOR_1;
-            RenderUtils.TERMINAL_FONT_8.draw(matrix, displayText, x + 4f, y + 6f, color);
+            int color = isSelected || isMouseOver(mouseX, mouseY) ? ClientUtils.FONT_COLOR_2 : ClientUtils.FONT_COLOR_1;
+            ClientUtils.TERMINAL_FONT_8.draw(matrix, displayText, x + 4f, y + 6f, color);
         }
     }
 

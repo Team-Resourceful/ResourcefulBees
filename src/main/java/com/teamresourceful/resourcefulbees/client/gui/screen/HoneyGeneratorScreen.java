@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGenerator
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -34,7 +34,7 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
     protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
         if (client != null) {
-            RenderUtils.bindTexture(BACKGROUND);
+            ClientUtils.bindTexture(BACKGROUND);
             int i = this.leftPos;
             int j = this.topPos;
             this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
@@ -44,7 +44,7 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
             FluidStack fluidStack = tank.getFluid();
 
             int height = (int)(54*((float)tank.getFluidAmount() / tank.getCapacity()));
-            RenderUtils.drawFluid(matrix, height, 12, fluidStack, i+28, j+16+(54-height), getBlitOffset());
+            ClientUtils.drawFluid(matrix, height, 12, fluidStack, i+28, j+16+(54-height), getBlitOffset());
 
             this.font.drawShadow(matrix, "Fluid: ",this.leftPos + 44f, this.topPos + 17f, 0xffffff);
             this.font.drawShadow(matrix, getDisplayName(fluidStack),this.leftPos + 48f, this.topPos + 27f, 0xffffff);

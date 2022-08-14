@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contain
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -61,7 +61,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
 
     @Override
     protected void renderLabels(@NotNull PoseStack matrix, int pX, int pY) {
-        RenderUtils.TERMINAL_FONT_12.draw(matrix, this.title, 10,5, 0xffc9c9c9);
+        ClientUtils.TERMINAL_FONT_12.draw(matrix, this.title, 10,5, 0xffc9c9c9);
     }
 
     @Override
@@ -69,10 +69,10 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         this.renderBackground(matrix);
         if (minecraft == null) return;
         //BACKGROUND
-        RenderUtils.bindTexture(BACKGROUND);
+        ClientUtils.bindTexture(BACKGROUND);
         blit(matrix, leftPos, topPos, 0, 0, imageWidth, imageHeight, 360, 228);
         //COMPONENTS
-        RenderUtils.bindTexture(COMPONENTS);
+        ClientUtils.bindTexture(COMPONENTS);
         drawInfoPane(matrix, leftPos, topPos);
     }
 

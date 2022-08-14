@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.components;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.capabilities.SelectableMultiFluidTank;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.SelectFluidMessage;
@@ -42,7 +42,7 @@ public class SelectableFluidWidget extends AbstractWidget {
         FluidStack fluid = tank.getFluid();
         if (!fluid.isEmpty()) {
             int height = Math.round(((float) fluid.getAmount() / (float)tank.getCapacity()) * (float)this.height);
-            RenderUtils.drawFluid(stack, height, this.width, fluid, this.x, this.y + this.height - height, getBlitOffset());
+            ClientUtils.drawFluid(stack, height, this.width, fluid, this.x, this.y + this.height - height, getBlitOffset());
         }
         if (this.isHoveredOrFocused()) {
             this.renderToolTip(stack, mouseX, mouseY);

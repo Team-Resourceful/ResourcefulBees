@@ -150,10 +150,6 @@ public class BeeTrait {
         return Component.translatable("trait_type.resourcefulbees." + name);
     }
 
-    public Component getDescription() {
-        return Component.translatable("trait_type.resourcefulbees.desc." + name);
-    }
-
     /**
      *
      * @return Returns <tt>true</tt> if the internal set is not empty.
