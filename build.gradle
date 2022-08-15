@@ -15,7 +15,7 @@ repositories {
 }
 
 version = mod_version
-group = "com.resourcefulbees" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "com.teamresourceful" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 evaluationDependsOnChildren()

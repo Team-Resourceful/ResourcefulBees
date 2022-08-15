@@ -23,7 +23,7 @@ task sourcesJar(type: Jar) {
 task javadocs(type: Javadoc) {
     classpath = sourceSets.main.compileClasspath
     source = sourceSets.main.java
-    include "com/resourcefulbees/**"
+    include "com/teamresourceful/**"
 
     options.addStringOption('Xdoclint:none', '-quiet')
     options.encoding = 'UTF-8'
