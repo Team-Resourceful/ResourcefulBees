@@ -1,9 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaImages;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaLang;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
@@ -16,10 +15,13 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 public class HomePage extends Screen {
+
+    public static final ResourceLocation LOGO = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/logo.png");
 
     private final CycleableList<Entity> bees;
 
@@ -45,10 +47,10 @@ public class HomePage extends Screen {
         ClientUtils.renderEntity(stack, bees.getSelected(), 85, 5, -45, 3);
         Font font = Minecraft.getInstance().font;
 
-        font.draw(stack, BeepediaLang.ITEM_GROUP.withStyle(ChatFormatting.GRAY), 41, 76, -1);
-        ClientUtils.bindTexture(BeepediaImages.LOGO);
+        font.draw(stack, Component.translatable("itemGroup.resourcefulbees").withStyle(ChatFormatting.GRAY), 41, 76, -1);
+        ClientUtils.bindTexture(LOGO);
         Gui.blit(stack, 41,  85, 0, 0, 104, 16, 104, 16);
-        font.draw(stack, BeepediaLang.VERSION_NUMBER.withStyle(ChatFormatting.GRAY), 41, 103, -1);
+        font.draw(stack, Component.translatable("gui.resourcefulbees.beepedia").withStyle(ChatFormatting.GRAY), 41, 103, -1);
 
         ClientUtils.drawCenteredString(font, stack, getProgress(), 93, 133, -1, false);
 
@@ -56,7 +58,7 @@ public class HomePage extends Screen {
     }
 
     private Component getProgress() {
-        MutableComponent prefix = BeepediaLang.COLLECTION_PROGRESS.plainCopy();
+        MutableComponent prefix = Component.translatable("gui.resourcefulbees.beepedia.home.progress").plainCopy();
         //TODO fill in data.
         prefix.append(String.format("%d / %d", 1, BeeRegistry.getRegistry().getBees().size()));
         prefix.withStyle(ChatFormatting.GRAY);

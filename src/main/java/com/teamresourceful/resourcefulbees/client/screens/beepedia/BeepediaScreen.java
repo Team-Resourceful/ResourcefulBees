@@ -11,7 +11,6 @@ import com.teamresourceful.resourcefulbees.client.components.beepedia.search.Sea
 import com.teamresourceful.resourcefulbees.client.components.beepedia.selection.BeeEntry;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.selection.ItemEntry;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.selection.SelectionButtons;
-import com.teamresourceful.resourcefulbees.client.gui.screen.beepedia.BeepediaImages;
 import com.teamresourceful.resourcefulbees.client.screens.base.SubdividedScreen;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.HomePage;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.BeePage;
@@ -41,6 +40,7 @@ import java.util.function.Function;
 public class BeepediaScreen extends SubdividedScreen {
 
     public static final ResourceLocation STATE_ID = new ResourceLocation(ResourcefulBees.MOD_ID, "beepedia");
+    public static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/screen.png");
 
     public int ticks;
 
@@ -76,7 +76,7 @@ public class BeepediaScreen extends SubdividedScreen {
 
     @Override
     public void renderScreen(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        ClientUtils.bindTexture(BeepediaImages.BACKGROUND);
+        ClientUtils.bindTexture(BACKGROUND);
         blit(stack, 0, 0, 0, 0, 328, 200, 328, 200);
         super.renderScreen(stack, mouseX, mouseY, partialTicks);
     }
