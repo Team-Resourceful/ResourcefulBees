@@ -7,16 +7,16 @@ import com.teamresourceful.resourcefulbees.api.trait.TraitAbility;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class TraitAbilityRegistry implements ITraitAbilityRegistry {
-
-    private static final HashMap<String, TraitAbility> ABILITY_REGISTRY = new HashMap<>();
-    private static boolean closed = false;
-
-    public static void closeAbilityRegistry() {
-        closed = true;
-    }
+public final class TraitAbilityRegistry implements ITraitAbilityRegistry {
 
     private static final TraitAbilityRegistry INSTANCE = new TraitAbilityRegistry();
+
+    private final HashMap<String, TraitAbility> registry = new HashMap<>();
+    private boolean closed = false;
+
+    private TraitAbilityRegistry() {
+        // Single instanced classes do not need to be able to be extended
+    }
 
     public static TraitAbilityRegistry getRegistry() {
         return INSTANCE;
@@ -28,17 +28,24 @@ public class TraitAbilityRegistry implements ITraitAbilityRegistry {
             ResourcefulBees.LOGGER.error("Trait Ability is already registered or registration is closed: {}", name);
             return false;
         }
-        ABILITY_REGISTRY.put(name.toLowerCase(Locale.ROOT), consumer);
+        registry.put(name.toLowerCase(Locale.ROOT), consumer);
         return true;
     }
 
     @Override
     public boolean hasAbility(String name) {
-        return ABILITY_REGISTRY.containsKey(name.toLowerCase(Locale.ROOT));
+        return registry.containsKey(name.toLowerCase(Locale.ROOT));
     }
 
     @Override
     public TraitAbility getAbility(String name) {
-        return ABILITY_REGISTRY.get(name.toLowerCase(Locale.ROOT));
+        return registry.get(name.toLowerCase(Locale.ROOT));
+    }
+
+    /**
+     * Closes the registry and prevents any further registrations.
+     */
+    public void close() {
+        this.closed = true;
     }
 }

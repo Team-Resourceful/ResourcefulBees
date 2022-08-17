@@ -14,18 +14,20 @@ import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryOps;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-@Unmodifiable
-public class BeeRegistry implements IBeeRegistry {
+public final class BeeRegistry implements IBeeRegistry {
 
     private static final BeeRegistry INSTANCE = new BeeRegistry();
     private static final Map<String, JsonObject> RAW_DATA = new LinkedHashMap<>();
     private static final Map<String, CustomBeeData> CUSTOM_DATA = new LinkedHashMap<>();
     private static final Map<Pair<String, String>, RandomCollection<BeeFamily>> FAMILY_TREE = new LinkedHashMap<>();
+
+    private BeeRegistry() {
+        // Single instanced classes do not need to be able to be extended
+    }
 
     /**
      * Returns an instance of the {@link BeeRegistry} for accessing data from the registry.

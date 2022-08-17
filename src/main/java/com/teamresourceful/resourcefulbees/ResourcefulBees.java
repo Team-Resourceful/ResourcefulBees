@@ -129,9 +129,9 @@ public class ResourcefulBees {
 
     @SubscribeEvent
     public void loadComplete(FMLLoadCompleteEvent event) {
-        TraitAbilityRegistry.closeAbilityRegistry();
+        TraitAbilityRegistry.getRegistry().close();
         TraitSetup.buildCustomTraits();
-        TraitRegistry.setTraitRegistryClosed();
+        TraitRegistry.getRegistry().close();
         BeeSetup.registerBeePlacements();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> LangGeneration::generateEnglishLang);
         DataGen.generateCommonData();

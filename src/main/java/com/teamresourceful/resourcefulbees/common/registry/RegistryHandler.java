@@ -76,7 +76,7 @@ public final class RegistryHandler {
     private static void registerHoneyBottle(String name, JsonObject honeyData) {
         HoneyData honeyBottleData = HoneyData.codec(name).parse(JsonOps.INSTANCE, honeyData)
                 .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not create Custom Honey Data for {} honey", name));
-        if (!HoneyRegistry.getRegistry().registerHoney(name, honeyBottleData)) {
+        if (!HoneyRegistry.getRegistry().register(name, honeyBottleData)) {
             ResourcefulBees.LOGGER.error("Duplicate honeys with name {}", name);
         }
     }

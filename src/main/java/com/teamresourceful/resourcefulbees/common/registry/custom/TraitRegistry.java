@@ -10,13 +10,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class TraitRegistry implements ITraitRegistry {
-
-    private static final HashMap<String, BeeTrait> TRAIT_REGISTRY = new HashMap<>();
-    private static boolean closed = false;
+public final class TraitRegistry implements ITraitRegistry {
 
     private static final TraitRegistry INSTANCE = new TraitRegistry();
 
+    private final HashMap<String, BeeTrait> registry = new HashMap<>();
+    private boolean closed = false;
+
+    private TraitRegistry() {
+        // Single instanced classes do not need to be able to be extended
+    }
+
+    /**
+     * @return The singleton instance of the registry
+     */
     public static TraitRegistry getRegistry() {
         return INSTANCE;
     }
@@ -31,11 +38,11 @@ public class TraitRegistry implements ITraitRegistry {
      */
     @Override
     public boolean register(String name, BeeTrait data) {
-        if (closed || TRAIT_REGISTRY.containsKey(name)) {
+        if (closed || registry.containsKey(name)) {
             ResourcefulBees.LOGGER.error("Trait is already registered or registration is closed: {}", name);
             return false;
         }
-        TRAIT_REGISTRY.put(name, data);
+        registry.put(name, data);
         return true;
     }
 
@@ -47,7 +54,7 @@ public class TraitRegistry implements ITraitRegistry {
      */
     @Override
     public BeeTrait getTrait(String name) {
-        return TRAIT_REGISTRY.getOrDefault(name, BeeTrait.DEFAULT);
+        return registry.getOrDefault(name, BeeTrait.DEFAULT);
     }
 
     /**
@@ -58,7 +65,7 @@ public class TraitRegistry implements ITraitRegistry {
      */
     @Override
     public Map<String, BeeTrait> getTraits() {
-        return Collections.unmodifiableMap(TRAIT_REGISTRY);
+        return Collections.unmodifiableMap(registry);
     }
 
     /**
@@ -70,7 +77,7 @@ public class TraitRegistry implements ITraitRegistry {
      * {@link BeeTrait} map
      */
     public Set<BeeTrait> getSetOfTraits() {
-        return Set.copyOf(TRAIT_REGISTRY.values());
+        return Set.copyOf(registry.values());
     }
 
     /**
@@ -80,7 +87,10 @@ public class TraitRegistry implements ITraitRegistry {
         return getSetOfTraits().stream();
     }
 
-    public static void setTraitRegistryClosed() {
-        closed = true;
+    /**
+     * Closes the registry and prevents any further registrations.
+     */
+    public void close() {
+        this.closed = true;
     }
 }
