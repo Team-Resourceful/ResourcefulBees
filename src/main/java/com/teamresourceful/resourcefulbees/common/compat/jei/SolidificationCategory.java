@@ -31,7 +31,7 @@ public class SolidificationCategory extends BaseCategory<SolidificationRecipe> {
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull SolidificationRecipe recipe, @NotNull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 21, 11)
                 .addIngredient(ForgeTypes.FLUID_STACK, recipe.fluid())
-                .setFluidRenderer(recipe.fluid().getAmount(), true, 16, 16)
+                .setFluidRenderer(recipe.fluid().getAmount(), false, 16, 16)
                 .setSlotName("input");
         builder.addSlot(RecipeIngredientRole.OUTPUT, 49, 54)
                 .addIngredient(VanillaTypes.ITEM_STACK, recipe.stack())
