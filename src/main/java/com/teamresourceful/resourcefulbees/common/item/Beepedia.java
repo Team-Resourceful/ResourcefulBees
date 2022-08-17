@@ -35,44 +35,12 @@ public class Beepedia extends Item {
         super(properties);
     }
 
-//    public void checkAndAddBees(ItemStack stack, CustomBeeEntity entity) {
-//        CompoundNBT nbt = stack.hasTag() && stack.getTag() != null ? stack.getTag() : new CompoundNBT();
-//        ListNBT listNBT;
-//        if (nbt.getBoolean(CREATIVE_TAG)) {
-//            if (entity != null) {
-//                nbt.putUUID(NBTConstants.NBT_ENTITY_ID, entity.getUUID());
-//                stack.setTag(nbt);
-//            }
-//            return;
-//        }
-//        if (nbt.contains(NBTConstants.NBT_BEES)) {
-//            listNBT = nbt.getList(NBTConstants.NBT_BEES, 8).copy();
-//        } else {
-//            listNBT = new ListNBT();
-//        }
-//        if (entity != null) {
-//            if (!listNBT.contains(StringNBT.valueOf(entity.getBeeType()))) {
-//                listNBT.add(StringNBT.valueOf(entity.getBeeType()));
-//            }
-//            listNBT.removeIf(b -> BeeRegistry.getRegistry().getBeeData(b.getAsString()) == null);
-//            listNBT = listNBT.stream().distinct().collect(Collectors.toCollection(ListNBT::new));
-//            nbt.putBoolean(COMPLETE_TAG, listNBT.size() == BeeRegistry.getRegistry().getBees().size());
-//            nbt.put(NBTConstants.NBT_BEES, listNBT);
-//            nbt.putUUID(NBTConstants.NBT_ENTITY_ID, entity.getUUID());
-//            stack.setTag(nbt);
-//        }
-//    }
-
-
-
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level world, Player player, @NotNull InteractionHand hand) {
         LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
         ItemStack itemstack = player.getItemInHand(hand);
-        ItemStack book = ItemStack.EMPTY; //TODO PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
-        boolean hasShades = player.getInventory().contains(book);
         if (world.isClientSide) {
-            BeepediaUtils.loadBeepedia(itemstack, hasShades, data);
+            BeepediaUtils.loadBeepedia(itemstack, data);
         }
         return InteractionResultHolder.sidedSuccess(itemstack, world.isClientSide());
     }
@@ -80,13 +48,11 @@ public class Beepedia extends Item {
     @Override
     public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
         LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
-        ItemStack book = ItemStack.EMPTY; //TODO PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
-        boolean hasShades = player.getInventory().contains(book);
         if (entity instanceof CustomBeeEntity) {
             if (!player.level.isClientSide) {
                 sendPacket(entity, player);
             }
-            if (player.level.isClientSide) BeepediaUtils.loadBeepedia(stack, hasShades, data);
+            if (player.level.isClientSide) BeepediaUtils.loadBeepedia(stack, data);
             player.setItemInHand(hand, stack);
             return InteractionResult.SUCCESS;
         }
