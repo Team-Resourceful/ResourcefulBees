@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.inventory.menus;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.LockBeeMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.client.LockBeePacket;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -62,7 +62,7 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
 
     public void lockOrUnlockBee(int id) {
         if (id >= 0 && id < entity.getBeeCount()) {
-            NetPacketHandler.sendToServer(new LockBeeMessage(entity.getBlockPos(), id));
+            NetPacketHandler.CHANNEL.sendToServer(new LockBeePacket(entity.getBlockPos(), id));
         }
     }
 

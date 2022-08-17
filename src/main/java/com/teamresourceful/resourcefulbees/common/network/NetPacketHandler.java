@@ -2,18 +2,11 @@ package com.teamresourceful.resourcefulbees.common.network;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.network.packets.*;
-import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandMessage;
-import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandResponseMessage;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
-
-import java.util.List;
+import com.teamresourceful.resourcefulbees.common.network.packets.client.*;
+import com.teamresourceful.resourcefulbees.common.network.packets.server.CommandResponsePacket;
+import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncGuiPacket;
+import com.teamresourceful.resourcefullib.common.networking.NetworkChannel;
+import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
 
 public final class NetPacketHandler {
 
@@ -21,42 +14,17 @@ public final class NetPacketHandler {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    private static int id = 0;
-    private static final String PROTOCOL_VERSION = Integer.toString(1);
-    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(ResourcefulBees.MOD_ID, "main_channel"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
+    public static final NetworkChannel CHANNEL = new NetworkChannel(ResourcefulBees.MOD_ID, 0, "main");
 
     public static void init() {
-        INSTANCE.registerMessage(++id, LockBeeMessage.class, LockBeeMessage::encode, LockBeeMessage::decode, LockBeeMessage::handle);
-        INSTANCE.registerMessage(++id, SyncGUIMessage.class, SyncGUIMessage::encode, SyncGUIMessage::decode, SyncGUIMessage::handle);
-        INSTANCE.registerMessage(++id, BeeconChangeMessage.class, BeeconChangeMessage::encode, BeeconChangeMessage::decode, BeeconChangeMessage::handle);
-        INSTANCE.registerMessage(++id, CommandMessage.class, CommandMessage::encode, CommandMessage::decode, CommandMessage::handle);
-        INSTANCE.registerMessage(++id, CommandResponseMessage.class, CommandResponseMessage::encode, CommandResponseMessage::decode, CommandResponseMessage::handle);
-        INSTANCE.registerMessage(++id, SelectFluidMessage.class, SelectFluidMessage::encode, SelectFluidMessage::decode, SelectFluidMessage::handle);
-        INSTANCE.registerMessage(++id, FindBeeMessage.class, FindBeeMessage::encode, FindBeeMessage::decode, FindBeeMessage::handle);
-    }
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, LockBeePacket.ID, LockBeePacket.HANDLER, LockBeePacket.class);
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, BeeconChangePacket.ID, BeeconChangePacket.HANDLER, BeeconChangePacket.class);
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, SelectFluidPacket.ID, SelectFluidPacket.HANDLER, SelectFluidPacket.class);
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, CommandPacket.ID, CommandPacket.HANDLER, CommandPacket.class);
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, LockBeePacket.ID, LockBeePacket.HANDLER, LockBeePacket.class);
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, FindBeePacket.ID, FindBeePacket.HANDLER, FindBeePacket.class);
 
-    public static void sendToServer(Object message) {
-        INSTANCE.sendToServer(message);
-    }
-
-    public static void sendToAllLoaded(Object message, Level world, BlockPos pos) {
-        INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)), message);
-    }
-
-    public static void sendToPlayers(Object message, List<ServerPlayer> players) {
-        for (ServerPlayer player : players) { sendToPlayer(message, player); }
-    }
-
-    public static void sendToPlayer(Object message, ServerPlayer playerEntity) {
-        INSTANCE.send(PacketDistributor.PLAYER.with(() -> playerEntity), message);
-    }
-
-    public static void sendToPlayersInRange(Object message, Level world, BlockPos pos, double range) {
-        INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, world.dimension())), message);
+        CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, SyncGuiPacket.ID, SyncGuiPacket.HANDLER, SyncGuiPacket.class);
+        CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, CommandResponsePacket.ID, CommandResponsePacket.HANDLER, CommandResponsePacket.class);
     }
 }

@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.locator;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.FindBeeMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.client.FindBeePacket;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
@@ -39,7 +39,7 @@ public class BeeLocatorScreen extends Screen {
             getSelected().ifPresent(bee -> {
                 String type = bee.getType();
                 if (type != null) {
-                    NetPacketHandler.INSTANCE.sendToServer(new FindBeeMessage(type, this.hand));
+                    NetPacketHandler.CHANNEL.sendToServer(new FindBeePacket(type, this.hand));
                 }
                 this.onClose();
             });

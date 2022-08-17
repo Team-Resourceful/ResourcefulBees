@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.comman
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.CentrifugeController;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandResponseMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.server.CommandResponsePacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,6 +30,6 @@ public record CentrifugeCommandSource(CentrifugeController controller, ServerPla
     }
 
     public void sendMessage(Component component) {
-        NetPacketHandler.sendToPlayer(new CommandResponseMessage(component), this.player);
+        NetPacketHandler.CHANNEL.sendToPlayer(new CommandResponsePacket(component), this.player);
     }
 }
