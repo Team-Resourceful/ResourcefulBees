@@ -2,5 +2,5 @@ package com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.out
 
 public interface AbstractOutput {
 
-    double getWeight();
+    double weight();
 }

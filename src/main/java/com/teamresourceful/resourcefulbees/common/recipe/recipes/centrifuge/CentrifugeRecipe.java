@@ -70,12 +70,12 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
     public record Output<T extends AbstractOutput>(double chance, RandomCollection<T> pool) {
         public static final Codec<Output<ItemOutput>> ITEM_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::chance),
-                CodecExtras.randomCollection(ItemOutput.CODEC, ItemOutput::getWeight).fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::pool)
+                CodecExtras.randomCollection(ItemOutput.CODEC, ItemOutput::weight).fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::pool)
         ).apply(instance, Output::new));
 
         public static final Codec<Output<FluidOutput>> FLUID_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::chance),
-                CodecExtras.randomCollection(FluidOutput.CODEC, FluidOutput::getWeight).fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::pool)
+                CodecExtras.randomCollection(FluidOutput.CODEC, FluidOutput::weight).fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::pool)
         ).apply(instance, Output::new));
     }
 }

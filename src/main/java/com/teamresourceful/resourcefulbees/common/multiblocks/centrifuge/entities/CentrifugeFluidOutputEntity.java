@@ -48,7 +48,7 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
     }
 
     public boolean depositResult(CentrifugeRecipe.Output<FluidOutput> output, int processQuantity) {
-        FluidStack result = output.pool().next().getFluidStack();
+        FluidStack result = output.pool().next().fluid();
         if (result.isEmpty() || controller().dumpsContainFluid(result)) return true;
         result.setAmount(result.getAmount() * processQuantity);
         if ((voidExcess || simulateDeposit(result))) {

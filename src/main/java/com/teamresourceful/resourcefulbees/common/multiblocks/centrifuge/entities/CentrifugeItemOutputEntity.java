@@ -54,7 +54,7 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
     }
 
     public boolean depositResult(CentrifugeRecipe.Output<ItemOutput> recipeOutput, int processQuantity) {
-        ItemStack result = recipeOutput.pool().next().getItemStack();
+        ItemStack result = recipeOutput.pool().next().itemStack();
         result.setCount(result.getCount() * processQuantity);
         return inventoryHandler.depositResult(result);
     }

@@ -55,9 +55,9 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull CentrifugeRecipeAdapter recipe, @NotNull IFocusGroup focuses) {
         List<List<FluidStack>> fluidStacks = recipe.recipe.fluidOutputs().stream()
-                .map(output -> output.pool().stream().map(FluidOutput::getFluidStack).collect(Collectors.toList())).toList();
+                .map(output -> output.pool().stream().map(FluidOutput::fluid).collect(Collectors.toList())).toList();
         List<List<ItemStack>> itemStacks = recipe.recipe.itemOutputs().stream()
-                .map(output -> output.pool().stream().map(ItemOutput::getItemStack).collect(Collectors.toList())).toList();
+                .map(output -> output.pool().stream().map(ItemOutput::itemStack).collect(Collectors.toList())).toList();
 
         builder.addSlot(RecipeIngredientRole.INPUT,10, 25).addIngredients(recipe.recipe.ingredient()).setSlotName("input");
         for (int i = 0; i < 3; i++) {
@@ -157,7 +157,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
 
             for (int i = 0; i < itemOutputList.size(); i++) {
                 Object2DoubleMap<ItemStack> weights = new Object2DoubleOpenHashMap<>();
-                itemOutputList.get(i).pool().forEachWithSelf((pool, output) -> weights.put(output.getItemStack(), pool.getAdjustedWeight(output.getWeight())));
+                itemOutputList.get(i).pool().forEachWithSelf((pool, output) -> weights.put(output.itemStack(), pool.getAdjustedWeight(output.weight())));
                 itemWeights.put("item_output_"+i, weights);
             }
 
@@ -165,7 +165,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
 
             for (int i = 0; i < fluidOutputList.size(); i++) {
                 Object2DoubleMap<FluidStack> weights = new Object2DoubleOpenHashMap<>();
-                fluidOutputList.get(i).pool().forEachWithSelf((pool, output) -> weights.put(output.getFluidStack(), pool.getAdjustedWeight(output.getWeight())));
+                fluidOutputList.get(i).pool().forEachWithSelf((pool, output) -> weights.put(output.fluid(), pool.getAdjustedWeight(output.weight())));
                 fluidWeights.put("fluid_output_"+i, weights);
             }
         }

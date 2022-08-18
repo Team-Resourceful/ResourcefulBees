@@ -143,13 +143,13 @@ public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements
                     .stream()
                     .filter(item -> level.random.nextDouble() < item.chance())
                     .map(item -> item.pool().next())
-                    .map(ItemOutput::getItemStack)
+                    .map(ItemOutput::itemStack)
                     .forEach(this::deliverItem);
             cachedRecipe.fluidOutputs()
                     .stream()
                     .filter(fluid -> level.random.nextDouble() < fluid.chance())
                     .map(fluid -> fluid.pool().next())
-                    .map(FluidOutput::getFluidStack)
+                    .map(FluidOutput::fluid)
                     .forEach(this::deliverFluid);
             outputFull = getInventory().getItems().stream().noneMatch(ItemStack::isEmpty);
             updateCachedRecipe();

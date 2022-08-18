@@ -171,7 +171,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
         }
 
         public CentrifugeRecipe.Output<ItemOutput> build() {
-            return new CentrifugeRecipe.Output<>(chance, RandomCollection.of(itemOutputs, ItemOutput::getWeight));
+            return new CentrifugeRecipe.Output<>(chance, RandomCollection.of(itemOutputs, ItemOutput::weight));
         }
 
     }
@@ -192,7 +192,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
         }
 
         public CentrifugeRecipe.Output<FluidOutput> build() {
-            return new CentrifugeRecipe.Output<>(chance, fluidOutputs.stream().collect(RandomCollection.getCollector(FluidOutput::getWeight)));
+            return new CentrifugeRecipe.Output<>(chance, fluidOutputs.stream().collect(RandomCollection.getCollector(FluidOutput::weight)));
         }
 
     }
