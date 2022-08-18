@@ -39,9 +39,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
@@ -180,7 +180,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         if (this.tank.getSpace() == 0) return;
         BlockEntity tileEntity = level.getBlockEntity(pos.below());
         if (tileEntity == null) return;
-        tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Direction.UP).ifPresent(handler -> {
+        tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, Direction.UP).ifPresent(handler -> {
             for (int i = 0; i < handler.getTanks(); i++) {
                 FluidStack stack = handler.getFluidInTank(i);
                 if (this.tank.isFluidValid(stack) && (this.tank.getFluid().isFluidEqual(stack) || this.tank.getFluid().isEmpty())) {
@@ -208,7 +208,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) return tankOptional.cast();
+        if (cap.equals(ForgeCapabilities.FLUID_HANDLER)) return tankOptional.cast();
         return super.getCapability(cap, side);
     }
 

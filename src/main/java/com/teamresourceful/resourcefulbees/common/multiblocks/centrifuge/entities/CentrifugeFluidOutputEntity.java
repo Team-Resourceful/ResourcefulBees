@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities;
 
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeFluidOutputContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -16,9 +16,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.RegistryObject;
@@ -44,7 +44,7 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
     @NotNull
     @Override
     public <T> LazyOptional<T> capability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) ? fluidOptional.cast() : super.capability(cap, side);
+        return cap.equals(ForgeCapabilities.FLUID_HANDLER) ? fluidOptional.cast() : super.capability(cap, side);
     }
 
     public boolean depositResult(CentrifugeRecipe.Output<FluidOutput> output, int processQuantity) {

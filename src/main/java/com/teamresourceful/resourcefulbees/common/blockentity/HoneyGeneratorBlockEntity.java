@@ -22,10 +22,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.apache.commons.lang3.tuple.Pair;
@@ -100,7 +99,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     }
 
     private void transferEnergy(Pair<BlockEntity, Direction> tileEntityDirectionPair) {
-        tileEntityDirectionPair.getLeft().getCapability(CapabilityEnergy.ENERGY, tileEntityDirectionPair.getRight().getOpposite())
+        tileEntityDirectionPair.getLeft().getCapability(ForgeCapabilities.ENERGY, tileEntityDirectionPair.getRight().getOpposite())
                 .filter(IEnergyStorage::canReceive)
                 .ifPresent(this::transferEnergy);
     }
@@ -183,8 +182,8 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap.equals(CapabilityEnergy.ENERGY)) return energyOptional.cast();
-        if (cap.equals(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) return tankOptional.cast();
+        if (cap.equals(ForgeCapabilities.ENERGY)) return energyOptional.cast();
+        if (cap.equals(ForgeCapabilities.FLUID_HANDLER)) return tankOptional.cast();
         return super.getCapability(cap, side);
     }
 

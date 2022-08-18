@@ -9,8 +9,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +30,7 @@ public class CreativeGenBlockEntity extends BlockEntity implements InstanceBlock
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap.equals(CapabilityEnergy.ENERGY)) return energyOptional.cast();
+        if (cap.equals(ForgeCapabilities.ENERGY)) return energyOptional.cast();
         return super.getCapability(cap, side);
     }
 
@@ -58,7 +58,7 @@ public class CreativeGenBlockEntity extends BlockEntity implements InstanceBlock
             Arrays.stream(Direction.values())
                 .map(direction -> level.getBlockEntity(pos.relative(direction)))
                 .filter(Objects::nonNull)
-                .forEach(tileEntity -> tileEntity.getCapability(CapabilityEnergy.ENERGY)
+                .forEach(tileEntity -> tileEntity.getCapability(ForgeCapabilities.ENERGY)
                 .map(iEnergyStorage -> !iEnergyStorage.canReceive() || iEnergyStorage.receiveEnergy(Integer.MAX_VALUE, false) != 0));
         }
     }

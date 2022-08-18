@@ -7,8 +7,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.registries.RegistryObject;
 import net.roguelogix.phosphophyllite.multiblock2.MultiblockController;
@@ -24,7 +24,7 @@ public class CentrifugeEnergyPortEntity extends AbstractTieredCentrifugeEntity i
     @NotNull
     @Override
     public <T> LazyOptional<T> capability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap.equals(CapabilityEnergy.ENERGY) ? LazyOptional.of(() -> this).cast() : super.capability(cap, side);
+        return cap.equals(ForgeCapabilities.ENERGY) ? LazyOptional.of(() -> this).cast() : super.capability(cap, side);
     }
 
     @Override

@@ -22,7 +22,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,7 +71,7 @@ public class HoneyPotBlock extends RenderingBaseEntityBlock {
             HoneyPotState potState = HoneyPotState.CLOSED;
 
             if (level.getBlockState(pos.above()).getBlock().equals(ModBlocks.ENDER_BEECON.get())) potState = HoneyPotState.BEECON;
-            else if (tileAbove != null && tileAbove.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()) potState = HoneyPotState.OPEN;
+            else if (tileAbove != null && tileAbove.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) potState = HoneyPotState.OPEN;
 
             level.setBlock(pos, state.setValue(LID_STATE, potState), Block.UPDATE_ALL); //TODO determine if this is the right flag to use might just need UPDATE_CLIENTS
         }

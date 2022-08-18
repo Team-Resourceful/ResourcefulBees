@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities;
 
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.inventory.AbstractFilterItemHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
@@ -11,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.OutputLocations;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,12 +27,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.RegistryObject;
-
 import net.roguelogix.phosphophyllite.multiblock.IOnAssemblyTile;
 import net.roguelogix.phosphophyllite.multiblock.ITickableMultiblockTile;
 import org.jetbrains.annotations.NotNull;
@@ -210,7 +209,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     @NotNull
     @Override
     public <T> LazyOptional<T> capability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) ? lazyOptional.cast() : super.capability(cap, side);
+        return cap.equals(ForgeCapabilities.ITEM_HANDLER) ? lazyOptional.cast() : super.capability(cap, side);
     }
     //endregion
 
