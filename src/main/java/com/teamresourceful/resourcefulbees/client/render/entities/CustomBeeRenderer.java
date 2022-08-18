@@ -1,10 +1,10 @@
-package com.teamresourceful.resourcefulbees.client.render.entity;
+package com.teamresourceful.resourcefulbees.client.render.entities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
-import com.teamresourceful.resourcefulbees.client.render.entity.layers.CustomBeeLayer;
-import com.teamresourceful.resourcefulbees.client.render.entity.models.CustomBeeModel;
+import com.teamresourceful.resourcefulbees.client.render.entities.layers.CustomBeeLayer;
+import com.teamresourceful.resourcefulbees.client.render.entities.models.CustomBeeModel;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

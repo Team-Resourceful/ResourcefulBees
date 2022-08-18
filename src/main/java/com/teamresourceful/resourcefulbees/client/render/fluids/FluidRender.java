@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.render.fluid;
+package com.teamresourceful.resourcefulbees.client.render.fluids;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;

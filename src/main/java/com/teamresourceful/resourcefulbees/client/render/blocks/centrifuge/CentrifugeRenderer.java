@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.render.tileentity.centrifuge;
+package com.teamresourceful.resourcefulbees.client.render.blocks.centrifuge;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

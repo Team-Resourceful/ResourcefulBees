@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.render.tileentity.centrifuge;
+package com.teamresourceful.resourcefulbees.client.render.blocks.centrifuge;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeCrankBlockEntity;
 import net.minecraft.resources.ResourceLocation;

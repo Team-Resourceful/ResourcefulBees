@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.render.tileentity;
+package com.teamresourceful.resourcefulbees.client.render.blocks;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
