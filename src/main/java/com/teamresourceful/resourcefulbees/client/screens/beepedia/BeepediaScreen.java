@@ -111,7 +111,7 @@ public class BeepediaScreen extends SubdividedScreen {
         List<? extends ListEntry> entries = switch (getState().type) {
             case BEES -> BeeRegistry.getRegistry()
                     .getStreamOfBees()
-                    .filter(bee -> getState().search == null || bee.coreData().name().toLowerCase().contains(getState().search.toLowerCase()))
+                    .filter(BeepediaSearchHandler.search(getState().search))
                     .sorted(
                         sortBee(getState(), BeepediaState.Sorting.FOUND, a -> this.data == null || !this.data.hasBee(a.coreData().name()))
                         .thenComparing(sortBee(getState(), BeepediaState.Sorting.ALPHABETICAL, data -> data.coreData().name()))
