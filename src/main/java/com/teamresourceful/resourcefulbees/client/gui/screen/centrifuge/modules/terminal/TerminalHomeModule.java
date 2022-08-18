@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeTerminalEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.centrifuge.CommandMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.client.CommandPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
@@ -108,7 +108,7 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
                     default -> {
                         CentrifugeTerminalEntity terminal = screen.getMenu().getEntity();
                         formatUserInput(commandInput).forEach(this::onTerminalResponse);
-                        NetPacketHandler.sendToServer(new CommandMessage(terminal.getBlockPos(), commandInput));
+                        NetPacketHandler.CHANNEL.sendToServer(new CommandPacket(terminal.getBlockPos(), commandInput));
                         neofetch = false;
                     }
                 }

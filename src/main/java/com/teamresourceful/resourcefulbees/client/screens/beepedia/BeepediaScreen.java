@@ -19,6 +19,8 @@ import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.trait.T
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.state.BeepediaState;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.state.StringPageState;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.BeepediaData;
+import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.CreativeBeepediaData;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
@@ -42,8 +44,8 @@ public class BeepediaScreen extends SubdividedScreen {
     public static final ResourceLocation STATE_ID = new ResourceLocation(ResourcefulBees.MOD_ID, "beepedia");
     public static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/screen.png");
 
+    private BeepediaData data;
     public int ticks;
-
     private SelectionList selectionList;
 
     public BeepediaScreen() {
@@ -111,12 +113,12 @@ public class BeepediaScreen extends SubdividedScreen {
                     .getStreamOfBees()
                     .filter(bee -> getState().search == null || bee.coreData().name().toLowerCase().contains(getState().search.toLowerCase()))
                     .sorted(
-                        sortBee(getState(), BeepediaState.Sorting.FOUND, a -> 0)
+                        sortBee(getState(), BeepediaState.Sorting.FOUND, a -> this.data == null || !this.data.hasBee(a.coreData().name()))
                         .thenComparing(sortBee(getState(), BeepediaState.Sorting.ALPHABETICAL, data -> data.coreData().name()))
                         .thenComparing(sortBee(getState(), BeepediaState.Sorting.TRAITS, data -> data.traitData().hasTraits()))
                         .thenComparing(sortBee(getState(), BeepediaState.Sorting.MUTATION, data -> data.mutationData().hasMutation()))
                     )
-                    .map(BeeEntry::new)
+                    .map(data -> new BeeEntry(data, () -> this.data != null && this.data.hasBee(data.coreData().name())))
                     .toList();
             case TRAITS -> TraitRegistry.getRegistry()
                     .getStreamOfTraits()
@@ -150,5 +152,10 @@ public class BeepediaScreen extends SubdividedScreen {
                 setSubScreen(new HoneyPage(honey));
             }
         }
+    }
+
+    public void updateData(BeepediaData data) {
+        if (this.data instanceof CreativeBeepediaData) return; //Do not replace the creative Beepedia.
+        this.data = data;
     }
 }

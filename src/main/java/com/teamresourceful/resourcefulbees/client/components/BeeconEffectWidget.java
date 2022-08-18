@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -47,8 +47,8 @@ public class BeeconEffectWidget extends AbstractWidget {
     @Override
     public void onClick(double mouseX, double mouseY) {
         if (MathUtils.inRangeInclusive((int) mouseX, x+60, x+85) && MathUtils.inRangeInclusive((int) mouseY, y+4, y+19)) {
-            NetPacketHandler.sendToServer(new BeeconChangeMessage(
-                    this.isSelected() ? BeeconChangeMessage.Option.EFFECT_OFF : BeeconChangeMessage.Option.EFFECT_ON,
+            NetPacketHandler.CHANNEL.sendToServer(new BeeconChangePacket(
+                    this.isSelected() ? BeeconChangePacket.Option.EFFECT_OFF : BeeconChangePacket.Option.EFFECT_ON,
                     MobEffect.getId(effect),
                     tile.getBlockPos()
                 )

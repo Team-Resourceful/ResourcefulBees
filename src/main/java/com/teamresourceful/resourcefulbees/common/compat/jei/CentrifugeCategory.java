@@ -69,6 +69,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             if (i < fluidStacks.size())
                 builder.addSlot(RecipeIngredientRole.OUTPUT, 108, 7 + (i * 18))
                         .addIngredients(ForgeTypes.FLUID_STACK, fluidStacks.get(i))
+                        .setFluidRenderer(1, false, 16, 16)
                         .setSlotName("fluid_output_"+i);
         }
     }

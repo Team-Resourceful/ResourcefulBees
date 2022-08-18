@@ -6,6 +6,9 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.SlotButton;
 import com.teamresourceful.resourcefulbees.client.screens.base.SubdividedScreen;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaTextures;
+import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub.HoneycombPage;
+import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub.InfoPage;
+import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub.TraitsPage;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -28,7 +31,7 @@ public class BeePage extends SubdividedScreen {
     private final Entity bee;
 
     public BeePage(CustomBeeData data) {
-        super(CommonComponents.EMPTY, 186, 163, 0, 51);
+        super(CommonComponents.EMPTY, 186, 163, 0, 51, (screen) -> new InfoPage());
         this.data = data;
         Level level = Minecraft.getInstance().level;
         this.bee = level != null ? data.getEntityType().create(level) : null;
@@ -36,9 +39,22 @@ public class BeePage extends SubdividedScreen {
 
     @Override
     protected void init() {
-        addRenderableWidget(new SlotButton(50, 25, BeepediaTextures.BOOK, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Info")));
-        addRenderableWidget(new SlotButton(72, 25, BeepediaTextures.TRAIT, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Traits")));
-        addRenderableWidget(new SlotButton(94, 25, BeepediaTextures.HOMEYCOMB, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Honeycombs")));
+        int x = 50;
+        addRenderableWidget(new SlotButton(x, 25, BeepediaTextures.BOOK, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Info")));
+        if (this.data.traitData().hasTraits()) {
+            x+=22;
+            addRenderableWidget(new SlotButton(x, 25, BeepediaTextures.TRAIT, () -> false,
+                    () -> this.setSubScreen(new TraitsPage(this.data.traitData()))))
+                    .setTooltipProvider(() -> List.of(Component.literal("Traits")));
+        }
+        var honeycomb = data.coreData().getHoneycombData();
+        if (honeycomb.isPresent()) {
+            x+=22;
+            addRenderableWidget(new SlotButton(x, 25, BeepediaTextures.HOMEYCOMB, () -> false,
+                    () -> this.setSubScreen(new HoneycombPage(honeycomb.get()))))
+                    .setTooltipProvider(() -> List.of(Component.literal("Honeycomb")));
+        }
+
         addRenderableWidget(new SlotButton(138, 25, BeepediaTextures.COMPASS, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Open Bee Locator")));
         addRenderableWidget(new SlotButton(160, 25, BeepediaTextures.RECIPE_BOOK, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Open JEI")));
     }

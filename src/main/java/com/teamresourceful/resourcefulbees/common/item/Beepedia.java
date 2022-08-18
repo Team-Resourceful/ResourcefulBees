@@ -1,10 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
-import com.teamresourceful.resourcefulbees.api.capabilities.IBeepediaData;
-import com.teamresourceful.resourcefulbees.common.capabilities.Capabilities;
+import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.BeepediaData;
+import com.teamresourceful.resourcefulbees.common.capabilities.ModCapabilities;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncCapabilityPacket;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import net.minecraft.ChatFormatting;
@@ -37,30 +39,28 @@ public class Beepedia extends Item {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level world, Player player, @NotNull InteractionHand hand) {
-        LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
         ItemStack itemstack = player.getItemInHand(hand);
         if (world.isClientSide) {
-            BeepediaUtils.loadBeepedia(itemstack, data);
+            BeepediaUtils.loadBeepedia(itemstack, player);
+        } else {
+            LazyOptional<BeepediaData> data = player.getCapability(ModCapabilities.BEEPEDIA_DATA);
+            data.ifPresent(beepedia -> NetPacketHandler.CHANNEL.sendToPlayer(SyncCapabilityPacket.of(player, ModCapabilities.BEEPEDIA_DATA), player));
         }
         return InteractionResultHolder.sidedSuccess(itemstack, world.isClientSide());
     }
 
     @Override
-    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
-        LazyOptional<IBeepediaData> data = player.getCapability(Capabilities.BEEPEDIA_DATA);
-        if (entity instanceof CustomBeeEntity) {
-            if (!player.level.isClientSide) {
-                sendPacket(entity, player);
+    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
+        if (entity instanceof CustomBeeEntity customBee) {
+            if (player.level.isClientSide) {
+                return InteractionResult.PASS;
+            } else {
+                player.getCapability(ModCapabilities.BEEPEDIA_DATA).ifPresent(beepedia -> beepedia.addBee(customBee.getCoreData().name()));
             }
-            if (player.level.isClientSide) BeepediaUtils.loadBeepedia(stack, data);
             player.setItemInHand(hand, stack);
             return InteractionResult.SUCCESS;
         }
         return super.interactLivingEntity(stack, player, entity, hand);
-    }
-
-    private void sendPacket(LivingEntity entity, Player player) {
-
     }
 
     @Override

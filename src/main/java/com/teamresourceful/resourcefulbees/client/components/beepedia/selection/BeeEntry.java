@@ -8,26 +8,33 @@ import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.BooleanSupplier;
+
 public class BeeEntry extends ListEntry {
 
     public static final ResourceLocation SLOT_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/list_button.png");
 
+    private final BooleanSupplier isFound;
     private final CustomBeeData data;
     private final Entity entity;
 
-    public BeeEntry(CustomBeeData data) {
+    public BeeEntry(CustomBeeData data, BooleanSupplier isFound) {
         this.data = data;
         Level level = Minecraft.getInstance().level;
         this.entity = level == null ? null : data.getEntityType().create(level);
+        this.isFound = isFound;
     }
 
     @Override
@@ -43,8 +50,10 @@ public class BeeEntry extends ListEntry {
             RenderUtils.bindTexture(SLOT_TEXTURE);
             Gui.blit(stack, 1, 0, 0, selected ? 40 : hovered ? 20 : 0, 20, 20, 20, 60);
 
-            int color = selected ? 16777215 : 11184810;
-            GuiComponent.drawString(stack, font, this.data.displayName(), 22, 5, color);
+            MutableComponent component = this.isFound.getAsBoolean() ? Component.literal("\u2726 ").withStyle(ChatFormatting.GREEN) : Component.literal("\u2727 ");
+            component.append(this.data.displayName().copy().withStyle(selected ? ChatFormatting.WHITE : ChatFormatting.GRAY));
+
+            GuiComponent.drawString(stack, font, component, 22, 5, -1);
         }
     }
 

@@ -24,13 +24,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class HoneycombRegistry {
+public final class HoneycombRegistry {
 
     private static final HoneycombRegistry INSTANCE = new HoneycombRegistry();
     private static final Map<String, JsonObject> RAW_DATA = new HashMap<>();
     private static final Map<String, OutputVariation> VARIATION_DATA = new HashMap<>();
     private static final Codec<List<OutputVariation>> VARIATION_CODEC = OutputVariation.CODEC.listOf().fieldOf("variations").orElse(new ArrayList<>()).codec();
     private static boolean itemsRegistered;
+
+    private HoneycombRegistry() {
+        // Single instanced classes do not need to be able to be extended
+    }
 
     public static boolean areItemsRegistered() {
         return itemsRegistered;

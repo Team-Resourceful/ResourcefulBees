@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.network.packets.BeeconChangeMessage;
+import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
@@ -239,13 +239,13 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         return !tank.isEmpty() && !effects.isEmpty();
     }
 
-    public void handleBeeconUpdate(BeeconChangeMessage.Option option, int value) {
+    public void handleBeeconUpdate(BeeconChangePacket.Option option, int value) {
         if (this.level == null) return;
         switch (option) {
             case EFFECT_OFF, EFFECT_ON -> {
                 MobEffect effect = MobEffect.byId(value);
                 if (effect != null && ALLOWED_EFFECTS.contains(effect)) {
-                    if (option.equals(BeeconChangeMessage.Option.EFFECT_ON)) effects.add(effect);
+                    if (option.equals(BeeconChangePacket.Option.EFFECT_ON)) effects.add(effect);
                     else effects.remove(effect);
                     this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
                 }

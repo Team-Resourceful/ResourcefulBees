@@ -12,18 +12,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class HoneyRegistry implements IHoneyRegistry {
+public final class HoneyRegistry implements IHoneyRegistry {
+
+    private static final HoneyRegistry INSTANCE = new HoneyRegistry();
 
     private boolean generate = true;
     private final Map<String, JsonObject> rawHoneyData = new LinkedHashMap<>();
     private final Map<String, HoneyData> honeyInfo = new LinkedHashMap<>();
 
-    private static final HoneyRegistry INSTANCE = new HoneyRegistry();
+    private HoneyRegistry() {
+        // Single instanced classes do not need to be able to be extended
+    }
 
     /**
-     * Return the instance of this class. This is useful for calling methods to the mod from a static or threaded context.
-     *
-     * @return Instance of this class
+     * @return Returns the singleton instance of the registry
      */
     public static HoneyRegistry getRegistry() {
         return INSTANCE;
@@ -88,8 +90,7 @@ public class HoneyRegistry implements IHoneyRegistry {
      * @param honeyData HoneyData of the honey being registered
      * @return Returns false if bee already exists in the registry.
      */
-    @SuppressWarnings("UnusedReturnValue")
-    public boolean registerHoney(String honeyType, HoneyData honeyData) {
+    public boolean register(String honeyType, HoneyData honeyData) {
         if (honeyInfo.containsKey(honeyType)) return false;
         honeyInfo.putIfAbsent(honeyType, honeyData);
         return true;
