@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeTerminalScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.modules.AbstractTerminalModule;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeTerminalEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
@@ -18,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,7 +59,7 @@ public class TerminalHomeModule extends AbstractTerminalModule<CentrifugeTermina
             TERMINAL_FONT_8.draw(matrix, "Gearboxes: " + centrifugeState.getGearboxes(), 6, 72, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(matrix, "Processors: " + centrifugeState.getProcessors(), 6, 80, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(matrix, "Recipe Power Modifier: " + centrifugeState.getRecipePowerModifier() * 100 + "%", 6, 88, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(matrix, "Recipe Time Modifier: " + ModConstants.DECIMAL_FORMAT.format(centrifugeState.getRecipeTimeModifier() * 96) + "%", 6, 104, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(matrix, "Recipe Time Modifier: " + DecimalFormat.getPercentInstance().format(centrifugeState.getRecipeTimeModifier() * 96) + "%", 6, 104, FONT_COLOR_1);
             matrix.popPose();
             float pos = 180;
             for (Component component : formatUserInput(commandInput)) {

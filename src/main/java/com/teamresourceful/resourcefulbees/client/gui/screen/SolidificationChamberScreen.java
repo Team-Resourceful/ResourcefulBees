@@ -16,6 +16,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
+
 
 @OnlyIn(Dist.CLIENT)
 public class SolidificationChamberScreen extends AbstractContainerScreen<SolidificationChamberMenu> {
@@ -61,7 +63,7 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
                 if (Screen.hasShiftDown() || tileEntity.getTank().getFluidAmount() < 1000) {
                     this.renderTooltip(matrix, Component.literal(tileEntity.getTank().getFluidAmount() + " MB"), mouseX, mouseY);
                 } else {
-                    this.renderTooltip(matrix, Component.literal(ModConstants.DECIMAL_FORMAT.format((double) tileEntity.getTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
+                    this.renderTooltip(matrix, Component.literal(DecimalFormat.getPercentInstance().format((double) tileEntity.getTank().getFluidAmount() / 1000) + " Buckets"), mouseX, mouseY);
                 }
             }
         }

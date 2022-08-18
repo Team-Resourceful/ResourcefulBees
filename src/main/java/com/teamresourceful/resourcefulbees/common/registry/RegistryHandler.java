@@ -24,7 +24,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class RegistryHandler {
 
     private RegistryHandler() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static void init() {

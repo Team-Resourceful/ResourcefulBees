@@ -16,7 +16,7 @@ import java.util.Set;
 public final class ModEntities {
 
     private ModEntities() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, ResourcefulBees.MOD_ID);

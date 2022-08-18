@@ -22,7 +22,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModItems {
 
     private ModItems() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final DeferredRegister<Item> ITEMS = createItemRegistry();

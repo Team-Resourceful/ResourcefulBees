@@ -14,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModRecipeSerializers {
 
     private ModRecipeSerializers() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ResourcefulBees.MOD_ID);

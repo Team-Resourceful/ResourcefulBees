@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.item.locator;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.utils.Vec2i;
+import com.teamresourceful.resourcefullib.common.utils.types.Vec2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.NbtUtils;
@@ -56,7 +56,7 @@ public class BeeLocatorWorker implements WorldWorkerManager.IWorker {
             fail();
             return false;
         }
-        BlockPos pos = new ChunkPos(this.chunk.x + offset.x(), this.chunk.z + offset.z()).getMiddleBlockPosition(0);
+        BlockPos pos = new ChunkPos(this.chunk.x + offset.x(), this.chunk.z + offset.y()).getMiddleBlockPosition(0);
         Holder<Biome> holder = player.level.getBiome(pos);
         if (holder.isBound()) {
             Biome biome = holder.get();

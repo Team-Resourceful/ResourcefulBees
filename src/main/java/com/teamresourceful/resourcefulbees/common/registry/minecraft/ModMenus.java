@@ -13,7 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModMenus {
 
     private ModMenus() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, ResourcefulBees.MOD_ID);

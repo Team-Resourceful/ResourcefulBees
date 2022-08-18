@@ -9,7 +9,6 @@ import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.II
 import com.teamresourceful.resourcefulbees.common.compat.jei.BaseCategory;
 import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -34,6 +33,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class MutationCategory extends BaseCategory<MutationRecipe> {
@@ -91,7 +91,9 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
     private static void setTagToolTip(Optional<CompoundTag> tag, List<Component> tooltip) {
         tag.ifPresent(nbt -> {
             if (Screen.hasShiftDown()) Arrays.stream(NbtUtils.prettyPrint(nbt).split("\n"))
-                    .map(Component::literal).map(c -> c.withStyle(ChatFormatting.DARK_PURPLE)).forEach(tooltip::add);
+                    .map(Component::literal)
+                    .map(c -> c.withStyle(ChatFormatting.DARK_PURPLE))
+                    .forEach(tooltip::add);
             else tooltip.add(TranslationConstants.Jei.NBT.withStyle(ChatFormatting.DARK_PURPLE));
         });
     }
@@ -105,8 +107,8 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
         if (mouseX >= 54 && mouseX <= 63 && mouseY >= 34 && mouseY <= 43 && outputWeightChance < 1) {
             List<Component> tooltip = Lists.newArrayList(TranslationConstants.Jei.MUTATION_WEIGHT_CHANCE_INFO);
             tooltip.add(Component.empty());
-            tooltip.add(Component.literal("Weight: " + ModConstants.PERCENT_FORMAT.format(recipe.pool().getAdjustedWeight(recipe.output().weight()))));
-            tooltip.add(Component.literal("Chance: " + ModConstants.PERCENT_FORMAT.format(recipe.output().chance())));
+            tooltip.add(Component.literal("Weight: " + DecimalFormat.getPercentInstance().format(recipe.pool().getAdjustedWeight(recipe.output().weight()))));
+            tooltip.add(Component.literal("Chance: " + DecimalFormat.getPercentInstance().format(recipe.output().chance())));
             return tooltip;
         }
         return super.getTooltipStrings(recipe, view, mouseX, mouseY);
@@ -122,13 +124,13 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
         double outputWeightChance = recipe.pool().getAdjustedWeight(recipe.output().weight()) * recipe.output().chance();
 
         if (outputWeightChance < 1) {
-            String chanceString = ModConstants.PERCENT_FORMAT.format(outputWeightChance);
+            String chanceString = DecimalFormat.getPercentInstance().format(outputWeightChance);
             int padding = fontRenderer.width(chanceString) / 2;
             info.draw(stack, 54, 34);
             fontRenderer.draw(stack, chanceString, 76F - padding, 35, 0xff808080);
         }
         if (recipe.input().chance() < 1) {
-            String chanceString = ModConstants.PERCENT_FORMAT.format(recipe.input().chance());
+            String chanceString = DecimalFormat.getPercentInstance().format(recipe.input().chance());
             int padding = fontRenderer.width(chanceString) / 2;
             fontRenderer.draw(stack, chanceString, 48F - padding, 66, 0xff808080);
         }

@@ -14,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModBiomeModifiers {
 
     private ModBiomeModifiers() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final DeferredRegister<Codec<? extends BiomeModifier>> MODIFIERS = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, ResourcefulBees.MOD_ID);

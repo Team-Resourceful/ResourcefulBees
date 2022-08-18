@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ModEffects {
 
     private ModEffects() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, ResourcefulBees.MOD_ID);

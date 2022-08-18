@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 public final class DefaultTraitAbilities {
 
     private DefaultTraitAbilities() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static void registerDefaultAbilities(TraitAbilityRegistry registry) {

@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.item.Beepedia;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ItemGroupResourcefulBees {
 
     private ItemGroupResourcefulBees() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final CreativeModeTab RESOURCEFUL_BEES = new CreativeModeTab(ResourcefulBees.MOD_ID) {
@@ -35,7 +35,7 @@ public final class ItemGroupResourcefulBees {
                 item.fillItemCategory(this, stacks);
                 if (item.equals(beepedia)) {
                     ItemStack creativeBeepedia = new ItemStack(ModItems.BEEPEDIA.get());
-                    creativeBeepedia.getOrCreateTag().putBoolean(Beepedia.CREATIVE_TAG, true);
+                    creativeBeepedia.getOrCreateTag().putBoolean(NBTConstants.Beepedia.CREATIVE, true);
                     stacks.add(creativeBeepedia);
                 }
             }

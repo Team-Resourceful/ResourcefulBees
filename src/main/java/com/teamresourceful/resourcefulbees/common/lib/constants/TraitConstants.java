@@ -3,8 +3,9 @@ package com.teamresourceful.resourcefulbees.common.lib.constants;
 public final class TraitConstants {
 
     private TraitConstants() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
+
     public static final String SLIMY = "slimy";
     public static final String FLAMMABLE = "flammable";
     public static final String TELEPORT = "teleport";

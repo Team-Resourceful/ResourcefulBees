@@ -2,12 +2,11 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGeneratorMenu;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -20,6 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 @OnlyIn(Dist.CLIENT)
 public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGeneratorMenu> {
@@ -67,11 +67,11 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrix, mouseX, mouseY);
-        renderFluidTooltip(matrix, mouseX, mouseY, ModConstants.DECIMAL_FORMAT);
-        renderEnergyTooltip(matrix, mouseX, mouseY, ModConstants.DECIMAL_FORMAT);
+        renderFluidTooltip(matrix, mouseX, mouseY, DecimalFormat.getPercentInstance());
+        renderEnergyTooltip(matrix, mouseX, mouseY, DecimalFormat.getPercentInstance());
     }
 
-    public void renderEnergyTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY, DecimalFormat decimalFormat) {
+    public void renderEnergyTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY, NumberFormat decimalFormat) {
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 136, this.leftPos + 148) && MathUtils.inRangeInclusive(mouseY, this.topPos + 16, this.topPos + 70)) {
             if (Screen.hasShiftDown() || this.menu.getEnergy().getEnergyStored() < 500)
                 this.renderTooltip(matrix, Component.literal(this.menu.getEnergy().getEnergyStored() + " RF"), mouseX, mouseY);
@@ -80,7 +80,7 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
         }
     }
 
-    public void renderFluidTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY, DecimalFormat decimalFormat) {
+    public void renderFluidTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY, NumberFormat decimalFormat) {
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 28, this.leftPos + 40) && MathUtils.inRangeInclusive(mouseY, this.topPos + 16, this.topPos + 70)) {
             FluidStack fluid = this.menu.getEntity().getTank().getFluid();
             if (Screen.hasShiftDown() || fluid.getAmount() < 500)

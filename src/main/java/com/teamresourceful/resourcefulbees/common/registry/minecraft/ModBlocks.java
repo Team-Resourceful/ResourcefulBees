@@ -33,7 +33,7 @@ import java.util.function.Supplier;
 public final class ModBlocks {
 
     private ModBlocks() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final DeferredRegister<Block> BLOCKS = createBlockRegistry();

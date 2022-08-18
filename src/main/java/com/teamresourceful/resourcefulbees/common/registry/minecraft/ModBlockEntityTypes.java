@@ -18,7 +18,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModBlockEntityTypes {
 
     private ModBlockEntityTypes() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ResourcefulBees.MOD_ID);

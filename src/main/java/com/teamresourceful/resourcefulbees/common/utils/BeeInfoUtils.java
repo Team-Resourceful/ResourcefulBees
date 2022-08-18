@@ -29,7 +29,7 @@ import java.util.Optional;
 public final class BeeInfoUtils {
 
     private BeeInfoUtils() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static Pair<String, String> sortParents(String parent1, String parent2) {

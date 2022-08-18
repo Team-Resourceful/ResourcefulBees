@@ -21,7 +21,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModFeatures {
 
     private ModFeatures() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, ResourcefulBees.MOD_ID);
@@ -31,8 +31,10 @@ public final class ModFeatures {
     public static class ConfiguredFeatures {
 
         private ConfiguredFeatures() {
-            throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+            throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
         }
+
+        //TODO Change to json generated configured features.
 
         public static final Holder<ConfiguredFeature<NoneFeatureConfiguration, ?>> OVERWORLD_NESTS_HOLDER =
                 FeatureUtils.register("resourcefulbees:overworld_nests", BEE_NEST_FEATURE.get());

@@ -23,7 +23,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModPotions {
 
     private ModPotions() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, ResourcefulBees.MOD_ID);

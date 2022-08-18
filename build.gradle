@@ -48,7 +48,7 @@ plugins.withId("idea") {
 }
 
 minecraft {
-    mappings channel: "parchment", version: "$mapping"
+    mappings channel: "parchment", version: mapping
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 

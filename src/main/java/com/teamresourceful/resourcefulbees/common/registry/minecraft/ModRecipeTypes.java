@@ -14,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModRecipeTypes {
 
     private ModRecipeTypes() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
     
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, ResourcefulBees.MOD_ID);

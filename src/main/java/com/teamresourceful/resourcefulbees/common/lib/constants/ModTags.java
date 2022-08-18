@@ -32,6 +32,10 @@ public final class ModTags {
 
         public static final TagKey<Item> HEAT_SOURCES = createItemTag(ForgeVersion.MOD_ID, "heat_sources");
 
+        private Items() {
+            throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        }
+
         private static TagKey<Item> createItemTag(String mod, String path) {
             return ItemTags.create(new ResourceLocation(mod, path));
         }
@@ -44,6 +48,10 @@ public final class ModTags {
 
         public static final TagKey<Block> HEAT_SOURCES = createBlockTag(ForgeVersion.MOD_ID, "heat_sources");
 
+        private Blocks() {
+            throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        }
+
         private static TagKey<Block> createBlockTag(String mod, String path) {
             return BlockTags.create(new ResourceLocation(mod, path));
         }
@@ -51,5 +59,9 @@ public final class ModTags {
 
     public static final class Fluids {
         public static final TagKey<Fluid> HONEY = FluidTags.create(new ResourceLocation(ForgeVersion.MOD_ID, "honey"));
+
+        private Fluids() {
+            throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        }
     }
 }

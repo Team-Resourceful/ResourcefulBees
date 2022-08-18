@@ -38,7 +38,7 @@ import javax.annotation.Nonnull;
 public final class WorldUtils {
 
     private WorldUtils() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     @Nullable

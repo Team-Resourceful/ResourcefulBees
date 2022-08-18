@@ -22,8 +22,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -38,7 +38,7 @@ public final class ModUtils {
     private static final String[] UNITS = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
 
     private ModUtils() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static void checkBottleAndCapability(FluidTank tank, BlockEntity entity, Player player, Level level, BlockPos pos, InteractionHand hand) {
@@ -53,8 +53,8 @@ public final class ModUtils {
     }
 
     public static void capabilityOrGuiUse(BlockEntity tileEntity, Player player, Level level, BlockPos pos, InteractionHand hand){
-        if (player.getItemInHand(hand).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
-            tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+        if (player.getItemInHand(hand).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+            tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER)
                     .ifPresent(iFluidHandler -> FluidUtil.interactWithFluidHandler(player, hand, level, pos, null));
         } else if (!player.isShiftKeyDown() && !level.isClientSide()) {
             NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tileEntity, pos);

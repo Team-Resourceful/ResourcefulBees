@@ -3,10 +3,9 @@ package com.teamresourceful.resourcefulbees.common.lib.constants;
 public final class NBTConstants {
 
     private NBTConstants() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
-    public static final String NBT_BEEPEDIA_DATA = "BeepediaData";
     public static final String NBT_BEES = "Bees";
     public static final String NBT_DISPLAYNAMES = "DisplayNames";
     public static final String NBT_BEE_NAME = "DisplayName";
@@ -57,5 +56,10 @@ public final class NBTConstants {
     public static class BeeLocator {
         public static final String LAST_BIOME = "LastBiome";
         public static final String LAST_BEE = "LastBee";
+    }
+
+    public static class Beepedia {
+        public static final String COMPLETE = "Complete";
+        public static final String CREATIVE = "Creative";
     }
 }

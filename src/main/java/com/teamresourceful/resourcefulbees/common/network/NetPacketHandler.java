@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirectio
 public final class NetPacketHandler {
 
     private NetPacketHandler() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
     public static final NetworkChannel CHANNEL = new NetworkChannel(ResourcefulBees.MOD_ID, 0, "main");
