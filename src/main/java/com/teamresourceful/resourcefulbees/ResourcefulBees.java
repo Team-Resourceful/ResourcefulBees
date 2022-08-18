@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
-import com.teamresourceful.resourcefulbees.common.capabilities.Capabilities;
+import com.teamresourceful.resourcefulbees.common.capabilities.ModCapabilities;
 import com.teamresourceful.resourcefulbees.common.compat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
@@ -25,12 +25,10 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.*;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPotions;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -80,6 +78,8 @@ public class ResourcefulBees {
             CommonConfig.GENERATE_DEFAULTS.save();
         }
 
+        ModCapabilities.init();
+
         FMLJavaModLoadingContext.get().getModEventBus().addListener(RegistryHandler::addEntityAttributes);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
@@ -88,7 +88,6 @@ public class ResourcefulBees {
 
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
         MinecraftForge.EVENT_BUS.addListener(Beekeeper::setupBeekeeper);
-        MinecraftForge.EVENT_BUS.addListener(this::cloneEvent);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
@@ -116,12 +115,6 @@ public class ResourcefulBees {
     }
 
     @SubscribeEvent
-    public void cloneEvent(PlayerEvent.Clone event) {
-        event.getOriginal().getCapability(Capabilities.BEEPEDIA_DATA).ifPresent(cap ->
-                event.getEntity().getCapability(Capabilities.BEEPEDIA_DATA).ifPresent(c -> c.deserializeNBT(cap.serializeNBT())));
-    }
-
-    @SubscribeEvent
     public void onInterModEnqueue(InterModEnqueueEvent event) {
         if (ModList.get().isLoaded("theoneprobe"))
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TopCompat::new);
@@ -141,6 +134,13 @@ public class ResourcefulBees {
 
     @SubscribeEvent
     public void onPackFinders(AddPackFindersEvent event) {
-        if (event.getPackType().equals(PackType.SERVER_DATA)) event.addRepositorySource(DataPackLoader.INSTANCE);
+        switch (event.getPackType()) {
+            case SERVER_DATA -> {
+                event.addRepositorySource(DataPackLoader.INSTANCE);
+            }
+            case CLIENT_RESOURCES -> {
+
+            }
+        }
     }
 }
