@@ -29,7 +29,7 @@ public class PetModelData implements IAnimatable {
 
     static {
         //noinspection unchecked
-        AnimationController.addModelFetcher((IAnimatable object) -> object instanceof PetModelData ? ((PetModelData) object).getModelRaw() : null);
+        AnimationController.addModelFetcher((IAnimatable object) -> object instanceof PetModelData data ? data.getModelRaw() : null);
     }
 
     private final PetBeeModel<PetModelData> model = new PetBeeModel<>();

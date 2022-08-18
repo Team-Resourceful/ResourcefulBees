@@ -8,23 +8,25 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-@SuppressWarnings("ProtectedMemberInFinalClass")
+/**
+ * Changed the protected methods and fields to package protected fields and methods.
+ */
 public final class PetInfo {
 
     private static final int VERSION = 1;
 
     private static final PetModelData FALLBACK_MODEL = new PetModelData(-1, "fallback", new ResourceLocation("resourcefulbees:geo/base-nocloak.geo.json"), new ResourceLocation("textures/entity/bee/bee.png"), new HashSet<>());
 
-    protected static PetModelData defaultModel = null;
+    static PetModelData defaultModel = null;
 
     private static final Map<String, PetModelData> PET_MODELS = new HashMap<>();
     private static final Map<UUID, String> USER_PETS = new HashMap<>();
 
     private PetInfo()   {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
-    protected static void addUser(String uuid, String model){
+    static void addUser(String uuid, String model){
         try {
             getUUID(uuid).ifPresent(uid -> USER_PETS.put(uid, model));
         } catch (Exception ignored) {
@@ -41,7 +43,7 @@ public final class PetInfo {
         return Optional.empty();
     }
 
-    protected static void addModel(@NotNull PetModelData data) {
+    static void addModel(@NotNull PetModelData data) {
         if (data.getVersion() != -1 && data.getVersion() <= VERSION) PET_MODELS.put(data.getId(), data);
         else PET_MODELS.put(data.getId(), FALLBACK_MODEL);
     }
