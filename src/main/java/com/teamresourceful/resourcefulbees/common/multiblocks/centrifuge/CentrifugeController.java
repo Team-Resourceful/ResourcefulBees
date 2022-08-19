@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fluids.FluidStack;
 import net.roguelogix.phosphophyllite.multiblock2.MultiblockController;
 import net.roguelogix.phosphophyllite.multiblock2.ValidationException;
-import net.roguelogix.phosphophyllite.multiblock2.persistent.IPersistentMultiblock;
+import net.roguelogix.phosphophyllite.multiblock2.common.IPersistentMultiblock;
 import net.roguelogix.phosphophyllite.multiblock2.rectangular.IRectangularMultiblock;
 import net.roguelogix.phosphophyllite.multiblock2.touching.ITouchingMultiblock;
 import net.roguelogix.phosphophyllite.repack.org.joml.Vector3i;
