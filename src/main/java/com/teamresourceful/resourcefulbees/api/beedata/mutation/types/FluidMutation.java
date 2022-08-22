@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -49,8 +48,8 @@ public record FluidMutation(Fluid fluid, double chance, double weight) implement
     }
 
     @Override
-    public FluidStack fluidRender() {
-        return new FluidStack(fluid, 1000);
+    public Fluid fluidRender() {
+        return fluid;
     }
 
     private static class Serializer implements IMutationSerializer {

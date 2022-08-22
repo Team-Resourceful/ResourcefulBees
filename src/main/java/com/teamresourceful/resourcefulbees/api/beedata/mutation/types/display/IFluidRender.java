@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display;
 
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.world.level.material.Fluid;
 
 public interface IFluidRender {
-    FluidStack fluidRender();
+    Fluid fluidRender();
 }
