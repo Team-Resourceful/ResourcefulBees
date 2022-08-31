@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.FontResourceManagerAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.MinecraftAccessor;
@@ -42,14 +41,10 @@ public final class ClientUtils {
         float scaledSize;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) entity.tickCount = mc.player.tickCount;
-        if (entity instanceof CustomBeeEntity customBee) {
-            scaledSize = 20 / customBee.getRenderData().sizeModifier();
-        } else {
-            scaledSize = 20 / (Math.max(entity.getBbWidth(), entity.getBbHeight()));
-        }
+        scaledSize = 15 / (Math.max(entity.getBbWidth(), entity.getBbHeight()));
         if (mc.player != null) {
             try (var ignored = new CloseablePoseStack(stack)) {
-                stack.translate(10, 20 * renderScale, 0.5);
+                stack.translate(10, 15 * renderScale, 0.5);
                 stack.translate(x, y, 1);
                 stack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
                 stack.translate(0, 0, 100);
