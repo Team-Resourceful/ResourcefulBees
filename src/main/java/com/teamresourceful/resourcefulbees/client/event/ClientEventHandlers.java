@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.client.event;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
 import com.teamresourceful.resourcefulbees.client.gui.overlay.BeeLocatorOverlay;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
@@ -9,18 +8,15 @@ import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.Centrifu
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeTerminalScreen;
 import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeVoidScreen;
 import com.teamresourceful.resourcefulbees.client.models.ModelHandler;
-import com.teamresourceful.resourcefulbees.client.render.entities.CustomBeeRenderer;
-import com.teamresourceful.resourcefulbees.client.render.fluids.FluidRender;
-import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
-import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
-import com.teamresourceful.resourcefulbees.client.render.blocks.BeeHouseSelectionBox;
 import com.teamresourceful.resourcefulbees.client.render.blocks.RenderEnderBeecon;
 import com.teamresourceful.resourcefulbees.client.render.blocks.RenderHoneyGenerator;
 import com.teamresourceful.resourcefulbees.client.render.blocks.RenderSolidificationChamber;
 import com.teamresourceful.resourcefulbees.client.render.blocks.centrifuge.CentrifugeCrankRenderer;
 import com.teamresourceful.resourcefulbees.client.render.blocks.centrifuge.CentrifugeRenderer;
-import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
-import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseTopBlock;
+import com.teamresourceful.resourcefulbees.client.render.entities.CustomBeeRenderer;
+import com.teamresourceful.resourcefulbees.client.render.fluids.FluidRender;
+import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
+import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -29,21 +25,16 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.core.Direction;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -70,23 +61,12 @@ public final class ClientEventHandlers {
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onBlockHighlight);
 
         Sheets.addWoodType(ModBlocks.WAXED_WOOD_TYPE);
     }
 
     public static void onRegisterGuiOverlay(RegisterGuiOverlaysEvent event) {
         event.registerAboveAll("bee_locator", BeeLocatorOverlay.INSTANCE);
-    }
-
-    public static void onBlockHighlight(RenderHighlightEvent.Block event) {
-        BlockState state = event.getCamera().getEntity().level.getBlockState(event.getTarget().getBlockPos());
-        if (state.getBlock() instanceof BeeHouseBlock || state.getBlock() instanceof BeeHouseTopBlock) {
-            event.setCanceled(true);
-            VertexConsumer consumer = event.getMultiBufferSource().getBuffer(RenderType.lines());
-            boolean shouldFlip = state.hasProperty(BlockStateProperties.HORIZONTAL_FACING) && state.getValue(BlockStateProperties.HORIZONTAL_FACING).getAxis().equals(Direction.Axis.X);
-            BeeHouseSelectionBox.renderSelectionBox(consumer, event.getPoseStack(), event.getCamera().getPosition(), event.getTarget().getBlockPos(), (state.getBlock() instanceof BeeHouseTopBlock ? 1 : 0), shouldFlip);
-        }
     }
 
     public static void recipesLoaded(RecipesUpdatedEvent event){
