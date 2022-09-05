@@ -32,8 +32,6 @@ public record BeeTexture(ResourceLocation normalTexture, ResourceLocation angryT
 
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getTexture(NeutralMob neutralMob) {
-        // Note: This optimization does mean that if a texture was missing and the user reloaded textures, and it's now not missing it will still return the default
-        //       while this is very annoying this optimization should be done because if not it will cause a lot of unneeded resource lookups.
         return ClientUtils.DEFAULT_TEXTURER.apply(neutralMob.isAngry() ? angryTexture : normalTexture, normalTexture);
     }
 

@@ -18,6 +18,7 @@ import com.teamresourceful.resourcefulbees.client.render.fluids.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.screens.MissingRegistryScreen;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -59,6 +60,7 @@ public final class ClientEventHandlers {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ColorHandler::onBlockColors);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::addLayers);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::onRegisterGuiOverlay);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientUtils::onResourceReload);
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);

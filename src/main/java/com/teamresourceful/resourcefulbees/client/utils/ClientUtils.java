@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.FontResourceManagerAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.MinecraftAccessor;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
-import net.minecraft.Util;
+import com.teamresourceful.resourcefullib.common.caches.CacheableBiFunction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
@@ -22,10 +22,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.util.function.BiFunction;
 
 public final class ClientUtils {
 
@@ -36,7 +35,7 @@ public final class ClientUtils {
     private static final FontSet FONT_12 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(new ResourceLocation(ResourcefulBees.MOD_ID, "jetbrains_mono_12"));
     public static final Font TERMINAL_FONT_12 = new Font(resourceLocation -> FONT_12, false); //IDK if this should be true or false tbh
 
-    public static final BiFunction<ResourceLocation, ResourceLocation, ResourceLocation> DEFAULT_TEXTURER = Util.memoize((texture, other) -> texture == other ? texture : Minecraft.getInstance().getResourceManager().getResource(texture).isPresent() ? texture : other);
+    public static final CacheableBiFunction<ResourceLocation, ResourceLocation, ResourceLocation> DEFAULT_TEXTURER = new CacheableBiFunction<>((texture, other) -> texture == other ? texture : Minecraft.getInstance().getResourceManager().getResource(texture).isPresent() ? texture : other);
 
     private ClientUtils() {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
@@ -89,5 +88,9 @@ public final class ClientUtils {
             x = x - (font.width(component) / 2);
             font.draw(stack, component, x, y, color);
         }
+    }
+
+    public static void onResourceReload(ModelEvent.BakingCompleted event) {
+        DEFAULT_TEXTURER.clear();
     }
 }
