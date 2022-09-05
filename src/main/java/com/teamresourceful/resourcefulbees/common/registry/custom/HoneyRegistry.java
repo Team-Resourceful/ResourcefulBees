@@ -31,6 +31,10 @@ public final class HoneyRegistry implements IHoneyRegistry {
         return INSTANCE;
     }
 
+    public static boolean containsHoney(String honey) {
+        return INSTANCE.honeyInfo.containsKey(honey);
+    }
+
     /**
      * Returns a HoneyBottleData object for the given honey type.
      *

@@ -130,6 +130,8 @@ public class ResourcefulBees {
         DataGen.generateCommonData();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PetLoader::loadAPI);
         HoneycombRegistry.getRegistry().regenerateVariationData();
+
+        MissingRegistrySetup.checkMissingRegistries();
     }
 
     @SubscribeEvent

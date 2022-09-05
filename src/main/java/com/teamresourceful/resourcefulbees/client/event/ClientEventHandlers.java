@@ -17,6 +17,7 @@ import com.teamresourceful.resourcefulbees.client.render.entities.CustomBeeRende
 import com.teamresourceful.resourcefulbees.client.render.fluids.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
+import com.teamresourceful.resourcefulbees.client.screens.MissingRegistryScreen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -61,6 +62,7 @@ public final class ClientEventHandlers {
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
+        MinecraftForge.EVENT_BUS.addListener(MissingRegistryScreen::onScreenChange);
 
         Sheets.addWoodType(ModBlocks.WAXED_WOOD_TYPE);
     }

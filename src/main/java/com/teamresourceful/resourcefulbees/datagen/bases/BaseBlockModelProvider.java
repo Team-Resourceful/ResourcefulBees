@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.util.Lazy;
 
@@ -22,7 +23,7 @@ public abstract class BaseBlockModelProvider extends BlockModelProvider {
     public BlockModelBuilder getBuilder(String path) {
         Preconditions.checkNotNull(path, "Path must not be null");
         ResourceLocation outputLoc = extendWithFolder(path.contains(":") ? new ResourceLocation(path) : new ResourceLocation(modid, path));
-        this.existingFileHelper.trackGenerated(outputLoc, MODEL);
+        this.existingFileHelper.trackGenerated(outputLoc, ModelProvider.MODEL);
         return generatedModels.computeIfAbsent(outputLoc, factory);
     }
 

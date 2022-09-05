@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockLootTable;
 import net.minecraft.advancements.critereon.EntityFlagsPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -50,7 +51,7 @@ public class BlockLootTables extends BaseBlockLootTable {
 
         dropSelf(ModBlocks.WAXED_MACHINE_BLOCK);
         dropSelf(ModBlocks.WAXED_PLANKS);
-        createDoorTable(ModBlocks.WAXED_DOOR.get());
+        BlockLoot.createDoorTable(ModBlocks.WAXED_DOOR.get());
         dropSelf(ModBlocks.WAXED_BUTTON);
         dropSelf(ModBlocks.WAXED_FENCE);
         dropSelf(ModBlocks.WAXED_FENCE_GATE);
