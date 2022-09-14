@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.client.components.beepedia.SlotButton
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.honey.EffectEntry;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitAbilityRegistry;
+import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.HistoryScreen;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
@@ -30,7 +31,7 @@ import static com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.
 public class TraitPage extends HistoryScreen implements TooltipProvider {
 
     private Category category;
-    private SelectionList list;
+    private SelectionList<ListEntry> list;
 
     private final BeeTrait data;
 
@@ -43,7 +44,7 @@ public class TraitPage extends HistoryScreen implements TooltipProvider {
     protected void init() {
         addRenderableOnly(new ItemSlotWidget(2, 0, new ItemStack(this.data.getDisplayItem()), false));
 
-        this.list = addRenderableOnly(new SelectionList(1, 22, 182, 141, 30, ignored -> {}));
+        this.list = addRenderableOnly(new SelectionList<>(1, 22, 182, 141, 30, ignored -> {}));
         int x = 184;
 
         List<Pair<Supplier<Boolean>, Category>> entries = List.of(

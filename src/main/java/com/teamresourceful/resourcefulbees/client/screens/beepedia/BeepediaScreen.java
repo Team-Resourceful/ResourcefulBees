@@ -46,7 +46,7 @@ public class BeepediaScreen extends SubdividedScreen {
 
     private BeepediaData data;
     public int ticks;
-    private SelectionList selectionList;
+    private SelectionList<ListEntry> selectionList;
 
     public BeepediaScreen() {
         super(CommonComponents.EMPTY, 328, 200, 133, 9, screen -> screen instanceof BeepediaScreen beepedia ? new HomePage(beepedia) : null);
@@ -60,7 +60,7 @@ public class BeepediaScreen extends SubdividedScreen {
         addRenderableWidget(new BeepediaMainButton(154, 175, 1, button -> this.setSubScreenNow(new HomePage(this)), button -> !(this.getSubScreen() instanceof HomePage)));
         addRenderableWidget(new BeepediaMainButton(184, 175, 2, button -> this.goBack(), button -> this.canGoBack()));
 
-        this.selectionList = addRenderableWidget(new SelectionList(9, 31, 119, 125, 20, this::updateSelection));
+        this.selectionList = addRenderableWidget(new SelectionList<>(9, 31, 119, 125, 20, this::updateSelection));
 
         addRenderableWidget(new SelectionButtons(9, 9, this));
         addRenderableWidget(new SearchBar(22, 159, this));
@@ -130,7 +130,7 @@ public class BeepediaScreen extends SubdividedScreen {
                     .getStreamOfHoney()
                     .filter(honey -> getState().search == null || honey.name().toLowerCase().contains(getState().search.toLowerCase()))
                     .sorted((o1, o2) -> getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isUnset() ? 0 : o1.name().compareTo(o2.name()) * (getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isFalse() ? -1 : 1))
-                    .map(data -> new ItemEntry<>(data, a -> new ItemStack(a.bottleData().honeyBottle()), HoneyData::getDisplayName))
+                    .map(data -> new ItemEntry<>(data, a -> new ItemStack(a.bottleData().honeyBottle().get()), HoneyData::getDisplayName))
                     .toList();
         };
 

@@ -9,11 +9,15 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
+import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.InclusiveRange;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -64,5 +68,17 @@ public final class CodecUtils {
     public static Consumer<String> debugLog() {
         if (Boolean.FALSE.equals(CommonConfig.SHOW_DEBUG_INFO.get())) return s -> {};
         return ResourcefulBees.LOGGER::warn;
+    }
+
+    public static LazyHolder<Item> itemHolder(String id) {
+        return new LazyHolder<>(Registry.ITEM, new ResourceLocation(id));
+    }
+
+    public static LazyHolder<Block> blockHolder(String id) {
+        return new LazyHolder<>(Registry.BLOCK, new ResourceLocation(id));
+    }
+
+    public static LazyHolder<Fluid> fluidHolder(String id) {
+        return new LazyHolder<>(Registry.FLUID, new ResourceLocation(id));
     }
 }

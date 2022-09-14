@@ -1,8 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
 import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.IHoneyRegistry;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 
@@ -102,11 +100,5 @@ public final class HoneyRegistry implements IHoneyRegistry {
 
     public Map<String, JsonObject> getRawHoney() {
         return rawHoneyData;
-    }
-
-    public void regenerateHoneyData() {
-        HoneyRegistry.getRegistry().getRawHoney().forEach((s, json) ->
-                honeyInfo.compute(s, (name, data) -> HoneyData.codec(name).parse(JsonOps.INSTANCE, json)
-                .getOrThrow(false, e -> ResourcefulBees.LOGGER.error("Could not create Custom Honey Data for {} honey", name))));
     }
 }

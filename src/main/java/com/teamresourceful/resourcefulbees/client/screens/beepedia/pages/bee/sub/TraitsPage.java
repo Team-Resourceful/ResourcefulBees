@@ -27,7 +27,7 @@ public class TraitsPage extends Screen implements TooltipProvider {
 
     @Override
     protected void init() {
-        var list = addRenderableWidget(new SelectionList(1, 0, 182, 111, 26, ignored -> {}));
+        var list = addRenderableWidget(new SelectionList<>(1, 0, 182, 111, 26, ignored -> {}));
         list.updateEntries(this.traits.stream().map(TraitEntry::new).toList());
     }
 

@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.ItemSlotWidget;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaTextures;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.HistoryScreen;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
@@ -29,13 +30,13 @@ public class HoneyPage extends HistoryScreen implements TooltipProvider {
     public HoneyPage(HoneyData data) {
         super(CommonComponents.EMPTY);
         this.data = data;
-        this.honeyBottle = new ItemStack(data.bottleData().honeyBottle());
+        this.honeyBottle = new ItemStack(data.bottleData().honeyBottle().get());
     }
 
     @Override
     protected void init() {
         addRenderableOnly(new ItemSlotWidget(2, 0, this.honeyBottle));
-        SelectionList list = addRenderableOnly(new SelectionList(1, 22, 182, 140, 20, ignored -> {}));
+        SelectionList<ListEntry> list = addRenderableOnly(new SelectionList<>(1, 22, 182, 140, 20, ignored -> {}));
         list.updateEntries(this.data.bottleData().effects().stream().map(EffectEntry::new).toList());
     }
 

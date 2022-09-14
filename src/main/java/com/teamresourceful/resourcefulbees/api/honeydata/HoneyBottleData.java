@@ -5,12 +5,14 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefullib.common.codecs.recipes.LazyHolders;
 import com.teamresourceful.resourcefullib.common.color.Color;
-import net.minecraft.core.Registry;
+import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -18,7 +20,7 @@ import net.minecraft.world.item.Items;
 import java.util.Collections;
 import java.util.List;
 
-public record HoneyBottleData(String name, Color color, int hunger, float saturation, List<HoneyEffect> effects, Item honeyBottle) {
+public record HoneyBottleData(String name, Color color, int hunger, float saturation, List<HoneyEffect> effects, LazyHolder<Item> honeyBottle) {
 
     public static Codec<HoneyBottleData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -27,7 +29,7 @@ public record HoneyBottleData(String name, Color color, int hunger, float satura
                 Codec.INT.fieldOf("hunger").orElse(1).forGetter(HoneyBottleData::hunger),
                 Codec.FLOAT.fieldOf("saturation").orElse(1.0f).forGetter(HoneyBottleData::saturation),
                 HoneyEffect.CODEC.listOf().fieldOf("effects").orElse(Collections.emptyList()).forGetter(HoneyBottleData::effects),
-                Registry.ITEM.byNameCodec().fieldOf("honeyBottle").orElse(Items.HONEY_BOTTLE).forGetter(HoneyBottleData::honeyBottle)
+                LazyHolders.LAZY_ITEM.fieldOf("honeyBottle").orElse(CodecUtils.itemHolder("honey_bottle")).forGetter(HoneyBottleData::honeyBottle)
         ).apply(instance, HoneyBottleData::new));
     }
 

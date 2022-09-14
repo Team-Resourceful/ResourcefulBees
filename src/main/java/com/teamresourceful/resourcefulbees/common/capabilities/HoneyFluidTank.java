@@ -88,7 +88,7 @@ public class HoneyFluidTank extends FluidTank {
             return ModFluids.HONEY_STILL.get().getSource();
         } else if (item instanceof CustomHoneyBottleItem honey) {
             HoneyFluidData fluidData = HoneyRegistry.getRegistry().getHoneyData(honey.getHoneyData().name()).fluidData();
-            return fluidData.stillFluid();
+            return fluidData.stillFluid().get();
         }
         return Fluids.EMPTY;
     }
@@ -96,7 +96,7 @@ public class HoneyFluidTank extends FluidTank {
     @Nullable
     public static Item getHoneyBottleFromFluid(Fluid fluid) {
         if (fluid instanceof CustomHoneyFluid honeyFluid) {
-            return HoneyRegistry.getRegistry().getHoneyData(honeyFluid.getHoneyData().name()).bottleData().honeyBottle();
+            return HoneyRegistry.getRegistry().getHoneyData(honeyFluid.getHoneyData().name()).bottleData().honeyBottle().get();
         }
         if (fluid.is(ModTags.Fluids.HONEY)) {
             return Items.HONEY_BOTTLE;
