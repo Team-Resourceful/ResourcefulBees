@@ -13,7 +13,7 @@ import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationR
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -94,7 +94,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         LOGGER.info("Adding Reload Listener: 'resourcefulbees recipe manager'");
     }
 
-    private Recipe<?> makeBreedingRecipe(RandomCollection<BeeFamily> families) {
+    private Recipe<?> makeBreedingRecipe(WeightedCollection<BeeFamily> families) {
         BeeFamily family = families.get(0);
         ResourceLocation id = new ResourceLocation(ResourcefulBees.MOD_ID, family.getParent1() + "_" + family.getParent2() + "_" + family.child());
         ResourceLocation parent1Id = family.getParent1Data().registryID();
@@ -107,7 +107,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         BeeJarIngredient beeJarParent2 = new BeeJarIngredient(parent2Id, family.getParent2Data().renderData().colorData().jarColor().getValue());
         var parent2FeedItems = Ingredient.of(parent2BreedData.feedItems().stream().map(ItemStack::new));
         BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parent2Id.toString()),  parent2FeedItems, parent2BreedData.feedReturnItem());
-        return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(RandomCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
+        return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(WeightedCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
     }
 
     private BreederRecipe.BreederOutput makeOutput(BeeFamily family) {

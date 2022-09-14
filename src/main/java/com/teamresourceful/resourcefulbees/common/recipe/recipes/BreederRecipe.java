@@ -9,8 +9,8 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTy
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.IngredientCodec;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
-import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -25,9 +25,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPair parent2, Optional<Ingredient> input, RandomCollection<BreederOutput> outputs, int time) implements CodecRecipe<Container> {
+public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPair parent2, Optional<Ingredient> input, WeightedCollection<BreederOutput> outputs, int time) implements CodecRecipe<Container> {
 
-    public static final Codec<RandomCollection<BreederOutput>> RANDOM_COLLECTION_CODEC = CodecExtras.set(BreederOutput.CODEC).comapFlatMap(BreederOutput::convertToRandomCollection, BreederOutput::convertToSet);
+    public static final Codec<WeightedCollection<BreederOutput>> RANDOM_COLLECTION_CODEC = CodecExtras.set(BreederOutput.CODEC).comapFlatMap(BreederOutput::convertToRandomCollection, BreederOutput::convertToSet);
 
     public static Codec<BreederRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -81,11 +81,11 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
                 Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BreederOutput::chance)
         ).apply(instance, BreederOutput::new));
 
-        private static DataResult<RandomCollection<BreederOutput>> convertToRandomCollection(Set<BreederOutput> set) {
-            return DataResult.success(set.stream().collect(RandomCollection.getCollector(BreederOutput::weight)));
+        private static DataResult<WeightedCollection<BreederOutput>> convertToRandomCollection(Set<BreederOutput> set) {
+            return DataResult.success(set.stream().collect(WeightedCollection.getCollector(BreederOutput::weight)));
         }
 
-        private static Set<BreederOutput> convertToSet(RandomCollection<BreederOutput> randomCollection) {
+        private static Set<BreederOutput> convertToSet(WeightedCollection<BreederOutput> randomCollection) {
             return new HashSet<>(randomCollection.getMap().values());
         }
     }

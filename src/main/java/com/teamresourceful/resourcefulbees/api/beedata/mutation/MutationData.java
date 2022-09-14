@@ -3,13 +3,13 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.IMutation;
-import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public record MutationData(int mutationCount, Map<IMutation, RandomCollection<IMutation>> mutations) {
+public record MutationData(int mutationCount, Map<IMutation, WeightedCollection<IMutation>> mutations) {
     public static final MutationData DEFAULT = new MutationData(0, Collections.emptyMap());
 
     /**

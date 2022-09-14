@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.entity.goals;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.IMutation;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
-import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -31,7 +31,7 @@ public class BeeMutateGoal extends Goal {
         if (bee.tickCount % 5 == 0) {
             MutationData mutationData = bee.getMutationData();
             if (mutationData.hasMutation()) {
-                for (Map.Entry<IMutation, RandomCollection<IMutation>> entry : mutationData.mutations().entrySet()) {
+                for (Map.Entry<IMutation, WeightedCollection<IMutation>> entry : mutationData.mutations().entrySet()) {
                     IMutation input = entry.getKey();
                     if (input.chance() < bee.level.random.nextFloat()) continue;
                     BlockPos pos = input.check(serverLevel, bee.blockPosition());
