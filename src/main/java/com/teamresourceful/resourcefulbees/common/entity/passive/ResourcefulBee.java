@@ -207,7 +207,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             }
 
             this.stopBeingAngry();
-            ((BeeInvoker) this).callSetFlag(4, CommonConfig.BEE_DIES_FROM_STING.get() && this.getCombatData().removeStingerOnAttack());
+            ((BeeInvoker) this).callSetFlag(4, CommonConfig.BEES_DIE_FROM_STING.get() && this.getCombatData().removeStingerOnAttack());
             this.playSound(SoundEvents.BEE_STING, 1.0F, 1.0F);
             return true;
         }

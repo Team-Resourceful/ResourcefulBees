@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.utils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Vector3f;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -12,8 +12,8 @@ import com.teamresourceful.resourcefullib.common.caches.CacheableBiFunction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.font.FontSet;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -73,8 +73,18 @@ public final class ClientUtils {
         int fluidColor = props.getTintColor(fluidStack);
 
         RenderSystem.setShaderColor(((fluidColor >> 16) & 0xFF)/ 255.0F, ((fluidColor >> 8) & 0xFF)/ 255.0F, (fluidColor & 0xFF)/ 255.0F,  ((fluidColor >> 24) & 0xFF)/ 255.0F);
-        for (int i = 0; i < splits; i++)
-            GuiComponent.blit(matrix,x, y + (i * 16), blitOffset, width, i+1 == splits && remainder != 0 ? remainder : 16, sprite);
+        for (int i = 0; i < splits; i++) {
+            //TODO figure out why they are still squished
+            int splitHeight = (i + 1 == splits && remainder != 0 ? remainder : 16);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+            bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+            bufferbuilder.vertex(matrix.last().pose(), x, y + (i * 16) + splitHeight, blitOffset).uv(sprite.getU0(), sprite.getV(width)).endVertex();
+            bufferbuilder.vertex(matrix.last().pose(), x + width, y + (i * 16) + splitHeight, blitOffset).uv(sprite.getU(splitHeight), sprite.getV(width)).endVertex();
+            bufferbuilder.vertex(matrix.last().pose(), x + width, y + (i * 16), blitOffset).uv(sprite.getU(splitHeight), sprite.getV0()).endVertex();
+            bufferbuilder.vertex(matrix.last().pose(), x, y + (i * 16), blitOffset).uv(sprite.getU0(), sprite.getV0()).endVertex();
+            BufferUploader.drawWithShader(bufferbuilder.end());
+        }
     }
 
     public static void bindTexture(ResourceLocation location) {

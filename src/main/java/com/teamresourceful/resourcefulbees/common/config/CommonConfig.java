@@ -61,7 +61,7 @@ public final class CommonConfig {
     public static DoubleValue BEE_SIZE_MODIFIER;
     public static DoubleValue CHILD_SIZE_MODIFIER;
 
-    public static BooleanValue BEE_DIES_FROM_STING;
+    public static BooleanValue BEES_DIE_FROM_STING;
     public static BooleanValue BEES_INFLICT_POISON;
 
     public static BooleanValue EDIBLE_HONEYCOMBS;
@@ -221,7 +221,7 @@ public final class CommonConfig {
                 .defineInRange("global_bee_size_modifier", 1.0, 0.5, 2.0);
         CHILD_SIZE_MODIFIER = commonBuilder.comment("\nThis value scales the child size for all Resource Bees.")
                 .defineInRange("global_child_size_modifier", 1.0, 1.0, 2.0);
-        BEE_DIES_FROM_STING = commonBuilder.comment("\nShould bees die from stinging?\nNote: Bees will continue to attack until they are no longer angry!")
+        BEES_DIE_FROM_STING = commonBuilder.comment("\nShould bees die from stinging?\nNote: Bees will continue to attack until they are no longer angry!")
                 .define("beesDieFromSting", true);
         BEES_INFLICT_POISON = commonBuilder.comment("\nShould bees inflict poison damage?\nNote: Poison is only inflicted if a bee has not been given a trait with a special damage output.\nSet to false if you want to configure bees individually.")
                 .define("beesInflictPoison", true);
