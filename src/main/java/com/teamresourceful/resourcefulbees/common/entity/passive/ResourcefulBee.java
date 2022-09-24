@@ -2,15 +2,15 @@ package com.teamresourceful.resourcefulbees.common.entity.passive;
 
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.api.trait.TraitAbility;
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.goals.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeGoToHiveGoalInvoker;
+import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitAbilityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -106,7 +106,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             if (pos != null) {
                 BlockEntity blockEntity = this.level.getBlockEntity(pos);
                 return blockEntity instanceof TieredBeehiveBlockEntity tieredHive && tieredHive.isAllowedBee()
-                        || blockEntity instanceof ApiaryBlockEntity apiary && apiary.isAllowedBee()
+                        || blockEntity instanceof BeeHolderBlockEntity apiary && apiary.isAllowedBee()
                         || blockEntity instanceof BeehiveBlockEntity;
             }
         }
@@ -301,7 +301,7 @@ public class ResourcefulBee extends CustomBeeEntity {
                     }
 
                     ((BeeEntityAccessor)ResourcefulBee.this).setHivePos(null);
-                } else if (blockEntity instanceof ApiaryBlockEntity apiaryBlockEntity) {
+                } else if (blockEntity instanceof BeeHolderBlockEntity apiaryBlockEntity) {
                     if (apiaryBlockEntity.hasSpace()) {
                         return true;
                     }
@@ -319,8 +319,8 @@ public class ResourcefulBee extends CustomBeeEntity {
                 BlockEntity blockEntity = ResourcefulBee.this.level.getBlockEntity(ResourcefulBee.this.getHivePos());
                 if (blockEntity instanceof BeehiveBlockEntity hive) {
                     hive.addOccupant(ResourcefulBee.this, ResourcefulBee.this.hasNectar());
-                } else if (blockEntity instanceof ApiaryBlockEntity apiary) {
-                    apiary.tryEnterHive(ResourcefulBee.this, ResourcefulBee.this.hasNectar(), 0);
+                } else if (blockEntity instanceof BeeHolderBlockEntity holder) {
+                    holder.tryEnterHive(ResourcefulBee.this, ResourcefulBee.this.hasNectar(), 0);
                 }
             }
         }

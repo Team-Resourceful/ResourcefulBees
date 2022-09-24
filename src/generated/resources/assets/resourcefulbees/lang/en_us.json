@@ -568,7 +568,7 @@
   "gui.resourcefulbees.light.any": "Any",
   "gui.resourcefulbees.light.day": "Day",
   "gui.resourcefulbees.light.night": "Night",
-  "gui.resourcefulbees.missing_registry.description": "Bees, Honey, or Combs in this instance that were loaded previously are missing this startup, are you sure you would you like to proceed?",
+  "gui.resourcefulbees.missing_registry.description": "Bees, Honey, or Combs in this instance that were loaded previously are missing\nthis startup, are you sure you would you like to proceed?\nInformation on which entries are missing provided in the logs.",
   "gui.resourcefulbees.missing_registry.proceed": "Proceed",
   "gui.resourcefulbees.missing_registry.quit": "Quit",
   "gui.resourcefulbees.missing_registry.title": "Resourceful Bees custom registry entries missing!",

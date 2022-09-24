@@ -1,8 +1,8 @@
-// 1.19.2	2022-09-04T01:29:46.0731546	ResourcefulBees Loot Table Provider
+// 1.19.2	2022-09-24T04:40:20.0324517	ResourcefulBees Loot Table Provider
 43b5faa39567daf91b64fda62db3601462c3777d data/resourcefulbees/loot_tables/blocks/bee_box.json
 b0a96d0a33989f534d4b4d65c1361066723d1e0c data/resourcefulbees/loot_tables/blocks/bee_box_temp.json
 659a79b2b45190bfdf0538d1db93f7878aafe009 data/resourcefulbees/loot_tables/blocks/breeder.json
-2b2a4bde1a1c86393b28fa3ff9b81ef1ddeed22d data/resourcefulbees/loot_tables/blocks/centrifuge.json
+a7ab55a8bf3a7f9d31e8fc43b78e82754a1f251b data/resourcefulbees/loot_tables/blocks/centrifuge.json
 9a92a98a3a4848834c85307c1729ae3039cd5755 data/resourcefulbees/loot_tables/blocks/centrifuge/casing.json
 6b14800487364e66755dc1e4ae994e88fc240bb9 data/resourcefulbees/loot_tables/blocks/centrifuge/gearbox.json
 f4d3aec4e651ed567c4125b36bbe316165fb0615 data/resourcefulbees/loot_tables/blocks/centrifuge/input/energy/advanced.json
@@ -30,7 +30,7 @@ c80d665f03924ae8f06a323f97e1fc5306d25477 data/resourcefulbees/loot_tables/blocks
 79e93985807bfdc501f2b0487d23b68e566e08c1 data/resourcefulbees/loot_tables/blocks/centrifuge/void/basic.json
 8d3d0589b1d6bb7c8e98b9649f7c66cbc7b30ac1 data/resourcefulbees/loot_tables/blocks/centrifuge/void/elite.json
 262403662bd0b9683a750e8e36aa83f2bbb342d4 data/resourcefulbees/loot_tables/blocks/centrifuge/void/ultimate.json
-2b2a4bde1a1c86393b28fa3ff9b81ef1ddeed22d data/resourcefulbees/loot_tables/blocks/centrifuge_crank.json
+baee60585757b6cc403123eadd044f2ffef52d4f data/resourcefulbees/loot_tables/blocks/centrifuge_crank.json
 ecb34f7f6f978710c3c10172cf4c49aef377287c data/resourcefulbees/loot_tables/blocks/ender_beecon.json
 f62fe37a57ee56bb8b94f3874c2312564b869906 data/resourcefulbees/loot_tables/blocks/gold_flower.json
 acd0e86ddf009209467c9630aedd8c03e5701a84 data/resourcefulbees/loot_tables/blocks/honey_generator.json

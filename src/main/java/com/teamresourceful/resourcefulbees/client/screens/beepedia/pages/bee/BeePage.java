@@ -55,7 +55,7 @@ public class BeePage extends SubdividedScreen {
                     .setTooltipProvider(() -> List.of(Component.literal("Honeycomb")));
         }
 
-        addRenderableWidget(new SlotButton(138, 25, BeepediaTextures.COMPASS, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Open Bee Locator")));
+        addRenderableWidget(new SlotButton(138, 25, BeepediaTextures.BEE_LOCATOR, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Open Bee Locator")));
         addRenderableWidget(new SlotButton(160, 25, BeepediaTextures.RECIPE_BOOK, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Open JEI")));
     }
 
@@ -67,7 +67,7 @@ public class BeePage extends SubdividedScreen {
 
         if (bee != null) {
             try (var ignored = RenderUtils.createScissorBox(Minecraft.getInstance(), stack, 0, 0, 49, 49)) {
-                ClientUtils.renderEntity(stack, bee, 14, 0, -45, 2f);
+                ClientUtils.renderEntity(stack, bee, 14, 12, -45, 2f);
             }
         }
 

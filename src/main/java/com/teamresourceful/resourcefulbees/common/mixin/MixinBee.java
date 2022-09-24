@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.mixin;
 
 import com.teamresourceful.resourcefulbees.api.IBeeCompat;
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import net.minecraft.core.BlockPos;
@@ -45,7 +45,7 @@ public abstract class MixinBee extends Animal implements IBeeCompat {
     private void doesHiveHaveSpace(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
         BlockEntity blockEntity = this.level.getBlockEntity(pos);
         if ((blockEntity instanceof TieredBeehiveBlockEntity tieredHive && !tieredHive.isFull())
-                || (blockEntity instanceof ApiaryBlockEntity apiary && apiary.hasSpace())
+                || (blockEntity instanceof BeeHolderBlockEntity apiary && apiary.hasSpace())
                 || (blockEntity instanceof BeehiveBlockEntity beeHive && !beeHive.isFull())) {
             callback.setReturnValue(true);
         }
@@ -58,7 +58,7 @@ public abstract class MixinBee extends Animal implements IBeeCompat {
             if (pos != null) {
                 BlockEntity blockEntity = this.level.getBlockEntity(this.hivePos);
                 if ((blockEntity instanceof TieredBeehiveBlockEntity tieredHive && tieredHive.isAllowedBee())
-                        || (blockEntity instanceof ApiaryBlockEntity apiary && apiary.isAllowedBee())) {
+                        || (blockEntity instanceof BeeHolderBlockEntity apiary && apiary.isAllowedBee())) {
                     callback.setReturnValue(true);
                 }
             }

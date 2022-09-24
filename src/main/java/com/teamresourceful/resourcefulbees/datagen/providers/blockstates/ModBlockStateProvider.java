@@ -21,7 +21,8 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
     protected void registerStatesAndModels() {
         ModBlocks.HIVES.getEntries().forEach(this::registerNest);
         ModBlocks.APIARIES.getEntries().forEach(this::registerApiary);
-        registerBreeder();
+        registerApiary(ModBlocks.FLOW_HIVE);
+        registerApiary(ModBlocks.BREEDER_BLOCK);
         registerCentrifuge();
         registerWaxedBlocks();
         //using sign generator as it does what we need and only generates a model with particle field.

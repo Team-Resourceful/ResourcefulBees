@@ -167,6 +167,7 @@ public final class ModBlocks {
     public static final RegistryObject<Block> T3_APIARY_BLOCK = APIARIES.register("t3_apiary", () -> new ApiaryBlock(ApiaryTier.T3_APIARY));
     public static final RegistryObject<Block> T4_APIARY_BLOCK = APIARIES.register("t4_apiary", () -> new ApiaryBlock(ApiaryTier.T4_APIARY));
     public static final RegistryObject<Block> BEEHOUSE_TOP = BLOCKS.register("beehouse_top", BeeHouseTopBlock::new);
+    public static final RegistryObject<Block> FLOW_HIVE = BLOCKS.register("flow_hive", FlowHiveBlock::new);
     //endregion
     public static final RegistryObject<Block> BREEDER_BLOCK = BLOCKS.register("breeder", () -> new BreederBlock(NEST_PROPERTIES));
     public static final RegistryObject<LiquidBlock> HONEY_FLUID_BLOCK = BLOCKS.register("honey_fluid_block", () -> new LiquidBlock(ModFluids.HONEY_STILL, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));

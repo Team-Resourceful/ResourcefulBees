@@ -1,1 +1,79 @@
-{"parent":"block/block","textures":{"particle":"resourcefulbees:block/centrifuge_crank"}}
+{
+    "parent": "builtin/entity",
+    "textures":{
+        "particle":"resourcefulbees:block/centrifuge_crank"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "scale": [
+                0.45,
+                0.45,
+                0.45
+            ]
+        },
+        "thirdperson_lefthand": {
+            "scale": [
+                0.45,
+                0.45,
+                0.45
+            ]
+        },
+        "firstperson_righthand": {
+            "scale": [
+                0.45,
+                0.45,
+                0.45
+            ]
+        },
+        "firstperson_lefthand": {
+            "scale": [
+                0.45,
+                0.45,
+                0.45
+            ]
+        },
+        "ground": {
+            "translation": [
+                0,
+                -2.25,
+                0
+            ],
+            "scale": [
+                0.6,
+                0.6,
+                0.6
+            ]
+        },
+        "gui": {
+            "rotation": [
+                15,
+                -145,
+                0
+            ],
+            "translation": [
+                0,
+                -5.25,
+                0
+            ],
+            "scale": [
+                0.5,
+                0.5,
+                0.5
+            ]
+        },
+        "head": {
+            "translation": [
+                0,
+                6.5,
+                0
+            ]
+        },
+        "fixed": {
+            "translation": [
+                0,
+                -5.25,
+                -0.75
+            ]
+        }
+    }
+}

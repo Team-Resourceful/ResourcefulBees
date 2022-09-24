@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
+import com.teamresourceful.resourcefulbees.common.block.FlowHiveBlock;
 import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
@@ -32,6 +33,6 @@ public final class ModPOIs {
     }
 
     private static boolean isTieredHiveOrApiary(Block block) {
-        return block instanceof TieredBeehiveBlock || block instanceof ApiaryBlock;
+        return block instanceof TieredBeehiveBlock || block instanceof ApiaryBlock || block instanceof FlowHiveBlock;
     }
 }
