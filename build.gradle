@@ -63,6 +63,7 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "$projectDir/build/createSrgToMcp/output.srg"
             property 'fml.earlyprogresswindow','false'
             property 'mixin.debug.export', 'true'
+            property 'forge.enableGameTest', 'true'
 
             mods {
                 resourcefulbees {
