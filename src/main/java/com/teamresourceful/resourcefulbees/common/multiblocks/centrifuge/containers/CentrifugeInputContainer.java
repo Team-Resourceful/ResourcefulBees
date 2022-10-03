@@ -34,8 +34,8 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
                 }
             });
 
-            for (int r = 0; r < CentrifugeUtils.getRows(tier); r++) {
-                for (int c = 0; c < CentrifugeUtils.getColumns(tier); c++) {
+            for (int r = 0; r < tier.getContainerRows(); r++) {
+                for (int c = 0; c < tier.getContainerColumns(); c++) {
                     this.addSlot(new SlotItemHandler(entity.getInventoryHandler(), c + r * 4, 162 + c * 17, 46 + r * 17));
                 }
             }

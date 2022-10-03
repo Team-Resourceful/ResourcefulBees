@@ -1,6 +1,8 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge;
+package com.teamresourceful.resourcefulbees.client.screens.centrifuge;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
+import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeInputContainer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,6 +12,21 @@ public class CentrifugeInputScreen extends CentrifugeInventoryScreen<CentrifugeI
 
     public CentrifugeInputScreen(CentrifugeInputContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle, 0, 36);
+    }
+
+    @Override
+    protected void switchControlPanelTab(ControlPanelTabs controlPanelTab, boolean initialize) {
+
+    }
+
+    @Override
+    protected void setNavPanelTab(boolean initialize) {
+
+    }
+
+    @Override
+    protected void updateInfoPanel(@NotNull TerminalPanels newInfoPanel) {
+
     }
 
     @Override

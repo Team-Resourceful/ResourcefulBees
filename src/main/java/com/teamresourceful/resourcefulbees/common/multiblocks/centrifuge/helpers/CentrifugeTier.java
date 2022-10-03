@@ -52,6 +52,14 @@ public enum CentrifugeTier implements IExtensibleEnum, StringRepresentable {
         return energyReceiveRate;
     }
 
+    public int getContainerRows() {
+        return this == BASIC ? 1 : slots / 4;
+    }
+
+    public int getContainerColumns() {
+        return this == BASIC ? 1 : 4;
+    }
+
     public static CentrifugeTier byName(String s) {
         return BY_NAME.get(s);
     }

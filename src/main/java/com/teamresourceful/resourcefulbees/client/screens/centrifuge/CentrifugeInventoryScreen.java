@@ -1,15 +1,11 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge;
+package com.teamresourceful.resourcefulbees.client.screens.centrifuge;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.client.screens.centrifuge.BaseCentrifugeScreen;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeContainer;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public abstract class CentrifugeInventoryScreen<T extends CentrifugeContainer<?>> extends BaseCentrifugeScreen<T> {
 
@@ -30,7 +26,7 @@ public abstract class CentrifugeInventoryScreen<T extends CentrifugeContainer<?>
     }
 
     protected void drawContainerSlots(@NotNull PoseStack matrix, int x, int y) {
-        drawSlotGrid(matrix, x + 161, y + 45, CentrifugeUtils.getRows(tier), CentrifugeUtils.getColumns(tier), u, v);
+        drawSlotGrid(matrix, x + 161, y + 45, tier.getContainerRows(), tier.getContainerColumns(), u, v);
     }
 
     protected void drawPlayerInventory(@NotNull PoseStack matrix, int x, int y) {
@@ -50,15 +46,5 @@ public abstract class CentrifugeInventoryScreen<T extends CentrifugeContainer<?>
 
     protected void drawSlot(PoseStack matrix, int x, int y, int u, int v) {
         blit(matrix, x, y, u, v, 18, 18);
-    }
-
-    @Override
-    @Nullable List<Component> getInfoTooltip() {
-        return Lists.newArrayList(Component.literal("INFO TEXT"));
-    }
-
-    @Override
-    void closeScreen() {
-        if (minecraft != null) minecraft.setScreen(null);
     }
 }

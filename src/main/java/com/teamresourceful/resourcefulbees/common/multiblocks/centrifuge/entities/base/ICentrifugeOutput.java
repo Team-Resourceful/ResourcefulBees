@@ -5,4 +5,8 @@ import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.Cent
 
 public interface ICentrifugeOutput<T extends AbstractOutput> {
     boolean depositResult(CentrifugeRecipe.Output<T> recipeOutput, int processQuantity);
+
+    void setVoidExcess(boolean voidExcess);
+
+    boolean voidsExcess();
 }

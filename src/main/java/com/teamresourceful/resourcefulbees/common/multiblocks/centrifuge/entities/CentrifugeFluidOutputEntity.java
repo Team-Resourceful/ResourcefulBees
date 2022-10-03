@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -38,7 +39,17 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
     }
 
     public void setVoidExcess(boolean voidExcess) {
+        //TODO this falls under the same issue as changing the processing stage in the in the input block.
+        // ideally this would not send a full packet of data and would instead only send a packet containing
+        // the changed data to players that are actively tracking the block, thus reducing the size, number, and frequency of packets being sent.
+        // see read/write nbt regarding amount of data being sent
+        if (level == null) return;
         this.voidExcess = voidExcess;
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+    }
+
+    public boolean voidsExcess() {
+        return voidExcess;
     }
 
     @NotNull
@@ -79,6 +90,7 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
     @Override
     protected void readNBT(@NotNull CompoundTag tag) {
         fluidTank.readFromNBT(tag);
+        voidExcess = tag.getBoolean("void_excess");
         super.readNBT(tag);
     }
 
@@ -87,6 +99,7 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
     protected CompoundTag writeNBT() {
         CompoundTag tag = super.writeNBT();
         fluidTank.writeToNBT(tag);
+        tag.putBoolean("void_excess", voidExcess);
         return tag;
     }
     //endregion

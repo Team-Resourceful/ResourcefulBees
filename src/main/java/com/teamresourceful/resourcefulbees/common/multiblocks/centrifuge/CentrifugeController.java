@@ -17,7 +17,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fluids.FluidStack;
 import net.roguelogix.phosphophyllite.multiblock2.MultiblockController;
 import net.roguelogix.phosphophyllite.multiblock2.ValidationException;
+import net.roguelogix.phosphophyllite.multiblock2.common.IEventMultiblock;
 import net.roguelogix.phosphophyllite.multiblock2.common.IPersistentMultiblock;
+import net.roguelogix.phosphophyllite.multiblock2.common.ITickablePartsMultiblock;
 import net.roguelogix.phosphophyllite.multiblock2.rectangular.IRectangularMultiblock;
 import net.roguelogix.phosphophyllite.multiblock2.touching.ITouchingMultiblock;
 import net.roguelogix.phosphophyllite.repack.org.joml.Vector3i;
@@ -32,7 +34,9 @@ import java.util.*;
 public class CentrifugeController extends MultiblockController<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController>
         implements IPersistentMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController>,
         IRectangularMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController>,
-        ITouchingMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController> {
+        ITouchingMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController>,
+        ITickablePartsMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController>,
+        IEventMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController> {
 
     private CentrifugeActivity centrifugeActivity = CentrifugeActivity.INACTIVE;
 
@@ -95,13 +99,19 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         return new Vector3i(7,8,7); //could this be static final?
     }
 
-    public List<CentrifugeItemOutputEntity> getItemOutputs() {
-        return new ArrayList<>(itemOutputs.values());
+    public Map<BlockPos, CentrifugeItemOutputEntity> getItemOutputs() {
+        return itemOutputs; //Should this return Linked List?
     }
 
-    public List<CentrifugeFluidOutputEntity> getFluidOutputs() {
-        return new ArrayList<>(fluidOutputs.values());
+    public Map<BlockPos, CentrifugeFluidOutputEntity> getFluidOutputs() {
+        return fluidOutputs; //Should this return Linked List?
     }
+
+/*    public <T extends AbstractOutput, A extends BlockEntity & ICentrifugeOutput<T>> Map<BlockPos, A> getOutputsByType(CentrifugeOutputType outputType) {
+        //ugh I don't like this
+        //noinspection unchecked
+        return outputType.isItem() ? (Map<BlockPos, A>) itemOutputs : (Map<BlockPos, A>) fluidOutputs;
+    }*/
 
     private <T extends AbstractCentrifugeEntity> void checkRequiredBlocksExist(Collection<T> blockSet, String error) throws ValidationException {
         if (blockSet.isEmpty()) throwValidationException(error);
@@ -274,7 +284,7 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
     //endregion
 
     @Override
-    public CompoundTag mergeNBTs(CompoundTag nbtA, CompoundTag nbtB) {
+    public @NotNull CompoundTag mergeNBTs(@NotNull CompoundTag nbtA, @NotNull CompoundTag nbtB) {
         return null; //TODO implement merging
     }
 
@@ -290,8 +300,8 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         centrifugeState.setTerminal(terminal.getBlockPos().asLong());
         centrifugeState.setEnergyCapacity(energyStorage.getCapacity());
         centrifugeState.setInputs(inputs.keySet());
-        centrifugeState.setItemOutputs(itemOutputs.keySet());
-        centrifugeState.setFluidOutputs(fluidOutputs.keySet());
+        centrifugeState.setItemOutputs(itemOutputs.keySet().stream().toList());
+        centrifugeState.setFluidOutputs(fluidOutputs.keySet().stream().toList());
         centrifugeState.setDumps(dumps.keySet());
         centrifugeState.setEnergyPorts(energyPorts.size());
         centrifugeState.setGearboxes(gearboxes.size());

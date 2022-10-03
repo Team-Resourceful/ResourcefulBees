@@ -2,13 +2,14 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entiti
 
 import com.teamresourceful.resourcefulbees.common.inventory.AbstractFilterItemHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeInputContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.OutputLocations;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.OutputLocationGroup;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,21 +34,21 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.RegistryObject;
-import net.roguelogix.phosphophyllite.multiblock.IOnAssemblyTile;
-import net.roguelogix.phosphophyllite.multiblock.ITickableMultiblockTile;
+import net.roguelogix.phosphophyllite.multiblock2.MultiblockController;
+import net.roguelogix.phosphophyllite.multiblock2.common.ITickablePartsMultiblock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
+import java.util.Map;
 
-public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implements ITickableMultiblockTile, IOnAssemblyTile {
+public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implements ITickablePartsMultiblock.Tickable {
 
     public static final int RECIPE_SLOT = 0;
 
-    private final OutputLocations<CentrifugeItemOutputEntity> itemOutputs = new OutputLocations<>();
-    private final OutputLocations<CentrifugeFluidOutputEntity> fluidOutputs = new OutputLocations<>();
+    private final OutputLocationGroup<CentrifugeItemOutputEntity> itemOutputs = new OutputLocationGroup<>();
+    private final OutputLocationGroup<CentrifugeFluidOutputEntity> fluidOutputs = new OutputLocationGroup<>();
     private final FilterInventory filterInventory = new FilterInventory(1);
     private final InventoryHandler inventoryHandler;
     private final LazyOptional<IItemHandler> lazyOptional;
@@ -87,12 +89,16 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         return processStage;
     }
 
-    public OutputLocations<CentrifugeItemOutputEntity> getItemOutputs() {
+    public OutputLocationGroup<CentrifugeItemOutputEntity> getItemOutputs() {
         return itemOutputs;
     }
 
-    public OutputLocations<CentrifugeFluidOutputEntity> getFluidOutputs() {
+    public OutputLocationGroup<CentrifugeFluidOutputEntity> getFluidOutputs() {
         return fluidOutputs;
+    }
+
+    public OutputLocationGroup<?> getOutputLocationGroup(CentrifugeOutputType outputType) {
+        return outputType.isItem() ? itemOutputs : fluidOutputs;
     }
 
     @Override
@@ -111,17 +117,28 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     }
 
     private void setProcessStage(ProcessStage newStage) {
+        //TODO currently this does not get updated in real-time on the client
+        // ideally this would not send a full packet of data and would instead only send a packet containing
+        // the changed data to players that are actively tracking the block, thus reducing the size, number, and frequency of packets being sent.
+        // see read/write nbt regarding amount of data being sent
         processStage = newStage;
     }
 
-    //TODO replicate honey generator client tick for process time tracking
     @Override
-    public void tick() {
+    public void preTick() {
+        //TODO Remove this when Rogue changes tick api in phos
+    }
+
+    //TODO replicate honey generator client tick for process time tracking
+    //^^^ not sure this can be done given the new design for phos
+    @Override
+    public void postTick() {
+        if (controller().assemblyState() != MultiblockController.AssemblyState.ASSEMBLED) return;
         if (level != null && !level.isClientSide) {
-            if (processStage.equals(ProcessStage.IDLE) && canProcess()) startProcess();
-            if (processStage.equals(ProcessStage.PROCESSING)) processRecipe();
-            if (processStage.equals(ProcessStage.FINALIZING)) depositResults();
-            if (processStage.equals(ProcessStage.COMPLETED)) processCompleted();
+            if (processStage.isIdle() && canProcess()) startProcess();
+            if (processStage.isProcessing()) processRecipe();
+            if (processStage.isFinalizing()) depositResults();
+            if (processStage.isCompleted()) processCompleted();
         }
     }
 
@@ -177,14 +194,14 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         }
     }
 
-    private <T extends AbstractOutput, A extends BlockEntity & ICentrifugeOutput<T>> boolean depositResults(List<CentrifugeRecipe.Output<T>> recipeOutputs, OutputLocations<A> outputLocations) {
+    private <T extends AbstractOutput, A extends BlockEntity & ICentrifugeOutput<T>> boolean depositResults(List<CentrifugeRecipe.Output<T>> recipeOutputs, OutputLocationGroup<A> outputLocationGroup) {
         for (int i = 0; i < recipeOutputs.size(); i++) {
             CentrifugeRecipe.Output<T> recipeOutput = recipeOutputs.get(i);
             if (recipeOutput.chance() >= MathUtils.RANDOM.nextFloat()) {
-                A location = outputLocations.get(i).getTile();
+                A location = outputLocationGroup.get(i).getTile();
                 if (location == null) return false;
-                if (!outputLocations.isDeposited(i)) outputLocations.setDeposited(i, location.depositResult(recipeOutput, processQuantity));
-                if (!outputLocations.isDeposited(i)) return false;
+                if (!outputLocationGroup.isDeposited(i)) outputLocationGroup.setDeposited(i, location.depositResult(recipeOutput, processQuantity));
+                if (!outputLocationGroup.isDeposited(i)) return false;
             }
         }
         return true;
@@ -219,8 +236,6 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         assert level != null;
         filterRecipe = (CentrifugeRecipe) level.getRecipeManager().byKey(filterRecipeID).orElse(null);
         processRecipe = (CentrifugeRecipe) level.getRecipeManager().byKey(processRecipeID).orElse(null);
-        itemOutputs.onLoad(CentrifugeItemOutputEntity.class, level);
-        fluidOutputs.onLoad(CentrifugeFluidOutputEntity.class, level);
     }
 
     //TODO change data syncing to reduce packet bloating if possible
@@ -233,8 +248,8 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         processEnergy = tag.getInt(NBTConstants.NBT_PROCESS_ENERGY);
         if (tag.contains(NBTConstants.NBT_PROCESS_RECIPE)) processRecipeID = ResourceLocation.tryParse(tag.getString(NBTConstants.NBT_PROCESS_RECIPE));
         if (tag.contains(NBTConstants.NBT_FILTER_RECIPE)) filterRecipeID = ResourceLocation.tryParse(tag.getString(NBTConstants.NBT_FILTER_RECIPE));
-        itemOutputs.deserialize(tag.getCompound(NBTConstants.NBT_ITEM_OUTPUTS));
-        fluidOutputs.deserialize(tag.getCompound(NBTConstants.NBT_FLUID_OUTPUTS));
+        itemOutputs.deserialize(tag.getCompound(NBTConstants.NBT_ITEM_OUTPUTS), CentrifugeItemOutputEntity.class, this::getLevel);
+        fluidOutputs.deserialize(tag.getCompound(NBTConstants.NBT_FLUID_OUTPUTS), CentrifugeFluidOutputEntity.class, this::getLevel);
         super.readNBT(tag);
     }
 
@@ -255,24 +270,26 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     }
     //endregion
 
-    //TODO see the line below
-    // REQUIRED remove this method and logic after implementing linking code in gui - this is only for dev/testing
-    @Override
-    public void onAssembly() {
-        linkOutputs(this.controller().getItemOutputs(), itemOutputs);
-        linkOutputs(this.controller().getFluidOutputs(), fluidOutputs);
+    //todo: abstract this down further to eliminate redundancy
+    public void linkOutput(CentrifugeOutputType outputType, int recipeOutputSlot, BlockPos outputPos) {
+        if (recipeOutputSlot < 0 || recipeOutputSlot > 2) return;
+        if (outputType.isItem()) {
+            var outputMap = this.controller().getItemOutputs();
+            if (!outputMap.containsKey(outputPos)) return;
+            linkOutput(recipeOutputSlot, outputPos, outputMap, itemOutputs);
+        } else if (outputType.isFluid()) {
+            var outputMap = this.controller().getFluidOutputs();
+            if (!outputMap.containsKey(outputPos)) return;
+            linkOutput(recipeOutputSlot, outputPos, outputMap, fluidOutputs);
+        }
     }
 
-    private <T extends AbstractOutput, A extends BlockEntity & ICentrifugeOutput<T>> void linkOutputs(List<A> outputs, OutputLocations<A> outputLocations) {
-        Optional<A> out = outputs.stream().findAny();
-        outputLocations.setFirst(out.orElse(null), out.orElseThrow(RuntimeException::new).getBlockPos());
-        out = outputs.stream().findAny();
-        outputLocations.setSecond(out.orElse(null), out.orElseThrow(RuntimeException::new).getBlockPos());
-        out = outputs.stream().findAny();
-        outputLocations.setThird(out.orElse(null), out.orElseThrow(RuntimeException::new).getBlockPos());
+    private <T extends AbstractOutput, A extends BlockEntity & ICentrifugeOutput<T>> void linkOutput(int recipeOutputSlot, BlockPos outputPos, Map<BlockPos, A> outputMap, OutputLocationGroup<A> outputLocationGroup) {
+        outputLocationGroup.set(recipeOutputSlot, outputMap.get(outputPos), outputPos);
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
-
-    //END REMOVE
 
     private class FilterInventory extends AbstractFilterItemHandler {
 

@@ -1,13 +1,18 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+//TODO: consider switching to record. (de)serialize methods would need to be changed to accommodate, as well as default values
 public class CentrifugeState {
 
     private CentrifugeTier maxCentrifugeTier = CentrifugeTier.ERROR;
@@ -15,8 +20,9 @@ public class CentrifugeState {
     private int energyCapacity = 0;
     private long terminal = 0;
     private Set<BlockPos> inputs = new HashSet<>();
-    private Set<BlockPos> itemOutputs = new HashSet<>();
-    private Set<BlockPos> fluidOutputs = new HashSet<>();
+    //TODO probably should switch item/fluid outputs to Lists
+    private List<BlockPos> itemOutputs = new ArrayList<>();
+    private List<BlockPos> fluidOutputs = new ArrayList<>();
     private Set<BlockPos> dumps = new HashSet<>();
     private int energyPorts = 0;
     private int gearboxes = 0;
@@ -77,25 +83,30 @@ public class CentrifugeState {
     }
 
     /**
-     * total number of item outputs attached to the centrifuge
+     * all item outputs attached to the centrifuge
      */
-    public Set<BlockPos> getItemOutputs() {
+    public List<BlockPos> getItemOutputs() {
         return itemOutputs;
     }
 
-    public void setItemOutputs(Set<BlockPos> itemOutputs) {
+    public void setItemOutputs(List<BlockPos> itemOutputs) {
         this.itemOutputs = itemOutputs;
     }
 
     /**
-     * total number of fluid outputs attached to the centrifuge
+     * all fluid outputs attached to the centrifuge
      */
-    public Set<BlockPos> getFluidOutputs() {
+    public List<BlockPos> getFluidOutputs() {
         return fluidOutputs;
     }
 
-    public void setFluidOutputs(Set<BlockPos> fluidOutputs) {
+    public void setFluidOutputs(List<BlockPos> fluidOutputs) {
         this.fluidOutputs = fluidOutputs;
+    }
+
+    //might not be worth keeping...
+    public List<BlockPos> getOutputsByType(CentrifugeOutputType outputType) {
+        return outputType.isItem() ? itemOutputs : fluidOutputs;
     }
 
     /**
@@ -173,6 +184,7 @@ public class CentrifugeState {
         buf.writeCollection(itemOutputs, FriendlyByteBuf::writeBlockPos);
         buf.writeCollection(fluidOutputs, FriendlyByteBuf::writeBlockPos);
         buf.writeCollection(dumps, FriendlyByteBuf::writeBlockPos);
+        buf.writeInt(energyPorts);
         buf.writeInt(gearboxes);
         buf.writeInt(processors);
         buf.writeInt(recipePowerModifier);
@@ -185,9 +197,10 @@ public class CentrifugeState {
         energyCapacity = buf.readInt();
         terminal = buf.readLong();
         inputs = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
-        itemOutputs = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
-        fluidOutputs = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
+        itemOutputs = buf.readCollection(Lists::newArrayListWithExpectedSize, FriendlyByteBuf::readBlockPos);
+        fluidOutputs = buf.readCollection(Lists::newArrayListWithExpectedSize, FriendlyByteBuf::readBlockPos);
         dumps = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
+        energyPorts = buf.readInt();
         gearboxes = buf.readInt();
         processors = buf.readInt();
         recipePowerModifier = buf.readInt();

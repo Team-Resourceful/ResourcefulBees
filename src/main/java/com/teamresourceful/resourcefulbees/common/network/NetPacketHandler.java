@@ -24,6 +24,8 @@ public final class NetPacketHandler {
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, CommandPacket.ID, CommandPacket.HANDLER, CommandPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, LockBeePacket.ID, LockBeePacket.HANDLER, LockBeePacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, FindBeePacket.ID, FindBeePacket.HANDLER, FindBeePacket.class);
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, OutputLocationSelectionPacket.ID, OutputLocationSelectionPacket.HANDLER, OutputLocationSelectionPacket.class);
+        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, VoidExcessPacket.ID, VoidExcessPacket.HANDLER, VoidExcessPacket.class);
 
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, SyncGuiPacket.ID, SyncGuiPacket.HANDLER, SyncGuiPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, CommandResponsePacket.ID, CommandResponsePacket.HANDLER, CommandResponsePacket.class);

@@ -72,6 +72,19 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
     }
 
     @Override
+    protected void readNBT(@NotNull CompoundTag compound) {
+        this.owner = compound.getString("owner");
+        super.readNBT(compound);
+    }
+
+    @Override
+    protected @NotNull CompoundTag writeNBT() {
+        CompoundTag tag = super.writeNBT();
+        tag.putString("owner", this.owner);
+        return tag;
+    }
+
+    /*    @Override
     protected void handleDataNBT(@NotNull CompoundTag nbt) {
         readNBT(nbt);
     }
@@ -79,7 +92,7 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
     @Override
     protected @NotNull CompoundTag getDataNBT() {
         return writeNBT();
-    }
+    }*/
     //endregion
 
     //region GUI Packet

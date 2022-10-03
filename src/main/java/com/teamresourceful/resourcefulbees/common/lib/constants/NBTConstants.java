@@ -6,6 +6,7 @@ public final class NBTConstants {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
+    //TODO make tag casing more consistent
     public static final String NBT_BEES = "Bees";
     public static final String NBT_DISPLAYNAMES = "DisplayNames";
     public static final String NBT_BEE_NAME = "DisplayName";

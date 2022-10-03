@@ -9,8 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 
 public final class CentrifugeUtils {
 
@@ -23,17 +23,9 @@ public final class CentrifugeUtils {
         return level != null ? level.getRecipeManager().getRecipeFor(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get(), new SimpleContainer(recipeStack), level) : Optional.empty();
     }
 
-    public static int getRows(CentrifugeTier tier) {
-        return tier.equals(CentrifugeTier.BASIC) ? 1 : tier.getSlots() / 4;
-    }
-
-    public static int getColumns(CentrifugeTier tier) {
-        return tier.equals(CentrifugeTier.BASIC) ? 1 : 4;
-    }
-
-    public static <T> T getFromSet(Set<T> set, int index) {
+    public static <T> T getFromCollection(Collection<T> collection, int index) {
         int i = 0;
-        for (T s : set) {
+        for (T s : collection) {
             if (i == index) return s;
             i++;
         }

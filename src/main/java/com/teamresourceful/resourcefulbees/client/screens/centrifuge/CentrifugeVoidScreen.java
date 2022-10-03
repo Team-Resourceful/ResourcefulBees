@@ -1,8 +1,9 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge;
+package com.teamresourceful.resourcefulbees.client.screens.centrifuge;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
+import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeVoidContainer;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,22 @@ public class CentrifugeVoidScreen extends CentrifugeInventoryScreen<CentrifugeVo
     }
 
     @Override
+    protected void switchControlPanelTab(ControlPanelTabs controlPanelTab, boolean initialize) {
+
+    }
+
+    @Override
+    protected void setNavPanelTab(boolean initialize) {
+
+    }
+
+    @Override
+    protected void updateInfoPanel(@NotNull TerminalPanels newInfoPanel) {
+
+    }
+
+    @Override
     protected void drawContainerSlots(@NotNull PoseStack matrix, int x, int y) {
-        drawSlotGrid(matrix, x + 161, y + 45, CentrifugeUtils.getRows(tier), CentrifugeUtils.getColumns(tier) * 2, 0, 54);
+        drawSlotGrid(matrix, x + 161, y + 45, tier.getContainerRows(), tier.getContainerColumns() * 2, 0, 54);
     }
 }
