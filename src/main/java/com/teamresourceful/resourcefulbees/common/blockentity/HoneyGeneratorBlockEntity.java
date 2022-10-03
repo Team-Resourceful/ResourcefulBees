@@ -72,7 +72,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
 
     @Override
     public void clientTick(Level level, BlockPos pos, BlockState state) {
-        if (this.processStage == ProcessStage.IDLE) this.processingTime = 0;
+        if (processStage.isIdle()) this.processingTime = 0;
         else {
             this.processingTime++;
             this.processingTime %= 10;
@@ -81,8 +81,8 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state) {
-        if (this.processStage.equals(ProcessStage.IDLE) && this.canProcess()) this.startProcess(level);
-        if (this.processStage.equals(ProcessStage.PROCESSING)) {
+        if (processStage.isIdle() && this.canProcess()) this.startProcess(level);
+        if (processStage.isProcessing()) {
             if (this.canProcess()) this.processEnergy();
             else this.processCompleted(level);
         }
