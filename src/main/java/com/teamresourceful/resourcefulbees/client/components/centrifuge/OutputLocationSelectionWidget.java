@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.components.centrifuge;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons.NavButton;
-import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.BaseCentrifugeScreen;
+import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTextures;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
@@ -52,7 +52,7 @@ public class OutputLocationSelectionWidget extends ParentWidget {
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
         if (inputEntity == null) return;
-        ClientUtils.bindTexture(BaseCentrifugeScreen.COMPONENTS);
+        ClientUtils.bindTexture(CentrifugeTextures.COMPONENTS);
         blit(stack, x+29, y+20, 0, outputType.isItem() ? 36 : 0, 18, 18);
 
         var tile =  inputEntity.getOutputLocationGroup(outputType).get(recipeOutputSlot).getTile();

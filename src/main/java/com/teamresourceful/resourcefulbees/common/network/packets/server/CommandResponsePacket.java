@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.server;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.client.gui.screen.centrifuge.CentrifugeTerminalScreen;
+import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTerminalScreen;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
@@ -41,7 +41,8 @@ public record CommandResponsePacket(Component response) implements Packet<Comman
         public PacketContext handle(CommandResponsePacket message) {
             return (player, level) -> {
                 if (Minecraft.getInstance().screen instanceof CentrifugeTerminalScreen terminal) {
-                    terminal.sendResponse(message.response);
+                    //terminal.sendResponse(message.response);
+                    //TODO need to fix this as i did not realize it would break
                 }
             };
         }
