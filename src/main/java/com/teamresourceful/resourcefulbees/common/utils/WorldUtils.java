@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 public final class WorldUtils {
 
@@ -73,5 +74,11 @@ public final class WorldUtils {
     @Contract("_, null, _ -> null")
     public static <T extends BlockEntity> T getTileEntity(@Nonnull Class<T> clazz, @Nullable Level world, @Nonnull BlockPos pos) {
         return getTileEntity(clazz, world, pos, false);
+    }
+
+    @Nullable
+    @Contract("_, _, _ -> null")
+    public static <T extends BlockEntity> T getTileEntity(@Nonnull Class<T> clazz, Supplier<@Nullable Level> input, @Nonnull BlockPos pos) {
+        return getTileEntity(clazz, input.get(), pos, false);
     }
 }
