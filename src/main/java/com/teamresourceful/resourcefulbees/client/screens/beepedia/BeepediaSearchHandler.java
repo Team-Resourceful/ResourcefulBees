@@ -63,6 +63,6 @@ public final class BeepediaSearchHandler {
     }
 
     private static <T> Predicate<T> predicateFalse() {
-        return any -> true;
+        return any -> false;
     }
 }

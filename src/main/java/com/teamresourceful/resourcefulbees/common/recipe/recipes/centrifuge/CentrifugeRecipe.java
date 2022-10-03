@@ -3,17 +3,17 @@ package com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.IAmountSensitive;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.IAmountSensitive;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.IngredientCodec;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
-import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -67,15 +67,15 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
         return rotations().orElse(((time / 20)/8) * 2);
     }
 
-    public record Output<T extends AbstractOutput>(double chance, RandomCollection<T> pool) {
+    public record Output<T extends AbstractOutput>(double chance, WeightedCollection<T> pool) {
         public static final Codec<Output<ItemOutput>> ITEM_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::chance),
-                CodecExtras.randomCollection(ItemOutput.CODEC, ItemOutput::weight).fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::pool)
+                CodecExtras.weightedCollection(ItemOutput.CODEC, ItemOutput::weight).fieldOf("pool").orElse(new WeightedCollection<>()).forGetter(Output::pool)
         ).apply(instance, Output::new));
 
         public static final Codec<Output<FluidOutput>> FLUID_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::chance),
-                CodecExtras.randomCollection(FluidOutput.CODEC, FluidOutput::weight).fieldOf("pool").orElse(new RandomCollection<>()).forGetter(Output::pool)
+                CodecExtras.weightedCollection(FluidOutput.CODEC, FluidOutput::weight).fieldOf("pool").orElse(new WeightedCollection<>()).forGetter(Output::pool)
         ).apply(instance, Output::new));
     }
 }

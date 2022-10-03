@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -42,7 +42,7 @@ import java.util.Optional;
 
 public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
-    private static final RandomCollection<Block> overworldBlocks = new RandomCollection<>();
+    private static final WeightedCollection<Block> overworldBlocks = new WeightedCollection<>();
 
     static {
         overworldBlocks.add(10, ModBlocks.GRASS_BEE_NEST.get());

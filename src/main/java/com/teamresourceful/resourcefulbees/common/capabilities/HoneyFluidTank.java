@@ -46,15 +46,17 @@ public class HoneyFluidTank extends FluidTank {
         if (itemStack.isEmpty()) return;
         if (tank.isEmpty()) return;
         if (tankFluid.getAmount() >= ModConstants.HONEY_PER_BOTTLE) {
-            tank.drain(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-            ItemStack stack = player.getItemInHand(hand);
-            if (stack.getCount() > 1) {
-                stack.setCount(stack.getCount() - 1);
-                player.addItem(itemStack);
-            } else {
-                player.setItemInHand(hand, itemStack);
+            FluidStack drain = tank.drain(fluidStack, FluidAction.EXECUTE);
+            if (!drain.isEmpty()) {
+                ItemStack stack = player.getItemInHand(hand);
+                if (stack.getCount() > 1) {
+                    stack.setCount(stack.getCount() - 1);
+                    player.addItem(itemStack);
+                } else {
+                    player.setItemInHand(hand, itemStack);
+                }
+                player.level.playSound(null, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
-            player.level.playSound(null, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
     }
 
@@ -69,8 +71,7 @@ public class HoneyFluidTank extends FluidTank {
         if (!tankFluid.isFluidEqual(fluidStack) && !tank.isEmpty()) {
             return;
         }
-        if (tank.getFluidAmount() + ModConstants.HONEY_PER_BOTTLE <= tank.getTankCapacity(0)) {
-            tank.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+        if (tank.getFluidAmount() + ModConstants.HONEY_PER_BOTTLE <= tank.getTankCapacity(0) && tank.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE) != 0) {
             ItemStack stack = player.getItemInHand(hand);
             if (stack.getCount() > 1) {
                 stack.setCount(stack.getCount() - 1);
@@ -88,7 +89,7 @@ public class HoneyFluidTank extends FluidTank {
             return ModFluids.HONEY_STILL.get().getSource();
         } else if (item instanceof CustomHoneyBottleItem honey) {
             HoneyFluidData fluidData = HoneyRegistry.getRegistry().getHoneyData(honey.getHoneyData().name()).fluidData();
-            return fluidData.stillFluid();
+            return fluidData.stillFluid().get();
         }
         return Fluids.EMPTY;
     }
@@ -96,7 +97,7 @@ public class HoneyFluidTank extends FluidTank {
     @Nullable
     public static Item getHoneyBottleFromFluid(Fluid fluid) {
         if (fluid instanceof CustomHoneyFluid honeyFluid) {
-            return HoneyRegistry.getRegistry().getHoneyData(honeyFluid.getHoneyData().name()).bottleData().honeyBottle();
+            return HoneyRegistry.getRegistry().getHoneyData(honeyFluid.getHoneyData().name()).bottleData().honeyBottle().get();
         }
         if (fluid.is(ModTags.Fluids.HONEY)) {
             return Items.HONEY_BOTTLE;

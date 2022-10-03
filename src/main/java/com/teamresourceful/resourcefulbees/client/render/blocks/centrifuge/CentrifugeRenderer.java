@@ -13,7 +13,7 @@ import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 public class CentrifugeRenderer extends GeoBlockRenderer<CentrifugeBlockEntity> {
 
     public CentrifugeRenderer(BlockEntityRendererProvider.Context rendererDispatcherIn) {
-        super(rendererDispatcherIn, new CentrifugeModel());
+        super(rendererDispatcherIn, new CentrifugeModel<>());
     }
 
     @Override

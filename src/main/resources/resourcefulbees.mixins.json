@@ -1,26 +1,28 @@
 {
-  "required": true,
-  "package": "com.teamresourceful.resourcefulbees.common.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "refmap": "resourcefulbees.refmap.json",
-  "mixins": [
-    "MixinBee",
-    "MixinBeeEnterHiveGoal",
-    "MixinBlock",
-    "MixinDispenserBlock",
-    "MixinHoneyBlock",
-    "accessors.BeeEntityAccessor",
-    "accessors.BeehiveBeeDataAccessor",
-    "accessors.BeehiveEntityAccessor",
-    "accessors.BlockAccessor",
-    "accessors.RecipeManagerAccessor",
-    "invokers.BeeGoToHiveGoalInvoker",
-    "invokers.BeeInvoker"
-  ],
-  "minVersion": "0.8.5",
-  "client": [
-    "accessors.FontResourceManagerAccessor",
-    "accessors.MinecraftAccessor",
-    "invokers.ScreenInvoker"
+    "required": true,
+    "package": "com.teamresourceful.resourcefulbees.common.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "refmap": "resourcefulbees.refmap.json",
+    "mixins": [
+        "MixinBee",
+        "MixinBeeEnterHiveGoal",
+        "MixinBlock",
+        "MixinDispenserBlock",
+        "MixinHoneyBlock",
+        "accessors.BeeEntityAccessor",
+        "accessors.BeehiveBeeDataAccessor",
+        "accessors.BeehiveEntityAccessor",
+        "accessors.BlockAccessor",
+        "accessors.RecipeManagerAccessor",
+        "accessors.ServerLevelAccessor",
+        "accessors.StructureCheckAccessor",
+        "invokers.BeeGoToHiveGoalInvoker",
+        "invokers.BeeInvoker"
+    ],
+    "minVersion": "0.8.5",
+    "client": [
+        "accessors.FontResourceManagerAccessor",
+        "accessors.MinecraftAccessor",
+        "invokers.ScreenInvoker"
   ]
 }

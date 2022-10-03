@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.base.BlockBee;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
@@ -47,8 +48,8 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
     public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         if (apiaryBlockEntity != null) {
             if (canScroll()) {
-                if (beeIndexOffset + 7 >= apiaryBlockEntity.getBeeCount()) {
-                    beeIndexOffset = Math.max(0, apiaryBlockEntity.getBeeCount() - 7);
+                if (beeIndexOffset + 7 >= apiaryBlockEntity.beeCount()) {
+                    beeIndexOffset = Math.max(0, apiaryBlockEntity.beeCount() - 7);
                 }
             }else {
                 beeIndexOffset = 0;
@@ -86,7 +87,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
     @Override
     protected void renderLabels(@NotNull PoseStack matrix, int mouseX, int mouseY) {
-        String s = String.format("(%1$s/%2$s)", apiaryBlockEntity.getBeeCount(), apiaryBlockEntity.getTier().getMaxBees());
+        String s = String.format("(%1$s/%2$s)", apiaryBlockEntity.beeCount(), apiaryBlockEntity.getTier().getMaxBees());
         this.font.draw(matrix, s, 4, 17, 0x404040);
         this.font.draw(matrix, getTitle(), 55, 7, 0x404040);
         this.font.draw(matrix, TranslationConstants.Guis.INVENTORY, 55, 75, 0x404040);
@@ -100,13 +101,13 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
     }
 
     private void renderBeeToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {
-        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.getBeeCount(); ++i) {
+        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.beeCount(); ++i) {
             int j = i - this.beeIndexOffset;
             int i1 = top + j * 18;
 
             if (mouseX >= left && mouseY >= i1 && mouseX < left + 18 && mouseY < i1 + 18) {
                 List<Component> beeInfo = new ArrayList<>();
-                ApiaryBlockEntity.ApiaryBee apiaryBee = this.menu.getApiaryBee(i);
+                BlockBee apiaryBee = this.menu.getApiaryBee(i);
 
                 int ticksInHive = apiaryBee.getTicksInHive();
                 beeInfo.add(apiaryBee.displayName);
@@ -119,7 +120,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
     private void drawRecipesBackground(@NotNull PoseStack matrix, int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {
 
-        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.getBeeCount(); ++i) {
+        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.beeCount(); ++i) {
             int j = i - this.beeIndexOffset;
             int k = left;
             int i1 = top + j * 18;
@@ -144,7 +145,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
     }
 
     private void drawBees(int left, int top, int beeIndexOffsetMax) {
-        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.getBeeCount(); ++i) {
+        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.beeCount(); ++i) {
             int j = i - this.beeIndexOffset;
             int i1 = top + j * 18 + 2;
 
@@ -156,7 +157,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
     }
 
     private boolean canScroll() {
-        return apiaryBlockEntity.getBeeCount() > 7;
+        return apiaryBlockEntity.beeCount() > 7;
     }
 
     @Override
@@ -183,12 +184,12 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
         return super.mouseDragged(mouseX, mouseY, pMouseDragged5, pMouseDragged6, pMouseDragged8);
     }
 
-    private int getHiddenRows() { return apiaryBlockEntity.getBeeCount() - 7; }
+    private int getHiddenRows() { return apiaryBlockEntity.beeCount() - 7; }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int pMouseClicked5) {
         this.clickedOnScroll = false;
-        if (apiaryBlockEntity.getBeeCount() > 0) {
+        if (apiaryBlockEntity.beeCount() > 0) {
             int i = this.leftPos + 5;
             int j = this.topPos + 34;
             int k = this.beeIndexOffset + 7;

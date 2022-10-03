@@ -3,9 +3,12 @@ package com.teamresourceful.resourcefulbees.api.beedata.render;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.NeutralMob;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public record BeeTexture(ResourceLocation normalTexture, ResourceLocation angryTexture) {
 
@@ -27,8 +30,9 @@ public record BeeTexture(ResourceLocation normalTexture, ResourceLocation angryT
                 : DataResult.error("Not a valid resource location: " + s);
     }
 
+    @OnlyIn(Dist.CLIENT)
     public ResourceLocation getTexture(NeutralMob neutralMob) {
-        return neutralMob.isAngry() ? angryTexture : normalTexture;
+        return ClientUtils.DEFAULT_TEXTURER.apply(neutralMob.isAngry() ? angryTexture : normalTexture, normalTexture);
     }
 
     @Override

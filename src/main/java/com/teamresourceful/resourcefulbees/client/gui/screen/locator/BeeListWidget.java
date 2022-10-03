@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;
@@ -80,14 +81,16 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
     }
 
     public void updateEntries(BeeRegistry registry) {
-        if (this.minecraft.level == null) return;
+        var level = this.minecraft.level;
+        if (level == null) return;
         this.clearEntries();
 
         registry.getSetOfBees()
             .stream()
+            .filter(bee -> DimensionalBeeHolder.DIMENSIONAL_BEES.get(level.dimension()).contains(bee.coreData().name()))
             .sorted(Comparator.comparing(bee -> bee.coreData().name()))
             .forEach(bee -> {
-                Entity entity = bee.entityType().get().create(this.minecraft.level);
+                Entity entity = bee.entityType().get().create(level);
                 if (entity != null) this.addEntry(new BeeLocatorEntry(this.selector, entity, bee.displayName().copy()));
             });
     }

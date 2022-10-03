@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.api.honeydata;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.api.honeydata.fluid.FluidAttributeData;
 import com.teamresourceful.resourcefulbees.api.honeydata.fluid.FluidRenderData;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyFluidBlock;
@@ -14,16 +15,15 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupRe
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import net.minecraft.core.Registry;
+import com.teamresourceful.resourcefullib.common.codecs.recipes.LazyHolders;
+import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
@@ -32,10 +32,10 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Consumer;
 
-public record HoneyFluidData(boolean generate, String name, FluidRenderData renderData, FluidAttributeData attributes, Fluid stillFluid, Fluid flowingFluid, Item fluidBucket, Block fluidBlock) {
+public record HoneyFluidData(boolean generate, String name, FluidRenderData renderData, FluidAttributeData attributes, LazyHolder<Fluid> stillFluid, LazyHolder<Fluid> flowingFluid, LazyHolder<Item> fluidBucket, LazyHolder<Block> fluidBlock) {
 
     public static HoneyFluidData getDefault(String name) {
-        return new HoneyFluidData(false, name, FluidRenderData.DEFAULT, FluidAttributeData.DEFAULT, Fluids.EMPTY, Fluids.EMPTY, Items.AIR, Blocks.AIR);
+        return new HoneyFluidData(false, name, FluidRenderData.DEFAULT, FluidAttributeData.DEFAULT, CodecUtils.fluidHolder("empty"), CodecUtils.fluidHolder("empty"), CodecUtils.itemHolder("air"), CodecUtils.blockHolder("air"));
     }
 
     public static Codec<HoneyFluidData> codec(String name) {
@@ -44,10 +44,10 @@ public record HoneyFluidData(boolean generate, String name, FluidRenderData rend
                 RecordCodecBuilder.point(name),
                 FluidRenderData.CODEC.fieldOf("rendering").orElse(FluidRenderData.DEFAULT).forGetter(HoneyFluidData::renderData),
                 FluidAttributeData.CODEC.fieldOf("attributes").orElse(FluidAttributeData.DEFAULT).forGetter(HoneyFluidData::attributes),
-                Registry.FLUID.byNameCodec().fieldOf("stillFluid").forGetter(HoneyFluidData::stillFluid),
-                Registry.FLUID.byNameCodec().fieldOf("flowingFluid").forGetter(HoneyFluidData::flowingFluid),
-                Registry.ITEM.byNameCodec().fieldOf("fluidBucket").forGetter(HoneyFluidData::fluidBucket),
-                Registry.BLOCK.byNameCodec().fieldOf("fluidBlock").forGetter(HoneyFluidData::fluidBlock)
+                LazyHolders.LAZY_FLUID.fieldOf("stillFluid").forGetter(HoneyFluidData::stillFluid),
+                LazyHolders.LAZY_FLUID.fieldOf("flowingFluid").forGetter(HoneyFluidData::flowingFluid),
+                LazyHolders.LAZY_ITEM.fieldOf("fluidBucket").forGetter(HoneyFluidData::fluidBucket),
+                LazyHolders.LAZY_BLOCK.fieldOf("fluidBlock").forGetter(HoneyFluidData::fluidBlock)
         ).apply(instance, HoneyFluidData::new));
     }
 

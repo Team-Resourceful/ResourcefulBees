@@ -44,7 +44,7 @@ public class BeeEntry extends ListEntry {
             Font font = Minecraft.getInstance().font;
             if (this.entity != null) {
                 try (var ignored2 = RenderUtils.createScissorBoxStack(scissorStack, Minecraft.getInstance(), stack, 3, 2, 16, 16)) {
-                    ClientUtils.renderEntity(stack, this.entity, 1, 0, 45f, 0.75f);
+                    ClientUtils.renderEntity(stack, this.entity, 1, 4, 45f, 0.75f);
                 }
             }
             RenderUtils.bindTexture(SLOT_TEXTURE);

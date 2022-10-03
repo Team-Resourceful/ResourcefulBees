@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefulbees.api.RegisterBeeEvent;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryOps;
 import org.apache.commons.lang3.tuple.Pair;
@@ -23,7 +23,7 @@ public final class BeeRegistry implements IBeeRegistry {
     private static final BeeRegistry INSTANCE = new BeeRegistry();
     private static final Map<String, JsonObject> RAW_DATA = new LinkedHashMap<>();
     private static final Map<String, CustomBeeData> CUSTOM_DATA = new LinkedHashMap<>();
-    private static final Map<Pair<String, String>, RandomCollection<BeeFamily>> FAMILY_TREE = new LinkedHashMap<>();
+    private static final Map<Pair<String, String>, WeightedCollection<BeeFamily>> FAMILY_TREE = new LinkedHashMap<>();
 
     private BeeRegistry() {
         // Single instanced classes do not need to be able to be extended
@@ -46,7 +46,7 @@ public final class BeeRegistry implements IBeeRegistry {
         return CUSTOM_DATA.containsKey(beeType);
     }
 
-    public Map<Pair<String, String>, RandomCollection<BeeFamily>> getFamilyTree() {
+    public Map<Pair<String, String>, WeightedCollection<BeeFamily>> getFamilyTree() {
         return FAMILY_TREE;
     }
 
@@ -189,7 +189,7 @@ public final class BeeRegistry implements IBeeRegistry {
     }
 
     private static void addBreedPairToFamilyTree(BeeFamily beeFamily) {
-        FAMILY_TREE.computeIfAbsent(beeFamily.parents(), k -> new RandomCollection<>()).add(beeFamily.weight(), beeFamily);
+        FAMILY_TREE.computeIfAbsent(beeFamily.parents(), k -> new WeightedCollection<>()).add(beeFamily.weight(), beeFamily);
     }
     //endregion
 }

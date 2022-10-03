@@ -7,8 +7,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Consumer;
 
@@ -21,10 +19,6 @@ public record HoneyData(String name, HoneyBottleData bottleData, HoneyBlockData 
                 HoneyBlockData.codec(name).fieldOf("blockData").orElse(HoneyBlockData.getDefault(name)).forGetter(HoneyData::blockData),
                 HoneyFluidData.codec(name).fieldOf("fluidData").orElse(HoneyFluidData.getDefault(name)).forGetter(HoneyData::fluidData)
         ).apply(instance, HoneyData::new));
-    }
-
-    public ResourceLocation getRegistryID() {
-        return ForgeRegistries.ITEMS.getKey(bottleData.honeyBottle());
     }
 
     public Component getDisplayName() {

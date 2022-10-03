@@ -13,7 +13,6 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConst
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
@@ -64,8 +63,8 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
                 .setSlotName("input")
                 .addTooltipCallback(getToolTip(recipe));
 
-        if (recipe.input() instanceof IItemRender itemRender) input.addIngredient(VanillaTypes.ITEM_STACK, itemRender.itemRender());
-        if (recipe.input() instanceof IFluidRender fluidRender) input.addIngredient(ForgeTypes.FLUID_STACK, fluidRender.fluidRender());
+        if (recipe.input() instanceof IItemRender itemRender) input.addItemStack(itemRender.itemRender());
+        if (recipe.input() instanceof IFluidRender fluidRender) input.addFluidStack(fluidRender.fluidRender(), 1000);
         if (recipe.input() instanceof IEntityRender entityRender) input.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.entityRender(), 45f, recipe.input().tag()));
 
         builder.addSlot(RecipeIngredientRole.INPUT, 17, 8)
@@ -76,8 +75,8 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
                 .setSlotName("output")
                 .addTooltipCallback(getToolTip(recipe));
 
-        if (recipe.output() instanceof IItemRender itemRender) output.addIngredient(VanillaTypes.ITEM_STACK, itemRender.itemRender());
-        if (recipe.output() instanceof IFluidRender fluidRender) output.addIngredient(ForgeTypes.FLUID_STACK, fluidRender.fluidRender());
+        if (recipe.output() instanceof IItemRender itemRender) output.addItemStack(itemRender.itemRender());
+        if (recipe.output() instanceof IFluidRender fluidRender) output.addFluidStack(fluidRender.fluidRender(), 1000);
         if (recipe.output() instanceof IEntityRender entityRender) output.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.entityRender(), -45f, recipe.output().tag()));
     }
 

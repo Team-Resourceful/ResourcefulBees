@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.su
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.common.utils.CycleableList;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class HoneycombPage extends Screen implements TooltipProvider {
 
-    private SelectionList list;
+    private SelectionList<ListEntry> list;
     private int ticks = 0;
 
     private final OutputVariation honeycomb;
@@ -30,7 +31,7 @@ public class HoneycombPage extends Screen implements TooltipProvider {
 
     @Override
     protected void init() {
-        this.list = addRenderableWidget(new SelectionList(1, 0, 182, 111, 26, ignored -> {}));
+        this.list = addRenderableWidget(new SelectionList<>(1, 0, 182, 111, 26, ignored -> {}));
         for (BeehiveTier value : BeehiveTier.values()) {
             CycleableList<ItemStack> hives = value.getDisplayItems()
                     .getEntries().stream().filter(RegistryObject::isPresent)

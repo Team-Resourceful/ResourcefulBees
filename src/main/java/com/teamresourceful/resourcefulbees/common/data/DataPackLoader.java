@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.data;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefullib.common.utils.GenericMemoryPack;
+import com.teamresourceful.resourcefullib.common.utils.forge.HiddenGenericMemoryPack;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.server.packs.PackType;
@@ -15,10 +15,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public class DataPackLoader implements RepositorySource {
+public final class DataPackLoader implements RepositorySource {
 
     private static final String DATAPACK_NAME = "resourcefulbees:internals";
     public static final DataPackLoader INSTANCE = new DataPackLoader();
+
+    private DataPackLoader() {}
 
     @Override
     public void loadPacks(@NotNull Consumer<Pack> packList, @NotNull Pack.PackConstructor factory) {
@@ -43,7 +45,7 @@ public class DataPackLoader implements RepositorySource {
         }
     }
 
-    private static class MemoryDataPack extends GenericMemoryPack {
+    private static class MemoryDataPack extends HiddenGenericMemoryPack {
 
         private static final JsonObject META = Util.make(new JsonObject(), meta -> {
            meta.addProperty("pack_format", PackType.SERVER_DATA.getVersion(SharedConstants.getCurrentVersion()));

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.mixin;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -37,8 +37,8 @@ public abstract class MixinBeeEnterHiveGoal {
     public void onCanBeeUse(CallbackInfoReturnable<Boolean> cir) {
         //noinspection ConstantConditions
         BlockEntity blockEntity = this$0.level.getBlockEntity(this$0.getHivePos());
-        if (blockEntity instanceof ApiaryBlockEntity apiary) {
-            if (apiary.hasSpace()) {
+        if (blockEntity instanceof BeeHolderBlockEntity holder) {
+            if (holder.hasSpace()) {
                 cir.setReturnValue(true);
             } else {
                 ((BeeEntityAccessor) this$0).setHivePos(null);
@@ -48,8 +48,8 @@ public abstract class MixinBeeEnterHiveGoal {
 
     @Inject(method = "start", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void onStart(CallbackInfo ci, BlockEntity blockentity) {
-        if (blockentity instanceof ApiaryBlockEntity apiary) {
-            apiary.tryEnterHive(this$0, this$0.hasNectar(), 0);
+        if (blockentity instanceof BeeHolderBlockEntity holder) {
+            holder.tryEnterHive(this$0, this$0.hasNectar(), 0);
         }
     }
 }

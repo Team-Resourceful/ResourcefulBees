@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
 import com.teamresourceful.resourcefulbees.common.init.*;
+import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.recipe.conditions.LoadDevRecipes;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitiveIngredient;
@@ -88,6 +89,7 @@ public class ResourcefulBees {
 
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
         MinecraftForge.EVENT_BUS.addListener(Beekeeper::setupBeekeeper);
+        MinecraftForge.EVENT_BUS.addListener(DimensionalBeeHolder::onDatapackSync);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
@@ -130,6 +132,8 @@ public class ResourcefulBees {
         DataGen.generateCommonData();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PetLoader::loadAPI);
         HoneycombRegistry.getRegistry().regenerateVariationData();
+
+        MissingRegistrySetup.checkMissingRegistries();
     }
 
     @SubscribeEvent

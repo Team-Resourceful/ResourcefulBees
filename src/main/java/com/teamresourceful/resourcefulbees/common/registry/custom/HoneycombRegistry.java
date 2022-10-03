@@ -53,6 +53,10 @@ public final class HoneycombRegistry {
         return INSTANCE;
     }
 
+    public static boolean containsComb(String comb) {
+        return VARIATION_DATA.containsKey(comb);
+    }
+
     /**
      * Returns an {@link OutputVariation} object for the given identifier.
      *

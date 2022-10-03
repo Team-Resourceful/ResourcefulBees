@@ -3,6 +3,8 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.*;
+import com.teamresourceful.resourcefulbees.common.item.centrifuge.CrankItem;
+import com.teamresourceful.resourcefulbees.common.item.centrifuge.ManualCentrifugeItem;
 import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocator;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.BeehiveUpgrade;
@@ -198,6 +200,7 @@ public final class ModItems {
     public static final RegistryObject<Item> T3_APIARY_ITEM = ITEMS.register("t3_apiary", () -> new BlockItem(ModBlocks.T3_APIARY_BLOCK.get(), getNestProperties()));
     public static final RegistryObject<Item> T4_APIARY_ITEM = ITEMS.register("t4_apiary", () -> new BlockItem(ModBlocks.T4_APIARY_BLOCK.get(), getNestProperties()));
     public static final RegistryObject<Item> BREEDER_ITEM = ITEMS.register("breeder", () -> new BlockItem(ModBlocks.BREEDER_BLOCK.get(), getNestProperties()));
+    public static final RegistryObject<Item> FLOW_HIVE = ITEMS.register("flow_hive", () -> new BlockItem(ModBlocks.FLOW_HIVE.get(), getNestProperties()));
     public static final RegistryObject<Item> ENDER_BEECON_ITEM = ITEMS.register("ender_beecon", () -> new BlockItem(ModBlocks.ENDER_BEECON.get(), getItemProperties()));
     public static final RegistryObject<Item> SOLIDIFICATION_CHAMBER_ITEM = ITEMS.register("solidification_chamber", () -> new BlockItem(ModBlocks.SOLIDIFICATION_CHAMBER.get(), getItemProperties()));
     public static final RegistryObject<Item> HONEY_POT_ITEM = ITEMS.register("honey_pot", () -> new BlockItem(ModBlocks.HONEY_POT.get(), getItemProperties()));
@@ -253,6 +256,9 @@ public final class ModItems {
     public static final RegistryObject<Item> CENTRIFUGE_ELITE_FLUID_OUTPUT = CENTRIFUGE_ITEMS.register("centrifuge/output/fluid/elite", () -> new BlockItem(ModBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT.get(), getItemProperties()));
     public static final RegistryObject<Item> CENTRIFUGE_ULTIMATE_FLUID_OUTPUT = CENTRIFUGE_ITEMS.register("centrifuge/output/fluid/ultimate", () -> new BlockItem(ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT.get(), getItemProperties()));
     //endregion
+
+    public static final RegistryObject<Item> CENTRIFUGE_CRANK = CENTRIFUGE_ITEMS.register("centrifuge_crank", () -> new CrankItem(ModBlocks.CENTRIFUGE_CRANK.get(), getItemProperties()));
+    public static final RegistryObject<Item> CENTRIFUGE = CENTRIFUGE_ITEMS.register("centrifuge", () -> new ManualCentrifugeItem(ModBlocks.BASIC_CENTRIFUGE.get(), getItemProperties()));
 
     //region Waxed Blocks
     public static final RegistryObject<Item> HONEY_GLASS = ITEMS.register("honey_glass", () -> new BlockItem(ModBlocks.HONEY_GLASS.get(), getItemProperties()));

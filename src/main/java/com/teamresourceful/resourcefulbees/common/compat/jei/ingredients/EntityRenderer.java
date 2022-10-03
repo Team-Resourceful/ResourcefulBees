@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
@@ -18,11 +17,7 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
     public void render(@NotNull PoseStack stack, @NotNull EntityIngredient ingredient) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null && ingredient.getEntity() != null) {
-            int y = 0;
-            if (ingredient.getEntity() instanceof CustomBeeEntity) {
-                y -= 5;
-            }
-            ClientUtils.renderEntity(stack, ingredient.getEntity(), -2, y, ingredient.getRotation(), 1);
+            ClientUtils.renderEntity(stack, ingredient.getEntity(), -2, -2, ingredient.getRotation(), 1);
         }
     }
 

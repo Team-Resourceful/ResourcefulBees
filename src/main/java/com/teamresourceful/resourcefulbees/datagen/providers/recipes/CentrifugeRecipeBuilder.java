@@ -4,11 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
-import com.teamresourceful.resourcefullib.common.utils.RandomCollection;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -171,7 +171,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
         }
 
         public CentrifugeRecipe.Output<ItemOutput> build() {
-            return new CentrifugeRecipe.Output<>(chance, RandomCollection.of(itemOutputs, ItemOutput::weight));
+            return new CentrifugeRecipe.Output<>(chance, WeightedCollection.of(itemOutputs, ItemOutput::weight));
         }
 
     }
@@ -192,7 +192,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
         }
 
         public CentrifugeRecipe.Output<FluidOutput> build() {
-            return new CentrifugeRecipe.Output<>(chance, fluidOutputs.stream().collect(RandomCollection.getCollector(FluidOutput::weight)));
+            return new CentrifugeRecipe.Output<>(chance, fluidOutputs.stream().collect(WeightedCollection.getCollector(FluidOutput::weight)));
         }
 
     }
