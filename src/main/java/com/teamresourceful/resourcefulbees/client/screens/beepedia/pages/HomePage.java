@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefullib.common.utils.CycleableList;
@@ -52,7 +53,7 @@ public class HomePage extends Screen {
         Gui.blit(stack, 41,  85, 0, 0, 104, 16, 104, 16);
         font.draw(stack, Component.translatable("gui.resourcefulbees.beepedia").withStyle(ChatFormatting.GRAY), 41, 103, -1);
 
-        ClientUtils.drawCenteredString(font, stack, getProgress(), 93, 133, -1, false);
+        TextUtils.drawCenteredString(font, stack, getProgress(), 93, 133, -1, false);
 
         super.render(stack, mouseX, mouseY, partialTicks);
     }
