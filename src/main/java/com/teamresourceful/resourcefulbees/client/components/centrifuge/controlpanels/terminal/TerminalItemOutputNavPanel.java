@@ -1,5 +1,6 @@
-package com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels;
+package com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.terminal;
 
+import com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.NavigableControlPanel;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTerminalScreen;
@@ -14,8 +15,9 @@ public class TerminalItemOutputNavPanel extends NavigableControlPanel<Centrifuge
 
     @Override
     protected void init() {
-        createNavPanelDisplayTab(y + 18, ControlPanelTabs.HOME, TerminalPanels.ITEM_OUTPUTS_HOME);
-        createNavPanelVoidExcessTab(y + 32, () -> selectedEntity != null && selectedEntity.voidsExcess());
+        createNavPanelDisplayTab(y+18, ControlPanelTabs.HOME, TerminalPanels.ITEM_OUTPUTS_HOME);
+        createNavPanelVoidExcessTab(y+32, () -> selectedEntity != null && selectedEntity.voidsExcess());
+        createNavPanelPurgeTab(y+46);
     }
 
     @Override

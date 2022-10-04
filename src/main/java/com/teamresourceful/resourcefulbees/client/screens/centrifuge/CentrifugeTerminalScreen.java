@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.screens.centrifuge;
 
-import com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.*;
+import com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.terminal.*;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.infopanels.terminal.TerminalHomePanel;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.infopanels.terminal.dump.TerminalVoidHomePanel;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.infopanels.terminal.input.TerminalIOPanel;

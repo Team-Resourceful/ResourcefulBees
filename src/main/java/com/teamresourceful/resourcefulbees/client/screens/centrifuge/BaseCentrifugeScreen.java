@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.packets.client.PurgeContentsPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.VoidExcessPacket;
 import com.teamresourceful.resourcefulbees.common.utils.WorldUtils;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
@@ -194,5 +195,13 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     public @Nullable <A extends AbstractGUICentrifugeEntity> A getBlockEntity(BlockPos pos, Class<A> clazz) {
         if (minecraft == null || minecraft.level == null) return null;
         return WorldUtils.getTileEntity(clazz, minecraft.level, pos);
+    }
+
+    public void purgeContents() {
+        if (navPanel == null) return;
+        AbstractGUICentrifugeEntity selectedEntity = navPanel.selectedEntity();
+        if (selectedEntity instanceof ICentrifugeOutput<?>) {
+            NetPacketHandler.CHANNEL.sendToServer(new PurgeContentsPacket(selectedEntity.getBlockPos()));
+        }
     }
 }

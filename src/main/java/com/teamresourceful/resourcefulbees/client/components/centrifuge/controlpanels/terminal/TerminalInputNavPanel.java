@@ -1,5 +1,6 @@
-package com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels;
+package com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.terminal;
 
+import com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.NavigableControlPanel;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTerminalScreen;

@@ -34,8 +34,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.RegistryObject;
-import net.roguelogix.phosphophyllite.multiblock2.MultiblockController;
 import net.roguelogix.phosphophyllite.multiblock2.common.ITickablePartsMultiblock;
+import net.roguelogix.phosphophyllite.multiblock2.validated.IValidatedMultiblock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -133,7 +133,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     //^^^ not sure this can be done given the new design for phos
     @Override
     public void postTick() {
-        if (controller().assemblyState() != MultiblockController.AssemblyState.ASSEMBLED) return;
+        if (controller().assemblyState() != IValidatedMultiblock.AssemblyState.ASSEMBLED) return;
         if (level != null && !level.isClientSide) {
             if (processStage.isIdle() && canProcess()) startProcess();
             if (processStage.isProcessing()) processRecipe();

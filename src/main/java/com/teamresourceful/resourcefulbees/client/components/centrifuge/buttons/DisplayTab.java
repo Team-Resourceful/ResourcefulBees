@@ -18,14 +18,23 @@ public class DisplayTab extends ImageButton {
     private final ControlPanelTabs type;
     private final Supplier<Boolean> isSelected;
     private final Runnable onPress;
+    private final boolean showArrow;
 
-    public DisplayTab(int x, int y, ControlPanelTabs type, Supplier<Boolean> isSelected, Runnable onPress) {
+    public DisplayTab(int x, int y, ControlPanelTabs type, Supplier<Boolean> isSelected, Runnable onPress, boolean showArrow) {
         super(x+1, y+1, 69, 13);
         this.imageWidth = 71;
         this.imageHeight = 45;
         this.type = type;
         this.isSelected = isSelected;
         this.onPress = onPress;
+        this.showArrow = showArrow;
+    }
+
+    /**
+     *  Use this to show the arrow on the button by default
+     */
+    public DisplayTab(int x, int y, ControlPanelTabs type, Supplier<Boolean> isSelected, Runnable onPress) {
+        this(x, y, type, isSelected, onPress, true);
     }
 
     @Override
@@ -36,7 +45,7 @@ public class DisplayTab extends ImageButton {
         if (isSelected()) {
             color = TextUtils.FONT_COLOR_2;
         } else if (isHovered) {
-            color = 0xffc7bf2c;
+            color = TextUtils.FONT_COLOR_3;
         } else {
             color = TextUtils.FONT_COLOR_1;
         }
@@ -59,6 +68,7 @@ public class DisplayTab extends ImageButton {
 
     @Override
     public int getV(int mouseX, int mouseY) {
+        if (!showArrow) return 0;
         if (isSelected()) {
             return 30;
         }

@@ -9,4 +9,6 @@ public interface ICentrifugeOutput<T extends AbstractOutput> {
     void setVoidExcess(boolean voidExcess);
 
     boolean voidsExcess();
+
+    void purgeContents();
 }

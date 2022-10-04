@@ -52,6 +52,11 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
         return voidExcess;
     }
 
+    @Override
+    public void purgeContents() {
+        fluidTank.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
+    }
+
     @NotNull
     @Override
     public <T> LazyOptional<T> capability(@NotNull Capability<T> cap, @Nullable Direction side) {

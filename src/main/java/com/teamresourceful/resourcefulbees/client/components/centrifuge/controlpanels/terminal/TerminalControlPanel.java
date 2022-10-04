@@ -1,6 +1,7 @@
-package com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels;
+package com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.terminal;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.AbstractControlPanel;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTextures;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTerminalScreen;
@@ -18,7 +19,7 @@ public class TerminalControlPanel extends AbstractControlPanel {
     @Override
     protected void init() {
         createControlPanelDisplayTab(y+18, ControlPanelTabs.HOME);
-        createControlPanelDisplayTab(y+32, ControlPanelTabs.INPUTS/*, new TerminalInputNavPanel(x, y+101, screen)*/);
+        createControlPanelDisplayTab(y+32, ControlPanelTabs.INPUTS);
         createControlPanelDisplayTab(y+46, ControlPanelTabs.ITEM_OUTPUTS);
         createControlPanelDisplayTab(y+60, ControlPanelTabs.FLUID_OUTPUTS);
         createControlPanelDisplayTab(y+74, ControlPanelTabs.DUMPS);

@@ -64,6 +64,14 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
         return voidExcess;
     }
 
+    @Override
+    public void purgeContents() {
+        int slots = inventoryHandler.getSlots();
+        for (int i = 0; i < slots; i++) {
+            inventoryHandler.setStackInSlot(i, ItemStack.EMPTY);
+        }
+    }
+
     public boolean depositResult(CentrifugeRecipe.Output<ItemOutput> recipeOutput, int processQuantity) {
         ItemStack result = recipeOutput.pool().next().itemStack();
         result.setCount(result.getCount() * processQuantity);
