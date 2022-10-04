@@ -142,7 +142,9 @@ dependencies {
     runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
     runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
-    //runtimeOnly fg.deobf ("com.simibubi.create:Create:$create_version")
+    runtimeOnly fg.deobf ("com.simibubi.create:create-$mc_version:$create_version:all") {
+        transitive = false
+    }
     //runtimeOnly fg.deobf ("com.jozufozu.flywheel:Flywheel-Forge:$flywheel_version")
 
     implementation fg.deobf("software.bernie.geckolib:$geckolib_version")
