@@ -16,6 +16,7 @@ public final class TextUtils {
 
     public static final int FONT_COLOR_1 = 0xffc9c9c9;
     public static final int FONT_COLOR_2 = 0xff2cafc7;
+    public static final int FONT_COLOR_3 = 0xffc7bf2c;
     private static final FontSet FONT_8 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(new ResourceLocation(ResourcefulBees.MOD_ID, "jetbrains_mono_8"));
     public static final Font TERMINAL_FONT_8 = new Font(resourceLocation -> FONT_8, false); //IDK if this should be true or false tbh
     private static final FontSet FONT_12 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(new ResourceLocation(ResourcefulBees.MOD_ID, "jetbrains_mono_12"));
