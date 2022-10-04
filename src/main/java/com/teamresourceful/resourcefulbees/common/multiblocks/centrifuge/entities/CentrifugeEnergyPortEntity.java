@@ -11,7 +11,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.registries.RegistryObject;
-import net.roguelogix.phosphophyllite.multiblock2.MultiblockController;
+import net.roguelogix.phosphophyllite.multiblock2.validated.IValidatedMultiblock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +30,7 @@ public class CentrifugeEnergyPortEntity extends AbstractTieredCentrifugeEntity i
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
         controller(); //why is this method here?...
-        if(controller().assemblyState() != MultiblockController.AssemblyState.ASSEMBLED) return 0;
+        if(controller().assemblyState() != IValidatedMultiblock.AssemblyState.ASSEMBLED) return 0;
         int energyReceived = Math.min(tier.getEnergyReceiveRate(), Math.min(controller().getEnergyStorage().getMaxTransfer(), maxReceive));
         if (!simulate) controller().getEnergyStorage().storeEnergy(energyReceived);
         return energyReceived;

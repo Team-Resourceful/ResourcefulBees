@@ -13,7 +13,7 @@ import net.minecraft.world.Nameable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.roguelogix.phosphophyllite.multiblock2.MultiblockController;
+import net.roguelogix.phosphophyllite.multiblock2.validated.IValidatedMultiblock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,7 +51,7 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
     public void getOpenGUIPacket(FriendlyByteBuf buffer) {
         buffer.writeBlockPos(this.getBlockPos());
         CentrifugeController controller = nullableController();
-        if (controller != null && controller.assemblyState() == MultiblockController.AssemblyState.ASSEMBLED) {
+        if (controller != null && controller.assemblyState() == IValidatedMultiblock.AssemblyState.ASSEMBLED) {
             controller.updateCentrifugeState(centrifugeState);
             centrifugeState.setOwner(owner);
             centrifugeState.serializeBytes(buffer);

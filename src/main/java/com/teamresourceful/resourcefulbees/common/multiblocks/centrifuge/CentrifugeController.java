@@ -22,9 +22,9 @@ import net.roguelogix.phosphophyllite.multiblock2.common.IPersistentMultiblock;
 import net.roguelogix.phosphophyllite.multiblock2.common.ITickablePartsMultiblock;
 import net.roguelogix.phosphophyllite.multiblock2.rectangular.IRectangularMultiblock;
 import net.roguelogix.phosphophyllite.multiblock2.touching.ITouchingMultiblock;
+import net.roguelogix.phosphophyllite.multiblock2.validated.IValidatedMultiblock;
 import net.roguelogix.phosphophyllite.repack.org.joml.Vector3i;
 import net.roguelogix.phosphophyllite.repack.org.joml.Vector3ic;
-import net.roguelogix.phosphophyllite.util.FastArraySet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,14 +36,19 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         IRectangularMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController>,
         ITouchingMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController>,
         ITickablePartsMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController>,
-        IEventMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController> {
+        IEventMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController>,
+        IValidatedMultiblock<AbstractCentrifugeEntity, AbstractCentrifuge, CentrifugeController> {
+
+    private static final Vector3i MIN_SIZE = new Vector3i(3);
+    private static final Vector3i MAX_SIZE = new Vector3i(7,8,7);
+    private static final String WRONG_OUTPUT_LOC = "wrong_output_location";
 
     private CentrifugeActivity centrifugeActivity = CentrifugeActivity.INACTIVE;
 
     private final Set<CentrifugeProcessorEntity> processors = new HashSet<>();
     private final Set<CentrifugeGearboxEntity> gearboxes = new HashSet<>();
     private final Set<CentrifugeEnergyPortEntity> energyPorts = new HashSet<>();
-    private final FastArraySet<CentrifugeTerminalEntity> terminals = new FastArraySet<>();
+    private final Set<CentrifugeTerminalEntity> terminals = new HashSet<>();
     private final Map<BlockPos, CentrifugeInputEntity> inputs = new HashMap<>();
     private final Map<BlockPos, CentrifugeItemOutputEntity> itemOutputs = new HashMap<>();
     private final Map<BlockPos, CentrifugeFluidOutputEntity> fluidOutputs = new HashMap<>();
@@ -60,25 +65,33 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
     }
 
     @Override
-    protected void preValidate() throws ValidationException {
+    public void validateStage1() throws ValidationException {
         if (blocks.size() < 27) {
             throw new ValidationException("min blocks");
         }
-        checkRequiredBlocksExist(terminals.elements(), "no_terminal");
+        checkRequiredBlocksExist(terminals, "no_terminal");
         checkRequiredBlocksExist(inputs.values(), "no_input");
         checkRequiredBlocksExist(itemOutputs.values(), "no_item_output");
         checkRequiredBlocksExist(fluidOutputs.values(), "no_fluid_output");
         checkRequiredBlocksExist(energyPorts, "no_energy_port");
-        if (terminals.size() != 1) throwValidationException("too_many_terminal");
-        checkHasTooManyBlocks(processors, 63, "too_many_cpu");
-        checkHasTooManyBlocks(gearboxes, 64, "too_many_gearbox");
-        this.terminal = terminals.get(0);
+    }
+
+    @Override
+    public void validateStage2() throws ValidationException {
+        this.terminal = terminals.iterator().next();
         CentrifugeTier tier = this.terminal.getTier();
         checkBlockExceedsTier(dumps.values(), tier, "void_exceeds_tier");
         checkBlockExceedsTier(inputs.values(), tier, "input_exceeds_tier");
         checkBlockExceedsTier(itemOutputs.values(), tier, "item_output_exceeds_tier");
         checkBlockExceedsTier(fluidOutputs.values(), tier, "fluid_output_exceeds_tier");
         checkBlockExceedsTier(energyPorts, tier, "energy_port_exceeds_tier");
+        if (terminals.size() != 1) throwValidationException("too_many_terminal");
+        checkHasTooManyBlocks(processors, 63, "too_many_cpu");
+        checkHasTooManyBlocks(gearboxes, 64, "too_many_gearbox");
+    }
+
+    @Override
+    public void validateStage3() throws ValidationException {
         validateBlockLocations();
     }
 
@@ -90,21 +103,21 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
     @Nullable
     @Override
     public Vector3ic minSize() {
-        return new Vector3i(3); //could this be static final?
+        return MIN_SIZE;
     }
 
     @Nullable
     @Override
     public Vector3ic maxSize() {
-        return new Vector3i(7,8,7); //could this be static final?
+        return MAX_SIZE;
     }
 
     public Map<BlockPos, CentrifugeItemOutputEntity> getItemOutputs() {
-        return itemOutputs; //Should this return Linked List?
+        return itemOutputs;
     }
 
     public Map<BlockPos, CentrifugeFluidOutputEntity> getFluidOutputs() {
-        return fluidOutputs; //Should this return Linked List?
+        return fluidOutputs;
     }
 
 /*    public <T extends AbstractOutput, A extends BlockEntity & ICentrifugeOutput<T>> Map<BlockPos, A> getOutputsByType(CentrifugeOutputType outputType) {
@@ -136,13 +149,13 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
             if (input.getBlockPos().getY() != max().y()) throwValidationException("input_not_on_top");
         }
         for (CentrifugeItemOutputEntity itemOutput : itemOutputs.values()) {
-            if (itemOutput.getBlockPos().getY() == max().y()) throwValidationException("wrong_output_location");
+            if (itemOutput.getBlockPos().getY() == max().y()) throwValidationException(WRONG_OUTPUT_LOC);
         }
         for (CentrifugeFluidOutputEntity fluidOutputOutput : fluidOutputs.values()) {
-            if (fluidOutputOutput.getBlockPos().getY() == max().y()) throwValidationException("wrong_output_location");
+            if (fluidOutputOutput.getBlockPos().getY() == max().y()) throwValidationException(WRONG_OUTPUT_LOC);
         }
         for (CentrifugeVoidEntity dump : dumps.values()) {
-            if (dump.getBlockPos().getY() == max().y()) throwValidationException("wrong_output_location");
+            if (dump.getBlockPos().getY() == max().y()) throwValidationException(WRONG_OUTPUT_LOC);
         }
     }
 
