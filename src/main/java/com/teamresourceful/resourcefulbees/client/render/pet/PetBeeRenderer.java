@@ -8,15 +8,16 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 public class PetBeeRenderer implements IGeoRenderer<PetModelData> {
 
+    private MultiBufferSource rtb;
+
     @Override
     public void setCurrentRTB(MultiBufferSource rtb) {
-        //TODO figure out what goes here!
+        this.rtb = rtb;
     }
 
     @Override
     public MultiBufferSource getCurrentRTB() {
-        //TODO figure out what goes here!
-        return null;
+        return rtb;
     }
 
     @Override
