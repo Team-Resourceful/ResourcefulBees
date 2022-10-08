@@ -78,6 +78,6 @@ public class DisplayTab extends ImageButton {
 
     @Override
     public void onPress() {
-        onPress.run();
+        if (!isSelected()) onPress.run();
     }
 }

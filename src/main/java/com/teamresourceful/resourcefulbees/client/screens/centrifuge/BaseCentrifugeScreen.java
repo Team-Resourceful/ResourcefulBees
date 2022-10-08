@@ -1,14 +1,15 @@
 package com.teamresourceful.resourcefulbees.client.screens.centrifuge;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.client.components.centrifuge.TerminalToastWidget;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons.CloseButton;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons.HelpButton;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.NavigableControlPanel;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.infopanels.AbstractInfoPanel;
-import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
+import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
@@ -30,6 +31,7 @@ import java.util.Optional;
 
 public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> extends AbstractContainerScreen<T> {
 
+    //TODO add back button to inventory screens
     //protected static final Rectangle BACK = new Rectangle(2, 2, 13, 13);
 
     protected final CentrifugeTier tier;
@@ -40,6 +42,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     protected ControlPanelTabs navPanelTab = ControlPanelTabs.HOME;
     protected TerminalPanels currentInfoPanel;
     protected int selectionIndex = 0;
+    protected TerminalToastWidget toastWidget;
 
     protected BaseCentrifugeScreen(T pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -54,6 +57,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         super.init();
         addRenderableWidget(new CloseButton(leftPos+345, topPos+2, this::closeScreen));
         addRenderableOnly(new HelpButton(leftPos+331, topPos+2));
+        this.toastWidget = addRenderableOnly(new TerminalToastWidget(leftPos+21, topPos+212));
     }
 
     public CentrifugeState centrifugeState() {
@@ -85,6 +89,15 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
 
     private void closeScreen() {
         if (minecraft != null) minecraft.setScreen(null);
+    }
+
+    public void setToastText(Component toastText) {
+        if (toastWidget != null) toastWidget.setToastText(toastText);
+    }
+
+    //retaining just in case it's needed
+    public void setToastText(Component toastText, int displayTime) {
+        if (toastWidget != null) toastWidget.setToastText(toastText, displayTime);
     }
 
     /* SAVING THIS UNTIL IT IS NO LONGER NECESSARY
@@ -121,14 +134,25 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
 
     protected void setNavPanelAndUpdate(@Nullable NavigableControlPanel<?> newNavPanel, boolean initialize) {
         removeNavPanelIfExists();
-        if (!initialize) resetSelectionIndex();
         navPanel = newNavPanel;
+        updateNavPanelSelection(initialize);
         if (newNavPanel != null) {
             addRenderableWidget(newNavPanel);
             setNavPanelTab(initialize);
         } else {
             removeInfoPanelIfExists();
         }
+    }
+
+    private void updateNavPanelSelection(boolean initialize) {
+        if (navPanel == null) {
+            resetSelectionIndex();
+            return;
+        }
+        if (!initialize) {
+            resetSelectionIndex();
+        }
+        navPanel.initializeSelection();
     }
 
     private void resetSelectionIndex() {
@@ -180,15 +204,19 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     public void rotateSelection(int max, boolean reverse) {
         if (reverse) {
             selectionIndex = selectionIndex == 0 ? max : --selectionIndex;
+        } else {
+            selectionIndex = selectionIndex == max ? 0 : ++selectionIndex;
         }
-        selectionIndex = selectionIndex == max ? 0 : ++selectionIndex;
     }
 
     public void voidExcess() {
         if (navPanel == null) return;
         AbstractGUICentrifugeEntity selectedEntity = navPanel.selectedEntity();
         if (selectedEntity instanceof ICentrifugeOutput<?> outputEntity) {
-            NetPacketHandler.CHANNEL.sendToServer(new VoidExcessPacket(selectedEntity.getBlockPos(), !outputEntity.voidsExcess()));
+            boolean voidsExcess = !outputEntity.voidsExcess();
+            //TODO make translatable
+            setToastText(Component.literal(voidsExcess ? "Excess contents will be voided for output" : "Excess contents will not be voided for output"));
+            NetPacketHandler.CHANNEL.sendToServer(new VoidExcessPacket(selectedEntity.getBlockPos(), voidsExcess));
         }
     }
 
@@ -201,6 +229,8 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         if (navPanel == null) return;
         AbstractGUICentrifugeEntity selectedEntity = navPanel.selectedEntity();
         if (selectedEntity instanceof ICentrifugeOutput<?>) {
+            //TODO make translatable
+            setToastText(Component.literal("Output contents purged!"));
             NetPacketHandler.CHANNEL.sendToServer(new PurgeContentsPacket(selectedEntity.getBlockPos()));
         }
     }

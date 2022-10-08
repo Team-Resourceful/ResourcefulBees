@@ -18,13 +18,14 @@ public abstract class NavigableControlPanel<T extends AbstractGUICentrifugeEntit
 
     protected final Collection<BlockPos> navList;
     protected @Nullable T selectedEntity;
-    private final String navType;
     private Component navLabel;
 
-    protected NavigableControlPanel(int x, int y, CentrifugeTerminalScreen screen, Collection<BlockPos> navList, String navType) {
+    protected NavigableControlPanel(int x, int y, CentrifugeTerminalScreen screen, Collection<BlockPos> navList) {
         super(x, y, screen);
         this.navList = navList;
-        this.navType = navType;
+    }
+
+    public void initializeSelection() {
         updateSelectedEntity();
         updateNavLabel();
         addNavButtons();
@@ -54,8 +55,10 @@ public abstract class NavigableControlPanel<T extends AbstractGUICentrifugeEntit
 
     protected abstract void updateSelectedEntity();
 
+    protected abstract Component getNavType();
+
     private void updateNavLabel() {
-        this.navLabel = Component.literal(navType + " #" + (screen.selectionIndex() + 1));
+        this.navLabel = Component.literal(getNavType().getString() + " #" + (screen.selectionIndex() + 1));
     }
 
     public AbstractGUICentrifugeEntity selectedEntity() {
