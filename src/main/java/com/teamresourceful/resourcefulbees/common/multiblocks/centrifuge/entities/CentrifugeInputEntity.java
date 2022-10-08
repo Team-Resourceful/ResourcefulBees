@@ -143,6 +143,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     }
 
     private boolean canProcess() {
+        //add check for output location groups to verify all outputs are linked in order to function
         return filterRecipe != null && consumeInputs(true);
     }
 

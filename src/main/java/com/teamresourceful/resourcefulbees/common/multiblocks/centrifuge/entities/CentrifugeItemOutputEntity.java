@@ -133,7 +133,7 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
         private boolean depositResult(ItemStack result) {
             if (result.isEmpty() || controller().dumpsContainItem(result)) return true;
 
-            boolean canDeposit = voidExcess || simulateDeposit(result);
+            boolean canDeposit = simulateDeposit(result);
 
 
             int slotIndex = 0;
@@ -142,7 +142,7 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
                 slotIndex++;
             }
 
-            return canDeposit;
+            return canDeposit || voidExcess;
         }
 
         private void depositResult(int slotIndex, ItemStack result) {
@@ -173,10 +173,11 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
                 int itemMaxStackSize = getStackLimit(slotIndex, result);
 
                 if (slotStack.isEmpty()) {
-                    count -= itemMaxStackSize;
+                    count -= Math.min(count,  itemMaxStackSize);
                 } else if (ItemStack.isSameItemSameTags(result, slotStack) && slotStack.getCount() != itemMaxStackSize) {
-                    count -= (itemMaxStackSize - slotStack.getCount());
+                    count -= Math.min((itemMaxStackSize - slotStack.getCount()), count);
                 }
+                slotIndex++;
             }
 
             return count == 0;

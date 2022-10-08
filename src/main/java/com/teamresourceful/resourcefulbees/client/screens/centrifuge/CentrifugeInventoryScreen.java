@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.screens.centrifuge;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.client.screens.centrifuge.BaseCentrifugeScreen;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeContainer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class CentrifugeInventoryScreen<T extends CentrifugeContainer<?>> extends BaseCentrifugeScreen<T> {
 
-    private final int u; //this could probably get removed since the value is always zero unless components.png gets changed
-    private final int v;
+    protected final int u; //this could probably get removed since the value is always zero unless components.png gets changed
+    protected final int v;
 
     protected CentrifugeInventoryScreen(T pMenu, Inventory pPlayerInventory, Component pTitle, int u, int v) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -26,10 +26,11 @@ public abstract class CentrifugeInventoryScreen<T extends CentrifugeContainer<?>
     }
 
     protected void drawContainerSlots(@NotNull PoseStack matrix, int x, int y) {
-        drawSlotGrid(matrix, x + 161, y + 45, tier.getContainerRows(), tier.getContainerColumns(), u, v);
+        drawSlotGrid(matrix, x + 160, y + 45, tier.getContainerRows(), tier.getContainerColumns(), u, v);
     }
 
     protected void drawPlayerInventory(@NotNull PoseStack matrix, int x, int y) {
+        ClientUtils.bindTexture(CentrifugeTextures.COMPONENTS);
         // player inventory
         drawSlotGrid(matrix, x, y, 3, 9, 0, 72);
         //hotbar slots

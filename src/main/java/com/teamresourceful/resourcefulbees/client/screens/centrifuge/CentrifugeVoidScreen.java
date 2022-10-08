@@ -31,6 +31,6 @@ public class CentrifugeVoidScreen extends CentrifugeInventoryScreen<CentrifugeVo
 
     @Override
     protected void drawContainerSlots(@NotNull PoseStack matrix, int x, int y) {
-        drawSlotGrid(matrix, x + 161, y + 45, tier.getContainerRows(), tier.getContainerColumns() * 2, 0, 54);
+        drawSlotGrid(matrix, x + 160, y + 45, tier.getContainerRows(), tier.getContainerColumns() * 2, u, v);
     }
 }

@@ -14,10 +14,7 @@ import com.teamresourceful.resourcefulbees.client.render.fluids.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.screens.MissingRegistryScreen;
-import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeInputScreen;
-import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeItemOutputScreen;
-import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTerminalScreen;
-import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeVoidScreen;
+import com.teamresourceful.resourcefulbees.client.screens.centrifuge.*;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
@@ -137,6 +134,7 @@ public final class ClientEventHandlers {
         //centrifuge
         MenuScreens.register(ModMenus.CENTRIFUGE_INPUT_CONTAINER.get(), CentrifugeInputScreen::new);
         MenuScreens.register(ModMenus.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), CentrifugeItemOutputScreen::new);
+        MenuScreens.register(ModMenus.CENTRIFUGE_FLUID_OUTPUT_CONTAINER.get(), CentrifugeFluidOutputScreen::new);
         MenuScreens.register(ModMenus.CENTRIFUGE_VOID_CONTAINER.get(), CentrifugeVoidScreen::new);
         MenuScreens.register(ModMenus.CENTRIFUGE_TERMINAL_CONTAINER.get(), CentrifugeTerminalScreen::new);
     }

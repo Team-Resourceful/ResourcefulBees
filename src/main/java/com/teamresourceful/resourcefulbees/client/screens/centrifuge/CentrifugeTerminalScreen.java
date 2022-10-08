@@ -38,6 +38,7 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
         int pY = topPos+140;
 
         switch (controlPanelTab) {
+            //Terminal_Home does not change the nav stuff or update/reset the selection index
             case HOME -> updateInfoPanel(TerminalPanels.TERMINAL_HOME);
             case INPUTS -> setNavPanelAndUpdate(new TerminalInputNavPanel(pX, pY, this), initialize);
             case ITEM_OUTPUTS -> setNavPanelAndUpdate(new TerminalItemOutputNavPanel(pX, pY, this), initialize);
@@ -65,6 +66,7 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
         int pX = leftPos+102;
         int pY = topPos+39;
         switch (newInfoPanel) {
+            //Terminal_Home does not change the nav stuff or update/reset the selection index
             case TERMINAL_HOME -> updateInfoPanel(new TerminalHomePanel(pX, pY, centrifugeState, getTerminal()));
             case INPUTS_HOME -> updateInfoPanel(new TerminalInputHomePanel(pX, pY));
             case INPUTS_ITEM_OUTPUTS -> updateInfoPanel(new TerminalIOPanel(pX, pY, CentrifugeOutputType.ITEM, centrifugeState.getItemOutputs()));

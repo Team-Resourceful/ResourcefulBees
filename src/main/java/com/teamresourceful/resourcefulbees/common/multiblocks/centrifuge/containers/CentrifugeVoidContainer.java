@@ -26,7 +26,7 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
     protected void addCentrifugeSlots() {
         for (int r = 0; r < tier.getContainerRows(); r++) {
             for (int c = 0; c < tier.getContainerColumns() * 2; c++) {
-                this.addSlot(new FilterSlot(entity.getFilterInventory(), c + r * 4, 162 + c * 17, 46 + r * 17));
+                this.addSlot(new FilterSlot(entity.getFilterInventory(), c + r * 4, 161 + c * 17, 46 + r * 17));
             }
         }
     }
