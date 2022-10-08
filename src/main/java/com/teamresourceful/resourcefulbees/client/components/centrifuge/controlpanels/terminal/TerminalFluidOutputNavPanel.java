@@ -6,11 +6,12 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTerminalScreen;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeFluidOutputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
+import net.minecraft.network.chat.Component;
 
 public class TerminalFluidOutputNavPanel extends NavigableControlPanel<CentrifugeFluidOutputEntity> {
 
     public TerminalFluidOutputNavPanel(int x, int y, CentrifugeTerminalScreen screen) {
-        super(x, y, screen, screen.centrifugeState().getFluidOutputs(), "Output");
+        super(x, y, screen, screen.centrifugeState().getFluidOutputs());
     }
 
     @Override
@@ -23,5 +24,10 @@ public class TerminalFluidOutputNavPanel extends NavigableControlPanel<Centrifug
     @Override
     protected void updateSelectedEntity() {
         selectedEntity = screen.getBlockEntity(CentrifugeUtils.getFromCollection(navList, screen.selectionIndex()), CentrifugeFluidOutputEntity.class);
+    }
+
+    @Override
+    protected Component getNavType() {
+        return Component.literal("Output");
     }
 }
