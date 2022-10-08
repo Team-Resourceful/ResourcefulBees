@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
-import com.google.common.collect.Sets;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
@@ -55,7 +54,7 @@ import java.util.stream.Collectors;
 
 public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker {
 
-    public static final Set<MobEffect> ALLOWED_EFFECTS = Sets.newHashSet(ModEffects.CALMING.get(), MobEffects.WATER_BREATHING, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION);
+    public static final Set<MobEffect> ALLOWED_EFFECTS = Set.of(ModEffects.CALMING.get(), MobEffects.WATER_BREATHING, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION);
 
     private final HoneyFluidTank tank = new HoneyFluidTank(16000) {
         @Override
