@@ -34,8 +34,18 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
 
     public CentrifugeFluidOutputEntity(RegistryObject<BlockEntityType<CentrifugeFluidOutputEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(tileType.get(), tier, pos, state);
-        this.fluidTank = new FluidTank(this.tier.getTankCapacity());
+        this.fluidTank = new FluidTank(this.tier.getTankCapacity()) {
+            @Override
+            protected void onContentsChanged() {
+                sendToPlayersTrackingChunk();
+                setChanged();
+            }
+        };
         this.fluidOptional = LazyOptional.of(() -> fluidTank);
+    }
+
+    public FluidTank getFluidTank() {
+        return fluidTank;
     }
 
     public void setVoidExcess(boolean voidExcess) {
@@ -107,5 +117,18 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
         tag.putBoolean("void_excess", voidExcess);
         return tag;
     }
+
+    @Override
+    public CompoundTag getSyncData() {
+        CompoundTag tag = super.getSyncData();
+        fluidTank.writeToNBT(tag);
+        return tag;
+    }
+
+    @Override
+    public void readSyncData(@NotNull CompoundTag tag) {
+        fluidTank.readFromNBT(tag);
+    }
+
     //endregion
 }
