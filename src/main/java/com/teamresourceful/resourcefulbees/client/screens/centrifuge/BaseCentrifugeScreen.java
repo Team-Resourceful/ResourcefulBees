@@ -40,7 +40,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     protected @Nullable NavigableControlPanel<?> navPanel;
     protected ControlPanelTabs controlPanelTab = ControlPanelTabs.HOME;
     protected ControlPanelTabs navPanelTab = ControlPanelTabs.HOME;
-    protected TerminalPanels currentInfoPanel;
+    protected TerminalPanels currentInfoPanel = TerminalPanels.TERMINAL_HOME;
     protected int selectionIndex = 0;
     protected TerminalToastWidget toastWidget;
 
@@ -136,12 +136,11 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         removeNavPanelIfExists();
         navPanel = newNavPanel;
         updateNavPanelSelection(initialize);
-        if (newNavPanel != null) {
-            addRenderableWidget(newNavPanel);
-            setNavPanelTab(initialize);
-        } else {
+        setNavPanelTab(initialize);
+        if (newNavPanel != null) addRenderableWidget(newNavPanel);
+            /* else {
             removeInfoPanelIfExists();
-        }
+        }*/
     }
 
     private void updateNavPanelSelection(boolean initialize) {
