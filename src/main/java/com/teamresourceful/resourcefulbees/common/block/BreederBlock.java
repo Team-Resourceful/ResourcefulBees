@@ -32,7 +32,6 @@ public class BreederBlock extends BeeHouseBlock {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        tooltip.add(TranslationConstants.Items.BREEDER_TOOLTIP.withStyle(ChatFormatting.GOLD));
         tooltip.add(Component.translatable(TranslationConstants.Items.BREEDER_TOOLTIP_1, CommonConfig.APIARY_MAX_BREED_TIME.get()).withStyle(ChatFormatting.GOLD));
         tooltip.add(TranslationConstants.Items.BREEDER_TOOLTIP_2.withStyle(ChatFormatting.GOLD));
         super.appendHoverText(stack, worldIn, tooltip, flagIn);

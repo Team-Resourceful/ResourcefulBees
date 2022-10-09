@@ -255,13 +255,10 @@ public final class TranslationConstants {
         @Translate("Generates RF using honey bottles.")
         public static final MutableComponent GEN_TOOLTIP = Component.translatable("block.resourcefulbees.generator.tooltip.info");
 
-        @Translate("An OPTIONAL breeder that can be added as part of the Apiary Multiblock")
-        public static final MutableComponent BREEDER_TOOLTIP = Component.translatable("block.resourcefulbees.apiary_breeder.tooltip.info");
-
         @Translate("Max Breed Time: %s ticks")
         public static final String BREEDER_TOOLTIP_1 = "block.resourcefulbees.apiary_breeder.tooltip.info.1";
 
-        @Translate("Can be upgraded with additional breeders or time modifiers.")
+        @Translate("Can be upgraded with breed time upgrades.")
         public static final MutableComponent BREEDER_TOOLTIP_2 = Component.translatable("block.resourcefulbees.apiary_breeder.tooltip.info.2");
 
         @Translate("Right-click on Tiered Beehives to collect honeycombs.")
