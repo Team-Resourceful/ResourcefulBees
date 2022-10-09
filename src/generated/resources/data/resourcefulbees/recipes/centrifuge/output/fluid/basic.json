@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "resourcefulbees:centrifuge/casing"
+    },
+    "H": {
+      "item": "resourcefulbees:honey_pot"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    }
+  },
+  "pattern": [
+    "OCO",
+    "CHC",
+    "OCO"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/output/fluid/basic"
+  }
+}

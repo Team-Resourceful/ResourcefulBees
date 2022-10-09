@@ -23,8 +23,20 @@ public class AdvancedShapedRecipeBuilder {
         return new AdvancedShapedRecipeBuilder(result);
     }
 
+    public static AdvancedShapedRecipeBuilder shaped(RegistryObject<Item> result, int qty){
+        return new AdvancedShapedRecipeBuilder(result.get(), qty);
+    }
+
+    public static AdvancedShapedRecipeBuilder shaped(ItemLike result, int qty){
+        return new AdvancedShapedRecipeBuilder(result, qty);
+    }
+
     private AdvancedShapedRecipeBuilder(ItemLike result) {
-        this.builder = ShapedRecipeBuilder.shaped(result);
+        this(result, 1);
+    }
+
+    private AdvancedShapedRecipeBuilder(ItemLike result, int qty) {
+        this.builder = ShapedRecipeBuilder.shaped(result, qty);
     }
 
     public AdvancedShapedRecipeBuilder pattern(String... pattern) {

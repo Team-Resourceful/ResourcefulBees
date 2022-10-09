@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "resourcefulbees:centrifuge/casing"
+    },
+    "G": {
+      "item": "resourcefulbees:honey_generator"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    }
+  },
+  "pattern": [
+    "OCO",
+    "CGC",
+    "OCO"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/input/energy/basic"
+  }
+}

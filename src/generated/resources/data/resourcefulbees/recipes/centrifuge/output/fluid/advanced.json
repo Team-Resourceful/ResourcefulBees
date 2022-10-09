@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "C": {
+      "item": "resourcefulbees:centrifuge/casing"
+    },
+    "O": {
+      "item": "resourcefulbees:centrifuge/output/fluid/basic"
+    }
+  },
+  "pattern": [
+    "BCB",
+    "COC",
+    "BCB"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/output/fluid/advanced"
+  }
+}

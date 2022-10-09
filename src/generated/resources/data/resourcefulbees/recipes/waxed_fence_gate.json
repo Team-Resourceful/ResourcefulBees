@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "item": "resourcefulbees:waxed_planks"
+    }
+  },
+  "pattern": [
+    "   ",
+    "SWS",
+    "SWS"
+  ],
+  "result": {
+    "item": "resourcefulbees:waxed_fence_gate"
+  }
+}

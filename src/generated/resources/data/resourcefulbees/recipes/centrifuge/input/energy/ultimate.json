@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": {
+      "item": "resourcefulbees:centrifuge/input/energy/elite"
+    },
+    "N": {
+      "tag": "forge:storage_blocks/netherite"
+    },
+    "R": {
+      "tag": "forge:storage_blocks/redstone"
+    },
+    "S": {
+      "tag": "forge:nether_stars"
+    }
+  },
+  "pattern": [
+    "NRN",
+    "SES",
+    "NRN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/input/energy/ultimate"
+  }
+}

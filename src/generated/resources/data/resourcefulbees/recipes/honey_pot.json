@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "C": {
+      "tag": "resourcefulbees:resourceful_honeycomb"
+    },
+    "H": {
+      "tag": "forge:honey_bottle"
+    }
+  },
+  "pattern": [
+    "HCH",
+    "CBC",
+    "HCH"
+  ],
+  "result": {
+    "item": "resourcefulbees:honey_pot"
+  }
+}

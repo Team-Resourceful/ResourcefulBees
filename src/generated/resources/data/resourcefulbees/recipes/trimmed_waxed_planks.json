@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "resourcefulbees:waxed_planks"
+    },
+    {
+      "item": "resourcefulbees:waxed_planks"
+    },
+    {
+      "item": "resourcefulbees:waxed_planks"
+    },
+    {
+      "item": "resourcefulbees:waxed_planks"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "resourcefulbees:trimmed_waxed_planks"
+  }
+}

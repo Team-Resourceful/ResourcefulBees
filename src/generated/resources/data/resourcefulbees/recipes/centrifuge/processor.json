@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "resourcefulbees:centrifuge/casing"
+    },
+    "L": {
+      "item": "minecraft:clock"
+    },
+    "N": {
+      "tag": "forge:ingots/netherite"
+    }
+  },
+  "pattern": [
+    "NCN",
+    "CLC",
+    "NCN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/processor"
+  }
+}

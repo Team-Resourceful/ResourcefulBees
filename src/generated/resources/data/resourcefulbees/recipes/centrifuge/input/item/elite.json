@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "I": {
+      "item": "resourcefulbees:centrifuge/input/item/advanced"
+    },
+    "N": {
+      "tag": "forge:ingots/netherite"
+    }
+  },
+  "pattern": [
+    "NHN",
+    "HIH",
+    "NHN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/input/item/elite"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "N": {
+      "tag": "forge:ingots/netherite"
+    },
+    "V": {
+      "item": "resourcefulbees:centrifuge/void/advanced"
+    }
+  },
+  "pattern": [
+    "NEN",
+    "EVE",
+    "NEN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/void/elite"
+  }
+}

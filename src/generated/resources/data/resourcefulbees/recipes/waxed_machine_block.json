@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": {
+      "tag": "resourcefulbees:resourceful_honeycomb"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "W": {
+      "tag": "forge:storage_blocks/wax"
+    }
+  },
+  "pattern": [
+    "RHR",
+    "HWH",
+    "RHR"
+  ],
+  "result": {
+    "count": 2,
+    "item": "resourcefulbees:waxed_machine_block"
+  }
+}

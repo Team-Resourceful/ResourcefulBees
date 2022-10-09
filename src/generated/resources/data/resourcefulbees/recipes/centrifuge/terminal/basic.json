@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "resourcefulbees:centrifuge/casing"
+    },
+    "F": {
+      "item": "resourcefulbees:centrifuge"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    }
+  },
+  "pattern": [
+    "OCO",
+    "CFC",
+    "OCO"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/terminal/basic"
+  }
+}

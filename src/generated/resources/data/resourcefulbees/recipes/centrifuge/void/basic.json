@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "resourcefulbees:centrifuge/casing"
+    },
+    "E": {
+      "tag": "forge:chests/ender"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    }
+  },
+  "pattern": [
+    "OCO",
+    "CEC",
+    "OCO"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/void/basic"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "item": "resourcefulbees:waxed_planks"
+    }
+  },
+  "pattern": [
+    "W  ",
+    "WW ",
+    "WWW"
+  ],
+  "result": {
+    "count": 4,
+    "item": "resourcefulbees:waxed_stairs"
+  }
+}

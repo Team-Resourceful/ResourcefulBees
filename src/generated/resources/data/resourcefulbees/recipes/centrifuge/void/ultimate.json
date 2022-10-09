@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": {
+      "item": "minecraft:end_rod"
+    },
+    "N": {
+      "tag": "forge:storage_blocks/netherite"
+    },
+    "S": {
+      "tag": "forge:nether_stars"
+    },
+    "T": {
+      "item": "resourcefulbees:centrifuge/void/elite"
+    }
+  },
+  "pattern": [
+    "NEN",
+    "STS",
+    "NEN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/void/ultimate"
+  }
+}

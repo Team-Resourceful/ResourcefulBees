@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": {
+      "item": "resourcefulbees:centrifuge/input/energy/advanced"
+    },
+    "N": {
+      "tag": "forge:ingots/netherite"
+    },
+    "R": {
+      "tag": "forge:storage_blocks/redstone"
+    }
+  },
+  "pattern": [
+    "NRN",
+    "RER",
+    "NRN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/input/energy/elite"
+  }
+}

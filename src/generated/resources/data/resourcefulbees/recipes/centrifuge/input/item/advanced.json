@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "resourcefulbees:centrifuge/casing"
+    },
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "I": {
+      "item": "resourcefulbees:centrifuge/input/item/basic"
+    }
+  },
+  "pattern": [
+    "HCH",
+    "CIC",
+    "HCH"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/input/item/advanced"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "item": "resourcefulbees:centrifuge/gearbox"
+    },
+    "N": {
+      "tag": "forge:ingots/netherite"
+    },
+    "T": {
+      "item": "resourcefulbees:centrifuge/terminal/advanced"
+    }
+  },
+  "pattern": [
+    "NGN",
+    "GTG",
+    "NGN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/terminal/elite"
+  }
+}
