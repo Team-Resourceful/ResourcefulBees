@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyPotMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -45,17 +46,31 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
     }
 
     @Override
-    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        super.render(matrix, mouseX, mouseY, partialTicks);
-
-        renderTooltip(matrix, mouseX, mouseY);
-
+    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+        super.render(stack, mouseX, mouseY, partialTicks);
+        renderTooltip(stack, mouseX, mouseY);
         if (this.minecraft == null) return;
 
-        if (MathUtils.inRangeInclusive(mouseX, this.leftPos+129, this.leftPos+141) && MathUtils.inRangeInclusive(mouseY, this.topPos+16, this.topPos+70)) {
+        if (MathUtils.inRangeInclusive(mouseX, leftPos+129, leftPos+141) && MathUtils.inRangeInclusive(mouseY, topPos+16, topPos+70)) {
+            int fluidAmount = menu.getEntity().getTank().getFluidAmount();
+            Component tooltip = Screen.hasShiftDown() || fluidAmount < 1000 ? getMillibuckets(fluidAmount) : getBuckets(fluidAmount);
+            this.renderTooltip(stack, tooltip, mouseX, mouseY);
+        }
+
+/*        if (MathUtils.inRangeInclusive(mouseX, this.leftPos+129, this.leftPos+141) && MathUtils.inRangeInclusive(mouseY, this.topPos+16, this.topPos+70)) {
             FluidStack fluidStack = menu.getEntity().getTank().getFluid();
             Component component = getDisplayName(fluidStack).copy().append(Component.literal(" : " + fluidStack.getAmount() + "mB"));
-            renderTooltip(matrix, component, mouseX, mouseY);
-        }
+            renderTooltip(stack, component, mouseX, mouseY);
+        }*/
+    }
+
+
+
+    private Component getMillibuckets(int fluidAmount) {
+        return Component.literal(fluidAmount + "mB");
+    }
+
+    private Component getBuckets(int fluidAmount) {
+        return Component.literal(((double) fluidAmount / 1000) + "B");
     }
 }
