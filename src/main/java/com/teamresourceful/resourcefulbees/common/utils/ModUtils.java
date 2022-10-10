@@ -32,6 +32,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+import static net.minecraft.world.item.ItemStack.tagMatches;
+
 public final class ModUtils {
 
     private static final String[] TENS = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
@@ -127,5 +129,9 @@ public final class ModUtils {
 
     public static String createRomanNumeral(int value) {
         return TENS[value % 100 / 10] + UNITS[value % 10];
+    }
+
+    public static boolean itemStackIsIdentical(ItemStack stack, ItemStack other) {
+        return stack.is(other.getItem()) && stack.getCount() == other.getCount() && tagMatches(stack, other);
     }
 }

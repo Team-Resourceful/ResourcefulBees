@@ -2,14 +2,15 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import mezz.jei.api.constants.VanillaTypes;
@@ -28,7 +29,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.CentrifugeRecipeAdapter> {
 
@@ -55,9 +55,9 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull CentrifugeRecipeAdapter recipe, @NotNull IFocusGroup focuses) {
         List<List<FluidStack>> fluidStacks = recipe.recipe.fluidOutputs().stream()
-                .map(output -> output.pool().stream().map(FluidOutput::fluid).collect(Collectors.toList())).toList();
+                .map(output -> output.pool().stream().map(FluidOutput::fluid).toList()).toList();
         List<List<ItemStack>> itemStacks = recipe.recipe.itemOutputs().stream()
-                .map(output -> output.pool().stream().map(ItemOutput::itemStack).collect(Collectors.toList())).toList();
+                .map(output -> output.pool().stream().map(ItemOutput::itemStack).toList()).toList();
 
         builder.addSlot(RecipeIngredientRole.INPUT,10, 25).addIngredients(recipe.recipe.ingredient()).setSlotName("input");
         for (int i = 0; i < 3; i++) {
@@ -101,7 +101,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
                 if (itemStack.isPresent()) {
                     Double itemWeight = recipe.getItemWeight(id, itemStack.get());
                     double itemChance = recipe.getRecipe().itemOutputs().get(i).chance();
-                    List<Component> itemTooltip = drawTooltip(itemStack.get().getDisplayName(), itemWeight, itemChance, mouseX, mouseY, i, recipe.getRecipe().itemOutputs().size(), 61, 70);
+                    List<Component> itemTooltip = drawTooltip(itemStack.get().getHoverName(), itemWeight, itemChance, mouseX, mouseY, i, recipe.getRecipe().itemOutputs().size(), 61, 70);
                     if (!itemTooltip.isEmpty()) return itemTooltip;
                 }
             }
@@ -174,7 +174,10 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             Map<ItemStack, Double> weightMap = itemWeights.get(slot);
             if (weightMap == null) return null;
             for (Map.Entry<ItemStack, Double> entry : weightMap.entrySet()) {
-                if (ItemStack.isSameItemSameTags(entry.getKey(), displayedStack)) return entry.getValue();
+                //TODO need to write our own method for comparing the items to take count into consideration,
+                // having the same item repeated in the pool will only ever show the weight for the first one in the map,
+                // even if the weights are different, would likely need to do the same for fluids as well
+                if (ModUtils.itemStackIsIdentical(entry.getKey(), displayedStack)) return entry.getValue();
             }
             return null;
         }
@@ -183,7 +186,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             Map<FluidStack, Double> weightMap = fluidWeights.get(slot);
             if (weightMap == null) return null;
             for (Map.Entry<FluidStack, Double> entry : weightMap.entrySet()) {
-                if (entry.getKey().isFluidEqual(displayedStack)) return entry.getValue();
+                if (entry.getKey().isFluidStackIdentical(displayedStack)) return entry.getValue();
             }
             return null;
         }
