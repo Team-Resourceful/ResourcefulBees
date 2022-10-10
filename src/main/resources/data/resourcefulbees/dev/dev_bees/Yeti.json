@@ -1,15 +1,15 @@
 {
   "CoreData": {
     "flower": "#minecraft:flowers",
-    "maxTimeInHive": 6000
+    "maxTimeInHive": 4000
   },
   "RenderData": {
     "texture": "/yeti/yeti_bee",
     "model":  "resourcefulbees:geo/yeti.geo.json",
     "ColorData": {
-      "spawnEggPrimaryColor": "#442920",
-      "spawnEggSecondaryColor": "#e1d9b8",
-      "jarColor": "#442920"
+      "spawnEggPrimaryColor": "#e9f4f6",
+      "spawnEggSecondaryColor": "#c1d3d6",
+      "jarColor": "#e9f4f6"
     },
     "sizeModifier": 1.25
   },
@@ -27,5 +27,68 @@
       "generic.armor_toughness": 10,
       "generic.attack_knockback": 3
     }
+  },
+  "MutationData": {
+    "mutationCount": 15,
+    "mutations" : [
+      {
+        "input": {
+          "type": "fluid",
+          "fluid": "minecraft:water",
+          "chance": 0.75
+        },
+        "outputs" : [
+          {
+            "type": "block",
+            "block": {
+              "id": "minecraft:snow_block"
+            },
+            "weight": 30
+          },
+          {
+            "type": "block",
+            "block": {
+              "id": "minecraft:ice"
+            },
+            "weight": 10
+          }
+        ]
+      },
+      {
+        "input": {
+          "type": "block",
+          "block": {
+            "id": "minecraft:snow"
+          },
+          "chance": 0.25
+        },
+        "outputs" : [
+          {
+            "type": "item",
+            "item": {
+              "id": "minecraft:snowball",
+              "count": 2
+            }
+          }
+        ]
+      },
+      {
+        "input": {
+          "type": "block",
+          "block": {
+            "id": "minecraft:ice"
+          },
+          "chance": 0.25
+        },
+        "outputs" : [
+          {
+            "type": "block",
+            "block": {
+              "id": "minecraft:packed_ice"
+            }
+          }
+        ]
+      }
+    ]
   }
 }
