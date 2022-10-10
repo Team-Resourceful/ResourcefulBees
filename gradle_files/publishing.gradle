@@ -7,7 +7,6 @@ publishing {
         mavenJava(MavenPublication) {
             artifact jar
             artifact sourcesJar
-            artifact javadocJar
 
             pom {
                 name = 'ResourcefulBees'
