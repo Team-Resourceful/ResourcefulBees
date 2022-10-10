@@ -1,172 +1,55 @@
 plugins {
-    id "net.minecraftforge.gradle" version "5.1.+"
-    id "com.matthewprenger.cursegradle" version "1.4.0"
-    id "org.spongepowered.mixin" version "0.7.+"
-    id "org.parchmentmc.librarian.forgegradle" version "1.+"
-    id "org.sonarqube" version "3.1.1"
-    id "maven-publish"
-    id "idea"
-    id "eclipse"
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
 }
 
-repositories {
-    maven { url "https://nexus.resourcefulbees.com/repository/maven-public/" }
-    mavenCentral()
+architectury {
+    minecraft = rootProject.minecraft_version
 }
 
-version = mod_version
-group = "com.teamresourceful" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+subprojects {
+    apply plugin: "dev.architectury.loom"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-evaluationDependsOnChildren()
-
-sourceSets {
-    main {
-        java.excludes = ['com/teamresourceful/resourcefulbees/datagen/**']
-        resources {
-            srcDirs += 'src/generated/resources'
-            exclude '.cache'
-        }
-    }
-    datagen {
-        resources.srcDirs = main.resources.srcDirs
-        resources.srcDirs.remove('src/generated/resources')
-        java.srcDirs = main.java.srcDirs
-        compileClasspath += main.compileClasspath
-        runtimeClasspath += main.runtimeClasspath
-        compileClasspath += main.output
-        runtimeClasspath += main.output
-    }
-}
-
-
-plugins.withId("idea") {
-    sourceSets.main.output.resourcesDir("out/production/resources")
-    project(":Phosphophyllite") {
-        sourceSets.main.output.resourcesDir("out/production/resources")
-    }
-}
-
-minecraft {
-    mappings channel: "parchment", version: mapping
-
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-            arg "-mixin.config=resourcefulbees.mixins.json"
-            arg "-mixin.config=phosphophyllite.mixins.json"
-
-            property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "$projectDir/build/createSrgToMcp/output.srg"
-            property 'fml.earlyprogresswindow','false'
-            property 'mixin.debug.export', 'true'
-            property 'forge.enableGameTest', 'true'
-
-            mods {
-                resourcefulbees {
-                    source sourceSets.main
-                }
-                Phosphophyllite {
-                    source project(':Phosphophyllite').sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-            arg "-mixin.config=resourcefulbees.mixins.json"
-            arg "-mixin.config=phosphophyllite.mixins.json"
-
-            property 'forge.logging.console.level', 'debug'
-            property 'fml.earlyprogresswindow','false'
-
-            mods {
-                resourcefulbees {
-                    source sourceSets.main
-                }
-                Phosphophyllite {
-                    source project(':Phosphophyllite').sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.console.level', 'debug'
-            args "--mod", "resourcefulbees", "--all", "--output", "\"" + file("src/generated/resources").toString() + "\"", "--validate", "--existing", "\"" + sourceSets.main.resources.srcDirs[0] + "\""
-            mods {
-                resourcefulbees {
-                    source sourceSets.datagen
-                }
-                Phosphophyllite {
-                    source project(':Phosphophyllite').sourceSets.main
-                }
-            }
-        }
-    }
-}
-
-mixin {
-    add sourceSets.main, "${modid}.refmap.json"
-}
-
-dependencies {
-    minecraft "net.minecraftforge:forge:$mc_version-$forge_version" //21
-
-    implementation fg.deobf("com.teamresourceful.resourcefullib:$resourcefullib_version")
-    jarJar fg.deobf("com.teamresourceful.resourcefullib:$resourcefullib_version") {
-        jarJar.ranged(it, "[1.0.0,)")
+    loom {
+        silentMojangMappingsLicense()
     }
 
-    compileOnly fg.deobf("mezz.jei:jei-$mc_version-forge-api:$jei_version")
-    implementation fg.deobf("mezz.jei:jei-$mc_version-forge:$jei_version")
-
-    compileOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:$top_version:api") {
-        transitive = false
-    }
-    runtimeOnly fg.deobf ("mcjty.theoneprobe:theoneprobe:$top_version") {
-        transitive = false
-    }
-
-    //compileOnly fg.deobf ("team.chisel.ctm:CTM:$ctm_version")
-    //runtimeOnly fg.deobf ("team.chisel.ctm:CTM:$ctm_version")
-
-    compileOnly fg.deobf ("vazkii.patchouli:Patchouli:$patchouli_version:api")
-    runtimeOnly fg.deobf ("vazkii.patchouli:Patchouli:$patchouli_version")
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}")// core
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    runtimeOnly fg.deobf ("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
-
-    runtimeOnly fg.deobf ("com.simibubi.create:create-$mc_version:$create_version:all") {
-        transitive = false
-    }
-    //runtimeOnly fg.deobf ("com.jozufozu.flywheel:Flywheel-Forge:$flywheel_version")
-
-    implementation fg.deobf("software.bernie.geckolib:$geckolib_version")
-    implementation fg.deobf("com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version")
-    runtimeOnly fg.deobf("tech.thatgravyboat.dashboard:Forge:$dashboard_version")
-
-    implementation project(':Phosphophyllite')
-
-    compileOnly 'org.jetbrains:annotations:23.0.0'
-    annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
-}
-
-jarJar{
-    enable()
     dependencies {
-        include(dependency("com.teamresourceful.resourcefullib:$resourcefullib_version"))
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        // The following line declares the mojmap mappings, you may use other mappings as well
+        mappings loom.officialMojangMappings()
+        // The following line declares the yarn mappings you may select this one as well.
+        // mappings "net.fabricmc:yarn:@YARN_MAPPINGS@:v2"
     }
 }
 
-apply from: "gradle_files/injectModsToml.gradle"
-apply from: "gradle_files/modJars.gradle"
-apply from: "gradle_files/publishing.gradle"
-apply from: "gradle_files/curse-publish.gradle"
-apply from: "gradle_files/minimizePNGFile.gradle"
-apply from: "gradle_files/sonar.gradle"
+allprojects {
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "maven-publish"
+
+    archivesBaseName = rootProject.archives_base_name
+    version = rootProject.mod_version
+    group = rootProject.maven_group
+
+    repositories {
+        maven {
+            url "https://nexus.resourcefulbees.com/repository/maven-public/"
+            metadataSources {
+                mavenPom()
+                artifact()
+            }
+        }
+        mavenCentral()
+        maven { url = "https://www.cursemaven.com" }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.release = 17
+    }
+
+    java {
+        withSourcesJar()
+    }
+}

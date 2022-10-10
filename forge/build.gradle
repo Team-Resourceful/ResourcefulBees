@@ -1,0 +1,111 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs += 'src/generated/resources'
+            exclude '.cache'
+        }
+    }
+}
+
+loom {
+    forge {
+        mixinConfig "resourcefulbees.mixins.json"
+    }
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+}
+
+dependencies {
+    forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+
+    include modApi("com.teamresourceful.resourcefullib:$rootProject.resourcefullib_version")
+
+    modCompileOnly("mezz.jei:jei-${rootProject.minecraft_version}-forge-api:${rootProject.jei_version}")
+    modCompileOnly("mezz.jei:jei-${rootProject.minecraft_version}-common-api:${rootProject.jei_version}")
+    //modRuntimeOnly("mezz.jei:jei-${rootProject.minecraft_version}-forge:${rootProject.jei_version}")
+
+    modCompileOnly("mcjty.theoneprobe:theoneprobe:${rootProject.top_version}:api"){
+        transitive = false
+    }
+    modRuntimeOnly("mcjty.theoneprobe:theoneprobe:${rootProject.top_version}"){
+        transitive = false
+    }
+
+    modImplementation "software.bernie.geckolib:${rootProject.geckolib_version}"
+
+    modImplementation("com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version")
+
+    modCompileOnly("net.roguelogix.phosphophyllite:Phosphophyllite:0.6.0-beta.5@jar")
+    modRuntimeOnly("net.roguelogix.phosphophyllite:Phosphophyllite:0.6.0-beta.5@jar")
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+    compileOnly 'org.jetbrains:annotations:23.0.0'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version
+    }
+}
+
+shadowJar {
+    exclude "fabric.mod.json"
+
+    configurations = [project.configurations.shadowCommon]
+    classifier "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    classifier null
+}
+
+jar {
+    classifier "dev"
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenForge(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+    }
+}

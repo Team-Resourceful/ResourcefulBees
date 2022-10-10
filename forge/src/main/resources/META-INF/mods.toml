@@ -1,0 +1,41 @@
+modLoader="javafml"
+loaderVersion="[43,)"
+license="https://www.gnu.org/licenses/lgpl-3.0.en.html"
+issueTrackerURL="https://github.com/Resourceful-Bees/ResourcefulBees/issues/new/choose"
+
+[[mods]]
+    modId="resourcefulbees"
+    version="${version}"
+    displayName="Resourceful Bees"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"
+    logoFile="logo.png"
+    authors="Epic_Oreo, ThatGravyBoat, Dawn Felstar, (Textures) Vik, (Textures) QBert, (Textures) Joosh"
+    description="This mod provides pack makers with useful capabilities for creating custom Resource Bees."
+
+[[dependencies.resourcefulbees]]
+    modId="geckolib3"
+    mandatory=true
+    versionRange="[3.1.22,)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.resourcefulbees]]
+    modId="phosphophyllite"
+    mandatory=true
+    versionRange="[0.6.0-beta.5,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.resourcefulbees]]
+    modId="forge"
+    mandatory=true
+    versionRange="[43.1.33,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.resourcefulbees]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,)"
+    ordering="NONE"
+    side="BOTH"

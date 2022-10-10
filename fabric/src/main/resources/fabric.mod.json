@@ -1,0 +1,21 @@
+{
+    "schemaVersion": 1,
+    "id": "resourcefulbees",
+    "version": "${version}",
+    "name": "Resourcefulbees",
+    "description": "",
+    "authors": [],
+    "contact": {},
+    "license": "LGPL-3.0",
+    "icon": "icon.png",
+    "environment": "*",
+    "entrypoints": {
+    },
+    "mixins": [
+        "resourcefulbees.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.14.9",
+        "minecraft": ">=1.19.2"
+    }
+}
