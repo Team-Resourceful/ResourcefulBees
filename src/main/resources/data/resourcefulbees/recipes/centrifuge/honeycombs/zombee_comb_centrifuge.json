@@ -1,0 +1,72 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "ingredient": { "item": "resourcefulbees:zombee_honeycomb" },
+  "itemOutputs": [
+    {
+      "chance": 0.80,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:rotten_flesh",
+            "count": 8
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:rotten_flesh",
+            "count": 4
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:rotten_flesh",
+            "count": 2
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "chance": 0.30,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:rotten_flesh",
+            "count": 8
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:rotten_flesh",
+            "count": 4
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:rotten_flesh",
+            "count": 2
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "chance": 0.01,
+      "pool": [
+        {"item": {"id": "minecraft:gold_ingot", "count": 1}}
+      ]
+    }
+  ],
+  "fluidOutputs": [
+    {
+      "pool": [
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+      ]
+    }
+  ],
+  "time": 200
+}

@@ -1,0 +1,78 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "ingredient": { "item": "resourcefulbees:ender_honeycomb" },
+  "itemOutputs": [
+    {
+      "chance": 0.7,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:ender_pearl",
+            "count": 4
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:ender_pearl",
+            "count": 2
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:ender_pearl",
+            "count": 1
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "chance": 0.15,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:ender_eye",
+            "count": 1
+          },
+          "weight": 50
+        },
+        {
+          "item": {
+            "id": "minecraft:ender_eye",
+            "count": 2
+          },
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "chance": 0.5,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:popped_chorus_fruit",
+            "count": 2
+          },
+          "weight": 50
+        },
+        {
+          "item": {
+            "id": "minecraft:chorus_fruit",
+            "count": 2
+          },
+          "weight": 25
+        }
+      ]
+    }
+  ],
+  "fluidOutputs": [
+    {
+      "pool": [
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+      ]
+    }
+  ],
+  "time": 200
+}

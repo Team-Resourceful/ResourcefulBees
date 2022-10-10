@@ -1,0 +1,66 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "ingredient": { "item": "resourcefulbees:netherite_honeycomb" },
+  "itemOutputs": [
+    {
+      "chance": 0.40,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:netherite_scrap",
+            "count": 5
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:netherite_scrap",
+            "count": 2
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:netherite_scrap",
+            "count": 1
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "chance": 0.15,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:netherite_scrap",
+            "count": 5
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:netherite_scrap",
+            "count": 2
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:netherite_scrap",
+            "count": 1
+          },
+          "weight": 50
+        }
+      ]
+    }
+  ],
+  "fluidOutputs": [
+    {
+      "pool": [
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+      ]
+    }
+  ],
+  "time": 200
+}

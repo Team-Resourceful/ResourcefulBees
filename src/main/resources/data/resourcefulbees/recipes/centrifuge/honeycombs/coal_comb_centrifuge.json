@@ -1,0 +1,66 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "ingredient": { "item": "resourcefulbees:coal_honeycomb" },
+  "itemOutputs": [
+    {
+      "chance": 0.5,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:coal",
+            "count": 8
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:coal",
+            "count": 4
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:coal",
+            "count": 2
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "chance": 0.5,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:charcoal",
+            "count": 8
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:charcoal",
+            "count": 4
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:charcoal",
+            "count": 2
+          },
+          "weight": 50
+        }
+      ]
+    }
+  ],
+  "fluidOutputs": [
+    {
+      "pool": [
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+      ]
+    }
+  ],
+  "time": 200
+}

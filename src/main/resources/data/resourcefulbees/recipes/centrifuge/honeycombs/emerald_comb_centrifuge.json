@@ -1,0 +1,78 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "ingredient": { "item": "resourcefulbees:diamond_honeycomb" },
+  "itemOutputs": [
+    {
+      "chance": 0.40,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:emerald",
+            "count": 5
+          },
+          "weight": 2
+        },
+        {
+          "item": {
+            "id": "minecraft:emerald",
+            "count": 2
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:emerald",
+            "count": 1
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "chance": 0.20,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:emerald",
+            "count": 5
+          },
+          "weight": 2
+        },
+        {
+          "item": {
+            "id": "minecraft:emerald",
+            "count": 2
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:emerald",
+            "count": 1
+          },
+          "weight": 50
+        }
+      ]
+    }
+  ],
+  "fluidOutputs": [
+    {
+      "pool": [
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+      ]
+    },
+    {
+      "chance": 0.5,
+      "pool": [
+        {"fluid": { "id": "minecraft:lava", "amount": 50 }}
+      ]
+    },
+    {
+      "chance": 0.5,
+      "pool": [
+        {"fluid": { "id": "minecraft:water", "amount": 50 }}
+      ]
+    }
+  ],
+  "time": 200
+}

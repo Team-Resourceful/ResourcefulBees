@@ -1,0 +1,19 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "ingredient": { "item": "resourcefulbees:catnip_honeycomb" },
+  "itemOutputs": [
+    {
+      "chance": 0.1,
+      "pool": [{"item": { "id": "minecraft:cat_spawn_egg", "count": 1 }}]
+    }
+  ],
+  "fluidOutputs": [
+    {
+      "chance": 0.01,
+      "pool": [
+        {"fluid": { "id": "resourcefulbees:catnip_honey", "amount": 250 }}
+      ]
+    }
+  ],
+  "time": 200
+}
