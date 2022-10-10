@@ -26,6 +26,6 @@ public record Mutation(IMutation input, WeightedCollection<IMutation> outputs) {
     }
 
     private static List<Mutation> convertToList(Map<IMutation, WeightedCollection<IMutation>> map) {
-        return map.entrySet().stream().map(entry -> new Mutation(entry.getKey(), entry.getValue())).collect(Collectors.toList());
+        return map.entrySet().stream().map(entry -> new Mutation(entry.getKey(), entry.getValue())).toList();
     }
 }
