@@ -22,6 +22,7 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEnt
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
@@ -111,6 +112,7 @@ public final class ClientEventHandlers {
         ItemModelPropertiesHandler.registerProperties();
         registerTERs();
         event.enqueueWork(FluidRender::setHoneyRenderType);
+        Color.initRainbow();
     }
 
     private static void registerTERs() {
