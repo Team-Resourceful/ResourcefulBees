@@ -8,8 +8,10 @@ import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveBeeDataAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
+import com.teamresourceful.resourcefullib.common.caches.CacheableFunction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -28,6 +30,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -38,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
@@ -45,20 +49,42 @@ import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConsta
 
 public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
 
-    private final RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
+    private static final CacheableFunction<Block, BlockEntityType<?>> HIVE_TO_ENTITY = new CacheableFunction<>(block ->
+        ModBlockEntityTypes.BLOCK_ENTITY_TYPES
+            .getEntries()
+            .stream()
+            .filter(RegistryObject::isPresent)
+            .map(RegistryObject::get)
+            .filter(type -> type.isValid(block.defaultBlockState()))
+            .findFirst()
+            .orElse(null)
+    );
+
+    private final Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
     private Queue<ItemStack> honeycombs = new LinkedList<>();
     protected boolean isSmoked = false;
     protected int ticksSmoked = -1;
     protected int ticksSinceBeesFlagged;
 
-    public TieredBeehiveBlockEntity(RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType, BlockPos pos, BlockState state) {
-        super(pos,state);
+    public TieredBeehiveBlockEntity(Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType, BlockPos pos, BlockState state) {
+        super(pos, state);
         this.entityType = entityType;
     }
 
     @NotNull
     @Override
-    public BlockEntityType<?> getType() { return entityType.get(); }
+    public BlockEntityType<?> getType() {
+        if (this.entityType == null) return getEntityType();
+        return this.entityType.get();
+    }
+
+    /**
+     * This is a hack to fix an issue where mod devs are using the gather capabilities event and trying to get the block entity type
+     * we can not pass the type to the other constructor because it is not available because the bee hive already sets it, so we override it.
+     */
+    private BlockEntityType<?> getEntityType() {
+        return HIVE_TO_ENTITY.apply(getBlockState().getBlock());
+    }
 
 
     public static void recalculateHoneyLevel(TieredBeehiveBlockEntity hive) {
@@ -73,7 +99,9 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
         ticksSmoked = ticksSmoked == -1 ? 0 : ticksSmoked;
     }
 
-    public int getTicksSmoked() { return ticksSmoked; }
+    public int getTicksSmoked() {
+        return ticksSmoked;
+    }
 
     @Override
     public void emptyAllLivingFromHive(@Nullable Player player, @NotNull BlockState state, @NotNull BeeReleaseStatus status) {
