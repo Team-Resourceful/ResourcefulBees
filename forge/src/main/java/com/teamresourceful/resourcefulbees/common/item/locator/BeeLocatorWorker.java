@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefullib.common.utils.types.Vec2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -64,7 +65,7 @@ public class BeeLocatorWorker implements WorldWorkerManager.IWorker {
             visited.add(biome);
             for (MobSpawnSettings.SpawnerData data : biome.getMobSettings().getMobs(ModConstants.BEE_MOB_CATEGORY).unwrap()) {
                 if (this.type.equals(data.type)) {
-                    success(pos);
+                    success(pos, holder);
                 }
             }
         }
@@ -83,12 +84,16 @@ public class BeeLocatorWorker implements WorldWorkerManager.IWorker {
         this.player.getCooldowns().addCooldown(stack.getItem(), 3000);
     }
 
-    public void success(BlockPos pos) {
+    public void success(BlockPos pos, Holder<Biome> biome) {
         this.isRunning = false;
         ItemStack stack = this.player.getItemInHand(this.hand);
         if (!(stack.getItem() instanceof BeeLocator)) return;
         var stackTag = stack.getOrCreateTag();
         stackTag.put(NBTConstants.BeeLocator.LAST_BIOME, NbtUtils.writeBlockPos(pos));
+        biome.unwrapKey()
+                .map(ResourceKey::location)
+                .map(Object::toString)
+                .ifPresent(loc -> stackTag.putString(NBTConstants.BeeLocator.LAST_BIOME_ID, loc));
         stackTag.putString(NBTConstants.BeeLocator.LAST_BEE, this.bee);
         stack.setTag(stackTag);
         this.player.getCooldowns().addCooldown(stack.getItem(), 3000);

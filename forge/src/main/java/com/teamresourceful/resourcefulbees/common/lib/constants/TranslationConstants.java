@@ -522,10 +522,13 @@ public final class TranslationConstants {
         @Translate("Selected: %s")
         public static final String SELECTED = "gui.resourcefulbees.bee_locator.selected";
 
-        @Translate("%s / %s")
+        @Translate("Loc: %s / %s")
         public static final String LOCATION = "gui.resourcefulbees.bee_locator.location";
 
-        @Translate("%sm")
+        @Translate("Biome: %s")
+        public static final String BIOME = "gui.resourcefulbees.bee_locator.biome";
+
+        @Translate("Dist: %sm")
         public static final String DISTANCE = "gui.resourcefulbees.bee_locator.distance";
     }
 

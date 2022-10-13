@@ -55,6 +55,7 @@ public final class NBTConstants {
     }
 
     public static class BeeLocator {
+        public static final String LAST_BIOME_ID = "LastBiomeId";
         public static final String LAST_BIOME = "LastBiome";
         public static final String LAST_BEE = "LastBee";
     }
