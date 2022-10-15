@@ -87,7 +87,7 @@ public class BeeJar extends Item {
             return InteractionResult.FAIL;
         }
 
-        CompoundTag stackTag = stack.getOrCreateTag();
+        CompoundTag stackTag = stack.getOrCreateTag().copy();
 
         stackTag.put(NBTConstants.BeeJar.ENTITY, BeeInfoUtils.createJarBeeTag(target));
         stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, Component.Serializer.toJson(target.getType().getDescription()));
