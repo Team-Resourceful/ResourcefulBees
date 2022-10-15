@@ -29,10 +29,11 @@ public class CentrifugeEnergyPortEntity extends AbstractTieredCentrifugeEntity i
 
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
-        controller(); //why is this method here?...
-        if(controller().assemblyState() != IValidatedMultiblock.AssemblyState.ASSEMBLED) return 0;
-        int energyReceived = Math.min(tier.getEnergyReceiveRate(), Math.min(controller().getEnergyStorage().getMaxTransfer(), maxReceive));
-        if (!simulate) controller().getEnergyStorage().storeEnergy(energyReceived);
+        var controller = nullableController();
+        if (controller == null) return 0;
+        if(controller.assemblyState() != IValidatedMultiblock.AssemblyState.ASSEMBLED) return 0;
+        int energyReceived = Math.min(tier.getEnergyReceiveRate(), Math.min(controller.getEnergyStorage().getMaxTransfer(), maxReceive));
+        if (!simulate) controller.getEnergyStorage().storeEnergy(energyReceived);
         return energyReceived;
     }
 
@@ -43,12 +44,14 @@ public class CentrifugeEnergyPortEntity extends AbstractTieredCentrifugeEntity i
 
     @Override
     public int getEnergyStored() {
-        return controller().getEnergyStorage().getStored();
+        var controller = nullableController();
+        return controller == null ? 0 : controller.getEnergyStorage().getStored();
     }
 
     @Override
     public int getMaxEnergyStored() {
-        return controller().getEnergyStorage().getCapacity();
+        var controller = nullableController();
+        return controller == null ? 0 : controller.getEnergyStorage().getCapacity();
     }
 
     @Override
