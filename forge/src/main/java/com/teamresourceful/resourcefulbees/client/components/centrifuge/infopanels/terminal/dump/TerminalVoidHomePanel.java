@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeVoidEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class TerminalVoidHomePanel extends AbstractInfoPanel<CentrifugeVoidEntity> {
@@ -23,8 +24,11 @@ public class TerminalVoidHomePanel extends AbstractInfoPanel<CentrifugeVoidEntit
 
     @Override
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        if (selectedEntity == null) return;
         ClientUtils.bindTexture(CentrifugeTextures.COMPONENTS);
+        if (selectedEntity == null) {
+            drawNoDumpsString(stack, x+118.5f, y+84.5f);
+            return;
+        }
         blit(stack, x+2, y+16, 21, 0, 233, 3);
         TextUtils.tf12DrawCenteredStringNoShadow(stack, selectedEntity.getDisplayName(), x+118.5f, y+6.5f, TextUtils.FONT_COLOR_1);
         int tX = x+14;
@@ -40,5 +44,9 @@ public class TerminalVoidHomePanel extends AbstractInfoPanel<CentrifugeVoidEntit
 
     private static void drawString(PoseStack stack, String string, int x, int y) {
         TextUtils.TERMINAL_FONT_8.draw(stack, string, x, y, TextUtils.FONT_COLOR_1);
+    }
+
+    private static void drawNoDumpsString(PoseStack stack, float x, float y) {
+        TextUtils.tf12DrawCenteredStringNoShadow(stack, Component.literal("Centrifuge has no Void Blocks!"), x, y, 0xffc72c2c);
     }
 }
