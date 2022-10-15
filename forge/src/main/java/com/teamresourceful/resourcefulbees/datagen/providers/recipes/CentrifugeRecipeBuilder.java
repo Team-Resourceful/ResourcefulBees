@@ -32,8 +32,8 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
     private final Ingredient ingredient;
     private final ResourceLocation id;
 
-    private final List<CentrifugeRecipe.Output<ItemOutput>> itemOutputs = new ArrayList<>();
-    private final List<CentrifugeRecipe.Output<FluidOutput>> fluidOutputs = new ArrayList<>();
+    private final List<CentrifugeRecipe.Output<ItemOutput, ItemStack>> itemOutputs = new ArrayList<>();
+    private final List<CentrifugeRecipe.Output<FluidOutput, FluidStack>> fluidOutputs = new ArrayList<>();
 
     private Integer time;
     private Integer rfPerTick;
@@ -111,8 +111,8 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
     }
 
     public record CentrifugeFinishedRecipe(Ingredient ingredient, ResourceLocation id,
-                                           List<CentrifugeRecipe.Output<ItemOutput>> itemOutputs,
-                                           List<CentrifugeRecipe.Output<FluidOutput>> fluidOutputs,
+                                           List<CentrifugeRecipe.Output<ItemOutput, ItemStack>> itemOutputs,
+                                           List<CentrifugeRecipe.Output<FluidOutput, FluidStack>> fluidOutputs,
                                            Integer time, Integer rfPerTick, Optional<Integer> uses,
                                            List<JsonObject> conditions) implements FinishedRecipe {
 
@@ -170,7 +170,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
             return addOutput(new ItemOutput(stack, weight));
         }
 
-        public CentrifugeRecipe.Output<ItemOutput> build() {
+        public CentrifugeRecipe.Output<ItemOutput, ItemStack> build() {
             return new CentrifugeRecipe.Output<>(chance, WeightedCollection.of(itemOutputs, ItemOutput::weight));
         }
 
@@ -191,7 +191,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
             return addOutput(new FluidOutput(stack, weight));
         }
 
-        public CentrifugeRecipe.Output<FluidOutput> build() {
+        public CentrifugeRecipe.Output<FluidOutput, FluidStack> build() {
             return new CentrifugeRecipe.Output<>(chance, fluidOutputs.stream().collect(WeightedCollection.getCollector(FluidOutput::weight)));
         }
 

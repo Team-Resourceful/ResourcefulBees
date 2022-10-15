@@ -20,7 +20,6 @@ public class CentrifugeState {
     private int energyCapacity = 0;
     private long terminal = 0;
     private Set<BlockPos> inputs = new HashSet<>();
-    //TODO probably should switch item/fluid outputs to Lists
     private List<BlockPos> itemOutputs = new ArrayList<>();
     private List<BlockPos> fluidOutputs = new ArrayList<>();
     private Set<BlockPos> dumps = new HashSet<>();
@@ -129,6 +128,10 @@ public class CentrifugeState {
 
     public void setDumps(Set<BlockPos> dumps) {
         this.dumps = dumps;
+    }
+
+    public boolean hasDumps() {
+        return !this.dumps.isEmpty();
     }
 
     /**

@@ -1,13 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge;
 
+import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.AbstractCentrifuge;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.*;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractTieredCentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeActivity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -120,11 +123,11 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         return fluidOutputs;
     }
 
-/*    public <T extends AbstractOutput, A extends BlockEntity & ICentrifugeOutput<T>> Map<BlockPos, A> getOutputsByType(CentrifugeOutputType outputType) {
-        //ugh I don't like this
+    //todo figure out how to get rid of this cast
+    public <A extends AbstractCentrifugeOutputEntity<T, E>, T extends AbstractOutput<E>, E> Map<BlockPos, A> getOutputsByType(CentrifugeOutputType outputType) {
         //noinspection unchecked
         return outputType.isItem() ? (Map<BlockPos, A>) itemOutputs : (Map<BlockPos, A>) fluidOutputs;
-    }*/
+    }
 
     private <T extends AbstractCentrifugeEntity> void checkRequiredBlocksExist(Collection<T> blockSet, String error) throws ValidationException {
         if (blockSet.isEmpty()) throwValidationException(error);

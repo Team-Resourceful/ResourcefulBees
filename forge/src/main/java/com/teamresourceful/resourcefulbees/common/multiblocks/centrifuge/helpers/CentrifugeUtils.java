@@ -24,6 +24,7 @@ public final class CentrifugeUtils {
     }
 
     public static <T> T getFromCollection(Collection<T> collection, int index) {
+        if (collection.isEmpty()) return null;
         int i = 0;
         for (T s : collection) {
             if (i == index) return s;

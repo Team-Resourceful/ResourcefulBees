@@ -1,11 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.CentrifugeController;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeItemOutputContainer;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,7 +14,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -27,11 +25,10 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity implements ICentrifugeOutput<ItemOutput> {
+public class CentrifugeItemOutputEntity extends AbstractCentrifugeOutputEntity<ItemOutput, ItemStack> {
 
     private final InventoryHandler inventoryHandler;
     private final LazyOptional<IItemHandler> lazyOptional;
-    private boolean voidExcess = true;
 
     public CentrifugeItemOutputEntity(RegistryObject<BlockEntityType<CentrifugeItemOutputEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(tileType.get(), tier, pos, state);
@@ -50,18 +47,8 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
         return new CentrifugeItemOutputContainer(id, playerInventory, this, centrifugeState);
     }
 
-    public void setVoidExcess(boolean voidExcess) {
-        //TODO this falls under the same issue as changing the processing stage in the in the input block.
-        // ideally this would not send a full packet of data and would instead only send a packet containing
-        // the changed data to players that are actively tracking the block, thus reducing the size, number, and frequency of packets being sent.
-        // see read/write nbt regarding amount of data being sent
-        if (level == null) return;
-        this.voidExcess = voidExcess;
-        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-    }
-
-    public boolean voidsExcess() {
-        return voidExcess;
+    public boolean depositResult(ItemOutput result, int processQuantity) {
+        return inventoryHandler.depositResult(result.multiply(processQuantity));
     }
 
     @Override
@@ -70,12 +57,6 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
         for (int i = 0; i < slots; i++) {
             inventoryHandler.setStackInSlot(i, ItemStack.EMPTY);
         }
-    }
-
-    public boolean depositResult(CentrifugeRecipe.Output<ItemOutput> recipeOutput, int processQuantity) {
-        ItemStack result = recipeOutput.pool().next().itemStack();
-        result.setCount(result.getCount() * processQuantity);
-        return inventoryHandler.depositResult(result);
     }
 
     public InventoryHandler getInventoryHandler() {
@@ -131,18 +112,19 @@ public class CentrifugeItemOutputEntity extends AbstractGUICentrifugeEntity impl
         }
 
         private boolean depositResult(ItemStack result) {
-            if (result.isEmpty() || controller().dumpsContainItem(result)) return true;
+            CentrifugeController controller = nullableController();
+            if (result.isEmpty() || controller != null && controller.dumpsContainItem(result)) return true;
 
-            boolean canDeposit = simulateDeposit(result);
-
-
-            int slotIndex = 0;
-            while (canDeposit && !result.isEmpty() && slotIndex < stacks.size()) {
-                depositResult(slotIndex, result);
-                slotIndex++;
+            if (voidExcess || simulateDeposit(result)) {
+                int slotIndex = 0;
+                while (!result.isEmpty() && slotIndex < stacks.size()) {
+                    depositResult(slotIndex, result);
+                    slotIndex++;
+                }
+                return true;
             }
 
-            return canDeposit || voidExcess;
+            return false;
         }
 
         private void depositResult(int slotIndex, ItemStack result) {

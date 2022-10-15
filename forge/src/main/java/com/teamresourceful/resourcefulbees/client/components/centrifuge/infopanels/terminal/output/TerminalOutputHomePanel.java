@@ -5,12 +5,12 @@ import com.teamresourceful.resourcefulbees.client.components.centrifuge.infopane
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTextures;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import org.jetbrains.annotations.NotNull;
 
-public class TerminalOutputHomePanel<T extends AbstractGUICentrifugeEntity & ICentrifugeOutput<?>> extends AbstractInfoPanel<T> {
+public class TerminalOutputHomePanel<T extends AbstractCentrifugeOutputEntity<?, ?>> extends AbstractInfoPanel<T> {
 
     private final Class<T> clazz;
 

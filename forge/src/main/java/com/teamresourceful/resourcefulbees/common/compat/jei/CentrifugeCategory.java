@@ -153,7 +153,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         public CentrifugeRecipeAdapter(CentrifugeRecipe recipe) {
             this.recipe = recipe;
 
-            List<CentrifugeRecipe.Output<ItemOutput>> itemOutputList = this.recipe.itemOutputs();
+            List<CentrifugeRecipe.Output<ItemOutput, ItemStack>> itemOutputList = this.recipe.itemOutputs();
 
             for (int i = 0; i < itemOutputList.size(); i++) {
                 Object2DoubleMap<ItemStack> weights = new Object2DoubleOpenHashMap<>();
@@ -161,7 +161,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
                 itemWeights.put("item_output_"+i, weights);
             }
 
-            List<CentrifugeRecipe.Output<FluidOutput>> fluidOutputList = this.recipe.fluidOutputs();
+            List<CentrifugeRecipe.Output<FluidOutput, FluidStack>> fluidOutputList = this.recipe.fluidOutputs();
 
             for (int i = 0; i < fluidOutputList.size(); i++) {
                 Object2DoubleMap<FluidStack> weights = new Object2DoubleOpenHashMap<>();
@@ -174,9 +174,6 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             Map<ItemStack, Double> weightMap = itemWeights.get(slot);
             if (weightMap == null) return null;
             for (Map.Entry<ItemStack, Double> entry : weightMap.entrySet()) {
-                //TODO need to write our own method for comparing the items to take count into consideration,
-                // having the same item repeated in the pool will only ever show the weight for the first one in the map,
-                // even if the weights are different, would likely need to do the same for fluids as well
                 if (ModUtils.itemStackIsIdentical(entry.getKey(), displayedStack)) return entry.getValue();
             }
             return null;

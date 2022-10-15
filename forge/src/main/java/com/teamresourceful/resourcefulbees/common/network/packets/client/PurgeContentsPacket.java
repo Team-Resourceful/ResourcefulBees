@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
@@ -42,7 +42,7 @@ public record PurgeContentsPacket(BlockPos pos) implements Packet<PurgeContentsP
             return ((player, level) -> {
                 if (level.isLoaded(message.pos)) {
                     BlockEntity blockEntity = level.getBlockEntity(message.pos);
-                    if (blockEntity instanceof ICentrifugeOutput<?> outputEntity) {
+                    if (blockEntity instanceof AbstractCentrifugeOutputEntity<?, ?> outputEntity) {
                         outputEntity.purgeContents();
                     }
                 }

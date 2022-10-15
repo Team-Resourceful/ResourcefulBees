@@ -60,7 +60,7 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
         drawString(stack, type + " Outputs: ", x, y);
     }
 
-    private static void drawOutputString(PoseStack stack, OutputLocationGroup<?> outputLocationGroup, int x, int y) {
+    private static void drawOutputString(PoseStack stack, OutputLocationGroup<?,?,?> outputLocationGroup, int x, int y) {
         for (int i = 0; i < 3; i++) {
             drawOutputString(stack, i+1, getOutputPos(outputLocationGroup, i), x, y+(i*8));
         }
@@ -74,7 +74,7 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
         TextUtils.TERMINAL_FONT_8.draw(stack, string, x, y, TextUtils.FONT_COLOR_1);
     }
 
-    private static String getOutputPos(OutputLocationGroup<?> outputLocationGroup, int index) {
+    private static String getOutputPos(OutputLocationGroup<?,?,?> outputLocationGroup, int index) {
         BlockPos output = outputLocationGroup.get(index).getPos();
         //TODO make this translatable
         return output == null ? "Output not linked!" : CentrifugeUtils.formatBlockPos(output);

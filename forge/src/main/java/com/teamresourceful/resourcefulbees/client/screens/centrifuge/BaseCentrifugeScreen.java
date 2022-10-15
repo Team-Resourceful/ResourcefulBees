@@ -11,8 +11,8 @@ import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeContainer;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
@@ -24,6 +24,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -211,7 +212,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     public void voidExcess() {
         if (navPanel == null) return;
         AbstractGUICentrifugeEntity selectedEntity = navPanel.selectedEntity();
-        if (selectedEntity instanceof ICentrifugeOutput<?> outputEntity) {
+        if (selectedEntity instanceof AbstractCentrifugeOutputEntity<?, ?> outputEntity) {
             boolean voidsExcess = !outputEntity.voidsExcess();
             //TODO make translatable
             setToastText(Component.literal(voidsExcess ? "Excess contents will be voided for output" : "Excess contents will not be voided for output"));
@@ -219,15 +220,16 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         }
     }
 
-    public @Nullable <A extends AbstractGUICentrifugeEntity> A getBlockEntity(BlockPos pos, Class<A> clazz) {
-        if (minecraft == null || minecraft.level == null) return null;
+    @Contract("null, null -> null")
+    public @Nullable <A extends AbstractGUICentrifugeEntity> A getBlockEntity(@Nullable BlockPos pos, Class<A> clazz) {
+        if (minecraft == null || minecraft.level == null || pos == null) return null;
         return WorldUtils.getTileEntity(clazz, minecraft.level, pos);
     }
 
     public void purgeContents() {
         if (navPanel == null) return;
         AbstractGUICentrifugeEntity selectedEntity = navPanel.selectedEntity();
-        if (selectedEntity instanceof ICentrifugeOutput<?>) {
+        if (selectedEntity instanceof AbstractCentrifugeOutputEntity<?,?>) {
             //TODO make translatable
             setToastText(Component.literal("Output contents purged!"));
             NetPacketHandler.CHANNEL.sendToServer(new PurgeContentsPacket(selectedEntity.getBlockPos()));

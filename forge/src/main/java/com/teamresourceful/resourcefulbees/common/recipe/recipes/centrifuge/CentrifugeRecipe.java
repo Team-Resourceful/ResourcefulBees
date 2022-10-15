@@ -21,13 +21,14 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput>> itemOutputs, List<Output<FluidOutput>> fluidOutputs, int time, int energyPerTick, Optional<Integer> rotations) implements CodecRecipe<Container> {
+public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput, ItemStack>> itemOutputs, List<Output<FluidOutput, FluidStack>> fluidOutputs, int time, int energyPerTick, Optional<Integer> rotations) implements CodecRecipe<Container> {
 
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -67,16 +68,21 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
         return rotations().orElse(((time / 20)/8) * 2);
     }
 
-    public record Output<T extends AbstractOutput>(double chance, WeightedCollection<T> pool) {
-        public static final Codec<Output<ItemOutput>> ITEM_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public record Output<T extends AbstractOutput<E>, E>(double chance, WeightedCollection<T> pool) {
+
+        public static final Codec<Output<ItemOutput, ItemStack>> ITEM_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::chance),
                 CodecExtras.weightedCollection(ItemOutput.CODEC, ItemOutput::weight).fieldOf("pool").orElse(new WeightedCollection<>()).forGetter(Output::pool)
         ).apply(instance, Output::new));
 
-        public static final Codec<Output<FluidOutput>> FLUID_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        public static final Codec<Output<FluidOutput, FluidStack>> FLUID_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::chance),
                 CodecExtras.weightedCollection(FluidOutput.CODEC, FluidOutput::weight).fieldOf("pool").orElse(new WeightedCollection<>()).forGetter(Output::pool)
         ).apply(instance, Output::new));
+
+        public T getRandomResult() {
+            return pool().next();
+        }
     }
 }
 

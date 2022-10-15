@@ -1,10 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities;
 
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.CentrifugeController;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeFluidOutputContainer;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.ICentrifugeOutput;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,7 +25,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity implements ICentrifugeOutput<FluidOutput> {
+public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<FluidOutput, FluidStack> {
 
     private final FluidTank fluidTank;
     private final LazyOptional<IFluidHandler> fluidOptional;
@@ -73,12 +72,12 @@ public class CentrifugeFluidOutputEntity extends AbstractGUICentrifugeEntity imp
         return cap.equals(ForgeCapabilities.FLUID_HANDLER) ? fluidOptional.cast() : super.capability(cap, side);
     }
 
-    public boolean depositResult(CentrifugeRecipe.Output<FluidOutput> output, int processQuantity) {
-        FluidStack result = output.pool().next().fluid();
-        if (result.isEmpty() || controller().dumpsContainFluid(result)) return true;
-        result.setAmount(result.getAmount() * processQuantity);
-        if ((voidExcess || simulateDeposit(result))) {
-            fluidTank.fill(result, IFluidHandler.FluidAction.EXECUTE);
+    public boolean depositResult(FluidOutput result, int processQuantity) {
+        FluidStack fluidStack = result.multiply(processQuantity);
+        CentrifugeController controller = nullableController();
+        if (fluidStack.isEmpty() || controller != null && controller.dumpsContainFluid(fluidStack)) return true;
+        if ((voidExcess || simulateDeposit(fluidStack))) {
+            fluidTank.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
             return true;
         }
         return false;

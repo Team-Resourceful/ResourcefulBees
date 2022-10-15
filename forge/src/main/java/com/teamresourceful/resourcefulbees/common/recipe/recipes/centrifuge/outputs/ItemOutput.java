@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Unmodifiable;
 
 @Unmodifiable
-public record ItemOutput(ItemStack itemStack, double weight) implements AbstractOutput {
+public record ItemOutput(ItemStack itemStack, double weight) implements AbstractOutput<ItemStack> {
 
     public static final Codec<ItemOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ItemStackCodec.CODEC.fieldOf("item").orElse(ItemStack.EMPTY).forGetter(ItemOutput::itemStack),
@@ -21,4 +21,9 @@ public record ItemOutput(ItemStack itemStack, double weight) implements Abstract
         return itemStack.copy();
     }
 
+    public ItemStack multiply(int factor) {
+        ItemStack stack = itemStack.copy();
+        stack.setCount(stack.getCount() * factor);
+        return stack;
+    }
 }
