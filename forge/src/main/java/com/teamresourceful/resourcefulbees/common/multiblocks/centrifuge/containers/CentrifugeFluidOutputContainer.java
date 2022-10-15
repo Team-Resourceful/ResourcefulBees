@@ -36,10 +36,6 @@ public class CentrifugeFluidOutputContainer extends CentrifugeContainer<Centrifu
         return 0;
     }
 
-    @Override
-    public int getContainerInputStart() {
-        return 0;
-    }
 
     @Override
     protected void addCentrifugeSlots() {

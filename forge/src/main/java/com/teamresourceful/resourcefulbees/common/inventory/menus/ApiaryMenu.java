@@ -47,7 +47,7 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
     }
 
     @Override
-    public int getContainerInputStart() {
+    public int startIndex() {
         return 27;
     }
 

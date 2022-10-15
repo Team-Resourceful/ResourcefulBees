@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -78,7 +79,32 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
     }
 
     @Override
-    public int getContainerInputStart() {
+    public int startIndex() {
         return 1;
+    }
+
+    @Override
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
+        ItemStack itemStack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+        if (slot.hasItem()) {
+            ItemStack slotItem = slot.getItem();
+            itemStack = slotItem.copy();
+
+            if (index < getInventoryStart()) {
+                if (!this.moveItemStackTo(slotItem, getInventoryStart(), this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.moveItemStackTo(slotItem, 1, getContainerInputEnd(), false)) {
+                return ItemStack.EMPTY;
+            }
+
+            if (slotItem.isEmpty()) {
+                slot.set(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+        }
+        return itemStack;
     }
 }

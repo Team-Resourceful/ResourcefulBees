@@ -25,11 +25,6 @@ public class CentrifugeMenu extends AbstractModContainerMenu<CentrifugeBlockEnti
     }
 
     @Override
-    public int getContainerInputStart() {
-        return 0;
-    }
-
-    @Override
     public int getContainerInputEnd() {
         return 1;
     }

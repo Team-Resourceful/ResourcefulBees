@@ -45,11 +45,6 @@ public class BreederMenu extends AbstractModContainerMenu<BreederBlockEntity> {
     }
 
     @Override
-    public int getContainerInputStart() {
-        return 0;
-    }
-
-    @Override
     public int getPlayerInvXOffset() {
         return 30;
     }

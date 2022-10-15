@@ -41,11 +41,6 @@ public class HoneyGeneratorMenu extends AbstractModContainerMenu<HoneyGeneratorB
     }
 
     @Override
-    public int getContainerInputStart() {
-        return 0;
-    }
-
-    @Override
     public int getPlayerInvXOffset() {
         return 8;
     }

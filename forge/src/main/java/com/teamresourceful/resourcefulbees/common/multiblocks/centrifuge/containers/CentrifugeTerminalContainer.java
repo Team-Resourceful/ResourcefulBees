@@ -37,11 +37,6 @@ public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeT
     }
 
     @Override
-    public int getContainerInputStart() {
-        return 0;
-    }
-
-    @Override
     protected void addCentrifugeSlots() {
         //TERMINAL HAS NO SLOTS
     }

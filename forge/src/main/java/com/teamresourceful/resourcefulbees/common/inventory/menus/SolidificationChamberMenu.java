@@ -29,11 +29,6 @@ public class SolidificationChamberMenu extends AbstractModContainerMenu<Solidifi
     }
 
     @Override
-    public int getContainerInputStart() {
-        return 0;
-    }
-
-    @Override
     public int getPlayerInvXOffset() {
         return 8;
     }

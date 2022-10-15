@@ -19,11 +19,6 @@ public class HoneyPotMenu extends AbstractModContainerMenu<HoneyPotBlockEntity> 
     }
 
     @Override
-    public int getContainerInputStart() {
-        return 0;
-    }
-
-    @Override
     public int getPlayerInvXOffset() {
         return 8;
     }

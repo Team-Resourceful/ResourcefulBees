@@ -44,9 +44,4 @@ public class CentrifugeItemOutputContainer extends CentrifugeContainer<Centrifug
     public int getInventoryStart() {
         return getContainerInputEnd();
     }
-
-    @Override
-    public int getContainerInputStart() {
-        return 0;
-    }
 }

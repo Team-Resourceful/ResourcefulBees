@@ -17,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractModContainerMenu<T extends BlockEntity> extends AbstractContainerMenu {
 
+    private static final int START_INDEX = 0;
+
     protected final T entity;
     protected final Inventory inv;
     protected final Player player;
@@ -41,7 +43,9 @@ public abstract class AbstractModContainerMenu<T extends BlockEntity> extends Ab
 
     protected abstract int getInventoryStart();
 
-    protected abstract int getContainerInputStart();
+    protected int startIndex() {
+        return START_INDEX;
+    }
 
     public abstract int getPlayerInvXOffset();
 
@@ -61,7 +65,7 @@ public abstract class AbstractModContainerMenu<T extends BlockEntity> extends Ab
                 if (!this.moveItemStackTo(slotItem, getInventoryStart(), this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(slotItem, 0, getContainerInputEnd(), false)) {
+            } else if (!this.moveItemStackTo(slotItem, startIndex(), getContainerInputEnd(), false)) {
                 return ItemStack.EMPTY;
             }
 
