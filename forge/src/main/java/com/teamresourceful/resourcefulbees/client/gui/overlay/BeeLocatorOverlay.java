@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -35,6 +36,7 @@ public class BeeLocatorOverlay implements IGuiOverlay {
             BlockPos pos = NbtUtils.readBlockPos(stack.getTag().getCompound(NBTConstants.BeeLocator.LAST_BIOME));
             pos = new BlockPos(pos.getX(), player.blockPosition().getY(), pos.getZ());
             String bee = stack.getTag().getString(NBTConstants.BeeLocator.LAST_BEE);
+            ResourceLocation biome = ResourceLocation.tryParse(stack.getTag().getString(NBTConstants.BeeLocator.LAST_BIOME_ID));
             if (!BeeRegistry.containsBeeType(bee)) return;
             CustomBeeData data = BeeRegistry.getRegistry().getBeeData(bee);
             Entity entity = getDisplayBee(data.getEntityType(), player.level);
@@ -54,6 +56,14 @@ public class BeeLocatorOverlay implements IGuiOverlay {
             Component distance = Component.translatable(TranslationConstants.BeeLocator.DISTANCE, pos.distManhattan(player.blockPosition()));
             gui.getFont().draw(poseStack, distance, 60, 30, 0xFFFFFFFF);
             poseStack.popPose();
+
+            if (biome != null && !biome.getPath().isEmpty()) {
+                poseStack.pushPose();
+                poseStack.scale(0.75f, 0.75f, 0.75f);
+                Component text = Component.translatable(TranslationConstants.BeeLocator.BIOME, Component.translatable(String.format("biome.%s.%s", biome.getNamespace(), biome.getPath())));
+                gui.getFont().draw(poseStack, text, 60, 40, 0xFFFFFFFF);
+                poseStack.popPose();
+            }
         }
     }
 
