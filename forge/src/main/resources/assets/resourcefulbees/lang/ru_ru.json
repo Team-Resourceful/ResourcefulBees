@@ -95,7 +95,6 @@
 	"block.resourcefulbees.apiary.tooltip.structure_size": "Мультиблок - 7x6x7 пустой кубойд.",
 	"block.resourcefulbees.apiary.tooltip.requisites": "Необходимо пасечное хранилище для проверки.",
 	"block.resourcefulbees.apiary.tooltip.drops": "Возвращает содержимое при уничтожении.",
-	"block.resourcefulbees.apiary.tooltip.tags": "Мультиблок можно построить, используя любой блок из тега valid_apiary.",
 	"block.resourcefulbees.apiary.tooltip.offset": "Смещение определяет расположение блока пасеки в зависимости от направления его облицовки..",
 	"block.resourcefulbees.apiary.tooltip.lock": "Пчелы выбраны для импорта.",
 	"block.resourcefulbees.apiary.tooltip.lock_2": "Пчелы должны быть выбранны для экспорта.",

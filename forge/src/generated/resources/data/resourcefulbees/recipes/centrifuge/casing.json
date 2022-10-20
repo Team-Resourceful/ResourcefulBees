@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "H": {
-      "tag": "resourcefulbees:resourceful_honeycomb_block"
+      "tag": "forge:storage_blocks/honeycombs"
     },
     "I": {
       "tag": "forge:ingots/iron"

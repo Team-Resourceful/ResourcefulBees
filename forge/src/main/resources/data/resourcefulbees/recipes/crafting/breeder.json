@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "item": "resourcefulbees:smoker"
+    },
+    "H": {
+      "tag": "forge:honeycombs"
+    },
+    "P": {
+      "item": "resourcefulbees:beepedia"
+    },
+    "B": {
+      "item": "resourcefulbees:bee_box"
+    },
+    "F": {
+      "type": "resourcefulbees:any_filled_bee_jar"
+    }
+  },
+  "pattern": [
+    "FHF",
+    "SBP",
+    "FHF"
+  ],
+  "result": {
+    "item": "resourcefulbees:breeder"
+  }
+}

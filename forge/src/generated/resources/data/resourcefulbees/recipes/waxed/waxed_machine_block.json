@@ -2,13 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "H": {
-      "tag": "resourcefulbees:resourceful_honeycomb"
+      "tag": "forge:honeycombs"
     },
     "R": {
-      "tag": "forge:dusts/redstone"
+      "tag": "forge:storage_blocks/redstone"
     },
     "W": {
-      "tag": "forge:storage_blocks/wax"
+      "item": "resourcefulbees:waxed_planks"
     }
   },
   "pattern": [

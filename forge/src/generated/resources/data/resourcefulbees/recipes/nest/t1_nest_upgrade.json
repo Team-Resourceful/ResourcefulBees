@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "M": {
-      "tag": "minecraft:planks"
+      "item": "resourcefulbees:waxed_planks"
     },
     "S": {
       "item": "minecraft:grass"

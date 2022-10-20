@@ -20,6 +20,7 @@ import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.recipe.conditions.LoadDevRecipes;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.FilledBeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.NBTAmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.*;
@@ -113,6 +114,7 @@ public class ResourcefulBees {
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "amount_sensitive"), AmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "nbt_amount_sensitive"), NBTAmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "any_filled_bee_jar"), FilledBeeJarIngredient.Serializer.INSTANCE);
         CraftingHelper.register(LoadDevRecipes.Serializer.INSTANCE);
     }
 

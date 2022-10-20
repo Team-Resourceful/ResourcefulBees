@@ -2,13 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "C": {
-      "tag": "resourcefulbees:resourceful_honeycomb_block"
+      "tag": "forge:honeycombs"
     },
     "M": {
-      "item": "minecraft:nether_star"
+      "item": "resourcefulbees:waxed_planks"
     },
     "S": {
-      "tag": "resourcefulbees:t3_nests"
+      "tag": "forge:wax"
     }
   },
   "pattern": [
@@ -17,6 +17,6 @@
     "CSC"
   ],
   "result": {
-    "item": "resourcefulbees:t1_apiary"
+    "item": "resourcefulbees:t2_nest_upgrade"
   }
 }

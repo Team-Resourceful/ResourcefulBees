@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "item": "resourcefulbees:waxed_planks"
+    },
+    "P": {
+      "item": "minecraft:dark_oak_planks"
+    },
+    "H": {
+      "item": "minecraft:beehive"
+    }
+  },
+  "pattern": [
+    "WPW",
+    "PHP",
+    "WPW"
+  ],
+  "result": {
+    "item": "resourcefulbees:nest/dark_oak/1"
+  }
+}

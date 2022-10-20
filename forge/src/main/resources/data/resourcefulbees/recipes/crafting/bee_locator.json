@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": {
+      "type": "resourcefulbees:any_filled_bee_jar",
+      "anyFilledJar": true
+    },
+    "C": {
+      "item": "minecraft:compass"
+    },
+    "W": {
+      "tag": "forge:wax"
+    }
+  },
+  "pattern": [
+    "HWH",
+    "WCW",
+    "HWH"
+  ],
+  "result": {
+    "item": "resourcefulbees:bee_locator"
+  }
+}

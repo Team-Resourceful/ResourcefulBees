@@ -1,6 +1,6 @@
 {
   "type": "resourcefulbees:centrifuge",
-  "ingredient": { "item": "resourcefulbees:diamond_honeycomb" },
+  "ingredient": { "item": "resourcefulbees:emerald_honeycomb" },
   "itemOutputs": [
     {
       "chance": 0.40,

@@ -15,8 +15,8 @@ public final class ModTags {
     }
 
     public static final class Items {
-        public static final TagKey<Item> HONEYCOMB_BLOCK = createItemTag(ResourcefulBees.MOD_ID, "resourceful_honeycomb_block");
-        public static final TagKey<Item> HONEYCOMB = createItemTag(ResourcefulBees.MOD_ID, "resourceful_honeycomb");
+        public static final TagKey<Item> HONEYCOMB_BLOCK = createItemTag(ForgeVersion.MOD_ID, "storage_blocks/honeycombs");
+        public static final TagKey<Item> HONEYCOMB = createItemTag(ForgeVersion.MOD_ID, "honeycombs");
         public static final TagKey<Item> WAX = createItemTag(ForgeVersion.MOD_ID, "wax");
         public static final TagKey<Item> WAX_BLOCK = createItemTag(ForgeVersion.MOD_ID, "storage_blocks/wax");
         public static final TagKey<Item> SHEARS = createItemTag(ForgeVersion.MOD_ID, "shears");
@@ -28,7 +28,7 @@ public final class ModTags {
         public static final TagKey<Item> T3_NESTS = createItemTag(ResourcefulBees.MOD_ID, "t3_nests");
 
         public static final TagKey<Item> MUSHROOM = createItemTag(ForgeVersion.MOD_ID, "mushrooms");
-        public static final TagKey<Item> HONEY_BOTTLES = createItemTag(ForgeVersion.MOD_ID, "honey_bottle");
+        public static final TagKey<Item> HONEY_BOTTLES = createItemTag(ForgeVersion.MOD_ID, "honey_bottles");
 
         public static final TagKey<Item> HEAT_SOURCES = createItemTag(ForgeVersion.MOD_ID, "heat_sources");
 
@@ -42,7 +42,7 @@ public final class ModTags {
     }
 
     public static final class Blocks {
-        public static final TagKey<Block> HONEYCOMB = createBlockTag(ResourcefulBees.MOD_ID, "resourceful_honeycomb_block");
+        public static final TagKey<Block> HONEYCOMB = createBlockTag(ForgeVersion.MOD_ID, "storage_blocks/honeycombs");
         public static final TagKey<Block> WAX = createBlockTag(ForgeVersion.MOD_ID, "storage_blocks/wax");
         public static final TagKey<Block> MUSHROOM = createBlockTag(ForgeVersion.MOD_ID, "mushrooms");
 

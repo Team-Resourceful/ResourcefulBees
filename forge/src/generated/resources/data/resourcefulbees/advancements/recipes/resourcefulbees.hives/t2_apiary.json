@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "resourcefulbees:resourceful_honeycomb_block"
+            "tag": "forge:storage_blocks/honeycombs"
           }
         ]
       },

@@ -1,5 +1,6 @@
 {
   "values": [
-    "#forge:storage_blocks/wax"
+    "#forge:storage_blocks/wax",
+    "#forge:storage_blocks/honeycombs"
   ]
 }

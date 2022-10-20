@@ -1,20 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BlockAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.versions.forge.ForgeVersion;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,31 +34,20 @@ public final class DataGen {
     public static void generateCommonData() {
         generateBeeTags();
 
-        generateTags(ModItems.HONEYCOMB_BLOCK_ITEMS, new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb_block.json"));
-        generateTags(ModBlocks.HONEYCOMB_BLOCKS, new ResourceLocation(ResourcefulBees.MOD_ID, "tags/blocks/resourceful_honeycomb_block.json"));
-        generateTags(ModItems.HONEYCOMB_ITEMS, new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honeycomb.json"));
-        generateValidApiaryTag();
+        generateTags(ModItems.HONEYCOMB_BLOCK_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/storage_blocks/honeycombs.json"));
+        generateTags(ModBlocks.HONEYCOMB_BLOCKS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/blocks/storage_blocks/honeycombs.json"));
+        generateTags(ModItems.HONEYCOMB_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/honeycombs.json"));
 
         //custom honey data
-        generateTags(ModItems.HONEY_BOTTLE_ITEMS, new ResourceLocation("forge", "tags/items/honey_bottle.json"));
+        generateTags(ModItems.HONEY_BOTTLE_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/honey_bottles.json"));
 
         if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_BLOCKS.get())) {
-            generateTags(ModBlocks.HONEY_BLOCKS, new ResourceLocation(ResourcefulBees.MOD_ID, "tags/blocks/resourceful_honey_block.json"));
-            generateTags(ModItems.HONEY_BLOCK_ITEMS, new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/resourceful_honey_block.json"));
+            generateTags(ModBlocks.HONEY_BLOCKS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/blocks/honey_blocks.json"));
+            generateTags(ModItems.HONEY_BLOCK_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/honey_blocks.json"));
         }
         if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_FLUIDS.get())) {
             generateHoneyTags();
         }
-    }
-
-    private static void generateValidApiaryTag() {
-        TAGS.put(new ResourceLocation(ResourcefulBees.MOD_ID, "tags/items/valid_apiary.json"),
-                ForgeRegistries.BLOCKS.getValues().stream()
-                        .filter(block -> ((BlockAccessor)block).getHasCollision() )
-                        .map(Block::asItem)
-                        .filter(item -> item != Items.AIR)
-                        .map(Registry.ITEM::getKey)
-                        .collect(Collectors.toSet()));
     }
 
     private static void generateBeeTags() {
@@ -88,5 +73,4 @@ public final class DataGen {
                         .map(RegistryObject::getId)
                         .collect(Collectors.toSet()));
     }
-
 }

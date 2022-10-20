@@ -89,7 +89,6 @@
 	"block.resourcefulbees.apiary.tooltip.structure_size": "Multiblock ist eine 7x6x7 leere Box.",
 	"block.resourcefulbees.apiary.tooltip.requisites": "Erfordert Bienen Nest Lager zum bestätigen.",
 	"block.resourcefulbees.apiary.tooltip.drops": "Behält den Inhalt bei, wenn er kaputt ist.",
-	"block.resourcefulbees.apiary.tooltip.tags": "Multiblock kann mit jedem Block aus dem valid_apiary tag erstellt werden.",
 	"block.resourcefulbees.apiary.tooltip.offset": "Der Offset bestimmt die Position des Bienen Nests anhand seiner Blickrichtung.",
 	"block.resourcefulbees.apiary.tooltip.lock": "Bienen sind auf import.",
 	"block.resourcefulbees.apiary.tooltip.lock_2": "Bienen müssen gesperrt sein und export ausgewählt sein.",
