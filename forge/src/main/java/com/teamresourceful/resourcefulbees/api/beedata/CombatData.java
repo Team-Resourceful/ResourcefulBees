@@ -36,7 +36,7 @@ public record CombatData(
             Codec.BOOL.fieldOf("isPassive").orElse(false).forGetter(CombatData::isPassive),
             Codec.BOOL.fieldOf("removeStingerOnAttack").orElse(true).forGetter(CombatData::removeStingerOnAttack),
             Codec.BOOL.fieldOf("inflictsPoison").orElse(true).forGetter(CombatData::inflictsPoison),
-            Codec.BOOL.fieldOf("isInvulnerable").orElse(true).forGetter(CombatData::isInvulnerable),
+            Codec.BOOL.fieldOf("isInvulnerable").orElse(false).forGetter(CombatData::isInvulnerable),
             Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("attributes").orElse(DEFAULT_ATTRIBUTES).forGetter(CombatData::attributes)
     ).apply(instance, CombatData::new));
 }
