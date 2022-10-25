@@ -24,6 +24,7 @@ import com.teamresourceful.resourcefulbees.common.recipe.ingredients.FilledBeeJa
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.NBTAmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.*;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModCommands;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPotions;
 import net.minecraft.resources.ResourceLocation;
@@ -93,6 +94,8 @@ public class ResourcefulBees {
         MinecraftForge.EVENT_BUS.addListener(DimensionalBeeHolder::onDatapackSync);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
+
+        ModCommands.init();
 
         MinecraftForge.EVENT_BUS.register(this);
     }

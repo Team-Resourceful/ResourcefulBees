@@ -50,7 +50,7 @@ public class TraitData extends BeeTrait {
     protected Set<String> traits;
     private final boolean hasTraits;
 
-    private TraitData(String name, int auraRange, Set<String> traits, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<BeeAura> auras) {
+    public TraitData(String name, int auraRange, Set<String> traits, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<BeeAura> auras) {
         super(name, null, potionDamageEffects, damageImmunities, potionImmunities, damageTypes, specialAbilities, particleEffects, auras);
         this.auraRange = auraRange;
         this.traits = traits;
