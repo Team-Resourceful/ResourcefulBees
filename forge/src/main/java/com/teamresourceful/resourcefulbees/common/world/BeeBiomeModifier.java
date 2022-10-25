@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record BeeBiomeModifier(
-        List<HolderSet<Biome>> whitelight,
+        List<HolderSet<Biome>> whitelist,
         List<HolderSet<Biome>> blacklist,
         MobSpawnSettings.SpawnerData spawns
 ) implements BiomeModifier {
 
     @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
-        if (phase.equals(Phase.ADD) && isInList(whitelight(), biome) && !isInList(blacklist(), biome)) {
+        if (phase.equals(Phase.ADD) && isInList(whitelist(), biome) && !isInList(blacklist(), biome)) {
             builder.getMobSpawnSettings().addSpawn(spawns().type.getCategory(), spawns());
         }
     }
@@ -42,7 +42,7 @@ public record BeeBiomeModifier(
 
     public static Codec<BeeBiomeModifier> makeCodec() {
         return RecordCodecBuilder.create(instance -> instance.group(
-                Biome.LIST_CODEC.listOf().fieldOf("whitelist").forGetter(BeeBiomeModifier::whitelight),
+                Biome.LIST_CODEC.listOf().fieldOf("whitelist").forGetter(BeeBiomeModifier::whitelist),
                 Biome.LIST_CODEC.listOf().fieldOf("blacklist").orElse(new ArrayList<>()).forGetter(BeeBiomeModifier::blacklist),
                 MobSpawnSettings.SpawnerData.CODEC.fieldOf("spawns").forGetter(BeeBiomeModifier::spawns)
         ).apply(instance, BeeBiomeModifier::new));
