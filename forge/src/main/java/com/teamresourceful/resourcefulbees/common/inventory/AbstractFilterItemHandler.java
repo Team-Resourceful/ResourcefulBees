@@ -21,7 +21,6 @@ public abstract class AbstractFilterItemHandler implements IItemHandlerModifiabl
         stack = stack.copy();
         stack.setCount(1);
         stacks.set(slot, stack);
-
     }
 
     @Override

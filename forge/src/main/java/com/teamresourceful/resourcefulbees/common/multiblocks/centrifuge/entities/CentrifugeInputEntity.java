@@ -43,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implements ITickablePartsMultiblock.Tickable {
 
@@ -294,9 +295,23 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
             super(numSlots);
         }
 
+        private Optional<CentrifugeRecipe> cachedRecipe = Optional.empty();
+
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return CentrifugeUtils.getRecipe(level, stack).isPresent();
+            return cachedRecipe.isPresent();
+        }
+
+        @Override
+        public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+            cachedRecipe = CentrifugeUtils.getRecipe(level, stack);
+            if (cachedRecipe.isPresent()) {
+                ItemStack itemStack = stack.copy();
+                itemStack.setCount(cachedRecipe.get().getInputAmount());
+                stacks.set(slot, itemStack);
+            } else {
+                super.setStackInSlot(slot, stack);
+            }
         }
     }
 

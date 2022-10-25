@@ -49,9 +49,7 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
             FilterSlot slot = (FilterSlot) this.getSlot(0);
             ItemStack stack = getCarried();
             if (stack.getCount() > 0 && slot.mayPlace(stack)) {
-                ItemStack copy = stack.copy();
-                copy.setCount(1);
-                slot.set(copy);
+                slot.set(stack);
             } else if (slot.getItem().getCount() > 0) {
                 slot.set(ItemStack.EMPTY);
             }

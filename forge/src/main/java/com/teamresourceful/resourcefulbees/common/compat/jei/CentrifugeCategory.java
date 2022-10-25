@@ -59,7 +59,10 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         List<List<ItemStack>> itemStacks = recipe.recipe.itemOutputs().stream()
                 .map(output -> output.pool().stream().map(ItemOutput::itemStack).toList()).toList();
 
-        builder.addSlot(RecipeIngredientRole.INPUT,10, 25).addIngredients(recipe.recipe.ingredient()).setSlotName("input");
+        ItemStack ingredient = recipe.recipe.ingredient().getItems()[0];
+        ingredient.setCount(recipe.recipe.getInputAmount());
+
+        builder.addSlot(RecipeIngredientRole.INPUT,10, 25).addItemStack(ingredient).setSlotName("input");
         for (int i = 0; i < 3; i++) {
             if (i < itemStacks.size())
                 builder.addSlot(RecipeIngredientRole.OUTPUT, 72, 7 + (i * 18))
@@ -120,11 +123,11 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         return super.getTooltipStrings(recipe, view, mouseX, mouseY);
     }
 
-    private static List<Component> drawTooltip(Component displayname, Double weight, double chance, double mouseX, double mouseY, int i, int outputSize, int min, int max) {
+    private static List<Component> drawTooltip(Component displayName, Double weight, double chance, double mouseX, double mouseY, int i, int outputSize, int min, int max) {
         boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, min, max) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18*i), 6 + (18*i) + 9);
         if (inBounds) {
             List<Component> tooltip = new ArrayList<>();
-            if (displayname != null) tooltip.add(displayname);
+            if (displayName != null) tooltip.add(displayName);
             if (weight != null) {
                 tooltip.add(Component.translatable(TranslationConstants.Jei.CENTRIFUGE_WEIGHT, ModConstants.DECIMAL_PERCENT_FORMAT.format(weight)));
             } else {
