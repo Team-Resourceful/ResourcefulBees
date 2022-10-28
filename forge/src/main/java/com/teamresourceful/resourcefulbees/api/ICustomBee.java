@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.api;
 
-import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.beedata.CombatData;
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
@@ -25,13 +24,6 @@ public interface ICustomBee {
      *  @return "This" bee's type.
      */
     String getBeeType();
-
-    /**
-     * Gets "this" bee's information card from the BEE_INFO hashmap.
-     *
-     *  @return "This" bee's info card.
-     */
-    JsonObject getRawBeeData();
 
     CoreData getCoreData();
 

@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.entity.passive;
 
-import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.IBeeCompat;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.CombatData;
@@ -48,6 +47,7 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -61,7 +61,7 @@ public class CustomBeeEntity extends Bee implements ICustomBee, IAnimatable, IBe
     private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", true).addAnimation("animation.bee.fly.bobbing", true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", ILoopType.EDefaultLoopTypes.LOOP).addAnimation("animation.bee.fly.bobbing", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
@@ -92,11 +92,6 @@ public class CustomBeeEntity extends Bee implements ICustomBee, IAnimatable, IBe
 
     public String getBeeType() {
         return beeType;
-    }
-
-    @Nullable
-    public JsonObject getRawBeeData() {
-        return customBeeData.rawData();
     }
 
     public CoreData getCoreData() {

@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.beedata;
 
 import com.google.common.base.Suppliers;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
@@ -9,7 +8,6 @@ import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -27,14 +25,11 @@ import java.util.function.Supplier;
  * @param combatData Returns a {@link CombatData} object containing information about the bees combat info such as health and attack damage.
  * @param mutationData Returns a {@link MutationData} object containing information regarding the various block and entity mutations a bee may perform.
  * @param traitData Returns a {@link TraitData} object containing information regarding the various traits a bee may have.
- * @param rawData Returns a {@link JsonObject} containing the raw unadulterated data from the bees json file.
  * @param registryID
  * @param displayName
  * @param entityType
  */
-public record CustomBeeData(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, TraitData traitData,
-                            JsonObject rawData, ResourceLocation registryID, MutableComponent displayName, Supplier<EntityType<?>> entityType
-) {
+public record CustomBeeData(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, TraitData traitData, ResourceLocation registryID, MutableComponent displayName, Supplier<EntityType<?>> entityType) {
     /**
      * A default implementation of {@link CustomBeeData} that can be
      * used to prevent {@link NullPointerException}'s
@@ -63,11 +58,10 @@ public record CustomBeeData(CoreData coreData, RenderData renderData, BreedData 
     }
 
     private static CustomBeeData of(CoreData coreData, RenderData renderData, BreedData breedData, CombatData combatData, MutationData mutationData, TraitData traitData) {
-        JsonObject rawData = BeeRegistry.getRegistry().getRawBeeData(coreData.name());
         ResourceLocation registryId = new ResourceLocation(ResourcefulBees.MOD_ID, coreData.name() + "_bee");
         MutableComponent displayName = Component.translatable("bee_type.resourcefulbees." + coreData.name());
         Supplier<EntityType<?>> beeEntity = Suppliers.memoize(() -> getEntity(registryId));
-        return new CustomBeeData(coreData, renderData, breedData, combatData, mutationData, traitData, rawData, registryId, displayName, beeEntity);
+        return new CustomBeeData(coreData, renderData, breedData, combatData, mutationData, traitData, registryId, displayName, beeEntity);
     }
 
     public @NotNull EntityType<?> getEntityType() {
