@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlock
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
@@ -56,53 +57,95 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
     public BeeNestFeature(Codec<NoneFeatureConfiguration> configFactoryIn) { super(configFactoryIn); }
 
-    private void generateHivePlatform(WorldGenLevel worldIn, BlockPos hivePos, BlockState platformBlock, Direction direction, Block blockToReplace) {
+    //TODO rewrite the Nest Feature!!!!
+    @Override
+    public boolean place(@NotNull FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        if(Boolean.FALSE.equals(CommonConfig.GENERATE_BEE_NESTS.get())) return false;
+        //gather data
+        WorldGenLevel level = context.level();
+        BlockPos pos = context.origin();
+        RandomSource rand = context.random();
+        Holder<Biome> biomeHolder = level.getBiome(pos);
+        Optional<ResourceKey<Biome>> biomeKey = biomeHolder.unwrapKey();
+        //find best position
+        BlockPos newPos = getYPos(level, rand, biomeHolder, pos);
+        if (newPos == BlockPos.ZERO) return false;
+        //set direction
+        BlockPos mutable = newPos.mutable();
+        List<Direction> possibleDirections = getPossibleDirections(level, mutable);
+        if (possibleDirections.isEmpty()) return false;
+        Direction direction = possibleDirections.get(rand.nextInt(possibleDirections.size()));
+        //generate hive platform
+        generateHivePlatform(level, biomeHolder, biomeKey, newPos, direction);
+        //select appropriate nest for biome
+        Block nest = getNest(biomeHolder, biomeKey, rand.nextBoolean());
+        BlockState newState = nest.defaultBlockState().setValue(BeehiveBlock.FACING, direction);
+        level.setBlock(newPos, newState, 1);
+        //add bees
+        setNestBees(newPos, biomeHolder, level, rand);
+        return true;
+    }
+
+    @NotNull
+    private static List<Direction> getPossibleDirections(WorldGenLevel level, BlockPos mutable) {
+        return Direction.Plane.HORIZONTAL.stream()
+                .filter(dir -> level.isEmptyBlock(mutable.relative(dir, 1)))
+                .toList();
+    }
+
+    private static void generateHivePlatform(WorldGenLevel worldIn, BlockPos hivePos, BlockState platformBlock, Direction direction, Block blockToReplace) {
         if (platformBlock == null) platformBlock = Blocks.OAK_WOOD.defaultBlockState();
         if (platformBlock.hasProperty(BlockStateProperties.AXIS)) {
             platformBlock = platformBlock.setValue(BlockStateProperties.AXIS, direction.getAxis());
         }
-
-        BlockPos posBlockPos = hivePos.offset(direction.getNormal());
-        BlockPos negBlockPos = hivePos.offset(direction.getOpposite().getNormal());
-
-        if (worldIn.getBlockState(posBlockPos).getBlock().equals(blockToReplace))
-            worldIn.setBlock(posBlockPos, platformBlock, 1);
-
-        if (worldIn.getBlockState(negBlockPos).getBlock().equals(blockToReplace))
-            worldIn.setBlock(negBlockPos, platformBlock, 1);
-
+        setPlatformBlockInDirection(worldIn, platformBlock, blockToReplace, hivePos.offset(direction.getNormal()));
+        setPlatformBlockInDirection(worldIn, platformBlock, blockToReplace, hivePos.offset(direction.getOpposite().getNormal()));
         worldIn.setBlock(hivePos, platformBlock, 1);
     }
 
-    private BlockPos getYPos(WorldGenLevel worldIn, RandomSource rand, Holder<Biome> biome, BlockPos initPos) {
+    private static void setPlatformBlockInDirection(WorldGenLevel worldIn, BlockState platformBlock, Block blockToReplace, BlockPos posBlockPos) {
+        if (worldIn.getBlockState(posBlockPos).getBlock().equals(blockToReplace))
+            worldIn.setBlock(posBlockPos, platformBlock, 1);
+    }
+
+    private static BlockPos getYPos(WorldGenLevel worldIn, RandomSource rand, Holder<Biome> biome, BlockPos initPos) {
         if (biome.is(BiomeTags.IS_NETHER) || worldIn.dimensionType().hasCeiling()) {
-            int ceilHeight = worldIn.getHeight();
-            BlockPos newPos = new BlockPos(initPos.getX(), rand.nextInt(ceilHeight - 33) + 32, initPos.getZ())
-                    .south(rand.nextInt(15))
-                    .east(rand.nextInt(15));
-            while (worldIn.isEmptyBlock(newPos.below())) {
-                newPos = newPos.below();
-            }
-            while (!worldIn.isEmptyBlock(newPos)) {
-                newPos = newPos.above();
-            }
-            if (newPos.getY() >= ceilHeight) {
-                return BlockPos.ZERO;
-            }
-            if (worldIn.getBlockState(newPos.below()).getBlock().equals(Blocks.LAVA) && rand.nextInt(10) != 0) {
-                return BlockPos.ZERO;
-            }
-            return newPos;
+            return getBlockPosForNetherBiomes(worldIn, rand, initPos);
         }
-
         BlockPos pos = worldIn.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, initPos);
-
         if ((biome.is(BiomeTags.IS_OCEAN) || biome.is(BiomeTags.IS_RIVER))
                 && rand.nextInt(10) != 0
                 && worldIn.getBlockState(pos.below()).getBlock().equals(Blocks.WATER)) {
             return BlockPos.ZERO;
         }
-        return pos;
+        return canPlaceOnBlockBelow(worldIn.getBlockState(pos.below())) ? pos : BlockPos.ZERO;
+    }
+
+    @NotNull
+    private static BlockPos getBlockPosForNetherBiomes(WorldGenLevel worldIn, RandomSource rand, BlockPos initPos) {
+        BlockPos newPos = initPos.south(rand.nextInt(15)).east(rand.nextInt(15));
+        while (worldIn.isEmptyBlock(newPos.below())) {
+            newPos = newPos.below();
+        }
+        while (!worldIn.isEmptyBlock(newPos)) {
+            newPos = newPos.above();
+        }
+        //getHeight and getMaxHeight for nether dimension return 256. need to figure out how to get the roof height
+        if (worldIn.isOutsideBuildHeight(newPos)) {
+            return BlockPos.ZERO;
+        }
+        BlockState blockBelow = worldIn.getBlockState(newPos.below());
+        if (!canPlaceOnBlockBelow(blockBelow)) {
+            return BlockPos.ZERO;
+        }
+        if (blockBelow.getBlock().equals(Blocks.LAVA) && rand.nextInt(10) != 0) {
+            return BlockPos.ZERO;
+        }
+        return newPos;
+    }
+
+    private static boolean canPlaceOnBlockBelow(BlockState state) {
+        return state.is(ModTags.Blocks.NEST_PLACEABLE_ON);
     }
 
     private static Block selectNest(boolean headsOrTails, Block blockOne, Block blockTwo){
@@ -122,7 +165,8 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         return biomeKey != null && (biomeKey.equals(Biomes.FROZEN_OCEAN) || biomeKey.equals(Biomes.FROZEN_RIVER) || biomeKey.equals(Biomes.DEEP_FROZEN_OCEAN));
     }
 
-    private void logMissingBiome(ResourceKey<Biome> biomeKey){
+    private static void logMissingBiome(ResourceKey<Biome> biomeKey) {
+        //TODO determine if this is needed any longer
         if (biomeKey != null && CommonConfig.SHOW_DEBUG_INFO.get()) {
             ResourcefulBees.LOGGER.warn("*****************************************************");
             ResourcefulBees.LOGGER.warn("Could not load bees into nest during chunk generation");
@@ -131,7 +175,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void addBeeToNest(CustomBeeEntityType<?> entityType, RandomSource rand, TieredBeehiveBlockEntity nest) {
+    private static void addBeeToNest(CustomBeeEntityType<?> entityType, RandomSource rand, TieredBeehiveBlockEntity nest) {
         ResourceLocation id = ForgeRegistries.ENTITY_TYPES.getKey(entityType);
         if (id != null) {
             CompoundTag tag = new CompoundTag();
@@ -141,7 +185,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void setNestBees(BlockPos nestPos, Holder<Biome> holder, WorldGenLevel level, RandomSource rand){
+    private static void setNestBees(BlockPos nestPos, Holder<Biome> holder, WorldGenLevel level, RandomSource rand){
         if (level.getBlockEntity(nestPos) instanceof TieredBeehiveBlockEntity nest) {
             int maxBees = Math.round(CommonConfig.HIVE_MAX_BEES.get() * 0.5f);
 
@@ -159,34 +203,8 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    //TODO rewrite the Nest Feature!!!!
-    @Override
-    public boolean place(@NotNull FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        if(Boolean.FALSE.equals(CommonConfig.GENERATE_BEE_NESTS.get())) return false;
-
-        WorldGenLevel level = context.level();
-        BlockPos pos = context.origin();
-        RandomSource rand = context.random();
-
-        Holder<Biome> biomeHolder = level.getBiome(pos);
-        Optional<ResourceKey<Biome>> biomeKey = biomeHolder.unwrapKey();
-
-        BlockPos newPos = getYPos(level, rand, biomeHolder, pos);
-
-        if (newPos.getY() == 0) return false;
-
-        BlockPos finalNewPos = newPos.mutable();
-        List<Direction> possibleDirections = Direction.Plane.HORIZONTAL.stream()
-                .filter(dir -> level.isEmptyBlock(finalNewPos.relative(dir, 1)))
-                .toList();
-
-        if (possibleDirections.isEmpty()) return false;
-        Direction direction = possibleDirections.get(rand.nextInt(possibleDirections.size()));
-
-        Block nest = getNest(biomeHolder, biomeKey, rand.nextBoolean());
+    private static void generateHivePlatform(WorldGenLevel level, Holder<Biome> biomeHolder, Optional<ResourceKey<Biome>> biomeKey, BlockPos newPos, Direction direction) {
         BlockState platformBlockState = getNestPlatform(biomeHolder, biomeKey);
-        BlockState newState = nest.defaultBlockState().setValue(BeehiveBlock.FACING, direction);
-
         BlockPos belowHive = newPos.offset(0,-1,0);
         if (level.getBlockState(belowHive).getBlock().equals(Blocks.WATER)) {
             generateHivePlatform(level, belowHive, platformBlockState, direction, Blocks.WATER);
@@ -194,11 +212,6 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         if (biomeHolder.is(BiomeTags.IS_RIVER) && level.getBlockState(belowHive).getBlock().equals(Blocks.LAVA)) {
             generateHivePlatform(level, belowHive, platformBlockState, direction, Blocks.LAVA);
         }
-
-        level.setBlock(newPos, newState, 1);
-
-        setNestBees(newPos, biomeHolder, level, rand);
-        return true;
     }
 
     private static Block getNest(Holder<Biome> biome, Optional<ResourceKey<Biome>> biomeKey, boolean headsOrTails) {

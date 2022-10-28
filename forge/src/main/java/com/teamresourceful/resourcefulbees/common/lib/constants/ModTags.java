@@ -2,7 +2,10 @@ package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.*;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
@@ -47,6 +50,7 @@ public final class ModTags {
         public static final TagKey<Block> MUSHROOM = createBlockTag(ForgeVersion.MOD_ID, "mushrooms");
 
         public static final TagKey<Block> HEAT_SOURCES = createBlockTag(ForgeVersion.MOD_ID, "heat_sources");
+        public static final TagKey<Block> NEST_PLACEABLE_ON = createBlockTag(ResourcefulBees.MOD_ID, "nest_placeable_on");
 
         private Blocks() {
             throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
