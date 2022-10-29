@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.entity.passive;
 
-import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.IBeeCompat;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.CombatData;
@@ -93,11 +92,6 @@ public class CustomBeeEntity extends Bee implements ICustomBee, IAnimatable, IBe
 
     public String getBeeType() {
         return beeType;
-    }
-
-    @Nullable
-    public JsonObject getRawBeeData() {
-        return customBeeData.rawData();
     }
 
     public CoreData getCoreData() {

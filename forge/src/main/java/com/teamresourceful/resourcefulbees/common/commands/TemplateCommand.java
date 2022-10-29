@@ -3,11 +3,9 @@ package com.teamresourceful.resourcefulbees.common.commands;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
@@ -23,19 +21,18 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryOps;
 
-public class TemplateCommand implements Command<CommandSourceStack> {
+public class TemplateCommand {
 
-    private static final TemplateCommand CMD = new TemplateCommand();
     private static final Gson PRETTY_GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String TEMPLATE_STRING = "template";
 
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
-        LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal(TEMPLATE_STRING).requires(commandSourceStack -> commandSourceStack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(CMD);
-        builder.then(Commands.literal("bee").executes(TemplateCommand::printBeeTemplate))
-                .then(Commands.literal("honeycomb").executes(TemplateCommand::printHoneycombTemplate))
-                .then(Commands.literal("honey").executes(TemplateCommand::printHoneyTemplate))
-                .then(Commands.literal("spawn_data").executes(TemplateCommand::printSpawnDataTemplate))
-                .then(Commands.literal("trait").executes(TemplateCommand::printTraitTemplate));
+        LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal(TEMPLATE_STRING);
+        builder.then(Commands.literal("bee").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printBeeTemplate))
+                .then(Commands.literal("honeycomb").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printHoneycombTemplate))
+                .then(Commands.literal("honey").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printHoneyTemplate))
+                .then(Commands.literal("spawn_data").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printSpawnDataTemplate))
+                .then(Commands.literal("trait").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printTraitTemplate));
         return builder;
     }
 
@@ -75,11 +72,6 @@ public class TemplateCommand implements Command<CommandSourceStack> {
         DataResult<JsonElement> traitResult = TraitData.codec(TEMPLATE_STRING).encodeStart(registryOps(context), DummyTraitData.DUMMY_TRAIT_DATA);
         ResourcefulBees.LOGGER.info(PRETTY_GSON.toJson(traitResult.getOrThrow(false, ResourcefulBees.LOGGER::error)));
         context.getSource().sendSuccess(Component.literal("Trait template printed to logs!"), true);
-        return 1;
-    }
-
-    @Override
-    public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         return 1;
     }
 }

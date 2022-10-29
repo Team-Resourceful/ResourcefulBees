@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.lib.templates;
 
-import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CombatData;
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
@@ -92,7 +91,6 @@ public class DummyBeeData {
             CombatData.DEFAULT,
             new MutationData(5, Map.of(MUTATION_INPUT, MUTATION_OUTPUT)),
             TraitData.DEFAULT,
-            new JsonObject(),
             new ResourceLocation(ResourcefulBees.MOD_ID, "template_bee"),
             Component.literal("template"),
             () -> EntityType.BEE

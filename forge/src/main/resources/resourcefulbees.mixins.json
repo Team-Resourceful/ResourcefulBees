@@ -8,11 +8,9 @@
         "MixinBeeEnterHiveGoal",
         "MixinBlock",
         "MixinDispenserBlock",
-        "MixinHoneyBlock",
         "accessors.BeeEntityAccessor",
         "accessors.BeehiveBeeDataAccessor",
         "accessors.BeehiveEntityAccessor",
-        "accessors.BlockAccessor",
         "accessors.RecipeManagerAccessor",
         "accessors.ServerLevelAccessor",
         "accessors.StructureCheckAccessor",
@@ -24,5 +22,5 @@
         "accessors.FontResourceManagerAccessor",
         "accessors.MinecraftAccessor",
         "invokers.ScreenInvoker"
-  ]
+    ]
 }
