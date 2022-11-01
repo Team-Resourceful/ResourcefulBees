@@ -31,13 +31,13 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
             this.addSlot(new FilterSlot(entity.getFilterInventory(), CentrifugeInputEntity.RECIPE_SLOT, 126, 64) {
                 @Override
                 public boolean mayPlace(@NotNull ItemStack stack) {
-                    return CentrifugeUtils.getRecipe(level, stack).isPresent();
+                    return CentrifugeUtils.getFilterRecipe(level, stack).isPresent();
                 }
             });
 
             for (int r = 0; r < tier.getContainerRows(); r++) {
                 for (int c = 0; c < tier.getContainerColumns(); c++) {
-                    this.addSlot(new SlotItemHandler(entity.getInventoryHandler(), c + r * 4, 161 + c * 17, 46 + r * 17));
+                    this.addSlot(new SlotItemHandler(entity.getInventoryHandler(), c+r*tier.getContainerColumns(), 161+c*17, 46+r*17));
                 }
             }
         }
@@ -46,7 +46,7 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
     @Override
     public void clicked(int pSlotId, int pDragType, @NotNull ClickType pClickType, @NotNull Player pPlayer) {
         if (pSlotId == CentrifugeInputEntity.RECIPE_SLOT && (pClickType.equals(ClickType.PICKUP) || pClickType.equals(ClickType.PICKUP_ALL) || pClickType.equals(ClickType.SWAP))) {
-            FilterSlot slot = (FilterSlot) this.getSlot(0);
+            Slot slot = this.getSlot(0);
             ItemStack stack = getCarried();
             if (stack.getCount() > 0 && slot.mayPlace(stack)) {
                 slot.set(stack);
@@ -63,7 +63,7 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
     public boolean stillValid(@NotNull Player player) {
         assert entity != null;
         return ContainerLevelAccess.create(level, entity.getBlockPos()).evaluate((world, pos) ->
-                world.getBlockState(pos).getBlock() instanceof CentrifugeInput && player.distanceToSqr(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D, true);
+                world.getBlockState(pos).getBlock() instanceof CentrifugeInput && player.distanceToSqr(pos.getX()+0.5D, pos.getY()+0.5D, pos.getZ()+0.5D) <= 64.0D, true);
     }
 
     @Override

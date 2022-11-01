@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers;
 
+import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
@@ -21,6 +22,11 @@ public final class CentrifugeUtils {
     @NotNull
     public static Optional<CentrifugeRecipe> getRecipe(Level level, ItemStack recipeStack) {
         return level != null ? level.getRecipeManager().getRecipeFor(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get(), new SimpleContainer(recipeStack), level) : Optional.empty();
+    }
+
+    @NotNull
+    public static Optional<CentrifugeRecipe> getFilterRecipe(Level level, ItemStack recipeStack) {
+        return level != null ? FilterSlot.getRecipeFor(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get(), new SimpleContainer(recipeStack), level) : Optional.empty();
     }
 
     public static <T> T getFromCollection(Collection<T> collection, int index) {

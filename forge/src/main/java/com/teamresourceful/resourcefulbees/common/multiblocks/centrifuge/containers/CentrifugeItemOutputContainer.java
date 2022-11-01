@@ -24,7 +24,7 @@ public class CentrifugeItemOutputContainer extends CentrifugeContainer<Centrifug
     protected void addCentrifugeSlots() {
         for (int r = 0; r < tier.getContainerRows(); r++) {
             for (int c = 0; c < tier.getContainerColumns(); c++) {
-                if (entity != null) this.addSlot(new OutputSlot(entity.getInventoryHandler(), c + r * 4, 161 + c * 17, 46 + r * 17));
+                if (entity != null) this.addSlot(new OutputSlot(entity.getInventoryHandler(), c+r*tier.getContainerColumns(), 161+c*17, 46+r*17));
             }
         }
     }
@@ -32,12 +32,12 @@ public class CentrifugeItemOutputContainer extends CentrifugeContainer<Centrifug
     @Override
     public boolean stillValid(@NotNull Player player) {
         return entity != null && ContainerLevelAccess.create(level, entity.getBlockPos()).evaluate((world, pos) ->
-                world.getBlockState(pos).getBlock() instanceof CentrifugeItemOutput && player.distanceToSqr(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D, true);
+                world.getBlockState(pos).getBlock() instanceof CentrifugeItemOutput && player.distanceToSqr(pos.getX()+0.5D, pos.getY()+0.5D, pos.getZ()+0.5D) <= 64.0D, true);
     }
 
     @Override
     public int getContainerInputEnd() {
-        return entity == null ? 0 : entity.getTier().getSlots();
+        return tier.getSlots();
     }
 
     @Override

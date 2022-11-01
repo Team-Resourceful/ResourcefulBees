@@ -4,6 +4,7 @@ package com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.IAmountSensitive;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
@@ -28,7 +29,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<Output<ItemOutput, ItemStack>> itemOutputs, List<Output<FluidOutput, FluidStack>> fluidOutputs, int time, int energyPerTick, Optional<Integer> rotations) implements CodecRecipe<Container> {
+public record CentrifugeRecipe(
+        ResourceLocation id,
+        Ingredient ingredient,
+        List<Output<ItemOutput, ItemStack>> itemOutputs,
+        List<Output<FluidOutput, FluidStack>> fluidOutputs,
+        int time,
+        int energyPerTick,
+        Optional<Integer> rotations
+) implements CodecRecipe<Container>, FilterSlot.IFilterMatch {
 
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -46,6 +55,11 @@ public record CentrifugeRecipe(ResourceLocation id, Ingredient ingredient, List<
     public boolean matches(Container inventory, @NotNull Level world) {
         ItemStack stack = inventory.getItem(0);
         return !stack.isEmpty() && ingredient.test(stack);
+    }
+
+    public boolean matchesItemAndNBT(Container inventory) {
+        ItemStack stack = inventory.getItem(0);
+        return !stack.isEmpty() && ItemStack.isSameItemSameTags(ingredient.getItems()[0], stack);
     }
 
     public int getInputAmount() {

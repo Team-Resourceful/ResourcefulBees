@@ -1,10 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.inventory.slots;
 
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class FilterSlot extends SlotItemHandler {
 
@@ -19,7 +25,7 @@ public class FilterSlot extends SlotItemHandler {
 
     @Override
     public void onTake(@NotNull Player pPlayer, @NotNull ItemStack pStack) {
-        //TODO make sure this works as onTake no longer returns itemstack
+        //not a real slot
     }
 
     @NotNull
@@ -36,5 +42,18 @@ public class FilterSlot extends SlotItemHandler {
     @Override
     public boolean mayPickup(Player playerIn) {
         return false;
+    }
+
+    //This method and interface exist so that recipes can work with this slot and IAmountSensitive ingredients
+
+    public static <C extends Container, T extends Recipe<C>> Optional<T> getRecipeFor(RecipeType<T> recipeType, C inventory, Level level) {
+       return level.getRecipeManager().getAllRecipesFor(recipeType).stream()
+               .filter(t -> t instanceof IFilterMatch filterMatch && filterMatch.matchesItemAndNBT(inventory))
+               .findFirst();
+    }
+
+    public interface IFilterMatch {
+
+        boolean matchesItemAndNBT(Container inventory);
     }
 }

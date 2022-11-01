@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,17 +25,23 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
     }
 
     protected void addCentrifugeSlots() {
+        int columns = tier.getContainerColumns()*2;
         for (int r = 0; r < tier.getContainerRows(); r++) {
-            for (int c = 0; c < tier.getContainerColumns() * 2; c++) {
-                this.addSlot(new FilterSlot(entity.getFilterInventory(), c + r * 4, 161 + c * 17, 46 + r * 17));
+            for (int c = 0; c < columns; c++) {
+                this.addSlot(new FilterSlot(entity.getFilterInventory(), c+r*columns, 161+c*17, 46+r*17) {
+                    @Override
+                    public boolean mayPlace(@NotNull ItemStack stack) {
+                        return true;
+                    }
+                });
             }
         }
     }
 
     @Override
     public void clicked(int pSlotId, int pDragType, @NotNull ClickType pClickType, @NotNull Player pPlayer) {
-        if (pSlotId < tier.getSlots() && (pClickType.equals(ClickType.PICKUP) || pClickType.equals(ClickType.PICKUP_ALL) || pClickType.equals(ClickType.SWAP))) {
-            FilterSlot slot = (FilterSlot) this.getSlot(pSlotId);
+        if (pSlotId < tier.getSlots()*2 && (pClickType.equals(ClickType.PICKUP) || pClickType.equals(ClickType.PICKUP_ALL) || pClickType.equals(ClickType.SWAP))) {
+            Slot slot = this.getSlot(pSlotId);
             ItemStack stack = getCarried();
             if (stack.getCount() > 0) {
                 ItemStack copy = stack.copy();
@@ -43,6 +50,8 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
             } else if (slot.getItem().getCount() > 0) {
                 slot.set(ItemStack.EMPTY);
             }
+        } else {
+            super.clicked(pSlotId, pDragType, pClickType, pPlayer);
         }
     }
 
@@ -54,11 +63,16 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
 
     @Override
     public int getContainerInputEnd() {
-        return tier.getSlots();
+        return tier.getSlots()*2;
     }
 
     @Override
     public int getInventoryStart() {
         return getContainerInputEnd();
+    }
+
+    @Override
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
+        return ItemStack.EMPTY;
     }
 }
