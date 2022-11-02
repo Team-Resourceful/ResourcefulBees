@@ -1,9 +1,10 @@
 package com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels;
 
-import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons.DisplayTab;
-import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
+import com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons.ToggleDisplayTab;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.BaseCentrifugeScreen;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
+import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefullib.client.components.ParentWidget;
 
 import java.util.function.Supplier;
@@ -27,22 +28,18 @@ public abstract class AbstractControlPanel extends ParentWidget {
     }
 
     protected final void createNavPanelVoidExcessTab(int y, Supplier<Boolean> isSelected) {
-        createDisplayTabWithoutArrow(y, ControlPanelTabs.VOID_EXCESS, isSelected, this.screen::voidExcess);
+        addRenderableWidget(new ToggleDisplayTab(x+2, y, ControlPanelTabs.VOID_EXCESS, isSelected, () -> this.screen.centrifugeState().hasDumps(), this.screen::voidExcess, false));
     }
 
     protected final void createNavPanelPurgeTab(int y) {
-        createDisplayTabWithoutArrow(y, ControlPanelTabs.PURGE, () -> false, this.screen::purgeContents);
+        createDisplayTab(y, ControlPanelTabs.PURGE, () -> false, this.screen::purgeContents, false);
     }
 
     private void createDisplayTabWithArrow(int y, ControlPanelTabs type, Supplier<Boolean> isSelected, Runnable callback) {
         createDisplayTab(y, type, isSelected, callback, true);
     }
 
-    private void createDisplayTabWithoutArrow(int y, ControlPanelTabs type, Supplier<Boolean> isSelected, Runnable callback) {
-        createDisplayTab(y, type, isSelected, callback, false);
-    }
-
     private void createDisplayTab(int y, ControlPanelTabs type, Supplier<Boolean> isSelected, Runnable callback, boolean showArrow) {
-        addRenderableWidget(new DisplayTab(x+2, y, type, isSelected, callback, showArrow));
+        addRenderableWidget(new DisplayTab(x+2, y, type, isSelected, () -> true, callback, showArrow));
     }
 }

@@ -17,24 +17,26 @@ public class DisplayTab extends ImageButton {
 
     private final ControlPanelTabs type;
     private final Supplier<Boolean> isSelected;
-    private final Runnable onPress;
+    private final Supplier<Boolean> isEnabled;
+    protected final Runnable onPress;
     private final boolean showArrow;
 
-    public DisplayTab(int x, int y, ControlPanelTabs type, Supplier<Boolean> isSelected, Runnable onPress, boolean showArrow) {
+    public DisplayTab(int x, int y, ControlPanelTabs type, Supplier<Boolean> isSelected, Supplier<Boolean> isEnabled, Runnable onPress, boolean showArrow) {
         super(x+1, y+1, 69, 13);
         this.imageWidth = 71;
         this.imageHeight = 45;
         this.type = type;
         this.isSelected = isSelected;
+        this.isEnabled = isEnabled;
         this.onPress = onPress;
         this.showArrow = showArrow;
     }
 
     /**
-     *  Use this to show the arrow on the button by default
+     *  Use this to show the arrow on the button and enable by default
      */
     public DisplayTab(int x, int y, ControlPanelTabs type, Supplier<Boolean> isSelected, Runnable onPress) {
-        this(x, y, type, isSelected, onPress, true);
+        this(x, y, type, isSelected, () -> true, onPress, true);
     }
 
     @Override
@@ -42,18 +44,26 @@ public class DisplayTab extends ImageButton {
         RenderUtils.bindTexture(getTexture(mouseX, mouseY));
         blit(stack, this.x-1, this.y-1, getU(mouseX, mouseY), getV(mouseX, mouseY), this.width+2, this.height+2, this.imageWidth, this.imageHeight);
         int color;
-        if (isSelected()) {
-            color = TextUtils.FONT_COLOR_2;
-        } else if (isHovered) {
-            color = TextUtils.FONT_COLOR_3;
+        if (isEnabled()) {
+            if (isSelected()) {
+                color = TextUtils.FONT_COLOR_2;
+            } else if (isHovered) {
+                color = TextUtils.FONT_COLOR_3;
+            } else {
+                color = TextUtils.FONT_COLOR_1;
+            }
         } else {
-            color = TextUtils.FONT_COLOR_1;
+            color = TextUtils.FONT_COLOR_4;
         }
         TextUtils.TERMINAL_FONT_8.draw(stack, type.label, x+4f, y+6f, color);
     }
 
     public boolean isSelected() {
         return isSelected.get();
+    }
+
+    public boolean isEnabled() {
+        return isEnabled.get();
     }
 
     @Override
@@ -68,7 +78,7 @@ public class DisplayTab extends ImageButton {
 
     @Override
     public int getV(int mouseX, int mouseY) {
-        if (!showArrow) return 0;
+        if (!isEnabled() || !showArrow) return 0;
         if (isSelected()) {
             return 30;
         }
@@ -78,6 +88,6 @@ public class DisplayTab extends ImageButton {
 
     @Override
     public void onPress() {
-        if (!isSelected()) onPress.run();
+        if (isEnabled() && !isSelected()) onPress.run();
     }
 }

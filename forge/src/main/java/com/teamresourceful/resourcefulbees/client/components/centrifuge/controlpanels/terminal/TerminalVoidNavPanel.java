@@ -16,7 +16,7 @@ public class TerminalVoidNavPanel extends NavigableControlPanel<CentrifugeVoidEn
 
     @Override
     protected void init() {
-        createNavPanelDisplayTab(y + 18, ControlPanelTabs.HOME, TerminalPanels.FLUID_OUTPUTS_HOME);
+        createNavPanelDisplayTab(y + 18, ControlPanelTabs.HOME, TerminalPanels.DUMPS_HOME);
     }
 
     @Override
