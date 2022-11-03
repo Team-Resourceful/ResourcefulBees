@@ -9,7 +9,8 @@ public enum ControlPanelTabs {
     FLUID_OUTPUTS(Component.literal("Fluid Outputs")),
     DUMPS(Component.literal("Dumps")),
     VOID_EXCESS(Component.literal("Void Excess")),
-    PURGE(Component.literal("Purge Contents"));
+    PURGE(Component.literal("Purge Contents")),
+    INVENTORY(Component.literal("Inventory"));
 
     public final Component label;
 

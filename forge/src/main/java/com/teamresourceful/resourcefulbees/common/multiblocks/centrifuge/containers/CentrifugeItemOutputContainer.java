@@ -24,7 +24,12 @@ public class CentrifugeItemOutputContainer extends CentrifugeContainer<Centrifug
     protected void addCentrifugeSlots() {
         for (int r = 0; r < tier.getContainerRows(); r++) {
             for (int c = 0; c < tier.getContainerColumns(); c++) {
-                if (entity != null) this.addSlot(new OutputSlot(entity.getInventoryHandler(), c+r*tier.getContainerColumns(), 161+c*17, 46+r*17));
+                if (entity != null) this.addSlot(new OutputSlot(entity.getInventoryHandler(), c+r*tier.getContainerColumns(), 161+c*17, 46+r*17) {
+                    @Override
+                    public boolean isActive() {
+                        return displaySlots;
+                    }
+                });
             }
         }
     }

@@ -17,6 +17,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.PurgeContentsPacket;
+import com.teamresourceful.resourcefulbees.common.network.packets.client.SwitchGuiPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.VoidExcessPacket;
 import com.teamresourceful.resourcefulbees.common.utils.WorldUtils;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
@@ -39,9 +40,9 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     protected CentrifugeState centrifugeState;
     protected @Nullable AbstractInfoPanel<?> infoPanel;
     protected @Nullable NavigableControlPanel<?> navPanel;
-    protected ControlPanelTabs controlPanelTab = ControlPanelTabs.HOME;
-    protected ControlPanelTabs navPanelTab = ControlPanelTabs.HOME;
-    protected TerminalPanels currentInfoPanel = TerminalPanels.TERMINAL_HOME;
+    protected ControlPanelTabs controlPanelTab = defaultControlPanelTab();
+    protected ControlPanelTabs navPanelTab = defaultNavPanelTab();
+    protected TerminalPanels currentInfoPanel = defaultInfoPanelTab();
     protected int selectionIndex = 0;
     protected TerminalToastWidget toastWidget;
 
@@ -52,6 +53,12 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         this.imageHeight = 228;
         this.centrifugeState = pMenu.getCentrifugeState();
     }
+
+    protected abstract ControlPanelTabs defaultControlPanelTab();
+
+    protected abstract ControlPanelTabs defaultNavPanelTab();
+
+    protected abstract TerminalPanels defaultInfoPanelTab();
 
     @Override
     protected void init() {
@@ -234,5 +241,9 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
             setToastText(Component.literal("Output contents purged!"));
             NetPacketHandler.CHANNEL.sendToServer(new PurgeContentsPacket(selectedEntity.getBlockPos()));
         }
+    }
+
+    protected final Runnable switchGUi(BlockPos newGuiPos) {
+        return () -> NetPacketHandler.CHANNEL.sendToServer(new SwitchGuiPacket(newGuiPos));
     }
 }

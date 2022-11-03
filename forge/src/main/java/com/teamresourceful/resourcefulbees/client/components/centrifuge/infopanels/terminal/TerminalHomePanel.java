@@ -39,7 +39,7 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
     private final int tX;
 
     public TerminalHomePanel(int x, int y, CentrifugeState centrifugeState, CentrifugeTerminalEntity terminal) {
-        super(x, y);
+        super(x, y, false);
         this.centrifugeState = centrifugeState;
         this.selectedEntity = terminal;
         this.tX = x+10;
@@ -48,6 +48,7 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
 
     @Override
     protected void init() {
+        super.init();
         setFocused(this);
         //changeFocus(true);
 /*        if (selectedEntity == null) return;
@@ -66,7 +67,6 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
     @Override
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
-
         if (neofetch) {
             drawASCII(stack);
             stack.pushPose();
@@ -88,9 +88,9 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
             TERMINAL_FONT_8.draw(stack, "Recipe Power Modifier: " + NumberFormat.getPercentInstance().format(centrifugeState.getRecipePowerModifier()), 6, 88, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(stack, "Recipe Time Modifier: " + NumberFormat.getPercentInstance().format(centrifugeState.getRecipeTimeModifier()), 6, 96, FONT_COLOR_1);
             stack.popPose();
-            float pos = 180;
+            float pos = 135;
             for (Component component : formatUserInput(commandInput)) {
-                TERMINAL_FONT_8.draw(stack, component, tX + 4f, pos, FONT_COLOR_1);
+                TERMINAL_FONT_8.draw(stack, component, tX + 4f, y+pos, FONT_COLOR_1);
                 pos += 10f;
             }
         } else {

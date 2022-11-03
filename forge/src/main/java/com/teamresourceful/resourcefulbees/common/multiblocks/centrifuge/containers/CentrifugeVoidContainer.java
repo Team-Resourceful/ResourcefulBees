@@ -33,6 +33,11 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
                     public boolean mayPlace(@NotNull ItemStack stack) {
                         return true;
                     }
+
+                    @Override
+                    public boolean isActive() {
+                        return displaySlots;
+                    }
                 });
             }
         }

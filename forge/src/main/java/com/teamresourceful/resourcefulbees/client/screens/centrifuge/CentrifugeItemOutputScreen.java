@@ -1,8 +1,10 @@
 package com.teamresourceful.resourcefulbees.client.screens.centrifuge;
 
-import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
+import com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.OutputControlPanel;
+import com.teamresourceful.resourcefulbees.client.components.centrifuge.infopanels.terminal.output.TerminalOutputHomePanel;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeItemOutputContainer;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeItemOutputEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -14,17 +16,37 @@ public class CentrifugeItemOutputScreen extends CentrifugeInventoryScreen<Centri
     }
 
     @Override
-    protected void switchControlPanelTab(ControlPanelTabs controlPanelTab, boolean initialize) {
-
+    protected void init() {
+        super.init();
+        addRenderableWidget(new OutputControlPanel(leftPos + 21, topPos + 39, this));
+        initializeControlPanelTab();
     }
 
     @Override
     protected void setNavPanelTab(boolean initialize) {
-
+        if (initialize) {
+            switchNavPanelTab(this.navPanelTab, currentInfoPanel);
+        } else switch (controlPanelTab) {
+            case HOME -> setDefaultNavPanelTab(TerminalPanels.ITEM_OUTPUTS_HOME);
+            case INVENTORY -> setDefaultNavPanelTab(TerminalPanels.INVENTORY);
+            default -> removeNavPanelIfExists();
+        }
     }
 
     @Override
     protected void updateInfoPanel(@NotNull TerminalPanels newInfoPanel) {
-
+        int pX = leftPos+102;
+        int pY = topPos+39;
+        switch (newInfoPanel) {
+            case INVENTORY -> {
+                removeInfoPanelIfExists();
+                menu.enableSlots();
+            }
+            case ITEM_OUTPUTS_HOME -> {
+                updateInfoPanel(new TerminalOutputHomePanel<>(pX, pY, CentrifugeItemOutputEntity.class, false));
+                menu.disableSlots();
+            }
+            default -> removeInfoPanelIfExists();
+        }
     }
 }

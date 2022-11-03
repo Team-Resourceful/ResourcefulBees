@@ -18,6 +18,7 @@ public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeT
 
     public CentrifugeTerminalContainer(int id, Inventory inv, CentrifugeTerminalEntity entity, CentrifugeState state) {
         super(ModMenus.CENTRIFUGE_TERMINAL_CONTAINER.get(), id, inv, entity, state);
+        this.disableSlots();
     }
 
     @Override

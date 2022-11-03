@@ -15,6 +15,7 @@ public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity>
     private static final int INV_Y_OFFSET = 124;
     protected final CentrifugeTier tier;
     protected final CentrifugeState centrifugeState;
+    protected boolean displaySlots = true;
 
     protected CentrifugeContainer(@Nullable MenuType<?> type, int id, Inventory inv, T entity, CentrifugeState centrifugeState) {
         super(type, id, inv, entity);
@@ -30,6 +31,23 @@ public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity>
 
     public CentrifugeTier getTier() {
         return tier;
+    }
+
+    public boolean displaySlots() {
+        return this.displaySlots;
+    }
+
+    //not sure which of these 3 I'll need yet
+    public void displaySlots(boolean displaySlots) {
+        this.displaySlots = displaySlots;
+    }
+
+    public void enableSlots() {
+        this.displaySlots = true;
+    }
+
+    public void disableSlots() {
+        this.displaySlots = false;
     }
 
     @Override
@@ -57,12 +75,22 @@ public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity>
     protected void addPlayerSlots() {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(inv, j + i * 9 + 9, getPlayerInvXOffset() + j * 17, getPlayerInvYOffset() + i * 17));
+                this.addSlot(new Slot(inv, j + i * 9 + 9, getPlayerInvXOffset() + j * 17, getPlayerInvYOffset() + i * 17) {
+                    @Override
+                    public boolean isActive() {
+                        return displaySlots;
+                    }
+                });
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(inv, k, getPlayerInvXOffset() + k * 17, getPlayerInvYOffset() + 55));
+            this.addSlot(new Slot(inv, k, getPlayerInvXOffset() + k * 17, getPlayerInvYOffset() + 55) {
+                @Override
+                public boolean isActive() {
+                    return displaySlots;
+                }
+            });
         }
     }
 }

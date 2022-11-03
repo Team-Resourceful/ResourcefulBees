@@ -2,8 +2,6 @@ package com.teamresourceful.resourcefulbees.client.components.centrifuge.infopan
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.infopanels.AbstractInfoPanel;
-import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTextures;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeInputEntity;
@@ -16,8 +14,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEntity> {
 
+    public TerminalInputHomePanel(int x, int y, boolean displayTitleBar) {
+        super(x, y, displayTitleBar);
+        init();
+    }
+
     public TerminalInputHomePanel(int x, int y) {
-        super(x, y);
+        this(x, y, true);
     }
 
     @Override
@@ -28,9 +31,7 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
     @Override
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         if (selectedEntity == null) return;
-        ClientUtils.bindTexture(CentrifugeTextures.COMPONENTS);
-        blit(stack, x+2, y+16, 21, 0, 233, 3);
-        TextUtils.tf12DrawCenteredStringNoShadow(stack, selectedEntity.getDisplayName(), x+118.5f, y+6.5f, TextUtils.FONT_COLOR_1);
+        super.render(stack, mouseX, mouseY, partialTicks);
         int tX = x+14;
         int tY = y+14;
 

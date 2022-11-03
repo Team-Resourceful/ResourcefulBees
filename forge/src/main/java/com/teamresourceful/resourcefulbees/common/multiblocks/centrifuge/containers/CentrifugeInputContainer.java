@@ -33,11 +33,21 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
                 public boolean mayPlace(@NotNull ItemStack stack) {
                     return CentrifugeUtils.getFilterRecipe(level, stack).isPresent();
                 }
+
+                @Override
+                public boolean isActive() {
+                    return displaySlots;
+                }
             });
 
             for (int r = 0; r < tier.getContainerRows(); r++) {
                 for (int c = 0; c < tier.getContainerColumns(); c++) {
-                    this.addSlot(new SlotItemHandler(entity.getInventoryHandler(), c+r*tier.getContainerColumns(), 161+c*17, 46+r*17));
+                    this.addSlot(new SlotItemHandler(entity.getInventoryHandler(), c+r*tier.getContainerColumns(), 161+c*17, 46+r*17) {
+                        @Override
+                        public boolean isActive() {
+                            return displaySlots;
+                        }
+                    });
                 }
             }
         }

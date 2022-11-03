@@ -82,4 +82,19 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
     private CentrifugeTerminalEntity getTerminal() {
         return getBlockEntity(BlockPos.of(centrifugeState.getTerminal()), CentrifugeTerminalEntity.class);
     }
+
+    @Override
+    protected ControlPanelTabs defaultControlPanelTab() {
+        return ControlPanelTabs.HOME;
+    }
+
+    @Override
+    protected ControlPanelTabs defaultNavPanelTab() {
+        return ControlPanelTabs.HOME;
+    }
+
+    @Override
+    protected TerminalPanels defaultInfoPanelTab() {
+        return TerminalPanels.TERMINAL_HOME;
+    }
 }
