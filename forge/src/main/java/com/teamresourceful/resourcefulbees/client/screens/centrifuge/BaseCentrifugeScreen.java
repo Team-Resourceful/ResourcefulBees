@@ -33,9 +33,6 @@ import java.util.Optional;
 
 public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> extends AbstractContainerScreen<T> {
 
-    //TODO add back button to inventory screens
-    //protected static final Rectangle BACK = new Rectangle(2, 2, 13, 13);
-
     protected final CentrifugeTier tier;
     protected CentrifugeState centrifugeState;
     protected @Nullable AbstractInfoPanel<?> infoPanel;
