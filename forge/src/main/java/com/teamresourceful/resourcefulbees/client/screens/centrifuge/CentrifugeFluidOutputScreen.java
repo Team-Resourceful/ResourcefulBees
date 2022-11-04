@@ -75,7 +75,7 @@ public class CentrifugeFluidOutputScreen extends CentrifugeInventoryScreen<Centr
     private void drawFluidTank(PoseStack matrix, int x, int y) {
         blit(matrix, x, y, u, v, 18, 69);
         FluidStack fluidStack = menu.getEntity().getFluidTank().getFluid();
-        int height = (fluidStack.getAmount() / tier.getTankCapacity() * 67);
+        int height = (int) ((float) fluidStack.getAmount() / tier.getTankCapacity() * 67);
         ClientUtils.drawFluid(matrix, height, 16, fluidStack, x+1, y+68-height, getBlitOffset());
     }
 
