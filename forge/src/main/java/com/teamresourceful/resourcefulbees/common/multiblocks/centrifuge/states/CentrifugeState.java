@@ -26,7 +26,7 @@ public class CentrifugeState {
     private int energyPorts = 0;
     private int gearboxes = 0;
     private int processors = 0;
-    private int recipePowerModifier = 1;
+    private double recipePowerModifier = 1;
     private double recipeTimeModifier = 1;
 
     /**
@@ -51,6 +51,7 @@ public class CentrifugeState {
         this.owner = owner;
     }
 
+    /** The Terminal block position represented as a long **/
     public long getTerminal() {
         return terminal;
     }
@@ -159,11 +160,11 @@ public class CentrifugeState {
     /**
      * the per tick recipe power multiplier
      */
-    public int getRecipePowerModifier() {
+    public double getRecipePowerModifier() {
         return recipePowerModifier;
     }
 
-    public void setRecipePowerModifier(int recipePowerModifier) {
+    public void setRecipePowerModifier(double recipePowerModifier) {
         this.recipePowerModifier = recipePowerModifier;
     }
 
@@ -190,7 +191,7 @@ public class CentrifugeState {
         buf.writeInt(energyPorts);
         buf.writeInt(gearboxes);
         buf.writeInt(processors);
-        buf.writeInt(recipePowerModifier);
+        buf.writeDouble(recipePowerModifier);
         buf.writeDouble(recipeTimeModifier);
     }
 
@@ -206,7 +207,7 @@ public class CentrifugeState {
         energyPorts = buf.readInt();
         gearboxes = buf.readInt();
         processors = buf.readInt();
-        recipePowerModifier = buf.readInt();
+        recipePowerModifier = buf.readDouble();
         recipeTimeModifier = buf.readDouble();
         return this;
     }

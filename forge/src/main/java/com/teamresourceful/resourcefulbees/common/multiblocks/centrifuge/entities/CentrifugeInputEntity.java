@@ -155,7 +155,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         processRecipe = filterRecipe;
         processRecipeID = processRecipe.getId();
         processTime = getRecipeTime();
-        processEnergy = processRecipe.energyPerTick() * this.controller().getRecipePowerModifier();
+        processEnergy = (int) (processRecipe.energyPerTick() * this.controller().getRecipePowerModifier());
         consumeInputs(false);
         setChanged();
     }

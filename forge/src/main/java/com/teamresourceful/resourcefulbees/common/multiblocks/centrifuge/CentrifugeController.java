@@ -226,12 +226,12 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         //TODO change 0.05 to be a config value or passed in as block property **make dividing by inputs configurable**
     }
 
-    public int getRecipePowerModifier() {
+    public double getRecipePowerModifier() {
         double cpuModifier = processors.isEmpty() ? 1 : 1 + (0.4 * Math.pow(1.1, processors.size()));
         //TODO change 0.4 to be a config value or passed in as block property
         double gbxModifier = gearboxes.isEmpty() ? 1 : 1 + (0.2 * Math.pow(1.1, gearboxes.size()));
         //TODO change 0.2 to be a config value or passed in as block property
-        return (int) (gbxModifier * cpuModifier);
+        return gbxModifier * cpuModifier;
     }
 
     public int getMaxInputRecipes() {
