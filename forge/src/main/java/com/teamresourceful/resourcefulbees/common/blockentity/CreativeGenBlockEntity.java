@@ -15,7 +15,6 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class CreativeGenBlockEntity extends BlockEntity implements InstanceBlockEntityTicker {
@@ -55,7 +54,7 @@ public class CreativeGenBlockEntity extends BlockEntity implements InstanceBlock
     public void serverTick(Level level, BlockPos pos, BlockState state) {
         if (level != null) {
             this.energyStorage.setEnergy(Integer.MAX_VALUE);
-            Arrays.stream(Direction.values())
+            Direction.stream()
                 .map(direction -> level.getBlockEntity(pos.relative(direction)))
                 .filter(Objects::nonNull)
                 .forEach(tileEntity -> tileEntity.getCapability(ForgeCapabilities.ENERGY)

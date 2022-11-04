@@ -31,7 +31,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Locale;
 
 public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker {
@@ -91,10 +90,10 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
 
     private void sendOutPower(Level level) {
         if (hasEnergy()) {
-            Arrays.stream(Direction.values())
-                    .map(direction -> Pair.of(level.getBlockEntity(getBlockPos().relative(direction)), direction))
-                    .filter(pair -> pair.getLeft() != null && pair.getRight() != null)
-                    .forEach(this::transferEnergy);
+            Direction.stream()
+                .map(direction -> Pair.of(level.getBlockEntity(getBlockPos().relative(direction)), direction))
+                .filter(pair -> pair.getLeft() != null && pair.getRight() != null)
+                .forEach(this::transferEnergy);
         }
     }
 
