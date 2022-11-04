@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -85,7 +86,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
      * @return returns true if the hive has been emptied
      */
     public static boolean dropResourceHoneycomb(TieredBeehiveBlock block, Level level, BlockPos pos, boolean useScraper) {
-        return block.dropResourceHoneycomb(level, pos, useScraper);
+        return block.dropResourceHoneycomb(level, pos, null, useScraper);
     }
 
 
@@ -133,7 +134,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
     @Nullable
     private InteractionResult performHoneyHarvest(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, ItemStack itemstack, boolean isScraper) {
         level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
-        dropResourceHoneycomb(level, pos, isScraper);
+        dropResourceHoneycomb(level, pos, player, isScraper);
         itemstack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(handIn));
 
         if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity beehiveTileEntity && !beehiveTileEntity.hasCombs()) {
@@ -230,10 +231,22 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
         tooltip.add(Component.empty());
     }
 
-    public boolean dropResourceHoneycomb(Level level, BlockPos pos, boolean useScraper) {
+    /**
+     * @param player is nullable when being called from dispenser
+     */
+    public boolean dropResourceHoneycomb(Level level, BlockPos pos, @Nullable Player player, boolean useScraper) {
         if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity hive) {
+            IntDoublePair extraRolls = ModCompatHelper.rollExtraHoneycombs(player, useScraper);
+            int rolls = extraRolls.firstInt();
             while (hive.hasCombs()) {
-                popResource(level, pos, hive.getResourceHoneycomb());
+                ItemStack honeycomb = hive.getResourceHoneycomb();
+                popResource(level, pos, honeycomb);
+                if (rolls > 0 && level.random.nextDouble() < extraRolls.secondDouble()) {
+                    ItemStack extraHoneycomb = honeycomb.copy();
+                    extraHoneycomb.setCount(1);
+                    popResource(level, pos, extraHoneycomb);
+                }
+                rolls--;
                 if (useScraper) break;
             }
             return !hive.hasCombs();
