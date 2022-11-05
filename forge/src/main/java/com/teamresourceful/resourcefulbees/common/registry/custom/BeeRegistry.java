@@ -6,7 +6,6 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
-import com.teamresourceful.resourcefulbees.api.RegisterBeeEvent;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
@@ -63,9 +62,7 @@ public final class BeeRegistry implements IBeeRegistry {
     /**
      * This method first iterates over the internal map of raw data and populates
      * the registry with new {@link CustomBeeData} objects that have been parsed
-     * using the codecs. A {@link RegisterBeeEvent} is then posted for other mods
-     * to register {@link CustomBeeData} objects they want Resourceful Bees to have
-     * compatibility with. Post Init methods are then ran on BeeFamilies to ensure
+     * using the codecs. Post Init methods are then ran on BeeFamilies to ensure
      * data has populated correctly. Finally, the family trees and spawnable biomes
      * maps are constructed.
      */

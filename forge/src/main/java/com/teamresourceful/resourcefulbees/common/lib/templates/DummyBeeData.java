@@ -93,6 +93,7 @@ public class DummyBeeData {
             TraitData.DEFAULT,
             new ResourceLocation(ResourcefulBees.MOD_ID, "template_bee"),
             Component.literal("template"),
-            () -> EntityType.BEE
+            () -> EntityType.BEE,
+            Map.of()
     );
 }
