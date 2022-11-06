@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub.InfoPage;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub.TraitsPage;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -19,6 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -55,8 +57,11 @@ public class BeePage extends SubdividedScreen {
                     .setTooltipProvider(() -> List.of(Component.literal("Honeycomb")));
         }
 
-        addRenderableWidget(new SlotButton(138, 25, BeepediaTextures.BEE_LOCATOR, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Open Bee Locator")));
-        addRenderableWidget(new SlotButton(160, 25, BeepediaTextures.RECIPE_BOOK, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Open JEI")));
+        addRenderableWidget(new SlotButton(160, 25, BeepediaTextures.RECIPE_BOOK, () -> ModList.get().isLoaded("jei"), () -> {
+            if (ModList.get().isLoaded("jei")) {
+                JEICompat.searchEntity(this.data.entityType().get());
+            }
+        })).setTooltipProvider(() -> List.of(Component.literal("Open JEI")));
     }
 
     @Override

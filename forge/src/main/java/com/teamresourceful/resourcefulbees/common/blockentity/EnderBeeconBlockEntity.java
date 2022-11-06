@@ -263,7 +263,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         double base = CommonConfig.BEECON_BASE_DRAIN.get();
         for (MobEffect e : effects) base += getEffectValue(e);
         base = (base * (range * CommonConfig.BEECON_RANGE_MULTIPLIER.get() * 0.10d));
-        return (int) Math.ceil(base);
+        return (int) base;
     }
 
     public boolean hasEffect(MobEffect effect) {
