@@ -49,11 +49,11 @@ public class ModRecipeProvider extends RecipeProvider {
         RecipeCriteria hasIron = new RecipeCriteria("has_iron", RecipeProvider.has(Tags.Items.INGOTS_IRON));
 
         //region Hive Upgrades
-        RecipeHelper.createBoxed(Ingredient.of(ItemTags.PLANKS), Ingredient.of(Items.GRASS), ModItems.T1_NEST_UPGRADE.get())
+        RecipeHelper.createBoxed(Ingredient.of(ItemTags.PLANKS), Ingredient.of(Items.GRASS), ModItems.T2_NEST_UPGRADE.get())
                 .unlockedBy(hasPlanks).save(recipes);
-        RecipeHelper.createCornerWithMid(Ingredient.of(ItemTags.PLANKS), Ingredient.of(ModTags.Items.HONEYCOMB), Ingredient.of(ModTags.Items.WAX), ModItems.T2_NEST_UPGRADE.get())
+        RecipeHelper.createCornerWithMid(Ingredient.of(ItemTags.PLANKS), Ingredient.of(ModTags.Items.HONEYCOMB), Ingredient.of(ModTags.Items.WAX), ModItems.T3_NEST_UPGRADE.get())
                 .unlockedBy(hasPlanks).save(recipes);
-        RecipeHelper.createCornerWithMid(Ingredient.of(ItemTags.PLANKS), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(ModTags.Items.WAX_BLOCK), ModItems.T3_NEST_UPGRADE.get())
+        RecipeHelper.createCornerWithMid(Ingredient.of(ItemTags.PLANKS), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(ModTags.Items.WAX_BLOCK), ModItems.T4_NEST_UPGRADE.get())
                 .unlockedBy(hasPlanks).save(recipes);
         //endregion
 

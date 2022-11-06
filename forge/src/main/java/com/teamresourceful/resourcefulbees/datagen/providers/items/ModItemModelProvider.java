@@ -17,9 +17,9 @@ public class ModItemModelProvider extends BaseItemModelProvider {
     @Override
     protected void registerModels() {
         basicItem(ModItems.WAX.get());
-        basicItem(ModItems.T1_NEST_UPGRADE.get());
         basicItem(ModItems.T2_NEST_UPGRADE.get());
         basicItem(ModItems.T3_NEST_UPGRADE.get());
+        basicItem(ModItems.T4_NEST_UPGRADE.get());
         basicItem(ModItems.SMOKER.get());
         basicItem(ModItems.SMOKERCAN.get());
         basicItem(ModItems.BELLOW.get());

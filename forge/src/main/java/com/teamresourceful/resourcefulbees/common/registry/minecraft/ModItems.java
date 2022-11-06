@@ -211,9 +211,9 @@ public final class ModItems {
 
     public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, getItemProperties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    public static final RegistryObject<Item> T1_NEST_UPGRADE = ITEMS.register("t1_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T1_TO_T2, getItemProperties().stacksTo(16)));
-    public static final RegistryObject<Item> T2_NEST_UPGRADE = ITEMS.register("t2_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T2_TO_T3, getItemProperties().stacksTo(16)));
-    public static final RegistryObject<Item> T3_NEST_UPGRADE = ITEMS.register("t3_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T3_TO_T4, getItemProperties().stacksTo(16)));
+    public static final RegistryObject<Item> T2_NEST_UPGRADE = ITEMS.register("t2_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T1_TO_T2, getItemProperties().stacksTo(16)));
+    public static final RegistryObject<Item> T3_NEST_UPGRADE = ITEMS.register("t3_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T2_TO_T3, getItemProperties().stacksTo(16)));
+    public static final RegistryObject<Item> T4_NEST_UPGRADE = ITEMS.register("t4_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T3_TO_T4, getItemProperties().stacksTo(16)));
     public static final RegistryObject<Item> BEE_LOCATOR = ITEMS.register("bee_locator", () -> new BeeLocator(getItemProperties().stacksTo(1)));
 
     //region centrifuge items
