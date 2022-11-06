@@ -1,27 +1,26 @@
 {
   "type": "resourcefulbees:centrifuge",
-  "ingredient": { "item": "resourcefulbees:nether_quartz_honeycomb" },
+  "ingredient": { "item": "resourcefulbees:slimy_honeycomb_block" },
   "itemOutputs": [
     {
-      "chance": 0.80,
       "pool": [
         {
           "item": {
-            "id": "minecraft:quartz",
-            "count": 2
+            "id": "minecraft:slime_block",
+            "count": 4
           },
           "weight": 50
         },
         {
           "item": {
-            "id": "minecraft:quartz",
-            "count": 4
+            "id": "minecraft:slime_block",
+            "count": 6
           },
           "weight": 30
         },
         {
           "item": {
-            "id": "minecraft:quartz",
+            "id": "minecraft:slime_block",
             "count": 8
           },
           "weight": 5
@@ -29,25 +28,25 @@
       ]
     },
     {
-      "chance": 0.30,
+      "chance": 0.50,
       "pool": [
         {
           "item": {
-            "id": "minecraft:quartz",
-            "count": 2
+            "id": "minecraft:slime_block",
+            "count": 4
           },
           "weight": 50
         },
         {
           "item": {
-            "id": "minecraft:quartz",
-            "count": 4
+            "id": "minecraft:slime_block",
+            "count": 6
           },
           "weight": 30
         },
         {
           "item": {
-            "id": "minecraft:quartz",
+            "id": "minecraft:slime_block",
             "count": 8
           },
           "weight": 5
@@ -58,9 +57,9 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
       ]
     }
   ],
-  "time": 200
+  "time": 1200
 }

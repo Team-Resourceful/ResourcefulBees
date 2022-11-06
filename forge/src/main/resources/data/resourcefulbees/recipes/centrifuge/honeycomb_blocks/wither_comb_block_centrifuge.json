@@ -1,0 +1,82 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "ingredient": { "item": "resourcefulbees:wither_honeycomb_block" },
+  "itemOutputs": [
+    {
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:bone_block",
+            "count": 8
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:bone_block",
+            "count": 4
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:bone_block",
+            "count": 2
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:bone",
+            "count": 16
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:bone",
+            "count": 8
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:bone",
+            "count": 4
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "chance": 0.05,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:wither_skeleton_skull",
+            "count": 5
+          },
+          "weight": 20
+        },
+        {
+          "item": {
+            "id": "minecraft:nether_star",
+            "count": 2
+          }
+        }
+      ]
+    }
+  ],
+  "fluidOutputs": [
+    {
+      "pool": [
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
+      ]
+    }
+  ],
+  "time": 1500
+}

@@ -2,8 +2,8 @@
   "type": "resourcefulbees:centrifuge",
   "ingredient": {
     "type": "resourcefulbees:amount_sensitive",
-    "item": "resourcefulbees:diamond_honeycomb",
-    "count": 2
+    "item": "resourcefulbees:netherite_honeycomb_block",
+    "count": 3
   },
   "itemOutputs": [
     {
@@ -11,22 +11,22 @@
       "pool": [
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 5
+            "id": "minecraft:netherite_block",
+            "count": 1
           },
           "weight": 5
         },
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 2
+            "id": "minecraft:netherite_ingot",
+            "count": 4
           },
           "weight": 25
         },
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 1
+            "id": "minecraft:netherite_scrap",
+            "count": 8
           },
           "weight": 50
         }
@@ -37,22 +37,22 @@
       "pool": [
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 5
+            "id": "minecraft:netherite_block",
+            "count": 1
           },
           "weight": 5
         },
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 2
+            "id": "minecraft:netherite_ingot",
+            "count": 4
           },
           "weight": 25
         },
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 1
+            "id": "minecraft:netherite_scrap",
+            "count": 8
           },
           "weight": 50
         }
@@ -62,21 +62,9 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
-      ]
-    },
-    {
-      "chance": 0.5,
-      "pool": [
-        {"fluid": { "id": "minecraft:lava", "amount": 50 }}
-      ]
-    },
-    {
-      "chance": 0.5,
-      "pool": [
-        {"fluid": { "id": "minecraft:water", "amount": 50 }}
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
       ]
     }
   ],
-  "time": 250
+  "time": 2000
 }
