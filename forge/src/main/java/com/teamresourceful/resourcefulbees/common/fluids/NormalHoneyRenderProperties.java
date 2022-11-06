@@ -18,8 +18,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class NormalHoneyRenderProperties implements IClientFluidTypeExtensions {
 
-    public static final ResourceLocation FLUID_STILL = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/honey_still");
-    public static final ResourceLocation FLUID_FLOWING = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/honey_flow");
+    private static final ResourceLocation FLUID_STILL = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/honey_still");
+    private static final ResourceLocation FLUID_FLOWING = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/honey_flow");
+    private static final ResourceLocation HONEY_UNDERWATER = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/block/honey/honey_underwater.png");
 
     public static final NormalHoneyRenderProperties INSTANCE = new NormalHoneyRenderProperties();
 
@@ -36,18 +37,20 @@ public class NormalHoneyRenderProperties implements IClientFluidTypeExtensions {
         return FLUID_FLOWING;
     }
 
+    //texture used against transparent blocks placed next to the fluid
     @Override
     public @Nullable ResourceLocation getOverlayTexture() {
         return FLUID_FLOWING;
     }
 
+    //screen overlay when underwater... though this texture isn't working for some reason...
     @Override
     public @Nullable ResourceLocation getRenderOverlayTexture(Minecraft mc) {
-        return null; //Bc this doesn't do shit
+        return HONEY_UNDERWATER;
     }
 
     @Override
-    public Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
+    public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
         BlockPos blockpos = new BlockPos(camera.getEntity().getX(), camera.getEntity().getEyeY(), camera.getEntity().getZ());
         float brightnessAtEyes = LightTexture.getBrightness(camera.getEntity().level.dimensionType(), camera.getEntity().level.getMaxLocalRawBrightness(blockpos));
         float brightness = (float)Math.max(Math.pow(FluidClientOverlay.getDimensionBrightnessAtEyes(camera.getEntity()), 2.0), brightnessAtEyes);

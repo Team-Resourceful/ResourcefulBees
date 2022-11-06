@@ -1,6 +1,10 @@
 {
   "type": "resourcefulbees:centrifuge",
-  "ingredient": { "item": "resourcefulbees:netherite_honeycomb" },
+  "ingredient": {
+    "type": "resourcefulbees:amount_sensitive",
+    "item": "resourcefulbees:netherite_honeycomb",
+    "count": 3
+  },
   "itemOutputs": [
     {
       "chance": 0.40,
@@ -62,5 +66,5 @@
       ]
     }
   ],
-  "time": 200
+  "time": 300
 }

@@ -2,57 +2,57 @@
   "type": "resourcefulbees:centrifuge",
   "ingredient": {
     "type": "resourcefulbees:amount_sensitive",
-    "item": "resourcefulbees:diamond_honeycomb",
+    "item": "resourcefulbees:emerald_honeycomb_block",
     "count": 2
   },
   "itemOutputs": [
     {
-      "chance": 0.50,
+      "chance": 0.40,
       "pool": [
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 5
+            "id": "minecraft:emerald_block",
+            "count": 4
           },
-          "weight": 5
+          "weight": 2
         },
         {
           "item": {
-            "id": "minecraft:diamond",
+            "id": "minecraft:emerald_block",
             "count": 2
           },
           "weight": 25
         },
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 1
+            "id": "minecraft:emerald_ore",
+            "count": 4
           },
           "weight": 50
         }
       ]
     },
     {
-      "chance": 0.25,
+      "chance": 0.20,
       "pool": [
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 5
+            "id": "minecraft:emerald_block",
+            "count": 4
           },
-          "weight": 5
+          "weight": 2
         },
         {
           "item": {
-            "id": "minecraft:diamond",
+            "id": "minecraft:emerald_block",
             "count": 2
           },
           "weight": 25
         },
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 1
+            "id": "minecraft:emerald_ore",
+            "count": 4
           },
           "weight": 50
         }
@@ -62,21 +62,21 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
       ]
     },
     {
       "chance": 0.5,
       "pool": [
-        {"fluid": { "id": "minecraft:lava", "amount": 50 }}
+        {"fluid": { "id": "minecraft:lava", "amount": 500 }}
       ]
     },
     {
       "chance": 0.5,
       "pool": [
-        {"fluid": { "id": "minecraft:water", "amount": 50 }}
+        {"fluid": { "id": "minecraft:water", "amount": 500 }}
       ]
     }
   ],
-  "time": 250
+  "time": 1400
 }

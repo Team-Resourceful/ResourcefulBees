@@ -2,7 +2,7 @@
   "type": "resourcefulbees:centrifuge",
   "ingredient": {
     "type": "resourcefulbees:amount_sensitive",
-    "item": "resourcefulbees:diamond_honeycomb",
+    "item": "resourcefulbees:diamond_honeycomb_block",
     "count": 2
   },
   "itemOutputs": [
@@ -11,22 +11,22 @@
       "pool": [
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 5
+            "id": "minecraft:diamond_block",
+            "count": 4
           },
           "weight": 5
         },
         {
           "item": {
-            "id": "minecraft:diamond",
+            "id": "minecraft:diamond_block",
             "count": 2
           },
           "weight": 25
         },
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 1
+            "id": "minecraft:diamond_ore",
+            "count": 4
           },
           "weight": 50
         }
@@ -37,22 +37,22 @@
       "pool": [
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 5
+            "id": "minecraft:diamond_block",
+            "count": 4
           },
           "weight": 5
         },
         {
           "item": {
-            "id": "minecraft:diamond",
+            "id": "minecraft:diamond_block",
             "count": 2
           },
           "weight": 25
         },
         {
           "item": {
-            "id": "minecraft:diamond",
-            "count": 1
+            "id": "minecraft:diamond_ore",
+            "count": 4
           },
           "weight": 50
         }
@@ -62,21 +62,21 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
       ]
     },
     {
       "chance": 0.5,
       "pool": [
-        {"fluid": { "id": "minecraft:lava", "amount": 50 }}
+        {"fluid": { "id": "minecraft:lava", "amount": 500 }}
       ]
     },
     {
       "chance": 0.5,
       "pool": [
-        {"fluid": { "id": "minecraft:water", "amount": 50 }}
+        {"fluid": { "id": "minecraft:water", "amount": 500 }}
       ]
     }
   ],
-  "time": 250
+  "time": 1400
 }

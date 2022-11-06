@@ -36,7 +36,12 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
         int tY = y+14;
 
         drawLocationString(stack, CentrifugeUtils.formatBlockPos(selectedEntity.getBlockPos()), tX+6, tY+16);
-        drawRecipeString(stack, selectedEntity.getFilterRecipeID(), tX+6, tY+24);
+
+        ResourceLocation recipeID = selectedEntity.getFilterRecipeID();
+        if (recipeID != null) {
+            String recipe = formatRecipeID(recipeID.toString());
+            drawRecipeString(stack, recipe, tX+6, tY+24);
+        }
         drawProcessingStageString(stack, selectedEntity.getProcessStage(), tX+6, tY+32);
         drawOutputTypeString(stack, "Item", tX+6, tY+40);
         drawOutputString(stack, selectedEntity.getItemOutputs(), tX+6, tY+48);
@@ -44,12 +49,17 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
         drawOutputString(stack, selectedEntity.getFluidOutputs(), tX+6, tY+80);
     }
 
+    @NotNull
+    private static String formatRecipeID(String recipe) {
+        return recipe.replace(recipe.subSequence(recipe.indexOf(":")+1, recipe.lastIndexOf("/")+1), "");
+    }
+
     //TODO make these translatable texts
     private static void drawLocationString(PoseStack stack, String location, int x, int y) {
         drawString(stack, "Location: " + location, x, y);
     }
 
-    private static void drawRecipeString(PoseStack stack, ResourceLocation recipeID, int x, int y) {
+    private static void drawRecipeString(PoseStack stack, String recipeID, int x, int y) {
         drawString(stack, "Recipe: " + recipeID, x, y);
     }
 

@@ -1,0 +1,78 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "ingredient": { "item": "resourcefulbees:ender_honeycomb_block" },
+  "itemOutputs": [
+    {
+      "chance": 0.7,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:end_portal_frame",
+            "count": 1
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:end_rod",
+            "count": 4
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:ender_pearl",
+            "count": 12
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "chance": 0.15,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:end_stone",
+            "count": 2
+          },
+          "weight": 50
+        },
+        {
+          "item": {
+            "id": "minecraft:beacon",
+            "count": 1
+          },
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "chance": 0.5,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:shulker_shell",
+            "count": 2
+          },
+          "weight": 50
+        },
+        {
+          "item": {
+            "id": "minecraft:shulker_shell",
+            "count": 4
+          },
+          "weight": 25
+        }
+      ]
+    }
+  ],
+  "fluidOutputs": [
+    {
+      "pool": [
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
+      ]
+    }
+  ],
+  "time": 1400
+}

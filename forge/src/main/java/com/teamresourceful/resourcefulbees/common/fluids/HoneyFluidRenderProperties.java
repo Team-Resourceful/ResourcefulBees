@@ -31,13 +31,11 @@ public class HoneyFluidRenderProperties implements IClientFluidTypeExtensions {
 
     @Override
     public @Nullable ResourceLocation getOverlayTexture() {
-        return data.flowing();
+        return data.overlay();
     }
 
     @Override
     public @Nullable ResourceLocation getRenderOverlayTexture(Minecraft mc) {
-        return null; //Bc it doesn't do shit
+        return data.underwater(); //Bc it doesn't do shit
     }
-
-
 }

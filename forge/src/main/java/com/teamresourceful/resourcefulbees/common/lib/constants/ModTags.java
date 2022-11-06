@@ -32,6 +32,7 @@ public final class ModTags {
 
         public static final TagKey<Item> MUSHROOM = createItemTag(ForgeVersion.MOD_ID, "mushrooms");
         public static final TagKey<Item> HONEY_BOTTLES = createItemTag(ForgeVersion.MOD_ID, "honey_bottles");
+        public static final TagKey<Item> HONEY_BUCKETS = createItemTag(ForgeVersion.MOD_ID, "buckets/honey");
 
         public static final TagKey<Item> HEAT_SOURCES = createItemTag(ForgeVersion.MOD_ID, "heat_sources");
 
