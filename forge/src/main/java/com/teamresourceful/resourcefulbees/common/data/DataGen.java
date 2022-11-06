@@ -40,6 +40,7 @@ public final class DataGen {
 
         //custom honey data
         generateTags(ModItems.HONEY_BOTTLE_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/honey_bottles.json"));
+        generateTags(ModItems.HONEY_BUCKET_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/buckets/honey.json"));
 
         if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_BLOCKS.get())) {
             generateTags(ModBlocks.HONEY_BLOCKS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/blocks/honey_blocks.json"));
