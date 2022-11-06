@@ -4,13 +4,14 @@ import com.teamresourceful.resourcefulbees.api.IBeeCompat;
 import com.teamresourceful.resourcefulbees.common.block.FlowHiveBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.FlowHiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -60,11 +61,17 @@ public class FlowHiveBlockEntity extends BeeHolderBlockEntity {
     }
 
     @Override
-    protected void deliverNectar(CompoundTag nbt, IBeeCompat bee) {
+    protected void deliverNectar(CompoundTag nbt, Entity bee) {
         if (nbt.getBoolean("HasNectar")) {
-            bee.nectarDroppedOff();
-            tank.setFluid(new FluidStack(ModFluids.HONEY_STILL.get(), tank.getFluidAmount() + 250));
-            //TODO get bees honey and put in tanks.
+            if (bee instanceof IBeeCompat compat) compat.nectarDroppedOff();
+            FlowHiveRecipe.findRecipe(bee.level.getRecipeManager(), bee.getType())
+                .ifPresent(recipe -> {
+                    if (!tank.getFluid().isEmpty() && tank.getFluid().isFluidEqual(recipe.fluid())) {
+                        tank.setFluid(new FluidStack(tank.getFluid(), Math.min(tank.getCapacity(), tank.getFluidAmount() + recipe.fluid().getAmount())));
+                    } else if (!recipe.fluid().isEmpty()) {
+                        tank.setFluid(new FluidStack(recipe.fluid(), Math.min(tank.getCapacity(), recipe.fluid().getAmount())));
+                    }
+                });
         }
     }
 

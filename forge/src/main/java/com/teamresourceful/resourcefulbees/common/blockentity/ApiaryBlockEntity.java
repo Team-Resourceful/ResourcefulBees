@@ -9,15 +9,16 @@ import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -47,11 +48,15 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
     }
 
     //region BEE HANDLING
-    protected void deliverNectar(CompoundTag nbt, IBeeCompat bee) {
+    protected void deliverNectar(CompoundTag nbt, Entity bee) {
         if (nbt.getBoolean("HasNectar")) {
-            bee.nectarDroppedOff();
-            ItemStack stack = bee.getApiaryOutput(tier);
-            for (int i = 0; i < inventory.getSlots() && !stack.isEmpty(); i++) { stack = ModUtils.insertItem(inventory, i, stack); }
+            if (bee instanceof IBeeCompat compat) compat.nectarDroppedOff();
+            HiveRecipe.getApiaryOutput(tier, bee)
+                .ifPresent(stack -> {
+                    for (int i = 0; i < inventory.getSlots() && !stack.isEmpty(); i++) {
+                        stack = ModUtils.insertItem(inventory, i, stack);
+                    }
+                });
         }
     }
 

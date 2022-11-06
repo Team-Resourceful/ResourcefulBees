@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveBeeDataAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
@@ -41,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -141,10 +143,12 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
             Entity entity = EntityType.loadEntityRecursive(nbt, hive.level, entity1 -> entity1);
             if (entity != null) {
                 BeeInfoUtils.setEntityLocationAndAngle(hive.worldPosition, direction, entity);
-                if (entity instanceof IBeeCompat compat && beehiveState == BeeReleaseStatus.HONEY_DELIVERED) {
-                    compat.nectarDroppedOff();
+                if (beehiveState == BeeReleaseStatus.HONEY_DELIVERED) {
+                    if (entity instanceof IBeeCompat compat) compat.nectarDroppedOff();
                     if (getHoneyLevel(state) < 5) {
-                        compat.getOptionalHiveOutput(hive.getBlock().getTier()).ifPresent(hive.honeycombs::add);
+                        HiveRecipe.getHiveOutput(hive.getBlock().getTier(), entity)
+                            .filter(Predicate.not(ItemStack::isEmpty))
+                            .ifPresent(hive.honeycombs::add);
                         recalculateHoneyLevel(hive);
                     }
 
