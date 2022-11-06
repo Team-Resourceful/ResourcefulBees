@@ -28,6 +28,7 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModCommands
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPotions;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -57,6 +58,7 @@ public class ResourcefulBees {
     public static final Logger LOGGER = LogManager.getLogger();
 
     public ResourcefulBees() {
+        CustomDataRegistry.INSTANCE.init();
         GeckoLib.initialize();
         ModSetup.initialize();
         RegistryHandler.init();
@@ -143,13 +145,8 @@ public class ResourcefulBees {
 
     @SubscribeEvent
     public void onPackFinders(AddPackFindersEvent event) {
-        switch (event.getPackType()) {
-            case SERVER_DATA -> {
-                event.addRepositorySource(DataPackLoader.INSTANCE);
-            }
-            case CLIENT_RESOURCES -> {
-
-            }
+        if (event.getPackType().equals(PackType.SERVER_DATA)) {
+            event.addRepositorySource(DataPackLoader.INSTANCE);
         }
     }
 }
