@@ -164,7 +164,8 @@ public final class ModItems {
             .saturationMod(2)
             .alwaysEat()
             .build())
-            .rarity(Rarity.EPIC)));
+            .rarity(Rarity.EPIC))
+    );
 
 
     public static final RegistryObject<Item> BEE_BOX_TEMP = ITEMS.register("bee_box_temp", () -> BeeBoxItem.temp(ModBlocks.BEE_BOX_TEMP.get(), getItemProperties().stacksTo(1)));
@@ -208,7 +209,7 @@ public final class ModItems {
     public static final RegistryObject<Item> BREED_TIME_UPGRADE = ITEMS.register("breed_time_upgrade", () ->
             new BreederTimeUpgradeItem(getItemProperties().stacksTo(16)));
 
-    public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_fluid_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, getItemProperties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final RegistryObject<Item> HONEY_FLUID_BUCKET = ITEMS.register("honey_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, getItemProperties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     public static final RegistryObject<Item> T1_NEST_UPGRADE = ITEMS.register("t1_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T1_TO_T2, getItemProperties().stacksTo(16)));
     public static final RegistryObject<Item> T2_NEST_UPGRADE = ITEMS.register("t2_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T2_TO_T3, getItemProperties().stacksTo(16)));

@@ -31,7 +31,6 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
     //TODO neofetch and command input should probably be split into two separate widgets
     //TODO need to clean up x/y pos for all elements
     //TODO charTyped and keyPressed methods don't fire
-    //TODO figure why the fuck the owner value keeps going to null
     private String commandInput = "";
     private boolean neofetch = true;
     private final List<FormattedCharSequence> consoleHistory = new ArrayList<>();
