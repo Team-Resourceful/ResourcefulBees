@@ -81,7 +81,9 @@ public class BeeLocatorWorker implements WorldWorkerManager.IWorker {
         stackTag.remove(NBTConstants.BeeLocator.LAST_BIOME);
         stackTag.remove(NBTConstants.BeeLocator.LAST_BEE);
         stack.setTag(stackTag);
-        this.player.getCooldowns().addCooldown(stack.getItem(), 3000);
+        if (!this.player.getAbilities().instabuild) {
+            this.player.getCooldowns().addCooldown(stack.getItem(), 3000);
+        }
     }
 
     public void success(BlockPos pos, Holder<Biome> biome) {
@@ -96,7 +98,9 @@ public class BeeLocatorWorker implements WorldWorkerManager.IWorker {
                 .ifPresent(loc -> stackTag.putString(NBTConstants.BeeLocator.LAST_BIOME_ID, loc));
         stackTag.putString(NBTConstants.BeeLocator.LAST_BEE, this.bee);
         stack.setTag(stackTag);
-        this.player.getCooldowns().addCooldown(stack.getItem(), 3000);
+        if (!this.player.getAbilities().instabuild) {
+            this.player.getCooldowns().addCooldown(stack.getItem(), 3000);
+        }
     }
 
     private static Queue<Vec2i> createRange(int range) {
