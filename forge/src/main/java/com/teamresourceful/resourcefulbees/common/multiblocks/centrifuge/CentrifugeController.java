@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fluids.FluidStack;
 import net.roguelogix.phosphophyllite.multiblock2.MultiblockController;
@@ -69,7 +70,8 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
 
     @Override
     public void validateStage1() throws ValidationException {
-        if (blocks.size() < 27) {
+        //checking size 26 instead of 27 bc air doesn't get added to blocks map but is allowed in centrifuge
+        if (blocks.size() < 26) {
             throw new ValidationException("min blocks");
         }
         checkRequiredBlocksExist(terminals, "no_terminal");
@@ -100,7 +102,7 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
 
     @Override
     public boolean allowedInteriorBlock(@NotNull Block block) {
-        return true;
+        return block instanceof AirBlock;
     }
 
     @Nullable
