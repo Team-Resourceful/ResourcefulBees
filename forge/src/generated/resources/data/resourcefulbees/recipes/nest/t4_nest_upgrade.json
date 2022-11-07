@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "forge:storage_blocks/honeycombs"
+    },
+    "U": {
+      "item": "resourcefulbees:t3_nest_upgrade"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "pattern": [
+    "CDC",
+    "DUD",
+    "CDC"
+  ],
+  "result": {
+    "item": "resourcefulbees:t4_nest_upgrade"
+  }
+}

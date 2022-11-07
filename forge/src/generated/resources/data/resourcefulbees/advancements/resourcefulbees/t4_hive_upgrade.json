@@ -1,12 +1,12 @@
 {
-  "parent": "resourcefulbees:resourcefulbees/obtain_bee_nest",
+  "parent": "resourcefulbees:resourcefulbees/t3_hive_upgrade",
   "criteria": {
-    "has_t1_hive_upgrade": {
+    "has_t4_hive_upgrade": {
       "conditions": {
         "items": [
           {
             "items": [
-              "resourcefulbees:t1_nest_upgrade"
+              "resourcefulbees:t4_nest_upgrade"
             ]
           }
         ]
@@ -17,21 +17,21 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancements.resourcefulbees.t1_hive_upgrade.description"
+      "translate": "advancements.resourcefulbees.t4_hive_upgrade.description"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "resourcefulbees:t1_nest_upgrade"
+      "item": "resourcefulbees:t4_nest_upgrade"
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.resourcefulbees.t1_hive_upgrade.title"
+      "translate": "advancements.resourcefulbees.t4_hive_upgrade.title"
     }
   },
   "requirements": [
     [
-      "has_t1_hive_upgrade"
+      "has_t4_hive_upgrade"
     ]
   ]
 }

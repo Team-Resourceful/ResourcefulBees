@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "C": {
-      "tag": "forge:storage_blocks/honeycombs"
+      "tag": "forge:honeycombs"
     },
-    "M": {
-      "item": "resourcefulbees:waxed_planks"
+    "U": {
+      "item": "resourcefulbees:t2_nest_upgrade"
     },
-    "S": {
-      "tag": "forge:storage_blocks/wax"
+    "G": {
+      "tag": "forge:nuggets/gold"
     }
   },
   "pattern": [
-    "CSC",
-    "SMS",
-    "CSC"
+    "CGC",
+    "GUG",
+    "CGC"
   ],
   "result": {
     "item": "resourcefulbees:t3_nest_upgrade"
