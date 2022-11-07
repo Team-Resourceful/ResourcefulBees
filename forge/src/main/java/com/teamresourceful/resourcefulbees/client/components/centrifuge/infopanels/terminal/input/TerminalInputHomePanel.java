@@ -39,8 +39,10 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
 
         ResourceLocation recipeID = selectedEntity.getFilterRecipeID();
         if (recipeID != null) {
-            String recipe = formatRecipeID(recipeID.toString());
+            String recipe = formatRecipeID(recipeID.getPath());
             drawRecipeString(stack, recipe, tX+6, tY+24);
+        } else {
+            drawRecipeString(stack, "Filter slot not set!", tX+6, tY+24);
         }
         drawProcessingStageString(stack, selectedEntity.getProcessStage(), tX+6, tY+32);
         drawOutputTypeString(stack, "Item", tX+6, tY+40);
@@ -51,7 +53,7 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
 
     @NotNull
     private static String formatRecipeID(String recipe) {
-        return recipe.replace(recipe.subSequence(recipe.indexOf(":")+1, recipe.lastIndexOf("/")+1), "");
+        return recipe.replace(recipe.subSequence(0, recipe.lastIndexOf("/")+1), "");
     }
 
     //TODO make these translatable texts
