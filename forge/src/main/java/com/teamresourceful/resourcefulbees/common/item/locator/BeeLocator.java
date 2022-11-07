@@ -34,7 +34,7 @@ public class BeeLocator extends Item {
 
     public static void run(Player player, String bee, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (player.getCooldowns().isOnCooldown(stack.getItem())) return;
+        if (!player.getAbilities().instabuild && player.getCooldowns().isOnCooldown(stack.getItem())) return;
         if (!(stack.getItem() instanceof BeeLocator)) return;
         WorldWorkerManager.addWorker(new BeeLocatorWorker(player, hand, bee, 100));
     }

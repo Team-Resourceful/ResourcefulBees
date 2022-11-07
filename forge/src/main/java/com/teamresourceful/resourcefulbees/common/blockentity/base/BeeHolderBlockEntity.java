@@ -52,9 +52,9 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
 
         if (level != null && this.level.getBlockState(blockPos1).getCollisionShape(this.level, blockPos1).isEmpty()) {
             Entity entity = EntityType.loadEntityRecursive(nbt, this.level, entity1 -> entity1);
-            if (entity instanceof IBeeCompat beeCompat) {
+            if (entity != null) {
                 BeeInfoUtils.setEntityLocationAndAngle(blockPos, direction, entity);
-                deliverNectar(nbt, beeCompat);
+                deliverNectar(nbt, entity);
                 if (entity instanceof Animal animal) BeeInfoUtils.ageBee(apiaryBee.getTicksInHive(), animal);
                 level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
                 level.addFreshEntity(entity);
@@ -64,7 +64,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
         return false;
     }
 
-    protected abstract void deliverNectar(CompoundTag nbt, IBeeCompat bee);
+    protected abstract void deliverNectar(CompoundTag nbt, Entity bee);
 
     public void tryEnterHive(@NotNull Entity bee, boolean hasNectar, int ticksInHive) {
         if (this.level != null && hasSpace() && bee instanceof IBeeCompat beeCompat) {

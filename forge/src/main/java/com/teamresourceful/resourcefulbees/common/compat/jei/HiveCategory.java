@@ -2,12 +2,11 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -17,16 +16,17 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,28 +53,33 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
         apiaryBackground = guiHelper.drawableBuilder(HIVE_BACK, 0, 26, 160, 26).addPadding(0, 0, 0, 0).build();
     }
 
-    public static List<Recipe> getHoneycombRecipes() {
-        List<Recipe> recipes = BeeRegistry.getRegistry().getBees().values().stream().flatMap(HiveCategory::createRecipes).collect(Collectors.toList());
-        for (BeehiveTier tier : BeehiveTier.values()) {
-            recipes.add(new Recipe(Items.HONEYCOMB.getDefaultInstance(), getStacksFromRegister(tier.getDisplayItems()), EntityType.BEE, false));
-        }
-        for (ApiaryTier tier : ApiaryTier.values()) {
-            ItemStack output = new ItemStack(tier.getOutputType().isComb() ? Items.HONEYCOMB : Items.HONEYCOMB_BLOCK);
-            recipes.add(new Recipe(output, tier.getItem().getDefaultInstance(), EntityType.BEE, true));
-        }
-        return recipes;
+    public static List<Recipe> getHoneycombRecipes(Collection<HiveRecipe> recipes) {
+        return recipes.stream().flatMap(HiveCategory::createRecipes).collect(Collectors.toList());
     }
 
-    private static Stream<Recipe> createRecipes(CustomBeeData beeData){
+    private static Stream<Recipe> createRecipes(HiveRecipe recipe){
         List<Recipe> recipes = new ArrayList<>();
-        beeData.coreData().getHoneycombData().ifPresent(honeycombData -> {
-            for (BeehiveTier tier : BeehiveTier.values()) {
-                recipes.add(new Recipe(honeycombData.getHiveOutput(tier), getStacksFromRegister(tier.getDisplayItems()), beeData.getEntityType(), false));
-            }
-            for (ApiaryTier tier : ApiaryTier.values()) {
-                recipes.add(new Recipe(honeycombData.getApiaryOutput(tier), tier.getItem().getDefaultInstance(), beeData.getEntityType(), true));
-            }
-        });
+
+        for (BeehiveTier tier : BeehiveTier.values()) {
+            ItemStack stack = recipe.getHiveOutput(tier);
+            if (stack.isEmpty()) continue;
+            List<ItemStack> hives = getStacksFromRegister(tier.getDisplayItems());
+            recipe.bees().stream()
+                .filter(Holder::isBound)
+                .map(Holder::get)
+                .map(entity -> new Recipe(stack, hives, entity, false))
+                .forEach(recipes::add);
+        }
+
+        for (ApiaryTier tier : ApiaryTier.values()) {
+            ItemStack stack = recipe.getApiaryOutput(tier);
+            if (stack.isEmpty()) continue;
+            recipe.bees().stream()
+                .filter(Holder::isBound)
+                .map(Holder::get)
+                .map(entity -> new Recipe(stack, tier.getItem().getDefaultInstance(), entity, true))
+                .forEach(recipes::add);
+        }
         return recipes.stream();
     }
 

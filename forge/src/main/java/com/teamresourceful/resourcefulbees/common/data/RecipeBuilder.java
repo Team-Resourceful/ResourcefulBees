@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
@@ -9,17 +10,20 @@ import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.RecipeManagerAccessor;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
@@ -31,6 +35,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -75,6 +80,12 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
                     .forEach(this::addRecipe);
         }
 
+        BeeRegistry.getRegistry()
+            .getStreamOfBees()
+            .map(this::makeHiveRecipe)
+            .filter(Objects::nonNull)
+            .forEach(this::addRecipe);
+
         BeeRegistry.getRegistry().getFamilyTree().values().forEach(c -> c.forEach(f -> addRecipe(makeBreedingRecipe(c))));
     }
 
@@ -113,6 +124,19 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
     private BreederRecipe.BreederOutput makeOutput(BeeFamily family) {
         ItemStack childBeeJar = BeeJarIngredient.getBeeJar(family.getChildData().registryID(), family.getChildData().renderData().colorData().jarColor().getValue());
         return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().registryID().toString()), family.weight(), family.chance());
+    }
+
+    private Recipe<?> makeHiveRecipe(CustomBeeData bee) {
+        var optData = bee.coreData().getHoneycombData();
+        if (optData.isEmpty()) return null;
+        var data = optData.get();
+
+        return new HiveRecipe(
+            new ResourceLocation(ResourcefulBees.MOD_ID, bee.coreData().name().toLowerCase(Locale.ROOT) + "_hive_output"),
+            HolderSet.direct(EntityType::builtInRegistryHolder, bee.entityType().get()),
+            data.hiveCombs(),
+            data.apiaryCombs()
+        );
     }
 
     private Recipe<?> makeHoneycombRecipe(HoneycombItem comb) {

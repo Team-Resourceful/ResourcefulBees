@@ -17,10 +17,13 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.registration.*;
+import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +34,8 @@ import java.util.stream.Collectors;
 public class JEICompat implements IModPlugin {
 
     public static final IIngredientType<EntityIngredient> ENTITY_INGREDIENT = () -> EntityIngredient.class;
+
+    private static IJeiRuntime JEI_RUNTIME = null;
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
@@ -65,7 +70,7 @@ public class JEICompat implements IModPlugin {
         ClientLevel clientWorld = Minecraft.getInstance().level;
         if (clientWorld != null) {
             RecipeManager recipeManager = clientWorld.getRecipeManager();
-            registration.addRecipes(HiveCategory.RECIPE, HiveCategory.getHoneycombRecipes());
+            registration.addRecipes(HiveCategory.RECIPE, HiveCategory.getHoneycombRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.HIVE_RECIPE_TYPE.get())));
             registration.addRecipes(BeeBreedingCategory.RECIPE, BeeBreedingCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.BREEDER_RECIPE_TYPE.get())));
             registration.addRecipes(MutationCategory.RECIPE, MutationCategory.getMutationRecipes());
             registration.addRecipes(FlowersCategory.RECIPE, FlowersCategory.getFlowersRecipes());
@@ -95,6 +100,22 @@ public class JEICompat implements IModPlugin {
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addGhostIngredientHandler(CentrifugeInputScreen.class, new CentrifugeInputGhostIngredientHandler<>());
         registration.addGhostIngredientHandler(CentrifugeVoidScreen.class, new CentrifugeInputGhostIngredientHandler<>());
+    }
+
+    @Override
+    public void onRuntimeAvailable(@NotNull IJeiRuntime runtime) {
+        JEICompat.JEI_RUNTIME = runtime;
+    }
+
+    public static void searchEntity(EntityType<?> entity) {
+        if (JEI_RUNTIME != null) {
+            try {
+                var focus = JEI_RUNTIME.getJeiHelpers().getFocusFactory().createFocus(RecipeIngredientRole.INPUT, ENTITY_INGREDIENT, new EntityIngredient(entity, -45.0f));
+                JEI_RUNTIME.getRecipesGui().show(focus);
+            } catch (Exception ignored) {
+                //DO Nothing
+            }
+        }
     }
 
 
