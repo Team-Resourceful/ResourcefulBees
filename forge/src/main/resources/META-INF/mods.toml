@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[43,)"
 license="https://www.gnu.org/licenses/lgpl-3.0.en.html"
-issueTrackerURL="https://github.com/Resourceful-Bees/ResourcefulBees/issues/new/choose"
+issueTrackerURL="https://github.com/Team-Resourceful/ResourcefulBees/issues/new/choose"
 
 [[mods]]
     modId="resourcefulbees"
