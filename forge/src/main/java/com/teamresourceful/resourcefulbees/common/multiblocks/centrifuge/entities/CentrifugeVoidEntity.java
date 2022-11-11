@@ -15,15 +15,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 public class CentrifugeVoidEntity extends AbstractGUICentrifugeEntity {
 
     private final FilterInventory filterInventory;
 
-    public CentrifugeVoidEntity(RegistryObject<BlockEntityType<CentrifugeVoidEntity>> entityType, CentrifugeTier tier, BlockPos pos, BlockState state) {
+    public CentrifugeVoidEntity(Supplier<BlockEntityType<CentrifugeVoidEntity>> entityType, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(entityType.get(), tier, pos, state);
         this.filterInventory = new FilterInventory(tier.getSlots() * 2);
     }

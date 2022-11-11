@@ -3,10 +3,11 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistries;
+import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
+import net.minecraft.core.Registry;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,14 +20,14 @@ public final class ModEntities {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
     }
 
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, ResourcefulBees.MOD_ID);
-    private static final Map<String, RegistryObject<EntityType<? extends CustomBeeEntity>>> MOD_BEES = new HashMap<>();
+    public static final ResourcefulRegistry<EntityType<?>> ENTITY_TYPES = ResourcefulRegistries.create(Registry.ENTITY_TYPE, ResourcefulBees.MOD_ID);
+    private static final Map<String, RegistryEntry<EntityType<? extends CustomBeeEntity>>> MOD_BEES = new HashMap<>();
 
-    public static Map<String, RegistryObject<EntityType<? extends CustomBeeEntity>>> getModBees() {
+    public static Map<String, RegistryEntry<EntityType<? extends CustomBeeEntity>>> getModBees() {
         return MOD_BEES;
     }
 
-    public static Set<RegistryObject<EntityType<? extends CustomBeeEntity>>> getSetOfModBees() {
+    public static Set<RegistryEntry<EntityType<? extends CustomBeeEntity>>> getSetOfModBees() {
         return new HashSet<>(MOD_BEES.values());
     }
 }

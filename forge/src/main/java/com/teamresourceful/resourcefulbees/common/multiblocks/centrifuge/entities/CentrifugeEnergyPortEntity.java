@@ -10,14 +10,15 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.registries.RegistryObject;
 import net.roguelogix.phosphophyllite.multiblock2.validated.IValidatedMultiblock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Supplier;
+
 public class CentrifugeEnergyPortEntity extends AbstractTieredCentrifugeEntity implements IEnergyStorage {
 
-    public CentrifugeEnergyPortEntity(RegistryObject<BlockEntityType<CentrifugeEnergyPortEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
+    public CentrifugeEnergyPortEntity(Supplier<BlockEntityType<CentrifugeEnergyPortEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(tileType.get(), tier, pos, state);
     }
 

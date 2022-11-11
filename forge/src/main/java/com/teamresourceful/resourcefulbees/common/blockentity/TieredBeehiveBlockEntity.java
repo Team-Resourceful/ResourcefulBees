@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveBeeDataAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
@@ -37,7 +38,6 @@ import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,8 +55,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
         ModBlockEntityTypes.BLOCK_ENTITY_TYPES
             .getEntries()
             .stream()
-            .filter(RegistryObject::isPresent)
-            .map(RegistryObject::get)
+            .map(RegistryEntry::get)
             .filter(type -> type.isValid(block.defaultBlockState()))
             .findFirst()
             .orElse(null)

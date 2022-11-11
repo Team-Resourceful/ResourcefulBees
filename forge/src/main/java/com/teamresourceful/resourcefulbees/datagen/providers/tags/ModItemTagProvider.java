@@ -2,18 +2,16 @@ package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,10 +31,10 @@ public class ModItemTagProvider extends ItemTagsProvider {
         TagAppender<Item> t1Nests = tag(ModTags.Items.T1_NESTS);
         TagAppender<Item> t2Nests = tag(ModTags.Items.T2_NESTS);
         TagAppender<Item> t3Nests = tag(ModTags.Items.T3_NESTS);
-        ModItems.T1_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t0Nests));
-        ModItems.T2_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t1Nests));
-        ModItems.T3_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t2Nests));
-        ModItems.T4_NEST_ITEMS.getEntries().stream().map(RegistryObject::get).forEach(item -> addToBuilders(item, hiveBuilder, t3Nests));
+        ModItems.T1_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t0Nests));
+        ModItems.T2_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t1Nests));
+        ModItems.T3_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t2Nests));
+        ModItems.T4_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t3Nests));
         tag(ItemTags.SMALL_FLOWERS).add(ModItems.GOLD_FLOWER_ITEM.get());
         tag(ModTags.Items.WAX).add(ModItems.WAX.get());
         tag(ModTags.Items.WAX_BLOCK).add(ModItems.WAX_BLOCK_ITEM.get());

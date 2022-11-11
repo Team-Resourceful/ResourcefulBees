@@ -21,9 +21,10 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 import static net.roguelogix.phosphophyllite.multiblock2.IAssemblyStateBlock.ASSEMBLED;
 
@@ -33,7 +34,7 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
     private final LazyOptional<IFluidHandler> fluidOptional;
     private boolean voidExcess = true;
 
-    public CentrifugeFluidOutputEntity(RegistryObject<BlockEntityType<CentrifugeFluidOutputEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
+    public CentrifugeFluidOutputEntity(Supplier<BlockEntityType<CentrifugeFluidOutputEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(tileType.get(), tier, pos, state);
         this.fluidTank = new ExtractOnlyFluidTank(this.tier.getTankCapacity()) {
             @Override

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -10,7 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,15 +29,15 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         //noinspection unchecked
         tag(Tags.Blocks.STORAGE_BLOCKS).addTags(ModTags.Blocks.WAX);
         TagAppender<Block> hiveBuilder = tag(BlockTags.BEEHIVES);
-        ModBlocks.HIVES.getEntries().stream().map(RegistryObject::get).forEach(hiveBuilder::add);
-        ModBlocks.APIARIES.getEntries().stream().map(RegistryObject::get).forEach(hiveBuilder::add);
+        ModBlocks.HIVES.getEntries().stream().map(RegistryEntry::get).forEach(hiveBuilder::add);
+        ModBlocks.APIARIES.getEntries().stream().map(RegistryEntry::get).forEach(hiveBuilder::add);
 
         TagAppender<Block> axeTagBuilder = tag(BlockTags.MINEABLE_WITH_AXE);
-        ModBlocks.APIARIES.getEntries().stream().map(RegistryObject::get).forEach(axeTagBuilder::add);
+        ModBlocks.APIARIES.getEntries().stream().map(RegistryEntry::get).forEach(axeTagBuilder::add);
         axeTagBuilder.add(ModBlocks.BEEHOUSE_TOP.get(), ModBlocks.BREEDER_BLOCK.get(), ModBlocks.FLOW_HIVE.get());
 
         TagAppender<Block> pickaxeTagBuilder = tag(BlockTags.MINEABLE_WITH_PICKAXE);
-        ModBlocks.CENTRIFUGE_BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(pickaxeTagBuilder::add);
+        ModBlocks.CENTRIFUGE_BLOCKS.getEntries().stream().map(RegistryEntry::get).forEach(pickaxeTagBuilder::add);
         pickaxeTagBuilder.add(ModBlocks.HONEY_GENERATOR.get(), ModBlocks.ENDER_BEECON.get(), ModBlocks.SOLIDIFICATION_CHAMBER.get(), ModBlocks.HONEY_POT.get());
 
         tag(ModTags.Blocks.HEAT_SOURCES).add(Blocks.TORCH, Blocks.SOUL_TORCH, Blocks.WALL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.LAVA, Blocks.LAVA_CAULDRON,

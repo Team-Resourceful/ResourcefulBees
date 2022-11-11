@@ -21,16 +21,17 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 public class CentrifugeItemOutputEntity extends AbstractCentrifugeOutputEntity<ItemOutput, ItemStack> {
 
     private final InventoryHandler inventoryHandler;
     private final LazyOptional<IItemHandler> lazyOptional;
 
-    public CentrifugeItemOutputEntity(RegistryObject<BlockEntityType<CentrifugeItemOutputEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
+    public CentrifugeItemOutputEntity(Supplier<BlockEntityType<CentrifugeItemOutputEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(tileType.get(), tier, pos, state);
         this.inventoryHandler = new InventoryHandler(tier.getSlots());
         this.lazyOptional = LazyOptional.of(() -> inventoryHandler);

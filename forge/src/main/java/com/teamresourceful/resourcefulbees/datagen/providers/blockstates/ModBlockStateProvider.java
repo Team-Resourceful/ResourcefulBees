@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.blockstates;
 
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockStateProvider;
 import net.minecraft.data.DataGenerator;
@@ -9,7 +10,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
 
 public class ModBlockStateProvider extends BaseBlockStateProvider {
 
@@ -51,7 +51,7 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         simpleBlockWithItem(ModBlocks.WAX_BLOCK.get(), cubeAll(ModBlocks.WAX_BLOCK.get()));
     }
 
-    private void registerApiary(RegistryObject<Block> registryObject) {
+    private void registerApiary(RegistryEntry<Block> registryObject) {
         String name = registryObject.getId().getPath();
         ModelFile model = models().getBuilder(name)
                 .parent(models().getExistingFile(modLoc("block/beehouse")))
@@ -64,7 +64,7 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         this.simpleBlockItem(registryObject.get(), model);
     }
 
-    private void registerNest(RegistryObject<Block> registryObject) {
+    private void registerNest(RegistryEntry<Block> registryObject) {
         String name = registryObject.getId().getPath();
         ModelFile model = buildNestModel(name, false);
         ModelFile modelHoney = buildNestModel(name, true);

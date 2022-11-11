@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.bases;
 
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -9,7 +10,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -28,15 +28,15 @@ public class BaseBlockLootTable extends BlockLoot {
         knownBlocks.add(block);
     }
 
-    protected void add(RegistryObject<Block> registryObject, LootTable.@NotNull Builder builder){
+    protected void add(RegistryEntry<Block> registryObject, LootTable.@NotNull Builder builder){
         this.add(registryObject.get(), builder);
     }
 
-    protected void add(RegistryObject<Block> registryObject, Function<Block, LootTable.Builder> factory){
+    protected void add(RegistryEntry<Block> registryObject, Function<Block, LootTable.Builder> factory){
         this.add(registryObject.get(), factory);
     }
 
-    protected void dropSelf(RegistryObject<? extends Block> registryObject) {
+    protected void dropSelf(RegistryEntry<? extends Block> registryObject) {
         this.dropSelf(registryObject.get());
     }
 

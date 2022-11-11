@@ -7,15 +7,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class AdvancedShapedRecipeBuilder {
 
     private final ShapedRecipeBuilder builder;
 
-    public static AdvancedShapedRecipeBuilder shaped(RegistryObject<Item> result){
+    public static AdvancedShapedRecipeBuilder shaped(Supplier<Item> result){
         return new AdvancedShapedRecipeBuilder(result.get());
     }
 
@@ -23,7 +23,7 @@ public class AdvancedShapedRecipeBuilder {
         return new AdvancedShapedRecipeBuilder(result);
     }
 
-    public static AdvancedShapedRecipeBuilder shaped(RegistryObject<Item> result, int qty){
+    public static AdvancedShapedRecipeBuilder shaped(Supplier<Item> result, int qty){
         return new AdvancedShapedRecipeBuilder(result.get(), qty);
     }
 

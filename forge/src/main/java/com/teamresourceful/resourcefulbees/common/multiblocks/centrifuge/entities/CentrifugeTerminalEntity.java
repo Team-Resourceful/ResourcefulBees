@@ -10,13 +10,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Supplier;
+
 public class CentrifugeTerminalEntity extends AbstractGUICentrifugeEntity {
 
-    public CentrifugeTerminalEntity(RegistryObject<BlockEntityType<CentrifugeTerminalEntity>> entityType, CentrifugeTier tier, BlockPos pos, BlockState state) {
+    public CentrifugeTerminalEntity(Supplier<BlockEntityType<CentrifugeTerminalEntity>> entityType, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(entityType.get(), tier, pos, state);
     }
 

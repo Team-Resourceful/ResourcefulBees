@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.loottables;
 
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockLootTable;
@@ -19,7 +20,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraftforge.registries.RegistryObject;
+
+import java.util.function.Supplier;
 
 public class BlockLootTables extends BaseBlockLootTable {
 
@@ -68,7 +70,7 @@ public class BlockLootTables extends BaseBlockLootTable {
         addBeeBox(ModBlocks.BEE_BOX_TEMP, true);
     }
 
-    private void addBeeBox(RegistryObject<Block> box, boolean temp) {
+    private void addBeeBox(Supplier<Block> box, boolean temp) {
         Block block = box.get();
 
         LootPoolEntryContainer.Builder<?> drop = LootItem.lootTableItem(block)
@@ -90,7 +92,7 @@ public class BlockLootTables extends BaseBlockLootTable {
         ));
     }
 
-    private void addNest(RegistryObject<Block> nest) {
+    private void addNest(RegistryEntry<Block> nest) {
         Block block = nest.get();
         add(block, LootTable.lootTable().withPool(getNestPool(block)));
     }

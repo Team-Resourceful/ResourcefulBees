@@ -6,15 +6,16 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Supplier;
+
 public class TickingBlock<E extends BlockEntity & InstanceBlockEntityTicker> extends RenderingBaseEntityBlock {
 
-    private final RegistryObject<BlockEntityType<E>> blockEntity;
+    private final Supplier<BlockEntityType<E>> blockEntity;
 
-    public TickingBlock(RegistryObject<BlockEntityType<E>> blockEntity, Properties properties) {
+    public TickingBlock(Supplier<BlockEntityType<E>> blockEntity, Properties properties) {
         super(properties);
         this.blockEntity = blockEntity;
     }

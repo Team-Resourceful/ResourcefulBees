@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ScraperDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
@@ -19,7 +20,6 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegistryObject;
 
 public final class RegistryHandler {
 
@@ -29,20 +29,21 @@ public final class RegistryHandler {
 
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModItems.initializeRegistries(bus);
-        ModBlocks.initializeRegistries(bus);
-        ModEffects.EFFECTS.register(bus);
-        ModFluids.initializeRegistries(bus);
-        ModEntities.ENTITY_TYPES.register(bus);
-        ModBlockEntityTypes.BLOCK_ENTITY_TYPES.register(bus);
-        ModEnchantments.ENCHANTMENTS.register(bus);
-        ModPOIs.POIS.register(bus);
-        ModPotions.POTIONS.register(bus);
-        ModMenus.CONTAINER_TYPES.register(bus);
-        ModRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
-        ModRecipeTypes.RECIPE_TYPES.register(bus);
-        ModVillagerProfessions.PROFESSIONS.register(bus);
-        ModFeatures.FEATURES.register(bus);
+        ModItems.ITEMS.init();
+        ModBlocks.BLOCKS.init();
+        ModEffects.EFFECTS.init();
+        ModFluids.FLUIDS.init();
+        ModFluids.FLUID_TYPES.register(bus);
+        ModEntities.ENTITY_TYPES.init();
+        ModBlockEntityTypes.BLOCK_ENTITY_TYPES.init();
+        ModEnchantments.ENCHANTMENTS.init();
+        ModPOIs.POIS.init();
+        ModPotions.POTIONS.init();
+        ModMenus.CONTAINER_TYPES.init();
+        ModRecipeSerializers.RECIPE_SERIALIZERS.init();
+        ModRecipeTypes.RECIPE_TYPES.init();
+        ModVillagerProfessions.PROFESSIONS.init();
+        ModFeatures.FEATURES.init();
         ModBiomeModifiers.MODIFIERS.register(bus);
         initOwnRegistries(bus);
     }
@@ -67,7 +68,7 @@ public final class RegistryHandler {
     }
 
     private static void registerBee(String name, float sizeModifier) {
-        RegistryObject<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.ENTITY_TYPES.register(name + "_bee",
+        RegistryEntry<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.ENTITY_TYPES.register(name + "_bee",
                 () -> CustomBeeEntityType.of(name, (type, world) -> new ResourcefulBee(type, world, name), 0.7F * sizeModifier, 0.6F * sizeModifier));
         ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> new BeeSpawnEggItem(beeEntityType, name));
         ModEntities.getModBees().put(name, beeEntityType);

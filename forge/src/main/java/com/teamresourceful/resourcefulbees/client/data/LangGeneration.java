@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
@@ -17,7 +18,6 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileWriter;
@@ -96,8 +96,12 @@ public final class LangGeneration {
     }
 
     private static void generateLang(DeferredRegister<?> register, String prefix, JsonObject object){
-        register.getEntries().stream()
-                .filter(RegistryObject::isPresent)
+        register.getEntries()
+                .forEach(registryObject -> object.addProperty(prefix + registryObject.getId().getPath(), replaceAndCapitalize(registryObject.getId().getPath())));
+    }
+
+    private static void generateLang(ResourcefulRegistry<?> register, String prefix, JsonObject object){
+        register.getEntries()
                 .forEach(registryObject -> object.addProperty(prefix + registryObject.getId().getPath(), replaceAndCapitalize(registryObject.getId().getPath())));
     }
 

@@ -5,16 +5,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.RegistryObject;
 import net.roguelogix.phosphophyllite.multiblock2.IAssemblyStateBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Supplier;
+
 public class CentrifugeInput extends AbstractGUICentrifuge implements IAssemblyStateBlock {
 
-    private final RegistryObject<BlockEntityType<CentrifugeInputEntity>> entityType;
+    private final Supplier<BlockEntityType<CentrifugeInputEntity>> entityType;
 
-    public CentrifugeInput(@NotNull Properties properties, RegistryObject<BlockEntityType<CentrifugeInputEntity>> entityType) {
+    public CentrifugeInput(@NotNull Properties properties, Supplier<BlockEntityType<CentrifugeInputEntity>> entityType) {
         super(properties);
         this.entityType = entityType;
     }

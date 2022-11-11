@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.client.color.item.ItemColor;
@@ -14,7 +15,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -39,19 +39,17 @@ public final class ColorHandler {
         registerBlocks(event, CustomHoneyBlock::getBlockColor, ModBlocks.HONEY_BLOCKS.getEntries());
     }
 
-    private static void registerItems(RegisterColorHandlersEvent.Item handler, ItemColor itemColor, Collection<RegistryObject<Item>> items) {
+    private static void registerItems(RegisterColorHandlersEvent.Item handler, ItemColor itemColor, Collection<RegistryEntry<Item>> items) {
         if (items.isEmpty()) return;
         items.stream()
-            .filter(RegistryObject::isPresent)
-            .map(RegistryObject::get)
+            .map(RegistryEntry::get)
             .forEach(item -> handler.register(itemColor, item));
     }
 
-    private static void registerBlocks(RegisterColorHandlersEvent.Block handler, Function<BlockState, Integer> blockColor, Collection<RegistryObject<Block>> blocks) {
+    private static void registerBlocks(RegisterColorHandlersEvent.Block handler, Function<BlockState, Integer> blockColor, Collection<RegistryEntry<Block>> blocks) {
         if (blocks.isEmpty()) return;
         blocks.stream()
-            .filter(RegistryObject::isPresent)
-            .map(RegistryObject::get)
+            .map(RegistryEntry::get)
             .forEach(block -> handler.register((state, a, b, c) -> blockColor.apply(state), block));
     }
 }

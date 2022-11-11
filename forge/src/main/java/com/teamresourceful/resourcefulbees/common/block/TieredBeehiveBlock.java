@@ -45,23 +45,23 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip {
 
     private static final MutableComponent NONE_TEXT = Component.literal("     NONE");
     //public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 1, 4);
 
-    private final RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
+    private final Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
     private final BeehiveTier tier;
 
-    public TieredBeehiveBlock(RegistryObject<BlockEntityType<TieredBeehiveBlockEntity>> entityType, BeehiveTier tier, Properties properties) {
+    public TieredBeehiveBlock(Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType, BeehiveTier tier, Properties properties) {
         super(properties);
         this.entityType = entityType;
         this.tier = tier;

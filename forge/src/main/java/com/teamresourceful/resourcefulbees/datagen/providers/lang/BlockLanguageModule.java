@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.text.WordUtils;
 
 public class BlockLanguageModule implements LanguageModule {
@@ -41,7 +41,7 @@ public class BlockLanguageModule implements LanguageModule {
         ModBlocks.HIVES.getEntries().forEach(registryObject -> addNest(provider, registryObject));
     }
 
-    private void addNest(BaseLanguageProvider provider, RegistryObject<Block> registryObject) {
+    private void addNest(BaseLanguageProvider provider, RegistryEntry<Block> registryObject) {
         String[] ids = registryObject.getId().getPath().split("/");
         //noinspection deprecation
         String name = WordUtils.capitalize(ids[1].replace("_", " "));

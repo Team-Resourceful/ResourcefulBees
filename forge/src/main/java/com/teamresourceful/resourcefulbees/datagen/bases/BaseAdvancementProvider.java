@@ -16,13 +16,13 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public abstract class BaseAdvancementProvider implements DataProvider {
 
@@ -39,7 +39,7 @@ public abstract class BaseAdvancementProvider implements DataProvider {
 
     public abstract void buildAdvancements();
 
-    protected static Advancement createRootAdvancement(RegistryObject<Item> item, Component title, Component desc, ResourceLocation background, ItemPredicate predicate) {
+    protected static Advancement createRootAdvancement(Supplier<Item> item, Component title, Component desc, ResourceLocation background, ItemPredicate predicate) {
         return Advancement.Builder.advancement()
                 .display(item.get().getDefaultInstance(),
                         title,
@@ -59,13 +59,13 @@ public abstract class BaseAdvancementProvider implements DataProvider {
                 .parent(parent);
     }
 
-    protected static Advancement.Builder createAdvancement(RegistryObject<Item> item, String id, Advancement parent) {
+    protected static Advancement.Builder createAdvancement(Supplier<Item> item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
                 .display(item.get().getDefaultInstance(), Component.translatable(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), Component.translatable(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.TASK, true, true, false)
                 .parent(parent);
     }
 
-    protected static Advancement createSimpleAdvancement(RegistryObject<Item> item, String id, Advancement parent) {
+    protected static Advancement createSimpleAdvancement(Supplier<Item> item, String id, Advancement parent) {
         return createAdvancement(item, id, parent)
                 .addCriterion("has_"+id, has(item.get()))
                 .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/"+id));
@@ -77,13 +77,13 @@ public abstract class BaseAdvancementProvider implements DataProvider {
                 .parent(parent);
     }
 
-    protected static Advancement.Builder createChallengeAchievement(RegistryObject<Item> item, String id, Advancement parent) {
+    protected static Advancement.Builder createChallengeAchievement(Supplier<Item> item, String id, Advancement parent) {
         return Advancement.Builder.advancement()
                 .display(item.get().getDefaultInstance(), Component.translatable(TRANSLATIONS_PREFIX+id+TITLE_SUFFIX), Component.translatable(TRANSLATIONS_PREFIX+id+DESCRIPTION_SUFFIX), null, FrameType.CHALLENGE, true, true, true)
                 .parent(parent);
     }
 
-    protected static Advancement createSimpleChallengeAchievement(RegistryObject<Item> item, String id, Advancement parent) {
+    protected static Advancement createSimpleChallengeAchievement(Supplier<Item> item, String id, Advancement parent) {
         return createChallengeAchievement(item, id, parent)
                 .addCriterion("has_"+id, has(item.get()))
                 .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/"+id));

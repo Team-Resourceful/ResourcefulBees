@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.datagen.bases;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.common.lib.annotations.Translate;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
@@ -11,7 +12,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
@@ -127,7 +127,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         add(fluid.get().getDescriptionId(), name);
     }
 
-    public void addPotion(RegistryObject<Potion> key, String name){
+    public void addPotion(RegistryEntry<Potion> key, String name){
         String id = key.getId().getPath();
         add("item.minecraft.potion.effect."+id, name+" Potion");
         add("item.minecraft.splash_potion.effect."+id, "Splash Potion of "+name);

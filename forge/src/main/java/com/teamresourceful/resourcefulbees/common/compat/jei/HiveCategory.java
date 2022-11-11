@@ -19,10 +19,7 @@ import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -38,7 +35,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
     public static final RecipeType<Recipe> RECIPE = new RecipeType<>(ID, Recipe.class);
 
-    protected static final List<ItemStack> NESTS_0 = getStacksFromRegister(ModItems.T1_NEST_ITEMS);
+    protected static final List<ItemStack> NESTS_0 = BeehiveTier.T1_NEST.getDisplayItems().get().stream().map(ItemStack::new).collect(Collectors.toList());
 
     private final IDrawable hiveBackground;
     private final IDrawable apiaryBackground;
@@ -63,7 +60,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
         for (BeehiveTier tier : BeehiveTier.values()) {
             ItemStack stack = recipe.getHiveOutput(tier);
             if (stack.isEmpty()) continue;
-            List<ItemStack> hives = getStacksFromRegister(tier.getDisplayItems());
+            List<ItemStack> hives = tier.getDisplayItems().get().stream().map(ItemStack::new).toList();
             recipe.bees().stream()
                 .filter(Holder::isBound)
                 .map(Holder::get)
@@ -81,10 +78,6 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
                 .forEach(recipes::add);
         }
         return recipes.stream();
-    }
-
-    private static List<ItemStack> getStacksFromRegister(DeferredRegister<Item> register) {
-        return register.getEntries().stream().filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).toList();
     }
 
     @Override

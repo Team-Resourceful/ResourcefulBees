@@ -35,7 +35,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.registries.RegistryObject;
 import net.roguelogix.phosphophyllite.multiblock2.common.ITickablePartsMultiblock;
 import net.roguelogix.phosphophyllite.multiblock2.validated.IValidatedMultiblock;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implements ITickablePartsMultiblock.Tickable {
 
@@ -63,7 +63,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     private int processQuantity; //# of inputs being currently being processed
     private ProcessStage processStage = ProcessStage.IDLE;
 
-    public CentrifugeInputEntity(RegistryObject<BlockEntityType<CentrifugeInputEntity>> entityType, CentrifugeTier tier, BlockPos pos, BlockState state) {
+    public CentrifugeInputEntity(Supplier<BlockEntityType<CentrifugeInputEntity>> entityType, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(entityType.get(), tier, pos, state);
         this.inventoryHandler = new InventoryHandler(tier.getSlots());
         this.lazyOptional = LazyOptional.of(() -> inventoryHandler);

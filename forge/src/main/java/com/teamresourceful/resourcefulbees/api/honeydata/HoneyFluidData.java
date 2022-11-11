@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.fluids.HoneyFluidRenderProperties;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
@@ -55,10 +56,10 @@ public record HoneyFluidData(boolean generate, String name, FluidRenderData rend
             ForgeFlowingFluid.Properties[] properties = {null};
 
             RegistryObject<FluidType> fluidType = ModFluids.FLUID_TYPES.register(name + "_honey", () -> honeyFluid(attributes.getProperties(), renderData));
-            RegistryObject<FlowingFluid> stillFluidRegistry = ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey", () -> new CustomHoneyFluid.Source(properties[0], this));
-            RegistryObject<FlowingFluid> flowingFluidRegistry = ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_flowing", () -> new CustomHoneyFluid.Flowing(properties[0], this));
-            RegistryObject<Item> fluidBucketRegistry = ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", () -> new CustomHoneyBucketItem(stillFluidRegistry, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY).craftRemainder(Items.BUCKET).stacksTo(1), this));
-            RegistryObject<LiquidBlock> blockFluidRegistry = ModBlocks.HONEY_FLUID_BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluidRegistry, ModBlocks.HONEY_FLUID_BLOCK_PROPERTIES, this));
+            RegistryEntry<FlowingFluid> stillFluidRegistry = ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey", () -> new CustomHoneyFluid.Source(properties[0], this));
+            RegistryEntry<FlowingFluid> flowingFluidRegistry = ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_flowing", () -> new CustomHoneyFluid.Flowing(properties[0], this));
+            RegistryEntry<Item> fluidBucketRegistry = ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", () -> new CustomHoneyBucketItem(stillFluidRegistry, new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY).craftRemainder(Items.BUCKET).stacksTo(1), this));
+            RegistryEntry<LiquidBlock> blockFluidRegistry = ModBlocks.HONEY_FLUID_BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluidRegistry, ModBlocks.HONEY_FLUID_BLOCK_PROPERTIES, this));
 
             properties[0] = new ForgeFlowingFluid.Properties(fluidType, stillFluidRegistry, flowingFluidRegistry)
                     .bucket(fluidBucketRegistry)

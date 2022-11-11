@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
@@ -20,7 +21,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.RegistryObject;
 
 public record HoneyBlockData(boolean generate, String name, Color color, float jumpFactor, float speedFactor, LazyHolder<Item> blockItem, LazyHolder<Block> block) {
 
@@ -42,7 +42,7 @@ public record HoneyBlockData(boolean generate, String name, Color color, float j
 
     public HoneyBlockData {
         if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_BLOCKS.get()) && generate && HoneyRegistry.getRegistry().canGenerate()) {
-            RegistryObject<Block> honeyBlock = ModBlocks.HONEY_BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(this));
+            RegistryEntry<Block> honeyBlock = ModBlocks.HONEY_BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(this));
             ModItems.HONEY_BLOCK_ITEMS.register(name + "_honey_block", () -> new BlockItem(honeyBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY)));
         }
     }

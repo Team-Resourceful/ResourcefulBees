@@ -4,6 +4,7 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.client.Minecraft;
@@ -19,7 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Map;
 
@@ -34,9 +34,7 @@ public final class ModelHandler {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
     }
 
-    private static void registerGenericBlockState(ModelEvent.RegisterAdditional event, RegistryObject<Block> block, String parentModel, RenderType renderType, ResourceManager resourceManager) {
-        if (!block.isPresent()) return;
-
+    private static void registerGenericBlockState(ModelEvent.RegisterAdditional event, RegistryEntry<Block> block, String parentModel, RenderType renderType, ResourceManager resourceManager) {
         if (resourceManager.getResource(new ResourceLocation(ResourcefulBees.MOD_ID, "blockstates/" + block.getId().getPath() + JSON_FILE_EXTENSION)).isEmpty()) {
             block.get().getStateDefinition().getPossibleStates().forEach(state -> {
                 String propertyMapString = BlockModelShaper.statePropertiesToString(state.getValues());
@@ -47,8 +45,8 @@ public final class ModelHandler {
         }
     }
 
-    private static void registerGenericItem(ModelEvent.RegisterAdditional event, RegistryObject<Item> item, String parentModel, ResourceManager resourceManager) {
-        if (item.isPresent() && resourceManager.getResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + item.getId().getPath() + JSON_FILE_EXTENSION)).isEmpty()) {
+    private static void registerGenericItem(ModelEvent.RegisterAdditional event, RegistryEntry<Item> item, String parentModel, ResourceManager resourceManager) {
+        if (resourceManager.getResource(new ResourceLocation(ResourcefulBees.MOD_ID, ITEM_MODEL_PATH + item.getId().getPath() + JSON_FILE_EXTENSION)).isEmpty()) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(parentModel, MODEL_INVENTORY_TAG);
             event.register(defaultModelLocation);
             MODEL_MAP.put(defaultModelLocation, new ModelResourceLocation(item.getId(), MODEL_INVENTORY_TAG));

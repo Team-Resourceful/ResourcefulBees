@@ -12,6 +12,7 @@ import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngre
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -31,7 +32,6 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -55,8 +55,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         if (Boolean.TRUE.equals(CommonConfig.HONEYCOMB_BLOCK_RECIPES.get())) {
             LOGGER.info("Generating comb recipes for {} honeycombs...", ModItems.HONEYCOMB_ITEMS.getEntries().size());
             ModItems.HONEYCOMB_ITEMS.getEntries().stream()
-                    .filter(RegistryObject::isPresent)
-                    .map(RegistryObject::get)
+                    .map(RegistryEntry::get)
                     .filter(HoneycombItem.class::isInstance)
                     .map(HoneycombItem.class::cast)
                     .filter(HoneycombItem::hasStorageBlockItem)

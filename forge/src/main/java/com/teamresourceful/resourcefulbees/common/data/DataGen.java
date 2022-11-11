@@ -2,14 +2,13 @@ package com.teamresourceful.resourcefulbees.common.data;
 
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.versions.forge.ForgeVersion;
 
 import java.util.Collections;
@@ -54,24 +53,21 @@ public final class DataGen {
     private static void generateBeeTags() {
         TAGS.put(new ResourceLocation("minecraft", "tags/entity_types/beehive_inhabitors.json"),
                 ModEntities.getSetOfModBees().stream()
-                        .map(RegistryObject::get)
-                        .map(Registry.ENTITY_TYPE::getKey)
+                        .map(RegistryEntry::getId)
                         .collect(Collectors.toSet()));
     }
 
     private static void generateHoneyTags() {
         TAGS.put(new ResourceLocation("forge", "tags/fluids/honey.json"),
                 Stream.concat(ModFluids.FLOWING_HONEY_FLUIDS.getEntries().stream(), ModFluids.STILL_HONEY_FLUIDS.getEntries().stream())
-                        .filter(RegistryObject::isPresent)
-                        .map(RegistryObject::getId)
+                        .map(RegistryEntry::getId)
                         .collect(Collectors.toSet()));
     }
 
-    private static void generateTags(DeferredRegister<?> register, ResourceLocation resourceLocation) {
+    private static void generateTags(ResourcefulRegistry<?> register, ResourceLocation resourceLocation) {
         TAGS.put(resourceLocation,
                 register.getEntries().stream()
-                        .filter(RegistryObject::isPresent)
-                        .map(RegistryObject::getId)
+                        .map(RegistryEntry::getId)
                         .collect(Collectors.toSet()));
     }
 }

@@ -7,18 +7,19 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Supplier;
+
 public class HoneycombItem extends net.minecraft.world.item.HoneycombItem {
 
-    private final RegistryObject<Item> storageBlock;
+    private final Supplier<Item> storageBlock;
     private final Color color;
     private final boolean isEdible;
     private final boolean enchanted;
 
-    public HoneycombItem(Color color, boolean isEdible, RegistryObject<Item> storageBlock, boolean enchanted) {
+    public HoneycombItem(Color color, boolean isEdible, Supplier<Item> storageBlock, boolean enchanted) {
         super(new Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_COMBS));
         this.color = color;
         this.isEdible = isEdible;
