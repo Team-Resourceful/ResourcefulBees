@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 public enum BeehiveTier implements IExtensibleEnum, StringRepresentable {
     T1_NEST("t1", 2, 4, 2.0, ModItems.T1_NEST_ITEMS),
-    T2_NEST("t2", 4, 8, 1.3, ModItems.T2_NEST_ITEMS),
-    T3_NEST("t3", 6, 16, 1.2, ModItems.T3_NEST_ITEMS),
+    T2_NEST("t2", 4, 8, 1.6, ModItems.T2_NEST_ITEMS),
+    T3_NEST("t3", 6, 16, 1.3, ModItems.T3_NEST_ITEMS),
     T4_NEST("t4", 8, 32, 1.0, ModItems.T4_NEST_ITEMS);
 
     public static final Codec<BeehiveTier> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(BeehiveTier::values, BeehiveTier::byName);

@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "C": {
-      "tag": "forge:honeycombs"
-    },
-    "M": {
+    "W": {
       "item": "resourcefulbees:waxed_planks"
     },
-    "S": {
-      "tag": "forge:wax"
+    "I": {
+      "tag": "forge:nuggets/iron"
+    },
+    "H": {
+      "tag": "forge:honeycombs"
     }
   },
   "pattern": [
-    "CSC",
-    "SMS",
-    "CSC"
+    "HIH",
+    "IWI",
+    "HIH"
   ],
   "result": {
     "item": "resourcefulbees:t2_nest_upgrade"

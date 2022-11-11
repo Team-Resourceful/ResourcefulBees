@@ -42,7 +42,6 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
 
         probeInfo.horizontal()
                 .vertical()
-                .text(Component.translatable(TranslationConstants.Top.TIER, getHiveTier(blockState)))
                 .text(Component.translatable(TranslationConstants.Top.BEES, getHiveBeeCount(tileEntity), getHiveMaxBees(blockState)))
                 .text(Component.translatable(TranslationConstants.Top.HONEY_LEVEL, getHoneyLevel(tileEntity)))
                 .text(Component.translatable(TranslationConstants.Top.SMOKED, getSmokedStatus(tileEntity)));
@@ -69,15 +68,6 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
     @NotNull
     private String getSmokedStatus(TieredBeehiveBlockEntity tileEntity) {
         return String.valueOf(tileEntity.isSedated());
-    }
-
-    @NotNull
-    private String getHiveTier(BlockState state) {
-        if (state.getBlock() instanceof TieredBeehiveBlock tieredBeehiveBlock) {
-            //TODO change to fancy name.
-            return tieredBeehiveBlock.getTier().getName();
-        }
-        return "ERROR";
     }
 
     private String getHoneyLevel(TieredBeehiveBlockEntity tileEntity) {

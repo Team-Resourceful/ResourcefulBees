@@ -18,10 +18,10 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public enum ApiaryTier implements IExtensibleEnum, StringRepresentable {
-    T1_APIARY("t1_apiary", 8, 0.8, () -> CommonConfig.T1_APIARY_OUTPUT.get(), () -> CommonConfig.T1_APIARY_QUANTITY.get(), ModBlockEntityTypes.T1_APIARY_ENTITY, ModItems.T1_APIARY_ITEM),
-    T2_APIARY("t2_apiary", 12, 0.7, () -> CommonConfig.T2_APIARY_OUTPUT.get(), () -> CommonConfig.T2_APIARY_QUANTITY.get(), ModBlockEntityTypes.T2_APIARY_ENTITY, ModItems.T2_APIARY_ITEM),
-    T3_APIARY("t3_apiary", 16, 0.6, () -> CommonConfig.T3_APIARY_OUTPUT.get(), () -> CommonConfig.T3_APIARY_QUANTITY.get(), ModBlockEntityTypes.T3_APIARY_ENTITY, ModItems.T3_APIARY_ITEM),
-    T4_APIARY("t4_apiary", 20, 0.5, () -> CommonConfig.T4_APIARY_OUTPUT.get(), () -> CommonConfig.T4_APIARY_QUANTITY.get(), ModBlockEntityTypes.T4_APIARY_ENTITY, ModItems.T4_APIARY_ITEM);
+    T1_APIARY("t1_apiary", 8, 0.8, CommonConfig.T1_APIARY_OUTPUT, CommonConfig.T1_APIARY_QUANTITY::get, ModBlockEntityTypes.T1_APIARY_ENTITY, ModItems.T1_APIARY_ITEM),
+    T2_APIARY("t2_apiary", 12, 0.7, CommonConfig.T2_APIARY_OUTPUT, CommonConfig.T2_APIARY_QUANTITY::get, ModBlockEntityTypes.T2_APIARY_ENTITY, ModItems.T2_APIARY_ITEM),
+    T3_APIARY("t3_apiary", 16, 0.6, CommonConfig.T3_APIARY_OUTPUT, CommonConfig.T3_APIARY_QUANTITY::get, ModBlockEntityTypes.T3_APIARY_ENTITY, ModItems.T3_APIARY_ITEM),
+    T4_APIARY("t4_apiary", 20, 0.5, CommonConfig.T4_APIARY_OUTPUT, CommonConfig.T4_APIARY_QUANTITY::get, ModBlockEntityTypes.T4_APIARY_ENTITY, ModItems.T4_APIARY_ITEM);
 
     public static final Codec<ApiaryTier> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(ApiaryTier::values, ApiaryTier::byName);
     private static final Map<String, ApiaryTier> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(ApiaryTier::getName, tier -> tier));

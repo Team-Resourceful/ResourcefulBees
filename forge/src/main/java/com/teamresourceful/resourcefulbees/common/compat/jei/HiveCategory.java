@@ -84,7 +84,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     }
 
     private static List<ItemStack> getStacksFromRegister(DeferredRegister<Item> register) {
-        return register.getEntries().stream().filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).collect(Collectors.toList());
+        return register.getEntries().stream().filter(RegistryObject::isPresent).map(RegistryObject::get).map(Item::getDefaultInstance).toList();
     }
 
     @Override

@@ -42,4 +42,4 @@
 
 For questions contact us via discord https://discord.gg/resourcefulbees
 
-For proposing changes to this document create a [new issue](https://github.com/Resourceful-Bees/ResourcefulBees/issues/new/choose).
+For proposing changes to this document create a [new issue](https://github.com/Team-Resourceful/ResourcefulBees/issues/new/choose).

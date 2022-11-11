@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients":  [
+    {"item": "resourcefulbees:honey_glass_player"}
+  ],
+  "result": {
+    "item": "resourcefulbees:honey_glass"
+  }
+}

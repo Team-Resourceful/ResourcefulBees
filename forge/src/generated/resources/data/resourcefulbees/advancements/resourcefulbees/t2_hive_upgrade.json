@@ -1,5 +1,5 @@
 {
-  "parent": "resourcefulbees:resourcefulbees/t1_hive_upgrade",
+  "parent": "resourcefulbees:resourcefulbees/obtain_bee_nest",
   "criteria": {
     "has_t2_hive_upgrade": {
       "conditions": {
