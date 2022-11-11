@@ -9,6 +9,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,11 +25,18 @@ public abstract class AbstractGUICentrifuge extends AbstractCentrifuge {
     @Override
     public @NotNull InteractionResult onUse(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (hand == InteractionHand.MAIN_HAND && state.hasProperty(ASSEMBLED) && Boolean.TRUE.equals(state.getValue(ASSEMBLED))) {
-            if (!level.isClientSide && level.getBlockEntity(pos) instanceof AbstractGUICentrifugeEntity entity) {
-                NetworkHooks.openScreen((ServerPlayer) player, entity, entity::getOpenGUIPacket);
+            if (level.getBlockEntity(pos) instanceof AbstractGUICentrifugeEntity entity) {
+                if (player.getItemInHand(hand).getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+                    entity.getCapability(ForgeCapabilities.FLUID_HANDLER)
+                            .ifPresent(handler -> FluidUtil.interactWithFluidHandler(player, hand, level, pos, null));
+                } else if (!player.isShiftKeyDown() && !level.isClientSide) {
+                    NetworkHooks.openScreen((ServerPlayer) player, entity, entity::getOpenGUIPacket);
+                }
             }
             return InteractionResult.SUCCESS;
         }
         return super.onUse(state, level, pos, player, hand, hitResult);
     }
+
+
 }

@@ -25,15 +25,17 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static net.roguelogix.phosphophyllite.multiblock2.IAssemblyStateBlock.ASSEMBLED;
+
 public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<FluidOutput, FluidStack> {
 
-    private final FluidTank fluidTank;
+    private final ExtractOnlyFluidTank fluidTank;
     private final LazyOptional<IFluidHandler> fluidOptional;
     private boolean voidExcess = true;
 
     public CentrifugeFluidOutputEntity(RegistryObject<BlockEntityType<CentrifugeFluidOutputEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(tileType.get(), tier, pos, state);
-        this.fluidTank = new FluidTank(this.tier.getTankCapacity()) {
+        this.fluidTank = new ExtractOnlyFluidTank(this.tier.getTankCapacity()) {
             @Override
             protected void onContentsChanged() {
                 sendToPlayersTrackingChunk();
@@ -43,7 +45,7 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
         this.fluidOptional = LazyOptional.of(() -> fluidTank);
     }
 
-    public FluidTank getFluidTank() {
+    public ExtractOnlyFluidTank getFluidTank() {
         return fluidTank;
     }
 
@@ -69,7 +71,11 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
     @NotNull
     @Override
     public <T> LazyOptional<T> capability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap.equals(ForgeCapabilities.FLUID_HANDLER) ? fluidOptional.cast() : super.capability(cap, side);
+        return cap.equals(ForgeCapabilities.FLUID_HANDLER)
+                && this.getBlockState().hasProperty(ASSEMBLED)
+                && Boolean.TRUE.equals(this.getBlockState().getValue(ASSEMBLED))
+                ? fluidOptional.cast()
+                : super.capability(cap, side);
     }
 
     public boolean depositResult(FluidOutput result, int processQuantity) {
@@ -77,7 +83,7 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
         CentrifugeController controller = nullableController();
         if (fluidStack.isEmpty() || controller != null && controller.dumpsContainFluid(fluidStack)) return true;
         if ((voidExcess || simulateDeposit(fluidStack))) {
-            fluidTank.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+            fluidTank.fillTank(fluidStack, IFluidHandler.FluidAction.EXECUTE);
             return true;
         }
         return false;
@@ -130,4 +136,22 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
     }
 
     //endregion
+
+    public static class ExtractOnlyFluidTank extends FluidTank {
+
+        public ExtractOnlyFluidTank(int capacity) {
+            super(capacity);
+        }
+
+        @Override
+        public int fill(FluidStack resource, FluidAction action) {
+            return 0;
+        }
+
+        /**For internal use only!*/
+        @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
+        private int fillTank(FluidStack resource, FluidAction action) {
+            return super.fill(resource, action);
+        }
+    }
 }
