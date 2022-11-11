@@ -40,7 +40,14 @@ public abstract class GUISyncedBlockEntity extends BlockEntity implements ISynca
 
     @Override
     public @NotNull CompoundTag getUpdateTag() {
-        return getSyncData();
+        CompoundTag tag = super.getUpdateTag();
+        this.saveAdditional(tag);
+        return tag;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag) {
+        this.load(tag);
     }
 
     @Nullable
