@@ -18,6 +18,7 @@ public class ModPoiTagProvider extends PoiTypeTagsProvider {
     @Override
     protected void addTags() {
         tag(PoiTypeTags.BEE_HOME).add(ModPOIs.TIERED_BEEHIVE_POI.get());
+        tag(PoiTypeTags.ACQUIRABLE_JOB_SITE).addTag(PoiTypeTags.BEE_HOME);
     }
 
     @Override
