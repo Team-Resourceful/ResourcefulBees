@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.common.block;
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.FlowHiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
-import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.item.IShiftingToolTip;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
@@ -42,12 +41,12 @@ public class FlowHiveBlock extends BeeHouseBlock implements IShiftingToolTip {
             if (!level.isClientSide) {
                 Item item = player.getItemInHand(hand).getItem();
                 if (item instanceof BottleItem) {
-                    HoneyFluidTank.fillBottle(flowHive.getTank(), player, hand);
+                    FluidUtils.fillBottle(flowHive.getTank(), player, hand);
                 } else if (item instanceof HoneyBottleItem) {
-                    HoneyFluidTank.emptyBottle(flowHive.getTank(), player, hand);
+                    FluidUtils.emptyBottle(flowHive.getTank(), player, hand);
                 }
             }
-            return InteractionResult.SUCCESS;
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return super.use(state, level, pos, player, hand, hitResult);
     }

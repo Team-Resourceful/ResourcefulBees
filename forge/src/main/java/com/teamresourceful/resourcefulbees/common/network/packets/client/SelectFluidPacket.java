@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.blockentity.base.ISelectableTankBlock;
+import com.teamresourceful.resourcefulbees.common.blockentity.base.SelectableFluidContainerHandler;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
@@ -43,7 +43,7 @@ public record SelectFluidPacket(BlockPos pos, int tank, FluidStack stack) implem
         public PacketContext handle(SelectFluidPacket message) {
             return (player, level) -> {
                 if (level.isLoaded(message.pos)){
-                    if (level.getBlockEntity(message.pos) instanceof ISelectableTankBlock tankBlock) {
+                    if (level.getBlockEntity(message.pos) instanceof SelectableFluidContainerHandler tankBlock) {
                         tankBlock.setFluid(message.tank(), message.stack());
                     }
                 }

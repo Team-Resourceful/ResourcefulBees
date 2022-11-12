@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEn
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -24,7 +24,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -77,22 +76,22 @@ public class EnderBeecon extends TickingBlock<EnderBeeconBlockEntity> {
     @NotNull
     @Override
     @Deprecated
-    public InteractionResult use(@NotNull BlockState state, Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
-        if (world.getBlockEntity(pos) instanceof EnderBeeconBlockEntity beecon) {
-            if (!world.isClientSide()) {
+    public InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
+        if (level.getBlockEntity(pos) instanceof EnderBeeconBlockEntity beecon) {
+            if (!level.isClientSide) {
                 ItemStack stack = player.getItemInHand(hand);
 
                 if (stack.is(ItemTags.WOOL)) {
-                    world.setBlock(pos, state.cycle(SOUND), Block.UPDATE_ALL);
+                    level.setBlock(pos, state.cycle(SOUND), Block.UPDATE_ALL);
                 } else if (stack.is(Items.STICK)) {
-                    world.setBlock(pos, state.cycle(BEAM), Block.UPDATE_ALL);
+                    level.setBlock(pos, state.cycle(BEAM), Block.UPDATE_ALL);
                 } else {
-                    ModUtils.checkBottleAndCapability(beecon.getTank(), beecon, player, world, pos, hand);
+                    FluidUtils.checkBottleAndCapability(beecon.getTank(), beecon, player, level, pos, hand);
                 }
             }
-            return InteractionResult.sidedSuccess(world.isClientSide());
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
-        return super.use(state, world, pos, player, hand, rayTraceResult);
+        return super.use(state, level, pos, player, hand, rayTraceResult);
     }
 
     @NotNull

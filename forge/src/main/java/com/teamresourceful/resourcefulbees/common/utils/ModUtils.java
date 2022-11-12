@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
-import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
@@ -16,15 +15,11 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BottleItem;
-import net.minecraft.world.item.HoneyBottleItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
@@ -41,17 +36,6 @@ public final class ModUtils {
 
     private ModUtils() {
         throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
-    }
-
-    public static void checkBottleAndCapability(FluidTank tank, BlockEntity entity, Player player, Level level, BlockPos pos, InteractionHand hand) {
-        Item item = player.getItemInHand(hand).getItem();
-        if (item instanceof BottleItem) {
-            HoneyFluidTank.fillBottle(tank, player, hand);
-        } else if (item instanceof HoneyBottleItem) {
-            HoneyFluidTank.emptyBottle(tank, player, hand);
-        } else {
-            ModUtils.capabilityOrGuiUse(entity, player, level, pos, hand);
-        }
     }
 
     public static void capabilityOrGuiUse(BlockEntity tileEntity, Player player, Level level, BlockPos pos, InteractionHand hand){

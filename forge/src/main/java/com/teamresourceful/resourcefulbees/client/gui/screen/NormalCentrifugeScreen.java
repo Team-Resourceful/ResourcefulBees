@@ -26,7 +26,7 @@ public class NormalCentrifugeScreen extends AbstractContainerScreen<CentrifugeMe
     protected void init() {
         super.init();
         clearWidgets();
-        addRenderableWidget(new SelectableFluidWidget(this, tileEntity.getTank(0), 0, tileEntity.getBlkPos(), this.leftPos + 152, this.topPos + 11, 16, 64, Component.literal("Centrifuge Tank!")));
+        addRenderableWidget(new SelectableFluidWidget(this, tileEntity.getContainer(), 0, tileEntity.getBlkPos(), this.leftPos + 152, this.topPos + 11, 16, 64, Component.literal("Centrifuge Tank!")));
     }
 
     @Override

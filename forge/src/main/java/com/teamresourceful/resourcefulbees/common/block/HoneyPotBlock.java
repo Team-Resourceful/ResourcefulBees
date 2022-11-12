@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.block.base.RenderingBaseEntity
 import com.teamresourceful.resourcefulbees.common.blockentity.HoneyPotBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.enums.HoneyPotState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -55,12 +55,14 @@ public class HoneyPotBlock extends RenderingBaseEntityBlock {
 
     @NotNull
     @Override
-    public InteractionResult use(@NotNull BlockState state, Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
-        if (world.getBlockEntity(pos) instanceof HoneyPotBlockEntity pot) {
-            ModUtils.checkBottleAndCapability(pot.getTank(), pot, player, world, pos, hand);
-            return InteractionResult.sidedSuccess(world.isClientSide());
+    public InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
+        if (level.getBlockEntity(pos) instanceof HoneyPotBlockEntity pot) {
+            if (!level.isClientSide) {
+                FluidUtils.checkBottleAndCapability(pot.getTank(), pot, player, level, pos, hand);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
-        return super.use(state, world, pos, player, hand, result);
+        return super.use(state, level, pos, player, hand, result);
     }
 
     @Override

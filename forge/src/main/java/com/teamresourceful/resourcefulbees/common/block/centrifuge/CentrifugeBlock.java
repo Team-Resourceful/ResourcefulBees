@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.block.centrifuge;
 
 import com.teamresourceful.resourcefulbees.common.block.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -42,8 +42,10 @@ public class CentrifugeBlock extends RenderingBaseEntityBlock {
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
         if (level.getBlockEntity(pos) instanceof CentrifugeBlockEntity centrifuge) {
-            ModUtils.capabilityOrGuiUse(centrifuge, player, level, pos, hand);
-            return InteractionResult.SUCCESS;
+            if (!level.isClientSide) {
+                FluidUtils.checkBottleAndCapability(centrifuge.getContainer(), centrifuge, player, level, pos, hand);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return super.use(state, level, pos, player, hand, result);
     }

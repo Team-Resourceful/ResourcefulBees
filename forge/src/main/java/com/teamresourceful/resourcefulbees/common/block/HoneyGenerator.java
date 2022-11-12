@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.block.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.HoneyGeneratorBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,8 +45,10 @@ public class HoneyGenerator extends TickingBlock<HoneyGeneratorBlockEntity> {
     @Override
     public InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
         if (level.getBlockEntity(pos) instanceof HoneyGeneratorBlockEntity generator) {
-            ModUtils.capabilityOrGuiUse(generator, player, level, pos, hand);
-            return InteractionResult.SUCCESS;
+            if (!level.isClientSide) {
+                FluidUtils.checkBottleAndCapability(generator.getTank(), generator, player, level, pos, hand);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return super.use(state, level, pos, player, hand, rayTraceResult);
     }
