@@ -34,16 +34,18 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements IAnimatable, SelectableFluidContainerHandler {
 
     private final SelectableMultiFluidTank tank = new SelectableMultiFluidTank(32000, fluid -> false);
     private final LazyOptional<SelectableMultiFluidTank> tankOptional = LazyOptional.of(() -> tank);
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private boolean firstCheck = true;
 
@@ -194,14 +196,14 @@ public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements
         int value = getBlockState().getValue(CentrifugeBlock.ROTATION);
         var animationBuilder = new AnimationBuilder();
         switch (value) {
-            case 1 -> animationBuilder.addAnimation("animation.centrifuge.360", false).addAnimation("animation.centrifuge.0", false);
-            case 2 -> animationBuilder.addAnimation("animation.centrifuge.45", false);
-            case 3 -> animationBuilder.addAnimation("animation.centrifuge.90", false);
-            case 4 -> animationBuilder.addAnimation("animation.centrifuge.135", false);
-            case 5 -> animationBuilder.addAnimation("animation.centrifuge.180", false);
-            case 6 -> animationBuilder.addAnimation("animation.centrifuge.225", false);
-            case 7 -> animationBuilder.addAnimation("animation.centrifuge.270", false);
-            case 8 -> animationBuilder.addAnimation("animation.centrifuge.315", false);
+            case 1 -> animationBuilder.addAnimation("animation.centrifuge.360", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("animation.centrifuge.0", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+            case 2 -> animationBuilder.addAnimation("animation.centrifuge.45", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+            case 3 -> animationBuilder.addAnimation("animation.centrifuge.90", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+            case 4 -> animationBuilder.addAnimation("animation.centrifuge.135", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+            case 5 -> animationBuilder.addAnimation("animation.centrifuge.180", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+            case 6 -> animationBuilder.addAnimation("animation.centrifuge.225", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+            case 7 -> animationBuilder.addAnimation("animation.centrifuge.270", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+            case 8 -> animationBuilder.addAnimation("animation.centrifuge.315", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
         }
         event.getController().setAnimation(animationBuilder);
         return PlayState.CONTINUE;
