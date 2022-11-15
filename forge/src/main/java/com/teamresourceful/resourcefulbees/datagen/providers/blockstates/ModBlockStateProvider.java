@@ -30,7 +30,7 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         simpleBlockWithItem(ModBlocks.BEE_BOX.get(), models().cubeBottomTop("bee_box", modLoc("block/bee_box_side"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top")));
         simpleBlockWithItem(ModBlocks.BEE_BOX_TEMP.get(), models().cubeBottomTop("bee_box_temp", modLoc("block/bee_box_side_temp"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top_temp")));
         simpleBlock(ModBlocks.CREATIVE_GEN.get(), cubeAll(ModBlocks.CREATIVE_GEN.get()));
-        simpleBlock(ModBlocks.GOLD_FLOWER.get(), models().cross(id(ModBlocks.GOLD_FLOWER.get()), modLoc("block/gold_flower")).renderType("cutout"));
+        simpleBlock(ModBlocks.GOLD_FLOWER.get(), models().cross(id(ModBlocks.GOLD_FLOWER), modLoc("block/gold_flower")).renderType("cutout"));
     }
 
     private void registerWaxedBlocks() {
@@ -39,14 +39,14 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         simpleBlockWithItem(ModBlocks.WAXED_PLANKS.get(), models().cubeAll("waxed_planks", modLoc("block/waxed_planks")));
         simpleBlockWithItem(ModBlocks.TRIMMED_WAXED_PLANKS.get(), models().cubeAll("trimmed_waxed_planks", modLoc("block/trimmed_waxed_planks")));
         simpleBlockWithItem(ModBlocks.WAXED_MACHINE_BLOCK.get(), models().cubeAll("waxed_machine_block", modLoc("block/waxed_machine_block")));
-        buttonBlockWithItem(ModBlocks.WAXED_BUTTON.get(), modLoc("block/waxed_planks"));
+        buttonBlockWithItem(ModBlocks.WAXED_BUTTON, modLoc("block/waxed_planks"));
         doorBlock(ModBlocks.WAXED_DOOR.get(), modLoc("block/waxed_door_bottom"), modLoc("block/waxed_door_top"));
-        fenceBlockWithItem(ModBlocks.WAXED_FENCE.get(), modLoc("block/waxed_planks"));
-        fenceGateBlockWithItem(ModBlocks.WAXED_FENCE_GATE.get(), modLoc("block/waxed_planks"));
-        preasurePlateBlockWithItem(ModBlocks.WAXED_PRESSURE_PLATE.get(), modLoc("block/waxed_planks"));
-        slabBlockWithItem(ModBlocks.WAXED_SLAB.get(), modLoc("block/waxed_planks"));
-        trapdoorBlockWithItem(ModBlocks.WAXED_TRAPDOOR.get(), modLoc("block/waxed_trapdoor"));
-        stairBlockWithItem(ModBlocks.WAXED_STAIRS.get(), modLoc("block/waxed_planks"));
+        fenceBlockWithItem(ModBlocks.WAXED_FENCE, modLoc("block/waxed_planks"));
+        fenceGateBlockWithItem(ModBlocks.WAXED_FENCE_GATE, modLoc("block/waxed_planks"));
+        preasurePlateBlockWithItem(ModBlocks.WAXED_PRESSURE_PLATE, modLoc("block/waxed_planks"));
+        slabBlockWithItem(ModBlocks.WAXED_SLAB, modLoc("block/waxed_planks"));
+        trapdoorBlockWithItem(ModBlocks.WAXED_TRAPDOOR, modLoc("block/waxed_trapdoor"));
+        stairBlockWithItem(ModBlocks.WAXED_STAIRS, modLoc("block/waxed_planks"));
         signBlock(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get(), modLoc("block/waxed_planks"));
         simpleBlockWithItem(ModBlocks.WAX_BLOCK.get(), cubeAll(ModBlocks.WAX_BLOCK.get()));
     }
@@ -100,39 +100,39 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         simpleBlockWithItem(ModBlocks.CENTRIFUGE_PROCESSOR.get());
 
         //terminal
-        horizontalCentrifuge(ModBlocks.CENTRIFUGE_BASIC_TERMINAL.get());
-        horizontalCentrifuge(ModBlocks.CENTRIFUGE_ADVANCED_TERMINAL.get());
-        horizontalCentrifuge(ModBlocks.CENTRIFUGE_ELITE_TERMINAL.get());
-        horizontalCentrifuge(ModBlocks.CENTRIFUGE_ULTIMATE_TERMINAL.get());
+        horizontalCentrifuge(ModBlocks.CENTRIFUGE_BASIC_TERMINAL);
+        horizontalCentrifuge(ModBlocks.CENTRIFUGE_ADVANCED_TERMINAL);
+        horizontalCentrifuge(ModBlocks.CENTRIFUGE_ELITE_TERMINAL);
+        horizontalCentrifuge(ModBlocks.CENTRIFUGE_ULTIMATE_TERMINAL);
 
         //void
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_VOID.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_VOID.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_VOID.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_VOID.get());
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_VOID);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_VOID);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_VOID);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_VOID);
 
         //input
-        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_BASIC_INPUT.get());
-        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_ADVANCED_INPUT.get());
-        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_ELITE_INPUT.get());
-        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_ULTIMATE_INPUT.get());
+        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_BASIC_INPUT);
+        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_ADVANCED_INPUT);
+        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_ELITE_INPUT);
+        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_ULTIMATE_INPUT);
 
         //energy
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_ENERGY_PORT.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_ENERGY_PORT.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_ENERGY_PORT.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_ENERGY_PORT.get());
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_ENERGY_PORT);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_ENERGY_PORT);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_ENERGY_PORT);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_ENERGY_PORT);
 
         //item output
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_ITEM_OUTPUT.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_ITEM_OUTPUT.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_ITEM_OUTPUT.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT.get());
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_ITEM_OUTPUT);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_ITEM_OUTPUT);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_ITEM_OUTPUT);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT);
 
         //fluid output
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_FLUID_OUTPUT.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_FLUID_OUTPUT.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT.get());
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT.get());
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_FLUID_OUTPUT);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_FLUID_OUTPUT);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT);
+        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT);
     }
 }

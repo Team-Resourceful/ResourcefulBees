@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +35,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -239,8 +239,8 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private static void addBeeToNest(CustomBeeEntityType<?> entityType, RandomSource rand, TieredBeehiveBlockEntity nest) {
-        ResourceLocation id = ForgeRegistries.ENTITY_TYPES.getKey(entityType);
-        if (id != null) {
+        ResourceLocation id = Registry.ENTITY_TYPE.getKey(entityType);
+        if (id != Registry.ENTITY_TYPE.getDefaultKey()) {
             CompoundTag tag = new CompoundTag();
             tag.putString(NBTConstants.NBT_ID, id.toString());
             int timeInHive = rand.nextInt(entityType.getData().coreData().maxTimeInHive());

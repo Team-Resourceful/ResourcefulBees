@@ -6,7 +6,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModItemModelProvider extends BaseItemModelProvider {
 
@@ -26,7 +25,7 @@ public class ModItemModelProvider extends BaseItemModelProvider {
         basicItem(ModItems.OREO_COOKIE.get());
         basicItem(ModItems.WAXED_DOOR.get());
         basicItem(ModItems.WAXED_SIGN.get());
-        var flower = ForgeRegistries.ITEMS.getKey(ModItems.GOLD_FLOWER_ITEM.get());
+        var flower = ModItems.GOLD_FLOWER_ITEM.getId();
         getBuilder(flower.toString())
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
                 .texture("layer0", new ResourceLocation(flower.getNamespace(), "block/" + flower.getPath()));

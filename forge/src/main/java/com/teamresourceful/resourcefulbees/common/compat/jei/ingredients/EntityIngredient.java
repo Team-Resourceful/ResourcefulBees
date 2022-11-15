@@ -4,12 +4,12 @@ import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -65,18 +65,18 @@ public class EntityIngredient {
                 tooltip.add(TranslationConstants.Jei.CLICK_INFO.withStyle(ChatFormatting.GOLD));
             }
             if (Minecraft.getInstance().options.advancedItemTooltips) {
-                ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(entityType);
-                if (key != null) {
-                    tooltip.add(Component.literal(key.toString()).withStyle(ChatFormatting.DARK_GRAY));
-                }
+                tooltip.add(Component.literal(toString()).withStyle(ChatFormatting.DARK_GRAY));
             }
         }
         return tooltip;
     }
 
+    public ResourceLocation getEntityId() {
+        return Registry.ENTITY_TYPE.getKey(entityType);
+    }
+
     @Override
     public String toString() {
-        ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(entityType);
-        return key != null ? key.toString() : entityType.toString();
+        return getEntityId().toString();
     }
 }
