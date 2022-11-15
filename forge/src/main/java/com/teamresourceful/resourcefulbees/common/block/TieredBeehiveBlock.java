@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -44,7 +45,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.common.util.FakePlayer;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -141,7 +141,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
             if (isHiveSmoked(pos, level)) {
                 this.resetHoneyLevel(level, state, pos);
             } else {
-                if (beehiveTileEntity.hasBees() && !(player instanceof FakePlayer) && player instanceof ServerPlayer serverPlayer && !ModCompatHelper.shouldNotAngerBees(serverPlayer)) {
+                if (beehiveTileEntity.hasBees() && !ModUtils.isFakePlayer(player) && player instanceof ServerPlayer serverPlayer && !ModCompatHelper.shouldNotAngerBees(serverPlayer)) {
                     this.angerBeesNearby(level, pos);
                 }
                 this.releaseBeesAndResetHoneyLevel(level, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
@@ -162,7 +162,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
                     .filter(beeEntity -> beeEntity.getTarget() == null)
                     .forEach(beeEntity -> {
                         Player randomPlayer = nearbyPlayers.get(level.random.nextInt(nearbyPlayers.size()));
-                        if (!(randomPlayer instanceof FakePlayer)) {
+                        if (!ModUtils.isFakePlayer(randomPlayer)) {
                             beeEntity.setTarget(randomPlayer);
                         }
                     });

@@ -18,6 +18,7 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
@@ -41,7 +42,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.NameTagItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.common.util.FakePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -254,7 +254,7 @@ public class CustomBeeEntity extends Bee implements ICustomBee, IAnimatable, IBe
     //This is because we don't want IF being able to breed our animals
     @Override
     public void setInLove(@Nullable Player player) {
-        if (player != null && !(player instanceof FakePlayer))
+        if (player != null && !ModUtils.isFakePlayer(player))
             super.setInLove(player);
     }
 

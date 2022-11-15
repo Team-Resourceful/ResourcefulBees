@@ -19,7 +19,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.model.data.ModelData;
 
 import java.util.Map;
 
@@ -77,7 +76,7 @@ public final class ModelHandler {
             BakedModel defaultModel = modelRegistry.getOrDefault(resourceLocation, missingModel);
             resourceLocations.forEach(modelLocation ->
                 modelRegistry.computeIfPresent(modelLocation, (resourceLocation1, iBakedModel) -> {
-                    if (iBakedModel.getParticleIcon(ModelData.EMPTY) instanceof MissingTextureAtlasSprite) return defaultModel;
+                    if (iBakedModel.getParticleIcon() instanceof MissingTextureAtlasSprite) return defaultModel;
                     return iBakedModel;
                 })
             );

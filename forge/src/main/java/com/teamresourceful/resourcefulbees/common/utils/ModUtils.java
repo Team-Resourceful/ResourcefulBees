@@ -23,8 +23,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
@@ -133,5 +135,13 @@ public final class ModUtils {
 
     public static boolean itemStackIsIdentical(ItemStack stack, ItemStack other) {
         return stack.is(other.getItem()) && stack.getCount() == other.getCount() && tagMatches(stack, other);
+    }
+
+    public static boolean isModLoaded(String modId) {
+        return ModList.get().isLoaded(modId);
+    }
+
+    public static boolean isFakePlayer(Player player) {
+        return player instanceof FakePlayer;
     }
 }
