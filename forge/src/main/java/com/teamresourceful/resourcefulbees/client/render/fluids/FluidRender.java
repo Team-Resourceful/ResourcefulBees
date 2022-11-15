@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.render.fluids;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -11,7 +11,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public final class FluidRender {
 
     private FluidRender() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static void setHoneyRenderType() {

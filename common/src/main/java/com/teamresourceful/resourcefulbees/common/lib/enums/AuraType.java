@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.lib.enums;
 
 import com.mojang.serialization.Codec;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeAura;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 
@@ -23,8 +22,7 @@ public enum AuraType {
         this.particle = particle;
     }
 
-    public boolean isBeneficial(BeeAura aura) {
-        if (this == POTION) return aura.potionEffect().effect().isBeneficial();
+    public boolean isBeneficial() {
         return this.beneficial;
     }
 }

@@ -1,9 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+
 public final class TraitConstants {
 
     private TraitConstants() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final String SLIMY = "slimy";

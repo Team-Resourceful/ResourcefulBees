@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.blockentity.breeder;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 
 import java.util.List;
 
 public final class BreederConstants {
 
     private BreederConstants() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final int NUM_OF_BREEDERS = 2;

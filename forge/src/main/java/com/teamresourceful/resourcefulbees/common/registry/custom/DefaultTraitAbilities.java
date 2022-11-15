@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.common.registry.custom;
 
 import com.teamresourceful.resourcefulbees.api.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 public final class DefaultTraitAbilities {
 
     private DefaultTraitAbilities() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static void registerDefaultAbilities(TraitAbilityRegistry registry) {

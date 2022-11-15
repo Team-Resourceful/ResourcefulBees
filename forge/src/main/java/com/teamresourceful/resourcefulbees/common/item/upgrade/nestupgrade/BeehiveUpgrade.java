@@ -1,7 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -18,9 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public enum BeehiveUpgrade implements IExtensibleEnum {
-    T1_TO_T2(BeehiveTier.T1_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '2'))),
-    T2_TO_T3(BeehiveTier.T2_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '3'))),
-    T3_TO_T4(BeehiveTier.T3_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '4')));
+    T1_TO_T2(DefaultBeehiveTiers.T1_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '2'))),
+    T2_TO_T3(DefaultBeehiveTiers.T1_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '3'))),
+    T3_TO_T4(DefaultBeehiveTiers.T1_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '4')));
 
     public final BeehiveTier from;
     public final NestUpgrader upgrader;

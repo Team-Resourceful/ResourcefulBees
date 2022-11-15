@@ -2,10 +2,10 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.fluids.NormalHoneyFluidType;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistries;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
@@ -19,7 +19,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class ModFluids {
 
     private ModFluids() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final ResourcefulRegistry<Fluid> FLUIDS = ResourcefulRegistries.create(Registry.FLUID, ResourcefulBees.MOD_ID);

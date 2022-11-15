@@ -13,9 +13,9 @@ import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.api.spawndata.SpawnData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
@@ -254,7 +254,7 @@ public class CustomBeeEntity extends Bee implements ICustomBee, IAnimatable, IBe
     //This is because we don't want IF being able to breed our animals
     @Override
     public void setInLove(@Nullable Player player) {
-        if (player != null && !ModUtils.isFakePlayer(player))
+        if (player != null && ModUtils.isARealPlayer(player))
             super.setInLove(player);
     }
 

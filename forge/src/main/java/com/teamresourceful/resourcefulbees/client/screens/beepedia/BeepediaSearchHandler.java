@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia;
 
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +16,7 @@ public final class BeepediaSearchHandler {
     private static final String NOT_SYMBOL = "!";
 
     private BeepediaSearchHandler() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static Predicate<CustomBeeData> search(@Nullable String search) {

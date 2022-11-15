@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.world;
 
 import com.mojang.serialization.Codec;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBiomeModifiers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import net.minecraft.core.Holder;

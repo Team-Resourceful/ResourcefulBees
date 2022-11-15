@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.datagen.bases;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
-import com.teamresourceful.resourcefulbees.common.lib.annotations.Translate;
+import com.teamresourceful.resourcefulbees.common.lib.tools.Translate;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.ComponentContents;
@@ -67,8 +67,10 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
             if (field.get(null) instanceof MutableComponent component && component.getContents() instanceof TranslatableContents translation) {
                 return translation.getKey();
             }
-        }catch (Exception e) {}
-        return null;
+            return null;
+        }catch (Exception e) {
+            return null;
+        }
     }
 
     public void addAdvancement(String id, String title, String desc) {

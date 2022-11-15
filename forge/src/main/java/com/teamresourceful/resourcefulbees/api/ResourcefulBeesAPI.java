@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.api;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraftforge.fml.ModLoadingContext;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.ApiStatus;
 public final class ResourcefulBeesAPI {
 
     private ResourcefulBeesAPI() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final String MOD_ID = "resourcefulbees";

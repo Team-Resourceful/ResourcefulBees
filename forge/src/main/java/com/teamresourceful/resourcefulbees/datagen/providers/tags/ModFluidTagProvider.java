@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.FluidTagsProvider;
@@ -16,6 +16,6 @@ public class ModFluidTagProvider extends FluidTagsProvider {
 
     @Override
     protected void addTags() {
-        tag(ModTags.Fluids.HONEY).add(ModFluids.HONEY_STILL.get());
+        tag(ModFluidTags.HONEY).add(ModFluids.HONEY_STILL.get());
     }
 }

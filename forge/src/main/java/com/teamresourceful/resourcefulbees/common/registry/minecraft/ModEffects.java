@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistries;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ModEffects {
 
     private ModEffects() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final ResourcefulRegistry<MobEffect> EFFECTS = ResourcefulRegistries.create(Registry.MOB_EFFECT, ResourcefulBees.MOD_ID);

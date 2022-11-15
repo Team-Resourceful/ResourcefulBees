@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulbees.common.blockentity.*;
 import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeCrankBlockEntity;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.*;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 public final class ModBlockEntityTypes {
 
     private ModBlockEntityTypes() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final ResourcefulRegistry<BlockEntityType<?>> BLOCK_ENTITY_TYPES = ResourcefulRegistries.create(Registry.BLOCK_ENTITY_TYPE, ResourcefulBees.MOD_ID);
@@ -199,13 +199,13 @@ public final class ModBlockEntityTypes {
 
     //region Apiaries
     public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T1_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t1_apiary", () -> build(BlockEntityType.Builder
-            .of((pos, state) -> new ApiaryBlockEntity(ApiaryTier.T1_APIARY, pos, state), ModBlocks.T1_APIARY_BLOCK.get())));
+            .of((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T1_APIARY, pos, state), ModBlocks.T1_APIARY_BLOCK.get())));
     public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T2_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t2_apiary", () -> build(BlockEntityType.Builder
-            .of((pos, state) -> new ApiaryBlockEntity(ApiaryTier.T2_APIARY, pos, state), ModBlocks.T2_APIARY_BLOCK.get())));
+            .of((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T2_APIARY, pos, state), ModBlocks.T2_APIARY_BLOCK.get())));
     public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T3_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t3_apiary", () -> build(BlockEntityType.Builder
-            .of((pos, state) -> new ApiaryBlockEntity(ApiaryTier.T3_APIARY, pos, state), ModBlocks.T3_APIARY_BLOCK.get())));
+            .of((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T3_APIARY, pos, state), ModBlocks.T3_APIARY_BLOCK.get())));
     public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T4_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t4_apiary", () -> build(BlockEntityType.Builder
-            .of((pos, state) -> new ApiaryBlockEntity(ApiaryTier.T4_APIARY, pos, state), ModBlocks.T4_APIARY_BLOCK.get())));
+            .of((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T4_APIARY, pos, state), ModBlocks.T4_APIARY_BLOCK.get())));
     //endregion
 
     public static final RegistryEntry<BlockEntityType<? extends FlowHiveBlockEntity>> FLOW_HIVE_ENTITY = BLOCK_ENTITY_TYPES.register("flow_hive", () -> build(BlockEntityType.Builder

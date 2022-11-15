@@ -2,11 +2,11 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.*;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.*;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistries;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -14,7 +14,7 @@ import net.minecraftforge.common.extensions.IForgeMenuType;
 public final class ModMenus {
 
     private ModMenus() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final ResourcefulRegistry<MenuType<?>> CONTAINER_TYPES = ResourcefulRegistries.create(Registry.MENU, ResourcefulBees.MOD_ID);

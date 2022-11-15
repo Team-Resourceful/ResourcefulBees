@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.entity.villager;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModVillagerProfessions;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -21,7 +21,7 @@ import java.util.List;
 public final class Beekeeper {
 
     private Beekeeper() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static void setupBeekeeper(VillagerTradesEvent event) {

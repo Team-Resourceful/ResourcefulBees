@@ -87,7 +87,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
     @Override
     protected void renderLabels(@NotNull PoseStack matrix, int mouseX, int mouseY) {
-        String s = String.format("(%1$s/%2$s)", apiaryBlockEntity.beeCount(), apiaryBlockEntity.getTier().getMaxBees());
+        String s = String.format("(%1$s/%2$s)", apiaryBlockEntity.beeCount(), apiaryBlockEntity.getTier().max());
         this.font.draw(matrix, s, 4, 17, 0x404040);
         this.font.draw(matrix, getTitle(), 55, 7, 0x404040);
         this.font.draw(matrix, TranslationConstants.Guis.INVENTORY, 55, 75, 0x404040);

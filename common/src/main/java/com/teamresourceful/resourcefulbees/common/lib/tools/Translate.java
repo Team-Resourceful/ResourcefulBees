@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.lib.annotations;
+package com.teamresourceful.resourcefulbees.common.lib.tools;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

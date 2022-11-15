@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -20,7 +20,7 @@ import static com.teamresourceful.resourcefulbees.common.utils.MathUtils.HALF_PI
 public final class RandomPositionGenerator {
 
     private RandomPositionGenerator() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     //TODO clean up unnecessary logic from this class that isn't useful to the bee so it is more optimized and readable.

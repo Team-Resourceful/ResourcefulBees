@@ -1,10 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+
 public final class BeeConstants {
 
 
     private BeeConstants() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final String MOD_NAME = "Resourceful Bees";
@@ -24,4 +26,6 @@ public final class BeeConstants {
 
     public static final int DEFAULT_ITEM_COLOR = -1;
     public static final int MAX_BEES_BEE_BOX = 10;
+
+    public static final int HONEY_PER_BOTTLE = 250;
 }

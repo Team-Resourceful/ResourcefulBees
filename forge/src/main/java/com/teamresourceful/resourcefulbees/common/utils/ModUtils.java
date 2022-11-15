@@ -3,9 +3,9 @@ package com.teamresourceful.resourcefulbees.common.utils;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -32,6 +32,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import static net.minecraft.world.item.ItemStack.tagMatches;
@@ -42,7 +43,7 @@ public final class ModUtils {
     private static final String[] UNITS = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
 
     private ModUtils() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static void checkBottleAndCapability(FluidTank tank, BlockEntity entity, Player player, Level level, BlockPos pos, InteractionHand hand) {
@@ -141,7 +142,11 @@ public final class ModUtils {
         return ModList.get().isLoaded(modId);
     }
 
-    public static boolean isFakePlayer(Player player) {
-        return player instanceof FakePlayer;
+    public static boolean isARealPlayer(Player player) {
+        return !(player instanceof FakePlayer);
+    }
+
+    public static Path getModPath(String modid) {
+        return ModList.get().getModFileById(modid).getFile().getFilePath();
     }
 }

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.config;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public final class ClientConfig {
@@ -9,7 +9,7 @@ public final class ClientConfig {
     public static ForgeConfigSpec.BooleanValue SHOW_TIERS_IN_JEI;
 
     private ClientConfig() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final ForgeConfigSpec CLIENT_CONFIG;

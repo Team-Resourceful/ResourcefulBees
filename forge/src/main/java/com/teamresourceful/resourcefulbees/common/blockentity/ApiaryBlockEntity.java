@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveI
 import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
@@ -61,7 +61,7 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
     }
 
     protected int getMaxTimeInHive(@NotNull IBeeCompat bee) {
-        return (int) (bee.getMaxTimeInHive() * tier.getTimeModifier());
+        return (int) (bee.getMaxTimeInHive() * tier.time());
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, ApiaryBlockEntity apiaryTile) {
@@ -69,7 +69,7 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
     }
 
     public boolean hasSpace() {
-        return this.bees.size() < tier.getMaxBees();
+        return this.bees.size() < tier.max();
     }
 
     public boolean isAllowedBee() {

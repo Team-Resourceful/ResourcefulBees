@@ -4,10 +4,10 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.block.FlowHiveBlock;
 import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistries;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.level.block.Block;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public final class ModPOIs {
 
     private ModPOIs() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final ResourcefulRegistry<PoiType> POIS = ResourcefulRegistries.create(Registry.POINT_OF_INTEREST_TYPE, ResourcefulBees.MOD_ID);

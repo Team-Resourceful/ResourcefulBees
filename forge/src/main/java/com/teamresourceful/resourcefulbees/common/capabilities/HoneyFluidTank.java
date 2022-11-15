@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.common.capabilities;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.sounds.SoundEvents;
@@ -17,7 +17,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +24,7 @@ import java.util.function.Predicate;
 
 public class HoneyFluidTank extends FluidTank {
 
-    private static final Predicate<FluidStack> FLUID_VALIDATOR = fluidStack -> fluidStack.getFluid().is(ModTags.Fluids.HONEY);
+    private static final Predicate<FluidStack> FLUID_VALIDATOR = fluidStack -> fluidStack.getFluid().is(ModFluidTags.HONEY);
 
     public HoneyFluidTank(int capacity) {
         this(capacity, FLUID_VALIDATOR);
@@ -41,11 +40,11 @@ public class HoneyFluidTank extends FluidTank {
 
     public static void fillBottle(FluidTank tank, Player player, InteractionHand hand){
         FluidStack tankFluid = tank.getFluid();
-        FluidStack fluidStack = new FluidStack(tankFluid, ModConstants.HONEY_PER_BOTTLE);
+        FluidStack fluidStack = new FluidStack(tankFluid, BeeConstants.HONEY_PER_BOTTLE);
         ItemStack itemStack = new ItemStack(getHoneyBottleFromFluid(tankFluid.getFluid()), 1);
         if (itemStack.isEmpty()) return;
         if (tank.isEmpty()) return;
-        if (tankFluid.getAmount() >= ModConstants.HONEY_PER_BOTTLE) {
+        if (tankFluid.getAmount() >= BeeConstants.HONEY_PER_BOTTLE) {
             FluidStack drain = tank.drain(fluidStack, FluidAction.EXECUTE);
             if (!drain.isEmpty()) {
                 ItemStack stack = player.getItemInHand(hand);
@@ -65,13 +64,13 @@ public class HoneyFluidTank extends FluidTank {
     }
 
     public static void emptyBottle(FluidTank tank, Player player, InteractionHand hand){
-        FluidStack fluidStack = new FluidStack(getHoneyFluidFromBottle(player.getItemInHand(hand)), ModConstants.HONEY_PER_BOTTLE);
+        FluidStack fluidStack = new FluidStack(getHoneyFluidFromBottle(player.getItemInHand(hand)), BeeConstants.HONEY_PER_BOTTLE);
         if (fluidStack.isEmpty()) return;
         FluidStack tankFluid = tank.getFluid();
         if (!tankFluid.isFluidEqual(fluidStack) && !tank.isEmpty()) {
             return;
         }
-        if (tank.getFluidAmount() + ModConstants.HONEY_PER_BOTTLE <= tank.getTankCapacity(0) && tank.fill(fluidStack, FluidAction.EXECUTE) != 0) {
+        if (tank.getFluidAmount() + BeeConstants.HONEY_PER_BOTTLE <= tank.getTankCapacity(0) && tank.fill(fluidStack, FluidAction.EXECUTE) != 0) {
             ItemStack stack = player.getItemInHand(hand);
             if (stack.getCount() > 1) {
                 stack.setCount(stack.getCount() - 1);
@@ -99,7 +98,7 @@ public class HoneyFluidTank extends FluidTank {
         if (fluid instanceof CustomHoneyFluid honeyFluid) {
             return HoneyRegistry.getRegistry().getHoneyData(honeyFluid.getHoneyData().name()).bottleData().honeyBottle().get();
         }
-        if (fluid.is(ModTags.Fluids.HONEY)) {
+        if (fluid.is(ModFluidTags.HONEY)) {
             return Items.HONEY_BOTTLE;
         }
         return null;

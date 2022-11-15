@@ -4,12 +4,12 @@ import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlock
 import com.teamresourceful.resourcefulbees.common.compat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.IShiftingToolTip;
+import com.teamresourceful.resourcefulbees.common.item.ScraperItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.INestUpgrade;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.ChatFormatting;
@@ -113,7 +113,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
 
         if (state.getValue(HONEY_LEVEL) >= 5) {
             boolean isShear = CommonConfig.ALLOW_SHEARS.get() && itemstack.canPerformAction(ToolActions.SHEARS_HARVEST);
-            boolean isScraper = itemstack.canPerformAction(ModConstants.SCRAPE_HIVE);
+            boolean isScraper = ScraperItem.isScraper(itemstack);
 
             if (isShear || isScraper) {
                 InteractionResult success = performHoneyHarvest(state, level, pos, player, handIn, itemstack, isScraper);
@@ -141,7 +141,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
             if (isHiveSmoked(pos, level)) {
                 this.resetHoneyLevel(level, state, pos);
             } else {
-                if (beehiveTileEntity.hasBees() && !ModUtils.isFakePlayer(player) && player instanceof ServerPlayer serverPlayer && !ModCompatHelper.shouldNotAngerBees(serverPlayer)) {
+                if (beehiveTileEntity.hasBees() && ModUtils.isARealPlayer(player) && player instanceof ServerPlayer serverPlayer && !ModCompatHelper.shouldNotAngerBees(serverPlayer)) {
                     this.angerBeesNearby(level, pos);
                 }
                 this.releaseBeesAndResetHoneyLevel(level, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
@@ -162,7 +162,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
                     .filter(beeEntity -> beeEntity.getTarget() == null)
                     .forEach(beeEntity -> {
                         Player randomPlayer = nearbyPlayers.get(level.random.nextInt(nearbyPlayers.size()));
-                        if (!ModUtils.isFakePlayer(randomPlayer)) {
+                        if (ModUtils.isARealPlayer(randomPlayer)) {
                             beeEntity.setTarget(randomPlayer);
                         }
                     });

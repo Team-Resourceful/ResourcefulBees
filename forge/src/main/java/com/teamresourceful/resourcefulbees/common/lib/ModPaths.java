@@ -1,7 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.lib;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.IOException;
@@ -14,9 +15,10 @@ import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
 public final class  ModPaths {
     private ModPaths() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
+    public static final Path MOD_ROOT = ModUtils.getModPath(ResourcefulBees.MOD_ID);
     public static final Path BEES = createCustomPath("bees");
     public static final Path BEE_TRAITS = createCustomPath("bee_traits");
     public static final Path RESOURCES = createCustomPath("resources");

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -9,7 +9,7 @@ import net.minecraft.world.level.ItemLike;
 public final class RecipeHelper {
 
     private RecipeHelper() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static ShapedRecipeBuilder getStorageRecipe(ItemLike result, Ingredient item) {

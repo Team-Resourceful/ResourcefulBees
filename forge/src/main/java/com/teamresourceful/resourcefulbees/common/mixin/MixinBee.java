@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.common.mixin;
 import com.teamresourceful.resourcefulbees.api.IBeeCompat;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
@@ -72,7 +72,7 @@ public abstract class MixinBee extends Animal implements IBeeCompat {
 
     @Override
     public ItemStack getApiaryOutput(ApiaryTier tier) {
-        return new ItemStack(tier.getOutputType().isComb() ? Items.HONEYCOMB : Items.HONEYCOMB_BLOCK, tier.getOutputAmount());
+        return new ItemStack(tier.output().get().isComb() ? Items.HONEYCOMB : Items.HONEYCOMB_BLOCK, tier.amount().getAsInt());
     }
 
     @Override

@@ -4,8 +4,8 @@ import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScree
 import com.teamresourceful.resourcefulbees.common.capabilities.ModCapabilities;
 import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.CreativeBeepediaData;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.client.screens.state.ScreenStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 public final class BeepediaUtils {
 
     private BeepediaUtils() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static void loadBeepedia(ItemStack itemstack, Player player) {

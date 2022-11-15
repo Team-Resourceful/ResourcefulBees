@@ -7,7 +7,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraftforge.fml.loading.FMLLoader;
 
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.Collection;
 public final class CentrifugeCommandHolder {
 
     private CentrifugeCommandHolder() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     private static CommandDispatcher<CentrifugeCommandSource> dispatcher = generateCommands();

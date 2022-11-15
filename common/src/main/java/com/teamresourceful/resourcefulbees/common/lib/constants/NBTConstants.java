@@ -1,9 +1,14 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import org.jetbrains.annotations.ApiStatus;
+
+import java.lang.reflect.Field;
+
 public final class NBTConstants {
 
     private NBTConstants() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     //TODO make tag casing more consistent
@@ -63,5 +68,35 @@ public final class NBTConstants {
     public static class Beepedia {
         public static final String COMPLETE = "Complete";
         public static final String CREATIVE = "Creative";
+    }
+
+    @ApiStatus.Internal
+    public static void verify() {
+        verify(NBTConstants.class);
+    }
+
+    @ApiStatus.Internal
+    private static void verify(Class<?> clazz) {
+        for (Field field : clazz.getFields()) {
+            if (field.getType() == String.class) {
+                try {
+                    String value = (String) field.get(null);
+                    if (value == null || value.isEmpty()) {
+                        throw new IllegalStateException("NBT constant " + field.getName() + " is empty");
+                    }
+                    if (!Character.isUpperCase(value.charAt(0))) {
+                        throw new IllegalStateException("NBT constant " + field.getName() + " does not start with an uppercase character");
+                    }
+                    if (value.contains(" ")) {
+                        throw new IllegalStateException("NBT constant " + field.getName() + " contains a space");
+                    }
+                } catch (IllegalAccessException e) {
+                    throw new IllegalStateException("NBTConstants field " + field.getName() + " is inaccessible");
+                }
+            }
+        }
+        for (Class<?> aClass : clazz.getClasses()) {
+            verify(aClass);
+        }
     }
 }

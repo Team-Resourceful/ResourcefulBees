@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.client.models;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockModelShaper;
@@ -30,7 +30,7 @@ public final class ModelHandler {
     private static final String JSON_FILE_EXTENSION = ".json";
 
     private ModelHandler() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     private static void registerGenericBlockState(ModelEvent.RegisterAdditional event, RegistryEntry<Block> block, String parentModel, RenderType renderType, ResourceManager resourceManager) {

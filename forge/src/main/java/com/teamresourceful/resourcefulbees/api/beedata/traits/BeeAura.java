@@ -15,6 +15,7 @@ public record BeeAura(AuraType type, DamageEffect damageEffect, PotionEffect pot
     ).apply(instance, BeeAura::new));
 
     public boolean isBeneficial() {
-        return type.isBeneficial(this);
+        if (type == AuraType.POTION) return this.potionEffect().effect().isBeneficial();
+        return type.isBeneficial();
     }
 }

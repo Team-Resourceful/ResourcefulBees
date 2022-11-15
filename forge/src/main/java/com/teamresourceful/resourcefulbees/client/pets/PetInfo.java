@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.pets;
 
 import com.mojang.util.UUIDTypeAdapter;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +23,7 @@ public final class PetInfo {
     private static final Map<UUID, String> USER_PETS = new HashMap<>();
 
     private PetInfo()   {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     static void addUser(String uuid, String model){

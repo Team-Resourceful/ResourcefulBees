@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.init;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.FolderPackResources;
@@ -22,7 +22,7 @@ import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 public final class ModSetup {
 
     private ModSetup() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static void initialize() {

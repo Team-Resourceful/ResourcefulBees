@@ -55,7 +55,7 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
 
     private String getHiveMaxBees(BlockState state) {
         if (state.getBlock() instanceof TieredBeehiveBlock tieredBeehiveBlock) {
-            return String.valueOf(tieredBeehiveBlock.getTier().getMaxBees());
+            return String.valueOf(tieredBeehiveBlock.getTier().maxBees());
         }
         return "Error";
     }

@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
-import com.teamresourceful.resourcefulbees.common.lib.annotations.Translate;
+import com.teamresourceful.resourcefulbees.common.lib.tools.Translate;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -15,7 +16,7 @@ public final class TranslationConstants {
      */
 
     private TranslationConstants() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static class LightLevel {

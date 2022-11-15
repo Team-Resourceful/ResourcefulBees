@@ -5,9 +5,9 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.Registry;
@@ -29,7 +29,7 @@ import java.util.function.Function;
 public final class CodecUtils {
 
     private CodecUtils() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     //region FluidStack Codec

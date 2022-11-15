@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
+import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
@@ -123,7 +123,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private static boolean canPlaceOnBlock(BlockState state) {
-        return state.is(ModTags.Blocks.NEST_PLACEABLE_ON);
+        return state.is(ModBlockTags.NEST_PLACEABLE_ON);
     }
 
     @NotNull

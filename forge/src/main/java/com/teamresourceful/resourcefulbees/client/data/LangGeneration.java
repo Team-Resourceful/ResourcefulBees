@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
@@ -17,6 +16,7 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraftforge.registries.DeferredRegister;
 import org.apache.commons.lang3.StringUtils;
 
@@ -40,7 +40,7 @@ public final class LangGeneration {
     public static final String TRAIT_RESOURCEFULBEES = "trait_type.resourcefulbees.";
 
     private LangGeneration() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static void generateEnglishLang() {

@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.versions.forge.ForgeVersion;
 
@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 public final class DataGen {
 
     private DataGen() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     private static final Map<ResourceLocation, Set<ResourceLocation>> TAGS = new HashMap<>();

@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.config;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.loading.FMLPaths;
 
@@ -11,7 +11,7 @@ import java.nio.file.Path;
 public final class ConfigLoader {
 
     private ConfigLoader() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static void load(ForgeConfigSpec config, String location) {

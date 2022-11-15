@@ -15,8 +15,8 @@ import com.teamresourceful.resourcefulbees.api.beedata.render.ColorData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.LayerData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.NbtPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedItemPredicate;
@@ -45,7 +45,7 @@ import java.util.Set;
 public class DummyBeeData {
 
     private DummyBeeData() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     private static final IMutation MUTATION_INPUT = new BlockMutation(new RestrictedBlockPredicate(Blocks.COAL_BLOCK, NbtPredicate.ANY, LocationPredicate.ANY, StatePropertiesPredicate.ANY), 0.65, 35);

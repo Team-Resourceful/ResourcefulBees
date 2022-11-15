@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import net.minecraft.data.DataGenerator;
@@ -23,11 +23,11 @@ public class ModBlockTagProvider extends BlockTagsProvider {
     @Override
     @SuppressWarnings("unchecked")
     protected void addTags() {
-        tag(ModTags.Blocks.HONEYCOMB).add(Blocks.HONEYCOMB_BLOCK);
-        tag(ModTags.Blocks.WAX).add(ModBlocks.WAX_BLOCK.get());
-        tag(ModTags.Blocks.MUSHROOM).add(Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM);
+        tag(ModBlockTags.HONEYCOMB).add(Blocks.HONEYCOMB_BLOCK);
+        tag(ModBlockTags.WAX).add(ModBlocks.WAX_BLOCK.get());
+        tag(ModBlockTags.MUSHROOM).add(Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM);
         //noinspection unchecked
-        tag(Tags.Blocks.STORAGE_BLOCKS).addTags(ModTags.Blocks.WAX);
+        tag(Tags.Blocks.STORAGE_BLOCKS).addTags(ModBlockTags.WAX);
         TagAppender<Block> hiveBuilder = tag(BlockTags.BEEHIVES);
         ModBlocks.HIVES.getEntries().stream().map(RegistryEntry::get).forEach(hiveBuilder::add);
         ModBlocks.APIARIES.getEntries().stream().map(RegistryEntry::get).forEach(hiveBuilder::add);
@@ -40,9 +40,9 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         ModBlocks.CENTRIFUGE_BLOCKS.getEntries().stream().map(RegistryEntry::get).forEach(pickaxeTagBuilder::add);
         pickaxeTagBuilder.add(ModBlocks.HONEY_GENERATOR.get(), ModBlocks.ENDER_BEECON.get(), ModBlocks.SOLIDIFICATION_CHAMBER.get(), ModBlocks.HONEY_POT.get());
 
-        tag(ModTags.Blocks.HEAT_SOURCES).add(Blocks.TORCH, Blocks.SOUL_TORCH, Blocks.WALL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.LAVA, Blocks.LAVA_CAULDRON,
+        tag(ModBlockTags.HEAT_SOURCES).add(Blocks.TORCH, Blocks.SOUL_TORCH, Blocks.WALL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.LAVA, Blocks.LAVA_CAULDRON,
                 Blocks.MAGMA_BLOCK, Blocks.LANTERN, Blocks.SEA_LANTERN, Blocks.SOUL_LANTERN, Blocks.JACK_O_LANTERN);
-        tag(ModTags.Blocks.HEAT_SOURCES).addTags(BlockTags.CAMPFIRES, BlockTags.FIRE, BlockTags.CANDLES);
+        tag(ModBlockTags.HEAT_SOURCES).addTags(BlockTags.CAMPFIRES, BlockTags.FIRE, BlockTags.CANDLES);
     }
 
     @Override
