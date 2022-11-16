@@ -55,7 +55,7 @@ public class RBeePollinateGoal extends Goal {
             return false;
         } else if (bee.getRandom().nextFloat() < 0.7F) {
             return false;
-        } else if ((Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get()) || bee.getCoreData().isEntityPresent()) && bee.getSavedFlowerPos() == null && (bee.tickCount < 20 || bee.tickCount % 5 == 0)) {
+        } else if ((manualModeEnabled() || hasEntityFlower()) && bee.getSavedFlowerPos() == null && randomFlag()) {
             Optional<BlockPos> optional = this.findFlower(5.0D);
             if (optional.isPresent()) {
                 bee.setSavedFlowerPos(optional.get());
@@ -71,8 +71,20 @@ public class RBeePollinateGoal extends Goal {
         return false;
     }
 
+    private static boolean manualModeEnabled() {
+        return Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get());
+    }
+
+    private boolean hasEntityFlower() {
+        return bee.getCoreData().isEntityPresent();
+    }
+
+    private boolean randomFlag() {
+        return bee.tickCount < 20 || bee.tickCount % 5 == 0;
+    }
+
     public boolean canBeeContinue() {
-        if (!this.running) return false;
+        if (!isPollinating()) return false;
         if (bee.getSavedFlowerPos() == null) return false;
         if (this.completedPollination()) return bee.getRandom().nextFloat() < 0.2F;
         if (!bee.isFlowerValid(bee.getSavedFlowerPos())) {
@@ -129,7 +141,7 @@ public class RBeePollinateGoal extends Goal {
     }
 
     public void clearTask() {
-        if (Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get())) {
+        if (manualModeEnabled()) {
             bee.setSavedFlowerPos(null);
             bee.setFlowerEntityID(-1);
             boundingBox = null;
@@ -244,12 +256,20 @@ public class RBeePollinateGoal extends Goal {
     public Predicate<BlockPos> getFlowerBlockPredicate() {
         return pos -> {
             if (bee.getCoreData().blockFlowers().size() > 0){
-                if (!MathUtils.inRangeInclusive(pos.getY(), 0, 256)) return false;
+                if (!MathUtils.inRangeInclusive(pos.getY(), minBuildHeight(), maxBuildHeight())) return false;
                 BlockState state = bee.level.getBlockState(pos);
                 if (state.isAir()) return false;
                 return state.is(bee.getCoreData().blockFlowers());
             }
             return false;
         };
+    }
+
+    private int minBuildHeight() {
+        return bee.level.getMinBuildHeight();
+    }
+
+    private int maxBuildHeight() {
+        return bee.level.getMaxBuildHeight();
     }
 }
