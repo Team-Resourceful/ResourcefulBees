@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class AbstractCentrifugeOutputEntity<T extends AbstractOutput<E>, E> extends AbstractGUICentrifugeEntity {
-    protected boolean voidExcess = true;
+    protected boolean voidExcess = false;
 
     protected AbstractCentrifugeOutputEntity(BlockEntityType<?> tileEntityTypeIn, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, tier, pos, state);
