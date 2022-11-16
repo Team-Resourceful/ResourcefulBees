@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.capabilities;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
