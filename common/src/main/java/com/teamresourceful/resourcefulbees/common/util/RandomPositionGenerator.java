@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.utils;
+package com.teamresourceful.resourcefulbees.common.util;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.BlockPos;
@@ -14,8 +14,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
-
-import static com.teamresourceful.resourcefulbees.common.utils.MathUtils.HALF_PI;
 
 public final class RandomPositionGenerator {
 
@@ -107,8 +105,8 @@ public final class RandomPositionGenerator {
 
     private static BlockPos getRandomOffset(RandomSource random, int horizontalOffset, int verticalOffset, int minusTwo, @Nullable Vec3 directionVec) {
         if (directionVec != null) {
-            double d3 = Mth.atan2(directionVec.z, directionVec.x) - HALF_PI;
-            double d4 = d3 + (2 * random.nextFloat() - 1) * HALF_PI;
+            double d3 = Mth.atan2(directionVec.z, directionVec.x) - MathUtils.HALF_PI;
+            double d4 = d3 + (2 * random.nextFloat() - 1) * MathUtils.HALF_PI;
             double d0 = random.nextDouble() * Mth.SQRT_OF_TWO * horizontalOffset;
             double d1 = -d0 * Math.sin(d4);
             double d2 = d0 * Math.cos(d4);

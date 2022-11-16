@@ -4,13 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.components.BasicImageButton;
 import com.teamresourceful.resourcefulbees.client.components.BeeconEffectWidget;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -72,7 +72,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
     @Override
     protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         if (tileEntity != null) {
-            ClientUtils.bindTexture(BACKGROUND);
+            RenderUtils.bindTexture(BACKGROUND);
             this.blit(matrix, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
             this.blit(matrix, this.leftPos+100, this.topPos+17, 138, 200, 6, 27);
         }

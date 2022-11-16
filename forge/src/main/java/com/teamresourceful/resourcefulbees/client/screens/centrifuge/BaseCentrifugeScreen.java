@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons.
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons.HelpButton;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.NavigableControlPanel;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.infopanels.AbstractInfoPanel;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
@@ -19,8 +18,9 @@ import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.PurgeContentsPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.SwitchGuiPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.VoidExcessPacket;
-import com.teamresourceful.resourcefulbees.common.utils.WorldUtils;
+import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -85,10 +85,10 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         this.renderBackground(matrix);
         if (minecraft == null) return;
         //BACKGROUND
-        ClientUtils.bindTexture(CentrifugeTextures.BACKGROUND);
+        RenderUtils.bindTexture(CentrifugeTextures.BACKGROUND);
         blit(matrix, leftPos, topPos, 0, 0, imageWidth, imageHeight, 360, 228);
         //COMPONENTS
-        ClientUtils.bindTexture(CentrifugeTextures.COMPONENTS);
+        RenderUtils.bindTexture(CentrifugeTextures.COMPONENTS);
         blit(matrix, leftPos+102, topPos+39, 19, 0, 237, 164);
     }
 

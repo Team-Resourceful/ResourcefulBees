@@ -278,7 +278,7 @@ public class SearchBox extends AbstractWidget {
     public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         if (!this.isVisible()) return;
 
-        ClientUtils.bindTexture(TEXTURE);
+        RenderUtils.bindTexture(TEXTURE);
         blit(stack, this.x, this.y, 0, 0, this.width, this.height, this.width, this.height);
 
         int j = this.cursorPos - this.displayPos;

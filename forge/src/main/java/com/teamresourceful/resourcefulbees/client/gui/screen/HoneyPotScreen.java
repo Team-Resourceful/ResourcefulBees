@@ -4,8 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyPotMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
+import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -27,7 +28,7 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
         this.renderBackground(matrix);
 
         if (this.minecraft == null) return;
-        ClientUtils.bindTexture(BACKGROUND);
+        RenderUtils.bindTexture(BACKGROUND);
         blit(matrix, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         FluidStack fluidStack = menu.getEntity().getTank().getFluid();

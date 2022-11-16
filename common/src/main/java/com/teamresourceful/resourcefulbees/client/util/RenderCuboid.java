@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.utils;
+package com.teamresourceful.resourcefulbees.client.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

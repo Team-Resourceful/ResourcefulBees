@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.CommonComponents;
@@ -27,7 +28,7 @@ public class CloseButton extends AbstractButton implements TooltipProvider {
 
     @Override
     public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        ClientUtils.bindTexture(TEXTURE);
+        RenderUtils.bindTexture(TEXTURE);
         blit(stack, this.x-1, this.y-1, this.isHovered ? 13 : 0, 0, this.width+2, this.height+2, 26, 13);
     }
 

@@ -2,11 +2,11 @@ package com.teamresourceful.resourcefulbees.client.components;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
+import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -59,13 +59,13 @@ public class BeeconEffectWidget extends AbstractWidget {
     @Override
     public void renderButton(@NotNull PoseStack matrix, int mouseX, int mouseY, float pPartialTicks) {
         Minecraft mc = Minecraft.getInstance();
-        ClientUtils.bindTexture(this.effectSprite.atlas().location());
+        RenderUtils.bindTexture(this.effectSprite.atlas().location());
         blit(matrix, this.x + 2, this.y + 2, this.getBlitOffset(), 18, 18, this.effectSprite);
         drawString(matrix, mc.font, Component.literal("x" + tile.getEffectValue(effect)), this.x+24, this.y+6, 14737632);
 
         boolean buttonHover = MathUtils.inRangeInclusive(mouseX, x+60, x+85) && MathUtils.inRangeInclusive(mouseY, y+4, y+19);
 
-        ClientUtils.bindTexture(BACKGROUND);
+        RenderUtils.bindTexture(BACKGROUND);
         blit(matrix, this.x + 59, this.y + 3, isSelected() ? 0 : 26, buttonHover ? 216 : 200, 26, 16);
     }
 

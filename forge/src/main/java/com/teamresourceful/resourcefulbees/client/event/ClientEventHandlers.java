@@ -68,7 +68,7 @@ public final class ClientEventHandlers {
     }
 
     public static void onRegisterGuiOverlay(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll("bee_locator", BeeLocatorOverlay.INSTANCE);
+        event.registerAboveAll("bee_locator", (gui, stack, partTicks, x, y) -> BeeLocatorOverlay.INSTANCE.render(gui.getMinecraft(), stack, partTicks, x, y));
     }
 
     public static void recipesLoaded(RecipesUpdatedEvent event){

@@ -4,11 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.ItemSlotWidget;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaTextures;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.HistoryScreen;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
@@ -44,24 +44,24 @@ public class HoneyPage extends HistoryScreen implements TooltipProvider {
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
 
-        ClientUtils.bindTexture(TEXTURE);
+        RenderUtils.bindTexture(TEXTURE);
         Gui.blit(stack, 0, 19, 0, 0, 186, 3, 186, 3);
 
         Font font = Minecraft.getInstance().font;
         font.draw(stack,  this.honeyBottle.getHoverName(), 24, 1, 0xFFFFFF);
         int food = Math.min(this.data.bottleData().hunger(), 20);
         float staturation = Math.min(food * this.data.bottleData().saturation() * 2f, 20);
-        ClientUtils.bindTexture(BeepediaTextures.HUNGER_BAR);
+        RenderUtils.bindTexture(BeepediaTextures.HUNGER_BAR);
         Gui.blit(stack, 24, 10, 0, 0, 90, 9, 90, 9);
 
-        ClientUtils.bindTexture(BeepediaTextures.SATURATION);
+        RenderUtils.bindTexture(BeepediaTextures.SATURATION);
         float percent = staturation / 20f;
         Gui.blit(stack, 24 + 90 - (int)(percent * 90), 10, 90 - (int)(percent * 90), 0, (int)(percent * 90), 9, 90, 9);
 
         int amount = food / 2;
         int startX = (10 - amount) * 9;
 
-        ClientUtils.bindTexture(BeepediaTextures.HUNGER);
+        RenderUtils.bindTexture(BeepediaTextures.HUNGER);
         if (food % 2 == 1) Gui.blit(stack, 24 + startX - 9, 10, 0, 9, 9, 9, 9, 18);
         for (int i = 0; i < amount; i++) {
             Gui.blit(stack, 24 + startX, 10, 0, 0, 9, 9, 9, 18);

@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConst
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeFluidOutputContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeFluidOutputEntity;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
+import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;

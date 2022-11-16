@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.BreederMenu;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -40,7 +40,7 @@ public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
 
     @Override
     protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
-        ClientUtils.bindTexture(BACKGROUND);
+        RenderUtils.bindTexture(BACKGROUND);
         blit(matrix, this.leftPos, this.topPos, 0, 0, 198, 188);
         int y = this.topPos + 21;
         for (int i = 0; i < BreederConstants.NUM_OF_BREEDERS; i++) {

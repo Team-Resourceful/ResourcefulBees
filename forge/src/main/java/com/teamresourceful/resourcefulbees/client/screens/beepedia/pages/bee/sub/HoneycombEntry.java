@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.su
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
-import com.teamresourceful.resourcefulbees.common.utils.TriState;
+import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import com.teamresourceful.resourcefulbees.common.util.TriState;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;

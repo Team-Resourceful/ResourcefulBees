@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.client.components.SelectableFluidWidg
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.CentrifugeMenu;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +34,7 @@ public class NormalCentrifugeScreen extends AbstractContainerScreen<CentrifugeMe
     protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/basic.png");
         if (tileEntity != null) {
-            ClientUtils.bindTexture(texture);
+            RenderUtils.bindTexture(texture);
             int i = this.leftPos;
             int j = this.topPos;
             this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);

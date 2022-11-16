@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.components.beepedia.selection
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
@@ -44,7 +44,7 @@ public class BeeEntry extends ListEntry {
             Font font = Minecraft.getInstance().font;
             if (this.entity != null) {
                 try (var ignored2 = RenderUtils.createScissorBoxStack(scissorStack, Minecraft.getInstance(), stack, 3, 2, 16, 16)) {
-                    ClientUtils.renderEntity(stack, this.entity, 1, 4, 45f, 0.75f);
+                    ClientRenderUtils.renderEntity(stack, this.entity, 1, 4, 45f, 0.75f);
                 }
             }
             RenderUtils.bindTexture(SLOT_TEXTURE);

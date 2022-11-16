@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.utils;
+package com.teamresourceful.resourcefulbees.common.util;
 
 public enum TriState {
     TRUE,

@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.utils;
+package com.teamresourceful.resourcefulbees.common.util;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 

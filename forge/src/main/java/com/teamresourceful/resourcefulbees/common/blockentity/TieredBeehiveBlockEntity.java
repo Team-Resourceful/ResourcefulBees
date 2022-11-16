@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
+import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.common.caches.CacheableFunction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

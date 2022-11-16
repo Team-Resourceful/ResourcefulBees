@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -17,7 +17,7 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
     public void render(@NotNull PoseStack stack, @NotNull EntityIngredient ingredient) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null && ingredient.getEntity() != null) {
-            ClientUtils.renderEntity(stack, ingredient.getEntity(), -2, -2, ingredient.getRotation(), 1);
+            ClientRenderUtils.renderEntity(stack, ingredient.getEntity(), -2, -2, ingredient.getRotation(), 1);
         }
     }
 

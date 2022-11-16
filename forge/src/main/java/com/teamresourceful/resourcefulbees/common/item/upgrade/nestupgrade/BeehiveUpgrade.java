@@ -14,11 +14,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.IExtensibleEnum;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public enum BeehiveUpgrade implements IExtensibleEnum {
+public enum BeehiveUpgrade {
     T1_TO_T2(DefaultBeehiveTiers.T1_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '2'))),
     T2_TO_T3(DefaultBeehiveTiers.T1_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '3'))),
     T3_TO_T4(DefaultBeehiveTiers.T1_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '4')));
@@ -29,11 +28,6 @@ public enum BeehiveUpgrade implements IExtensibleEnum {
     BeehiveUpgrade(BeehiveTier from, NestUpgrader upgrader) {
         this.from = from;
         this.upgrader = upgrader;
-    }
-
-    @SuppressWarnings("unused")
-    public static BeehiveUpgrade create(String name, BeehiveTier from, NestUpgrader upgrader) {
-        throw new IllegalStateException("Enum not extended");
     }
 
     private static InteractionResult performUpgrade(BlockState state, Level level, BlockPos pos, NestGetter getter) {

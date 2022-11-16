@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item.locator;
 
 import com.teamresourceful.resourcefulbees.client.gui.screen.locator.BeeLocatorScreen;
+import com.teamresourceful.resourcefulbees.platform.common.workers.LevelWorkManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -10,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.WorldWorkerManager;
 import org.jetbrains.annotations.NotNull;
 
 public class BeeLocator extends Item {
@@ -36,7 +36,7 @@ public class BeeLocator extends Item {
         ItemStack stack = player.getItemInHand(hand);
         if (!player.getAbilities().instabuild && player.getCooldowns().isOnCooldown(stack.getItem())) return;
         if (!(stack.getItem() instanceof BeeLocator)) return;
-        WorldWorkerManager.addWorker(new BeeLocatorWorker(player, hand, bee, 100));
+        LevelWorkManager.addWork(new BeeLocatorWorker(player, hand, bee, 100));
     }
 
 }

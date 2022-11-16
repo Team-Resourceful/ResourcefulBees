@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.item.locator;
 import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.platform.common.workers.LevelWorker;
 import com.teamresourceful.resourcefullib.common.utils.types.Vec2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -15,14 +16,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraftforge.common.WorldWorkerManager;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
 
-public class BeeLocatorWorker implements WorldWorkerManager.IWorker {
+public class BeeLocatorWorker implements LevelWorker {
 
     private boolean isRunning = true;
     private final Player player;
@@ -46,12 +46,12 @@ public class BeeLocatorWorker implements WorldWorkerManager.IWorker {
     }
 
     @Override
-    public boolean hasWork() {
+    public boolean canWork() {
         return isRunning;
     }
 
     @Override
-    public boolean doWork() {
+    public boolean work() {
         Vec2i offset = queue.poll();
         if (offset == null) {
             fail();

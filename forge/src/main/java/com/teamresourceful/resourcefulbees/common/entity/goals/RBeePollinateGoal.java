@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
+import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
 import net.minecraft.sounds.SoundEvents;

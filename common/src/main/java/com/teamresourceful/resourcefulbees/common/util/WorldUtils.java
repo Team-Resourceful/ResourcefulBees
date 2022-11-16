@@ -23,17 +23,17 @@
  * Methods below are taken from Mekanism and modified to fit Resourceful Bees -> https://github.com/mekanism/Mekanism
  */
 
-package com.teamresourceful.resourcefulbees.common.utils;
+package com.teamresourceful.resourcefulbees.common.util;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.lib.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 public final class WorldUtils {
@@ -44,7 +44,7 @@ public final class WorldUtils {
 
     @Nullable
     @Contract("_, null, _, _ -> null")
-    public static <A extends BlockEntity> A getTileEntity(@Nonnull Class<A> clazz, @Nullable Level reader, @Nonnull BlockPos pos, boolean logWrongType) {
+    public static <A extends BlockEntity> A getTileEntity(@NotNull Class<A> clazz, @Nullable Level reader, @NotNull BlockPos pos, boolean logWrongType) {
         BlockEntity tile = getTileEntity(reader, pos);
         if (tile == null) {
             return null;
@@ -52,7 +52,7 @@ public final class WorldUtils {
             return clazz.cast(tile);
         } else {
             if (logWrongType) {
-                ResourcefulBees.LOGGER.warn("Unexpected TileEntity class at {}, expected {}, but found: {}", pos, clazz, tile.getClass());
+                Constants.LOGGER.warn("Unexpected TileEntity class at {}, expected {}, but found: {}", pos, clazz, tile.getClass());
             }
 
             return null;
@@ -61,24 +61,24 @@ public final class WorldUtils {
 
     @Nullable
     @Contract("null, _ -> null")
-    public static BlockEntity getTileEntity(@Nullable Level world, @Nonnull BlockPos pos) {
+    public static BlockEntity getTileEntity(@Nullable Level world, @NotNull BlockPos pos) {
         return !isBlockLoaded(world, pos) ? null : world.getBlockEntity(pos);
     }
 
     @Contract("null, _ -> false")
-    public static boolean isBlockLoaded(@Nullable Level world, @Nonnull BlockPos pos) {
+    public static boolean isBlockLoaded(@Nullable Level world, @NotNull BlockPos pos) {
         return world != null && world.isInWorldBounds(pos) && world.isLoaded(pos);
     }
 
     @Nullable
     @Contract("_, null, _ -> null")
-    public static <T extends BlockEntity> T getTileEntity(@Nonnull Class<T> clazz, @Nullable Level world, @Nonnull BlockPos pos) {
+    public static <T extends BlockEntity> T getTileEntity(@NotNull Class<T> clazz, @Nullable Level world, @NotNull BlockPos pos) {
         return getTileEntity(clazz, world, pos, false);
     }
 
     @Nullable
     @Contract("_, _, _ -> null")
-    public static <T extends BlockEntity> T getTileEntity(@Nonnull Class<T> clazz, Supplier<@Nullable Level> input, @Nonnull BlockPos pos) {
+    public static <T extends BlockEntity> T getTileEntity(@NotNull Class<T> clazz, Supplier<@Nullable Level> input, @NotNull BlockPos pos) {
         return getTileEntity(clazz, input.get(), pos, false);
     }
 }
