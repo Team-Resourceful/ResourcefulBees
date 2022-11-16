@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub;
 
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
@@ -33,7 +33,7 @@ public class HoneycombPage extends Screen implements TooltipProvider {
         this.list = addRenderableWidget(new SelectionList<>(1, 0, 182, 111, 26, ignored -> {}));
         for (BeehiveTier value : BeehiveTier.values()) {
             CycleableList<ItemStack> hives = value.getDisplayItems()
-                    .get().stream().map(ItemStack::new)
+                    .stream().map(ItemStack::new)
                     .collect(CycleableList::new, CycleableList::add, CycleableList::addAll);
             this.list.addEntry(new HoneycombEntry(hives, this.honeycomb.getHiveOutput(value), false));
         }

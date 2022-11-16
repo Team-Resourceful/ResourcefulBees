@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
+import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.common.caches.CacheableFunction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -90,7 +90,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
 
     public static void recalculateHoneyLevel(TieredBeehiveBlockEntity hive) {
         float combsInHive = hive.honeycombs.size();
-        float percentValue = (combsInHive / hive.getBlock().getTier().getMaxCombs()) * 100;
+        float percentValue = (combsInHive / hive.getBlock().getTier().maxCombs()) * 100;
         int newState = (int) Mth.clamp((percentValue - (percentValue % 20)) / 20, 0, 5) ;
         if (hive.level != null) hive.level.setBlockAndUpdate(hive.worldPosition, hive.getBlockState().setValue(BeehiveBlock.HONEY_LEVEL, newState));
     }
@@ -168,13 +168,13 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
     public void addOccupantWithPresetTicks(@NotNull Entity bee, boolean hasNectar, int ticksInHive) {
         if (!(bee instanceof IBeeCompat compat)) return;
         BeehiveEntityAccessor thisHive = (BeehiveEntityAccessor) this;
-        if (thisHive.getBees().size() < getBlock().getTier().getMaxBees()) {
+        if (thisHive.getBees().size() < getBlock().getTier().maxBees()) {
             bee.ejectPassengers();
             CompoundTag nbt = new CompoundTag();
             bee.save(nbt);
 
             if (this.level != null) {
-                int maxTimeInHive = (int) (compat.getMaxTimeInHive() * getBlock().getTier().getTimeModifier());
+                int maxTimeInHive = (int) (compat.getMaxTimeInHive() * getBlock().getTier().timeModifier());
                 thisHive.getBees().add(new BeeData(nbt, ticksInHive, hasNectar ? maxTimeInHive : MIN_HIVE_TIME));
                 BlockPos pos = this.getBlockPos();
                 this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -241,7 +241,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
     }
 
     @Override
-    public boolean isFull() { return ((BeehiveEntityAccessor) this).getBees().size() >= getBlock().getTier().getMaxBees(); }
+    public boolean isFull() { return ((BeehiveEntityAccessor) this).getBees().size() >= getBlock().getTier().maxBees(); }
 
     public boolean hasBees() { return !((BeehiveEntityAccessor) this).getBees().isEmpty(); }
 

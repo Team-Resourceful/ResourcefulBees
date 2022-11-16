@@ -6,8 +6,8 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -63,7 +63,7 @@ public record OutputVariation(String id,
             if (comb != null) { lastStack = comb; continue; }
             hiveCombs.put(tier, lastStack);
         }
-        return Collections.unmodifiableMap(new EnumMap<>(hiveCombs));
+        return Collections.unmodifiableMap(hiveCombs);
     }
 
     /**
@@ -85,12 +85,12 @@ public record OutputVariation(String id,
                 //We check if its was empty to make sure it with create the proper list based off the config value instead
                 //of copying the first config value to all slots.
                 //noinspection OptionalGetWithoutIsPresent
-                lastStack = tier.getOutputType().isComb() ? defaultComb.get().copy() : defaultCombBlock.get().copy();
-                lastStack.setCount(tier.getOutputAmount());
+                lastStack = tier.output().get().isComb() ? defaultComb.get().copy() : defaultCombBlock.get().copy();
+                lastStack.setCount(tier.amount().getAsInt());
             }
             apiaryCombs.put(tier, lastStack);
         }
-        return Collections.unmodifiableMap(new EnumMap<>(apiaryCombs));
+        return Collections.unmodifiableMap(apiaryCombs);
     }
 
     private static void checkDefaultsAreOK(String id, Optional<ItemStack> defaultComb, Optional<ItemStack> defaultCombBlock) {

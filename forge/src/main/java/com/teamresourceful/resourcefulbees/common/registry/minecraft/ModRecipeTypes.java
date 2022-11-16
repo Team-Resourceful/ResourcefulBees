@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.FlowHiveRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
@@ -10,6 +9,7 @@ import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.Cent
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistries;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipeType;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -17,7 +17,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 public final class ModRecipeTypes {
 
     private ModRecipeTypes() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
     
     public static final ResourcefulRegistry<RecipeType<?>> RECIPE_TYPES = ResourcefulRegistries.create(Registry.RECIPE_TYPE, ResourcefulBees.MOD_ID);

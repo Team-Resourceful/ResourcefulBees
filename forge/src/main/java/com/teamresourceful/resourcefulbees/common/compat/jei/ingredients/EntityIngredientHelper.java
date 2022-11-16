@@ -10,7 +10,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.common.ForgeSpawnEggItem;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,9 +50,7 @@ public class EntityIngredientHelper implements IIngredientHelper<EntityIngredien
 
     @Override
     public @NotNull ResourceLocation getResourceLocation(EntityIngredient ingredient) {
-        ResourceLocation id = ForgeRegistries.ENTITY_TYPES.getKey(ingredient.getEntityType());
-        if (id == null) return new ResourceLocation("error");
-        return id;
+        return ingredient.getEntityId();
     }
 
     @NotNull

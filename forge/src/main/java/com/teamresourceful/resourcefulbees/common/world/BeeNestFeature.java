@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
+import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +35,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -123,7 +123,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private static boolean canPlaceOnBlock(BlockState state) {
-        return state.is(ModTags.Blocks.NEST_PLACEABLE_ON);
+        return state.is(ModBlockTags.NEST_PLACEABLE_ON);
     }
 
     @NotNull
@@ -239,8 +239,8 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private static void addBeeToNest(CustomBeeEntityType<?> entityType, RandomSource rand, TieredBeehiveBlockEntity nest) {
-        ResourceLocation id = ForgeRegistries.ENTITY_TYPES.getKey(entityType);
-        if (id != null) {
+        ResourceLocation id = Registry.ENTITY_TYPE.getKey(entityType);
+        if (id != Registry.ENTITY_TYPE.getDefaultKey()) {
             CompoundTag tag = new CompoundTag();
             tag.putString(NBTConstants.NBT_ID, id.toString());
             int timeInHive = rand.nextInt(entityType.getData().coreData().maxTimeInHive());

@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeT
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +40,7 @@ public abstract class NavigableControlPanel<T extends AbstractGUICentrifugeEntit
 
     @Override
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        ClientUtils.bindTexture(CentrifugeTextures.COMPONENTS);
+        RenderUtils.bindTexture(CentrifugeTextures.COMPONENTS);
         blit(stack, x, y, 0, 193, 75, 63);
         TextUtils.tf12DrawCenteredStringNoShadow(stack, navLabel, x+37f, y+6.5f, TextUtils.FONT_COLOR_1);
         super.render(stack, mouseX, mouseY, partialTicks);

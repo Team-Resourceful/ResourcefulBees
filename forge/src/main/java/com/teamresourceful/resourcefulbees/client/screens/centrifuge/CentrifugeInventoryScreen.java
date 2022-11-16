@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeContainer;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -42,7 +43,7 @@ public abstract class CentrifugeInventoryScreen<T extends CentrifugeContainer<?>
     }
 
     protected void drawPlayerInventory(@NotNull PoseStack matrix, int x, int y) {
-        ClientUtils.bindTexture(CentrifugeTextures.COMPONENTS);
+        RenderUtils.bindTexture(CentrifugeTextures.COMPONENTS);
         // player inventory
         drawSlotGrid(matrix, x, y, 3, 9, 0, 72);
         //hotbar slots

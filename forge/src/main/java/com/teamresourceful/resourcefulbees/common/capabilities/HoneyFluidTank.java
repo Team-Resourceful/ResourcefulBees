@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 
 public class HoneyFluidTank extends FluidTank {
 
-    private static final Predicate<FluidStack> FLUID_VALIDATOR = fluidStack -> fluidStack.getFluid().is(ModTags.Fluids.HONEY);
+    private static final Predicate<FluidStack> FLUID_VALIDATOR = fluidStack -> fluidStack.getFluid().is(ModFluidTags.HONEY);
 
     public HoneyFluidTank(int capacity) {
         this(capacity, FLUID_VALIDATOR);

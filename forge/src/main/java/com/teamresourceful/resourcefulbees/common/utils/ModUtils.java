@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.common.utils;
 
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -19,12 +19,16 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import static net.minecraft.world.item.ItemStack.tagMatches;
@@ -35,7 +39,7 @@ public final class ModUtils {
     private static final String[] UNITS = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
 
     private ModUtils() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static void capabilityOrGuiUse(BlockEntity tileEntity, Player player, Level level, BlockPos pos, InteractionHand hand){
@@ -117,5 +121,17 @@ public final class ModUtils {
 
     public static boolean itemStackIsIdentical(ItemStack stack, ItemStack other) {
         return stack.is(other.getItem()) && stack.getCount() == other.getCount() && tagMatches(stack, other);
+    }
+
+    public static boolean isModLoaded(String modId) {
+        return ModList.get().isLoaded(modId);
+    }
+
+    public static boolean isARealPlayer(Player player) {
+        return !(player instanceof FakePlayer);
+    }
+
+    public static Path getModPath(String modid) {
+        return ModList.get().getModFileById(modid).getFile().getFilePath();
     }
 }

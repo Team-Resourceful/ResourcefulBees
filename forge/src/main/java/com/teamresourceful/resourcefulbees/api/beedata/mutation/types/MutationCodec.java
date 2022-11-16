@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.Optional;
 public final class MutationCodec {
 
     private MutationCodec() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     private static final Map<String, IMutationSerializer> SERIALIZERS = new HashMap<>();

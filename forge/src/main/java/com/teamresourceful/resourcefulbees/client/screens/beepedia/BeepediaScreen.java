@@ -27,6 +27,7 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.state.ScreenStateManager;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -78,7 +79,7 @@ public class BeepediaScreen extends SubdividedScreen {
 
     @Override
     public void renderScreen(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        ClientUtils.bindTexture(BACKGROUND);
+        RenderUtils.bindTexture(BACKGROUND);
         blit(stack, 0, 0, 0, 0, 328, 200, 328, 200);
         super.renderScreen(stack, mouseX, mouseY, partialTicks);
     }

@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia.state;
 import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaTextures;
-import com.teamresourceful.resourcefulbees.common.utils.TriState;
+import com.teamresourceful.resourcefulbees.common.util.TriState;
 import com.teamresourceful.resourcefullib.client.screens.state.PageState;
 import com.teamresourceful.resourcefullib.client.screens.state.ScreenState;
 import net.minecraft.client.gui.screens.Screen;

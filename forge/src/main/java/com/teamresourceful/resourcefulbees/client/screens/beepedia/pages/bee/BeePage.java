@@ -9,8 +9,9 @@ import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaTextu
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub.HoneycombPage;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub.InfoPage;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub.TraitsPage;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -20,7 +21,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -57,8 +57,8 @@ public class BeePage extends SubdividedScreen {
                     .setTooltipProvider(() -> List.of(Component.literal("Honeycomb")));
         }
 
-        addRenderableWidget(new SlotButton(160, 25, BeepediaTextures.RECIPE_BOOK, () -> ModList.get().isLoaded("jei"), () -> {
-            if (ModList.get().isLoaded("jei")) {
+        addRenderableWidget(new SlotButton(160, 25, BeepediaTextures.RECIPE_BOOK, () -> ModUtils.isModLoaded("jei"), () -> {
+            if (ModUtils.isModLoaded("jei")) {
                 JEICompat.searchEntity(this.data.entityType().get());
             }
         })).setTooltipProvider(() -> List.of(Component.literal("Open JEI")));
@@ -72,7 +72,7 @@ public class BeePage extends SubdividedScreen {
 
         if (bee != null) {
             try (var ignored = RenderUtils.createScissorBox(Minecraft.getInstance(), stack, 0, 0, 49, 49)) {
-                ClientUtils.renderEntity(stack, bee, 14, 12, -45, 2f);
+                ClientRenderUtils.renderEntity(stack, bee, 14, 12, -45, 2f);
             }
         }
 

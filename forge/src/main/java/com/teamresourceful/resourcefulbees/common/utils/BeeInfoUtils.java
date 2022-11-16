@@ -3,11 +3,12 @@ package com.teamresourceful.resourcefulbees.common.utils;
 import com.teamresourceful.resourcefulbees.api.ICustomBee;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -19,7 +20,6 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,27 +29,25 @@ import java.util.Optional;
 public final class BeeInfoUtils {
 
     private BeeInfoUtils() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static Pair<String, String> sortParents(String parent1, String parent2) {
         return parent1.compareTo(parent2) > 0 ? Pair.of(parent1, parent2) : Pair.of(parent2, parent1);
     }
 
+    @Nullable
     public static MobEffect getEffect(String effectName) {
-        return ForgeRegistries.MOB_EFFECTS.getValue(ResourceLocation.tryParse(effectName));
+        return Registry.MOB_EFFECT.getOptional(ResourceLocation.tryParse(effectName)).orElse(null);
     }
 
     public static Optional<EntityType<?>> getOptionalEntityType(String entityName) {
-         return getResourceLocation(entityName).filter(ForgeRegistries.ENTITY_TYPES::containsKey).map(ForgeRegistries.ENTITY_TYPES::getValue);
+        return EntityType.byString(entityName);
     }
 
-    public static @Nullable EntityType<?> getEntityType(ResourceLocation entityId) {
-        return ForgeRegistries.ENTITY_TYPES.getValue(entityId);
-    }
-
-    public static Optional<ResourceLocation> getResourceLocation(String resource) {
-        return Optional.ofNullable(ResourceLocation.tryParse(resource));
+    @Nullable
+    public static EntityType<?> getEntityType(ResourceLocation entityId) {
+        return Registry.ENTITY_TYPE.getOptional(entityId).orElse(null);
     }
 
     public static void flagBeesInRange(BlockPos pos, Level level) {

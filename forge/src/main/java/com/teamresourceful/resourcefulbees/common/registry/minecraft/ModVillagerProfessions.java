@@ -2,10 +2,10 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.google.common.collect.ImmutableSet;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistries;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.Registry;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.PoiTypeTags;
@@ -14,7 +14,7 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 public final class ModVillagerProfessions {
 
     private ModVillagerProfessions() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final ResourcefulRegistry<VillagerProfession> PROFESSIONS = ResourcefulRegistries.create(Registry.VILLAGER_PROFESSION, ResourcefulBees.MOD_ID);

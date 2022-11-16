@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.inventory;
 
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
+import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import net.minecraft.world.inventory.ContainerData;
 
 public class BoundSafeContainerData implements ContainerData {

@@ -13,7 +13,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.Vec3;
@@ -34,11 +33,6 @@ public class BeeSpawnEggItem extends ForgeSpawnEggItem {
 		super(entityType, 0xffcc33, 0x303030, new Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_BEES));
 		this.beeData = BeeRegistry.getRegistry().getBeeData(beeType);
 	}
-
-	//try to remove this
-    public CustomBeeData getBeeData() {
-        return beeData;
-    }
 
     @Override
     public int getColor(int tintIndex) {

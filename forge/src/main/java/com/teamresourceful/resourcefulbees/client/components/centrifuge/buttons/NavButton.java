@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
@@ -24,7 +24,7 @@ public class NavButton extends AbstractButton {
 
     @Override
     public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        ClientUtils.bindTexture(TEXTURE);
+        RenderUtils.bindTexture(TEXTURE);
         if (reverse) {
             drawButton(stack,this.x+3, this.y+3, isHovered ? 7 : 0);
         } else {

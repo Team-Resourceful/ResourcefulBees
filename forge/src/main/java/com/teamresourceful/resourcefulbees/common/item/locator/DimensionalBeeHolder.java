@@ -1,11 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.item.locator;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ServerLevelAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.StructureCheckAccessor;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.DimensionalBeesPacket;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -24,7 +25,7 @@ public final class DimensionalBeeHolder {
     public static final Map<ResourceKey<Level>, List<String>> DIMENSIONAL_BEES = new HashMap<>();
 
     private DimensionalBeeHolder() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     private static void updateBees(MinecraftServer server) {

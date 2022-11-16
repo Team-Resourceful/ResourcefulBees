@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.inventory.menus;
 
-import com.teamresourceful.resourcefulbees.common.utils.WorldUtils;
+import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

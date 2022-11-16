@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConst
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
@@ -68,7 +69,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
     protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         Minecraft client = this.minecraft;
         if (client != null && apiaryBlockEntity != null) {
-            ClientUtils.bindTexture(VALIDATED_TEXTURE);
+            RenderUtils.bindTexture(VALIDATED_TEXTURE);
             int i = this.leftPos;
             int j = this.topPos;
             this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
@@ -87,7 +88,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
     @Override
     protected void renderLabels(@NotNull PoseStack matrix, int mouseX, int mouseY) {
-        String s = String.format("(%1$s/%2$s)", apiaryBlockEntity.beeCount(), apiaryBlockEntity.getTier().getMaxBees());
+        String s = String.format("(%1$s/%2$s)", apiaryBlockEntity.beeCount(), apiaryBlockEntity.getTier().max());
         this.font.draw(matrix, s, 4, 17, 0x404040);
         this.font.draw(matrix, getTitle(), 55, 7, 0x404040);
         this.font.draw(matrix, TranslationConstants.Guis.INVENTORY, 55, 75, 0x404040);

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.config;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
@@ -91,7 +91,7 @@ public final class CommonConfig {
     public static BooleanValue SHOW_DEBUG_INFO;
 
     private CommonConfig() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final ForgeConfigSpec COMMON_CONFIG;
@@ -112,8 +112,7 @@ public final class CommonConfig {
                 .define("beepediaHideLocked", false);
         HONEY_PROCESS_TIME = commonBuilder.comment("\nAmount of time in ticks required to finish processing a honey bottle.")
                 .defineInRange("honeyProcessTime", 5, 0, 2400);
-        CONGEALER_TIME_MODIFIER = commonBuilder.comment("\nMultiplier to the amount of ticks needed to process honey into honey blocks in the congealer." +
-                "\nThis value is multiplying the honeyProcessTime.")
+        CONGEALER_TIME_MODIFIER = commonBuilder.comment("\nMultiplier to the amount of ticks needed to process honey into honey blocks in the congealer.\nThis value is multiplying the honeyProcessTime.")
                 .defineInRange("congealerTimeMultiplier", 4, 1, 16);
         commonBuilder.pop();
 

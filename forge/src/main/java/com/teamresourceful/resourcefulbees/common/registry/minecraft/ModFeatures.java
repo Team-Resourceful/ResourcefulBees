@@ -2,11 +2,11 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistries;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.common.world.BeeNestFeature;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.features.FeatureUtils;
@@ -22,7 +22,7 @@ import net.minecraft.world.level.levelgen.placement.RarityFilter;
 public final class ModFeatures {
 
     private ModFeatures() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final ResourcefulRegistry<Feature<?>> FEATURES = ResourcefulRegistries.create(Registry.FEATURE, ResourcefulBees.MOD_ID);
@@ -32,7 +32,7 @@ public final class ModFeatures {
     public static class ConfiguredFeatures {
 
         private ConfiguredFeatures() {
-            throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+            throw new UtilityClassError();
         }
 
         //TODO Change to json generated configured features.

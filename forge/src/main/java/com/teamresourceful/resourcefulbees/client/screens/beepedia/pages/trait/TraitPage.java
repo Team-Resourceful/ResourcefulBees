@@ -6,12 +6,12 @@ import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.ItemSlotWidget;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.SlotButton;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.honey.EffectEntry;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitAbilityRegistry;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.HistoryScreen;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
@@ -70,7 +70,7 @@ public class TraitPage extends HistoryScreen implements TooltipProvider {
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
 
-        ClientUtils.bindTexture(TEXTURE);
+        RenderUtils.bindTexture(TEXTURE);
         Gui.blit(stack, 0, 19, 0, 0, 186, 3, 186, 3);
 
         Font font = Minecraft.getInstance().font;

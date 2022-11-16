@@ -1,19 +1,19 @@
 package com.teamresourceful.resourcefulbees.common.network;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.*;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.CommandResponsePacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.DimensionalBeesPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncCapabilityPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncGuiPacket;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.networking.NetworkChannel;
 import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
 
 public final class NetPacketHandler {
 
     private NetPacketHandler() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static final NetworkChannel CHANNEL = new NetworkChannel(ResourcefulBees.MOD_ID, 0, "main");

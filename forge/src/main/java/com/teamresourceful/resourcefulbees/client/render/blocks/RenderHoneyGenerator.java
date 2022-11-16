@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.render.blocks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.teamresourceful.resourcefulbees.client.utils.RenderCuboid;
+import com.teamresourceful.resourcefulbees.client.util.RenderCuboid;
 import com.teamresourceful.resourcefulbees.common.blockentity.HoneyGeneratorBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;

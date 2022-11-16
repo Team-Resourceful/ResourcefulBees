@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.data.DataGenerator;
@@ -45,26 +45,26 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipes);
 
         RecipeCriteria hasPlanks = new RecipeCriteria("has_planks", RecipeProvider.has(ItemTags.PLANKS));
-        RecipeCriteria hasHoneycombBlock = new RecipeCriteria("has_honeycomb_block", RecipeProvider.has(ModTags.Items.HONEYCOMB_BLOCK));
+        RecipeCriteria hasHoneycombBlock = new RecipeCriteria("has_honeycomb_block", RecipeProvider.has(ModItemTags.HONEYCOMB_BLOCK));
         RecipeCriteria hasIron = new RecipeCriteria("has_iron", RecipeProvider.has(Tags.Items.INGOTS_IRON));
 
         //region Hive Upgrades
         RecipeHelper.createBoxed(Ingredient.of(ItemTags.PLANKS), Ingredient.of(Items.GRASS), ModItems.T2_NEST_UPGRADE.get())
                 .unlockedBy(hasPlanks).save(recipes);
-        RecipeHelper.createCornerWithMid(Ingredient.of(ItemTags.PLANKS), Ingredient.of(ModTags.Items.HONEYCOMB), Ingredient.of(ModTags.Items.WAX), ModItems.T3_NEST_UPGRADE.get())
+        RecipeHelper.createCornerWithMid(Ingredient.of(ItemTags.PLANKS), Ingredient.of(ModItemTags.HONEYCOMB), Ingredient.of(ModItemTags.WAX), ModItems.T3_NEST_UPGRADE.get())
                 .unlockedBy(hasPlanks).save(recipes);
-        RecipeHelper.createCornerWithMid(Ingredient.of(ItemTags.PLANKS), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(ModTags.Items.WAX_BLOCK), ModItems.T4_NEST_UPGRADE.get())
+        RecipeHelper.createCornerWithMid(Ingredient.of(ItemTags.PLANKS), Ingredient.of(ModItemTags.HONEYCOMB_BLOCK), Ingredient.of(ModItemTags.WAX_BLOCK), ModItems.T4_NEST_UPGRADE.get())
                 .unlockedBy(hasPlanks).save(recipes);
         //endregion
 
         //region Apiary Blocks
-        RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(ModTags.Items.T3_NESTS), ModItems.T1_APIARY_ITEM.get())
+        RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModItemTags.HONEYCOMB_BLOCK), Ingredient.of(ModItemTags.T3_NESTS), ModItems.T1_APIARY_ITEM.get())
                 .unlockedBy(hasHoneycombBlock).save(recipes);
-        RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(ModItems.T1_APIARY_ITEM.get()), ModItems.T2_APIARY_ITEM.get())
+        RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModItemTags.HONEYCOMB_BLOCK), Ingredient.of(ModItems.T1_APIARY_ITEM.get()), ModItems.T2_APIARY_ITEM.get())
                 .unlockedBy(hasHoneycombBlock).save(recipes);
-        RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(ModItems.T2_APIARY_ITEM.get()), ModItems.T3_APIARY_ITEM.get())
+        RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModItemTags.HONEYCOMB_BLOCK), Ingredient.of(ModItems.T2_APIARY_ITEM.get()), ModItems.T3_APIARY_ITEM.get())
                 .unlockedBy(hasHoneycombBlock).save(recipes);
-        RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK), Ingredient.of(ModItems.T3_APIARY_ITEM.get()), ModItems.T4_APIARY_ITEM.get())
+        RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModItemTags.HONEYCOMB_BLOCK), Ingredient.of(ModItems.T3_APIARY_ITEM.get()), ModItems.T4_APIARY_ITEM.get())
                 .unlockedBy(hasHoneycombBlock).save(recipes);
         //endregion
         //region Honey Conversion
@@ -82,16 +82,16 @@ public class ModRecipeProvider extends RecipeProvider {
         //endregion
         AdvancedShapedRecipeBuilder.shaped(ModItems.HONEY_POT_ITEM)
                 .pattern("HCH", "CBC", "HCH")
-                .define('H', Ingredient.of(ModTags.Items.HONEY_BOTTLES))
-                .define('C', Ingredient.of(ModTags.Items.HONEYCOMB))
+                .define('H', Ingredient.of(ModItemTags.HONEY_BOTTLES))
+                .define('C', Ingredient.of(ModItemTags.HONEYCOMB))
                 .define('B', Ingredient.of(Items.BUCKET))
                 .unlockedBy(hasHoneycombBlock)
                 .save(recipes);
         //region Waxed Blocks
-        RecipeCriteria hasWax = new RecipeCriteria("has_wax", RecipeProvider.has(ModTags.Items.WAX));
+        RecipeCriteria hasWax = new RecipeCriteria("has_wax", RecipeProvider.has(ModItemTags.WAX));
         AdvancedShapedRecipeBuilder.shaped(ModItems.WAXED_PLANKS.get(), 4)
                 .pattern("WPW", "PWP", "WPW")
-                .define('W', Ingredient.of(ModTags.Items.WAX))
+                .define('W', Ingredient.of(ModItemTags.WAX))
                 .define('P', Ingredient.of(ItemTags.PLANKS))
                 .unlockedBy(hasWax)
                 .save(recipes);
@@ -119,7 +119,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipes);
         ShapelessRecipeBuilder.shapeless(ModItems.WAXED_BUTTON.get())
                 .requires(ModItems.WAXED_PLANKS.get())
-                .unlockedBy("has_wax", RecipeProvider.has(ModTags.Items.WAX))
+                .unlockedBy("has_wax", RecipeProvider.has(ModItemTags.WAX))
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.WAXED_PRESSURE_PLATE)
                 .pattern("   ", "WW ", "   ")
@@ -144,12 +144,12 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipes);
         ShapelessRecipeBuilder.shapeless(ModItems.TRIMMED_WAXED_PLANKS.get(), 4)
                 .requires(ModItems.WAXED_PLANKS.get(), 4)
-                .unlockedBy("has_wax", RecipeProvider.has(ModTags.Items.WAX))
+                .unlockedBy("has_wax", RecipeProvider.has(ModItemTags.WAX))
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.WAXED_MACHINE_BLOCK, 2)
                 .pattern("RHR", "HWH", "RHR")
-                .define('W', Ingredient.of(ModTags.Items.WAX_BLOCK))
-                .define('H', Ingredient.of(ModTags.Items.HONEYCOMB))
+                .define('W', Ingredient.of(ModItemTags.WAX_BLOCK))
+                .define('H', Ingredient.of(ModItemTags.HONEYCOMB))
                 .define('R', Ingredient.of(Tags.Items.DUSTS_REDSTONE))
                 .unlockedBy(hasWax)
                 .save(recipes);
@@ -181,7 +181,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("IRI", "IGI", "IHI")
                 .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
                 .define('G', Ingredient.of(Tags.Items.GLASS_PANES))
-                .define('H', Ingredient.of(ModTags.Items.HONEY_BOTTLES))
+                .define('H', Ingredient.of(ModItemTags.HONEY_BOTTLES))
                 .define('R', Ingredient.of(Tags.Items.DUSTS_REDSTONE))
                 .unlockedBy(hasIron)
                 .save(recipes);
@@ -189,15 +189,15 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("PPP", "WIW", "PPP")
                 .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
                 .define('P', Ingredient.of(ItemTags.PLANKS))
-                .define('W', Ingredient.of(ModTags.Items.WAX))
+                .define('W', Ingredient.of(ModItemTags.WAX))
                 .unlockedBy(hasIron)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.HONEY_DIPPER)
                 .pattern(" CW", " SC", "S  ")
-                .define('C', Ingredient.of(ModTags.Items.HONEYCOMB))
+                .define('C', Ingredient.of(ModItemTags.HONEYCOMB))
                 .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
-                .define('W', Ingredient.of(ModTags.Items.WAX))
-                .unlockedBy("has_honeycomb", RecipeProvider.has(ModTags.Items.HONEYCOMB))
+                .define('W', Ingredient.of(ModItemTags.WAX))
+                .unlockedBy("has_honeycomb", RecipeProvider.has(ModItemTags.HONEYCOMB))
                 .save(recipes);
         ShapelessRecipeBuilder.shapeless(ModItems.SMOKER.get()).requires(ModItems.SMOKERCAN.get()).requires(ModItems.BELLOW.get()).unlockedBy("has_honeycomb", RecipeProvider.has(ModItems.SMOKERCAN.get())).save(recipes);
         //endregion
@@ -215,7 +215,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern(" G ","IGI","SWS")
                 .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
                 .define('G', Ingredient.of(Tags.Items.GLASS))
-                .define('W', Ingredient.of(ModTags.Items.WAX))
+                .define('W', Ingredient.of(ModItemTags.WAX))
                 .define('S', Ingredient.of(Tags.Items.STONE))
                 .unlockedBy(hasIron)
                 .save(recipes);
@@ -234,7 +234,7 @@ public class ModRecipeProvider extends RecipeProvider {
         RecipeCriteria hasNetherite = new RecipeCriteria("has_netherite", RecipeProvider.has(Tags.Items.INGOTS_NETHERITE));
         AdvancedShapedRecipeBuilder.shaped(ModItems.CENTRIFUGE_CASING)
                 .pattern("IWI","WHW","IWI")
-                .define('H', Ingredient.of(ModTags.Items.HONEYCOMB_BLOCK))
+                .define('H', Ingredient.of(ModItemTags.HONEYCOMB_BLOCK))
                 .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
                 .define('W', Ingredient.of(ModItems.WAXED_MACHINE_BLOCK.get()))
                 .unlockedBy(hasIron)

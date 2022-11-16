@@ -16,6 +16,8 @@ import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
 import com.teamresourceful.resourcefulbees.common.init.*;
 import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHolder;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.recipe.conditions.LoadDevRecipes;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitiveIngredient;
@@ -58,6 +60,9 @@ public class ResourcefulBees {
     public static final Logger LOGGER = LogManager.getLogger();
 
     public ResourcefulBees() {
+        DefaultBeehiveTiers.loadDefaults();
+        DefaultApiaryTiers.loadDefaults();
+
         CustomDataRegistry.INSTANCE.init();
         GeckoLib.initialize();
         ModSetup.initialize();

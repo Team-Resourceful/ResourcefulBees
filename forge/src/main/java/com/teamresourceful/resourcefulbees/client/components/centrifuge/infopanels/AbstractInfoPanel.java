@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.SwitchGuiPacket;
 import com.teamresourceful.resourcefullib.client.components.ParentWidget;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +41,7 @@ public abstract class AbstractInfoPanel<T extends AbstractGUICentrifugeEntity> e
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         if (selectedEntity == null) return;
         if (displayTitleBar) {
-            ClientUtils.bindTexture(CentrifugeTextures.COMPONENTS);
+            RenderUtils.bindTexture(CentrifugeTextures.COMPONENTS);
             blit(stack, x+2, y+16, 21, 0, 233, 3);
             TextUtils.tf12DrawCenteredStringNoShadow(stack, selectedEntity.getDisplayName(), x + 126.5f, y + 6.5f, TextUtils.FONT_COLOR_1);
         }

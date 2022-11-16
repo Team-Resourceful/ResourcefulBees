@@ -4,10 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
+import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import com.teamresourceful.resourcefullib.common.utils.CycleableList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -45,11 +46,11 @@ public class HomePage extends Screen {
 
     @Override
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        ClientUtils.renderEntity(stack, bees.getSelected(), 85, 5, -45, 3);
+        ClientRenderUtils.renderEntity(stack, bees.getSelected(), 85, 5, -45, 3);
         Font font = Minecraft.getInstance().font;
 
         font.draw(stack, Component.translatable("itemGroup.resourcefulbees").withStyle(ChatFormatting.GRAY), 41, 76, -1);
-        ClientUtils.bindTexture(LOGO);
+        RenderUtils.bindTexture(LOGO);
         Gui.blit(stack, 41,  85, 0, 0, 104, 16, 104, 16);
         font.draw(stack, Component.translatable("gui.resourcefulbees.beepedia").withStyle(ChatFormatting.GRAY), 41, 103, -1);
 

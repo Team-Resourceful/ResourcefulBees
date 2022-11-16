@@ -16,12 +16,12 @@ import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.screens.MissingRegistryScreen;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.*;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -45,7 +45,7 @@ public final class ClientEventHandlers {
 
     //TODO some methods here get called from distRunWhenOn's and could probably be merged into the FMLClientSetupEvent instead
     private ClientEventHandlers() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     private static boolean setupsDone = false;
@@ -68,7 +68,7 @@ public final class ClientEventHandlers {
     }
 
     public static void onRegisterGuiOverlay(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll("bee_locator", BeeLocatorOverlay.INSTANCE);
+        event.registerAboveAll("bee_locator", (gui, stack, partTicks, x, y) -> BeeLocatorOverlay.INSTANCE.render(gui.getMinecraft(), stack, partTicks, x, y));
     }
 
     public static void recipesLoaded(RecipesUpdatedEvent event){

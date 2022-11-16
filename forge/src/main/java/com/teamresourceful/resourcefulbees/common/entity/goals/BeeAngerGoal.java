@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
-import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -9,9 +8,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class BeeAngerGoal extends HurtByTargetGoal {
 
-    private final ResourcefulBee bee;
+    private final Bee bee;
 
-    public BeeAngerGoal(ResourcefulBee bee) {
+    public BeeAngerGoal(Bee bee) {
         super(bee);
         this.bee = bee;
     }

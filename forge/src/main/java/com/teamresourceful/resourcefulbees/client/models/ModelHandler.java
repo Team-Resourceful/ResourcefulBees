@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.client.models;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockModelShaper;
@@ -19,7 +19,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.model.data.ModelData;
 
 import java.util.Map;
 
@@ -31,7 +30,7 @@ public final class ModelHandler {
     private static final String JSON_FILE_EXTENSION = ".json";
 
     private ModelHandler() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     private static void registerGenericBlockState(ModelEvent.RegisterAdditional event, RegistryEntry<Block> block, String parentModel, RenderType renderType, ResourceManager resourceManager) {
@@ -77,7 +76,7 @@ public final class ModelHandler {
             BakedModel defaultModel = modelRegistry.getOrDefault(resourceLocation, missingModel);
             resourceLocations.forEach(modelLocation ->
                 modelRegistry.computeIfPresent(modelLocation, (resourceLocation1, iBakedModel) -> {
-                    if (iBakedModel.getParticleIcon(ModelData.EMPTY) instanceof MissingTextureAtlasSprite) return defaultModel;
+                    if (iBakedModel.getParticleIcon() instanceof MissingTextureAtlasSprite) return defaultModel;
                     return iBakedModel;
                 })
             );

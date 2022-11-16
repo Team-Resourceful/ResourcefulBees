@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.advancements;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModTags;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
@@ -27,7 +27,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 Component.translatable("advancements.resourcefulbees.root.title"),
                 Component.translatable("advancements.resourcefulbees.root.description"),
                 new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/advancements/backgrounds/resourcefulbees.png"),
-                ItemPredicate.Builder.item().of(ModTags.Items.HONEYCOMB).build()
+                ItemPredicate.Builder.item().of(ModItemTags.HONEYCOMB).build()
         ));
 
         addAdvancement(createSimpleAdvancement(ModItems.WAX, "wax", root));
@@ -37,7 +37,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
         addAdvancement(createSimpleAdvancement(ModItems.ENDER_BEECON_ITEM, "ender_beecon", root));
         addAdvancement(createSimpleAdvancement(ModItems.HONEY_GENERATOR_ITEM, "honey_generator", root));
         Advancement nest = addAdvancement(createAdvancement(ModItems.OAK_BEE_NEST_ITEM, "obtain_bee_nest", root)
-                .addCriterion("has_nest", has(ModTags.Items.BEEHIVES))
+                .addCriterion("has_nest", has(ModItemTags.BEEHIVES))
                 .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/obtain_bee_nest")));
 
         Advancement t1HiveUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T2_NEST_UPGRADE, "t1_hive_upgrade", nest));

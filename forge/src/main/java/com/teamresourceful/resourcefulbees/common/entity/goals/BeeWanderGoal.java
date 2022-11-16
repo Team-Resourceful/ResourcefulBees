@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
-import com.teamresourceful.resourcefulbees.common.utils.RandomPositionGenerator;
+import com.teamresourceful.resourcefulbees.common.util.RandomPositionGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Bee;

@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.client.utils;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.FontResourceManagerAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.MinecraftAccessor;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -24,7 +24,7 @@ public final class TextUtils {
     public static final Font TERMINAL_FONT_12 = new Font(resourceLocation -> FONT_12, false); //IDK if this should be true or false tbh
 
     private TextUtils() {
-        throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 
     public static void drawCenteredString(Font font, PoseStack stack, Component component, int x, int y, int color, boolean shadow) {

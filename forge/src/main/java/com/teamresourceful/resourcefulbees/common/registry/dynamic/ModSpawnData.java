@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.registry.dynamic;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.spawndata.SpawnData;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.CommonLevelAccessor;
 import net.minecraftforge.registries.DeferredRegister;
@@ -24,6 +24,6 @@ public final class ModSpawnData {
     }
 
     private ModSpawnData() {
-        throw new IllegalAccessError(ModConstants.UTILITY_CLASS);
+        throw new UtilityClassError();
     }
 }

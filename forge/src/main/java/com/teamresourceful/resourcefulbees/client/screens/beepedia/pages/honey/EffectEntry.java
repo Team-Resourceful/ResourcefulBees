@@ -3,11 +3,11 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.honey;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.PotionEffect;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyEffect;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
@@ -61,10 +61,10 @@ public class EffectEntry extends ListEntry {
             MobEffectTextureManager textureManager = instance.getMobEffectTextures();
 
             TextureAtlasSprite sprite = textureManager.get(this.effect);
-            ClientUtils.bindTexture(sprite.atlas().location());
+            RenderUtils.bindTexture(sprite.atlas().location());
             Gui.blit(stack, 2, 1, 0, 18, 18, sprite);
 
-            ClientUtils.bindTexture(SLOT_TEXTURE);
+            RenderUtils.bindTexture(SLOT_TEXTURE);
             Gui.blit(stack, 1, 0, 0, 0, 20, 20, 20, 60);
 
             int color = effect.getCategory() == MobEffectCategory.HARMFUL ? 16733525 : 5592575;

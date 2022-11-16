@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -35,8 +35,6 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
     public static final RecipeType<Recipe> RECIPE = new RecipeType<>(ID, Recipe.class);
 
-    protected static final List<ItemStack> NESTS_0 = BeehiveTier.T1_NEST.getDisplayItems().get().stream().map(ItemStack::new).collect(Collectors.toList());
-
     private final IDrawable hiveBackground;
     private final IDrawable apiaryBackground;
 
@@ -60,7 +58,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
         for (BeehiveTier tier : BeehiveTier.values()) {
             ItemStack stack = recipe.getHiveOutput(tier);
             if (stack.isEmpty()) continue;
-            List<ItemStack> hives = tier.getDisplayItems().get().stream().map(ItemStack::new).toList();
+            List<ItemStack> hives = tier.getDisplayItems().stream().map(ItemStack::new).toList();
             recipe.bees().stream()
                 .filter(Holder::isBound)
                 .map(Holder::get)

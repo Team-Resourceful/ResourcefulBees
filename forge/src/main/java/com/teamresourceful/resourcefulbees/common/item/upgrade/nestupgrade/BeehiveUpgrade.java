@@ -1,8 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
@@ -12,14 +14,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.IExtensibleEnum;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public enum BeehiveUpgrade implements IExtensibleEnum {
-    T1_TO_T2(BeehiveTier.T1_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '2'))),
-    T2_TO_T3(BeehiveTier.T2_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '3'))),
-    T3_TO_T4(BeehiveTier.T3_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '4')));
+public enum BeehiveUpgrade {
+    T1_TO_T2(DefaultBeehiveTiers.T1_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '2'))),
+    T2_TO_T3(DefaultBeehiveTiers.T1_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '3'))),
+    T3_TO_T4(DefaultBeehiveTiers.T1_NEST, (state, level, pos, stack) -> performUpgrade(state, level, pos, block -> getUpdateFor(block, '4')));
 
     public final BeehiveTier from;
     public final NestUpgrader upgrader;
@@ -27,11 +28,6 @@ public enum BeehiveUpgrade implements IExtensibleEnum {
     BeehiveUpgrade(BeehiveTier from, NestUpgrader upgrader) {
         this.from = from;
         this.upgrader = upgrader;
-    }
-
-    @SuppressWarnings("unused")
-    public static BeehiveUpgrade create(String name, BeehiveTier from, NestUpgrader upgrader) {
-        throw new IllegalStateException("Enum not extended");
     }
 
     private static InteractionResult performUpgrade(BlockState state, Level level, BlockPos pos, NestGetter getter) {
@@ -67,9 +63,8 @@ public enum BeehiveUpgrade implements IExtensibleEnum {
     }
 
     public static Block getUpdateFor(Block block, char i) {
-        ResourceLocation id = ForgeRegistries.BLOCKS.getKey(block);
-        if (id == null) return null;
-        return ForgeRegistries.BLOCKS.getValue(new ResourceLocation(id.getNamespace(), id.getPath().substring(0, id.getPath().length() - 1) + i));
+        ResourceLocation id = Registry.BLOCK.getKey(block);
+        return Registry.BLOCK.getOptional(new ResourceLocation(id.getNamespace(), id.getPath().substring(0, id.getPath().length() - 1) + i)).orElse(null);
     }
 
     @FunctionalInterface
@@ -79,6 +74,6 @@ public enum BeehiveUpgrade implements IExtensibleEnum {
 
     @FunctionalInterface
     private interface NestGetter {
-        Block getNest(Block block);
+        @Nullable Block getNest(Block block);
     }
 }

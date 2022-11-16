@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.compat.base;
 
 import com.teamresourceful.resourcefulbees.common.compat.bumblezone.BumblezoneCompat;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class ModCompatHelper {
     private static final List<ModCompat> COMPATS = new ArrayList<>();
 
     public static void registerCompats() {
-        if (ModList.get().isLoaded("the_bumblezone")) {
+        if (ModUtils.isModLoaded("the_bumblezone")) {
             COMPATS.add(new BumblezoneCompat());
         }
     }

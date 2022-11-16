@@ -1,7 +1,8 @@
 package com.teamresourceful.resourcefulbees.api;
 
-import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeehiveTier;
+
+import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;

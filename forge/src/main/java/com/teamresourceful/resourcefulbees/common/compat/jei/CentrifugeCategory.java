@@ -2,15 +2,14 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.utils.MathUtils;
+import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import mezz.jei.api.constants.VanillaTypes;
@@ -28,6 +27,7 @@ import net.minecraftforge.client.gui.ScreenUtils;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.CentrifugeRecipeAdapter> {
@@ -35,7 +35,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge");
     public static final RecipeType<CentrifugeRecipeAdapter> RECIPE = new RecipeType<>(ID, CentrifugeRecipeAdapter.class);
-
+    private static final DecimalFormat DECIMAL_PERCENT_FORMAT = new DecimalFormat("#.#%");
 
     public CentrifugeCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
@@ -80,7 +80,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     @Override
     public void draw(@NotNull CentrifugeRecipeAdapter recipe, @NotNull IRecipeSlotsView view, @NotNull PoseStack stack, double mouseX, double mouseY) {
         super.draw(recipe, view, stack, mouseX, mouseY);
-        ClientUtils.bindTexture(GUI_BACK);
+        RenderUtils.bindTexture(GUI_BACK);
         for (int i = 0; i < 3; i++) {
             int finalI = i;
             view.findSlotByName("item_output_"+i).ifPresent(slot -> drawWeightAndChance(stack, 61, mouseX, mouseY, finalI));
@@ -129,7 +129,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             List<Component> tooltip = new ArrayList<>();
             if (displayName != null) tooltip.add(displayName);
             if (weight != null) {
-                tooltip.add(Component.translatable(TranslationConstants.Jei.CENTRIFUGE_WEIGHT, ModConstants.DECIMAL_PERCENT_FORMAT.format(weight)));
+                tooltip.add(Component.translatable(TranslationConstants.Jei.CENTRIFUGE_WEIGHT, DECIMAL_PERCENT_FORMAT.format(weight)));
             } else {
                 tooltip.add(TranslationConstants.Jei.CENTRIFUGE_WEIGHT_EMPTY);
             }
@@ -138,7 +138,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         inBounds = MathUtils.inRangeInclusive((int) mouseX, min, max) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
         if (inBounds) {
             if (outputSize > i)
-                return Collections.singletonList(Component.translatable(TranslationConstants.Jei.CENTRIFUGE_CHANCE, ModConstants.DECIMAL_PERCENT_FORMAT.format(chance)));
+                return Collections.singletonList(Component.translatable(TranslationConstants.Jei.CENTRIFUGE_CHANCE, DECIMAL_PERCENT_FORMAT.format(chance)));
             else {
                 return Collections.singletonList(TranslationConstants.Jei.CENTRIFUGE_CHANCE_EMPTY);
             }
