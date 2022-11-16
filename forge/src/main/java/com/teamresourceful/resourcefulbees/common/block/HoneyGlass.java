@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -10,6 +11,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -51,4 +53,11 @@ public class HoneyGlass extends GlassBlock {
         super.appendHoverText(stack, level, tooltip, flag);
         tooltip.add(collidePlayer ? TranslationConstants.Items.HONEY_GLASS : TranslationConstants.Items.HONEY_GLASS_PLAYER);
     }
+
+    @Override
+    public @Nullable BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
+        return collidePlayer && mob instanceof Bee ? BlockPathTypes.OPEN : BlockPathTypes.BLOCKED;
+    }
+
+
 }

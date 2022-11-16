@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlock
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.goals.*;
+import com.teamresourceful.resourcefulbees.common.entity.pathfinding.BeePathNavigation;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
@@ -26,6 +27,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -97,6 +100,25 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (getMutationData().hasMutation()) {
             this.goalSelector.addGoal(7, new BeeMutateGoal(this));
         }
+    }
+
+    @Override
+    protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
+        FlyingPathNavigation flyingpathnavigation = new BeePathNavigation(this, level) {
+            public boolean isStableDestination(BlockPos pos) {
+                return !this.level.getBlockState(pos.below()).isAir();
+            }
+
+            public void tick() {
+                if (!ResourcefulBee.this.pollinateGoal.isPollinating()) {
+                    super.tick();
+                }
+            }
+        };
+        flyingpathnavigation.setCanOpenDoors(false);
+        flyingpathnavigation.setCanFloat(false);
+        flyingpathnavigation.setCanPassDoors(true);
+        return flyingpathnavigation;
     }
 
     @Override
