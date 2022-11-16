@@ -9,14 +9,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class CentrifugeCrankBlockEntity extends BlockEntity implements IAnimatable {
 
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public CentrifugeCrankBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -32,14 +34,14 @@ public class CentrifugeCrankBlockEntity extends BlockEntity implements IAnimatab
             int value = state.hasProperty(CentrifugeBlock.ROTATION) ? state.getValue(CentrifugeBlock.ROTATION) : 1;
             var animationBuilder = new AnimationBuilder();
             switch (value) {
-                case 1 -> animationBuilder.addAnimation("animation.crank.360", false).addAnimation("animation.crank.0", false);
-                case 2 -> animationBuilder.addAnimation("animation.crank.45", false);
-                case 3 -> animationBuilder.addAnimation("animation.crank.90", false);
-                case 4 -> animationBuilder.addAnimation("animation.crank.135", false);
-                case 5 -> animationBuilder.addAnimation("animation.crank.180", false);
-                case 6 -> animationBuilder.addAnimation("animation.crank.225", false);
-                case 7 -> animationBuilder.addAnimation("animation.crank.270", false);
-                case 8 -> animationBuilder.addAnimation("animation.crank.315", false);
+                case 1 -> animationBuilder.addAnimation("animation.crank.360", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("animation.crank.0", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+                case 2 -> animationBuilder.addAnimation("animation.crank.45", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+                case 3 -> animationBuilder.addAnimation("animation.crank.90", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+                case 4 -> animationBuilder.addAnimation("animation.crank.135", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+                case 5 -> animationBuilder.addAnimation("animation.crank.180", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+                case 6 -> animationBuilder.addAnimation("animation.crank.225", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+                case 7 -> animationBuilder.addAnimation("animation.crank.270", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+                case 8 -> animationBuilder.addAnimation("animation.crank.315", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
             }
             event.getController().setAnimation(animationBuilder);
         }

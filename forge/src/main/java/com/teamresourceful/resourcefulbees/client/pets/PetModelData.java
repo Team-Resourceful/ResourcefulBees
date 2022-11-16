@@ -10,9 +10,11 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -33,7 +35,7 @@ public class PetModelData implements IAnimatable {
     }
 
     private final PetBeeModel<PetModelData> model = new PetBeeModel<>();
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private final int version;
     private final String id;
@@ -81,7 +83,7 @@ public class PetModelData implements IAnimatable {
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, event -> {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", true).addAnimation("animation.bee.fly.bobbing", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", ILoopType.EDefaultLoopTypes.LOOP).addAnimation("animation.bee.fly.bobbing", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }));
     }

@@ -8,12 +8,13 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
 public class ManualCentrifugeItem extends BlockItem implements IAnimatable {
 
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public ManualCentrifugeItem(Block block, Properties pProperties) {
         super(block, pProperties);
