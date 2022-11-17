@@ -54,7 +54,7 @@ public final class CommonConfig {
     public static IntValue MAX_TANK_STORAGE;
 
     public static IntValue APIARY_MAX_BEES;
-    public static IntValue APIARY_MAX_BREED_TIME;
+    //public static IntValue APIARY_MAX_BREED_TIME;
 
     public static IntValue SMOKER_DURABILITY;
 
@@ -200,8 +200,6 @@ public final class CommonConfig {
                 .defineInRange("tierFourApiaryQuantity", 8, 1, Integer.MAX_VALUE);
         APIARY_MAX_BEES = commonBuilder.comment("\nMaximum number of UNIQUE bees allowed in the Apiary.")
                 .defineInRange("apiaryMaxBees", 16, 1, 24);
-        APIARY_MAX_BREED_TIME = commonBuilder.comment("\nMaximum breed time before upgrades are applied.")
-                .defineInRange("apiaryMaxBreedTime", 2400, 1200, 4800);
         commonBuilder.pop();
 
         commonBuilder.push("Spawning Options");

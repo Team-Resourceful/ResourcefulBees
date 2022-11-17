@@ -33,6 +33,8 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class BreederBlockEntity extends BlockEntity implements MenuProvider {
 
     private final TileStackHandler inventory = new TileStackHandler();
@@ -112,22 +114,20 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
             stack.setCount(amount);
             deliverItem(stack);
 
-            int feed1Amount = recipe.parent1().feedItem() instanceof IAmountSensitive amountSensitive ? amountSensitive.getAmount() : 1;
-            getItem(BreederConstants.FEED_1_SLOTS.get(slot)).shrink(feed1Amount);
-            recipe.parent1().returnItem().ifPresent(item -> {
-                ItemStack return1 = item.copy();
-                return1.setCount(feed1Amount);
-                deliverItem(return1);
-            });
-            int feed2Amount = recipe.parent1().feedItem() instanceof IAmountSensitive amountSensitive ? amountSensitive.getAmount() : 1;
-            getItem(BreederConstants.FEED_2_SLOTS.get(slot)).shrink(feed2Amount);
-            recipe.parent2().returnItem().ifPresent(item -> {
-                ItemStack return2 = item.copy();
-                return2.setCount(feed2Amount);
-                deliverItem(return2);
-            });
+            completeBreed(recipe, BreederConstants.FEED_1_SLOTS, slot, recipe.parent1());
+            completeBreed(recipe, BreederConstants.FEED_2_SLOTS, slot, recipe.parent2());
             checkAndCacheRecipe(slot);
         }
+    }
+
+    private void completeBreed(BreederRecipe recipe, List<Integer> feedSlots, int slot, BreederRecipe.BreederPair parent) {
+        int feedAmount = recipe.parent1().feedItem() instanceof IAmountSensitive amountSensitive ? amountSensitive.getAmount() : 1;
+        getItem(feedSlots.get(slot)).shrink(feedAmount);
+        parent.returnItem().ifPresent(item -> {
+            ItemStack returnItem = item.copy();
+            returnItem.setCount(feedAmount);
+            deliverItem(returnItem);
+        });
     }
 
     private void deliverItem(ItemStack stack) {
@@ -208,7 +208,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
 
         @Override
         public int getSlotLimit(int slot) {
-            return slot == 0 ? 1 : 64;
+            return slot == 0 ? 4 : 64;
         }
 
         @Override
@@ -219,7 +219,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         private void updateBreedTime(TileStackHandler stackHandler) {
             var stackInSlot = stackHandler.getStackInSlot(0);
             if (stackInSlot.getItem() instanceof BreederTimeUpgradeItem upgrade) {
-                int reduction = upgrade.getUpgradeTier(stackInSlot);
+                int reduction = calculateReduction(upgrade, stackInSlot);
                 if (reduction != timeReduction) {
                     timeReduction = reduction;
                     for (int i = 0; i < BreederConstants.NUM_OF_BREEDERS; i++) {
@@ -228,6 +228,10 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
                     }
                 }
             }
+        }
+
+        private static int calculateReduction(BreederTimeUpgradeItem upgrade, ItemStack stack) {
+            return Math.max(100, upgrade.getUpgradeTier(stack) * stack.getCount());
         }
     }
 }

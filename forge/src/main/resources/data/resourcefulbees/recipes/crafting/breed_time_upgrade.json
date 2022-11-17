@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "J": {
+      "type": "resourcefulbees:any_filled_bee_jar"
+    },
+    "C": {
+      "item": "minecraft:clock"
+    }
+  },
+  "pattern": [
+    "JJJ",
+    "JCJ",
+    "JJJ"
+  ],
+  "result": {
+    "item": "resourcefulbees:breed_time_upgrade"
+  }
+}

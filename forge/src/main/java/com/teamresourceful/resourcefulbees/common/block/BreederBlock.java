@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederBlockEntity;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.ChatFormatting;
@@ -32,7 +32,7 @@ public class BreederBlock extends BeeHouseBlock {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        tooltip.add(Component.translatable(TranslationConstants.Items.BREEDER_TOOLTIP_1, CommonConfig.APIARY_MAX_BREED_TIME.get()).withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.translatable(TranslationConstants.Items.BREEDER_TOOLTIP_1, BreederConstants.DEFAULT_BREEDER_TIME).withStyle(ChatFormatting.GOLD));
         tooltip.add(TranslationConstants.Items.BREEDER_TOOLTIP_2.withStyle(ChatFormatting.GOLD));
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }

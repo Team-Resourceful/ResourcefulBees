@@ -17,5 +17,6 @@ public final class BreederConstants {
     public static final List<Integer> PARENT_2_SLOTS = List.of(3,8);
     public static final List<Integer> FEED_2_SLOTS = List.of(4,9);
     public static final List<Integer> EMPTY_JAR_SLOTS = List.of(5,10);
+    public static final int DEFAULT_BREEDER_TIME = 2400;
 
 }

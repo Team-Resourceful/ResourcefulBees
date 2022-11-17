@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.recipe.recipes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
@@ -36,7 +37,7 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
             BreederPair.CODEC.fieldOf("parent2").forGetter(BreederRecipe::parent2),
             IngredientCodec.CODEC.optionalFieldOf("input").forGetter(BreederRecipe::input),
             BreederRecipe.RANDOM_COLLECTION_CODEC.fieldOf("outputs").forGetter(BreederRecipe::outputs),
-            Codec.intRange(100, 72000).fieldOf("time").orElse(1200).forGetter(BreederRecipe::time)
+            Codec.intRange(100, 72000).fieldOf("time").orElse(BreederConstants.DEFAULT_BREEDER_TIME).forGetter(BreederRecipe::time)
         ).apply(instance, BreederRecipe::new));
     }
 
