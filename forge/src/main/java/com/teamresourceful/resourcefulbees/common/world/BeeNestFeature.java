@@ -5,11 +5,10 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
-import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
 import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.BlockPos;
@@ -232,7 +231,6 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
                         .map(data -> data.type)
                         .filter(type -> type instanceof CustomBeeEntityType<?>)
                         .map(type -> (CustomBeeEntityType<?>) type)
-                        .filter(bee -> ModSpawnData.getData(level, bee.getBeeType()).canSpawnAtY(nestPos.getY()))
                         .ifPresentOrElse(bee -> addBeeToNest(bee, rand, nest), () -> logMissingBiome(holder.unwrapKey().orElse(null)));
             }
         }

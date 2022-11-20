@@ -6,13 +6,12 @@ import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.FileUtils;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -53,10 +52,6 @@ public final class BeeSetup {
 
     public static void registerBeePlacements() {
         ModEntities.getModBees().forEach((s, entityType) ->
-                SpawnPlacements.register(entityType.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, createPredicate(s)));
-    }
-
-    public static <T extends Mob> SpawnPlacements.SpawnPredicate<T> createPredicate(String beeType) {
-        return (type, level, reason, pos, random) -> CustomBeeEntity.canBeeSpawn(beeType, level, reason, pos);
+                SpawnPlacements.register(entityType.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CustomBeeEntity::canBeeSpawn));
     }
 }

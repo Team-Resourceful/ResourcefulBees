@@ -11,5 +11,12 @@
     "weight": 8,
     "minCount": 0,
     "maxCount": 3
+  },
+  "spawnPredicate": {
+    "light": {
+      "light": {
+        "max": 7
+      }
+    }
   }
 }

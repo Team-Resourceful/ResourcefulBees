@@ -26,6 +26,7 @@ import com.teamresourceful.resourcefulbees.common.recipe.ingredients.FilledBeeJa
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.NBTAmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.*;
+import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModCommands;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPotions;
@@ -35,6 +36,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -112,6 +114,11 @@ public class ResourcefulBees {
         if (event.getServer().isDedicatedServer()){
             BeeRegistry.getRegistry().regenerateCustomBeeData(event.getServer().registryAccess());
         }
+    }
+
+    @SubscribeEvent
+    public void serverAboutToStart(ServerAboutToStartEvent event) {
+        ModSpawnData.initalize(event.getServer());
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)

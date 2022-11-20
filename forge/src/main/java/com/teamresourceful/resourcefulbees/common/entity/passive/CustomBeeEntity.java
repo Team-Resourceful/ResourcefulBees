@@ -11,11 +11,10 @@ import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
-import com.teamresourceful.resourcefulbees.api.spawndata.SpawnData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
@@ -25,6 +24,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -41,7 +41,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.NameTagItem;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -219,11 +219,12 @@ public class CustomBeeEntity extends Bee implements ICustomBee, IAnimatable, IBe
         this.hasHiveInRange = hasHiveInRange;
     }
 
-    public static boolean canBeeSpawn(String beeType, LevelAccessor level, MobSpawnType reason, BlockPos pos) {
+    public static boolean canBeeSpawn(EntityType<?> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource randomSource) {
         switch (reason) {
             case NATURAL, CHUNK_GENERATION -> {
-                SpawnData data = ModSpawnData.getData(level, beeType);
-                return data.canSpawnAtY(pos.getY()) && data.lightLevel().canSpawn(level, pos);
+                return ModSpawnData.getPredicate(type)
+                        .map(predicate -> predicate.matches(level.getLevel(), pos.getX(), pos.getY(), pos.getZ()))
+                        .orElse(true);
             }
         }
         return true;

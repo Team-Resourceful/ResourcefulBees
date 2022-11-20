@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.lib.enums;
 
-import com.mojang.serialization.Codec;
+import com.teamresourceful.resourcefullib.common.codecs.EnumCodec;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +37,7 @@ public enum DamageTypes {
     MOB_ATTACK(DamageSource::mobAttack),
     THORN(DamageSource::thorns);
 
-    public static final Codec<DamageTypes> CODEC = Codec.STRING.xmap(DamageTypes::valueOf, DamageTypes::toString);
+    public static final EnumCodec<DamageTypes> CODEC = EnumCodec.of(DamageTypes.class);
 
     private final Function<LivingEntity, DamageSource> source;
     private final boolean genericOnNull;

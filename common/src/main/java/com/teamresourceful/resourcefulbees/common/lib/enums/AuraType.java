@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.lib.enums;
 
-import com.mojang.serialization.Codec;
+import com.teamresourceful.resourcefullib.common.codecs.EnumCodec;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 
@@ -12,7 +12,7 @@ public enum AuraType {
     DAMAGING(false, ParticleTypes.CRIT),
     EXPERIENCE_DRAIN(false, ParticleTypes.POOF);
 
-    public static final Codec<AuraType> CODEC = Codec.STRING.xmap(AuraType::valueOf, AuraType::toString);
+    public static final EnumCodec<AuraType> CODEC = EnumCodec.of(AuraType.class);
 
     private final boolean beneficial;
     public final SimpleParticleType particle;

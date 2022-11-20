@@ -1,26 +1,36 @@
 package com.teamresourceful.resourcefulbees.common.registry.dynamic;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.spawndata.SpawnData;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.CommonLevelAccessor;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
+import com.teamresourceful.resourcefulbees.common.world.SpawnDataModifier;
+import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.core.Holder;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.function.Supplier;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public final class ModSpawnData {
 
-    public static final DeferredRegister<SpawnData> SPAWN_DATA = DeferredRegister.create(new ResourceLocation(ResourcefulBees.MOD_ID, "spawndata"), ResourcefulBees.MOD_ID);
-    public static final Supplier<IForgeRegistry<SpawnData>> SPAWN_DATA_REGISTRY = SPAWN_DATA.makeRegistry(() -> new RegistryBuilder<SpawnData>().dataPackRegistry(SpawnData.CODEC).disableSync());
+    private static final Map<EntityType<?>, LocationPredicate> SPAWN_PREDICATES = new HashMap<>();
 
-    public static SpawnData getData(CommonLevelAccessor level, String bee) {
-        return level.registryAccess()
-                .registry(SPAWN_DATA_REGISTRY.get().getRegistryKey())
-                .map(registry -> registry.get(new ResourceLocation(ResourcefulBees.MOD_ID, bee)))
-                .orElse(SpawnData.DEFAULT);
+    public static Optional<LocationPredicate> getPredicate(EntityType<?> type) {
+        return Optional.ofNullable(SPAWN_PREDICATES.get(type));
+    }
+
+    public static void initalize(MinecraftServer server) {
+        SPAWN_PREDICATES.clear();
+        server.registryAccess().registryOrThrow(ForgeRegistries.Keys.BIOME_MODIFIERS)
+            .holders()
+            .map(Holder::value)
+            .filter(SpawnDataModifier.class::isInstance)
+            .map(SpawnDataModifier.class::cast)
+            .forEach(modifier -> modifier
+                .getSpawnPredicate()
+                .ifPresent(predicate -> SPAWN_PREDICATES.put(modifier.getEntityType(), predicate))
+            );
     }
 
     private ModSpawnData() {

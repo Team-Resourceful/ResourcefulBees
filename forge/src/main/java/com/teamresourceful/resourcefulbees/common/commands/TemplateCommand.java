@@ -14,8 +14,10 @@ import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
 import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
-import com.teamresourceful.resourcefulbees.api.spawndata.SpawnData;
-import com.teamresourceful.resourcefulbees.common.lib.templates.*;
+import com.teamresourceful.resourcefulbees.common.lib.templates.DummyBeeData;
+import com.teamresourceful.resourcefulbees.common.lib.templates.DummyHoneyData;
+import com.teamresourceful.resourcefulbees.common.lib.templates.DummyHoneycombData;
+import com.teamresourceful.resourcefulbees.common.lib.templates.DummyTraitData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -31,7 +33,6 @@ public class TemplateCommand {
         builder.then(Commands.literal("bee").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printBeeTemplate))
                 .then(Commands.literal("honeycomb").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printHoneycombTemplate))
                 .then(Commands.literal("honey").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printHoneyTemplate))
-                .then(Commands.literal("spawn_data").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printSpawnDataTemplate))
                 .then(Commands.literal("trait").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printTraitTemplate));
         return builder;
     }
@@ -58,13 +59,6 @@ public class TemplateCommand {
         DataResult<JsonElement> honeyResult = HoneyData.codec(TEMPLATE_STRING).encodeStart(registryOps(context), DummyHoneyData.DUMMY_HONEY_DATA);
         ResourcefulBees.LOGGER.info(PRETTY_GSON.toJson(honeyResult.getOrThrow(false, ResourcefulBees.LOGGER::error)));
         context.getSource().sendSuccess(Component.literal("Honey template printed to logs!"), true);
-        return 1;
-    }
-
-    private static int printSpawnDataTemplate(CommandContext<CommandSourceStack> context) {
-        DataResult<JsonElement> spawnResult = SpawnData.CODEC.encodeStart(registryOps(context), DummySpawnData.DUMMY_SPAWN_DATA);
-        ResourcefulBees.LOGGER.info(PRETTY_GSON.toJson(spawnResult.getOrThrow(false, ResourcefulBees.LOGGER::error)));
-        context.getSource().sendSuccess(Component.literal("Spawn data template printed to logs!"), true);
         return 1;
     }
 
