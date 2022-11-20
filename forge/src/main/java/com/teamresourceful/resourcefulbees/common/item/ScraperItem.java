@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ScraperItem extends Item implements IShiftingToolTip {
+public class ScraperItem extends Item implements ExpandableTooltip {
 
     private static final ToolAction SCRAPE = ToolAction.get("scrape_hive");
 

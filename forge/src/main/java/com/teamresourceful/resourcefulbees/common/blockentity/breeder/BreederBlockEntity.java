@@ -4,11 +4,11 @@ import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveI
 import com.teamresourceful.resourcefulbees.common.inventory.BoundSafeContainerData;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.BreederMenu;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgradeItem;
-import com.teamresourceful.resourcefulbees.common.item.upgrade.IUpgrade;
+import com.teamresourceful.resourcefulbees.common.item.upgrade.Upgrade;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.IAmountSensitive;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitive;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
@@ -105,9 +105,9 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         boolean recipeSuccess = output.chance() >= level.random.nextFloat();
 
         if (recipeSuccess) {
-            int amount = recipe.input().filter(IAmountSensitive.class::isInstance)
-                    .map(IAmountSensitive.class::cast)
-                    .map(IAmountSensitive::getAmount)
+            int amount = recipe.input().filter(AmountSensitive.class::isInstance)
+                    .map(AmountSensitive.class::cast)
+                    .map(AmountSensitive::getAmount)
                     .orElse(1);
             recipe.input().ifPresent(input -> getItem(BreederConstants.EMPTY_JAR_SLOTS.get(slot)).shrink(amount));
             ItemStack stack = output.output().copy();
@@ -121,7 +121,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private void completeBreed(BreederRecipe recipe, List<Integer> feedSlots, int slot, BreederRecipe.BreederPair parent) {
-        int feedAmount = recipe.parent1().feedItem() instanceof IAmountSensitive amountSensitive ? amountSensitive.getAmount() : 1;
+        int feedAmount = recipe.parent1().feedItem() instanceof AmountSensitive amountSensitive ? amountSensitive.getAmount() : 1;
         getItem(feedSlots.get(slot)).shrink(feedAmount);
         parent.returnItem().ifPresent(item -> {
             ItemStack returnItem = item.copy();
@@ -182,7 +182,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         public IAcceptor getAcceptor() {
             return (slot, stack, automation) -> {
                 if (slot >= 0 && slot < 11) {
-                    return slot != 0 || stack.getItem() instanceof IUpgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.BREEDER);
+                    return slot != 0 || stack.getItem() instanceof Upgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.BREEDER);
                 }
                 return false;
             };
@@ -213,7 +213,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return slot != 0 || stack.getItem() instanceof IUpgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.BREEDER);
+            return slot != 0 || stack.getItem() instanceof Upgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.BREEDER);
         }
 
         private void updateBreedTime(TileStackHandler stackHandler) {

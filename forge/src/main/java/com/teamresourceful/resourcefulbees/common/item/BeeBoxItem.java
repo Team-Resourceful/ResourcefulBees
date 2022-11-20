@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class BeeBoxItem extends BlockItem implements IShiftingToolTip {
+public class BeeBoxItem extends BlockItem implements ExpandableTooltip {
 
     private final boolean temp;
 

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GUISyncedBlockEntity extends BlockEntity implements ISyncableGUI {
+public abstract class GUISyncedBlockEntity extends BlockEntity implements SyncableGUI {
 
     private final List<ServerPlayer> listeners = new ArrayList<>();
 

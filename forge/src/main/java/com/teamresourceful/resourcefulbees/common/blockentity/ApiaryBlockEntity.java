@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
 
-import com.teamresourceful.resourcefulbees.api.IBeeCompat;
+import com.teamresourceful.resourcefulbees.api.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
@@ -50,7 +50,7 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
     //region BEE HANDLING
     protected void deliverNectar(CompoundTag nbt, Entity bee) {
         if (nbt.getBoolean("HasNectar")) {
-            if (bee instanceof IBeeCompat compat) compat.nectarDroppedOff();
+            if (bee instanceof BeeCompat compat) compat.nectarDroppedOff();
             HiveRecipe.getApiaryOutput(tier, bee)
                 .ifPresent(stack -> {
                     for (int i = 0; i < inventory.getSlots() && !stack.isEmpty(); i++) {
@@ -60,7 +60,7 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
         }
     }
 
-    protected int getMaxTimeInHive(@NotNull IBeeCompat bee) {
+    protected int getMaxTimeInHive(@NotNull BeeCompat bee) {
         return (int) (bee.getMaxTimeInHive() * tier.time());
     }
 

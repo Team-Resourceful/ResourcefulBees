@@ -16,15 +16,15 @@ public final class ResourcefulBeesAPI {
     /**
      * Instance of IBeeRegistry
      */
-    private static IBeeRegistry beeRegistry;
+    private static BeeRegistry beeRegistry;
 
     /**
      * Instance of ITraitRegistry
      */
-    private static ITraitRegistry traitRegistry;
+    private static TraitRegistry traitRegistry;
 
     @ApiStatus.Internal
-    public static void setBeeRegistry(IBeeRegistry beeRegistry) {
+    public static void setBeeRegistry(BeeRegistry beeRegistry) {
         if (ResourcefulBeesAPI.beeRegistry == null && ModLoadingContext.get().getActiveContainer().getModId().equals(MOD_ID)) {
             ResourcefulBeesAPI.beeRegistry = beeRegistry;
             ResourcefulBees.LOGGER.info("Bee Registry Initialized...");
@@ -32,15 +32,15 @@ public final class ResourcefulBeesAPI {
     }
 
     @ApiStatus.Internal
-    public static void setTraitRegistry(ITraitRegistry traitRegistry) {
+    public static void setTraitRegistry(TraitRegistry traitRegistry) {
         if (ResourcefulBeesAPI.traitRegistry == null && ModLoadingContext.get().getActiveContainer().getModId().equals(MOD_ID)) {
             ResourcefulBeesAPI.traitRegistry = traitRegistry;
             ResourcefulBees.LOGGER.info("Trait Registry Initialized...");
         }
     }
 
-    public static IBeeRegistry getBeeRegistry() { return beeRegistry; }
+    public static BeeRegistry getBeeRegistry() { return beeRegistry; }
 
-    public static ITraitRegistry getTraitRegistry() { return traitRegistry; }
+    public static TraitRegistry getTraitRegistry() { return traitRegistry; }
 
 }

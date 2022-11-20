@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentity;
 
 
 import com.google.common.collect.Lists;
-import com.teamresourceful.resourcefulbees.api.IBeeCompat;
+import com.teamresourceful.resourcefulbees.api.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveBeeDataAccessor;
@@ -113,7 +113,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
                 .forEach(entity -> {
                         if (!this.isSedated()) {
                             if (entity instanceof Mob mob) mob.setTarget(player);
-                            else if (entity instanceof IBeeCompat compat) compat.setOutOfHiveCooldown(400);
+                            else if (entity instanceof BeeCompat compat) compat.setOutOfHiveCooldown(400);
                         }
                 });
     }
@@ -143,7 +143,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
             if (entity != null) {
                 BeeInfoUtils.setEntityLocationAndAngle(hive.worldPosition, direction, entity);
                 if (beehiveState == BeeReleaseStatus.HONEY_DELIVERED) {
-                    if (entity instanceof IBeeCompat compat) compat.nectarDroppedOff();
+                    if (entity instanceof BeeCompat compat) compat.nectarDroppedOff();
                     if (getHoneyLevel(state) < 5) {
                         HiveRecipe.getHiveOutput(hive.getBlock().getTier(), entity)
                             .filter(Predicate.not(ItemStack::isEmpty))
@@ -166,7 +166,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
 
     @Override
     public void addOccupantWithPresetTicks(@NotNull Entity bee, boolean hasNectar, int ticksInHive) {
-        if (!(bee instanceof IBeeCompat compat)) return;
+        if (!(bee instanceof BeeCompat compat)) return;
         BeehiveEntityAccessor thisHive = (BeehiveEntityAccessor) this;
         if (thisHive.getBees().size() < getBlock().getTier().maxBees()) {
             bee.ejectPassengers();

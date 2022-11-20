@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.BlockMutation;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.IMutation;
+import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.Mutation;
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.ItemMutation;
 import com.teamresourceful.resourcefulbees.api.beedata.render.BeeTexture;
 import com.teamresourceful.resourcefulbees.api.beedata.render.ColorData;
@@ -48,9 +48,9 @@ public class DummyBeeData {
         throw new UtilityClassError();
     }
 
-    private static final IMutation MUTATION_INPUT = new BlockMutation(new RestrictedBlockPredicate(Blocks.COAL_BLOCK, NbtPredicate.ANY, LocationPredicate.ANY, StatePropertiesPredicate.ANY), 0.65, 35);
+    private static final Mutation MUTATION_INPUT = new BlockMutation(new RestrictedBlockPredicate(Blocks.COAL_BLOCK, NbtPredicate.ANY, LocationPredicate.ANY, StatePropertiesPredicate.ANY), 0.65, 35);
 
-    private static final WeightedCollection<IMutation> MUTATION_OUTPUT = new WeightedCollection<IMutation>().add(25, new ItemMutation(new RestrictedItemPredicate(Items.DIAMOND, NbtPredicate.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.exactly(2)), 1.0, 25));
+    private static final WeightedCollection<Mutation> MUTATION_OUTPUT = new WeightedCollection<Mutation>().add(25, new ItemMutation(new RestrictedItemPredicate(Items.DIAMOND, NbtPredicate.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.exactly(2)), 1.0, 25));
 
     private static ItemStack getBucketWithNbt() {
         ItemStack bucket = Items.BUCKET.getDefaultInstance();

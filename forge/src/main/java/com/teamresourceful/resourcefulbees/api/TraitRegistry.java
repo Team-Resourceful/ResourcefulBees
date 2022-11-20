@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * ITraitRegistry is implemented in TraitRegistry
  */
-public interface ITraitRegistry {
+public interface TraitRegistry {
 
     boolean register(String name, BeeTrait data);
     BeeTrait getTrait(String name);

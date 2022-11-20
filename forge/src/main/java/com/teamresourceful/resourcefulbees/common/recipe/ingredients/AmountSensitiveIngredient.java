@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class AmountSensitiveIngredient extends Ingredient implements IAmountSensitive {
+public class AmountSensitiveIngredient extends Ingredient implements AmountSensitive {
 
     public static final AmountSensitiveIngredient EMPTY = new AmountSensitiveIngredient(Stream.empty(), 0);
 

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blockentity.base;
 
-import com.teamresourceful.resourcefulbees.api.IBeeCompat;
+import com.teamresourceful.resourcefulbees.api.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
@@ -67,7 +67,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
     protected abstract void deliverNectar(CompoundTag nbt, Entity bee);
 
     public void tryEnterHive(@NotNull Entity bee, boolean hasNectar, int ticksInHive) {
-        if (this.level != null && hasSpace() && bee instanceof IBeeCompat beeCompat) {
+        if (this.level != null && hasSpace() && bee instanceof BeeCompat beeCompat) {
             bee.ejectPassengers();
             CompoundTag nbt = new CompoundTag();
             bee.save(nbt);
@@ -77,7 +77,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
         }
     }
 
-    protected abstract int getMaxTimeInHive(@NotNull IBeeCompat bee);
+    protected abstract int getMaxTimeInHive(@NotNull BeeCompat bee);
 
     public static <T extends BeeHolderBlockEntity> void serverTick(Level level, BlockPos pos, BlockState state, T holder) {
         BlockBee apiaryBee;

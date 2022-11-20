@@ -48,7 +48,7 @@ public class BasicEntry extends ListEntry implements TooltipProvider {
     }
 
     public static BasicEntry of(TraitAbility ability) {
-        return new BasicEntry(ability.getIcon(), ability.getTitle(), ability.getDescription(), 0x55FF55, Component.literal("Hover to for description").setStyle(Style.EMPTY.withUnderlined(true)));
+        return new BasicEntry(ability.displayedItem(), ability.getTitle(), ability.getDescription(), 0x55FF55, Component.literal("Hover to for description").setStyle(Style.EMPTY.withUnderlined(true)));
     }
 
     public static BasicEntry of(String immunity) {

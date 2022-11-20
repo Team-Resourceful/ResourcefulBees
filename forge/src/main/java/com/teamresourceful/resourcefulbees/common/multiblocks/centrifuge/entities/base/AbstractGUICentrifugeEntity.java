@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.base.ISyncableGUI;
+import com.teamresourceful.resourcefulbees.common.blockentity.base.SyncableGUI;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.CentrifugeController;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifugeEntity implements Nameable, ISyncableGUI {
+public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifugeEntity implements Nameable, SyncableGUI {
 
     private final List<ServerPlayer> listeners = new ArrayList<>(); //TODO consider eliminating this
 

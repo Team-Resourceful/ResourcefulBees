@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
 import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.IMutation;
+import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.Mutation;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.BlockPos;
@@ -31,12 +31,12 @@ public class BeeMutateGoal extends Goal {
         if (bee.tickCount % 5 == 0) {
             MutationData mutationData = bee.getMutationData();
             if (mutationData.hasMutation()) {
-                for (Map.Entry<IMutation, WeightedCollection<IMutation>> entry : mutationData.mutations().entrySet()) {
-                    IMutation input = entry.getKey();
+                for (Map.Entry<Mutation, WeightedCollection<Mutation>> entry : mutationData.mutations().entrySet()) {
+                    Mutation input = entry.getKey();
                     if (input.chance() < bee.level.random.nextFloat()) continue;
                     BlockPos pos = input.check(serverLevel, bee.blockPosition());
                     if (pos == null) continue;
-                    IMutation output = entry.getValue().next();
+                    Mutation output = entry.getValue().next();
                     if (output.chance() < bee.level.random.nextFloat()) continue;
                     if (output.activate(serverLevel, pos)) {
                         bee.incrementNumCropsGrownSincePollination();

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
-import com.teamresourceful.resourcefulbees.api.IBeeCompat;
+import com.teamresourceful.resourcefulbees.api.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.block.FlowHiveBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -63,7 +63,7 @@ public class FlowHiveBlockEntity extends BeeHolderBlockEntity {
     @Override
     protected void deliverNectar(CompoundTag nbt, Entity bee) {
         if (nbt.getBoolean("HasNectar")) {
-            if (bee instanceof IBeeCompat compat) compat.nectarDroppedOff();
+            if (bee instanceof BeeCompat compat) compat.nectarDroppedOff();
             FlowHiveRecipe.findRecipe(bee.level.getRecipeManager(), bee.getType())
                 .ifPresent(recipe -> {
                     if (!tank.getFluid().isEmpty() && tank.getFluid().isFluidEqual(recipe.fluid())) {
@@ -76,7 +76,7 @@ public class FlowHiveBlockEntity extends BeeHolderBlockEntity {
     }
 
     @Override
-    protected int getMaxTimeInHive(@NotNull IBeeCompat bee) {
+    protected int getMaxTimeInHive(@NotNull BeeCompat bee) {
         return (int) (bee.getMaxTimeInHive() * 0.5);
     }
 

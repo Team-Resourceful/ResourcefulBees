@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
 
 import java.util.Map;
 
-public interface IHoneyRegistry {
+public interface HoneyRegistry {
 
     /**
      * Returns an unmodifiable copy of the Honey Registry.

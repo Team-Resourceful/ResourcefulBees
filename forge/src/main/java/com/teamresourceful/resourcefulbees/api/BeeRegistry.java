@@ -16,7 +16,7 @@ import java.util.Set;
  * for bees created by <i>Resourceful Bees</i>.
  */
 @SuppressWarnings("unused")
-public interface IBeeRegistry {
+public interface BeeRegistry {
 
     /**
      * Returns a BeeData object for the given bee type.

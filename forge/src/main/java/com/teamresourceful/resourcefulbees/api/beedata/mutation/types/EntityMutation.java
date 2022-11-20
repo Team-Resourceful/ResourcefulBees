@@ -2,7 +2,8 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IEntityRender;
+import com.teamresourceful.resourcefulbees.client.util.displays.EntityDisplay;
+import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
 import net.minecraft.core.BlockPos;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public record EntityMutation(RestrictedEntityPredicate predicate, double chance, double weight) implements IMutation, IEntityRender {
+public record EntityMutation(RestrictedEntityPredicate predicate, double chance, double weight) implements Mutation, EntityDisplay {
 
     public static final Serializer SERIALIZER = new Serializer();
 
@@ -48,16 +49,16 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
     }
 
     @Override
-    public IMutationSerializer serializer() {
+    public GenericSerializer<Mutation> serializer() {
         return SERIALIZER;
     }
 
     @Override
-    public EntityType<?> entityRender() {
+    public EntityType<?> displayedEntity() {
         return predicate().entityType();
     }
 
-    private static class Serializer implements IMutationSerializer {
+    private static class Serializer implements GenericSerializer<Mutation> {
 
         public static final Codec<EntityMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 RestrictedEntityPredicate.CODEC.fieldOf("entity").forGetter(EntityMutation::predicate),

@@ -2,7 +2,8 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IFluidRender;
+import com.teamresourceful.resourcefulbees.client.util.displays.FluidDisplay;
+import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record FluidMutation(Fluid fluid, double chance, double weight) implements IMutation, IFluidRender {
+public record FluidMutation(Fluid fluid, double chance, double weight) implements Mutation, FluidDisplay {
 
     public static final Serializer SERIALIZER = new Serializer();
 
@@ -43,16 +44,16 @@ public record FluidMutation(Fluid fluid, double chance, double weight) implement
     }
 
     @Override
-    public IMutationSerializer serializer() {
+    public GenericSerializer<Mutation> serializer() {
         return SERIALIZER;
     }
 
     @Override
-    public Fluid fluidRender() {
+    public Fluid displayedFluid() {
         return fluid;
     }
 
-    private static class Serializer implements IMutationSerializer {
+    private static class Serializer implements GenericSerializer<Mutation> {
 
         public static final Codec<FluidMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Registry.FLUID.byNameCodec().fieldOf("fluid").forGetter(FluidMutation::fluid),

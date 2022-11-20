@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 
+import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -7,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public interface IMutation {
+public interface Mutation {
 
     /**
      * @param level the level to check.
@@ -28,5 +29,5 @@ public interface IMutation {
 
     Optional<CompoundTag> tag();
 
-    IMutationSerializer serializer();
+    GenericSerializer<Mutation> serializer();
 }

@@ -11,7 +11,7 @@ import net.minecraftforge.common.crafting.StrictNBTIngredient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class NBTAmountSensitiveIngredient extends StrictNBTIngredient implements IAmountSensitive {
+public class NBTAmountSensitiveIngredient extends StrictNBTIngredient implements AmountSensitive {
 
     private final ItemStack stack;
 

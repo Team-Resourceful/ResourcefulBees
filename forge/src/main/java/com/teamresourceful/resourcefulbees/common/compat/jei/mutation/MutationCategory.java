@@ -3,9 +3,9 @@ package com.teamresourceful.resourcefulbees.common.compat.jei.mutation;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IEntityRender;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IFluidRender;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IItemRender;
+import com.teamresourceful.resourcefulbees.client.util.displays.EntityDisplay;
+import com.teamresourceful.resourcefulbees.client.util.displays.FluidDisplay;
+import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
 import com.teamresourceful.resourcefulbees.common.compat.jei.BaseCategory;
 import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
@@ -63,9 +63,9 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
                 .setSlotName("input")
                 .addTooltipCallback(getToolTip(recipe));
 
-        if (recipe.input() instanceof IItemRender itemRender) input.addItemStack(itemRender.itemRender());
-        if (recipe.input() instanceof IFluidRender fluidRender) input.addFluidStack(fluidRender.fluidRender(), 1000);
-        if (recipe.input() instanceof IEntityRender entityRender) input.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.entityRender(), 45f, recipe.input().tag()));
+        if (recipe.input() instanceof ItemDisplay itemRender) input.addItemStack(itemRender.displayedItem());
+        if (recipe.input() instanceof FluidDisplay fluidRender) input.addFluidStack(fluidRender.displayedFluid(), 1000);
+        if (recipe.input() instanceof EntityDisplay entityRender) input.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.displayedEntity(), 45f, recipe.input().tag()));
 
         builder.addSlot(RecipeIngredientRole.INPUT, 17, 8)
                 .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.bee(), 45f))
@@ -75,9 +75,9 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
                 .setSlotName("output")
                 .addTooltipCallback(getToolTip(recipe));
 
-        if (recipe.output() instanceof IItemRender itemRender) output.addItemStack(itemRender.itemRender());
-        if (recipe.output() instanceof IFluidRender fluidRender) output.addFluidStack(fluidRender.fluidRender(), 1000);
-        if (recipe.output() instanceof IEntityRender entityRender) output.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.entityRender(), -45f, recipe.output().tag()));
+        if (recipe.output() instanceof ItemDisplay itemRender) output.addItemStack(itemRender.displayedItem());
+        if (recipe.output() instanceof FluidDisplay fluidRender) output.addFluidStack(fluidRender.displayedFluid(), 1000);
+        if (recipe.output() instanceof EntityDisplay entityRender) output.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.displayedEntity(), -45f, recipe.output().tag()));
     }
 
     private static IRecipeSlotTooltipCallback getToolTip(MutationRecipe recipe) {
@@ -133,7 +133,7 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
             int padding = fontRenderer.width(chanceString) / 2;
             fontRenderer.draw(stack, chanceString, 48F - padding, 66, 0xff808080);
         }
-        if (!(recipe.input() instanceof IEntityRender)) this.slot.draw(stack, 15, 52);
-        if (!(recipe.output() instanceof IEntityRender)) this.outputSlot.draw(stack, 85, 43);
+        if (!(recipe.input() instanceof EntityDisplay)) this.slot.draw(stack, 15, 52);
+        if (!(recipe.output() instanceof EntityDisplay)) this.outputSlot.draw(stack, 85, 43);
     }
 }

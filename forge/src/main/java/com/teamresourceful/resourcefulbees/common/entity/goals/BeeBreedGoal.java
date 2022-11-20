@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
-import com.teamresourceful.resourcefulbees.api.ICustomBee;
+import com.teamresourceful.resourcefulbees.api.CustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -32,8 +32,8 @@ public class BeeBreedGoal extends BreedGoal {
     @Override
     public boolean canUse() {
         if (this.animal.isInLove()) {
-            if (super.canUse() && this.partner instanceof ICustomBee parent1){
-                return BeeRegistry.getRegistry().canParentsBreed(parent1.getBeeType(), ((ICustomBee) animal).getBeeType());
+            if (super.canUse() && this.partner instanceof CustomBee parent1){
+                return BeeRegistry.getRegistry().canParentsBreed(parent1.getBeeType(), ((CustomBee) animal).getBeeType());
             }
         }
         return false;
@@ -42,7 +42,7 @@ public class BeeBreedGoal extends BreedGoal {
     @Override
     protected void breed() {
         if (partner == null) return;
-        BeeFamily beeFamily = BeeRegistry.getRegistry().getWeightedChild(((ICustomBee)this.partner).getBeeType(), beeType);
+        BeeFamily beeFamily = BeeRegistry.getRegistry().getWeightedChild(((CustomBee)this.partner).getBeeType(), beeType);
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, this.partner, createSelectedChild(beeFamily));
         if (MinecraftForge.EVENT_BUS.post(event)) {
@@ -97,8 +97,8 @@ public class BeeBreedGoal extends BreedGoal {
     }
 
     private void resetBreed() {
-        this.animal.setAge(((ICustomBee)this.animal).getBreedData().breedDelay());
-        this.partner.setAge(((ICustomBee)this.partner).getBreedData().breedDelay());
+        this.animal.setAge(((CustomBee)this.animal).getBreedData().breedDelay());
+        this.partner.setAge(((CustomBee)this.partner).getBreedData().breedDelay());
         this.animal.resetLove();
         this.partner.resetLove();
     }

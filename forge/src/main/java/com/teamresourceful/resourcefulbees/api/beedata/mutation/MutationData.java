@@ -2,14 +2,14 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.IMutation;
+import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.Mutation;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public record MutationData(int mutationCount, Map<IMutation, WeightedCollection<IMutation>> mutations) {
+public record MutationData(int mutationCount, Map<Mutation, WeightedCollection<Mutation>> mutations) {
     public static final MutationData DEFAULT = new MutationData(0, Collections.emptyMap());
 
     /**
@@ -18,7 +18,7 @@ public record MutationData(int mutationCount, Map<IMutation, WeightedCollection<
      */
     public static final Codec<MutationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.intRange(1, Integer.MAX_VALUE).fieldOf("mutationCount").orElse(10).forGetter(MutationData::mutationCount),
-            Mutation.MUTATION_MAP_CODEC.fieldOf("mutations").orElse(new HashMap<>()).forGetter(MutationData::mutations)
+            com.teamresourceful.resourcefulbees.api.beedata.mutation.Mutation.MUTATION_MAP_CODEC.fieldOf("mutations").orElse(new HashMap<>()).forGetter(MutationData::mutations)
     ).apply(instance, MutationData::new));
 
     /**

@@ -2,7 +2,8 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IItemRender;
+import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
+import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record BlockMutation(RestrictedBlockPredicate predicate, double chance, double weight) implements IMutation, IItemRender {
+public record BlockMutation(RestrictedBlockPredicate predicate, double chance, double weight) implements Mutation, ItemDisplay {
 
     public static final Serializer SERIALIZER = new Serializer();
 
@@ -51,12 +52,12 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
     }
 
     @Override
-    public IMutationSerializer serializer() {
+    public GenericSerializer<Mutation> serializer() {
         return SERIALIZER;
     }
 
     @Override
-    public ItemStack itemRender() {
+    public ItemStack displayedItem() {
         ItemStack stack = new ItemStack(Items.BARRIER);
         Item item = predicate.block().asItem();
         if (item.equals(Items.AIR)) {
@@ -68,7 +69,7 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
     }
 
 
-    private static class Serializer implements IMutationSerializer {
+    private static class Serializer implements GenericSerializer<Mutation> {
 
         public static final Codec<BlockMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 RestrictedBlockPredicate.CODEC.fieldOf("block").forGetter(BlockMutation::predicate),

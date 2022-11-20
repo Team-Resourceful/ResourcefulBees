@@ -2,7 +2,8 @@ package com.teamresourceful.resourcefulbees.api.beedata.mutation.types;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.display.IItemRender;
+import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
+import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedItemPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public record ItemMutation(RestrictedItemPredicate predicate, double chance, double weight) implements IMutation, IItemRender {
+public record ItemMutation(RestrictedItemPredicate predicate, double chance, double weight) implements Mutation, ItemDisplay {
 
     public static final Serializer SERIALIZER = new Serializer();
 
@@ -46,16 +47,16 @@ public record ItemMutation(RestrictedItemPredicate predicate, double chance, dou
     }
 
     @Override
-    public IMutationSerializer serializer() {
+    public GenericSerializer<Mutation> serializer() {
         return SERIALIZER;
     }
 
     @Override
-    public ItemStack itemRender() {
+    public ItemStack displayedItem() {
         return new ItemStack(predicate.item(), 1, predicate.getTag().orElse(null));
     }
 
-    private static class Serializer implements IMutationSerializer {
+    private static class Serializer implements GenericSerializer<Mutation> {
 
         public static final Codec<ItemMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 RestrictedItemPredicate.CODEC.fieldOf("item").forGetter(ItemMutation::predicate),
@@ -64,7 +65,7 @@ public record ItemMutation(RestrictedItemPredicate predicate, double chance, dou
         ).apply(instance, ItemMutation::new));
 
         @Override
-        public Codec<? extends IMutation> codec() {
+        public Codec<? extends Mutation> codec() {
             return CODEC;
         }
 

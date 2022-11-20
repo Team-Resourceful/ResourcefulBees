@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.FlowHiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
-import com.teamresourceful.resourcefulbees.common.item.IShiftingToolTip;
+import com.teamresourceful.resourcefulbees.common.item.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class FlowHiveBlock extends BeeHouseBlock implements IShiftingToolTip {
+public class FlowHiveBlock extends BeeHouseBlock implements ExpandableTooltip {
 
     public FlowHiveBlock() {
         super(Properties.of(Material.WOOD).strength(5f, 6f).sound(SoundType.WOOD));

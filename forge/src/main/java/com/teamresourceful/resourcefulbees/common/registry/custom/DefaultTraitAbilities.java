@@ -94,7 +94,7 @@ public final class DefaultTraitAbilities {
     public record DefaultAbility(String id, Item item, Consumer<ResourcefulBee> ability) implements TraitAbility {
 
         @Override
-        public ItemStack getIcon() {
+        public ItemStack displayedItem() {
             return new ItemStack(item);
         }
 

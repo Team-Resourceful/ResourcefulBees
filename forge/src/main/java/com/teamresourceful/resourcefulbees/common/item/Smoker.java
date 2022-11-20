@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class Smoker extends Item implements IShiftingToolTip {
+public class Smoker extends Item implements ExpandableTooltip {
 
     public Smoker(Properties properties) {
         super(properties);

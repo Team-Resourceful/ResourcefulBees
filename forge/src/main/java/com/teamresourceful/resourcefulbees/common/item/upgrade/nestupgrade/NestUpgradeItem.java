@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade;
 
-import com.teamresourceful.resourcefulbees.common.item.IShiftingToolTip;
+import com.teamresourceful.resourcefulbees.common.item.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.ChatFormatting;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class NestUpgradeItem extends Item implements INestUpgrade, IShiftingToolTip {
+public class NestUpgradeItem extends Item implements NestUpgrade, ExpandableTooltip {
 
     private final BeehiveUpgrade upgrade;
 

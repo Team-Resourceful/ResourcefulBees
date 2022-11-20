@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
-public interface IBeeCompat {
+public interface BeeCompat {
 
     ItemStack getHiveOutput(BeehiveTier tier);
 

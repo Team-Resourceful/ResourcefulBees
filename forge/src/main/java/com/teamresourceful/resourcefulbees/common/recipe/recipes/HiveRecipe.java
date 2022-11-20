@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.recipe.recipes;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.IBeeCompat;
+import com.teamresourceful.resourcefulbees.api.BeeCompat;
 import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
@@ -49,7 +49,7 @@ public record HiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees, Map
     public static Optional<ItemStack> getHiveOutput(BeehiveTier tier, Entity entity) {
         Optional<HiveRecipe> recipe = findRecipe(entity.level.getRecipeManager(), entity.getType());
         return OptionalItemStack.ofNullable(recipe.map(t -> t.getHiveOutput(tier)).orElseGet(() -> {
-            if (entity instanceof IBeeCompat compat) {
+            if (entity instanceof BeeCompat compat) {
                 return compat.getHiveOutput(tier);
             }
             return ItemStack.EMPTY;
@@ -59,7 +59,7 @@ public record HiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees, Map
     public static Optional<ItemStack> getApiaryOutput(ApiaryTier tier, Entity entity) {
         Optional<HiveRecipe> recipe = findRecipe(entity.level.getRecipeManager(), entity.getType());
         return OptionalItemStack.ofNullable(recipe.map(t -> t.getApiaryOutput(tier)).orElseGet(() -> {
-            if (entity instanceof IBeeCompat compat) {
+            if (entity instanceof BeeCompat compat) {
                 return compat.getApiaryOutput(tier);
             }
             return ItemStack.EMPTY;

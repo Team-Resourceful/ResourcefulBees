@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.common.block;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.compat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.item.IShiftingToolTip;
+import com.teamresourceful.resourcefulbees.common.item.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.common.item.ScraperItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
-import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.INestUpgrade;
+import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.NestUpgrade;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
@@ -53,7 +53,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip {
+public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableTooltip {
 
     private static final MutableComponent NONE_TEXT = Component.literal("     NONE");
     //public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 1, 4);
@@ -121,7 +121,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements IShiftingToolTip
             }
         }
 
-        if (itemstack.getItem() instanceof INestUpgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.NEST)) {
+        if (itemstack.getItem() instanceof NestUpgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.NEST)) {
             if (upgrade.getTier().from.equals(this.tier)) return upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
             else {
                 player.displayClientMessage(Component.literal("You can not upgrade this nest with that upgrade."), true);

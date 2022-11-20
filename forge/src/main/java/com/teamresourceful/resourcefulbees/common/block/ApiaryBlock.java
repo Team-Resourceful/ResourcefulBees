@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.item.IShiftingToolTip;
+import com.teamresourceful.resourcefulbees.common.item.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
 import net.minecraft.ChatFormatting;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ApiaryBlock extends BeeHouseBlock implements IShiftingToolTip {
+public class ApiaryBlock extends BeeHouseBlock implements ExpandableTooltip {
 
   private final ApiaryTier tier;
 

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.entity.passive;
 
-import com.teamresourceful.resourcefulbees.api.IBeeCompat;
-import com.teamresourceful.resourcefulbees.api.ICustomBee;
+import com.teamresourceful.resourcefulbees.api.BeeCompat;
+import com.teamresourceful.resourcefulbees.api.CustomBee;
 import com.teamresourceful.resourcefulbees.api.beedata.CombatData;
 import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
@@ -57,7 +57,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import java.util.Objects;
 import java.util.Optional;
 
-public class CustomBeeEntity extends Bee implements ICustomBee, IAnimatable, IBeeCompat {
+public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeCompat {
 
     private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
 

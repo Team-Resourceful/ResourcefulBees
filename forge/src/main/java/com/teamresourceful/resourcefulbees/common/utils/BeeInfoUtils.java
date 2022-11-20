@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
-import com.teamresourceful.resourcefulbees.api.ICustomBee;
+import com.teamresourceful.resourcefulbees.api.CustomBee;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -85,7 +85,7 @@ public final class BeeInfoUtils {
         CompoundTag nbt = new CompoundTag();
         bee.saveAsPassenger(nbt);
 
-        String beeColor = bee instanceof ICustomBee iBee ? iBee.getRenderData().colorData().jarColor().toString() : BeeConstants.VANILLA_BEE_COLOR;
+        String beeColor = bee instanceof CustomBee iBee ? iBee.getRenderData().colorData().jarColor().toString() : BeeConstants.VANILLA_BEE_COLOR;
 
         nbt.putString(NBTConstants.BeeJar.COLOR, beeColor);
         BeehiveEntityAccessor.callRemoveIgnoredBeeTags(nbt);

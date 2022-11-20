@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface ISyncableGUI extends MenuProvider {
+public interface SyncableGUI extends MenuProvider {
 
     /**
      * Wrapper method for {@link BlockEntity#getBlockPos()} due to obfuscation

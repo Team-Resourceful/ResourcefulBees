@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.server;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.blockentity.base.ISyncableGUI;
+import com.teamresourceful.resourcefulbees.common.blockentity.base.SyncableGUI;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
@@ -15,7 +15,7 @@ public record SyncGuiPacket(BlockPos pos, CompoundTag tag) implements Packet<Syn
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "sync_gui");
     public static final Handler HANDLER = new Handler();
 
-    public SyncGuiPacket(ISyncableGUI syncedBlockEntity) {
+    public SyncGuiPacket(SyncableGUI syncedBlockEntity) {
         this(syncedBlockEntity.getBlkPos(), syncedBlockEntity.getSyncData());
     }
 
@@ -46,7 +46,7 @@ public record SyncGuiPacket(BlockPos pos, CompoundTag tag) implements Packet<Syn
         public PacketContext handle(SyncGuiPacket message) {
             return (player, level) -> {
                 if (level.isLoaded(message.pos)) {
-                    if (level.getBlockEntity(message.pos) instanceof ISyncableGUI syncedBlockEntity) {
+                    if (level.getBlockEntity(message.pos) instanceof SyncableGUI syncedBlockEntity) {
                         syncedBlockEntity.readSyncData(message.tag);
                     }
                 }

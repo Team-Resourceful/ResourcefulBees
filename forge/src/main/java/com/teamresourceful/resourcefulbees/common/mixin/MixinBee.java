@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.mixin;
 
-import com.teamresourceful.resourcefulbees.api.IBeeCompat;
+import com.teamresourceful.resourcefulbees.api.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Bee.class)
-public abstract class MixinBee extends Animal implements IBeeCompat {
+public abstract class MixinBee extends Animal implements BeeCompat {
 
     protected MixinBee(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);

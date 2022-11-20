@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.IBeeRegistry;
 import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
@@ -17,7 +16,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.*;
 import java.util.stream.Stream;
 
-public final class BeeRegistry implements IBeeRegistry {
+public final class BeeRegistry implements com.teamresourceful.resourcefulbees.api.BeeRegistry {
 
     private static final BeeRegistry INSTANCE = new BeeRegistry();
     private static final Map<String, JsonObject> RAW_DATA = new LinkedHashMap<>();
@@ -73,7 +72,7 @@ public final class BeeRegistry implements IBeeRegistry {
                 CustomBeeData.codec(s).parse(ops, jsonObject)
                 .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", s))));
         //MinecraftForge.EVENT_BUS.post(new RegisterBeeEvent(beeData));
-        BeeRegistry.buildFamilyTree();
+        com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry.buildFamilyTree();
     }
 
     /**
@@ -182,7 +181,7 @@ public final class BeeRegistry implements IBeeRegistry {
                 .filter(customBeeData -> customBeeData.breedData().hasParents())
                 .flatMap(customBeeData -> customBeeData.breedData().families().stream())
                 .filter(BeeFamily::hasValidParents)
-                .forEach(BeeRegistry::addBreedPairToFamilyTree);
+                .forEach(com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry::addBreedPairToFamilyTree);
     }
 
     private static void addBreedPairToFamilyTree(BeeFamily beeFamily) {

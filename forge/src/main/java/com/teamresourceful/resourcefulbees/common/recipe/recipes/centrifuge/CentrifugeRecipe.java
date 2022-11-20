@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.IAmountSensitive;
+import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitive;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
@@ -63,7 +63,7 @@ public record CentrifugeRecipe(
     }
 
     public int getInputAmount() {
-        return ingredient instanceof IAmountSensitive amountSensitive ? amountSensitive.getAmount() : 1;
+        return ingredient instanceof AmountSensitive amountSensitive ? amountSensitive.getAmount() : 1;
     }
 
     @NotNull

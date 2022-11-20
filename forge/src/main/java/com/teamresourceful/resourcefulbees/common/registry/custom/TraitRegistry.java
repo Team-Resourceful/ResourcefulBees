@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.ITraitRegistry;
 import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
 
 import java.util.Collections;
@@ -10,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public final class TraitRegistry implements ITraitRegistry {
+public final class TraitRegistry implements com.teamresourceful.resourcefulbees.api.TraitRegistry {
 
     private static final TraitRegistry INSTANCE = new TraitRegistry();
 

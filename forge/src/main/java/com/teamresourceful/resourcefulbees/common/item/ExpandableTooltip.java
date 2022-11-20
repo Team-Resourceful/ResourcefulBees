@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface IShiftingToolTip {
+public interface ExpandableTooltip {
 
     @OnlyIn(Dist.CLIENT)
     default void setupTooltip(@NotNull ItemStack stack, @Nullable BlockGetter pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {

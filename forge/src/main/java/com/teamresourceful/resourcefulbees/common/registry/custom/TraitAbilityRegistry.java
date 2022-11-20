@@ -1,13 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.ITraitAbilityRegistry;
 import com.teamresourceful.resourcefulbees.api.trait.TraitAbility;
 
 import java.util.HashMap;
 import java.util.Locale;
 
-public final class TraitAbilityRegistry implements ITraitAbilityRegistry {
+public final class TraitAbilityRegistry implements com.teamresourceful.resourcefulbees.api.TraitAbilityRegistry {
 
     private static final TraitAbilityRegistry INSTANCE = new TraitAbilityRegistry();
 

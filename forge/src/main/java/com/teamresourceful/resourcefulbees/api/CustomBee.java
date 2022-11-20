@@ -13,10 +13,10 @@ import java.util.Optional;
 
 /**
  * Implemented in CustomBeeEntity and ResourcefulBee
- *
+ * <p>
  * It is recommended to use ResourcefulBee (or a class that is child of it) when referred to ICustomBee
  */
-public interface ICustomBee {
+public interface CustomBee {
 
     /**
      * Gets "this" bee's type.
