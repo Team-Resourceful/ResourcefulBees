@@ -4,19 +4,19 @@
     "saturation": 0.9,
     "effects": [
       {
-        "effect": "speed",
+        "effect": "minecraft:speed",
         "duration": 2400,
         "strength": 2,
         "chance": 1
       },
       {
-        "effect": "jump_boost",
+        "effect": "minecraft:jump_boost",
         "duration": 2400,
         "strength": 1,
         "chance": 1
       },
       {
-        "effect": "night_vision",
+        "effect": "minecraft:night_vision",
         "duration": 2400,
         "strength": 0,
         "chance": 1

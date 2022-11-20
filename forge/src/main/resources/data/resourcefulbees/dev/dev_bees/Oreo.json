@@ -24,7 +24,6 @@
     "sizeModifier": 1.25
   },
   "TraitData": {
-    "hasTraits": true,
     "traits": [ "oreo" ]
   },
   "CombatData": {

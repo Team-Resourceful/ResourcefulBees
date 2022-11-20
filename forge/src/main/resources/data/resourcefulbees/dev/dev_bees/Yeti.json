@@ -14,7 +14,6 @@
     "sizeModifier": 1.25
   },
   "TraitData": {
-    "hasTraits": true,
     "traits": [ "oreo" ]
   },
   "CombatData": {
@@ -29,7 +28,7 @@
     }
   },
   "MutationData": {
-    "mutationCount": 15,
+    "mutationCount": 1,
     "mutations" : [
       {
         "input": {

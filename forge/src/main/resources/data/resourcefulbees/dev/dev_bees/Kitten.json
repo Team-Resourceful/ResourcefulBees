@@ -32,7 +32,6 @@
     }
   },
   "TraitData": {
-    "hasTraits": true,
     "traits": [ "kitten" ]
   },
   "CombatData": {
