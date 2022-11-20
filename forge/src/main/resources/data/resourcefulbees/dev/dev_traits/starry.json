@@ -1,0 +1,42 @@
+{
+  "displayItem": "minecraft:nether_star",
+  "specialAbilities": [
+    "spider"
+  ],
+  "particles": [
+    "minecraft:end_rod"
+  ],
+  "potionImmunities": [
+    "minecraft:poison",
+    "minecraft:slowness",
+    "minecraft:instant_damage",
+    "minecraft:nausea",
+    "minecraft:weakness",
+    "minecraft:hunger",
+    "minecraft:wither"
+  ],
+  "damageTypes": [
+    {
+      "damageType": "OUT_OF_WORLD",
+      "amplifier": 10
+    }
+  ],
+  "auras": [
+    {
+      "aura": "DAMAGING",
+      "damageEffect": {
+        "source": "MAGIC",
+        "strength": 5
+      }
+    },
+    {
+      "aura": "POTION",
+      "potionEffect": {
+        "effect": "minecraft:wither"
+      }
+    },
+    {
+      "aura": "BURNING"
+    }
+  ]
+}

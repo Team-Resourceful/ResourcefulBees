@@ -32,30 +32,32 @@ public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoLayerRenderer<
         ResourceLocation texture = layerData.beeTexture().getTexture(bee);
 
         switch (layerData.effect()) {
-            case NONE -> {
-                renderer.render(this.getEntityModel().getModel(renderData.model()),
-                        bee, partialTicks,
-                        null, stack, null, buffer.getBuffer(RenderType.entityTranslucent(texture)),
-                        packedLight, LivingEntityRenderer.getOverlayCoords(bee, 0.0F),
-                        layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
-            }
-            case GLOW -> {
-                if (layerData.pulseFrequency() == 0 || bee.tickCount % layerData.pulseFrequency() == 0.0f) {
-                    renderer.render(this.getEntityModel().getModel(renderData.model()),
-                            bee, partialTicks,
-                            null, stack, null, buffer.getBuffer(RenderType.eyes(texture)),
-                            15728640, OverlayTexture.NO_OVERLAY,
-                            layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
-                }
-            }
-            case ENCHANTED -> {
-                renderer.render(this.getEntityModel().getModel(renderData.model()),
-                        bee, partialTicks,
-                        null, stack, null, buffer.getBuffer(RenderType.entityGlint()),
-                        packedLight, OverlayTexture.NO_OVERLAY,
-                        0.0F, 0.0F, 0.0F, 0.0F);
-            }
+            case NONE -> renderNone(stack, buffer, packedLight, bee, partialTicks, texture);
+            case GLOW -> renderGlowLayer(stack, buffer, bee, partialTicks, texture);
+            case ENCHANTED -> renderEnchantedLayer(stack, buffer, packedLight, bee, partialTicks);
         }
 
+    }
+
+    private void renderEnchantedLayer(PoseStack stack, MultiBufferSource buffer, int packedLight, E bee, float partialTicks) {
+        renderLayer(bee, partialTicks, stack, buffer, RenderType.entityGlint(), packedLight, OverlayTexture.NO_OVERLAY, 0.0F, 0.0F, 0.0F, 0.0F);
+    }
+
+    private void renderGlowLayer(PoseStack stack, MultiBufferSource buffer, E bee, float partialTicks, ResourceLocation texture) {
+        if (layerData.pulseFrequency() == 0 || bee.tickCount % layerData.pulseFrequency() == 0.0f) {
+            renderLayer(bee, partialTicks, stack, buffer, RenderType.eyes(texture), 15728640, OverlayTexture.NO_OVERLAY, layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
+        }
+    }
+
+    private void renderNone(PoseStack stack, MultiBufferSource buffer, int packedLight, E bee, float partialTicks, ResourceLocation texture) {
+        renderLayer(bee, partialTicks, stack, buffer, RenderType.entityTranslucent(texture), packedLight, LivingEntityRenderer.getOverlayCoords(bee, 0.0F), layerData.color().getFloatRed(), layerData.color().getFloatGreen(), layerData.color().getFloatBlue(), 1.0F);
+    }
+
+    private void renderLayer(E bee, float partialTicks, PoseStack stack, MultiBufferSource buffer, RenderType texture, int packedLight, int bee1, float layerData, float layerData1, float layerData2, float alpha) {
+        renderer.render(this.getEntityModel().getModel(renderData.model()),
+                bee, partialTicks,
+                null, stack, null, buffer.getBuffer(texture),
+                packedLight, bee1,
+                layerData, layerData1, layerData2, alpha);
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -27,14 +28,14 @@ public class CustomBeeRenderer<E extends CustomBeeEntity> extends GeoEntityRende
         super.render(model, bee, partialTicks, type, matrixStackIn, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
-
     @Override
-    public void renderEarly(E bee, PoseStack stack, float ticks, MultiBufferSource bufferSource, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float partialTicks) {
-        super.renderEarly(bee, stack, ticks, bufferSource, consumer, light, overlay, red, green, blue, partialTicks);
-        stack.scale(bee.getRenderData().sizeModifier(), bee.getRenderData().sizeModifier(), bee.getRenderData().sizeModifier());
+    public void render(E bee, float entityYaw, float partialTick, PoseStack stack, @NotNull MultiBufferSource buffer, int packedLight) {
+        float size = bee.getRenderData().sizeModifier();
+        stack.scale(size, size, size);
         if (bee.isBaby()){
             stack.scale(0.5f, 0.5f, 0.5f);
         }
+        super.render(bee, entityYaw, partialTick, stack, buffer, packedLight);
     }
 
     @Override

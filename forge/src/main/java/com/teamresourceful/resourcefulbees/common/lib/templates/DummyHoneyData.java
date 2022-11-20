@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.api.honeydata.fluid.FluidAttributeDat
 import com.teamresourceful.resourcefulbees.api.honeydata.fluid.FluidRenderData;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.Rarity;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class DummyHoneyData {
                     ConstantColors.blue,
                     2,
                     4,
+                    Rarity.EPIC,
                     List.of(
                             new HoneyEffect(MobEffects.WITHER, 25, 2, 0.75f),
                             new HoneyEffect(MobEffects.INVISIBILITY, 50, 1, 1f)

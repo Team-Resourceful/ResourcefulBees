@@ -1,0 +1,69 @@
+{
+  "CoreData": {
+    "flower": "minecraft:beacon",
+    "honeycombVariation": "starry",
+    "maxTimeInHive": 1200,
+    "lore": [
+      {
+        "text":"Reach for the stars!",
+        "color": "rainbow"
+      },
+      {
+        "translate":"tooltip.resourcefulbees.bee.creator",
+        "with": ["§6Lady Lexxie"]
+      }
+    ]
+  },
+  "RenderData": {
+    "texture": "starry/starry_bee",
+    "ColorData": {
+      "spawnEggPrimaryColor": "#FFA500",
+      "spawnEggSecondaryColor": "#f0d800",
+      "jarColor": "#FFA500"
+    },
+    "layers": [
+      {
+        "layerEffect": "GLOW",
+        "color": "#FFA500",
+        "texture": "starry/starry_bee_emissive"
+      }
+    ],
+    "sizeModifier": 1.25,
+    "model": "resourcefulbees:geo/queen.geo.json"
+  },
+  "TraitData": {
+    "traits": [ "starry" ]
+  },
+  "CombatData": {
+    "isInvulnerable": true,
+    "removeStingerOnAttack": false,
+    "inflictsPoison": false,
+    "attributes": {
+      "generic.attack_damage": 0,
+      "generic.max_health": 20
+    }
+  },
+  "MutationData": {
+    "mutationCount": 1,
+    "mutations" : [
+      {
+        "input": {
+          "type": "block",
+          "block": {
+            "id": "resourcefulbees:starry_honey_block"
+          },
+          "chance": 0.1
+        },
+        "outputs" : [
+          {
+            "type": "item",
+            "item": {
+              "id": "minecraft:nether_star"
+            },
+            "weight": 30
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "bottleData": {
+    "hunger": 20,
+    "saturation": 1,
+    "rarity": "EPIC",
+    "color": "#FFA500",
+    "effects": [
+      {
+        "effect": "minecraft:glowing",
+        "duration": 2400,
+        "strength": 0,
+        "chance": 1
+      }
+    ],
+    "honeyBottle": "resourcefulbees:starry_honey_bottle"
+  },
+  "blockData": {
+    "honeyBlockItem": "resourcefulbees:starry_honey_block",
+    "honeyBlock": "resourcefulbees:starry_honey_block",
+    "color": "#FFA500"
+  },
+  "fluidData": {
+    "rendering": {
+      "color": "#FFA500"
+    },
+    "stillFluid": "resourcefulbees:starry_honey",
+    "flowingFluid": "resourcefulbees:starry_honey_flowing",
+    "fluidBucket": "resourcefulbees:starry_honey_bucket",
+    "fluidBlock": "resourcefulbees:starry_honey"
+  }
+}
