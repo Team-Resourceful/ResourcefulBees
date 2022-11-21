@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.entity.ai.AuraHandler;
 import com.teamresourceful.resourcefulbees.common.entity.goals.*;
 import com.teamresourceful.resourcefulbees.common.entity.pathfinding.BeePathNavigation;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -38,6 +39,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -47,11 +49,13 @@ public class ResourcefulBee extends CustomBeeEntity {
     private int numberOfMutations;
     private RBeePollinateGoal pollinateGoal;
     private int explosiveCooldown = 0;
+    private final @Nullable AuraHandler auraHandler;
 
     public ResourcefulBee(EntityType<? extends Bee> type, Level level, String beeType) {
         super(type, level, beeType);
         //THIS NEEDS TO BE ONLY LOADED ON THE SERVER AS IT WOULD NOT MATCH HOW VANILLA LOADS GOALS OTHERWISE.
         if (level instanceof ServerLevel) registerConditionalGoals();
+        auraHandler = customBeeData.traitData().hasAuras() ? new AuraHandler(this) : null;
     }
 
     @Override
@@ -71,7 +75,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         this.goalSelector.addGoal(6, ((BeeEntityAccessor)this).getGoToKnownFlowerGoal());
         this.goalSelector.addGoal(8, Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get()) ? new BeeWanderGoal(this) : new WanderWorkerGoal(this));
         this.goalSelector.addGoal(9, new FloatGoal(this));
-        this.goalSelector.addGoal(10, new BeeAuraGoal(this));
+        //this.goalSelector.addGoal(10, new BeeAuraGoal(this));
     }
 
     /**
@@ -189,6 +193,10 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     protected void customServerAiStep() {
+        if (auraHandler != null) {
+            auraHandler.tick();
+        }
+
         TraitData info = getTraitData();
         TraitAbilityRegistry registry = TraitAbilityRegistry.getRegistry();
 
