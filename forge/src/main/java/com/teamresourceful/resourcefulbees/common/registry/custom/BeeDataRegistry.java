@@ -14,6 +14,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.loading.FMLLoader;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -66,7 +67,7 @@ public class BeeDataRegistry {
     private static DataResult<BeeDataSerializer<?>> decode(ResourceLocation id) {
         BeeDataSerializer<?> serializer = INSTANCE.get(id);
         if (serializer == null) {
-            if (SharedConstants.IS_RUNNING_IN_IDE || Boolean.TRUE.equals(CommonConfig.SHOW_DEBUG_INFO.get())) {
+            if (!FMLLoader.isProduction() || SharedConstants.IS_RUNNING_IN_IDE || Boolean.TRUE.equals(CommonConfig.SHOW_DEBUG_INFO.get())) {
                 ResourcefulBees.LOGGER.error("No serializer found for " + id);
             }
             return DataResult.success(DUMMY_SERIALIZER);
