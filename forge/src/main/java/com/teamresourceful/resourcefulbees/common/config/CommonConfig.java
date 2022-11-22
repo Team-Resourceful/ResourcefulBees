@@ -85,6 +85,7 @@ public final class CommonConfig {
     public static BooleanValue BYPASS_PERFORMANT_CHECK;
     public static BooleanValue BEEPEDIA_HIDE_LOCKED;
     public static IntValue DEFAULT_AURA_RANGE;
+    public static IntValue AURA_FREQUENCY;
 
     public static BooleanValue MANUAL_MODE;
 
@@ -230,6 +231,8 @@ public final class CommonConfig {
                 .define("use_experimental_manual_mode", false);
         DEFAULT_AURA_RANGE = commonBuilder.comment("\nThe default radius that all bees will use for their auras.")
                 .defineInRange("beeAuraRange", 10, 3, 20);
+        AURA_FREQUENCY = commonBuilder.comment("\nThe frequency, in seconds, that a bee will apply its aura effect. \nSet this to a higher value to improve performance")
+                .defineInRange("auraFrequency", 6, 5, 15);
         commonBuilder.pop();
 
         commonBuilder.push("Honeycomb Options");

@@ -25,4 +25,8 @@ public enum AuraType {
     public boolean isBeneficial() {
         return this.beneficial;
     }
+
+    public boolean isPotion() {
+        return this == POTION;
+    }
 }
