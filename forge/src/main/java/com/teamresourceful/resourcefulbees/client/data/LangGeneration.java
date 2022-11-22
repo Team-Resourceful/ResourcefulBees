@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.client.data;
 
 import com.google.gson.JsonObject;
-import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
-import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
@@ -16,7 +16,6 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraftforge.registries.DeferredRegister;
 import org.apache.commons.lang3.StringUtils;
 
@@ -51,8 +50,7 @@ public final class LangGeneration {
 
         BeeRegistry.getRegistry()
                 .getStreamOfBees()
-                .map(CustomBeeData::coreData)
-                .map(CoreData::name)
+                .map(CustomBeeData::name)
                 .forEach(name -> {
                     object.addProperty(ENTITY_RESOURCEFULBEES + name + "_bee", replaceAndCapitalize(name) + " Bee");
                     object.addProperty(BEE_RESOURCEFULBEES + name, replaceAndCapitalize(name));
@@ -70,7 +68,7 @@ public final class LangGeneration {
 
         TraitRegistry.getRegistry()
                 .getStreamOfTraits()
-                .map(BeeTrait::getName)
+                .map(Trait::name)
                 .forEach(name -> object.addProperty(TRAIT_RESOURCEFULBEES + name, replaceAndCapitalize(name)));
 
         generateLang(ModItems.SPAWN_EGG_ITEMS, ITEM_RESOURCEFULBEES, object);

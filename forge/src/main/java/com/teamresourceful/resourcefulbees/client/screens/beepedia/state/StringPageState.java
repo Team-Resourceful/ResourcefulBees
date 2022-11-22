@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.state;
 
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.BeePage;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.honey.HoneyPage;
@@ -37,7 +37,7 @@ public class StringPageState<T, P> implements PageState<P> {
         return new StringPageState<>(beeType, BeeRegistry.getRegistry()::getBeeData, BeePage::new);
     }
 
-    public static StringPageState<BeeTrait, BeepediaScreen> createTraitPageState(String traitType) {
+    public static StringPageState<Trait, BeepediaScreen> createTraitPageState(String traitType) {
         return new StringPageState<>(traitType, TraitRegistry.getRegistry()::getTrait, TraitPage::new);
     }
 

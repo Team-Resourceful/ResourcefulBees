@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.trait;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeAura;
-import com.teamresourceful.resourcefulbees.api.trait.TraitAbility;
+import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
+import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
@@ -55,7 +55,7 @@ public class BasicEntry extends ListEntry implements TooltipProvider {
         return new BasicEntry(new ItemStack(Items.SHIELD), Component.literal("Damage Source Immunity"), Component.literal(immunity), 0x55FF55);
     }
 
-    public static BasicEntry of(BeeAura aura) {
+    public static BasicEntry of(Aura aura) {
         return switch (aura.type()) {
             case POTION -> new BasicEntry(new ItemStack(Items.POTION), Component.literal("Potion Aura"), aura.potionEffect().effect().getDisplayName().copy().append(" " + ModUtils.createRomanNumeral(aura.potionEffect().strength())), aura.isBeneficial() ? 0x5555FF : 0xFF5555);
             case BURNING -> new BasicEntry(new ItemStack(Items.BLAZE_POWDER), Component.literal("Burning Aura"), Component.literal("Burns for 10 seconds"), aura.isBeneficial() ? 0x5555FF : 0xFF5555);

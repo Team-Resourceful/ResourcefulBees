@@ -1,5 +1,5 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": "#minecraft:flowers",
     "honeycombVariation": "oreo",
     "maxTimeInHive": 6000,
@@ -14,7 +14,7 @@
       }
     ]
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "/oreo/oreo_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#442920",
@@ -23,10 +23,10 @@
     },
     "sizeModifier": 1.25
   },
-  "TraitData": {
+  "resourcefulbees:trait/v1": {
     "traits": [ "oreo" ]
   },
-  "CombatData": {
+  "resourcefulbees:combat/v1": {
     "removeStingerOnAttack": false,
     "inflictsPoison": false,
     "attributes": {

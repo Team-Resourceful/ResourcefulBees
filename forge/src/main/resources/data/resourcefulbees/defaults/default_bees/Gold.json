@@ -1,10 +1,10 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": "#forge:storage_blocks/gold",
     "honeycombVariation": "gold",
     "maxTimeInHive": 800
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "ores/gold/gold_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",
     "ColorData": {
@@ -13,7 +13,7 @@
       "jarColor": "#FFDC00"
     }
   },
-  "MutationData": {
+  "resourcefulbees:mutation/v1": {
     "mutations" : [
       {
         "input": {
@@ -39,7 +39,7 @@
       }
     ]
   },
-  "BreedData": {
+  "resourcefulbees:breeding/v1": {
     "isBreedable": true,
     "parents": [
       {

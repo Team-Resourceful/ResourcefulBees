@@ -1,10 +1,10 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": "#minecraft:flowers",
     "honeycombVariation": "rgb",
     "maxTimeInHive": 600
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "custom/bee",
     "model": "resourcefulbees:geo/crystal.geo.json",
     "layers": [
@@ -18,7 +18,7 @@
       "jarColor": "rainbow"
     }
   },
-  "BreedData": {
+  "resourcefulbees:breeding/v1": {
     "isBreedable": true,
     "parents": [
       {

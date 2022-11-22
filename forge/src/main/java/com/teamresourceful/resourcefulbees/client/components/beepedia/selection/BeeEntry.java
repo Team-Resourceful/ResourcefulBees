@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.components.beepedia.selection
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
@@ -33,7 +33,7 @@ public class BeeEntry extends ListEntry {
     public BeeEntry(CustomBeeData data, BooleanSupplier isFound) {
         this.data = data;
         Level level = Minecraft.getInstance().level;
-        this.entity = level == null ? null : data.getEntityType().create(level);
+        this.entity = level == null ? null : data.entityType().create(level);
         this.isFound = isFound;
     }
 

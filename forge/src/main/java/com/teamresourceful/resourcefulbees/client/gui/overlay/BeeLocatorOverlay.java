@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.overlay;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocator;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -39,7 +39,7 @@ public class BeeLocatorOverlay implements OverlayRenderer {
             ResourceLocation biome = ResourceLocation.tryParse(stack.getTag().getString(NBTConstants.BeeLocator.LAST_BIOME_ID));
             if (!BeeRegistry.containsBeeType(bee)) return;
             CustomBeeData data = BeeRegistry.getRegistry().getBeeData(bee);
-            Entity entity = getDisplayBee(data.getEntityType(), player.level);
+            Entity entity = getDisplayBee(data.entityType(), player.level);
             if (entity == null) return;
             GuiComponent.fill(poseStack, 0, 0, 150, 50, 1325400064);
             ClientRenderUtils.renderEntity(poseStack, entity, 10, 5, 45f, 1.5f);

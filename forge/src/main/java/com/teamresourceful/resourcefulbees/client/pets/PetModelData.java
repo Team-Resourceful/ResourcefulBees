@@ -2,9 +2,10 @@ package com.teamresourceful.resourcefulbees.client.pets;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.beedata.render.BeeTexture;
-import com.teamresourceful.resourcefulbees.api.beedata.render.LayerData;
-import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
+import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
+import com.teamresourceful.resourcefulbees.common.data.beedata.data.rendering.LayerData;
+import com.teamresourceful.resourcefulbees.common.data.beedata.data.rendering.LayerTexture;
+import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -21,11 +22,13 @@ import java.util.Set;
 
 public class PetModelData implements IAnimatable {
 
+    private static final ResourceLocation BASE_MODEL = new ModResourceLocation("geo/base.geo.json");
+
     public static final Codec<PetModelData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("version").orElse(-1).forGetter(PetModelData::getVersion),
             Codec.STRING.fieldOf("id").orElse("error").forGetter(PetModelData::getId),
-            ResourceLocation.CODEC.fieldOf("model").orElse(RenderData.BASE_MODEL).forGetter(PetModelData::getModelLocation),
-            ResourceLocation.CODEC.fieldOf("texture").orElse(BeeTexture.MISSING_TEXTURE.normalTexture()).forGetter(PetModelData::getTexture),
+            ResourceLocation.CODEC.fieldOf("model").orElse(BASE_MODEL).forGetter(PetModelData::getModelLocation),
+            ResourceLocation.CODEC.fieldOf("texture").orElse(LayerTexture.MISSING_TEXTURE.texture()).forGetter(PetModelData::getTexture),
             CodecExtras.linkedSet(LayerData.CODEC).fieldOf("layers").orElse(new LinkedHashSet<>()).forGetter(PetModelData::getLayers)
     ).apply(instance, PetModelData::new));
 
@@ -41,9 +44,9 @@ public class PetModelData implements IAnimatable {
     private final String id;
     private final ResourceLocation modelLocation;
     private final ResourceLocation texture;
-    private final Set<LayerData> layers;
+    private final Set<BeeLayerData> layers;
 
-    public PetModelData(int version, String id, ResourceLocation modelLocation, ResourceLocation texture, Set<LayerData> layers) {
+    public PetModelData(int version, String id, ResourceLocation modelLocation, ResourceLocation texture, Set<BeeLayerData> layers) {
         this.version = version;
         this.id = id;
         this.modelLocation = modelLocation;
@@ -76,7 +79,7 @@ public class PetModelData implements IAnimatable {
         return texture;
     }
 
-    public Set<LayerData> getLayers() {
+    public Set<BeeLayerData> getLayers() {
         return layers;
     }
 

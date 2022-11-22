@@ -1,5 +1,5 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": "minecraft:beacon",
     "honeycombVariation": "starry",
     "maxTimeInHive": 1200,
@@ -14,7 +14,7 @@
       }
     ]
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "starry/starry_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#FFA500",
@@ -31,10 +31,10 @@
     "sizeModifier": 1.25,
     "model": "resourcefulbees:geo/queen.geo.json"
   },
-  "TraitData": {
+  "resourcefulbees:trait/v1": {
     "traits": [ "starry" ]
   },
-  "CombatData": {
+  "resourcefulbees:combat/v1": {
     "isInvulnerable": true,
     "removeStingerOnAttack": false,
     "inflictsPoison": false,
@@ -43,7 +43,7 @@
       "generic.max_health": 20
     }
   },
-  "MutationData": {
+  "resourcefulbees:mutation/v1": {
     "mutationCount": 1,
     "mutations" : [
       {

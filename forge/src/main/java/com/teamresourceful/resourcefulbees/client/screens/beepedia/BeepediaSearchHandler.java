@@ -1,10 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia;
 
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -50,12 +51,12 @@ public final class BeepediaSearchHandler {
 
     @NotNull
     private static Predicate<CustomBeeData> searchName(String search) {
-        return bee -> bee.displayName().getString().toLowerCase().contains(search.toLowerCase());
+        return bee -> bee.displayName().getString().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT));
     }
 
     @NotNull
     private static Predicate<CustomBeeData> searchId(String search) {
-        return bee -> bee.coreData().name().toLowerCase().contains(search.toLowerCase());
+        return bee -> bee.name().toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT));
     }
 
     private static <T> Predicate<T> predicateTrue() {

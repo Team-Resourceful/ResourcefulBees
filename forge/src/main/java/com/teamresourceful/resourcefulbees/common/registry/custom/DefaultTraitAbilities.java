@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
-import com.teamresourceful.resourcefulbees.api.trait.TraitAbility;
+import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
@@ -28,12 +28,13 @@ public final class DefaultTraitAbilities {
         throw new UtilityClassError();
     }
 
-    public static void registerDefaultAbilities(TraitAbilityRegistry registry) {
+    public static TraitAbilityRegistry registerDefaultAbilities(TraitAbilityRegistry registry) {
         registry.register(TraitConstants.TELEPORT, new DefaultAbility("teleport", Items.ENDER_PEARL, DefaultTraitAbilities::enderAbility));
         registry.register(TraitConstants.SLIMY, new DefaultAbility("slimy", Items.SLIME_BALL, DefaultTraitAbilities::slimeAbility));
         registry.register(TraitConstants.FLAMMABLE, new DefaultAbility("flammable", Items.BLAZE_POWDER, DefaultTraitAbilities::fireAbility));
         registry.register(TraitConstants.ANGRY, new DefaultAbility("angry", Items.IRON_AXE, DefaultTraitAbilities::angryAbility));
         registry.register(TraitConstants.SPIDER, new DefaultAbility("spider", Items.COBWEB, null));
+        return registry;
     }
 
     private static void enderAbility(ResourcefulBee bee) {

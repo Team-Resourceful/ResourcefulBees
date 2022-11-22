@@ -1,10 +1,10 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": ["minecraft:bone_block"],
     "honeycombVariation": "skeleton",
     "maxTimeInHive": 600
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "skeleton/skeleton_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#F6F2E6",
@@ -12,7 +12,7 @@
       "jarColor": "#F6F2E6"
     }
   },
-  "MutationData": {
+  "resourcefulbees:mutation/v1": {
     "mutations" : [
       {
         "input": {
@@ -32,7 +32,7 @@
       }
     ]
   },
-  "BreedData": {
+  "resourcefulbees:breeding/v1": {
     "parents": [
       {
         "parent1": "skeleton",

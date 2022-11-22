@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.out
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
+import com.teamresourceful.resourcefulbees.common.utils.CodecUtils;
 import net.minecraftforge.fluids.FluidStack;
 
 public record FluidOutput(FluidStack fluid, double weight) implements AbstractOutput<FluidStack> {

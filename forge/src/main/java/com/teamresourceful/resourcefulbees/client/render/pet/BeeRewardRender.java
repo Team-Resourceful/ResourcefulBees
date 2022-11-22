@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.render.pet;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
-import com.teamresourceful.resourcefulbees.api.beedata.render.LayerData;
+import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
 import com.teamresourceful.resourcefulbees.client.pets.PetBeeModel;
 import com.teamresourceful.resourcefulbees.client.pets.PetInfo;
 import com.teamresourceful.resourcefulbees.client.pets.PetModelData;
@@ -58,14 +58,14 @@ public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerMod
             provider.setCustomAnimations(data, renderer.getUniqueID(data), event);
             renderer.render(model, data, partialTicks, renderType, stack, buffer, consumer, packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
 
-            for (LayerData layer : data.getLayers()) {
+            for (BeeLayerData layer : data.getLayers()) {
                 renderLayer(playerEntity, stack, buffer, layer, data, model, partialTicks, packedLightIn);
             }
         }
     }
 
-    public void renderLayer(AbstractClientPlayer playerEntity, PoseStack stack, @NotNull MultiBufferSource buffer, LayerData layerData, PetModelData data, GeoModel model, float partialTicks, int packedLightIn) {
-        ResourceLocation texture = layerData.beeTexture().normalTexture();
+    public void renderLayer(AbstractClientPlayer playerEntity, PoseStack stack, @NotNull MultiBufferSource buffer, BeeLayerData layerData, PetModelData data, GeoModel model, float partialTicks, int packedLightIn) {
+        ResourceLocation texture = layerData.texture().texture();
 
         switch (layerData.effect()) {
             case NONE -> {

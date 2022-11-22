@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
+import com.teamresourceful.resourcefulbees.api.data.honey.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;

@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.SlotButton;
 import com.teamresourceful.resourcefulbees.client.screens.base.SubdividedScreen;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaTextures;
@@ -36,20 +36,20 @@ public class BeePage extends SubdividedScreen {
         super(CommonComponents.EMPTY, 186, 163, 0, 51, (screen) -> new InfoPage());
         this.data = data;
         Level level = Minecraft.getInstance().level;
-        this.bee = level != null ? data.getEntityType().create(level) : null;
+        this.bee = level != null ? data.entityType().create(level) : null;
     }
 
     @Override
     protected void init() {
         int x = 50;
         addRenderableWidget(new SlotButton(x, 25, BeepediaTextures.BOOK, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Info")));
-        if (this.data.traitData().hasTraits()) {
+        if (this.data.getTraitData().hasTraits()) {
             x+=22;
             addRenderableWidget(new SlotButton(x, 25, BeepediaTextures.TRAIT, () -> false,
-                    () -> this.setSubScreen(new TraitsPage(this.data.traitData()))))
+                    () -> this.setSubScreen(new TraitsPage(this.data.getTraitData()))))
                     .setTooltipProvider(() -> List.of(Component.literal("Traits")));
         }
-        var honeycomb = data.coreData().getHoneycombData();
+        var honeycomb = data.getCoreData().getHoneycombData();
         if (honeycomb.isPresent()) {
             x+=22;
             addRenderableWidget(new SlotButton(x, 25, BeepediaTextures.HOMEYCOMB, () -> false,
@@ -59,7 +59,7 @@ public class BeePage extends SubdividedScreen {
 
         addRenderableWidget(new SlotButton(160, 25, BeepediaTextures.RECIPE_BOOK, () -> ModUtils.isModLoaded("jei"), () -> {
             if (ModUtils.isModLoaded("jei")) {
-                JEICompat.searchEntity(this.data.entityType().get());
+                JEICompat.searchEntity(this.data.entityType());
             }
         })).setTooltipProvider(() -> List.of(Component.literal("Open JEI")));
     }

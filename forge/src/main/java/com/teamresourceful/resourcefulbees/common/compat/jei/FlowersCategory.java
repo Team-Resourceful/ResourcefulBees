@@ -1,7 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
@@ -26,7 +27,10 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -49,12 +53,13 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
     public static List<Recipe> getFlowersRecipes() {
         List<Recipe> recipes = new ArrayList<>();
         BEE_REGISTRY.getBees().forEach((s, beeData) -> {
-            if (beeData.coreData().blockFlowers().size() > 0) {
+            BeeCoreData coreData = beeData.getCoreData();
+            if (coreData.hasFlowers()) {
                 Set<ItemStack> stacks = new HashSet<>();
                 Set<FluidStack> fluids = new HashSet<>();
 
-                beeData.coreData()
-                    .blockFlowers()
+                coreData
+                    .flowers()
                     .stream()
                     .filter(Holder::isBound)
                     .map(Holder::value)
@@ -73,8 +78,8 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
                     recipes.add(Recipe.getFluidRecipe(beeData, fluids));
                 }
 
-            } else if (beeData.coreData().isEntityPresent()){
-                recipes.add(Recipe.getEntityRecipe(beeData, beeData.coreData().entityFlower()));
+            } else if (coreData.hasEntityFlower()){
+                recipes.add(Recipe.getEntityRecipe(beeData, coreData.entityFlowers()));
             }
         });
         return recipes;
@@ -84,7 +89,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull Recipe recipe, @NotNull IFocusGroup focuses) {
 
         builder.addSlot(RecipeIngredientRole.INPUT, 41, 10)
-                .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeData.getEntityType(), 45.0f))
+                .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.beeData.entityType(), 45.0f))
                 .setSlotName("bee");
 
         recipe.builder.accept(builder.addSlot(RecipeIngredientRole.INPUT, 41, 55).setSlotName("flower"));

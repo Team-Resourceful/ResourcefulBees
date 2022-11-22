@@ -38,7 +38,7 @@ public class BeeLocatorWorker implements LevelWorker {
         this.hand = hand;
         this.queue = createRange(range);
         this.chunk = player.level.getChunk(player.blockPosition()).getPos();
-        this.type = BeeRegistry.containsBeeType(bee) ? BeeRegistry.getRegistry().getBeeData(bee).getEntityType() : null;
+        this.type = BeeRegistry.containsBeeType(bee) ? BeeRegistry.getRegistry().getBeeData(bee).entityType() : null;
         this.bee = bee;
         if (this.type == null) {
             this.isRunning = false;

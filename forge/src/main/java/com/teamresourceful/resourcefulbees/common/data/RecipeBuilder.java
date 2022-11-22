@@ -1,10 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
-import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
+import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.RecipeManagerAccessor;
@@ -104,35 +105,35 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         LOGGER.info("Adding Reload Listener: 'resourcefulbees recipe manager'");
     }
 
-    private Recipe<?> makeBreedingRecipe(WeightedCollection<BeeFamily> families) {
-        BeeFamily family = families.get(0);
-        ResourceLocation id = new ResourceLocation(ResourcefulBees.MOD_ID, family.getParent1() + "_" + family.getParent2() + "_" + family.child());
-        ResourceLocation parent1Id = family.getParent1Data().registryID();
-        BeeJarIngredient beeJarParent1 = new BeeJarIngredient(parent1Id, family.getParent1Data().renderData().colorData().jarColor().getValue());
-        BreedData parent1BreedData = family.getParent1Data().breedData();
+    private Recipe<?> makeBreedingRecipe(WeightedCollection<FamilyUnit> families) {
+        Parents parents = families.get(0).getParents();
+        ResourceLocation id = new ResourceLocation(ResourcefulBees.MOD_ID, parents.getParent1() + "_" + parents.getParent2() + "_" + families.get(0).getChild());
+        ResourceLocation parent1Id = parents.getParent1Data().id();
+        BeeJarIngredient beeJarParent1 = new BeeJarIngredient(parent1Id, parents.getParent1Data().getRenderData().colorData().jarColor().getValue());
+        BeeBreedData parent1BreedData = parents.getParent1Data().getBreedData();
         var parent1FeedItems = Ingredient.of(parent1BreedData.feedItems().stream().map(ItemStack::new));
         BreederRecipe.BreederPair parent1 = new BreederRecipe.BreederPair(beeJarParent1, Optional.of(parent1Id.toString()), parent1FeedItems, parent1BreedData.feedReturnItem());
-        ResourceLocation parent2Id = family.getParent2Data().registryID();
-        BreedData parent2BreedData = family.getParent2Data().breedData();
-        BeeJarIngredient beeJarParent2 = new BeeJarIngredient(parent2Id, family.getParent2Data().renderData().colorData().jarColor().getValue());
+        ResourceLocation parent2Id = parents.getParent2Data().id();
+        BeeBreedData parent2BreedData = parents.getParent2Data().getBreedData();
+        BeeJarIngredient beeJarParent2 = new BeeJarIngredient(parent2Id, parents.getParent2Data().getRenderData().colorData().jarColor().getValue());
         var parent2FeedItems = Ingredient.of(parent2BreedData.feedItems().stream().map(ItemStack::new));
         BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parent2Id.toString()),  parent2FeedItems, parent2BreedData.feedReturnItem());
         return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(WeightedCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
     }
 
-    private BreederRecipe.BreederOutput makeOutput(BeeFamily family) {
-        ItemStack childBeeJar = BeeJarIngredient.getBeeJar(family.getChildData().registryID(), family.getChildData().renderData().colorData().jarColor().getValue());
-        return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().registryID().toString()), family.weight(), family.chance());
+    private BreederRecipe.BreederOutput makeOutput(FamilyUnit family) {
+        ItemStack childBeeJar = BeeJarIngredient.getBeeJar(family.getChildData().id(), family.getChildData().getRenderData().colorData().jarColor().getValue());
+        return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().id().toString()), family.weight(), family.chance());
     }
 
     private Recipe<?> makeHiveRecipe(CustomBeeData bee) {
-        var optData = bee.coreData().getHoneycombData();
+        var optData = bee.getCoreData().getHoneycombData();
         if (optData.isEmpty()) return null;
         var data = optData.get();
 
         return new HiveRecipe(
-            new ResourceLocation(ResourcefulBees.MOD_ID, bee.coreData().name().toLowerCase(Locale.ROOT) + "_hive_output"),
-            HolderSet.direct(EntityType::builtInRegistryHolder, bee.entityType().get()),
+            new ResourceLocation(ResourcefulBees.MOD_ID, bee.name().toLowerCase(Locale.ROOT) + "_hive_output"),
+            HolderSet.direct(EntityType::builtInRegistryHolder, bee.entityType()),
             data.hiveCombs(),
             data.apiaryCombs()
         );

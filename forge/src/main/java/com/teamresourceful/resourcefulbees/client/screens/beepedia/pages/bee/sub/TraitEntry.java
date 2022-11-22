@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.su
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
+import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
@@ -24,9 +24,9 @@ public class TraitEntry extends ListEntry implements TooltipProvider {
     public static final ResourceLocation SLOT_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/list_button.png");
 
     private boolean hovered;
-    private final BeeTrait trait;
+    private final Trait trait;
 
-    public TraitEntry(BeeTrait trait) {
+    public TraitEntry(Trait trait) {
         this.trait = trait;
     }
 
@@ -39,7 +39,7 @@ public class TraitEntry extends ListEntry implements TooltipProvider {
 
             RenderUtils.bindTexture(SLOT_TEXTURE);
             Gui.blit(stack, 0, 2, 0, this.hovered ? 20 : 0, 20, 20, 20, 60);
-            RenderUtils.renderItem(stack, this.trait.getDisplayItem().getDefaultInstance(), 2, 4);
+            RenderUtils.renderItem(stack, this.trait.displayItem().getDefaultInstance(), 2, 4);
 
             Font font = Minecraft.getInstance().font;
             MutableComponent text = this.trait.getDisplayName().copy();

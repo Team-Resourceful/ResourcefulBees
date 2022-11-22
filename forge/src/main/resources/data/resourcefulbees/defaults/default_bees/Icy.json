@@ -1,9 +1,9 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": ["minecraft:water"],
     "maxTimeInHive": 1200
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "icy/icy_bee",
     "model": "resourcefulbees:geo/slime.geo.json",
     "ColorData": {
@@ -13,7 +13,7 @@
     },
     "sizeModifier": 0.75
   },
-  "MutationData": {
+  "resourcefulbees:mutation/v1": {
     "mutations" : [
       {
         "input": {
@@ -40,7 +40,7 @@
       }
     ]
   },
-  "BreedData": {
+  "resourcefulbees:breeding/v1": {
     "isBreedable": true,
     "parents": [
       {
@@ -49,8 +49,7 @@
       }
     ]
   },
-  "TraitData": {
-    "hasTraits": true,
+  "resourcefulbees:trait/v1": {
     "traits": ["can_swim"]
   }
 }

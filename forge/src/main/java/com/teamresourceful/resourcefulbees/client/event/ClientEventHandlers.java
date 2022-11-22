@@ -105,7 +105,7 @@ public final class ClientEventHandlers {
     private static void clientSetup(final FMLClientSetupEvent event) {
         ModEntities.getModBees().forEach((s, entityType) ->
                 EntityRenderers.register(entityType.get(),
-                        manager -> new CustomBeeRenderer<>(manager, BeeRegistry.getRegistry().getBeeData(s).renderData())));
+                        manager -> new CustomBeeRenderer<>(manager, BeeRegistry.getRegistry().getBeeData(s).getRenderData())));
 
         registerScreens();
 

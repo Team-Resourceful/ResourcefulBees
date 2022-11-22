@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub;
 
-import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;

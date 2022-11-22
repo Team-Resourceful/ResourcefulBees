@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.lib.templates;
 
-import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import net.minecraft.world.item.Items;

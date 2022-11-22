@@ -1,10 +1,10 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": "#forge:storage_blocks/netherite",
     "honeycombVariation": "netherite",
     "maxTimeInHive": 600
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "ores/netherite/netherite_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#654740",
@@ -12,7 +12,7 @@
       "jarColor": "#654740"
     }
   },
-  "MutationData": {
+  "resourcefulbees:mutation/v1": {
     "mutations" : [
       {
         "input": {
@@ -38,7 +38,7 @@
       }
     ]
   },
-  "BreedData": {
+  "resourcefulbees:breeding/v1": {
     "isBreedable": true,
     "parents": [
       {
@@ -47,7 +47,7 @@
       }
     ]
   },
-  "TraitData": {
+  "resourcefulbees:trait/v1": {
     "hasTraits": true,
     "traits": ["nether", "wither"]
   }

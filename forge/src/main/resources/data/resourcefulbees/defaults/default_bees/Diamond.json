@@ -1,10 +1,10 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": "#forge:storage_blocks/diamond",
     "honeycombVariation": "diamond",
     "maxTimeInHive": 600
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "ores/diamond/diamond_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",
     "ColorData": {
@@ -13,7 +13,7 @@
       "jarColor": "#00ffff"
     }
   },
-  "MutationData": {
+  "resourcefulbees:mutation/v1": {
     "mutations" : [
       {
         "input": {
@@ -30,7 +30,7 @@
       }
     ]
   },
-  "BreedData": {
+  "resourcefulbees:breeding/v1": {
     "isBreedable": true,
     "parents": [
       {

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.fluids;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.fluid.FluidRenderData;
+import com.teamresourceful.resourcefulbees.api.data.honey.fluid.FluidRenderData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;

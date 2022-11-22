@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub;
 
-import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeTrait;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
+import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
+import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class TraitsPage extends Screen implements TooltipProvider {
-    private final List<BeeTrait> traits;
+    private final List<Trait> traits;
 
-    public TraitsPage(TraitData traits) {
+    public TraitsPage(BeeTraitData traits) {
         super(CommonComponents.EMPTY);
-        this.traits = traits.getTraits()
+        this.traits = traits.traits()
                 .stream()
                 .map(TraitRegistry.getRegistry()::getTrait)
                 .filter(Objects::nonNull)

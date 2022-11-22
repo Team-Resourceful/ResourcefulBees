@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
-import com.teamresourceful.resourcefulbees.api.CustomBee;
+import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -20,7 +20,6 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,10 +31,6 @@ public final class BeeInfoUtils {
         throw new UtilityClassError();
     }
 
-    public static Pair<String, String> sortParents(String parent1, String parent2) {
-        return parent1.compareTo(parent2) > 0 ? Pair.of(parent1, parent2) : Pair.of(parent2, parent1);
-    }
-
     @Nullable
     public static MobEffect getEffect(String effectName) {
         return Registry.MOB_EFFECT.getOptional(ResourceLocation.tryParse(effectName)).orElse(null);
@@ -43,11 +38,6 @@ public final class BeeInfoUtils {
 
     public static Optional<EntityType<?>> getOptionalEntityType(String entityName) {
         return EntityType.byString(entityName);
-    }
-
-    @Nullable
-    public static EntityType<?> getEntityType(ResourceLocation entityId) {
-        return Registry.ENTITY_TYPE.getOptional(entityId).orElse(null);
     }
 
     public static void flagBeesInRange(BlockPos pos, Level level) {

@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
-import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
+import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -15,13 +15,12 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -95,8 +94,8 @@ public final class ModUtils {
         if (bee.isAngry()) {
             bee.setTarget(player);
             if (bee instanceof ResourcefulBee customBee) {
-                TraitData traitData = customBee.getTraitData();
-                if (traitData.getDamageTypes().stream().anyMatch(damageType -> damageType.type().equals(TraitConstants.EXPLOSIVE))) {
+                BeeTraitData traitData = customBee.getTraitData();
+                if (traitData.damageTypes().stream().anyMatch(damageType -> damageType.type().equals(TraitConstants.EXPLOSIVE))) {
                     customBee.setExplosiveCooldown(60);
                 }
             }

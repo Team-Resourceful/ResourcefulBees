@@ -241,7 +241,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         if (id != Registry.ENTITY_TYPE.getDefaultKey()) {
             CompoundTag tag = new CompoundTag();
             tag.putString(NBTConstants.NBT_ID, id.toString());
-            int timeInHive = rand.nextInt(entityType.getData().coreData().maxTimeInHive());
+            int timeInHive = rand.nextInt(entityType.getData().getCoreData().maxTimeInHive());
             ((BeehiveEntityAccessor)nest).getBees().add(new BeehiveBlockEntity.BeeData(tag, 0, timeInHive));
         }
     }

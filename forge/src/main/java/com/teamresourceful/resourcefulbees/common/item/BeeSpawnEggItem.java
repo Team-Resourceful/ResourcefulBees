@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.render.ColorData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeColorData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
@@ -36,8 +36,8 @@ public class BeeSpawnEggItem extends ForgeSpawnEggItem {
 
     @Override
     public int getColor(int tintIndex) {
-        ColorData colorData = beeData.renderData().colorData();
-        return tintIndex == 0 ? colorData.spawnEggPrimaryColor().getValue(): colorData.spawnEggSecondaryColor().getValue();
+        BeeColorData colorData = beeData.getRenderData().colorData();
+        return tintIndex == 0 ? colorData.primarySpawnEggColor().getValue(): colorData.secondarySpawnEggColor().getValue();
     }
 
     @Override

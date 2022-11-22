@@ -87,7 +87,7 @@ public class JEICompat implements IModPlugin {
     public void registerIngredients(IModIngredientRegistration registration) {
         registration.register(
                 ENTITY_INGREDIENT,
-                BeeRegistry.getRegistry().getBees().values().stream().map(b -> new EntityIngredient(b.getEntityType(), -45.0f)).collect(Collectors.toList()),
+                BeeRegistry.getRegistry().getBees().values().stream().map(b -> new EntityIngredient(b.entityType(), -45.0f)).collect(Collectors.toList()),
                 new EntityIngredientHelper(),
                 new EntityRenderer()
         );

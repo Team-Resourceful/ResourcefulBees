@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.render.entities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
+import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.client.render.entities.layers.CustomBeeLayer;
 import com.teamresourceful.resourcefulbees.client.render.entities.models.CustomBeeModel;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
@@ -17,7 +17,7 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class CustomBeeRenderer<E extends CustomBeeEntity> extends GeoEntityRenderer<E> {
 
-    public CustomBeeRenderer(EntityRendererProvider.Context ctx, RenderData renderData) {
+    public CustomBeeRenderer(EntityRendererProvider.Context ctx, BeeRenderData renderData) {
         super(ctx, new CustomBeeModel<>());
         renderData.layers().stream().limit(6).forEach(layerData -> addLayer(new CustomBeeLayer<>(this, renderData, layerData)));
     }

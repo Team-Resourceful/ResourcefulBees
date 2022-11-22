@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
-import com.teamresourceful.resourcefulbees.api.CustomBee;
-import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
+import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.particles.ParticleTypes;
@@ -42,7 +42,7 @@ public class BeeBreedGoal extends BreedGoal {
     @Override
     protected void breed() {
         if (partner == null) return;
-        BeeFamily beeFamily = BeeRegistry.getRegistry().getWeightedChild(((CustomBee)this.partner).getBeeType(), beeType);
+        FamilyUnit beeFamily = BeeRegistry.getRegistry().getWeightedChild(((CustomBee)this.partner).getBeeType(), beeType);
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, this.partner, createSelectedChild(beeFamily));
         if (MinecraftForge.EVENT_BUS.post(event)) {
@@ -63,8 +63,8 @@ public class BeeBreedGoal extends BreedGoal {
         }
     }
 
-    private void spawnChildInLevel(BeeFamily beeFamily, AgeableMob selectedChild) {
-        selectedChild.setAge(beeFamily.getChildData().breedData().childGrowthDelay());
+    private void spawnChildInLevel(FamilyUnit beeFamily, AgeableMob selectedChild) {
+        selectedChild.setAge(beeFamily.getChildData().getBreedData().childGrowthDelay());
         selectedChild.moveTo(animal.position());
         this.level.addFreshEntity(selectedChild);
         this.level.broadcastEntityEvent(this.animal, (byte)18);
@@ -103,8 +103,8 @@ public class BeeBreedGoal extends BreedGoal {
         this.partner.resetLove();
     }
 
-    public AgeableMob createSelectedChild(BeeFamily beeFamily) {
-        EntityType<?> entityType = Objects.requireNonNull(beeFamily.getChildData().getEntityType());
+    public AgeableMob createSelectedChild(FamilyUnit beeFamily) {
+        EntityType<?> entityType = Objects.requireNonNull(beeFamily.getChildData().entityType());
         return (AgeableMob) entityType.create(level);
     }
 

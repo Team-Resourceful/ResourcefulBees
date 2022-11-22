@@ -10,18 +10,20 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
-import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
+import com.teamresourceful.resourcefulbees.common.data.beedata.DispatchMapCodec;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyBeeData;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyHoneyData;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyHoneycombData;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyTraitData;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BeeDataRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryOps;
+import net.minecraft.resources.ResourceLocation;
 
 public class TemplateCommand {
 
@@ -42,7 +44,8 @@ public class TemplateCommand {
     }
 
     private static int printBeeTemplate(CommandContext<CommandSourceStack> context) {
-        DataResult<JsonElement> beeResult = CustomBeeData.codec(TEMPLATE_STRING).encodeStart(registryOps(context), DummyBeeData.DUMMY_CUSTOM_BEE_DATA);
+        DataResult<JsonElement> beeResult = new DispatchMapCodec<>(ResourceLocation.CODEC, BeeDataRegistry.codec(TEMPLATE_STRING))
+                .encodeStart(registryOps(context), DummyBeeData.DATA);
         ResourcefulBees.LOGGER.info(PRETTY_GSON.toJson(beeResult.getOrThrow(false, ResourcefulBees.LOGGER::error)));
         context.getSource().sendSuccess(Component.literal("Bee template printed to logs!"), true);
         return 1;
@@ -63,7 +66,7 @@ public class TemplateCommand {
     }
 
     private static int printTraitTemplate(CommandContext<CommandSourceStack> context) {
-        DataResult<JsonElement> traitResult = TraitData.codec(TEMPLATE_STRING).encodeStart(registryOps(context), DummyTraitData.DUMMY_TRAIT_DATA);
+        DataResult<JsonElement> traitResult = Trait.getCodec(TEMPLATE_STRING).encodeStart(registryOps(context), DummyTraitData.DUMMY_TRAIT_DATA);
         ResourcefulBees.LOGGER.info(PRETTY_GSON.toJson(traitResult.getOrThrow(false, ResourcefulBees.LOGGER::error)));
         context.getSource().sendSuccess(Component.literal("Trait template printed to logs!"), true);
         return 1;

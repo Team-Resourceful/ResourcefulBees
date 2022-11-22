@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 
-public final class HoneycombRegistry {
+public final class HoneycombRegistry implements com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry {
 
     private static final HoneycombRegistry INSTANCE = new HoneycombRegistry();
     private static final Map<String, JsonObject> RAW_DATA = new HashMap<>();
@@ -64,7 +64,7 @@ public final class HoneycombRegistry {
      * @param identifier The identifier of the variation requested.
      * @return Returns an {@link OutputVariation} object for the given identifier.
      */
-    public static @Nullable OutputVariation getOutputVariation(String identifier) {
+    public @Nullable OutputVariation getOutputVariation(String identifier) {
         return VARIATION_DATA.get(identifier);
     }
 
@@ -137,6 +137,11 @@ public final class HoneycombRegistry {
     private static void parseRegistryData(String s, JsonObject jsonObject) {
         RegistryData.codec(s).optionalFieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject)
                 .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.warn("Could not create honeycomb registry item from {} json file.", s));
+    }
+
+    @Override
+    public Map<String, OutputVariation> getData() {
+        return Collections.unmodifiableMap(VARIATION_DATA);
     }
 
     private record RegistryData(String name, Color color, boolean edible, boolean block, boolean enchanted) {

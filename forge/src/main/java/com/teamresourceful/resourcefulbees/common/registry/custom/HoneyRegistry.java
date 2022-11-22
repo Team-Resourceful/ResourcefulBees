@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
 import com.google.gson.JsonObject;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.api.HoneyRegistry {
+public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry {
 
     private static final HoneyRegistry INSTANCE = new HoneyRegistry();
 

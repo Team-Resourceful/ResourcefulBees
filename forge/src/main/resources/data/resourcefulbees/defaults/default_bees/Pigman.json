@@ -1,9 +1,9 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": ["minecraft:nether_wart"],
     "maxTimeInHive": 1000
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "pigman/pigman_bee",
     "ColorData": {
       "spawnEggPrimaryColor": "#885956",
@@ -11,7 +11,7 @@
       "jarColor": "#885956"
     }
   },
-  "MutationData": {
+  "resourcefulbees:mutation/v1": {
     "mutations" : [
       {
         "input": {
@@ -37,7 +37,7 @@
       }
     ]
   },
-  "BreedData": {
+  "resourcefulbees:breeding/v1": {
     "isBreedable": true,
     "parents": [
       {
@@ -46,8 +46,7 @@
       }
     ]
   },
-  "TraitData": {
-    "hasTraits": true,
+  "resourcefulbees:trait/v1": {
     "traits": ["nether", "pigman"]
   }
 }

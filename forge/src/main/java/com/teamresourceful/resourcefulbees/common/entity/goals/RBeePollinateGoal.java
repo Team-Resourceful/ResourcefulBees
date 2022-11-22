@@ -76,7 +76,7 @@ public class RBeePollinateGoal extends Goal {
     }
 
     private boolean hasEntityFlower() {
-        return bee.getCoreData().isEntityPresent();
+        return bee.getCoreData().hasEntityFlower();
     }
 
     private boolean randomFlag() {
@@ -153,7 +153,7 @@ public class RBeePollinateGoal extends Goal {
         ++this.ticks;
         if (this.ticks > 600) {
             this.clearTask();
-        } else if ((bee.getCoreData().isEntityPresent() || bee.getFlowerEntityID() >= 0)) {
+        } else if ((bee.getCoreData().hasEntityFlower() || bee.getFlowerEntityID() >= 0)) {
             handleEntityFlower();
             handleBlockFlower();
         }
@@ -211,7 +211,7 @@ public class RBeePollinateGoal extends Goal {
     }
 
     private void handleEntityFlower() {
-        if (bee.tickCount % 5 == 0 && bee.getCoreData().isEntityPresent()) {
+        if (bee.tickCount % 5 == 0 && bee.getCoreData().hasEntityFlower()) {
             Entity flowerEntity = bee.level.getEntity(bee.getFlowerEntityID());
             if (flowerEntity != null) {
                 boundingBox = new Vec3(flowerEntity.getBoundingBox().getCenter().x(), flowerEntity.getBoundingBox().maxY, flowerEntity.getBoundingBox().getCenter().z());
@@ -230,7 +230,7 @@ public class RBeePollinateGoal extends Goal {
 
     public Optional<BlockPos> findFlower(double range) {
         BlockPos beePos = bee.blockPosition();
-        HolderSet<EntityType<?>> holders = bee.getCoreData().entityFlower();
+        HolderSet<EntityType<?>> holders = bee.getCoreData().entityFlowers();
         if (holders.size() > 0) {
             return bee.level.getEntities(bee, new AABB(bee.blockPosition()).inflate(range), entity -> holders.contains(entity.getType().builtInRegistryHolder()))
                     .stream()
@@ -255,11 +255,11 @@ public class RBeePollinateGoal extends Goal {
 
     public Predicate<BlockPos> getFlowerBlockPredicate() {
         return pos -> {
-            if (bee.getCoreData().blockFlowers().size() > 0){
+            if (bee.getCoreData().flowers().size() > 0){
                 if (!MathUtils.inRangeInclusive(pos.getY(), minBuildHeight(), maxBuildHeight())) return false;
                 BlockState state = bee.level.getBlockState(pos);
                 if (state.isAir()) return false;
-                return state.is(bee.getCoreData().blockFlowers());
+                return state.is(bee.getCoreData().flowers());
             }
             return false;
         };

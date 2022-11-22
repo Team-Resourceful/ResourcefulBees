@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentity;
 
 
 import com.google.common.collect.Lists;
-import com.teamresourceful.resourcefulbees.api.BeeCompat;
+import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveBeeDataAccessor;

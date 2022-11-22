@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
+import com.teamresourceful.resourcefulbees.common.data.beedata.DataSetup;
 import com.teamresourceful.resourcefulbees.common.capabilities.ModCapabilities;
 import com.teamresourceful.resourcefulbees.common.compat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
@@ -62,22 +63,28 @@ public class ResourcefulBees {
     public static final Logger LOGGER = LogManager.getLogger();
 
     public ResourcefulBees() {
+        ConfigLoader.load(CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
+
         DefaultBeehiveTiers.loadDefaults();
         DefaultApiaryTiers.loadDefaults();
 
-        CustomDataRegistry.INSTANCE.init();
+        DataSetup.setupInitalizers(ResourcefulBeesAPI.getInitializers());
+
+        BeeDataRegistry.init();
+
         GeckoLib.initialize();
         ModSetup.initialize();
         RegistryHandler.init();
         ModCompatHelper.registerCompats();
-        ResourcefulBeesAPI.setBeeRegistry(BeeRegistry.getRegistry());
-        ResourcefulBeesAPI.setTraitRegistry(TraitRegistry.getRegistry());
-        DefaultTraitAbilities.registerDefaultAbilities(TraitAbilityRegistry.getRegistry());
+
+        ResourcefulBeesAPI.getRegistry().setBeeRegistry(BeeRegistry.getRegistry());
+        ResourcefulBeesAPI.getRegistry().setTraitRegistry(TraitRegistry.getRegistry());
+        ResourcefulBeesAPI.getRegistry().setTraitAbilityRegistry(DefaultTraitAbilities.registerDefaultAbilities(TraitAbilityRegistry.getRegistry()));
+        ResourcefulBeesAPI.getRegistry().setHoneycombRegistry(HoneycombRegistry.getRegistry());
+        ResourcefulBeesAPI.getRegistry().setHoneyRegistry(HoneyRegistry.getRegistry());
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
-
-        ConfigLoader.load(CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
 
         HoneycombSetup.setupHoneycombs();
 

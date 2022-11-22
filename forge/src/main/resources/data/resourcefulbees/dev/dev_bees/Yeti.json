@@ -1,9 +1,9 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": "#minecraft:flowers",
     "maxTimeInHive": 4000
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "/yeti/yeti_bee",
     "model":  "resourcefulbees:geo/yeti.geo.json",
     "ColorData": {
@@ -13,10 +13,10 @@
     },
     "sizeModifier": 1.25
   },
-  "TraitData": {
+  "resourcefulbees:trait/v1": {
     "traits": [ "oreo" ]
   },
-  "CombatData": {
+  "resourcefulbees:combat/v1": {
     "removeStingerOnAttack": false,
     "inflictsPoison": false,
     "attributes": {
@@ -27,7 +27,7 @@
       "generic.attack_knockback": 3
     }
   },
-  "MutationData": {
+  "resourcefulbees:mutation/v1": {
     "mutationCount": 1,
     "mutations" : [
       {

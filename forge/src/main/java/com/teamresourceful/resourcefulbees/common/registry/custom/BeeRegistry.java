@@ -1,27 +1,33 @@
 package com.teamresourceful.resourcefulbees.common.registry.custom;
 
+import com.google.common.base.Suppliers;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
+import com.teamresourceful.resourcefulbees.common.data.beedata.DispatchMapCodec;
+import com.teamresourceful.resourcefulbees.common.data.beedata.data.breeding.BeeParents;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryOps;
-import org.apache.commons.lang3.tuple.Pair;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public final class BeeRegistry implements com.teamresourceful.resourcefulbees.api.BeeRegistry {
+public final class BeeRegistry implements com.teamresourceful.resourcefulbees.api.registry.BeeRegistry {
 
     private static final BeeRegistry INSTANCE = new BeeRegistry();
     private static final Map<String, JsonObject> RAW_DATA = new LinkedHashMap<>();
     private static final Map<String, CustomBeeData> CUSTOM_DATA = new LinkedHashMap<>();
-    private static final Map<Pair<String, String>, WeightedCollection<BeeFamily>> FAMILY_TREE = new LinkedHashMap<>();
+    private static final Map<Parents, WeightedCollection<FamilyUnit>> FAMILY_TREE = new LinkedHashMap<>();
+    private static final Supplier<CustomBeeData> DEFAULT_DATA = Suppliers.memoize(() -> ResourcefulBeesAPI.getInitializers().data("error", Map.of()));
 
     private BeeRegistry() {
         // Single instanced classes do not need to be able to be extended
@@ -44,7 +50,7 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
         return CUSTOM_DATA.containsKey(beeType);
     }
 
-    public Map<Pair<String, String>, WeightedCollection<BeeFamily>> getFamilyTree() {
+    public Map<Parents, WeightedCollection<FamilyUnit>> getFamilyTree() {
         return FAMILY_TREE;
     }
 
@@ -55,7 +61,7 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      * @return Returns a {@link CustomBeeData} object for the given bee type.
      */
     public CustomBeeData getBeeData(String beeType) {
-        return CUSTOM_DATA.getOrDefault(beeType, CustomBeeData.DEFAULT);
+        return CUSTOM_DATA.getOrDefault(beeType, DEFAULT_DATA.get());
     }
 
     /**
@@ -67,12 +73,15 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      */
     public void regenerateCustomBeeData(RegistryAccess access) {
         DynamicOps<JsonElement> ops = access == null ? JsonOps.INSTANCE : RegistryOps.create(JsonOps.INSTANCE, access);
-
-        RAW_DATA.forEach((s, jsonObject) -> CUSTOM_DATA.compute(s, (s1, customBeeDataCodec) ->
-                CustomBeeData.codec(s).parse(ops, jsonObject)
-                .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", s))));
-        //MinecraftForge.EVENT_BUS.post(new RegisterBeeEvent(beeData));
+        RAW_DATA.forEach((s, jsonObject) -> CUSTOM_DATA.compute(s, (s1, customBeeDataCodec) -> parseData(s, ops, jsonObject)));
         com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry.buildFamilyTree();
+    }
+
+    private static CustomBeeData parseData(String id, DynamicOps<JsonElement> ops, JsonObject jsonObject) {
+        var data = new DispatchMapCodec<>(ResourceLocation.CODEC, BeeDataRegistry.codec(id))
+                .parse(ops, jsonObject)
+                .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", id));
+        return ResourcefulBeesAPI.getInitializers().data(id, data);
     }
 
     /**
@@ -94,7 +103,7 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      * @return Returns true/false if parents can breed.
      */
     public boolean canParentsBreed(String parent1, String parent2) {
-        return FAMILY_TREE.containsKey(BeeInfoUtils.sortParents(parent1, parent2));
+        return FAMILY_TREE.containsKey(BeeParents.nullOf(parent1, parent2));
     }
 
     /**
@@ -104,8 +113,8 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      * @param parent2 Bee type for parent 2.
      * @return Returns a weighted random bee type as a string.
      */
-    public BeeFamily getWeightedChild(String parent1, String parent2) {
-        return FAMILY_TREE.get(BeeInfoUtils.sortParents(parent1, parent2)).next();
+    public FamilyUnit getWeightedChild(String parent1, String parent2) {
+        return FAMILY_TREE.get(BeeParents.nullOf(parent1, parent2)).next();
     }
 
     /**
@@ -116,8 +125,8 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      * @param beeFamily BeeData object for the child.
      * @return Returns random bee type as a string.
      */
-    public double getAdjustedWeightForChild(BeeFamily beeFamily) {
-        return FAMILY_TREE.get(beeFamily.parents()).getAdjustedWeight(beeFamily.weight());
+    public double getAdjustedWeightForChild(FamilyUnit beeFamily) {
+        return FAMILY_TREE.get(beeFamily.getParents()).getAdjustedWeight(beeFamily.weight());
     }
 
     /**
@@ -178,14 +187,14 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
     private static void buildFamilyTree() {
         FAMILY_TREE.clear();
         CUSTOM_DATA.values().stream()
-                .filter(customBeeData -> customBeeData.breedData().hasParents())
-                .flatMap(customBeeData -> customBeeData.breedData().families().stream())
-                .filter(BeeFamily::hasValidParents)
+                .filter(customBeeData -> customBeeData.getBreedData().hasParents())
+                .flatMap(customBeeData -> customBeeData.getBreedData().families().stream())
+                .filter(FamilyUnit::validUnit)
                 .forEach(com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry::addBreedPairToFamilyTree);
     }
 
-    private static void addBreedPairToFamilyTree(BeeFamily beeFamily) {
-        FAMILY_TREE.computeIfAbsent(beeFamily.parents(), k -> new WeightedCollection<>()).add(beeFamily.weight(), beeFamily);
+    private static void addBreedPairToFamilyTree(FamilyUnit beeFamily) {
+        FAMILY_TREE.computeIfAbsent(beeFamily.getParents(), k -> new WeightedCollection<>()).add(beeFamily.weight(), beeFamily);
     }
     //endregion
 }

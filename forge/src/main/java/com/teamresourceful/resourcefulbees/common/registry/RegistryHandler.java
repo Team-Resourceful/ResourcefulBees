@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.registry;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
@@ -53,7 +53,7 @@ public final class RegistryHandler {
     }
 
     public static void registerDynamicBees() {
-        BeeRegistry.getRegistry().getBees().forEach((name, beeData) -> registerBee(name, beeData.renderData().sizeModifier()));
+        BeeRegistry.getRegistry().getBees().forEach((name, beeData) -> registerBee(name, beeData.getRenderData().sizeModifier()));
     }
 
     public static void registerDynamicHoney() {

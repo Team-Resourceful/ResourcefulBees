@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.render.entities.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.api.beedata.render.LayerData;
-import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
+import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
+import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -14,11 +14,11 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoLayerRenderer<E> {
 
-    private final RenderData renderData;
-    private final LayerData layerData;
+    private final BeeRenderData renderData;
+    private final BeeLayerData layerData;
     private final IGeoRenderer<E> renderer;
 
-    public CustomBeeLayer(IGeoRenderer<E> renderer, RenderData renderData, LayerData layerData) {
+    public CustomBeeLayer(IGeoRenderer<E> renderer, BeeRenderData renderData, BeeLayerData layerData) {
         super(renderer);
         this.renderData = renderData;
         this.layerData = layerData;
@@ -28,8 +28,8 @@ public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoLayerRenderer<
 
     @Override
     public void render(PoseStack stack, MultiBufferSource buffer, int packedLight, E bee, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (!bee.hasNectar() && layerData.isPollen()) return;
-        ResourceLocation texture = layerData.beeTexture().getTexture(bee);
+        if (!bee.hasNectar() && layerData.pollenLayer()) return;
+        ResourceLocation texture = layerData.texture().getTexture(bee);
 
         switch (layerData.effect()) {
             case NONE -> renderNone(stack, buffer, packedLight, bee, partialTicks, texture);

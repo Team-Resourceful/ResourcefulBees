@@ -1,9 +1,9 @@
 {
-  "CoreData":{
+  "resourcefulbees:core/v1":{
     "flower": ["minecraft:spawner"],
     "maxTimeInHive": 1200
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "dungeon/dungeon_bee",
     "model": "resourcefulbees:geo/flower_moss.geo.json",
     "ColorData": {
@@ -12,7 +12,7 @@
       "jarColor": "#406278"
     }
   },
-  "MutationData": {
+  "resourcefulbees:mutation/v1": {
     "mutationCount": 5,
     "mutations": [
       {
@@ -42,7 +42,7 @@
       }
     ]
   },
-  "BreedData": {
+  "resourcefulbees:breeding/v1": {
     "parents": [
       {
         "parent1": "dungeon",

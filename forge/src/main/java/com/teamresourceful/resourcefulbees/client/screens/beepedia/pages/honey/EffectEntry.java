@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.honey;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.PotionEffect;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyEffect;
+import com.teamresourceful.resourcefulbees.api.data.trait.PotionEffect;
+import com.teamresourceful.resourcefulbees.api.data.honey.HoneyEffect;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;

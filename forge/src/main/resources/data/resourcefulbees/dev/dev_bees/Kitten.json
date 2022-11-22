@@ -1,5 +1,5 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": "#minecraft:beds",
     "honeycombVariation": "catnip",
     "maxTimeInHive": 600,
@@ -14,14 +14,7 @@
       }
     ]
   },
-  "CentrifugeData": {
-    "hasCentrifugeOutput": true,
-    "itemOutputs": [
-      {"item":{"id": "minecraft:cat_spawn_egg"}, "chance": 1},
-      {"item":{"id": "resourcefulbees:catnip_honey_bottle"}, "chance": 10}
-    ]
-  },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "sizeModifier": 0.75,
     "texture": "/kitten/bee",
     "model": "resourcefulbees:geo/kitten.geo.json",
@@ -31,10 +24,10 @@
       "jarColor": "#EAA939"
     }
   },
-  "TraitData": {
+  "resourcefulbees:trait/v1": {
     "traits": [ "kitten" ]
   },
-  "CombatData": {
+  "resourcefulbees:combat/v1": {
     "removeStingerOnAttack": false,
     "inflictsPoison": false,
     "attributes": {

@@ -1,10 +1,10 @@
 {
-  "CoreData": {
+  "resourcefulbees:core/v1": {
     "flower": ["minecraft:coal_block"],
     "honeycombVariation": "coal",
     "maxTimeInHive": 600
   },
-  "RenderData": {
+  "resourcefulbees:rendering/v1": {
     "texture": "ores/coal/coal_bee",
     "model": "resourcefulbees:geo/crystal.geo.json",
     "ColorData": {
@@ -13,7 +13,7 @@
       "jarColor": "#303030"
     }
   },
-  "MutationData": {
+  "resourcefulbees:mutation/v1": {
     "mutations" : [
       {
         "input": {
@@ -34,7 +34,7 @@
       }
     ]
   },
-  "BreedData": {
+  "resourcefulbees:breeding/v1": {
     "parents": [
       {
         "parent1": "coal",

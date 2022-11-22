@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.types.Mutation;
+import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
+import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.BlockPos;
@@ -20,7 +20,7 @@ public class BeeMutateGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (bee.getNumberOfMutations() >= bee.getMutationData().getMutationCount()) return false;
+        if (bee.getNumberOfMutations() >= bee.getMutationData().count()) return false;
         if (bee.level.random.nextFloat() < 0.3F) return false;
         return bee.hasNectar() && !bee.isAngry();
     }
@@ -29,14 +29,14 @@ public class BeeMutateGoal extends Goal {
     public void tick() {
         if (!(bee.getLevel() instanceof ServerLevel serverLevel)) return;
         if (bee.tickCount % 5 == 0) {
-            MutationData mutationData = bee.getMutationData();
+            BeeMutationData mutationData = bee.getMutationData();
             if (mutationData.hasMutation()) {
-                for (Map.Entry<Mutation, WeightedCollection<Mutation>> entry : mutationData.mutations().entrySet()) {
-                    Mutation input = entry.getKey();
+                for (Map.Entry<MutationType, WeightedCollection<MutationType>> entry : mutationData.mutations().entrySet()) {
+                    MutationType input = entry.getKey();
                     if (input.chance() < bee.level.random.nextFloat()) continue;
                     BlockPos pos = input.check(serverLevel, bee.blockPosition());
                     if (pos == null) continue;
-                    Mutation output = entry.getValue().next();
+                    MutationType output = entry.getValue().next();
                     if (output.chance() < bee.level.random.nextFloat()) continue;
                     if (output.activate(serverLevel, pos)) {
                         bee.incrementNumCropsGrownSincePollination();

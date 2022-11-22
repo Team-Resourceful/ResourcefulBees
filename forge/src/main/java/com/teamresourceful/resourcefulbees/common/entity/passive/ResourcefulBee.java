@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.entity.passive;
 
-import com.teamresourceful.resourcefulbees.api.beedata.traits.BeeAura;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
-import com.teamresourceful.resourcefulbees.api.trait.TraitAbility;
+import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
+import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
+import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
@@ -56,7 +56,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         super(type, level, beeType);
         //THIS NEEDS TO BE ONLY LOADED ON THE SERVER AS IT WOULD NOT MATCH HOW VANILLA LOADS GOALS OTHERWISE.
         if (level instanceof ServerLevel) registerConditionalGoals();
-        auraHandler = customBeeData.traitData().hasAuras() ? new AuraHandler(this) : null;
+        auraHandler = customBeeData.getTraitData().hasAuras() ? new AuraHandler(this) : null;
     }
 
     @Override
@@ -180,25 +180,25 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean isFlowerValid(@NotNull BlockPos pos) {
-        if (getCoreData().isEntityPresent()) return this.level.getEntity(this.getFlowerEntityID()) != null;
-        return this.level.isLoaded(pos) && this.level.getBlockState(pos).is(getCoreData().blockFlowers());
+        if (getCoreData().hasEntityFlower()) return this.level.getEntity(this.getFlowerEntityID()) != null;
+        return this.level.isLoaded(pos) && this.level.getBlockState(pos).is(getCoreData().flowers());
     }
 
     @Override
     public void makeStuckInBlock(BlockState state, @NotNull Vec3 vector) {
-        TraitData info = getTraitData();
-        boolean isSpider = info.hasSpecialAbilities() && info.getSpecialAbilities().contains(TraitConstants.SPIDER);
+        BeeTraitData info = getTraitData();
+        boolean isSpider = info.hasSpecialAbilities() && info.specialAbilities().contains(TraitConstants.SPIDER);
         if (state.is(Blocks.COBWEB) && isSpider) return;
         super.makeStuckInBlock(state, vector);
     }
 
     @Override
     protected void customServerAiStep() {
-        if (auraHandler != null && (this.tickCount + getId()) % BeeAura.INTERVAL == 0) {
+        if (auraHandler != null && (this.tickCount + getId()) % Aura.INTERVAL == 0) {
             auraHandler.tick();
         }
 
-        TraitData info = getTraitData();
+        BeeTraitData info = getTraitData();
         TraitAbilityRegistry registry = TraitAbilityRegistry.getRegistry();
 
         if (!info.hasTraits() || !info.hasSpecialAbilities()) {
@@ -206,7 +206,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             return;
         }
 
-        info.getSpecialAbilities().stream()
+        info.specialAbilities().stream()
                 .map(registry::getAbility)
                 .filter(Objects::nonNull)
                 .filter(TraitAbility::canRun)
@@ -247,10 +247,10 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private void applyTraitEffectsAndDamage(@NotNull LivingEntity target, int diffMod) {
-        TraitData info = getTraitData();
+        BeeTraitData info = getTraitData();
         if (info.hasTraits() && diffMod > 0) {
             if (info.hasDamageTypes()) {
-                info.getDamageTypes().forEach(damageType -> {
+                info.damageTypes().forEach(damageType -> {
                     if (damageType.type().equals(TraitConstants.SET_ON_FIRE))
                         target.setSecondsOnFire(diffMod * damageType.amplifier());
                     if (damageType.type().equals(TraitConstants.EXPLOSIVE))
@@ -259,7 +259,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             }
             int duration = diffMod * 20;
             if (info.hasPotionDamageEffects()) {
-                info.getPotionDamageEffects().forEach(effect -> target.addEffect(effect.createInstance(duration)));
+                info.potionDamageEffects().forEach(effect -> target.addEffect(effect.createInstance(duration)));
             }
             if (canPoison(info)) {
                 target.addEffect(new MobEffectInstance(MobEffects.POISON, duration, 0));
@@ -276,7 +276,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         };
     }
 
-    private boolean canPoison(TraitData info) {
+    private boolean canPoison(BeeTraitData info) {
         return CommonConfig.BEES_INFLICT_POISON.get() && this.getCombatData().inflictsPoison() && info.canPoison();
     }
 

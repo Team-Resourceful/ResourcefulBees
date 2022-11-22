@@ -1,16 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.entity.passive;
 
-import com.teamresourceful.resourcefulbees.api.BeeCompat;
-import com.teamresourceful.resourcefulbees.api.CustomBee;
-import com.teamresourceful.resourcefulbees.api.beedata.CombatData;
-import com.teamresourceful.resourcefulbees.api.beedata.CoreData;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.beedata.breeding.BeeFamily;
-import com.teamresourceful.resourcefulbees.api.beedata.breeding.BreedData;
-import com.teamresourceful.resourcefulbees.api.beedata.mutation.MutationData;
-import com.teamresourceful.resourcefulbees.api.beedata.render.RenderData;
-import com.teamresourceful.resourcefulbees.api.beedata.traits.TraitData;
-import com.teamresourceful.resourcefulbees.api.honeycombdata.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
+import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
+import com.teamresourceful.resourcefulbees.api.data.bee.BeeCombatData;
+import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
+import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
+import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
+import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
+import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
@@ -82,11 +82,9 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     }
 
     public static AttributeSupplier.Builder createBeeAttributes(String key) {
-        CombatData combatData = BeeRegistry.getRegistry().getBeeData(key).combatData();
-        AttributeSupplier.Builder builder = createMobAttributes();
-        CombatData.DEFAULT_ATTRIBUTES.forEach(builder::add);
-        combatData.attributes().forEach(builder::add);
-        return builder;
+        return BeeRegistry.getRegistry().getBeeData(key)
+                .getCombatData()
+                .buildAttributes(createMobAttributes());
     }
 
     //region BEE INFO RELATED METHODS BELOW
@@ -95,32 +93,32 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
         return beeType;
     }
 
-    public CoreData getCoreData() {
-        return customBeeData.coreData();
+    public BeeCoreData getCoreData() {
+        return customBeeData.getCoreData();
     }
 
     public Optional<OutputVariation> getHoneycombData() {
         return getCoreData().getHoneycombData();
     }
 
-    public RenderData getRenderData() {
-        return customBeeData.renderData();
+    public BeeRenderData getRenderData() {
+        return customBeeData.getRenderData();
     }
 
-    public BreedData getBreedData() {
-        return customBeeData.breedData();
+    public BeeBreedData getBreedData() {
+        return customBeeData.getBreedData();
     }
 
-    public CombatData getCombatData() {
-        return customBeeData.combatData();
+    public BeeCombatData getCombatData() {
+        return customBeeData.getCombatData();
     }
 
-    public MutationData getMutationData() {
-        return customBeeData.mutationData();
+    public BeeMutationData getMutationData() {
+        return customBeeData.getMutationData();
     }
 
-    public TraitData getTraitData() {
-        return customBeeData.traitData();
+    public BeeTraitData getTraitData() {
+        return customBeeData.getTraitData();
     }
 
     public int getFlowerEntityID() {
@@ -153,14 +151,14 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
         if (getCombatData().isInvulnerable() && !source.equals(DamageSource.OUT_OF_WORLD)) return true;
 
-        TraitData info = getTraitData();
+        BeeTraitData info = getTraitData();
         if (hasEffect(MobEffects.WATER_BREATHING) && source == DamageSource.DROWN) {
             return true;
         }
         if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
             return true;
         }
-        if (info.hasTraits() && info.hasDamageImmunities() && info.getDamageImmunities().stream().anyMatch(source.msgId::equalsIgnoreCase)) {
+        if (info.hasTraits() && info.hasDamageImmunities() && info.damageImmunities().stream().anyMatch(source.msgId::equalsIgnoreCase)) {
             return true;
         }
         return super.isInvulnerableTo(source);
@@ -168,10 +166,10 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     @Override
     public boolean canBeAffected(@NotNull MobEffectInstance effectInstance) {
-        TraitData info = getTraitData();
+        BeeTraitData info = getTraitData();
         if (info.hasTraits() && info.hasPotionImmunities()) {
             MobEffect potionEffect = effectInstance.getEffect();
-            return info.getPotionImmunities().stream().noneMatch(potionEffect::equals) || super.canBeAffected(effectInstance);
+            return info.potionImmunities().stream().noneMatch(potionEffect::equals) || super.canBeAffected(effectInstance);
         }
         return super.canBeAffected(effectInstance);
     }
@@ -180,9 +178,9 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     public void aiStep() {
         if (this.level.isClientSide) {
             if (this.tickCount % 40 == 0) {
-                TraitData info = getTraitData();
+                BeeTraitData info = getTraitData();
                 if (info.hasTraits() && info.hasParticleEffects()) {
-                    info.getParticleEffects().forEach(basicParticleType -> {
+                    info.particleEffects().forEach(basicParticleType -> {
                         for (int i = 0; i < 10; ++i) {
                             this.level.addParticle((ParticleOptions) basicParticleType, this.getRandomX(0.5D),
                                     this.getRandomY() - 0.25D, this.getRandomZ(0.5D),
@@ -248,8 +246,8 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
-    public AgeableMob createSelectedChild(BeeFamily beeFamily) {
-        EntityType<?> entityType = Objects.requireNonNull(beeFamily.getChildData().getEntityType());
+    public AgeableMob createSelectedChild(FamilyUnit beeFamily) {
+        EntityType<?> entityType = Objects.requireNonNull(beeFamily.getChildData().entityType());
         return (AgeableMob) entityType.create(level);
     }
 
@@ -354,7 +352,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     @Override
     public int getMaxTimeInHive() {
-        return getBeeData().coreData().maxTimeInHive();
+        return getBeeData().getCoreData().maxTimeInHive();
     }
 
     @Override

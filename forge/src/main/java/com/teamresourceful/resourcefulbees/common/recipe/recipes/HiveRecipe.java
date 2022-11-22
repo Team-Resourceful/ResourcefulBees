@@ -2,12 +2,12 @@ package com.teamresourceful.resourcefulbees.common.recipe.recipes;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.BeeCompat;
-import com.teamresourceful.resourcefulbees.api.beedata.CodecUtils;
+import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
+import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import com.teamresourceful.resourcefullib.common.item.OptionalItemStack;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
@@ -34,8 +34,8 @@ public record HiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees, Map
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 HolderSetCodec.of(Registry.ENTITY_TYPE).fieldOf("bees").forGetter(HiveRecipe::bees),
-                CodecUtils.BEEHIVE_VARIATIONS.fieldOf("hiveCombs").orElseGet(HashMap::new).forGetter(HiveRecipe::hiveCombs),
-                CodecUtils.APIARY_VARIATIONS.fieldOf("apiaryCombs").orElseGet(HashMap::new).forGetter(HiveRecipe::apiaryCombs)
+                Codec.unboundedMap(BeehiveTier.CODEC, ItemStackCodec.CODEC).fieldOf("hiveCombs").orElseGet(HashMap::new).forGetter(HiveRecipe::hiveCombs),
+                Codec.unboundedMap(ApiaryTier.CODEC, ItemStackCodec.CODEC).fieldOf("apiaryCombs").orElseGet(HashMap::new).forGetter(HiveRecipe::apiaryCombs)
         ).apply(instance, HiveRecipe::new));
     }
 

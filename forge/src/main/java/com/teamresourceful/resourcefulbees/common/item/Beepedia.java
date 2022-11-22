@@ -52,7 +52,7 @@ public class Beepedia extends Item {
             if (player.level.isClientSide()) {
                 return InteractionResult.PASS;
             } else {
-                player.getCapability(ModCapabilities.BEEPEDIA_DATA).ifPresent(beepedia -> beepedia.addBee(customBee.getCoreData().name()));
+                player.getCapability(ModCapabilities.BEEPEDIA_DATA).ifPresent(beepedia -> beepedia.addBee(customBee.getBeeData().name()));
             }
             player.setItemInHand(hand, stack);
             return InteractionResult.SUCCESS;

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
 
-import com.teamresourceful.resourcefulbees.api.BeeCompat;
+import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;

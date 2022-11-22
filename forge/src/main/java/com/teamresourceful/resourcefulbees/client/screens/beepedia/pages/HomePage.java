@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.api.beedata.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
@@ -37,7 +37,7 @@ public class HomePage extends Screen {
         this.bees = BeeRegistry.getRegistry()
                 .getSetOfBees()
                 .stream()
-                .map(CustomBeeData::getEntityType)
+                .map(CustomBeeData::entityType)
                 .map(type -> type.create(Minecraft.getInstance().level))
                 .collect(CycleableList::new, CycleableList::add, CycleableList::addAll);
 

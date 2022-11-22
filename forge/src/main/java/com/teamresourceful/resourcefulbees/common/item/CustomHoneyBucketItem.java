@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyFluidData;
+import com.teamresourceful.resourcefulbees.api.data.honey.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BucketItem;

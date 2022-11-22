@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.honey;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.api.honeydata.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.ItemSlotWidget;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaTextures;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
