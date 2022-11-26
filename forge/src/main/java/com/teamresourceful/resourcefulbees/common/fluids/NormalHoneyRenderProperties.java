@@ -4,7 +4,7 @@ import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Vector3f;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.telepathicgrunt.the_bumblezone.client.rendering.FluidClientOverlay;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -53,7 +53,7 @@ public class NormalHoneyRenderProperties implements IClientFluidTypeExtensions {
     public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
         BlockPos blockpos = new BlockPos(camera.getEntity().getX(), camera.getEntity().getEyeY(), camera.getEntity().getZ());
         float brightnessAtEyes = LightTexture.getBrightness(camera.getEntity().level.dimensionType(), camera.getEntity().level.getMaxLocalRawBrightness(blockpos));
-        float brightness = (float)Math.max(Math.pow(FluidClientOverlay.getDimensionBrightnessAtEyes(camera.getEntity()), 2.0), brightnessAtEyes);
+        float brightness = (float)Math.max(Math.pow(ClientUtils.getDimensionBrightnessAtEyes(camera.getEntity()), 2.0), brightnessAtEyes);
         float fogRed = 0.945F * brightness;
         float fogGreen = 0.67F * brightness;
         float fogBlue = 0.231F * brightness;

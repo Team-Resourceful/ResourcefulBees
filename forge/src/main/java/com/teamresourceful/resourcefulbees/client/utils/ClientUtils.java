@@ -8,7 +8,9 @@ import com.teamresourceful.resourcefullib.common.caches.CacheableBiFunction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -45,6 +47,11 @@ public final class ClientUtils {
             bufferbuilder.vertex(matrix.last().pose(), x, y + (i * 16), blitOffset).uv(sprite.getU0(), sprite.getV0()).endVertex();
             BufferUploader.drawWithShader(bufferbuilder.end());
         }
+    }
+
+    public static float getDimensionBrightnessAtEyes(Entity entity) {
+        float lightLevelAtEyes = (float)entity.level.getRawBrightness(new BlockPos(entity.getEyePosition(1.0F)), 0);
+        return lightLevelAtEyes / 15.0F;
     }
 
     public static void onResourceReload(ModelEvent.BakingCompleted event) {
