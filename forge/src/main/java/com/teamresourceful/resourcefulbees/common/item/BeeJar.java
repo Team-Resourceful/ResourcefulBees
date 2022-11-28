@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -49,6 +50,21 @@ public class BeeJar extends Item {
     public static boolean isFilled(ItemStack stack) {
         return stack.getItem() instanceof BeeJar && !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().contains(NBTConstants.BeeJar.ENTITY)
                 && stack.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY).contains(NBTConstants.NBT_ID);
+    }
+
+    public static ItemStack createFilledJar(ResourceLocation id, int color) {
+        ItemStack stack = ModItems.BEE_JAR.get().getDefaultInstance();
+
+        CompoundTag stackTag = new CompoundTag();
+        CompoundTag entityTag = new CompoundTag();
+
+        entityTag.putString(NBTConstants.NBT_ID, id.toString());
+        entityTag.putString(NBTConstants.BeeJar.COLOR, new Color(color).toString());
+        stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, Component.Serializer.toJson(Component.translatable("entity." + id.getNamespace() + "." + id.getPath())));
+
+        stackTag.put(NBTConstants.BeeJar.ENTITY, entityTag);
+        stack.setTag(stackTag);
+        return stack;
     }
 
     public static boolean hasEntityDisplay(ItemStack stack) {

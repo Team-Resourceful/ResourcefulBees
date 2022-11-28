@@ -8,11 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefullib.common.color.Color;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -29,7 +25,7 @@ public class BeeJarIngredient extends Ingredient {
     private final int color;
 
     public BeeJarIngredient(ResourceLocation id, int color) {
-        super(Stream.of(new ItemValue(getBeeJar(id, color))));
+        super(Stream.of(new ItemValue(BeeJar.createFilledJar(id, color))));
         this.id = id;
         this.color = color;
     }
@@ -40,21 +36,6 @@ public class BeeJarIngredient extends Ingredient {
 
     public int getColor() {
         return color;
-    }
-
-    public static ItemStack getBeeJar(ResourceLocation id, int color) {
-        ItemStack stack = new ItemStack(ModItems.BEE_JAR.get());
-
-        CompoundTag stackTag = new CompoundTag();
-        CompoundTag entityTag = new CompoundTag();
-
-        entityTag.putString(NBTConstants.NBT_ID, id.toString());
-        entityTag.putString(NBTConstants.BeeJar.COLOR, new Color(color).toString());
-        stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, Component.Serializer.toJson(Component.translatable("entity." + id.getNamespace() + "." + id.getPath())));
-
-        stackTag.put(NBTConstants.BeeJar.ENTITY, entityTag);
-        stack.setTag(stackTag);
-        return stack;
     }
 
     @Override
