@@ -68,7 +68,7 @@ public class ResourcefulBees {
         DefaultBeehiveTiers.loadDefaults();
         DefaultApiaryTiers.loadDefaults();
 
-        DataSetup.setupInitalizers(ResourcefulBeesAPI.getInitializers());
+        DataSetup.setupInitializers(ResourcefulBeesAPI.getInitializers());
 
         BeeDataRegistry.init();
 

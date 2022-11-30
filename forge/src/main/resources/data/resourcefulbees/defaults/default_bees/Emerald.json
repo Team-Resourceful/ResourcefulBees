@@ -40,5 +40,18 @@
     ],
     "isBreedable": true,
     "spawnWeight": 4
+  },
+  "resourcefulbees:trade/v1": {
+    "amount": {
+      "min": 1,
+      "max": 1
+    },
+    "secondaryItem": "minecraft:emerald_block",
+    "secondaryItemCost": {
+      "min": 8,
+      "max": 12
+    },
+    "priceMultiplier": 4,
+    "maxTrades": 2
   }
 }

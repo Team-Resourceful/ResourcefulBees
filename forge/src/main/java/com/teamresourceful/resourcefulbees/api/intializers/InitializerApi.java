@@ -1,9 +1,11 @@
 package com.teamresourceful.resourcefulbees.api.intializers;
 
+import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCombatData;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
-import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
@@ -12,7 +14,6 @@ import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeColorData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerTexture;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
-import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
@@ -22,6 +23,7 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
@@ -42,6 +44,7 @@ public class InitializerApi {
     private Initializers.CombatInitializer combat;
     private Initializers.CoreInitializer core;
     private Initializers.TraitInitializer traits;
+    private Initializers.BeekeeperTradeInitializer beekeeperTrade;
     //Rendering
     private Initializers.RenderInitializer render;
     private Initializers.LayerTextureInitializer layerTexture;
@@ -67,6 +70,10 @@ public class InitializerApi {
 
     public BeeCoreData core(String honeycomb, HolderSet<Block> flowers, HolderSet<EntityType<?>> entityFlowers, int maxTimeInHive, List<MutableComponent> lore) {
         return this.core.create(honeycomb, flowers, entityFlowers, maxTimeInHive, lore);
+    }
+
+    public BeekeeperTradeData beekeeperTrade(UniformInt amount, ItemStack secondaryItem, UniformInt secondaryItemCost, float priceMultiplier, int maxTrades, int xp) {
+        return this.beekeeperTrade.create(amount, secondaryItem, secondaryItemCost, priceMultiplier, maxTrades, xp);
     }
 
     public BeeTraitData trait(int range, Set<String> traits) {
@@ -130,6 +137,11 @@ public class InitializerApi {
     @ApiStatus.Internal
     public void setCore(Initializers.CoreInitializer core) {
         this.core = core;
+    }
+
+    @ApiStatus.Internal
+    public void setBeekeeperTrade(Initializers.BeekeeperTradeInitializer beekeeperTrade) {
+        this.beekeeperTrade = beekeeperTrade;
     }
 
     @ApiStatus.Internal

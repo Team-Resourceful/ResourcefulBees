@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyFluidData;
+import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BucketItem;
@@ -33,5 +34,13 @@ public class CustomHoneyBucketItem extends BucketItem {
     @Override
     public ICapabilityProvider initCapabilities(@NotNull ItemStack stack, @Nullable CompoundTag nbt) {
         return new FluidBucketWrapper(stack);
+    }
+
+    public boolean isTradable() {
+        return data.tradeData().isTradable();
+    }
+
+    public BeekeeperTradeData getTradeData() {
+        return data.tradeData();
     }
 }

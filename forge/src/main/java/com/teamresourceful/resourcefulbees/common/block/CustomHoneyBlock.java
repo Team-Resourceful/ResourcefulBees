@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -48,8 +49,12 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
         this.data = data;
     }
 
-    public HoneyBlockData getData() {
-        return data;
+    public BeekeeperTradeData getTradeData() {
+        return data.tradeData();
+    }
+
+    public boolean isTradable() {
+        return data.tradeData().isTradable();
     }
 
     //region Color stuff

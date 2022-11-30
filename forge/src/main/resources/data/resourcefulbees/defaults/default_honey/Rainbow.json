@@ -11,12 +11,16 @@
         "chance": 1
       }
     ],
-    "honeyBottle": "resourcefulbees:rainbow_honey_bottle"
+    "honeyBottle": "resourcefulbees:rainbow_honey_bottle",
+    "tradeData": {
+      "secondaryItem": "minecraft:bottle"
+    }
   },
   "blockData": {
     "color": "rainbow",
     "honeyBlockItem": "resourcefulbees:rainbow_honey_block",
-    "honeyBlock": "resourcefulbees:rainbow_honey_block"
+    "honeyBlock": "resourcefulbees:rainbow_honey_block",
+    "tradeData": {}
   },
   "fluidData": {
     "rendering" : {
@@ -25,6 +29,9 @@
     "stillFluid": "resourcefulbees:rainbow_honey",
     "flowingFluid": "resourcefulbees:rainbow_honey_flowing",
     "fluidBucket": "resourcefulbees:rainbow_honey_bucket",
-    "fluidBlock": "resourcefulbees:rainbow_honey"
+    "fluidBlock": "resourcefulbees:rainbow_honey",
+    "tradeData": {
+      "secondaryItem": "minecraft:bucket"
+    }
   }
 }

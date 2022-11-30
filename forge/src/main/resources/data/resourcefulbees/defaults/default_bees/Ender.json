@@ -48,5 +48,18 @@
   },
   "resourcefulbees:trait/v1": {
     "traits": ["ender"]
+  },
+  "resourcefulbees:trade/v1": {
+    "amount": {
+      "min": 1,
+      "max": 1
+    },
+    "secondaryItem": "minecraft:ender_pearl",
+    "secondaryItemCost": {
+      "min": 8,
+      "max": 16
+    },
+    "priceMultiplier": 4,
+    "maxTrades": 2
   }
 }

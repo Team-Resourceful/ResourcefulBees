@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
+import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefullib.common.color.Color;
@@ -18,13 +19,15 @@ public class HoneycombItem extends net.minecraft.world.item.HoneycombItem {
     private final Color color;
     private final boolean isEdible;
     private final boolean enchanted;
+    private final BeekeeperTradeData tradeData;
 
-    public HoneycombItem(Color color, boolean isEdible, Supplier<Item> storageBlock, boolean enchanted) {
+    public HoneycombItem(Color color, boolean isEdible, Supplier<Item> storageBlock, boolean enchanted, BeekeeperTradeData tradeData) {
         super(new Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_COMBS));
         this.color = color;
         this.isEdible = isEdible;
         this.storageBlock = storageBlock;
         this.enchanted = enchanted;
+        this.tradeData = tradeData;
     }
 
     @SuppressWarnings("unused")
@@ -40,6 +43,14 @@ public class HoneycombItem extends net.minecraft.world.item.HoneycombItem {
 
     public boolean hasStorageBlockItem() {
         return storageBlock != null;
+    }
+
+    public boolean isTradable() {
+        return tradeData.isTradable();
+    }
+
+    public BeekeeperTradeData getTradeData() {
+        return tradeData;
     }
 
     @Override

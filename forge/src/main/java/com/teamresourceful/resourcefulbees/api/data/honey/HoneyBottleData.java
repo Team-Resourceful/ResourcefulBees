@@ -5,6 +5,8 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
+import com.teamresourceful.resourcefulbees.common.data.beedata.data.TradeData;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
@@ -22,7 +24,16 @@ import net.minecraft.world.item.Rarity;
 import java.util.Collections;
 import java.util.List;
 
-public record HoneyBottleData(String name, Color color, int hunger, float saturation, Rarity rarity, List<HoneyEffect> effects, LazyHolder<Item> honeyBottle) {
+public record HoneyBottleData(
+        String name,
+        Color color,
+        int hunger,
+        float saturation,
+        Rarity rarity,
+        List<HoneyEffect> effects,
+        LazyHolder<Item> honeyBottle,
+        BeekeeperTradeData tradeData
+) {
 
     public static Codec<HoneyBottleData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -32,7 +43,8 @@ public record HoneyBottleData(String name, Color color, int hunger, float satura
                 Codec.FLOAT.fieldOf("saturation").orElse(1.0f).forGetter(HoneyBottleData::saturation),
                 EnumCodec.of(Rarity.class).fieldOf("rarity").orElse(Rarity.COMMON).forGetter(HoneyBottleData::rarity),
                 HoneyEffect.CODEC.listOf().fieldOf("effects").orElse(Collections.emptyList()).forGetter(HoneyBottleData::effects),
-                LazyHolders.LAZY_ITEM.fieldOf("honeyBottle").orElse(LazyHolder.of(Registry.ITEM, Items.HONEY_BOTTLE)).forGetter(HoneyBottleData::honeyBottle)
+                LazyHolders.LAZY_ITEM.fieldOf("honeyBottle").orElse(LazyHolder.of(Registry.ITEM, Items.HONEY_BOTTLE)).forGetter(HoneyBottleData::honeyBottle),
+                TradeData.CODEC.fieldOf("tradeData").orElse(TradeData.DEFAULT).forGetter(HoneyBottleData::tradeData)
         ).apply(instance, HoneyBottleData::new));
     }
 

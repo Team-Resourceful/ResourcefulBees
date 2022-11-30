@@ -45,5 +45,18 @@
   },
   "resourcefulbees:trait/v1": {
     "traits": ["slimy"]
+  },
+  "resourcefulbees:trade/v1": {
+    "amount": {
+      "min": 1,
+      "max": 1
+    },
+    "secondaryItem": "minecraft:slime_block",
+    "secondaryItemCost": {
+      "min": 12,
+      "max": 16
+    },
+    "priceMultiplier": 4,
+    "maxTrades": 2
   }
 }

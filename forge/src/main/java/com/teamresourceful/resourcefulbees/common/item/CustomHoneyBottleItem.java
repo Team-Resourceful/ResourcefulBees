@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
+import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,6 +33,14 @@ public class CustomHoneyBottleItem extends HoneyBottleItem {
     @Override
     public boolean isEdible() {
         return true;
+    }
+
+    public boolean isTradable() {
+        return data.tradeData().isTradable();
+    }
+
+    public BeekeeperTradeData getTradeData() {
+        return data.tradeData();
     }
 
     public int getHoneyBottleColor() {

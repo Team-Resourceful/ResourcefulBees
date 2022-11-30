@@ -20,7 +20,13 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.ArrayList;
 import java.util.List;
 
-public record CoreData(String honeycomb, HolderSet<Block> flowers, HolderSet<EntityType<?>> entityFlowers, int maxTimeInHive, List<MutableComponent> lore) implements BeeCoreData {
+public record CoreData(
+        String honeycomb,
+        HolderSet<Block> flowers,
+        HolderSet<EntityType<?>> entityFlowers,
+        int maxTimeInHive,
+        List<MutableComponent> lore
+) implements BeeCoreData {
 
     private static final BeeCoreData DEFAULT = new CoreData("", HolderSet.direct(), HolderSet.direct(), BeeConstants.MAX_TIME_IN_HIVE, new ArrayList<>());
     private static final Codec<BeeCoreData> CODEC = RecordCodecBuilder.create(instance -> instance.group(

@@ -5,8 +5,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
+import com.teamresourceful.resourcefulbees.common.data.beedata.data.TradeData;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
@@ -144,7 +146,14 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
         return Collections.unmodifiableMap(VARIATION_DATA);
     }
 
-    private record RegistryData(String name, Color color, boolean edible, boolean block, boolean enchanted) {
+    private record RegistryData(
+            String name,
+            Color color,
+            boolean edible,
+            boolean block,
+            boolean enchanted,
+            BeekeeperTradeData tradeData
+    ) {
 
         private static Codec<RegistryData> codec(String name) {
             return RecordCodecBuilder.create(instance -> instance.group(
@@ -152,7 +161,8 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
                     Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(RegistryData::color),
                     Codec.BOOL.fieldOf("edible").orElse(true).forGetter(RegistryData::edible),
                     Codec.BOOL.fieldOf("block").orElse(true).forGetter(RegistryData::block),
-                    Codec.BOOL.fieldOf("enchanted").orElse(false).forGetter(RegistryData::enchanted)
+                    Codec.BOOL.fieldOf("enchanted").orElse(false).forGetter(RegistryData::enchanted),
+                    TradeData.CODEC.fieldOf("tradeData").orElse(TradeData.DEFAULT).forGetter(RegistryData::tradeData)
             ).apply(instance, RegistryData::new));
         }
 
@@ -165,9 +175,9 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
                         return enchanted || stack.isEnchanted();
                     }
                 });
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, edible, blockItem, enchanted));
+                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, edible, blockItem, enchanted, tradeData));
             } else {
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, edible, null, enchanted));
+                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, edible, null, enchanted, tradeData));
             }
         }
 

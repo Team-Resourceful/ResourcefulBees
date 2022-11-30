@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.CombatData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.CoreData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.DefaultBeeData;
+import com.teamresourceful.resourcefulbees.common.data.beedata.data.TradeData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.breeding.BeeFamilyUnit;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.mutation.MutationData;
@@ -25,7 +26,7 @@ public final class DataSetup {
         throw new UtilityClassError();
     }
 
-    public static void setupInitalizers(InitializerApi api) {
+    public static void setupInitializers(InitializerApi api) {
         api.setData(DefaultBeeData::of);
 
         api.setColor(ColorData::new);
@@ -45,12 +46,13 @@ public final class DataSetup {
         api.setLayer(LayerData::new);
     }
 
-    public static void setupRegister(RegisterBeeDataEvent.DataRegisterer registerer) {
-        registerer.register(BreedData.SERIALIZER);
-        registerer.register(CombatData.SERIALIZER);
-        registerer.register(RenderData.SERIALIZER);
-        registerer.register(MutationData.SERIALIZER);
-        registerer.register(CoreData.SERIALIZER);
-        registerer.register(TraitData.SERIALIZER);
+    public static void setupRegister(RegisterBeeDataEvent.DataRegistrar registrar) {
+        registrar.register(BreedData.SERIALIZER);
+        registrar.register(CombatData.SERIALIZER);
+        registrar.register(RenderData.SERIALIZER);
+        registrar.register(MutationData.SERIALIZER);
+        registrar.register(CoreData.SERIALIZER);
+        registrar.register(TraitData.SERIALIZER);
+        registrar.register(TradeData.SERIALIZER);
     }
 }

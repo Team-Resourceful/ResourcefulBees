@@ -4,14 +4,15 @@ import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.CombatData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.CoreData;
+import com.teamresourceful.resourcefulbees.common.data.beedata.data.TradeData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.breeding.BeeFamilyUnit;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.mutation.types.BlockMutation;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.mutation.types.ItemMutation;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.rendering.ColorData;
-import com.teamresourceful.resourcefulbees.common.data.beedata.data.rendering.LayerTexture;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.rendering.LayerData;
+import com.teamresourceful.resourcefulbees.common.data.beedata.data.rendering.LayerTexture;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.rendering.RenderData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.data.traits.TraitData;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
@@ -92,6 +93,7 @@ public class DummyBeeData {
             ),
             CombatData.SERIALIZER.id(), Objects.requireNonNull(CombatData.SERIALIZER.defaultValue()),
             MutationData.SERIALIZER.id(), new MutationData(5, Map.of(MUTATION_INPUT, MUTATION_OUTPUT)),
-            TraitData.SERIALIZER.id(), Objects.requireNonNull(TraitData.SERIALIZER.defaultValue())
+            TraitData.SERIALIZER.id(), Objects.requireNonNull(TraitData.SERIALIZER.defaultValue()),
+            TraitData.SERIALIZER.id(), Objects.requireNonNull(TradeData.SERIALIZER.defaultValue())
     );
 }

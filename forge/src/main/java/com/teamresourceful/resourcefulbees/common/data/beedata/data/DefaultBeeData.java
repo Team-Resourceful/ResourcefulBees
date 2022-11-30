@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.data.beedata.data;
 
 import com.google.common.base.Suppliers;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCombatData;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
@@ -68,5 +69,10 @@ public record DefaultBeeData(String name, Map<ResourceLocation, BeeData<?>> data
     @Override
     public BeeTraitData getTraitData() {
         return getData(TraitData.SERIALIZER);
+    }
+
+    @Override
+    public BeekeeperTradeData getTradeData() {
+        return getData(TradeData.SERIALIZER);
     }
 }

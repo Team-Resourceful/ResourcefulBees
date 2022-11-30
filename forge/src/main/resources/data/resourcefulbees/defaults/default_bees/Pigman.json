@@ -48,5 +48,18 @@
   },
   "resourcefulbees:trait/v1": {
     "traits": ["nether", "pigman"]
+  },
+  "resourcefulbees:trade/v1": {
+    "amount": {
+      "min": 1,
+      "max": 1
+    },
+    "secondaryItem": "minecraft:glowstone",
+    "secondaryItemCost": {
+      "min": 12,
+      "max": 16
+    },
+    "priceMultiplier": 4,
+    "maxTrades": 2
   }
 }

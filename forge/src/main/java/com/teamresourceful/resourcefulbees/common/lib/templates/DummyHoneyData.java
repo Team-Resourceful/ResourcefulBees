@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.lib.templates;
 import com.teamresourceful.resourcefulbees.api.data.honey.*;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.FluidAttributeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.FluidRenderData;
+import com.teamresourceful.resourcefulbees.common.data.beedata.data.TradeData;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -30,7 +31,8 @@ public class DummyHoneyData {
                             new HoneyEffect(MobEffects.WITHER, 25, 2, 0.75f),
                             new HoneyEffect(MobEffects.INVISIBILITY, 50, 1, 1f)
                     ),
-                    LazyHolder.of(Registry.ITEM, Items.HONEY_BOTTLE)
+                    LazyHolder.of(Registry.ITEM, Items.HONEY_BOTTLE),
+                    TradeData.DEFAULT
             ),
             new HoneyBlockData(
                     true,
@@ -39,7 +41,8 @@ public class DummyHoneyData {
                     2,
                     8,
                     LazyHolder.of(Registry.ITEM, Items.HONEY_BLOCK),
-                    LazyHolder.of(Registry.BLOCK, Blocks.HONEY_BLOCK)
+                    LazyHolder.of(Registry.BLOCK, Blocks.HONEY_BLOCK),
+                    TradeData.DEFAULT
             ),
             new HoneyFluidData(
                     true,
@@ -49,7 +52,8 @@ public class DummyHoneyData {
                     LazyHolder.of(Registry.FLUID, ModFluids.HONEY_STILL.get()),
                     LazyHolder.of(Registry.FLUID, ModFluids.HONEY_FLOWING.get()),
                     LazyHolder.of(Registry.ITEM, ModItems.HONEY_FLUID_BUCKET.get()),
-                    LazyHolder.of(Registry.BLOCK, ModBlocks.HONEY_FLUID_BLOCK.get())
+                    LazyHolder.of(Registry.BLOCK, ModBlocks.HONEY_FLUID_BLOCK.get()),
+                    TradeData.DEFAULT
             )
     );
 }

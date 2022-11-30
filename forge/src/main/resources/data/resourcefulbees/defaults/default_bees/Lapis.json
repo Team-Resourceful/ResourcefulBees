@@ -47,5 +47,18 @@
         "parent2": "lapis"
       }
     ]
+  },
+  "resourcefulbees:trade/v1": {
+    "amount": {
+      "min": 1,
+      "max": 1
+    },
+    "secondaryItem": "minecraft:lapis_block",
+    "secondaryItemCost": {
+      "min": 8,
+      "max": 12
+    },
+    "priceMultiplier": 4,
+    "maxTrades": 2
   }
 }

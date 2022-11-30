@@ -2,10 +2,12 @@ package com.teamresourceful.resourcefulbees.api.data.honey;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.FluidAttributeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.FluidRenderData;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyFluidBlock;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.data.beedata.data.TradeData;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.fluids.HoneyFluidRenderProperties;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
@@ -33,10 +35,20 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Consumer;
 
-public record HoneyFluidData(boolean generate, String name, FluidRenderData renderData, FluidAttributeData attributes, LazyHolder<Fluid> stillFluid, LazyHolder<Fluid> flowingFluid, LazyHolder<Item> fluidBucket, LazyHolder<Block> fluidBlock) {
+public record HoneyFluidData(
+        boolean generate,
+        String name,
+        FluidRenderData renderData,
+        FluidAttributeData attributes,
+        LazyHolder<Fluid> stillFluid,
+        LazyHolder<Fluid> flowingFluid,
+        LazyHolder<Item> fluidBucket,
+        LazyHolder<Block> fluidBlock,
+        BeekeeperTradeData tradeData
+) {
 
     public static HoneyFluidData getDefault(String name) {
-        return new HoneyFluidData(false, name, FluidRenderData.DEFAULT, FluidAttributeData.DEFAULT, LazyHolder.of(Registry.FLUID, Fluids.EMPTY), LazyHolder.of(Registry.FLUID, Fluids.EMPTY), LazyHolder.of(Registry.ITEM, Items.AIR), LazyHolder.of(Registry.BLOCK, Blocks.AIR));
+        return new HoneyFluidData(false, name, FluidRenderData.DEFAULT, FluidAttributeData.DEFAULT, LazyHolder.of(Registry.FLUID, Fluids.EMPTY), LazyHolder.of(Registry.FLUID, Fluids.EMPTY), LazyHolder.of(Registry.ITEM, Items.AIR), LazyHolder.of(Registry.BLOCK, Blocks.AIR), TradeData.DEFAULT);
     }
 
     public static Codec<HoneyFluidData> codec(String name) {
@@ -48,7 +60,8 @@ public record HoneyFluidData(boolean generate, String name, FluidRenderData rend
                 LazyHolders.LAZY_FLUID.fieldOf("stillFluid").forGetter(HoneyFluidData::stillFluid),
                 LazyHolders.LAZY_FLUID.fieldOf("flowingFluid").forGetter(HoneyFluidData::flowingFluid),
                 LazyHolders.LAZY_ITEM.fieldOf("fluidBucket").forGetter(HoneyFluidData::fluidBucket),
-                LazyHolders.LAZY_BLOCK.fieldOf("fluidBlock").forGetter(HoneyFluidData::fluidBlock)
+                LazyHolders.LAZY_BLOCK.fieldOf("fluidBlock").forGetter(HoneyFluidData::fluidBlock),
+                TradeData.CODEC.fieldOf("tradeData").orElse(TradeData.DEFAULT).forGetter(HoneyFluidData::tradeData)
         ).apply(instance, HoneyFluidData::new));
     }
 

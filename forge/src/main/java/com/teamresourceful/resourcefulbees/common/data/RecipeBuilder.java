@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.RecipeManagerAccessor;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
@@ -122,7 +123,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     private BreederRecipe.BreederOutput makeOutput(FamilyUnit family) {
-        ItemStack childBeeJar = BeeJarIngredient.getBeeJar(family.getChildData().id(), family.getChildData().getRenderData().colorData().jarColor().getValue());
+        ItemStack childBeeJar = BeeJar.createFilledJar(family.getChildData().id(), family.getChildData().getRenderData().colorData().jarColor().getValue());
         return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().id().toString()), family.weight(), family.chance());
     }
 

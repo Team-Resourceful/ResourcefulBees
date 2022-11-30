@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.data.bee;
 
+import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
@@ -31,6 +32,8 @@ public interface CustomBeeData {
     BeeMutationData getMutationData();
     BeeCoreData getCoreData();
     BeeTraitData getTraitData();
+
+    BeekeeperTradeData getTradeData();
 
     default BeeData<?> getBeeData(ResourceLocation id) {
         return data().get(id);

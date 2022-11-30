@@ -2,7 +2,8 @@
   "honeycomb": {
     "color": "#FFDC00",
     "edible": true,
-    "block": true
+    "block": true,
+    "tradeData": {}
   },
   "variations": [
     {

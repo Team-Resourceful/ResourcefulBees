@@ -5,8 +5,10 @@ import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.data.beedata.data.TradeData;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
@@ -22,10 +24,19 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-public record HoneyBlockData(boolean generate, String name, Color color, float jumpFactor, float speedFactor, LazyHolder<Item> blockItem, LazyHolder<Block> block) {
+public record HoneyBlockData(
+        boolean generate,
+        String name,
+        Color color,
+        float jumpFactor,
+        float speedFactor,
+        LazyHolder<Item> blockItem,
+        LazyHolder<Block> block,
+        BeekeeperTradeData tradeData
+) {
 
     public static HoneyBlockData getDefault(String name) {
-        return new HoneyBlockData(false, name, Color.DEFAULT, 0.5f, 0.4f, LazyHolder.of(Registry.ITEM, Items.AIR), LazyHolder.of(Registry.BLOCK, Blocks.AIR));
+        return new HoneyBlockData(false, name, Color.DEFAULT, 0.5f, 0.4f, LazyHolder.of(Registry.ITEM, Items.AIR), LazyHolder.of(Registry.BLOCK, Blocks.AIR), TradeData.DEFAULT);
     }
 
     public static Codec<HoneyBlockData> codec(String name) {
@@ -36,7 +47,8 @@ public record HoneyBlockData(boolean generate, String name, Color color, float j
                 Codec.FLOAT.fieldOf("jumpFactor").orElse(0.5f).forGetter(HoneyBlockData::jumpFactor),
                 Codec.FLOAT.fieldOf("speedFactor").orElse(0.4f).forGetter(HoneyBlockData::speedFactor),
                 LazyHolders.LAZY_ITEM.fieldOf("honeyBlockItem").orElse(LazyHolder.of(Registry.ITEM, Items.HONEY_BLOCK)).forGetter(HoneyBlockData::blockItem),
-                LazyHolders.LAZY_BLOCK.fieldOf("honeyBlock").orElse(LazyHolder.of(Registry.BLOCK, Blocks.HONEY_BLOCK)).forGetter(HoneyBlockData::block)
+                LazyHolders.LAZY_BLOCK.fieldOf("honeyBlock").orElse(LazyHolder.of(Registry.BLOCK, Blocks.HONEY_BLOCK)).forGetter(HoneyBlockData::block),
+                TradeData.CODEC.fieldOf("tradeData").orElse(TradeData.DEFAULT).forGetter(HoneyBlockData::tradeData)
         ).apply(instance, HoneyBlockData::new));
     }
 
