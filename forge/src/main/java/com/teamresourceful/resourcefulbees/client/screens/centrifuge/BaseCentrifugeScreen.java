@@ -72,6 +72,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     @Override
     public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
         renderTooltip(matrixStack, TooltipProvider.getTooltips(this.renderables, mouseX, mouseY), Optional.empty(), mouseX, mouseY);
     }
 

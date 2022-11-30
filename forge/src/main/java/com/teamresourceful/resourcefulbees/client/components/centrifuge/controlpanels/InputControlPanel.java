@@ -17,8 +17,8 @@ public class InputControlPanel extends AbstractControlPanel {
 
     @Override
     protected void init() {
-        createControlPanelDisplayTab(y+18, ControlPanelTabs.INVENTORY);
-        createControlPanelDisplayTab(y+32, ControlPanelTabs.HOME);
+        createControlPanelDisplayTab(y+18, ControlPanelTabs.HOME);
+        createControlPanelDisplayTab(y+32, ControlPanelTabs.INVENTORY);
         createControlPanelDisplayTab(y+46, ControlPanelTabs.ITEM_OUTPUTS);
         createControlPanelDisplayTab(y+60, ControlPanelTabs.FLUID_OUTPUTS);
     }

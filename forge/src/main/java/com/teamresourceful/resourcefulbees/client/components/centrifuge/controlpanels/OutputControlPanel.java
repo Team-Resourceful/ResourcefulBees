@@ -18,8 +18,8 @@ public class OutputControlPanel extends AbstractControlPanel {
 
     @Override
     protected void init() {
-        createControlPanelDisplayTab(y+18, ControlPanelTabs.INVENTORY);
-        createControlPanelDisplayTab(y+32, ControlPanelTabs.HOME);
+        createControlPanelDisplayTab(y+18, ControlPanelTabs.HOME);
+        createControlPanelDisplayTab(y+32, ControlPanelTabs.INVENTORY);
         createNavPanelVoidExcessTab(y+46, ((AbstractCentrifugeOutputEntity<?, ?>) screen.getMenu().getEntity())::voidsExcess);
         createNavPanelPurgeTab(y+60);
     }

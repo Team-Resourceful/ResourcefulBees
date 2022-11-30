@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.client.components.centrifuge.control
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTextures;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeVoidScreen;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
@@ -18,8 +17,8 @@ public class VoidControlPanel extends AbstractControlPanel {
 
     @Override
     protected void init() {
-        createControlPanelDisplayTab(y+18, ControlPanelTabs.INVENTORY);
-        createControlPanelDisplayTab(y+32, ControlPanelTabs.HOME);
+        createControlPanelDisplayTab(y+18, ControlPanelTabs.HOME);
+        createControlPanelDisplayTab(y+32, ControlPanelTabs.INVENTORY);
     }
 
     @Override
