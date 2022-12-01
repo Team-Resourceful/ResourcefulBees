@@ -123,7 +123,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     private BreederRecipe.BreederOutput makeOutput(FamilyUnit family) {
-        ItemStack childBeeJar = BeeJar.createFilledJar(family.getChildData().id(), family.getChildData().getRenderData().colorData().jarColor().getValue());
+        ItemStack childBeeJar = BeeJar.createFilledJar(family.getChildData().id(), family.getChildData().getRenderData().colorData().jarColor());
         return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().id().toString()), family.weight(), family.chance());
     }
 

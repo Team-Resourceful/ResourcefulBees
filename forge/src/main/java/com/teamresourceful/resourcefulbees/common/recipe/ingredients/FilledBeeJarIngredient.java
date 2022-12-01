@@ -5,13 +5,14 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import net.minecraft.nbt.CompoundTag;
+import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -25,22 +26,26 @@ import java.util.stream.Stream;
 public class FilledBeeJarIngredient extends Ingredient {
 
     public FilledBeeJarIngredient() {
-        super(Stream.of(new ItemValue(getBeeJar())));
+        super(Stream.concat(
+                BeeRegistry.getRegistry().getStreamOfBees().map(FilledBeeJarIngredient::getBeeJar),
+                Stream.of(getBeeJar(EntityType.getKey(EntityType.BEE), BeeConstants.VANILLA_BEE_INT_COLOR))
+        ));
     }
 
-    public static ItemStack getBeeJar() {
-        ItemStack stack = new ItemStack(ModItems.BEE_JAR.get());
+    @NotNull
+    private static ItemValue getBeeJar(ResourceLocation id, Color color) {
+        return new ItemValue(BeeJar.createFilledJar(id, color));
+    }
 
-        CompoundTag stackTag = new CompoundTag();
-        CompoundTag entityTag = new CompoundTag();
+    @SuppressWarnings("SameParameterValue")
+    @NotNull
+    private static ItemValue getBeeJar(ResourceLocation id, int color) {
+        return getBeeJar(id, new Color(color));
+    }
 
-        entityTag.putString(NBTConstants.NBT_ID, "minecraft:bee");
-        entityTag.putString(NBTConstants.BeeJar.COLOR, BeeConstants.VANILLA_BEE_COLOR);
-        stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, Component.Serializer.toJson(Component.literal("Any Filled Bee Jar")));
-
-        stackTag.put(NBTConstants.BeeJar.ENTITY, entityTag);
-        stack.setTag(stackTag);
-        return stack;
+    @NotNull
+    private static ItemValue getBeeJar(CustomBeeData customBeeData) {
+        return getBeeJar(customBeeData.id(), customBeeData.getRenderData().colorData().jarColor());
     }
 
     @Override

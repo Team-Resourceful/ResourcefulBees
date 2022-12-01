@@ -53,13 +53,17 @@ public class BeeJar extends Item {
     }
 
     public static ItemStack createFilledJar(ResourceLocation id, int color) {
+        return createFilledJar(id, new Color(color));
+    }
+
+    public static ItemStack createFilledJar(ResourceLocation id, Color color) {
         ItemStack stack = ModItems.BEE_JAR.get().getDefaultInstance();
 
         CompoundTag stackTag = new CompoundTag();
         CompoundTag entityTag = new CompoundTag();
 
         entityTag.putString(NBTConstants.NBT_ID, id.toString());
-        entityTag.putString(NBTConstants.BeeJar.COLOR, new Color(color).toString());
+        entityTag.putString(NBTConstants.BeeJar.COLOR, color.toString());
         stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, Component.Serializer.toJson(Component.translatable("entity." + id.getNamespace() + "." + id.getPath())));
 
         stackTag.put(NBTConstants.BeeJar.ENTITY, entityTag);

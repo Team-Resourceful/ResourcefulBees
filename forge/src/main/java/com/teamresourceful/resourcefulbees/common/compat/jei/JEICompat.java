@@ -29,8 +29,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.stream.Collectors;
-
 @JeiPlugin
 public class JEICompat implements IModPlugin {
 
@@ -87,7 +85,7 @@ public class JEICompat implements IModPlugin {
     public void registerIngredients(IModIngredientRegistration registration) {
         registration.register(
                 ENTITY_INGREDIENT,
-                BeeRegistry.getRegistry().getBees().values().stream().map(b -> new EntityIngredient(b.entityType(), -45.0f)).collect(Collectors.toList()),
+                BeeRegistry.getRegistry().getBees().values().stream().map(b -> new EntityIngredient(b.entityType(), -45.0f)).toList(),
                 new EntityIngredientHelper(),
                 new EntityRenderer()
         );
@@ -121,6 +119,4 @@ public class JEICompat implements IModPlugin {
             }
         }
     }
-
-
 }

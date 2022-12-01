@@ -224,7 +224,7 @@ public final class Beekeeper {
             BeekeeperTradeData tradeData = customBeeData.getTradeData();
             if (tradeData.isTradable()) {
                 list.add((trader, random) -> {
-                    ItemStack beeJar = BeeJar.createFilledJar(customBeeData.id(), customBeeData.getRenderData().colorData().jarColor().getValue());
+                    ItemStack beeJar = BeeJar.createFilledJar(customBeeData.id(), customBeeData.getRenderData().colorData().jarColor());
                     beeJar.setCount(tradeData.amount().sample(random));
                     return tradeData.getMerchantOffer(random, beeJar, 32, 64);
                 });
