@@ -38,6 +38,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @ApiStatus.NonExtendable
+@SuppressWarnings("unused")
 public class InitializerApi {
 
     private Initializers.DataInitializer data;

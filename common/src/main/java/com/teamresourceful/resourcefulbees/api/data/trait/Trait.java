@@ -209,11 +209,4 @@ public record Trait(String name, Item displayItem,
     public boolean hasAuras() {
         return !auras.isEmpty();
     }
-
-    /**
-     * @return Returns <tt>true</tt> if there is no damageTypes and no potionDamageEffects.
-     */
-    public boolean canPoison() {
-        return !hasDamageTypes() && !hasPotionDamageEffects();
-    }
 }
