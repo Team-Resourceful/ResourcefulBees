@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
-import com.teamresourceful.resourcefulbees.common.data.beedata.DataSetup;
+import com.teamresourceful.resourcefulbees.common.data.DataSetup;
 import com.teamresourceful.resourcefulbees.common.capabilities.ModCapabilities;
 import com.teamresourceful.resourcefulbees.common.compat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
@@ -69,8 +69,10 @@ public class ResourcefulBees {
         DefaultApiaryTiers.loadDefaults();
 
         DataSetup.setupInitializers(ResourcefulBeesAPI.getInitializers());
+        DataSetup.setupInitializers(ResourcefulBeesAPI.getHoneyInitalizers());
 
         BeeDataRegistry.init();
+        HoneyDataRegistry.init();
 
         GeckoLib.initialize();
         ModSetup.initialize();

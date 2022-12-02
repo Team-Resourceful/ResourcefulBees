@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.honey;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyBottleEffectData;
 import com.teamresourceful.resourcefulbees.api.data.trait.PotionEffect;
-import com.teamresourceful.resourcefulbees.api.data.honey.HoneyEffect;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
@@ -31,8 +31,8 @@ public class EffectEntry extends ListEntry {
     private final Component durationText;
     private final float chance;
 
-    public EffectEntry(HoneyEffect effect) {
-        this.effect = effect.effect();
+    public EffectEntry(HoneyBottleEffectData effect) {
+        this.effect = effect.effect().get();
         this.strength = effect.strength();
         this.durationText = Component.literal(String.format("(%02d:%02d)", (effect.duration() / 20) / 60, (effect.duration() / 20) % 60));
         this.chance = effect.chance();

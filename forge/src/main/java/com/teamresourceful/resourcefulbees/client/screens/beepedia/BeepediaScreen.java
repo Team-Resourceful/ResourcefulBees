@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.BeepediaMainButton;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.search.SearchBar;
@@ -130,7 +130,7 @@ public class BeepediaScreen extends SubdividedScreen {
                     .getStreamOfHoney()
                     .filter(honey -> getState().search == null || honey.name().toLowerCase().contains(getState().search.toLowerCase()))
                     .sorted((o1, o2) -> getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isUnset() ? 0 : o1.name().compareTo(o2.name()) * (getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isFalse() ? -1 : 1))
-                    .map(data -> new ItemEntry<>(data, a -> new ItemStack(a.bottleData().honeyBottle().get()), HoneyData::getDisplayName))
+                    .map(data -> new ItemEntry<>(data, a -> new ItemStack(data.getBottleData().bottle().get()), a -> data.displayName()))
                     .toList();
         };
 
@@ -148,7 +148,7 @@ public class BeepediaScreen extends SubdividedScreen {
             Object data = itemEntry.getData();
             if (data instanceof Trait trait) {
                 setSubScreen(new TraitPage(trait));
-            } else if (data instanceof HoneyData honey) {
+            } else if (data instanceof CustomHoneyData honey) {
                 setSubScreen(new HoneyPage(honey));
             }
         }

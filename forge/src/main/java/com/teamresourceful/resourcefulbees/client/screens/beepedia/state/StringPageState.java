@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.state;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.BeePage;
@@ -29,7 +29,7 @@ public class StringPageState<T, P> implements PageState<P> {
         this.creator = creator;
     }
 
-    public static StringPageState<HoneyData, BeepediaScreen> createHoneyPageState(String honeyType) {
+    public static StringPageState<CustomHoneyData, BeepediaScreen> createHoneyPageState(String honeyType) {
         return new StringPageState<>(honeyType, HoneyRegistry.getRegistry()::getHoneyData, HoneyPage::new);
     }
 

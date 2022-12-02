@@ -1,28 +1,30 @@
 {
-  "bottleData": {
+  "resourcefulbees:bottle/v1": {
     "color": "rainbow",
-    "hunger": 3,
-    "saturation": 0.25,
-    "effects": [
-      {
-        "effect": "minecraft:glowing",
-        "duration": 2400,
-        "strength": 0,
-        "chance": 1
-      }
-    ],
+    "food": {
+      "hunger": 3,
+      "saturation": 0.25,
+      "effects": [
+        {
+          "effect": "minecraft:glowing",
+          "duration": 2400,
+          "strength": 0,
+          "chance": 1
+        }
+      ]
+    },
     "honeyBottle": "resourcefulbees:rainbow_honey_bottle",
     "tradeData": {
       "secondaryItem": "minecraft:bottle"
     }
   },
-  "blockData": {
+  "resourcefulbees:block/v1": {
     "color": "rainbow",
     "honeyBlockItem": "resourcefulbees:rainbow_honey_block",
     "honeyBlock": "resourcefulbees:rainbow_honey_block",
     "tradeData": {}
   },
-  "fluidData": {
+  "resourcefulbees:fluid/v1": {
     "rendering" : {
       "color": "rainbow"
     },

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
-import com.teamresourceful.resourcefulbees.api.data.honey.HoneyFluidData;
+import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
@@ -74,7 +74,9 @@ public final class FluidUtils {
         if (item == Items.HONEY_BOTTLE) {
             return ModFluids.HONEY_STILL.get().getSource();
         } else if (item instanceof CustomHoneyBottleItem honey) {
-            HoneyFluidData fluidData = HoneyRegistry.getRegistry().getHoneyData(honey.getHoneyData().name()).fluidData();
+            String id = honey.getHoneyData().id();
+            if (id.isEmpty()) return Fluids.EMPTY;
+            HoneyFluidData fluidData = HoneyRegistry.getRegistry().getHoneyData(id).getFluidData();
             return fluidData.stillFluid().get();
         }
         return Fluids.EMPTY;
@@ -83,7 +85,9 @@ public final class FluidUtils {
     @Nullable
     public static Item getHoneyBottleFromFluid(Fluid fluid) {
         if (fluid instanceof CustomHoneyFluid honeyFluid) {
-            return HoneyRegistry.getRegistry().getHoneyData(honeyFluid.getHoneyData().name()).bottleData().honeyBottle().get();
+            String id = honeyFluid.getHoneyData().id();
+            if (id.isEmpty()) return null;
+            return HoneyRegistry.getRegistry().getHoneyData(id).getBottleData().bottle().get();
         }
         if (fluid.is(ModFluidTags.HONEY)) {
             return Items.HONEY_BOTTLE;

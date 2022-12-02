@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.data;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
@@ -63,7 +63,7 @@ public final class LangGeneration {
 
         HoneyRegistry.getRegistry()
                 .getStreamOfHoney()
-                .map(HoneyData::name)
+                .map(CustomHoneyData::name)
                 .forEach(name -> object.addProperty(HONEY_RESOURCEFULBEES + name, replaceAndCapitalize(name)));
 
         TraitRegistry.getRegistry()

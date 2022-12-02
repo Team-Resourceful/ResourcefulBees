@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.entity.passive;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
-import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
@@ -194,7 +193,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     protected void customServerAiStep() {
-        if (auraHandler != null && (this.tickCount + getId()) % Aura.INTERVAL == 0) {
+        if (auraHandler != null && (this.tickCount + getId()) % CommonConfig.AURA_FREQUENCY.get() * 20 == 0) {
             auraHandler.tick();
         }
 

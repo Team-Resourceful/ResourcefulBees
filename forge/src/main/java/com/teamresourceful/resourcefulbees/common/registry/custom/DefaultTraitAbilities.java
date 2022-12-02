@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -37,8 +38,8 @@ public final class DefaultTraitAbilities {
         return registry;
     }
 
-    private static void enderAbility(ResourcefulBee bee) {
-        if (!bee.hasCustomName() && bee.tickCount % 150 == 0 && bee.level.isDay() && !bee.isPollinating() && !bee.hasHiveInRange() && !bee.getDisruptorInRange() && !bee.level.isClientSide() && bee.isAlive()) {
+    private static void enderAbility(Bee input) {
+        if (input instanceof ResourcefulBee bee && !bee.hasCustomName() && bee.tickCount % 150 == 0 && bee.level.isDay() && !bee.isPollinating() && !bee.hasHiveInRange() && !bee.getDisruptorInRange() && !bee.level.isClientSide() && bee.isAlive()) {
             double x = bee.getX() + (bee.getRandom().nextDouble() - 0.5D) * 4.0D;
             double y = bee.getY() + (bee.getRandom().nextInt(4) - 2);
             double z = bee.getZ() + (bee.getRandom().nextDouble() - 0.5D) * 4.0D;
@@ -63,8 +64,8 @@ public final class DefaultTraitAbilities {
         }
     }
 
-    private static void slimeAbility(ResourcefulBee bee) {
-        if (!bee.checkSpawnObstruction(bee.level) && !bee.wasColliding()) {
+    private static void slimeAbility(Bee input) {
+        if (input instanceof ResourcefulBee bee && !bee.checkSpawnObstruction(bee.level) && !bee.wasColliding()) {
             for (int j = 0; j < 8; ++j) {
                 float f = bee.getRandom().nextFloat() * ((float) Math.PI * 2F);
                 float f1 = bee.getRandom().nextFloat() * 0.5F + 0.5F;
@@ -78,13 +79,13 @@ public final class DefaultTraitAbilities {
         }
     }
 
-    private static void fireAbility(ResourcefulBee bee) {
+    private static void fireAbility(Bee bee) {
         if (bee.tickCount % 150 == 0) {
             bee.setSecondsOnFire(3);
         }
     }
 
-    private static void angryAbility(ResourcefulBee bee) {
+    private static void angryAbility(Bee bee) {
         if (!bee.hasEffect(ModEffects.CALMING.get())) {
             Entity player = bee.level.getNearestPlayer(bee, 20);
             bee.setPersistentAngerTarget(player != null ? player.getUUID() : null);
@@ -92,7 +93,7 @@ public final class DefaultTraitAbilities {
         }
     }
 
-    public record DefaultAbility(String id, Item item, Consumer<ResourcefulBee> ability) implements TraitAbility {
+    public record DefaultAbility(String id, Item item, Consumer<Bee> ability) implements TraitAbility {
 
         @Override
         public ItemStack displayedItem() {
@@ -115,7 +116,7 @@ public final class DefaultTraitAbilities {
         }
 
         @Override
-        public void run(ResourcefulBee bee) {
+        public void run(Bee bee) {
             ability.accept(bee);
         }
     }

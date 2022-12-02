@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.honey;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.ItemSlotWidget;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaTextures;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
@@ -24,20 +24,20 @@ import static com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.
 
 public class HoneyPage extends HistoryScreen implements TooltipProvider {
 
-    private final HoneyData data;
+    private final CustomHoneyData data;
     private final ItemStack honeyBottle;
 
-    public HoneyPage(HoneyData data) {
+    public HoneyPage(CustomHoneyData data) {
         super(CommonComponents.EMPTY);
         this.data = data;
-        this.honeyBottle = new ItemStack(data.bottleData().honeyBottle().get());
+        this.honeyBottle = new ItemStack(data.getBottleData().bottle().get());
     }
 
     @Override
     protected void init() {
         addRenderableOnly(new ItemSlotWidget(2, 0, this.honeyBottle));
         SelectionList<ListEntry> list = addRenderableOnly(new SelectionList<>(1, 22, 182, 140, 20, ignored -> {}));
-        list.updateEntries(this.data.bottleData().effects().stream().map(EffectEntry::new).toList());
+        list.updateEntries(this.data.getBottleData().food().effects().stream().map(EffectEntry::new).toList());
     }
 
     @Override
@@ -49,8 +49,8 @@ public class HoneyPage extends HistoryScreen implements TooltipProvider {
 
         Font font = Minecraft.getInstance().font;
         font.draw(stack,  this.honeyBottle.getHoverName(), 24, 1, 0xFFFFFF);
-        int food = Math.min(this.data.bottleData().hunger(), 20);
-        float staturation = Math.min(food * this.data.bottleData().saturation() * 2f, 20);
+        int food = Math.min(this.data.getBottleData().food().hunger(), 20);
+        float staturation = Math.min(food * this.data.getBottleData().food().saturation() * 2f, 20);
         RenderUtils.bindTexture(BeepediaTextures.HUNGER_BAR);
         Gui.blit(stack, 24, 10, 0, 0, 90, 9, 90, 9);
 
@@ -74,7 +74,7 @@ public class HoneyPage extends HistoryScreen implements TooltipProvider {
         return TooltipProvider.getTooltips(this.renderables, mouseX, mouseY);
     }
 
-    public HoneyData getData() {
+    public CustomHoneyData getData() {
         return this.data;
     }
 }
