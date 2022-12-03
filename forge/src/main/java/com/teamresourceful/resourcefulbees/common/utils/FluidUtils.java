@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
+import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -76,7 +76,7 @@ public final class FluidUtils {
         } else if (item instanceof CustomHoneyBottleItem honey) {
             String id = honey.getHoneyData().id();
             if (id.isEmpty()) return Fluids.EMPTY;
-            HoneyFluidData fluidData = HoneyRegistry.getRegistry().getHoneyData(id).getFluidData();
+            HoneyFluidData fluidData = HoneyRegistry.get().getHoneyData(id).getFluidData();
             return fluidData.stillFluid().get();
         }
         return Fluids.EMPTY;
@@ -87,7 +87,7 @@ public final class FluidUtils {
         if (fluid instanceof CustomHoneyFluid honeyFluid) {
             String id = honeyFluid.getHoneyData().id();
             if (id.isEmpty()) return null;
-            return HoneyRegistry.getRegistry().getHoneyData(id).getBottleData().bottle().get();
+            return HoneyRegistry.get().getHoneyData(id).getBottleData().bottle().get();
         }
         if (fluid.is(ModFluidTags.HONEY)) {
             return Items.HONEY_BOTTLE;

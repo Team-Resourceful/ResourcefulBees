@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.entity.goals;
 
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -30,7 +30,7 @@ public class BeeBreedGoal extends BreedGoal {
     public boolean canUse() {
         if (this.animal.isInLove()) {
             if (super.canUse() && this.partner instanceof CustomBee parent1){
-                return BeeRegistry.getRegistry().canParentsBreed(parent1.getBeeType(), ((CustomBee) animal).getBeeType());
+                return BeeRegistry.get().canParentsBreed(parent1.getBeeType(), ((CustomBee) animal).getBeeType());
             }
         }
         return false;
@@ -39,7 +39,7 @@ public class BeeBreedGoal extends BreedGoal {
     @Override
     protected void breed() {
         if (partner == null) return;
-        FamilyUnit beeFamily = BeeRegistry.getRegistry().getWeightedChild(((CustomBee)this.partner).getBeeType(), beeType);
+        FamilyUnit beeFamily = BeeRegistry.get().getWeightedChild(((CustomBee)this.partner).getBeeType(), beeType);
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, this.partner, ((ResourcefulBee)this.animal).createSelectedChild(beeFamily));
         if (MinecraftForge.EVENT_BUS.post(event)) {

@@ -1,11 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
+import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.config.RecipeConfig;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
@@ -16,7 +18,6 @@ import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.HolderSet;
@@ -66,7 +67,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
         }
 
         if (RecipeConfig.honeyBlockRecipes) {
-            HoneyRegistry.getRegistry().getHoneyBottles().values().stream()
+            HoneyRegistry.get().getStreamOfHoney()
                     .flatMap(data ->
                         Stream.of(
                             makeHoneyBlockRecipe(data),
@@ -81,13 +82,13 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
                     .forEach(this::addRecipe);
         }
 
-        BeeRegistry.getRegistry()
+        ResourcefulBeesAPI.getRegistry().getBeeRegistry()
             .getStreamOfBees()
             .map(this::makeHiveRecipe)
             .filter(Objects::nonNull)
             .forEach(this::addRecipe);
 
-        BeeRegistry.getRegistry().getFamilyTree().values().forEach(c -> c.forEach(f -> addRecipe(makeBreedingRecipe(c))));
+        ResourcefulBeesAPI.getRegistry().getBeeRegistry().getFamilyTree().values().forEach(c -> c.forEach(f -> addRecipe(makeBreedingRecipe(c))));
     }
 
     public void addRecipe(Recipe<?> recipe) {

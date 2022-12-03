@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeInputScreen;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeVoidScreen;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.CentrifugeInputGhostIngredientHandler;
@@ -10,7 +11,6 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityR
 import com.teamresourceful.resourcefulbees.common.compat.jei.mutation.MutationCategory;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
 import mezz.jei.api.IModPlugin;
@@ -87,7 +87,7 @@ public class JEICompat implements IModPlugin {
     public void registerIngredients(IModIngredientRegistration registration) {
         registration.register(
                 ENTITY_INGREDIENT,
-                BeeRegistry.getRegistry().getBees().values().stream().map(b -> new EntityIngredient(b.entityType(), -45.0f)).collect(Collectors.toList()),
+                BeeRegistry.get().getStreamOfBees().map(b -> new EntityIngredient(b.entityType(), -45.0f)).collect(Collectors.toList()),
                 new EntityIngredientHelper(),
                 new EntityRenderer()
         );

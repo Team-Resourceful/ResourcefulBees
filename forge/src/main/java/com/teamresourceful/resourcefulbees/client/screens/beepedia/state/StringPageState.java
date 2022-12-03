@@ -3,13 +3,13 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia.state;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.api.registry.TraitRegistry;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.BeePage;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.honey.HoneyPage;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.trait.TraitPage;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefullib.client.screens.state.PageState;
 import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.NotNull;
@@ -30,15 +30,15 @@ public class StringPageState<T, P> implements PageState<P> {
     }
 
     public static StringPageState<CustomHoneyData, BeepediaScreen> createHoneyPageState(String honeyType) {
-        return new StringPageState<>(honeyType, HoneyRegistry.getRegistry()::getHoneyData, HoneyPage::new);
+        return new StringPageState<>(honeyType, HoneyRegistry.get()::getHoneyData, HoneyPage::new);
     }
 
     public static StringPageState<CustomBeeData, BeepediaScreen> createBeePageState(String beeType) {
-        return new StringPageState<>(beeType, BeeRegistry.getRegistry()::getBeeData, BeePage::new);
+        return new StringPageState<>(beeType, BeeRegistry.get()::getBeeData, BeePage::new);
     }
 
     public static StringPageState<Trait, BeepediaScreen> createTraitPageState(String traitType) {
-        return new StringPageState<>(traitType, TraitRegistry.getRegistry()::getTrait, TraitPage::new);
+        return new StringPageState<>(traitType, TraitRegistry.get()::getTrait, TraitPage::new);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.compat.jei.mutation;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.util.displays.EntityDisplay;
 import com.teamresourceful.resourcefulbees.client.util.displays.FluidDisplay;
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
@@ -10,7 +11,6 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.BaseCategory;
 import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -50,10 +50,13 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
 
     public static List<MutationRecipe> getMutationRecipes() {
         List<MutationRecipe> recipes = new ArrayList<>();
-        BeeRegistry.getRegistry().getBees().values().forEach((beeData ->
-                beeData.getMutationData().mutations().forEach((input, outputs) ->
-                    outputs.forEach(output ->
-                            recipes.add(new MutationRecipe(beeData.entityType(), input, output, outputs))))));
+        BeeRegistry.get()
+            .getSetOfBees()
+            .forEach((beeData -> {
+                beeData.getMutationData().mutations().forEach((input, outputs) -> {
+                    outputs.forEach(output -> recipes.add(new MutationRecipe(beeData.entityType(), input, output, outputs)));
+                });
+            }));
         return recipes;
     }
 

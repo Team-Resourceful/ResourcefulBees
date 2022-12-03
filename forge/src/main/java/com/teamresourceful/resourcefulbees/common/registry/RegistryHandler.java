@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyFluidBlock;
 import com.teamresourceful.resourcefulbees.common.data.DispatchMapCodec;
@@ -23,7 +24,6 @@ import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ScraperDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyDataRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.*;
@@ -79,7 +79,7 @@ public final class RegistryHandler {
     }
 
     public static void registerDynamicBees() {
-        BeeRegistry.getRegistry().getBees().forEach((name, beeData) -> registerBee(name, beeData.getRenderData().sizeModifier()));
+        BeeRegistry.get().getBees().forEach((name, beeData) -> registerBee(name, beeData.getRenderData().sizeModifier()));
     }
 
     public static void registerDynamicHoney() {

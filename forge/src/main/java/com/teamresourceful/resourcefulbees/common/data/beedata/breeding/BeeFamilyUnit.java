@@ -9,8 +9,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Locale;
@@ -25,7 +25,7 @@ public record BeeFamilyUnit(
 
     public static BeeFamilyUnit of(double weight, double chance, String parent1, String parent2, String childName) {
         String child = childName.toLowerCase(Locale.ROOT).replace(" ", "_");
-        return new BeeFamilyUnit(weight, chance, BeeParents.of(parent1, parent2), child, Suppliers.memoize(() -> BeeRegistry.getRegistry().getBeeData(child)));
+        return new BeeFamilyUnit(weight, chance, BeeParents.of(parent1, parent2), child, Suppliers.memoize(() -> BeeRegistry.get().getBeeData(child)));
     }
 
     @ApiStatus.Internal

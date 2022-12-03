@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.api.data.bee;
 
-import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EntityType;
@@ -32,6 +32,6 @@ public interface BeeCoreData extends BeeData<BeeCoreData> {
     List<MutableComponent> lore();
 
     default Optional<OutputVariation> getHoneycombData() {
-        return Optional.ofNullable(ResourcefulBeesAPI.getRegistry().getHoneycombRegistry().getOutputVariation(honeycomb()));
+        return Optional.ofNullable(HoneycombRegistry.get().getHoneycomb(honeycomb()));
     }
 }

@@ -46,20 +46,11 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
         return INSTANCE;
     }
 
-    public static boolean containsBeeType(String beeType) {
+    public boolean containsBeeType(String beeType) {
         return CUSTOM_DATA.containsKey(beeType);
     }
 
-    public Map<Parents, WeightedCollection<FamilyUnit>> getFamilyTree() {
-        return FAMILY_TREE;
-    }
-
-    /**
-     * Returns a {@link CustomBeeData} object for the given bee type.
-     *
-     * @param beeType Bee type for which BeeData is requested.
-     * @return Returns a {@link CustomBeeData} object for the given bee type.
-     */
+    @Override
     public CustomBeeData getBeeData(String beeType) {
         return CUSTOM_DATA.getOrDefault(beeType, DEFAULT_DATA.get());
     }
@@ -95,36 +86,22 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
         return RAW_DATA.get(bee);
     }
 
-    /**
-     * Returns true if supplied parents can make a child bee.
-     *
-     * @param parent1 Bee type for Parent 1.
-     * @param parent2 Bee type for parent 2.
-     * @return Returns true/false if parents can breed.
-     */
+    @Override
+    public Map<Parents, WeightedCollection<FamilyUnit>> getFamilyTree() {
+        return FAMILY_TREE;
+    }
+
+    @Override
     public boolean canParentsBreed(String parent1, String parent2) {
         return FAMILY_TREE.containsKey(BeeParents.nullOf(parent1, parent2));
     }
 
-    /**
-     * Returns the a weighted random bee type based on the supplied parents.
-     *
-     * @param parent1 Bee type for Parent 1.
-     * @param parent2 Bee type for parent 2.
-     * @return Returns a weighted random bee type as a string.
-     */
+    @Override
     public FamilyUnit getWeightedChild(String parent1, String parent2) {
         return FAMILY_TREE.get(BeeParents.nullOf(parent1, parent2)).next();
     }
 
-    /**
-     * Returns the adjusted weight for the supplied child's data.
-     * The returned value is an adjusted percentage in the range of 0 - 100 represented as a double.
-     * This value is calculated based on the weighting of all possible children the supplied child's parents can have.
-     *
-     * @param beeFamily BeeData object for the child.
-     * @return Returns random bee type as a string.
-     */
+    @Override
     public double getAdjustedWeightForChild(FamilyUnit beeFamily) {
         return FAMILY_TREE.get(beeFamily.getParents()).getAdjustedWeight(beeFamily.weight());
     }
@@ -140,46 +117,29 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
         RAW_DATA.computeIfAbsent(beeType.toLowerCase(Locale.ENGLISH).replace(" ", "_"), s -> Objects.requireNonNull(beeData));
     }
 
-    /**
-     * Returns an unmodifiable copy of the internal {@link JsonObject} map representing
-     * the raw json data. This is useful for iterating over all bees without worry of
-     * changing registry data as the objects contained in the map are immutable.
-     *
-     * @return Returns unmodifiable copy of the internal {@link JsonObject} map representing
-     * the raw json data.
-     */
+    @Override
     public Map<String, JsonObject> getRawBees() {
         return Collections.unmodifiableMap(RAW_DATA);
     }
 
-    /**
-     * Returns an unmodifiable copy of the internal {@link CustomBeeData} map.
-     * This is useful for iterating over all bees without worry of changing registry data
-     * as the objects contained in the map are immutable.
-     *
-     * @return Returns an unmodifiable copy of the internal {@link CustomBeeData} map.
-     */
+    @Override
     public Map<String, CustomBeeData> getBees() {
         return Collections.unmodifiableMap(CUSTOM_DATA);
     }
 
-    /**
-     * A helper method that returns an unmodifiable set of the values contained in the internal
-     * {@link CustomBeeData} map. This is useful for iterating over all bees without
-     * worry of changing registry data as the objects contained in the map are immutable.
-     *
-     * @return Returns an unmodifiable set of the values contained in the internal
-     * {@link CustomBeeData} map
-     */
+    @Override
     public Set<CustomBeeData> getSetOfBees() {
         return Set.copyOf(CUSTOM_DATA.values());
     }
 
-    /**
-     * A helper method that returns a stream using the {@link BeeRegistry#getSetOfBees()} method.
-     */
+    @Override
     public Stream<CustomBeeData> getStreamOfBees() {
-        return Set.copyOf(CUSTOM_DATA.values()).stream();
+        return getSetOfBees().stream();
+    }
+
+    @Override
+    public Set<String> getBeeTypes() {
+        return Set.copyOf(CUSTOM_DATA.keySet());
     }
 
     //region Setup

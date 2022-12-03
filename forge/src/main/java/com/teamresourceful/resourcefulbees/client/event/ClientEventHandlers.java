@@ -16,12 +16,12 @@ import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.screens.MissingRegistryScreen;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.*;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -105,7 +105,7 @@ public final class ClientEventHandlers {
     private static void clientSetup(final FMLClientSetupEvent event) {
         ModEntities.getModBees().forEach((s, entityType) ->
                 EntityRenderers.register(entityType.get(),
-                        manager -> new CustomBeeRenderer<>(manager, BeeRegistry.getRegistry().getBeeData(s).getRenderData())));
+                        manager -> new CustomBeeRenderer<>(manager, com.teamresourceful.resourcefulbees.api.registry.BeeRegistry.get().getBeeData(s).getRenderData())));
 
         registerScreens();
 

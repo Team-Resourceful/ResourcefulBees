@@ -1,11 +1,15 @@
 package com.teamresourceful.resourcefulbees.api.registry;
 
 import com.google.gson.JsonObject;
+import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * An interface for working with the Bee Registry. The bee Registry
@@ -18,6 +22,10 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public interface BeeRegistry {
 
+    static BeeRegistry get() {
+        return ResourcefulBeesAPI.getRegistry().getBeeRegistry();
+    }
+
     /**
      * Returns a BeeData object for the given bee type.
      *
@@ -27,12 +35,26 @@ public interface BeeRegistry {
     CustomBeeData getBeeData(String bee);
 
     /**
+     * Returns weather a bee type is registered in the registry.
+     *
+     *  @param bee Bee type for which bee is checked.
+     *  @return Returns a boolean if the bee type is registered.
+     */
+    boolean containsBeeType(String bee);
+
+    /**
      * Returns a JsonObject for the given bee type.
      *
      * @param bee Bee type for which BeeData is requested.
      * @return Returns a JsonObject for the given bee type.
      */
     JsonObject getRawBeeData(String bee);
+
+    /**
+     * Returns a map of parents to families.
+     * @return Returns a map of parents to families.
+     */
+    Map<Parents, WeightedCollection<FamilyUnit>> getFamilyTree();
 
     /**
      * Returns true if supplied parents can make a child bee.
@@ -78,7 +100,15 @@ public interface BeeRegistry {
      */
     Set<CustomBeeData> getSetOfBees();
 
-    //void cacheRawBeeData(String name, JsonObject beeData);
+    /**
+     * A helper method that returns a stream using the {@link BeeRegistry#getSetOfBees()} method.
+     */
+    Stream<CustomBeeData> getStreamOfBees();
+
+    /**
+     *  @return Returns a set containing all bee types.
+     */
+    Set<String> getBeeTypes();
 
     Map<String, JsonObject> getRawBees();
 }

@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.init;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import com.teamresourceful.resourcefullib.common.utils.readers.ArrayByteReader;
 import com.teamresourceful.resourcefullib.common.yabn.YabnParser;
 import com.teamresourceful.resourcefullib.common.yabn.base.YabnArray;
@@ -30,21 +30,21 @@ public final class MissingRegistrySetup {
                 if (object.get("b") instanceof YabnArray array) {
                     StringBuilder missingBees = new StringBuilder();
                     getStrings(array).stream()
-                            .filter(s -> !BeeRegistry.containsBeeType(s) && (anyRegistriesMissing = true))
+                            .filter(s -> !BeeRegistry.get().containsBeeType(s) && (anyRegistriesMissing = true))
                             .forEach(s -> missingBees.append("    - ").append(s).append("\n"));
                     if (!missingBees.isEmpty()) ResourcefulBees.LOGGER.warn("\nThe following bees are missing from the registry: \n" + missingBees);
                 }
                 if (object.get("h") instanceof YabnArray array) {
                     StringBuilder missingHoney = new StringBuilder();
                     getStrings(array).stream()
-                            .filter(s -> !HoneyRegistry.containsHoney(s) && (anyRegistriesMissing = true))
+                            .filter(s -> !HoneyRegistry.get().containsHoney(s) && (anyRegistriesMissing = true))
                             .forEach(s -> missingHoney.append("    - ").append(s).append("\n"));
                     if (!missingHoney.isEmpty()) ResourcefulBees.LOGGER.warn("\nThe following honey are missing from the registry: \n" + missingHoney);
                 }
                 if (object.get("c") instanceof YabnArray array) {
                     StringBuilder missingCombs = new StringBuilder();
                     getStrings(array).stream()
-                            .filter(s -> !HoneycombRegistry.containsComb(s) && (anyRegistriesMissing = true))
+                            .filter(s -> !HoneycombRegistry.get().containsHoneycomb(s) && (anyRegistriesMissing = true))
                             .forEach(s -> missingCombs.append("    - ").append(s).append("\n"));
                     if (!missingCombs.isEmpty()) ResourcefulBees.LOGGER.warn("\nThe following combs are missing from the registry: \n" + missingCombs);
                 }
@@ -59,9 +59,9 @@ public final class MissingRegistrySetup {
         YabnArray beeArray = new YabnArray();
         YabnArray honeyArray = new YabnArray();
         YabnArray combArray = new YabnArray();
-        BeeRegistry.getRegistry().getBees().keySet().forEach(bee -> beeArray.add(YabnPrimitive.ofString(bee)));
-        HoneyRegistry.getRegistry().getRawHoney().keySet().forEach(honey -> honeyArray.add(YabnPrimitive.ofString(honey)));
-        HoneycombRegistry.getRegistry().getVariations().keySet().forEach(comb -> combArray.add(YabnPrimitive.ofString(comb)));
+        BeeRegistry.get().getBeeTypes().forEach(bee -> beeArray.add(YabnPrimitive.ofString(bee)));
+        HoneyRegistry.get().getHoneyTypes().forEach(honey -> honeyArray.add(YabnPrimitive.ofString(honey)));
+        HoneycombRegistry.get().getHoneycombTypes().forEach(comb -> combArray.add(YabnPrimitive.ofString(comb)));
         object.put("b", beeArray);
         object.put("h", honeyArray);
         object.put("c", combArray);

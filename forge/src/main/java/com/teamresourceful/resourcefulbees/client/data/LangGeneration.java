@@ -5,14 +5,14 @@ import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
+import com.teamresourceful.resourcefulbees.api.registry.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -48,7 +48,7 @@ public final class LangGeneration {
 
         JsonObject object = new JsonObject();
 
-        BeeRegistry.getRegistry()
+        BeeRegistry.get()
                 .getStreamOfBees()
                 .map(CustomBeeData::name)
                 .forEach(name -> {
@@ -56,17 +56,17 @@ public final class LangGeneration {
                     object.addProperty(BEE_RESOURCEFULBEES + name, replaceAndCapitalize(name));
                 });
 
-        HoneycombRegistry.getRegistry()
-                .getStreamOfVariations()
+        HoneycombRegistry.get()
+                .getStreamOfHoneycombs()
                 .map(OutputVariation::id)
                 .forEach(name -> object.addProperty(COMB_RESOURCEFULBEES + name, replaceAndCapitalize(name)));
 
-        HoneyRegistry.getRegistry()
+        HoneyRegistry.get()
                 .getStreamOfHoney()
                 .map(CustomHoneyData::name)
                 .forEach(name -> object.addProperty(HONEY_RESOURCEFULBEES + name, replaceAndCapitalize(name)));
 
-        TraitRegistry.getRegistry()
+        TraitRegistry.get()
                 .getStreamOfTraits()
                 .map(Trait::name)
                 .forEach(name -> object.addProperty(TRAIT_RESOURCEFULBEES + name, replaceAndCapitalize(name)));

@@ -27,16 +27,12 @@ public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.
         return INSTANCE;
     }
 
-    public static boolean containsHoney(String honey) {
+    @Override
+    public boolean containsHoney(String honey) {
         return INSTANCE.honeyInfo.containsKey(honey);
     }
 
-    /**
-     * Returns a HoneyBottleData object for the given honey type.
-     *
-     * @param honey Honey type for which HoneyData is requested.
-     * @return Returns a HoneyBottleData object for the given bee type.
-     */
+    @Override
     public CustomHoneyData getHoneyData(String honey) {
         return honeyInfo.get(honey);
     }
@@ -45,31 +41,24 @@ public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.
         rawHoneyData.computeIfAbsent(name, s -> jsonObject);
     }
 
-    /**
-     * Returns an unmodifiable copy of the Honey Registry.
-     * This is useful for iterating over all honey without worry of changing data
-     *
-     * @return Returns unmodifiable copy of honey registry.
-     */
+    @Override
     public Map<String, CustomHoneyData> getHoneyBottles() {
         return Collections.unmodifiableMap(honeyInfo);
     }
 
-    /**
-     * Returns a set containing all registered HoneyBottleData.
-     * This is useful for iterating over all honey without worry of changing data
-     *
-     * @return Returns a set containing all registered HoneyBottleData.
-     */
+    @Override
     public Set<CustomHoneyData> getSetOfHoney() {
         return Set.copyOf(honeyInfo.values());
     }
 
-    /**
-     * A helper method that returns a stream using the {@link HoneyRegistry#getSetOfHoney()} method.
-     */
+    @Override
     public Stream<CustomHoneyData> getStreamOfHoney() {
         return getSetOfHoney().stream();
+    }
+
+    @Override
+    public Set<String> getHoneyTypes() {
+        return Set.copyOf(honeyInfo.keySet());
     }
 
     /**

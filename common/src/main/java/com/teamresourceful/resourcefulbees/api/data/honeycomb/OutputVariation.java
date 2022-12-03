@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.api.data.honeycomb;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
+import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
@@ -71,7 +71,7 @@ public record OutputVariation(String id,
     private static Map<ApiaryTier, ItemStack> fixApiaryCombs(String id, Map<ApiaryTier, ItemStack> apiaryCombs, Optional<ItemStack> defaultComb, Optional<ItemStack> defaultCombBlock) {
         ItemStack lastStack = null;
         boolean wasEmpty = apiaryCombs.isEmpty();
-        if (wasEmpty) ResourcefulBeesAPI.getRegistry().getHoneycombRegistry().validateDefaults(id, defaultComb, defaultCombBlock);
+        if (wasEmpty) HoneycombRegistry.get().validateDefaults(id, defaultComb, defaultCombBlock);
         for (ApiaryTier tier : ApiaryTier.values()) {
             ItemStack comb = apiaryCombs.get(tier);
             if (comb != null) {
