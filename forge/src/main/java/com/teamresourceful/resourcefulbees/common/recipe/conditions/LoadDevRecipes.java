@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.recipe.conditions;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
@@ -23,7 +23,7 @@ public final class LoadDevRecipes implements ICondition {
 
     @Override
     public boolean test(IContext context) {
-        return Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULT_RECIPES.get());
+        return GeneralConfig.enableDevBees;
     }
 
     public static class Serializer implements IConditionSerializer<LoadDevRecipes> {

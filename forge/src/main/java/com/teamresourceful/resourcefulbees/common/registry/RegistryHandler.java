@@ -5,13 +5,13 @@ import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
-import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyFluidBlock;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.data.DispatchMapCodec;
+import com.teamresourceful.resourcefulbees.common.data.honeydata.CustomHoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.fluid.CustomHoneyFluidAttributesData;
+import com.teamresourceful.resourcefulbees.common.data.honeydata.fluid.CustomHoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
@@ -113,11 +113,11 @@ public final class RegistryHandler {
         }
     }
 
-    private static void registerHoneyBlock(String name, CustomHoneyData data) {
-        if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_BLOCKS.get())) {
-            RegistryEntry<Block> honeyBlock = ModBlocks.HONEY_BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(data.getBlockData()));
-            ModItems.HONEY_BLOCK_ITEMS.register(name + "_honey_block", () -> new BlockItem(honeyBlock.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY)));
-        }
+    private static void registerHoneyBlock(String name, CustomHoneyData input) {
+        input.getOptionalData(CustomHoneyBlockData.SERIALIZER).ifPresent(data -> {
+            RegistryEntry<Block> block = ModBlocks.HONEY_BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(data));
+            ModItems.HONEY_BLOCK_ITEMS.register(name + "_honey_block", () -> new BlockItem(block.get(), new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY)));
+        });
     }
 
     private static void registerHoneyBottle(String name, CustomHoneyData data) {
@@ -125,8 +125,7 @@ public final class RegistryHandler {
     }
 
     private static void registerHoneyFluid(String name, CustomHoneyData data) {
-        if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_FLUIDS.get())) {
-            HoneyFluidData fluidData = data.getFluidData();
+        data.getOptionalData(CustomHoneyFluidData.SERIALIZER).ifPresent(fluidData -> {
             ForgeFlowingFluid.Properties[] properties = {null};
 
             RegistryObject<FluidType> fluidType = ModFluids.FLUID_TYPES.register(name + "_honey", () -> honeyFluid(CustomHoneyFluidAttributesData.getProperties(fluidData.fluidAttributesData()), fluidData.renderData()));
@@ -139,7 +138,7 @@ public final class RegistryHandler {
                     .bucket(fluidBucketRegistry)
                     .block(blockFluidRegistry)
                     .tickRate(20);
-        }
+        });
     }
 
     private static FluidType honeyFluid(FluidType.Properties properties, HoneyRenderData renderData) {

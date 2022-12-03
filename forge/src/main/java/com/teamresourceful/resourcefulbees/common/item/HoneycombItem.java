@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.HoneycombConfig;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.world.entity.LivingEntity;
@@ -66,12 +66,12 @@ public class HoneycombItem extends net.minecraft.world.item.HoneycombItem {
     @Nullable
     @Override
     public FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
-        if (Boolean.TRUE.equals(CommonConfig.EDIBLE_HONEYCOMBS.get()) && !isEdible) {
+        if (HoneycombConfig.honeycombsEdible && !isEdible) {
             return super.getFoodProperties(stack, entity);
         }
         return new FoodProperties.Builder()
-                .nutrition(CommonConfig.HONEYCOMB_HUNGER.get())
-                .saturationMod(CommonConfig.HONEYCOMB_SATURATION.get().floatValue())
+                .nutrition(HoneycombConfig.honeycombHunger)
+                .saturationMod(HoneycombConfig.honeycombSaturation)
                 .fast()
                 .build();
     }

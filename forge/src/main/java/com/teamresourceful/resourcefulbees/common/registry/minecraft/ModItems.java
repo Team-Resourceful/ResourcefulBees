@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.item.*;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.CrankItem;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.ManualCentrifugeItem;
@@ -9,10 +9,10 @@ import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocator;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.BeehiveUpgrade;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.NestUpgradeItem;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistries;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -180,7 +180,7 @@ public final class ModItems {
 
     public static final RegistryEntry<Item> SCRAPER = ITEMS.register("scraper", () -> new ScraperItem(getItemProperties().stacksTo(1)));
 
-    public static final RegistryEntry<Item> SMOKER = ITEMS.register("smoker", () -> new Smoker(getItemProperties().setNoRepair().durability(CommonConfig.SMOKER_DURABILITY.get())));
+    public static final RegistryEntry<Item> SMOKER = ITEMS.register("smoker", () -> new Smoker(getItemProperties().setNoRepair().durability(GeneralConfig.smokerDurability)));
     public static final RegistryEntry<Item> BELLOW = ITEMS.register("bellow", () -> new Item(getItemProperties()));
     public static final RegistryEntry<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(getItemProperties()));
 

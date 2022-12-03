@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.RecipeConfig;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.RecipeManagerAccessor;
@@ -54,7 +54,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
     @Override
     public void onResourceManagerReload(@NotNull ResourceManager resourceManager) {
 
-        if (Boolean.TRUE.equals(CommonConfig.HONEYCOMB_BLOCK_RECIPES.get())) {
+        if (RecipeConfig.honeycombBlockRecipes) {
             LOGGER.info("Generating comb recipes for {} honeycombs...", ModItems.HONEYCOMB_ITEMS.getEntries().size());
             ModItems.HONEYCOMB_ITEMS.getEntries().stream()
                     .map(RegistryEntry::get)
@@ -65,7 +65,7 @@ public class RecipeBuilder implements ResourceManagerReloadListener {
                     .forEach(this::addRecipe);
         }
 
-        if (CommonConfig.HONEY_BLOCK_RECIPES.get() && CommonConfig.HONEY_GENERATE_BLOCKS.get()) {
+        if (RecipeConfig.honeyBlockRecipes) {
             HoneyRegistry.getRegistry().getHoneyBottles().values().stream()
                     .flatMap(data ->
                         Stream.of(

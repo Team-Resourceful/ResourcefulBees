@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
-import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
+import com.teamresourceful.resourcefulbees.common.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
@@ -43,7 +43,7 @@ public final class LangGeneration {
     }
 
     public static void generateEnglishLang() {
-        if (Boolean.FALSE.equals(ClientConfig.GENERATE_ENGLISH_LANG.get())) return;
+        if (!ClientConfig.generateEnglishLang) return;
         LOGGER.info("Generating English Lang...");
 
         JsonObject object = new JsonObject();

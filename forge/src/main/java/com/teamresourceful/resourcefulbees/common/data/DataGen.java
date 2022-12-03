@@ -1,13 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.versions.forge.ForgeVersion;
 
@@ -41,13 +40,9 @@ public final class DataGen {
         generateTags(ModItems.HONEY_BOTTLE_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/honey_bottles.json"));
         generateTags(ModItems.HONEY_BUCKET_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/buckets/honey.json"));
 
-        if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_BLOCKS.get())) {
-            generateTags(ModBlocks.HONEY_BLOCKS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/blocks/honey_blocks.json"));
-            generateTags(ModItems.HONEY_BLOCK_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/honey_blocks.json"));
-        }
-        if (Boolean.TRUE.equals(CommonConfig.HONEY_GENERATE_FLUIDS.get())) {
-            generateHoneyTags();
-        }
+        generateTags(ModBlocks.HONEY_BLOCKS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/blocks/honey_blocks.json"));
+        generateTags(ModItems.HONEY_BLOCK_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/honey_blocks.json"));
+        generateHoneyTags();
     }
 
     private static void generateBeeTags() {

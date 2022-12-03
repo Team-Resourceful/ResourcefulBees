@@ -1,18 +1,16 @@
 package com.teamresourceful.resourcefulbees;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
-import com.teamresourceful.resourcefulbees.client.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
-import com.teamresourceful.resourcefulbees.common.data.DataSetup;
 import com.teamresourceful.resourcefulbees.common.capabilities.ModCapabilities;
 import com.teamresourceful.resourcefulbees.common.compat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
-import com.teamresourceful.resourcefulbees.common.config.ConfigLoader;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.data.DataGen;
 import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
+import com.teamresourceful.resourcefulbees.common.data.DataSetup;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
 import com.teamresourceful.resourcefulbees.common.init.*;
@@ -31,9 +29,13 @@ import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModCommands;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPotions;
+import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
+import com.teamresourceful.resourcefulconfig.common.config.Configurator;
+import com.teamresourceful.resourcefulconfig.common.config.ResourcefulConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
@@ -46,7 +48,6 @@ import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -62,8 +63,20 @@ public class ResourcefulBees {
     public static final String MOD_ID = "resourcefulbees";
     public static final Logger LOGGER = LogManager.getLogger();
 
+    private static final Configurator CONFIGURATOR = new Configurator(true);
+
     public ResourcefulBees() {
-        ConfigLoader.load(CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
+        CONFIGURATOR.registerConfig(GeneralConfig.class);
+
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+                () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> {
+                    ResourcefulConfig config = CONFIGURATOR.getConfig(GeneralConfig.class);
+                    if (config == null) {
+                        return null;
+                    }
+                    return new ConfigScreen(null, config);
+                })
+        );
 
         DefaultBeehiveTiers.loadDefaults();
         DefaultApiaryTiers.loadDefaults();
@@ -85,9 +98,6 @@ public class ResourcefulBees {
         ResourcefulBeesAPI.getRegistry().setHoneycombRegistry(HoneycombRegistry.getRegistry());
         ResourcefulBeesAPI.getRegistry().setHoneyRegistry(HoneyRegistry.getRegistry());
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG, "resourcefulbees/common.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT_CONFIG, "resourcefulbees/client.toml");
-
         HoneycombSetup.setupHoneycombs();
 
         BeeSetup.setupBees();
@@ -95,8 +105,8 @@ public class ResourcefulBees {
         HoneySetup.setupHoney();
         RegistryHandler.registerDynamicHoney();
         if (FMLLoader.isProduction()) {
-            CommonConfig.GENERATE_DEFAULTS.set(false);
-            CommonConfig.GENERATE_DEFAULTS.save();
+            GeneralConfig.generateDefaults = false;
+            CONFIGURATOR.saveConfig(GeneralConfig.class);
         }
 
         ModCapabilities.init();

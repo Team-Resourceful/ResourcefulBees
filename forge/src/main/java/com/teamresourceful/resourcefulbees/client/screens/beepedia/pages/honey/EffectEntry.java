@@ -31,11 +31,11 @@ public class EffectEntry extends ListEntry {
     private final Component durationText;
     private final float chance;
 
-    public EffectEntry(HoneyBottleEffectData effect) {
-        this.effect = effect.effect().get();
-        this.strength = effect.strength();
-        this.durationText = Component.literal(String.format("(%02d:%02d)", (effect.duration() / 20) / 60, (effect.duration() / 20) % 60));
-        this.chance = effect.chance();
+    public EffectEntry(HoneyBottleEffectData data) {
+        this.effect = data.effect().get();
+        this.strength = data.strength();
+        this.durationText = Component.literal(String.format("(%02d:%02d)", (data.duration() / 20) / 60, (data.duration() / 20) % 60));
+        this.chance = data.chance();
     }
 
     public EffectEntry(PotionEffect effect) {

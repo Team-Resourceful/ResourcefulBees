@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntity
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.HoneyGenConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGeneratorMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
@@ -35,11 +35,11 @@ import java.util.Locale;
 
 public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker {
 
-    public static final int HONEY_DRAIN_AMOUNT = CommonConfig.HONEY_DRAIN_AMOUNT.get();
-    public static final int ENERGY_FILL_AMOUNT = CommonConfig.ENERGY_FILL_AMOUNT.get();
-    public static final int ENERGY_TRANSFER_AMOUNT = CommonConfig.ENERGY_TRANSFER_AMOUNT.get();
-    public static final int MAX_ENERGY_CAPACITY = CommonConfig.MAX_ENERGY_CAPACITY.get();
-    public static final int MAX_TANK_STORAGE = CommonConfig.MAX_TANK_STORAGE.get();
+    public static final int HONEY_DRAIN_AMOUNT = HoneyGenConfig.honeyDrainAmount;
+    public static final int ENERGY_FILL_AMOUNT = HoneyGenConfig.energyFillAmount;
+    public static final int ENERGY_TRANSFER_AMOUNT = HoneyGenConfig.energyTransferAmount;
+    public static final int MAX_ENERGY_CAPACITY = HoneyGenConfig.maxEnergyCapacity;
+    public static final int MAX_TANK_STORAGE = HoneyGenConfig.maxTankCapacity;
 
     private final CustomEnergyStorage energyStorage = new CustomEnergyStorage(MAX_ENERGY_CAPACITY, 0, ENERGY_TRANSFER_AMOUNT) {
         @Override

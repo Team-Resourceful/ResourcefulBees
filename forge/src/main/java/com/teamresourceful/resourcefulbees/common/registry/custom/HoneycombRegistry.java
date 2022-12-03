@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
 import com.teamresourceful.resourcefulbees.common.data.beedata.TradeData;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
@@ -187,7 +187,7 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
 
     //endregion
 
-    private static final List<ApiaryOutputType> DEFAULT_APIARY_OUTPUT_TYPES = List.of(CommonConfig.T1_APIARY_OUTPUT.get(), CommonConfig.T2_APIARY_OUTPUT.get(), CommonConfig.T3_APIARY_OUTPUT.get(), CommonConfig.T4_APIARY_OUTPUT.get());
+    private static final List<ApiaryOutputType> DEFAULT_APIARY_OUTPUT_TYPES = List.of(ApiaryConfig.tierOneApiaryOutput, ApiaryConfig.tierTwoApiaryOutput, ApiaryConfig.tierThreeApiaryOutput, ApiaryConfig.tierFourApiaryOutput);
     private static final boolean DEFAULT_OUTPUT_TYPE_INCLUDES_COMB = DEFAULT_APIARY_OUTPUT_TYPES.contains(ApiaryOutputType.COMB);
     private static final boolean DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK = DEFAULT_APIARY_OUTPUT_TYPES.contains(ApiaryOutputType.BLOCK);
 

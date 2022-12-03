@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -78,7 +78,7 @@ public class Smoker extends Item implements ExpandableTooltip {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        return CommonConfig.SMOKER_DURABILITY.get() * 2;
+        return GeneralConfig.smokerDurability * 2;
     }
 
     @Override

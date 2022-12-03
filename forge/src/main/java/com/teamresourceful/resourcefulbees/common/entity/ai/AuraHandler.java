@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.entity.ai;
 
 import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
 import net.minecraft.server.level.ServerLevel;
@@ -30,7 +30,7 @@ public class AuraHandler {
         for (Aura aura : auras) {
             if (cannotPerform(aura)) continue;
             for (ServerPlayer player : players) {
-                aura.apply(player, CommonConfig.AURA_FREQUENCY.get() * 20);
+                aura.apply(player, BeeConfig.auraFrequency * 20);
             }
             Aura.spawnParticles(this.bee, aura.type().particle);
         }

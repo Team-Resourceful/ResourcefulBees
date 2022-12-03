@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.CentrifugeConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitive;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
@@ -45,8 +45,8 @@ public record CentrifugeRecipe(
                 IngredientCodec.CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::ingredient),
                 Output.ITEM_OUTPUT_CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::itemOutputs),
                 Output.FLUID_OUTPUT_CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::fluidOutputs),
-                Codec.INT.fieldOf("time").orElse(CommonConfig.GLOBAL_CENTRIFUGE_RECIPE_TIME.get()).forGetter(CentrifugeRecipe::time),
-                Codec.INT.fieldOf("energyPerTick").orElse(CommonConfig.RF_TICK_CENTRIFUGE.get()).forGetter(CentrifugeRecipe::energyPerTick),
+                Codec.INT.fieldOf("time").orElse(CentrifugeConfig.globalCentrifugeRecipeTime).forGetter(CentrifugeRecipe::time),
+                Codec.INT.fieldOf("energyPerTick").orElse(CentrifugeConfig.centrifugeRfPerTick).forGetter(CentrifugeRecipe::energyPerTick),
                 Codec.INT.optionalFieldOf("rotations").forGetter(CentrifugeRecipe::rotations)
         ).apply(instance, CentrifugeRecipe::new));
     }

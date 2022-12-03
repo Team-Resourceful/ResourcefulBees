@@ -2,14 +2,14 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.compat.base.ModCompatHelper;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.item.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.common.item.ScraperItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.NestUpgrade;
+import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.ChatFormatting;
@@ -112,7 +112,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
         ItemStack itemstack = player.getItemInHand(handIn);
 
         if (state.getValue(HONEY_LEVEL) >= 5) {
-            boolean isShear = CommonConfig.ALLOW_SHEARS.get() && itemstack.canPerformAction(ToolActions.SHEARS_HARVEST);
+            boolean isShear = GeneralConfig.allowShears && itemstack.canPerformAction(ToolActions.SHEARS_HARVEST);
             boolean isScraper = ScraperItem.isScraper(itemstack);
 
             if (isShear || isScraper) {

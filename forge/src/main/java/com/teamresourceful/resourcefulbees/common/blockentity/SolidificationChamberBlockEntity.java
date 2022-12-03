@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.SolidficationConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.SolidificationChamberMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -58,8 +58,8 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
 
     public float getProcessPercent() {
         if (!canProcessHoney()) return 0;
-        if (processingFill == CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get()) return 1;
-        return processingFill / ((float) CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get());
+        if (processingFill == SolidficationConfig.honeyProcessTime * SolidficationConfig.solidficationTimeMultiplier) return 1;
+        return processingFill / ((float) SolidficationConfig.honeyProcessTime * SolidficationConfig.solidficationTimeMultiplier);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state) {
         if (this.canProcessHoney()) {
-            if (this.processingFill >= CommonConfig.HONEY_PROCESS_TIME.get() * CommonConfig.CONGEALER_TIME_MODIFIER.get()) {
+            if (this.processingFill >= SolidficationConfig.honeyProcessTime * SolidficationConfig.solidficationTimeMultiplier) {
                 this.processHoney();
                 this.processingFill = 0;
             }

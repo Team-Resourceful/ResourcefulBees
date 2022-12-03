@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
 import com.teamresourceful.resourcefulbees.api.data.trait.DamageType;
 import com.teamresourceful.resourcefulbees.api.data.trait.PotionEffect;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
@@ -30,9 +30,9 @@ public record TraitData(
         Set<Aura> auras
 ) implements BeeTraitData {
 
-    private static final BeeTraitData DEFAULT = TraitData.of(CommonConfig.DEFAULT_AURA_RANGE.get(), Collections.emptySet());
+    private static final BeeTraitData DEFAULT = TraitData.of(BeeConfig.defaultAuraRange, Collections.emptySet());
     private static final Codec<BeeTraitData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.intRange(3, 20).fieldOf("auraRange").orElse(CommonConfig.DEFAULT_AURA_RANGE.get()).forGetter(BeeTraitData::auraRange),
+            Codec.intRange(3, 20).fieldOf("auraRange").orElse(BeeConfig.defaultAuraRange).forGetter(BeeTraitData::auraRange),
             CodecExtras.set(Codec.STRING).fieldOf("traits").orElse(new HashSet<>()).forGetter(BeeTraitData::traits)
     ).apply(instance, TraitData::of));
     public static final BeeDataSerializer<BeeTraitData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("trait"), 1, id -> CODEC, DEFAULT);
