@@ -8,8 +8,10 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
-import com.teamresourceful.resourcefulbees.common.data.beedata.data.TradeData;
+import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
+import com.teamresourceful.resourcefulbees.common.data.beedata.TradeData;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
@@ -56,17 +58,13 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
         return INSTANCE;
     }
 
-    public static boolean containsComb(String comb) {
-        return VARIATION_DATA.containsKey(comb);
+    @Override
+    public boolean containsHoneycomb(String name) {
+        return VARIATION_DATA.containsKey(name);
     }
 
-    /**
-     * Returns an {@link OutputVariation} object for the given identifier.
-     *
-     * @param identifier The identifier of the variation requested.
-     * @return Returns an {@link OutputVariation} object for the given identifier.
-     */
-    public @Nullable OutputVariation getOutputVariation(String identifier) {
+    @Override
+    public @Nullable OutputVariation getHoneycomb(String identifier) {
         return VARIATION_DATA.get(identifier);
     }
 
@@ -81,34 +79,19 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
         RAW_DATA.computeIfAbsent(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), s -> Objects.requireNonNull(honeycombData));
     }
 
-    /**
-     * Returns an unmodifiable copy of the internal {@link OutputVariation} map.
-     * This is useful for iterating over all variations without worry of changing registry data
-     * as the objects contained in the map are immutable.
-     *
-     * @return Returns an unmodifiable copy of the internal {@link OutputVariation} map.
-     */
-    public Map<String, OutputVariation> getVariations() {
-        return Collections.unmodifiableMap(VARIATION_DATA);
-    }
-
-    /**
-     * A helper method that returns an unmodifiable set of the values contained in the internal
-     * {@link OutputVariation} map. This is useful for iterating over all variations without
-     * worry of changing registry data as the objects contained in the map are immutable.
-     *
-     * @return Returns an unmodifiable set of the values contained in the internal
-     * {@link OutputVariation} map
-     */
-    public Set<OutputVariation> getSetOfVariations() {
+    @Override
+    public Set<OutputVariation> getSetOfHoneycombs() {
         return Set.copyOf(VARIATION_DATA.values());
     }
 
-    /**
-     * A helper method that returns a stream using the {@link HoneycombRegistry#getSetOfVariations()} method.
-     */
-    public Stream<OutputVariation> getStreamOfVariations() {
-        return getSetOfVariations().stream();
+    @Override
+    public Stream<OutputVariation> getStreamOfHoneycombs() {
+        return getSetOfHoneycombs().stream();
+    }
+
+    @Override
+    public Set<String> getHoneycombTypes() {
+        return Set.copyOf(VARIATION_DATA.keySet());
     }
 
     //region Regeneration Methods
@@ -184,4 +167,17 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
     }
 
     //endregion
+
+    private static final List<ApiaryOutputType> DEFAULT_APIARY_OUTPUT_TYPES = List.of(ApiaryConfig.tierOneApiaryOutput, ApiaryConfig.tierTwoApiaryOutput, ApiaryConfig.tierThreeApiaryOutput, ApiaryConfig.tierFourApiaryOutput);
+    private static final boolean DEFAULT_OUTPUT_TYPE_INCLUDES_COMB = DEFAULT_APIARY_OUTPUT_TYPES.contains(ApiaryOutputType.COMB);
+    private static final boolean DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK = DEFAULT_APIARY_OUTPUT_TYPES.contains(ApiaryOutputType.BLOCK);
+
+    @Override
+    public void validateDefaults(String id, Optional<ItemStack> defaultComb, Optional<ItemStack> defaultCombBlock) {
+        if (DEFAULT_OUTPUT_TYPE_INCLUDES_COMB && defaultComb.isEmpty()) {
+            throw new IllegalArgumentException(id + " : Default comb must be present when list is empty and config contains combs!!!");
+        } else if (DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK && defaultCombBlock.isEmpty()) {
+            throw new IllegalArgumentException(id + " : Default block must be present when list is empty and config contains blocks!!!");
+        }
+    }
 }

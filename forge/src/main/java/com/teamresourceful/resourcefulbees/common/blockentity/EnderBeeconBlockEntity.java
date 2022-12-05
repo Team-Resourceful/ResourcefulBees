@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.EnderBeeconConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -183,7 +183,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
             for (int i = 0; i < handler.getTanks(); i++) {
                 FluidStack stack = handler.getFluidInTank(i);
                 if (this.tank.isFluidValid(stack) && (this.tank.getFluid().isFluidEqual(stack) || this.tank.getFluid().isEmpty())) {
-                    int pullAmount = Math.min(CommonConfig.BEECON_PULL_AMOUNT.get(), this.tank.getSpace());
+                    int pullAmount = Math.min(EnderBeeconConfig.beeconPullAmount, this.tank.getSpace());
                     FluidStack amountDrained = handler.drain(new FluidStack(stack.getFluid(), pullAmount), IFluidHandler.FluidAction.EXECUTE);
                     this.tank.fill(amountDrained, IFluidHandler.FluidAction.EXECUTE);
                 }
@@ -260,9 +260,9 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     }
 
     public int getDrain() {
-        double base = CommonConfig.BEECON_BASE_DRAIN.get();
+        double base = EnderBeeconConfig.beeconBaseDrain;
         for (MobEffect e : effects) base += getEffectValue(e);
-        base = (base * (range * CommonConfig.BEECON_RANGE_MULTIPLIER.get() * 0.10d));
+        base = (base * (range * EnderBeeconConfig.beeconRangeMultiplier * 0.10d));
         return (int) base;
     }
 
@@ -292,10 +292,10 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     }
 
     public double getEffectValue(MobEffect effect) {
-        if (ModEffects.CALMING.get().equals(effect)) return CommonConfig.BEECON_CALMING_VALUE.get();
-        else if (MobEffects.WATER_BREATHING.equals(effect)) return CommonConfig.BEECON_WATER_BREATHING_VALUE.get();
-        else if (MobEffects.FIRE_RESISTANCE.equals(effect)) return CommonConfig.BEECON_FIRE_RESISTANCE_VALUE.get();
-        else if (MobEffects.REGENERATION.equals(effect)) return CommonConfig.BEECON_REGENERATION_VALUE.get();
+        if (ModEffects.CALMING.get().equals(effect)) return EnderBeeconConfig.beeconCalmingValue;
+        else if (MobEffects.WATER_BREATHING.equals(effect)) return EnderBeeconConfig.beeconWaterBreathingValue;
+        else if (MobEffects.FIRE_RESISTANCE.equals(effect)) return EnderBeeconConfig.beeconFireResistanceValue;
+        else if (MobEffects.REGENERATION.equals(effect)) return EnderBeeconConfig.beeconRegenerationValue;
 
         ResourcefulBees.LOGGER.error("Effect {} does not have an effect value", effect.getDescriptionId());
         return 1D;

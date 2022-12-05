@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.init;
 
 import com.google.gson.JsonObject;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
@@ -25,12 +25,12 @@ public final class BeeSetup {
     }
 
     public static void setupBees() {
-        if (Boolean.TRUE.equals(CommonConfig.ENABLE_DEV_BEES.get())) {
+        if (GeneralConfig.enableDevBees) {
             LOGGER.info("Loading Dev Bees...");
             FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_bees", BeeSetup::parseBee, ModPaths.MOD_ROOT);
         }
 
-        if (Boolean.TRUE.equals(CommonConfig.GENERATE_DEFAULTS.get())) {
+        if (GeneralConfig.generateDefaults) {
             LOGGER.info("Copying Default Bees...");
             FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_bees", ModPaths.BEES, ModPaths.MOD_ROOT);
         }

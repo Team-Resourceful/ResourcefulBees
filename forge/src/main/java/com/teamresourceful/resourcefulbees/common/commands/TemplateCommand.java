@@ -11,14 +11,14 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
-import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
-import com.teamresourceful.resourcefulbees.common.data.beedata.DispatchMapCodec;
+import com.teamresourceful.resourcefulbees.common.data.DispatchMapCodec;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyBeeData;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyHoneyData;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyHoneycombData;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyTraitData;
 import com.teamresourceful.resourcefulbees.common.registry.custom.BeeDataRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyDataRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -59,7 +59,8 @@ public class TemplateCommand {
     }
 
     private static int printHoneyTemplate(CommandContext<CommandSourceStack> context) {
-        DataResult<JsonElement> honeyResult = HoneyData.codec(TEMPLATE_STRING).encodeStart(registryOps(context), DummyHoneyData.DUMMY_HONEY_DATA);
+        DataResult<JsonElement> honeyResult = new DispatchMapCodec<>(ResourceLocation.CODEC, HoneyDataRegistry.codec(TEMPLATE_STRING))
+                .encodeStart(registryOps(context), DummyHoneyData.DATA);
         ResourcefulBees.LOGGER.info(PRETTY_GSON.toJson(honeyResult.getOrThrow(false, ResourcefulBees.LOGGER::error)));
         context.getSource().sendSuccess(Component.literal("Honey template printed to logs!"), true);
         return 1;

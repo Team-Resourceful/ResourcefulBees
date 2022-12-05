@@ -1,11 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.entity.passive;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
-import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.entity.ai.AuraHandler;
 import com.teamresourceful.resourcefulbees.common.entity.goals.*;
 import com.teamresourceful.resourcefulbees.common.entity.pathfinding.BeePathNavigation;
@@ -74,7 +73,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         ((BeeEntityAccessor)this).setGoToKnownFlowerGoal(new BeeGoToKnownFlowerGoal());
         this.goalSelector.addGoal(6, ((BeeEntityAccessor)this).getGoToKnownFlowerGoal());
-        this.goalSelector.addGoal(8, Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get()) ? new BeeWanderGoal(this) : new WanderWorkerGoal(this));
+        this.goalSelector.addGoal(8, !BeeConfig.manualMode ? new BeeWanderGoal(this) : new WanderWorkerGoal(this));
         this.goalSelector.addGoal(9, new FloatGoal(this));
         //this.goalSelector.addGoal(10, new BeeAuraGoal(this));
     }
@@ -194,7 +193,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     protected void customServerAiStep() {
-        if (auraHandler != null && (this.tickCount + getId()) % Aura.INTERVAL == 0) {
+        if (auraHandler != null && (this.tickCount + getId()) % BeeConfig.auraFrequency * 20 == 0) {
             auraHandler.tick();
         }
 
@@ -238,7 +237,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             }
 
             this.stopBeingAngry();
-            ((BeeInvoker) this).callSetFlag(4, CommonConfig.BEES_DIE_FROM_STING.get() && this.getCombatData().removeStingerOnAttack());
+            ((BeeInvoker) this).callSetFlag(4, BeeConfig.beesDieFromSting && this.getCombatData().removeStingerOnAttack());
             this.playSound(SoundEvents.BEE_STING, 1.0F, 1.0F);
             return true;
         }
@@ -277,7 +276,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private boolean canPoison(BeeTraitData info) {
-        return CommonConfig.BEES_INFLICT_POISON.get() && this.getCombatData().inflictsPoison() && info.canPoison();
+        return BeeConfig.beesInflictPoison && this.getCombatData().inflictsPoison() && info.canPoison();
     }
 
     private void explode(int radius) {
@@ -370,7 +369,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public void dropHive() {
-            if (Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get())) {
+            if (!BeeConfig.manualMode) {
                 super.dropHive();
             }  // double check blacklist as it may need to be cleared - epic
         }
@@ -399,7 +398,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public boolean canBeeUse() {
-            return Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get()) && super.canBeeUse();
+            return !BeeConfig.manualMode && super.canBeeUse();
         }
     }
 }

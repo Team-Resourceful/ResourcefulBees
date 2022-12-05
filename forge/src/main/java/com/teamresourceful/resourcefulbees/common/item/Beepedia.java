@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
-import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.BeepediaData;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.capabilities.ModCapabilities;
+import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncCapabilityPacket;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -76,7 +76,7 @@ public class Beepedia extends Item {
         tooltip.add(TranslationConstants.Items.INFO_BEEPEDIA.withStyle(ChatFormatting.GREEN));
         if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
             boolean complete = stack.getTag().getBoolean(NBTConstants.Beepedia.COMPLETE) || stack.getTag().getBoolean(NBTConstants.Beepedia.CREATIVE);
-            int total = BeeRegistry.getRegistry().getBees().size();
+            int total = BeeRegistry.get().getBees().size();
             int count = stack.getTag().getList(NBTConstants.NBT_BEES, 8).size();
             tooltip.add(Component.translatable(TranslationConstants.Beepedia.PROGRESS, complete? total : count, total).withStyle(ChatFormatting.GRAY));
         }

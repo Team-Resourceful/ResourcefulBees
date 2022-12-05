@@ -1,7 +1,7 @@
 
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.api.data.honey.HoneyFluidData;
+import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;

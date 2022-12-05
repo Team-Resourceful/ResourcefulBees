@@ -1,7 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.entity.villager;
 
-import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
@@ -9,7 +10,6 @@ import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModVillagerProfessions;
 import net.minecraft.ChatFormatting;
@@ -220,16 +220,16 @@ public final class Beekeeper {
     }
 
     private static void addBees(List<VillagerTrades.ItemListing> list) {
-        BeeRegistry.getRegistry().getBees().forEach((s, customBeeData) -> {
-            BeekeeperTradeData tradeData = customBeeData.getTradeData();
-            if (tradeData.isTradable()) {
+        BeeRegistry.get().getStreamOfBees()
+            .filter(beeData -> beeData.getTradeData().isTradable())
+            .forEach(bee -> {
+                var tradeData = bee.getTradeData();
                 list.add((trader, random) -> {
-                    ItemStack beeJar = BeeJar.createFilledJar(customBeeData.id(), customBeeData.getRenderData().colorData().jarColor());
+                    ItemStack beeJar = BeeJar.createFilledJar(bee.id(), bee.getRenderData().colorData().jarColor());
                     beeJar.setCount(tradeData.amount().sample(random));
                     return tradeData.getMerchantOffer(random, beeJar, 32, 64);
                 });
-            }
-        });
+            });
     }
 
     private static ItemStack getQueenBeeBanner() {

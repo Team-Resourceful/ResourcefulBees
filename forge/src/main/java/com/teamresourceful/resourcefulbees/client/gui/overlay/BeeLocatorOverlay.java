@@ -2,11 +2,11 @@ package com.teamresourceful.resourcefulbees.client.gui.overlay;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocator;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.platform.client.renderer.overlay.OverlayRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -37,8 +37,8 @@ public class BeeLocatorOverlay implements OverlayRenderer {
             pos = new BlockPos(pos.getX(), player.blockPosition().getY(), pos.getZ());
             String bee = stack.getTag().getString(NBTConstants.BeeLocator.LAST_BEE);
             ResourceLocation biome = ResourceLocation.tryParse(stack.getTag().getString(NBTConstants.BeeLocator.LAST_BIOME_ID));
-            if (!BeeRegistry.containsBeeType(bee)) return;
-            CustomBeeData data = BeeRegistry.getRegistry().getBeeData(bee);
+            if (!BeeRegistry.get().containsBeeType(bee)) return;
+            CustomBeeData data = BeeRegistry.get().getBeeData(bee);
             Entity entity = getDisplayBee(data.entityType(), player.level);
             if (entity == null) return;
             GuiComponent.fill(poseStack, 0, 0, 150, 50, 1325400064);

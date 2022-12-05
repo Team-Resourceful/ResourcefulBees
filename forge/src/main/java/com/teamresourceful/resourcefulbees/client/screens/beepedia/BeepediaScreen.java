@@ -3,8 +3,11 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.data.honey.HoneyData;
+import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.api.registry.TraitRegistry;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.BeepediaMainButton;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.search.SearchBar;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.search.SearchBox;
@@ -20,9 +23,6 @@ import com.teamresourceful.resourcefulbees.client.screens.beepedia.state.Beepedi
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.state.StringPageState;
 import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.CreativeBeepediaData;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.state.ScreenStateManager;
@@ -109,7 +109,7 @@ public class BeepediaScreen extends SubdividedScreen {
 
     public void updateSelections() {
         List<? extends ListEntry> entries = switch (getState().type) {
-            case BEES -> BeeRegistry.getRegistry()
+            case BEES -> BeeRegistry.get()
                     .getStreamOfBees()
                     .filter(BeepediaSearchHandler.search(getState().search))
                     .sorted(
@@ -120,17 +120,17 @@ public class BeepediaScreen extends SubdividedScreen {
                     )
                     .map(data -> new BeeEntry(data, () -> this.data != null && this.data.hasBee(data.name())))
                     .toList();
-            case TRAITS -> TraitRegistry.getRegistry()
+            case TRAITS -> TraitRegistry.get()
                     .getStreamOfTraits()
                     .filter(trait -> getState().search == null || trait.name().toLowerCase().contains(getState().search.toLowerCase()))
                     .sorted((o1, o2) -> getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isUnset() ? 0 : o1.name().compareTo(o2.name()) * (getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isFalse() ? -1 : 1))
                     .map(data -> new ItemEntry<>(data, a -> new ItemStack(a.displayItem()), Trait::getDisplayName))
                     .toList();
-            case HONEY -> HoneyRegistry.getRegistry()
+            case HONEY -> HoneyRegistry.get()
                     .getStreamOfHoney()
                     .filter(honey -> getState().search == null || honey.name().toLowerCase().contains(getState().search.toLowerCase()))
                     .sorted((o1, o2) -> getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isUnset() ? 0 : o1.name().compareTo(o2.name()) * (getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isFalse() ? -1 : 1))
-                    .map(data -> new ItemEntry<>(data, a -> new ItemStack(a.bottleData().honeyBottle().get()), HoneyData::getDisplayName))
+                    .map(data -> new ItemEntry<>(data, a -> new ItemStack(data.getBottleData().bottle().get()), a -> data.displayName()))
                     .toList();
         };
 
@@ -148,7 +148,7 @@ public class BeepediaScreen extends SubdividedScreen {
             Object data = itemEntry.getData();
             if (data instanceof Trait trait) {
                 setSubScreen(new TraitPage(trait));
-            } else if (data instanceof HoneyData honey) {
+            } else if (data instanceof CustomHoneyData honey) {
                 setSubScreen(new HoneyPage(honey));
             }
         }

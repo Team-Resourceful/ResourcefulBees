@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.fluids;
 
-import com.teamresourceful.resourcefulbees.api.data.honey.fluid.FluidRenderData;
+import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -8,9 +8,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class HoneyFluidRenderProperties implements IClientFluidTypeExtensions {
 
-    private final FluidRenderData data;
+    private final HoneyRenderData data;
 
-    public HoneyFluidRenderProperties(FluidRenderData data) {
+    public HoneyFluidRenderProperties(HoneyRenderData data) {
         this.data = data;
     }
 
@@ -31,11 +31,11 @@ public class HoneyFluidRenderProperties implements IClientFluidTypeExtensions {
 
     @Override
     public @Nullable ResourceLocation getOverlayTexture() {
-        return data.overlay();
+        return data.face();
     }
 
     @Override
     public @Nullable ResourceLocation getRenderOverlayTexture(Minecraft mc) {
-        return data.underwater(); //Bc it doesn't do shit
+        return data.overlay(); //Bc it doesn't do shit
     }
 }

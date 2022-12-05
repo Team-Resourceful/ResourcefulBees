@@ -3,17 +3,17 @@ package com.teamresourceful.resourcefulbees.common.registry.custom;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.RegisterBeeDataEvent;
-import com.teamresourceful.resourcefulbees.common.data.beedata.DataSetup;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.data.DataSetup;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,8 +33,8 @@ public class BeeDataRegistry {
     private BeeDataRegistry() {}
 
     public static void init() {
-        DataSetup.setupRegister(INSTANCE::register);
-        MinecraftForge.EVENT_BUS.post(new RegisterBeeDataEvent(INSTANCE::register));
+        ResourcefulBeesAPI.getEvents().registerBeeData(DataSetup::setupRegister);
+        ResourcefulBeesAPI.getEvents().onRegisterBeeData(new RegisterBeeDataEvent(INSTANCE::register));
         INSTANCE.locked = true;
     }
 
@@ -67,7 +67,7 @@ public class BeeDataRegistry {
     private static DataResult<BeeDataSerializer<?>> decode(ResourceLocation id) {
         BeeDataSerializer<?> serializer = INSTANCE.get(id);
         if (serializer == null) {
-            if (!FMLLoader.isProduction() || SharedConstants.IS_RUNNING_IN_IDE || Boolean.TRUE.equals(CommonConfig.SHOW_DEBUG_INFO.get())) {
+            if (!FMLLoader.isProduction() || SharedConstants.IS_RUNNING_IN_IDE || GeneralConfig.showDebugInfo) {
                 ResourcefulBees.LOGGER.error("No serializer found for " + id);
             }
             return DataResult.success(DUMMY_SERIALIZER);

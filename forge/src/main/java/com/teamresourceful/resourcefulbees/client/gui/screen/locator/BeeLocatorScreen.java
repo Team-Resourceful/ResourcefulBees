@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen.locator;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.FindBeePacket;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -31,7 +31,7 @@ public class BeeLocatorScreen extends Screen {
         super.init();
 
         this.listWidget = new BeeListWidget(this::setSelected, this.minecraft, this.width, this.height, 32, this.height - 32, 36);
-        this.listWidget.updateEntries(BeeRegistry.getRegistry());
+        this.listWidget.updateEntries(BeeRegistry.get());
 
         var closeButton = new Button((this.width / 2) - 90, this.height - 26, 80, 20, TranslationConstants.BeeLocator.CANCEL, (button) -> this.onClose());
 

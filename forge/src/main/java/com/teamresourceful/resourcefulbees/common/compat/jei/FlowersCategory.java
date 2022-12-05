@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
@@ -52,7 +53,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
 
     public static List<Recipe> getFlowersRecipes() {
         List<Recipe> recipes = new ArrayList<>();
-        BEE_REGISTRY.getBees().forEach((s, beeData) -> {
+        BeeRegistry.get().getBees().forEach((s, beeData) -> {
             BeeCoreData coreData = beeData.getCoreData();
             if (coreData.hasFlowers()) {
                 Set<ItemStack> stacks = new HashSet<>();

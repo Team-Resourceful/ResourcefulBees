@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
@@ -72,7 +72,7 @@ public class RBeePollinateGoal extends Goal {
     }
 
     private static boolean manualModeEnabled() {
-        return Boolean.FALSE.equals(CommonConfig.MANUAL_MODE.get());
+        return !BeeConfig.manualMode;
     }
 
     private boolean hasEntityFlower() {

@@ -4,18 +4,18 @@ import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCombatData;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
+import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
-import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
@@ -78,13 +78,11 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     public CustomBeeEntity(EntityType<? extends Bee> type, Level world, String beeType) {
         super(type, world);
         this.beeType = beeType;
-        this.customBeeData = BeeRegistry.getRegistry().getBeeData(beeType);
+        this.customBeeData = BeeRegistry.get().getBeeData(beeType);
     }
 
     public static AttributeSupplier.Builder createBeeAttributes(String key) {
-        return BeeRegistry.getRegistry().getBeeData(key)
-                .getCombatData()
-                .buildAttributes(createMobAttributes());
+        return BeeRegistry.get().getBeeData(key).getCombatData().buildAttributes(createMobAttributes());
     }
 
     //region BEE INFO RELATED METHODS BELOW
@@ -191,7 +189,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
                 }
             }
         } else {
-            if (Boolean.TRUE.equals(CommonConfig.BEES_DIE_IN_VOID.get()) && this.position().y <= level.getMinBuildHeight()) {
+            if (BeeConfig.beesDieInVoid && this.position().y <= level.getMinBuildHeight()) {
                 this.remove(RemovalReason.KILLED);
             }
             if (!hasCustomName() && this.tickCount % 100 == 0) {

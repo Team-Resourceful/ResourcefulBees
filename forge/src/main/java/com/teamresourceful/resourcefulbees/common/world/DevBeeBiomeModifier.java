@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.world;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBiomeModifiers;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.advancements.critereon.LocationPredicate;
@@ -27,7 +27,7 @@ public record DevBeeBiomeModifier(
 
     @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
-        if (Boolean.FALSE.equals(CommonConfig.ENABLE_DEV_BEES.get())) return;
+        if (!GeneralConfig.enableDevBees) return;
         if (phase.equals(Phase.ADD) && isInList(whitelist(), biome) && !isInList(blacklist(), biome)) {
             builder.getMobSpawnSettings().addSpawn(spawns().type.getCategory(), spawns());
         }

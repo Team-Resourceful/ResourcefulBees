@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.item.locator;
 
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.platform.common.workers.LevelWorker;
 import com.teamresourceful.resourcefullib.common.utils.types.Vec2i;
 import net.minecraft.core.BlockPos;
@@ -38,7 +38,7 @@ public class BeeLocatorWorker implements LevelWorker {
         this.hand = hand;
         this.queue = createRange(range);
         this.chunk = player.level.getChunk(player.blockPosition()).getPos();
-        this.type = BeeRegistry.containsBeeType(bee) ? BeeRegistry.getRegistry().getBeeData(bee).entityType() : null;
+        this.type = BeeRegistry.get().containsBeeType(bee) ? BeeRegistry.get().getBeeData(bee).entityType() : null;
         this.bee = bee;
         if (this.type == null) {
             this.isRunning = false;

@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.WorldGenConfig;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistries;
 import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.common.world.BeeNestFeature;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.features.FeatureUtils;
@@ -44,7 +44,7 @@ public final class ModFeatures {
                 CountPlacement.of(3),
                 PlacementUtils.HEIGHTMAP_WORLD_SURFACE,
                 InSquarePlacement.spread(),
-                RarityFilter.onAverageOnceEvery(CommonConfig.OVERWORLD_NEST_GENERATION_CHANCE.get()));
+                RarityFilter.onAverageOnceEvery(WorldGenConfig.overworldNestGenerationChance));
 
         public static final Holder<ConfiguredFeature<NoneFeatureConfiguration, ?>> THE_END_NESTS_HOLDER =
                 FeatureUtils.register("resourcefulbees:the_end_nests", BEE_NEST_FEATURE.get());
@@ -53,7 +53,7 @@ public final class ModFeatures {
                 CountPlacement.of(2),
                 PlacementUtils.HEIGHTMAP_WORLD_SURFACE,
                 InSquarePlacement.spread(),
-                RarityFilter.onAverageOnceEvery(CommonConfig.END_NEST_GENERATION_CHANCE.get()));
+                RarityFilter.onAverageOnceEvery(WorldGenConfig.endNestGenerationChance));
 
         public static final Holder<ConfiguredFeature<NoneFeatureConfiguration, ?>> NETHER_NESTS_HOLDER =
                 FeatureUtils.register("resourcefulbees:nether_nests", BEE_NEST_FEATURE.get());
@@ -62,7 +62,7 @@ public final class ModFeatures {
                 CountPlacement.of(3),
                 PlacementUtils.RANGE_10_10,
                 InSquarePlacement.spread(),
-                RarityFilter.onAverageOnceEvery(CommonConfig.NETHER_NEST_GENERATION_CHANCE.get()));
+                RarityFilter.onAverageOnceEvery(WorldGenConfig.netherNestGenerationChance));
 
         public static void registerConfiguredFeatures() {
             //IDK

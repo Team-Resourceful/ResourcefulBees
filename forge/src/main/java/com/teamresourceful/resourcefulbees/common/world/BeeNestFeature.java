@@ -3,7 +3,8 @@ package com.teamresourceful.resourcefulbees.common.world;
 import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.config.WorldGenConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -59,7 +60,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     //TODO rewrite the Nest Feature!!!!
     @Override
     public boolean place(@NotNull FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        if(Boolean.FALSE.equals(CommonConfig.GENERATE_BEE_NESTS.get())) return false;
+        if(!WorldGenConfig.generateBeeNests) return false;
         //gather data
         WorldGenLevel level = context.level();
         BlockPos pos = context.origin();
@@ -221,7 +222,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
     private static void setNestBees(BlockPos nestPos, Holder<Biome> holder, WorldGenLevel level, RandomSource rand){
         if (level.getBlockEntity(nestPos) instanceof TieredBeehiveBlockEntity nest) {
-            int maxBees = Math.round(CommonConfig.HIVE_MAX_BEES.get() * 0.5f);
+            int maxBees = Math.round(WorldGenConfig.hiveMaxBees * 0.5f);
 
             Biome biome = holder.get();
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
@@ -248,7 +249,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
     private static void logMissingBiome(ResourceKey<Biome> biomeKey) {
         //TODO determine if this is needed any longer
-        if (biomeKey != null && CommonConfig.SHOW_DEBUG_INFO.get()) {
+        if (biomeKey != null && GeneralConfig.showDebugInfo) {
             ResourcefulBees.LOGGER.warn("*****************************************************");
             ResourcefulBees.LOGGER.warn("Could not load bees into nest during chunk generation");
             ResourcefulBees.LOGGER.warn("Biome: {}", biomeKey.location());

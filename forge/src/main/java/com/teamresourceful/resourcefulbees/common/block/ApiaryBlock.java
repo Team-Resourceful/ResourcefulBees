@@ -2,10 +2,9 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
-import com.teamresourceful.resourcefulbees.common.config.CommonConfig;
 import com.teamresourceful.resourcefulbees.common.item.ExpandableTooltip;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -62,7 +61,7 @@ public class ApiaryBlock extends BeeHouseBlock implements ExpandableTooltip {
 
   @Override
   public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-    components.add(Component.translatable(TranslationConstants.BeeHive.MAX_BEES, CommonConfig.APIARY_MAX_BEES.get())
+    components.add(Component.translatable(TranslationConstants.BeeHive.MAX_BEES, tier.max())
             .append(TranslationConstants.BeeHive.UNIQUE.withStyle(ChatFormatting.BOLD))
             .withStyle(ChatFormatting.GOLD)
     );

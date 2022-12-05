@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
-import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import com.teamresourceful.resourcefullib.common.utils.CycleableList;
@@ -34,9 +34,8 @@ public class HomePage extends Screen {
         this.screen = screen;
 
         //noinspection ConstantConditions
-        this.bees = BeeRegistry.getRegistry()
-                .getSetOfBees()
-                .stream()
+        this.bees = BeeRegistry.get()
+                .getStreamOfBees()
                 .map(CustomBeeData::entityType)
                 .map(type -> type.create(Minecraft.getInstance().level))
                 .collect(CycleableList::new, CycleableList::add, CycleableList::addAll);
@@ -62,7 +61,7 @@ public class HomePage extends Screen {
     private Component getProgress() {
         MutableComponent prefix = Component.translatable("gui.resourcefulbees.beepedia.home.progress").plainCopy();
         //TODO fill in data.
-        prefix.append(String.format("%d / %d", 1, BeeRegistry.getRegistry().getBees().size()));
+        prefix.append(String.format("%d / %d", 1, BeeRegistry.get().getBees().size()));
         prefix.withStyle(ChatFormatting.GRAY);
         return prefix;
     }

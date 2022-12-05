@@ -1,12 +1,15 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
-import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBottleData;
+import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.HoneyBottleItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
 public class CustomHoneyBottleItem extends HoneyBottleItem {
@@ -15,7 +18,7 @@ public class CustomHoneyBottleItem extends HoneyBottleItem {
     private FoodProperties food = null;
 
     public CustomHoneyBottleItem(HoneyBottleData data) {
-        super(data.getProperties());
+        super(new Item.Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY).craftRemainder(Items.GLASS_BOTTLE).stacksTo(16).rarity(data.rarity()));
         this.data = data;
     }
 
@@ -26,7 +29,7 @@ public class CustomHoneyBottleItem extends HoneyBottleItem {
     @Nullable
     @Override
     public FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
-        if (food == null) food = data.getFood();
+        if (food == null) food = data.food().getFood();
         return food;
     }
 
