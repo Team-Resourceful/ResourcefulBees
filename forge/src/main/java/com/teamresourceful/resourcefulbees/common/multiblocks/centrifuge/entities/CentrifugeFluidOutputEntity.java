@@ -12,7 +12,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -57,7 +56,7 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
         // see read/write nbt regarding amount of data being sent
         if (level == null) return;
         this.voidExcess = voidExcess;
-        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        sendToPlayersTrackingChunk();
     }
 
     public boolean voidsExcess() {
@@ -104,7 +103,9 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
-        return new CentrifugeFluidOutputContainer(id, playerInventory, this, centrifugeState);
+        CentrifugeController controller = nullableController();
+        if (controller == null) return null;
+        return new CentrifugeFluidOutputContainer(id, playerInventory, this, centrifugeState, controller.getEnergyStorage());
     }
 
     //region NBT HANDLING
@@ -126,14 +127,12 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
 
     @Override
     public CompoundTag getSyncData() {
-        CompoundTag tag = super.getSyncData();
-        fluidTank.writeToNBT(tag);
-        return tag;
+        return writeNBT();
     }
 
     @Override
     public void readSyncData(@NotNull CompoundTag tag) {
-        fluidTank.readFromNBT(tag);
+        readNBT(tag);
     }
 
     //endregion
@@ -145,7 +144,7 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
         }
 
         @Override
-        public int fill(FluidStack resource, FluidAction action) {
+        public final int fill(FluidStack resource, FluidAction action) {
             return 0;
         }
 

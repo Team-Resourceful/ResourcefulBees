@@ -23,7 +23,8 @@ public abstract class AbstractCentrifugeOutputEntity<T extends AbstractOutput<E>
         // see read/write nbt regarding amount of data being sent
         if (level == null) return;
         this.voidExcess = voidExcess;
-        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        BlockState currentState = getBlockState();
+        level.sendBlockUpdated(worldPosition, currentState, currentState, Block.UPDATE_CLIENTS);
     }
 
     public boolean voidsExcess() {

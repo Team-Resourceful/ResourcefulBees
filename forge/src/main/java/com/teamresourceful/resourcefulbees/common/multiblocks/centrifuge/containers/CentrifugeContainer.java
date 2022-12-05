@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 
 import com.teamresourceful.resourcefulbees.common.inventory.menus.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,13 +17,24 @@ public abstract class CentrifugeContainer<T extends AbstractGUICentrifugeEntity>
     protected final CentrifugeTier tier;
     protected final CentrifugeState centrifugeState;
     protected boolean displaySlots = true;
+    protected final CentrifugeEnergyStorage energyStorage;
 
-    protected CentrifugeContainer(@Nullable MenuType<?> type, int id, Inventory inv, T entity, CentrifugeState centrifugeState) {
+    protected CentrifugeContainer(@Nullable MenuType<?> type, int id, Inventory inv, T entity, CentrifugeState centrifugeState, CentrifugeEnergyStorage energyStorage) {
         super(type, id, inv, entity);
         this.tier = entity.getTier();
         this.centrifugeState = centrifugeState;
+        this.energyStorage = energyStorage;
+        this.addDataSlots(energyStorage);
         addCentrifugeSlots();
         addPlayerSlots();
+    }
+
+    protected static CentrifugeEnergyStorage dummyEnergyStorageData() {
+        return new CentrifugeEnergyStorage();
+    }
+
+    public CentrifugeEnergyStorage getEnergyStorage() {
+        return energyStorage;
     }
 
     public CentrifugeState getCentrifugeState() {

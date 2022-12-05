@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entiti
 
 import com.teamresourceful.resourcefulbees.common.inventory.AbstractFilterItemHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.CentrifugeController;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeVoidContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
@@ -49,7 +50,9 @@ public class CentrifugeVoidEntity extends AbstractGUICentrifugeEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-        return new CentrifugeVoidContainer(id, playerInventory, this, centrifugeState);
+        CentrifugeController controller = nullableController();
+        if (controller == null) return null;
+        return new CentrifugeVoidContainer(id, playerInventory, this, centrifugeState, controller.getEnergyStorage());
     }
 
     //region NBT HANDLING

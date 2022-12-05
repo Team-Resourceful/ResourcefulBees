@@ -45,7 +45,9 @@ public class CentrifugeItemOutputEntity extends AbstractCentrifugeOutputEntity<I
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-        return new CentrifugeItemOutputContainer(id, playerInventory, this, centrifugeState);
+        CentrifugeController controller = nullableController();
+        if (controller == null) return null;
+        return new CentrifugeItemOutputContainer(id, playerInventory, this, centrifugeState, controller.getEnergyStorage());
     }
 
     public boolean depositResult(ItemOutput result, int processQuantity) {

@@ -27,7 +27,7 @@ import net.minecraftforge.client.gui.ScreenUtils;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 
 public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.CentrifugeRecipeAdapter> {
@@ -35,7 +35,6 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png");
     public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge");
     public static final RecipeType<CentrifugeRecipeAdapter> RECIPE = new RecipeType<>(ID, CentrifugeRecipeAdapter.class);
-    private static final DecimalFormat DECIMAL_PERCENT_FORMAT = new DecimalFormat("#.#%");
 
     public CentrifugeCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
@@ -129,7 +128,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             List<Component> tooltip = new ArrayList<>();
             if (displayName != null) tooltip.add(displayName);
             if (weight != null) {
-                tooltip.add(Component.translatable(TranslationConstants.Jei.CENTRIFUGE_WEIGHT, DECIMAL_PERCENT_FORMAT.format(weight)));
+                tooltip.add(Component.translatable(TranslationConstants.Jei.CENTRIFUGE_WEIGHT, NumberFormat.getPercentInstance().format(weight)));
             } else {
                 tooltip.add(TranslationConstants.Jei.CENTRIFUGE_WEIGHT_EMPTY);
             }
@@ -138,7 +137,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         inBounds = MathUtils.inRangeInclusive((int) mouseX, min, max) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
         if (inBounds) {
             if (outputSize > i)
-                return Collections.singletonList(Component.translatable(TranslationConstants.Jei.CENTRIFUGE_CHANCE, DECIMAL_PERCENT_FORMAT.format(chance)));
+                return Collections.singletonList(Component.translatable(TranslationConstants.Jei.CENTRIFUGE_CHANCE, NumberFormat.getPercentInstance().format(chance)));
             else {
                 return Collections.singletonList(TranslationConstants.Jei.CENTRIFUGE_CHANCE_EMPTY);
             }

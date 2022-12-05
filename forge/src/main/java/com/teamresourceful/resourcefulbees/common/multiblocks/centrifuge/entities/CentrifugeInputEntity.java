@@ -4,12 +4,14 @@ import com.teamresourceful.resourcefulbees.common.inventory.AbstractFilterItemHa
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.CentrifugeController;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeInputContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.OutputLocationGroup;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.ProcessContainerData;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
@@ -58,10 +60,9 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     private ResourceLocation filterRecipeID = null;//needed to load the recipe on world load for client
     private CentrifugeRecipe processRecipe = null; //recipe currently being processed
     private ResourceLocation processRecipeID = null; //needed to load the recipe on world load
-    private int processTime; //ticks left to complete processed recipe
-    private int processEnergy; //energy needed per tick for processed recipe
     private int processQuantity; //# of inputs being currently being processed
     private ProcessStage processStage = ProcessStage.IDLE;
+    private final ProcessContainerData processData = new ProcessContainerData(); //contains synchronized data - time and energy
 
     public CentrifugeInputEntity(Supplier<BlockEntityType<CentrifugeInputEntity>> entityType, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(entityType.get(), tier, pos, state);
@@ -91,6 +92,10 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         return processStage;
     }
 
+    public ProcessContainerData getProcessData() {
+        return processData;
+    }
+
     public OutputLocationGroup<CentrifugeItemOutputEntity, ItemOutput, ItemStack> getItemOutputs() {
         return itemOutputs;
     }
@@ -113,7 +118,9 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-        return new CentrifugeInputContainer(id, playerInventory, this, centrifugeState);
+        CentrifugeController controller = nullableController();
+        if (controller == null) return null;
+        return new CentrifugeInputContainer(id, playerInventory, this, centrifugeState, controller.getEnergyStorage());
     }
 
     public int getRecipeTime() {
@@ -121,11 +128,10 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     }
 
     private void setProcessStage(ProcessStage newStage) {
-        //TODO currently this does not get updated in real-time on the client
-        // ideally this would not send a full packet of data and would instead only send a packet containing
-        // the changed data to players that are actively tracking the block, thus reducing the size, number, and frequency of packets being sent.
-        // see read/write nbt regarding amount of data being sent
+        if (level == null) return;
         processStage = newStage;
+        sendToPlayersTrackingChunk();
+        /*if (!processStage.isIdle())*/ tickProcess();
     }
 
     @Override
@@ -138,10 +144,16 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         var controller = nullableController();
         if (controller == null || controller.assemblyState() != IValidatedMultiblock.AssemblyState.ASSEMBLED) return;
         if (level != null && !level.isClientSide) {
-            if (processStage.isIdle() && canProcess()) startProcess();
-            if (processStage.isProcessing()) processRecipe();
-            if (processStage.isFinalizing()) depositResults();
-            if (processStage.isCompleted()) processCompleted();
+            tickProcess();
+        }
+    }
+
+    private void tickProcess() {
+        switch (processStage) {
+            case IDLE -> { if (canProcess()) startProcess(); }
+            case PROCESSING -> processRecipe();
+            case FINALIZING -> depositResults();
+            case COMPLETED -> processCompleted();
         }
     }
 
@@ -154,8 +166,8 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         setProcessStage(ProcessStage.PROCESSING);
         processRecipe = filterRecipe;
         processRecipeID = processRecipe.getId();
-        processTime = getRecipeTime();
-        processEnergy = (int) (processRecipe.energyPerTick() * this.controller().getRecipePowerModifier());
+        processData.setTime(getRecipeTime());
+        processData.setEnergy((int) (processRecipe.energyPerTick() * this.controller().getRecipePowerModifier()));
         consumeInputs(false);
         setChanged();
     }
@@ -184,9 +196,9 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     }
 
     private void processRecipe() {
-        if (this.controller().getEnergyStorage().consumeEnergy(processEnergy, false)) {
-            processTime--;
-            if (processTime == 0) setProcessStage(ProcessStage.FINALIZING);
+        if (this.controller().getEnergyStorage().consumeEnergy(processData.getEnergy(), false)) {
+            processData.decreaseTime();
+            if (processData.getTime() == 0) setProcessStage(ProcessStage.FINALIZING);
         }
     }
 
@@ -199,7 +211,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     }
 
     // Downside to this method is the result is not cached therefore it is randomized each time this method gets called
-    private <T extends AbstractOutput<E>, A extends AbstractCentrifugeOutputEntity<T, E>, E> boolean depositResults(List<CentrifugeRecipe.Output<T, E>> recipeOutputs, OutputLocationGroup<A, T, E> outputLocationGroup) {
+    private <T extends AbstractOutput<E>,A extends AbstractCentrifugeOutputEntity<T, E>, E> boolean depositResults(List<CentrifugeRecipe.Output<T, E>> recipeOutputs, OutputLocationGroup<A, T, E> outputLocationGroup) {
         for (int i = 0; i < recipeOutputs.size(); i++) {
             CentrifugeRecipe.Output<T, E> recipeOutput = recipeOutputs.get(i);
             if (recipeOutput.chance() >= MathUtils.RANDOM.nextFloat()
@@ -214,7 +226,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         processRecipe = null;
         processRecipeID = null;
         processQuantity = 0;
-        processEnergy = 0;
+        processData.reset();
         itemOutputs.resetProcessData();
         fluidOutputs.resetProcessData();
         setProcessStage(ProcessStage.IDLE);
@@ -241,14 +253,25 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         processRecipe = (CentrifugeRecipe) level.getRecipeManager().byKey(processRecipeID).orElse(null);
     }
 
-    //TODO change data syncing to reduce packet bloating if possible
+    //TODO change data syncing to reduce packet bloating if possible ->
+    // come up with a better system for conditionally reading/writing sync data to be able
+    // to have a single packet type that accepts a list of items to be synced
+    // This would allow for a singular point of execution while handling a dynamic number of items
+    // that need to be synced. For example: if I want to send a packet that syncs only processStage,
+    // but later I want to send a packet that syncs itemOutputs, or fluidOutputs, or perhaps I want to
+    // sync everything at once.
+    // -- alternative option is to have a sync packet that gets sent on an interval. then we could just add to the packet
+    // whenever data gets changed and needs to be synced. for example: I update processStage so I add to the packet the change,
+    // but before the packet gets sent another data point gets changed and needs to be synced so that gets added, now the packet
+    // has two data points that need to be synced and now the packet gets sent, then next packet that gets sent only one data
+    // point needed to be updated, etc.
     @Override
     protected void readNBT(@NotNull CompoundTag tag) {
         inventoryHandler.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
         filterInventory.deserializeNBT(tag.getCompound(NBTConstants.NBT_FILTER_INVENTORY));
-        processStage = ProcessStage.valueOf(tag.getString(NBTConstants.NBT_PROCESS_STAGE).toUpperCase(Locale.ROOT));
-        processTime = tag.getInt(NBTConstants.NBT_PROCESS_TIME);
-        processEnergy = tag.getInt(NBTConstants.NBT_PROCESS_ENERGY);
+        processStage = ProcessStage.deserialize(tag);
+        processData.setTime(tag.getInt(NBTConstants.NBT_PROCESS_TIME));
+        processData.setEnergy(tag.getInt(NBTConstants.NBT_PROCESS_ENERGY));
         if (tag.contains(NBTConstants.NBT_PROCESS_RECIPE)) processRecipeID = ResourceLocation.tryParse(tag.getString(NBTConstants.NBT_PROCESS_RECIPE));
         if (tag.contains(NBTConstants.NBT_FILTER_RECIPE)) filterRecipeID = ResourceLocation.tryParse(tag.getString(NBTConstants.NBT_FILTER_RECIPE));
         itemOutputs.deserialize(tag.getCompound(NBTConstants.NBT_ITEM_OUTPUTS), CentrifugeItemOutputEntity.class, this::getLevel);
@@ -263,14 +286,27 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         tag.put(NBTConstants.NBT_INVENTORY, inventoryHandler.serializeNBT());
         tag.put(NBTConstants.NBT_FILTER_INVENTORY, filterInventory.serializeNBT());
         tag.putString(NBTConstants.NBT_PROCESS_STAGE, processStage.toString().toLowerCase(Locale.ROOT));
-        tag.putInt(NBTConstants.NBT_PROCESS_TIME, processTime);
-        tag.putInt(NBTConstants.NBT_PROCESS_ENERGY, processEnergy);
+        tag.putInt(NBTConstants.NBT_PROCESS_TIME, processData.getTime());
+        tag.putInt(NBTConstants.NBT_PROCESS_ENERGY, processData.getEnergy());
         if (processRecipe != null && processRecipeID != null) tag.putString(NBTConstants.NBT_PROCESS_RECIPE, processRecipeID.toString());
         if (filterRecipe != null && filterRecipeID != null) tag.putString(NBTConstants.NBT_FILTER_RECIPE, filterRecipeID.toString());
         tag.put(NBTConstants.NBT_ITEM_OUTPUTS, itemOutputs.serialize());
         tag.put(NBTConstants.NBT_FLUID_OUTPUTS, fluidOutputs.serialize());
         return tag;
     }
+
+    @Override
+    public CompoundTag getSyncData() {
+        CompoundTag tag = super.getSyncData();
+        tag.putString(NBTConstants.NBT_PROCESS_STAGE, processStage.toString().toLowerCase(Locale.ROOT));
+        return tag;
+    }
+
+    @Override
+    public void readSyncData(@NotNull CompoundTag tag) {
+        if (tag.contains(NBTConstants.NBT_PROCESS_STAGE)) processStage = ProcessStage.deserialize(tag);
+    }
+
     //endregion
 
     public void linkOutput(CentrifugeOutputType outputType, int recipeOutputSlot, BlockPos outputPos) {

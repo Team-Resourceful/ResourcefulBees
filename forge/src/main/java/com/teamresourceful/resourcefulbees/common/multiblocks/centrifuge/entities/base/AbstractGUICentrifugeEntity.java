@@ -83,16 +83,6 @@ public abstract class AbstractGUICentrifugeEntity extends AbstractTieredCentrifu
         tag.putString("owner", this.owner);
         return tag;
     }
-
-    /*    @Override
-    protected void handleDataNBT(@NotNull CompoundTag nbt) {
-        readNBT(nbt);
-    }
-
-    @Override
-    protected @NotNull CompoundTag getDataNBT() {
-        return writeNBT();
-    }*/
     //endregion
 
     //region GUI Packet

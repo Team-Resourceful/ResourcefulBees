@@ -10,7 +10,6 @@ import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.MobEffectTextureManager;
@@ -20,7 +19,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import static com.teamresourceful.resourcefulbees.client.components.beepedia.selection.BeeEntry.SLOT_TEXTURE;
 
@@ -62,17 +61,17 @@ public class EffectEntry extends ListEntry {
 
             TextureAtlasSprite sprite = textureManager.get(this.effect);
             RenderUtils.bindTexture(sprite.atlas().location());
-            Gui.blit(stack, 2, 1, 0, 18, 18, sprite);
+            GuiComponent.blit(stack, 2, 1, 0, 18, 18, sprite);
 
             RenderUtils.bindTexture(SLOT_TEXTURE);
-            Gui.blit(stack, 1, 0, 0, 0, 20, 20, 20, 60);
+            GuiComponent.blit(stack, 1, 0, 0, 0, 20, 20, 20, 60);
 
             int color = effect.getCategory() == MobEffectCategory.HARMFUL ? 16733525 : 5592575;
             MutableComponent component = effect.getDisplayName().copy();
             if (this.strength > 0) component.append(" " + ModUtils.createRomanNumeral(this.strength));
             GuiComponent.drawString(stack, font, component, 24, 1, color);
             MutableComponent text = durationText.copy();
-            if (chance < 1 && chance > 0) text.append(" " + DecimalFormat.getPercentInstance().format(chance));
+            if (chance < 1 && chance > 0) text.append(" " + NumberFormat.getPercentInstance().format(chance));
 
             GuiComponent.drawString(stack, font, text, 24, 11, 11184810);
         }

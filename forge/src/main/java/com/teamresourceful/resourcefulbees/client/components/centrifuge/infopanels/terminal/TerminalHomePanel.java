@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.infopanels.AbstractInfoPanel;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeTerminalEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.CommandPacket;
@@ -36,11 +37,13 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
     private final List<FormattedCharSequence> consoleHistory = new ArrayList<>();
     private final CentrifugeState centrifugeState; //this should probably not be final and instead updatable
     private final int tX;
+    private final CentrifugeEnergyStorage energyStorage;
 
-    public TerminalHomePanel(int x, int y, CentrifugeState centrifugeState, CentrifugeTerminalEntity terminal) {
+    public TerminalHomePanel(int x, int y, CentrifugeState centrifugeState, CentrifugeTerminalEntity terminal, CentrifugeEnergyStorage energyStorage) {
         super(x, y, false);
         this.centrifugeState = centrifugeState;
         this.selectedEntity = terminal;
+        this.energyStorage = energyStorage;
         this.tX = x+10;
         init();
     }
@@ -69,14 +72,14 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
         if (neofetch) {
             drawASCII(stack);
             stack.pushPose();
-            stack.translate(tX + 90d, y+30d, 0);
+            stack.translate(tX + 90d, y+20d, 0);
             //TODO make these translatable texts
             String owner = centrifugeState.getOwner()+"@centrifuge";
             //TODO make each of these lines a separate static method with a common font draw method so they are cleaner
             TERMINAL_FONT_8.draw(stack, owner, 6, 0, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(stack, StringUtils.repeat('─', owner.length()), 6, 8, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(stack, "Max Tier: " + StringUtils.capitalize(centrifugeState.getMaxCentrifugeTier().getName()), 6, 16, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Energy Capacity: " + centrifugeState.getEnergyCapacity() + "rf", 6, 24, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(stack, "Energy: " + energyStorage.getStored() + "/" + energyStorage.getCapacity() + "rf", 6, 24, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(stack, "Inputs: " + centrifugeState.getInputs().size(), 6, 32, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(stack, "Item Outputs: " + centrifugeState.getItemOutputs().size(), 6, 40, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(stack, "Fluid Outputs: " + centrifugeState.getFluidOutputs().size(), 6, 48, FONT_COLOR_1);

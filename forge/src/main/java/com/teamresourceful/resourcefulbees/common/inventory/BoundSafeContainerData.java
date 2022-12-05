@@ -15,23 +15,37 @@ public class BoundSafeContainerData implements ContainerData {
 
     @Override
     public int get(int i) {
-        return MathUtils.inRangeInclusive(i, 0, getCount()-1) ? ints[i] : defaultVal;
+        return inBounds(i) ? ints[i] : defaultVal;
     }
 
     @Override
     public void set(int i, int val) {
-        if (!MathUtils.inRangeInclusive(i, 0, getCount()-1)) return;
+        if (!inBounds(i)) return;
         ints[i] = val;
     }
 
+    public void increment(int i) {
+        if (!inBounds(i)) return;
+        ints[i]++;
+    }
+
     public void increment(int i, int val) {
-        if (!MathUtils.inRangeInclusive(i, 0, getCount()-1)) return;
+        if (!inBounds(i)) return;
         ints[i]+=val;
     }
 
+    public void decrement(int i) {
+        if (!inBounds(i)) return;
+        ints[i]--;
+    }
+
     public void decrement(int i, int val) {
-        if (!MathUtils.inRangeInclusive(i, 0, getCount()-1)) return;
+        if (!inBounds(i)) return;
         ints[i]-=val;
+    }
+
+    private boolean inBounds(int i) {
+        return MathUtils.inRangeInclusive(i, 0, getCount() - 1);
     }
 
     @Override

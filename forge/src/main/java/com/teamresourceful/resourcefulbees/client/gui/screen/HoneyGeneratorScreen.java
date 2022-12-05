@@ -19,7 +19,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 @OnlyIn(Dist.CLIENT)
@@ -68,26 +67,26 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrix, mouseX, mouseY);
-        renderFluidTooltip(matrix, mouseX, mouseY, DecimalFormat.getNumberInstance());
-        renderEnergyTooltip(matrix, mouseX, mouseY, DecimalFormat.getNumberInstance());
+        renderFluidTooltip(matrix, mouseX, mouseY);
+        renderEnergyTooltip(matrix, mouseX, mouseY);
     }
 
-    public void renderEnergyTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY, NumberFormat decimalFormat) {
+    public void renderEnergyTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 136, this.leftPos + 148) && MathUtils.inRangeInclusive(mouseY, this.topPos + 16, this.topPos + 70)) {
             if (Screen.hasShiftDown() || this.menu.getEnergy().getEnergyStored() < 500)
                 this.renderTooltip(matrix, Component.literal(this.menu.getEnergy().getEnergyStored() + " RF"), mouseX, mouseY);
             else
-                this.renderTooltip(matrix, Component.literal(decimalFormat.format((double) this.menu.getEnergy().getEnergyStored() / 1000) + " kRF"), mouseX, mouseY);
+                this.renderTooltip(matrix, Component.literal(NumberFormat.getNumberInstance().format((double) this.menu.getEnergy().getEnergyStored() / 1000) + " kRF"), mouseX, mouseY);
         }
     }
 
-    public void renderFluidTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY, NumberFormat decimalFormat) {
+    public void renderFluidTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 28, this.leftPos + 40) && MathUtils.inRangeInclusive(mouseY, this.topPos + 16, this.topPos + 70)) {
             FluidStack fluid = this.menu.getEntity().getTank().getFluid();
             if (Screen.hasShiftDown() || fluid.getAmount() < 500)
                 this.renderTooltip(matrix, Component.literal(fluid.getAmount() + " MB"), mouseX, mouseY);
             else
-                this.renderTooltip(matrix, Component.literal(decimalFormat.format((double) fluid.getAmount() / 1000) + " Buckets"), mouseX, mouseY);
+                this.renderTooltip(matrix, Component.literal(NumberFormat.getNumberInstance().format((double) fluid.getAmount() / 1000) + " Buckets"), mouseX, mouseY);
         }
     }
 }

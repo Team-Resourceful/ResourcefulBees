@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.client.screens.centrifuge;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons.BackButton;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeContainer;
@@ -26,7 +25,7 @@ public abstract class CentrifugeInventoryScreen<T extends CentrifugeContainer<?>
     @Override
     protected void init() {
         super.init();
-        addRenderableWidget(new BackButton(leftPos+2, topPos+2 , switchGUi(BlockPos.of(centrifugeState.getTerminal()))));
+        addRenderableWidget(new BackButton(leftPos+2, topPos+2 , switchGui(BlockPos.of(centrifugeState.getTerminal()))));
     }
 
     @Override

@@ -32,7 +32,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 
 public class MutationCategory extends BaseCategory<MutationRecipe> {
@@ -109,8 +109,8 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
         if (mouseX >= 54 && mouseX <= 63 && mouseY >= 34 && mouseY <= 43 && outputWeightChance < 1) {
             List<Component> tooltip = Lists.newArrayList(TranslationConstants.Jei.MUTATION_WEIGHT_CHANCE_INFO);
             tooltip.add(Component.empty());
-            tooltip.add(Component.literal("Weight: " + DecimalFormat.getPercentInstance().format(recipe.pool().getAdjustedWeight(recipe.output().weight()))));
-            tooltip.add(Component.literal("Chance: " + DecimalFormat.getPercentInstance().format(recipe.output().chance())));
+            tooltip.add(Component.literal("Weight: " + NumberFormat.getPercentInstance().format(recipe.pool().getAdjustedWeight(recipe.output().weight()))));
+            tooltip.add(Component.literal("Chance: " + NumberFormat.getPercentInstance().format(recipe.output().chance())));
             return tooltip;
         }
         return super.getTooltipStrings(recipe, view, mouseX, mouseY);
@@ -126,13 +126,13 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
         double outputWeightChance = recipe.pool().getAdjustedWeight(recipe.output().weight()) * recipe.output().chance();
 
         if (outputWeightChance < 1) {
-            String chanceString = DecimalFormat.getPercentInstance().format(outputWeightChance);
+            String chanceString = NumberFormat.getPercentInstance().format(outputWeightChance);
             int padding = fontRenderer.width(chanceString) / 2;
             info.draw(stack, 54, 34);
             fontRenderer.draw(stack, chanceString, 76F - padding, 35, 0xff808080);
         }
         if (recipe.input().chance() < 1) {
-            String chanceString = DecimalFormat.getPercentInstance().format(recipe.input().chance());
+            String chanceString = NumberFormat.getPercentInstance().format(recipe.input().chance());
             int padding = fontRenderer.width(chanceString) / 2;
             fontRenderer.draw(stack, chanceString, 48F - padding, 66, 0xff808080);
         }

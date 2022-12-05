@@ -6,21 +6,27 @@ import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeInputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.OutputLocationGroup;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.ProcessContainerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEntity> {
 
-    public TerminalInputHomePanel(int x, int y, boolean displayTitleBar) {
+    private ProcessContainerData processData = new ProcessContainerData();
+    private final CentrifugeEnergyStorage energyStorage;
+
+    public TerminalInputHomePanel(int x, int y, boolean displayTitleBar, CentrifugeEnergyStorage energyStorage) {
         super(x, y, displayTitleBar);
+        this.energyStorage = energyStorage;
         init();
     }
 
-    public TerminalInputHomePanel(int x, int y) {
-        this(x, y, true);
+    public TerminalInputHomePanel(int x, int y, CentrifugeEnergyStorage energyStorag) {
+        this(x, y, true, energyStorag);
     }
 
     @Override
@@ -28,27 +34,43 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
         this.selectedEntity = (CentrifugeInputEntity) selectedEntity;
     }
 
+    public void setProcessData(@NotNull ProcessContainerData processData) {
+        this.processData = processData;
+    }
+
     @Override
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         if (selectedEntity == null) return;
         super.render(stack, mouseX, mouseY, partialTicks);
         int tX = x+14;
-        int tY = y+14;
+        int tY = displayTitleBar ? y+30 : y+14;
 
-        drawLocationString(stack, CentrifugeUtils.formatBlockPos(selectedEntity.getBlockPos()), tX+6, tY+16);
+        drawLocationString(stack, CentrifugeUtils.formatBlockPos(selectedEntity.getBlockPos()), tX, tY);
 
         ResourceLocation recipeID = selectedEntity.getFilterRecipeID();
         if (recipeID != null) {
             String recipe = formatRecipeID(recipeID.getPath());
-            drawRecipeString(stack, recipe, tX+6, tY+24);
+            drawRecipeString(stack, recipe, tX, tY+8);
         } else {
-            drawRecipeString(stack, "Filter slot not set!", tX+6, tY+24);
+            drawRecipeString(stack, "Filter slot not set!", tX, tY+8);
         }
-        drawProcessingStageString(stack, selectedEntity.getProcessStage(), tX+6, tY+32);
-        drawOutputTypeString(stack, "Item", tX+6, tY+40);
-        drawOutputString(stack, selectedEntity.getItemOutputs(), tX+6, tY+48);
-        drawOutputTypeString(stack, "Fluid", tX+6, tY+72);
-        drawOutputString(stack, selectedEntity.getFluidOutputs(), tX+6, tY+80);
+        drawEnergyPerTickString(stack, processData.getEnergy(), tX, tY+16);
+        drawProcessingStageString(stack, selectedEntity.getProcessStage(), tX, tY+24);
+        int timeLeft = !selectedEntity.getProcessStage().isProcessing() || energyStorage.isEmpty() ? Integer.MAX_VALUE : processData.getTime();
+        drawProcessTimeLeftString(stack, timeLeft, tX, tY+32);
+        drawOutputTypeString(stack, "Item", tX, tY+40);
+        drawOutputString(stack, selectedEntity.getItemOutputs(), tX, tY+48);
+        drawOutputTypeString(stack, "Fluid", tX, tY+72);
+        drawOutputString(stack, selectedEntity.getFluidOutputs(), tX, tY+80);
+    }
+
+    //TODO make these translatable texts
+    private static void drawProcessTimeLeftString(PoseStack stack, int timeLeft, int x, int y) {
+        drawString(stack, "Process Time Left: " + formatTicksAsSeconds(timeLeft), x, y);
+    }
+
+    private static void drawEnergyPerTickString(PoseStack stack, int energy, int x, int y) {
+        drawString(stack, "Energy Usage: " + energy + " rf/t", x, y);
     }
 
     @NotNull
@@ -56,7 +78,6 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
         return recipe.replace(recipe.subSequence(0, recipe.lastIndexOf("/")+1), "");
     }
 
-    //TODO make these translatable texts
     private static void drawLocationString(PoseStack stack, String location, int x, int y) {
         drawString(stack, "Location: " + location, x, y);
     }
@@ -91,5 +112,11 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
         BlockPos output = outputLocationGroup.get(index).getPos();
         //TODO make this translatable
         return output == null ? "Output not linked!" : CentrifugeUtils.formatBlockPos(output);
+    }
+
+    private static String formatTicksAsSeconds(int ticks) {
+        if(ticks == Integer.MAX_VALUE) return "Unknown";
+        float seconds = ticks*0.05f;
+        return String.format("%06.2fs", seconds);
     }
 }

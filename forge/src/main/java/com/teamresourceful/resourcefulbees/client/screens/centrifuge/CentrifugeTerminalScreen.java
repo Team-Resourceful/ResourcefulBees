@@ -68,8 +68,8 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
         int pY = topPos+39;
         switch (newInfoPanel) {
             //Terminal_Home does not change the nav stuff or update/reset the selection index
-            case TERMINAL_HOME -> updateInfoPanel(new TerminalHomePanel(pX, pY, centrifugeState, getTerminal()));
-            case INPUTS_HOME -> updateInfoPanel(new TerminalInputHomePanel(pX, pY));
+            case TERMINAL_HOME -> updateInfoPanel(new TerminalHomePanel(pX, pY, centrifugeState, getTerminal(), menu.getEnergyStorage()));
+            case INPUTS_HOME -> updateInfoPanel(new TerminalInputHomePanel(pX, pY, menu.getEnergyStorage()));
             case INPUTS_ITEM_OUTPUTS -> updateInfoPanel(new TerminalIOPanel(pX, pY, CentrifugeOutputType.ITEM, centrifugeState.getItemOutputs()));
             case INPUTS_FLUID_OUTPUTS -> updateInfoPanel(new TerminalIOPanel(pX, pY, CentrifugeOutputType.FLUID, centrifugeState.getFluidOutputs()));
             case ITEM_OUTPUTS_HOME -> updateInfoPanel(new TerminalOutputHomePanel<>(pX, pY, CentrifugeItemOutputEntity.class));
@@ -81,6 +81,15 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
 
     private CentrifugeTerminalEntity getTerminal() {
         return getBlockEntity(BlockPos.of(centrifugeState.getTerminal()), CentrifugeTerminalEntity.class);
+    }
+
+    @Override
+    public void notifyInfoPanelOfEntitySelection() {
+        if (infoPanel == null || navPanel == null) return;
+        infoPanel.updateSelectedEntity(navPanel.selectedEntity());
+        if (infoPanel instanceof TerminalInputHomePanel homePanel) {
+            homePanel.setProcessData(menu.getProcessData(navPanel.selectedEntity().getBlockPos()));
+        }
     }
 
     @Override

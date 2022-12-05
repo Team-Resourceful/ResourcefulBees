@@ -3,7 +3,9 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeInput;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeInputEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.ProcessContainerData;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,12 +20,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInputEntity> {
 
+    private final ProcessContainerData processData;
+
     public CentrifugeInputContainer(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeInputEntity.class), new CentrifugeState().deserializeBytes(buffer));
+        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeInputEntity.class), new CentrifugeState().deserializeBytes(buffer), dummyEnergyStorageData());
     }
 
-    public CentrifugeInputContainer(int id, Inventory inv, CentrifugeInputEntity entity, CentrifugeState state) {
-        super(ModMenus.CENTRIFUGE_INPUT_CONTAINER.get(), id, inv, entity, state);
+    public CentrifugeInputContainer(int id, Inventory inv, CentrifugeInputEntity entity, CentrifugeState state, CentrifugeEnergyStorage energyStorage) {
+        super(ModMenus.CENTRIFUGE_INPUT_CONTAINER.get(), id, inv, entity, state, energyStorage);
+        this.processData = entity.getProcessData();
+        this.addDataSlots(processData);
+    }
+
+    public ProcessContainerData getProcessData() {
+        return processData;
     }
 
     protected void addCentrifugeSlots() {

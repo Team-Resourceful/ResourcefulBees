@@ -213,10 +213,9 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
             selectionIndex = selectionIndex == max ? 0 : ++selectionIndex;
         }
     }
-
+    //does not work on output screen
     public void voidExcess() {
-        if (navPanel == null) return;
-        AbstractGUICentrifugeEntity selectedEntity = navPanel.selectedEntity();
+        AbstractGUICentrifugeEntity selectedEntity = navPanel == null ? menu.getEntity() : navPanel.selectedEntity();
         if (selectedEntity instanceof AbstractCentrifugeOutputEntity<?, ?> outputEntity) {
             boolean voidsExcess = !outputEntity.voidsExcess();
             //TODO make translatable
@@ -230,10 +229,9 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         if (minecraft == null || minecraft.level == null || pos == null) return null;
         return WorldUtils.getTileEntity(clazz, minecraft.level, pos);
     }
-
+    //does not work on output screen
     public void purgeContents() {
-        if (navPanel == null) return;
-        AbstractGUICentrifugeEntity selectedEntity = navPanel.selectedEntity();
+        AbstractGUICentrifugeEntity selectedEntity = navPanel == null ? menu.getEntity() : navPanel.selectedEntity();
         if (selectedEntity instanceof AbstractCentrifugeOutputEntity<?,?>) {
             //TODO make translatable
             setToastText(Component.literal("Output contents purged!"));
@@ -241,7 +239,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         }
     }
 
-    protected final Runnable switchGUi(BlockPos newGuiPos) {
+    protected final Runnable switchGui(BlockPos newGuiPos) {
         return () -> NetPacketHandler.CHANNEL.sendToServer(new SwitchGuiPacket(newGuiPos));
     }
 }

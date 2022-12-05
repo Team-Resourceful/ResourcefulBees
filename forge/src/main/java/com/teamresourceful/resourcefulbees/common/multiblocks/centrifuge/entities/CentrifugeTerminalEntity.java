@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities;
 
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.CentrifugeController;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeTerminalContainer;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
@@ -30,6 +31,8 @@ public class CentrifugeTerminalEntity extends AbstractGUICentrifugeEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-        return new CentrifugeTerminalContainer(id, playerInventory, this, centrifugeState);
+        CentrifugeController controller = nullableController();
+        if (controller == null) return null;
+        return new CentrifugeTerminalContainer(id, playerInventory, this, centrifugeState, controller.getEnergyStorage());
     }
 }

@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.contai
 import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.CentrifugeVoid;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeVoidEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
@@ -17,11 +18,11 @@ import org.jetbrains.annotations.NotNull;
 public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidEntity> {
 
     public CentrifugeVoidContainer(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeVoidEntity.class), new CentrifugeState().deserializeBytes(buffer));
+        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeVoidEntity.class), new CentrifugeState().deserializeBytes(buffer), dummyEnergyStorageData());
     }
 
-    public CentrifugeVoidContainer(int id, Inventory inv, CentrifugeVoidEntity entity, CentrifugeState state) {
-        super(ModMenus.CENTRIFUGE_VOID_CONTAINER.get(), id, inv, entity, state);
+    public CentrifugeVoidContainer(int id, Inventory inv, CentrifugeVoidEntity entity, CentrifugeState state, CentrifugeEnergyStorage energyStorage) {
+        super(ModMenus.CENTRIFUGE_VOID_CONTAINER.get(), id, inv, entity, state, energyStorage);
     }
 
     protected void addCentrifugeSlots() {

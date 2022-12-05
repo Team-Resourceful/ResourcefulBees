@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.client.components.centrifuge.infopan
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons.ViewButton;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTextures;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractInfoPanel<T extends AbstractGUICentrifugeEntity> extends ParentWidget {
 
     protected @Nullable T selectedEntity;
-    private final boolean displayTitleBar;
+    protected final boolean displayTitleBar;
 
     protected AbstractInfoPanel(int x, int y, boolean displayTitleBar) {
         super(x, y);

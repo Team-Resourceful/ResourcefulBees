@@ -48,7 +48,7 @@ public class CentrifugeInputScreen extends CentrifugeInventoryScreen<CentrifugeI
                 menu.enableSlots();
             }
             case INPUTS_HOME -> {
-                updateInfoPanel(new TerminalInputHomePanel(pX, pY, false));
+                updateInfoPanel(new TerminalInputHomePanel(pX, pY, false, menu.getEnergyStorage()));
                 menu.disableSlots();
             }
             case INPUTS_ITEM_OUTPUTS -> {
@@ -67,5 +67,14 @@ public class CentrifugeInputScreen extends CentrifugeInventoryScreen<CentrifugeI
     protected void drawContainerSlots(@NotNull PoseStack matrix, int x, int y) {
         drawSlot(matrix, x+125, y+63, 0, 0);
         super.drawContainerSlots(matrix, x, y);
+    }
+
+    @Override
+    public void notifyInfoPanelOfEntitySelection() {
+        if (infoPanel == null) return;
+        infoPanel.updateSelectedEntity(menu.getEntity());
+        if (infoPanel instanceof TerminalInputHomePanel homePanel) {
+            homePanel.setProcessData(menu.getProcessData());
+        }
     }
 }
