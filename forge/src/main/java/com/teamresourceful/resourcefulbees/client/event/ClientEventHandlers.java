@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.event;
 
+import com.teamresourceful.resourcefulbees.client.ResourcefulBeesClient;
 import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
 import com.teamresourceful.resourcefulbees.client.gui.overlay.BeeLocatorOverlay;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
@@ -13,7 +14,6 @@ import com.teamresourceful.resourcefulbees.client.render.entities.CustomBeeRende
 import com.teamresourceful.resourcefulbees.client.render.fluids.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
-import com.teamresourceful.resourcefulbees.client.screens.MissingRegistryScreen;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.*;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
@@ -22,6 +22,7 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEnt
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
+import com.teamresourceful.resourcefulbees.platform.client.events.ScreenOpenEvent;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -35,6 +36,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -51,6 +53,8 @@ public final class ClientEventHandlers {
     private static boolean setupsDone = false;
 
     public static void clientStuff() {
+        ResourcefulBeesClient.init();
+
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::onAddAdditional);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::onModelBake);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::clientSetup);
@@ -62,7 +66,14 @@ public final class ClientEventHandlers {
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
-        MinecraftForge.EVENT_BUS.addListener(MissingRegistryScreen::onScreenChange);
+        MinecraftForge.EVENT_BUS.addListener((ScreenEvent.Opening event) -> {
+            ScreenOpenEvent screenOpenEvent = new ScreenOpenEvent(event.getScreen());
+            ScreenOpenEvent.EVENT.fire(screenOpenEvent);
+            if (event.getScreen() != screenOpenEvent.getScreen()) {
+                event.setNewScreen(screenOpenEvent.getScreen());
+                event.setCanceled(true);
+            }
+        });
 
         Sheets.addWoodType(ModBlocks.WAXED_WOOD_TYPE);
     }

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
-import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
+import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;

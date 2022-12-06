@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.init;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;

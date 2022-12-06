@@ -10,9 +10,9 @@ import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.api.registry.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.config.ClientConfig;
-import com.teamresourceful.resourcefulbees.common.lib.ModPaths;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
@@ -51,25 +52,12 @@ public final class LangGeneration {
         BeeRegistry.get()
                 .getStreamOfBees()
                 .map(CustomBeeData::name)
-                .forEach(name -> {
-                    object.addProperty(ENTITY_RESOURCEFULBEES + name + "_bee", replaceAndCapitalize(name) + " Bee");
-                    object.addProperty(BEE_RESOURCEFULBEES + name, replaceAndCapitalize(name));
-                });
+                .forEach(name -> object.addProperty(ENTITY_RESOURCEFULBEES + name + "_bee", replaceAndCapitalize(name) + " Bee"));
 
-        HoneycombRegistry.get()
-                .getStreamOfHoneycombs()
-                .map(OutputVariation::id)
-                .forEach(name -> object.addProperty(COMB_RESOURCEFULBEES + name, replaceAndCapitalize(name)));
-
-        HoneyRegistry.get()
-                .getStreamOfHoney()
-                .map(CustomHoneyData::name)
-                .forEach(name -> object.addProperty(HONEY_RESOURCEFULBEES + name, replaceAndCapitalize(name)));
-
-        TraitRegistry.get()
-                .getStreamOfTraits()
-                .map(Trait::name)
-                .forEach(name -> object.addProperty(TRAIT_RESOURCEFULBEES + name, replaceAndCapitalize(name)));
+        generateLang(BeeRegistry.get().getStreamOfBees().map(CustomBeeData::name), BEE_RESOURCEFULBEES, object);
+        generateLang(HoneyRegistry.get().getStreamOfHoney().map(CustomHoneyData::name), HONEY_RESOURCEFULBEES, object);
+        generateLang(HoneycombRegistry.get().getStreamOfHoneycombs().map(OutputVariation::id), COMB_RESOURCEFULBEES, object);
+        generateLang(TraitRegistry.get().getStreamOfTraits().map(Trait::name), TRAIT_RESOURCEFULBEES, object);
 
         generateLang(ModItems.SPAWN_EGG_ITEMS, ITEM_RESOURCEFULBEES, object);
         generateLang(ModItems.HONEYCOMB_ITEMS, ITEM_RESOURCEFULBEES, object);
@@ -101,6 +89,10 @@ public final class LangGeneration {
     private static void generateLang(ResourcefulRegistry<?> register, String prefix, JsonObject object){
         register.getEntries()
                 .forEach(registryObject -> object.addProperty(prefix + registryObject.getId().getPath(), replaceAndCapitalize(registryObject.getId().getPath())));
+    }
+
+    private static void generateLang(Stream<String> register, String prefix, JsonObject object){
+        register.forEach(name -> object.addProperty(prefix + name, replaceAndCapitalize(name)));
     }
 
     private static String replaceAndCapitalize(String input) {

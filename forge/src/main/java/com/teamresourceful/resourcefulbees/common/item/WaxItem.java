@@ -24,21 +24,20 @@ public class WaxItem extends Item {
     }
 
     @Override
-    public @NotNull InteractionResult useOn(UseOnContext pContext) {
-        Level level = pContext.getLevel();
-        BlockPos blockpos = pContext.getClickedPos();
-        BlockState blockstate = level.getBlockState(blockpos);
-        return getWaxed(blockstate).map((p_238251_) -> {
-            Player player = pContext.getPlayer();
-            ItemStack itemstack = pContext.getItemInHand();
-            if (player instanceof ServerPlayer) {
-                CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer)player, blockpos, itemstack);
+    public @NotNull InteractionResult useOn(UseOnContext context) {
+        Level level = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        return getWaxed(level.getBlockState(pos)).map((state) -> {
+            Player player = context.getPlayer();
+            ItemStack itemstack = context.getItemInHand();
+            if (player instanceof ServerPlayer serverplayer) {
+                CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverplayer, pos, itemstack);
             }
 
             itemstack.shrink(1);
-            level.setBlock(blockpos, p_238251_, 11);
-            level.gameEvent(GameEvent.BLOCK_CHANGE, blockpos, GameEvent.Context.of(player, p_238251_));
-            level.levelEvent(player, 3003, blockpos, 0);
+            level.setBlock(pos, state, 11);
+            level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, state));
+            level.levelEvent(player, 3003, pos, 0);
             return InteractionResult.sidedSuccess(level.isClientSide);
         }).orElse(InteractionResult.PASS);
     }

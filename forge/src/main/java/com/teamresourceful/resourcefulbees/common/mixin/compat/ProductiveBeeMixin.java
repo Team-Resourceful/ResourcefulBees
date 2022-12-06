@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.mixin.compat;
 
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.compat.productivebees.ProductiveBeesCompat;
-import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
+import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
+import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.item.ItemStack;

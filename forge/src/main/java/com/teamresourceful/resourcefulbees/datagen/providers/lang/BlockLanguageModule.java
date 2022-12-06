@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 
-import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;

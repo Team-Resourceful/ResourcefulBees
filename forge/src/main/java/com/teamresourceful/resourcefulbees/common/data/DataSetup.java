@@ -24,6 +24,7 @@ import com.teamresourceful.resourcefulbees.common.data.honeydata.CustomHoneyBloc
 import com.teamresourceful.resourcefulbees.common.data.honeydata.HoneyDataImpl;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.bottle.CustomHoneyBottleData;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.bottle.CustomHoneyBottleEffectData;
+import com.teamresourceful.resourcefulbees.common.data.honeydata.bottle.CustomHoneyFoodData;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.fluid.CustomHoneyFluidAttributesData;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.fluid.CustomHoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.fluid.CustomHoneyRenderData;
@@ -41,10 +42,12 @@ public final class DataSetup {
         api.setColor(ColorData::new);
         api.setCombat(CombatData::new);
         api.setCore(CoreData::new);
+        api.setBeekeeperTrade(TradeData::new);
 
         api.setBreeding(BreedData::new);
         api.setFamilyUnit(BeeFamilyUnit::of);
 
+        api.setMutation(MutationData::new);
         api.setItemMutation(ItemMutation::new);
         api.setBlockMutation(BlockMutation::new);
         api.setEntityMutation(EntityMutation::new);
@@ -53,6 +56,10 @@ public final class DataSetup {
         api.setRender(RenderData::new);
         api.setLayerTexture(LayerTexture::new);
         api.setLayer(LayerData::new);
+
+        api.setTraits(TraitData::of);
+
+        api.validate();
     }
 
     public static void setupInitializers(HoneyInitializerApi api) {
@@ -61,11 +68,14 @@ public final class DataSetup {
         api.setBlock(CustomHoneyBlockData::new);
 
         api.setBottle(CustomHoneyBottleData::new);
+        api.setFood(CustomHoneyFoodData::new);
         api.setEffect(CustomHoneyBottleEffectData::new);
 
         api.setFluid(CustomHoneyFluidData::new);
         api.setFluidRender(CustomHoneyRenderData::new);
         api.setFluidAttributes(CustomHoneyFluidAttributesData::new);
+
+        api.validate();
     }
 
     public static void setupRegister(RegisterBeeDataEvent registrar) {

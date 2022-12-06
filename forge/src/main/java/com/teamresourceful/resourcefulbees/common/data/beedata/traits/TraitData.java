@@ -37,7 +37,7 @@ public record TraitData(
     ).apply(instance, TraitData::of));
     public static final BeeDataSerializer<BeeTraitData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("trait"), 1, id -> CODEC, DEFAULT);
 
-    private static TraitData of(int range, Set<String> traits) {
+    public static TraitData of(int range, Set<String> traits) {
         Set<PotionEffect> potionDamageEffects = new HashSet<>();
         Set<String> damageImmunities = new HashSet<>();
         Set<MobEffect> potionImmunities = new HashSet<>();

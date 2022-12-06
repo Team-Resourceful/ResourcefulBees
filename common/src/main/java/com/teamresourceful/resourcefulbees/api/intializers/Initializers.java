@@ -118,6 +118,9 @@ public final class Initializers {
         CustomBeeData create(String name, Map<ResourceLocation, BeeData<?>> data);
     }
 
-
+    @FunctionalInterface
+    public interface TradeInitializer {
+        BeekeeperTradeData create(UniformInt amount, ItemStack secondaryItem, UniformInt secondaryItemCost, float priceMultiplier, int maxTrades, int xp);
+    }
 
 }

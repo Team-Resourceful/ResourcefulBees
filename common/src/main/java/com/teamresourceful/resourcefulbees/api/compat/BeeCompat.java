@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.api.compat;
 
 
-import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
+import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
+import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.blockstates;
 
-import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockStateProvider;
 import net.minecraft.data.DataGenerator;

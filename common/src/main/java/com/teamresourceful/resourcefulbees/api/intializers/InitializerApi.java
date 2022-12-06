@@ -32,10 +32,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.*;
 
 @ApiStatus.NonExtendable
 @SuppressWarnings("unused")
@@ -203,5 +201,25 @@ public class InitializerApi {
     @ApiStatus.Internal
     public void setFamilyUnit(Initializers.FamilyUnitInitializer familyUnit) {
         this.familyUnit = familyUnit;
+    }
+
+    /**
+     * This validates that all the initializers have been set.
+     */
+    @ApiStatus.Internal
+    public void validate() {
+        List<String> badFields = Arrays.stream(this.getClass().getDeclaredFields())
+                .filter(field -> {
+                    try {
+                        return field.get(this) == null;
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .map(Field::getName)
+                .toList();
+        if (!badFields.isEmpty()) {
+            throw new IllegalStateException("InitializerApi is missing the following initializers: " + badFields);
+        }
     }
 }

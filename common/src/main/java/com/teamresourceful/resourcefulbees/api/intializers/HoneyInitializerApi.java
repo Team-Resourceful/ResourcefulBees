@@ -21,6 +21,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -110,5 +112,22 @@ public class HoneyInitializerApi {
     @ApiStatus.Internal
     public void setEffect(HoneyInitializers.HoneyBottleEffectDataInitializer effect) {
         this.effect = effect;
+    }
+
+    @ApiStatus.Internal
+    public void validate() {
+        List<String> badFields = Arrays.stream(this.getClass().getDeclaredFields())
+                .filter(field -> {
+                    try {
+                        return field.get(this) == null;
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .map(Field::getName)
+                .toList();
+        if (!badFields.isEmpty()) {
+            throw new IllegalStateException("HoneyInitializerApi is missing the following initializers: " + badFields);
+        }
     }
 }

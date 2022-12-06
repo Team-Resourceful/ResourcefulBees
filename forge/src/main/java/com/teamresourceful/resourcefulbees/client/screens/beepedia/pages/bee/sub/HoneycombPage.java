@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.sub;
 
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
-import com.teamresourceful.resourcefulbees.common.lib.builders.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.lib.builders.BeehiveTier;
+import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
+import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;

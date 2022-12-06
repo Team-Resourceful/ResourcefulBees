@@ -10,9 +10,9 @@ import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgrad
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.BeehiveUpgrade;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.NestUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.registry.api.RegistryEntry;
-import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistries;
-import com.teamresourceful.resourcefulbees.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistries;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
