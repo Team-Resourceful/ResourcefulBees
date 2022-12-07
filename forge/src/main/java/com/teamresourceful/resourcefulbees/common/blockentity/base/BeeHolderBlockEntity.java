@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefullib.common.utils.TagUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -142,7 +143,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
 
     @Override
     public @NotNull CompoundTag getSyncData() {
-        return ModUtils.nbtWithData(NBTConstants.NBT_BEES, writeBees());
+        return TagUtils.tagWithData(NBTConstants.NBT_BEES, writeBees());
     }
 
     @Override

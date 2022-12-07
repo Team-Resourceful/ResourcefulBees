@@ -8,9 +8,8 @@ import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import com.teamresourceful.resourcefullib.common.utils.TagUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
@@ -151,7 +150,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
             int i1 = top + j * 18 + 2;
 
             ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
-            beeJar.setTag(ModUtils.nbtWithData(NBTConstants.BeeJar.ENTITY, this.menu.getApiaryBee(i).entityData.copy()));
+            beeJar.setTag(TagUtils.tagWithData(NBTConstants.BeeJar.ENTITY, this.menu.getApiaryBee(i).entityData.copy()));
 
             this.itemRenderer.renderAndDecorateItem(beeJar, left, i1);
         }

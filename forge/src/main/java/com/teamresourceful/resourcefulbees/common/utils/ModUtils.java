@@ -7,8 +7,6 @@ import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
@@ -25,9 +23,6 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 import static net.minecraft.world.item.ItemStack.tagMatches;
 
@@ -68,24 +63,6 @@ public final class ModUtils {
         else existing.grow(reachedLimit ? limit : stack.getCount());
 
         return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
-    }
-
-    public static CompoundTag nbtWithData(String key, Tag tag) {
-        CompoundTag compoundTag = new CompoundTag();
-        compoundTag.put(key, tag);
-        return compoundTag;
-    }
-
-    public static <T extends Tag> ListTag listTag(@Nullable List<T> tags) {
-        ListTag list = new ListTag();
-        if (tags != null && !tags.isEmpty()) {
-            list.addAll(tags);
-        }
-        return list;
-    }
-
-    public static <T extends Tag> List<T> fromListTag(ListTag list, Class<T> tagClass) {
-        return list.stream().filter(tagClass::isInstance).map(tagClass::cast).toList();
     }
 
     public static void summonEntity(CompoundTag tag, Level level, Player player, BlockPos pos) {

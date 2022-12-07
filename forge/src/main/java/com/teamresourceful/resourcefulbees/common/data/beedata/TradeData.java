@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
-import com.teamresourceful.resourcefulbees.common.utils.CodecUtils;
+import com.teamresourceful.resourcefullib.common.codecs.bounds.UniformedNumberCodecs;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -40,9 +40,9 @@ public record TradeData(
     }
 
     public static final Codec<BeekeeperTradeData> CODEC = RecordCodecBuilder.create(tradeDataInstance -> tradeDataInstance.group(
-            CodecUtils.rangedUniformIntCodec(1, 64).fieldOf("amount").orElse(UniformInt.of(1,1)).forGetter(BeekeeperTradeData::amount),
+            UniformedNumberCodecs.rangedUniformIntCodec(1, 64).fieldOf("amount").orElse(UniformInt.of(1,1)).forGetter(BeekeeperTradeData::amount),
             ItemStackCodec.CODEC.fieldOf("secondaryItem").orElse(ItemStack.EMPTY).forGetter(BeekeeperTradeData::secondaryItem),
-            CodecUtils.rangedUniformIntCodec(1, 64).fieldOf("secondaryItemCost").orElse(UniformInt.of(1, 4)).forGetter(BeekeeperTradeData::secondaryItemCost),
+            UniformedNumberCodecs.rangedUniformIntCodec(1, 64).fieldOf("secondaryItemCost").orElse(UniformInt.of(1, 4)).forGetter(BeekeeperTradeData::secondaryItemCost),
             Codec.floatRange(0, 1).fieldOf("priceMultiplier").orElse(0.05f).forGetter(BeekeeperTradeData::priceMultiplier),
             Codec.intRange(1, 64).fieldOf("maxTrades").orElse(4).forGetter(BeekeeperTradeData::maxTrades),
             Codec.intRange(1, 64).fieldOf("xp").orElse(2).forGetter(BeekeeperTradeData::xp)

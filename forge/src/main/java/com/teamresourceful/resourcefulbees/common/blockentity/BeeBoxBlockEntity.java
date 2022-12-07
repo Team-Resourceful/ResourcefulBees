@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefullib.common.utils.TagUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
@@ -28,15 +29,15 @@ public class BeeBoxBlockEntity extends BlockEntity {
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put(NBTConstants.NBT_BEES, ModUtils.listTag(bees));
-        tag.put(NBTConstants.NBT_DISPLAYNAMES, ModUtils.listTag(displayNames));
+        tag.put(NBTConstants.NBT_BEES, TagUtils.toListTag(bees));
+        tag.put(NBTConstants.NBT_DISPLAYNAMES, TagUtils.toListTag(displayNames));
     }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
-        this.bees = ModUtils.fromListTag(tag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND), CompoundTag.class);
-        this.displayNames = ModUtils.fromListTag(tag.getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING), StringTag.class);
+        this.bees = TagUtils.fromListTag(tag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND), CompoundTag.class);
+        this.displayNames = TagUtils.fromListTag(tag.getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING), StringTag.class);
     }
     //endregion
 

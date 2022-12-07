@@ -9,8 +9,8 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
+import com.teamresourceful.resourcefullib.common.utils.TagUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -227,7 +227,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     private static void addBeeToNest(CustomBeeEntityType<?> entity, RandomSource rand, TieredBeehiveBlockEntity nest) {
         ResourceLocation id = Registry.ENTITY_TYPE.getKey(entity);
         if (id != Registry.ENTITY_TYPE.getDefaultKey()) {
-            CompoundTag tag = ModUtils.nbtWithData(NBTConstants.NBT_ID, StringTag.valueOf(id.toString()));
+            CompoundTag tag = TagUtils.tagWithData(NBTConstants.NBT_ID, StringTag.valueOf(id.toString()));
             int timeInHive = rand.nextInt(entity.getData().getCoreData().maxTimeInHive());
             ((BeehiveEntityAccessor)nest).getBees().add(new BeehiveBlockEntity.BeeData(tag, 0, timeInHive));
         }

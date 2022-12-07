@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.advancements;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseAdvancementProvider;
+import com.teamresourceful.resourcefullib.common.utils.TagUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -121,7 +121,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
         CompoundTag nbt = new CompoundTag();
         nbt.putString(NBTConstants.NBT_ID, id);
         nbt.putString(NBTConstants.BeeJar.COLOR, color);
-        stack.setTag(ModUtils.nbtWithData(NBTConstants.BeeJar.ENTITY, nbt));
+        stack.setTag(TagUtils.tagWithData(NBTConstants.BeeJar.ENTITY, nbt));
         return stack;
     }
 }
