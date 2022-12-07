@@ -193,7 +193,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
         return isSmoked || CampfireBlock.isSmokeyPos(this.level, this.getBlockPos());
     }
 
-    public static void serverSideTick(Level level, BlockPos blockPos, BlockState state, TieredBeehiveBlockEntity hive) {
+    public static void serverSideTick(Level level, BlockPos pos, BlockState state, TieredBeehiveBlockEntity hive) {
         if (hive.isSmoked) {
             if (MathUtils.inRangeInclusive(hive.ticksSmoked, 0, SMOKE_TIME)) {
                 hive.ticksSmoked++;
@@ -205,16 +205,16 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
 
         hive.ticksSinceBeesFlagged++;
         if (hive.ticksSinceBeesFlagged == 80) {
-            BeeInfoUtils.flagBeesInRange(hive.worldPosition, hive.level);
+            BeeInfoUtils.flagBeesInRange(pos, level);
             hive.ticksSinceBeesFlagged = 0;
         }
         tickOccupants(hive, state, ((BeehiveEntityAccessor) hive).getBees());
         if (hive.hasBees() && level.getRandom().nextDouble() < 0.005D) {
-            var vec = Vec3.atBottomCenterOf(blockPos);
+            var vec = Vec3.atBottomCenterOf(pos);
             level.playSound(null, vec.x(), vec.y(), vec.z(), SoundEvents.BEEHIVE_WORK, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 
-        DebugPackets.sendHiveInfo(level, blockPos, state, hive);
+        DebugPackets.sendHiveInfo(level, pos, state, hive);
     }
 
     private static void tickOccupants(TieredBeehiveBlockEntity hive, BlockState state, List<BeeData> bees) {

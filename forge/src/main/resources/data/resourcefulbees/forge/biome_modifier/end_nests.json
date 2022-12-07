@@ -1,0 +1,5 @@
+{
+  "type": "resourcefulbees:nests",
+  "biomes": "#minecraft:is_end",
+  "features": ["resourcefulbees:end_nests"]
+}

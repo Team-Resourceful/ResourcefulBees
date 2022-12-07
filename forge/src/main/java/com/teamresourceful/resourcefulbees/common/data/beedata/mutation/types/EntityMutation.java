@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.EntityDisplay;
+import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
@@ -36,7 +37,7 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
 
     @Override
     public boolean activate(ServerLevel level, BlockPos pos) {
-        CompoundTag entityTag = predicate().getTag().map(nbt -> ModUtils.nbtWithData("EntityTag", nbt)).orElse(new CompoundTag());
+        CompoundTag entityTag = predicate().getTag().map(nbt -> ModUtils.nbtWithData(NBTConstants.ENTITY_TAG, nbt)).orElse(new CompoundTag());
         Entity entity = predicate().entityType().spawn(level, entityTag, null, null, pos, MobSpawnType.CONVERSION, false, false);
         if (entity != null) {
             level.levelEvent(2005, pos.below(1), 0);

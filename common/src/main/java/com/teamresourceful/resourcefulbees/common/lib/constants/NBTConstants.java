@@ -1,9 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
+import com.teamresourceful.resourcefulbees.common.lib.tools.DontCheckCasing;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class NBTConstants {
 
@@ -16,27 +19,44 @@ public final class NBTConstants {
     public static final String NBT_DISPLAYNAMES = "DisplayNames";
     public static final String NBT_BEE_NAME = "DisplayName";
     public static final String NBT_BLOCK_ENTITY_TAG = "BlockEntityTag";
+    @DontCheckCasing
     public static final String NBT_ENERGY = "energy";
     public static final String NBT_FEED_COUNT = "FeedCount";
+    @DontCheckCasing
     public static final String NBT_FILTER_INVENTORY = "filterInv";
+    @DontCheckCasing
     public static final String NBT_FILTER_RECIPE = "filterRecipe";
+    @DontCheckCasing
     public static final String NBT_FLUID_OUTPUTS = "fluidOutputs";
+    @DontCheckCasing
     public static final String NBT_ID = "id";
+    @DontCheckCasing
     public static final String NBT_INVENTORY = "inv";
+    @DontCheckCasing
     public static final String NBT_ITEM_OUTPUTS = "itemOutputs";
+    @DontCheckCasing
     public static final String NBT_LOCATIONS = "locations";
     public static final String NBT_LOCKED = "Locked";
+    @DontCheckCasing
     public static final String NBT_MUTATION_COUNT = "mutationCount";
+    @DontCheckCasing
     public static final String NBT_PROCESS_ENERGY = "processEnergy";
+    @DontCheckCasing
     public static final String NBT_PROCESS_RECIPE = "processRecipe";
+    @DontCheckCasing
     public static final String NBT_PROCESS_STAGE = "processStage";
+    @DontCheckCasing
     public static final String NBT_PROCESS_TIME = "processTime";
     public static final String NBT_TANK = "Tank";
     public static final String ROTATIONS = "Rotations";
     public static final String SYNC_DATA = "SyncData";
 
+    public static final String ENTITY_TAG = "EntityTag";
+
     public static class Beecon {
+        @DontCheckCasing
         public static final String RANGE = "range";
+        @DontCheckCasing
         public static final String ACTIVE_EFFECTS = "active_effects";
     }
 
@@ -71,32 +91,42 @@ public final class NBTConstants {
     }
 
     @ApiStatus.Internal
-    public static void verify() {
-        verify(NBTConstants.class);
+    public static void validate() {
+        List<String> errors = validate(NBTConstants.class);
+        if (!errors.isEmpty()) {
+            StringBuilder builder = new StringBuilder("NBTConstants validation failed! Please fix the following errors:");
+            for (String error : errors) {
+                builder.append("\n").append(error);
+            }
+            throw new IllegalStateException(builder.toString());
+        }
     }
 
     @ApiStatus.Internal
-    private static void verify(Class<?> clazz) {
+    private static List<String> validate(Class<?> clazz) {
+        List<String> errors = new ArrayList<>();
         for (Field field : clazz.getFields()) {
             if (field.getType() == String.class) {
                 try {
-                    String value = (String) field.get(null);
+                    boolean hasCheck = field.getAnnotation(DontCheckCasing.class) != null;
+                    final String value = (String) field.get(null);
                     if (value == null || value.isEmpty()) {
-                        throw new IllegalStateException("NBT constant " + field.getName() + " is empty");
+                        errors.add("NBT constant " + clazz.getSimpleName() + "." + field.getName() + " is empty");
                     }
-                    if (!Character.isUpperCase(value.charAt(0))) {
-                        throw new IllegalStateException("NBT constant " + field.getName() + " does not start with an uppercase character");
+                    if (!hasCheck && !Character.isUpperCase(value.charAt(0))) {
+                        errors.add("NBT constant " + clazz.getSimpleName() + "." + field.getName() + " does not start with an uppercase character");
                     }
                     if (value.contains(" ")) {
-                        throw new IllegalStateException("NBT constant " + field.getName() + " contains a space");
+                        errors.add("NBT constant " + clazz.getSimpleName() + "." + field.getName() + " contains a space");
                     }
                 } catch (IllegalAccessException e) {
-                    throw new IllegalStateException("NBTConstants field " + field.getName() + " is inaccessible");
+                    errors.add("NBTConstants field " + clazz.getSimpleName() + "." + field.getName() + " is inaccessible");
                 }
             }
         }
         for (Class<?> aClass : clazz.getClasses()) {
-            verify(aClass);
+            errors.addAll(validate(aClass));
         }
+        return errors;
     }
 }

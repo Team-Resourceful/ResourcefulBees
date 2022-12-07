@@ -27,7 +27,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Path;
 import java.util.List;
 
 import static net.minecraft.world.item.ItemStack.tagMatches;
@@ -64,10 +63,11 @@ public final class ModUtils {
         if (limit <= 0) return stack;
 
         boolean reachedLimit = stack.getCount() > limit;
+        //TODO Change to copyWithCount in 1.19.3
         if (existing.isEmpty()) handler.setStackInSlot(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
         else existing.grow(reachedLimit ? limit : stack.getCount());
 
-        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount()- limit) : ItemStack.EMPTY;
+        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
     }
 
     public static CompoundTag nbtWithData(String key, Tag tag) {
@@ -88,20 +88,6 @@ public final class ModUtils {
         return list.stream().filter(tagClass::isInstance).map(tagClass::cast).toList();
     }
 
-    public static void updateCapturedBee(Bee bee, Player player) {
-        bee.setSavedFlowerPos(null);
-        ((BeeEntityAccessor) bee).setHivePos(null);
-        if (bee.isAngry()) {
-            bee.setTarget(player);
-            if (bee instanceof ResourcefulBee customBee) {
-                BeeTraitData traitData = customBee.getTraitData();
-                if (traitData.damageTypes().stream().anyMatch(damageType -> damageType.type().equals(TraitConstants.EXPLOSIVE))) {
-                    customBee.setExplosiveCooldown(60);
-                }
-            }
-        }
-    }
-
     public static void summonEntity(CompoundTag tag, Level level, Player player, BlockPos pos) {
         if (tag == null) return;
         EntityType.by(tag)
@@ -110,7 +96,19 @@ public final class ModUtils {
                 entity.load(tag);
                 entity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
                 level.addFreshEntity(entity);
-                if (entity instanceof Bee beeEntity) ModUtils.updateCapturedBee(beeEntity, player);
+                if (entity instanceof Bee bee) {
+                    bee.setSavedFlowerPos(null);
+                    ((BeeEntityAccessor) bee).setHivePos(null);
+                    if (bee.isAngry()) {
+                        bee.setTarget(player);
+                        if (bee instanceof ResourcefulBee customBee) {
+                            BeeTraitData traitData = customBee.getTraitData();
+                            if (traitData.damageTypes().stream().anyMatch(damageType -> damageType.type().equals(TraitConstants.EXPLOSIVE))) {
+                                customBee.setExplosiveCooldown(60);
+                            }
+                        }
+                    }
+                }
             });
     }
 
@@ -128,9 +126,5 @@ public final class ModUtils {
 
     public static boolean isARealPlayer(Player player) {
         return !(player instanceof FakePlayer);
-    }
-
-    public static Path getModPath(String modid) {
-        return ModList.get().getModFileById(modid).getFile().getFilePath();
     }
 }

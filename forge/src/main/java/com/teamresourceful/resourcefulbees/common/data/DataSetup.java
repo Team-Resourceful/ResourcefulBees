@@ -58,8 +58,6 @@ public final class DataSetup {
         api.setLayer(LayerData::new);
 
         api.setTraits(TraitData::of);
-
-        api.validate();
     }
 
     public static void setupInitializers(HoneyInitializerApi api) {
@@ -74,8 +72,6 @@ public final class DataSetup {
         api.setFluid(CustomHoneyFluidData::new);
         api.setFluidRender(CustomHoneyRenderData::new);
         api.setFluidAttributes(CustomHoneyFluidAttributesData::new);
-
-        api.validate();
     }
 
     public static void setupRegister(RegisterBeeDataEvent registrar) {

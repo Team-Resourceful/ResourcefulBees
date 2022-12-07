@@ -17,6 +17,7 @@ import com.teamresourceful.resourcefulbees.common.init.*;
 import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
+import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.recipe.conditions.LoadDevRecipes;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitiveIngredient;
@@ -27,7 +28,6 @@ import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.*;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModCommands;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFeatures;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPotions;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
@@ -67,6 +67,9 @@ public class ResourcefulBees {
     private static final Configurator CONFIGURATOR = new Configurator(true);
 
     public ResourcefulBees() {
+        if (!FMLLoader.isProduction()) {
+            ModValidation.IS_RUNNING_IN_IDE = true;
+        }
         CONFIGURATOR.registerConfig(GeneralConfig.class);
 
         ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
@@ -127,6 +130,7 @@ public class ResourcefulBees {
         ModCommands.init();
 
         MinecraftForge.EVENT_BUS.register(this);
+        ModValidation.init();
     }
 
     @SubscribeEvent
@@ -146,7 +150,6 @@ public class ResourcefulBees {
         event.enqueueWork(RegistryHandler::registerDispenserBehaviors);
         NetPacketHandler.init();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
-        ModFeatures.ConfiguredFeatures.registerConfiguredFeatures();
         ModPotions.createMixes();
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "amount_sensitive"), AmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "nbt_amount_sensitive"), NBTAmountSensitiveIngredient.Serializer.INSTANCE);

@@ -80,14 +80,14 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
     protected abstract int getMaxTimeInHive(@NotNull BeeCompat bee);
 
     public static <T extends BeeHolderBlockEntity> void serverTick(Level level, BlockPos pos, BlockState state, T holder) {
-        BlockBee apiaryBee;
+        BlockBee bee;
         Iterator<BlockBee> iterator = holder.bees.iterator();
         while (iterator.hasNext()) {
-            apiaryBee = iterator.next();
-            if (holder.canRelease(apiaryBee) && holder.releaseBee(state, apiaryBee)) {
+            bee = iterator.next();
+            if (holder.canRelease(bee) && holder.releaseBee(state, bee)) {
                 iterator.remove();
             } else {
-                apiaryBee.setTicksInHive(Math.min(apiaryBee.getTicksInHive() + 1, Integer.MAX_VALUE - 1));
+                bee.setTicksInHive(Math.min(bee.getTicksInHive() + 1, Integer.MAX_VALUE - 1));
             }
         }
 
