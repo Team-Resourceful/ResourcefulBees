@@ -19,7 +19,6 @@ import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTier
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.recipe.conditions.LoadDevRecipes;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.FilledBeeJarIngredient;
@@ -28,8 +27,9 @@ import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.*;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModCommands;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPotions;
+import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
+import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
 import com.teamresourceful.resourcefulconfig.common.config.Configurator;
 import com.teamresourceful.resourcefulconfig.common.config.ResourcefulConfig;
@@ -131,6 +131,8 @@ public class ResourcefulBees {
 
         MinecraftForge.EVENT_BUS.register(this);
         ModValidation.init();
+
+        GameSetup.initSerializersAndConditions();
     }
 
     @SubscribeEvent
@@ -150,12 +152,12 @@ public class ResourcefulBees {
         event.enqueueWork(RegistryHandler::registerDispenserBehaviors);
         NetPacketHandler.init();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
-        ModPotions.createMixes();
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "amount_sensitive"), AmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "nbt_amount_sensitive"), NBTAmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "any_filled_bee_jar"), FilledBeeJarIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(LoadDevRecipes.Serializer.INSTANCE);
+        GameSetup.initPotionRecipes();
+        ConditionRegistryImpl.freeze();
     }
 
     @SubscribeEvent

@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPotions;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import net.minecraft.data.DataGenerator;
 import org.jetbrains.annotations.NotNull;

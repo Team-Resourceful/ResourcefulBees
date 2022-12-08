@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.entity.ai;
 import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEffects;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;

@@ -1,8 +1,7 @@
-package com.teamresourceful.resourcefulbees.platform.common.registry.api.creativetab.fabric;
+package com.teamresourceful.resourcefulbees.platform.common.registry.creativetab.forge;
 
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -19,12 +18,7 @@ import java.util.function.Supplier;
 
 public class CreativeTabBuilderImpl {
     public static CreativeModeTab create(ResourceLocation id, String background, boolean hideScrollBar, boolean hideTitle, Supplier<ItemStack> icon, BiConsumer<ItemLike, List<ItemStack>> listingFunction, List<Supplier<ResourcefulRegistry<Item>>> registryItems, boolean dontSearch) {
-        // We do this to get the array expanded fabric doesnt let use edit the
-        // display items so we just let fabric expand the array size and then replace it after.
-        FabricItemGroupBuilder.create(id).build();
-
-
-        CreativeModeTab tab = new CreativeModeTab(CreativeModeTab.TABS.length - 1, String.format("%s.%s", id.getNamespace(), id.getPath())) {
+        CreativeModeTab tab = new CreativeModeTab(String.format("%s.%s", id.getNamespace(), id.getPath())) {
             @Override
             public @NotNull ItemStack makeIcon() {
                 return icon.get();

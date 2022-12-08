@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.platform.common.registry.api.creativetab;
+package com.teamresourceful.resourcefulbees.platform.common.registry.creativetab;
 
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
