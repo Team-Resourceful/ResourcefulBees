@@ -1,7 +1,7 @@
-package com.teamresourceful.resourcefulbees.common.registry.custom;
+package com.teamresourceful.resourcefulbees.common.registries.custom;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
+import com.teamresourceful.resourcefullib.common.lib.Constants;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -24,7 +24,7 @@ public final class TraitAbilityRegistry implements com.teamresourceful.resourcef
     @Override
     public boolean register(String name, TraitAbility consumer) {
         if (closed || hasAbility(name)) {
-            ResourcefulBees.LOGGER.error("Trait Ability is already registered or registration is closed: {}", name);
+            Constants.LOGGER.error("Trait Ability is already registered or registration is closed: {}", name);
             return false;
         }
         registry.put(name.toLowerCase(Locale.ROOT), consumer);

@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.ItemSlotWidget;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.SlotButton;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.honey.EffectEntry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.TraitAbilityRegistry;
+import com.teamresourceful.resourcefulbees.common.registries.custom.TraitAbilityRegistry;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.HistoryScreen;

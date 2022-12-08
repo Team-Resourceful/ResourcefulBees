@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.api.data.trait.DamageType;
 import com.teamresourceful.resourcefulbees.api.data.trait.PotionEffect;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
-import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
+import com.teamresourceful.resourcefulbees.common.registries.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.core.particles.ParticleType;

@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
+import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.RegisterBeeDataEvent;
 import com.teamresourceful.resourcefulbees.api.data.honey.base.RegisterHoneyDataEvent;
 import com.teamresourceful.resourcefulbees.api.intializers.HoneyInitializerApi;
@@ -58,6 +59,8 @@ public final class DataSetup {
         api.setLayer(LayerData::new);
 
         api.setTraits(TraitData::of);
+
+        ResourcefulBeesAPI.getEvents().registerBeeData(DataSetup::setupRegister);
     }
 
     public static void setupInitializers(HoneyInitializerApi api) {
@@ -72,6 +75,8 @@ public final class DataSetup {
         api.setFluid(CustomHoneyFluidData::new);
         api.setFluidRender(CustomHoneyRenderData::new);
         api.setFluidAttributes(CustomHoneyFluidAttributesData::new);
+
+        ResourcefulBeesAPI.getEvents().registerHoneyData(DataSetup::setupRegister);
     }
 
     public static void setupRegister(RegisterBeeDataEvent registrar) {

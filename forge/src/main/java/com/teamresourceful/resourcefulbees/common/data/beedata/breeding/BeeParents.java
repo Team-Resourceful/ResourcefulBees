@@ -20,14 +20,6 @@ public record BeeParents(String parent1, String parent2, Supplier<CustomBeeData>
         }
     }
 
-    public static BeeParents nullOf(String parent1, String parent2) {
-        if (parent1.compareTo(parent2) > 0) {
-            return new BeeParents(parent1, parent2, () -> null, () -> null);
-        } else {
-            return new BeeParents(parent2, parent1, () -> null, () -> null);
-        }
-    }
-
     @Override
     public String getParent1() {
         return parent1;

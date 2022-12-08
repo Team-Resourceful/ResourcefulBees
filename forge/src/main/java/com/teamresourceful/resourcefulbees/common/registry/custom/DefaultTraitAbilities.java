@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.registries.custom.TraitAbilityRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

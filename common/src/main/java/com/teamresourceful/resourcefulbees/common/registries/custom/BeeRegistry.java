@@ -1,17 +1,21 @@
-package com.teamresourceful.resourcefulbees.common.registry.custom;
+package com.teamresourceful.resourcefulbees.common.registries.custom;
 
 import com.google.common.base.Suppliers;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
-import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;import com.teamresourceful.resourcefulbees.common.data.beedata.breeding.BeeParents;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
+import com.teamresourceful.resourcefulbees.common.lib.tools.MapStrategies;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
+import com.teamresourceful.resourcefullib.common.lib.Constants;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +29,7 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
     private static final BeeRegistry INSTANCE = new BeeRegistry();
     private static final Map<String, JsonObject> RAW_DATA = new LinkedHashMap<>();
     private static final Map<String, CustomBeeData> CUSTOM_DATA = new LinkedHashMap<>();
-    private static final Map<Parents, WeightedCollection<FamilyUnit>> FAMILY_TREE = new LinkedHashMap<>();
+    private static final Object2ObjectMap<Parents, WeightedCollection<FamilyUnit>> FAMILY_TREE = new Object2ObjectOpenCustomHashMap<>(MapStrategies.BREED_TREE);
     private static final Supplier<CustomBeeData> DEFAULT_DATA = Suppliers.memoize(() -> ResourcefulBeesAPI.getInitializers().data("error", Map.of()));
 
     private BeeRegistry() {
@@ -64,13 +68,13 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
     public void regenerateCustomBeeData(RegistryAccess access) {
         DynamicOps<JsonElement> ops = access == null ? JsonOps.INSTANCE : RegistryOps.create(JsonOps.INSTANCE, access);
         RAW_DATA.forEach((s, jsonObject) -> CUSTOM_DATA.compute(s, (s1, customBeeDataCodec) -> parseData(s, ops, jsonObject)));
-        com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry.buildFamilyTree();
+        buildFamilyTree();
     }
 
     private static CustomBeeData parseData(String id, DynamicOps<JsonElement> ops, JsonObject jsonObject) {
         var data = new DispatchMapCodec<>(ResourceLocation.CODEC, BeeDataRegistry.codec(id))
                 .parse(ops, jsonObject)
-                .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not create Custom Bee Data for {} bee", id));
+                .getOrThrow(false, s -> Constants.LOGGER.error("Could not create Custom Bee Data for {} bee", id));
         return ResourcefulBeesAPI.getInitializers().data(id, data);
     }
 
@@ -91,13 +95,16 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
     }
 
     @Override
+    @SuppressWarnings("SuspiciousMethodCalls")
     public boolean canParentsBreed(String parent1, String parent2) {
-        return FAMILY_TREE.containsKey(BeeParents.nullOf(parent1, parent2));
+        if (parent1.equals(parent2)) return FAMILY_TREE.containsKey(parent1);
+        return FAMILY_TREE.containsKey(new Pair<>(parent1, parent2));
     }
 
     @Override
     public FamilyUnit getWeightedChild(String parent1, String parent2) {
-        return FAMILY_TREE.get(BeeParents.nullOf(parent1, parent2)).next();
+        if (parent1.equals(parent2)) return FAMILY_TREE.get(parent1).next();
+        return FAMILY_TREE.get(new Pair<>(parent1, parent2)).next();
     }
 
     @Override
@@ -149,7 +156,7 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
                 .filter(customBeeData -> customBeeData.getBreedData().hasParents())
                 .flatMap(customBeeData -> customBeeData.getBreedData().families().stream())
                 .filter(FamilyUnit::validUnit)
-                .forEach(com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry::addBreedPairToFamilyTree);
+                .forEach(BeeRegistry::addBreedPairToFamilyTree);
     }
 
     private static void addBreedPairToFamilyTree(FamilyUnit beeFamily) {

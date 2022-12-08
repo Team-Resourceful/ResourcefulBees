@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee.su
 
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
-import com.teamresourceful.resourcefulbees.common.registry.custom.TraitRegistry;
+import com.teamresourceful.resourcefulbees.common.registries.custom.TraitRegistry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import net.minecraft.client.gui.screens.Screen;

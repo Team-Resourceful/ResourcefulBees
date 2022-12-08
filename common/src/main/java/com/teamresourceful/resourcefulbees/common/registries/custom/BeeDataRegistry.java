@@ -1,20 +1,18 @@
-package com.teamresourceful.resourcefulbees.common.registry.custom;
+package com.teamresourceful.resourcefulbees.common.registries.custom;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.RegisterBeeDataEvent;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.data.DataSetup;
+import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
+import com.teamresourceful.resourcefullib.common.lib.Constants;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.loading.FMLLoader;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -33,7 +31,6 @@ public class BeeDataRegistry {
     private BeeDataRegistry() {}
 
     public static void init() {
-        ResourcefulBeesAPI.getEvents().registerBeeData(DataSetup::setupRegister);
         ResourcefulBeesAPI.getEvents().onRegisterBeeData(new RegisterBeeDataEvent(INSTANCE::register));
         INSTANCE.locked = true;
     }
@@ -67,13 +64,13 @@ public class BeeDataRegistry {
     private static DataResult<BeeDataSerializer<?>> decode(ResourceLocation id) {
         BeeDataSerializer<?> serializer = INSTANCE.get(id);
         if (serializer == null) {
-            if (!FMLLoader.isProduction() || SharedConstants.IS_RUNNING_IN_IDE || GeneralConfig.showDebugInfo) {
-                ResourcefulBees.LOGGER.error("No serializer found for " + id);
+            if (ModValidation.IS_RUNNING_IN_IDE || GeneralConfig.showDebugInfo) {
+                Constants.LOGGER.error("No serializer found for " + id);
             }
             return DataResult.success(DUMMY_SERIALIZER);
         }
         if (serializer.version() < INSTANCE.types.getInt(serializer.type())) {
-            ResourcefulBees.LOGGER.warn("Serializer {} is outdated the current version is {}.", id, INSTANCE.types.getInt(serializer.type()));
+            Constants.LOGGER.warn("Serializer {} is outdated the current version is {}.", id, INSTANCE.types.getInt(serializer.type()));
         }
         return DataResult.success(serializer);
     }

@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.compat.patchouli;
 
 //import com.mojang.blaze3d.vertex.PoseStack;
 //import com.mojang.math.Vector3f;
-//import com.teamresourceful.resourcefulbees.common.registry.custom.BeeRegistry;
+//import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 //import net.minecraft.client.Minecraft;
 //import net.minecraft.client.gui.components.Button;
 //import net.minecraft.client.multiplayer.ClientLevel;
