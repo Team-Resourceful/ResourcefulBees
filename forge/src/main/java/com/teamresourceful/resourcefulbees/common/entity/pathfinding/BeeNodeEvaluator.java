@@ -16,6 +16,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class BeeNodeEvaluator extends FlyNodeEvaluator {
 
+    public BeeNodeEvaluator() {
+        super();
+        setCanPassDoors(true);
+    }
+
     @Override
     public @NotNull BlockPathTypes getBlockPathType(@NotNull BlockGetter level, int x, int y, int z) {
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();

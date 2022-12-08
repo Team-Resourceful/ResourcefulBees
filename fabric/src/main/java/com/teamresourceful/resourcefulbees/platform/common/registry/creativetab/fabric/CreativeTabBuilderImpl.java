@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.platform.common.registry.creativetab
 
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefulbees.platform.common.registry.creativetab.CreativeTabBuilder;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
@@ -15,10 +16,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class CreativeTabBuilderImpl {
-    public static CreativeModeTab create(ResourceLocation id, String background, boolean hideScrollBar, boolean hideTitle, Supplier<ItemStack> icon, BiConsumer<ItemLike, List<ItemStack>> listingFunction, List<Supplier<ResourcefulRegistry<Item>>> registryItems, boolean dontSearch) {
+    public static CreativeModeTab create(ResourceLocation id, String background, boolean hideScrollBar, boolean hideTitle, Consumer<CreativeTabBuilder.Adder> adder, Supplier<ItemStack> icon, BiConsumer<ItemLike, List<ItemStack>> listingFunction, List<Supplier<ResourcefulRegistry<Item>>> registryItems, boolean dontSearch) {
         // We do this to get the array expanded fabric doesnt let use edit the
         // display items so we just let fabric expand the array size and then replace it after.
         FabricItemGroupBuilder.create(id).build();
@@ -32,6 +34,9 @@ public class CreativeTabBuilderImpl {
 
             @Override
             public void fillItemList(@NotNull NonNullList<ItemStack> items) {
+
+                adder.accept(items::add);
+
                 if (!dontSearch) {
                     for (Item item : Registry.ITEM) {
                         item.fillItemCategory(this, items);

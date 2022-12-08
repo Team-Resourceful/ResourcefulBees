@@ -31,7 +31,7 @@ public class PetBeeRenderer implements IGeoRenderer<PetModelData> {
     }
 
     @Override
-    public Integer getUniqueID(PetModelData animatable) {
+    public int getInstanceId(PetModelData animatable) {
         return animatable.getId().hashCode();
     }
 }

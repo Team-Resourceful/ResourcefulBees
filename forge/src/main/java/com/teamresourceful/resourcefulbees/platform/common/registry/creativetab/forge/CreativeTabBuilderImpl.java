@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.platform.common.registry.creativetab
 
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefulbees.platform.common.registry.creativetab.CreativeTabBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -14,10 +15,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class CreativeTabBuilderImpl {
-    public static CreativeModeTab create(ResourceLocation id, String background, boolean hideScrollBar, boolean hideTitle, Supplier<ItemStack> icon, BiConsumer<ItemLike, List<ItemStack>> listingFunction, List<Supplier<ResourcefulRegistry<Item>>> registryItems, boolean dontSearch) {
+    public static CreativeModeTab create(ResourceLocation id, String background, boolean hideScrollBar, boolean hideTitle, Consumer<CreativeTabBuilder.Adder> adder, Supplier<ItemStack> icon, BiConsumer<ItemLike, List<ItemStack>> listingFunction, List<Supplier<ResourcefulRegistry<Item>>> registryItems, boolean dontSearch) {
         CreativeModeTab tab = new CreativeModeTab(String.format("%s.%s", id.getNamespace(), id.getPath())) {
             @Override
             public @NotNull ItemStack makeIcon() {
@@ -26,6 +28,9 @@ public class CreativeTabBuilderImpl {
 
             @Override
             public void fillItemList(@NotNull NonNullList<ItemStack> items) {
+
+                adder.accept(items::add);
+
                 if (!dontSearch) {
                     for (Item item : Registry.ITEM) {
                         item.fillItemCategory(this, items);

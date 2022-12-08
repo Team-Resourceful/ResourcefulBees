@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.common.config.HoneycombConfig;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
@@ -22,7 +21,7 @@ public class HoneycombItem extends net.minecraft.world.item.HoneycombItem {
     private final BeekeeperTradeData tradeData;
 
     public HoneycombItem(Color color, boolean isEdible, Supplier<Item> storageBlock, boolean enchanted, BeekeeperTradeData tradeData) {
-        super(new Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_COMBS));
+        super(new Properties());
         this.color = color;
         this.isEdible = isEdible;
         this.storageBlock = storageBlock;

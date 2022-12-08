@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeColorData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -30,7 +29,7 @@ public class BeeSpawnEggItem extends ForgeSpawnEggItem {
     private final CustomBeeData beeData;
 
 	public BeeSpawnEggItem(Supplier<EntityType<? extends CustomBeeEntity>> entityType, String beeType) {
-		super(entityType, 0xffcc33, 0x303030, new Properties().tab(ItemGroupResourcefulBees.RESOURCEFUL_BEES_BEES));
+		super(entityType, 0xffcc33, 0x303030, new Properties());
 		this.beeData = BeeRegistry.get().getBeeData(beeType);
 	}
 

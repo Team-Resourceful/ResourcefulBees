@@ -28,7 +28,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowParentGoal;
-import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.Explosion;
@@ -75,7 +74,6 @@ public class ResourcefulBee extends CustomBeeEntity {
         this.goalSelector.addGoal(6, ((BeeEntityAccessor)this).getGoToKnownFlowerGoal());
         this.goalSelector.addGoal(8, !BeeConfig.manualMode ? new BeeWanderGoal(this) : new WanderWorkerGoal(this));
         this.goalSelector.addGoal(9, new FloatGoal(this));
-        //this.goalSelector.addGoal(10, new BeeAuraGoal(this));
     }
 
     /**
@@ -108,21 +106,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
-        FlyingPathNavigation flyingpathnavigation = new BeePathNavigation(this, level) {
-            public boolean isStableDestination(BlockPos pos) {
-                return !this.level.getBlockState(pos.below()).isAir();
-            }
-
-            public void tick() {
-                if (!ResourcefulBee.this.pollinateGoal.isPollinating()) {
-                    super.tick();
-                }
-            }
-        };
-        flyingpathnavigation.setCanOpenDoors(false);
-        flyingpathnavigation.setCanFloat(false);
-        flyingpathnavigation.setCanPassDoors(true);
-        return flyingpathnavigation;
+        return new BeePathNavigation(this, level, () -> !pollinateGoal.isPollinating());
     }
 
     @Override

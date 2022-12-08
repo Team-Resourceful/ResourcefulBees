@@ -1,13 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.capabilities.ModCapabilities;
-import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncCapabilityPacket;
+import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncBeepediaPacket;
+import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
 import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -22,7 +21,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,8 +38,7 @@ public class Beepedia extends Item {
         if (level.isClientSide()) {
             BeepediaUtils.loadBeepedia(itemstack, player);
         } else {
-            LazyOptional<BeepediaData> data = player.getCapability(ModCapabilities.BEEPEDIA_DATA);
-            data.ifPresent(beepedia -> NetPacketHandler.CHANNEL.sendToPlayer(SyncCapabilityPacket.of(player, ModCapabilities.BEEPEDIA_DATA), player));
+            NetPacketHandler.CHANNEL.sendToPlayer(SyncBeepediaPacket.of(player), player);
         }
         return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
     }
@@ -52,7 +49,7 @@ public class Beepedia extends Item {
             if (player.level.isClientSide()) {
                 return InteractionResult.PASS;
             } else {
-                player.getCapability(ModCapabilities.BEEPEDIA_DATA).ifPresent(beepedia -> beepedia.addBee(customBee.getBeeData().name()));
+                BeepediaSavedData.addBee(player, customBee.getBeeData().name());
             }
             player.setItemInHand(hand, stack);
             return InteractionResult.SUCCESS;

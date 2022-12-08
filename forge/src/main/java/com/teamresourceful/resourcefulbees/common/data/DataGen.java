@@ -47,7 +47,7 @@ public final class DataGen {
 
     private static void generateBeeTags() {
         TAGS.put(new ResourceLocation("minecraft", "tags/entity_types/beehive_inhabitors.json"),
-                ModEntities.getSetOfModBees().stream()
+                ModEntities.ENTITY_TYPES.stream()
                         .map(RegistryEntry::getId)
                         .collect(Collectors.toSet()));
     }

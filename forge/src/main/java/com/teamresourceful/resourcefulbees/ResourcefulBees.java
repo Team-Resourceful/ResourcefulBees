@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
-import com.teamresourceful.resourcefulbees.common.capabilities.ModCapabilities;
 import com.teamresourceful.resourcefulbees.common.compat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
@@ -25,11 +24,12 @@ import com.teamresourceful.resourcefulbees.common.recipe.ingredients.FilledBeeJa
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.NBTAmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.custom.*;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
-import com.teamresourceful.resourcefulbees.common.registry.custom.*;
+import com.teamresourceful.resourcefulbees.common.registry.custom.DefaultTraitAbilities;
+import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModCommands;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
+import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
 import com.teamresourceful.resourcefulconfig.common.config.Configurator;
@@ -41,6 +41,7 @@ import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -83,6 +84,8 @@ public class ResourcefulBees {
                 })
         );
 
+        GameSetup.initEvents();
+
         DefaultBeehiveTiers.loadDefaults();
         DefaultApiaryTiers.loadDefaults();
 
@@ -114,8 +117,6 @@ public class ResourcefulBees {
             CONFIGURATOR.saveConfig(GeneralConfig.class);
         }
 
-        ModCapabilities.init();
-
         FMLJavaModLoadingContext.get().getModEventBus().addListener(RegistryHandler::addEntityAttributes);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
@@ -128,7 +129,9 @@ public class ResourcefulBees {
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
-        ModCommands.init();
+        MinecraftForge.EVENT_BUS.addListener((RegisterCommandsEvent event) -> {
+            CommandRegisterEvent.EVENT.fire(new CommandRegisterEvent(event.getDispatcher(), event.getCommandSelection(), event.getBuildContext()));
+        });
 
         MinecraftForge.EVENT_BUS.register(this);
         ModValidation.init();

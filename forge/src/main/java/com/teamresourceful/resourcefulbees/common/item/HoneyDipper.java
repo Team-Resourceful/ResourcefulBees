@@ -120,8 +120,7 @@ public class HoneyDipper extends Item {
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
         if (level instanceof ServerLevel serverLevel) {
             ItemStack itemInHand = player.getItemInHand(hand);
-            Entity stackEntity = getEntity(serverLevel, itemInHand);
-            if (player.isShiftKeyDown() && stackEntity != null) {
+            if (player.isShiftKeyDown() && getEntity(serverLevel, itemInHand) != null) {
                 player.setItemInHand(hand, setEntity(itemInHand, null));
                 sendMessageToPlayer(null, player, MessageTypes.BEE_CLEARED, null);
             }

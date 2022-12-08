@@ -30,7 +30,7 @@ public class BeeBreedGoal extends BreedGoal {
     public boolean canUse() {
         if (this.animal.isInLove()) {
             if (super.canUse() && this.partner instanceof CustomBee parent1){
-                return BeeRegistry.get().canParentsBreed(parent1.getBeeType(), ((CustomBee) animal).getBeeType());
+                return BeeRegistry.get().canParentsBreed(parent1.getBeeType(), beeType);
             }
         }
         return false;

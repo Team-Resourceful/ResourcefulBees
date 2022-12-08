@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.common.capabilities.ModCapabilities;
-import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.BeepediaData;
-import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.CreativeBeepediaData;
+import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.CreativeBeepediaData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;
+import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
 import com.teamresourceful.resourcefullib.client.screens.state.ScreenStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -20,7 +20,7 @@ public final class BeepediaUtils {
     }
 
     public static void loadBeepedia(ItemStack itemstack, Player player) {
-        BeepediaData data = player.getCapability(ModCapabilities.BEEPEDIA_DATA).resolve().orElse(null);
+        BeepediaData data = BeepediaSavedData.getBeepediaData(player);
         if (itemstack.hasTag() && itemstack.getTag() != null && !itemstack.isEmpty() && itemstack.getTag().getBoolean(NBTConstants.Beepedia.CREATIVE)) {
             data = CreativeBeepediaData.INSTANCE;
         }
@@ -29,7 +29,7 @@ public final class BeepediaUtils {
         Minecraft.getInstance().setScreen(screen);
     }
 
-    public static void capabilityUpdated(BeepediaData data) {
+    public static void onClientUpdated(BeepediaData data) {
         if (Minecraft.getInstance().screen instanceof BeepediaScreen beepedia) {
             beepedia.updateData(data);
         }

@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.*;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.CommandResponsePacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.DimensionalBeesPacket;
-import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncCapabilityPacket;
+import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncBeepediaPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncGuiPacket;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.networking.NetworkChannel;
@@ -33,7 +33,7 @@ public final class NetPacketHandler {
 
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, SyncGuiPacket.ID, SyncGuiPacket.HANDLER, SyncGuiPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, CommandResponsePacket.ID, CommandResponsePacket.HANDLER, CommandResponsePacket.class);
-        CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, SyncCapabilityPacket.ID, SyncCapabilityPacket.HANDLER, SyncCapabilityPacket.class);
+        CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, SyncBeepediaPacket.ID, SyncBeepediaPacket.HANDLER, SyncBeepediaPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, DimensionalBeesPacket.ID, DimensionalBeesPacket.HANDLER, DimensionalBeesPacket.class);
     }
 }

@@ -21,8 +21,8 @@ import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.honey.H
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.trait.TraitPage;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.state.BeepediaState;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.state.StringPageState;
-import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.BeepediaData;
-import com.teamresourceful.resourcefulbees.common.capabilities.beepedia.CreativeBeepediaData;
+import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;
+import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.CreativeBeepediaData;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.state.ScreenStateManager;

@@ -12,9 +12,9 @@ import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
@@ -37,9 +37,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.NameTagItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +47,6 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -60,11 +57,6 @@ import java.util.Optional;
 public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeCompat {
 
     private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
-
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", ILoopType.EDefaultLoopTypes.LOOP).addAnimation("animation.bee.fly.bobbing", ILoopType.EDefaultLoopTypes.LOOP));
-        return PlayState.CONTINUE;
-    }
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
@@ -216,14 +208,13 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     }
 
     public static boolean canBeeSpawn(EntityType<?> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource randomSource) {
-        switch (reason) {
-            case NATURAL, CHUNK_GENERATION -> {
-                return ModSpawnData.getPredicate(type)
+        return switch (reason) {
+            case NATURAL, CHUNK_GENERATION ->
+                    ModSpawnData.getPredicate(type)
                         .map(predicate -> predicate.matches(level.getLevel(), pos.getX(), pos.getY(), pos.getZ()))
                         .orElse(true);
-            }
-        }
-        return true;
+            default -> true;
+        };
     }
 
     @Override
@@ -281,10 +272,6 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        Item item = itemstack.getItem();
-        if (item instanceof NameTagItem) {
-            super.mobInteract(player, hand);
-        }
         if (this.isFood(itemstack)) {
             if (!this.level.isClientSide && this.getAge() == 0 && !this.isInLove()) {
                 this.usePlayerItem(player, hand, itemstack);
@@ -326,7 +313,13 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, (event) -> {
+            event.getController().setAnimation(new AnimationBuilder()
+                    .addAnimation("animation.bee.fly", ILoopType.EDefaultLoopTypes.LOOP)
+                    .addAnimation("animation.bee.fly.bobbing", ILoopType.EDefaultLoopTypes.LOOP)
+            );
+            return PlayState.CONTINUE;
+        }));
     }
 
     @Override
