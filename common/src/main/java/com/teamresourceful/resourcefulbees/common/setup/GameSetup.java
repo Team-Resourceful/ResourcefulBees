@@ -1,7 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.setup;
 
+import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesCommand;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
 import com.teamresourceful.resourcefulbees.common.resources.conditions.LoadDevRecipes;
+import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
 import com.teamresourceful.resourcefulbees.platform.common.registry.potion.PotionRegistry;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.ConditionRegistry;
 import net.minecraft.core.Registry;
@@ -12,10 +14,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 
-public class GameSetup {
+public final class GameSetup {
 
     //TODO Change to common tag for forge and fabric.
     private static final TagKey<Item> HONEY_BOTTLE_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "honey_bottles"));
+
+    public static void initEvents() {
+        CommandRegisterEvent.EVENT.addListener(ResourcefulBeesCommand::registerCommand);
+    }
 
     public static void initSerializersAndConditions() {
         ConditionRegistry.registerCondition(new LoadDevRecipes());

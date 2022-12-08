@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.capabilities.beepedia;
+package com.teamresourceful.resourcefulbees.common.resources.storage.beepedia;
 
 public class CreativeBeepediaData extends BeepediaData {
 

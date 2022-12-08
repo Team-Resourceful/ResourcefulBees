@@ -1,9 +1,8 @@
-package com.teamresourceful.resourcefulbees.common.capabilities.beepedia;
+package com.teamresourceful.resourcefulbees.common.resources.storage.beepedia;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.util.INBTSerializable;
 
-public class BeepediaBeeData implements INBTSerializable<CompoundTag> {
+public class BeepediaBeeData {
 
     private long timeFound;
 
@@ -13,19 +12,17 @@ public class BeepediaBeeData implements INBTSerializable<CompoundTag> {
 
     public static BeepediaBeeData of(CompoundTag nbt) {
         BeepediaBeeData data = new BeepediaBeeData(0);
-        data.deserializeNBT(nbt);
+        data.load(nbt);
         return data;
     }
 
-    @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         tag.putLong("TimeFound", this.timeFound);
         return tag;
     }
 
-    @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void load(CompoundTag nbt) {
         this.timeFound = nbt.getLong("TimeFound");
     }
 }

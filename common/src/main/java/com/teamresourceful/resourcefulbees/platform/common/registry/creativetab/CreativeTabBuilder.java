@@ -12,6 +12,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public final class CreativeTabBuilder {
@@ -24,6 +25,7 @@ public final class CreativeTabBuilder {
 
     private final List<Supplier<ResourcefulRegistry<Item>>> items = new ArrayList<>();
     private BiConsumer<ItemLike, List<ItemStack>> listingFunction = (item, list) -> {};
+    private Consumer<Adder> adder = a -> {};
     private boolean dontSearch;
 
     private CreativeTabBuilder(ResourceLocation id) {
@@ -41,6 +43,12 @@ public final class CreativeTabBuilder {
 
     public CreativeTabBuilder addRegistry(Supplier<ResourcefulRegistry<Item>> items) {
         this.items.add(items);
+        return this;
+    }
+
+    public CreativeTabBuilder setAddingFunction(Consumer<Adder> adder) {
+        this.adder = adder;
+        if (adder == null) this.adder = list -> {};
         return this;
     }
 
@@ -71,13 +79,25 @@ public final class CreativeTabBuilder {
     }
 
     public CreativeModeTab build() {
-        return create(id, background, hideScrollBar, hideTitle, icon, listingFunction, items, dontSearch);
+        return create(id, background, hideScrollBar, hideTitle, adder, icon, listingFunction, items, dontSearch);
     }
 
     @ExpectPlatform
-    public static CreativeModeTab create(ResourceLocation id, String background, boolean hideScrollBar, boolean hasTitle, Supplier<ItemStack> icon, BiConsumer<ItemLike, List<ItemStack>> listingFunction, List<Supplier<ResourcefulRegistry<Item>>> items, boolean dontSearch) {
+    public static CreativeModeTab create(ResourceLocation id, String background, boolean hideScrollBar, boolean hasTitle, Consumer<Adder> adder, Supplier<ItemStack> icon, BiConsumer<ItemLike, List<ItemStack>> listingFunction, List<Supplier<ResourcefulRegistry<Item>>> items, boolean dontSearch) {
         throw new NotImplementedException("Not implemented yet");
     }
 
+    @FunctionalInterface
+    public interface Adder {
+        void add(ItemStack stack);
+
+        default void add(ItemLike item) {
+            add(new ItemStack(item));
+        }
+
+        default void add(Supplier<? extends ItemLike> item) {
+            add(item.get());
+        }
+    }
 
 }
