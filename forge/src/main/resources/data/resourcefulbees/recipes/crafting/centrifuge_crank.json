@@ -9,9 +9,9 @@
     }
   },
   "pattern": [
-    " S ",
-    "SIS",
-    " S "
+    "S S",
+    " I ",
+    "S S"
   ],
   "result": {
     "item": "resourcefulbees:centrifuge_crank"

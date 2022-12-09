@@ -205,10 +205,10 @@ public class ModRecipeProvider extends RecipeProvider {
         RecipeCriteria hasObsidian = new RecipeCriteria("has_obsidian", RecipeProvider.has(Tags.Items.OBSIDIAN));
         AdvancedShapedRecipeBuilder.shaped(ModItems.ENDER_BEECON_ITEM)
                 .pattern("PPP","GEG","POP")
-                .define('E', Ingredient.of(Tags.Items.ENDER_PEARLS))
+                .define('E', Ingredient.of(Items.ENDER_EYE))
                 .define('P', Ingredient.of(Items.PURPUR_BLOCK))
                 .define('G', Ingredient.of(Tags.Items.GLASS))
-                .define('O', Ingredient.of(Tags.Items.OBSIDIAN))
+                .define('B', Ingredient.of(Items.BEACON))
                 .unlockedBy(hasObsidian)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.SOLIDIFICATION_CHAMBER_ITEM)
