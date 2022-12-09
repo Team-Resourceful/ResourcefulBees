@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.custom.TraitRegistry;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.FileUtils;
@@ -40,8 +41,10 @@ public final class TraitSetup {
 
     private static void parseTrait(Reader reader, String name) {
         JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
-        name = Codec.STRING.fieldOf("name").orElse(name).codec().parse(JsonOps.INSTANCE, jsonObject).get().orThrow().toLowerCase(Locale.ENGLISH).replace(" ", "_");
-        Trait beeTrait = Trait.getCodec(name).parse(JsonOps.INSTANCE, jsonObject).getOrThrow(false, s -> LOGGER.error("Could not Create Bee Trait"));
-        TraitRegistry.getRegistry().register(name, beeTrait);
+        if (LoadConditionRegistry.canLoad(jsonObject)) {
+            name = Codec.STRING.fieldOf("name").orElse(name).codec().parse(JsonOps.INSTANCE, jsonObject).get().orThrow().toLowerCase(Locale.ENGLISH).replace(" ", "_");
+            Trait beeTrait = Trait.getCodec(name).parse(JsonOps.INSTANCE, jsonObject).getOrThrow(false, s -> LOGGER.error("Could not Create Bee Trait"));
+            TraitRegistry.getRegistry().register(name, beeTrait);
+        }
     }
 }

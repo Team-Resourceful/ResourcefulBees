@@ -91,9 +91,11 @@ public class ResourcefulBees {
 
         DataSetup.setupInitializers(ResourcefulBeesAPI.getInitializers());
         DataSetup.setupInitializers(ResourcefulBeesAPI.getHoneyInitalizers());
+        ResourcefulBeesAPI.getEvents().registerCondition(DataSetup::setupRegister);
 
         BeeDataRegistry.init();
         HoneyDataRegistry.init();
+        LoadConditionRegistry.init();
 
         GeckoLib.initialize();
         ModSetup.initialize();

@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.FileUtils;
@@ -44,7 +45,9 @@ public final class BeeSetup {
 
     private static void parseBee(Reader reader, String name) {
         JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
-        BeeRegistry.getRegistry().cacheRawBeeData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
+        if (LoadConditionRegistry.canLoad(jsonObject)) {
+            BeeRegistry.getRegistry().cacheRawBeeData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
+        }
     }
 
     public static void registerBeePlacements() {

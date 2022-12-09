@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.data;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.RegisterBeeDataEvent;
+import com.teamresourceful.resourcefulbees.api.data.conditions.RegisterConditionEvent;
 import com.teamresourceful.resourcefulbees.api.data.honey.base.RegisterHoneyDataEvent;
 import com.teamresourceful.resourcefulbees.api.intializers.HoneyInitializerApi;
 import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
@@ -21,6 +22,9 @@ import com.teamresourceful.resourcefulbees.common.data.beedata.rendering.LayerDa
 import com.teamresourceful.resourcefulbees.common.data.beedata.rendering.LayerTexture;
 import com.teamresourceful.resourcefulbees.common.data.beedata.rendering.RenderData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.traits.TraitData;
+import com.teamresourceful.resourcefulbees.common.data.conditions.AndCondition;
+import com.teamresourceful.resourcefulbees.common.data.conditions.ModLoadedCondition;
+import com.teamresourceful.resourcefulbees.common.data.conditions.OrCondition;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.CustomHoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.HoneyDataImpl;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.bottle.CustomHoneyBottleData;
@@ -93,5 +97,11 @@ public final class DataSetup {
         registrar.register(CustomHoneyBlockData.SERIALIZER);
         registrar.register(CustomHoneyBottleData.SERIALIZER);
         registrar.register(CustomHoneyFluidData.SERIALIZER);
+    }
+
+    public static void setupRegister(RegisterConditionEvent registrar) {
+        registrar.register(ModLoadedCondition.SERIALIZER);
+        registrar.register(OrCondition.SERIALIZER);
+        registrar.register(AndCondition.SERIALIZER);
     }
 }

@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class BeeDataRegistry {
+public final class BeeDataRegistry {
 
     public static final BeeDataRegistry INSTANCE = new BeeDataRegistry();
     private static final BeeDataSerializer<DummyBeeData> DUMMY_SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("noop"), 0, id -> Codec.unit(DummyBeeData::new), new DummyBeeData());
