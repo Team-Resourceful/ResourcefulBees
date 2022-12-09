@@ -1,0 +1,5 @@
+{
+  "type": "resourcefulbees:gold_flower",
+  "biomes": "#resourcefulbees:allows_gold_flower",
+  "features": ["resourcefulbees:gold_flower"]
+}
