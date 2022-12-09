@@ -6,7 +6,12 @@
   },
   "resourcefulbees:rendering/v1": {
     "texture": "mushroom/bee_red",
-    "model": "resourcefulbees:geo/flower_moss.geo.json"
+    "model": "resourcefulbees:geo/flower_moss.geo.json",
+    "ColorData": {
+      "spawnEggPrimaryColor": "#FE2A2A",
+      "spawnEggSecondaryColor": "#EDE8CA",
+      "jarColor": "#FE2A2A"
+    }
   },
   "resourcefulbees:mutation/v1": {
     "mutationCount": 15,

@@ -292,12 +292,6 @@ public final class TranslationConstants {
         @Translate("§8statistics.")
         public static final MutableComponent TOOLTIP_STATS = Component.translatable("item.resourcefulbees.tooltip_stats");
 
-        @Translate("§6Honey Glass (Bee)")
-        public static final MutableComponent HONEY_GLASS = Component.translatable("block.resourcefulbees.honey_glass.tooltip");
-
-        @Translate("§6Honey Glass (Player)")
-        public static final MutableComponent HONEY_GLASS_PLAYER = Component.translatable("block.resourcefulbees.honey_glass_player.tooltip");
-
         @Translate(" - %s")
         public static final String BEE_BOX_ENTITY_NAME = "item.resourcefulbees.bee_box.entity_name";
 

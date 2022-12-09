@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
-import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGeneratorMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
@@ -17,6 +16,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.NumberFormat;
@@ -40,7 +40,7 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
             this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
             renderEnergy(matrix, i+136, j+16, this.menu.getEnergy().getPercentage());
 
-            HoneyFluidTank tank = menu.getEntity().getTank();
+            FluidTank tank = menu.getEntity().getTank();
             FluidStack fluidStack = tank.getFluid();
 
             int height = (int)(54*((float)tank.getFluidAmount() / tank.getCapacity()));

@@ -4,12 +4,12 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
-import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.config.EnderBeeconConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -56,7 +56,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
 
     public static final Set<MobEffect> ALLOWED_EFFECTS = Set.of(ModEffects.CALMING.get(), MobEffects.WATER_BREATHING, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION);
 
-    private final HoneyFluidTank tank = new HoneyFluidTank(16000) {
+    private final FluidTank tank = new FluidTank(16000, fluidStack -> fluidStack.getFluid().is(ModFluidTags.HONEY)) {
         @Override
         protected void onContentsChanged() {
             sendToPlayersTrackingChunk();
@@ -200,7 +200,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
 
     //endregion
 
-    public HoneyFluidTank getTank() {
+    public FluidTank getTank() {
         return tank;
     }
 

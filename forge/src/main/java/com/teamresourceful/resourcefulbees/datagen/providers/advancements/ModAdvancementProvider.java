@@ -78,16 +78,6 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 ))
                 .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/beepedia_complete")));
 
-        //TODO add back when patchouli is updated or if we do our own book
-/*        ItemStack fifityShadesOfBeesBook = PatchouliAPI.get().getBookStack(ModConstants.SHADES_OF_BEES);
-
-        addAdvancement(createAdvancement(fifityShadesOfBeesBook, "fifty_shades_of_bees", root)
-                .addCriterion("has_guide_book", InventoryChangeTrigger.TriggerInstance.hasItems(
-                        ItemPredicate.Builder.item().of(fifityShadesOfBeesBook.getItem()).hasNbt(fifityShadesOfBeesBook.serializeNBT()).build()
-                ))
-                .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/fifty_shades_of_bees"))
-        );*/
-
         ItemStack filledJar = createBeejar("minecraft:bee", "#edc343");
 
         Advancement collectBee = addAdvancement(createAdvancement(filledJar, "collect_bee", beeJar)

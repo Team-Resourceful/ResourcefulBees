@@ -4,12 +4,12 @@ import com.teamresourceful.resourcefulbees.common.block.HoneyGenerator;
 import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
-import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.config.HoneyGenConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGeneratorMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -47,7 +47,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
             setChanged();
         }
     };
-    private final HoneyFluidTank tank = new HoneyFluidTank(MAX_TANK_STORAGE) {
+    private final FluidTank tank = new FluidTank(MAX_TANK_STORAGE, fluidStack -> fluidStack.getFluid().is(ModFluidTags.HONEY)) {
         @Override
         protected void onContentsChanged() {
             setChanged();
@@ -208,7 +208,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
         return processingTime;
     }
 
-    public HoneyFluidTank getTank() {
+    public FluidTank getTank() {
         return tank;
     }
 

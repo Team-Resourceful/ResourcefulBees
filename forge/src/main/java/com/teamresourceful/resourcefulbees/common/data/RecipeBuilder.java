@@ -45,7 +45,7 @@ import java.util.stream.Stream;
 
 import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
-public class RecipeBuilder implements ResourceManagerReloadListener {
+public final class RecipeBuilder implements ResourceManagerReloadListener {
     private static RecipeManager recipeManager;
 
     private static void setRecipeManager(RecipeManager recipeManager) {

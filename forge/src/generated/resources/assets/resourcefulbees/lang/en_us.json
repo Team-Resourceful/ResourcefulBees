@@ -689,7 +689,7 @@
   "item.resourcefulbees.yeti_bee_spawn_egg": "Yeti Bee Spawn Egg",
   "item.resourcefulbees.zombee_bee_spawn_egg": "Zombee Bee Spawn Egg",
   "item.resourcefulbees.zombee_honeycomb": "Zombee Honeycomb",
-  "itemGroup.resourcefulbees": "Resourceful Bees",
+  "itemGroup.resourcefulbees.resourcefulbees": "Resourceful Bees",
   "itemGroup.resourcefulbees.bees": "Resourceful Bees - Spawn Eggs",
   "itemGroup.resourcefulbees.combs": "Resourceful Bees - Combs",
   "itemGroup.resourcefulbees.hives": "Resourceful Bees - Hives",

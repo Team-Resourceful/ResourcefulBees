@@ -1,13 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,8 +14,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class HoneyGlass extends GlassBlock {
 
@@ -46,12 +40,6 @@ public class HoneyGlass extends GlassBlock {
 
     private static boolean isBeeContext(EntityCollisionContext context) {
         return context.getEntity() instanceof Bee;
-    }
-
-    @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-        super.appendHoverText(stack, level, tooltip, flag);
-        tooltip.add(collidePlayer ? TranslationConstants.Items.HONEY_GLASS : TranslationConstants.Items.HONEY_GLASS_PLAYER);
     }
 
     @Override

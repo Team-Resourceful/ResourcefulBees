@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
-import com.teamresourceful.resourcefulbees.common.capabilities.HoneyFluidTank;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyPotMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -82,10 +82,10 @@ public class HoneyPotBlockEntity extends GUISyncedBlockEntity {
         tank.readFromNBT(tag.getCompound(NBTConstants.NBT_TANK));
     }
 
-    public static class HoneyPotFluidTank extends HoneyFluidTank {
+    public static class HoneyPotFluidTank extends FluidTank {
 
         public HoneyPotFluidTank() {
-            super(64000);
+            super(64000, fluidStack -> fluidStack.getFluid().is(ModFluidTags.HONEY));
         }
 
         @Override

@@ -21,7 +21,6 @@ public final class ItemGroupResourcefulBees {
             .setAddingFunction(list -> {
                 list.add(ModItems.BEE_JAR);
                 list.add(ModItems.OREO_COOKIE);
-                list.add(ModItems.OREO_COOKIE);
                 list.add(ModItems.BEE_BOX);
                 list.add(ModItems.BEE_BOX_TEMP);
                 ItemStack creativeBeepedia = new ItemStack(ModItems.BEEPEDIA.get());
