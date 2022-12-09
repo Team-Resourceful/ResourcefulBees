@@ -1,5 +1,5 @@
 {
   "type": "resourcefulbees:nests",
   "biomes": "#minecraft:is_overworld",
-  "features": ["resourcefulbees:nether_nests"]
+  "features": ["resourcefulbees:overworld_nests"]
 }
