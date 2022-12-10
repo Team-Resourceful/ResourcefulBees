@@ -1,5 +1,6 @@
 {
-  "type": "resourcefulbees:gold_flower",
+  "type": "forge:add_features",
   "biomes": "#resourcefulbees:allows_gold_flower",
-  "features": ["resourcefulbees:gold_flower"]
+  "features": ["resourcefulbees:gold_flower"],
+  "step": "vegetal_decoration"
 }

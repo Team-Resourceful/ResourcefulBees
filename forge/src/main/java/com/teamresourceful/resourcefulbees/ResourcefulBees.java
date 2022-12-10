@@ -29,6 +29,7 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegis
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
+import com.teamresourceful.resourcefulbees.common.world.GoldFlowerBiomeModifier;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
@@ -164,6 +165,7 @@ public class ResourcefulBees {
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "any_filled_bee_jar"), FilledBeeJarIngredient.Serializer.INSTANCE);
         GameSetup.initPotionRecipes();
         ConditionRegistryImpl.freeze();
+        MinecraftForge.EVENT_BUS.addListener(GoldFlowerBiomeModifier::onBoneMealEvent);
     }
 
     @SubscribeEvent
