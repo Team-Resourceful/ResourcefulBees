@@ -13,6 +13,7 @@ import com.teamresourceful.resourcefulbees.common.data.DataSetup;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
 import com.teamresourceful.resourcefulbees.common.init.*;
+import com.teamresourceful.resourcefulbees.common.item.event.BonemealEventHandler;
 import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
@@ -29,7 +30,6 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegis
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
-import com.teamresourceful.resourcefulbees.common.world.GoldFlowerBiomeModifier;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
@@ -165,7 +165,7 @@ public class ResourcefulBees {
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "any_filled_bee_jar"), FilledBeeJarIngredient.Serializer.INSTANCE);
         GameSetup.initPotionRecipes();
         ConditionRegistryImpl.freeze();
-        MinecraftForge.EVENT_BUS.addListener(GoldFlowerBiomeModifier::onBoneMealEvent);
+        MinecraftForge.EVENT_BUS.addListener(BonemealEventHandler::onBoneMealEvent);
     }
 
     @SubscribeEvent
