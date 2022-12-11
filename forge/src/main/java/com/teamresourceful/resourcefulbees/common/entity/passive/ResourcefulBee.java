@@ -331,7 +331,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public void dropOffMutations() {
         this.numberOfMutations = getMutationData().count();
-        if (isFakeFlowerValid()) ((FakeFlowerEntity) level.getBlockEntity(fakeFlowerPos)).sendMutations(this);
+        if (isFakeFlowerValid()) ((FakeFlowerEntity) level.getBlockEntity(fakeFlowerPos)).createPollen(this);
     }
 
     public void setFakeFlowerPos(BlockPos clickedPos) {
