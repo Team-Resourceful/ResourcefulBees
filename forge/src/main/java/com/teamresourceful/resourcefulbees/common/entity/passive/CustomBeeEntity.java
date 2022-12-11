@@ -2,15 +2,9 @@ package com.teamresourceful.resourcefulbees.common.entity.passive;
 
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
-import com.teamresourceful.resourcefulbees.api.data.bee.BeeCombatData;
-import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
-import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
-import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
-import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
-import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
@@ -51,9 +45,6 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-import java.util.Objects;
-import java.util.Optional;
-
 public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeCompat {
 
     private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
@@ -61,7 +52,6 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     protected final CustomBeeData customBeeData;
-    protected final String beeType;
     protected int timeWithoutHive;
     protected int flowerID;
     private boolean hasHiveInRange;
@@ -69,7 +59,6 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     public CustomBeeEntity(EntityType<? extends Bee> type, Level world, String beeType) {
         super(type, world);
-        this.beeType = beeType;
         this.customBeeData = BeeRegistry.get().getBeeData(beeType);
     }
 
@@ -79,36 +68,9 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     //region BEE INFO RELATED METHODS BELOW
 
-    public String getBeeType() {
-        return beeType;
-    }
-
-    public BeeCoreData getCoreData() {
-        return customBeeData.getCoreData();
-    }
-
-    public Optional<OutputVariation> getHoneycombData() {
-        return getCoreData().getHoneycombData();
-    }
-
-    public BeeRenderData getRenderData() {
-        return customBeeData.getRenderData();
-    }
-
-    public BeeBreedData getBreedData() {
-        return customBeeData.getBreedData();
-    }
-
-    public BeeCombatData getCombatData() {
-        return customBeeData.getCombatData();
-    }
-
-    public BeeMutationData getMutationData() {
-        return customBeeData.getMutationData();
-    }
-
-    public BeeTraitData getTraitData() {
-        return customBeeData.getTraitData();
+    @Override
+    public CustomBeeData getBeeData() {
+        return customBeeData;
     }
 
     public int getFlowerEntityID() {
@@ -224,9 +186,9 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     }
 
     @Override
-    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.entityData.set(FEED_COUNT, compound.getInt(NBTConstants.NBT_FEED_COUNT));
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.entityData.set(FEED_COUNT, tag.getInt(NBTConstants.NBT_FEED_COUNT));
     }
 
     @Override
@@ -235,9 +197,9 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
-    public AgeableMob createSelectedChild(FamilyUnit beeFamily) {
-        EntityType<?> entityType = Objects.requireNonNull(beeFamily.getChildData().entityType());
-        return (AgeableMob) entityType.create(level);
+    @Override
+    public AgeableMob createSelectedChild(FamilyUnit family) {
+        return (AgeableMob) family.getChildData().entityType().create(level);
     }
 
     //This is because we don't want IF being able to breed our animals
@@ -266,7 +228,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     @Override
     public boolean isFood(@NotNull ItemStack stack) {
-        return this.getBreedData().feedItems().contains(stack.getItem().builtInRegistryHolder());
+        return this.getBreedData().isFood(stack);
     }
 
     @Override
@@ -325,10 +287,6 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
-    }
-
-    public CustomBeeData getBeeData() {
-        return customBeeData;
     }
 
     @Override

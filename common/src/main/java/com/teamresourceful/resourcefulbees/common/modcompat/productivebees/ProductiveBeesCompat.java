@@ -1,6 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.compat.productivebees;
+package com.teamresourceful.resourcefulbees.common.modcompat.productivebees;
 
-import com.teamresourceful.resourcefulbees.common.compat.base.ModCompat;
+import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompat;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;

@@ -2,6 +2,8 @@ package com.teamresourceful.resourcefulbees.api.compat;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCombatData;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
+import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
@@ -18,24 +20,39 @@ import java.util.Optional;
  */
 public interface CustomBee {
 
-    /**
-     * Gets "this" bee's type.
-     *
-     *  @return "This" bee's type.
-     */
-    String getBeeType();
+    CustomBeeData getBeeData();
 
-    BeeCoreData getCoreData();
+    default String getBeeType() {
+        return getBeeData().name();
+    }
 
-    Optional<OutputVariation> getHoneycombData();
+    default BeeCoreData getCoreData() {
+        return getBeeData().getCoreData();
+    }
 
-    BeeRenderData getRenderData();
+    default Optional<OutputVariation> getHoneycombData() {
+        return getBeeData().getCoreData().getHoneycombData();
+    }
 
-    BeeBreedData getBreedData();
+    default BeeRenderData getRenderData() {
+        return getBeeData().getRenderData();
+    }
 
-    BeeCombatData getCombatData();
+    default BeeBreedData getBreedData() {
+        return getBeeData().getBreedData();
+    }
 
-    BeeMutationData getMutationData();
+    default BeeCombatData getCombatData() {
+        return getBeeData().getCombatData();
+    }
+
+    default BeeMutationData getMutationData() {
+        return getBeeData().getMutationData();
+    }
+
+    default BeeTraitData getTraitData() {
+        return getBeeData().getTraitData();
+    }
 
     /**
      * Gets "this" bee's current number of times fed.

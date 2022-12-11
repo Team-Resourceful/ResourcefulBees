@@ -22,9 +22,9 @@ import com.teamresourceful.resourcefulbees.common.data.beedata.rendering.LayerDa
 import com.teamresourceful.resourcefulbees.common.data.beedata.rendering.LayerTexture;
 import com.teamresourceful.resourcefulbees.common.data.beedata.rendering.RenderData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.traits.TraitData;
-import com.teamresourceful.resourcefulbees.common.data.conditions.AndCondition;
-import com.teamresourceful.resourcefulbees.common.data.conditions.ModLoadedCondition;
-import com.teamresourceful.resourcefulbees.common.data.conditions.OrCondition;
+import com.teamresourceful.resourcefulbees.common.lib.data.conditions.AndCondition;
+import com.teamresourceful.resourcefulbees.common.lib.data.conditions.ModLoadedCondition;
+import com.teamresourceful.resourcefulbees.common.lib.data.conditions.OrCondition;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.CustomHoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.HoneyDataImpl;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.bottle.CustomHoneyBottleData;

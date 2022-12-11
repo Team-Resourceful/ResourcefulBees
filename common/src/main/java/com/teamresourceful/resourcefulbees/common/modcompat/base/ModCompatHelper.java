@@ -1,7 +1,7 @@
-package com.teamresourceful.resourcefulbees.common.compat.base;
+package com.teamresourceful.resourcefulbees.common.modcompat.base;
 
-import com.teamresourceful.resourcefulbees.common.compat.bumblezone.BumblezoneCompat;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.common.modcompat.bumblezone.BumblezoneCompat;
+import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;

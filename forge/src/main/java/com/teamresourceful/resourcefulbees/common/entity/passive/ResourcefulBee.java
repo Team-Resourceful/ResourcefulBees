@@ -100,7 +100,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             this.targetSelector.addGoal(2, new Bee.BeeBecomeAngryTargetGoal(this));
         }
         if (getBreedData().hasParents()) {
-            this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D, beeType));
+            this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D, getBeeType()));
             this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D));
             this.goalSelector.addGoal(6, new FollowParentGoal(this, 1.25D));
         }
@@ -303,13 +303,13 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
         this.fakeFlowerPos = null;
-        if (compound.contains(NBTConstants.FAKE_FLOWER_POS)) {
-            this.fakeFlowerPos = NbtUtils.readBlockPos(compound.getCompound(NBTConstants.FAKE_FLOWER_POS));
+        if (tag.contains(NBTConstants.FAKE_FLOWER_POS)) {
+            this.fakeFlowerPos = NbtUtils.readBlockPos(tag.getCompound(NBTConstants.FAKE_FLOWER_POS));
         }
-        this.numberOfMutations = compound.getInt(NBTConstants.NBT_MUTATION_COUNT);
+        this.numberOfMutations = tag.getInt(NBTConstants.NBT_MUTATION_COUNT);
     }
 
     @Override

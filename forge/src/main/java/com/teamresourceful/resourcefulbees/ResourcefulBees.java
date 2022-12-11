@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.client.event.ClientEventHandlers;
 import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
-import com.teamresourceful.resourcefulbees.common.compat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.data.DataGen;
@@ -18,6 +17,7 @@ import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHol
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
+import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
@@ -164,6 +164,7 @@ public class ResourcefulBees {
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "any_filled_bee_jar"), FilledBeeJarIngredient.Serializer.INSTANCE);
         GameSetup.initPotionRecipes();
+        GameSetup.initArguments();
         ConditionRegistryImpl.freeze();
         MinecraftForge.EVENT_BUS.addListener(BonemealEventHandler::onBoneMealEvent);
     }

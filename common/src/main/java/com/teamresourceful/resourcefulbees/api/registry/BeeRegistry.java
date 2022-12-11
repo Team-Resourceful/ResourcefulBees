@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -33,6 +34,14 @@ public interface BeeRegistry {
      *  @return Returns a BeeData object for the given bee type.
      */
     CustomBeeData getBeeData(String bee);
+
+    /**
+     * Returns a BeeData object for the given bee type.
+     *
+     *  @param bee Bee type for which BeeData is requested.
+     *  @return Returns an optional BeeData object for the given bee type.
+     */
+    Optional<CustomBeeData> getOptionalBeeData(String bee);
 
     /**
      * Returns weather a bee type is registered in the registry.
