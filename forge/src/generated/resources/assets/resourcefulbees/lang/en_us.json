@@ -270,6 +270,7 @@
   "block.resourcefulbees.waxed_trapdoor": "Waxed Trapdoor",
   "block.resourcefulbees.wither_honeycomb_block": "Wither Honeycomb Block",
   "block.resourcefulbees.zombee_honeycomb_block": "Zombee Honeycomb Block",
+  "block.resourcefulbees.fake_flower": "Fake Gold Flower",
   "book.resourcefulbees.apiary_category": "Apiary Basics",
   "book.resourcefulbees.apiary_category.apiary_basics": "Apiary Basics",
   "book.resourcefulbees.apiary_category.apiary_basics.1": "There are $(or)four tiers$() to the apiary.$(br2)Each tier $(or)increases$() the amount of $(or)combs$() generated per bee and $(or)decreases$() the amount of $(or)time$() the bee spends in the Apiary.$(br2)An Apiary can only be occupied by nine $(or)unique$() bees.",

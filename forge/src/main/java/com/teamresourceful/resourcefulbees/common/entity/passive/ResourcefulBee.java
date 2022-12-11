@@ -325,13 +325,13 @@ public class ResourcefulBee extends CustomBeeEntity {
         return this.fakeFlowerPos != null;
     }
 
-    public void dropFakeFlower() {
+    public void removeFakeFlower() {
         fakeFlowerPos = null;
     }
 
     public void dropOffMutations() {
-        this.numberOfMutations = 0;
-        ((FakeFlowerEntity) level.getBlockEntity(fakeFlowerPos)).sendMutations(this);
+        this.numberOfMutations = getMutationData().count();
+        if (isFakeFlowerValid()) ((FakeFlowerEntity) level.getBlockEntity(fakeFlowerPos)).sendMutations(this);
     }
 
     public void setFakeFlowerPos(BlockPos clickedPos) {
