@@ -7,9 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class BeepediaSavedData extends SavedData {
 
@@ -41,8 +39,27 @@ public class BeepediaSavedData extends SavedData {
     }
 
     public static void addBee(Player player, String bee) {
+        addBees(player, Collections.singletonList(bee));
+    }
+
+    public static void removeBee(Player player, String bee) {
         BeepediaSavedData data = read(player.level);
-        data.players.computeIfAbsent(player.getUUID(), ignored -> new BeepediaData()).addBee(bee);
+        if (data.players.computeIfAbsent(player.getUUID(), ignored -> new BeepediaData()).removeBee(bee)) {
+            data.setDirty();
+        }
+    }
+
+    public static void clearBees(Player player) {
+        BeepediaSavedData data = read(player.level);
+        if (data.players.remove(player.getUUID()) != null) {
+            data.setDirty();
+        }
+    }
+
+    public static void addBees(Player player, Collection<String> bees) {
+        BeepediaSavedData data = read(player.level);
+        BeepediaData beepedia = data.players.computeIfAbsent(player.getUUID(), ignored -> new BeepediaData());
+        bees.forEach(beepedia::addBee);
         data.setDirty();
     }
 

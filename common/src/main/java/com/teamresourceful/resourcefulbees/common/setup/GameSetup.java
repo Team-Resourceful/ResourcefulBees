@@ -1,9 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.setup;
 
 import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesCommand;
+import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
 import com.teamresourceful.resourcefulbees.common.resources.conditions.LoadDevRecipes;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
+import com.teamresourceful.resourcefulbees.platform.common.registry.RegistryHelper;
 import com.teamresourceful.resourcefulbees.platform.common.registry.potion.PotionRegistry;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.ConditionRegistry;
 import net.minecraft.core.Registry;
@@ -30,5 +33,9 @@ public final class GameSetup {
     public static void initPotionRecipes() {
         PotionRegistry.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(HONEY_BOTTLE_TAG), ModPotions.CALMING_POTION.get());
         PotionRegistry.registerPotionRecipe(ModPotions.CALMING_POTION.get(), Ingredient.of(Items.GLOWSTONE_DUST), ModPotions.LONG_CALMING_POTION.get());
+    }
+
+    public static void initArguments() {
+        RegistryHelper.register(ModArguments.BEE_TYPE, BeeArgument.class);
     }
 }

@@ -1,16 +1,10 @@
 package com.teamresourceful.resourcefulbees.platform.common.events;
 
-public class UpdateEvent {
+import com.teamresourceful.resourcefulbees.platform.common.events.base.EventHelper;
 
-    private final UpdateType type;
+public record UpdateEvent(UpdateType type) {
 
-    public UpdateEvent(UpdateType type) {
-        this.type = type;
-    }
-
-    public UpdateType getType() {
-        return type;
-    }
+    public static final EventHelper<UpdateEvent> EVENT = new EventHelper<>();
 
     public enum UpdateType {
         RECIPE,

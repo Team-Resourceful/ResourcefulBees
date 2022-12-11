@@ -28,6 +28,14 @@ public class BeepediaData {
         bees.computeIfAbsent(bee, ignored -> new BeepediaBeeData(Instant.now().getEpochSecond()));
     }
 
+    public boolean removeBee(String bee) {
+        return bees.remove(bee) != null;
+    }
+
+    public int size() {
+        return bees.size();
+    }
+
     public CompoundTag save() {
         CompoundTag map = new CompoundTag();
         bees.forEach((key, value) -> map.put(key, value.save()));

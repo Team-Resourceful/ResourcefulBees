@@ -343,6 +343,8 @@ public final class TranslationConstants {
         @Translate("Honey")
         public static final MutableComponent HONEY = Component.translatable("gui.resourcefulbees.beepedia.honey");
 
+        @Translate("No be with that name found!")
+        public static final MutableComponent COMMAND_NONE_FOUND = Component.translatable("argument.resourcefulbees.beepedia.bee_not_found");
 
         public static class Home {
 

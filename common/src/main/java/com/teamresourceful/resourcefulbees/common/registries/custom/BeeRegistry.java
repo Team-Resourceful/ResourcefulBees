@@ -58,6 +58,11 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
         return CUSTOM_DATA.getOrDefault(beeType, DEFAULT_DATA.get());
     }
 
+    @Override
+    public Optional<CustomBeeData> getOptionalBeeData(String beeType) {
+        return Optional.ofNullable(CUSTOM_DATA.get(beeType));
+    }
+
     /**
      * This method first iterates over the internal map of raw data and populates
      * the registry with new {@link CustomBeeData} objects that have been parsed

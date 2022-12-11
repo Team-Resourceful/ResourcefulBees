@@ -164,6 +164,7 @@ public class ResourcefulBees {
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "any_filled_bee_jar"), FilledBeeJarIngredient.Serializer.INSTANCE);
         GameSetup.initPotionRecipes();
+        GameSetup.initArguments();
         ConditionRegistryImpl.freeze();
         MinecraftForge.EVENT_BUS.addListener(BonemealEventHandler::onBoneMealEvent);
     }

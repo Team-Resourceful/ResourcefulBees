@@ -12,6 +12,9 @@ public class ResourcefulBeesCommand {
     }
 
     public static void registerCommand(CommandRegisterEvent event) {
-        event.dispatcher().register(Commands.literal(BeeConstants.MOD_ID).then(TemplateCommand.register()));
+        event.dispatcher().register(Commands.literal(BeeConstants.MOD_ID)
+                .then(TemplateCommand.register())
+                .then(BeepediaCommand.register())
+        );
     }
 }
