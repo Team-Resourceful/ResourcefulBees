@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.compat.base;
+package com.teamresourceful.resourcefulbees.common.modcompat.base;
 
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.server.level.ServerPlayer;

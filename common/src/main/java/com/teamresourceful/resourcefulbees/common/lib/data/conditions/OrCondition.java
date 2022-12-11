@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.data.conditions;
+package com.teamresourceful.resourcefulbees.common.lib.data.conditions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

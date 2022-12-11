@@ -1,11 +1,11 @@
-package com.teamresourceful.resourcefulbees.common.data.conditions;
+package com.teamresourceful.resourcefulbees.common.lib.data.conditions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.conditions.LoadCondition;
 import com.teamresourceful.resourcefulbees.api.data.conditions.LoadConditionSerializer;
+import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.ModList;
 
 public record ModLoadedCondition(String modid) implements LoadCondition<ModLoadedCondition> {
 
@@ -17,7 +17,7 @@ public record ModLoadedCondition(String modid) implements LoadCondition<ModLoade
 
     @Override
     public boolean canLoad() {
-        return ModList.get().isLoaded(modid);
+        return ModUtils.isModLoaded(modid);
     }
 
     @Override

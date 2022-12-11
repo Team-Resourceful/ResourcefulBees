@@ -44,15 +44,6 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
         return itemsRegistered;
     }
 
-    /**
-     * Returns an instance of the {@link HoneycombRegistry} for accessing data from the registry.
-     * The honeycomb registry is a central point for getting any honeycomb data pertinent to
-     * <i>Resourceful Bees</i>. The registry contains a cache of {@link JsonObject}'s and
-     * {@link OutputVariation} objects for all honeycombs registered to the mod in addition
-     * to other items bees can output in hives and apiaries.
-     *
-     * @return Returns an instance of the {@link HoneycombRegistry} for accessing data from the registry.
-     */
     public static HoneycombRegistry getRegistry() {
         return INSTANCE;
     }

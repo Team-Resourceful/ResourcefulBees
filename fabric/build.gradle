@@ -25,6 +25,9 @@ dependencies {
 
     modApi("com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-$rootProject.resourcefulconfig_version")
 
+    //TODO when fabric gets running we do need transitive, this was just disabled so I could not deal with updating the maven
+    modImplementation("com.telepathicgrunt:Bumblezone-Fabric:$rootProject.bumblezone_version") { transitive false }
+
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 }

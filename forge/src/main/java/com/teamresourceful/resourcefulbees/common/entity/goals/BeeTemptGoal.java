@@ -6,23 +6,22 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 
 public class BeeTemptGoal extends Goal {
     private static final TargetingConditions ENTITY_PREDICATE = (TargetingConditions.forNonCombat()).range(10.0D).ignoreInvisibilityTesting().ignoreLineOfSight();
-    protected final CustomBeeEntity beeEntity;
+    protected final CustomBeeEntity bee;
     private final double speed;
     protected Player closestPlayer;
     private int delayTemptCounter;
 
 
-    public BeeTemptGoal(CustomBeeEntity beeEntity, double speedIn) {
-        this.beeEntity = beeEntity;
+    public BeeTemptGoal(CustomBeeEntity bee, double speedIn) {
+        this.bee = bee;
         this.speed = speedIn;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-        if (!(beeEntity.getNavigation() instanceof GroundPathNavigation) && !(beeEntity.getNavigation() instanceof FlyingPathNavigation)) {
+        if (!(bee.getNavigation() instanceof GroundPathNavigation) && !(bee.getNavigation() instanceof FlyingPathNavigation)) {
             throw new IllegalArgumentException("Unsupported mob type for TemptGoal");
         }
     }
@@ -36,12 +35,8 @@ public class BeeTemptGoal extends Goal {
             --this.delayTemptCounter;
             return false;
         }
-        this.closestPlayer = this.beeEntity.level.getNearestPlayer(ENTITY_PREDICATE, this.beeEntity);
-        return this.closestPlayer != null && (this.isTempting(this.closestPlayer.getMainHandItem()) || this.isTempting(this.closestPlayer.getOffhandItem()));
-    }
-
-    protected boolean isTempting(ItemStack stack) {
-        return this.beeEntity.getBreedData().feedItems().contains(stack.getItem().builtInRegistryHolder());
+        this.closestPlayer = this.bee.level.getNearestPlayer(ENTITY_PREDICATE, this.bee);
+        return this.closestPlayer != null && (bee.isFood(this.closestPlayer.getMainHandItem()) || bee.isFood(this.closestPlayer.getOffhandItem()));
     }
 
     /**
@@ -58,7 +53,7 @@ public class BeeTemptGoal extends Goal {
     @Override
     public void stop() {
         this.closestPlayer = null;
-        this.beeEntity.getNavigation().stop();
+        this.bee.getNavigation().stop();
         this.delayTemptCounter = 100;
     }
 
@@ -67,11 +62,11 @@ public class BeeTemptGoal extends Goal {
      */
     @Override
     public void tick() {
-        this.beeEntity.getLookControl().setLookAt(this.closestPlayer, (this.beeEntity.getMaxHeadYRot() + 20), this.beeEntity.getMaxHeadXRot());
-        if (this.beeEntity.distanceToSqr(this.closestPlayer) < 6.25D) {
-            this.beeEntity.getNavigation().stop();
+        this.bee.getLookControl().setLookAt(this.closestPlayer, (this.bee.getMaxHeadYRot() + 20), this.bee.getMaxHeadXRot());
+        if (this.bee.distanceToSqr(this.closestPlayer) < 6.25D) {
+            this.bee.getNavigation().stop();
         } else {
-            this.beeEntity.getNavigation().moveTo(this.closestPlayer, this.speed);
+            this.bee.getNavigation().moveTo(this.closestPlayer, this.speed);
         }
 
     }

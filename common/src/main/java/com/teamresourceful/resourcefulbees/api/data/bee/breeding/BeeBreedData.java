@@ -23,4 +23,8 @@ public interface BeeBreedData extends BeeData<BeeBreedData> {
     int breedDelay();
 
     boolean hasParents();
+
+    default boolean isFood(ItemStack stack) {
+        return feedItems().contains(stack.getItem().builtInRegistryHolder());
+    }
 }
