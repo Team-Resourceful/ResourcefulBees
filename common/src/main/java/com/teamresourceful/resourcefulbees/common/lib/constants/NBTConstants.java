@@ -1,3 +1,4 @@
+
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.DontCheckCasing;
@@ -13,6 +14,7 @@ public final class NBTConstants {
     private NBTConstants() {
         throw new UtilityClassError();
     }
+
 
     //TODO make tag casing more consistent
     public static final String NBT_BEES = "Bees";
@@ -50,21 +52,22 @@ public final class NBTConstants {
     public static final String NBT_TANK = "Tank";
     public static final String ROTATIONS = "Rotations";
     public static final String SYNC_DATA = "SyncData";
+    public static final String FAKE_FLOWER_POS = "FakeFlowerPos";
 
     public static final String ENTITY_TAG = "EntityTag";
-
     public static class Beecon {
+
         @DontCheckCasing
         public static final String RANGE = "range";
         @DontCheckCasing
         public static final String ACTIVE_EFFECTS = "active_effects";
     }
-
     public static class Breeder {
+
         public static final String TIME_REDUCTION = "TimeReduction";
     }
-
     public static class BeeJar {
+
         public static final String COLOR = "Color";
         public static final String ENTITY = "Entity";
         public static final String DISPLAY_NAME = "DisplayName";

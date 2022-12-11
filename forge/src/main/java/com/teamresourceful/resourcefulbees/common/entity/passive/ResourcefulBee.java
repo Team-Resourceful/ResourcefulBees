@@ -69,15 +69,15 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         ((BeeEntityAccessor) this).setPollinateGoal(new FakePollinateGoal());
 
-        this.goalSelector.addGoal(5, new UpdateBeehiveGoal2());
+        this.goalSelector.addGoal(6, new UpdateBeehiveGoal2());
 
         ((BeeEntityAccessor) this).setGoToHiveGoal(new FindBeehiveGoal2());
-        this.goalSelector.addGoal(5, ((BeeEntityAccessor) this).getGoToHiveGoal());
+        this.goalSelector.addGoal(6, ((BeeEntityAccessor) this).getGoToHiveGoal());
 
         ((BeeEntityAccessor) this).setGoToKnownFlowerGoal(new BeeGoToKnownFlowerGoal());
-        this.goalSelector.addGoal(6, ((BeeEntityAccessor) this).getGoToKnownFlowerGoal());
-        this.goalSelector.addGoal(8, !BeeConfig.manualMode ? new BeeWanderGoal(this) : new WanderWorkerGoal(this));
-        this.goalSelector.addGoal(9, new FloatGoal(this));
+        this.goalSelector.addGoal(7, ((BeeEntityAccessor) this).getGoToKnownFlowerGoal());
+        this.goalSelector.addGoal(9, !BeeConfig.manualMode ? new BeeWanderGoal(this) : new WanderWorkerGoal(this));
+        this.goalSelector.addGoal(10, new FloatGoal(this));
     }
 
     /**
@@ -102,11 +102,11 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (getBreedData().hasParents()) {
             this.goalSelector.addGoal(2, new BeeBreedGoal(this, 1.0D, beeType));
             this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D));
-            this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
+            this.goalSelector.addGoal(6, new FollowParentGoal(this, 1.25D));
         }
         if (getMutationData().hasMutation()) {
-            this.goalSelector.addGoal(4, new BeeFakeFlowerGoal(this));
-            this.goalSelector.addGoal(7, new BeeMutateGoal(this));
+            this.goalSelector.addGoal(5, new BeeFakeFlowerGoal(this));
+            this.goalSelector.addGoal(8, new BeeMutateGoal(this));
         }
     }
 
@@ -306,8 +306,8 @@ public class ResourcefulBee extends CustomBeeEntity {
     public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.fakeFlowerPos = null;
-        if (compound.contains("FakeFlowerPos")) {
-            this.fakeFlowerPos = NbtUtils.readBlockPos(compound.getCompound("FakeFlowerPos"));
+        if (compound.contains(NBTConstants.FAKE_FLOWER_POS)) {
+            this.fakeFlowerPos = NbtUtils.readBlockPos(compound.getCompound(NBTConstants.FAKE_FLOWER_POS));
         }
         this.numberOfMutations = compound.getInt(NBTConstants.NBT_MUTATION_COUNT);
     }
@@ -316,7 +316,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.hasFakeFlower()) {
-            compound.put("FakeFlowerPos", NbtUtils.writeBlockPos(this.getFakeFlowerPos()));
+            compound.put(NBTConstants.FAKE_FLOWER_POS, NbtUtils.writeBlockPos(this.getFakeFlowerPos()));
         }
         compound.putInt(NBTConstants.NBT_MUTATION_COUNT, this.numberOfMutations);
     }

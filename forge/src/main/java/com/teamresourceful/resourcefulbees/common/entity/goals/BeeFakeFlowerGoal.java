@@ -7,6 +7,8 @@ import net.minecraft.world.entity.ai.util.AirRandomPos;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.EnumSet;
+
 public class BeeFakeFlowerGoal extends Goal {
 
     private final ResourcefulBee bee;
@@ -17,11 +19,12 @@ public class BeeFakeFlowerGoal extends Goal {
 
     public BeeFakeFlowerGoal(ResourcefulBee bee) {
         this.bee = bee;
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
     @Override
     public boolean canUse() {
-        return bee.hasFakeFlower() && bee.hasNectar() && bee.getNumberOfMutations() > 0;
+        return bee.hasFakeFlower() && bee.hasNectar() && bee.getNumberOfMutations() < bee.getMutationData().count();
     }
 
     public void tick() {
@@ -60,20 +63,22 @@ public class BeeFakeFlowerGoal extends Goal {
         this.travellingTicks = 0;
         this.ticksStuck = 0;
     }
+
     boolean isTooFarAway(BlockPos pos) {
         return !bee.blockPosition().closerThan(pos, 32);
     }
 
     private boolean pathfindDirectlyTowards(BlockPos pos) {
         bee.getNavigation().setMaxVisitedNodesMultiplier(10.0F);
-        bee.getNavigation().moveTo((double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 1.0);
+        bee.getNavigation().moveTo((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), 1.0);
         return bee.getNavigation().getPath() != null && bee.getNavigation().getPath().canReach();
     }
+
     private void pathfindRandomlyTowards(BlockPos pos) {
         Vec3 vec3 = Vec3.atBottomCenterOf(pos);
         int i = 0;
         BlockPos blockpos = bee.blockPosition();
-        int j = (int)vec3.y - blockpos.getY();
+        int j = (int) vec3.y - blockpos.getY();
         if (j > 2) {
             i = 4;
         } else if (j < -2) {
