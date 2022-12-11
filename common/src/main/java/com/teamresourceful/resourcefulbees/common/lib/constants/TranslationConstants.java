@@ -502,8 +502,8 @@ public final class TranslationConstants {
     }
 
     public static class FakeFLower {
-        @Translate("Fake Gold Flower")
-        public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.fake_flower.title");
+        @Translate("Fake Golden Flower")
+        public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.fake_flower");
     }
 
     public static class Centrifuge {
