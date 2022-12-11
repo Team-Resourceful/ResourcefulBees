@@ -1,7 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.FakeFlowerEntity;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
@@ -65,6 +67,13 @@ public class HoneyDipper extends Item {
             if (clickedTile instanceof BeehiveBlockEntity || clickedTile instanceof ApiaryBlockEntity) {
                 ((BeeEntityAccessor)bee).setHivePos(context.getClickedPos());
                 sendMessageToPlayer(bee, player, MessageTypes.HIVE, context.getClickedPos());
+                player.setItemInHand(context.getHand(), setEntity(stack, null));
+                return InteractionResult.SUCCESS;
+            }
+
+            if (clickedTile instanceof FakeFlowerEntity && bee instanceof ResourcefulBee) {
+                ((ResourcefulBee)bee).setFakeFlowerPos(context.getClickedPos());
+                sendMessageToPlayer(bee, player, MessageTypes.FAKE_FLOWER, context.getClickedPos());
                 player.setItemInHand(context.getHand(), setEntity(stack, null));
                 return InteractionResult.SUCCESS;
             }
@@ -150,7 +159,8 @@ public class HoneyDipper extends Item {
         FLOWER(args -> Component.translatable(TranslationConstants.HoneyDipper.FLOWER_SET, args)),
         HIVE(args -> Component.translatable(TranslationConstants.HoneyDipper.HIVE_SET, args)),
         BEE_SELECTED(args -> Component.translatable(TranslationConstants.HoneyDipper.BEE_SET, args)),
-        BEE_CLEARED(args -> TranslationConstants.HoneyDipper.SELECTION_CLEARED);
+        BEE_CLEARED(args -> TranslationConstants.HoneyDipper.SELECTION_CLEARED),
+        FAKE_FLOWER(args -> Component.translatable(TranslationConstants.HoneyDipper.FAKE_FLOWER_SET, args));
 
         private final Function<Object[], MutableComponent> component;
 

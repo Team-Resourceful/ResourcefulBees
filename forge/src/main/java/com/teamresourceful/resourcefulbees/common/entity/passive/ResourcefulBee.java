@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.entity.passive;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
+import com.teamresourceful.resourcefulbees.common.blockentity.FakeFlowerEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
@@ -14,8 +15,10 @@ import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAcces
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeGoToHiveGoalInvoker;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
 import com.teamresourceful.resourcefulbees.common.registries.custom.TraitAbilityRegistry;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -49,6 +52,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     private RBeePollinateGoal pollinateGoal;
     private int explosiveCooldown = 0;
     private final @Nullable AuraHandler auraHandler;
+    private BlockPos fakeFlowerPos = null;
 
     public ResourcefulBee(EntityType<? extends Bee> type, Level level, String beeType) {
         super(type, level, beeType);
@@ -63,15 +67,15 @@ public class ResourcefulBee extends CustomBeeEntity {
         this.pollinateGoal = new RBeePollinateGoal(this);
         this.goalSelector.addGoal(4, this.pollinateGoal);
 
-        ((BeeEntityAccessor)this).setPollinateGoal(new FakePollinateGoal());
+        ((BeeEntityAccessor) this).setPollinateGoal(new FakePollinateGoal());
 
         this.goalSelector.addGoal(5, new UpdateBeehiveGoal2());
 
-        ((BeeEntityAccessor)this).setGoToHiveGoal(new FindBeehiveGoal2());
-        this.goalSelector.addGoal(5, ((BeeEntityAccessor)this).getGoToHiveGoal());
+        ((BeeEntityAccessor) this).setGoToHiveGoal(new FindBeehiveGoal2());
+        this.goalSelector.addGoal(5, ((BeeEntityAccessor) this).getGoToHiveGoal());
 
-        ((BeeEntityAccessor)this).setGoToKnownFlowerGoal(new BeeGoToKnownFlowerGoal());
-        this.goalSelector.addGoal(6, ((BeeEntityAccessor)this).getGoToKnownFlowerGoal());
+        ((BeeEntityAccessor) this).setGoToKnownFlowerGoal(new BeeGoToKnownFlowerGoal());
+        this.goalSelector.addGoal(6, ((BeeEntityAccessor) this).getGoToKnownFlowerGoal());
         this.goalSelector.addGoal(8, !BeeConfig.manualMode ? new BeeWanderGoal(this) : new WanderWorkerGoal(this));
         this.goalSelector.addGoal(9, new FloatGoal(this));
     }
@@ -89,6 +93,7 @@ public class ResourcefulBee extends CustomBeeEntity {
      */
     @SuppressWarnings("JavadocReference")
     protected void registerConditionalGoals() {
+
         if (!getCombatData().isPassive()) {
             this.goalSelector.addGoal(0, new Bee.BeeAttackGoal(this, 1.4, true));
             this.targetSelector.addGoal(1, (new BeeAngerGoal(this)).setAlertOthers());
@@ -100,6 +105,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25D));
         }
         if (getMutationData().hasMutation()) {
+            this.goalSelector.addGoal(4, new BeeFakeFlowerGoal(this));
             this.goalSelector.addGoal(7, new BeeMutateGoal(this));
         }
     }
@@ -107,6 +113,10 @@ public class ResourcefulBee extends CustomBeeEntity {
     @Override
     protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
         return new BeePathNavigation(this, level, () -> !pollinateGoal.isPollinating());
+    }
+
+    public BlockPos getFakeFlowerPos() {
+        return this.fakeFlowerPos;
     }
 
     @Override
@@ -141,9 +151,9 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     public boolean wantsToEnterHive() {
-        if (((BeeEntityAccessor)this).getStayOutOfHiveCountdown() <= 0 && !this.pollinateGoal.isPollinating() && !this.hasStung() && this.getTarget() == null) {
-            boolean flag = ((BeeInvoker)this).callIsTiredOfLookingForNectar() || this.hasNectar();
-            return flag && !((BeeInvoker)this).callIsHiveNearFire();
+        if (((BeeEntityAccessor) this).getStayOutOfHiveCountdown() <= 0 && !this.pollinateGoal.isPollinating() && !this.hasStung() && this.getTarget() == null) {
+            boolean flag = ((BeeInvoker) this).callIsTiredOfLookingForNectar() || this.hasNectar();
+            return flag && !((BeeInvoker) this).callIsHiveNearFire();
         }
         return false;
     }
@@ -159,6 +169,10 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public int getNumberOfMutations() {
         return this.numberOfMutations;
+    }
+
+    public boolean isFakeFlowerValid() {
+        return hasFakeFlower() && this.level.isLoaded(this.fakeFlowerPos) && this.level.getBlockState(this.fakeFlowerPos).is(ModBlocks.FAKE_FLOWER.get());
     }
 
     @Override
@@ -291,16 +305,41 @@ public class ResourcefulBee extends CustomBeeEntity {
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
+        this.fakeFlowerPos = null;
+        if (compound.contains("FakeFlowerPos")) {
+            this.fakeFlowerPos = NbtUtils.readBlockPos(compound.getCompound("FakeFlowerPos"));
+        }
         this.numberOfMutations = compound.getInt(NBTConstants.NBT_MUTATION_COUNT);
     }
 
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
+        if (this.hasFakeFlower()) {
+            compound.put("FakeFlowerPos", NbtUtils.writeBlockPos(this.getFakeFlowerPos()));
+        }
         compound.putInt(NBTConstants.NBT_MUTATION_COUNT, this.numberOfMutations);
     }
 
+    public boolean hasFakeFlower() {
+        return this.fakeFlowerPos != null;
+    }
+
+    public void dropFakeFlower() {
+        fakeFlowerPos = null;
+    }
+
+    public void dropOffMutations() {
+        this.numberOfMutations = 0;
+        ((FakeFlowerEntity) level.getBlockEntity(fakeFlowerPos)).sendMutations(this);
+    }
+
+    public void setFakeFlowerPos(BlockPos clickedPos) {
+        fakeFlowerPos = clickedPos;
+    }
+
     public class EnterBeehiveGoal2 extends Bee.BeeEnterHiveGoal {
+
         public EnterBeehiveGoal2() {
             super();
         }
@@ -314,13 +353,13 @@ public class ResourcefulBee extends CustomBeeEntity {
                         return true;
                     }
 
-                    ((BeeEntityAccessor)ResourcefulBee.this).setHivePos(null);
+                    ((BeeEntityAccessor) ResourcefulBee.this).setHivePos(null);
                 } else if (blockEntity instanceof BeeHolderBlockEntity apiaryBlockEntity) {
                     if (apiaryBlockEntity.hasSpace()) {
                         return true;
                     }
 
-                    ((BeeEntityAccessor)ResourcefulBee.this).setHivePos(null);
+                    ((BeeEntityAccessor) ResourcefulBee.this).setHivePos(null);
                 }
             }
 
@@ -342,13 +381,14 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public class FindBeehiveGoal2 extends BeeGoToHiveGoal {
 
+
         public FindBeehiveGoal2() {
             super();
         }
 
         @Override
         public boolean canBeeUse() {
-            return getHivePos() != null && !hasRestriction() && wantsToEnterHive() && !((BeeGoToHiveGoalInvoker)this).callHasReachedTarget(getHivePos()) && isHiveValid();
+            return getHivePos() != null && !hasRestriction() && wantsToEnterHive() && !((BeeGoToHiveGoalInvoker) this).callHasReachedTarget(getHivePos()) && isHiveValid();
         }
 
         @Override
@@ -360,6 +400,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     public class FakePollinateGoal extends Bee.BeePollinateGoal {
+
         public FakePollinateGoal() {
             super();
         }
@@ -376,6 +417,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     public class UpdateBeehiveGoal2 extends Bee.BeeLocateHiveGoal {
+
         public UpdateBeehiveGoal2() {
             super();
         }

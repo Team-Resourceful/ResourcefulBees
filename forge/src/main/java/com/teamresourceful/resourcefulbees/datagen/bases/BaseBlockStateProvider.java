@@ -83,9 +83,9 @@ public abstract class BaseBlockStateProvider extends BlockStateProvider {
 
     protected void trapdoorBlockWithItem(RegistryEntry<? extends TrapDoorBlock> block, ResourceLocation texture) {
         String baseName = idFull(block) + "_trapdoor";
-        ModelFile bottom = models().trapdoorOrientableBottom(baseName + "_bottom", texture).renderType("cutcout");
-        ModelFile top = models().trapdoorOrientableTop(baseName + "_top", texture).renderType("cutcout");
-        ModelFile open = models().trapdoorOrientableOpen(baseName + "_open", texture).renderType("cutcout");
+        ModelFile bottom = models().trapdoorOrientableBottom(baseName + "_bottom", texture).renderType("cutout");
+        ModelFile top = models().trapdoorOrientableTop(baseName + "_top", texture).renderType("cutout");
+        ModelFile open = models().trapdoorOrientableOpen(baseName + "_open", texture).renderType("cutout");
         trapdoorBlock(block.get(), bottom, top, open, true);
         this.simpleBlockItem(block.get(), bottom);
     }

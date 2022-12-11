@@ -20,6 +20,7 @@ public class BeeMutateGoal extends Goal {
 
     @Override
     public boolean canUse() {
+        if (bee.hasFakeFlower()) return false;
         if (bee.getNumberOfMutations() >= bee.getMutationData().count()) return false;
         if (bee.level.random.nextFloat() < 0.3F) return false;
         return bee.hasNectar() && !bee.isAngry();
