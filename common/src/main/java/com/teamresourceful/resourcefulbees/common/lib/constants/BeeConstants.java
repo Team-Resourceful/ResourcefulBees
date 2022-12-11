@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.color.Color;
 
 public final class BeeConstants {
 
@@ -16,8 +17,8 @@ public final class BeeConstants {
     public static final String STRING_DEFAULT_ITEM_COLOR = "-1";
     public static final String VANILLA_BEE_COLOR = "#edc343";
     public static final int VANILLA_BEE_INT_COLOR = 15582019;
-    public static final int DEFAULT_POLLEN_TOP_INT_COLOR = 13408304;
-    public static final int DEFAULT_POLLEN_BOTTOM_INT_COLOR = 12681264;
+    public static final Color DEFAULT_POLLEN_TOP_COLOR = new Color(13408304);
+    public static final Color DEFAULT_POLLEN_BASE_COLOR = new Color(12681264);
 
     public static final double DEFAULT_BREED_WEIGHT = 10;
     public static final double DEFAULT_BREED_CHANCE = 1;
