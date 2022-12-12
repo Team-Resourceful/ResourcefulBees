@@ -89,7 +89,7 @@ public class BeepediaScreen extends SubdividedScreen {
         if (subScreen instanceof HoneyPage page) {
             getState().page = StringPageState.createHoneyPageState(page.getData().name());
         } else if (subScreen instanceof BeePage page) {
-            getState().page = StringPageState.createBeePageState(page.getData().name());
+            getState().page = StringPageState.createBeePageState(page.getData().name(), this::openTraitPage);
         } else if (subScreen instanceof TraitPage page) {
             getState().page = StringPageState.createTraitPageState(page.getData().name());
         } else {
@@ -133,8 +133,19 @@ public class BeepediaScreen extends SubdividedScreen {
                     .map(data -> new ItemEntry<>(data, a -> new ItemStack(data.getBottleData().bottle().get()), a -> data.displayName()))
                     .toList();
         };
-
         selectionList.updateEntries(entries);
+    }
+
+    public void openTraitPage(Trait trait) {
+        this.getState().type = BeepediaState.Type.TRAITS;
+        updateSelections();
+        for (ListEntry child : selectionList.children()) {
+            if (child instanceof ItemEntry<?> entry && entry.getData() == trait) {
+                selectionList.setSelected(entry);
+                selectionList.ensureVisible(entry);
+                break;
+            }
+        }
     }
 
     public static <T extends Comparable<T>> Comparator<CustomBeeData> sortBee(BeepediaState state, BeepediaState.Sorting sorting, Function<CustomBeeData, T> comparator) {
@@ -143,7 +154,7 @@ public class BeepediaScreen extends SubdividedScreen {
 
     public void updateSelection(ListEntry entry) {
         if (entry instanceof BeeEntry beeEntry) {
-            setSubScreen(new BeePage(beeEntry.getData()));
+            setSubScreen(new BeePage(beeEntry.getData(), this::openTraitPage));
         } else if (entry instanceof ItemEntry<?> itemEntry) {
             Object data = itemEntry.getData();
             if (data instanceof Trait trait) {

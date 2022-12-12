@@ -58,7 +58,7 @@ public record TraitData(
             auras.addAll(trait.auras());
         }
 
-        boolean hasData = !potionDamageEffects.isEmpty() && !damageImmunities.isEmpty() && !potionImmunities.isEmpty() && !damageTypes.isEmpty() && !specialAbilities.isEmpty() && !particleEffects.isEmpty() && !auras.isEmpty();
+        boolean hasData = !potionDamageEffects.isEmpty() || !damageImmunities.isEmpty() || !potionImmunities.isEmpty() || !damageTypes.isEmpty() || !specialAbilities.isEmpty() || !particleEffects.isEmpty() || !auras.isEmpty();
 
         return new TraitData(
                 range,

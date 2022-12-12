@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.screens.beepedia.pages.bee;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.client.components.beepedia.SlotButton;
 import com.teamresourceful.resourcefulbees.client.screens.base.SubdividedScreen;
 import com.teamresourceful.resourcefulbees.client.screens.beepedia.BeepediaTextures;
@@ -24,17 +25,21 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class BeePage extends SubdividedScreen {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/beepedia/bee_splitter.png");
 
+    private final Consumer<Trait> traitOpener;
+
     private final CustomBeeData data;
     private final Entity bee;
 
-    public BeePage(CustomBeeData data) {
+    public BeePage(CustomBeeData data, Consumer<Trait> traitOpener) {
         super(CommonComponents.EMPTY, 186, 163, 0, 51, (screen) -> new InfoPage());
         this.data = data;
+        this.traitOpener = traitOpener;
         Level level = Minecraft.getInstance().level;
         this.bee = level != null ? data.entityType().create(level) : null;
     }
@@ -46,7 +51,7 @@ public class BeePage extends SubdividedScreen {
         if (this.data.getTraitData().hasTraits()) {
             x+=22;
             addRenderableWidget(new SlotButton(x, 25, BeepediaTextures.TRAIT, () -> false,
-                    () -> this.setSubScreen(new TraitsPage(this.data.getTraitData()))))
+                    () -> this.setSubScreen(new TraitsPage(this.data.getTraitData(), traitOpener))))
                     .setTooltipProvider(() -> List.of(Component.literal("Traits")));
         }
         var honeycomb = data.getCoreData().getHoneycombData();

@@ -57,4 +57,8 @@ public class TraitEntry extends ListEntry implements TooltipProvider {
         }
         return List.of();
     }
+
+    public Trait getTrait() {
+        return this.trait;
+    }
 }
