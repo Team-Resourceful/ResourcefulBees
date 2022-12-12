@@ -1,0 +1,27 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations": [
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:netherrack"
+                }
+            },
+            "outputs" : [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:nether_quartz_ore"
+                    }
+                },
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:cobblestone"
+                    }
+                }
+            ]
+        }
+    ]
+}

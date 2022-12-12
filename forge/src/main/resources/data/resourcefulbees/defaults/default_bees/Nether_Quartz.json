@@ -1,70 +1,47 @@
 {
-  "resourcefulbees:core/v1": {
-    "flower": "#forge:storage_blocks/quartz",
-    "honeycombVariation": "quartz",
-    "maxTimeInHive": 1000
-  },
-  "resourcefulbees:rendering/v1": {
-    "texture": "custom/bee",
-    "layers": [
-      { "color": "#D4CABA", "texture": "custom/primary_layer" },
-      { "color": "#303030", "texture": "custom/secondary_layer" }
-    ],
-    "ColorData": {
-      "spawnEggPrimaryColor": "#D4CABA",
-      "spawnEggSecondaryColor": "#303030",
-      "jarColor": "#D4CABA"
-    }
-  },
-  "resourcefulbees:mutation/v1": {
-    "mutations" : [
-      {
-        "input": {
-          "type": "block",
-          "block": {
-            "id": "minecraft:netherrack"
-          }
-        },
-        "outputs" : [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:nether_quartz_ore"
+    "resourcefulbees:core/v1": {
+        "flower": "#forge:storage_blocks/quartz",
+        "honeycombVariation": "quartz",
+        "maxTimeInHive": 1000
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "custom/bee",
+        "layers": [
+            { "color": "#D4CABA", "texture": "custom/primary_layer" },
+            { "color": "#303030", "texture": "custom/secondary_layer" }
+        ],
+        "ColorData": {
+            "spawnEggPrimaryColor": "#D4CABA",
+            "spawnEggSecondaryColor": "#303030",
+            "jarColor": "#D4CABA"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation" : "resourcefulbees:mutations/quartz"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "nether_quartz",
+                "parent2": "coal"
             }
-          },
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:cobblestone"
-            }
-          }
         ]
-      }
-    ]
-  },
-  "resourcefulbees:breeding/v1": {
-    "isBreedable": true,
-    "parents": [
-      {
-        "parent1": "nether_quartz",
-        "parent2": "coal"
-      }
-    ]
-  },
-  "resourcefulbees:trait/v1": {
-    "traits": ["nether"]
-  },
-  "resourcefulbees:trade/v1": {
-    "amount": {
-      "min": 1,
-      "max": 1
     },
-    "secondaryItem": "minecraft:quartz_block",
-    "secondaryItemCost": {
-      "min": 12,
-      "max": 16
+    "resourcefulbees:trait/v1": {
+        "traits": ["nether"]
     },
-    "priceMultiplier": 4,
-    "maxTrades": 2
-  }
+    "resourcefulbees:trade/v1": {
+        "amount": {
+            "min": 1,
+            "max": 1
+        },
+        "secondaryItem": "minecraft:quartz_block",
+        "secondaryItemCost": {
+            "min": 12,
+            "max": 16
+        },
+        "priceMultiplier": 4,
+        "maxTrades": 2
+    }
 }

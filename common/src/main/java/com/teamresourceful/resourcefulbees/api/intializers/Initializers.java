@@ -18,7 +18,6 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedItemPredicate;
-import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.MutableComponent;
@@ -40,7 +39,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface MutationInitializer {
-        BeeMutationData create(int count, Map<MutationType, WeightedCollection<MutationType>> mutations);
+        BeeMutationData create(int count, ResourceLocation id);
     }
 
     @FunctionalInterface

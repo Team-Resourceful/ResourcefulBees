@@ -44,9 +44,14 @@ public final class BeeSetup {
 
 
     private static void parseBee(Reader reader, String name) {
-        JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
-        if (LoadConditionRegistry.canLoad(jsonObject)) {
-            BeeRegistry.getRegistry().cacheRawBeeData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
+        try {
+            JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
+            if (LoadConditionRegistry.canLoad(jsonObject)) {
+                BeeRegistry.getRegistry().cacheRawBeeData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error parsing bee: {}", name);
+            throw e;
         }
     }
 

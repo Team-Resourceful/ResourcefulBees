@@ -15,41 +15,7 @@
   },
   "resourcefulbees:mutation/v1": {
     "mutationCount": 15,
-    "mutations": [
-      {
-        "input": {
-          "type": "block",
-          "block": {
-            "id": "minecraft:brown_mushroom"
-          }
-        },
-        "outputs" : [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:warped_fungus"
-            }
-          }
-        ]
-      },
-      {
-        "input": {
-          "type": "entity",
-          "entity": {
-            "type": "minecraft:zoglin"
-          }
-        },
-        "outputs" : [
-          {
-            "type": "entity",
-            "entity": {
-              "type": "minecraft:hoglin",
-              "nbt": "{\"IsImmuneToZombification\": true}"
-            }
-          }
-        ]
-      }
-    ]
+    "mutation": "resourcefulbees:mutations/warped_fungus"
   },
   "resourcefulbees:breeding/v1": {
     "isBreedable": true,

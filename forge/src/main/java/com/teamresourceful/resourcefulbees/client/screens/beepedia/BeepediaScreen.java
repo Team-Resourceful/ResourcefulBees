@@ -116,7 +116,7 @@ public class BeepediaScreen extends SubdividedScreen {
                         sortBee(getState(), BeepediaState.Sorting.FOUND, a -> this.data == null || !this.data.hasBee(a.name()))
                         .thenComparing(sortBee(getState(), BeepediaState.Sorting.ALPHABETICAL, CustomBeeData::name))
                         .thenComparing(sortBee(getState(), BeepediaState.Sorting.TRAITS, data -> data.getTraitData().hasTraits()))
-                        .thenComparing(sortBee(getState(), BeepediaState.Sorting.MUTATION, data -> data.getMutationData().hasMutation()))
+                        .thenComparing(sortBee(getState(), BeepediaState.Sorting.MUTATION, data -> minecraft != null && !data.getMutationData().hasMutation(minecraft.level)))
                     )
                     .map(data -> new BeeEntry(data, () -> this.data != null && this.data.hasBee(data.name())))
                     .toList();

@@ -1,0 +1,28 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations" : [
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:stone"
+                }
+            },
+            "outputs": [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:mossy_cobblestone"
+                    }
+                },
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:cobblestone"
+                    },
+                    "weight": 30
+                }
+            ]
+        }
+    ]
+}

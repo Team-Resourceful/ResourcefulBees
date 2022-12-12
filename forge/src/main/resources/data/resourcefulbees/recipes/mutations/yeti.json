@@ -1,0 +1,63 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations": [
+        {
+            "input": {
+                "type": "fluid",
+                "fluid": "minecraft:water",
+                "chance": 0.75
+            },
+            "outputs" : [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:snow_block"
+                    },
+                    "weight": 30
+                },
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:ice"
+                    },
+                    "weight": 10
+                }
+            ]
+        },
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:snow"
+                },
+                "chance": 0.25
+            },
+            "outputs" : [
+                {
+                    "type": "item",
+                    "item": {
+                        "id": "minecraft:snowball",
+                        "count": 2
+                    }
+                }
+            ]
+        },
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:ice"
+                },
+                "chance": 0.25
+            },
+            "outputs" : [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:packed_ice"
+                    }
+                }
+            ]
+        }
+    ]
+}

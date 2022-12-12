@@ -14,25 +14,7 @@
     }
   },
   "resourcefulbees:mutation/v1": {
-    "mutations" : [
-      {
-        "input": {
-          "type": "block",
-          "block": {
-              "id": "minecraft:stone"
-          },
-          "chance": 0.75
-        },
-        "outputs" : [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:coal_ore"
-            }
-          }
-        ]
-      }
-    ]
+    "mutation": "resourcefulbees:mutations/coal"
   },
   "resourcefulbees:breeding/v1": {
     "parents": [

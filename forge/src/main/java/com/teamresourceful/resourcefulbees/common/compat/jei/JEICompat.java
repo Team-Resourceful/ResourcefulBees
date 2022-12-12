@@ -69,12 +69,12 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
-        ClientLevel clientWorld = Minecraft.getInstance().level;
-        if (clientWorld != null) {
-            RecipeManager recipeManager = clientWorld.getRecipeManager();
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level != null) {
+            RecipeManager recipeManager = level.getRecipeManager();
             registration.addRecipes(HiveCategory.RECIPE, HiveCategory.getHoneycombRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.HIVE_RECIPE_TYPE.get())));
             registration.addRecipes(BeeBreedingCategory.RECIPE, BeeBreedingCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.BREEDER_RECIPE_TYPE.get())));
-            registration.addRecipes(MutationCategory.RECIPE, MutationCategory.getMutationRecipes());
+            registration.addRecipes(MutationCategory.RECIPE, MutationCategory.getMutationRecipes(level));
             registration.addRecipes(FlowersCategory.RECIPE, FlowersCategory.getFlowersRecipes());
             registration.addRecipes(CentrifugeCategory.RECIPE, CentrifugeCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get())));
             registration.addRecipes(SolidificationCategory.RECIPE, recipeManager.getAllRecipesFor(ModRecipeTypes.SOLIDIFICATION_RECIPE_TYPE.get()));

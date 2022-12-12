@@ -30,18 +30,16 @@ public class BeeMutateGoal extends Goal {
         if (!(bee.getLevel() instanceof ServerLevel serverLevel)) return;
         if (bee.tickCount % 5 == 0) {
             BeeMutationData mutationData = bee.getMutationData();
-            if (mutationData.hasMutation()) {
-                for (Map.Entry<MutationType, WeightedCollection<MutationType>> entry : mutationData.mutations().entrySet()) {
-                    MutationType input = entry.getKey();
-                    if (input.chance() < bee.level.random.nextFloat()) continue;
-                    BlockPos pos = input.check(serverLevel, bee.blockPosition());
-                    if (pos == null) continue;
-                    MutationType output = entry.getValue().next();
-                    if (output.chance() < bee.level.random.nextFloat()) continue;
-                    if (output.activate(serverLevel, pos)) {
-                        bee.incrementNumCropsGrownSincePollination();
-                        break;
-                    }
+            for (Map.Entry<MutationType, WeightedCollection<MutationType>> entry : mutationData.mutations(serverLevel).entrySet()) {
+                MutationType input = entry.getKey();
+                if (input.chance() < bee.level.random.nextFloat()) continue;
+                BlockPos pos = input.check(serverLevel, bee.blockPosition());
+                if (pos == null) continue;
+                MutationType output = entry.getValue().next();
+                if (output.chance() < bee.level.random.nextFloat()) continue;
+                if (output.activate(serverLevel, pos)) {
+                    bee.incrementNumCropsGrownSincePollination();
+                    break;
                 }
             }
         }

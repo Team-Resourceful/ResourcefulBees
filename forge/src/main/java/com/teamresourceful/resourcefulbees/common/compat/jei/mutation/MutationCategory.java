@@ -30,6 +30,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.NumberFormat;
@@ -48,12 +49,12 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
                 guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModItems.BEE_BOX.get())));
     }
 
-    public static List<MutationRecipe> getMutationRecipes() {
+    public static List<MutationRecipe> getMutationRecipes(Level level) {
         List<MutationRecipe> recipes = new ArrayList<>();
         BeeRegistry.get()
             .getSetOfBees()
             .forEach((beeData -> {
-                beeData.getMutationData().mutations().forEach((input, outputs) -> {
+                beeData.getMutationData().mutations(level).forEach((input, outputs) -> {
                     outputs.forEach(output -> recipes.add(new MutationRecipe(beeData.entityType(), input, output, outputs)));
                 });
             }));

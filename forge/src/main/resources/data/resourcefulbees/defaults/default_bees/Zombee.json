@@ -1,66 +1,42 @@
 {
-  "resourcefulbees:core/v1": {
-    "flower": "#minecraft:bee_growables",
-    "honeycombVariation": "zombie",
-    "maxTimeInHive": 600
-  },
-  "resourcefulbees:rendering/v1": {
-    "texture": "zombie/zombie_bee",
-    "ColorData": {
-      "spawnEggPrimaryColor": "#2F4E32",
-      "spawnEggSecondaryColor": "#303030"
-    }
-  },
-  "resourcefulbees:mutation/v1": {
-    "mutations" : [
-      {
-        "input": {
-          "type": "block",
-          "block": {
-            "id": "minecraft:stone"
-          }
-        },
-        "outputs": [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:mossy_cobblestone"
+    "resourcefulbees:core/v1": {
+        "flower": "#minecraft:bee_growables",
+        "honeycombVariation": "zombie",
+        "maxTimeInHive": 600
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "zombie/zombie_bee",
+        "ColorData": {
+            "spawnEggPrimaryColor": "#2F4E32",
+            "spawnEggSecondaryColor": "#303030"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation": "resourcefulbees:mutations/zombee"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "zombee",
+                "parent2": "zombee"
             }
-          },
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:cobblestone"
-            },
-            "weight": 30
-          }
         ]
-      }
-    ]
-  },
-  "resourcefulbees:breeding/v1": {
-    "isBreedable": true,
-    "parents": [
-      {
-        "parent1": "zombee",
-        "parent2": "zombee"
-      }
-    ]
-  },
-  "resourcefulbees:trait/v1": {
-    "traits": ["zombie"]
-  },
-  "resourcefulbees:trade/v1": {
-    "amount": {
-      "min": 1,
-      "max": 1
     },
-    "secondaryItem": "minecraft:mossy_cobblestone",
-    "secondaryItemCost": {
-      "min": 12,
-      "max": 16
+    "resourcefulbees:trait/v1": {
+        "traits": ["zombie"]
     },
-    "priceMultiplier": 4,
-    "maxTrades": 2
-  }
+    "resourcefulbees:trade/v1": {
+        "amount": {
+            "min": 1,
+            "max": 1
+        },
+        "secondaryItem": "minecraft:mossy_cobblestone",
+        "secondaryItemCost": {
+            "min": 12,
+            "max": 16
+        },
+        "priceMultiplier": 4,
+        "maxTrades": 2
+    }
 }

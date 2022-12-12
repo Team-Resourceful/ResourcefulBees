@@ -1,64 +1,41 @@
 {
-  "resourcefulbees:core/v1": {
-    "flower": "#forge:storage_blocks/iron",
-    "honeycombVariation": "iron",
-    "maxTimeInHive": 600
-  },
-  "resourcefulbees:rendering/v1": {
-    "texture": "ores/iron/iron_bee",
-    "model": "resourcefulbees:geo/crystal.geo.json",
-    "ColorData": {
-      "spawnEggPrimaryColor": "#ffcc99",
-      "spawnEggSecondaryColor": "#303030",
-      "jarColor": "#ffcc99"
-    }
-  },
-  "resourcefulbees:mutation/v1": {
-    "mutations" : [
-      {
-        "input": {
-          "type": "block",
-          "block": {
-            "id": "minecraft:stone"
-          }
-        },
-        "outputs" : [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:iron_ore"
+    "resourcefulbees:core/v1": {
+        "flower": "#forge:storage_blocks/iron",
+        "honeycombVariation": "iron",
+        "maxTimeInHive": 600
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "ores/iron/iron_bee",
+        "model": "resourcefulbees:geo/crystal.geo.json",
+        "ColorData": {
+            "spawnEggPrimaryColor": "#ffcc99",
+            "spawnEggSecondaryColor": "#303030",
+            "jarColor": "#ffcc99"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation": "resourcefulbees:mutations/iron"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "iron",
+                "parent2": "iron"
             }
-          },
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:cobblestone"
-            }
-          }
         ]
-      }
-    ]
-  },
-  "resourcefulbees:breeding/v1": {
-    "isBreedable": true,
-    "parents": [
-      {
-        "parent1": "iron",
-        "parent2": "iron"
-      }
-    ]
-  },
-  "resourcefulbees:trade/v1": {
-    "amount": {
-      "min": 1,
-      "max": 1
     },
-    "secondaryItem": "minecraft:iron_block",
-    "secondaryItemCost": {
-      "min": 4,
-      "max": 8
-    },
-    "priceMultiplier": 4,
-    "maxTrades": 2
-  }
+    "resourcefulbees:trade/v1": {
+        "amount": {
+            "min": 1,
+            "max": 1
+        },
+        "secondaryItem": "minecraft:iron_block",
+        "secondaryItemCost": {
+            "min": 4,
+            "max": 8
+        },
+        "priceMultiplier": 4,
+        "maxTrades": 2
+    }
 }

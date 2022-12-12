@@ -15,41 +15,7 @@
   },
   "resourcefulbees:mutation/v1": {
     "mutationCount": 15,
-    "mutations": [
-      {
-        "input": {
-          "type": "block",
-          "block": {
-            "id": "minecraft:red_mushroom"
-          }
-        },
-        "outputs" : [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:crimson_fungus"
-            }
-          }
-        ]
-      },
-      {
-        "input": {
-          "type": "entity",
-          "entity": {
-            "type": "minecraft:hoglin"
-          }
-        },
-        "outputs": [
-          {
-            "type": "entity",
-            "entity": {
-              "type": "minecraft:hoglin",
-              "nbt": "{\"IsImmuneToZombification\": true}"
-            }
-          }
-        ]
-      }
-    ]
+    "mutation": "resourcefulbees:mutations/crimson_fungus"
   },
   "resourcefulbees:breeding/v1": {
     "isBreedable": true,
