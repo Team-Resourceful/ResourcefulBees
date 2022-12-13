@@ -32,7 +32,7 @@ public record MutationData(int count, ResourceLocation id) implements BeeMutatio
 
     @Override
     public Map<MutationType, WeightedCollection<MutationType>> mutations(Level level) {
-        MutationRecipe recipe = ((RecipeManagerInvoker) level.getRecipeManager()).callByType(ModRecipeTypes.MUTATION_RECIPE_TYPE.get()).get(id);
+        MutationRecipe recipe = MutationRecipe.getRecipe(level, id);
         return recipe != null ? recipe.mutations() : Map.of();
     }
 

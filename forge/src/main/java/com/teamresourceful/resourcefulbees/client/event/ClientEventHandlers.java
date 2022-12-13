@@ -31,6 +31,7 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;
@@ -120,7 +121,7 @@ public final class ClientEventHandlers {
                         manager -> new CustomBeeRenderer<>(manager, com.teamresourceful.resourcefulbees.api.registry.BeeRegistry.get().getBeeData(s).getRenderData())));
 
         registerScreens();
-
+        EntityRenderers.register(ModEntities.THROWN_MUTATED_POLLEN.get(), ThrownItemRenderer::new);
         ItemModelPropertiesHandler.registerProperties();
         registerTERs();
         event.enqueueWork(FluidRender::setHoneyRenderType);

@@ -315,7 +315,7 @@ public final class TranslationConstants {
 
         @Translate("Flower position for [%s] has been set to %s")
         public static final String FLOWER_SET = "items.resourcefulbees.honey_dipper.flower_set";
-        @Translate("Fake Flower Position for [%s] has been set to %s")
+        @Translate("Fake Golden Flower Position for [%s] has been set to %s")
         public static final String FAKE_FLOWER_SET = "items.resourcefulbees.honey_dipper.fake_flower_set";
 
         @Translate("Bee Selection Cleared!")

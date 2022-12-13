@@ -17,6 +17,7 @@ public final class NBTConstants {
 
 
 
+
     //TODO make tag casing more consistent
     public static final String NBT_BEES = "Bees";
     public static final String NBT_DISPLAYNAMES = "DisplayNames";
@@ -56,6 +57,7 @@ public final class NBTConstants {
     public static final String FAKE_FLOWER_POS = "FakeFlowerPos";
     public static final String POLLEN_TOP_COLOR = "PollenTopColor";
     public static final String POLLEN_BASE_COLOR = "PollenBaseColor";
+    public static final String POLLEN_ID = "PollenID";
 
     public static final String ENTITY_TAG = "EntityTag";
     public static class Beecon {

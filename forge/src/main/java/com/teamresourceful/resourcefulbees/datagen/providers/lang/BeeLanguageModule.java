@@ -92,5 +92,31 @@ public class BeeLanguageModule implements LanguageModule {
         provider.addTraitDamageTypeDescription("setOnFire", "Sets player on fire on attack.");
         provider.addTraitDamageType("explosive", "Explosive");
         provider.addTraitDamageTypeDescription("explosive", "Explodes on attack.");
+        provider.addMutation("gold", "Gold");
+        provider.addMutation("iron", "Iron");
+        provider.addMutation("emerald", "Emerald");
+        provider.addMutation("diamond", "Diamond");
+        provider.addMutation("redstone", "Redstone");
+        provider.addMutation("nether_quartz", "Nether Quartz");
+        provider.addMutation("lapis", "Lapis");
+        provider.addMutation("coal", "Coal");
+        provider.addMutation("ender", "Ender");
+        provider.addMutation("beeper", "Beeper");
+        provider.addMutation("pigman", "Pigman");
+        provider.addMutation("skeleton", "Skeleton");
+        provider.addMutation("wither", "Wither");
+        provider.addMutation("zombee", "Zombee");
+        provider.addMutation("netherite", "Netherite");
+        provider.addMutation("oreo", "Oreo");
+        provider.addMutation("slimy", "Slimy");
+        provider.addMutation("icy", "Icy");
+        provider.addMutation("kitten", "Kitten");
+        provider.addMutation("dragon", "Dragon");
+        provider.addMutation("dungeon", "Dungeon");
+        provider.addMutation("brown_mushroom", "Brown Mushroom");
+        provider.addMutation("red_mushroom", "Red Mushroom");
+        provider.addMutation("crimson_fungus", "Crimson Fungus");
+        provider.addMutation("warped_fungus", "Warped Fungus");
+        provider.addMutation("yeti", "Yeti");
     }
 }

@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.block.base.RenderingBaseEntity
 import com.teamresourceful.resourcefulbees.common.blockentity.FakeFlowerEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
@@ -50,6 +51,8 @@ public class FakeFlower extends RenderingBaseEntityBlock {
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
+        if (player.getItemInHand(hand).is(ModItems.HONEY_DIPPER.get()))
+            return InteractionResult.FAIL;
         if (level.getBlockEntity(pos) instanceof FakeFlowerEntity fakeFlower) {
             if (!level.isClientSide) {
                 ModUtils.capabilityOrGuiUse(fakeFlower, player, level, pos, hand);

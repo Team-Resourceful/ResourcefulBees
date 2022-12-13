@@ -8,6 +8,8 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ResultSlot;
+import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
 
 public class FakeFlowerMenu extends AbstractModContainerMenu<FakeFlowerEntity>{
@@ -42,7 +44,7 @@ public class FakeFlowerMenu extends AbstractModContainerMenu<FakeFlowerEntity>{
     @Override
     protected void addMenuSlots() {
         for (int i = 0; i < entity.getInventory().getSlots(); i++) {
-            this.addSlot(new FilterSlot(entity.getInventory(), i, 44 + (i*18), 20));
+            this.addSlot(new OutputSlot(entity.getInventory(), i, 44 + (i*18), 20));
         }
     }
 

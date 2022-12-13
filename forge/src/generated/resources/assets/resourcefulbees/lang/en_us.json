@@ -701,6 +701,7 @@
   "items.resourcefulbees.honey_dipper.cleared": "Bee Selection Cleared!",
   "items.resourcefulbees.honey_dipper.flower_set": "Flower position for [%s] has been set to %s",
   "items.resourcefulbees.honey_dipper.hive_set": "Hive position for [%s] has been set to %s",
+  "items.resourcefulbees.honey_dipper.fake_flower_set": "Fake Golden Flower position for [%s] has been set to %s",
   "tooltip.resourcefulbees.bee.creator": "§7- %s",
   "tooltip.resourcefulbees.jei.click_bee_info": "Click or Right-Click for more info!",
   "trait_ability.resourcefulbees.angry": "Angry",

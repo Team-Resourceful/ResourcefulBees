@@ -158,9 +158,9 @@ public class HoneyDipper extends Item {
     private enum MessageTypes {
         FLOWER(args -> Component.translatable(TranslationConstants.HoneyDipper.FLOWER_SET, args)),
         HIVE(args -> Component.translatable(TranslationConstants.HoneyDipper.HIVE_SET, args)),
+        FAKE_FLOWER(args -> Component.translatable(TranslationConstants.HoneyDipper.FAKE_FLOWER_SET, args)),
         BEE_SELECTED(args -> Component.translatable(TranslationConstants.HoneyDipper.BEE_SET, args)),
-        BEE_CLEARED(args -> TranslationConstants.HoneyDipper.SELECTION_CLEARED),
-        FAKE_FLOWER(args -> Component.translatable(TranslationConstants.HoneyDipper.FAKE_FLOWER_SET, args));
+        BEE_CLEARED(args -> TranslationConstants.HoneyDipper.SELECTION_CLEARED);
 
         private final Function<Object[], MutableComponent> component;
 
