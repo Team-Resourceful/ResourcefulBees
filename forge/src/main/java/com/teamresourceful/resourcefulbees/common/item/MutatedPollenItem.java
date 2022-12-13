@@ -7,6 +7,8 @@ import com.teamresourceful.resourcefulbees.common.entity.projectile.ThrownMutate
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.MutationRecipe;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import net.minecraft.ChatFormatting;
@@ -39,6 +41,19 @@ public class MutatedPollenItem extends Item {
     public MutatedPollenItem(Properties arg) {
         super(arg);
         Color color = ConstantColors.aliceblue;
+    }
+
+    public static ItemStack getPollen(ResourceLocation id, Level level) {
+        ItemStack pollen = new ItemStack(ModItems.MUTATED_POLLEN.get());
+        MutationRecipe recipe = MutationRecipe.getRecipe(level, id);
+        if (recipe == null) return pollen;
+        // add data
+        CompoundTag tag = new CompoundTag();
+        tag.putString(NBTConstants.POLLEN_ID, recipe.id().toString());
+        tag.putInt(NBTConstants.POLLEN_BASE_COLOR, recipe.getPollenBaseColor().getValue());
+        tag.putInt(NBTConstants.POLLEN_TOP_COLOR, recipe.getPollenTopColor().getValue());
+        pollen.setTag(tag);
+        return pollen;
     }
 
     @Override

@@ -70,16 +70,9 @@ public class FakeFlowerEntity extends GUISyncedBlockEntity implements InstanceBl
         ItemStack pollen = new ItemStack(ModItems.MUTATED_POLLEN.get());
         ResourceLocation id = bee.getMutationData().id();
         if (level == null || id == null) return;
-        MutationRecipe recipe = MutationRecipe.getRecipe(level, id);
-        if (recipe == null) return;
-        int count = bee.getMutationData().count();
-        // add data
-        CompoundTag tag = new CompoundTag();
-        tag.putString(NBTConstants.POLLEN_ID, recipe.id().toString());
-        tag.putInt(NBTConstants.POLLEN_BASE_COLOR, recipe.getPollenBaseColor().getValue());
-        tag.putInt(NBTConstants.POLLEN_TOP_COLOR, recipe.getPollenTopColor().getValue());
-        pollen.setTag(tag);
+        MutatedPollenItem.getPollen(id, level);
         // generate random amount
+        int count = bee.getMutationData().count();
         int quart = count / 4;
         int total = Math.max(1, bee.getRandom().nextInt(count - quart) + quart);
         pollen.setCount(total);
