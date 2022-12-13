@@ -52,7 +52,7 @@ public class BeeFakeFlowerGoal extends Goal {
                         depositTime++;
                         if (depositTime >= 20) {
                             bee.dropOffMutations();
-                            spawnParticles();
+                            BeeMutateGoal.spawnParticles(level, bee);
                         }
                     }
                     if (!flag) {
@@ -105,21 +105,6 @@ public class BeeFakeFlowerGoal extends Goal {
         if (vec31 != null) {
             bee.getNavigation().setMaxVisitedNodesMultiplier(0.5F);
             bee.getNavigation().moveTo(vec31.x, vec31.y, vec31.z, 1.0);
-        }
-    }
-
-    protected void spawnParticles() {
-        if (level instanceof ServerLevel serverLevel) {
-            for(int i = 0; i < 5; ++i) {
-                double d0 = level.random.nextGaussian() * 0.02D;
-                double d1 = level.random.nextGaussian() * 0.02D;
-                double d2 = level.random.nextGaussian() * 0.02D;
-                serverLevel.sendParticles(ParticleTypes.COMPOSTER,
-                        bee.getRandomX(1.0D),
-                        bee.getRandomY(),
-                        bee.getRandomZ(1.0D),
-                        10, d0, d1, d2, 0.1f);
-            }
         }
     }
 }

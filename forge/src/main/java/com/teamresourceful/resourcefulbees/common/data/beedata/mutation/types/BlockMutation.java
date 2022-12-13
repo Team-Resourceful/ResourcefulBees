@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
-import net.minecraft.commands.arguments.blocks.BlockInput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -22,8 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record BlockMutation(RestrictedBlockPredicate predicate, double chance,
-                            double weight) implements MutationType, ItemDisplay {
+public record BlockMutation(RestrictedBlockPredicate predicate, double chance, double weight) implements MutationType, ItemDisplay {
 
     public static final Serializer SERIALIZER = new Serializer();
 

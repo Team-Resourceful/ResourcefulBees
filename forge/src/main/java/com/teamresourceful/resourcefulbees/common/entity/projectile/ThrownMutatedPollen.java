@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -47,8 +48,8 @@ public class ThrownMutatedPollen extends ThrowableItemProjectile {
     }
 
     private void doMutation(BlockPos result) {
-        spawnParticles();
-        this.kill();
+        BeeMutateGoal.spawnParticles(this.level, this);
+        this.discard();
         ItemStack item = this.getItem();
         if (item.getTag() == null || !item.getTag().contains(NBTConstants.POLLEN_ID)) {
             return;
@@ -59,18 +60,5 @@ public class ThrownMutatedPollen extends ThrowableItemProjectile {
             BeeMutateGoal.doMutation(recipe.mutations(), serverLevel, result);
         }
     }
-    protected void spawnParticles() {
-        if (level instanceof ServerLevel serverLevel) {
-            for(int i = 0; i < 5; ++i) {
-                double d0 = level.random.nextGaussian() * 0.02D;
-                double d1 = level.random.nextGaussian() * 0.02D;
-                double d2 = level.random.nextGaussian() * 0.02D;
-                serverLevel.sendParticles(ParticleTypes.COMPOSTER,
-                        this.getRandomX(2.0D),
-                        this.getRandomY(),
-                        this.getRandomZ(2.0D),
-                        10, d0, d1, d2, 0.1f);
-            }
-        }
-    }
+
 }
