@@ -316,6 +316,9 @@ public final class TranslationConstants {
         @Translate("Flower position for [%s] has been set to %s")
         public static final String FLOWER_SET = "items.resourcefulbees.honey_dipper.flower_set";
 
+        @Translate("Fake Golden Flower Position for [%s] has been set to %s")
+        public static final String FAKE_FLOWER_SET = "items.resourcefulbees.honey_dipper.fake_flower_set";
+
         @Translate("Bee Selection Cleared!")
         public static final MutableComponent SELECTION_CLEARED = Component.translatable("items.resourcefulbees.honey_dipper.cleared");
 
@@ -497,6 +500,11 @@ public final class TranslationConstants {
             public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.combat");
         }
 
+    }
+
+    public static class FakeFLower {
+        @Translate("Fake Golden Flower")
+        public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.fake_flower");
     }
 
     public static class Centrifuge {

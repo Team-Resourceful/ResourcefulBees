@@ -17,6 +17,7 @@ public final class ModMenus {
         throw new UtilityClassError();
     }
 
+
     public static final ResourcefulRegistry<MenuType<?>> CONTAINER_TYPES = ResourcefulRegistries.create(Registry.MENU, ResourcefulBees.MOD_ID);
 
 
@@ -30,6 +31,8 @@ public final class ModMenus {
             .create(EnderBeeconMenu::new));
     public static final RegistryEntry<MenuType<SolidificationChamberMenu>> SOLIDIFICATION_CHAMBER_CONTAINER = CONTAINER_TYPES.register("solidification_chamber", () -> IForgeMenuType
             .create(SolidificationChamberMenu::new));
+    public static final RegistryEntry<MenuType<FakeFlowerMenu>> FAKE_FLOWER_CONTAINER = CONTAINER_TYPES.register("fake_flower", () -> IForgeMenuType
+            .create(FakeFlowerMenu::new));
     public static final RegistryEntry<MenuType<HoneyPotMenu>> HONEY_POT_CONTAINER = CONTAINER_TYPES.register("honey_pot", () -> IForgeMenuType
             .create(HoneyPotMenu::new));
 

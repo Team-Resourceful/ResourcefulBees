@@ -44,6 +44,7 @@ public final class ItemGroupResourcefulBees {
                 list.add(ModItems.CENTRIFUGE_CRANK);
                 list.add(ModItems.CENTRIFUGE);
                 list.add(ModItems.WAXED_MACHINE_BLOCK);
+                list.add(ModItems.FAKE_FLOWER);
 
                 list.add(ModItems.BREED_TIME_UPGRADE);
                 list.add(ModItems.T2_NEST_UPGRADE);

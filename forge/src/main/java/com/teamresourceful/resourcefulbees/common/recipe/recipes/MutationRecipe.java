@@ -4,9 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.common.data.beedata.mutation.MutationEntry;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.mixin.invokers.RecipeManagerInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -18,13 +21,27 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public record MutationRecipe(ResourceLocation id, Map<MutationType, WeightedCollection<MutationType>> mutations) implements CodecRecipe<Container> {
+public record MutationRecipe(ResourceLocation id, Color pollenBaseColor, Color pollenTopColor, Map<MutationType, WeightedCollection<MutationType>> mutations) implements CodecRecipe<Container> {
 
     public static Codec<MutationRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
             RecordCodecBuilder.point(id),
+            Color.CODEC.fieldOf("pollenBaseColor").orElse(BeeConstants.DEFAULT_POLLEN_BASE_COLOR).forGetter(MutationRecipe::getPollenBaseColor),
+            Color.CODEC.fieldOf("pollenTopColor").orElse(BeeConstants.DEFAULT_POLLEN_TOP_COLOR).forGetter(MutationRecipe::getPollenTopColor),
             MutationEntry.MUTATION_MAP_CODEC.fieldOf("mutations").orElse(new HashMap<>()).forGetter(MutationRecipe::mutations)
         ).apply(instance, MutationRecipe::new));
+    }
+
+    public static MutationRecipe getRecipe(@NotNull Level level, ResourceLocation id) {
+        return ((RecipeManagerInvoker) level.getRecipeManager()).callByType(ModRecipeTypes.MUTATION_RECIPE_TYPE.get()).get(id);
+    }
+
+    public Color getPollenBaseColor() {
+        return pollenBaseColor;
+    }
+
+    public Color getPollenTopColor() {
+        return pollenTopColor;
     }
 
     @Override

@@ -1,5 +1,7 @@
 {
     "type": "resourcefulbees:mutation",
+    "pollenTopColor" : "#74918F",
+    "pollenBaseColor" : "#536866",
     "mutations": [
         {
             "input": {
@@ -20,7 +22,7 @@
                     "type": "block",
                     "block": {
                         "id": "minecraft:chest",
-                        "tag": "{\"LootTable\": \"minecraft:chests/simple_dungeon\"}"
+                        "nbt": {"LootTable": "minecraft:chests/simple_dungeon"}
                     },
                     "weight": 1
                 }

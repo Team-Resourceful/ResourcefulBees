@@ -125,6 +125,10 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         add(LangGeneration.HONEY_RESOURCEFULBEES+id, name);
     }
 
+    public void addMutation(String id, String name) {
+        add("mutation.resourcefulbees.mutation." + id, name);
+    }
+
     public void addFluid(Supplier<FluidType> fluid, String name) {
         add(fluid.get().getDescriptionId(), name);
     }
@@ -144,6 +148,4 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         }
     }
 
-
-    
 }

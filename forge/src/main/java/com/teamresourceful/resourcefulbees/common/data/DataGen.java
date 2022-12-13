@@ -30,7 +30,7 @@ public final class DataGen {
     }
 
     public static void generateCommonData() {
-        generateTags(ModEntities.ENTITY_TYPES, new ResourceLocation("minecraft", "tags/entity_types/beehive_inhabitors.json"));
+        generateTags(ModEntities.BEES, new ResourceLocation("minecraft", "tags/entity_types/beehive_inhabitors.json"));
 
         generateTags(ModItems.HONEYCOMB_BLOCK_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/storage_blocks/honeycombs.json"));
         generateTags(ModBlocks.HONEYCOMB_BLOCKS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/blocks/storage_blocks/honeycombs.json"));

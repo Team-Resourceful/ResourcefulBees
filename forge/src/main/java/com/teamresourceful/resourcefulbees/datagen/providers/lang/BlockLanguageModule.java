@@ -34,6 +34,7 @@ public class BlockLanguageModule implements LanguageModule {
         provider.addBlock(ModBlocks.WAXED_TRAPDOOR, "Waxed Trapdoor");
         provider.addBlock(ModBlocks.WAXED_FENCE, "Waxed Fence");
         provider.addBlock(ModBlocks.WAXED_FENCE_GATE, "Waxed Fence Gate");
+        provider.addBlock(ModBlocks.FAKE_FLOWER, "Fake Golden Flower");
         provider.addFluid(ModFluids.HONEY, "Honey");
 
         provider.addBlock(ModBlocks.HONEY_POT, "Honey Pot");

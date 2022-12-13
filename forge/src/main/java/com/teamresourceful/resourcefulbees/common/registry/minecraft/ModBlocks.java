@@ -262,6 +262,7 @@ public final class ModBlocks {
     public static final RegistryEntry<Block> TRIMMED_WAXED_PLANKS = BLOCKS.register("trimmed_waxed_planks", () -> new WaxedBlock(WAXED_PLANKS, WAXED_PLANKS_PROPERTIES));
     public static final RegistryEntry<Block> WAXED_MACHINE_BLOCK = BLOCKS.register("waxed_machine_block", () -> new Block(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 
+    public static final RegistryEntry<Block> FAKE_FLOWER = BLOCKS.register("fake_flower", () -> new FakeFlower(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.GOLD).strength(2.0f, 3.0f).sound(SoundType.WOOD)));
     @SuppressWarnings("unused")
     private static boolean never(BlockState state, BlockGetter blockGetter, BlockPos blockPos) {
         return false;

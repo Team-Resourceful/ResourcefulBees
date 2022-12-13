@@ -1,7 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.FakeFlowerEntity;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
@@ -68,6 +70,13 @@ public class HoneyDipper extends Item {
                 player.setItemInHand(context.getHand(), setEntity(stack, null));
                 return InteractionResult.SUCCESS;
             }
+
+            if (clickedTile instanceof FakeFlowerEntity && bee instanceof ResourcefulBee) {
+                ((ResourcefulBee)bee).setFakeFlowerPos(context.getClickedPos());
+                sendMessageToPlayer(bee, player, MessageTypes.FAKE_FLOWER, context.getClickedPos());
+                player.setItemInHand(context.getHand(), setEntity(stack, null));
+                return InteractionResult.SUCCESS;
+            }
         }
         return super.useOn(context);
     }
@@ -84,9 +93,10 @@ public class HoneyDipper extends Item {
 
     private void sendMessageToPlayer(Bee bee, Player playerEntity, MessageTypes messageTypes, BlockPos pos) {
         switch (messageTypes) {
-            case FLOWER, HIVE -> playerEntity.displayClientMessage(messageTypes.create(bee.getDisplayName(), NbtUtils.writeBlockPos(pos)), false);
+            case FLOWER, HIVE, FAKE_FLOWER -> playerEntity.displayClientMessage(messageTypes.create(bee.getDisplayName(), NbtUtils.writeBlockPos(pos)), false);
             case BEE_CLEARED -> playerEntity.displayClientMessage(messageTypes.create(), false);
             case BEE_SELECTED -> playerEntity.displayClientMessage(messageTypes.create(bee.getDisplayName()), false);
+            default -> throw new IllegalStateException("Unexpected value: " + messageTypes);
         }
     }
 
@@ -146,9 +156,14 @@ public class HoneyDipper extends Item {
         return stack;
     }
 
+    public static boolean isHoldingHoneyDipper(Player player) {
+        return player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof HoneyDipper || player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof HoneyDipper;
+    }
+
     private enum MessageTypes {
         FLOWER(args -> Component.translatable(TranslationConstants.HoneyDipper.FLOWER_SET, args)),
         HIVE(args -> Component.translatable(TranslationConstants.HoneyDipper.HIVE_SET, args)),
+        FAKE_FLOWER(args -> Component.translatable(TranslationConstants.HoneyDipper.FAKE_FLOWER_SET, args)),
         BEE_SELECTED(args -> Component.translatable(TranslationConstants.HoneyDipper.BEE_SET, args)),
         BEE_CLEARED(args -> TranslationConstants.HoneyDipper.SELECTION_CLEARED);
 
