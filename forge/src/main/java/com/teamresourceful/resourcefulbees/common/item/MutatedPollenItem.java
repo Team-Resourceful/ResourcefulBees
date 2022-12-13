@@ -50,8 +50,8 @@ public class MutatedPollenItem extends Item {
         // add data
         CompoundTag tag = new CompoundTag();
         tag.putString(NBTConstants.POLLEN_ID, recipe.id().toString());
-        tag.putInt(NBTConstants.POLLEN_BASE_COLOR, recipe.getPollenBaseColor().getValue());
-        tag.putInt(NBTConstants.POLLEN_TOP_COLOR, recipe.getPollenTopColor().getValue());
+        tag.putString(NBTConstants.POLLEN_BASE_COLOR, recipe.getPollenBaseColor().toString());
+        tag.putString(NBTConstants.POLLEN_TOP_COLOR, recipe.getPollenTopColor().toString());
         pollen.setTag(tag);
         return pollen;
     }
