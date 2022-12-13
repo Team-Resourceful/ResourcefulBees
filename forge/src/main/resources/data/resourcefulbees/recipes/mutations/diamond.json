@@ -1,0 +1,18 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations" : [
+        {
+            "input": {
+                "type": "fluid",
+                "fluid": "minecraft:lava",
+                "chance": 0.75
+            },
+            "outputs" : [
+                {
+                    "type": "fluid",
+                    "fluid": "minecraft:water"
+                }
+            ]
+        }
+    ]
+}

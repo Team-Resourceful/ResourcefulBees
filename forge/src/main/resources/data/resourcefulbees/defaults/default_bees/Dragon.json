@@ -1,57 +1,39 @@
 {
-  "resourcefulbees:core/v1": {
-    "flower": ["minecraft:obsidian"],
-    "honeycombVariation": "dragon",
-    "maxTimeInHive": 2400
-  },
-  "resourcefulbees:rendering/v1": {
-    "texture": "dragon/dragon_bee",
-    "model": "resourcefulbees:geo/dragon.geo.json",
-    "layers": [
-      { "texture": "dragon/dragon_bee_primary", "color": "#222222" },
-      { "texture": "dragon/dragon_bee_secondary", "color": "#171717" },
-      { "layerEffect": "GLOW", "texture": "dragon/dragon_bee_emissive", "color": "#E400FF" }
-    ],
-    "ColorData": {
-      "spawnEggPrimaryColor": "#171717",
-      "spawnEggSecondaryColor": "#E400FF",
-      "jarColor": "#222222"
-    }
-  },
-  "resourcefulbees:mutation/v1": {
-    "mutations" : [
-      {
-        "input": {
-          "type": "block",
-          "block": {
-              "id": "minecraft:stone"
-          },
-          "chance": 0.5
-        },
-        "outputs" : [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:end_stone"
+    "resourcefulbees:core/v1": {
+        "flower": ["minecraft:obsidian"],
+        "honeycombVariation": "dragon",
+        "maxTimeInHive": 2400
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "dragon/dragon_bee",
+        "model": "resourcefulbees:geo/dragon.geo.json",
+        "layers": [
+            { "texture": "dragon/dragon_bee_primary", "color": "#222222" },
+            { "texture": "dragon/dragon_bee_secondary", "color": "#171717" },
+            { "layerEffect": "GLOW", "texture": "dragon/dragon_bee_emissive", "color": "#E400FF" }
+        ],
+        "ColorData": {
+            "spawnEggPrimaryColor": "#171717",
+            "spawnEggSecondaryColor": "#E400FF",
+            "jarColor": "#222222"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation": "resourcefulbees:mutations/dragon"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "wither",
+                "parent2": "ender",
+                "chance": 0.25
             }
-          }
-        ]
-      }
-    ]
-  },
-  "resourcefulbees:breeding/v1": {
-    "isBreedable": true,
-    "parents": [
-      {
-        "parent1": "wither",
-        "parent2": "ender",
-        "chance": 0.25
-      }
-    ],
-    "feedItem": ["minecraft:end_stone"],
-    "feedAmount": 12
-  },
-  "resourcefulbees:trait/v1": {
-    "traits": [ "ender", "nether", "wither" ]
-  }
+        ],
+        "feedItem": ["minecraft:end_stone"],
+        "feedAmount": 12
+    },
+    "resourcefulbees:trait/v1": {
+        "traits": [ "ender", "nether", "wither" ]
+    }
 }

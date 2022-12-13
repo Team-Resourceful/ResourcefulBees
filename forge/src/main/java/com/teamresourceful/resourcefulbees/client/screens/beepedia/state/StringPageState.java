@@ -15,6 +15,7 @@ import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class StringPageState<T, P> implements PageState<P> {
@@ -33,8 +34,8 @@ public class StringPageState<T, P> implements PageState<P> {
         return new StringPageState<>(honeyType, HoneyRegistry.get()::getHoneyData, HoneyPage::new);
     }
 
-    public static StringPageState<CustomBeeData, BeepediaScreen> createBeePageState(String beeType) {
-        return new StringPageState<>(beeType, BeeRegistry.get()::getBeeData, BeePage::new);
+    public static StringPageState<CustomBeeData, BeepediaScreen> createBeePageState(String beeType, Consumer<Trait> opener) {
+        return new StringPageState<>(beeType, BeeRegistry.get()::getBeeData, beeData -> new BeePage(beeData, opener));
     }
 
     public static StringPageState<Trait, BeepediaScreen> createTraitPageState(String traitType) {

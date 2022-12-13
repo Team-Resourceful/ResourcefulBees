@@ -18,7 +18,6 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedItemPredicate;
-import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.MutableComponent;
@@ -95,8 +94,8 @@ public class InitializerApi {
         return this.color.create(primarySpawnEggColor, secondarySpawnEggColor, jarColor);
     }
 
-    public BeeMutationData mutation(int count, Map<MutationType, WeightedCollection<MutationType>> mutations) {
-        return this.mutation.create(count, mutations);
+    public BeeMutationData mutation(int count, ResourceLocation id) {
+        return this.mutation.create(count, id);
     }
 
     public MutationType blockMutation(RestrictedBlockPredicate block, double chance, double weight) {

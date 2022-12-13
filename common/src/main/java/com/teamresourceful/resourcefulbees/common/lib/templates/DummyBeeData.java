@@ -7,7 +7,6 @@ import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
-import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerTexture;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
@@ -16,16 +15,9 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
-import com.teamresourceful.resourcefullib.common.codecs.predicates.NbtPredicate;
-import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
-import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedItemPredicate;
-import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import net.minecraft.Util;
-import net.minecraft.advancements.critereon.LocationPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -110,24 +102,9 @@ public class DummyBeeData {
             })
     );
 
-    private static final MutationType MUTATION_INPUT = API.blockMutation(
-            new RestrictedBlockPredicate(Blocks.COAL_BLOCK, NbtPredicate.ANY, LocationPredicate.ANY, StatePropertiesPredicate.ANY),
-            0.65,
-            35
-    );
-
-    private static final WeightedCollection<MutationType> MUTATION_OUTPUT = new WeightedCollection<MutationType>().add(
-            25, API.itemMutation(
-                new RestrictedItemPredicate(Items.DIAMOND, NbtPredicate.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.exactly(2)),
-                1.0,
-                25
-            )
-    );
-
-
     private static final BeeMutationData MUTATION_DATA = API.mutation(
             5,
-            Map.of(MUTATION_INPUT, MUTATION_OUTPUT)
+            new ResourceLocation(BeeConstants.MOD_ID, "mutations/template")
     );
 
     private static final BeeTraitData TRAIT_DATA = API.trait(BeeConfig.defaultAuraRange, Set.of());

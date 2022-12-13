@@ -15,40 +15,7 @@
   },
   "resourcefulbees:mutation/v1": {
     "mutationCount": 15,
-    "mutations": [
-      {
-        "input": {
-          "type": "block",
-          "block": {
-            "id": "minecraft:grass"
-          }
-        },
-        "outputs" : [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:red_mushroom"
-            }
-          }
-        ]
-      },
-      {
-        "input": {
-          "type": "entity",
-          "entity": {
-            "type": "minecraft:cow"
-          }
-        },
-        "outputs" : [
-          {
-            "type": "entity",
-            "entity": {
-              "type": "minecraft:mooshroom"
-            }
-          }
-        ]
-      }
-    ]
+    "mutation": "resourcefulbees:mutations/red_mushroom"
   },
   "resourcefulbees:breeding/v1": {
     "isBreedable": true,

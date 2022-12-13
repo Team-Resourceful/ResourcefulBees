@@ -1,64 +1,41 @@
 {
-  "resourcefulbees:core/v1": {
-    "flower": "#forge:storage_blocks/redstone",
-    "honeycombVariation": "redstone",
-    "maxTimeInHive": 800
-  },
-  "resourcefulbees:rendering/v1": {
-    "texture": "ores/redstone/redstone_bee",
-    "model": "resourcefulbees:geo/crystal.geo.json",
-    "ColorData": {
-      "spawnEggPrimaryColor": "#aa0f01",
-      "spawnEggSecondaryColor": "#303030",
-      "jarColor": "#aa0f01"
-    }
-  },
-  "resourcefulbees:mutation/v1": {
-    "mutations" : [
-      {
-        "input": {
-          "type": "block",
-          "block": {
-            "id": "minecraft:stone"
-          }
-        },
-        "outputs": [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:redstone_ore"
+    "resourcefulbees:core/v1": {
+        "flower": "#forge:storage_blocks/redstone",
+        "honeycombVariation": "redstone",
+        "maxTimeInHive": 800
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "ores/redstone/redstone_bee",
+        "model": "resourcefulbees:geo/crystal.geo.json",
+        "ColorData": {
+            "spawnEggPrimaryColor": "#aa0f01",
+            "spawnEggSecondaryColor": "#303030",
+            "jarColor": "#aa0f01"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation" : "resourcefulbees:mutations/redstone"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "redstone",
+                "parent2": "redstone"
             }
-          },
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:cobblestone"
-            }
-          }
         ]
-      }
-    ]
-  },
-  "resourcefulbees:breeding/v1": {
-    "isBreedable": true,
-    "parents": [
-      {
-        "parent1": "redstone",
-        "parent2": "redstone"
-      }
-    ]
-  },
-  "resourcefulbees:trade/v1": {
-    "amount": {
-      "min": 1,
-      "max": 1
     },
-    "secondaryItem": "minecraft:tnt",
-    "secondaryItemCost": {
-      "min": 4,
-      "max": 8
-    },
-    "priceMultiplier": 4,
-    "maxTrades": 2
-  }
+    "resourcefulbees:trade/v1": {
+        "amount": {
+            "min": 1,
+            "max": 1
+        },
+        "secondaryItem": "minecraft:tnt",
+        "secondaryItemCost": {
+            "min": 4,
+            "max": 8
+        },
+        "priceMultiplier": 4,
+        "maxTrades": 2
+    }
 }

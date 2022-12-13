@@ -1,65 +1,47 @@
 {
-  "resourcefulbees:core/v1": {
-    "flower": ["minecraft:chorus_flower"],
-    "honeycombVariation": "ender",
-    "maxTimeInHive": 1800
-  },
-  "resourcefulbees:rendering/v1": {
-    "texture": "custom/bee",
-    "layers": [
-      { "color": "#339786", "texture": "custom/primary_layer" },
-      { "color": "#303030", "texture": "custom/secondary_layer" }
-    ],
-    "ColorData": {
-      "spawnEggPrimaryColor": "#339786",
-      "spawnEggSecondaryColor": "#303030",
-      "jarColor": "#339786"
-    }
-  },
-  "resourcefulbees:mutation/v1": {
-    "mutations" : [
-      {
-        "input": {
-          "type": "block",
-          "block": {
-            "id": "minecraft:obsidian"
-          },
-          "chance": 0.5
-        },
-        "outputs" : [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:end_stone"
+    "resourcefulbees:core/v1": {
+        "flower": ["minecraft:chorus_flower"],
+        "honeycombVariation": "ender",
+        "maxTimeInHive": 1800
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "custom/bee",
+        "layers": [
+            { "color": "#339786", "texture": "custom/primary_layer" },
+            { "color": "#303030", "texture": "custom/secondary_layer" }
+        ],
+        "ColorData": {
+            "spawnEggPrimaryColor": "#339786",
+            "spawnEggSecondaryColor": "#303030",
+            "jarColor": "#339786"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation": "resourcefulbees:mutations/ender"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "ender",
+                "parent2": "ender"
             }
-          }
         ]
-      }
-    ]
-  },
-  "resourcefulbees:breeding/v1": {
-    "isBreedable": true,
-    "parents": [
-      {
-        "parent1": "ender",
-        "parent2": "ender"
-      }
-    ]
-  },
-  "resourcefulbees:trait/v1": {
-    "traits": ["ender"]
-  },
-  "resourcefulbees:trade/v1": {
-    "amount": {
-      "min": 1,
-      "max": 1
     },
-    "secondaryItem": "minecraft:ender_pearl",
-    "secondaryItemCost": {
-      "min": 8,
-      "max": 16
+    "resourcefulbees:trait/v1": {
+        "traits": ["ender"]
     },
-    "priceMultiplier": 4,
-    "maxTrades": 2
-  }
+    "resourcefulbees:trade/v1": {
+        "amount": {
+            "min": 1,
+            "max": 1
+        },
+        "secondaryItem": "minecraft:ender_pearl",
+        "secondaryItemCost": {
+            "min": 8,
+            "max": 16
+        },
+        "priceMultiplier": 4,
+        "maxTrades": 2
+    }
 }

@@ -16,40 +16,7 @@
     }
   },
   "resourcefulbees:mutation/v1": {
-    "mutations" : [
-      {
-        "input": {
-          "type": "fluid",
-          "fluid": "minecraft:lava",
-          "chance": 0.75
-        },
-        "outputs" : [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:mossy_cobblestone"
-            }
-          }
-        ]
-      },
-      {
-        "input": {
-          "type": "block",
-          "block": {
-            "id": "minecraft:coal_block"
-          },
-          "chance": 0.25
-        },
-        "outputs" : [
-          {
-            "type": "block",
-            "block": {
-              "id": "minecraft:tnt"
-            }
-          }
-        ]
-      }
-    ]
+    "mutation": "resourcefulbees:mutations/beeper"
   },
   "resourcefulbees:breeding/v1": {
     "parents": [

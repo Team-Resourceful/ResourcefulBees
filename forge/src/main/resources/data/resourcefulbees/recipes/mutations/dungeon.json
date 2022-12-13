@@ -1,0 +1,30 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations": [
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:cobblestone"
+                }
+            },
+            "outputs" : [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:mossy_cobblestone"
+                    },
+                    "weight": 99
+                },
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:chest",
+                        "tag": "{\"LootTable\": \"minecraft:chests/simple_dungeon\"}"
+                    },
+                    "weight": 1
+                }
+            ]
+        }
+    ]
+}

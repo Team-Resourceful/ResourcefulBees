@@ -1,0 +1,41 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations": [
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:grass",
+                    "location": {
+                        "biome": "grove"
+                    }
+                }
+            },
+            "outputs" : [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:brown_mushroom"
+                    }
+                }
+            ]
+        },
+        {
+            "input": {
+                "type": "entity",
+                "entity": {
+                    "type": "minecraft:cow"
+                }
+            },
+            "outputs": [
+                {
+                    "type": "entity",
+                    "entity": {
+                        "type": "minecraft:mooshroom",
+                        "nbt": "{\"Type\": \"brown\"}"
+                    }
+                }
+            ]
+        }
+    ]
+}

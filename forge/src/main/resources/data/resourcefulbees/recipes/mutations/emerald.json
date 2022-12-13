@@ -1,0 +1,20 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations" : [
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:stone"
+                },
+                "chance": 0.75
+            },
+            "outputs" : [
+                {
+                    "type": "fluid",
+                    "fluid": "minecraft:lava"
+                }
+            ]
+        }
+    ]
+}

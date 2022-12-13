@@ -16,7 +16,8 @@
         "accessors.ServerLevelAccessor",
         "accessors.StructureCheckAccessor",
         "invokers.BeeGoToHiveGoalInvoker",
-        "invokers.BeeInvoker"
+        "invokers.BeeInvoker",
+        "invokers.RecipeManagerInvoker"
     ],
     "minVersion": "0.8.5",
     "client": [
