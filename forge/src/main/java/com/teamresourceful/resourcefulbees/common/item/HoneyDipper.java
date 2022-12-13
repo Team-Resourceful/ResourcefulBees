@@ -93,9 +93,10 @@ public class HoneyDipper extends Item {
 
     private void sendMessageToPlayer(Bee bee, Player playerEntity, MessageTypes messageTypes, BlockPos pos) {
         switch (messageTypes) {
-            case FLOWER, HIVE -> playerEntity.displayClientMessage(messageTypes.create(bee.getDisplayName(), NbtUtils.writeBlockPos(pos)), false);
+            case FLOWER, HIVE, FAKE_FLOWER -> playerEntity.displayClientMessage(messageTypes.create(bee.getDisplayName(), NbtUtils.writeBlockPos(pos)), false);
             case BEE_CLEARED -> playerEntity.displayClientMessage(messageTypes.create(), false);
             case BEE_SELECTED -> playerEntity.displayClientMessage(messageTypes.create(bee.getDisplayName()), false);
+            default -> throw new IllegalStateException("Unexpected value: " + messageTypes);
         }
     }
 
@@ -153,6 +154,10 @@ public class HoneyDipper extends Item {
             stack.setTag(stackTag);
         }
         return stack;
+    }
+
+    public static boolean isHoldingHoneyDipper(Player player) {
+        return player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof HoneyDipper || player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof HoneyDipper;
     }
 
     private enum MessageTypes {

@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.block.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.FakeFlowerEntity;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.item.HoneyDipper;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -14,14 +14,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.stream.Stream;
 
 public class FakeFlower extends RenderingBaseEntityBlock {
 
@@ -45,9 +41,9 @@ public class FakeFlower extends RenderingBaseEntityBlock {
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
-        if (player.getItemInHand(hand).is(ModItems.HONEY_DIPPER.get()))
+        if (HoneyDipper.isHoldingHoneyDipper(player)) {
             return InteractionResult.FAIL;
-        if (level.getBlockEntity(pos) instanceof FakeFlowerEntity fakeFlower) {
+        } else if (level.getBlockEntity(pos) instanceof FakeFlowerEntity fakeFlower) {
             if (!level.isClientSide) {
                 ModUtils.capabilityOrGuiUse(fakeFlower, player, level, pos, hand);
             }
