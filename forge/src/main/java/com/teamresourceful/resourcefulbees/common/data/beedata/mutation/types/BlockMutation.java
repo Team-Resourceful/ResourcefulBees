@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
+import net.minecraft.commands.arguments.blocks.BlockInput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +22,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record BlockMutation(RestrictedBlockPredicate predicate, double chance, double weight) implements MutationType, ItemDisplay {
+public record BlockMutation(RestrictedBlockPredicate predicate, double chance,
+                            double weight) implements MutationType, ItemDisplay {
 
     public static final Serializer SERIALIZER = new Serializer();
 
@@ -40,10 +42,24 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
     @Override
     public boolean activate(ServerLevel level, BlockPos pos) {
         if (!level.getBlockState(pos).getMaterial().isReplaceable()) return false;
-        //TODO see about changing this to using blockstate processor or something.
+        //TODO see about changing the block codec to allow for blockstates (current one doesn't expose them even if they are avaliable to input)
         BlockState state = this.predicate.block().defaultBlockState();
-        level.setBlock(pos, state, Block.UPDATE_ALL);
-        predicate.getTag().ifPresent(nbt -> BlockEntity.loadStatic(pos, state, nbt));
+        BlockState blockState = Block.updateFromNeighbourShapes(state, level, pos);
+        if (blockState.isAir()) {
+            blockState = state;
+        }
+
+        if (!level.setBlock(pos, blockState, Block.UPDATE_ALL)) {
+            return false;
+        } else {
+            // applies NBT
+            CompoundTag tag = tag().orElse(new CompoundTag());
+            BlockEntity entity = level.getBlockEntity(pos);
+            if (entity!= null) {
+                entity.load(tag);
+            }
+        }
+        level.blockUpdated(pos, blockState.getBlock());
         return true;
     }
 
