@@ -93,7 +93,7 @@ public final class RegistryHandler {
     }
 
     private static void registerBee(String name, float sizeModifier) {
-        RegistryEntry<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.ENTITY_TYPES.register(name + "_bee",
+        RegistryEntry<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.BEES.register(name + "_bee",
                 () -> CustomBeeEntityType.of(name, (type, world) -> new ResourcefulBee(type, world, name), 0.7F * sizeModifier, 0.6F * sizeModifier));
         ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> new BeeSpawnEggItem(beeEntityType, name));
         ModEntities.getModBees().put(name, beeEntityType);

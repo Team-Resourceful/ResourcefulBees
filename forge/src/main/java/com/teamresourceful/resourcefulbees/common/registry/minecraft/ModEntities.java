@@ -10,7 +10,6 @@ import com.teamresourceful.resourcefulbees.platform.common.registry.api.Resource
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +20,7 @@ public final class ModEntities {
         throw new UtilityClassError();
     }
     public static final ResourcefulRegistry<EntityType<?>> ENTITY_TYPES = ResourcefulRegistries.create(Registry.ENTITY_TYPE, ResourcefulBees.MOD_ID);
+    public static final ResourcefulRegistry<EntityType<?>> BEES = ResourcefulRegistries.create(ENTITY_TYPES);
     private static final Map<String, RegistryEntry<EntityType<? extends CustomBeeEntity>>> MOD_BEES = new HashMap<>();
     public static Map<String, RegistryEntry<EntityType<? extends CustomBeeEntity>>> getModBees() {
         return MOD_BEES;
