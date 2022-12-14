@@ -5,12 +5,12 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'adopt'
+          distribution: 'temurin'
+          java-version: 17
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Checkout submodules
@@ -18,6 +18,6 @@ jobs:
         with:
           args: git submodule update --init --recursive
       - name: Publish Curse
-        run: ./gradlew curseforge
+        run: "chmod +x gradlew && ./gradlew curseforge"
         env:
           CURSE_API_KEY: ${{ secrets.CURSE_API_KEY}}
