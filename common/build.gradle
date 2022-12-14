@@ -11,19 +11,62 @@ dependencies {
 }
 
 architectury {
-    common()
+    common("fabric", "forge")
 }
 
 publishing {
     publications {
         mavenCommon(MavenPublication) {
-            artifactId = rootProject.archives_base_name
+            artifactId = rootProject.archives_base_name + "-" + project.name + "-" + rootProject.minecraft_version
             from components.java
+
+            pom {
+                name = 'ResourcefulBees'
+                description = 'A mod for minecraft to add own bees to minecraft through a powerful api.'
+                url = 'https://github.com/Resourceful-Bees/ResourcefulBees'
+
+                scm {
+                    connection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
+                    developerConnection = 'git:https://github.com/Resourceful-Bees/ResourcefulBees.git'
+                    url = 'https://github.com/Resourceful-Bees/ResourcefulBees/'
+                }
+
+                licenses {
+                    license {
+                        name = 'GNU Lesser General Public License v3.0'
+                        url = 'https://raw.githubusercontent.com/Resourceful-Bees/ResourcefulBees/master/LICENSE'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'epic428'
+                        name = 'Epic_Oreo'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'thatgravyboat'
+                        name = 'ThatGravyBoat'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                    developer {
+                        id = 'dawn_felstar'
+                        name = 'Dawn Felstar'
+                        email = 'admin@resourcefulbees.com'
+                    }
+                }
+            }
         }
     }
 
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
+        maven {
+            url = repoUrl
+            credentials {
+                username ENV.MAVEN_USER
+                password ENV.MAVEN_PASS
+            }
+        }
     }
 }

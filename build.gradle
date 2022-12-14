@@ -8,6 +8,11 @@ architectury {
     minecraft = rootProject.minecraft_version
 }
 
+ext {
+    repoUrl = "https://nexus.resourcefulbees.com/repository/maven-releases/"
+    ENV = System.getenv()
+}
+
 subprojects {
     apply plugin: "dev.architectury.loom"
 
@@ -24,6 +29,14 @@ subprojects {
         }
         // The following line declares the yarn mappings you may select this one as well.
         // mappings "net.fabricmc:yarn:@YARN_MAPPINGS@:v2"
+    }
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "Resourceful-Bees_ResourcefulBees"
+        property "sonar.organization", "resourceful-bees"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
 
