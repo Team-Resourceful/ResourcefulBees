@@ -2,12 +2,11 @@ package com.teamresourceful.resourcefulbees.client.utils;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.FontResourceManagerAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.MinecraftAccessor;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -25,14 +24,6 @@ public final class TextUtils {
 
     private TextUtils() {
         throw new UtilityClassError();
-    }
-
-    public static void drawCenteredString(Font font, PoseStack stack, Component component, int x, int y, int color, boolean shadow) {
-        if (shadow) {
-            GuiComponent.drawCenteredString(stack, font, component, x, y, color);
-        } else {
-            font.draw(stack, component, x - halfWidthOfText(font, component), y, color);
-        }
     }
 
     public static void drawCenteredStringNoShadow(Font font, PoseStack stack, Component component, float x, float y, int color) {

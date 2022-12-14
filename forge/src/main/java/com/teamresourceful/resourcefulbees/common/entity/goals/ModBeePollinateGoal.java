@@ -4,13 +4,10 @@ import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
-import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderSet;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -232,9 +229,8 @@ public class ModBeePollinateGoal extends Goal {
 
     public Optional<BlockPos> findFlower(double range) {
         BlockPos beePos = bee.blockPosition();
-        HolderSet<EntityType<?>> holders = bee.getCoreData().entityFlowers();
-        if (holders.size() > 0) {
-            return bee.level.getEntities(bee, new AABB(bee.blockPosition()).inflate(range), entity -> holders.contains(entity.getType().builtInRegistryHolder()))
+        if (bee.getCoreData().hasEntityFlower()) {
+            return bee.level.getEntities(bee, new AABB(bee.blockPosition()).inflate(range), entity -> bee.getCoreData().isEntityFlower(entity.getType()))
                     .stream()
                     .filter(Entity::isAlive)
                     .findFirst()
@@ -258,20 +254,12 @@ public class ModBeePollinateGoal extends Goal {
     public Predicate<BlockPos> getFlowerBlockPredicate() {
         return pos -> {
             if (bee.getCoreData().flowers().size() > 0){
-                if (!MathUtils.inRangeInclusive(pos.getY(), minBuildHeight(), maxBuildHeight())) return false;
+                if (!bee.level.isInWorldBounds(pos)) return false;
                 BlockState state = bee.level.getBlockState(pos);
                 if (state.isAir()) return false;
                 return state.is(bee.getCoreData().flowers());
             }
             return false;
         };
-    }
-
-    private int minBuildHeight() {
-        return bee.level.getMinBuildHeight();
-    }
-
-    private int maxBuildHeight() {
-        return bee.level.getMaxBuildHeight();
     }
 }

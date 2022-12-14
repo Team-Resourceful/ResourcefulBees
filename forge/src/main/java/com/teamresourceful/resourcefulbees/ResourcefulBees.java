@@ -12,7 +12,6 @@ import com.teamresourceful.resourcefulbees.common.data.DataSetup;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
 import com.teamresourceful.resourcefulbees.common.init.*;
-import com.teamresourceful.resourcefulbees.common.item.event.BonemealEventHandler;
 import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
@@ -30,6 +29,7 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegis
 import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
+import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
@@ -43,6 +43,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -60,6 +61,8 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mod(ResourcefulBees.MOD_ID)
 public class ResourcefulBees {
@@ -166,7 +169,20 @@ public class ResourcefulBees {
         GameSetup.initPotionRecipes();
         GameSetup.initArguments();
         ConditionRegistryImpl.freeze();
-        MinecraftForge.EVENT_BUS.addListener(BonemealEventHandler::onBoneMealEvent);
+        MinecraftForge.EVENT_BUS.addListener((BonemealEvent bonemealEvent) -> {
+            BlockBonemealedEvent newEvent = new BlockBonemealedEvent(
+                    bonemealEvent.getEntity(),
+                    bonemealEvent.getLevel(),
+                    bonemealEvent.getPos(),
+                    bonemealEvent.getBlock(),
+                    bonemealEvent.getStack(),
+                    new AtomicBoolean(bonemealEvent.isCanceled())
+            );
+            BlockBonemealedEvent.EVENT.fire(newEvent);
+            if (newEvent.isCanceled()) {
+                bonemealEvent.setCanceled(true);
+            }
+        });
     }
 
     @SubscribeEvent

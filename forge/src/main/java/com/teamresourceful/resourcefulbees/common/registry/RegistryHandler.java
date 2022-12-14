@@ -24,10 +24,7 @@ import com.teamresourceful.resourcefulbees.common.item.dispenser.ScraperDispense
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyDataRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModVillagerProfessions;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.*;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;

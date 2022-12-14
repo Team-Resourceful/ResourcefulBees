@@ -1,11 +1,13 @@
 {
     "required": true,
     "minVersion": "0.8",
-    "package": "com.teamresourceful.resourcefulbees.mixin.forge",
+    "package": "com.teamresourceful.resourcefulbees.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
+        "common.MixinBlock"
     ],
     "client": [
+        "client.ScreenInvoker"
     ],
     "injectors": {
         "defaultRequire": 1

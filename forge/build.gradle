@@ -18,6 +18,7 @@ sourceSets {
 loom {
     forge {
         mixinConfig "resourcefulbees.mixins.json"
+        mixinConfig "resourcefulbees-common.mixins.json"
     }
 }
 

@@ -7,7 +7,6 @@
         "compat.ProductiveBeeMixin",
         "MixinBee",
         "MixinBeeEnterHiveGoal",
-        "MixinBlock",
         "MixinDispenserBlock",
         "accessors.BeeEntityAccessor",
         "accessors.BeehiveBeeDataAccessor",
@@ -22,7 +21,6 @@
     "minVersion": "0.8.5",
     "client": [
         "accessors.FontResourceManagerAccessor",
-        "accessors.MinecraftAccessor",
-        "invokers.ScreenInvoker"
+        "accessors.MinecraftAccessor"
     ]
 }

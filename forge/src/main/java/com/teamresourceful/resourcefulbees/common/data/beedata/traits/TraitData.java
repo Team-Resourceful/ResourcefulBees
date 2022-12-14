@@ -8,8 +8,8 @@ import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
 import com.teamresourceful.resourcefulbees.api.data.trait.DamageType;
 import com.teamresourceful.resourcefulbees.api.data.trait.PotionEffect;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
+import com.teamresourceful.resourcefulbees.api.registry.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
-import com.teamresourceful.resourcefulbees.common.registries.custom.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.core.particles.ParticleType;
@@ -47,7 +47,7 @@ public record TraitData(
         Set<Aura> auras = new HashSet<>();
 
         for (String id : traits) {
-            Trait trait = TraitRegistry.getRegistry().getTrait(id);
+            Trait trait = TraitRegistry.get().getTrait(id);
             if (trait == null) continue;
             potionDamageEffects.addAll(trait.potionDamageEffects());
             damageImmunities.addAll(trait.damageImmunities());

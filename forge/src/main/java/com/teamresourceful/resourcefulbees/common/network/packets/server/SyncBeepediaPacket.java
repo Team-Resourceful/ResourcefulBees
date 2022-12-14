@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.network.packets.server;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
-import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
+import com.teamresourceful.resourcefulbees.common.util.BeepediaUtils;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;

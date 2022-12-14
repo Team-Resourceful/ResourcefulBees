@@ -6,9 +6,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.item.BeeJar;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +27,7 @@ public class FilledBeeJarIngredient extends Ingredient {
 
     public FilledBeeJarIngredient() {
         super(Stream.concat(
-                BeeRegistry.getRegistry().getStreamOfBees().map(FilledBeeJarIngredient::getBeeJar),
+                BeeRegistry.get().getStreamOfBees().map(FilledBeeJarIngredient::getBeeJar),
                 Stream.of(getBeeJar(EntityType.getKey(EntityType.BEE), BeeConstants.VANILLA_BEE_INT_COLOR))
         ));
     }

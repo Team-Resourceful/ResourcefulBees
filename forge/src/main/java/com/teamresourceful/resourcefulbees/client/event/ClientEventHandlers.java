@@ -16,13 +16,13 @@ import com.teamresourceful.resourcefulbees.client.render.items.ItemModelProperti
 import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.*;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
-import com.teamresourceful.resourcefulbees.common.inventory.menus.FakeFlowerMenu;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
+import com.teamresourceful.resourcefulbees.platform.client.events.RegisterColorHandlerEvent;
 import com.teamresourceful.resourcefulbees.platform.client.events.ScreenOpenEvent;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.client.Minecraft;
@@ -35,10 +35,7 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RecipesUpdatedEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -57,6 +54,8 @@ public final class ClientEventHandlers {
     public static void clientStuff() {
         ResourcefulBeesClient.init();
 
+        var eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::onAddAdditional);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModelHandler::onModelBake);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::clientSetup);
@@ -65,6 +64,11 @@ public final class ClientEventHandlers {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::addLayers);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientEventHandlers::onRegisterGuiOverlay);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientUtils::onResourceReload);
+
+        eventBus.addListener((RegisterColorHandlersEvent.Item event) ->
+                RegisterColorHandlerEvent.EVENT.fire(new RegisterColorHandlerEvent(event.getItemColors(), event.getBlockColors(), RegisterColorHandlerEvent.Phase.ITEMS)));
+        eventBus.addListener((RegisterColorHandlersEvent.Block event) ->
+                RegisterColorHandlerEvent.EVENT.fire(new RegisterColorHandlerEvent(null, event.getBlockColors(), RegisterColorHandlerEvent.Phase.BLOCKS)));
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);

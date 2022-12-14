@@ -27,6 +27,10 @@ public interface BeeCoreData extends BeeData<BeeCoreData> {
         return entityFlowers().size() > 0;
     }
 
+    default boolean isEntityFlower(EntityType<?> entityType) {
+        return entityFlowers().contains(entityType.builtInRegistryHolder());
+    }
+
     int maxTimeInHive();
 
     List<MutableComponent> lore();

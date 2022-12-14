@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConst
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncBeepediaPacket;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
-import com.teamresourceful.resourcefulbees.common.utils.BeepediaUtils;
+import com.teamresourceful.resourcefulbees.common.util.BeepediaUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;

@@ -2,10 +2,14 @@ package com.teamresourceful.resourcefulbees.common.setup;
 
 import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesCommand;
 import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument;
+import com.teamresourceful.resourcefulbees.common.enchantments.HiveBreakEnchantment;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
 import com.teamresourceful.resourcefulbees.common.resources.conditions.LoadDevRecipes;
+import com.teamresourceful.resourcefulbees.common.worldgen.GoldenFlower;
+import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
+import com.teamresourceful.resourcefulbees.platform.common.events.PlayerBrokeBlockEvent;
 import com.teamresourceful.resourcefulbees.platform.common.registry.RegistryHelper;
 import com.teamresourceful.resourcefulbees.platform.common.registry.potion.PotionRegistry;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.ConditionRegistry;
@@ -24,6 +28,8 @@ public final class GameSetup {
 
     public static void initEvents() {
         CommandRegisterEvent.EVENT.addListener(ResourcefulBeesCommand::registerCommand);
+        PlayerBrokeBlockEvent.EVENT.addListener(HiveBreakEnchantment::onBlockBreak);
+        BlockBonemealedEvent.EVENT.addListener(GoldenFlower::onBlockBonemealed);
     }
 
     public static void initSerializersAndConditions() {

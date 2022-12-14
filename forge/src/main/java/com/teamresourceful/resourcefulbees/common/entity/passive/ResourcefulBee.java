@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.entity.passive;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
+import com.teamresourceful.resourcefulbees.api.registry.TraitAbilityRegistry;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
@@ -13,7 +14,6 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeGoToHiveGoalInvoker;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
-import com.teamresourceful.resourcefulbees.common.registries.custom.TraitAbilityRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.util.SerializedDataEntry;
@@ -218,7 +218,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             return;
         }
 
-        TraitAbilityRegistry registry = TraitAbilityRegistry.getRegistry();
+        TraitAbilityRegistry registry = TraitAbilityRegistry.get();
 
         info.specialAbilities().stream()
             .map(registry::getAbility)
