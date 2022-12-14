@@ -2,8 +2,6 @@ package com.teamresourceful.resourcefulbees.common.entity.goals;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.AirRandomPos;
 import net.minecraft.world.level.Level;
@@ -31,24 +29,25 @@ public class BeeFakeFlowerGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return bee.hasFakeFlower() && bee.hasNectar() && bee.getNumberOfMutations() < bee.getMutationData().count();
+        return bee.fakeFlower.hasData() && bee.hasNectar() && bee.getNumberOfMutations() < bee.getMutationData().count();
     }
 
     public void tick() {
         if (travellingTicks % 20 == 0) {
-            if (!bee.isFakeFlowerValid()) bee.removeFakeFlower();
+            if (!bee.isFakeFlowerValid()) bee.fakeFlower.clear();
         }
 
-        if (bee.getFakeFlowerPos() != null) {
+        if (bee.fakeFlower.hasData()) {
             ++this.travellingTicks;
             if (this.travellingTicks > this.adjustedTickDelay(600)) {
                 bee.incrementNumCropsGrownSincePollination();
             } else if (!bee.getNavigation().isInProgress()) {
-                if (!bee.blockPosition().closerThan(bee.getFakeFlowerPos(), 16)) {
-                    this.pathfindRandomlyTowards(bee.getFakeFlowerPos());
+                BlockPos flower = bee.fakeFlower.get();
+                if (!bee.blockPosition().closerThan(flower, 16)) {
+                    this.pathfindRandomlyTowards(flower);
                 } else {
-                    boolean flag = this.pathfindDirectlyTowards(bee.getFakeFlowerPos());
-                    if (bee.blockPosition().closerThan(bee.getFakeFlowerPos(), 1.1)) {
+                    boolean flag = this.pathfindDirectlyTowards(flower);
+                    if (bee.blockPosition().closerThan(flower, 1.1)) {
                         depositTime++;
                         if (depositTime >= 20) {
                             bee.dropOffMutations();
@@ -60,7 +59,7 @@ public class BeeFakeFlowerGoal extends Goal {
                     } else if (this.lastPath != null && bee.getNavigation().getPath() != null && bee.getNavigation().getPath().sameAs(this.lastPath)) {
                         ++this.ticksStuck;
                         if (this.ticksStuck > 60) {
-                            bee.removeFakeFlower();
+                            bee.fakeFlower.clear();
                             this.ticksStuck = 0;
                         }
                     }
@@ -78,7 +77,7 @@ public class BeeFakeFlowerGoal extends Goal {
 
     private boolean pathfindDirectlyTowards(BlockPos pos) {
         bee.getNavigation().setMaxVisitedNodesMultiplier(10.0F);
-        bee.getNavigation().moveTo((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), 1.0);
+        bee.getNavigation().moveTo(pos.getX(), pos.getY(), pos.getZ(), 1.0);
         return bee.getNavigation().getPath() != null && bee.getNavigation().getPath().canReach();
     }
 

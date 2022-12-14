@@ -71,8 +71,8 @@ public class HoneyDipper extends Item {
                 return InteractionResult.SUCCESS;
             }
 
-            if (clickedTile instanceof FakeFlowerEntity && bee instanceof ResourcefulBee) {
-                ((ResourcefulBee)bee).setFakeFlowerPos(context.getClickedPos());
+            if (clickedTile instanceof FakeFlowerEntity && bee instanceof ResourcefulBee resourcefulBee) {
+                resourcefulBee.fakeFlower.set(context.getClickedPos());
                 sendMessageToPlayer(bee, player, MessageTypes.FAKE_FLOWER, context.getClickedPos());
                 player.setItemInHand(context.getHand(), setEntity(stack, null));
                 return InteractionResult.SUCCESS;
@@ -111,10 +111,10 @@ public class HoneyDipper extends Item {
                 return InteractionResult.SUCCESS;
             }
 
-            if (stackEntity instanceof CustomBeeEntity customBee && entityTypesMatch(entity, customBee.getCoreData().entityFlowers())) {
-                customBee.setFlowerEntityID(entity.getId());
-                customBee.setSavedFlowerPos(entity.blockPosition());
-                sendMessageToPlayer(customBee, player, MessageTypes.FLOWER, entity.blockPosition());
+            if (stackEntity instanceof ResourcefulBee bee && entityTypesMatch(entity, bee.getCoreData().entityFlowers())) {
+                bee.entityFlower.set(entity.getId());
+                bee.setSavedFlowerPos(entity.blockPosition());
+                sendMessageToPlayer(bee, player, MessageTypes.FLOWER, entity.blockPosition());
                 player.setItemInHand(hand, setEntity(stack, null));
                 return InteractionResult.SUCCESS;
             }

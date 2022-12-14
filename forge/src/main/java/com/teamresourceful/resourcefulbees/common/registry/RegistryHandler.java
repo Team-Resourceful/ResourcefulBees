@@ -33,6 +33,7 @@ import com.teamresourceful.resourcefulbees.platform.common.registry.api.Registry
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -81,7 +82,10 @@ public final class RegistryHandler {
     //Dynamic|Iterative Registration Stuff below this line
 
     public static void addEntityAttributes(EntityAttributeCreationEvent event) {
-        ModEntities.getModBees().forEach((s, entityType) -> event.put(entityType.get(), CustomBeeEntity.createBeeAttributes(s).build()));
+        ModEntities.getModBees().forEach((s, entityType) -> event.put(
+            entityType.get(),
+            BeeRegistry.get().getBeeData(s).getCombatData().buildAttributes(Mob.createMobAttributes()).build()
+        ));
     }
 
     public static void registerDynamicBees() {

@@ -1,10 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
 import net.minecraft.sounds.SoundEvents;
@@ -20,30 +21,29 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class RBeePollinateGoal extends Goal {
+public class ModBeePollinateGoal extends Goal {
+
+    private static final ArrayList<BlockPos> OFFSETS = Util.make(new ArrayList<>(), offsets -> {
+        for(int i = 0; (double)i <= 5; i = i > 0 ? -i : 1 - i) {
+            for(int j = 0; (double)j < 5; ++j) {
+                for(int k = 0; k <= j; k = k > 0 ? -k : 1 - k) {
+                    for(int l = k < j && k > -j ? j : 0; l <= j; l = l > 0 ? -l : 1 - l) {
+                        offsets.add(new BlockPos(k,i-1, l));
+                    }
+                }
+            }
+        }
+    });
 
     private int pollinationTicks;
     private int lastPollinationTick;
     private boolean running;
     private Vec3 nextTarget;
     private int ticks;
-    private final CustomBeeEntity bee;
+    private final ResourcefulBee bee;
     private Vec3 boundingBox;
-    private static final ArrayList<BlockPos> positionOffsets = new ArrayList<>();
 
-    static {
-        for(int i = 0; (double)i <= 5; i = i > 0 ? -i : 1 - i) {
-            for(int j = 0; (double)j < 5; ++j) {
-                for(int k = 0; k <= j; k = k > 0 ? -k : 1 - k) {
-                    for(int l = k < j && k > -j ? j : 0; l <= j; l = l > 0 ? -l : 1 - l) {
-                        positionOffsets.add(new BlockPos(k,i-1, l));
-                    }
-                }
-            }
-        }
-    }
-
-    public RBeePollinateGoal(CustomBeeEntity beeEntity) {
+    public ModBeePollinateGoal(ResourcefulBee beeEntity) {
         this.setFlags(EnumSet.of(Flag.MOVE));
         this.bee = beeEntity;
     }
@@ -55,15 +55,17 @@ public class RBeePollinateGoal extends Goal {
             return false;
         } else if (bee.getRandom().nextFloat() < 0.7F) {
             return false;
-        } else if ((manualModeEnabled() || hasEntityFlower()) && bee.getSavedFlowerPos() == null && randomFlag()) {
-            Optional<BlockPos> optional = this.findFlower(5.0D);
-            if (optional.isPresent()) {
-                bee.setSavedFlowerPos(optional.get());
-                bee.getNavigation().moveTo(bee.getSavedFlowerPos().getX() + 0.5D, bee.getSavedFlowerPos().getY() + 0.5D, bee.getSavedFlowerPos().getZ() + 0.5D, 1.2D);
-                return true;
-            } else {
-                ((BeeEntityAccessor)bee).setRemainingCooldownBeforeLocatingNewFlower(600);
-            }
+        } else if ((canBeesFreelyFindFlowers() || hasEntityFlower()) && bee.getSavedFlowerPos() == null && randomFlag()) {
+            return this.findFlower(5.0D)
+                .map(pos -> {
+                    bee.setSavedFlowerPos(pos);
+                    bee.getNavigation().moveTo(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 1.2D);
+                    return true;
+                })
+                .orElseGet(() -> {
+                    ((BeeEntityAccessor)bee).setRemainingCooldownBeforeLocatingNewFlower(600);
+                    return false;
+                });
         } else if (bee.getSavedFlowerPos() != null) {
             bee.getNavigation().moveTo(bee.getSavedFlowerPos().getX() + 0.5D, bee.getSavedFlowerPos().getY() + 0.5D, bee.getSavedFlowerPos().getZ() + 0.5D, 1.2D);
             return true;
@@ -71,7 +73,7 @@ public class RBeePollinateGoal extends Goal {
         return false;
     }
 
-    private static boolean manualModeEnabled() {
+    private static boolean canBeesFreelyFindFlowers() {
         return !BeeConfig.manualMode;
     }
 
@@ -117,7 +119,6 @@ public class RBeePollinateGoal extends Goal {
         return !bee.isAngry() && this.canBeeContinue();
     }
 
-
     @Override
     public void start() {
         this.pollinationTicks = 0;
@@ -141,9 +142,9 @@ public class RBeePollinateGoal extends Goal {
     }
 
     public void clearTask() {
-        if (manualModeEnabled()) {
+        if (canBeesFreelyFindFlowers()) {
             bee.setSavedFlowerPos(null);
-            bee.setFlowerEntityID(-1);
+            bee.entityFlower.clear();
             boundingBox = null;
         }
     }
@@ -153,8 +154,9 @@ public class RBeePollinateGoal extends Goal {
         ++this.ticks;
         if (this.ticks > 600) {
             this.clearTask();
-        } else if ((bee.getCoreData().hasEntityFlower() || bee.getFlowerEntityID() >= 0)) {
+        } else if ((bee.getCoreData().hasEntityFlower() || bee.entityFlower.hasData())) {
             handleEntityFlower();
+        } else {
             handleBlockFlower();
         }
     }
@@ -212,7 +214,7 @@ public class RBeePollinateGoal extends Goal {
 
     private void handleEntityFlower() {
         if (bee.tickCount % 5 == 0 && bee.getCoreData().hasEntityFlower()) {
-            Entity flowerEntity = bee.level.getEntity(bee.getFlowerEntityID());
+            Entity flowerEntity = bee.level.getEntity(bee.entityFlower.get());
             if (flowerEntity != null) {
                 boundingBox = new Vec3(flowerEntity.getBoundingBox().getCenter().x(), flowerEntity.getBoundingBox().maxY, flowerEntity.getBoundingBox().getCenter().z());
                 bee.setSavedFlowerPos(flowerEntity.blockPosition());
@@ -237,12 +239,12 @@ public class RBeePollinateGoal extends Goal {
                     .filter(Entity::isAlive)
                     .findFirst()
                     .map(entity -> {
-                        bee.setFlowerEntityID(entity.getId());
+                        bee.entityFlower.set(entity.getId());
                         return entity.blockPosition();
                     });
         } else {
             BlockPos.MutableBlockPos flowerPos = beePos.mutable();
-            for (BlockPos blockPos : positionOffsets){
+            for (BlockPos blockPos : OFFSETS){
                 flowerPos.setWithOffset(beePos, blockPos);
                 if (getFlowerBlockPredicate().test(flowerPos)){
                     return Optional.of(flowerPos);

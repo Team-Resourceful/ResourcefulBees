@@ -28,7 +28,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -53,7 +52,6 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     protected final CustomBeeData customBeeData;
     protected int timeWithoutHive;
-    protected int flowerID;
     private boolean hasHiveInRange;
     private int disruptorInRange;
 
@@ -62,23 +60,11 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
         this.customBeeData = BeeRegistry.get().getBeeData(beeType);
     }
 
-    public static AttributeSupplier.Builder createBeeAttributes(String key) {
-        return BeeRegistry.get().getBeeData(key).getCombatData().buildAttributes(createMobAttributes());
-    }
-
     //region BEE INFO RELATED METHODS BELOW
 
     @Override
     public CustomBeeData getBeeData() {
         return customBeeData;
-    }
-
-    public int getFlowerEntityID() {
-        return flowerID;
-    }
-
-    public void setFlowerEntityID(int id) {
-        flowerID = id;
     }
 
     @Override
@@ -171,10 +157,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     public static boolean canBeeSpawn(EntityType<?> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource randomSource) {
         return switch (reason) {
-            case NATURAL, CHUNK_GENERATION ->
-                    ModSpawnData.getPredicate(type)
-                        .map(predicate -> predicate.matches(level.getLevel(), pos.getX(), pos.getY(), pos.getZ()))
-                        .orElse(true);
+            case NATURAL, CHUNK_GENERATION -> ModSpawnData.test(type, level.getLevel(), pos);
             default -> true;
         };
     }
@@ -277,8 +260,8 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, (event) -> {
             event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation("animation.bee.fly", ILoopType.EDefaultLoopTypes.LOOP)
-                    .addAnimation("animation.bee.fly.bobbing", ILoopType.EDefaultLoopTypes.LOOP)
+                .addAnimation("animation.bee.fly", ILoopType.EDefaultLoopTypes.LOOP)
+                .addAnimation("animation.bee.fly.bobbing", ILoopType.EDefaultLoopTypes.LOOP)
             );
             return PlayState.CONTINUE;
         }));
