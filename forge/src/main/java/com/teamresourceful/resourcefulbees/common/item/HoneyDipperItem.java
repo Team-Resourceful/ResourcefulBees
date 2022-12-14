@@ -35,9 +35,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 import java.util.function.Function;
 
-public class HoneyDipper extends Item {
+public class HoneyDipperItem extends Item {
 
-    public HoneyDipper(Properties properties) {
+    public HoneyDipperItem(Properties properties) {
         super(properties);
     }
 
@@ -157,7 +157,7 @@ public class HoneyDipper extends Item {
     }
 
     public static boolean isHoldingHoneyDipper(Player player) {
-        return player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof HoneyDipper || player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof HoneyDipper;
+        return player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof HoneyDipperItem || player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof HoneyDipperItem;
     }
 
     private enum MessageTypes {

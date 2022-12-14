@@ -33,15 +33,14 @@ public final class DataPackLoader implements RepositorySource {
                         .ifPresent(json -> dataPack.putJson(PackType.SERVER_DATA, location, json));
             });
 
-            Pack pack = Pack.create(
-                DATAPACK_NAME,
-                true,
-                () -> dataPack,
-                factory,
-                Pack.Position.BOTTOM,
-                PackSource.BUILT_IN
-            );
-            packList.accept(pack);
+            packList.accept(Pack.create(
+                    DATAPACK_NAME,
+                    true,
+                    () -> dataPack,
+                    factory,
+                    Pack.Position.BOTTOM,
+                    PackSource.BUILT_IN
+            ));
         }
     }
 

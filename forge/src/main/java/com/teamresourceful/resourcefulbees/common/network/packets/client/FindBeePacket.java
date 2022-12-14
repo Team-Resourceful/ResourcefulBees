@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocator;
+import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocatorItem;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
@@ -39,7 +39,7 @@ public record FindBeePacket(String bee, InteractionHand hand) implements Packet<
 
         @Override
         public PacketContext handle(FindBeePacket message) {
-            return (player, level) -> BeeLocator.run(player, message.bee(), message.hand());
+            return (player, level) -> BeeLocatorItem.run(player, message.bee(), message.hand());
         }
     }
 }

@@ -26,8 +26,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-public class BeeJar extends Item {
-    public BeeJar(Properties properties) {
+public class BeeJarItem extends Item {
+    public BeeJarItem(Properties properties) {
         super(properties);
     }
 
@@ -48,7 +48,7 @@ public class BeeJar extends Item {
     }
 
     public static boolean isFilled(ItemStack stack) {
-        return stack.getItem() instanceof BeeJar && !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().contains(NBTConstants.BeeJar.ENTITY)
+        return stack.getItem() instanceof BeeJarItem && !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().contains(NBTConstants.BeeJar.ENTITY)
                 && stack.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY).contains(NBTConstants.NBT_ID);
     }
 
@@ -132,7 +132,7 @@ public class BeeJar extends Item {
     @Override
     public @NotNull Component getName(@NotNull ItemStack stack) {
         MutableComponent component = super.getName(stack).copy();
-        if (BeeJar.hasEntityDisplay(stack)) {
+        if (BeeJarItem.hasEntityDisplay(stack)) {
             MutableComponent display = Component.Serializer.fromJson(stack.getOrCreateTag().getString(NBTConstants.BeeJar.DISPLAY_NAME));
             if (display != null) {
                 Color color = getColor(stack);

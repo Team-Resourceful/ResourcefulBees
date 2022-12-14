@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.entity.villager;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
-import com.teamresourceful.resourcefulbees.common.item.BeeJar;
+import com.teamresourceful.resourcefulbees.common.item.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
@@ -225,7 +225,7 @@ public final class Beekeeper {
             .forEach(bee -> {
                 var tradeData = bee.getTradeData();
                 list.add((trader, random) -> {
-                    ItemStack beeJar = BeeJar.createFilledJar(bee.id(), bee.getRenderData().colorData().jarColor());
+                    ItemStack beeJar = BeeJarItem.createFilledJar(bee.id(), bee.getRenderData().colorData().jarColor());
                     beeJar.setCount(tradeData.amount().sample(random));
                     return tradeData.getMerchantOffer(random, beeJar, 32, 64);
                 });

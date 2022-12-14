@@ -7,7 +7,7 @@ import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.item.BeeJar;
+import com.teamresourceful.resourcefulbees.common.item.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.network.FriendlyByteBuf;
@@ -34,7 +34,7 @@ public class FilledBeeJarIngredient extends Ingredient {
 
     @NotNull
     private static ItemValue getBeeJar(ResourceLocation id, Color color) {
-        return new ItemValue(BeeJar.createFilledJar(id, color));
+        return new ItemValue(BeeJarItem.createFilledJar(id, color));
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -55,7 +55,7 @@ public class FilledBeeJarIngredient extends Ingredient {
 
     @Override
     public boolean test(@Nullable ItemStack input) {
-        return input != null && BeeJar.isFilled(input);
+        return input != null && BeeJarItem.isFilled(input);
     }
 
     @Override

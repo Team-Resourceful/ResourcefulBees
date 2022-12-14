@@ -75,7 +75,7 @@ public class BeeLocatorWorker implements LevelWorker {
     public void fail() {
         this.isRunning = false;
         ItemStack stack = this.player.getItemInHand(this.hand);
-        if (!(stack.getItem() instanceof BeeLocator)) return;
+        if (!(stack.getItem() instanceof BeeLocatorItem)) return;
 
         var stackTag = stack.getOrCreateTag();
         stackTag.remove(NBTConstants.BeeLocator.LAST_BIOME);
@@ -89,7 +89,7 @@ public class BeeLocatorWorker implements LevelWorker {
     public void success(BlockPos pos, Holder<Biome> biome) {
         this.isRunning = false;
         ItemStack stack = this.player.getItemInHand(this.hand);
-        if (!(stack.getItem() instanceof BeeLocator)) return;
+        if (!(stack.getItem() instanceof BeeLocatorItem)) return;
         var stackTag = stack.getOrCreateTag();
         stackTag.put(NBTConstants.BeeLocator.LAST_BIOME, NbtUtils.writeBlockPos(pos));
         biome.unwrapKey()

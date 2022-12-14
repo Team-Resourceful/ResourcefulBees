@@ -30,7 +30,7 @@ public final class ColorHandler {
         registerItems(event::register, CustomHoneyBucketItem::getColor, ModItems.HONEY_BUCKET_ITEMS.getEntries());
         registerItems(event::register, CustomHoneyBottleItem::getColor, ModItems.HONEY_BOTTLE_ITEMS.getEntries());
         registerItems(event::register, CustomHoneyBlock::getItemColor, ModItems.HONEY_BLOCK_ITEMS.getEntries());
-        event.register(BeeJar::getColor, ModItems.BEE_JAR.get());
+        event.register(BeeJarItem::getColor, ModItems.BEE_JAR.get());
         event.register(MutatedPollenItem::getColor, ModItems.MUTATED_POLLEN.get());
     }
 

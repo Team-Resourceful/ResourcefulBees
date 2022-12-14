@@ -13,9 +13,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-public class BeeLocator extends Item {
+public class BeeLocatorItem extends Item {
 
-    public BeeLocator(Properties p_41383_) {
+    public BeeLocatorItem(Properties p_41383_) {
         super(p_41383_);
     }
 
@@ -35,7 +35,7 @@ public class BeeLocator extends Item {
     public static void run(Player player, String bee, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!player.getAbilities().instabuild && player.getCooldowns().isOnCooldown(stack.getItem())) return;
-        if (!(stack.getItem() instanceof BeeLocator)) return;
+        if (!(stack.getItem() instanceof BeeLocatorItem)) return;
         LevelWorkManager.addWork(new BeeLocatorWorker(player, hand, bee, 100));
     }
 

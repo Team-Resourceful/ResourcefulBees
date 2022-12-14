@@ -30,9 +30,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class Smoker extends Item implements ExpandableTooltip {
+public class SmokerItem extends Item implements ExpandableTooltip {
 
-    public Smoker(Properties properties) {
+    public SmokerItem(Properties properties) {
         super(properties);
     }
 

@@ -26,9 +26,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class Beepedia extends Item {
+public class BeepediaItem extends Item {
 
-    public Beepedia(Properties properties) {
+    public BeepediaItem(Properties properties) {
         super(properties);
     }
 
@@ -81,6 +81,6 @@ public class Beepedia extends Item {
     }
 
     public static boolean isCreative(ItemStack stack) {
-        return stack.getItem() instanceof Beepedia && !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().getBoolean(NBTConstants.Beepedia.CREATIVE);
+        return stack.getItem() instanceof BeepediaItem && !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().getBoolean(NBTConstants.Beepedia.CREATIVE);
     }
 }

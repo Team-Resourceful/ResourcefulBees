@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.block.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.FakeFlowerEntity;
-import com.teamresourceful.resourcefulbees.common.item.HoneyDipper;
+import com.teamresourceful.resourcefulbees.common.item.HoneyDipperItem;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -41,7 +41,7 @@ public class FakeFlower extends RenderingBaseEntityBlock {
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
-        if (HoneyDipper.isHoldingHoneyDipper(player)) {
+        if (HoneyDipperItem.isHoldingHoneyDipper(player)) {
             return InteractionResult.FAIL;
         } else if (level.getBlockEntity(pos) instanceof FakeFlowerEntity fakeFlower) {
             if (!level.isClientSide) {

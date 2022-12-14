@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
-import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocator;
+import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocatorItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.platform.client.renderer.overlay.OverlayRenderer;
@@ -31,8 +31,8 @@ public class BeeLocatorOverlay implements OverlayRenderer {
     public void render(Minecraft mc, PoseStack poseStack, float partialTick, int width, int height) {
         Player player = mc.player;
         if (player == null) return;
-        ItemStack stack = player.getMainHandItem().getItem() instanceof BeeLocator ? player.getMainHandItem() : player.getOffhandItem();
-        if (stack.getItem() instanceof BeeLocator && hasBeeAndPos(stack)) {
+        ItemStack stack = player.getMainHandItem().getItem() instanceof BeeLocatorItem ? player.getMainHandItem() : player.getOffhandItem();
+        if (stack.getItem() instanceof BeeLocatorItem && hasBeeAndPos(stack)) {
             BlockPos pos = NbtUtils.readBlockPos(stack.getTag().getCompound(NBTConstants.BeeLocator.LAST_BIOME));
             pos = new BlockPos(pos.getX(), player.blockPosition().getY(), pos.getZ());
             String bee = stack.getTag().getString(NBTConstants.BeeLocator.LAST_BEE);

@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.item.BeeJar;
+import com.teamresourceful.resourcefulbees.common.item.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +25,7 @@ public class BeeJarIngredient extends Ingredient {
     private final int color;
 
     public BeeJarIngredient(ResourceLocation id, int color) {
-        super(Stream.of(new ItemValue(BeeJar.createFilledJar(id, color))));
+        super(Stream.of(new ItemValue(BeeJarItem.createFilledJar(id, color))));
         this.id = id;
         this.color = color;
     }
@@ -46,7 +46,7 @@ public class BeeJarIngredient extends Ingredient {
     @Override
     public boolean test(@Nullable ItemStack input) {
         if (input == null) return false;
-        return BeeJar.isFilled(input) && input.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY).getString(NBTConstants.NBT_ID).equals(id.toString());
+        return BeeJarItem.isFilled(input) && input.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY).getString(NBTConstants.NBT_ID).equals(id.toString());
     }
 
     @Override
