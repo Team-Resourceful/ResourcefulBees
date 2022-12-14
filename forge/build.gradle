@@ -51,8 +51,8 @@ dependencies {
 
     modImplementation("com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version")
 
-    modCompileOnly("net.roguelogix.phosphophyllite:Phosphophyllite:0.6.0-beta.5@jar")
-    modRuntimeOnly("net.roguelogix.phosphophyllite:Phosphophyllite:0.6.0-beta.5@jar")
+    modCompileOnly("net.roguelogix.phosphophyllite:Phosphophyllite:0.6.0-beta.6")
+    modRuntimeOnly("net.roguelogix.phosphophyllite:Phosphophyllite:0.6.0-beta.6")
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }

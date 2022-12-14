@@ -36,13 +36,7 @@ allprojects {
     group = rootProject.maven_group
 
     repositories {
-        maven {
-            url "https://nexus.resourcefulbees.com/repository/maven-public/"
-            metadataSources {
-                mavenPom()
-                artifact()
-            }
-        }
+        maven { url = "https://nexus.resourcefulbees.com/repository/maven-public/" }
         mavenCentral()
         maven { url = "https://www.cursemaven.com" }
     }
