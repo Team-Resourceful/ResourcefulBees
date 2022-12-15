@@ -13,7 +13,7 @@ import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -71,7 +71,7 @@ public class BeePage extends SubdividedScreen {
     public void renderScreen(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.renderScreen(stack, mouseX, mouseY, partialTicks);
         RenderUtils.bindTexture(TEXTURE);
-        Gui.blit(stack, 0, 46, 0, 0, 186, 3, 186, 3);
+        GuiComponent.blit(stack, 0, 46, 0, 0, 186, 3, 186, 3);
 
         if (bee != null) {
             try (var ignored = RenderUtils.createScissorBox(Minecraft.getInstance(), stack, 0, 0, 49, 49)) {

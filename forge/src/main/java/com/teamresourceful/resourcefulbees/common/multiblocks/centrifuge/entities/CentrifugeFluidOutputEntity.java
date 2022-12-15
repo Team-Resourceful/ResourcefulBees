@@ -31,7 +31,6 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
 
     private final ExtractOnlyFluidTank fluidTank;
     private final LazyOptional<IFluidHandler> fluidOptional;
-    private boolean voidExcess = true;
 
     public CentrifugeFluidOutputEntity(Supplier<BlockEntityType<CentrifugeFluidOutputEntity>> tileType, CentrifugeTier tier, BlockPos pos, BlockState state) {
         super(tileType.get(), tier, pos, state);
@@ -57,10 +56,6 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
         if (level == null) return;
         this.voidExcess = voidExcess;
         sendToPlayersTrackingChunk();
-    }
-
-    public boolean voidsExcess() {
-        return voidExcess;
     }
 
     @Override

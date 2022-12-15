@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
 import net.minecraft.commands.Commands;
 
-public class ResourcefulBeesCommand {
+public final class ResourcefulBeesCommand {
 
     private ResourcefulBeesCommand() {
         throw new UtilityClassError();

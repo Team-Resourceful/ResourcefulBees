@@ -9,7 +9,6 @@ import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -48,7 +47,7 @@ public class DamageEntry extends ListEntry {
             RenderUtils.renderItem(stack, this.icon, 3, 2);
 
             RenderUtils.bindTexture(SLOT_TEXTURE);
-            Gui.blit(stack, 1, 0, 0, 0, 20, 20, 20, 60);
+            GuiComponent.blit(stack, 1, 0, 0, 0, 20, 20, 20, 60);
 
             GuiComponent.drawString(stack, font, Component.translatable("damage_type.resourcefulbees."+ this.id), 24, 1, 0x55FF55);
             GuiComponent.drawString(stack, font, Component.translatable(TranslationConstants.Beepedia.Traits.AMPLIFIER, this.amplifier), 24, 11, 0xAAAAAA);

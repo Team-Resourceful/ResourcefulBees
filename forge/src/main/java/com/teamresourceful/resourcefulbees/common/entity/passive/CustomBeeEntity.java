@@ -133,9 +133,10 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
                 this.remove(RemovalReason.KILLED);
             }
             if (!hasCustomName() && this.tickCount % 100 == 0) {
+                timeWithoutHive += 100;
                 if (hasHiveInRange() || hasSavedFlowerPos() || isPassenger() || isPersistenceRequired() || isLeashed() || hasNectar() || disruptorInRange > 0 || isBaby()) {
                     timeWithoutHive = 0;
-                } else if ((timeWithoutHive += 100) >= 12000) {
+                } else if (timeWithoutHive >= 12000) {
                     this.discard();
                 }
                 hasHiveInRange = false;
@@ -258,7 +259,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, (event) -> {
+        data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, event -> {
             event.getController().setAnimation(new AnimationBuilder()
                 .addAnimation("animation.bee.fly", ILoopType.EDefaultLoopTypes.LOOP)
                 .addAnimation("animation.bee.fly.bobbing", ILoopType.EDefaultLoopTypes.LOOP)

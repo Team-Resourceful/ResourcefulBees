@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.client.screen.beepedia.state.Beepedia
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.components.ImageButton;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +36,7 @@ public class SearchButton extends ImageButton implements TooltipProvider {
         super.renderButton(stack, mouseX, mouseY, partialTicks);
         int u = this.type.u + (this.state.getSorting(this.type).isTrue() ? 0 : 13);
         int v = 39 + (this.state.getSorting(this.type).isSet() ? 26 : this.isHovered ? 13 : 0);
-        blit(stack, this.x, this.y, u, v, 13, 13, 128, 128);
+        GuiComponent.blit(stack, this.x, this.y, u, v, 13, 13, 128, 128);
     }
 
     @Override

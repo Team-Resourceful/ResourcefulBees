@@ -12,6 +12,7 @@ import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -50,18 +51,18 @@ public class HoneyPage extends HistoryScreen implements TooltipProvider {
         super.render(stack, mouseX, mouseY, partialTicks);
 
         RenderUtils.bindTexture(TEXTURE);
-        Gui.blit(stack, 0, 19, 0, 0, 186, 3, 186, 3);
+        GuiComponent.blit(stack, 0, 19, 0, 0, 186, 3, 186, 3);
 
         Font font = Minecraft.getInstance().font;
         font.draw(stack,  this.honeyBottle.getHoverName(), 24, 1, 0xFFFFFF);
         int food = Math.min(this.data.getBottleData().food().hunger(), 20);
         float staturation = Math.min(food * this.data.getBottleData().food().saturation() * 2f, 20);
         RenderUtils.bindTexture(BeepediaTextures.HUNGER_BAR);
-        Gui.blit(stack, 24, 10, 0, 0, 90, 9, 90, 9);
+        GuiComponent.blit(stack, 24, 10, 0, 0, 90, 9, 90, 9);
 
         RenderUtils.bindTexture(BeepediaTextures.SATURATION);
         float percent = staturation / 20f;
-        Gui.blit(stack, 24 + 90 - (int)(percent * 90), 10, 90f - (int)(percent * 90), 0, (int)(percent * 90), 9, 90, 9);
+        GuiComponent.blit(stack, 24 + 90 - (int)(percent * 90), 10, 90f - (int)(percent * 90), 0, (int)(percent * 90), 9, 90, 9);
 
         int amount = food / 2;
         int startX = (10 - amount) * 9;

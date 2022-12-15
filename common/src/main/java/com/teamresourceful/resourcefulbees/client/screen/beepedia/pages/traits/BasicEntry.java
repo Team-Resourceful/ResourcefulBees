@@ -11,7 +11,6 @@ import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -77,7 +76,7 @@ public class BasicEntry extends ListEntry implements TooltipProvider {
             RenderUtils.renderItem(stack, this.icon, 3, 2);
 
             RenderUtils.bindTexture(SLOT_TEXTURE);
-            Gui.blit(stack, 1, 0, 0, 0, 20, 20, 20, 60);
+            GuiComponent.blit(stack, 1, 0, 0, 0, 20, 20, 20, 60);
 
             GuiComponent.drawString(stack, font, this.title, 24, 1, this.color);
             GuiComponent.drawString(stack, font, this.tooltip != null ? this.tooltip : this.description, 24, 11, 0xAAAAAA);

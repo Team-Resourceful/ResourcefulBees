@@ -11,7 +11,6 @@ import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -48,7 +47,7 @@ public class BeeEntry extends ListEntry {
                 }
             }
             RenderUtils.bindTexture(SLOT_TEXTURE);
-            Gui.blit(stack, 1, 0, 0, selected ? 40 : hovered ? 20 : 0, 20, 20, 20, 60);
+            GuiComponent.blit(stack, 1, 0, 0, selected ? 40 : hovered ? 20 : 0, 20, 20, 20, 60);
 
             MutableComponent component = this.isFound.getAsBoolean() ? Component.literal("\u2726 ").withStyle(ChatFormatting.GREEN) : Component.literal("\u2727 ");
             component.append(this.data.displayName().copy().withStyle(selected ? ChatFormatting.WHITE : ChatFormatting.GRAY));

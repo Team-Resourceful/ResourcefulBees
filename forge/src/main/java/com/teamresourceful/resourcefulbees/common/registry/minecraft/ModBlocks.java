@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.block.*;
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseTopBlock;
 import com.teamresourceful.resourcefulbees.common.block.base.TickingBlock;
@@ -8,11 +8,10 @@ import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeBlo
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeCrankBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModMaterials;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
-import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks.*;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistries;

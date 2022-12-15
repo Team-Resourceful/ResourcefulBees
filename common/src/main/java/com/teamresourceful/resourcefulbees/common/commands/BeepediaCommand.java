@@ -4,13 +4,18 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
 
-public class BeepediaCommand {
+public final class BeepediaCommand {
+
+    private BeepediaCommand() {
+        throw new UtilityClassError();
+    }
 
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
         return Commands.literal("beepedia")

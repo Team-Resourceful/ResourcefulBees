@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -38,7 +38,7 @@ public class TraitEntry extends ListEntry implements TooltipProvider {
             ignored.translate(left, top, 0);
 
             RenderUtils.bindTexture(SLOT_TEXTURE);
-            Gui.blit(stack, 0, 2, 0, this.hovered ? 20 : 0, 20, 20, 20, 60);
+            GuiComponent.blit(stack, 0, 2, 0, this.hovered ? 20 : 0, 20, 20, 20, 60);
             RenderUtils.renderItem(stack, this.trait.displayItem().getDefaultInstance(), 2, 4);
 
             Font font = Minecraft.getInstance().font;

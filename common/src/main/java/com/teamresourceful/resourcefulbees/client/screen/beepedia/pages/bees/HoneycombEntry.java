@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import com.teamresourceful.resourcefullib.common.utils.CycleableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -53,14 +53,14 @@ public class HoneycombEntry extends ListEntry implements TooltipProvider {
             ignored.translate(left, top, 0);
 
             RenderUtils.bindTexture(ROW_TEXTURE);
-            Gui.blit(stack, 24, 1, 0, this.apiary ? 25 : 0, 50, 24, 50, 50);
+            GuiComponent.blit(stack, 24, 1, 0, this.apiary ? 25 : 0, 50, 24, 50, 50);
 
             RenderUtils.bindTexture(SLOT_TEXTURE);
-            Gui.blit(stack, 0, 2, 0, this.state.isTrue() ? 20 : 0, 20, 20, 20, 60);
+            GuiComponent.blit(stack, 0, 2, 0, this.state.isTrue() ? 20 : 0, 20, 20, 20, 60);
             RenderUtils.renderItem(stack, this.hives.getSelected(), 2, 4);
 
             RenderUtils.bindTexture(SLOT_TEXTURE);
-            Gui.blit(stack, 75, 2, 0, this.state.isFalse() ? 20 : 0, 20, 20, 20, 60);
+            GuiComponent.blit(stack, 75, 2, 0, this.state.isFalse() ? 20 : 0, 20, 20, 20, 60);
             RenderUtils.renderItem(stack, this.honeycomb, 77, 4);
 
             if (this.honeycomb.getCount() != 1) {

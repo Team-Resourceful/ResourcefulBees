@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -36,7 +36,7 @@ public class ItemSlotWidget implements Widget, TooltipProvider {
     @Override
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         RenderUtils.bindTexture(TEXTURE);
-        Gui.blit(stack, this.x, this.y, 0, 0, 20, 20, 20, 60);
+        GuiComponent.blit(stack, this.x, this.y, 0, 0, 20, 20, 20, 60);
         RenderUtils.renderItem(stack, this.stack, this.x + 2, this.y + 2);
     }
 

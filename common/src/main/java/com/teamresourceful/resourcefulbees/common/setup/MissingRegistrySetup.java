@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.util.PathUtils;
 import com.teamresourceful.resourcefullib.common.utils.readers.ArrayByteReader;
 import com.teamresourceful.resourcefullib.common.yabn.YabnParser;
@@ -21,6 +22,10 @@ import java.util.List;
 public final class MissingRegistrySetup {
 
     private static boolean anyRegistriesMissing = false;
+
+    private MissingRegistrySetup() {
+        throw new UtilityClassError();
+    }
 
     public static void checkMissingRegistries() {
         File registryCheckFile = Paths.get(PathUtils.getConfigPath().toAbsolutePath().toString(), ModConstants.MOD_ID, "registry.yabn").toFile();

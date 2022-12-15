@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -40,7 +39,7 @@ public class ItemEntry<T> extends ListEntry {
             RenderUtils.renderItem(stack, this.getter.apply(this.data), 3, 2);
 
             RenderUtils.bindTexture(SLOT_TEXTURE);
-            Gui.blit(stack, 1, 0, 0, selected ? 40 : hovered ? 20 : 0, 20, 20, 20, 60);
+            GuiComponent.blit(stack, 1, 0, 0, selected ? 40 : hovered ? 20 : 0, 20, 20, 20, 60);
 
             int color = selected ? 16777215 : 11184810;
             GuiComponent.drawString(stack, font, this.nameGetter.apply(this.data), 22, 5, color);

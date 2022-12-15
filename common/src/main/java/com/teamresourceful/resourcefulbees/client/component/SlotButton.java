@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.components.ImageButton;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +41,7 @@ public class SlotButton extends ImageButton implements TooltipProvider {
     public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.renderButton(stack, mouseX, mouseY, partialTicks);
         RenderUtils.bindTexture(this.texture);
-        blit(stack, this.x + 2, this.y + 2, 0, 0, 16, 16, 16, 16);
+        GuiComponent.blit(stack, this.x + 2, this.y + 2, 0, 0, 16, 16, 16, 16);
     }
 
     @Override

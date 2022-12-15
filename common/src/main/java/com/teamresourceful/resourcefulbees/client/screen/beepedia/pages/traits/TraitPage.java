@@ -15,7 +15,7 @@ import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -79,7 +79,7 @@ public class TraitPage extends HistoryScreen implements TooltipProvider {
         super.render(stack, mouseX, mouseY, partialTicks);
 
         RenderUtils.bindTexture(TEXTURE);
-        Gui.blit(stack, 0, 19, 0, 0, 186, 3, 186, 3);
+        GuiComponent.blit(stack, 0, 19, 0, 0, 186, 3, 186, 3);
 
         Font font = Minecraft.getInstance().font;
         font.draw(stack, this.data.getDisplayName(), 24, 1, 0xFFFFFF);
