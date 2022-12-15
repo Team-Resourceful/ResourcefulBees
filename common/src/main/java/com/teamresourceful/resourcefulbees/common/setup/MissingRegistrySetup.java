@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.platform.common.util.PathUtils;
-import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.readers.ArrayByteReader;
 import com.teamresourceful.resourcefullib.common.yabn.YabnParser;
 import com.teamresourceful.resourcefullib.common.yabn.base.YabnArray;
@@ -33,26 +32,26 @@ public final class MissingRegistrySetup {
                     getStrings(array).stream()
                             .filter(s -> !BeeRegistry.get().containsBeeType(s) && (anyRegistriesMissing = true))
                             .forEach(s -> missingBees.append("    - ").append(s).append("\n"));
-                    if (!missingBees.isEmpty()) Constants.LOGGER.warn("\nThe following bees are missing from the registry: \n" + missingBees);
+                    if (!missingBees.isEmpty()) ModConstants.LOGGER.warn("\nThe following bees are missing from the registry: \n {}", missingBees);
                 }
                 if (object.get("h") instanceof YabnArray array) {
                     StringBuilder missingHoney = new StringBuilder();
                     getStrings(array).stream()
                             .filter(s -> !HoneyRegistry.get().containsHoney(s) && (anyRegistriesMissing = true))
                             .forEach(s -> missingHoney.append("    - ").append(s).append("\n"));
-                    if (!missingHoney.isEmpty()) Constants.LOGGER.warn("\nThe following honey are missing from the registry: \n" + missingHoney);
+                    if (!missingHoney.isEmpty()) ModConstants.LOGGER.warn("\nThe following honey are missing from the registry: \n {}", missingHoney);
                 }
                 if (object.get("c") instanceof YabnArray array) {
                     StringBuilder missingCombs = new StringBuilder();
                     getStrings(array).stream()
                             .filter(s -> !HoneycombRegistry.get().containsHoneycomb(s) && (anyRegistriesMissing = true))
                             .forEach(s -> missingCombs.append("    - ").append(s).append("\n"));
-                    if (!missingCombs.isEmpty()) Constants.LOGGER.warn("\nThe following combs are missing from the registry: \n" + missingCombs);
+                    if (!missingCombs.isEmpty()) ModConstants.LOGGER.warn("\nThe following combs are missing from the registry: \n {}", missingCombs);
                 }
             }
         } catch (Exception e) {
-            Constants.LOGGER.error("Failed to read registry check file. Registries may be missing.");
-            if (Constants.LOGGER.isDebugEnabled())
+            ModConstants.LOGGER.error("Failed to read registry check file. Registries may be missing.");
+            if (ModConstants.LOGGER.isDebugEnabled())
                 e.printStackTrace();
         }
 
@@ -69,7 +68,7 @@ public final class MissingRegistrySetup {
         try {
             FileUtils.writeByteArrayToFile(registryCheckFile, object.toData());
         } catch (Exception e) {
-            Constants.LOGGER.error("Failed to write registry check file. Registries may be missing next run!");
+            ModConstants.LOGGER.error("Failed to write registry check file. Registries may be missing next run!");
         }
     }
 

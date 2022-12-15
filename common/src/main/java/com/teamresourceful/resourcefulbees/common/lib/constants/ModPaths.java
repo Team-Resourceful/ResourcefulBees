@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.util.PathUtils;
-import com.teamresourceful.resourcefullib.common.lib.Constants;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -32,6 +31,6 @@ public final class  ModPaths {
     private static void createDirectory(Path path, String dirName) {
         try { Files.createDirectories(path);
         } catch (FileAlreadyExistsException ignored) { //ignored
-        } catch (IOException e) { Constants.LOGGER.error("failed to create \"{}\" directory", dirName);}
+        } catch (IOException e) { ModConstants.LOGGER.error("failed to create \"{}\" directory", dirName);}
     }
 }

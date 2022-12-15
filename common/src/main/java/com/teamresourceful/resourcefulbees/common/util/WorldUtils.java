@@ -25,8 +25,8 @@
 
 package com.teamresourceful.resourcefulbees.common.util;
 
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefullib.common.lib.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -54,7 +54,7 @@ public final class WorldUtils {
             return clazz.cast(tile);
         } else {
             if (logWrongType) {
-                Constants.LOGGER.warn("Unexpected TileEntity class at {}, expected {}, but found: {}", pos, clazz, tile.getClass());
+                ModConstants.LOGGER.warn("Unexpected TileEntity class at {}, expected {}, but found: {}", pos, clazz, tile.getClass());
             }
 
             return null;

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registries.custom;
 
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
-import com.teamresourceful.resourcefullib.common.lib.Constants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ public final class TraitRegistry implements com.teamresourceful.resourcefulbees.
     @Override
     public boolean register(String name, Trait data) {
         if (closed || registry.containsKey(name)) {
-            Constants.LOGGER.error("Trait is already registered or registration is closed: {}", name);
+            ModConstants.LOGGER.error("Trait is already registered or registration is closed: {}", name);
             return false;
         }
         registry.put(name, data);

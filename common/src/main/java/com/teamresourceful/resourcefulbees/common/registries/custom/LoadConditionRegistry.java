@@ -9,9 +9,9 @@ import com.teamresourceful.resourcefulbees.api.data.conditions.LoadCondition;
 import com.teamresourceful.resourcefulbees.api.data.conditions.LoadConditionSerializer;
 import com.teamresourceful.resourcefulbees.api.data.conditions.RegisterConditionEvent;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
-import com.teamresourceful.resourcefullib.common.lib.Constants;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,7 +67,7 @@ public final class LoadConditionRegistry {
         LoadConditionSerializer<?> serializer = INSTANCE.get(id);
         if (serializer == null) {
             if (ModValidation.IS_RUNNING_IN_IDE || GeneralConfig.showDebugInfo) {
-                Constants.LOGGER.error("No serializer found for " + id);
+                ModConstants.LOGGER.error("No serializer found for {}", id);
             }
             return DataResult.success(DUMMY_SERIALIZER);
         }

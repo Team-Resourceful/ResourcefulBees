@@ -10,10 +10,10 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.MapStrategies;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
-import com.teamresourceful.resourcefullib.common.lib.Constants;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 import net.minecraft.core.RegistryAccess;
@@ -79,7 +79,7 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
     private static CustomBeeData parseData(String id, DynamicOps<JsonElement> ops, JsonObject jsonObject) {
         var data = new DispatchMapCodec<>(ResourceLocation.CODEC, BeeDataRegistry.codec(id))
                 .parse(ops, jsonObject)
-                .getOrThrow(false, s -> Constants.LOGGER.error("Could not create Custom Bee Data for {} bee", id));
+                .getOrThrow(false, s -> ModConstants.LOGGER.error("Could not create Custom Bee Data for {} bee", id));
         return ResourcefulBeesAPI.getInitializers().data(id, data);
     }
 

@@ -7,9 +7,9 @@ import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.RegisterBeeDataEvent;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
-import com.teamresourceful.resourcefullib.common.lib.Constants;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.resources.ResourceLocation;
@@ -65,12 +65,12 @@ public final class BeeDataRegistry {
         BeeDataSerializer<?> serializer = INSTANCE.get(id);
         if (serializer == null) {
             if (ModValidation.IS_RUNNING_IN_IDE || GeneralConfig.showDebugInfo) {
-                Constants.LOGGER.error("No serializer found for " + id);
+                ModConstants.LOGGER.error("No serializer found for {}", id);
             }
             return DataResult.success(DUMMY_SERIALIZER);
         }
         if (serializer.version() < INSTANCE.types.getInt(serializer.type())) {
-            Constants.LOGGER.warn("Serializer {} is outdated the current version is {}.", id, INSTANCE.types.getInt(serializer.type()));
+            ModConstants.LOGGER.warn("Serializer {} is outdated the current version is {}.", id, INSTANCE.types.getInt(serializer.type()));
         }
         return DataResult.success(serializer);
     }
