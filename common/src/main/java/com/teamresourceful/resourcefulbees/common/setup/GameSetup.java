@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.setup;
 import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesCommand;
 import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument;
 import com.teamresourceful.resourcefulbees.common.enchantments.HiveBreakEnchantment;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
 import com.teamresourceful.resourcefulbees.common.resources.conditions.LoadDevRecipes;
@@ -25,6 +26,10 @@ public final class GameSetup {
 
     //TODO Change to common tag for forge and fabric.
     private static final TagKey<Item> HONEY_BOTTLE_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "honey_bottles"));
+
+    private GameSetup() {
+        throw new UtilityClassError();
+    }
 
     public static void initEvents() {
         CommandRegisterEvent.EVENT.addListener(ResourcefulBeesCommand::registerCommand);

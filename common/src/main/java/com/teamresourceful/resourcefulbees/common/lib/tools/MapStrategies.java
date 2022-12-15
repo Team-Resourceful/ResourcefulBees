@@ -6,20 +6,22 @@ import it.unimi.dsi.fastutil.Hash;
 
 import java.util.Objects;
 
-public class MapStrategies {
+public final class MapStrategies {
+
+    private MapStrategies() {
+        throw new UtilityClassError();
+    }
 
     public static final Hash.Strategy<? super Object> BREED_TREE = new Hash.Strategy<>() {
         @Override
         public int hashCode(Object o) {
             if (o instanceof String) {
                 return Objects.hash(o, o);
-            } else if (o instanceof Pair<?, ?> pair) {
-                if (pair.getFirst() instanceof String first && pair.getSecond() instanceof String second) {
-                    if (first.compareTo(second) > 0) {
-                        return Objects.hash(first, second);
-                    }
-                    return Objects.hash(second, first);
+            } else if (o instanceof Pair<?, ?> pair && pair.getFirst() instanceof String first && pair.getSecond() instanceof String second) {
+                if (first.compareTo(second) > 0) {
+                    return Objects.hash(first, second);
                 }
+                return Objects.hash(second, first);
             }
             return o.hashCode();
         }
@@ -39,13 +41,11 @@ public class MapStrategies {
     private static String getParent1(Object o) {
         if (o instanceof String str) {
             return str;
-        } else if (o instanceof Pair<?, ?> pair) {
-            if (pair.getFirst() instanceof String first && pair.getSecond() instanceof String second) {
-                if (first.compareTo(second) > 0) {
-                    return first;
-                }
-                return second;
+        } else if (o instanceof Pair<?, ?> pair && pair.getFirst() instanceof String first && pair.getSecond() instanceof String second) {
+            if (first.compareTo(second) > 0) {
+                return first;
             }
+            return second;
         } else if (o instanceof Parents parents) {
             return parents.getParent1();
         }
@@ -55,13 +55,11 @@ public class MapStrategies {
     private static String getParent2(Object o) {
         if (o instanceof String str) {
             return str;
-        } else if (o instanceof Pair<?, ?> pair) {
-            if (pair.getFirst() instanceof String first && pair.getSecond() instanceof String second) {
-                if (first.compareTo(second) > 0) {
-                    return second;
-                }
-                return first;
+        } else if (o instanceof Pair<?, ?> pair && pair.getFirst() instanceof String first && pair.getSecond() instanceof String second) {
+            if (first.compareTo(second) > 0) {
+                return second;
             }
+            return first;
         } else if (o instanceof Parents parents) {
             return parents.getParent2();
         }

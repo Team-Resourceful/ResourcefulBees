@@ -11,7 +11,6 @@ import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -68,9 +67,9 @@ public class HoneyPage extends HistoryScreen implements TooltipProvider {
         int startX = (10 - amount) * 9;
 
         RenderUtils.bindTexture(BeepediaTextures.HUNGER);
-        if (food % 2 == 1) Gui.blit(stack, 24 + startX - 9, 10, 0, 9, 9, 9, 9, 18);
+        if (food % 2 == 1) GuiComponent.blit(stack, 24 + startX - 9, 10, 0, 9, 9, 9, 9, 18);
         for (int i = 0; i < amount; i++) {
-            Gui.blit(stack, 24 + startX, 10, 0, 0, 9, 9, 9, 18);
+            GuiComponent.blit(stack, 24 + startX, 10, 0, 0, 9, 9, 9, 18);
             startX += 9;
         }
     }

@@ -133,9 +133,9 @@ public class ResourcefulBees {
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
-        MinecraftForge.EVENT_BUS.addListener((RegisterCommandsEvent event) -> {
-            CommandRegisterEvent.EVENT.fire(new CommandRegisterEvent(event.getDispatcher(), event.getCommandSelection(), event.getBuildContext()));
-        });
+        MinecraftForge.EVENT_BUS.addListener((RegisterCommandsEvent event) ->
+            CommandRegisterEvent.EVENT.fire(new CommandRegisterEvent(event.getDispatcher(), event.getCommandSelection(), event.getBuildContext()))
+        );
 
         MinecraftForge.EVENT_BUS.register(this);
         ModValidation.init();

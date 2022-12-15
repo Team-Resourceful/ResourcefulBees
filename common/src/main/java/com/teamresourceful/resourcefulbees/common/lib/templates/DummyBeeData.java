@@ -32,7 +32,7 @@ import net.minecraft.world.level.block.Blocks;
 
 import java.util.*;
 
-public class DummyBeeData {
+public final class DummyBeeData {
 
     private DummyBeeData() {
         throw new UtilityClassError();

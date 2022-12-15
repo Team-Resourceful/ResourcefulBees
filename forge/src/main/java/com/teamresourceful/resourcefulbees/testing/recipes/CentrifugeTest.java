@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.testing.recipes;
 
 import com.google.gson.JsonObject;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.CentrifugeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;

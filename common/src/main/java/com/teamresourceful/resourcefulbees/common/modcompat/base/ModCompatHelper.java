@@ -1,6 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.modcompat.base;
 
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.modcompat.bumblezone.BumblezoneCompat;
+import com.teamresourceful.resourcefulbees.common.modcompat.productivebees.ProductiveBeesCompat;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,13 +12,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModCompatHelper {
+public final class ModCompatHelper {
 
     private static final List<ModCompat> COMPATS = new ArrayList<>();
+
+    private ModCompatHelper() {
+        throw new UtilityClassError();
+    }
 
     public static void registerCompats() {
         if (ModUtils.isModLoaded("the_bumblezone")) {
             COMPATS.add(new BumblezoneCompat());
+        }
+        if (ModUtils.isModLoaded("productivebees")) {
+            COMPATS.add(new ProductiveBeesCompat());
         }
     }
 

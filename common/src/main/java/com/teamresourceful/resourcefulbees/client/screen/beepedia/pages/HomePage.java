@@ -15,7 +15,7 @@ import com.teamresourceful.resourcefullib.common.utils.CycleableList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -52,7 +52,7 @@ public class HomePage extends Screen {
 
         font.draw(stack, Component.translatable("itemGroup.resourcefulbees.resourcefulbees").withStyle(ChatFormatting.GRAY), 41, 76, -1);
         RenderUtils.bindTexture(LOGO);
-        Gui.blit(stack, 41,  85, 0, 0, 104, 16, 104, 16);
+        GuiComponent.blit(stack, 41,  85, 0, 0, 104, 16, 104, 16);
         font.draw(stack, TranslationConstants.Beepedia.NAME.withStyle(ChatFormatting.GRAY), 41, 103, -1);
 
         font.draw(stack, getProgress(), 93 - font.width(getProgress())/2f, 133, -1);
