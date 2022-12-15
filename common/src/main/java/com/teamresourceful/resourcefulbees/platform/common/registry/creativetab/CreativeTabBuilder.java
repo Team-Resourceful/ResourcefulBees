@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.platform.common.registry.creativetab;
 
+import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.resources.ResourceLocation;
@@ -7,7 +8,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +84,7 @@ public final class CreativeTabBuilder {
 
     @ExpectPlatform
     public static CreativeModeTab create(ResourceLocation id, String background, boolean hideScrollBar, boolean hasTitle, Consumer<Adder> adder, Supplier<ItemStack> icon, BiConsumer<ItemLike, List<ItemStack>> listingFunction, List<Supplier<ResourcefulRegistry<Item>>> items, boolean dontSearch) {
-        throw new NotImplementedException("Not implemented yet");
+        throw new NotImplementedError();
     }
 
     @FunctionalInterface

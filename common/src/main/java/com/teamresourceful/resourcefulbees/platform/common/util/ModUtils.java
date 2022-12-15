@@ -1,20 +1,20 @@
 package com.teamresourceful.resourcefulbees.platform.common.util;
 
+import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import org.apache.commons.lang3.NotImplementedException;
 
 public class ModUtils {
 
     @ExpectPlatform
     public static boolean isModLoaded(String modId) {
-        throw new NotImplementedException("Not implemented on this platform");
+        throw new NotImplementedError();
     }
 
     @ExpectPlatform
     public static void openEntityInJEI(EntityType<?> entity) {
-        throw new NotImplementedException("Not implemented on this platform");
+        throw new NotImplementedError();
     }
 
     /**
@@ -28,6 +28,6 @@ public class ModUtils {
      */
     @ExpectPlatform
     public static MobCategory createMobCategory(String name, String id, int max, boolean isFriendly, boolean isPersistent, int despawnDistance, MobCategory fallback) {
-        throw new NotImplementedException("Not implemented on this platform");
+        throw new NotImplementedError();
     }
 }
