@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.WorldGenConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
-import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
@@ -213,7 +213,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity nest) {
             int maxBees = Math.round(WorldGenConfig.hiveMaxBees * 0.5f);
 
-            WeightedRandomList<MobSpawnSettings.SpawnerData> bees = biome.get().getMobSettings().getMobs(ModConstants.BEE_MOB_CATEGORY);
+            WeightedRandomList<MobSpawnSettings.SpawnerData> bees = biome.get().getMobSettings().getMobs(ModConstants.BEE_CATEGORY);
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 bees.getRandom(rand)
                     .map(data -> data.type)

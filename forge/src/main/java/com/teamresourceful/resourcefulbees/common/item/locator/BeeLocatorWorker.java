@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item.locator;
 
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.platform.common.workers.LevelWorker;
 import com.teamresourceful.resourcefullib.common.utils.types.Vec2i;
@@ -63,7 +63,7 @@ public class BeeLocatorWorker implements LevelWorker {
             Biome biome = holder.get();
             if (visited.contains(biome)) return true;
             visited.add(biome);
-            for (MobSpawnSettings.SpawnerData data : biome.getMobSettings().getMobs(ModConstants.BEE_MOB_CATEGORY).unwrap()) {
+            for (MobSpawnSettings.SpawnerData data : biome.getMobSettings().getMobs(ModConstants.BEE_CATEGORY).unwrap()) {
                 if (this.type.equals(data.type)) {
                     success(pos, holder);
                 }

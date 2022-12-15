@@ -10,6 +10,9 @@
     "icon": "icon.png",
     "environment": "*",
     "entrypoints": {
+        "main": [
+            "com.teamresourceful.resourcefulbees.ResourcefulBees"
+        ]
     },
     "accessWidener": "resourceful-bees.accesswidener",
     "mixins": [

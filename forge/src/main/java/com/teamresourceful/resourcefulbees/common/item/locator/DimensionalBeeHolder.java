@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item.locator;
 
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
-import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.ServerLevelAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.StructureCheckAccessor;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
@@ -40,7 +40,7 @@ public final class DimensionalBeeHolder {
                     .possibleBiomes()
                     .stream()
                     .filter(Holder::isBound).map(Holder::get)
-                    .map(biome -> biome.getMobSettings().getMobs(ModConstants.BEE_MOB_CATEGORY))
+                    .map(biome -> biome.getMobSettings().getMobs(ModConstants.BEE_CATEGORY))
                     .map(WeightedRandomList::unwrap).flatMap(List::stream)
                     .map(data -> data.type).filter(type -> type instanceof CustomBeeEntityType<?>).map(type -> (CustomBeeEntityType<?>)type)
                     .map(CustomBeeEntityType::getBeeType).forEach(bees::add);

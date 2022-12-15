@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.world;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.lib.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBiomeModifiers;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -16,7 +16,7 @@ public record BeeNestBiomeModifier(HolderSet<Biome> biomes, HolderSet<PlacedFeat
 
     @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
-        if (phase.equals(Phase.AFTER_EVERYTHING) && !builder.getMobSpawnSettings().getSpawner(ModConstants.BEE_MOB_CATEGORY).isEmpty() && biomes.contains(biome)) {
+        if (phase.equals(Phase.AFTER_EVERYTHING) && !builder.getMobSpawnSettings().getSpawner(ModConstants.BEE_CATEGORY).isEmpty() && biomes.contains(biome)) {
             features.forEach(feature -> builder.getGenerationSettings().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, feature));
         }
     }
