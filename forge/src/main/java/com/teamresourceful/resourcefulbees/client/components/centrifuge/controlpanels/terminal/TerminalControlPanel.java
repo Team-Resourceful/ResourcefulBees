@@ -2,11 +2,10 @@ package com.teamresourceful.resourcefulbees.client.components.centrifuge.control
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.controlpanels.AbstractControlPanel;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
-import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTextures;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTerminalScreen;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTextures;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;

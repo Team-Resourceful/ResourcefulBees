@@ -80,38 +80,38 @@ public class SerializedDataEntry<T, N extends Tag> implements Supplier<T> {
         public SerializedDataEntry<T, N> build() {
             return new SerializedDataEntry<>(data, key, tagKey, writer, reader);
         }
-    }
 
-    private static byte idFromTagType(TagType<?> type) {
-        byte id = -1;
-        if (type == StringTag.TYPE) {
-            id = Tag.TAG_STRING;
-        } else if (type == IntTag.TYPE) {
-            id = Tag.TAG_INT;
-        } else if (type == ByteTag.TYPE) {
-            id = Tag.TAG_BYTE;
-        } else if (type == ShortTag.TYPE) {
-            id = Tag.TAG_SHORT;
-        } else if (type == LongTag.TYPE) {
-            id = Tag.TAG_LONG;
-        } else if (type == FloatTag.TYPE) {
-            id = Tag.TAG_FLOAT;
-        } else if (type == DoubleTag.TYPE) {
-            id = Tag.TAG_DOUBLE;
-        } else if (type == ByteArrayTag.TYPE) {
-            id = Tag.TAG_BYTE_ARRAY;
-        } else if (type == ListTag.TYPE) {
-            id = Tag.TAG_LIST;
-        } else if (type == CompoundTag.TYPE) {
-            id = Tag.TAG_COMPOUND;
-        } else if (type == IntArrayTag.TYPE) {
-            id = Tag.TAG_INT_ARRAY;
-        } else if (type == LongArrayTag.TYPE) {
-            id = Tag.TAG_LONG_ARRAY;
+        private static byte idFromTagType(TagType<?> type) {
+            byte id = -1;
+            if (type == StringTag.TYPE) {
+                id = Tag.TAG_STRING;
+            } else if (type == IntTag.TYPE) {
+                id = Tag.TAG_INT;
+            } else if (type == ByteTag.TYPE) {
+                id = Tag.TAG_BYTE;
+            } else if (type == ShortTag.TYPE) {
+                id = Tag.TAG_SHORT;
+            } else if (type == LongTag.TYPE) {
+                id = Tag.TAG_LONG;
+            } else if (type == FloatTag.TYPE) {
+                id = Tag.TAG_FLOAT;
+            } else if (type == DoubleTag.TYPE) {
+                id = Tag.TAG_DOUBLE;
+            } else if (type == ByteArrayTag.TYPE) {
+                id = Tag.TAG_BYTE_ARRAY;
+            } else if (type == ListTag.TYPE) {
+                id = Tag.TAG_LIST;
+            } else if (type == CompoundTag.TYPE) {
+                id = Tag.TAG_COMPOUND;
+            } else if (type == IntArrayTag.TYPE) {
+                id = Tag.TAG_INT_ARRAY;
+            } else if (type == LongArrayTag.TYPE) {
+                id = Tag.TAG_LONG_ARRAY;
+            }
+            if (TagTypes.getType(id) != type) {
+                throw new IllegalArgumentException("Unknown tag type " + type);
+            }
+            return id;
         }
-        if (TagTypes.getType(id) != type) {
-            throw new IllegalArgumentException("Unknown tag type " + type);
-        }
-        return id;
     }
 }

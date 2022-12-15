@@ -64,8 +64,7 @@ public class BeeMutateGoal extends Goal {
             BlockPos pos = input.check(serverLevel, blockPos);
             if (pos == null) continue;
             MutationType output = entry.getValue().next();
-            if (output.chance() < serverLevel.random.nextFloat()) continue;
-            if (output.activate(serverLevel, pos)) {
+            if (output.chance() >= serverLevel.random.nextFloat() && output.activate(serverLevel, pos)) {
                 return true;
             }
         }

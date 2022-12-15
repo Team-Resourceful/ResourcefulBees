@@ -34,7 +34,7 @@ public class JEICompat implements IModPlugin {
 
     public static final IIngredientType<EntityIngredient> ENTITY_INGREDIENT = () -> EntityIngredient.class;
 
-    private static IJeiRuntime JEI_RUNTIME = null;
+    private static IJeiRuntime jeiRuntime = null;
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
@@ -106,14 +106,14 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void onRuntimeAvailable(@NotNull IJeiRuntime runtime) {
-        JEICompat.JEI_RUNTIME = runtime;
+        JEICompat.jeiRuntime = runtime;
     }
 
     public static void searchEntity(EntityType<?> entity) {
-        if (JEI_RUNTIME != null) {
+        if (jeiRuntime != null) {
             try {
-                var focus = JEI_RUNTIME.getJeiHelpers().getFocusFactory().createFocus(RecipeIngredientRole.INPUT, ENTITY_INGREDIENT, new EntityIngredient(entity, -45.0f));
-                JEI_RUNTIME.getRecipesGui().show(focus);
+                var focus = jeiRuntime.getJeiHelpers().getFocusFactory().createFocus(RecipeIngredientRole.INPUT, ENTITY_INGREDIENT, new EntityIngredient(entity, -45.0f));
+                jeiRuntime.getRecipesGui().show(focus);
             } catch (Exception ignored) {
                 //DO Nothing
             }

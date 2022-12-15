@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.components;
+package com.teamresourceful.resourcefulbees.client.component;
 
 import com.teamresourceful.resourcefullib.client.components.ImageButton;
 import net.minecraft.resources.ResourceLocation;

@@ -38,15 +38,15 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
         RenderSystem.setShaderTexture(0, BACKGROUND);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        bufferbuilder.vertex(this.x0, this.y1, 0.0D).uv((float)this.x0 / 32.0F, (float)(this.y1 + (int)this.getScrollAmount()) / 32.0F).color(32, 32, 32, 255).endVertex();
-        bufferbuilder.vertex(this.x1, this.y1, 0.0D).uv((float)this.x1 / 32.0F, (float)(this.y1 + (int)this.getScrollAmount()) / 32.0F).color(32, 32, 32, 255).endVertex();
-        bufferbuilder.vertex(this.x1, this.y0, 0.0D).uv((float)this.x1 / 32.0F, (float)(this.y0 + (int)this.getScrollAmount()) / 32.0F).color(32, 32, 32, 255).endVertex();
-        bufferbuilder.vertex(this.x0, this.y0, 0.0D).uv((float)this.x0 / 32.0F, (float)(this.y0 + (int)this.getScrollAmount()) / 32.0F).color(32, 32, 32, 255).endVertex();
+        bufferbuilder.vertex(this.x0, this.y1, 0.0D).uv(this.x0 / 32.0f, (this.y1 + (int)this.getScrollAmount()) / 32.0f).color(32, 32, 32, 255).endVertex();
+        bufferbuilder.vertex(this.x1, this.y1, 0.0D).uv(this.x1 / 32.0f, (this.y1 + (int)this.getScrollAmount()) / 32.0f).color(32, 32, 32, 255).endVertex();
+        bufferbuilder.vertex(this.x1, this.y0, 0.0D).uv(this.x1 / 32.0f, (this.y0 + (int)this.getScrollAmount()) / 32.0f).color(32, 32, 32, 255).endVertex();
+        bufferbuilder.vertex(this.x0, this.y0, 0.0D).uv(this.x0 / 32.0f, (this.y0 + (int)this.getScrollAmount()) / 32.0f).color(32, 32, 32, 255).endVertex();
         tesselator.end();
     }
 
     @Override
-    protected void renderDecorations(@NotNull PoseStack stack, int p_93444_, int p_93445_) {
+    protected void renderDecorations(@NotNull PoseStack stack, int mouseX, int mouseY) {
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
@@ -54,14 +54,14 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
         RenderSystem.enableDepthTest();
         RenderSystem.depthFunc(519);
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        bufferbuilder.vertex(this.x0, this.y0, -100.0D).uv(0.0F, (float)this.y0 / 32.0F).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex((this.x0 + this.width), this.y0, -100.0D).uv((float)this.width / 32.0F, (float)this.y0 / 32.0F).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex((this.x0 + this.width), 0.0D, -100.0D).uv((float)this.width / 32.0F, 0.0F).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.vertex(this.x0, this.y0, -100.0D).uv(0.0F, this.y0 / 32.0f).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.vertex((this.x0 + this.width), this.y0, -100.0D).uv(this.width / 32.0f, this.y0 / 32.0f).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.vertex((this.x0 + this.width), 0.0D, -100.0D).uv(this.width / 32.0f, 0.0f).color(64, 64, 64, 255).endVertex();
         bufferbuilder.vertex(this.x0, 0.0D, -100.0D).uv(0.0F, 0.0F).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex(this.x0, this.height, -100.0D).uv(0.0F, (float)this.height / 32.0F).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex((this.x0 + this.width), this.height, -100.0D).uv((float)this.width / 32.0F, (float)this.height / 32.0F).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex((this.x0 + this.width), this.y1, -100.0D).uv((float)this.width / 32.0F, (float)this.y1 / 32.0F).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex(this.x0, this.y1, -100.0D).uv(0.0F, (float)this.y1 / 32.0F).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.vertex(this.x0, this.height, -100.0D).uv(0.0F, this.height / 32.0f).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.vertex((this.x0 + this.width), this.height, -100.0D).uv(this.width / 32.0f, this.height / 32.0f).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.vertex((this.x0 + this.width), this.y1, -100.0D).uv(this.width / 32.0f, this.y1 / 32.0f).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.vertex(this.x0, this.y1, -100.0D).uv(0.0F, this.y1 / 32.0f).color(64, 64, 64, 255).endVertex();
         tesselator.end();
         RenderSystem.depthFunc(515);
         RenderSystem.disableDepthTest();

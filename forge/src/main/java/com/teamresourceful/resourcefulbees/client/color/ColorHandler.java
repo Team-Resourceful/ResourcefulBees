@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.client.color;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.item.*;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.item.Item;
@@ -16,7 +16,7 @@ import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 
 import java.util.Collection;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 public final class ColorHandler {
 
@@ -46,10 +46,10 @@ public final class ColorHandler {
             .forEach(item -> handler.accept(itemColor, item));
     }
 
-    private static void registerBlocks(BiConsumer<BlockColor, Block> handler, Function<BlockState, Integer> blockColor, Collection<RegistryEntry<Block>> blocks) {
+    private static void registerBlocks(BiConsumer<BlockColor, Block> handler, ToIntFunction<BlockState> blockColor, Collection<RegistryEntry<Block>> blocks) {
         if (blocks.isEmpty()) return;
         blocks.stream()
             .map(RegistryEntry::get)
-            .forEach(block -> handler.accept((state, a, b, c) -> blockColor.apply(state), block));
+            .forEach(block -> handler.accept((state, a, b, c) -> blockColor.applyAsInt(state), block));
     }
 }

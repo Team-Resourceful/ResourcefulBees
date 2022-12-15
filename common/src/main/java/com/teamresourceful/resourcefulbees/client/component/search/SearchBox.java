@@ -35,7 +35,10 @@ public class SearchBox extends AbstractWidget {
 
     private final Font font;
     private String value = "";
-    private int frame, displayPos, cursorPos, highlightPos;
+    private int frame;
+    private int displayPos;
+    private int cursorPos;
+    private int highlightPos;
     private boolean shiftPressed;
 
     private final BeepediaScreen screen;
@@ -44,7 +47,7 @@ public class SearchBox extends AbstractWidget {
         super(x, y, 90, 12, CommonComponents.EMPTY);
         this.font = font;
         this.screen = screen;
-        if (screen.getState().search != null) this.setValue(screen.getState().search);
+        if (screen.getState().getSearch() != null) this.setValue(screen.getState().getSearch());
     }
 
     public void tick() {
@@ -98,7 +101,7 @@ public class SearchBox extends AbstractWidget {
     }
 
     private void onValueChange(String text) {
-        this.screen.getState().search = text;
+        this.screen.getState().setSearch(text);
         this.screen.updateSelections();
     }
 
@@ -261,7 +264,7 @@ public class SearchBox extends AbstractWidget {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!this.isVisible()) return false;
 
-        this.setFocused(mouseX >= (double) this.x && mouseX < (double) (this.x + this.width) && mouseY >= (double) this.y && mouseY < (double) (this.y + this.height));
+        this.setFocused(mouseX >= this.x && mouseX < (this.x + this.width) && mouseY >= this.y && mouseY < (this.y + this.height));
 
         if (this.isFocused() && button == 0) {
             int i = Mth.floor(mouseX) - this.x - 4;
@@ -292,7 +295,7 @@ public class SearchBox extends AbstractWidget {
 
         if (!displayText.isEmpty()) {
             String s1 = flag ? displayText.substring(0, j) : displayText;
-            j1 = this.font.drawShadow(stack, FormattedCharSequence.forward(s1, Style.EMPTY), (float)this.x + 2, (float)this.y + 2, 0xE0E0E0);
+            j1 = this.font.drawShadow(stack, FormattedCharSequence.forward(s1, Style.EMPTY), this.x + 2f, this.y + 2f, 0xE0E0E0);
         }
 
         boolean showVerticalBar = this.cursorPos < this.value.length() || this.value.length() >= 32;
@@ -305,14 +308,14 @@ public class SearchBox extends AbstractWidget {
         }
 
         if (!displayText.isEmpty() && flag && j < displayText.length()) {
-            this.font.drawShadow(stack, FormattedCharSequence.forward(displayText.substring(j), Style.EMPTY), (float)j1, (float)this.y + 2, 0xE0E0E0);
+            this.font.drawShadow(stack, FormattedCharSequence.forward(displayText.substring(j), Style.EMPTY), j1, this.y + 2f, 0xE0E0E0);
         }
 
         if (showFlash) {
             if (showVerticalBar) {
                 GuiComponent.fill(stack, k1, this.y - 2, k1 + 1, this.y + 11, -3092272);
             } else {
-                this.font.drawShadow(stack, "_", (float)k1, (float)this.y + 1, 0xE0E0E0);
+                this.font.drawShadow(stack, "_", k1, this.y + 1f, 0xE0E0E0);
             }
         }
 
@@ -373,13 +376,13 @@ public class SearchBox extends AbstractWidget {
     }
 
     @Override
-    public boolean changeFocus(boolean p_94172_) {
-        return this.isVisible() && super.changeFocus(p_94172_);
+    public boolean changeFocus(boolean focus) {
+        return this.isVisible() && super.changeFocus(focus);
     }
 
     @Override
-    public boolean isMouseOver(double p_94157_, double p_94158_) {
-        return this.isVisible() && p_94157_ >= (double)this.x && p_94157_ < (double)(this.x + this.width) && p_94158_ >= (double)this.y && p_94158_ < (double)(this.y + this.height);
+    public boolean isMouseOver(double x, double y) {
+        return this.isVisible() && x >= this.x && x < (this.x + this.width) && y >= this.y && y < (this.y + this.height);
     }
 
     @Override
@@ -417,10 +420,10 @@ public class SearchBox extends AbstractWidget {
     }
 
     public boolean isVisible() {
-        return this.screen.getState().search != null && this.visible;
+        return this.screen.getState().getSearch() != null && this.visible;
     }
 
-    public void updateNarration(NarrationElementOutput p_169009_) {
-        p_169009_.add(NarratedElementType.TITLE, Component.translatable("narration.edit_box", this.getValue()));
+    public void updateNarration(NarrationElementOutput output) {
+        output.add(NarratedElementType.TITLE, Component.translatable("narration.edit_box", this.getValue()));
     }
 }

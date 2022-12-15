@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.client.components.BasicImageButton;
+import com.teamresourceful.resourcefulbees.client.component.BasicImageButton;
 import com.teamresourceful.resourcefulbees.client.components.BeeconEffectWidget;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;

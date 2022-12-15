@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.components;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;

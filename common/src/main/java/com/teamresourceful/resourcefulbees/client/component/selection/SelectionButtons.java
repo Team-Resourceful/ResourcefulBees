@@ -26,8 +26,8 @@ public class SelectionButtons extends ParentWidget {
     }
 
     private SlotButton createButton(int x, int y, BeepediaState.Type type) {
-        return new SlotButton(x + 28, y, type.texture, () -> this.screen.getState().type.equals(type), () -> {
-            this.screen.getState().type = type;
+        return new SlotButton(x + 28, y, type.texture, () -> this.screen.getState().getType().equals(type), () -> {
+            this.screen.getState().setType(type);
             screen.updateSelections();
         });
     }

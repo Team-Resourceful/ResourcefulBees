@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Supplier;
+import java.util.function.BooleanSupplier;
 import java.util.stream.Stream;
 
 import static com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.bees.BeePage.TEXTURE;
@@ -53,7 +53,7 @@ public class TraitPage extends HistoryScreen implements TooltipProvider {
         this.list = addRenderableOnly(new SelectionList<>(1, 22, 182, 141, 30, ignored -> {}));
         int x = 184;
 
-        List<Pair<Supplier<Boolean>, Category>> entries = List.of(
+        List<Pair<BooleanSupplier, Category>> entries = List.of(
             Pair.of(this.data::hasPotionDamageEffects, Category.POTIONS),
             Pair.of(() -> this.data.hasDamageImmunities() || this.data.hasPotionImmunities(), Category.IMMUNITIES),
             Pair.of(this.data::hasDamageTypes, Category.DAMAGE),
@@ -62,7 +62,7 @@ public class TraitPage extends HistoryScreen implements TooltipProvider {
         );
 
         for (var entry : entries) {
-            if (entry.getFirst().get()) {
+            if (entry.getFirst().getAsBoolean()) {
                 x-=22;
                 addRenderableWidget(createButton(x, 0, entry.getSecond()));
                 this.category = entry.getSecond();

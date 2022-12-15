@@ -71,7 +71,7 @@ public class HomePage extends Screen {
 
     @Override
     public void tick() {
-        if (screen.ticks % 20 == 0) {
+        if (screen.getTicks() % 20 == 0) {
             bees.next();
         }
     }

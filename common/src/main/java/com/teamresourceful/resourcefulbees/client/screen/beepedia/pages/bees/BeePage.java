@@ -33,7 +33,7 @@ public class BeePage extends SubdividedScreen {
     private final Entity bee;
 
     public BeePage(CustomBeeData data, Consumer<Trait> traitOpener) {
-        super(CommonComponents.EMPTY, 186, 163, 0, 51, (screen) -> new InfoPage());
+        super(CommonComponents.EMPTY, 186, 163, 0, 51, screen -> new InfoPage());
         this.data = data;
         this.traitOpener = traitOpener;
         Level level = Minecraft.getInstance().level;

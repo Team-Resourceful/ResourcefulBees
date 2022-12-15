@@ -10,19 +10,20 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class SlotButton extends ImageButton implements TooltipProvider {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/list_button.png");
 
-    private final Supplier<Boolean> isActive;
+    private final BooleanSupplier isActive;
     private final ResourceLocation texture;
     private final Runnable onPress;
 
     private Supplier<List<Component>> tooltip;
 
-    public SlotButton(int x, int y, ResourceLocation texture, Supplier<Boolean> isActive, Runnable onPress) {
+    public SlotButton(int x, int y, ResourceLocation texture, BooleanSupplier isActive, Runnable onPress) {
         super(x, y, 20, 20);
         this.imageHeight = 60;
         this.imageWidth = 20;
@@ -54,7 +55,7 @@ public class SlotButton extends ImageButton implements TooltipProvider {
 
     @Override
     public int getV(int mouseX, int mouseY) {
-        return isActive.get() ? 40 : isHovered ? 20 : 0;
+        return isActive.getAsBoolean() ? 40 : isHovered ? 20 : 0;
     }
 
     @Override

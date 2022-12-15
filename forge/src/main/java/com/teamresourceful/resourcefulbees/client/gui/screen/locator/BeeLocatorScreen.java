@@ -33,17 +33,17 @@ public class BeeLocatorScreen extends Screen {
         this.listWidget = new BeeListWidget(this::setSelected, this.minecraft, this.width, this.height, 32, this.height - 32, 36);
         this.listWidget.updateEntries(BeeRegistry.get());
 
-        var closeButton = new Button((this.width / 2) - 90, this.height - 26, 80, 20, TranslationConstants.BeeLocator.CANCEL, (button) -> this.onClose());
+        var closeButton = new Button((this.width / 2) - 90, this.height - 26, 80, 20, TranslationConstants.BeeLocator.CANCEL, button -> this.onClose());
 
-        this.selectButton = new Button((this.width / 2) + 10, this.height - 26, 80, 20, TranslationConstants.BeeLocator.SEARCH, (button) -> {
+        this.selectButton = new Button((this.width / 2) + 10, this.height - 26, 80, 20, TranslationConstants.BeeLocator.SEARCH, button ->
             getSelected().ifPresent(bee -> {
                 String type = bee.getType();
                 if (type != null) {
                     NetPacketHandler.CHANNEL.sendToServer(new FindBeePacket(type, this.hand));
                 }
                 this.onClose();
-            });
-        });
+            })
+        );
 
         this.selectButton.active = false;
 

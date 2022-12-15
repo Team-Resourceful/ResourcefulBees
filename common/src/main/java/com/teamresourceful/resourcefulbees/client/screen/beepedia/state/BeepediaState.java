@@ -12,12 +12,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class BeepediaState implements ScreenState {
 
-    public Type type = Type.BEES;
-    public PageState<BeepediaScreen> page = null;
-
-
+    private Type type = Type.BEES;
+    private PageState<BeepediaScreen> page = null;
     private Pair<Sorting, TriState> sorting = Pair.of(Sorting.ALPHABETICAL, TriState.TRUE);
-    public String search = null;
+    private String search = null;
 
     public void setSorting(Sorting sorting, @Nullable TriState value) {
         this.sorting = Pair.of(sorting, value);
@@ -33,6 +31,26 @@ public class BeepediaState implements ScreenState {
         BeepediaScreen screen = new BeepediaScreen();
         if (page != null) screen.setSubScreen(page.createScreen(screen));
         return screen;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public void setPage(PageState<BeepediaScreen> page) {
+        this.page = page;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
     }
 
     public enum Type {

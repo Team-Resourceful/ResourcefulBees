@@ -61,7 +61,7 @@ public class HoneyPage extends HistoryScreen implements TooltipProvider {
 
         RenderUtils.bindTexture(BeepediaTextures.SATURATION);
         float percent = staturation / 20f;
-        Gui.blit(stack, 24 + 90 - (int)(percent * 90), 10, 90 - (int)(percent * 90), 0, (int)(percent * 90), 9, 90, 9);
+        Gui.blit(stack, 24 + 90 - (int)(percent * 90), 10, 90f - (int)(percent * 90), 0, (int)(percent * 90), 9, 90, 9);
 
         int amount = food / 2;
         int startX = (10 - amount) * 9;

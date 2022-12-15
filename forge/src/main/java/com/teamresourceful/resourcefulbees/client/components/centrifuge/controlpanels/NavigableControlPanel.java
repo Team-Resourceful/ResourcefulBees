@@ -2,9 +2,8 @@ package com.teamresourceful.resourcefulbees.client.components.centrifuge.control
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons.NavButton;
-import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTextures;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTerminalScreen;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTextures;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;

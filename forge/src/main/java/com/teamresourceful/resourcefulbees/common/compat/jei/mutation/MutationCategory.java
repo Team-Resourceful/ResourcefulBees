@@ -53,11 +53,11 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
         List<MutationRecipe> recipes = new ArrayList<>();
         BeeRegistry.get()
             .getSetOfBees()
-            .forEach((beeData -> {
-                beeData.getMutationData().mutations(level).forEach((input, outputs) -> {
-                    outputs.forEach(output -> recipes.add(new MutationRecipe(beeData.entityType(), input, output, outputs)));
-                });
-            }));
+            .forEach((beeData ->
+                beeData.getMutationData().mutations(level).forEach((input, outputs) ->
+                    outputs.forEach(output -> recipes.add(new MutationRecipe(beeData.entityType(), input, output, outputs)))
+                )
+            ));
         return recipes;
     }
 

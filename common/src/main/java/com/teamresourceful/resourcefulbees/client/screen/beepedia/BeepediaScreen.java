@@ -36,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -45,7 +46,7 @@ public class BeepediaScreen extends SubdividedScreen {
     public static final ResourceLocation BACKGROUND = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/screen.png");
 
     private BeepediaData data;
-    public int ticks;
+    private int ticks;
     private SelectionList<ListEntry> selectionList;
 
     public BeepediaScreen() {
@@ -56,7 +57,7 @@ public class BeepediaScreen extends SubdividedScreen {
     protected void init() {
         super.init();
 
-        addRenderableWidget(new BeepediaMainButton(124, 175, 0, button -> getState().search = getState().search == null ? "" : null));
+        addRenderableWidget(new BeepediaMainButton(124, 175, 0, button -> getState().setSearch(getState().getSearch() == null ? "" : null)));
         addRenderableWidget(new BeepediaMainButton(154, 175, 1, button -> this.setSubScreenNow(new HomePage(this)), button -> !(this.getSubScreen() instanceof HomePage)));
         addRenderableWidget(new BeepediaMainButton(184, 175, 2, button -> this.goBack(), button -> this.canGoBack()));
 
@@ -87,13 +88,13 @@ public class BeepediaScreen extends SubdividedScreen {
     public void forceSubScreen(@Nullable Screen subScreen) {
         super.forceSubScreen(subScreen);
         if (subScreen instanceof HoneyPage page) {
-            getState().page = StringPageState.createHoneyPageState(page.getData().name());
+            getState().setPage(StringPageState.createHoneyPageState(page.getData().name()));
         } else if (subScreen instanceof BeePage page) {
-            getState().page = StringPageState.createBeePageState(page.getData().name(), this::openTraitPage);
+            getState().setPage(StringPageState.createBeePageState(page.getData().name(), this::openTraitPage));
         } else if (subScreen instanceof TraitPage page) {
-            getState().page = StringPageState.createTraitPageState(page.getData().name());
+            getState().setPage(StringPageState.createTraitPageState(page.getData().name()));
         } else {
-            getState().page = null;
+            getState().setPage(null);
         }
     }
 
@@ -108,10 +109,10 @@ public class BeepediaScreen extends SubdividedScreen {
     }
 
     public void updateSelections() {
-        List<? extends ListEntry> entries = switch (getState().type) {
+        List<? extends ListEntry> entries = switch (getState().getType()) {
             case BEES -> BeeRegistry.get()
                     .getStreamOfBees()
-                    .filter(BeepediaSearchHandler.search(getState().search))
+                    .filter(BeepediaSearchHandler.search(getState().getSearch()))
                     .sorted(
                         sortBee(getState(), BeepediaState.Sorting.FOUND, a -> this.data == null || !this.data.hasBee(a.name()))
                         .thenComparing(sortBee(getState(), BeepediaState.Sorting.ALPHABETICAL, CustomBeeData::name))
@@ -122,13 +123,13 @@ public class BeepediaScreen extends SubdividedScreen {
                     .toList();
             case TRAITS -> TraitRegistry.get()
                     .getStreamOfTraits()
-                    .filter(trait -> getState().search == null || trait.name().toLowerCase().contains(getState().search.toLowerCase()))
+                    .filter(trait -> getState().getSearch() == null || trait.name().toLowerCase(Locale.ROOT).contains(getState().getSearch().toLowerCase(Locale.ROOT)))
                     .sorted((o1, o2) -> getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isUnset() ? 0 : o1.name().compareTo(o2.name()) * (getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isFalse() ? -1 : 1))
                     .map(data -> new ItemEntry<>(data, a -> new ItemStack(a.displayItem()), Trait::getDisplayName))
                     .toList();
             case HONEY -> HoneyRegistry.get()
                     .getStreamOfHoney()
-                    .filter(honey -> getState().search == null || honey.name().toLowerCase().contains(getState().search.toLowerCase()))
+                    .filter(honey -> getState().getSearch() == null || honey.name().toLowerCase(Locale.ROOT).contains(getState().getSearch().toLowerCase(Locale.ROOT)))
                     .sorted((o1, o2) -> getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isUnset() ? 0 : o1.name().compareTo(o2.name()) * (getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isFalse() ? -1 : 1))
                     .map(data -> new ItemEntry<>(data, a -> new ItemStack(data.getBottleData().bottle().get()), a -> data.displayName()))
                     .toList();
@@ -137,7 +138,7 @@ public class BeepediaScreen extends SubdividedScreen {
     }
 
     public void openTraitPage(Trait trait) {
-        this.getState().type = BeepediaState.Type.TRAITS;
+        this.getState().setType(BeepediaState.Type.TRAITS);
         updateSelections();
         for (ListEntry child : selectionList.children()) {
             if (child instanceof ItemEntry<?> entry && entry.getData() == trait) {
@@ -168,5 +169,9 @@ public class BeepediaScreen extends SubdividedScreen {
     public void updateData(BeepediaData data) {
         if (this.data instanceof CreativeBeepediaData) return; //Do not replace the creative Beepedia.
         this.data = data;
+    }
+
+    public int getTicks() {
+        return ticks;
     }
 }

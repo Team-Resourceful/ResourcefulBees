@@ -17,7 +17,8 @@ public class ItemSlotWidget implements Widget, TooltipProvider {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/list_button.png");
 
-    private final int x, y;
+    private final int x;
+    private final int y;
     private final ItemStack stack;
     private final boolean tooltip;
 

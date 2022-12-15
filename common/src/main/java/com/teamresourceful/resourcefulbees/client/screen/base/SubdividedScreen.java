@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public class SubdividedScreen extends HistoryScreen implements TooltipProvider {
 
@@ -30,7 +30,7 @@ public class SubdividedScreen extends HistoryScreen implements TooltipProvider {
 
     private Screen subScreen;
 
-    protected SubdividedScreen(Component title, int width, int height, int subX, int subY, Function<Screen, Screen> subScreenFactory) {
+    protected SubdividedScreen(Component title, int width, int height, int subX, int subY, UnaryOperator<Screen> subScreenFactory) {
         this(title, width, height, subX, subY);
         this.subScreen = subScreenFactory.apply(this);
         if (this.subScreen instanceof ScreenInvoker invoker) {
