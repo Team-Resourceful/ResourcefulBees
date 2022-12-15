@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.client.component.selection;
 import com.teamresourceful.resourcefulbees.client.component.SlotButton;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.state.BeepediaState;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefullib.client.components.ParentWidget;
-import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
@@ -20,9 +20,12 @@ public class SelectionButtons extends ParentWidget {
 
     @Override
     protected void init() {
-        addRenderableWidget(createButton(x, y, BeepediaState.Type.BEES)).setTooltipProvider(() -> List.of(Component.literal("Bees")));
-        addRenderableWidget(createButton(x + 22, y, BeepediaState.Type.TRAITS)).setTooltipProvider(() -> List.of(Component.literal("Traits")));
-        addRenderableWidget(createButton(x + 44, y, BeepediaState.Type.HONEY)).setTooltipProvider(() -> List.of(Component.literal("Honey")));
+        addRenderableWidget(createButton(x, y, BeepediaState.Type.BEES))
+                .setTooltipProvider(() -> List.of(TranslationConstants.Beepedia.BEES));
+        addRenderableWidget(createButton(x + 22, y, BeepediaState.Type.TRAITS))
+                .setTooltipProvider(() -> List.of(TranslationConstants.Beepedia.TRAITS));
+        addRenderableWidget(createButton(x + 44, y, BeepediaState.Type.HONEY))
+                .setTooltipProvider(() -> List.of(TranslationConstants.Beepedia.HONEY));
     }
 
     private SlotButton createButton(int x, int y, BeepediaState.Type type) {

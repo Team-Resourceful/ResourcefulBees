@@ -335,10 +335,10 @@ public final class TranslationConstants {
         public static final MutableComponent NAME = Component.translatable("gui.resourcefulbees.beepedia");
 
         @Translate("Bees")
-        public static final MutableComponent BEE_LIST = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.bees_list");
+        public static final MutableComponent BEES = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.bees_list");
 
-        @Translate("Trait Effects")
-        public static final MutableComponent EFFECTS_LIST = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.effects_list");
+        @Translate("Traits")
+        public static final MutableComponent TRAITS = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.effects_list");
 
         @Translate("Search")
         public static final MutableComponent SEARCH = Component.translatable("gui.resourcefulbees.beepedia.search");
@@ -364,80 +364,10 @@ public final class TranslationConstants {
             public static final MutableComponent WIKI = Component.translatable("gui.resourcefulbees.beepedia.home.wiki");
         }
 
-        public static class Breeding {
-
-            @Translate("Breeding")
-            public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.breeding");
-
-            @Translate("Parents")
-            public static final MutableComponent PARENTS = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.breeding.parents_title");
-
-            @Translate("Children")
-            public static final MutableComponent CHILDREN = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.breeding.children_title");
-
-            @Translate("Entity Mutations")
-            public static final MutableComponent ENTITY_MUTATIONS = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.breeding.entity_mutations_title");
-
-            @Translate("Item Mutations")
-            public static final MutableComponent ITEM_MUTATIONS = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.breeding.item_mutations_title");
-
-            @Translate("Error")
-            public static final MutableComponent ERROR = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.breeding.error_title");
-        }
-
-        public static class Spawning {
-
-            @Translate("Spawning")
-            public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.spawning");
-
-            @Translate("Biomes")
-            public static final MutableComponent BIOMES = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.spawning.biomes");
-
-            @Translate("Group Size: %s - %s")
-            public static final String GROUP = "gui.resourcefulbees.beepedia.bee_subtab.spawning.group";
-
-            @Translate("Spawn Height: %s - %s")
-            public static final String HEIGHT = "gui.resourcefulbees.beepedia.bee_subtab.spawning.height";
-
-            @Translate("Spawn Weight: %s")
-            public static final String WEIGHT = "gui.resourcefulbees.beepedia.bee_subtab.spawning.weight";
-
-            @Translate("Light Level: %s")
-            public static final String LIGHT = "gui.resourcefulbees.beepedia.bee_subtab.spawning.light";
-        }
-
         public static class Honeycombs {
 
             @Translate("Honeycomb")
             public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.honeycomb");
-        }
-
-        public static class Centrifuge {
-
-            @Translate("Centrifuge")
-            public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.centrifuge");
-
-            @Translate("Multiblock centrifuge required for this recipe.")
-            public static final MutableComponent MULTIBLOCK = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.centrifuge.requires_multiblock");
-        }
-
-        public static class Mutations {
-
-            @Translate("Mutations")
-            public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.mutations");
-
-            @Translate("Amount of mutations able to be performed per pollination.")
-            public static final MutableComponent MUTATION_COUNT = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.mutations.mutation_count.tooltip");
-
-            @Translate("Block Mutations")
-            public static final MutableComponent BLOCK = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.mutations.block");
-
-            @Translate("Entity Mutations")
-            public static final MutableComponent ENTITY = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.mutations.entity");
-
-            @Translate("Item Mutations")
-            public static final MutableComponent ITEM = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.mutations.item");
-
         }
 
         public static class Traits {
@@ -445,29 +375,30 @@ public final class TranslationConstants {
             @Translate("Traits")
             public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.beepedia.tab.traits");
 
-            @Translate("Particles")
-            public static final MutableComponent PARTICLES = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.particle");
-
-            @Translate("Damage Types")
-            public static final MutableComponent DAMAGE_TYPES = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.damageTypes");
-
-            @Translate("Amplifier: ")
-            public static final MutableComponent AMPLIFIER = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.amplifier");
+            @Translate("Amplifier: %d")
+            public static final String AMPLIFIER = "gui.resourcefulbees.beepedia.tab.traits.amplifier";
 
             @Translate("Potion Damage Effects")
             public static final MutableComponent POTION_DAMAGE_EFFECTS = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.potion_damage_effects");
 
-            @Translate("Potion Immunities")
-            public static final MutableComponent POTION_IMMUNITIES = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.potion_immunities");
+            @Translate("Immunities")
+            public static final MutableComponent IMMUNITIES = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.immunities");
 
-            @Translate("Damage Immunities")
-            public static final MutableComponent DAMAGE_IMMUNITIES = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.damage_immunities");
+            @Translate("Damage Types")
+            public static final MutableComponent DAMAGE_TYPES = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.damage_types");
+
+            @Translate("Abilities")
+            public static final MutableComponent ABILITIES = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.abilities");
+
+            @Translate("Auras")
+            public static final MutableComponent AURAS = Component.translatable("gui.resourcefulbees.beepedia.tab.traits.auras");
+
         }
 
         public static class Info {
 
             @Translate("Info")
-            public static final MutableComponent INFO = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.info");
+            public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.info");
 
             @Translate("Flower: ")
             public static final MutableComponent FLOWER = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.info.flower");
@@ -492,12 +423,6 @@ public final class TranslationConstants {
 
             @Translate("Time In Hive: %ss")
             public static final String TIME = "gui.resourcefulbees.beepedia.bee_subtab.info.time";
-        }
-
-        public static class Combat {
-
-            @Translate("Combat Data")
-            public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.beepedia.bee_subtab.combat");
         }
 
     }

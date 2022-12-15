@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.client.screen.base.SubdividedScreen;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaTextures;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -43,19 +44,20 @@ public class BeePage extends SubdividedScreen {
     @Override
     protected void init() {
         int x = 50;
-        addRenderableWidget(new SlotButton(x, 25, BeepediaTextures.BOOK, () -> false, () -> {})).setTooltipProvider(() -> List.of(Component.literal("Info")));
+        addRenderableWidget(new SlotButton(x, 25, BeepediaTextures.BOOK, () -> false, () -> {}))
+                .setTooltipProvider(() -> List.of(TranslationConstants.Beepedia.Info.TITLE));
         if (this.data.getTraitData().hasTraits()) {
             x+=22;
             addRenderableWidget(new SlotButton(x, 25, BeepediaTextures.TRAIT, () -> false,
                     () -> this.setSubScreen(new TraitsPage(this.data.getTraitData(), traitOpener))))
-                    .setTooltipProvider(() -> List.of(Component.literal("Traits")));
+                    .setTooltipProvider(() -> List.of(TranslationConstants.Beepedia.Traits.TITLE));
         }
         var honeycomb = data.getCoreData().getHoneycombData();
         if (honeycomb.isPresent()) {
             x+=22;
             addRenderableWidget(new SlotButton(x, 25, BeepediaTextures.HOMEYCOMB, () -> false,
                     () -> this.setSubScreen(new HoneycombPage(honeycomb.get()))))
-                    .setTooltipProvider(() -> List.of(Component.literal("Honeycomb")));
+                    .setTooltipProvider(() -> List.of(TranslationConstants.Beepedia.Honeycombs.TITLE));
         }
 
         addRenderableWidget(new SlotButton(160, 25, BeepediaTextures.RECIPE_BOOK, () -> ModUtils.isModLoaded("jei"), () -> {

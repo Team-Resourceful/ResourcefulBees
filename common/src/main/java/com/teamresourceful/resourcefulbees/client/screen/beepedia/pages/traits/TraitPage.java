@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.api.registry.TraitAbilityRegistry;
 import com.teamresourceful.resourcefulbees.client.component.ItemSlotWidget;
 import com.teamresourceful.resourcefulbees.client.component.SlotButton;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.honeys.EffectEntry;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.HistoryScreen;
@@ -20,6 +21,7 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -126,16 +128,18 @@ public class TraitPage extends HistoryScreen implements TooltipProvider {
     }
 
     enum Category {
-        POTIONS(new ResourceLocation("textures/item/brewing_stand.png")),
-        IMMUNITIES(new ResourceLocation("textures/item/barrier.png")),
-        DAMAGE(new ResourceLocation("textures/item/iron_axe.png")),
-        ABILITIES(new ResourceLocation("textures/item/nether_star.png")),
-        AURAS(new ResourceLocation("textures/item/end_crystal.png"));
+        POTIONS(new ResourceLocation("textures/item/brewing_stand.png"), TranslationConstants.Beepedia.Traits.POTION_DAMAGE_EFFECTS),
+        IMMUNITIES(new ResourceLocation("textures/item/barrier.png"), TranslationConstants.Beepedia.Traits.IMMUNITIES),
+        DAMAGE(new ResourceLocation("textures/item/iron_axe.png"), TranslationConstants.Beepedia.Traits.DAMAGE_TYPES),
+        ABILITIES(new ResourceLocation("textures/item/nether_star.png"), TranslationConstants.Beepedia.Traits.ABILITIES),
+        AURAS(new ResourceLocation("textures/item/end_crystal.png"), TranslationConstants.Beepedia.Traits.AURAS);
 
         public final ResourceLocation texture;
+        public final MutableComponent component;
 
-        Category(ResourceLocation texture) {
+        Category(ResourceLocation texture, MutableComponent component) {
             this.texture = texture;
+            this.component = component;
         }
     }
 }
