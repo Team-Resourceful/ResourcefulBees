@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.setup;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.platform.common.util.PathUtils;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.readers.ArrayByteReader;
@@ -24,7 +24,7 @@ public final class MissingRegistrySetup {
     private static boolean anyRegistriesMissing = false;
 
     public static void checkMissingRegistries() {
-        File registryCheckFile = Paths.get(PathUtils.getConfigPath().toAbsolutePath().toString(), BeeConstants.MOD_ID, "registry.yabn").toFile();
+        File registryCheckFile = Paths.get(PathUtils.getConfigPath().toAbsolutePath().toString(), ModConstants.MOD_ID, "registry.yabn").toFile();
         try {
             YabnElement parse = YabnParser.parse(new ArrayByteReader(FileUtils.readFileToByteArray(registryCheckFile)));
             if (parse instanceof YabnObject object) {

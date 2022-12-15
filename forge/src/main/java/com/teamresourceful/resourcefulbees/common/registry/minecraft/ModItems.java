@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.item.*;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.CrankItem;
@@ -9,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocatorItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.BeehiveUpgrade;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.NestUpgradeItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistries;
@@ -27,7 +27,7 @@ public final class ModItems {
         throw new UtilityClassError();
     }
 
-    public static final ResourcefulRegistry<Item> ITEMS = ResourcefulRegistries.create(Registry.ITEM, ResourcefulBees.MOD_ID);
+    public static final ResourcefulRegistry<Item> ITEMS = ResourcefulRegistries.create(Registry.ITEM, ModConstants.MOD_ID);
 
     public static final ResourcefulRegistry<Item> NEST_ITEMS = ResourcefulRegistries.create(ITEMS);
     public static final ResourcefulRegistry<Item> T1_NEST_ITEMS = ResourcefulRegistries.create(NEST_ITEMS);

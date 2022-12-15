@@ -1,8 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.components.AbstractButton;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class ViewButton extends AbstractButton implements TooltipProvider {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/view_btn.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/centrifuges/view_btn.png");
 
     private final Runnable onPress;
 

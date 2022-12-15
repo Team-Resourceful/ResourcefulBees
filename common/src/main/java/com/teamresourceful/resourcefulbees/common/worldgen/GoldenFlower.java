@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.worldgen;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBiomeTags;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public final class GoldenFlower {
 
-    private static final ResourceLocation GOLD_FLOWER_FEATURE = new ResourceLocation(BeeConstants.MOD_ID, "gold_flower");
+    private static final ResourceLocation GOLD_FLOWER_FEATURE = new ResourceLocation(ModConstants.MOD_ID, "gold_flower");
 
     private GoldenFlower() {
         throw new UtilityClassError();

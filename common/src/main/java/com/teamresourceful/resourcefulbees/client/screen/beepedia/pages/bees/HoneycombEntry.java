@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.bees;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefulbees.common.util.TriState;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
@@ -22,8 +22,8 @@ import java.util.List;
 
 public class HoneycombEntry extends ListEntry implements TooltipProvider {
 
-    public static final ResourceLocation ROW_TEXTURE = new ResourceLocation(BeeConstants.MOD_ID, "textures/gui/beepedia/honeycomb.png");
-    public static final ResourceLocation SLOT_TEXTURE = new ResourceLocation(BeeConstants.MOD_ID, "textures/gui/beepedia/list_button.png");
+    public static final ResourceLocation ROW_TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/honeycomb.png");
+    public static final ResourceLocation SLOT_TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/list_button.png");
 
     private TriState state = TriState.UNSET;
 

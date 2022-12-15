@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPOIs;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.PoiTypeTagsProvider;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class ModPoiTagProvider extends PoiTypeTagsProvider {
 
     public ModPoiTagProvider(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper) {
-        super(pGenerator, ResourcefulBees.MOD_ID, existingFileHelper);
+        super(pGenerator, ModConstants.MOD_ID, existingFileHelper);
     }
 
     @Override

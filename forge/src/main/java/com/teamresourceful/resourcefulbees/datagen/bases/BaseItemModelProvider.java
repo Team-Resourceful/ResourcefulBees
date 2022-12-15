@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.bases;
 
 import com.google.common.base.Preconditions;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -12,7 +12,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 public abstract class BaseItemModelProvider extends ItemModelProvider {
 
     protected BaseItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, ResourcefulBees.MOD_ID, existingFileHelper);
+        super(generator, ModConstants.MOD_ID, existingFileHelper);
     }
 
     @Override

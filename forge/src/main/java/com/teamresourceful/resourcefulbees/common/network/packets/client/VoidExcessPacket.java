@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
@@ -10,10 +10,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public record VoidExcessPacket(BlockPos pos, boolean value)
-    implements Packet<VoidExcessPacket> {
+public record VoidExcessPacket(BlockPos pos, boolean value) implements Packet<VoidExcessPacket> {
 
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "void_excess");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "void_excess");
     public static final Handler HANDLER = new Handler();
 
     @Override

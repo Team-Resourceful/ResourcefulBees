@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class SolidificationCategory extends BaseCategory<SolidificationRecipe> {
 
-    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/solidification.png");
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "solidification");
+    public static final ResourceLocation GUI_BACK = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/jei/solidification.png");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "solidification");
     public static final RecipeType<SolidificationRecipe> RECIPE = new RecipeType<>(ID, SolidificationRecipe.class);
 
     protected SolidificationCategory(IGuiHelper guiHelper) {

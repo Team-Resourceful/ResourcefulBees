@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.SolidificationChamberMenu;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.screens.Screen;
@@ -31,7 +31,7 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
 
     @Override
     protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/solidification/solidification.png");
+        ResourceLocation texture = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/solidification/solidification.png");
         if (tileEntity != null) {
             RenderUtils.bindTexture(texture);
             int i = this.leftPos;
@@ -44,7 +44,7 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
     }
 
     private void renderProgressBar(PoseStack matrix) {
-        ResourceLocation texture = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/solidification/solidification.png");
+        ResourceLocation texture = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/solidification/solidification.png");
         RenderUtils.bindTexture(texture);
         int i = this.leftPos;
         int j = this.topPos;

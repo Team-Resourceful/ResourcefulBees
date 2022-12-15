@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.components.BasicImageButton;
 import com.teamresourceful.resourcefulbees.client.components.BeeconEffectWidget;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
@@ -29,7 +29,7 @@ import java.util.List;
 @OnlyIn(Dist.CLIENT)
 public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> {
 
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
 
     private final EnderBeeconBlockEntity tileEntity;
 

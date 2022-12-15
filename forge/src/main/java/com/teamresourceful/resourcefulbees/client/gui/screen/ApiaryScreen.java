@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BlockBee;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -31,7 +31,7 @@ import java.util.List;
 @OnlyIn(Dist.CLIENT)
 public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
-    private static final ResourceLocation VALIDATED_TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/apiary/validated.png");
+    private static final ResourceLocation VALIDATED_TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/apiary/validated.png");
     private int beeIndexOffset;
     private float sliderProgress;
     private boolean clickedOnScroll;

@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.component.search;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.state.BeepediaState;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.components.ImageButton;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import net.minecraft.network.chat.Component;
@@ -14,7 +14,7 @@ import java.util.Locale;
 
 public class SearchButton extends ImageButton implements TooltipProvider {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(BeeConstants.MOD_ID, "textures/gui/beepedia/search_buttons.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/search_buttons.png");
 
     private final BeepediaState state;
     private final BeepediaState.Sorting type;

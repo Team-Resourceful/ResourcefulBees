@@ -4,11 +4,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.item.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -83,7 +83,7 @@ public class FilledBeeJarIngredient extends Ingredient {
 
         @Override
         public @NotNull FilledBeeJarIngredient parse(@NotNull JsonObject json) {
-            return CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not parse FilledBeeJarIngredient"));
+            return CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, s -> ModConstants.LOGGER.error("Could not parse FilledBeeJarIngredient"));
         }
 
         @Override

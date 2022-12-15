@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers;
 
 import com.google.common.base.Suppliers;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
@@ -49,7 +49,7 @@ public class OutputLocationGroup<T extends AbstractCentrifugeOutputEntity<E, V>,
             case 0 -> set(location1, tile, pos);
             case 1 -> set(location2, tile, pos);
             case 2 -> set(location3, tile, pos);
-            default -> ResourcefulBees.LOGGER.warn("Invalid Output Location Given!");
+            default -> ModConstants.LOGGER.warn("Invalid Output Location Given!");
         }
     }
 

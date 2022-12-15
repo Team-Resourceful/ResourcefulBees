@@ -20,7 +20,7 @@ import com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.honeys.H
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.traits.TraitPage;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.state.BeepediaState;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.state.StringPageState;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.CreativeBeepediaData;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
@@ -41,8 +41,8 @@ import java.util.function.Function;
 
 public class BeepediaScreen extends SubdividedScreen {
 
-    public static final ResourceLocation STATE_ID = new ResourceLocation(BeeConstants.MOD_ID, "beepedia");
-    public static final ResourceLocation BACKGROUND = new ResourceLocation(BeeConstants.MOD_ID, "textures/gui/beepedia/screen.png");
+    public static final ResourceLocation STATE_ID = new ResourceLocation(ModConstants.MOD_ID, "beepedia");
+    public static final ResourceLocation BACKGROUND = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/screen.png");
 
     private BeepediaData data;
     public int ticks;

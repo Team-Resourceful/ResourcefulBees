@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.component;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.components.ImageButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.resources.ResourceLocation;
@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 public class BeepediaMainButton extends ImageButton {
 
-    public static final ResourceLocation HOME_BUTTONS = new ResourceLocation(BeeConstants.MOD_ID, "textures/gui/beepedia/home_buttons.png");
+    public static final ResourceLocation HOME_BUTTONS = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/home_buttons.png");
 
     private final int column;
 

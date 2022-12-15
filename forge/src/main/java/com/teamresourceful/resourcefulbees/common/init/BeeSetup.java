@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.init;
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
@@ -17,8 +18,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import java.io.Reader;
 import java.util.Locale;
 
-import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
-
 public final class BeeSetup {
 
     private BeeSetup() {
@@ -27,16 +26,16 @@ public final class BeeSetup {
 
     public static void setupBees() {
         if (GeneralConfig.enableDevBees) {
-            LOGGER.info("Loading Dev Bees...");
+            ModConstants.LOGGER.info("Loading Dev Bees...");
             FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_bees", BeeSetup::parseBee, ModPaths.MOD_ROOT);
         }
 
         if (GeneralConfig.generateDefaults) {
-            LOGGER.info("Copying Default Bees...");
+            ModConstants.LOGGER.info("Copying Default Bees...");
             FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_bees", ModPaths.BEES, ModPaths.MOD_ROOT);
         }
 
-        LOGGER.info("Loading Custom Bees...");
+        ModConstants.LOGGER.info("Loading Custom Bees...");
         FileUtils.streamFilesAndParse(ModPaths.BEES, BeeSetup::parseBee);
 
         BeeRegistry.getRegistry().regenerateCustomBeeData(null);
@@ -50,7 +49,7 @@ public final class BeeSetup {
                 BeeRegistry.getRegistry().cacheRawBeeData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
             }
         } catch (Exception e) {
-            LOGGER.error("Error parsing bee: {}", name);
+            ModConstants.LOGGER.error("Error parsing bee: {}", name);
             throw e;
         }
     }

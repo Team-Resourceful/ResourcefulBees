@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.datagen.bases;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
@@ -16,7 +16,7 @@ public abstract class BaseBlockStateProvider extends BlockStateProvider {
 
 
     protected BaseBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, ResourcefulBees.MOD_ID, exFileHelper);
+        super(gen, ModConstants.MOD_ID, exFileHelper);
         this.blockModelProvider = new BaseBlockModelProvider(gen, exFileHelper) { @Override protected void registerModels() {} };
         this.itemModelProvider = new BaseItemModelProvider(gen, exFileHelper) { @Override protected void registerModels() {} };
     }

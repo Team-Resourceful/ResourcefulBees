@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseCategory<T> implements IRecipeCategory<T> {
 
-    private static final ResourceLocation ICONS = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/icons.png");
+    private static final ResourceLocation ICONS = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/jei/icons.png");
 
     private final RecipeType<T> recipeType;
     private final Component localizedName;

@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.network;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.*;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.CommandResponsePacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.DimensionalBeesPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncBeepediaPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncGuiPacket;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.networking.NetworkChannel;
 import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
 
@@ -16,7 +16,7 @@ public final class NetPacketHandler {
         throw new UtilityClassError();
     }
 
-    public static final NetworkChannel CHANNEL = new NetworkChannel(ResourcefulBees.MOD_ID, 0, "main");
+    public static final NetworkChannel CHANNEL = new NetworkChannel(ModConstants.MOD_ID, 0, "main");
 
     public static void init() {
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, LockBeePacket.ID, LockBeePacket.HANDLER, LockBeePacket.class);

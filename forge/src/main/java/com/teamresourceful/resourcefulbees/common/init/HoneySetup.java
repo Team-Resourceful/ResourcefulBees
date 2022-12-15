@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.init;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistry;
@@ -13,8 +14,6 @@ import net.minecraft.util.GsonHelper;
 import java.io.Reader;
 import java.util.Locale;
 
-import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
-
 public final class HoneySetup {
 
     private HoneySetup() {
@@ -23,16 +22,16 @@ public final class HoneySetup {
 
     public static void setupHoney() {
         if (GeneralConfig.enableDevBees) {
-            LOGGER.info("Loading Dev Honeys...");
+            ModConstants.LOGGER.info("Loading Dev Honeys...");
             FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honey", HoneySetup::parseHoney, ModPaths.MOD_ROOT);
         }
 
         if (GeneralConfig.generateDefaults) {
-            LOGGER.info("Copying Default Honeys...");
+            ModConstants.LOGGER.info("Copying Default Honeys...");
             FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_honey", ModPaths.HONEY, ModPaths.MOD_ROOT);
         }
 
-        LOGGER.info("Loading Custom Honeys...");
+        ModConstants.LOGGER.info("Loading Custom Honeys...");
         FileUtils.streamFilesAndParse(ModPaths.HONEY, HoneySetup::parseHoney);
     }
 

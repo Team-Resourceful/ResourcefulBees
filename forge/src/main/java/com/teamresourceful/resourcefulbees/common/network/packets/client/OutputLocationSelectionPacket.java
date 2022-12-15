@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeInputEntity;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 public record OutputLocationSelectionPacket(CentrifugeOutputType outputType, int recipeOutputSlot, BlockPos outputLocation, BlockPos inputLocation)
     implements Packet<OutputLocationSelectionPacket> {
 
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "output_location_selection");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "output_location_selection");
     public static final Handler HANDLER = new Handler();
 
     @Override

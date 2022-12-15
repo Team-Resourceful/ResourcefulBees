@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
@@ -13,10 +13,9 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkHooks;
 
-public record SwitchGuiPacket(BlockPos newGuiPos)
-    implements Packet<SwitchGuiPacket> {
+public record SwitchGuiPacket(BlockPos newGuiPos) implements Packet<SwitchGuiPacket> {
 
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "go_back");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "go_back");
     public static final Handler HANDLER = new Handler();
 
     @Override

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.bases;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -50,7 +50,7 @@ public abstract class BaseAdvancementProvider implements DataProvider {
                         false,
                         false)
                 .addCriterion("inventory_changed", inventoryTrigger(predicate))
-                .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/root"));
+                .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/root"));
     }
 
     protected static Advancement.Builder createAdvancement(ItemStack item, String id, Advancement parent) {
@@ -68,7 +68,7 @@ public abstract class BaseAdvancementProvider implements DataProvider {
     protected static Advancement createSimpleAdvancement(Supplier<Item> item, String id, Advancement parent) {
         return createAdvancement(item, id, parent)
                 .addCriterion("has_"+id, has(item.get()))
-                .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/"+id));
+                .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/"+id));
     }
 
     protected static Advancement.Builder createChallengeAchievement(ItemStack item, String id, Advancement parent) {
@@ -86,7 +86,7 @@ public abstract class BaseAdvancementProvider implements DataProvider {
     protected static Advancement createSimpleChallengeAchievement(Supplier<Item> item, String id, Advancement parent) {
         return createChallengeAchievement(item, id, parent)
                 .addCriterion("has_"+id, has(item.get()))
-                .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/"+id));
+                .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/"+id));
     }
 
     protected static InventoryChangeTrigger.TriggerInstance has(ItemLike pItemLike) {

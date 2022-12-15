@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
@@ -121,7 +121,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
             CentrifugeRecipe recipe = new CentrifugeRecipe(id(), ingredient(), itemOutputs(), fluidOutputs(), time(), rfPerTick(), uses());
             CentrifugeRecipe.codec(id())
                     .encodeStart(JsonOps.INSTANCE, recipe)
-                    .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("COULD NOT SERIALIZE DATA GEN RECIPE"))
+                    .getOrThrow(false, s -> ModConstants.LOGGER.error("COULD NOT SERIALIZE DATA GEN RECIPE"))
                     .getAsJsonObject()
                     .entrySet()
                     .forEach(entry -> json.add(entry.getKey(), entry.getValue()));

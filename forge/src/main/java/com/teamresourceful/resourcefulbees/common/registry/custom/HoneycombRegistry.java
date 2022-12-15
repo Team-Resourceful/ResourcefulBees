@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
 import com.teamresourceful.resourcefulbees.common.data.beedata.TradeData;
 import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -92,7 +92,7 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
 
     private static void parseVariationData(String s, JsonObject jsonObject) {
         VARIATION_CODEC.parse(JsonOps.INSTANCE, jsonObject)
-                .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.error("Could not create output variation from {} json file!", s))
+                .getOrThrow(false, s2 -> ModConstants.LOGGER.error("Could not create output variation from {} json file!", s))
                 .forEach(HoneycombRegistry::computeVariation);
     }
 
@@ -111,7 +111,7 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
 
     private static void parseRegistryData(String s, JsonObject jsonObject) {
         RegistryData.codec(s).optionalFieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject)
-                .getOrThrow(false, s2 -> ResourcefulBees.LOGGER.warn("Could not create honeycomb registry item from {} json file.", s));
+                .getOrThrow(false, s2 -> ModConstants.LOGGER.warn("Could not create honeycomb registry item from {} json file.", s));
     }
 
     @Override

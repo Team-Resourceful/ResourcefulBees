@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocatorItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
@@ -11,7 +11,7 @@ import net.minecraft.world.InteractionHand;
 
 public record FindBeePacket(String bee, InteractionHand hand) implements Packet<FindBeePacket> {
 
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "find_bee");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "find_bee");
     public static final Handler HANDLER = new Handler();
 
     @Override

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.server;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
 import com.teamresourceful.resourcefulbees.common.util.BeepediaUtils;
@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 
 public record SyncBeepediaPacket(CompoundTag data) implements Packet<SyncBeepediaPacket> {
 
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "sync_beepedia");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "sync_beepedia");
     public static final Handler HANDLER = new Handler();
 
     public static SyncBeepediaPacket of(Player player) {

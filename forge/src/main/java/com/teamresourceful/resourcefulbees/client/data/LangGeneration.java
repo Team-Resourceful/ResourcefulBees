@@ -10,12 +10,13 @@ import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.api.registry.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.config.ClientConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
 import net.minecraftforge.registries.DeferredRegister;
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,8 +25,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
-
-import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
 
 public final class LangGeneration {
 
@@ -45,7 +44,7 @@ public final class LangGeneration {
 
     public static void generateEnglishLang() {
         if (!ClientConfig.generateEnglishLang) return;
-        LOGGER.info("Generating English Lang...");
+        ModConstants.LOGGER.info("Generating English Lang...");
 
         JsonObject object = new JsonObject();
 
@@ -74,9 +73,9 @@ public final class LangGeneration {
             try (FileWriter writer = new FileWriter(Paths.get(langPath, "en_us.json").toFile())) {
                 writer.write(object.toString());
             }
-            LOGGER.info("Language File Generated!");
+            ModConstants.LOGGER.info("Language File Generated!");
         } catch (IOException e) {
-            LOGGER.error("Could not generate language file!");
+            ModConstants.LOGGER.error("Could not generate language file!");
             e.printStackTrace();
         }
     }

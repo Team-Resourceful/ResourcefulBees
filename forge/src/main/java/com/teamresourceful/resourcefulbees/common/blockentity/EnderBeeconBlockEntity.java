@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.EnderBeeconConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
@@ -255,7 +255,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
                 this.setRange(value);
                 this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
             }
-            default -> ResourcefulBees.LOGGER.error("UNKNOWN Beecon Configuration Option '{}' please report to github!", option);
+            default -> ModConstants.LOGGER.error("UNKNOWN Beecon Configuration Option '{}' please report to github!", option);
         }
     }
 
@@ -297,7 +297,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         else if (MobEffects.FIRE_RESISTANCE.equals(effect)) return EnderBeeconConfig.beeconFireResistanceValue;
         else if (MobEffects.REGENERATION.equals(effect)) return EnderBeeconConfig.beeconRegenerationValue;
 
-        ResourcefulBees.LOGGER.error("Effect {} does not have an effect value", effect.getDescriptionId());
+        ModConstants.LOGGER.error("Effect {} does not have an effect value", effect.getDescriptionId());
         return 1D;
     }
 

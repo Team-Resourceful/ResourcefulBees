@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public record BeeconChangePacket(Option option, int value, BlockPos pos) implements Packet<BeeconChangePacket> {
 
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "beecon_change");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "beecon_change");
     public static final Handler HANDLER = new Handler();
 
     public BeeconChangePacket(Option option, boolean value, BlockPos pos) {

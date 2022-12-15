@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.common.compat.jei.mutation;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.util.displays.EntityDisplay;
 import com.teamresourceful.resourcefulbees.client.util.displays.FluidDisplay;
@@ -10,6 +9,7 @@ import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
 import com.teamresourceful.resourcefulbees.common.compat.jei.BaseCategory;
 import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -38,8 +38,8 @@ import java.util.*;
 
 public class MutationCategory extends BaseCategory<MutationRecipe> {
 
-    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/mutation.png");
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "mutation");
+    public static final ResourceLocation GUI_BACK = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/jei/mutation.png");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "mutation");
     public static final RecipeType<MutationRecipe> RECIPE = new RecipeType<>(ID, MutationRecipe.class);
 
     public MutationCategory(IGuiHelper guiHelper) {

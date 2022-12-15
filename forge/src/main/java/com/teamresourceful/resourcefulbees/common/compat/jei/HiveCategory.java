@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
+import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -31,8 +31,8 @@ import java.util.stream.Stream;
 
 public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
-    public static final ResourceLocation HIVE_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/honeycomb.png");
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "hive");
+    public static final ResourceLocation HIVE_BACK = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/jei/honeycomb.png");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "hive");
     public static final RecipeType<Recipe> RECIPE = new RecipeType<>(ID, Recipe.class);
 
     private final IDrawable hiveBackground;

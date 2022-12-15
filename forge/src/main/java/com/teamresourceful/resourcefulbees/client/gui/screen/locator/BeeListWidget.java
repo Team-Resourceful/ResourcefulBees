@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.*;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHolder;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.renderer.GameRenderer;
@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
 
-    public static final ResourceLocation BACKGROUND = new ResourceLocation(BeeConstants.MOD_ID, "textures/gui/advancements/backgrounds/resourcefulbees.png");
+    public static final ResourceLocation BACKGROUND = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/advancements/backgrounds/resourcefulbees.png");
 
     private final Consumer<BeeLocatorEntry> selector;
 

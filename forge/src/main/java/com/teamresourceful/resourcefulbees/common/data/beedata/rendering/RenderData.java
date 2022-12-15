@@ -2,12 +2,12 @@ package com.teamresourceful.resourcefulbees.common.data.beedata.rendering;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeColorData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerTexture;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
-import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.resources.ResourceLocation;
@@ -18,8 +18,8 @@ import java.util.Set;
 
 public record RenderData(Set<BeeLayerData> layers, BeeColorData colorData, ResourceLocation model, BeeLayerTexture texture, ResourceLocation animations, float sizeModifier) implements BeeRenderData {
 
-    private static final ResourceLocation BASE_MODEL = new ResourceLocation(ResourcefulBees.MOD_ID, "geo/base.geo.json");
-    private static final ResourceLocation BASE_ANIMATION = new ResourceLocation(ResourcefulBees.MOD_ID, "animations/bee.animation.json");
+    private static final ResourceLocation BASE_MODEL = new ResourceLocation(ModConstants.MOD_ID, "geo/base.geo.json");
+    private static final ResourceLocation BASE_ANIMATION = new ResourceLocation(ModConstants.MOD_ID, "animations/bee.animation.json");
 
     private static final BeeRenderData DEFAULT = new RenderData(Collections.emptySet(), ColorData.DEFAULT, BASE_MODEL, LayerTexture.MISSING_TEXTURE, BASE_ANIMATION, 1.0f);
 

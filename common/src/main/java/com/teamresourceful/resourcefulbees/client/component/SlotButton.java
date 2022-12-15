@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.component;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.components.ImageButton;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 public class SlotButton extends ImageButton implements TooltipProvider {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(BeeConstants.MOD_ID, "textures/gui/beepedia/list_button.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/list_button.png");
 
     private final Supplier<Boolean> isActive;
     private final ResourceLocation texture;

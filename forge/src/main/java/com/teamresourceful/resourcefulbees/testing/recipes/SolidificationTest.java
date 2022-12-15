@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.testing.recipes;
 
 import com.google.gson.JsonObject;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefullib.common.utils.GsonHelpers;
@@ -17,10 +17,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
-@GameTestHolder(ResourcefulBees.MOD_ID)
+@GameTestHolder(ModConstants.MOD_ID)
 public class SolidificationTest {
 
-    private static final ResourceLocation TEST_ID = new ResourceLocation(ResourcefulBees.MOD_ID, "solidification_test");
+    private static final ResourceLocation TEST_ID = new ResourceLocation(ModConstants.MOD_ID, "solidification_test");
     private static final SolidificationRecipe RECIPE = new SolidificationRecipe(TEST_ID, new FluidStack(Fluids.WATER, 1000), new ItemStack(Items.STICK));
     private static final JsonObject JSON_RECIPE = GsonHelpers.parseJson("""
         {

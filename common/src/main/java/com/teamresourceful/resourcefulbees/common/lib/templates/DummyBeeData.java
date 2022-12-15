@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerTexture;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
@@ -59,7 +59,7 @@ public class DummyBeeData {
             )
     );
 
-    private static final BeeLayerTexture MISSING_LAYER = API.layerTexture(new ResourceLocation(BeeConstants.MOD_ID, "textures/entity/missing_texture.png"), new ResourceLocation(BeeConstants.MOD_ID, "textures/entity/missing_texture.png"));
+    private static final BeeLayerTexture MISSING_LAYER = API.layerTexture(new ResourceLocation(ModConstants.MOD_ID, "textures/entity/missing_texture.png"), new ResourceLocation(ModConstants.MOD_ID, "textures/entity/missing_texture.png"));
 
     private static final BeeRenderData RENDER_DATA = API.render(
             Set.of(
@@ -104,7 +104,7 @@ public class DummyBeeData {
 
     private static final BeeMutationData MUTATION_DATA = API.mutation(
             5,
-            new ResourceLocation(BeeConstants.MOD_ID, "mutations/template")
+            new ResourceLocation(ModConstants.MOD_ID, "mutations/template")
     );
 
     private static final BeeTraitData TRAIT_DATA = API.trait(BeeConfig.defaultAuraRange, Set.of());

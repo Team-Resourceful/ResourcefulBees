@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.common.registry;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
@@ -21,6 +20,7 @@ import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ScraperDispenserBehavior;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyDataRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistry;
@@ -103,16 +103,16 @@ public final class RegistryHandler {
     private static void registerHoneyBottle(String id, JsonObject honeyData) {
         var data = new DispatchMapCodec<>(ResourceLocation.CODEC, HoneyDataRegistry.codec(id))
                 .parse(JsonOps.INSTANCE, honeyData)
-                .getOrThrow(false, s -> ResourcefulBees.LOGGER.error("Could not create Honey Data for {} honey", id));
+                .getOrThrow(false, s -> ModConstants.LOGGER.error("Could not create Honey Data for {} honey", id));
         try {
             HoneyDataRegistry.INSTANCE.check(data.values());
         }catch (Exception e) {
-            ResourcefulBees.LOGGER.error("Could not create Honey Data for {} honey", id);
+            ModConstants.LOGGER.error("Could not create Honey Data for {} honey", id);
             throw e;
         }
         CustomHoneyData customHoneyData = ResourcefulBeesAPI.getHoneyInitalizers().data(id, data);
         if (!HoneyRegistry.getRegistry().register(id, customHoneyData)) {
-            ResourcefulBees.LOGGER.error("Duplicate honeys with name {}", id);
+            ModConstants.LOGGER.error("Duplicate honeys with name {}", id);
         } else {
             registerHoneyBlock(id, customHoneyData);
             registerHoneyBottle(id, customHoneyData);

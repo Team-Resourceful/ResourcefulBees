@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public record PurgeContentsPacket(BlockPos pos) implements Packet<PurgeContentsPacket> {
 
-    public static final ResourceLocation ID=new ResourceLocation(ResourcefulBees.MOD_ID,"purge");
+    public static final ResourceLocation ID=new ResourceLocation(ModConstants.MOD_ID,"purge");
     public static final Handler HANDLER=new Handler();
 
     @Override

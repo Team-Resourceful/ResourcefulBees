@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.server;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHolder;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 public record DimensionalBeesPacket(Map<ResourceKey<Level>, List<String>> bees) implements Packet<DimensionalBeesPacket> {
 
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "dimensional_bees");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "dimensional_bees");
     public static final Handler HANDLER = new Handler();
 
     @Override

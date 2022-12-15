@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.common.fluids;
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Vector3f;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -18,9 +18,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class NormalHoneyRenderProperties implements IClientFluidTypeExtensions {
 
-    private static final ResourceLocation FLUID_STILL = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/honey_still");
-    private static final ResourceLocation FLUID_FLOWING = new ResourceLocation(ResourcefulBees.MOD_ID, "block/honey/honey_flow");
-    private static final ResourceLocation HONEY_UNDERWATER = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/block/honey/honey_underwater.png");
+    private static final ResourceLocation FLUID_STILL = new ResourceLocation(ModConstants.MOD_ID, "block/honey/honey_still");
+    private static final ResourceLocation FLUID_FLOWING = new ResourceLocation(ModConstants.MOD_ID, "block/honey/honey_flow");
+    private static final ResourceLocation HONEY_UNDERWATER = new ResourceLocation(ModConstants.MOD_ID, "textures/block/honey/honey_underwater.png");
 
     public static final NormalHoneyRenderProperties INSTANCE = new NormalHoneyRenderProperties();
 

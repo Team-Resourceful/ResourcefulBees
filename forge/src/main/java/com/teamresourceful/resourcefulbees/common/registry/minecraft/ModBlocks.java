@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.common.block.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeCrankBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModMaterials;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
@@ -39,7 +40,7 @@ public final class ModBlocks {
         throw new UtilityClassError();
     }
 
-    public static final ResourcefulRegistry<Block> BLOCKS = ResourcefulRegistries.create(Registry.BLOCK, ResourcefulBees.MOD_ID);
+    public static final ResourcefulRegistry<Block> BLOCKS = ResourcefulRegistries.create(Registry.BLOCK, ModConstants.MOD_ID);
     public static final ResourcefulRegistry<Block> HIVES = ResourcefulRegistries.create(BLOCKS);
     public static final ResourcefulRegistry<Block> APIARIES = ResourcefulRegistries.create(BLOCKS);
     public static final ResourcefulRegistry<Block> HONEYCOMB_BLOCKS = ResourcefulRegistries.create(BLOCKS);
@@ -52,7 +53,7 @@ public final class ModBlocks {
     private static final BlockBehaviour.Properties NEST_PROPERTIES = BlockBehaviour.Properties.of(Material.WOOD).strength(1F).sound(SoundType.WOOD);
 
     public static final BlockBehaviour.Properties WAXED_PLANKS_PROPERTIES = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
-    public static final WoodType WAXED_WOOD_TYPE = WoodType.register(WoodType.create(new ResourceLocation(ResourcefulBees.MOD_ID, "waxed").toString()));
+    public static final WoodType WAXED_WOOD_TYPE = WoodType.register(WoodType.create(new ResourceLocation(ModConstants.MOD_ID, "waxed").toString()));
 
     private static BlockBehaviour.Properties makeNestProperty(Material material, MaterialColor color, SoundType soundType){
         return BlockBehaviour.Properties.of(material, color).strength(1.0F).sound(soundType);

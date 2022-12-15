@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.lib.tags;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -15,10 +15,10 @@ public final class ModItemTags {
     public static final TagKey<Item> SHEARS = createItemTag("forge", "shears");
     public static final TagKey<Item> BEEHIVES = createItemTag("minecraft", "beehives");
 
-    public static final TagKey<Item> T0_NESTS = createItemTag(BeeConstants.MOD_ID, "t0_nests");
-    public static final TagKey<Item> T1_NESTS = createItemTag(BeeConstants.MOD_ID, "t1_nests");
-    public static final TagKey<Item> T2_NESTS = createItemTag(BeeConstants.MOD_ID, "t2_nests");
-    public static final TagKey<Item> T3_NESTS = createItemTag(BeeConstants.MOD_ID, "t3_nests");
+    public static final TagKey<Item> T0_NESTS = createItemTag(ModConstants.MOD_ID, "t0_nests");
+    public static final TagKey<Item> T1_NESTS = createItemTag(ModConstants.MOD_ID, "t1_nests");
+    public static final TagKey<Item> T2_NESTS = createItemTag(ModConstants.MOD_ID, "t2_nests");
+    public static final TagKey<Item> T3_NESTS = createItemTag(ModConstants.MOD_ID, "t3_nests");
 
     public static final TagKey<Item> MUSHROOM = createItemTag("forge", "mushrooms");
     public static final TagKey<Item> HONEY_BOTTLES = createItemTag("forge", "honey_bottles");

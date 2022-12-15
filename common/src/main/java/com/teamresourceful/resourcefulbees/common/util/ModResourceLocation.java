@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.util;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.StringUtils;
 
@@ -20,13 +20,13 @@ public class ModResourceLocation extends ResourceLocation {
 
     private static String[] ifNoNamespace(String[] strings) {
         if (StringUtils.isEmpty(strings[0])) {
-            strings[0] = BeeConstants.MOD_ID;
+            strings[0] = ModConstants.MOD_ID;
         }
         return strings;
     }
 
     private static String[] deconstruct(String location, char separator) {
-        String[] strings = new String[]{BeeConstants.MOD_ID, location};
+        String[] strings = new String[]{ModConstants.MOD_ID, location};
         int i = location.indexOf(separator);
         if (i >= 0) {
             strings[1] = location.substring(i + 1);

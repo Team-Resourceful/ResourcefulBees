@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.components;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class BeeconEffectWidget extends AbstractWidget {
 
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
 
 
     private final Screen screen;

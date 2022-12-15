@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.datagen.providers.advancements.ModAdvancementProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.blockstates.ModBlockStateProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.items.ModItemModelProvider;
@@ -11,14 +12,13 @@ import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModBlockTagPro
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModFluidTagProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModItemTagProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModPoiTagProvider;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = ResourcefulBees.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = ModConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ResourcefulBeesDataGenerator {
 
     private ResourcefulBeesDataGenerator() {
@@ -27,7 +27,7 @@ public final class ResourcefulBeesDataGenerator {
 
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
-        ResourcefulBees.LOGGER.info("Data Generator Loaded!");
+        ModConstants.LOGGER.info("Data Generator Loaded!");
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         generator.addProvider(event.includeClient(), new ModBlockStateProvider(generator, existingFileHelper));

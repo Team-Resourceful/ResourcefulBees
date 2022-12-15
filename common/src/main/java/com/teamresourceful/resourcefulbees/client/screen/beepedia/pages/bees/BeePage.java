@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.client.component.SlotButton;
 import com.teamresourceful.resourcefulbees.client.screen.base.SubdividedScreen;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaTextures;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 
 public class BeePage extends SubdividedScreen {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(BeeConstants.MOD_ID, "textures/gui/beepedia/bee_splitter.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/bee_splitter.png");
 
     private final Consumer<Trait> traitOpener;
 

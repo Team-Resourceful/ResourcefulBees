@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.testing.recipes;
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.CentrifugeConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefullib.common.utils.GsonHelpers;
@@ -19,10 +20,10 @@ import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import java.util.ArrayList;
 import java.util.Optional;
 
-@GameTestHolder(ResourcefulBees.MOD_ID)
+@GameTestHolder(ModConstants.MOD_ID)
 public class CentrifugeTest {
 
-    private static final ResourceLocation TEST_ID = new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge_test");
+    private static final ResourceLocation TEST_ID = new ResourceLocation(ModConstants.MOD_ID, "centrifuge_test");
     private static final CentrifugeRecipe RECIPE = new CentrifugeRecipe(TEST_ID, Ingredient.of(Items.STICK), new ArrayList<>(), new ArrayList<>(), CentrifugeConfig.globalCentrifugeRecipeTime, CentrifugeConfig.centrifugeRfPerTick, Optional.empty());
     private static final JsonObject JSON_RECIPE = GsonHelpers.parseJson("""
         {

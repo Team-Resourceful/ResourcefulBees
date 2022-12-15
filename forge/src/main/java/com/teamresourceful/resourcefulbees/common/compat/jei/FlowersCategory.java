@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import mezz.jei.api.constants.VanillaTypes;
@@ -36,8 +36,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
-    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/flowers.png");
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "bee_pollination_flowers");
+    public static final ResourceLocation GUI_BACK = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/jei/flowers.png");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "bee_pollination_flowers");
     public static final RecipeType<Recipe> RECIPE = new RecipeType<>(ID, Recipe.class);
 
     public FlowersCategory(IGuiHelper guiHelper) {

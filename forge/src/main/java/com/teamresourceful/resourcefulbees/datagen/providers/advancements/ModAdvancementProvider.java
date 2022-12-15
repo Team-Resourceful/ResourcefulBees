@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.advancements;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -26,7 +26,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
         Advancement root = addAdvancement(createRootAdvancement(ModItems.GOLD_FLOWER_ITEM,
                 Component.translatable("advancements.resourcefulbees.root.title"),
                 Component.translatable("advancements.resourcefulbees.root.description"),
-                new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/advancements/backgrounds/resourcefulbees.png"),
+                new ResourceLocation(ModConstants.MOD_ID, "textures/gui/advancements/backgrounds/resourcefulbees.png"),
                 ItemPredicate.Builder.item().of(ModItemTags.HONEYCOMB).build()
         ));
 
@@ -38,7 +38,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
         addAdvancement(createSimpleAdvancement(ModItems.HONEY_GENERATOR_ITEM, "honey_generator", root));
         Advancement nest = addAdvancement(createAdvancement(ModItems.OAK_BEE_NEST_ITEM, "obtain_bee_nest", root)
                 .addCriterion("has_nest", has(ModItemTags.BEEHIVES))
-                .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/obtain_bee_nest")));
+                .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/obtain_bee_nest")));
 
         Advancement t1HiveUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T2_NEST_UPGRADE, "t1_hive_upgrade", nest));
         Advancement t2HiveUpgrade = addAdvancement(createSimpleAdvancement(ModItems.T3_NEST_UPGRADE, "t2_hive_upgrade", t1HiveUpgrade));
@@ -66,7 +66,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 .addCriterion("has_unlocked_beepedia", InventoryChangeTrigger.TriggerInstance.hasItems(
                         ItemPredicate.Builder.item().of(ModItems.BEEPEDIA.get()).hasNbt(beepediaNbt).build()
                 ))
-                .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/beepedia_unlock_bee")));
+                .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/beepedia_unlock_bee")));
 
 
         CompoundTag completeBeepedia = new CompoundTag();
@@ -76,7 +76,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 .addCriterion("has_completed_beepedia", InventoryChangeTrigger.TriggerInstance.hasItems(
                         ItemPredicate.Builder.item().of(ModItems.BEEPEDIA.get()).hasNbt(completeBeepedia).build()
                 ))
-                .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/beepedia_complete")));
+                .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/beepedia_complete")));
 
         ItemStack filledJar = createBeejar("minecraft:bee", "#edc343");
 
@@ -84,7 +84,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 .addCriterion("has_filled_jar", InventoryChangeTrigger.TriggerInstance.hasItems(
                         ItemPredicate.Builder.item().of(filledJar.getItem()).hasNbt(filledJar.serializeNBT()).build()
                 ))
-                .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/collect_bee"))
+                .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/collect_bee"))
         );
 
         ItemStack kittenJar = createBeejar("resourcefulbees:kitten_bee", "#EAA939");
@@ -93,7 +93,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 .addCriterion("has_kitten_jar", InventoryChangeTrigger.TriggerInstance.hasItems(
                         ItemPredicate.Builder.item().of(kittenJar.getItem()).hasNbt(kittenJar.serializeNBT()).build()
                 ))
-                .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/kitten_bee"))
+                .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/kitten_bee"))
         );
 
         ItemStack oreoJar = createBeejar("resourcefulbees:oreo_bee", "#442920");
@@ -102,7 +102,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 .addCriterion("has_oreo_jar", InventoryChangeTrigger.TriggerInstance.hasItems(
                         ItemPredicate.Builder.item().of(oreoJar.getItem()).hasNbt(oreoJar.serializeNBT()).build()
                 ))
-                .build(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees/oreo_bee"))
+                .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/oreo_bee"))
         );
     }
 

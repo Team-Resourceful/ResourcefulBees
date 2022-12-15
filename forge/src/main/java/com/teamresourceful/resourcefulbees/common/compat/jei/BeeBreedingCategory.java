@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -22,8 +22,8 @@ import java.util.Optional;
 
 //TODO rewrite to be more like centrifuge category with weight and chance but also like mutation for items and entities.
 public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.BreedingWrapper> {
-    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/breeding.png");
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "breeding");
+    public static final ResourceLocation GUI_BACK = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/jei/breeding.png");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "breeding");
     public static final RecipeType<BreedingWrapper> RECIPE = new RecipeType<>(ID, BreedingWrapper.class);
 
     public BeeBreedingCategory(IGuiHelper guiHelper) {

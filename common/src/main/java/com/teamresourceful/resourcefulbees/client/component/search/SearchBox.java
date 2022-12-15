@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import com.teamresourceful.resourcefullib.common.utils.types.Vec2i;
 import net.minecraft.SharedConstants;
@@ -31,7 +31,7 @@ import java.util.Objects;
 
 public class SearchBox extends AbstractWidget {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(BeeConstants.MOD_ID, "textures/gui/beepedia/search_box.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/search_box.png");
 
     private final Font font;
     private String value = "";

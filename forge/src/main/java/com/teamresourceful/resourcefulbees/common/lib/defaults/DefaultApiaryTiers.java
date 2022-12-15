@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.lib.defaults;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
+import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -21,7 +21,7 @@ public final class DefaultApiaryTiers {
         .amount(() -> ApiaryConfig.tierOneApiaryQuantity)
         .blockEntity(ModBlockEntityTypes.T1_APIARY_ENTITY::get)
         .item(ModItems.T1_APIARY_ITEM)
-        .build(new ResourceLocation(ResourcefulBees.MOD_ID, "t1"));
+        .build(new ResourceLocation(ModConstants.MOD_ID, "t1"));
 
     public static final ApiaryTier T2_APIARY = new ApiaryTier.Builder()
             .max(12)
@@ -30,7 +30,7 @@ public final class DefaultApiaryTiers {
             .amount(() -> ApiaryConfig.tierTwoApiaryQuantity)
             .blockEntity(ModBlockEntityTypes.T2_APIARY_ENTITY::get)
             .item(ModItems.T2_APIARY_ITEM)
-            .build(new ResourceLocation(ResourcefulBees.MOD_ID, "t2"));
+            .build(new ResourceLocation(ModConstants.MOD_ID, "t2"));
 
     public static final ApiaryTier T3_APIARY = new ApiaryTier.Builder()
             .max(16)
@@ -39,7 +39,7 @@ public final class DefaultApiaryTiers {
             .amount(() -> ApiaryConfig.tierThreeApiaryQuantity)
             .blockEntity(ModBlockEntityTypes.T3_APIARY_ENTITY::get)
             .item(ModItems.T3_APIARY_ITEM)
-            .build(new ResourceLocation(ResourcefulBees.MOD_ID, "t3"));
+            .build(new ResourceLocation(ModConstants.MOD_ID, "t3"));
 
     public static final ApiaryTier T4_APIARY = new ApiaryTier.Builder()
             .max(20)
@@ -48,7 +48,7 @@ public final class DefaultApiaryTiers {
             .amount(() -> ApiaryConfig.tierFourApiaryQuantity)
             .blockEntity(ModBlockEntityTypes.T4_APIARY_ENTITY::get)
             .item(ModItems.T4_APIARY_ITEM)
-            .build(new ResourceLocation(ResourcefulBees.MOD_ID, "t4"));
+            .build(new ResourceLocation(ModConstants.MOD_ID, "t4"));
 
     public static void loadDefaults() {
         // NO-OP

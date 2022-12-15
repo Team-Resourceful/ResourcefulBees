@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyBottleData
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.intializers.HoneyInitializerApi;
 import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
@@ -69,10 +69,10 @@ public class DummyHoneyData {
             "template",
             HONEY_API.fluidRender(
                     Color.DEFAULT,
-                    new ResourceLocation(BeeConstants.MOD_ID, "block/honey/custom_honey_still"),
-                    new ResourceLocation(BeeConstants.MOD_ID, "block/honey/custom_honey_flow"),
-                    new ResourceLocation(BeeConstants.MOD_ID, "block/honey/custom_honey_flow"),
-                    new ResourceLocation(BeeConstants.MOD_ID, "textures/block/honey/custom_honey_underwater.png")
+                    new ResourceLocation(ModConstants.MOD_ID, "block/honey/custom_honey_still"),
+                    new ResourceLocation(ModConstants.MOD_ID, "block/honey/custom_honey_flow"),
+                    new ResourceLocation(ModConstants.MOD_ID, "block/honey/custom_honey_flow"),
+                    new ResourceLocation(ModConstants.MOD_ID, "textures/block/honey/custom_honey_underwater.png")
             ),
             HONEY_API.fluidAttributes(
                     1,
@@ -91,10 +91,10 @@ public class DummyHoneyData {
                     LazyHolder.of(Registry.SOUND_EVENT, SoundEvents.BUCKET_FILL),
                     LazyHolder.of(Registry.SOUND_EVENT, SoundEvents.BUCKET_EMPTY)
             ),
-            LazyHolder.of(Registry.FLUID, new ResourceLocation(BeeConstants.MOD_ID, "honey")),
-            LazyHolder.of(Registry.FLUID, new ResourceLocation(BeeConstants.MOD_ID, "honey_flowing")),
-            LazyHolder.of(Registry.ITEM, new ResourceLocation(BeeConstants.MOD_ID, "honey_bucket")),
-            LazyHolder.of(Registry.BLOCK, new ResourceLocation(BeeConstants.MOD_ID, "honey")),
+            LazyHolder.of(Registry.FLUID, new ResourceLocation(ModConstants.MOD_ID, "honey")),
+            LazyHolder.of(Registry.FLUID, new ResourceLocation(ModConstants.MOD_ID, "honey_flowing")),
+            LazyHolder.of(Registry.ITEM, new ResourceLocation(ModConstants.MOD_ID, "honey_bucket")),
+            LazyHolder.of(Registry.BLOCK, new ResourceLocation(ModConstants.MOD_ID, "honey")),
             DEFAULT_TRADE
     );
 

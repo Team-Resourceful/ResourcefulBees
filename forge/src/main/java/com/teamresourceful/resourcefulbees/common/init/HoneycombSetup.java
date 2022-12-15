@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
@@ -15,8 +16,6 @@ import net.minecraft.util.GsonHelper;
 import java.io.Reader;
 import java.util.Locale;
 
-import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
-
 public final class HoneycombSetup {
 
     private HoneycombSetup() {
@@ -25,16 +24,16 @@ public final class HoneycombSetup {
 
     public static void setupHoneycombs() {
         if (GeneralConfig.enableDevBees) {
-            LOGGER.info("Loading Dev Honeycombs...");
+            ModConstants.LOGGER.info("Loading Dev Honeycombs...");
             FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honeycombs", HoneycombSetup::parseHoneycomb, ModPaths.MOD_ROOT);
         }
 
         if (GeneralConfig.generateDefaults) {
-            LOGGER.info("Copying Default Honeycombs...");
+            ModConstants.LOGGER.info("Copying Default Honeycombs...");
             FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_honeycombs", ModPaths.HONEYCOMBS, ModPaths.MOD_ROOT);
         }
 
-        LOGGER.info("Loading Custom Honeycombs...");
+        ModConstants.LOGGER.info("Loading Custom Honeycombs...");
         FileUtils.streamFilesAndParse(ModPaths.HONEYCOMBS, HoneycombSetup::parseHoneycomb);
 
         if (!HoneycombRegistry.areItemsRegistered()) {

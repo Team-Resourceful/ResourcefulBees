@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.FakeFlowerMenu;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class FakeFlowerScreen extends AbstractContainerScreen<FakeFlowerMenu> {
 
-    public static final ResourceLocation FAKE_FLOWER_BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/fake_flower/fake_flower.png");
+    public static final ResourceLocation FAKE_FLOWER_BACKGROUND = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/fake_flower/fake_flower.png");
     public FakeFlowerScreen(FakeFlowerMenu container, Inventory inventory, Component displayName) {
         super(container, inventory, displayName);
         this.imageHeight = 133;

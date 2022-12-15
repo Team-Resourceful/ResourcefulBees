@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -28,7 +28,7 @@ public class ModRecipeProvider extends RecipeProvider {
     @Override
     protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> recipes) {
 
-        CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB), new ResourceLocation(ResourcefulBees.MOD_ID, "honeycomb_centrifuge"))
+        CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB), new ResourceLocation(ModConstants.MOD_ID, "honeycomb_centrifuge"))
                 .time(200)
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(Items.SUGAR.getDefaultInstance(), 10))
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(ModItems.WAX.get().getDefaultInstance(), 10))
@@ -36,7 +36,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .rf(5)
                 .save(recipes);
 
-        CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB_BLOCK), new ResourceLocation(ResourcefulBees.MOD_ID, "honeycomb_block_centrifuge"))
+        CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB_BLOCK), new ResourceLocation(ModConstants.MOD_ID, "honeycomb_block_centrifuge"))
                 .time(200)
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 9), 10))
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(new ItemStack(ModItems.WAX.get(), 9), 10))
@@ -69,9 +69,9 @@ public class ModRecipeProvider extends RecipeProvider {
         //endregion
         //region Honey Conversion
         ShapelessRecipeBuilder.shapeless(ModItems.HONEY_FLUID_BUCKET.get()).requires(Items.HONEY_BOTTLE, 4).requires(Items.BUCKET)
-                .unlockedBy("has_honey_bottle", RecipeProvider.has(Items.HONEY_BOTTLE)).save(recipes, new ResourceLocation(ResourcefulBees.MOD_ID, "honey_bottles_to_bucket"));
+                .unlockedBy("has_honey_bottle", RecipeProvider.has(Items.HONEY_BOTTLE)).save(recipes, new ResourceLocation(ModConstants.MOD_ID, "honey_bottles_to_bucket"));
         ShapelessRecipeBuilder.shapeless(Items.HONEY_BOTTLE, 4).requires(Items.GLASS_BOTTLE, 4).requires(ModItems.HONEY_FLUID_BUCKET.get())
-                .unlockedBy("has_honey_bottle", RecipeProvider.has(Items.HONEY_BOTTLE)).save(recipes, new ResourceLocation(ResourcefulBees.MOD_ID, "honey_bucket_to_bottles"));
+                .unlockedBy("has_honey_bottle", RecipeProvider.has(Items.HONEY_BOTTLE)).save(recipes, new ResourceLocation(ModConstants.MOD_ID, "honey_bucket_to_bottles"));
         //endregion
 
         //region Wax

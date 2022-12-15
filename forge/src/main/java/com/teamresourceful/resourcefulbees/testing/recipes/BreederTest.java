@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.testing.recipes;
 
 import com.google.gson.JsonObject;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
@@ -18,10 +18,10 @@ import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
 import java.util.Optional;
 
-@GameTestHolder(ResourcefulBees.MOD_ID)
+@GameTestHolder(ModConstants.MOD_ID)
 public class BreederTest {
 
-    private static final ResourceLocation TEST_ID = new ResourceLocation(ResourcefulBees.MOD_ID, "breeder_test");
+    private static final ResourceLocation TEST_ID = new ResourceLocation(ModConstants.MOD_ID, "breeder_test");
     private static final BreederRecipe.BreederPair PAIR = new BreederRecipe.BreederPair(Ingredient.of(Items.STICK), Optional.empty(), Ingredient.of(Items.DIAMOND), Optional.empty());
     private static final BreederRecipe RECIPE = new BreederRecipe(TEST_ID, PAIR, PAIR, Optional.empty(), new WeightedCollection<>(), 1200);
     private static final JsonObject JSON_RECIPE = GsonHelpers.parseJson("""

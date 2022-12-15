@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeInputScreen;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeVoidScreen;
@@ -9,10 +8,11 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityI
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredientHelper;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityRenderer;
 import com.teamresourceful.resourcefulbees.common.compat.jei.mutation.MutationCategory;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -50,7 +50,7 @@ public class JEICompat implements IModPlugin {
     @NotNull
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(ResourcefulBees.MOD_ID, "jei");
+        return new ResourceLocation(ModConstants.MOD_ID, "jei");
     }
 
     @Override

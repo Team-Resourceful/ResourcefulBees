@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefullib.client.components.ImageButton;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 public class DisplayTab extends ImageButton {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/display_tab.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/centrifuges/display_tab.png");
 
     private final ControlPanelTabs type;
     private final Supplier<Boolean> isSelected;

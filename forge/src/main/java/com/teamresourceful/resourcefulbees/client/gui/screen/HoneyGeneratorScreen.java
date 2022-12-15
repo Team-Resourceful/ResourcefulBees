@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGeneratorMenu;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
@@ -24,7 +24,7 @@ import java.text.NumberFormat;
 @OnlyIn(Dist.CLIENT)
 public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGeneratorMenu> {
 
-    public static final ResourceLocation BACKGROUND = new ResourceLocation(ResourcefulBees.MOD_ID,"textures/gui/generator/honey_gen.png");
+    public static final ResourceLocation BACKGROUND = new ResourceLocation(ModConstants.MOD_ID,"textures/gui/generator/honey_gen.png");
 
     public HoneyGeneratorScreen(HoneyGeneratorMenu screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);

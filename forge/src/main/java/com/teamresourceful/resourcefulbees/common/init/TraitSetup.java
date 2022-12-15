@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
@@ -16,8 +17,6 @@ import net.minecraft.util.GsonHelper;
 import java.io.Reader;
 import java.util.Locale;
 
-import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
-
 public final class TraitSetup {
 
     private TraitSetup() {
@@ -26,16 +25,16 @@ public final class TraitSetup {
 
     public static void buildCustomTraits() {
         if (GeneralConfig.enableDevBees) {
-            LOGGER.info("Loading Dev Traits...");
+            ModConstants.LOGGER.info("Loading Dev Traits...");
             FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_traits", TraitSetup::parseTrait, ModPaths.MOD_ROOT);
         }
 
         if (GeneralConfig.generateDefaults) {
-            LOGGER.info("Copying Default Traits...");
+            ModConstants.LOGGER.info("Copying Default Traits...");
             FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_traits", ModPaths.BEE_TRAITS, ModPaths.MOD_ROOT);
         }
 
-        LOGGER.info("Loading Custom Traits...");
+        ModConstants.LOGGER.info("Loading Custom Traits...");
         FileUtils.streamFilesAndParse(ModPaths.BEE_TRAITS, TraitSetup::parseTrait);
     }
 
@@ -43,7 +42,7 @@ public final class TraitSetup {
         JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
         if (LoadConditionRegistry.canLoad(jsonObject)) {
             name = Codec.STRING.fieldOf("name").orElse(name).codec().parse(JsonOps.INSTANCE, jsonObject).get().orThrow().toLowerCase(Locale.ENGLISH).replace(" ", "_");
-            Trait beeTrait = Trait.getCodec(name).parse(JsonOps.INSTANCE, jsonObject).getOrThrow(false, s -> LOGGER.error("Could not Create Bee Trait"));
+            Trait beeTrait = Trait.getCodec(name).parse(JsonOps.INSTANCE, jsonObject).getOrThrow(false, s -> ModConstants.LOGGER.error("Could not Create Bee Trait"));
             TraitRegistry.getRegistry().register(name, beeTrait);
         }
     }

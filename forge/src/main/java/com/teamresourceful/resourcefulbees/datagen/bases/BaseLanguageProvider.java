@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.bases;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.Translate;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import net.minecraft.data.DataGenerator;
@@ -25,7 +25,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
     private final Class<?>[] miscTranslationsClazz;
 
     protected BaseLanguageProvider(DataGenerator gen, @Nullable Class<?>... miscTranslationsClazz) {
-        super(gen, ResourcefulBees.MOD_ID, "en_us");
+        super(gen, ModConstants.MOD_ID, "en_us");
         this.miscTranslationsClazz = miscTranslationsClazz;
     }
 

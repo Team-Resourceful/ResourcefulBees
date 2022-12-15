@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistries;
@@ -16,7 +16,7 @@ public final class ModArguments {
         throw new UtilityClassError();
     }
 
-    public static final ResourcefulRegistry<ArgumentTypeInfo<?, ?>> ARGUMENTS = ResourcefulRegistries.create(Registry.COMMAND_ARGUMENT_TYPE, BeeConstants.MOD_ID);
+    public static final ResourcefulRegistry<ArgumentTypeInfo<?, ?>> ARGUMENTS = ResourcefulRegistries.create(Registry.COMMAND_ARGUMENT_TYPE, ModConstants.MOD_ID);
 
     public static final RegistryEntry<ArgumentTypeInfo<BeeArgument, SingletonArgumentInfo<BeeArgument>.Template>> BEE_TYPE = ARGUMENTS.register("bee", () -> SingletonArgumentInfo.contextFree(BeeArgument::new));
 }

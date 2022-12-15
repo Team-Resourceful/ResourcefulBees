@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class ModBlockTagProvider extends BlockTagsProvider {
 
     public ModBlockTagProvider(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper) {
-        super(pGenerator, ResourcefulBees.MOD_ID, existingFileHelper);
+        super(pGenerator, ModConstants.MOD_ID, existingFileHelper);
     }
 
     @Override

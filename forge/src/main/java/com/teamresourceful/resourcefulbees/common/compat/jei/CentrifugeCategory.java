@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
@@ -32,8 +32,8 @@ import java.util.*;
 
 public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.CentrifugeRecipeAdapter> {
 
-    public static final ResourceLocation GUI_BACK = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/jei/centrifuge.png");
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge");
+    public static final ResourceLocation GUI_BACK = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/jei/centrifuge.png");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "centrifuge");
     public static final RecipeType<CentrifugeRecipeAdapter> RECIPE = new RecipeType<>(ID, CentrifugeRecipeAdapter.class);
 
     public CentrifugeCategory(IGuiHelper guiHelper) {

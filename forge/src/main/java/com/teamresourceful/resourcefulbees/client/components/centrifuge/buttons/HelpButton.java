@@ -1,8 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -17,7 +16,7 @@ import java.util.List;
 public class HelpButton extends AbstractWidget implements TooltipProvider {
 
     //TODO consider maybe making this a button that enables certain tooltips in various menus
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ResourcefulBees.MOD_ID, "textures/gui/centrifuges/help_btn.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/centrifuges/help_btn.png");
 
     public HelpButton(int x, int y) {
         super(x+1, y+1, 11, 11, CommonComponents.EMPTY);

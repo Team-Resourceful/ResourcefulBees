@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistries;
@@ -18,7 +18,7 @@ public final class ModEffects {
         throw new UtilityClassError();
     }
 
-    public static final ResourcefulRegistry<MobEffect> EFFECTS = ResourcefulRegistries.create(Registry.MOB_EFFECT, BeeConstants.MOD_ID);
+    public static final ResourcefulRegistry<MobEffect> EFFECTS = ResourcefulRegistries.create(Registry.MOB_EFFECT, ModConstants.MOD_ID);
 
     public static final RegistryEntry<MobEffect> CALMING = EFFECTS.register("calming", () -> new MobEffect(MobEffectCategory.BENEFICIAL, 16763783) {
         @Override

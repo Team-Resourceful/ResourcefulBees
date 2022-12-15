@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.init;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Paths;
 
-import static com.teamresourceful.resourcefulbees.ResourcefulBees.LOGGER;
-
 public final class ModSetup {
 
     private ModSetup() {
@@ -35,13 +33,15 @@ public final class ModSetup {
     }
 
     private static void setupPaths() {
-        LOGGER.info("Setting up config paths...");
+        ModConstants.LOGGER.info("Setting up config paths...");
 
         try (FileWriter file = new FileWriter(Paths.get(ModPaths.RESOURCES.toAbsolutePath().toString(), "pack.mcmeta").toFile())) {
             String mcMetaContent = "{\"pack\":{\"pack_format\":"+ PackType.CLIENT_RESOURCES.getVersion(SharedConstants.getCurrentVersion()) +",\"description\":\"Resourceful Bees resource pack used for lang purposes for the user to add lang for bee/items.\"}}";
             file.write(mcMetaContent);
         } catch (FileAlreadyExistsException ignored) { //ignored
-        } catch (IOException e) { LOGGER.error("Failed to create pack.mcmeta file for resource loading");}
+        } catch (IOException e) {
+            ModConstants.LOGGER.error("Failed to create pack.mcmeta file for resource loading");
+        }
     }
 
     private static void loadResources() {
@@ -51,7 +51,7 @@ public final class ModSetup {
 
         Minecraft.getInstance().getResourcePackRepository().addPackFinder((consumer, factory) -> {
             final Pack packInfo = Pack.create(
-                    ResourcefulBees.MOD_ID,
+                    ModConstants.MOD_ID,
                     true,
                     () -> new FolderPackResources(ModPaths.RESOURCES.toFile()) {
                         @Override
@@ -64,7 +64,7 @@ public final class ModSetup {
                     PackSource.BUILT_IN
             );
             if (packInfo == null) {
-                LOGGER.error("Failed to load resource pack, some things may not work.");
+                ModConstants.LOGGER.error("Failed to load resource pack, some things may not work.");
                 return;
             }
             consumer.accept(packInfo);

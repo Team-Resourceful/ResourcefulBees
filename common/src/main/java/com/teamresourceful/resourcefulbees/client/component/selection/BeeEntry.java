@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.component.selection;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
@@ -24,7 +24,7 @@ import java.util.function.BooleanSupplier;
 
 public class BeeEntry extends ListEntry {
 
-    public static final ResourceLocation SLOT_TEXTURE = new ResourceLocation(BeeConstants.MOD_ID, "textures/gui/beepedia/list_button.png");
+    public static final ResourceLocation SLOT_TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/list_button.png");
 
     private final BooleanSupplier isFound;
     private final CustomBeeData data;

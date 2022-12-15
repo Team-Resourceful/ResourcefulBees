@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.bases;
 
 import com.google.common.base.Preconditions;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
@@ -16,7 +16,7 @@ public abstract class BaseBlockModelProvider extends BlockModelProvider {
     public final Lazy<ModelFile> EMPTY_MODEL = Lazy.of(() -> getExistingFile(mcLoc("air")));
 
     protected BaseBlockModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, ResourcefulBees.MOD_ID, existingFileHelper);
+        super(generator, ModConstants.MOD_ID, existingFileHelper);
     }
 
     @Override

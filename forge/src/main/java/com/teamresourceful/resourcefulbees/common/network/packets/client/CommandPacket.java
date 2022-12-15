@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.commands.CentrifugeCommandHolder;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.commands.CentrifugeCommandSource;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractCentrifugeEntity;
@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public record CommandPacket(BlockPos pos, String command) implements Packet<CommandPacket> {
 
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge_command");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "centrifuge_command");
     public static final Handler HANDLER = new Handler();
 
     @Override

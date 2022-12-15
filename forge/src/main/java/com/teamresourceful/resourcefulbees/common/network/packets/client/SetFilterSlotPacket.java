@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.AbstractModContainerMenu;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.CentrifugeInputContainer;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
@@ -10,10 +10,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-public record SetFilterSlotPacket(ItemStack stack, int slot)
-        implements Packet<SetFilterSlotPacket> {
+public record SetFilterSlotPacket(ItemStack stack, int slot) implements Packet<SetFilterSlotPacket> {
 
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "set_filter_slot");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "set_filter_slot");
     public static final SetFilterSlotPacket.Handler HANDLER = new SetFilterSlotPacket.Handler();
 
     @Override

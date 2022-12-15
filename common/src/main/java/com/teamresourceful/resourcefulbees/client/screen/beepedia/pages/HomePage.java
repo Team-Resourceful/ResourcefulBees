@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
-import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
@@ -26,7 +26,7 @@ import java.util.Optional;
 
 public class HomePage extends Screen {
 
-    public static final ResourceLocation LOGO = new ResourceLocation(BeeConstants.MOD_ID, "textures/gui/beepedia/logo.png");
+    public static final ResourceLocation LOGO = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/logo.png");
 
     private final CycleableList<Entity> bees;
 

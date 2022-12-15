@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.data.DataGenerator;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public class ModFluidTagProvider extends FluidTagsProvider {
 
     public ModFluidTagProvider(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper) {
-        super(pGenerator, ResourcefulBees.MOD_ID, existingFileHelper);
+        super(pGenerator, ModConstants.MOD_ID, existingFileHelper);
     }
 
     @Override

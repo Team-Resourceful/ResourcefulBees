@@ -59,17 +59,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Mod(ResourcefulBees.MOD_ID)
+@Mod(ModConstants.MOD_ID)
 public class ResourcefulBees {
-
-    public static final String MOD_ID = "resourcefulbees";
-    public static final Logger LOGGER = LogManager.getLogger();
 
     private static final Configurator CONFIGURATOR = new Configurator(true);
 
@@ -165,10 +160,10 @@ public class ResourcefulBees {
         event.enqueueWork(RegistryHandler::registerDispenserBehaviors);
         NetPacketHandler.init();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
-        CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "amount_sensitive"), AmountSensitiveIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "nbt_amount_sensitive"), NBTAmountSensitiveIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(new ResourceLocation(ResourcefulBees.MOD_ID, "any_filled_bee_jar"), FilledBeeJarIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "amount_sensitive"), AmountSensitiveIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "nbt_amount_sensitive"), NBTAmountSensitiveIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
+        CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "any_filled_bee_jar"), FilledBeeJarIngredient.Serializer.INSTANCE);
         GameSetup.initPotionRecipes();
         GameSetup.initArguments();
         ConditionRegistryImpl.freeze();

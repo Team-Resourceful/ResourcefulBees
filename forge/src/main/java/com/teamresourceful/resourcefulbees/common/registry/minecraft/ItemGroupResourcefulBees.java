@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.platform.common.registry.creativetab.CreativeTabBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.platform.common.registry.creativetab.CreativeTabBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +15,7 @@ public final class ItemGroupResourcefulBees {
         throw new UtilityClassError();
     }
 
-    public static final CreativeModeTab RESOURCEFUL_BEES = CreativeTabBuilder.of(new ResourceLocation(ResourcefulBees.MOD_ID, "resourcefulbees"))
+    public static final CreativeModeTab RESOURCEFUL_BEES = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees"))
             .setIcon(() -> new ItemStack(ModItems.HONEY_DIPPER.get()))
             .addRegistry(() -> ModItems.CENTRIFUGE_ITEMS)
             .setAddingFunction(list -> {
@@ -67,25 +67,25 @@ public final class ItemGroupResourcefulBees {
             })
             .build();
 
-    public static final CreativeModeTab RESOURCEFUL_BEES_HIVES = CreativeTabBuilder.of(new ResourceLocation(ResourcefulBees.MOD_ID, "hives"))
+    public static final CreativeModeTab RESOURCEFUL_BEES_HIVES = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "hives"))
         .setIcon(() -> new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get()))
         .addRegistry(() -> ModItems.NEST_ITEMS)
         .build();
 
-    public static final CreativeModeTab RESOURCEFUL_BEES_HONEY = CreativeTabBuilder.of(new ResourceLocation(ResourcefulBees.MOD_ID, "honey"))
+    public static final CreativeModeTab RESOURCEFUL_BEES_HONEY = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "honey"))
             .setIcon(() -> new ItemStack(Items.HONEY_BOTTLE))
             .addRegistry(() -> ModItems.HONEY_BOTTLE_ITEMS)
             .addRegistry(() -> ModItems.HONEY_BLOCK_ITEMS)
             .addRegistry(() -> ModItems.HONEY_BUCKET_ITEMS)
             .build();
 
-    public static final CreativeModeTab RESOURCEFUL_BEES_COMBS = CreativeTabBuilder.of(new ResourceLocation(ResourcefulBees.MOD_ID, "combs"))
+    public static final CreativeModeTab RESOURCEFUL_BEES_COMBS = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "combs"))
             .setIcon(() -> new ItemStack(Items.HONEYCOMB))
             .addRegistry(() -> ModItems.HONEYCOMB_ITEMS)
             .addRegistry(() -> ModItems.HONEYCOMB_BLOCK_ITEMS)
             .build();
 
-    public static final CreativeModeTab RESOURCEFUL_BEES_BEES = CreativeTabBuilder.of(new ResourceLocation(ResourcefulBees.MOD_ID, "bees"))
+    public static final CreativeModeTab RESOURCEFUL_BEES_BEES = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "bees"))
             .setIcon(() -> new ItemStack(Items.BEE_SPAWN_EGG))
             .addRegistry(() -> ModItems.SPAWN_EGG_ITEMS)
             .build();

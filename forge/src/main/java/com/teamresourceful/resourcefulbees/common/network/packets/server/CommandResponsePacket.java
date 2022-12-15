@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.network.packets.server;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTerminalScreen;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public record CommandResponsePacket(Component response) implements Packet<CommandResponsePacket> {
 
-    public static final ResourceLocation ID = new ResourceLocation(ResourcefulBees.MOD_ID, "centrifuge_command_response");
+    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "centrifuge_command_response");
     public static final Handler HANDLER = new Handler();
 
     @Override
