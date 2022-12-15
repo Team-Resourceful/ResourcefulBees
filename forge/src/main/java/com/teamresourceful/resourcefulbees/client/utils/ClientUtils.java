@@ -41,16 +41,16 @@ public final class ClientUtils {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
             bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-            bufferbuilder.vertex(matrix.last().pose(), x, y + (i * 16) + splitHeight, blitOffset).uv(sprite.getU0(), sprite.getV(width)).endVertex();
-            bufferbuilder.vertex(matrix.last().pose(), x + width, y + (i * 16) + splitHeight, blitOffset).uv(sprite.getU(splitHeight), sprite.getV(width)).endVertex();
-            bufferbuilder.vertex(matrix.last().pose(), x + width, y + (i * 16), blitOffset).uv(sprite.getU(splitHeight), sprite.getV0()).endVertex();
-            bufferbuilder.vertex(matrix.last().pose(), x, y + (i * 16), blitOffset).uv(sprite.getU0(), sprite.getV0()).endVertex();
+            bufferbuilder.vertex(matrix.last().pose(), x, y + (i * 16f) + splitHeight, blitOffset).uv(sprite.getU0(), sprite.getV(width)).endVertex();
+            bufferbuilder.vertex(matrix.last().pose(), x + (float)width, y + (i * 16f) + splitHeight, blitOffset).uv(sprite.getU(splitHeight), sprite.getV(width)).endVertex();
+            bufferbuilder.vertex(matrix.last().pose(), x + (float)width, y + (i * 16f), blitOffset).uv(sprite.getU(splitHeight), sprite.getV0()).endVertex();
+            bufferbuilder.vertex(matrix.last().pose(), x, y + (i * 16f), blitOffset).uv(sprite.getU0(), sprite.getV0()).endVertex();
             BufferUploader.drawWithShader(bufferbuilder.end());
         }
     }
 
     public static float getDimensionBrightnessAtEyes(Entity entity) {
-        float lightLevelAtEyes = (float)entity.level.getRawBrightness(new BlockPos(entity.getEyePosition(1.0F)), 0);
+        float lightLevelAtEyes = entity.level.getRawBrightness(new BlockPos(entity.getEyePosition(1.0F)), 0);
         return lightLevelAtEyes / 15.0F;
     }
 
