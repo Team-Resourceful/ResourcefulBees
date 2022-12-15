@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyFoodData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidAttributesData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
+import com.teamresourceful.resourcefulbees.common.lib.tools.ValidationException;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.resources.ResourceLocation;
@@ -121,13 +122,13 @@ public class HoneyInitializerApi {
                     try {
                         return field.get(this) == null;
                     } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
+                        throw new ValidationException(e);
                     }
                 })
                 .map(Field::getName)
                 .toList();
         if (!badFields.isEmpty()) {
-            throw new IllegalStateException("HoneyInitializerApi is missing the following initializers: " + badFields);
+            throw new ValidationException("HoneyInitializerApi is missing the following initializers: " + badFields);
         }
     }
 }

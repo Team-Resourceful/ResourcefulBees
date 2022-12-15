@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.DontCheckCasing;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.lib.tools.ValidationException;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.reflect.Field;
@@ -106,7 +107,7 @@ public final class NBTConstants {
             for (String error : errors) {
                 builder.append("\n").append(error);
             }
-            throw new IllegalStateException(builder.toString());
+            throw new ValidationException(builder.toString());
         }
     }
 
@@ -120,6 +121,7 @@ public final class NBTConstants {
                     final String value = (String) field.get(null);
                     if (value == null || value.isEmpty()) {
                         errors.add("NBT constant " + clazz.getSimpleName() + "." + field.getName() + " is empty");
+                        continue;
                     }
                     if (!hasCheck && !Character.isUpperCase(value.charAt(0))) {
                         errors.add("NBT constant " + clazz.getSimpleName() + "." + field.getName() + " does not start with an uppercase character");

@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerTexture;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
+import com.teamresourceful.resourcefulbees.common.lib.tools.ValidationException;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedItemPredicate;
@@ -212,13 +213,13 @@ public class InitializerApi {
                     try {
                         return field.get(this) == null;
                     } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
+                        throw new ValidationException(e);
                     }
                 })
                 .map(Field::getName)
                 .toList();
         if (!badFields.isEmpty()) {
-            throw new IllegalStateException("InitializerApi is missing the following initializers: " + badFields);
+            throw new ValidationException("InitializerApi is missing the following initializers: " + badFields);
         }
     }
 }
