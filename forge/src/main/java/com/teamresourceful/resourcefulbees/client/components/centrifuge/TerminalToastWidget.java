@@ -22,11 +22,6 @@ public class TerminalToastWidget extends GuiComponent implements Widget {
         this.y = y;
     }
 
-    //I have no clue if 100 is good.
-    public void setToastText(@NotNull Component toastText) {
-        setToastText(toastText, 100);
-    }
-
     public void setToastText(@NotNull Component toastText, int displayTime) {
         if (displayTime < 1) return;
         this.toastText = toastText;

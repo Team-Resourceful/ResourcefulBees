@@ -98,7 +98,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     }
 
     public void setToastText(Component toastText) {
-        if (toastWidget != null) toastWidget.setToastText(toastText);
+        setToastText(toastText, 100);
     }
 
     //retaining just in case it's needed
@@ -181,12 +181,14 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     protected void updateInfoPanel(@NotNull AbstractInfoPanel<?> newInfoPanel) {
         removeInfoPanelIfExists();
         infoPanel = addRenderableWidget(newInfoPanel);
+        setFocused(infoPanel);
         notifyInfoPanelOfEntitySelection();
     }
 
     protected void removeInfoPanelIfExists() {
         if (infoPanel != null) removeWidget(infoPanel);
         infoPanel = null;
+        setFocused(null);
     }
 
     public void notifyInfoPanelOfEntitySelection() {
@@ -241,5 +243,9 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
 
     protected final Runnable switchGui(BlockPos newGuiPos) {
         return () -> NetworkHandler.CHANNEL.sendToServer(new SwitchGuiPacket(newGuiPos));
+    }
+
+    public @Nullable AbstractInfoPanel<?> getInfoPanel() {
+        return infoPanel;
     }
 }
