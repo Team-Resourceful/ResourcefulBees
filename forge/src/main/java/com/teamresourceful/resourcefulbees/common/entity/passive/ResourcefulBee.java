@@ -6,7 +6,8 @@ import com.teamresourceful.resourcefulbees.api.registry.TraitAbilityRegistry;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
-import com.teamresourceful.resourcefulbees.common.entity.ai.AuraHandler;
+import com.teamresourceful.resourcefulbees.common.entities.ai.AuraHandler;
+import com.teamresourceful.resourcefulbees.common.entities.goals.*;
 import com.teamresourceful.resourcefulbees.common.entity.goals.*;
 import com.teamresourceful.resourcefulbees.common.entity.pathfinding.BeePathNavigation;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -69,7 +70,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         super(type, level, beeType);
         //THIS NEEDS TO BE ONLY LOADED ON THE SERVER AS IT WOULD NOT MATCH HOW VANILLA LOADS GOALS OTHERWISE.
         if (level instanceof ServerLevel) registerConditionalGoals();
-        auraHandler = customBeeData.getTraitData().hasAuras() ? new AuraHandler(this) : null;
+        auraHandler = customBeeData.getTraitData().hasAuras() ? new AuraHandler(this, this.getBeeData()) : null;
     }
 
     @Override

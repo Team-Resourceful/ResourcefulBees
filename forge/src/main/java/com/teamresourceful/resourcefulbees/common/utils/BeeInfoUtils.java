@@ -14,7 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Bee;
@@ -22,8 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public final class BeeInfoUtils {
 
@@ -34,10 +31,6 @@ public final class BeeInfoUtils {
     @Nullable
     public static MobEffect getEffect(String effectName) {
         return Registry.MOB_EFFECT.getOptional(ResourceLocation.tryParse(effectName)).orElse(null);
-    }
-
-    public static Optional<EntityType<?>> getOptionalEntityType(String entityName) {
-        return EntityType.byString(entityName);
     }
 
     public static void flagBeesInRange(BlockPos pos, Level level) {

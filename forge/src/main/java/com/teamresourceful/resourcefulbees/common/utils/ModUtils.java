@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
@@ -27,9 +26,6 @@ import net.minecraftforge.network.NetworkHooks;
 import static net.minecraft.world.item.ItemStack.tagMatches;
 
 public final class ModUtils {
-
-    private static final String[] TENS = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
-    private static final String[] UNITS = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
 
     private ModUtils() {
         throw new UtilityClassError();
@@ -89,16 +85,8 @@ public final class ModUtils {
             });
     }
 
-    public static String createRomanNumeral(int value) {
-        return TENS[value % 100 / 10] + UNITS[value % 10];
-    }
-
     public static boolean itemStackIsIdentical(ItemStack stack, ItemStack other) {
         return stack.is(other.getItem()) && stack.getCount() == other.getCount() && tagMatches(stack, other);
-    }
-
-    public static boolean isModLoaded(String modId) {
-        return ModList.get().isLoaded(modId);
     }
 
     public static boolean isARealPlayer(Player player) {

@@ -1,18 +1,18 @@
 package com.teamresourceful.resourcefulbees.common.entity.goals;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
-import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ModBeeEnterHiveGoal extends Goal {
 
-    private final ResourcefulBee bee;
+    private final Bee bee;
 
-    public ModBeeEnterHiveGoal(ResourcefulBee bee) {
+    public ModBeeEnterHiveGoal(Bee bee) {
         this.bee = bee;
     }
 

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.platform.common.util.fabric;
 
 import com.teamresourceful.resourcefulbees.common.util.EnumBuilder;
 import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
+import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -29,5 +30,10 @@ public class ModUtilsImpl {
             e.printStackTrace();
             return fallback;
         }
+    }
+
+    public static void spawnBabyEvent(SpawnBabyEvent event) {
+        SpawnBabyEvent.EVENT.fire(event);
+        //TODO check for fabric events
     }
 }

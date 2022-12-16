@@ -17,7 +17,7 @@ import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.fluids.HoneyFluidRenderProperties;
 import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
-import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
+import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ScraperDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;

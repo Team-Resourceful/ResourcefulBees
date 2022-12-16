@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -13,6 +12,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,17 +55,17 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Breedi
                 .addIngredient(VanillaTypes.ITEM_STACK, recipe.output().output())
                 .setSlotName("output_item");
 
-        recipe.parent1.displayEntity().flatMap(BeeInfoUtils::getOptionalEntityType)
+        recipe.parent1.displayEntity().flatMap(EntityType::byString)
                 .ifPresent(entityType -> builder.addSlot(RecipeIngredientRole.OUTPUT, 56, 30)
                         .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityType, 45f))
                         .setSlotName("parent_1_entity_display"));
 
-        recipe.parent2.displayEntity().flatMap(BeeInfoUtils::getOptionalEntityType)
+        recipe.parent2.displayEntity().flatMap(EntityType::byString)
                 .ifPresent(entityType -> builder.addSlot(RecipeIngredientRole.OUTPUT, 56, 102)
                         .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityType, 45f))
                         .setSlotName("parent_2_entity_display"));
 
-        recipe.output.displayEntity().flatMap(BeeInfoUtils::getOptionalEntityType)
+        recipe.output.displayEntity().flatMap(EntityType::byString)
                 .ifPresent(entityType -> builder.addSlot(RecipeIngredientRole.OUTPUT, 138, 67)
                         .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityType, 45f))
                         .setSlotName("output_entity"));

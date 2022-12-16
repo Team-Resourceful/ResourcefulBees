@@ -4,9 +4,9 @@ import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.item.BeeJarItem;
-import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBottleItem;
+import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
-import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
+import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
@@ -114,7 +114,7 @@ public final class Beekeeper {
 
         Collection<RegistryEntry<Item>> honeycombs = ModItems.HONEYCOMB_ITEMS.getEntries();
         honeycombs.forEach(registryEntry -> {
-            if (registryEntry.get() instanceof HoneycombItem honeycombItem && honeycombItem.isTradable()) {
+            if (registryEntry.get() instanceof CustomHoneycombItem honeycombItem && honeycombItem.isTradable()) {
                 addBeeProduct(list, honeycombItem.getDefaultInstance(), honeycombItem.getTradeData());
             }
         });

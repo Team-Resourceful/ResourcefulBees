@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
 import com.teamresourceful.resourcefulbees.common.data.beedata.TradeData;
-import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
+import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
@@ -148,9 +148,9 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
                         return enchanted || stack.isEnchanted();
                     }
                 });
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, edible, blockItem, enchanted, tradeData));
+                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new CustomHoneycombItem(color, edible, blockItem, enchanted, tradeData));
             } else {
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new HoneycombItem(color, edible, null, enchanted, tradeData));
+                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new CustomHoneycombItem(color, edible, null, enchanted, tradeData));
             }
         }
 

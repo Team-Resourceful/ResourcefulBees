@@ -6,12 +6,17 @@ dependencies {
     modRuntimeOnly "mezz.jei:jei-${rootProject.minecraft_version}-common:${rootProject.jei_version}"
     modImplementation "com.teamresourceful.resourcefullib:resourcefullib-common-$rootProject.resourcefullib_version"
     modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-$rootProject.resourcefulconfig_version"
+    modImplementation "software.bernie.geckolib:$rootProject.geckolib_fabric_version"
 
     modImplementation("com.telepathicgrunt:Bumblezone-Forge:$rootProject.bumblezone_version")
 }
 
 architectury {
     common("fabric", "forge")
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/resourcefulbees.accesswidener")
 }
 
 publishing {

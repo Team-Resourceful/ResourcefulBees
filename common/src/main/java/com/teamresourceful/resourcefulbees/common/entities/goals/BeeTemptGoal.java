@@ -1,23 +1,23 @@
-package com.teamresourceful.resourcefulbees.common.entity.goals;
+package com.teamresourceful.resourcefulbees.common.entities.goals;
 
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.EnumSet;
 
 public class BeeTemptGoal extends Goal {
     private static final TargetingConditions ENTITY_PREDICATE = (TargetingConditions.forNonCombat()).range(10.0D).ignoreInvisibilityTesting().ignoreLineOfSight();
-    protected final CustomBeeEntity bee;
+    protected final Bee bee;
     private final double speed;
     protected Player closestPlayer;
     private int delayTemptCounter;
 
 
-    public BeeTemptGoal(CustomBeeEntity bee, double speedIn) {
+    public BeeTemptGoal(Bee bee, double speedIn) {
         this.bee = bee;
         this.speed = speedIn;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));

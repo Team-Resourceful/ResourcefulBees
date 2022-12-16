@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.entity.goals.base;
+package com.teamresourceful.resourcefulbees.common.entities.goals.base;
 
 import net.minecraft.world.entity.ai.goal.Goal;
 

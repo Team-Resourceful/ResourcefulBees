@@ -149,7 +149,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
     public void readSyncData(@NotNull CompoundTag tag) {
         bees.clear();
         loadBees(tag);
-        bees.removeIf(bee -> BeeInfoUtils.getOptionalEntityType(bee.entityData.getString("id")).isEmpty());
+        bees.removeIf(bee -> EntityType.byString(bee.entityData.getString("id")).isEmpty());
     }
     //endregion
 

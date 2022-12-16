@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.gui.overlay;
+package com.teamresourceful.resourcefulbees.client.overlay;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;

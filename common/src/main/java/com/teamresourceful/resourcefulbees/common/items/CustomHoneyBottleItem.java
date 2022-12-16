@@ -1,9 +1,8 @@
-package com.teamresourceful.resourcefulbees.common.item;
+package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.HoneyBottleItem;
 import net.minecraft.world.item.Item;
@@ -27,9 +26,9 @@ public class CustomHoneyBottleItem extends HoneyBottleItem {
 
     @Nullable
     @Override
-    public FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
+    public FoodProperties getFoodProperties() {
         if (food == null) food = data.food().getFood();
-        return food;
+        return food == null ? super.getFoodProperties() : food;
     }
 
     @Override

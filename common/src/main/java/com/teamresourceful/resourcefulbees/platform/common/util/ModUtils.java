@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.platform.common.util;
 
 import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
+import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -28,6 +29,11 @@ public class ModUtils {
      */
     @ExpectPlatform
     public static MobCategory createMobCategory(String name, String id, int max, boolean isFriendly, boolean isPersistent, int despawnDistance, MobCategory fallback) {
+        throw new NotImplementedError();
+    }
+
+    @ExpectPlatform
+    public static void spawnBabyEvent(SpawnBabyEvent event) {
         throw new NotImplementedError();
     }
 }

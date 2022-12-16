@@ -1,10 +1,10 @@
-package com.teamresourceful.resourcefulbees.common.item;
+package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.common.config.HoneycombConfig;
 import com.teamresourceful.resourcefullib.common.color.Color;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class HoneycombItem extends net.minecraft.world.item.HoneycombItem {
+public class CustomHoneycombItem extends HoneycombItem {
 
     private final Supplier<Item> storageBlock;
     private final Color color;
@@ -20,7 +20,7 @@ public class HoneycombItem extends net.minecraft.world.item.HoneycombItem {
     private final boolean enchanted;
     private final BeekeeperTradeData tradeData;
 
-    public HoneycombItem(Color color, boolean isEdible, Supplier<Item> storageBlock, boolean enchanted, BeekeeperTradeData tradeData) {
+    public CustomHoneycombItem(Color color, boolean isEdible, Supplier<Item> storageBlock, boolean enchanted, BeekeeperTradeData tradeData) {
         super(new Properties());
         this.color = color;
         this.isEdible = isEdible;
@@ -31,7 +31,7 @@ public class HoneycombItem extends net.minecraft.world.item.HoneycombItem {
 
     @SuppressWarnings("unused")
     public static int getColor(ItemStack stack, int tintIndex) {
-        return ((HoneycombItem) stack.getItem()).getHoneycombColor();
+        return ((CustomHoneycombItem) stack.getItem()).getHoneycombColor();
     }
 
     public int getHoneycombColor() { return color.getValue(); }
@@ -64,9 +64,10 @@ public class HoneycombItem extends net.minecraft.world.item.HoneycombItem {
 
     @Nullable
     @Override
-    public FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
+    @SuppressWarnings("deprecation")
+    public FoodProperties getFoodProperties() {
         if (HoneycombConfig.honeycombsEdible && !isEdible) {
-            return super.getFoodProperties(stack, entity);
+            return super.getFoodProperties();
         }
         return new FoodProperties.Builder()
                 .nutrition(HoneycombConfig.honeycombHunger)

@@ -1,9 +1,10 @@
-package com.teamresourceful.resourcefulbees.common.entity.goals;
+package com.teamresourceful.resourcefulbees.common.entities.goals;
 
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
+import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
+import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -13,15 +14,14 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.GameRules;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 
 public class BeeBreedGoal extends BreedGoal {
 
     private final String beeType;
 
-    public BeeBreedGoal(ResourcefulBee animal, double speedIn, String beeType) {
+    public <T extends Bee & CustomBee> BeeBreedGoal(T animal, double speedIn, String beeType) {
         super(animal, speedIn);
         this.beeType = beeType;
     }
@@ -41,8 +41,9 @@ public class BeeBreedGoal extends BreedGoal {
         if (partner == null) return;
         FamilyUnit beeFamily = BeeRegistry.get().getWeightedChild(((CustomBee)this.partner).getBeeType(), beeType);
 
-        final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, this.partner, ((ResourcefulBee)this.animal).createSelectedChild(beeFamily));
-        if (MinecraftForge.EVENT_BUS.post(event)) {
+        final SpawnBabyEvent event = new SpawnBabyEvent(animal, this.partner, ((CustomBee)this.animal).createSelectedChild(beeFamily));
+        ModUtils.spawnBabyEvent(event);
+        if (event.isCanceled()) {
             resetBreed();
             return;
         }

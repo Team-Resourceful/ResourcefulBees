@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.render.items;
 
 import com.teamresourceful.resourcefulbees.common.item.BeeJarItem;
-import com.teamresourceful.resourcefulbees.common.item.BeepediaItem;
+import com.teamresourceful.resourcefulbees.common.items.BeepediaItem;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.client.renderer.item.ItemProperties;

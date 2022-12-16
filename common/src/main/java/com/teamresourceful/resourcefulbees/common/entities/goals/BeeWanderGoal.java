@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.entity.goals;
+package com.teamresourceful.resourcefulbees.common.entities.goals;
 
 import com.teamresourceful.resourcefulbees.common.util.RandomPositionGenerator;
 import net.minecraft.core.BlockPos;
@@ -12,10 +12,10 @@ import java.util.EnumSet;
 import java.util.Objects;
 
 public class BeeWanderGoal extends Goal {
-    private final Bee modBeeEntity;
+    private final Bee bee;
 
-    public BeeWanderGoal(Bee modBeeEntity) {
-        this.modBeeEntity = modBeeEntity;
+    public BeeWanderGoal(Bee bee) {
+        this.bee = bee;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
@@ -24,7 +24,7 @@ public class BeeWanderGoal extends Goal {
      * method as well.
      */
     public boolean canUse() {
-        return modBeeEntity.getNavigation().isDone() && modBeeEntity.getRandom().nextInt(10) == 0;
+        return bee.getNavigation().isDone() && bee.getRandom().nextInt(10) == 0;
     }
 
     /**
@@ -32,7 +32,7 @@ public class BeeWanderGoal extends Goal {
      */
     @Override
     public boolean canContinueToUse() {
-        return modBeeEntity.getNavigation().isInProgress();
+        return bee.getNavigation().isInProgress();
     }
 
     /**
@@ -42,7 +42,7 @@ public class BeeWanderGoal extends Goal {
     public void start() {
         Vec3 vector3d = this.getRandomLocation();
         if (vector3d != null) {
-            modBeeEntity.getNavigation().moveTo(modBeeEntity.getNavigation().createPath(new BlockPos(vector3d), 1), 1.0D);
+            bee.getNavigation().moveTo(bee.getNavigation().createPath(new BlockPos(vector3d), 1), 1.0D);
         }
 
     }
@@ -50,17 +50,17 @@ public class BeeWanderGoal extends Goal {
     @Nullable
     private Vec3 getRandomLocation() {
         Vec3 vector3d;
-        if (modBeeEntity.isHiveValid() && !checkIsWithinDistance(modBeeEntity, Objects.requireNonNull(modBeeEntity.getHivePos()), 22)) {
-            Vec3 vector3d1 = Vec3.atCenterOf(modBeeEntity.getHivePos());
-            vector3d = vector3d1.subtract(modBeeEntity.position()).normalize();
+        if (bee.isHiveValid() && !checkIsWithinDistance(bee, Objects.requireNonNull(bee.getHivePos()), 22)) {
+            Vec3 vector3d1 = Vec3.atCenterOf(bee.getHivePos());
+            vector3d = vector3d1.subtract(bee.position()).normalize();
         } else {
-            vector3d = modBeeEntity.getViewVector(0.0F);
+            vector3d = bee.getViewVector(0.0F);
         }
 
-        int randHorz = modBeeEntity.getRandom().nextInt(8) + 8;
+        int randHorz = bee.getRandom().nextInt(8) + 8;
 
-        Vec3 vector3d2 = RandomPositionGenerator.findAirTarget(modBeeEntity, randHorz, 7, vector3d);
-        return vector3d2 != null ? vector3d2 : RandomPositionGenerator.findGroundTarget(modBeeEntity, randHorz, 6, -4, vector3d);
+        Vec3 vector3d2 = RandomPositionGenerator.findAirTarget(bee, randHorz, 7, vector3d);
+        return vector3d2 != null ? vector3d2 : RandomPositionGenerator.findGroundTarget(bee, randHorz, 6, -4, vector3d);
     }
 
     public static boolean checkIsWithinDistance(Bee bee, @NotNull BlockPos hivePos, int i) {

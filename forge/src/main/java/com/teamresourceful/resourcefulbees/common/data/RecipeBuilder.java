@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.config.RecipeConfig;
 import com.teamresourceful.resourcefulbees.common.item.BeeJarItem;
-import com.teamresourceful.resourcefulbees.common.item.HoneycombItem;
+import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.RecipeManagerAccessor;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
@@ -57,9 +57,9 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
             ModConstants.LOGGER.info("Generating comb recipes for {} honeycombs...", ModItems.HONEYCOMB_ITEMS.getEntries().size());
             ModItems.HONEYCOMB_ITEMS.getEntries().stream()
                     .map(RegistryEntry::get)
-                    .filter(HoneycombItem.class::isInstance)
-                    .map(HoneycombItem.class::cast)
-                    .filter(HoneycombItem::hasStorageBlockItem)
+                    .filter(CustomHoneycombItem.class::isInstance)
+                    .map(CustomHoneycombItem.class::cast)
+                    .filter(CustomHoneycombItem::hasStorageBlockItem)
                     .flatMap(comb -> Stream.of(makeHoneycombRecipe(comb), makeCombBlockToCombRecipe(comb)))
                     .forEach(this::addRecipe);
         }
@@ -139,7 +139,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         );
     }
 
-    private Recipe<?> makeHoneycombRecipe(HoneycombItem comb) {
+    private Recipe<?> makeHoneycombRecipe(CustomHoneycombItem comb) {
         Ingredient honeycombItem = Ingredient.of(comb);
         return new ShapedRecipe(
                 Objects.requireNonNull(Registry.ITEM.getKey(comb.getStorageBlockItem())),
@@ -246,7 +246,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         );
     }
 
-    private Recipe<?> makeCombBlockToCombRecipe(HoneycombItem comb) {
+    private Recipe<?> makeCombBlockToCombRecipe(CustomHoneycombItem comb) {
         return new ShapelessRecipe(
                 Objects.requireNonNull(Registry.ITEM.getKey(comb)),
                 "",

@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.event;
 
 import com.teamresourceful.resourcefulbees.client.ResourcefulBeesClient;
 import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
-import com.teamresourceful.resourcefulbees.client.gui.overlay.BeeLocatorOverlay;
+import com.teamresourceful.resourcefulbees.client.overlay.BeeLocatorOverlay;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
 import com.teamresourceful.resourcefulbees.client.models.ModelHandler;
 import com.teamresourceful.resourcefulbees.client.render.blocks.RenderEnderBeecon;

@@ -1,26 +1,27 @@
-package com.teamresourceful.resourcefulbees.common.entity.ai;
+package com.teamresourceful.resourcefulbees.common.entities.ai;
 
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.animal.Bee;
 
 import java.util.List;
 import java.util.Set;
 
 public class AuraHandler {
 
-    private final CustomBeeEntity bee;
+    private final Bee bee;
     private final int auraRange;
     private final Set<Aura> auras;
 
-    public AuraHandler(CustomBeeEntity bee) {
+    public AuraHandler(Bee bee, CustomBeeData data) {
         this.bee = bee;
-        this.auraRange = this.bee.getTraitData().auraRange();
-        this.auras = this.bee.getTraitData().auras();
+        this.auraRange = data.getTraitData().auraRange();
+        this.auras = data.getTraitData().auras();
     }
 
     public void tick() {
