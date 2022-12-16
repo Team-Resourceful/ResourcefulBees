@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.entity.passive;
+package com.teamresourceful.resourcefulbees.common.entities;
 
 import com.google.common.collect.ImmutableSet;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
@@ -6,8 +6,9 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Bee;
 
-public class CustomBeeEntityType<T extends ResourcefulBee> extends EntityType<T> {
+public class CustomBeeEntityType<T extends Bee> extends EntityType<T> {
 
     private final String beeType;
 
@@ -16,7 +17,7 @@ public class CustomBeeEntityType<T extends ResourcefulBee> extends EntityType<T>
         this.beeType = beeType;
     }
 
-    public static <T extends ResourcefulBee> CustomBeeEntityType<T> of(String beeType, EntityFactory<T> factory, float width, float height) {
+    public static <T extends Bee> CustomBeeEntityType<T> of(String beeType, EntityFactory<T> factory, float width, float height) {
         return new CustomBeeEntityType<>(beeType, factory, EntityDimensions.scalable(width, height));
     }
 

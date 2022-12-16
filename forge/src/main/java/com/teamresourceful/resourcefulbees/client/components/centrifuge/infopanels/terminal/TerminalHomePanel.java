@@ -6,8 +6,8 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.CommandPacket;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
@@ -144,7 +144,7 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
             case "neofetch" -> neofetch = true;
             default -> {
                 formatUserInput(commandInput).forEach(this::onTerminalResponse);
-                if (selectedEntity != null) NetPacketHandler.CHANNEL.sendToServer(new CommandPacket(selectedEntity.getBlockPos(), commandInput));
+                if (selectedEntity != null) NetworkHandler.CHANNEL.sendToServer(new CommandPacket(selectedEntity.getBlockPos(), commandInput));
                 neofetch = false;
             }
         }

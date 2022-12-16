@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.item.*;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.CrankItem;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.ManualCentrifugeItem;
-import com.teamresourceful.resourcefulbees.common.item.locator.BeeLocatorItem;
+import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.BeehiveUpgrade;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.NestUpgradeItem;

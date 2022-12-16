@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefulbees.common.data.honeydata.CustomHoneyBloc
 import com.teamresourceful.resourcefulbees.common.data.honeydata.fluid.CustomHoneyFluidAttributesData;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.fluid.CustomHoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
+import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.fluids.HoneyFluidRenderProperties;

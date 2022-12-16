@@ -1,11 +1,11 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.locator;
+package com.teamresourceful.resourcefulbees.client.screen.locator;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHolder;
+import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;

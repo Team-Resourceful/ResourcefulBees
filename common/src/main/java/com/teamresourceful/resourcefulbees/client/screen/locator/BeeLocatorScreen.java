@@ -1,29 +1,31 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.locator;
+package com.teamresourceful.resourcefulbees.client.screen.locator;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.client.FindBeePacket;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
+import com.teamresourceful.resourcefulbees.common.networking.packets.client.FindBeePacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
 public class BeeLocatorScreen extends Screen {
 
-    private final InteractionHand hand;
+    private final int slot;
     private BeeListWidget listWidget;
     private Button selectButton;
 
-    public BeeLocatorScreen(InteractionHand hand) {
+    public BeeLocatorScreen(int slot) {
         super(CommonComponents.EMPTY);
-        this.hand = hand;
+        this.slot = slot;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class BeeLocatorScreen extends Screen {
             getSelected().ifPresent(bee -> {
                 String type = bee.getType();
                 if (type != null) {
-                    NetPacketHandler.CHANNEL.sendToServer(new FindBeePacket(type, this.hand));
+                    NetworkHandler.CHANNEL.sendToServer(new FindBeePacket(type, this.slot));
                 }
                 this.onClose();
             })
@@ -71,5 +73,13 @@ public class BeeLocatorScreen extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    public static void openScreen(Player player, InteractionHand hand) {
+        int slot = player.getInventory().selected;
+        if (hand == InteractionHand.OFF_HAND) {
+            slot = player.getInventory().getContainerSize() - 1;
+        }
+        Minecraft.getInstance().setScreen(new BeeLocatorScreen(slot));
     }
 }

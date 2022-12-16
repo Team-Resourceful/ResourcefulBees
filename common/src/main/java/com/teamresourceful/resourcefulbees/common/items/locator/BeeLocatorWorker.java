@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.item.locator;
+package com.teamresourceful.resourcefulbees.common.items.locator;
 
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -26,16 +25,16 @@ public class BeeLocatorWorker implements LevelWorker {
 
     private boolean isRunning = true;
     private final Player player;
-    private final InteractionHand hand;
+    private final int slot;
     private final Queue<Vec2i> queue;
     private final ChunkPos chunk;
     private final Set<Biome> visited = new HashSet<>();
     private final EntityType<?> type;
     private final String bee;
 
-    public BeeLocatorWorker(Player player, InteractionHand hand, String bee, int range) {
+    public BeeLocatorWorker(Player player, int slot, String bee, int range) {
         this.player = player;
-        this.hand = hand;
+        this.slot = slot;
         this.queue = createRange(range);
         this.chunk = player.level.getChunk(player.blockPosition()).getPos();
         this.type = BeeRegistry.get().containsBeeType(bee) ? BeeRegistry.get().getBeeData(bee).entityType() : null;
@@ -60,7 +59,7 @@ public class BeeLocatorWorker implements LevelWorker {
         BlockPos pos = new ChunkPos(this.chunk.x + offset.x(), this.chunk.z + offset.y()).getMiddleBlockPosition(0);
         Holder<Biome> holder = player.level.getBiome(pos);
         if (holder.isBound()) {
-            Biome biome = holder.get();
+            Biome biome = holder.value();
             if (visited.contains(biome)) return true;
             visited.add(biome);
             for (MobSpawnSettings.SpawnerData data : biome.getMobSettings().getMobs(ModConstants.BEE_CATEGORY).unwrap()) {
@@ -74,7 +73,7 @@ public class BeeLocatorWorker implements LevelWorker {
 
     public void fail() {
         this.isRunning = false;
-        ItemStack stack = this.player.getItemInHand(this.hand);
+        ItemStack stack = this.player.getInventory().getItem(slot);
         if (!(stack.getItem() instanceof BeeLocatorItem)) return;
 
         var stackTag = stack.getOrCreateTag();
@@ -88,7 +87,7 @@ public class BeeLocatorWorker implements LevelWorker {
 
     public void success(BlockPos pos, Holder<Biome> biome) {
         this.isRunning = false;
-        ItemStack stack = this.player.getItemInHand(this.hand);
+        ItemStack stack = this.player.getInventory().getItem(slot);
         if (!(stack.getItem() instanceof BeeLocatorItem)) return;
         var stackTag = stack.getOrCreateTag();
         stackTag.put(NBTConstants.BeeLocator.LAST_BIOME, NbtUtils.writeBlockPos(pos));

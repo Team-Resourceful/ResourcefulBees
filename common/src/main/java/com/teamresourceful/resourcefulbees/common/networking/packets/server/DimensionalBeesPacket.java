@@ -1,6 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.network.packets.server;
+package com.teamresourceful.resourcefulbees.common.networking.packets.server;
 
-import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHolder;
+import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;

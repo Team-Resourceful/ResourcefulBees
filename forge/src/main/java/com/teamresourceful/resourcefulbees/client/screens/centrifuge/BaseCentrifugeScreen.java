@@ -14,10 +14,10 @@ import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entitie
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.states.CentrifugeState;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.PurgeContentsPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.SwitchGuiPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.VoidExcessPacket;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
@@ -220,7 +220,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
             boolean voidsExcess = !outputEntity.voidsExcess();
             //TODO make translatable
             setToastText(Component.literal(voidsExcess ? "Excess contents will be voided for output" : "Excess contents will not be voided for output"));
-            NetPacketHandler.CHANNEL.sendToServer(new VoidExcessPacket(selectedEntity.getBlockPos(), voidsExcess));
+            NetworkHandler.CHANNEL.sendToServer(new VoidExcessPacket(selectedEntity.getBlockPos(), voidsExcess));
         }
     }
 
@@ -235,11 +235,11 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         if (selectedEntity instanceof AbstractCentrifugeOutputEntity<?,?>) {
             //TODO make translatable
             setToastText(Component.literal("Output contents purged!"));
-            NetPacketHandler.CHANNEL.sendToServer(new PurgeContentsPacket(selectedEntity.getBlockPos()));
+            NetworkHandler.CHANNEL.sendToServer(new PurgeContentsPacket(selectedEntity.getBlockPos()));
         }
     }
 
     protected final Runnable switchGui(BlockPos newGuiPos) {
-        return () -> NetPacketHandler.CHANNEL.sendToServer(new SwitchGuiPacket(newGuiPos));
+        return () -> NetworkHandler.CHANNEL.sendToServer(new SwitchGuiPacket(newGuiPos));
     }
 }

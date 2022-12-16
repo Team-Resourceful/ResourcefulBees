@@ -4,8 +4,8 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
-import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncBeepediaPacket;
+import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncBeepediaPacket;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
 import com.teamresourceful.resourcefulbees.common.util.BeepediaUtils;
 import net.minecraft.ChatFormatting;
@@ -38,7 +38,7 @@ public class BeepediaItem extends Item {
         if (level.isClientSide()) {
             BeepediaUtils.loadBeepedia(itemstack, player);
         } else {
-            NetPacketHandler.CHANNEL.sendToPlayer(SyncBeepediaPacket.of(player), player);
+            NetworkHandler.CHANNEL.sendToPlayer(SyncBeepediaPacket.of(player), player);
         }
         return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
     }

@@ -1,22 +1,19 @@
 package com.teamresourceful.resourcefulbees.common.network;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.*;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.CommandResponsePacket;
-import com.teamresourceful.resourcefulbees.common.network.packets.server.DimensionalBeesPacket;
-import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncBeepediaPacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncGuiPacket;
-import com.teamresourceful.resourcefullib.common.networking.NetworkChannel;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
 
-public final class NetPacketHandler {
+import static com.teamresourceful.resourcefulbees.common.networking.NetworkHandler.CHANNEL;
 
-    private NetPacketHandler() {
+public final class ForgeNetworkHandler {
+
+    private ForgeNetworkHandler() {
         throw new UtilityClassError();
     }
-
-    public static final NetworkChannel CHANNEL = new NetworkChannel(ModConstants.MOD_ID, 0, "main");
 
     public static void init() {
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, LockBeePacket.ID, LockBeePacket.HANDLER, LockBeePacket.class);
@@ -24,7 +21,6 @@ public final class NetPacketHandler {
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, SelectFluidPacket.ID, SelectFluidPacket.HANDLER, SelectFluidPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, CommandPacket.ID, CommandPacket.HANDLER, CommandPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, LockBeePacket.ID, LockBeePacket.HANDLER, LockBeePacket.class);
-        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, FindBeePacket.ID, FindBeePacket.HANDLER, FindBeePacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, OutputLocationSelectionPacket.ID, OutputLocationSelectionPacket.HANDLER, OutputLocationSelectionPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, VoidExcessPacket.ID, VoidExcessPacket.HANDLER, VoidExcessPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, PurgeContentsPacket.ID, PurgeContentsPacket.HANDLER, PurgeContentsPacket.class);
@@ -33,7 +29,6 @@ public final class NetPacketHandler {
 
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, SyncGuiPacket.ID, SyncGuiPacket.HANDLER, SyncGuiPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, CommandResponsePacket.ID, CommandResponsePacket.HANDLER, CommandResponsePacket.class);
-        CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, SyncBeepediaPacket.ID, SyncBeepediaPacket.HANDLER, SyncBeepediaPacket.class);
-        CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, DimensionalBeesPacket.ID, DimensionalBeesPacket.HANDLER, DimensionalBeesPacket.class);
+        NetworkHandler.init();
     }
 }

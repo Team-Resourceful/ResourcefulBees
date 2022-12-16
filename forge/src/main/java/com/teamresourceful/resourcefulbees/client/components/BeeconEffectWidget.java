@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.client.components;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -47,7 +47,7 @@ public class BeeconEffectWidget extends AbstractWidget {
     @Override
     public void onClick(double mouseX, double mouseY) {
         if (MathUtils.inRangeInclusive((int) mouseX, x+60, x+85) && MathUtils.inRangeInclusive((int) mouseY, y+4, y+19)) {
-            NetPacketHandler.CHANNEL.sendToServer(new BeeconChangePacket(
+            NetworkHandler.CHANNEL.sendToServer(new BeeconChangePacket(
                     this.isSelected() ? BeeconChangePacket.Option.EFFECT_OFF : BeeconChangePacket.Option.EFFECT_ON,
                     MobEffect.getId(effect),
                     tile.getBlockPos()

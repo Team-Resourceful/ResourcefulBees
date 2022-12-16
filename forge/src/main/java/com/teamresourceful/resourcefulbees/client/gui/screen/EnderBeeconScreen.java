@@ -8,8 +8,8 @@ import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEn
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -56,14 +56,14 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
-                NetPacketHandler.CHANNEL.sendToServer(new BeeconChangePacket(BeeconChangePacket.Option.SOUND, !selected, menu.getEntity().getBlockPos()));
+                NetworkHandler.CHANNEL.sendToServer(new BeeconChangePacket(BeeconChangePacket.Option.SOUND, !selected, menu.getEntity().getBlockPos()));
             }
         });
         addRenderableWidget(new BasicImageButton(leftPos+132, topPos+84, 92, 200, state.hasProperty(EnderBeecon.BEAM) && !state.getValue(EnderBeecon.BEAM), BACKGROUND) {
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
-                NetPacketHandler.CHANNEL.sendToServer(new BeeconChangePacket(BeeconChangePacket.Option.BEAM, !selected, menu.getEntity().getBlockPos()));
+                NetworkHandler.CHANNEL.sendToServer(new BeeconChangePacket(BeeconChangePacket.Option.BEAM, !selected, menu.getEntity().getBlockPos()));
             }
         });
         addRenderableWidget(new RangeSlider(leftPos + 155, topPos + 84, (menu.getEntity().getRange() - 10f) / 40f));
@@ -148,7 +148,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
         @Override
         protected void applyValue() {
             int range = (int)(value * 40)+10;
-            NetPacketHandler.CHANNEL.sendToServer(new BeeconChangePacket(BeeconChangePacket.Option.RANGE, range, EnderBeeconScreen.this.menu.getEntity().getBlockPos()));
+            NetworkHandler.CHANNEL.sendToServer(new BeeconChangePacket(BeeconChangePacket.Option.RANGE, range, EnderBeeconScreen.this.menu.getEntity().getBlockPos()));
         }
     }
 }

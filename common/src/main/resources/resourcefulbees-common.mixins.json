@@ -4,7 +4,9 @@
     "package": "com.teamresourceful.resourcefulbees.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
-        "common.MixinBlock"
+        "common.MixinBlock",
+        "common.ServerLevelAccessor",
+        "common.StructureCheckAccessor"
     ],
     "client": [
         "client.ScreenInvoker"

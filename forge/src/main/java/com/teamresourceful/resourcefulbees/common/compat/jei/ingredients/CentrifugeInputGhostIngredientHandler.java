@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
 import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.SetFilterSlotPacket;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
@@ -41,7 +41,7 @@ public class CentrifugeInputGhostIngredientHandler<S extends AbstractContainerSc
 
             @Override
             public void accept(@NotNull I ingredient) {
-                NetPacketHandler.CHANNEL.sendToServer(new SetFilterSlotPacket((ItemStack) ingredient, slot.index));
+                NetworkHandler.CHANNEL.sendToServer(new SetFilterSlotPacket((ItemStack) ingredient, slot.index));
             }
         }
 }

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.blockentity.base;
 
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncGuiPacket;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,7 +43,7 @@ public interface SyncableGUI extends MenuProvider {
      */
     default void sendToPlayer(ServerPlayer player) {
         if (getLvl() == null || getLvl().isClientSide) return;
-        NetPacketHandler.CHANNEL.sendToPlayer(new SyncGuiPacket(this), player);
+        NetworkHandler.CHANNEL.sendToPlayer(new SyncGuiPacket(this), player);
     }
 
     /**
@@ -51,7 +51,7 @@ public interface SyncableGUI extends MenuProvider {
      */
     default void sendToPlayersTrackingChunk(){
         if (getLvl() == null || getLvl().isClientSide) return;
-        NetPacketHandler.CHANNEL.sendToAllLoaded(new SyncGuiPacket(this), getLvl(), getBlkPos());
+        NetworkHandler.CHANNEL.sendToAllLoaded(new SyncGuiPacket(this), getLvl(), getBlkPos());
     }
 
     /**
@@ -60,7 +60,7 @@ public interface SyncableGUI extends MenuProvider {
      */
     default void sendToPlayersInRange(double range){
         if (getLvl() == null || getLvl().isClientSide) return;
-        NetPacketHandler.CHANNEL.sendToPlayersInRange(new SyncGuiPacket(this), getLvl(), getBlkPos(), range);
+        NetworkHandler.CHANNEL.sendToPlayersInRange(new SyncGuiPacket(this), getLvl(), getBlkPos(), range);
     }
 
     /**
@@ -69,7 +69,7 @@ public interface SyncableGUI extends MenuProvider {
      */
     default void sendToListeningPlayers() {
         if (getLvl() == null || getLvl().isClientSide) return;
-        NetPacketHandler.CHANNEL.sendToPlayers(new SyncGuiPacket(this), getListeners());
+        NetworkHandler.CHANNEL.sendToPlayers(new SyncGuiPacket(this), getListeners());
     }
 
     default void addListeningPlayer(@NotNull ServerPlayer player) {

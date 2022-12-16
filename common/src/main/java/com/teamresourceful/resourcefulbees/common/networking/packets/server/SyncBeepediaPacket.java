@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.network.packets.server;
+package com.teamresourceful.resourcefulbees.common.networking.packets.server;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;

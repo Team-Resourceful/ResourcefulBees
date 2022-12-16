@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulbees.client.components.centrifuge.buttons.
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeTextures;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.SwitchGuiPacket;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefullib.client.components.ParentWidget;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ public abstract class AbstractInfoPanel<T extends AbstractGUICentrifugeEntity> e
 
     private void viewSelectedEntity() {
         if (selectedEntity == null) return;
-        NetPacketHandler.CHANNEL.sendToServer(new SwitchGuiPacket(selectedEntity.getBlockPos()));
+        NetworkHandler.CHANNEL.sendToServer(new SwitchGuiPacket(selectedEntity.getBlockPos()));
     }
 
     public abstract void updateSelectedEntity(AbstractGUICentrifugeEntity selectedEntity);

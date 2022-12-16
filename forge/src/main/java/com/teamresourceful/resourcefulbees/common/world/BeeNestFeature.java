@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.world;
 import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.WorldGenConfig;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
+import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;

@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.client.components;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.capabilities.SelectableMultiFluidTank;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.SelectFluidPacket;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefullib.common.utils.SelectableList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -110,7 +110,7 @@ public class SelectableFluidWidget extends AbstractWidget {
     private void sendToServer() {
         if (lastStack != null) {
             if (!this.tank.getFluid().isFluidEqual(lastStack)) {
-                NetPacketHandler.CHANNEL.sendToServer(new SelectFluidPacket(pos, id, lastStack));
+                NetworkHandler.CHANNEL.sendToServer(new SelectFluidPacket(pos, id, lastStack));
             }
             lastStack = null;
         }

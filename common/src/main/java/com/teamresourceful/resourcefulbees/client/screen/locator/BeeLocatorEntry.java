@@ -1,8 +1,8 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen.locator;
+package com.teamresourceful.resourcefulbees.client.screen.locator;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntityType;
+import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

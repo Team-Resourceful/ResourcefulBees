@@ -12,13 +12,12 @@ import com.teamresourceful.resourcefulbees.common.data.DataSetup;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
 import com.teamresourceful.resourcefulbees.common.init.*;
-import com.teamresourceful.resourcefulbees.common.item.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
+import com.teamresourceful.resourcefulbees.common.network.ForgeNetworkHandler;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.FilledBeeJarIngredient;
@@ -32,6 +31,7 @@ import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
 import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
+import com.teamresourceful.resourcefulbees.platform.common.events.SyncedDatapackEvent;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
 import com.teamresourceful.resourcefulconfig.common.config.Configurator;
@@ -43,6 +43,7 @@ import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
@@ -129,7 +130,9 @@ public class ResourcefulBees {
 
         MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
         MinecraftForge.EVENT_BUS.addListener(Beekeeper::setupBeekeeper);
-        MinecraftForge.EVENT_BUS.addListener(DimensionalBeeHolder::onDatapackSync);
+        MinecraftForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) ->
+            SyncedDatapackEvent.EVENT.fire(new SyncedDatapackEvent(event.getPlayerList(), event.getPlayer()))
+        );
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
@@ -158,7 +161,7 @@ public class ResourcefulBees {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void setup(FMLCommonSetupEvent event) {
         event.enqueueWork(RegistryHandler::registerDispenserBehaviors);
-        NetPacketHandler.init();
+        ForgeNetworkHandler.init();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
         CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "amount_sensitive"), AmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "nbt_amount_sensitive"), NBTAmountSensitiveIngredient.Serializer.INSTANCE);

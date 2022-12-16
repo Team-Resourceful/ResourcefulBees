@@ -7,8 +7,8 @@ import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeInputEntity;
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeUtils;
-import com.teamresourceful.resourcefulbees.common.network.NetPacketHandler;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.OutputLocationSelectionPacket;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefullib.client.components.ParentWidget;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -77,7 +77,7 @@ public class OutputLocationSelectionWidget extends ParentWidget {
         int outputIndex = outputsList.indexOf(blockPos);
         int newOutputIndex = outputIndex == -1 ? 0 : rotateSelection(outputIndex, outputsList.size()-1, reverse);
         if (outputIndex != newOutputIndex) {
-            NetPacketHandler.CHANNEL.sendToServer(new OutputLocationSelectionPacket(outputType, recipeOutputSlot, outputsList.get(newOutputIndex), inputEntity.getBlockPos()));
+            NetworkHandler.CHANNEL.sendToServer(new OutputLocationSelectionPacket(outputType, recipeOutputSlot, outputsList.get(newOutputIndex), inputEntity.getBlockPos()));
         }
     }
 

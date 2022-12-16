@@ -12,8 +12,6 @@
         "accessors.BeehiveBeeDataAccessor",
         "accessors.BeehiveEntityAccessor",
         "accessors.RecipeManagerAccessor",
-        "accessors.ServerLevelAccessor",
-        "accessors.StructureCheckAccessor",
         "invokers.BeeGoToHiveGoalInvoker",
         "invokers.BeeInvoker",
         "invokers.RecipeManagerInvoker"
