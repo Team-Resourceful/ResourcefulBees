@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.render.entities.models;
 
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

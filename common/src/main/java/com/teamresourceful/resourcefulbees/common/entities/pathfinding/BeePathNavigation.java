@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.entity.pathfinding;
+package com.teamresourceful.resourcefulbees.common.entities.pathfinding;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;

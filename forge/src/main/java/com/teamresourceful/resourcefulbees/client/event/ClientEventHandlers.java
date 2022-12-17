@@ -18,8 +18,8 @@ import com.teamresourceful.resourcefulbees.client.screens.centrifuge.*;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import com.teamresourceful.resourcefulbees.platform.client.events.RegisterColorHandlerEvent;
@@ -136,7 +136,7 @@ public final class ClientEventHandlers {
         BlockEntityRenderers.register(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), RenderSolidificationChamber::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
-        BlockEntityRenderers.register(ModBlockEntityTypes.WAXED_SIGN_ENTITY.get(), SignRenderer::new);
+        BlockEntityRenderers.register(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes.WAXED_SIGN_ENTITY.get(), SignRenderer::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), CentrifugeRenderer::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get(), CentrifugeCrankRenderer::new);
     }

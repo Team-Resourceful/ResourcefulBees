@@ -1,6 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.blockentity;
+package com.teamresourceful.resourcefulbees.common.blockentities;
 
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;

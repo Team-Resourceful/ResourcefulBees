@@ -2,11 +2,11 @@ package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.FakeFlowerEntity;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
+import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
 import net.minecraft.nbt.CompoundTag;

@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.render.entities.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;

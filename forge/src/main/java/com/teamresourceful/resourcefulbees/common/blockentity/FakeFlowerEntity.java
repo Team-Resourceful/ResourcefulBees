@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
-import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
+import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
@@ -93,15 +93,15 @@ public class FakeFlowerEntity extends GUISyncedBlockEntity implements InstanceBl
     }
 
     @Override
-    public Component getDisplayName() {
+    public @NotNull Component getDisplayName() {
         return TranslationConstants.FakeFLower.TITLE;
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int i, Inventory arg, Player arg2) {
+    public AbstractContainerMenu createMenu(int i, @NotNull Inventory inventory, @NotNull Player player) {
         if (level == null) return null;
-        return new FakeFlowerMenu(i, arg, this);
+        return new FakeFlowerMenu(i, inventory, this);
     }
 
     @Override

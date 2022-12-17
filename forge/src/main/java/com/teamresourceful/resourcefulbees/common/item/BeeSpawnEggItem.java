@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.item;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeColorData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

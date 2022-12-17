@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentity.base.BlockBee;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.BlockBee;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;

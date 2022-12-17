@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.utils;
 
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
+import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;

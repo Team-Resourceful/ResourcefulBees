@@ -7,12 +7,13 @@ import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlock
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.entities.ai.AuraHandler;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entities.goals.*;
 import com.teamresourceful.resourcefulbees.common.entity.goals.*;
-import com.teamresourceful.resourcefulbees.common.entity.pathfinding.BeePathNavigation;
+import com.teamresourceful.resourcefulbees.common.entities.pathfinding.BeePathNavigation;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
+import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeGoToHiveGoalInvoker;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -51,6 +52,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 public class ResourcefulBee extends CustomBeeEntity {
+
     private final @Nullable AuraHandler auraHandler;
     public final SerializedDataEntry<BlockPos, CompoundTag> fakeFlower = SerializedDataEntry.Builder
         .of(NBTConstants.FAKE_FLOWER_POS, CompoundTag.TYPE, (BlockPos) null)
@@ -154,8 +156,12 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (explosiveCooldown > 0) explosiveCooldown--;
     }
 
-    public void setExplosiveCooldown(int cooldown) {
-        this.explosiveCooldown = cooldown;
+    @Override
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
+        if (getTarget() != null && getTraitData().damageTypes().stream().anyMatch(damageType -> damageType.type().equals(TraitConstants.EXPLOSIVE))) {
+            this.explosiveCooldown = 60;
+        }
     }
 
     @Override

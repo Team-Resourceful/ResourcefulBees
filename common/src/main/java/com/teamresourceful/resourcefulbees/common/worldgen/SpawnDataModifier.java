@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.world;
+package com.teamresourceful.resourcefulbees.common.worldgen;
 
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.world.entity.EntityType;

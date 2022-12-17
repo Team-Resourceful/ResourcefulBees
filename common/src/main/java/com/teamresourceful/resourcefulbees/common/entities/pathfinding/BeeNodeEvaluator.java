@@ -1,5 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.entity.pathfinding;
+package com.teamresourceful.resourcefulbees.common.entities.pathfinding;
 
+import com.teamresourceful.resourcefulbees.platform.common.util.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -55,7 +56,7 @@ public class BeeNodeEvaluator extends FlyNodeEvaluator {
 
     private static BlockPathTypes getRawPathType(BlockGetter level, BlockPos pos, Mob mob) {
         BlockState blockstate = level.getBlockState(pos);
-        BlockPathTypes type = blockstate.getBlockPathType(level, pos, mob);
+        BlockPathTypes type = LevelUtils.getType(blockstate, level, pos, mob);
         if (type != null) {
             return type;
         } else {
@@ -76,7 +77,7 @@ public class BeeNodeEvaluator extends FlyNodeEvaluator {
                     return BlockPathTypes.COCOA;
                 } else {
                     FluidState fluidstate = level.getFluidState(pos);
-                    BlockPathTypes nonLoggableFluidPathType = fluidstate.getBlockPathType(level, pos, mob, false);
+                    BlockPathTypes nonLoggableFluidPathType = LevelUtils.getType(fluidstate, level, pos, mob, false);
                     if (nonLoggableFluidPathType != null) {
                         return nonLoggableFluidPathType;
                     } else if (fluidstate.is(FluidTags.LAVA)) {
@@ -97,7 +98,7 @@ public class BeeNodeEvaluator extends FlyNodeEvaluator {
                         if (!blockstate.isPathfindable(level, pos, PathComputationType.LAND)) {
                             return BlockPathTypes.BLOCKED;
                         } else {
-                            BlockPathTypes loggableFluidPathType = fluidstate.getBlockPathType(level, pos, mob, true);
+                            BlockPathTypes loggableFluidPathType = LevelUtils.getType(fluidstate, level, pos, mob, true);
                             if (loggableFluidPathType != null) {
                                 return loggableFluidPathType;
                             } else {

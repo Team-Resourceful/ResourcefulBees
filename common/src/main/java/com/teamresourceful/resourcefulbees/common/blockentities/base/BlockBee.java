@@ -1,6 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.blockentity.base;
+package com.teamresourceful.resourcefulbees.common.blockentities.base;
 
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
+import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 

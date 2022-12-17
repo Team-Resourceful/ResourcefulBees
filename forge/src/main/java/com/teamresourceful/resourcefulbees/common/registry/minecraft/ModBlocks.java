@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.block.*;
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseTopBlock;
-import com.teamresourceful.resourcefulbees.common.block.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeCrankBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModMaterials;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
@@ -18,18 +18,17 @@ import com.teamresourceful.resourcefulbees.platform.common.registry.api.Resource
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -50,9 +49,6 @@ public final class ModBlocks {
     public static final BlockBehaviour.Properties HONEY_FLUID_BLOCK_PROPERTIES = BlockBehaviour.Properties.of(ModMaterials.MATERIAL_HONEY).noCollission().strength(100.0F).noLootTable();
     public static final BlockBehaviour.Properties CENTRIFUGE_PROPERTIES = BlockBehaviour.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL);
     private static final BlockBehaviour.Properties NEST_PROPERTIES = BlockBehaviour.Properties.of(Material.WOOD).strength(1F).sound(SoundType.WOOD);
-
-    public static final BlockBehaviour.Properties WAXED_PLANKS_PROPERTIES = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
-    public static final WoodType WAXED_WOOD_TYPE = WoodType.register(WoodType.create(new ResourceLocation(ModConstants.MOD_ID, "waxed").toString()));
 
     private static BlockBehaviour.Properties makeNestProperty(Material material, MaterialColor color, SoundType soundType){
         return BlockBehaviour.Properties.of(material, color).strength(1.0F).sound(soundType);
@@ -192,8 +188,6 @@ public final class ModBlocks {
     public static final RegistryEntry<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", EnderBeecon::new);
     public static final RegistryEntry<Block> SOLIDIFICATION_CHAMBER = BLOCKS.register("solidification_chamber", () -> new SolidificationChamber(BlockBehaviour.Properties.of(Material.STONE).sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops()));
     public static final RegistryEntry<Block> HONEY_POT = BLOCKS.register("honey_pot", () -> new HoneyPotBlock(BlockBehaviour.Properties.of(Material.STONE).sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops()));
-    public static final RegistryEntry<Block> BEE_BOX = BLOCKS.register("bee_box", () -> new BeeBoxBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(0.5f)));
-    public static final RegistryEntry<Block> BEE_BOX_TEMP = BLOCKS.register("bee_box_temp", () -> new BeeBoxBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(0.5f)));
 
     //region Centrifuge Multiblock Blocks
     public static final RegistryEntry<Block> CENTRIFUGE_CASING = CENTRIFUGE_BLOCKS.register("centrifuge/casing", () -> new CentrifugeCasing(CENTRIFUGE_PROPERTIES));
@@ -233,34 +227,6 @@ public final class ModBlocks {
 
     public static final RegistryEntry<Block> BASIC_CENTRIFUGE = CENTRIFUGE_BLOCKS.register("centrifuge", () -> new CentrifugeBlock(BlockBehaviour.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL).noOcclusion()));
     public static final RegistryEntry<Block> CENTRIFUGE_CRANK = CENTRIFUGE_BLOCKS.register("centrifuge_crank", () -> new CentrifugeCrankBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2).sound(SoundType.WOOD).noOcclusion()));
-
-
-    //region Waxed Blocks
-    public static final RegistryEntry<Block> HONEY_GLASS = BLOCKS.register("honey_glass", () -> new HoneyGlass(BlockBehaviour.Properties.copy(Blocks.GLASS).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollission(), true));
-    public static final RegistryEntry<Block> HONEY_GLASS_PLAYER = BLOCKS.register("honey_glass_player", () -> new HoneyGlass(BlockBehaviour.Properties.copy(Blocks.GLASS).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollission(), false));
-    public static final RegistryEntry<Block> WAXED_PLANKS = BLOCKS.register("waxed_planks", () -> new Block(WAXED_PLANKS_PROPERTIES));
-    public static final RegistryEntry<StairBlock> WAXED_STAIRS = BLOCKS.register("waxed_stairs", () -> new StairBlock(() -> WAXED_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).dynamicShape()));
-    public static final RegistryEntry<SlabBlock> WAXED_SLAB = BLOCKS.register("waxed_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).dynamicShape()));
-    public static final RegistryEntry<FenceBlock> WAXED_FENCE = BLOCKS.register("waxed_fence", () -> new FenceBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion()));
-    public static final RegistryEntry<FenceGateBlock> WAXED_FENCE_GATE = BLOCKS.register("waxed_fence_gate", () -> new FenceGateBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion()));
-    public static final RegistryEntry<WoodButtonBlock> WAXED_BUTTON = BLOCKS.register("waxed_button", () -> new WoodButtonBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission()));
-    public static final RegistryEntry<PressurePlateBlock> WAXED_PRESSURE_PLATE = BLOCKS.register("waxed_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission()));
-    public static final RegistryEntry<DoorBlock> WAXED_DOOR = BLOCKS.register("waxed_door", () -> new DoorBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion()));
-    public static final RegistryEntry<TrapDoorBlock> WAXED_TRAPDOOR = BLOCKS.register("waxed_trapdoor", () -> new TrapDoorBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion()));
-    public static final RegistryEntry<StandingSignBlock> WAXED_SIGN = BLOCKS.register("waxed_sign", () -> new StandingSignBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission(), WAXED_WOOD_TYPE) {
-        @Override
-        public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-            return ModBlockEntityTypes.WAXED_SIGN_ENTITY.get().create(pos, state);
-        }
-    });
-    public static final RegistryEntry<WallSignBlock> WAXED_WALL_SIGN = BLOCKS.register("waxed_wall_sign", () -> new WallSignBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission(), WAXED_WOOD_TYPE) {
-        @Override
-        public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-            return ModBlockEntityTypes.WAXED_SIGN_ENTITY.get().create(pos, state);
-        }
-    });
-    public static final RegistryEntry<Block> TRIMMED_WAXED_PLANKS = BLOCKS.register("trimmed_waxed_planks", () -> new WaxedBlock(WAXED_PLANKS, WAXED_PLANKS_PROPERTIES));
-    public static final RegistryEntry<Block> WAXED_MACHINE_BLOCK = BLOCKS.register("waxed_machine_block", () -> new Block(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 
     public static final RegistryEntry<Block> FAKE_FLOWER = BLOCKS.register("fake_flower", () -> new FakeFlower(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.GOLD).strength(2.0f, 3.0f).sound(SoundType.WOOD)));
     @SuppressWarnings("unused")

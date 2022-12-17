@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.entity.goals;
 
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeeEntityAccessor;
+import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;

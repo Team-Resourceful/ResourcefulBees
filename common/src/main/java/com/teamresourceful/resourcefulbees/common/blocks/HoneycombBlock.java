@@ -1,5 +1,5 @@
 
-package com.teamresourceful.resourcefulbees.common.block;
+package com.teamresourceful.resourcefulbees.common.blocks;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.BlockPos;

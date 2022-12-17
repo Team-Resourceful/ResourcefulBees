@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.block.base.RenderingBaseEntityBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.FakeFlowerEntity;
 import com.teamresourceful.resourcefulbees.common.item.HoneyDipperItem;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;

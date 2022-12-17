@@ -3,8 +3,12 @@ package com.teamresourceful.resourcefulbees.platform.common.util;
 import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
 import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Contract;
 
 public class ModUtils {
 
@@ -34,6 +38,18 @@ public class ModUtils {
 
     @ExpectPlatform
     public static void spawnBabyEvent(SpawnBabyEvent event) {
+        throw new NotImplementedError();
+    }
+
+    @ExpectPlatform
+    @SuppressWarnings("Contract")
+    @Contract(value = "null -> false", pure = true)
+    public static boolean isRealPlayer(Player player) {
+        throw new NotImplementedError();
+    }
+
+    @ExpectPlatform
+    public static ResourceKey<? extends Registry<?>> getSpawnDataRegistryKey() {
         throw new NotImplementedError();
     }
 }

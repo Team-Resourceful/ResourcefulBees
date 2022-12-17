@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.block.base.TickingBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;

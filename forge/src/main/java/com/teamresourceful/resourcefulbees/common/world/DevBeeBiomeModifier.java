@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBiomeModifiers;
+import com.teamresourceful.resourcefulbees.common.worldgen.SpawnDataModifier;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.core.Holder;

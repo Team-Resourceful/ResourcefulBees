@@ -1,8 +1,8 @@
-package com.teamresourceful.resourcefulbees.common.block;
+package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.teamresourceful.resourcefulbees.common.block.base.RenderingBaseEntityBlock;
-import com.teamresourceful.resourcefulbees.common.blockentity.BeeBoxBlockEntity;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.blockentities.BeeBoxBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;

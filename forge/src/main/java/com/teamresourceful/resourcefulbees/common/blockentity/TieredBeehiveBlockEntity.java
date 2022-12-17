@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveBeeDataAccessor;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
+import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;

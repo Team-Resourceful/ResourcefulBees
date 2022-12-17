@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.block.base;
+package com.teamresourceful.resourcefulbees.common.blocks.base;
 
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;

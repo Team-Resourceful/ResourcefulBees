@@ -1,5 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.block;
+package com.teamresourceful.resourcefulbees.common.blocks;
 
+import com.teamresourceful.resourcefulbees.platform.common.block.BlockExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Bee;
@@ -15,7 +16,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HoneyGlass extends GlassBlock {
+public class HoneyGlass extends GlassBlock implements BlockExtension {
 
     private final boolean collidePlayer; //if true player cannot go through block but bee can - if false player can go through block but bee cannot
 
@@ -46,6 +47,5 @@ public class HoneyGlass extends GlassBlock {
     public @Nullable BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
         return collidePlayer && mob instanceof Bee ? BlockPathTypes.OPEN : BlockPathTypes.BLOCKED;
     }
-
 
 }

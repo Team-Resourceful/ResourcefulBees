@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

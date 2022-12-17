@@ -4,6 +4,8 @@
     "package": "com.teamresourceful.resourcefulbees.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
+        "common.BeeEntityAccessor",
+        "common.BeehiveEntityAccessor",
         "common.MixinBlock",
         "common.ServerLevelAccessor",
         "common.StructureCheckAccessor"

@@ -26,7 +26,7 @@ import com.teamresourceful.resourcefulbees.common.registries.custom.*;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.DefaultTraitAbilities;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
+import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
 import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
@@ -155,7 +155,7 @@ public class ResourcefulBees {
 
     @SubscribeEvent
     public void serverAboutToStart(ServerAboutToStartEvent event) {
-        ModSpawnData.initalize(event.getServer());
+        ModSpawnData.initialize(event.getServer());
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)

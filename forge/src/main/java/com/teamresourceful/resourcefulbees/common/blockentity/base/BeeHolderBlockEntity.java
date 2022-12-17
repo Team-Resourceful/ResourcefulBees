@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.blockentity.base;
 
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.BlockBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import com.teamresourceful.resourcefullib.common.utils.TagUtils;

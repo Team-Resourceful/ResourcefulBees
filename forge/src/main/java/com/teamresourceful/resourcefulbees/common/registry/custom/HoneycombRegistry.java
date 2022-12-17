@@ -6,7 +6,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
-import com.teamresourceful.resourcefulbees.common.block.HoneycombBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
 import com.teamresourceful.resourcefulbees.common.data.beedata.TradeData;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;

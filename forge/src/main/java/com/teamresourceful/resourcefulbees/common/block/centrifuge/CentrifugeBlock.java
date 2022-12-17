@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block.centrifuge;
 
-import com.teamresourceful.resourcefulbees.common.block.base.RenderingBaseEntityBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.core.BlockPos;

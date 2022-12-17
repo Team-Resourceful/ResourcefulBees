@@ -4,8 +4,8 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.util.BeeUtils;
 import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -83,7 +83,7 @@ public class BeeJarItem extends Item {
             Level level = context.getLevel();
             if (level.isClientSide() || !isFilled(stack)) return InteractionResult.FAIL;
 
-            ModUtils.summonEntity(stack.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY), level, player, context.getClickedPos().relative(context.getClickedFace()));
+            BeeUtils.summonEntity(stack.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY), level, player, context.getClickedPos().relative(context.getClickedFace()));
 
             if (!player.isCreative()) {
                 if (stack.getCount() > 1) {

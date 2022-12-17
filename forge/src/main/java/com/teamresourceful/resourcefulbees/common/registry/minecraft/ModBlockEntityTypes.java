@@ -228,10 +228,6 @@ public final class ModBlockEntityTypes {
             .of(SolidificationChamberBlockEntity::new, ModBlocks.SOLIDIFICATION_CHAMBER.get())));
     public static final RegistryEntry<BlockEntityType<HoneyPotBlockEntity>> HONEY_POT_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_pot", () -> build(BlockEntityType.Builder
             .of(HoneyPotBlockEntity::new, ModBlocks.HONEY_POT.get())));
-    public static final RegistryEntry<BlockEntityType<WaxedSignBlockEntity>> WAXED_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_sign", () -> build(BlockEntityType.Builder
-            .of(WaxedSignBlockEntity::new, ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get())));
-    public static final RegistryEntry<BlockEntityType<BeeBoxBlockEntity>> BEE_BOX_ENTITY = BLOCK_ENTITY_TYPES.register("bee_box", () -> build(BlockEntityType.Builder
-            .of(BeeBoxBlockEntity::new, ModBlocks.BEE_BOX.get(), ModBlocks.BEE_BOX_TEMP.get())));
 
     //region Centrifuge Block Entity Types
     public static final RegistryEntry<BlockEntityType<CentrifugeCasingEntity>> CENTRIFUGE_CASING_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge_casing", () -> build(BlockEntityType.Builder

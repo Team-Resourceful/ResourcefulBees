@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.entity.passive;
+package com.teamresourceful.resourcefulbees.common.entities.entity;
 
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
@@ -10,8 +10,8 @@ import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.registry.dynamic.ModSpawnData;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
+import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
@@ -189,7 +189,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     //This is because we don't want IF being able to breed our animals
     @Override
     public void setInLove(@Nullable Player player) {
-        if (player != null && ModUtils.isARealPlayer(player))
+        if (ModUtils.isRealPlayer(player))
             super.setInLove(player);
     }
 

@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.common.item.*;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.CrankItem;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.ManualCentrifugeItem;
 import com.teamresourceful.resourcefulbees.common.items.BeepediaItem;
+import com.teamresourceful.resourcefulbees.common.items.WaxItem;
 import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.BeehiveUpgrade;
@@ -167,8 +168,8 @@ public final class ModItems {
     );
 
 
-    public static final RegistryEntry<Item> BEE_BOX_TEMP = ITEMS.register("bee_box_temp", () -> BeeBoxItem.temp(ModBlocks.BEE_BOX_TEMP.get(), new Item.Properties().stacksTo(1)));
-    public static final RegistryEntry<Item> BEE_BOX = ITEMS.register("bee_box", () -> BeeBoxItem.of(ModBlocks.BEE_BOX.get(), new Item.Properties().stacksTo(1)));
+    public static final RegistryEntry<Item> BEE_BOX_TEMP = ITEMS.register("bee_box_temp", () -> BeeBoxItem.temp(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX_TEMP.get(), new Item.Properties().stacksTo(1)));
+    public static final RegistryEntry<Item> BEE_BOX = ITEMS.register("bee_box", () -> BeeBoxItem.of(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX.get(), new Item.Properties().stacksTo(1)));
     public static final RegistryEntry<Item> BEEPEDIA = ITEMS.register("beepedia", () -> new BeepediaItem(new Item.Properties().stacksTo(1)));
     public static final RegistryEntry<Item> HONEY_DIPPER = ITEMS.register("honey_dipper", () -> new HoneyDipperItem(new Item.Properties().stacksTo(1)));
 
@@ -263,20 +264,20 @@ public final class ModItems {
     public static final RegistryEntry<Item> CENTRIFUGE = ITEMS.register("centrifuge", () -> new ManualCentrifugeItem(ModBlocks.BASIC_CENTRIFUGE.get(), new Item.Properties()));
 
     //region Waxed Blocks
-    public static final RegistryEntry<Item> HONEY_GLASS = ITEMS.register("honey_glass", () -> new BlockItem(ModBlocks.HONEY_GLASS.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> HONEY_GLASS_PLAYER = ITEMS.register("honey_glass_player", () -> new BlockItem(ModBlocks.HONEY_GLASS_PLAYER.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_PLANKS = ITEMS.register("waxed_planks", () -> new BlockItem(ModBlocks.WAXED_PLANKS.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_STAIRS = ITEMS.register("waxed_stairs", () -> new BlockItem(ModBlocks.WAXED_STAIRS.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_SLAB = ITEMS.register("waxed_slab", () -> new BlockItem(ModBlocks.WAXED_SLAB.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_FENCE = ITEMS.register("waxed_fence", () -> new BlockItem(ModBlocks.WAXED_FENCE.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_FENCE_GATE = ITEMS.register("waxed_fence_gate", () -> new BlockItem(ModBlocks.WAXED_FENCE_GATE.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_BUTTON = ITEMS.register("waxed_button", () -> new BlockItem(ModBlocks.WAXED_BUTTON.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_PRESSURE_PLATE = ITEMS.register("waxed_pressure_plate", () -> new BlockItem(ModBlocks.WAXED_PRESSURE_PLATE.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_DOOR = ITEMS.register("waxed_door", () -> new BlockItem(ModBlocks.WAXED_DOOR.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_TRAPDOOR = ITEMS.register("waxed_trapdoor", () -> new BlockItem(ModBlocks.WAXED_TRAPDOOR.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_SIGN = ITEMS.register("waxed_sign", () -> new SignItem(new Item.Properties(), ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get()));
-    public static final RegistryEntry<Item> TRIMMED_WAXED_PLANKS = ITEMS.register("trimmed_waxed_planks", () -> new BlockItem(ModBlocks.TRIMMED_WAXED_PLANKS.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_MACHINE_BLOCK = ITEMS.register("waxed_machine_block", () -> new BlockItem(ModBlocks.WAXED_MACHINE_BLOCK.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> HONEY_GLASS = ITEMS.register("honey_glass", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_GLASS.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> HONEY_GLASS_PLAYER = ITEMS.register("honey_glass_player", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_GLASS_PLAYER.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_PLANKS = ITEMS.register("waxed_planks", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_PLANKS.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_STAIRS = ITEMS.register("waxed_stairs", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_STAIRS.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_SLAB = ITEMS.register("waxed_slab", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_SLAB.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_FENCE = ITEMS.register("waxed_fence", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_FENCE.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_FENCE_GATE = ITEMS.register("waxed_fence_gate", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_FENCE_GATE.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_BUTTON = ITEMS.register("waxed_button", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_BUTTON.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_PRESSURE_PLATE = ITEMS.register("waxed_pressure_plate", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_PRESSURE_PLATE.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_DOOR = ITEMS.register("waxed_door", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_DOOR.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_TRAPDOOR = ITEMS.register("waxed_trapdoor", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_TRAPDOOR.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_SIGN = ITEMS.register("waxed_sign", () -> new SignItem(new Item.Properties(), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_SIGN.get(), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_WALL_SIGN.get()));
+    public static final RegistryEntry<Item> TRIMMED_WAXED_PLANKS = ITEMS.register("trimmed_waxed_planks", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.TRIMMED_WAXED_PLANKS.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_MACHINE_BLOCK = ITEMS.register("waxed_machine_block", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_MACHINE_BLOCK.get(), new Item.Properties()));
     public static final RegistryEntry<Item> FAKE_FLOWER = ITEMS.register("fake_flower", () -> new BlockItem(ModBlocks.FAKE_FLOWER.get(), new Item.Properties()));
     //endregion
 }

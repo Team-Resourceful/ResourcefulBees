@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
-import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
+import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.EnderBeeconConfig;
-import com.teamresourceful.resourcefulbees.common.entity.passive.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;

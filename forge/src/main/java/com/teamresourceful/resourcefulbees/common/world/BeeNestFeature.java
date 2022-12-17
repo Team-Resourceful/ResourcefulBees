@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveEntityAccessor;
+import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.utils.TagUtils;

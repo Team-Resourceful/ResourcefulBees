@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.block.base.TickingBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;

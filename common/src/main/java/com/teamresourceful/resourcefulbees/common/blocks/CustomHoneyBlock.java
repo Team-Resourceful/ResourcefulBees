@@ -1,8 +1,10 @@
-package com.teamresourceful.resourcefulbees.common.block;
+package com.teamresourceful.resourcefulbees.common.blocks;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
 import com.teamresourceful.resourcefullib.common.color.Color;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -29,8 +31,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -164,7 +164,7 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
 
     //endregion
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     private void addParticles(Entity entity) {
         BlockParticleOption particleData = new BlockParticleOption(ParticleTypes.BLOCK, this.defaultBlockState());
         for (int i = 0; i < 5; ++i) {

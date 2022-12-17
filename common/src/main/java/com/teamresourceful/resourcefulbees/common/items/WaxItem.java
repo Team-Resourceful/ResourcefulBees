@@ -1,6 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.item;
+package com.teamresourceful.resourcefulbees.common.items;
 
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;

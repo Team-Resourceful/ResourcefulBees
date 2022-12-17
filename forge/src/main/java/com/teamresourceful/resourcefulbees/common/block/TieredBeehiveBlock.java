@@ -1,16 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
-import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.item.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.common.item.ScraperItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.NestUpgrade;
-import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
+import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -141,7 +141,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
             if (isHiveSmoked(pos, level)) {
                 this.resetHoneyLevel(level, state, pos);
             } else {
-                if (beehiveTileEntity.hasBees() && ModUtils.isARealPlayer(player) && player instanceof ServerPlayer serverPlayer && !ModCompatHelper.shouldNotAngerBees(serverPlayer)) {
+                if (beehiveTileEntity.hasBees() && ModUtils.isRealPlayer(player) && player instanceof ServerPlayer serverPlayer && !ModCompatHelper.shouldNotAngerBees(serverPlayer)) {
                     this.angerBeesNearby(level, pos);
                 }
                 this.releaseBeesAndResetHoneyLevel(level, state, pos, player, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
@@ -162,7 +162,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
                     .filter(beeEntity -> beeEntity.getTarget() == null)
                     .forEach(beeEntity -> {
                         Player randomPlayer = nearbyPlayers.get(level.random.nextInt(nearbyPlayers.size()));
-                        if (ModUtils.isARealPlayer(randomPlayer)) {
+                        if (ModUtils.isRealPlayer(randomPlayer)) {
                             beeEntity.setTarget(randomPlayer);
                         }
                     });

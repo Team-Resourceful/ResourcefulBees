@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
-import com.teamresourceful.resourcefulbees.common.block.base.InstanceBlockEntityTicker;
+import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;

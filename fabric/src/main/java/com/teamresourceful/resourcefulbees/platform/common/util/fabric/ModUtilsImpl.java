@@ -4,8 +4,12 @@ import com.teamresourceful.resourcefulbees.common.util.EnumBuilder;
 import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
 import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.player.Player;
 
 public class ModUtilsImpl {
     public static boolean isModLoaded(String modId) {
@@ -35,5 +39,13 @@ public class ModUtilsImpl {
     public static void spawnBabyEvent(SpawnBabyEvent event) {
         SpawnBabyEvent.EVENT.fire(event);
         //TODO check for fabric events
+    }
+
+    public static boolean isRealPlayer(Player player) {
+        return player instanceof ServerPlayer && player.getClass() == ServerPlayer.class;
+    }
+
+    public static ResourceKey<? extends Registry<?>> getSpawnDataRegistryKey() {
+        throw new NotImplementedError();
     }
 }

@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block.base;
 
+import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
