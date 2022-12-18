@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.blockentity.breeder;
+package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 

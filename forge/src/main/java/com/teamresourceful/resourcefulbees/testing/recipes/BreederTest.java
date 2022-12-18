@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.testing.recipes;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
+import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.utils.GsonHelpers;
 import io.netty.buffer.Unpooled;

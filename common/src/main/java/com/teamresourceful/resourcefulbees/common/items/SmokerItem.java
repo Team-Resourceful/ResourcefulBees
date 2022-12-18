@@ -1,8 +1,10 @@
-package com.teamresourceful.resourcefulbees.common.item;
+package com.teamresourceful.resourcefulbees.common.items;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.SmokeableHive;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -23,8 +25,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +33,7 @@ import java.util.List;
 public class SmokerItem extends Item implements ExpandableTooltip {
 
     public SmokerItem(Properties properties) {
-        super(properties);
+        super(properties.durability(GeneralConfig.smokerDurability * 2));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SmokerItem extends Item implements ExpandableTooltip {
 
     protected void smokeHive(BlockPos pos, Level world) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TieredBeehiveBlockEntity hive) {
+        if (blockEntity instanceof SmokeableHive hive) {
             hive.smokeHive();
         }
     }
@@ -77,29 +77,19 @@ public class SmokerItem extends Item implements ExpandableTooltip {
 	}
 
     @Override
-    public int getMaxDamage(ItemStack stack) {
-        return GeneralConfig.smokerDurability * 2;
-    }
-
-    @Override
-    public boolean isDamageable(ItemStack stack) {
-        return getMaxDamage(stack) > 0;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
         setupTooltip(stack, level, components, flag);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public Component getShiftingDisplay() {
         return TranslationConstants.Items.FOR_MORE_INFO;
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
         components.add(TranslationConstants.Items.SMOKER_TOOLTIP.withStyle(ChatFormatting.GOLD));
         components.add(TranslationConstants.Items.SMOKER_TOOLTIP1.withStyle(ChatFormatting.GOLD));

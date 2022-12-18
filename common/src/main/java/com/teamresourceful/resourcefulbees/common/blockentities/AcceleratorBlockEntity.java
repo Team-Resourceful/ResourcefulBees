@@ -1,7 +1,7 @@
-package com.teamresourceful.resourcefulbees.common.blockentity;
+package com.teamresourceful.resourcefulbees.common.blockentities;
 
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;

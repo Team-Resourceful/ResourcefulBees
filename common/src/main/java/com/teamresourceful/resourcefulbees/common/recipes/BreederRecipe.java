@@ -1,12 +1,12 @@
-package com.teamresourceful.resourcefulbees.common.recipe.recipes;
+package com.teamresourceful.resourcefulbees.common.recipes;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.IngredientCodec;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
@@ -53,7 +53,7 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
 
     @Override
     public @NotNull RecipeType<?> getType() {
-        return ModRecipeTypes.BREEDER_RECIPE_TYPE.get();
+        return ModRecipes.BREEDER_RECIPE_TYPE.get();
     }
 
     @Override

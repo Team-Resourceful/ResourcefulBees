@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentity.base;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BlockBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import com.teamresourceful.resourcefullib.common.utils.TagUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -54,9 +54,11 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
         if (level != null && this.level.getBlockState(blockPos1).getCollisionShape(this.level, blockPos1).isEmpty()) {
             Entity entity = EntityType.loadEntityRecursive(nbt, this.level, entity1 -> entity1);
             if (entity != null) {
-                BeeInfoUtils.setEntityLocationAndAngle(blockPos, direction, entity);
+                EntityUtils.setEntityLocationAndAngle(blockPos, direction, entity);
                 deliverNectar(nbt, entity);
-                if (entity instanceof Animal animal) BeeInfoUtils.ageBee(apiaryBee.getTicksInHive(), animal);
+                if (entity instanceof Animal animal) {
+                    EntityUtils.ageBee(apiaryBee.getTicksInHive(), animal);
+                }
                 level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
                 level.addFreshEntity(entity);
             }
@@ -98,7 +100,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
 
         holder.ticksSinceBeesFlagged++;
         if (holder.ticksSinceBeesFlagged == 80) {
-            BeeInfoUtils.flagBeesInRange(pos, level);
+            EntityUtils.flagBeesInRange(pos, level);
             holder.ticksSinceBeesFlagged = 0;
         }
     }

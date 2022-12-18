@@ -5,14 +5,15 @@ package com.teamresourceful.resourcefulbees.common.blockentity;
 import com.google.common.collect.Lists;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
+import com.teamresourceful.resourcefulbees.common.blockentities.SmokeableHive;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveBeeDataAccessor;
-import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.HiveRecipe;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
+import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.caches.CacheableFunction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -49,7 +50,7 @@ import java.util.stream.Collectors;
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.SMOKE_TIME;
 
-public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
+public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements SmokeableHive {
 
     private static final CacheableFunction<Block, BlockEntityType<?>> HIVE_TO_ENTITY = new CacheableFunction<>(block ->
         ModBlockEntityTypes.BLOCK_ENTITY_TYPES
@@ -95,6 +96,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
         if (hive.level != null) hive.level.setBlockAndUpdate(hive.worldPosition, hive.getBlockState().setValue(BeehiveBlock.HONEY_LEVEL, newState));
     }
 
+    @Override
     public void smokeHive() {
         this.isSmoked = true;
         ticksSmoked = ticksSmoked == -1 ? 0 : ticksSmoked;
@@ -141,7 +143,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
             }
             Entity entity = EntityType.loadEntityRecursive(nbt, hive.level, entity1 -> entity1);
             if (entity != null) {
-                BeeInfoUtils.setEntityLocationAndAngle(hive.worldPosition, direction, entity);
+                EntityUtils.setEntityLocationAndAngle(hive.worldPosition, direction, entity);
                 if (beehiveState == BeeReleaseStatus.HONEY_DELIVERED) {
                     if (entity instanceof BeeCompat compat) compat.nectarDroppedOff();
                     if (getHoneyLevel(state) < 5) {
@@ -152,7 +154,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
                     }
 
                     if (entity instanceof Animal animal) {
-                        BeeInfoUtils.ageBee(((BeehiveBeeDataAccessor) tileBee).getTicksInHive(), animal);
+                        EntityUtils.ageBee(((BeehiveBeeDataAccessor) tileBee).getTicksInHive(), animal);
                     }
                     if (entities != null) entities.add(entity);
                 }
@@ -205,7 +207,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity {
 
         hive.ticksSinceBeesFlagged++;
         if (hive.ticksSinceBeesFlagged == 80) {
-            BeeInfoUtils.flagBeesInRange(pos, level);
+            EntityUtils.flagBeesInRange(pos, level);
             hive.ticksSinceBeesFlagged = 0;
         }
         tickOccupants(hive, state, ((BeehiveEntityAccessor) hive).getBees());

@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
-import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.config.EnderBeeconConfig;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
@@ -13,7 +13,6 @@ import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -46,10 +45,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker {
@@ -286,8 +282,10 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         return nbt.stream()
                 .filter(StringTag.class::isInstance)
                 .map(Tag::getAsString)
-                .map(BeeInfoUtils::getEffect)
-                .filter(Objects::nonNull)
+                .map(ResourceLocation::tryParse)
+                .map(Registry.MOB_EFFECT::getOptional)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toSet());
     }
 

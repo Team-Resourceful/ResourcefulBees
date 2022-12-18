@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.blockentity.breeder;
+package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.BoundSafeContainerData;
@@ -6,12 +6,13 @@ import com.teamresourceful.resourcefulbees.common.inventory.menus.BreederMenu;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.Upgrade;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitive;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.BreederRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
@@ -80,7 +81,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
                 getItem(BreederConstants.PARENT_2_SLOTS.get(i)), getItem(BreederConstants.FEED_2_SLOTS.get(i)),
                 getItem(BreederConstants.EMPTY_JAR_SLOTS.get(i))
         );
-        recipes[i] = level.getRecipeManager().getRecipeFor(ModRecipeTypes.BREEDER_RECIPE_TYPE.get(), container, level).orElse(null);
+        recipes[i] = level.getRecipeManager().getRecipeFor(ModRecipes.BREEDER_RECIPE_TYPE.get(), container, level).orElse(null);
         if (recipes[i] != null) {
             endTimes.set(i, recipes[i].time()-timeReduction);
         }

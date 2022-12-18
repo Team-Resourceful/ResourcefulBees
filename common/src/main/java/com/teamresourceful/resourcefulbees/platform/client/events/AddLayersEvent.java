@@ -7,13 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-public class AddLayersEvent {
-
-    public final Function<String, ? extends @Nullable LivingEntityRenderer<? extends Player, ? extends EntityModel<? extends Player>>> getter;
-
-    public AddLayersEvent(Function<String, ? extends @Nullable LivingEntityRenderer<? extends Player, ? extends EntityModel<? extends Player>>> getter) {
-        this.getter = getter;
-    }
+public record AddLayersEvent(Function<String, ? extends LivingEntityRenderer<? extends Player, ? extends EntityModel<? extends Player>>> getter) {
 
     @Nullable
     @SuppressWarnings("unchecked")

@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityR
 import com.teamresourceful.resourcefulbees.common.compat.jei.mutation.MutationCategory;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
@@ -72,8 +73,8 @@ public class JEICompat implements IModPlugin {
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null) {
             RecipeManager recipeManager = level.getRecipeManager();
-            registration.addRecipes(HiveCategory.RECIPE, HiveCategory.getHoneycombRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.HIVE_RECIPE_TYPE.get())));
-            registration.addRecipes(BeeBreedingCategory.RECIPE, BeeBreedingCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.BREEDER_RECIPE_TYPE.get())));
+            registration.addRecipes(HiveCategory.RECIPE, HiveCategory.getHoneycombRecipes(recipeManager.getAllRecipesFor(ModRecipes.HIVE_RECIPE_TYPE.get())));
+            registration.addRecipes(BeeBreedingCategory.RECIPE, BeeBreedingCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipes.BREEDER_RECIPE_TYPE.get())));
             registration.addRecipes(MutationCategory.RECIPE, MutationCategory.getMutationRecipes(level));
             registration.addRecipes(FlowersCategory.RECIPE, FlowersCategory.getFlowersRecipes());
             registration.addRecipes(CentrifugeCategory.RECIPE, CentrifugeCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get())));

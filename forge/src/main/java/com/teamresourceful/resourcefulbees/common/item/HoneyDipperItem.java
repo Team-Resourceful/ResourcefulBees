@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
+import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.FakeFlowerEntity;
-import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
@@ -53,7 +53,7 @@ public class HoneyDipperItem extends Item {
 
             if (!(entity instanceof Bee bee)) return InteractionResult.FAIL;
 
-            if (bee instanceof CustomBeeEntity customBee) {
+            if (bee instanceof CustomBee customBee) {
                 if (clickedBlock.is(customBee.getCoreData().flowers())) {
                     setFlowerPosition(bee, context);
                     return InteractionResult.SUCCESS;

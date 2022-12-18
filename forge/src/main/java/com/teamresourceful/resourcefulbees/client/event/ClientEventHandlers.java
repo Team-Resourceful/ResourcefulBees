@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.client.event;
 
 import com.teamresourceful.resourcefulbees.client.ResourcefulBeesClient;
 import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
-import com.teamresourceful.resourcefulbees.client.overlay.BeeLocatorOverlay;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
 import com.teamresourceful.resourcefulbees.client.models.ModelHandler;
+import com.teamresourceful.resourcefulbees.client.overlay.BeeLocatorOverlay;
 import com.teamresourceful.resourcefulbees.client.render.blocks.RenderEnderBeecon;
 import com.teamresourceful.resourcefulbees.client.render.blocks.RenderHoneyGenerator;
 import com.teamresourceful.resourcefulbees.client.render.blocks.RenderSolidificationChamber;
@@ -23,13 +23,12 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEnt
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import com.teamresourceful.resourcefulbees.platform.client.events.RegisterColorHandlerEvent;
+import com.teamresourceful.resourcefulbees.platform.client.events.RegisterRendererEvent;
 import com.teamresourceful.resourcefulbees.platform.client.events.ScreenOpenEvent;
-import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -66,9 +65,14 @@ public final class ClientEventHandlers {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientUtils::onResourceReload);
 
         eventBus.addListener((RegisterColorHandlersEvent.Item event) ->
-                RegisterColorHandlerEvent.EVENT.fire(new RegisterColorHandlerEvent(event.getItemColors(), event.getBlockColors(), RegisterColorHandlerEvent.Phase.ITEMS)));
+            RegisterColorHandlerEvent.EVENT.fire(new RegisterColorHandlerEvent(event.getItemColors(), event.getBlockColors(), RegisterColorHandlerEvent.Phase.ITEMS))
+        );
         eventBus.addListener((RegisterColorHandlersEvent.Block event) ->
-                RegisterColorHandlerEvent.EVENT.fire(new RegisterColorHandlerEvent(null, event.getBlockColors(), RegisterColorHandlerEvent.Phase.BLOCKS)));
+            RegisterColorHandlerEvent.EVENT.fire(new RegisterColorHandlerEvent(null, event.getBlockColors(), RegisterColorHandlerEvent.Phase.BLOCKS))
+        );
+        eventBus.addListener((EntityRenderersEvent.RegisterRenderers event) ->
+            RegisterRendererEvent.EVENT.fire(new RegisterRendererEvent(event::registerEntityRenderer, event::registerBlockEntityRenderer))
+        );
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::recipesLoaded);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, ClientEventHandlers::onTagsUpdated);
@@ -129,14 +133,12 @@ public final class ClientEventHandlers {
         ItemModelPropertiesHandler.registerProperties();
         registerTERs();
         event.enqueueWork(FluidRender::setHoneyRenderType);
-        Color.initRainbow();
     }
 
     private static void registerTERs() {
         BlockEntityRenderers.register(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), RenderSolidificationChamber::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), RenderEnderBeecon::new);
-        BlockEntityRenderers.register(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes.WAXED_SIGN_ENTITY.get(), SignRenderer::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), CentrifugeRenderer::new);
         BlockEntityRenderers.register(ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get(), CentrifugeCrankRenderer::new);
     }

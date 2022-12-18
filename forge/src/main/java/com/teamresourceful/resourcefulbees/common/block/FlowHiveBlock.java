@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.FlowHiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
-import com.teamresourceful.resourcefulbees.common.item.ExpandableTooltip;
+import com.teamresourceful.resourcefulbees.common.items.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
@@ -36,7 +36,7 @@ public class FlowHiveBlock extends BeeHouseBlock implements ExpandableTooltip {
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (level.getBlockEntity(pos) instanceof FlowHiveBlockEntity flowHive) {
             if (!level.isClientSide) {
                 Item item = player.getItemInHand(hand).getItem();

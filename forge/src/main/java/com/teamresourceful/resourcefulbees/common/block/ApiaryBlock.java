@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
-import com.teamresourceful.resourcefulbees.common.item.ExpandableTooltip;
+import com.teamresourceful.resourcefulbees.common.items.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.ChatFormatting;

@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
+import com.teamresourceful.resourcefulbees.common.blockentities.AcceleratorBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.BeeBoxBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.WaxedSignBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -23,6 +24,8 @@ public final class ModBlockEntityTypes {
             .of(BeeBoxBlockEntity::new, ModBlocks.BEE_BOX.get(), ModBlocks.BEE_BOX_TEMP.get())));
     public static final RegistryEntry<BlockEntityType<WaxedSignBlockEntity>> WAXED_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_sign", () -> build(BlockEntityType.Builder
             .of(WaxedSignBlockEntity::new, ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get())));
+    public static final RegistryEntry<BlockEntityType<AcceleratorBlockEntity>> ACCELERATOR_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("accelerator", () -> build(BlockEntityType.Builder
+            .of(AcceleratorBlockEntity::new, ModBlocks.ACCELERATOR.get())));
 
     private static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.Builder<T> builder) {
         //noinspection ConstantConditions

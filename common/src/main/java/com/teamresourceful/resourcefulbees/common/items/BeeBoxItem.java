@@ -1,9 +1,9 @@
-package com.teamresourceful.resourcefulbees.common.item;
+package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.utils.BeeInfoUtils;
+import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -57,7 +57,7 @@ public class BeeBoxItem extends BlockItem implements ExpandableTooltip {
 
         if (bees.size() == BeeConstants.MAX_BEES_BEE_BOX) return InteractionResult.FAIL;
 
-        bees.add(BeeInfoUtils.createJarBeeTag(target));
+        bees.add(EntityUtils.createJarBeeTag(target));
         displayNames.add(StringTag.valueOf(Component.Serializer.toJson(target.getType().getDescription())));
 
         blockTag.put(NBTConstants.NBT_BEES, bees);

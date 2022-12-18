@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.util.BeeUtils;
+import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import com.teamresourceful.resourcefullib.common.utils.TagUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -44,7 +44,7 @@ public class BeeBoxBlockEntity extends BlockEntity {
     public void summonBees(Level level, BlockPos pos, Player player) {
         if (this.bees != null) {
             if (level.isClientSide()) return;
-            this.bees.forEach(bee -> BeeUtils.summonEntity(bee, level, player, pos));
+            this.bees.forEach(bee -> EntityUtils.summonEntity(bee, level, player, pos));
         }
     }
 

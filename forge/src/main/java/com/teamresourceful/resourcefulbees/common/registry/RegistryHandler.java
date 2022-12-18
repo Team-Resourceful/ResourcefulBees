@@ -6,8 +6,8 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyFluidBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.CustomHoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.fluid.CustomHoneyFluidAttributesData;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.fluid.CustomHoneyFluidData;
@@ -27,6 +27,7 @@ import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistr
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.*;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
@@ -74,7 +75,9 @@ public final class RegistryHandler {
         ModPotions.POTIONS.init();
         ModMenus.CONTAINER_TYPES.init();
         ModRecipeSerializers.RECIPE_SERIALIZERS.init();
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers.RECIPE_SERIALIZERS.init();
         ModRecipeTypes.RECIPE_TYPES.init();
+        ModRecipes.RECIPE_TYPES.init();
         ModVillagerProfessions.PROFESSIONS.init();
         ModFeatures.FEATURES.init();
         ModBiomeModifiers.MODIFIERS.register(bus);

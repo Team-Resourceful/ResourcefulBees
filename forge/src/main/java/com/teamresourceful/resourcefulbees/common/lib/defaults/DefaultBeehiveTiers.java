@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import net.minecraft.resources.ResourceLocation;
 
-public class DefaultBeehiveTiers {
+public final class DefaultBeehiveTiers {
 
     private DefaultBeehiveTiers() {
         throw new UtilityClassError();

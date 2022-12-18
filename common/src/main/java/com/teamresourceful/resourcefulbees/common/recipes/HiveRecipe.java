@@ -1,12 +1,12 @@
-package com.teamresourceful.resourcefulbees.common.recipe.recipes;
+package com.teamresourceful.resourcefulbees.common.recipes;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import com.teamresourceful.resourcefullib.common.item.OptionalItemStack;
@@ -41,7 +41,7 @@ public record HiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees, Map
 
     private static Optional<HiveRecipe> findRecipe(RecipeManager manager, EntityType<?> bee) {
         return manager
-                .getAllRecipesFor(ModRecipeTypes.HIVE_RECIPE_TYPE.get())
+                .getAllRecipesFor(ModRecipes.HIVE_RECIPE_TYPE.get())
                 .stream()
                 .filter(recipe -> recipe.bees().contains(bee.builtInRegistryHolder())).findFirst();
     }
@@ -89,6 +89,6 @@ public record HiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees, Map
     @Override
     public @NotNull
     RecipeType<?> getType() {
-        return ModRecipeTypes.HIVE_RECIPE_TYPE.get();
+        return ModRecipes.HIVE_RECIPE_TYPE.get();
     }
 }

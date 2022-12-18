@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.common.block;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.item.ExpandableTooltip;
-import com.teamresourceful.resourcefulbees.common.item.ScraperItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.NestUpgrade;
+import com.teamresourceful.resourcefulbees.common.items.ExpandableTooltip;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
@@ -44,7 +44,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolActions;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -112,18 +111,21 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
         ItemStack itemstack = player.getItemInHand(handIn);
 
         if (state.getValue(HONEY_LEVEL) >= 5) {
-            boolean isShear = GeneralConfig.allowShears && itemstack.canPerformAction(ToolActions.SHEARS_HARVEST);
-            boolean isScraper = ScraperItem.isScraper(itemstack);
+            boolean isShear = GeneralConfig.allowShears && ModConstants.SHEAR_ACTION.test(itemstack);
+            boolean isScraper = ModConstants.SCRAPE_ACTION.test(itemstack);
 
             if (isShear || isScraper) {
                 InteractionResult success = performHoneyHarvest(state, level, pos, player, handIn, itemstack, isScraper);
-                if (success != null) return success;
+                if (success != null) {
+                    return success;
+                }
             }
         }
 
         if (itemstack.getItem() instanceof NestUpgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.NEST)) {
-            if (upgrade.getTier().from.equals(this.tier)) return upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
-            else {
+            if (upgrade.getTier().from.equals(this.tier)) {
+                return upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
+            } else {
                 player.displayClientMessage(Component.literal("You can not upgrade this nest with that upgrade."), true);
             }
         }

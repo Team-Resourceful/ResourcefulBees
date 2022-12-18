@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
-import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederConstants;
+import com.teamresourceful.resourcefulbees.common.blockentity.BreederBlockEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.ChatFormatting;

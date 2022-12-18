@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.item.upgrade;
 
-import com.teamresourceful.resourcefulbees.common.item.ExpandableTooltip;
+import com.teamresourceful.resourcefulbees.common.items.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.network.chat.Component;

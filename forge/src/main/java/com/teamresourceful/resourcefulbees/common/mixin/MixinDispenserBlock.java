@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.mixin;
 
 import com.teamresourceful.resourcefulbees.common.item.dispenser.ShearsDispenserBehavior;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSourceImpl;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
@@ -8,7 +9,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
-import net.minecraftforge.common.ToolActions;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,7 +32,7 @@ public abstract class MixinDispenserBlock {
     )
     public void onDispenseFromInject(ServerLevel level, BlockPos pos, CallbackInfo ci, BlockSourceImpl source, DispenserBlockEntity dispenser, int slot, ItemStack stack) {
         DispenseItemBehavior behavior = getDispenseMethod(stack);
-        if (stack.canPerformAction(ToolActions.SHEARS_HARVEST)) {
+        if (ModConstants.SHEAR_ACTION.test(stack)) {
             dispenser.setItem(slot, new ShearsDispenserBehavior(behavior).dispense(source, stack));
             ci.cancel();
         }

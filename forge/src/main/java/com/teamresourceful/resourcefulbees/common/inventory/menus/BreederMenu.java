@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.inventory.menus;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentity.breeder.BreederConstants;
+import com.teamresourceful.resourcefulbees.common.blockentity.BreederBlockEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
