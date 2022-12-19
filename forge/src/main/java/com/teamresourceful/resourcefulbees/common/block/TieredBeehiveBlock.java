@@ -55,7 +55,6 @@ import java.util.function.Supplier;
 public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableTooltip {
 
     private static final MutableComponent NONE_TEXT = Component.literal("     NONE");
-    //public static final IntegerProperty TIER_PROPERTY = IntegerProperty.create("tier", 1, 4);
 
     private final Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
     private final BeehiveTier tier;

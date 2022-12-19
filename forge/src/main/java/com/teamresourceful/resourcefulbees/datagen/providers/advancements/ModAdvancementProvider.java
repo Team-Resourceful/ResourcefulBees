@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.advancements;
 
+import com.teamresourceful.resourcefulbees.common.item.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseAdvancementProvider;
-import com.teamresourceful.resourcefullib.common.utils.TagUtils;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -78,7 +78,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 ))
                 .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/beepedia_complete")));
 
-        ItemStack filledJar = createBeejar("minecraft:bee", "#edc343");
+        ItemStack filledJar =  BeeJarItem.createFilledJar(new ResourceLocation("minecraft:bee"), Color.parseColor("#edc343"));
 
         Advancement collectBee = addAdvancement(createAdvancement(filledJar, "collect_bee", beeJar)
                 .addCriterion("has_filled_jar", InventoryChangeTrigger.TriggerInstance.hasItems(
@@ -87,7 +87,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/collect_bee"))
         );
 
-        ItemStack kittenJar = createBeejar("resourcefulbees:kitten_bee", "#EAA939");
+        ItemStack kittenJar = BeeJarItem.createFilledJar(new ResourceLocation("resourcefulbees:kitten_bee"), Color.parseColor("#EAA939"));
 
         addAdvancement(createChallengeAchievement(kittenJar, "kitten_bee", collectBee)
                 .addCriterion("has_kitten_jar", InventoryChangeTrigger.TriggerInstance.hasItems(
@@ -96,7 +96,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/kitten_bee"))
         );
 
-        ItemStack oreoJar = createBeejar("resourcefulbees:oreo_bee", "#442920");
+        ItemStack oreoJar = BeeJarItem.createFilledJar(new ResourceLocation("resourcefulbees:oreo_bee"), Color.parseColor("#442920"));
 
         addAdvancement(createChallengeAchievement(oreoJar, "oreo_bee", collectBee)
                 .addCriterion("has_oreo_jar", InventoryChangeTrigger.TriggerInstance.hasItems(
@@ -104,14 +104,5 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 ))
                 .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/oreo_bee"))
         );
-    }
-
-    private static ItemStack createBeejar(String id, String color) {
-        ItemStack stack = ModItems.BEE_JAR.get().getDefaultInstance();
-        CompoundTag nbt = new CompoundTag();
-        nbt.putString(NBTConstants.NBT_ID, id);
-        nbt.putString(NBTConstants.BeeJar.COLOR, color);
-        stack.setTag(TagUtils.tagWithData(NBTConstants.BeeJar.ENTITY, nbt));
-        return stack;
     }
 }

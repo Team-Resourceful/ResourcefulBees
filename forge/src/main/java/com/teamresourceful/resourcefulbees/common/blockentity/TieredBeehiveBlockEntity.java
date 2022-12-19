@@ -34,7 +34,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -92,8 +91,10 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
     public static void recalculateHoneyLevel(TieredBeehiveBlockEntity hive) {
         float combsInHive = hive.honeycombs.size();
         float percentValue = (combsInHive / hive.getBlock().getTier().maxCombs()) * 100;
-        int newState = (int) Mth.clamp((percentValue - (percentValue % 20)) / 20, 0, 5) ;
-        if (hive.level != null) hive.level.setBlockAndUpdate(hive.worldPosition, hive.getBlockState().setValue(BeehiveBlock.HONEY_LEVEL, newState));
+        int newState = (int) Mth.clamp((percentValue - (percentValue % 20)) / 20, 0, 5);
+        if (hive.level != null) {
+            hive.level.setBlockAndUpdate(hive.worldPosition, hive.getBlockState().setValue(BeehiveBlock.HONEY_LEVEL, newState));
+        }
     }
 
     @Override
@@ -113,16 +114,19 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
                 .stream()
                 .filter(e -> e.position().distanceToSqr(player.position()) <= 16.0D)
                 .forEach(entity -> {
-                        if (!this.isSedated()) {
-                            if (entity instanceof Mob mob) mob.setTarget(player);
-                            else if (entity instanceof BeeCompat compat) compat.setOutOfHiveCooldown(400);
+                    if (!this.isSedated()) {
+                        if (entity instanceof Mob mob) {
+                            mob.setTarget(player);
+                        } else if (entity instanceof BeeCompat compat) {
+                            compat.setOutOfHiveCooldown(400);
                         }
+                    }
                 });
     }
 
     private List<Entity> releaseAllBees(BlockState state, BeeReleaseStatus status) {
         List<Entity> list = Lists.newArrayList();
-        ((BeehiveEntityAccessor)this).getBees().removeIf(beeData -> releaseBee(this, state, beeData, list, status));
+        getBees().removeIf(beeData -> releaseBee(this, state, beeData, list, status));
         return list;
     }
 
@@ -158,26 +162,24 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
                     }
                     if (entities != null) entities.add(entity);
                 }
-                hive.level.playSound(null, hive.worldPosition.getX(), hive.worldPosition.getY(),  hive.worldPosition.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
+                hive.level.playSound(null, hive.worldPosition.getX(), hive.worldPosition.getY(), hive.worldPosition.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
                 return hive.level.addFreshEntity(entity);
-            } else {
-                return true;
             }
+            return true;
         }
     }
 
     @Override
     public void addOccupantWithPresetTicks(@NotNull Entity bee, boolean hasNectar, int ticksInHive) {
         if (!(bee instanceof BeeCompat compat)) return;
-        BeehiveEntityAccessor thisHive = (BeehiveEntityAccessor) this;
-        if (thisHive.getBees().size() < getBlock().getTier().maxBees()) {
+        if (getOccupantCount() < getBlock().getTier().maxBees()) {
             bee.ejectPassengers();
             CompoundTag nbt = new CompoundTag();
             bee.save(nbt);
 
             if (this.level != null) {
                 int maxTimeInHive = (int) (compat.getMaxTimeInHive() * getBlock().getTier().timeModifier());
-                thisHive.getBees().add(new BeeData(nbt, ticksInHive, hasNectar ? maxTimeInHive : MIN_HIVE_TIME));
+                getBees().add(new BeeData(nbt, ticksInHive, hasNectar ? maxTimeInHive : MIN_HIVE_TIME));
                 BlockPos pos = this.getBlockPos();
                 this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
                 bee.discard();
@@ -191,8 +193,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
 
     @Override
     public boolean isSedated() {
-        assert this.level != null;
-        return isSmoked || CampfireBlock.isSmokeyPos(this.level, this.getBlockPos());
+        return isSmoked || super.isSedated();
     }
 
     public static void serverSideTick(Level level, BlockPos pos, BlockState state, TieredBeehiveBlockEntity hive) {
@@ -210,7 +211,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             EntityUtils.flagBeesInRange(pos, level);
             hive.ticksSinceBeesFlagged = 0;
         }
-        tickOccupants(hive, state, ((BeehiveEntityAccessor) hive).getBees());
+        tickOccupants(hive, state, hive.getBees());
         if (hive.hasBees() && level.getRandom().nextDouble() < 0.005D) {
             var vec = Vec3.atBottomCenterOf(pos);
             level.playSound(null, vec.x(), vec.y(), vec.z(), SoundEvents.BEEHIVE_WORK, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -221,10 +222,10 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
 
     private static void tickOccupants(TieredBeehiveBlockEntity hive, BlockState state, List<BeeData> bees) {
         BeehiveBlockEntity.BeeData bee;
-        for(Iterator<BeeData> iterator = bees.iterator(); iterator.hasNext(); increaseTicksInHive(bee, 1)) {
+        for (Iterator<BeeData> iterator = bees.iterator(); iterator.hasNext(); increaseTicksInHive(bee, 1)) {
             bee = iterator.next();
-            if (((BeehiveBeeDataAccessor)bee).getTicksInHive() > ((BeehiveBeeDataAccessor)bee).getMinOccupationTicks()) {
-                BeeReleaseStatus status = ((BeehiveBeeDataAccessor)bee).getEntityData().getBoolean("HasNectar") ? BeeReleaseStatus.HONEY_DELIVERED : BeeReleaseStatus.BEE_RELEASED;
+            if (((BeehiveBeeDataAccessor) bee).getTicksInHive() > ((BeehiveBeeDataAccessor) bee).getMinOccupationTicks()) {
+                BeeReleaseStatus status = ((BeehiveBeeDataAccessor) bee).getEntityData().getBoolean("HasNectar") ? BeeReleaseStatus.HONEY_DELIVERED : BeeReleaseStatus.BEE_RELEASED;
                 if (releaseBee(hive, state, bee, null, status)) {
                     iterator.remove();
                 }
@@ -235,25 +236,39 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
     //TODO make something (item, etc) to speed up bees xD
     @SuppressWarnings("SameParameterValue")
     private static void increaseTicksInHive(BeeData beeData, int amount) {
-        ((BeehiveBeeDataAccessor)beeData).setTicksInHive(((BeehiveBeeDataAccessor) beeData).getTicksInHive() + amount);
+        ((BeehiveBeeDataAccessor) beeData).setTicksInHive(((BeehiveBeeDataAccessor) beeData).getTicksInHive() + amount);
     }
 
-    public static boolean shouldStayInHive(Level level, BeeReleaseStatus beehiveState){
+    public static boolean shouldStayInHive(Level level, BeeReleaseStatus beehiveState) {
         return (level != null && (level.isNight() || level.isRaining())) && beehiveState != BeeReleaseStatus.EMERGENCY;
     }
 
     @Override
-    public boolean isFull() { return ((BeehiveEntityAccessor) this).getBees().size() >= getBlock().getTier().maxBees(); }
+    public boolean isFull() {
+        return getOccupantCount() >= getBlock().getTier().maxBees();
+    }
 
-    public boolean hasBees() { return !((BeehiveEntityAccessor) this).getBees().isEmpty(); }
+    public boolean hasBees() {
+        return !this.isEmpty();
+    }
 
-    public ItemStack getResourceHoneycomb(){ return honeycombs.remove(); }
+    public List<BeeData> getBees() {
+        return ((BeehiveEntityAccessor) this).getBees();
+    }
 
-    public boolean hasCombs(){ return numberOfCombs() > 0; }
+    public ItemStack getResourceHoneycomb() {
+        return honeycombs.remove();
+    }
 
-    public int numberOfCombs() { return honeycombs.size(); }
+    public boolean hasCombs() {
+        return numberOfCombs() > 0;
+    }
 
-    public boolean isAllowedBee(){
+    public int numberOfCombs() {
+        return honeycombs.size();
+    }
+
+    public boolean isAllowedBee() {
         return getBlockState().getBlock() instanceof TieredBeehiveBlock;
     }
 

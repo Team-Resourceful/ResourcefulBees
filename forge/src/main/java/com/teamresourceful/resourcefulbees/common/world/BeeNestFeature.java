@@ -7,7 +7,6 @@ import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
-import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.utils.TagUtils;
@@ -229,7 +228,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         if (id != Registry.ENTITY_TYPE.getDefaultKey()) {
             CompoundTag tag = TagUtils.tagWithData(NBTConstants.NBT_ID, StringTag.valueOf(id.toString()));
             int timeInHive = rand.nextInt(entity.getData().getCoreData().maxTimeInHive());
-            ((BeehiveEntityAccessor)nest).getBees().add(new BeehiveBlockEntity.BeeData(tag, 0, timeInHive));
+            nest.getBees().add(new BeehiveBlockEntity.BeeData(tag, 0, timeInHive));
         }
     }
 }

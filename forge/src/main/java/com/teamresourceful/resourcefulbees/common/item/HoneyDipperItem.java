@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
@@ -19,7 +18,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
@@ -111,7 +109,7 @@ public class HoneyDipperItem extends Item {
                 return InteractionResult.SUCCESS;
             }
 
-            if (stackEntity instanceof ResourcefulBee bee && entityTypesMatch(entity, bee.getCoreData().entityFlowers())) {
+            if (stackEntity instanceof ResourcefulBee bee && bee.getCoreData().isEntityFlower(entity.getType())) {
                 bee.entityFlower.set(entity.getId());
                 bee.setSavedFlowerPos(entity.blockPosition());
                 sendMessageToPlayer(bee, player, MessageTypes.FLOWER, entity.blockPosition());
@@ -120,10 +118,6 @@ public class HoneyDipperItem extends Item {
             }
         }
         return super.interactLivingEntity(stack, player, entity, hand);
-    }
-
-    private boolean entityTypesMatch(LivingEntity entity, HolderSet<EntityType<?>> holders) {
-        return holders.contains(entity.getType().builtInRegistryHolder());
     }
 
     @Override
