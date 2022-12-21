@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks;
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.base.AbstractGUICentrifugeEntity;
+import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -18,8 +19,11 @@ import static net.roguelogix.phosphophyllite.multiblock2.IAssemblyStateBlock.ASS
 
 public abstract class AbstractGUICentrifuge extends AbstractCentrifuge {
 
-    protected AbstractGUICentrifuge(Properties properties) {
+    protected final CentrifugeTier tier;
+
+    protected AbstractGUICentrifuge(Properties properties, CentrifugeTier tier) {
         super(properties);
+        this.tier = tier;
     }
 
     @Override
