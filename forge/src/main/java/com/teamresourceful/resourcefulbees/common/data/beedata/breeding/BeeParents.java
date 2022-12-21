@@ -12,7 +12,7 @@ public record BeeParents(String parent1, String parent2, Supplier<CustomBeeData>
 
     public static BeeParents of(String parent1, String parent2) {
         Supplier<CustomBeeData> parent1Data = Suppliers.memoize(() -> BeeRegistry.get().getBeeData(parent1));
-        Supplier<CustomBeeData> parent2Data = Suppliers.memoize(() -> BeeRegistry.get().getBeeData(parent1));
+        Supplier<CustomBeeData> parent2Data = Suppliers.memoize(() -> BeeRegistry.get().getBeeData(parent2));
         if (parent1.compareTo(parent2) > 0) {
             return new BeeParents(parent1, parent2, parent1Data, parent2Data);
         } else {
