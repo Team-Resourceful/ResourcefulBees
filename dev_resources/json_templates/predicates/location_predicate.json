@@ -1,0 +1,41 @@
+{
+    "position": {
+        "x": {
+            "min": 10.0,
+            "max": 40.0
+        },
+        "y": {
+            "min": 10.0,
+            "max": 40.0
+        },
+        "z": {
+            "min": 10.0,
+            "max": 40.0
+        }
+    },
+    "dimension": "minecraft:overworld",
+    "structure": "minecraft:mansion",
+    "biome": "minecraft:dark_forest",
+    "smokey": true,
+    "light": {
+        "light": {
+            "min": 0,
+            "max": 7
+        }
+    },
+    "block": {
+        "blocks": [
+            "minecraft:cobblestone",
+            "minecraft:diamond_block"
+        ],
+        "tag": "minecraft:beehives",
+        "nbt": "{}",
+        "state": {
+            "honey_level": "5"
+        }
+    },
+    "fluid": {
+        "fluid": "minecraft:lava",
+        "state": null
+    }
+}

@@ -1,0 +1,135 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations": [
+        {
+            "input": {
+                "type": "entity",
+                "entity": {
+                    "type": "minecraft:pig",
+                    "location": {
+                        "position": {
+                            "x": {
+                                "min": 10.0,
+                                "max": 40.0
+                            },
+                            "y": {
+                                "min": 10.0,
+                                "max": 40.0
+                            },
+                            "z": {
+                                "min": 10.0,
+                                "max": 40.0
+                            }
+                        },
+                        "dimension": "minecraft:overworld",
+                        "structure": "minecraft:mansion",
+                        "biome": "minecraft:dark_forest",
+                        "smokey": true,
+                        "light": {
+                            "light": {
+                                "min": 0,
+                                "max": 7
+                            }
+                        },
+                        "block": {
+                            "blocks": [
+                                "minecraft:cobblestone",
+                                "minecraft:diamond_block"
+                            ],
+                            "tag": "minecraft:beehives",
+                            "nbt": "{}",
+                            "state": {
+                                "honey_level": "5"
+                            }
+                        },
+                        "fluid": {
+                            "fluid": "minecraft:lava",
+                            "state": null
+                        }
+                    },
+                    "effects": {
+                        "minecraft:regeneration": {
+                            "amplifier": {
+                                "min": 1,
+                                "max": 10
+                            },
+                            "duration": {
+                                "min": 1,
+                                "max": 10
+                            },
+                            "ambient": true,
+                            "visible": true
+                        }
+                    },
+                    "nbt": "{}",
+                    "flags": {
+                        "is_on_fire": true,
+                        "is_sneaking": true,
+                        "is_sprinting": true,
+                        "is_swimming": true,
+                        "is_baby": true
+                    },
+                    "target": {
+                        "type": null,
+                        "distance": null,
+                        "location": null,
+                        "stepping_on": null,
+                        "effects": null,
+                        "nbt": null,
+                        "flags": null,
+                        "equipment": {
+                            "head": null,
+                            "chest": null,
+                            "legs": null,
+                            "feet": null,
+                            "mainhand": {
+                                "count": null,
+                                "durability": null,
+                                "nbt": null,
+                                "enchantments": [
+                                    {
+                                        "enchantment": "minecraft:fortune",
+                                        "levels": {
+                                            "min": 1,
+                                            "max": 4
+                                        }
+                                    }
+                                ]
+                            },
+                            "offhand": null
+                        },
+                        "type_specific": null,
+                        "vehicle": null,
+                        "passenger": null,
+                        "targeted_entity": null,
+                        "team": null
+                    }
+                }
+            },
+            "outputs": [
+                {
+                    "type": "fluid",
+                    "fluid": "minecraft:lava",
+                    "chance": 0.75
+                }
+            ]
+        },
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:coal_block"
+                },
+                "chance": 0.25
+            },
+            "outputs": [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:tnt"
+                    }
+                }
+            ]
+        }
+    ]
+}

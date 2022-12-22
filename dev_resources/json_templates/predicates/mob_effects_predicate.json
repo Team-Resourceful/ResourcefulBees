@@ -1,0 +1,14 @@
+{
+    "minecraft:regeneration": {
+        "amplifier": {
+            "min": 1,
+            "max": 10
+        },
+        "duration": {
+            "min": 1,
+            "max": 10
+        },
+        "ambient": true,
+        "visible": true
+    }
+}
