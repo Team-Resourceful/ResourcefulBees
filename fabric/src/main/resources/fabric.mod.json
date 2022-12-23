@@ -14,7 +14,7 @@
             "com.teamresourceful.resourcefulbees.ResourcefulBees"
         ]
     },
-    "accessWidener": "resourceful-bees.accesswidener",
+    "accessWidener": "resourcefulbees.accesswidener",
     "mixins": [
         "resourcefulbees.mixins.json"
     ],

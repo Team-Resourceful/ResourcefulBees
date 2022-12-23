@@ -1,5 +1,0 @@
-accessWidener   v2  named
-
-accessible class net/minecraft/world/item/alchemy/PotionBrewing$Mix
-accessible field net/minecraft/world/item/alchemy/PotionBrewing POTION_MIXES Ljava/util/List;
-accessible field net/minecraft/world/item/alchemy/PotionBrewing CONTAINER_MIXES Ljava/util/List;

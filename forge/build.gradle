@@ -24,6 +24,16 @@ loom {
 
         mixinConfig "resourcefulbees.mixins.json"
         mixinConfig "resourcefulbees-common.mixins.json"
+
+        dataGen {
+            mod "resourcefulbees"
+        }
+    }
+
+    runs {
+        data {
+            programArgs "--existing", file("src/main/resources").absolutePath
+        }
     }
 }
 
