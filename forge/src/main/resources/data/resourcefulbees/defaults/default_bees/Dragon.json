@@ -29,9 +29,7 @@
                 "parent2": "ender",
                 "chance": 0.25
             }
-        ],
-        "feedItem": ["minecraft:end_stone"],
-        "feedAmount": 12
+        ]
     },
     "resourcefulbees:trait/v1": {
         "traits": [ "ender", "nether", "wither" ]

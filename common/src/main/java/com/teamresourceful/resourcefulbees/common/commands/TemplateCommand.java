@@ -53,6 +53,40 @@ public final class TemplateCommand {
                 .encodeStart(registryOps(context), DummyBeeData.DATA);
         ModConstants.LOGGER.info(PRETTY_GSON.toJson(beeResult.getOrThrow(false, ModConstants.LOGGER::error)));
         context.getSource().sendSuccess(Component.literal("Bee template printed to logs!"), true);
+
+        //TODO move these into their own template commands and finish the entity predicate
+        /*LocationPredicate predicate = new LocationPredicate(
+                MinMaxBounds.Doubles.between(10d, 40d),
+                MinMaxBounds.Doubles.between(10d, 40d),
+                MinMaxBounds.Doubles.between(10d, 40d),
+                Biomes.DARK_FOREST,
+                Structures.WOODLAND_MANSION.unwrapKey().get(),
+                context.getSource().getLevel().dimension(),
+                true,
+                new LightPredicate.Builder().setComposite(MinMaxBounds.Ints.between(0, 7)).build(),
+                new BlockPredicate(BlockTags.BEEHIVES, Set.of(Blocks.COBBLESTONE, Blocks.DIAMOND_BLOCK), StatePropertiesPredicate.Builder.properties().hasProperty(BeehiveBlock.HONEY_LEVEL, 5).build(), new NbtPredicate(new CompoundTag())),
+                FluidPredicate.Builder.fluid().of(Fluids.LAVA).build()
+        );
+
+        ModConstants.LOGGER.info(predicate.serializeToJson());
+        ModConstants.LOGGER.info("Printed Location Predicate");
+
+        Map<MobEffect, MobEffectsPredicate.MobEffectInstancePredicate> effectInstancePredicateMap = new HashMap<>();
+        effectInstancePredicateMap.put(MobEffects.REGENERATION, new MobEffectsPredicate.MobEffectInstancePredicate(MinMaxBounds.Ints.between(1, 10), MinMaxBounds.Ints.between(1, 10), true, true));
+
+        MobEffectsPredicate mobEffectsPredicate = new MobEffectsPredicate(effectInstancePredicateMap);
+        ModConstants.LOGGER.info(mobEffectsPredicate.serializeToJson());
+        ModConstants.LOGGER.info("Printed Mob Effects Predicate");
+
+        EntityFlagsPredicate entityFlagsPredicate = new EntityFlagsPredicate(true, true, true, true, true);
+        ModConstants.LOGGER.info(entityFlagsPredicate.serializeToJson());
+        ModConstants.LOGGER.info("Printed Entity Flags Predicate");
+
+        EntityPredicate entityPredicate = EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.BLOCK_FORTUNE, MinMaxBounds.Ints.between(1, 4))).build()).build()).build();
+        ModConstants.LOGGER.info(entityPredicate.serializeToJson());
+        ModConstants.LOGGER.info("Printed Entity Predicate");*/
+
+
         return 1;
     }
 

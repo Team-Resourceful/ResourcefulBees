@@ -2,12 +2,18 @@ package com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.blocks
 
 import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.CentrifugeCasingEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.roguelogix.phosphophyllite.multiblock2.IAssemblyStateBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class CentrifugeCasing extends AbstractCentrifuge implements IAssemblyStateBlock {
     public CentrifugeCasing(@NotNull BlockBehaviour.Properties properties) {
@@ -17,6 +23,12 @@ public class CentrifugeCasing extends AbstractCentrifuge implements IAssemblySta
     @Override
     public boolean isGoodForFrame() {
         return true;
+    }
+
+    //TODO make translatable
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
+        tooltip.add(Component.literal("Multiblock edges, corners, and faces only"));
     }
 
     @Override

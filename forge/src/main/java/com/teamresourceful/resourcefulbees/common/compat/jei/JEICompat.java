@@ -31,7 +31,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 
 @JeiPlugin
-public class JEICompat implements IModPlugin {
+public final class JEICompat implements IModPlugin {
 
     public static final IIngredientType<EntityIngredient> ENTITY_INGREDIENT = () -> EntityIngredient.class;
 
@@ -71,15 +71,23 @@ public class JEICompat implements IModPlugin {
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
         ClientLevel level = Minecraft.getInstance().level;
-        if (level != null) {
-            RecipeManager recipeManager = level.getRecipeManager();
-            registration.addRecipes(HiveCategory.RECIPE, HiveCategory.getHoneycombRecipes(recipeManager.getAllRecipesFor(ModRecipes.HIVE_RECIPE_TYPE.get())));
-            registration.addRecipes(BeeBreedingCategory.RECIPE, BeeBreedingCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipes.BREEDER_RECIPE_TYPE.get())));
-            registration.addRecipes(MutationCategory.RECIPE, MutationCategory.getMutationRecipes(level));
-            registration.addRecipes(FlowersCategory.RECIPE, FlowersCategory.getFlowersRecipes());
-            registration.addRecipes(CentrifugeCategory.RECIPE, CentrifugeCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get())));
-            registration.addRecipes(SolidificationCategory.RECIPE, recipeManager.getAllRecipesFor(ModRecipeTypes.SOLIDIFICATION_RECIPE_TYPE.get()));
-        }
+        if (level == null) return;
+        RecipeManager recipeManager = level.getRecipeManager();
+        registration.addRecipes(HiveCategory.RECIPE, HiveCategory.getHoneycombRecipes(recipeManager.getAllRecipesFor(ModRecipes.HIVE_RECIPE_TYPE.get())));
+        registration.addRecipes(BeeBreedingCategory.RECIPE, BeeBreedingCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipes.BREEDER_RECIPE_TYPE.get())));
+        registration.addRecipes(MutationCategory.RECIPE, MutationCategory.getMutationRecipes(level));
+        registration.addRecipes(FlowersCategory.RECIPE, FlowersCategory.getFlowersRecipes());
+        registration.addRecipes(CentrifugeCategory.RECIPE, CentrifugeCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get())));
+        registration.addRecipes(SolidificationCategory.RECIPE, recipeManager.getAllRecipesFor(ModRecipeTypes.SOLIDIFICATION_RECIPE_TYPE.get()));
+        CentrifugeInfo.registerCasingInfo(registration);
+        CentrifugeInfo.registerGearboxInfo(registration);
+        CentrifugeInfo.registerProcessorInfo(registration);
+        CentrifugeInfo.registerTerminalInfo(registration);
+        CentrifugeInfo.registerEnergyInputInfo(registration);
+        CentrifugeInfo.registerInputInfo(registration);
+        CentrifugeInfo.registerItemOutputInfo(registration);
+        CentrifugeInfo.registerFluidOutputInfo(registration);
+        CentrifugeInfo.registerVoidInfo(registration);
     }
 
     @Override
@@ -120,4 +128,6 @@ public class JEICompat implements IModPlugin {
             }
         }
     }
+
+
 }
