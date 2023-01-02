@@ -9,7 +9,6 @@ import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitive;
 import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -56,7 +55,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         boolean dirty = false;
         for (int i = 0; i < BreederConstants.NUM_OF_BREEDERS; i++) {
             if (entity.recipes[i] != null) {
-                entity.times.increment(i, 1);
+                entity.times.increment(i);
                 if (entity.times.get(i) >= entity.endTimes.get(i)) {
                     entity.times.set(i, 0);
                     entity.processBreed(i);
@@ -106,27 +105,22 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         boolean recipeSuccess = output.chance() >= level.random.nextFloat();
 
         if (recipeSuccess) {
-            int amount = recipe.input().filter(AmountSensitive.class::isInstance)
-                    .map(AmountSensitive.class::cast)
-                    .map(AmountSensitive::getAmount)
-                    .orElse(1);
-            recipe.input().ifPresent(input -> getItem(BreederConstants.EMPTY_JAR_SLOTS.get(slot)).shrink(amount));
+            recipe.input().ifPresent(input -> getItem(BreederConstants.EMPTY_JAR_SLOTS.get(slot)).shrink(1));
             ItemStack stack = output.output().copy();
-            stack.setCount(amount);
+            stack.setCount(1);
             deliverItem(stack);
 
-            completeBreed(recipe, BreederConstants.FEED_1_SLOTS, slot, recipe.parent1());
-            completeBreed(recipe, BreederConstants.FEED_2_SLOTS, slot, recipe.parent2());
+            completeBreed(BreederConstants.FEED_1_SLOTS, slot, recipe.parent1());
+            completeBreed(BreederConstants.FEED_2_SLOTS, slot, recipe.parent2());
             checkAndCacheRecipe(slot);
         }
     }
 
-    private void completeBreed(BreederRecipe recipe, List<Integer> feedSlots, int slot, BreederRecipe.BreederPair parent) {
-        int feedAmount = recipe.parent1().feedItem() instanceof AmountSensitive amountSensitive ? amountSensitive.getAmount() : 1;
-        getItem(feedSlots.get(slot)).shrink(feedAmount);
+    private void completeBreed(List<Integer> feedSlots, int slot, BreederRecipe.BreederPair parent) {
+        getItem(feedSlots.get(slot)).shrink(parent.feedAmount());
         parent.returnItem().ifPresent(item -> {
             ItemStack returnItem = item.copy();
-            returnItem.setCount(feedAmount);
+            returnItem.setCount(parent.feedAmount());
             deliverItem(returnItem);
         });
     }

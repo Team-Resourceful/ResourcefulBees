@@ -38,8 +38,7 @@ public class BeeJarItem extends Item {
 
     @OnlyIn(Dist.CLIENT)
     public static int getColor(ItemStack stack, int tintIndex) {
-        CompoundTag tag = stack.getTag();
-        if (tintIndex == 1 && tag != null) {
+        if (tintIndex == 1 && stack.hasTag()) {
             Color color = getColor(stack);
             return color == null ? BeeConstants.VANILLA_BEE_INT_COLOR : color.getValue();
         }

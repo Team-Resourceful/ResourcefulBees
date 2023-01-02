@@ -61,10 +61,11 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
         return NonNullList.of(Ingredient.EMPTY, parent1.parent(), parent1.feedItem(), parent2.parent(), parent2.feedItem());
     }
 
-    public record BreederPair(Ingredient parent, Optional<String> displayEntity, Ingredient feedItem, Optional<ItemStack> returnItem){
+    public record BreederPair(Ingredient parent, Optional<String> displayEntity, int feedAmount, Ingredient feedItem, Optional<ItemStack> returnItem){
         public static final Codec<BreederPair> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 IngredientCodec.CODEC.fieldOf("parent").forGetter(BreederPair::parent),
                 Codec.STRING.optionalFieldOf("entity").forGetter(BreederPair::displayEntity),
+                Codec.INT.fieldOf("feedAmount").orElse(1).forGetter(BreederPair::feedAmount),
                 IngredientCodec.CODEC.fieldOf("feedItem").forGetter(BreederPair::feedItem),
                 ItemStackCodec.CODEC.optionalFieldOf("returnItem").forGetter(BreederPair::returnItem)
         ).apply(instance, BreederPair::new));

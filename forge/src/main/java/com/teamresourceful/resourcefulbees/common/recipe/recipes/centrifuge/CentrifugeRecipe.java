@@ -43,8 +43,8 @@ public record CentrifugeRecipe(
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 IngredientCodec.CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::ingredient),
-                Output.ITEM_OUTPUT_CODEC.listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::itemOutputs),
-                Output.FLUID_OUTPUT_CODEC.listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::fluidOutputs),
+                Output.codec(ItemOutput.CODEC).listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::itemOutputs),
+                Output.codec(FluidOutput.CODEC).listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::fluidOutputs),
                 Codec.INT.fieldOf("time").orElse(CentrifugeConfig.globalCentrifugeRecipeTime).forGetter(CentrifugeRecipe::time),
                 Codec.INT.fieldOf("energyPerTick").orElse(CentrifugeConfig.centrifugeRfPerTick).forGetter(CentrifugeRecipe::energyPerTick),
                 Codec.INT.optionalFieldOf("rotations").forGetter(CentrifugeRecipe::rotations)
@@ -84,15 +84,12 @@ public record CentrifugeRecipe(
 
     public record Output<T extends AbstractOutput<E>, E>(double chance, WeightedCollection<T> pool) {
 
-        public static final Codec<Output<ItemOutput, ItemStack>> ITEM_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::chance),
-                CodecExtras.weightedCollection(ItemOutput.CODEC, ItemOutput::weight).fieldOf("pool").orElse(new WeightedCollection<>()).forGetter(Output::pool)
-        ).apply(instance, Output::new));
-
-        public static final Codec<Output<FluidOutput, FluidStack>> FLUID_OUTPUT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::chance),
-                CodecExtras.weightedCollection(FluidOutput.CODEC, FluidOutput::weight).fieldOf("pool").orElse(new WeightedCollection<>()).forGetter(Output::pool)
-        ).apply(instance, Output::new));
+        public static <A extends AbstractOutput<B>, B> Codec<Output<A, B>> codec(Codec<A> codec) {
+            return RecordCodecBuilder.create(instance -> instance.group(
+                    Codec.doubleRange(0d, 1.0d).fieldOf("chance").orElse(1.0d).forGetter(Output::chance),
+                    CodecExtras.weightedCollection(codec, AbstractOutput::weight).fieldOf("pool").orElse(new WeightedCollection<>()).forGetter(Output::pool)
+            ).apply(instance, Output::new));
+        }
 
         public T getRandomResult() {
             return pool().next();

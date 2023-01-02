@@ -25,8 +25,7 @@ public class BoundSafeContainerData implements ContainerData {
     }
 
     public void increment(int i) {
-        if (!inBounds(i)) return;
-        ints[i]++;
+        increment(i, 1);
     }
 
     public void increment(int i, int val) {
@@ -35,8 +34,7 @@ public class BoundSafeContainerData implements ContainerData {
     }
 
     public void decrement(int i) {
-        if (!inBounds(i)) return;
-        ints[i]--;
+        decrement(i, 1);
     }
 
     public void decrement(int i, int val) {

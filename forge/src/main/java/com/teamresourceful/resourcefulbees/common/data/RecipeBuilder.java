@@ -90,7 +90,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     public void addRecipe(Recipe<?> recipe) {
-        ((RecipeManagerAccessor)getRecipeManager()).getRecipes().computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
+        getRecipeManager().getRecipes().computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -112,12 +112,12 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         BeeJarIngredient beeJarParent1 = new BeeJarIngredient(parent1Id, parents.getParent1Data().getRenderData().colorData().jarColor().getValue());
         BeeBreedData parent1BreedData = parents.getParent1Data().getBreedData();
         var parent1FeedItems = Ingredient.of(parent1BreedData.feedItems().stream().map(ItemStack::new));
-        BreederRecipe.BreederPair parent1 = new BreederRecipe.BreederPair(beeJarParent1, Optional.of(parent1Id.toString()), parent1FeedItems, parent1BreedData.feedReturnItem());
+        BreederRecipe.BreederPair parent1 = new BreederRecipe.BreederPair(beeJarParent1, Optional.of(parent1Id.toString()), parent1BreedData.feedAmount(), parent1FeedItems, parent1BreedData.feedReturnItem());
         ResourceLocation parent2Id = parents.getParent2Data().id();
         BeeBreedData parent2BreedData = parents.getParent2Data().getBreedData();
         BeeJarIngredient beeJarParent2 = new BeeJarIngredient(parent2Id, parents.getParent2Data().getRenderData().colorData().jarColor().getValue());
         var parent2FeedItems = Ingredient.of(parent2BreedData.feedItems().stream().map(ItemStack::new));
-        BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parent2Id.toString()),  parent2FeedItems, parent2BreedData.feedReturnItem());
+        BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parent2Id.toString()), parent2BreedData.feedAmount(), parent2FeedItems, parent2BreedData.feedReturnItem());
         return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(WeightedCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
     }
 
@@ -255,13 +255,13 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         );
     }
 
-    public static RecipeManager getRecipeManager() {
+    public static RecipeManagerAccessor getRecipeManager() {
         RecipeManagerAccessor recipeManagerInvoker = (RecipeManagerAccessor)recipeManager;
         if (!recipeManagerInvoker.getRecipes().getClass().equals(HashMap.class)) {
             recipeManagerInvoker.setRecipes(new HashMap<>(recipeManagerInvoker.getRecipes()));
             recipeManagerInvoker.getRecipes().replaceAll((t, v) -> new HashMap<>(recipeManagerInvoker.getRecipes().get(t)));
         }
 
-        return recipeManager;
+        return recipeManagerInvoker;
     }
 }
