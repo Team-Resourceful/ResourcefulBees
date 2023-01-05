@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.event;
 
+import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.client.ResourcefulBeesClient;
 import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
@@ -16,6 +17,7 @@ import com.teamresourceful.resourcefulbees.client.render.items.ItemModelProperti
 import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.screens.centrifuge.*;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
@@ -25,6 +27,8 @@ import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import com.teamresourceful.resourcefulbees.platform.client.events.RegisterColorHandlerEvent;
 import com.teamresourceful.resourcefulbees.platform.client.events.RegisterRendererEvent;
 import com.teamresourceful.resourcefulbees.platform.client.events.ScreenOpenEvent;
+import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
+import com.teamresourceful.resourcefulconfig.common.config.ResourcefulConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
@@ -34,10 +38,12 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -52,6 +58,16 @@ public final class ClientEventHandlers {
 
     public static void clientStuff() {
         ResourcefulBeesClient.init();
+
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+                () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> {
+                    ResourcefulConfig config = ResourcefulBees.CONFIGURATOR.getConfig(GeneralConfig.class);
+                    if (config == null) {
+                        return null;
+                    }
+                    return new ConfigScreen(null, config);
+                })
+        );
 
         var eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 

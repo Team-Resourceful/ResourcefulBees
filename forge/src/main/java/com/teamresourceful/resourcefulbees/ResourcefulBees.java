@@ -23,23 +23,20 @@ import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngre
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.FilledBeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.NBTAmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.custom.*;
+import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.DefaultTraitAbilities;
 import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
-import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
 import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.SyncedDatapackEvent;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
-import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
 import com.teamresourceful.resourcefulconfig.common.config.Configurator;
-import com.teamresourceful.resourcefulconfig.common.config.ResourcefulConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
@@ -53,7 +50,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
@@ -67,7 +63,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Mod(ModConstants.MOD_ID)
 public class ResourcefulBees {
 
-    private static final Configurator CONFIGURATOR = new Configurator(true);
+    public static final Configurator CONFIGURATOR = new Configurator(true);
 
     public ResourcefulBees() {
         ModConstants.forceInit();
@@ -76,16 +72,6 @@ public class ResourcefulBees {
             ModValidation.IS_RUNNING_IN_IDE = true;
         }
         CONFIGURATOR.registerConfig(GeneralConfig.class);
-
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> {
-                    ResourcefulConfig config = CONFIGURATOR.getConfig(GeneralConfig.class);
-                    if (config == null) {
-                        return null;
-                    }
-                    return new ConfigScreen(null, config);
-                })
-        );
 
         GameSetup.initEvents();
 
