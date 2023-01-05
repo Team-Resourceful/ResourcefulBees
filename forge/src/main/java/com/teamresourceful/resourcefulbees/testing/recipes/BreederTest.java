@@ -22,7 +22,7 @@ import java.util.Optional;
 public class BreederTest {
 
     private static final ResourceLocation TEST_ID = new ResourceLocation(ModConstants.MOD_ID, "breeder_test");
-    private static final BreederRecipe.BreederPair PAIR = new BreederRecipe.BreederPair(Ingredient.of(Items.STICK), Optional.empty(), Ingredient.of(Items.DIAMOND), Optional.empty());
+    private static final BreederRecipe.BreederPair PAIR = new BreederRecipe.BreederPair(Ingredient.of(Items.STICK), Optional.empty(), 1, Ingredient.of(Items.DIAMOND), Optional.empty());
     private static final BreederRecipe RECIPE = new BreederRecipe(TEST_ID, PAIR, PAIR, Optional.empty(), new WeightedCollection<>(), 1200);
     private static final JsonObject JSON_RECIPE = GsonHelpers.parseJson("""
         {
