@@ -1,6 +1,9 @@
 accessWidener   v2  named
 
 accessible method net/minecraft/world/entity/animal/Bee isHiveValid ()Z
+accessible method net/minecraft/world/entity/animal/Bee wantsToEnterHive ()Z
+accessible method net/minecraft/world/entity/animal/Bee incrementNumCropsGrownSincePollination ()V
+accessible method net/minecraft/world/entity/animal/Bee isFlowerValid (Lnet/minecraft/core/BlockPos;)Z
 
 accessible class net/minecraft/world/level/block/entity/BeehiveBlockEntity$BeeData
 accessible method net/minecraft/world/level/block/entity/BeehiveBlockEntity$BeeData <init> (Lnet/minecraft/nbt/CompoundTag;II)V
@@ -15,7 +18,11 @@ accessible method net/minecraft/world/entity/animal/Bee$BeeEnterHiveGoal <init> 
 accessible class net/minecraft/world/entity/animal/Bee$BeeGrowCropGoal
 accessible method net/minecraft/world/entity/animal/Bee$BeeGrowCropGoal <init> (Lnet/minecraft/world/entity/animal/Bee;)V
 accessible method net/minecraft/world/entity/animal/Bee$BeeGoToHiveGoal <init> (Lnet/minecraft/world/entity/animal/Bee;)V
-accessible class net/minecraft/world/entity/animal/Bee$BeePollinateGoal
-accessible method net/minecraft/world/entity/animal/Bee$BeePollinateGoal <init> (Lnet/minecraft/world/entity/animal/Bee;)V
+extendable method net/minecraft/world/entity/animal/Bee$BeeGoToHiveGoal dropHive ()V
 accessible class net/minecraft/world/entity/animal/Bee$BeeLocateHiveGoal
 accessible method net/minecraft/world/entity/animal/Bee$BeeLocateHiveGoal <init> (Lnet/minecraft/world/entity/animal/Bee;)V
+
+accessible class net/minecraft/world/entity/animal/Bee$BeePollinateGoal
+accessible method net/minecraft/world/entity/animal/Bee$BeePollinateGoal <init> (Lnet/minecraft/world/entity/animal/Bee;)V
+accessible method net/minecraft/world/entity/animal/Bee$BeePollinateGoal stopPollinating ()V
+accessible method net/minecraft/world/entity/animal/Bee$BeePollinateGoal isPollinating ()Z
