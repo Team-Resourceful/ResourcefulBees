@@ -13,7 +13,7 @@ public interface CodecIngredient<T extends CodecIngredient<T>> extends Predicate
     Collection<ItemStack> getStacks();
 
     /**
-     * Determines if this ingredient is constants.
+     * Determines if this ingredient is constant.
      * i.e. it will always return the same stacks such that does not depend on nbt or other data.
      * @return true if this ingredient is constant.
      */
