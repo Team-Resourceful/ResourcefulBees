@@ -18,10 +18,8 @@ import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTie
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.network.ForgeNetworkHandler;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.recipe.ingredients.FilledBeeJarIngredient;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.NBTAmountSensitiveIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.custom.*;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
@@ -151,8 +149,6 @@ public class ResourcefulBees {
         ForgeNetworkHandler.init();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
         ForgeIngredientHelper.init();
-        CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "amount_sensitive"), AmountSensitiveIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "nbt_amount_sensitive"), NBTAmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "any_filled_bee_jar"), FilledBeeJarIngredient.Serializer.INSTANCE);
         GameSetup.initPotionRecipes();

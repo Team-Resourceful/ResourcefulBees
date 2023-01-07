@@ -31,6 +31,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
 
     private final Ingredient ingredient;
     private final ResourceLocation id;
+    private final int inputAmount;
 
     private final List<CentrifugeRecipe.Output<ItemOutput, ItemStack>> itemOutputs = new ArrayList<>();
     private final List<CentrifugeRecipe.Output<FluidOutput, FluidStack>> fluidOutputs = new ArrayList<>();
@@ -41,13 +42,14 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
 
     private final List<JsonObject> conditions = new ArrayList<>();
 
-    private CentrifugeRecipeBuilder(Ingredient ingredient, ResourceLocation id) {
+    private CentrifugeRecipeBuilder(Ingredient ingredient, ResourceLocation id, int inputAmount) {
         this.ingredient = ingredient;
         this.id = id;
+        this.inputAmount = inputAmount;
     }
 
-    public static CentrifugeRecipeBuilder of(Ingredient ingredient, ResourceLocation id) {
-        return new CentrifugeRecipeBuilder(ingredient, id);
+    public static CentrifugeRecipeBuilder of(Ingredient ingredient, ResourceLocation id, int inputAmount) {
+        return new CentrifugeRecipeBuilder(ingredient, id, inputAmount);
     }
 
     public CentrifugeRecipeBuilder time(int time) {
@@ -107,10 +109,11 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
 
     @Override
     public void save(@NotNull Consumer<FinishedRecipe> consumer, @NotNull ResourceLocation id) {
-        consumer.accept(new CentrifugeFinishedRecipe(this.ingredient, this.id, itemOutputs, fluidOutputs, time, rfPerTick, Optional.ofNullable(uses), conditions));
+        consumer.accept(new CentrifugeFinishedRecipe(this.ingredient, this.id, inputAmount, itemOutputs, fluidOutputs, time, rfPerTick, Optional.ofNullable(uses), conditions));
     }
 
     public record CentrifugeFinishedRecipe(Ingredient ingredient, ResourceLocation id,
+                                           int inputAmount,
                                            List<CentrifugeRecipe.Output<ItemOutput, ItemStack>> itemOutputs,
                                            List<CentrifugeRecipe.Output<FluidOutput, FluidStack>> fluidOutputs,
                                            Integer time, Integer rfPerTick, Optional<Integer> uses,
@@ -118,7 +121,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
 
         @Override
         public void serializeRecipeData(@NotNull JsonObject json) {
-            CentrifugeRecipe recipe = new CentrifugeRecipe(id(), ingredient(), itemOutputs(), fluidOutputs(), time(), rfPerTick(), uses());
+            CentrifugeRecipe recipe = new CentrifugeRecipe(id(), ingredient(), inputAmount(), itemOutputs(), fluidOutputs(), time(), rfPerTick(), uses());
             CentrifugeRecipe.codec(id())
                     .encodeStart(JsonOps.INSTANCE, recipe)
                     .getOrThrow(false, s -> ModConstants.LOGGER.error("COULD NOT SERIALIZE DATA GEN RECIPE"))

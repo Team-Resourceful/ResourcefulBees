@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
+import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;

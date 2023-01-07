@@ -1,10 +1,7 @@
 {
   "type": "resourcefulbees:centrifuge",
-  "ingredient": {
-    "type": "resourcefulbees:amount_sensitive",
-    "item": "resourcefulbees:diamond_honeycomb_block",
-    "count": 2
-  },
+  "ingredient": { "item": "resourcefulbees:diamond_honeycomb_block" },
+  "inputAmount": 2,
   "itemOutputs": [
     {
       "chance": 0.50,

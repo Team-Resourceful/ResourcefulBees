@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.config.CentrifugeConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.AmountSensitive;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
@@ -32,6 +31,7 @@ import java.util.Optional;
 public record CentrifugeRecipe(
         ResourceLocation id,
         Ingredient ingredient,
+        int inputAmount,
         List<Output<ItemOutput, ItemStack>> itemOutputs,
         List<Output<FluidOutput, FluidStack>> fluidOutputs,
         int time,
@@ -43,6 +43,7 @@ public record CentrifugeRecipe(
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 IngredientCodec.CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::ingredient),
+                Codec.INT.fieldOf("inputAmount").orElse(1).forGetter(CentrifugeRecipe::inputAmount),
                 Output.codec(ItemOutput.CODEC).listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::itemOutputs),
                 Output.codec(FluidOutput.CODEC).listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::fluidOutputs),
                 Codec.INT.fieldOf("time").orElse(CentrifugeConfig.globalCentrifugeRecipeTime).forGetter(CentrifugeRecipe::time),
@@ -60,10 +61,6 @@ public record CentrifugeRecipe(
     public boolean matchesItemAndNBT(Container inventory) {
         ItemStack stack = inventory.getItem(0);
         return !stack.isEmpty() && ItemStack.isSameItemSameTags(ingredient.getItems()[0], stack);
-    }
-
-    public int getInputAmount() {
-        return ingredient instanceof AmountSensitive amountSensitive ? amountSensitive.getAmount() : 1;
     }
 
     @NotNull

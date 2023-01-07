@@ -1,8 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.network;
 
+import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.*;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.*;
-import com.teamresourceful.resourcefulbees.common.network.packets.server.CommandResponsePacket;
+import com.teamresourceful.resourcefulbees.centrifuge.common.network.server.CommandResponsePacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncGuiPacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;

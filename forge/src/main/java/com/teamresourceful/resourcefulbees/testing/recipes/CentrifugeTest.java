@@ -23,7 +23,7 @@ import java.util.Optional;
 public class CentrifugeTest {
 
     private static final ResourceLocation TEST_ID = new ResourceLocation(ModConstants.MOD_ID, "centrifuge_test");
-    private static final CentrifugeRecipe RECIPE = new CentrifugeRecipe(TEST_ID, Ingredient.of(Items.STICK), new ArrayList<>(), new ArrayList<>(), CentrifugeConfig.globalCentrifugeRecipeTime, CentrifugeConfig.centrifugeRfPerTick, Optional.empty());
+    private static final CentrifugeRecipe RECIPE = new CentrifugeRecipe(TEST_ID, Ingredient.of(Items.STICK), 1, new ArrayList<>(), new ArrayList<>(), CentrifugeConfig.globalCentrifugeRecipeTime, CentrifugeConfig.centrifugeRfPerTick, Optional.empty());
     private static final JsonObject JSON_RECIPE = GsonHelpers.parseJson("""
         {
             "ingredient": {

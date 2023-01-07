@@ -59,7 +59,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
                 .map(output -> output.pool().stream().map(ItemOutput::itemStack).toList()).toList();
 
         ItemStack ingredient = recipe.recipe.ingredient().getItems()[0];
-        ingredient.setCount(recipe.recipe.getInputAmount());
+        ingredient.setCount(recipe.recipe.inputAmount());
 
         builder.addSlot(RecipeIngredientRole.INPUT,10, 25).addItemStack(ingredient).setSlotName("input");
         for (int i = 0; i < 3; i++) {

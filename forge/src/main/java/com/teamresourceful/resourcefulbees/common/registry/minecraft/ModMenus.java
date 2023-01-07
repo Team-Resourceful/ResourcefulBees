@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.containers.*;
+import com.teamresourceful.resourcefulbees.centrifuge.common.containers.*;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistries;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;

@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeInputScreen;
-import com.teamresourceful.resourcefulbees.client.screens.centrifuge.CentrifugeVoidScreen;
+import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeInputScreen;
+import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeVoidScreen;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.CentrifugeInputGhostIngredientHandler;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredientHelper;

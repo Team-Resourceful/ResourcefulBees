@@ -6,8 +6,8 @@ import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.Centrif
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.entities.*;
-import com.teamresourceful.resourcefulbees.common.multiblocks.centrifuge.helpers.CentrifugeTier;
+import com.teamresourceful.resourcefulbees.centrifuge.common.entities.*;
+import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistries;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;

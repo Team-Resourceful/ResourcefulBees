@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
 import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
-import com.teamresourceful.resourcefulbees.common.network.packets.client.SetFilterSlotPacket;
+import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.SetFilterSlotPacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
