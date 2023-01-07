@@ -7,9 +7,9 @@ public interface CodecIngredientSerializer<T extends CodecIngredient<T>> {
 
     ResourceLocation id();
 
-    Codec<T> codec();
+    Codec<CodecIngredient<T>> codec();
 
-    default Codec<T> network() {
+    default Codec<CodecIngredient<T>> network() {
         return codec();
     }
 }

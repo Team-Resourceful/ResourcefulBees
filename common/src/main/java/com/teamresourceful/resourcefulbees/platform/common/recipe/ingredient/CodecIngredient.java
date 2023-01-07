@@ -1,16 +1,25 @@
 package com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient;
 
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 
-public interface CodecIngredient<T extends CodecIngredient<T>> extends Predicate<ItemStack> {
+public interface CodecIngredient<T extends CodecIngredient<T>> extends Predicate<@Nullable ItemStack> {
 
     @Override
-    boolean test(ItemStack stack);
+    boolean test(@Nullable ItemStack stack);
 
-    Collection<ItemStack> getStacks();
+    List<ItemStack> getStacks();
+
+    default ItemStack[] getStacksAsArray() {
+        return getStacks().toArray(new ItemStack[0]);
+    }
+
+    default boolean isEmpty() {
+        return getStacks().isEmpty();
+    }
 
     /**
      * Determines if this ingredient is constant.

@@ -19,6 +19,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
 
+    modApi("com.teamresourceful.resourcefullib:resourcefullib-fabric-$rootProject.resourcefullib_version")
     modApi("com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-$rootProject.resourcefulconfig_version")
 
     //TODO when fabric gets running we do need transitive, this was just disabled so I could not deal with updating the maven

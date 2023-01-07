@@ -32,6 +32,7 @@ import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
 import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.SyncedDatapackEvent;
+import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.forge.ForgeIngredientHelper;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import com.teamresourceful.resourcefulconfig.common.config.Configurator;
 import net.minecraft.resources.ResourceLocation;
@@ -149,6 +150,7 @@ public class ResourcefulBees {
         event.enqueueWork(RegistryHandler::registerDispenserBehaviors);
         ForgeNetworkHandler.init();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
+        ForgeIngredientHelper.init();
         CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "amount_sensitive"), AmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "nbt_amount_sensitive"), NBTAmountSensitiveIngredient.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
