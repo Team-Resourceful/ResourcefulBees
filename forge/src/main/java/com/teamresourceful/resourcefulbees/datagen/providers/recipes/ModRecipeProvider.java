@@ -167,7 +167,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Ingredient.of(Items.STICK))
                 .unlockedBy(hasIron)
                 .save(recipes);
-        AdvancedShapedRecipeBuilder.shaped(ModItems.BEE_JAR)
+        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR)
                 .pattern(" G ", "G G", "GGG")
                 .define('G', Ingredient.of(Tags.Items.GLASS_PANES_COLORLESS))
                 .unlockedBy("has_glass_panes", RecipeProvider.has(Tags.Items.GLASS_PANES_COLORLESS))

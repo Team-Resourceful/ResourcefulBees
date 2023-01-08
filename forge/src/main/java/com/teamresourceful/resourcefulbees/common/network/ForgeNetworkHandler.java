@@ -1,10 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.network;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.*;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.network.packets.client.*;
 import com.teamresourceful.resourcefulbees.centrifuge.common.network.server.CommandResponsePacket;
-import com.teamresourceful.resourcefulbees.common.network.packets.server.SyncGuiPacket;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
+import com.teamresourceful.resourcefulbees.common.network.packets.client.LockBeePacket;
+import com.teamresourceful.resourcefulbees.common.network.packets.client.SelectFluidPacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
 
@@ -28,7 +29,6 @@ public final class ForgeNetworkHandler {
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, SetFilterSlotPacket.ID, SetFilterSlotPacket.HANDLER, SetFilterSlotPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, SwitchGuiPacket.ID, SwitchGuiPacket.HANDLER, SwitchGuiPacket.class);
 
-        CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, SyncGuiPacket.ID, SyncGuiPacket.HANDLER, SyncGuiPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, CommandResponsePacket.ID, CommandResponsePacket.HANDLER, CommandResponsePacket.class);
         NetworkHandler.init();
     }

@@ -18,8 +18,6 @@ import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTie
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.network.ForgeNetworkHandler;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.BeeJarIngredient;
-import com.teamresourceful.resourcefulbees.common.recipe.ingredients.FilledBeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.custom.*;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
@@ -33,11 +31,9 @@ import com.teamresourceful.resourcefulbees.platform.common.events.SyncedDatapack
 import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.forge.ForgeIngredientHelper;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import com.teamresourceful.resourcefulconfig.common.config.Configurator;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -149,8 +145,6 @@ public class ResourcefulBees {
         ForgeNetworkHandler.init();
         MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
         ForgeIngredientHelper.init();
-        CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "beejar"), BeeJarIngredient.Serializer.INSTANCE);
-        CraftingHelper.register(new ResourceLocation(ModConstants.MOD_ID, "any_filled_bee_jar"), FilledBeeJarIngredient.Serializer.INSTANCE);
         GameSetup.initPotionRecipes();
         GameSetup.initArguments();
         ConditionRegistryImpl.freeze();

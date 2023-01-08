@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.network.client;
 
-import com.teamresourceful.resourcefulbees.common.inventory.menus.AbstractModContainerMenu;
+import com.teamresourceful.resourcefulbees.common.menus.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeInputContainer;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;

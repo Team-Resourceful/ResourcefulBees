@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
-import com.teamresourceful.resourcefulbees.common.inventory.BoundSafeContainerData;
+import com.teamresourceful.resourcefulbees.common.menus.BoundSafeContainerData;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.BreederMenu;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.BreederTimeUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.item.upgrade.Upgrade;

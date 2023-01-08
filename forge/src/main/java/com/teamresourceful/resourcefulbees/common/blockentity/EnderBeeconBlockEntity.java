@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
-import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.config.EnderBeeconConfig;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
@@ -242,14 +242,14 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
                 if (effect != null && ALLOWED_EFFECTS.contains(effect)) {
                     if (option.equals(BeeconChangePacket.Option.EFFECT_ON)) effects.add(effect);
                     else effects.remove(effect);
-                    this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+                    this.sendToPlayersTrackingChunk();
                 }
             }
             case BEAM -> this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(EnderBeecon.BEAM, value == 1), Block.UPDATE_ALL);
             case SOUND -> this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(EnderBeecon.SOUND, value == 1), Block.UPDATE_ALL);
             case RANGE -> {
                 this.setRange(value);
-                this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+                this.sendToPlayersTrackingChunk();
             }
             default -> ModConstants.LOGGER.error("UNKNOWN Beecon Configuration Option '{}' please report to github!", option);
         }

@@ -2,13 +2,14 @@ package com.teamresourceful.resourcefulbees.common.inventory.menus;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.FakeFlowerEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
+import com.teamresourceful.resourcefulbees.common.menus.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class FakeFlowerMenu extends AbstractModContainerMenu<FakeFlowerEntity>{
+public class FakeFlowerMenu extends AbstractModContainerMenu<FakeFlowerEntity> {
 
     public FakeFlowerMenu(int id, Inventory inv, FriendlyByteBuf buf) {
         this(id, inv, getTileFromBuf(inv.player.level, buf, FakeFlowerEntity.class));

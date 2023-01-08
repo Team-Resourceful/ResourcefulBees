@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blockentity.base;
 
+import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import net.minecraft.core.BlockPos;

@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.entities.base;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.base.SyncableGUI;
 import com.teamresourceful.resourcefulbees.centrifuge.common.CentrifugeController;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeState;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.SyncableGUI;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

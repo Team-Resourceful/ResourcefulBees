@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.inventory.menus;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BlockBee;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
+import com.teamresourceful.resourcefulbees.common.menus.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.LockBeePacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;

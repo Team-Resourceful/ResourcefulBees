@@ -5,14 +5,12 @@ import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument
 import com.teamresourceful.resourcefulbees.common.enchantments.HiveBreakEnchantment;
 import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
 import com.teamresourceful.resourcefulbees.common.resources.conditions.LoadDevRecipes;
 import com.teamresourceful.resourcefulbees.common.worldgen.GoldenFlower;
-import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
-import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
-import com.teamresourceful.resourcefulbees.platform.common.events.PlayerBrokeBlockEvent;
-import com.teamresourceful.resourcefulbees.platform.common.events.SyncedDatapackEvent;
+import com.teamresourceful.resourcefulbees.platform.common.events.*;
 import com.teamresourceful.resourcefulbees.platform.common.registry.RegistryHelper;
 import com.teamresourceful.resourcefulbees.platform.common.registry.potion.PotionRegistry;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.ConditionRegistry;
@@ -38,6 +36,7 @@ public final class GameSetup {
         PlayerBrokeBlockEvent.EVENT.addListener(HiveBreakEnchantment::onBlockBreak);
         BlockBonemealedEvent.EVENT.addListener(GoldenFlower::onBlockBonemealed);
         SyncedDatapackEvent.EVENT.addListener(DimensionalBeeHolder::onDatapackSync);
+        RegisterIngredientsEvent.EVENT.addListener(GameSetup::initIngredients);
     }
 
     public static void initSerializersAndConditions() {
@@ -51,5 +50,9 @@ public final class GameSetup {
 
     public static void initArguments() {
         RegistryHelper.register(ModArguments.BEE_TYPE, BeeArgument.class);
+    }
+
+    public static void initIngredients(RegisterIngredientsEvent event) {
+        event.register(BeeJarIngredient.SERIALIZER);
     }
 }

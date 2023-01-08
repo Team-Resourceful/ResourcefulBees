@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "J": {
-      "type": "resourcefulbees:any_filled_bee_jar"
+      "type": "resourcefulbees:bee_jar"
     },
     "C": {
       "item": "minecraft:clock"

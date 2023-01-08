@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.inventory.menus;
+package com.teamresourceful.resourcefulbees.common.menus;
 
 import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,8 +10,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -92,6 +90,8 @@ public abstract class AbstractModContainerMenu<T extends BlockEntity> extends Ab
     }
 
     protected static <T extends BlockEntity> T getTileFromBuf(Level level, FriendlyByteBuf buf, Class<T> type) {
-        return buf == null ? null : DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> WorldUtils.getTileEntity(type, level, buf.readBlockPos()));
+        if (buf == null) return null;
+        if (!level.isClientSide) return null;
+        return WorldUtils.getTileEntity(type, level, buf.readBlockPos());
     }
 }

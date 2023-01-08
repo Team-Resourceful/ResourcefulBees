@@ -7,7 +7,14 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public record FabricIngredient<T extends CodecIngredient<T>>(CodecIngredient<T> ingredient) implements CustomIngredient {
+public class FabricIngredient<T extends CodecIngredient<T>> implements CustomIngredient {
+
+    private final T ingredient;
+    private List<ItemStack> stacks;
+
+    public FabricIngredient(T ingredient) {
+        this.ingredient = ingredient;
+    }
 
     @Override
     public boolean test(ItemStack stack) {
@@ -16,7 +23,10 @@ public record FabricIngredient<T extends CodecIngredient<T>>(CodecIngredient<T> 
 
     @Override
     public List<ItemStack> getMatchingStacks() {
-        return ingredient.getStacks();
+        if (stacks == null) {
+            stacks = ingredient.getStacks();
+        }
+        return stacks;
     }
 
     @Override
@@ -27,5 +37,9 @@ public record FabricIngredient<T extends CodecIngredient<T>>(CodecIngredient<T> 
     @Override
     public CustomIngredientSerializer<?> getSerializer() {
         return null;
+    }
+
+    public T getIngredient() {
+        return ingredient;
     }
 }

@@ -12,7 +12,7 @@ public final class IngredientHelper {
     }
 
     @ExpectPlatform
-    public static Ingredient getIngredient(CodecIngredient<?> ingredient) {
+    public static <T extends CodecIngredient<T>> Ingredient getIngredient(T ingredient) {
         throw new NotImplementedError();
     }
 }

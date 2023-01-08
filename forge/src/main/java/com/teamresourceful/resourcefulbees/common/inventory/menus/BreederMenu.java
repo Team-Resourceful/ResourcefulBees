@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.blockentity.BreederBlockEntity
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
+import com.teamresourceful.resourcefulbees.common.menus.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;

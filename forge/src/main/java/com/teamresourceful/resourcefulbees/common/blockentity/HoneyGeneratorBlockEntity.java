@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.block.HoneyGenerator;
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
-import com.teamresourceful.resourcefulbees.common.blockentity.base.GUISyncedBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.config.HoneyGenConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGeneratorMenu;

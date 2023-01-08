@@ -2,8 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "H": {
-      "type": "resourcefulbees:any_filled_bee_jar",
-      "anyFilledJar": true
+      "type": "resourcefulbees:bee_jar"
     },
     "C": {
       "item": "minecraft:compass"

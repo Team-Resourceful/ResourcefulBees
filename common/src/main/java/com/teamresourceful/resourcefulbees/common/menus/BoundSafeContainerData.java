@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.inventory;
+package com.teamresourceful.resourcefulbees.common.menus;
 
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import net.minecraft.world.inventory.ContainerData;

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.mixin;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.block.entity.BlockEntity;

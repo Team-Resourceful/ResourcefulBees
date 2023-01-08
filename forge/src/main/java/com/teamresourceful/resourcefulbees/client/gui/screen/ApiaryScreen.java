@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BlockBee;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
+import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import com.teamresourceful.resourcefullib.common.utils.TagUtils;
 import net.minecraft.client.Minecraft;
@@ -149,9 +149,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
             int j = i - this.beeIndexOffset;
             int i1 = top + j * 18 + 2;
 
-            ItemStack beeJar = new ItemStack(ModItems.BEE_JAR.get());
-            beeJar.setTag(TagUtils.tagWithData(NBTConstants.BeeJar.ENTITY, this.menu.getApiaryBee(i).entityData.copy()));
-
+            ItemStack beeJar = BeeJarItem.createFilledJar(TagUtils.tagWithData(NBTConstants.BeeJar.ENTITY, this.menu.getApiaryBee(i).entityData.copy()), null);
             this.itemRenderer.renderAndDecorateItem(beeJar, left, i1);
         }
     }

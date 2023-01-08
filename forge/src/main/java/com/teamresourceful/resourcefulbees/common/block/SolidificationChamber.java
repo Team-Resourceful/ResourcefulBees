@@ -57,7 +57,7 @@ public class SolidificationChamber extends TickingBlock<SolidificationChamberBlo
         SolidificationChamberBlockEntity tank = getBlockEntity(level, pos);
         if (tank == null) return;
         if (tank.getTank().getFluid().getFluid() instanceof CustomHoneyFluid fluid && fluid.getHoneyData().renderData().color().isRainbow()) {
-            level.sendBlockUpdated(pos, stateIn, stateIn, 2);
+            level.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
         }
         super.animateTick(stateIn, level, pos, rand);
     }

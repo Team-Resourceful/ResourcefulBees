@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.color;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.item.*;
+import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
@@ -32,7 +33,7 @@ public final class ColorHandler {
         registerItems(event::register, CustomHoneyBucketItem::getColor, ModItems.HONEY_BUCKET_ITEMS.getEntries());
         registerItems(event::register, CustomHoneyBottleItem::getColor, ModItems.HONEY_BOTTLE_ITEMS.getEntries());
         registerItems(event::register, CustomHoneyBlock::getItemColor, ModItems.HONEY_BLOCK_ITEMS.getEntries());
-        event.register(BeeJarItem::getColor, ModItems.BEE_JAR.get());
+        event.register(BeeJarItem::getColor, com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR.get());
         event.register(MutatedPollenItem::getColor, ModItems.MUTATED_POLLEN.get());
     }
 

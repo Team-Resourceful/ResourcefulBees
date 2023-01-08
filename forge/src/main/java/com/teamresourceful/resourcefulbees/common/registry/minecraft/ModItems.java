@@ -148,8 +148,6 @@ public final class ModItems {
     //endregion
     //endregion
 
-    public static final RegistryEntry<Item> BEE_JAR = ITEMS.register("bee_jar", () -> new BeeJarItem(new Item.Properties().durability(0).stacksTo(16)));
-
     public static final RegistryEntry<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
             .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 600, 1), 1)
             .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 2400, 3), 1)

@@ -28,13 +28,13 @@ public class ForgeIngredientSerializer<T extends CodecIngredient<T>> implements 
 
     @Override
     public @NotNull ForgeIngredient<T> parse(@NotNull JsonObject json) {
-        CodecIngredient<T> ingredient = serializer.codec().parse(JsonOps.INSTANCE, json).getOrThrow(false, ModConstants.LOGGER::error);
+        T ingredient = serializer.codec().parse(JsonOps.INSTANCE, json).getOrThrow(false, ModConstants.LOGGER::error);
         return new ForgeIngredient<>(ingredient);
     }
 
     @Override
     public @NotNull ForgeIngredient<T> parse(@NotNull FriendlyByteBuf buf) {
-        CodecIngredient<T> ingredient = serializer.network()
+        T ingredient = serializer.network()
                 .parse(YabnOps.COMPRESSED, YabnParser.parseCompress(new ByteBufByteReader(buf)))
                 .getOrThrow(false, ModConstants.LOGGER::error);
         return new ForgeIngredient<>(ingredient);

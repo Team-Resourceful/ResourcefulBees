@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.FindBeePacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.DimensionalBeesPacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncBeepediaPacket;
+import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncGuiPacket;
 import com.teamresourceful.resourcefullib.common.networking.NetworkChannel;
 import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
 
@@ -21,6 +22,7 @@ public final class NetworkHandler {
 
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, DimensionalBeesPacket.ID, DimensionalBeesPacket.HANDLER, DimensionalBeesPacket.class);
         CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, SyncBeepediaPacket.ID, SyncBeepediaPacket.HANDLER, SyncBeepediaPacket.class);
+        CHANNEL.registerPacket(NetworkDirection.SERVER_TO_CLIENT, SyncGuiPacket.ID, SyncGuiPacket.HANDLER, SyncGuiPacket.class);
     }
 
 }

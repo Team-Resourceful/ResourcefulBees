@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.inventory.menus;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.HoneyPotBlockEntity;
+import com.teamresourceful.resourcefulbees.common.menus.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

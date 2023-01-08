@@ -31,16 +31,16 @@ public class FabricIngredientSerializer<T extends CodecIngredient<T>> implements
 
     @Override
     public FabricIngredient<T> read(JsonObject json) {
-        CodecIngredient<T> ingredient = serializer.codec().parse(JsonOps.INSTANCE, json).getOrThrow(false, ModConstants.LOGGER::error);
+        T ingredient = serializer.codec().parse(JsonOps.INSTANCE, json).getOrThrow(false, ModConstants.LOGGER::error);
         return new FabricIngredient<>(ingredient);
     }
 
     @Override
     public void write(JsonObject json, FabricIngredient<T> ingredient) {
-        JsonElement element = serializer.codec().encodeStart(JsonOps.INSTANCE, ingredient.ingredient())
+        JsonElement element = serializer.codec().encodeStart(JsonOps.INSTANCE, ingredient.getIngredient())
                 .getOrThrow(false, ModConstants.LOGGER::error);
         if (!element.isJsonObject()) {
-            ModConstants.LOGGER.error("Could not parse {}", ingredient.ingredient());
+            ModConstants.LOGGER.error("Could not parse {}", ingredient.getIngredient());
             ModConstants.LOGGER.error("Element is not a JsonObject");
             return;
         }
@@ -51,7 +51,7 @@ public class FabricIngredientSerializer<T extends CodecIngredient<T>> implements
 
     @Override
     public FabricIngredient<T> read(FriendlyByteBuf buf) {
-        CodecIngredient<T> ingredient = serializer.network()
+        T ingredient = serializer.network()
                 .parse(YabnOps.COMPRESSED, YabnParser.parseCompress(new ByteBufByteReader(buf)))
                 .getOrThrow(false, ModConstants.LOGGER::error);
         return new FabricIngredient<>(ingredient);
@@ -59,7 +59,7 @@ public class FabricIngredientSerializer<T extends CodecIngredient<T>> implements
 
     @Override
     public void write(FriendlyByteBuf buf, FabricIngredient<T> ingredient) {
-        PacketHelper.writeWithYabn(buf, serializer.network(), ingredient.ingredient(), true)
-                .getOrThrow(false, s -> ModConstants.LOGGER.error("Could not parse {}", ingredient.ingredient()));
+        PacketHelper.writeWithYabn(buf, serializer.network(), ingredient.getIngredient(), true)
+                .getOrThrow(false, s -> ModConstants.LOGGER.error("Could not parse {}", ingredient.getIngredient()));
     }
 }

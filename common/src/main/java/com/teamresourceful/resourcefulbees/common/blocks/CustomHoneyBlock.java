@@ -75,7 +75,7 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
 
     @Override
     public void animateTick(@NotNull BlockState stateIn, @NotNull Level world, @NotNull BlockPos pos, @NotNull RandomSource rand) {
-        if (color.isRainbow()) world.sendBlockUpdated(pos, stateIn, stateIn, 2);
+        if (color.isRainbow()) world.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
         super.animateTick(stateIn, world, pos, rand);
     }
 

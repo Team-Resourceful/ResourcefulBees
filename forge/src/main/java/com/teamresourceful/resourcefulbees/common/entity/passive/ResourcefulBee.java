@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.api.registry.TraitAbilityRegistry;
 import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentity.base.BeeHolderBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.entities.ai.AuraHandler;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;

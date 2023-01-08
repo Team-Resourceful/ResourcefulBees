@@ -11,7 +11,7 @@
       "item": "resourcefulbees:waxed_stairs"
     },
     "F": {
-      "type": "resourcefulbees:any_filled_bee_jar"
+      "type": "resourcefulbees:bee_jar"
     }
   },
   "pattern": [

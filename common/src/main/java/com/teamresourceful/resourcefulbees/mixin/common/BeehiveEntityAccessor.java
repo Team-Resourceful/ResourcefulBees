@@ -12,7 +12,7 @@ import java.util.List;
 public interface BeehiveEntityAccessor {
 
     @Accessor("stored")
-    List<BeehiveBlockEntity.BeeData> getBees();
+    List<BeehiveBlockEntity.BeeData> getStored();
 
     @Invoker("removeIgnoredBeeTags")
     static void callRemoveIgnoredBeeTags(CompoundTag tag) {

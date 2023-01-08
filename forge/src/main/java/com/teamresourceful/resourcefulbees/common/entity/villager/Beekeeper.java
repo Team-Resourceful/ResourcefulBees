@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.entity.villager;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
-import com.teamresourceful.resourcefulbees.common.item.BeeJarItem;
+import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;
@@ -76,7 +76,7 @@ public final class Beekeeper {
     //region Level One Trades
     private static void createLevelOneTrades(List<VillagerTrades.ItemListing> list) {
         addTrade(list, UniformInt.of(1,2), ModItems.WAX.get(), UniformInt.of(1,4), 8, 1);
-        addTrade(list, UniformInt.of(2,4), ModItems.BEE_JAR.get(), UniformInt.of(1,4), 4, 1);
+        addTrade(list, UniformInt.of(2,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR.get(), UniformInt.of(1,4), 4, 1);
     }
     //endregion
 

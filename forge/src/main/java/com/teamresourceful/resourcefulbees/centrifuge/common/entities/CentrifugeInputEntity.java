@@ -1,9 +1,5 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.entities;
 
-import com.teamresourceful.resourcefulbees.common.inventory.AbstractFilterItemHandler;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.centrifuge.common.CentrifugeController;
 import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeInputContainer;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractCentrifugeOutputEntity;
@@ -12,6 +8,10 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeT
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.OutputLocationGroup;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.ProcessContainerData;
+import com.teamresourceful.resourcefulbees.common.inventory.AbstractFilterItemHandler;
+import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
@@ -28,7 +28,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -321,7 +320,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     private <A extends AbstractCentrifugeOutputEntity<T, E>, T extends AbstractOutput<E>, E> void linkOutput(int recipeOutputSlot, BlockPos outputPos, A output, OutputLocationGroup<A, T, E> outputLocationGroup) {
         outputLocationGroup.set(recipeOutputSlot, output, outputPos);
         if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+            this.sendToPlayersTrackingChunk();
         }
     }
 

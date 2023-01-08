@@ -1,11 +1,13 @@
-package com.teamresourceful.resourcefulbees.common.item;
+package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import com.teamresourceful.resourcefullib.common.color.Color;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -21,9 +23,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class BeeJarItem extends Item {
     public BeeJarItem(Properties properties) {
@@ -36,7 +37,7 @@ public class BeeJarItem extends Item {
         return color.isBlank() || color.equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR) ? null : Color.parse(color);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static int getColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 1 && stack.hasTag()) {
             Color color = getColor(stack);
@@ -55,16 +56,20 @@ public class BeeJarItem extends Item {
     }
 
     public static ItemStack createFilledJar(ResourceLocation id, Color color) {
-        ItemStack stack = ModItems.BEE_JAR.get().getDefaultInstance();
-
-        CompoundTag stackTag = new CompoundTag();
         CompoundTag entityTag = new CompoundTag();
-
         entityTag.putString(NBTConstants.NBT_ID, id.toString());
         entityTag.putString(NBTConstants.BeeJar.COLOR, color.toString());
-        stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, Component.Serializer.toJson(Component.translatable("entity." + id.getNamespace() + "." + id.getPath())));
 
-        stackTag.put(NBTConstants.BeeJar.ENTITY, entityTag);
+        return createFilledJar(entityTag, Component.Serializer.toJson(Component.translatable("entity." + id.getNamespace() + "." + id.getPath())));
+    }
+
+    public static ItemStack createFilledJar(CompoundTag beeData, @Nullable String display) {
+        ItemStack stack = ModItems.BEE_JAR.get().getDefaultInstance();
+        CompoundTag stackTag = new CompoundTag();
+        if (display != null) {
+            stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, display);
+        }
+        stackTag.put(NBTConstants.BeeJar.ENTITY, beeData);
         stack.setTag(stackTag);
         return stack;
     }

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.containers;
 
-import com.teamresourceful.resourcefulbees.common.inventory.menus.AbstractModContainerMenu;
+import com.teamresourceful.resourcefulbees.common.menus.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;

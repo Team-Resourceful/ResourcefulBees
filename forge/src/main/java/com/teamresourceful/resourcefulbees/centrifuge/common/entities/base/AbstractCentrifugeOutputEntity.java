@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.centrifuge.common.entities.base;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -23,8 +22,7 @@ public abstract class AbstractCentrifugeOutputEntity<T extends AbstractOutput<E>
         // see read/write nbt regarding amount of data being sent
         if (level == null) return;
         this.voidExcess = voidExcess;
-        BlockState currentState = getBlockState();
-        level.sendBlockUpdated(worldPosition, currentState, currentState, Block.UPDATE_CLIENTS);
+        this.sendToPlayersTrackingChunk();
     }
 
     public boolean voidsExcess() {

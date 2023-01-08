@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.advancements;
 
-import com.teamresourceful.resourcefulbees.common.item.BeeJarItem;
+import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -32,7 +32,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
 
         addAdvancement(createSimpleAdvancement(ModItems.WAX, "wax", root));
         Advancement scraper = addAdvancement(createSimpleAdvancement(ModItems.SCRAPER, "scraper", root));
-        Advancement beeJar = addAdvancement(createSimpleAdvancement(ModItems.BEE_JAR, "bee_jar", root));
+        Advancement beeJar = addAdvancement(createSimpleAdvancement(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR, "bee_jar", root));
         Advancement beepedia = addAdvancement(createSimpleAdvancement(ModItems.BEEPEDIA, "beepedia", root));
         addAdvancement(createSimpleAdvancement(ModItems.ENDER_BEECON_ITEM, "ender_beecon", root));
         addAdvancement(createSimpleAdvancement(ModItems.HONEY_GENERATOR_ITEM, "honey_generator", root));

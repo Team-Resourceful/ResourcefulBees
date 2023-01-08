@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.Cod
 import net.minecraft.world.item.crafting.Ingredient;
 
 public class IngredientHelperImpl {
-    public static Ingredient getIngredient(CodecIngredient<?> ingredient) {
+    public static <T extends CodecIngredient<T>> Ingredient getIngredient(T ingredient) {
         return new FabricIngredient<>(ingredient).toVanilla();
     }
 }

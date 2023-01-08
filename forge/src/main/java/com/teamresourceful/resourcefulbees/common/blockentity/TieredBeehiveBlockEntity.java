@@ -253,7 +253,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
     }
 
     public List<BeeData> getBees() {
-        return ((BeehiveEntityAccessor) this).getBees();
+        return ((BeehiveEntityAccessor) this).getStored();
     }
 
     public ItemStack getResourceHoneycomb() {

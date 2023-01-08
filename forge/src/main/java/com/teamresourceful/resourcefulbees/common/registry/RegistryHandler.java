@@ -27,6 +27,7 @@ import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistr
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.*;
 import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
@@ -61,6 +62,7 @@ public final class RegistryHandler {
         ItemGroupResourcefulBees.register();
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         ModItems.ITEMS.init();
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.ITEMS.init();
         ModBlocks.BLOCKS.init();
         com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BLOCKS.init();
         ModEffects.EFFECTS.init();

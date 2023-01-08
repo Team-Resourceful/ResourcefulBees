@@ -16,16 +16,16 @@ import java.util.stream.Stream;
 
 public class ForgeIngredient<T extends CodecIngredient<T>> extends AbstractIngredient {
 
-    private final CodecIngredient<T> ingredient;
+    private final T ingredient;
     @Nullable private ItemStack[] stacks;
     @Nullable private IntList stackingIds;
 
-    protected ForgeIngredient(CodecIngredient<T> ingredient) {
+    protected ForgeIngredient(T ingredient) {
         super(Stream.of());
         this.ingredient = ingredient;
     }
 
-    public CodecIngredient<T> getIngredient() {
+    public T getIngredient() {
         return this.ingredient;
     }
 
