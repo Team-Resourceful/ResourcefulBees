@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.mixin.accessors;
+package com.teamresourceful.resourcefulbees.mixin.common;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;

@@ -36,7 +36,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
         Advancement beepedia = addAdvancement(createSimpleAdvancement(ModItems.BEEPEDIA, "beepedia", root));
         addAdvancement(createSimpleAdvancement(ModItems.ENDER_BEECON_ITEM, "ender_beecon", root));
         addAdvancement(createSimpleAdvancement(ModItems.HONEY_GENERATOR_ITEM, "honey_generator", root));
-        Advancement nest = addAdvancement(createAdvancement(ModItems.OAK_BEE_NEST_ITEM, "obtain_bee_nest", root)
+        Advancement nest = addAdvancement(createAdvancement(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.OAK_BEE_NEST_ITEM, "obtain_bee_nest", root)
                 .addCriterion("has_nest", has(ModItemTags.BEEHIVES))
                 .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/obtain_bee_nest")));
 

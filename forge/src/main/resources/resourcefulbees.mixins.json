@@ -8,7 +8,6 @@
         "MixinBee",
         "MixinBeeEnterHiveGoal",
         "MixinDispenserBlock",
-        "accessors.BeehiveBeeDataAccessor",
         "accessors.RecipeManagerAccessor",
         "invokers.BeeGoToHiveGoalInvoker",
         "invokers.BeeInvoker",

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModPOIs;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPOIs;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.PoiTypeTagsProvider;
 import net.minecraft.tags.PoiTypeTags;

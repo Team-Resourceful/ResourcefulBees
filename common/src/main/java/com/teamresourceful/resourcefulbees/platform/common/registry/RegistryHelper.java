@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.platform.common.registry;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.resources.ResourceLocation;

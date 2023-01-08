@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeItems;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
@@ -40,7 +40,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         super(guiHelper, RECIPE,
                 TranslationConstants.Jei.CENTRIFUGE,
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 134, 66).addPadding(0, 0, 0, 0).build(),
-                guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ModItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance()));
+                guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, CentrifugeItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance()));
     }
 
     public static List<CentrifugeRecipeAdapter> getRecipes(Collection<CentrifugeRecipe> recipes) {

@@ -1,20 +1,19 @@
 
-package com.teamresourceful.resourcefulbees.common.blockentity;
+package com.teamresourceful.resourcefulbees.common.blockentities;
 
 
 import com.google.common.collect.Lists;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
-import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
-import com.teamresourceful.resourcefulbees.common.blockentities.SmokeableHive;
+import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.BeehiveBeeDataAccessor;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import com.teamresourceful.resourcefulbees.mixin.common.BeehiveBeeDataAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.caches.CacheableFunction;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

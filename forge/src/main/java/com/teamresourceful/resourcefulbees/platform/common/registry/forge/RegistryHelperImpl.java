@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.platform.common.registry.forge;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.resources.ResourceLocation;

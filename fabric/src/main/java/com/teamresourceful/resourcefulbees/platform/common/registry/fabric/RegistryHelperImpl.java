@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.platform.common.registry.fabric;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.properties.WoodType;

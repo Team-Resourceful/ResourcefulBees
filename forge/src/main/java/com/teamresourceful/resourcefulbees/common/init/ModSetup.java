@@ -2,8 +2,7 @@ package com.teamresourceful.resourcefulbees.common.init;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.platform.common.events.RegisterHiveBreakBlocksEvent;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;

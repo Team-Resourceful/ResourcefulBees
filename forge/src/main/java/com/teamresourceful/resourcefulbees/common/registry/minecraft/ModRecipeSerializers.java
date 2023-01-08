@@ -6,10 +6,10 @@ import com.teamresourceful.resourcefulbees.common.recipe.recipes.FlowHiveRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.MutationRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistries;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipeSerializer;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
+import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 

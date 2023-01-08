@@ -1,13 +1,13 @@
-package com.teamresourceful.resourcefulbees.common.world;
+package com.teamresourceful.resourcefulbees.common.worldgen;
 
 import com.mojang.serialization.Codec;
-import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.WorldGenConfig;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.utils.TagUtils;
 import net.minecraft.Util;
@@ -36,7 +36,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -146,13 +145,12 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         if (biome.is(BiomeTags.IS_END)) return Blocks.END_STONE.defaultBlockState();
         else if (biome.is(BiomeTags.IS_NETHER)) return Blocks.OBSIDIAN.defaultBlockState();
         else if (biome.is(BiomeTags.IS_SAVANNA))return Blocks.ACACIA_WOOD.defaultBlockState();
-        else if (biome.is(Tags.Biomes.IS_DRY_OVERWORLD))return Blocks.ACACIA_WOOD.defaultBlockState();
         else if (biome.is(BiomeTags.IS_JUNGLE)) return Blocks.JUNGLE_WOOD.defaultBlockState();
         else if (biome.is(BiomeTags.IS_BEACH)) return isFrozenBiome(biome) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.STRIPPED_OAK_WOOD.defaultBlockState();
         else if (biome.is(BiomeTags.IS_OCEAN)) return isFrozenBiome(biome) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.STRIPPED_OAK_WOOD.defaultBlockState();
         else if (biome.is(BiomeTags.IS_TAIGA)) return Blocks.PACKED_ICE.defaultBlockState();
-        else if (biome.is(Tags.Biomes.IS_COLD_OVERWORLD)) return Blocks.PACKED_ICE.defaultBlockState();
-        else if (biome.is(Tags.Biomes.IS_SWAMP)) return  Blocks.STRIPPED_SPRUCE_WOOD.defaultBlockState();
+        else if (doesSnowInBiome(biome)) return Blocks.PACKED_ICE.defaultBlockState();
+        else if (biome.is(BiomeTags.HAS_SWAMP_HUT)) return  Blocks.STRIPPED_SPRUCE_WOOD.defaultBlockState();
         else if (biome.is(BiomeTags.IS_RIVER)) return isFrozenBiome(biome) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.OAK_WOOD.defaultBlockState();
         return Blocks.OAK_WOOD.defaultBlockState();
     }
@@ -177,16 +175,19 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         if (biome.is(BiomeTags.IS_END)) return ModBlocks.PURPUR_BEE_NEST.get();
         else if (biome.is(BiomeTags.IS_NETHER)) return getNetherNest(headsOrTails, biome);
         else if (biome.is(BiomeTags.IS_SAVANNA)) return ModBlocks.ACACIA_BEE_NEST.get();
-        else if (biome.is(Tags.Biomes.IS_DRY_OVERWORLD)) return ModBlocks.ACACIA_BEE_NEST.get();
         else if (biome.is(BiomeTags.IS_JUNGLE)) return ModBlocks.JUNGLE_BEE_NEST.get();
         else if (biome.is(BiomeTags.IS_BEACH)) return ModBlocks.PRISMARINE_BEE_NEST.get();
         else if (biome.is(BiomeTags.IS_OCEAN)) return ModBlocks.PRISMARINE_BEE_NEST.get();
-        else if (biome.is(Tags.Biomes.IS_CONIFEROUS)) return ModBlocks.SPRUCE_BEE_NEST.get();
-        else if (biome.is(Tags.Biomes.IS_COLD_OVERWORLD)) return ModBlocks.SPRUCE_BEE_NEST.get();
-        else if (biome.is(Tags.Biomes.IS_MUSHROOM)) return selectNest(headsOrTails, ModBlocks.RED_MUSHROOM_BEE_NEST.get(), ModBlocks.BROWN_MUSHROOM_BEE_NEST.get());
-        else if (biome.is(Tags.Biomes.IS_SWAMP)) return ModBlocks.OAK_BEE_NEST.get();
+        else if (biome.is(BiomeTags.IS_TAIGA)) return ModBlocks.SPRUCE_BEE_NEST.get();
+        else if (doesSnowInBiome(biome)) return ModBlocks.SPRUCE_BEE_NEST.get();
+        else if (biome.unwrapKey().map(key -> key.equals(Biomes.MUSHROOM_FIELDS)).orElse(false)) return selectNest(headsOrTails, ModBlocks.RED_MUSHROOM_BEE_NEST.get(), ModBlocks.BROWN_MUSHROOM_BEE_NEST.get());
+        else if (biome.is(BiomeTags.HAS_SWAMP_HUT)) return ModBlocks.OAK_BEE_NEST.get();
         else if (biome.is(BiomeTags.IS_FOREST)) return selectNest(headsOrTails, ModBlocks.BIRCH_BEE_NEST.get(), ModBlocks.DARK_OAK_BEE_NEST.get());
         return OVERWORLD_BLOCKS.next();
+    }
+
+    private static boolean doesSnowInBiome(Holder<Biome> biome) {
+        return biome.unwrap().mapRight(value -> value.getPrecipitation() == Biome.Precipitation.SNOW).right().orElse(false);
     }
 
     private static Block getNetherNest(boolean headsOrTails, Holder<Biome> biome){
@@ -202,17 +203,20 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
     private static boolean isFrozenBiome(@Nullable Holder<Biome> biome) {
         if (biome != null && biome.isBound()) {
-            Biome.ClimateSettings climate = biome.get().getModifiedClimateSettings();
-            return climate.precipitation() == Biome.Precipitation.SNOW || climate.temperature() < 0.15F;
+            return get(biome).getPrecipitation() == Biome.Precipitation.SNOW || get(biome).getBaseTemperature() < 0.15F;
         }
         return false;
+    }
+
+    private static Biome get(Holder<Biome> biome) {
+        return biome.unwrap().right().orElseThrow();
     }
 
     private static void setNestBees(BlockPos pos, Holder<Biome> biome, WorldGenLevel level, RandomSource rand){
         if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity nest) {
             int maxBees = Math.round(WorldGenConfig.hiveMaxBees * 0.5f);
 
-            WeightedRandomList<MobSpawnSettings.SpawnerData> bees = biome.get().getMobSettings().getMobs(ModConstants.BEE_CATEGORY);
+            WeightedRandomList<MobSpawnSettings.SpawnerData> bees = get(biome).getMobSettings().getMobs(ModConstants.BEE_CATEGORY);
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 bees.getRandom(rand)
                     .map(data -> data.type)

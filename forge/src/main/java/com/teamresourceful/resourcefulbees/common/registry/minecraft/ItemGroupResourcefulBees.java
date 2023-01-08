@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeItems;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
@@ -17,7 +18,7 @@ public final class ItemGroupResourcefulBees {
 
     public static final CreativeModeTab RESOURCEFUL_BEES = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees"))
             .setIcon(() -> new ItemStack(ModItems.HONEY_DIPPER.get()))
-            .addRegistry(() -> ModItems.CENTRIFUGE_ITEMS)
+            .addRegistry(() -> CentrifugeItems.CENTRIFUGE_ITEMS)
             .setAddingFunction(list -> {
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR);
                 list.add(ModItems.OREO_COOKIE);
@@ -68,8 +69,8 @@ public final class ItemGroupResourcefulBees {
             .build();
 
     public static final CreativeModeTab RESOURCEFUL_BEES_HIVES = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "hives"))
-        .setIcon(() -> new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get()))
-        .addRegistry(() -> ModItems.NEST_ITEMS)
+        .setIcon(() -> new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.OAK_BEE_NEST_ITEM.get()))
+        .addRegistry(() -> com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.NEST_ITEMS)
         .build();
 
     public static final CreativeModeTab RESOURCEFUL_BEES_HONEY = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "honey"))

@@ -16,7 +16,7 @@ import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraftforge.registries.DeferredRegister;
 import org.apache.commons.lang3.StringUtils;
 

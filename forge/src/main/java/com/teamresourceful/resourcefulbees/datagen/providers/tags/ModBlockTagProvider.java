@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
@@ -29,7 +29,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         //noinspection unchecked
         tag(Tags.Blocks.STORAGE_BLOCKS).addTags(ModBlockTags.WAX);
         TagAppender<Block> hiveBuilder = tag(BlockTags.BEEHIVES);
-        ModBlocks.HIVES.getEntries().stream().map(RegistryEntry::get).forEach(hiveBuilder::add);
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HIVES.getEntries().stream().map(RegistryEntry::get).forEach(hiveBuilder::add);
         ModBlocks.APIARIES.getEntries().stream().map(RegistryEntry::get).forEach(hiveBuilder::add);
 
         TagAppender<Block> axeTagBuilder = tag(BlockTags.MINEABLE_WITH_AXE);

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.platform.common.registry.creativetab;
 
 import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
+import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;

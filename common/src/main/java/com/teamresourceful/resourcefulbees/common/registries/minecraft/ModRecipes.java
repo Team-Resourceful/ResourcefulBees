@@ -4,10 +4,10 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistries;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipeType;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
+import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.crafting.RecipeType;
 

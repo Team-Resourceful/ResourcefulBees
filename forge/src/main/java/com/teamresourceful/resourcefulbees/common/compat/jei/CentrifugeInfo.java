@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeItems;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.network.chat.Component;
@@ -19,13 +19,13 @@ public final class CentrifugeInfo {
     }
 
     public static void registerCasingInfo(@NotNull IRecipeRegistration registration) {
-        registration.addIngredientInfo(ModItems.CENTRIFUGE_CASING.get().getDefaultInstance(), VanillaTypes.ITEM_STACK,
+        registration.addIngredientInfo(CentrifugeItems.CENTRIFUGE_CASING.get().getDefaultInstance(), VanillaTypes.ITEM_STACK,
                 Component.literal("Casings are used as filler for the shell of the multiblock. They can be placed on the edges, corners, and all faces")
         );
     }
 
     public static void registerGearboxInfo(@NotNull IRecipeRegistration registration) {
-        registration.addIngredientInfo(ModItems.CENTRIFUGE_GEARBOX.get().getDefaultInstance(), VanillaTypes.ITEM_STACK,
+        registration.addIngredientInfo(CentrifugeItems.CENTRIFUGE_GEARBOX.get().getDefaultInstance(), VanillaTypes.ITEM_STACK,
                 Component.literal(
                         "A centrifuge can have up to 64 gearboxes. Gearboxes are optional, but when added they reduce the time a recipe takes, with each additional gearbox having a diminishing effect. The time reduction from gearboxes is divided among all inputs in the centrifuge.\n\nTime modification can be calculated as:\nrecipeTime*((1-scale)/numInputs)^numGearboxes\n\nGearboxes also increase the energy required to process a recipe.\n\nThe energy required from a gearbox can be calculated as:\n1 + (gbxModifier * (1.1^numGearboxes))\n\nThis energy value is then multiplied by the energy required from processors."
                 )
@@ -33,17 +33,17 @@ public final class CentrifugeInfo {
     }
 
     public static void registerProcessorInfo(@NotNull IRecipeRegistration registration) {
-        registration.addIngredientInfo(ModItems.CENTRIFUGE_PROCESSOR.get().getDefaultInstance(), VanillaTypes.ITEM_STACK,
+        registration.addIngredientInfo(CentrifugeItems.CENTRIFUGE_PROCESSOR.get().getDefaultInstance(), VanillaTypes.ITEM_STACK,
                 Component.literal("A centrifuge can have up to 63 processors. Inputs can process one additional copy of a recipe each iteration for each processor added. Processors are optional, but with the maximum number of processors, an input can process a full stack of recipes in one iteration. Recipe time is not affected by processors, making them efficient at handling a large ingest of items. Processors increase the energy required to process a recipe.\n\nThe energy required from a processor can be calculated as:\n1 + (cpuModifier * (1.1^numProcessors))\n\nThis energy value is then multiplied by the energy required from gearboxes.")
         );
     }
 
     public static void registerEnergyInputInfo(@NotNull IRecipeRegistration registration) {
         List<ItemStack> energyInputs = List.of(
-                ModItems.CENTRIFUGE_BASIC_ENERGY_PORT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ADVANCED_ENERGY_PORT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ELITE_ENERGY_PORT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ULTIMATE_ENERGY_PORT.get().getDefaultInstance()
+                CentrifugeItems.CENTRIFUGE_BASIC_ENERGY_PORT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ADVANCED_ENERGY_PORT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ELITE_ENERGY_PORT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ULTIMATE_ENERGY_PORT.get().getDefaultInstance()
         );
 
         registration.addIngredientInfo(energyInputs, VanillaTypes.ITEM_STACK,
@@ -53,10 +53,10 @@ public final class CentrifugeInfo {
 
     public static void registerInputInfo(@NotNull IRecipeRegistration registration) {
         List<ItemStack> inputs = List.of(
-                ModItems.CENTRIFUGE_BASIC_INPUT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ADVANCED_INPUT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ELITE_INPUT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ULTIMATE_INPUT.get().getDefaultInstance()
+                CentrifugeItems.CENTRIFUGE_BASIC_INPUT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ADVANCED_INPUT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ELITE_INPUT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ULTIMATE_INPUT.get().getDefaultInstance()
         );
 
         registration.addIngredientInfo(inputs, VanillaTypes.ITEM_STACK,
@@ -66,20 +66,20 @@ public final class CentrifugeInfo {
 
     public static void registerItemOutputInfo(@NotNull IRecipeRegistration registration) {
         List<ItemStack> itemOutputs = List.of(
-                ModItems.CENTRIFUGE_BASIC_ITEM_OUTPUT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ADVANCED_ITEM_OUTPUT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ELITE_ITEM_OUTPUT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT.get().getDefaultInstance()
+                CentrifugeItems.CENTRIFUGE_BASIC_ITEM_OUTPUT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ADVANCED_ITEM_OUTPUT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ELITE_ITEM_OUTPUT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT.get().getDefaultInstance()
         );
         registerOutputInfo(registration, itemOutputs, CentrifugeOutputType.ITEM);
     }
 
     public static void registerFluidOutputInfo(@NotNull IRecipeRegistration registration) {
         List<ItemStack> itemOutputs = List.of(
-                ModItems.CENTRIFUGE_BASIC_FLUID_OUTPUT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ADVANCED_FLUID_OUTPUT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ELITE_FLUID_OUTPUT.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT.get().getDefaultInstance()
+                CentrifugeItems.CENTRIFUGE_BASIC_FLUID_OUTPUT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ADVANCED_FLUID_OUTPUT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ELITE_FLUID_OUTPUT.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT.get().getDefaultInstance()
         );
         registerOutputInfo(registration, itemOutputs, CentrifugeOutputType.FLUID);
     }
@@ -93,10 +93,10 @@ public final class CentrifugeInfo {
 
     public static void registerTerminalInfo(@NotNull IRecipeRegistration registration) {
         List<ItemStack> terminals = List.of(
-                ModItems.CENTRIFUGE_BASIC_TERMINAL.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ELITE_TERMINAL.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ULTIMATE_TERMINAL.get().getDefaultInstance()
+                CentrifugeItems.CENTRIFUGE_BASIC_TERMINAL.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ELITE_TERMINAL.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ULTIMATE_TERMINAL.get().getDefaultInstance()
         );
 
         registration.addIngredientInfo(terminals, VanillaTypes.ITEM_STACK,
@@ -106,10 +106,10 @@ public final class CentrifugeInfo {
 
     public static void registerVoidInfo(@NotNull IRecipeRegistration registration) {
         List<ItemStack> dumps = List.of(
-                ModItems.CENTRIFUGE_BASIC_VOID.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ADVANCED_VOID.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ELITE_VOID.get().getDefaultInstance(),
-                ModItems.CENTRIFUGE_ULTIMATE_VOID.get().getDefaultInstance()
+                CentrifugeItems.CENTRIFUGE_BASIC_VOID.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ADVANCED_VOID.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ELITE_VOID.get().getDefaultInstance(),
+                CentrifugeItems.CENTRIFUGE_ULTIMATE_VOID.get().getDefaultInstance()
         );
 
         registration.addIngredientInfo(dumps, VanillaTypes.ITEM_STACK,

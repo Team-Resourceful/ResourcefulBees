@@ -1,17 +1,20 @@
-package com.teamresourceful.resourcefulbees.common.block;
+package com.teamresourceful.resourcefulbees.common.blocks;
 
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
-import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
-import com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade.NestUpgrade;
 import com.teamresourceful.resourcefulbees.common.items.ExpandableTooltip;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.NestUpgrade;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -42,8 +45,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,7 +53,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableTooltip {
+public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableTooltip, BeeHolderBlock {
 
     private static final MutableComponent NONE_TEXT = Component.literal("     NONE");
 
@@ -171,7 +172,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
         setupTooltip(stack, level, components, flag);

@@ -1,7 +1,7 @@
-package com.teamresourceful.resourcefulbees.common.item.upgrade.nestupgrade;
+package com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade;
 
 import com.teamresourceful.resourcefulbees.common.items.ExpandableTooltip;
-import com.teamresourceful.resourcefulbees.common.item.upgrade.UpgradeType;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

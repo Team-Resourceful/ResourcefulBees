@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.item.dispenser;
 
-import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
@@ -37,7 +37,7 @@ public class ShearsDispenserBehavior extends DefaultDispenseItemBehavior {
                     }
 
                     TieredBeehiveBlock.dropResourceHoneycomb(tieredBeehiveBlock, world, blockpos, false);
-                    ((BeehiveBlock) blockstate.getBlock()).releaseBeesAndResetHoneyLevel(world, blockstate, blockpos, null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
+                    tieredBeehiveBlock.releaseBeesAndResetHoneyLevel(world, blockstate, blockpos, null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
                 }
             }
         } else if (defaultBehavior != DispenseItemBehavior.NOOP) {

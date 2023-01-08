@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.platform.common.registry.creativetab.forge;
 
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.platform.common.registry.creativetab.CreativeTabBuilder;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;

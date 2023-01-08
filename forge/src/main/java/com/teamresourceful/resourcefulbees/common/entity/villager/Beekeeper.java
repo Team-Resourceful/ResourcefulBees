@@ -3,15 +3,15 @@ package com.teamresourceful.resourcefulbees.common.entity.villager;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
+import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBottleItem;
-import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModVillagerProfessions;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -166,8 +166,8 @@ public final class Beekeeper {
     private static void addNests(List<VillagerTrades.ItemListing> list) {
         addNest(list, Items.BEEHIVE);
         addNest(list, Items.BEE_NEST);
-        ModItems.T1_NEST_ITEMS.getEntries().forEach(nest -> addNest(list, nest.get()));
-        ModItems.T2_NEST_ITEMS.getEntries().forEach(nest -> addNest(list, nest.get()));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T1_NEST_ITEMS.getEntries().forEach(nest -> addNest(list, nest.get()));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T2_NEST_ITEMS.getEntries().forEach(nest -> addNest(list, nest.get()));
     }
 
     private static void addNest(List<VillagerTrades.ItemListing> list, Item nest) {

@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.datagen.bases;
 
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeBlocks;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
@@ -51,13 +51,13 @@ public abstract class BaseBlockStateProvider extends BlockStateProvider {
     }
 
     protected void horizontalCentrifuge(RegistryEntry<Block> block) {
-        ResourceLocation topAndSide = blockTexture(ModBlocks.CENTRIFUGE_CASING.get());
+        ResourceLocation topAndSide = blockTexture(CentrifugeBlocks.CENTRIFUGE_CASING.get());
         ModelFile model = models().orientable(id(block), topAndSide, blockTexture(block.get()), topAndSide);
         horizontalBlockWithItem(block.get(), model);
     }
 
     protected void horizontalCentrifugeBottom(RegistryEntry<Block> block) {
-        ModelFile model = models().orientableWithBottom(id(block), blockTexture(ModBlocks.CENTRIFUGE_CASING.get()), blockTexture(block.get()), blockTexture(block.get()), blockTexture(ModBlocks.CENTRIFUGE_CASING.get()));
+        ModelFile model = models().orientableWithBottom(id(block), blockTexture(CentrifugeBlocks.CENTRIFUGE_CASING.get()), blockTexture(block.get()), blockTexture(block.get()), blockTexture(CentrifugeBlocks.CENTRIFUGE_CASING.get()));
         horizontalBlockWithItem(block.get(), model);
     }
 
@@ -67,7 +67,7 @@ public abstract class BaseBlockStateProvider extends BlockStateProvider {
     }
 
     protected void orientableVerticalWithItem(RegistryEntry<Block> block) {
-        ModelFile model = models().orientableVertical(id(block), blockTexture(ModBlocks.CENTRIFUGE_CASING.get()), blockTexture(block.get()));
+        ModelFile model = models().orientableVertical(id(block), blockTexture(CentrifugeBlocks.CENTRIFUGE_CASING.get()), blockTexture(block.get()));
         this.simpleBlock(block.get(), model);
         this.simpleBlockItem(block.get(), model);
     }

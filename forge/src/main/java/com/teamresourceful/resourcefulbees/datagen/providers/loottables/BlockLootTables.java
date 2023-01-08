@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.loottables;
 
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockLootTable;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.advancements.critereon.EntityFlagsPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.data.loot.BlockLoot;
@@ -36,7 +36,7 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.WAX_BLOCK);
         dropSelf(ModBlocks.GOLD_FLOWER);
         //endregion
-        ModBlocks.HIVES.getEntries().forEach(this::addNest);
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HIVES.getEntries().forEach(this::addNest);
         //region Apiary
         dropSelf(ModBlocks.T1_APIARY_BLOCK);
         dropSelf(ModBlocks.T2_APIARY_BLOCK);

@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.lib.defaults;
+package com.teamresourceful.resourcefulbees.common.lib.tiers;
 
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;

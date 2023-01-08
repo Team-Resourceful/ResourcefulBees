@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.item.dispenser;
 
-import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
@@ -20,15 +20,15 @@ public class ScraperDispenserBehavior extends DefaultDispenseItemBehavior {
         ServerLevel world = source.getLevel();
         BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
         BlockState blockstate = world.getBlockState(blockpos);
-        if (blockstate.getBlock() instanceof TieredBeehiveBlock) {
+        if (blockstate.getBlock() instanceof TieredBeehiveBlock tieredBeehiveBlock) {
             int i = blockstate.getValue(BeehiveBlock.HONEY_LEVEL);
             if (i >= 5) {
                 if (stack.hurt(1, world.random, null)) {
                     stack.setCount(0);
                 }
 
-                if (TieredBeehiveBlock.dropResourceHoneycomb((TieredBeehiveBlock) blockstate.getBlock(), world, blockpos, true)) {
-                    ((BeehiveBlock) blockstate.getBlock()).releaseBeesAndResetHoneyLevel(world, blockstate, blockpos, null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
+                if (TieredBeehiveBlock.dropResourceHoneycomb(tieredBeehiveBlock, world, blockpos, true)) {
+                    tieredBeehiveBlock.releaseBeesAndResetHoneyLevel(world, blockstate, blockpos, null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
                 }
             }
         }

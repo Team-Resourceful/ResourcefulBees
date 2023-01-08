@@ -1,8 +1,8 @@
 
 package com.teamresourceful.resourcefulbees.common.compat.top;
 
-import com.teamresourceful.resourcefulbees.common.block.TieredBeehiveBlock;
-import com.teamresourceful.resourcefulbees.common.blockentity.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
+import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import mcjty.theoneprobe.api.*;

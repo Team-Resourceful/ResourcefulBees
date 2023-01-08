@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.item.upgrade;
+package com.teamresourceful.resourcefulbees.common.items.upgrade;
 
 import com.teamresourceful.resourcefulbees.common.items.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;

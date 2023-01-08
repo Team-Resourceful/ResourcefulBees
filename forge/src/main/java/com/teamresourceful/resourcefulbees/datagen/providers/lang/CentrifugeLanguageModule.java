@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;
 import org.apache.commons.lang3.StringUtils;
@@ -38,9 +38,9 @@ public class CentrifugeLanguageModule implements LanguageModule {
     }
 
     private void addCentrifuge(BaseLanguageProvider provider) {
-        provider.addBlock(ModBlocks.CENTRIFUGE_CASING, "Centrifuge Casing");
-        provider.addBlock(ModBlocks.CENTRIFUGE_PROCESSOR, "Centrifuge Processor");
-        provider.addBlock(ModBlocks.CENTRIFUGE_GEARBOX, "Centrifuge Gearbox");
+        provider.addBlock(CentrifugeBlocks.CENTRIFUGE_CASING, "Centrifuge Casing");
+        provider.addBlock(CentrifugeBlocks.CENTRIFUGE_PROCESSOR, "Centrifuge Processor");
+        provider.addBlock(CentrifugeBlocks.CENTRIFUGE_GEARBOX, "Centrifuge Gearbox");
 
         for (CentrifugeTier tier : CentrifugeTier.values()) {
             for (String type : TYPES) {

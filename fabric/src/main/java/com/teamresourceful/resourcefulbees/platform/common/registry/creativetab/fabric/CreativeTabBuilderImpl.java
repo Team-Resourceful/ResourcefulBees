@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.platform.common.registry.creativetab.fabric;
 
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.ResourcefulRegistry;
 import com.teamresourceful.resourcefulbees.platform.common.registry.creativetab.CreativeTabBuilder;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;

@@ -1,8 +1,9 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.blockstates;
 
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockStateProvider;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,7 +20,7 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        ModBlocks.HIVES.getEntries().forEach(this::registerNest);
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HIVES.getEntries().forEach(this::registerNest);
         ModBlocks.APIARIES.getEntries().forEach(this::registerApiary);
         registerApiary(ModBlocks.FLOW_HIVE);
         registerApiary(ModBlocks.BREEDER_BLOCK);
@@ -95,44 +96,44 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
     }
 
     private void registerCentrifuge() {
-        simpleBlockWithItem(ModBlocks.CENTRIFUGE_CASING.get());
-        simpleBlockWithItem(ModBlocks.CENTRIFUGE_GEARBOX.get());
-        simpleBlockWithItem(ModBlocks.CENTRIFUGE_PROCESSOR.get());
+        simpleBlockWithItem(CentrifugeBlocks.CENTRIFUGE_CASING.get());
+        simpleBlockWithItem(CentrifugeBlocks.CENTRIFUGE_GEARBOX.get());
+        simpleBlockWithItem(CentrifugeBlocks.CENTRIFUGE_PROCESSOR.get());
 
         //terminal
-        horizontalCentrifuge(ModBlocks.CENTRIFUGE_BASIC_TERMINAL);
-        horizontalCentrifuge(ModBlocks.CENTRIFUGE_ADVANCED_TERMINAL);
-        horizontalCentrifuge(ModBlocks.CENTRIFUGE_ELITE_TERMINAL);
-        horizontalCentrifuge(ModBlocks.CENTRIFUGE_ULTIMATE_TERMINAL);
+        horizontalCentrifuge(CentrifugeBlocks.CENTRIFUGE_BASIC_TERMINAL);
+        horizontalCentrifuge(CentrifugeBlocks.CENTRIFUGE_ADVANCED_TERMINAL);
+        horizontalCentrifuge(CentrifugeBlocks.CENTRIFUGE_ELITE_TERMINAL);
+        horizontalCentrifuge(CentrifugeBlocks.CENTRIFUGE_ULTIMATE_TERMINAL);
 
         //void
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_VOID);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_VOID);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_VOID);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_VOID);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_BASIC_VOID);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ADVANCED_VOID);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ELITE_VOID);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ULTIMATE_VOID);
 
         //input
-        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_BASIC_INPUT);
-        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_ADVANCED_INPUT);
-        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_ELITE_INPUT);
-        orientableVerticalWithItem(ModBlocks.CENTRIFUGE_ULTIMATE_INPUT);
+        orientableVerticalWithItem(CentrifugeBlocks.CENTRIFUGE_BASIC_INPUT);
+        orientableVerticalWithItem(CentrifugeBlocks.CENTRIFUGE_ADVANCED_INPUT);
+        orientableVerticalWithItem(CentrifugeBlocks.CENTRIFUGE_ELITE_INPUT);
+        orientableVerticalWithItem(CentrifugeBlocks.CENTRIFUGE_ULTIMATE_INPUT);
 
         //energy
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_ENERGY_PORT);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_ENERGY_PORT);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_ENERGY_PORT);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_ENERGY_PORT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_BASIC_ENERGY_PORT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ADVANCED_ENERGY_PORT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ELITE_ENERGY_PORT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ULTIMATE_ENERGY_PORT);
 
         //item output
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_ITEM_OUTPUT);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_ITEM_OUTPUT);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_ITEM_OUTPUT);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_BASIC_ITEM_OUTPUT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ADVANCED_ITEM_OUTPUT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ELITE_ITEM_OUTPUT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT);
 
         //fluid output
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_BASIC_FLUID_OUTPUT);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ADVANCED_FLUID_OUTPUT);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT);
-        horizontalCentrifugeBottom(ModBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_BASIC_FLUID_OUTPUT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ADVANCED_FLUID_OUTPUT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ELITE_FLUID_OUTPUT);
+        horizontalCentrifugeBottom(CentrifugeBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT);
     }
 }

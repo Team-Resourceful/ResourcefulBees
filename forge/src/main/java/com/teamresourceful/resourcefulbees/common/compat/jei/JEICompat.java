@@ -13,7 +13,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
-import com.teamresourceful.resourcefulbees.platform.common.registry.api.RegistryEntry;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -62,7 +62,7 @@ public final class JEICompat implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.T4_APIARY_ITEM.get()), HiveCategory.RECIPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.BREEDER_ITEM.get()), BeeBreedingCategory.RECIPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get()), SolidificationCategory.RECIPE);
-        var nests = ModItems.T1_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).map(ItemStack::new).toList();
+        var nests = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T1_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).map(ItemStack::new).toList();
         for (ItemStack stack : nests) {
             registration.addRecipeCatalyst(stack, HiveCategory.RECIPE);
         }
