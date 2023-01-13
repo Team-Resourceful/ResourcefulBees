@@ -12,7 +12,7 @@ jobs:
           distribution: 'temurin'
           java-version: 17
       - name: Publish package
-        run: "chmod +x gradlew && ./gradlew publish"
+        run: "chmod +x gradlew && ./gradlew publish --info"
         env:
           MAVEN_USER: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASS: ${{ secrets.MAVEN_PASSWORD }}
