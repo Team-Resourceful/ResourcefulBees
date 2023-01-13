@@ -66,6 +66,8 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         RandomSource rand = context.random();
         Holder<Biome> biomeHolder = level.getBiome(pos);
 
+        if (!biomeHolder.isBound()) return false;
+
         //find best position
         BlockPos newPos = getYPos(level, rand, biomeHolder, pos);
         if (newPos != BlockPos.ZERO) {
@@ -187,7 +189,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private static boolean doesSnowInBiome(Holder<Biome> biome) {
-        return biome.unwrap().mapRight(value -> value.getPrecipitation() == Biome.Precipitation.SNOW).right().orElse(false);
+        return biome.isBound() && biome.value().getPrecipitation() == Biome.Precipitation.SNOW;
     }
 
     private static Block getNetherNest(boolean headsOrTails, Holder<Biome> biome){
@@ -203,20 +205,16 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
     private static boolean isFrozenBiome(@Nullable Holder<Biome> biome) {
         if (biome != null && biome.isBound()) {
-            return get(biome).getPrecipitation() == Biome.Precipitation.SNOW || get(biome).getBaseTemperature() < 0.15F;
+            return biome.value().getPrecipitation() == Biome.Precipitation.SNOW || biome.value().getBaseTemperature() < 0.15F;
         }
         return false;
-    }
-
-    private static Biome get(Holder<Biome> biome) {
-        return biome.unwrap().right().orElseThrow();
     }
 
     private static void setNestBees(BlockPos pos, Holder<Biome> biome, WorldGenLevel level, RandomSource rand){
         if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity nest) {
             int maxBees = Math.round(WorldGenConfig.hiveMaxBees * 0.5f);
 
-            WeightedRandomList<MobSpawnSettings.SpawnerData> bees = get(biome).getMobSettings().getMobs(ModConstants.BEE_CATEGORY);
+            WeightedRandomList<MobSpawnSettings.SpawnerData> bees = biome.value().getMobSettings().getMobs(ModConstants.BEE_CATEGORY);
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 bees.getRandom(rand)
                     .map(data -> data.type)

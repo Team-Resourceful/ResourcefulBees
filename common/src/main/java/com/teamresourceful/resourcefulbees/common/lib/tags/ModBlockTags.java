@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.lib.tags;
 
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +13,7 @@ public final class ModBlockTags {
     public static final TagKey<Block> MUSHROOM = createBlockTag("forge", "mushrooms");
 
     public static final TagKey<Block> HEAT_SOURCES = createBlockTag("forge", "heat_sources");
-    public static final TagKey<Block> NEST_PLACEABLE_ON = createBlockTag("forge", "nest_placeable_on");
+    public static final TagKey<Block> NEST_PLACEABLE_ON = createBlockTag(ModConstants.MOD_ID, "nest_placeable_on");
 
     private ModBlockTags() {
         throw new UtilityClassError();
