@@ -11,6 +11,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
       - name: Publish package
         run: "chmod +x gradlew && ./gradlew publish --info"
         env:
