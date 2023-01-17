@@ -14,6 +14,8 @@ import com.teamresourceful.resourcefullib.common.utils.FileUtils;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.io.Reader;
 import java.util.Locale;
@@ -54,8 +56,9 @@ public final class BeeSetup {
         }
     }
 
-    public static void registerBeePlacements() {
+    @SubscribeEvent
+    public static void onSpawnPlacementRegisterEvent(SpawnPlacementRegisterEvent event) {
         ModEntities.getModBees().forEach((s, entityType) ->
-                SpawnPlacements.register(entityType.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CustomBeeEntity::canBeeSpawn));
+                event.register(entityType.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CustomBeeEntity::canBeeSpawn, SpawnPlacementRegisterEvent.Operation.REPLACE));
     }
 }

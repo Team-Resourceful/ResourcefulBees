@@ -41,6 +41,7 @@ import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -103,25 +104,28 @@ public class ResourcefulBees {
             CONFIGURATOR.saveConfig(GeneralConfig.class);
         }
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(RegistryHandler::addEntityAttributes);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOW, this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onPackFinders);
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(RegistryHandler::addEntityAttributes);
+        modEventBus.addListener(EventPriority.LOW, this::setup);
+        modEventBus.addListener(this::onInterModEnqueue);
+        modEventBus.addListener(this::loadComplete);
+        modEventBus.addListener(this::onPackFinders);
+        modEventBus.addListener(BeeSetup::onSpawnPlacementRegisterEvent);
 
-        MinecraftForge.EVENT_BUS.addListener(this::serverLoaded);
-        MinecraftForge.EVENT_BUS.addListener(Beekeeper::setupBeekeeper);
-        MinecraftForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) ->
+        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+        forgeEventBus.addListener(this::serverLoaded);
+        forgeEventBus.addListener(Beekeeper::setupBeekeeper);
+        forgeEventBus.addListener((OnDatapackSyncEvent event) ->
             SyncedDatapackEvent.EVENT.fire(new SyncedDatapackEvent(event.getPlayerList(), event.getPlayer()))
         );
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientEventHandlers::clientStuff);
 
-        MinecraftForge.EVENT_BUS.addListener((RegisterCommandsEvent event) ->
+        forgeEventBus.addListener((RegisterCommandsEvent event) ->
             CommandRegisterEvent.EVENT.fire(new CommandRegisterEvent(event.getDispatcher(), event.getCommandSelection(), event.getBuildContext()))
         );
 
-        MinecraftForge.EVENT_BUS.register(this);
+        forgeEventBus.register(this);
         ModValidation.init();
 
         GameSetup.initSerializersAndConditions();
@@ -175,7 +179,6 @@ public class ResourcefulBees {
         TraitAbilityRegistry.getRegistry().close();
         TraitSetup.buildCustomTraits();
         TraitRegistry.getRegistry().close();
-        BeeSetup.registerBeePlacements();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> LangGeneration::generateEnglishLang);
         DataGen.generateCommonData();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PetLoader::loadAPI);
