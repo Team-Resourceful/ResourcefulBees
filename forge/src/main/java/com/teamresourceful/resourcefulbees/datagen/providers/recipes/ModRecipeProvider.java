@@ -109,13 +109,13 @@ public class ModRecipeProvider extends RecipeProvider {
         AdvancedShapedRecipeBuilder.shaped(ModItems.WAXED_FENCE, 3)
                 .pattern("   ", "WSW", "WSW")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
-                .define('S', Ingredient.of(Items.STICK))
+                .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
                 .unlockedBy(hasWax)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.WAXED_FENCE_GATE)
                 .pattern("   ", "SWS", "SWS")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
-                .define('S', Ingredient.of(Items.STICK))
+                .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
                 .unlockedBy(hasWax)
                 .save(recipes);
         ShapelessRecipeBuilder.shapeless(ModItems.WAXED_BUTTON.get())
@@ -140,7 +140,7 @@ public class ModRecipeProvider extends RecipeProvider {
         AdvancedShapedRecipeBuilder.shaped(ModItems.WAXED_SIGN, 3)
                 .pattern("WWW", "WWW", " S ")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
-                .define('S', Ingredient.of(Items.STICK))
+                .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
                 .unlockedBy(hasWax)
                 .save(recipes);
         ShapelessRecipeBuilder.shapeless(ModItems.TRIMMED_WAXED_PLANKS.get(), 4)
@@ -165,7 +165,7 @@ public class ModRecipeProvider extends RecipeProvider {
         AdvancedShapedRecipeBuilder.shaped(ModItems.SCRAPER)
                 .pattern(" II", " SI", "S  ")
                 .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
-                .define('S', Ingredient.of(Items.STICK))
+                .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
                 .unlockedBy(hasIron)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR)

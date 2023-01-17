@@ -5,7 +5,7 @@
       "tag": "forge:ingots/iron"
     },
     "S": {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     }
   },
   "pattern": [
