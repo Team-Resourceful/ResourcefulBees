@@ -22,6 +22,10 @@ public record BeehiveTier(ResourceLocation id, int maxBees, int maxCombs, double
         TIERS.put(id, this);
     }
 
+    public String getTimeModificationAsPercent() {
+        return String.format("%+d",(100 - (int)(timeModifier() * 100)) * -1);
+    }
+
     public Collection<Item> getDisplayItems() {
         return displayItems.get();
     }

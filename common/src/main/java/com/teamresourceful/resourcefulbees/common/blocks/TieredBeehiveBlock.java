@@ -122,7 +122,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
             }
         }
 
-        if (itemstack.getItem() instanceof NestUpgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.NEST)) {
+        if (itemstack.getItem() instanceof NestUpgrade upgrade && upgrade.isType(UpgradeType.NEST)) {
             if (upgrade.getTier().from.equals(this.tier)) {
                 return upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
             } else {
@@ -153,6 +153,29 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
         return null;
     }
 
+    /**
+     * @param player is nullable when being called from dispenser
+     */
+    public boolean dropResourceHoneycomb(Level level, BlockPos pos, @Nullable Player player, boolean useScraper) {
+        if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity hive) {
+            IntDoublePair extraRolls = ModCompatHelper.rollExtraHoneycombs(player, useScraper);
+            int rolls = extraRolls.firstInt();
+            while (hive.hasCombs()) {
+                ItemStack honeycomb = hive.getResourceHoneycomb();
+                popResource(level, pos, honeycomb);
+                if (rolls > 0 && level.random.nextDouble() < extraRolls.secondDouble()) {
+                    ItemStack extraHoneycomb = honeycomb.copy();
+                    extraHoneycomb.setCount(1);
+                    popResource(level, pos, extraHoneycomb);
+                }
+                rolls--;
+                if (useScraper) break;
+            }
+            return !hive.hasCombs();
+        }
+        return false;
+    }
+
     private void angerBeesNearby(Level level, BlockPos pos) {
         AABB aabb = new AABB(pos).inflate(8.0D, 6.0D, 8.0D);
         List<Bee> beeEntityList = level.getEntitiesOfClass(Bee.class, aabb);
@@ -172,15 +195,18 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
         }
     }
 
-    @Environment(EnvType.CLIENT)
-    @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        setupTooltip(stack, level, components, flag);
-    }
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HONEY_LEVEL, FACING);
+    }
+
+    @Environment(EnvType.CLIENT)
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+        components.add(Component.translatable(TranslationConstants.BeeHive.MAX_BEES, tier.maxBees()).withStyle(ChatFormatting.GOLD));
+        components.add(Component.translatable(TranslationConstants.BeeHive.MAX_COMBS, tier.maxCombs()).withStyle(ChatFormatting.GOLD));
+        components.add(Component.translatable(TranslationConstants.BeeHive.HIVE_TIME, tier.getTimeModificationAsPercent()).withStyle(ChatFormatting.GOLD));
+        setupTooltip(stack, level, components, flag);
     }
 
     private void createHoneycombsTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {
@@ -233,65 +259,13 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
         tooltip.add(Component.empty());
     }
 
-    /**
-     * @param player is nullable when being called from dispenser
-     */
-    public boolean dropResourceHoneycomb(Level level, BlockPos pos, @Nullable Player player, boolean useScraper) {
-        if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity hive) {
-            IntDoublePair extraRolls = ModCompatHelper.rollExtraHoneycombs(player, useScraper);
-            int rolls = extraRolls.firstInt();
-            while (hive.hasCombs()) {
-                ItemStack honeycomb = hive.getResourceHoneycomb();
-                popResource(level, pos, honeycomb);
-                if (rolls > 0 && level.random.nextDouble() < extraRolls.secondDouble()) {
-                    ItemStack extraHoneycomb = honeycomb.copy();
-                    extraHoneycomb.setCount(1);
-                    popResource(level, pos, extraHoneycomb);
-                }
-                rolls--;
-                if (useScraper) break;
-            }
-            return !hive.hasCombs();
-        }
-        return false;
-    }
-
     @Override
     public Component getShiftingDisplay() {
-        return TranslationConstants.Items.FOR_MORE_INFO;
+        return TranslationConstants.Items.TOOLTIP_CONTENTS;
     }
 
     @Override
     public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-//        if (stack.hasTag()) {
-//            CompoundTag stackTag = stack.getTag();
-//            if (stackTag != null && !stackTag.isEmpty() && stackTag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
-//                CompoundTag blockEntityTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
-//                localTier = blockEntityTag.getInt(NBTConstants.NBT_TIER);
-//                localTierModifier = blockEntityTag.getFloat(NBTConstants.NBT_TIER_MODIFIER);
-//            }
-//        }
-//
-//
-//        components.add(TranslationConstants.Items.MORE_INFO.withStyle(ChatFormatting.YELLOW));
-//        components.add(new TranslatableComponent(TranslationConstants.BeeHive.MAX_BEES, Math.round(CommonConfig.HIVE_MAX_BEES.get() * localTierModifier)).withStyle(ChatFormatting.GOLD));
-//        components.add(new TranslatableComponent(TranslationConstants.BeeHive.MAX_COMBS, Math.round(CommonConfig.HIVE_MAX_COMBS.get() * localTierModifier)).withStyle(ChatFormatting.GOLD));
-//
-//
-//        if (localTier != 1) {
-//            int timeReduction = localTier > 1 ? (int) ((localTier * .05) * 100) : (int) (.05 * 100);
-//            String sign = localTier > 1 ? "-" : "+";
-//            components.add(new TranslatableComponent(TranslationConstants.BeeHive.HIVE_TIME, sign, timeReduction).withStyle(ChatFormatting.GOLD));
-//        }
-    }
-
-    @Override
-    public Component getControlDisplay() {
-        return TranslationConstants.Items.TOOLTIP_STATS;
-    }
-
-    @Override
-    public void appendControlTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
         if (stack.hasTag()) {
             CompoundTag stackTag = stack.getTag();
             if (stackTag != null && !stackTag.isEmpty() && stackTag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {

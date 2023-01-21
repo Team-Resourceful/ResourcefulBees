@@ -82,8 +82,8 @@ public record OutputVariation(String id,
                 //We check if its was empty to make sure it with create the proper list based off the config value instead
                 //of copying the first config value to all slots.
                 //noinspection OptionalGetWithoutIsPresent
-                lastStack = tier.output().get().isComb() ? defaultComb.get().copy() : defaultCombBlock.get().copy();
-                lastStack.setCount(tier.amount().getAsInt());
+                lastStack = tier.outputType().get().isComb() ? defaultComb.get().copy() : defaultCombBlock.get().copy();
+                lastStack.setCount(tier.outputAmount().getAsInt());
             }
             apiaryCombs.put(tier, lastStack);
         }

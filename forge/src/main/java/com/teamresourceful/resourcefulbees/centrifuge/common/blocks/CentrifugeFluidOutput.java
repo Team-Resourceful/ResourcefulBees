@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.centrifuge.common.blocks;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeFluidOutputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -41,9 +42,9 @@ public class CentrifugeFluidOutput extends AbstractGUICentrifuge implements IAss
     //TODO make translatable
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-        tooltip.add(Component.literal("Multiblock sides only"));
-        tooltip.add(Component.literal("Cannot be used on edges"));
-        tooltip.add(Component.literal("Capacity: " + tier.getTankCapacity() + "mb"));
+        tooltip.add(Component.literal("Multiblock sides only").withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.literal("Cannot be used on edges").withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.literal("Capacity: " + tier.getTankCapacity() + "mb").withStyle(ChatFormatting.GOLD));
     }
 
     @Nullable

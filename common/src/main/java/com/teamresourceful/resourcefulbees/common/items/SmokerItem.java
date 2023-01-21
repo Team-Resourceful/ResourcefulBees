@@ -20,7 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
@@ -30,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SmokerItem extends Item implements ExpandableTooltip {
+public class SmokerItem extends Item {
 
     public SmokerItem(Properties properties) {
         super(properties.durability(GeneralConfig.smokerDurability * 2));
@@ -79,18 +78,6 @@ public class SmokerItem extends Item implements ExpandableTooltip {
     @Override
     @Environment(EnvType.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        setupTooltip(stack, level, components, flag);
-    }
-
-    @Override
-    @Environment(EnvType.CLIENT)
-    public Component getShiftingDisplay() {
-        return TranslationConstants.Items.FOR_MORE_INFO;
-    }
-
-    @Override
-    @Environment(EnvType.CLIENT)
-    public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
         components.add(TranslationConstants.Items.SMOKER_TOOLTIP.withStyle(ChatFormatting.GOLD));
         components.add(TranslationConstants.Items.SMOKER_TOOLTIP1.withStyle(ChatFormatting.GOLD));
     }

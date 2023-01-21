@@ -1,15 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
+import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
-import com.teamresourceful.resourcefulbees.common.items.ExpandableTooltip;
-import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -27,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ApiaryBlock extends BeeHouseBlock implements ExpandableTooltip, BeeHolderBlock {
+public class ApiaryBlock extends BeeHouseBlock implements BeeHolderBlock {
 
   private final ApiaryTier tier;
 
@@ -39,7 +37,8 @@ public class ApiaryBlock extends BeeHouseBlock implements ExpandableTooltip, Bee
   @OnlyIn(Dist.CLIENT)
   @Override
   public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-    setupTooltip(stack, level, components, flag);
+    components.add(Component.translatable(TranslationConstants.BeeHive.MAX_BEES, tier.maxBees()).withStyle(ChatFormatting.GOLD));
+    components.add(Component.translatable(TranslationConstants.BeeHive.HIVE_TIME, tier.getTimeModificationAsPercent()).withStyle(ChatFormatting.GOLD));
   }
 
   @Nullable
@@ -53,25 +52,5 @@ public class ApiaryBlock extends BeeHouseBlock implements ExpandableTooltip, Bee
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
     //TODO fix when we move this class to common
     return level.isClientSide ? null : createTickerHelper(type, tier.getBlockEntityType(), (level1, pos, state1, blockEntity) -> ApiaryBlockEntity.serverTick(level1, pos, state1, (ApiaryBlockEntity) blockEntity));
-  }
-
-  @Override
-  public Component getShiftingDisplay() {
-    return TranslationConstants.Items.TOOLTIP_STATS;
-  }
-
-  @Override
-  public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-    components.add(Component.translatable(TranslationConstants.BeeHive.MAX_BEES, tier.max())
-            .append(TranslationConstants.BeeHive.UNIQUE.withStyle(ChatFormatting.BOLD))
-            .withStyle(ChatFormatting.GOLD)
-    );
-
-    int timeReduction = 100 - (int)(tier.time() * 100);
-    components.add(Component.translatable(TranslationConstants.BeeHive.HIVE_TIME, "-", timeReduction).withStyle(ChatFormatting.GOLD));
-    MutableComponent outputType = tier.output().get().isComb() ? TranslationConstants.Apiary.HONEYCOMB : TranslationConstants.Apiary.HONEYCOMB_BLOCK;
-
-    components.add(Component.translatable(TranslationConstants.Apiary.OUTPUT_TYPE, outputType).withStyle(ChatFormatting.GOLD));
-    components.add(Component.translatable(TranslationConstants.Apiary.OUTPUT_QUANTITY, tier.amount().getAsInt()).withStyle(ChatFormatting.GOLD));
   }
 }

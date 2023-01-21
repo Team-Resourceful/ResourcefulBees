@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.centrifuge.common.blocks;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeVoidEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -41,9 +42,9 @@ public class CentrifugeVoid extends AbstractGUICentrifuge implements IAssemblySt
     //TODO make translatable
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-        tooltip.add(Component.literal("Multiblock sides only"));
-        tooltip.add(Component.literal("Cannot be used on edges"));
-        tooltip.add(Component.literal("Slots: " + tier.getSlots() * 2));
+        tooltip.add(Component.literal("Multiblock sides only").withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.literal("Cannot be used on edges").withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.literal("Slots: " + tier.getSlots() * 2).withStyle(ChatFormatting.GOLD));
     }
 
     @Nullable

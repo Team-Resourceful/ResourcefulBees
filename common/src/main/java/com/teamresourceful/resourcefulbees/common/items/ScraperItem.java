@@ -11,14 +11,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ScraperItem extends Item implements ExpandableTooltip, ItemExtension {
+public class ScraperItem extends Item implements ItemExtension {
 
     public ScraperItem(Properties pProperties) {
         super(pProperties);
@@ -32,18 +31,6 @@ public class ScraperItem extends Item implements ExpandableTooltip, ItemExtensio
     @Override
     @Environment(EnvType.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        setupTooltip(stack, level, components, flag);
-    }
-
-    @Override
-    @Environment(EnvType.CLIENT)
-    public Component getShiftingDisplay() {
-        return TranslationConstants.Items.FOR_MORE_INFO;
-    }
-
-    @Override
-    @Environment(EnvType.CLIENT)
-    public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
         components.add(TranslationConstants.Items.SCRAPER_TOOLTIP.withStyle(ChatFormatting.GOLD));
         components.add(TranslationConstants.Items.SCRAPER_TOOLTIP_1.withStyle(ChatFormatting.GOLD));
     }

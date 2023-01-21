@@ -77,32 +77,23 @@ public class BeeBoxItem extends BlockItem implements ExpandableTooltip {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level world, @NotNull List<Component> tooltip, @NotNull TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, world, tooltip, tooltipFlag);
-        setupTooltip(stack, world, tooltip, tooltipFlag);
-    }
-
-    @Override
-    public Component getShiftingDisplay() {
-        return TranslationConstants.Items.FOR_MORE_INFO;
-    }
-
-    @Override
-    public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level world, @NotNull List<Component> components, @NotNull TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, world, components, tooltipFlag);
         if (this.temp) {
             components.add(TranslationConstants.Items.BEE_BOX_TOOLTIP_TEMP.withStyle(ChatFormatting.GOLD));
         } else {
             components.add(Component.translatable(TranslationConstants.Items.BEE_BOX_TOOLTIP, BeeConstants.MAX_BEES_BEE_BOX).withStyle(ChatFormatting.GOLD));
         }
+        setupTooltip(stack, world, components, tooltipFlag);
     }
 
     @Override
-    public Component getControlDisplay() {
-        return TranslationConstants.Items.TOOLTIP_STATS;
+    public Component getShiftingDisplay() {
+        return TranslationConstants.Items.TOOLTIP_CONTENTS;
     }
 
     @Override
-    public void appendControlTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+    public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
         components.add(TranslationConstants.Items.BEES.withStyle(ChatFormatting.YELLOW));
 
         //noinspection ConstantConditions

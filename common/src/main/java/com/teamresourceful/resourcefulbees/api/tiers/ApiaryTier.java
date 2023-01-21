@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public record ApiaryTier(ResourceLocation id, int max, double time, Supplier<ApiaryOutputType> output, IntSupplier amount, Supplier<BlockEntityType<? extends BlockEntity>> blockEntity, Supplier<? extends Item> item) {
+public record ApiaryTier(ResourceLocation id, int maxBees, double timeMod, Supplier<ApiaryOutputType> outputType, IntSupplier outputAmount, Supplier<BlockEntityType<? extends BlockEntity>> blockEntity, Supplier<? extends Item> item) {
 
     private static final Map<ResourceLocation, ApiaryTier> TIERS = new HashMap<>();
     public static final Codec<ApiaryTier> CODEC = ResourceLocation.CODEC.comapFlatMap(ApiaryTier::get, ApiaryTier::id);
@@ -34,6 +34,9 @@ public record ApiaryTier(ResourceLocation id, int max, double time, Supplier<Api
         return blockEntity.get();
     }
 
+    public String getTimeModificationAsPercent() {
+        return String.format("%+d",(100 - (int)(timeMod() * 100)) * -1);
+    }
 
     public static DataResult<ApiaryTier> get(ResourceLocation id) {
         if (TIERS.containsKey(id)) {

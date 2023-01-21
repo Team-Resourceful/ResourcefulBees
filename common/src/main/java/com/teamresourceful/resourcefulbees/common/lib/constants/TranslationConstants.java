@@ -157,14 +157,23 @@ public final class TranslationConstants {
         @Translate("Hive Time Modification: %s%s%%")
         public static final String HIVE_TIME ="block.resourcefulbees.beehive.tooltip.hive_time";
 
-        @Translate(" UNIQUE \u00A76Bees")
-        public static final MutableComponent UNIQUE = Component.translatable("block.resourcefulbees.beehive.tooltip.unique_bees");
-
         @Translate("Bees:")
         public static final MutableComponent BEES = Component.translatable("block.resourcefulbees.beehive.tooltip.bees");
 
         @Translate("Honeycombs:")
         public static final MutableComponent HONEYCOMBS = Component.translatable("block.resourcefulbees.beehive.tooltip.honeycombs");
+    }
+
+    public static class FlowHive {
+
+        @Translate("Collects liquid honey from bees")
+        public static final MutableComponent INFO = Component.translatable("block.resourcefulbees.flowhive.tooltip.info");
+
+        @Translate("Harvest using bottles or pipes")
+        public static final MutableComponent HARVEST = Component.translatable("block.resourcefulbees.flowhive.tooltip.harvest");
+
+        @Translate("Capacity: 16000mb")
+        public static final MutableComponent CAPACITY = Component.translatable("block.resourcefulbees.flowhive.tooltip.capacity");
     }
 
     public static class Guis {
@@ -253,7 +262,7 @@ public final class TranslationConstants {
         @Translate("[Prevents bees from teleporting in effect range]")
         public static final MutableComponent BEECON_TOOLTIP_1 = Component.translatable("block.resourcefulbees.beecon.tooltip.info.1");
 
-        @Translate("Generates RF using honey bottles.")
+        @Translate("Generates RF using honey")
         public static final MutableComponent GEN_TOOLTIP = Component.translatable("block.resourcefulbees.generator.tooltip.info");
 
         @Translate("Max Breed Time: %s ticks")
@@ -262,7 +271,7 @@ public final class TranslationConstants {
         @Translate("Can be upgraded with breed time upgrades.")
         public static final MutableComponent BREEDER_TOOLTIP_2 = Component.translatable("block.resourcefulbees.apiary_breeder.tooltip.info.2");
 
-        @Translate("Right-click on Tiered Beehives to collect honeycombs.")
+        @Translate("Use on Tiered Beehives to harvest combs one at a time")
         public static final MutableComponent SCRAPER_TOOLTIP = Component.translatable("block.resourcefulbees.scraper.tooltip.info");
 
         @Translate("Must collect ALL honeycombs for bees to generate new ones!")
@@ -289,13 +298,13 @@ public final class TranslationConstants {
         @Translate("§8more info.")
         public static final MutableComponent FOR_MORE_INFO = Component.translatable("item.resourcefulbees.tooltip_info");
 
-        @Translate("§8statistics.")
-        public static final MutableComponent TOOLTIP_STATS = Component.translatable("item.resourcefulbees.tooltip_stats");
+        @Translate("§8contents.")
+        public static final MutableComponent TOOLTIP_CONTENTS = Component.translatable("item.resourcefulbees.tooltip_contents");
 
         @Translate(" - %s")
         public static final String BEE_BOX_ENTITY_NAME = "item.resourcefulbees.bee_box.entity_name";
 
-        @Translate("Can hold up to %s bees.")
+        @Translate("Holds up to %s bees.")
         public static final String BEE_BOX_TOOLTIP = "item.resourcefulbees.information.bee_box.info";
 
         @Translate("Contains lost bees. Consumed on use.")
@@ -430,6 +439,9 @@ public final class TranslationConstants {
     public static class FakeFLower {
         @Translate("Fake Golden Flower")
         public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.fake_flower");
+
+        @Translate("Visiting bees will leave pollen that can be harvested")
+        public static final MutableComponent HARVEST = Component.translatable("block.resourcefulbees.fake_flower.tooltip.harvest");
     }
 
     public static class Centrifuge {

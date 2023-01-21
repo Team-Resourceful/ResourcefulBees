@@ -38,6 +38,13 @@ public final class ItemGroupResourcefulBees {
                 list.add(ModItems.WAX_BLOCK_ITEM);
                 list.add(ModItems.GOLD_FLOWER_ITEM);
 
+                list.add(ModItems.FLOW_HIVE);
+                list.add(ModItems.BREEDER_ITEM);
+                list.add(ModItems.T1_APIARY_ITEM);
+                list.add(ModItems.T2_APIARY_ITEM);
+                list.add(ModItems.T3_APIARY_ITEM);
+                list.add(ModItems.T4_APIARY_ITEM);
+
                 list.add(ModItems.HONEY_GENERATOR_ITEM);
                 list.add(ModItems.ENDER_BEECON_ITEM);
                 list.add(ModItems.SOLIDIFICATION_CHAMBER_ITEM);

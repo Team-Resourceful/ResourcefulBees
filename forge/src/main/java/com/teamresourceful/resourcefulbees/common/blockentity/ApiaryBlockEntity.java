@@ -2,13 +2,13 @@ package com.teamresourceful.resourcefulbees.common.blockentity;
 
 
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
+import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
@@ -61,7 +61,7 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
     }
 
     protected int getMaxTimeInHive(@NotNull BeeCompat bee) {
-        return (int) (bee.getMaxTimeInHive() * tier.time());
+        return (int) (bee.getMaxTimeInHive() * tier.timeMod());
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, ApiaryBlockEntity apiaryTile) {
@@ -69,7 +69,7 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
     }
 
     public boolean hasSpace() {
-        return this.bees.size() < tier.max();
+        return this.bees.size() < tier.maxBees();
     }
 
     public boolean isAllowedBee() {

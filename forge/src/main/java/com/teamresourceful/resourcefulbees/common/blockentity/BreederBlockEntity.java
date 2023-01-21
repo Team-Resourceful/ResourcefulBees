@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
-import com.teamresourceful.resourcefulbees.common.menus.BoundSafeContainerData;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.BreederMenu;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.BreederTimeUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.Upgrade;
@@ -9,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.menus.BoundSafeContainerData;
 import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
@@ -177,7 +177,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         public IAcceptor getAcceptor() {
             return (slot, stack, automation) -> {
                 if (slot >= 0 && slot < 11) {
-                    return slot != 0 || stack.getItem() instanceof Upgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.BREEDER);
+                    return slot != 0 || stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.BREEDER);
                 }
                 return false;
             };
@@ -208,7 +208,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return slot != 0 || stack.getItem() instanceof Upgrade upgrade && upgrade.getUpgradeType().equals(UpgradeType.BREEDER);
+            return slot != 0 || stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.BREEDER);
         }
 
         private void updateBreedTime(TileStackHandler stackHandler) {
