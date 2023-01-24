@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.FlowHiveRecipe;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.HoneyGenRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.MutationRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
@@ -24,5 +25,6 @@ public final class ModRecipeTypes {
     public static final RegistryEntry<RecipeType<SolidificationRecipe>> SOLIDIFICATION_RECIPE_TYPE = RECIPE_TYPES.register("solidification", () -> CodecRecipeType.of("solidification"));
     public static final RegistryEntry<RecipeType<FlowHiveRecipe>> FLOW_HIVE_RECIPE_TYPE = RECIPE_TYPES.register("flowhive", () -> CodecRecipeType.of("flowhive"));
     public static final RegistryEntry<RecipeType<MutationRecipe>> MUTATION_RECIPE_TYPE = RECIPE_TYPES.register("mutation", () -> CodecRecipeType.of("mutation"));
+    public static final RegistryEntry<RecipeType<HoneyGenRecipe>> HONEY_GEN_RECIPE_TYPE = RECIPE_TYPES.register("honey_gen", () -> CodecRecipeType.of("honey_gen"));
 
 }

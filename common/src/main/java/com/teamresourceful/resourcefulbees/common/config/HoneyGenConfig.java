@@ -10,24 +10,6 @@ import com.teamresourceful.resourcefulconfig.common.config.EntryType;
 public final class HoneyGenConfig {
 
     @ConfigEntry(
-        id = "honeyDrainAmount",
-        type = EntryType.INTEGER,
-        translation = "Honey Drain Amount"
-    )
-    @Comment("Amount of honey consumed in mb/t.")
-    @IntRange(min = 1, max = 50)
-    public static int honeyDrainAmount = 5;
-
-    @ConfigEntry(
-        id = "energyFillAmount",
-        type = EntryType.INTEGER,
-        translation = "Energy Fill Amount"
-    )
-    @Comment("Amount of rf/t generated.")
-    @IntRange(min = 0, max = 500)
-    public static int energyFillAmount = 125;
-
-    @ConfigEntry(
         id = "energyTransferAmount",
         type = EntryType.INTEGER,
         translation = "Energy Transfer Amount"

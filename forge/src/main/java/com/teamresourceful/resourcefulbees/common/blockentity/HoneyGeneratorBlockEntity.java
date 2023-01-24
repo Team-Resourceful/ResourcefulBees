@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.blockentity;
 
 import com.teamresourceful.resourcefulbees.common.block.HoneyGenerator;
-import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.config.HoneyGenConfig;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGeneratorMenu;
@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
+import com.teamresourceful.resourcefulbees.common.recipe.recipes.HoneyGenRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,11 +33,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
+import java.util.Optional;
 
 public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker {
 
-    public static final int HONEY_DRAIN_AMOUNT = HoneyGenConfig.honeyDrainAmount;
-    public static final int ENERGY_FILL_AMOUNT = HoneyGenConfig.energyFillAmount;
     public static final int ENERGY_TRANSFER_AMOUNT = HoneyGenConfig.energyTransferAmount;
     public static final int MAX_ENERGY_CAPACITY = HoneyGenConfig.maxEnergyCapacity;
     public static final int MAX_TANK_STORAGE = HoneyGenConfig.maxTankCapacity;
@@ -44,21 +44,23 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     private final CustomEnergyStorage energyStorage = new CustomEnergyStorage(MAX_ENERGY_CAPACITY, 0, ENERGY_TRANSFER_AMOUNT) {
         @Override
         protected void onEnergyChanged() {
-            setChanged();
+            dirty = true;
         }
     };
     private final FluidTank tank = new FluidTank(MAX_TANK_STORAGE, fluidStack -> fluidStack.getFluid().is(ModFluidTags.HONEY)) {
         @Override
         protected void onContentsChanged() {
-            setChanged();
+            dirty = true;
         }
     };
 
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
     private final LazyOptional<FluidTank> tankOptional = LazyOptional.of(() -> tank);
 
-    private int processingTime = 0;
+    private Optional<HoneyGenRecipe> recipe = Optional.empty();
+    private boolean validRecipe = true;
     private ProcessStage processStage = ProcessStage.IDLE;
+    private boolean dirty;
 
     public HoneyGeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), pos, state);
@@ -66,16 +68,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
 
     @Override
     public Side getSide() {
-        return Side.BOTH;
-    }
-
-    @Override
-    public void clientTick(Level level, BlockPos pos, BlockState state) {
-        if (processStage.isIdle()) this.processingTime = 0;
-        else {
-            this.processingTime++;
-            this.processingTime %= 10;
-        }
+        return Side.SERVER;
     }
 
     @Override
@@ -86,6 +79,11 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
             else this.processCompleted(level);
         }
         this.sendOutPower(level);
+        if (dirty) {
+            dirty = false;
+            checkRecipe();
+            setChanged();
+        }
     }
 
     private void sendOutPower(Level level) {
@@ -118,15 +116,15 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     }
 
     private boolean canProcess() {
-        return hasHoney() && energyStorage.canAddEnergy(ENERGY_FILL_AMOUNT) && canDrain();
+        return !tank.isEmpty() && recipe.isPresent() && canAddEnergy(recipe.get().energyFillRate()) && canDrain(recipe.get().honeyDrainRate());
     }
 
-    private boolean hasHoney() {
-        return !tank.isEmpty();
+    private boolean canAddEnergy(int energyAmount) {
+        return energyStorage.canAddEnergy(energyAmount);
     }
 
-    private boolean canDrain() {
-        return tank.getFluidAmount() >= HONEY_DRAIN_AMOUNT;
+    private boolean canDrain(int drainAmount) {
+        return tank.getFluidAmount() >= drainAmount;
     }
 
     private void startProcess(Level level) {
@@ -135,13 +133,24 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     }
 
     private void processEnergy() {
-        tank.drain(HONEY_DRAIN_AMOUNT, IFluidHandler.FluidAction.EXECUTE);
-        energyStorage.addEnergy(ENERGY_FILL_AMOUNT);
+        if (recipe.isEmpty()) return;
+        tank.drain(recipe.get().honeyDrainRate(), IFluidHandler.FluidAction.EXECUTE);
+        energyStorage.addEnergy(recipe.get().energyFillRate());
     }
 
     private void processCompleted(Level level) {
         processStage = ProcessStage.IDLE;
         level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(HoneyGenerator.PROPERTY_ON, false));
+    }
+
+    private void checkRecipe() {
+        if (tank.isEmpty()) {
+            recipe = Optional.empty();
+            validRecipe = true;
+        } else if (validRecipe && !tank.isEmpty() && recipe.isEmpty() && level != null) {
+            recipe = HoneyGenRecipe.findRecipe(level.getRecipeManager(), tank.getFluid());
+            validRecipe = recipe.isPresent();
+        }
     }
 
     @Override
@@ -178,6 +187,13 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
         if (tag.contains(NBTConstants.NBT_PROCESS_STAGE)) processStage = ProcessStage.valueOf(tag.getString(NBTConstants.NBT_PROCESS_STAGE).toUpperCase(Locale.ROOT));
     }
 
+    //overriding method as it provides guaranteed access to the level on first load in both forge and fabric
+    @Override
+    public void setLevel(@NotNull Level level) {
+        super.setLevel(level);
+        checkRecipe();
+    }
+
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
@@ -202,10 +218,6 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     @Override
     public Component getDisplayName() {
         return TranslationConstants.Guis.GENERATOR;
-    }
-
-    public int getProcessingTime() {
-        return processingTime;
     }
 
     public FluidTank getTank() {
