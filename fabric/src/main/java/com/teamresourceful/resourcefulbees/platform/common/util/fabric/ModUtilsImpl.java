@@ -42,7 +42,7 @@ public class ModUtilsImpl {
     }
 
     public static boolean isRealPlayer(Player player) {
-        return player instanceof ServerPlayer && player.getClass() == ServerPlayer.class;
+        return player != null && player.getClass() == ServerPlayer.class;
     }
 
     public static ResourceKey<? extends Registry<?>> getSpawnDataRegistryKey() {
