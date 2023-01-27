@@ -39,8 +39,8 @@
 	"gui.resourcefulbees.apiary.export.false" : "Bienen export ist fehlgeschlagen!",
 	"gui.resourcefulbees.apiary.validated.true" : "Bienenhausvalidierung erfolgreich!",
 	"gui.resourcefulbees.apiary.validated.false" : "Bienenhausvalidierung fehlgeschlagen!",
-	"gui.resourcefulbees.apiary.bee.ticks_in_hive": "Ticks im Bienenstock",
-	"gui.resourcefulbees.apiary.bee.ticks_left": "Ticks übrig",
+	"gui.resourcefulbees.apiary.bee.ticks_in_hive": "Ticks im Bienenstock: %s",
+	"gui.resourcefulbees.apiary.bee.ticks_left": "Ticks übrig: %s",
 	"gui.resourcefulbees.apiary.button.breed_screen": "Bienenzüchter",
 	"gui.resourcefulbees.apiary.button.main_screen": "Bienen Import/Export",
 	"gui.resourcefulbees.apiary.button.storage_screen": "Bienenhauslager",
@@ -82,7 +82,7 @@
 	"block.resourcefulbees.honey_generator": "Honig Generator",
 	"block.resourcefulbees.beehive.tooltip.max_bees": "Maximale Bienen: %s",
 	"block.resourcefulbees.beehive.tooltip.max_combs": "Maximale Bienenwaben: %s",
-	"block.resourcefulbees.beehive.tooltip.hive_time": "Bienen Nest Zeit Modifikation: %s",
+	"block.resourcefulbees.beehive.tooltip.hive_time": "Bienen Nest Zeit Modifikation: %s%s%%",
 	"block.resourcefulbees.beehive.tooltip.unique_bees": "EINZIGARTIG",
 	"block.resourcefulbees.apiary.tooltip.output_type": "Output Typ: %s",
 	"block.resourcefulbees.apiary.tooltip.output_quantity": "Output Menge: %s",
@@ -194,11 +194,13 @@
 	"item.resourcefulbees.scraper.tooltip": "Rechtsklick auf volle Bienen Neste um Waben zu sammeln.",
 	"item.resourcefulbees.scraper.tooltip.1": "man muss ALLE Waben sammeln damit Bienen neue erstellen können!",
 	"block.resourcefulbees.apiary_breeder.tooltip.info": "Ein ZUSÄTZLICHER Züchter kann zusatzlich zum Bienen Nest Multiblock hinzugefügt werden",
-	"block.resourcefulbees.apiary_breeder.tooltip.info1": "Maximale Brutzeit:",
+	"block.resourcefulbees.apiary_breeder.tooltip.info1": "Maximale Brutzeit: %s ticks",
 	"block.resourcefulbees.apiary_breeder.tooltip.info2": "Kann mit zusätzlichen Züchtern oder Zeitmodifikatoren aufgerüstet werden.",
-	"item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info": "Reduziert die maximale Brutzeit um 300 ticks.",
+	"item.resourcefulbees.apiary_breed_time_upgrade.tooltip.info": "Reduziert die maximale Brutzeit um %s ticks.",
 	"item.resourcefulbees.apiary_breeder_upgrade.tooltip.info": "Fügt dem Bienenzüchter zusätzliche Züchter hinzu",
 	"block.resourcefulbees.centrifuge.tooltip.structure_size": "Zentrifuge Die Multiblock-Größe beträgt 3x4x3 und besteht aus einem Controller und den restlichen Gehäusen.",
 	"block.resourcefulbees.centrifuge.tooltip.requisites": "Der Controller muss der eine Block von unten in der Mitte einer Fläche sein.",
-	"block.resourcefulbees.centrifuge.tooltip.capabilities": "Jeder Block im Multiblock importiert/exportiert items und energie"
+	"block.resourcefulbees.centrifuge.tooltip.capabilities": "Jeder Block im Multiblock importiert/exportiert items und energie",
+
+	"tooltip.resourcefulbees.jei.click_bee_info": "Links oder rechts klicken für mehr Info"
 }
