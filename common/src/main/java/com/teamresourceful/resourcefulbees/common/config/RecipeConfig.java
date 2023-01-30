@@ -9,14 +9,14 @@ import com.teamresourceful.resourcefulconfig.common.config.EntryType;
 public final class RecipeConfig {
 
     @ConfigEntry(
-            id = "generateDefaultsRecipes",
+            id = "generateDefaultRecipes",
             type = EntryType.BOOLEAN,
             translation = "Generate Default Recipes"
     )
     @Comment(
             value = "Set this to false when you want to overwrite the default bees recipes. [true/false]"
     )
-    public static boolean generateDefaultsRecipes = true;
+    public static boolean generateDefaultRecipes = true;
 
     @ConfigEntry(
             id = "honeycombBlockRecipes",

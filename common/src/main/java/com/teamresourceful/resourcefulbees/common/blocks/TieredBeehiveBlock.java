@@ -124,7 +124,11 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
 
         if (itemstack.getItem() instanceof NestUpgrade upgrade && upgrade.isType(UpgradeType.NEST)) {
             if (upgrade.getTier().from.equals(this.tier)) {
-                return upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
+                InteractionResult result = upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
+                if (result == InteractionResult.SUCCESS && GeneralConfig.consumeHiveUpgrade) {
+                    itemstack.shrink(1);
+                }
+                return result;
             } else {
                 player.displayClientMessage(Component.literal("You can not upgrade this nest with that upgrade."), true);
             }

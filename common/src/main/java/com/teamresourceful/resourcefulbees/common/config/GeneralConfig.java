@@ -59,8 +59,18 @@ public final class GeneralConfig {
     @Comment(
             value = "Sets the max durability for the smoker"
     )
-    @IntRange(min = 100, max = 5000)
     public static int smokerDurability = 1000;
+
+    @ConfigEntry(
+            id = "consumeHiveUpgrade",
+            type = EntryType.BOOLEAN,
+            translation = "Consume Hive Upgrade"
+    )
+    @Comment(
+            value = "Set to false if you want hive upgrades to be reusable."
+    )
+    @IntRange(min = 100, max = 5000)
+    public static boolean consumeHiveUpgrade = true;
 
     @InlineCategory
     public static ClientConfig clientConfig;
