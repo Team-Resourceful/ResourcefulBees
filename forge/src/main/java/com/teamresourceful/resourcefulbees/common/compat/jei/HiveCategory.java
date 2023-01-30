@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
@@ -49,7 +48,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     }
 
     public static List<Recipe> getHoneycombRecipes(Collection<HiveRecipe> recipes) {
-        return recipes.stream().flatMap(HiveCategory::createRecipes).collect(Collectors.toList());
+        return recipes.stream().flatMap(HiveCategory::createRecipes).toList();
     }
 
     private static Stream<Recipe> createRecipes(HiveRecipe recipe){

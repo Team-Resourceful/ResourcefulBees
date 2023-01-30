@@ -1,0 +1,10 @@
+{
+    "type": "resourcefulbees:flow_hive",
+    "bees": [
+        "resourcefulbees:kitten_bee"
+    ],
+    "fluid": {
+        "id": "resourcefulbees:catnip_honey",
+        "amount": 50
+    }
+}

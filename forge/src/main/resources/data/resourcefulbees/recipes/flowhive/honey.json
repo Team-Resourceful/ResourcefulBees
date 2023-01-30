@@ -1,0 +1,35 @@
+{
+    "type": "resourcefulbees:flow_hive",
+    "bees": [
+        "minecraft:bee",
+        "resourcefulbees:beeper_bee",
+        "resourcefulbees:brown_mushroom_bee",
+        "resourcefulbees:coal_bee",
+        "resourcefulbees:crimson_fungus_bee",
+        "resourcefulbees:diamond_bee",
+        "resourcefulbees:dragon_bee",
+        "resourcefulbees:dungeon_bee",
+        "resourcefulbees:emerald_bee",
+        "resourcefulbees:ender_bee",
+        "resourcefulbees:gold_bee",
+        "resourcefulbees:icy_bee",
+        "resourcefulbees:iron_bee",
+        "resourcefulbees:lapis_bee",
+        "resourcefulbees:nether_quartz_bee",
+        "resourcefulbees:netherite_bee",
+        "resourcefulbees:pigman_bee",
+        "resourcefulbees:red_mushroom_bee",
+        "resourcefulbees:redstone_bee",
+        "resourcefulbees:skeleton_bee",
+        "resourcefulbees:slimy_bee",
+        "resourcefulbees:warped_fungus_bee",
+        "resourcefulbees:wither_bee",
+        "resourcefulbees:zombee_bee",
+        "resourcefulbees:oreo_bee",
+        "resourcefulbees:yeti_bee"
+    ],
+    "fluid": {
+        "id": "resourcefulbees:honey",
+        "amount": 250
+    }
+}

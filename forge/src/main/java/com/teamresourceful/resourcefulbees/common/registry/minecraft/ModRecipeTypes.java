@@ -23,7 +23,7 @@ public final class ModRecipeTypes {
 
     public static final RegistryEntry<RecipeType<CentrifugeRecipe>> CENTRIFUGE_RECIPE_TYPE = RECIPE_TYPES.register("centrifuge", () -> CodecRecipeType.of("centrifuge"));
     public static final RegistryEntry<RecipeType<SolidificationRecipe>> SOLIDIFICATION_RECIPE_TYPE = RECIPE_TYPES.register("solidification", () -> CodecRecipeType.of("solidification"));
-    public static final RegistryEntry<RecipeType<FlowHiveRecipe>> FLOW_HIVE_RECIPE_TYPE = RECIPE_TYPES.register("flowhive", () -> CodecRecipeType.of("flowhive"));
+    public static final RegistryEntry<RecipeType<FlowHiveRecipe>> FLOW_HIVE_RECIPE_TYPE = RECIPE_TYPES.register("flow_hive", () -> CodecRecipeType.of("flow_hive"));
     public static final RegistryEntry<RecipeType<MutationRecipe>> MUTATION_RECIPE_TYPE = RECIPE_TYPES.register("mutation", () -> CodecRecipeType.of("mutation"));
     public static final RegistryEntry<RecipeType<HoneyGenRecipe>> HONEY_GEN_RECIPE_TYPE = RECIPE_TYPES.register("honey_gen", () -> CodecRecipeType.of("honey_gen"));
 

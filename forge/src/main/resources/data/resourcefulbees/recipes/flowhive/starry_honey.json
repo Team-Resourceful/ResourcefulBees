@@ -1,0 +1,10 @@
+{
+    "type": "resourcefulbees:flow_hive",
+    "bees": [
+        "resourcefulbees:starry_bee"
+    ],
+    "fluid": {
+        "id": "resourcefulbees:starry_honey",
+        "amount": 25
+    }
+}
