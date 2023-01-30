@@ -46,6 +46,7 @@ public final class JEICompat implements IModPlugin {
         registration.addRecipeCategories(new MutationCategory(helper));
         registration.addRecipeCategories(new CentrifugeCategory(helper));
         registration.addRecipeCategories(new SolidificationCategory(helper));
+        registration.addRecipeCategories(new HoneyGenCategory(helper));
     }
 
     @NotNull
@@ -62,6 +63,7 @@ public final class JEICompat implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.T4_APIARY_ITEM.get()), HiveCategory.RECIPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.BREEDER_ITEM.get()), BeeBreedingCategory.RECIPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get()), SolidificationCategory.RECIPE);
+        registration.addRecipeCatalyst(ModItems.HONEY_GENERATOR_ITEM.get().getDefaultInstance(), HoneyGenCategory.RECIPE);
         var nests = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T1_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).map(ItemStack::new).toList();
         for (ItemStack stack : nests) {
             registration.addRecipeCatalyst(stack, HiveCategory.RECIPE);
@@ -79,6 +81,7 @@ public final class JEICompat implements IModPlugin {
         registration.addRecipes(FlowersCategory.RECIPE, FlowersCategory.getFlowersRecipes());
         registration.addRecipes(CentrifugeCategory.RECIPE, CentrifugeCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get())));
         registration.addRecipes(SolidificationCategory.RECIPE, recipeManager.getAllRecipesFor(ModRecipeTypes.SOLIDIFICATION_RECIPE_TYPE.get()));
+        registration.addRecipes(HoneyGenCategory.RECIPE, recipeManager.getAllRecipesFor(ModRecipeTypes.HONEY_GEN_RECIPE_TYPE.get()));
         CentrifugeInfo.registerCasingInfo(registration);
         CentrifugeInfo.registerGearboxInfo(registration);
         CentrifugeInfo.registerProcessorInfo(registration);
