@@ -74,6 +74,10 @@ public class BeeJarItem extends Item {
         return stack;
     }
 
+    public static ItemStack createFilledJar(Bee bee) {
+        return createFilledJar(EntityUtils.createJarBeeTag(bee), Component.Serializer.toJson(bee.getType().getDescription()));
+    }
+
     public static boolean hasEntityDisplay(ItemStack stack) {
         return !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().contains(NBTConstants.BeeJar.DISPLAY_NAME);
     }
@@ -110,20 +114,14 @@ public class BeeJarItem extends Item {
             return InteractionResult.FAIL;
         }
 
-        CompoundTag stackTag = stack.getOrCreateTag().copy();
-
-        stackTag.put(NBTConstants.BeeJar.ENTITY, EntityUtils.createJarBeeTag(target));
-        stackTag.putString(NBTConstants.BeeJar.DISPLAY_NAME, Component.Serializer.toJson(target.getType().getDescription()));
-
         if (stack.getCount() > 1) {
-            ItemStack newJar = new ItemStack(ModItems.BEE_JAR.get());
-            newJar.setTag(stackTag);
+            ItemStack newJar = createFilledJar(target);
             stack.shrink(1);
             if (!player.addItem(newJar)) {
                 player.drop(newJar, false);
             }
         } else {
-            stack.setTag(stackTag);
+            stack = createFilledJar(target);
         }
 
         player.setItemInHand(hand, stack);
