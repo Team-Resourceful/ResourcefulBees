@@ -29,6 +29,7 @@ public final class ModFluids {
     public static final ResourcefulRegistry<Fluid> STILL_HONEY_FLUIDS = ResourcefulRegistries.create(FLUIDS);
     public static final ResourcefulRegistry<Fluid> FLOWING_HONEY_FLUIDS = ResourcefulRegistries.create(FLUIDS);
 
+    //TODO either remove this method or replace the calls in @RegistryHandler.java with this method
     public static void initializeRegistries(IEventBus bus) {
         FLUIDS.init();
         FLUID_TYPES.register(bus);
