@@ -20,6 +20,6 @@ public final class ModRecipeSerializers {
     public static final ResourcefulRegistry<RecipeSerializer<?>> RECIPE_SERIALIZERS = ResourcefulRegistries.create(Registry.RECIPE_SERIALIZER, ModConstants.MOD_ID);
 
     public static final RegistryEntry<CodecRecipeSerializer<HiveRecipe>> HIVE_RECIPE = RECIPE_SERIALIZERS.register("hive", () -> new CodecRecipeSerializer<>(ModRecipes.HIVE_RECIPE_TYPE.get(), HiveRecipe::codec));
-    public static final RegistryEntry<CodecRecipeSerializer<BreederRecipe>> BREEDER_RECIPE = RECIPE_SERIALIZERS.register("breeder", () -> new CodecRecipeSerializer<>(ModRecipes.BREEDER_RECIPE_TYPE.get(), BreederRecipe::codec));
+    public static final RegistryEntry<CodecRecipeSerializer<BreederRecipe>> BREEDER_RECIPE = RECIPE_SERIALIZERS.register("breeder", () -> new CodecRecipeSerializer<>(ModRecipes.BREEDER_RECIPE_TYPE.get(), BreederRecipe::codec, BreederRecipe::networkCodec));
 
 }
