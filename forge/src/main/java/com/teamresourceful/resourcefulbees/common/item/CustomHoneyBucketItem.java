@@ -24,7 +24,10 @@ public class CustomHoneyBucketItem extends BucketItem {
     }
 
     public static int getColor(ItemStack stack, int tintIndex) {
-        return tintIndex == 1 ? ((CustomHoneyBucketItem) stack.getItem()).getHoneyBucketColor() : BeeConstants.DEFAULT_ITEM_COLOR;
+        if (stack.getItem() instanceof CustomHoneyBucketItem bucket && tintIndex == 1) {
+            return bucket.getHoneyBucketColor();
+        }
+        return BeeConstants.DEFAULT_ITEM_COLOR;
     }
 
     public int getHoneyBucketColor() {
