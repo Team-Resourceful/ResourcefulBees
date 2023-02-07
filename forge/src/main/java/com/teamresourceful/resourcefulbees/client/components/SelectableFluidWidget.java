@@ -41,7 +41,7 @@ public class SelectableFluidWidget extends AbstractWidget {
     public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         FluidStack fluid = tank.getFluid();
         if (!fluid.isEmpty()) {
-            int height = Math.round(((float) fluid.getAmount() / (float)tank.getCapacity()) * (float)this.height);
+            int height = Math.round((fluid.getAmount() / (float)tank.getCapacity()) * this.height);
             ClientUtils.drawFluid(stack, height, this.width, fluid, this.x, this.y + this.height - height, getBlitOffset());
         }
         if (this.isHoveredOrFocused()) {
@@ -61,7 +61,7 @@ public class SelectableFluidWidget extends AbstractWidget {
         if (fluid.isEmpty()) {
             tooltip.add(Component.literal("Tank Empty")); //TODO Translate
         } else {
-            tooltip.add(Component.literal("Hold [CTRL] to switch between fluids!")); //TODO Translate
+            tooltip.add(Component.literal("Hold [CTRL] and [SCROLL] to switch between fluids!")); //TODO Translate
             tooltip.add(CommonComponents.EMPTY);
             for (FluidStack tankFluid : tank.getFluids()) {
                 MutableComponent line;
@@ -80,6 +80,7 @@ public class SelectableFluidWidget extends AbstractWidget {
 
     @Override
     public boolean mouseScrolled(double scrollX, double scrollY, double delta) {
+        //TODO consider adding up/down arrow key support for people who may not have a scroll wheel
         if (this.isHoveredOrFocused() && Screen.hasControlDown()) {
             this.lastStack = nextStack(this.lastStack != null ? this.lastStack : this.tank.getFluid(), delta < 0 ? 1 : -1);
         }
