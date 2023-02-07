@@ -125,7 +125,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
         if (itemstack.getItem() instanceof NestUpgrade upgrade && upgrade.isType(UpgradeType.NEST)) {
             if (upgrade.getTier().from.equals(this.tier)) {
                 InteractionResult result = upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
-                if (result == InteractionResult.SUCCESS && GeneralConfig.consumeHiveUpgrade) {
+                if (result != InteractionResult.FAIL && GeneralConfig.consumeHiveUpgrade) {
                     itemstack.shrink(1);
                 }
                 return result;
