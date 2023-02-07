@@ -2,6 +2,7 @@
   "type": "resourcefulbees:centrifuge",
   "ingredient": { "item": "resourcefulbees:diamond_honeycomb" },
   "inputAmount": 2,
+  "energyPerTick": 16,
   "itemOutputs": [
     {
       "chance": 0.50,

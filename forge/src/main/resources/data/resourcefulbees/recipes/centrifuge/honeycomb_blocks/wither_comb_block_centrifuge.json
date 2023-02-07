@@ -1,27 +1,28 @@
 {
   "type": "resourcefulbees:centrifuge",
   "ingredient": { "item": "resourcefulbees:wither_honeycomb_block" },
+  "energyPerTick": 14,
   "itemOutputs": [
     {
       "pool": [
         {
           "item": {
             "id": "minecraft:bone_block",
-            "count": 8
+            "count": 4
           },
           "weight": 5
         },
         {
           "item": {
             "id": "minecraft:bone_block",
-            "count": 4
+            "count": 2
           },
           "weight": 25
         },
         {
           "item": {
             "id": "minecraft:bone_block",
-            "count": 2
+            "count": 1
           },
           "weight": 50
         }
@@ -32,21 +33,21 @@
         {
           "item": {
             "id": "minecraft:bone",
-            "count": 16
+            "count": 8
           },
           "weight": 5
         },
         {
           "item": {
             "id": "minecraft:bone",
-            "count": 8
+            "count": 4
           },
           "weight": 25
         },
         {
           "item": {
             "id": "minecraft:bone",
-            "count": 4
+            "count": 2
           },
           "weight": 50
         }
@@ -58,14 +59,14 @@
         {
           "item": {
             "id": "minecraft:wither_skeleton_skull",
-            "count": 5
+            "count": 3
           },
           "weight": 20
         },
         {
           "item": {
             "id": "minecraft:nether_star",
-            "count": 2
+            "count": 1
           }
         }
       ]
@@ -74,9 +75,9 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 500 }}
       ]
     }
   ],
-  "time": 1500
+  "time": 700
 }

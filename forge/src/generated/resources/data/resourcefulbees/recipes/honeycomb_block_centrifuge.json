@@ -1,14 +1,13 @@
 {
   "type": "resourcefulbees:centrifuge",
   "conditions": [],
-  "energyPerTick": 10,
   "fluidOutputs": [
     {
       "chance": 0.2,
       "pool": [
         {
           "fluid": {
-            "amount": 2250,
+            "amount": 1250,
             "id": "resourcefulbees:honey"
           },
           "weight": 10.0
@@ -25,10 +24,9 @@
       "pool": [
         {
           "item": {
-            "count": 9,
+            "count": 6,
             "id": "minecraft:sugar"
-          },
-          "weight": 10.0
+          }
         }
       ]
     },
@@ -37,13 +35,12 @@
       "pool": [
         {
           "item": {
-            "count": 9,
-            "id": "resourcefulbees:wax"
-          },
-          "weight": 10.0
+            "count": 1,
+            "id": "resourcefulbees:wax_block"
+          }
         }
       ]
     }
   ],
-  "time": 200
+  "time": 400
 }

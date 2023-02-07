@@ -7,21 +7,21 @@
         {
           "item": {
             "id": "minecraft:lapis_block",
-            "count": 4
+            "count": 2
           },
           "weight": 5
         },
         {
           "item": {
             "id": "minecraft:lapis_ore",
-            "count": 4
+            "count": 2
           },
           "weight": 30
         },
         {
           "item": {
             "id": "minecraft:lapis_lazuli",
-            "count": 32
+            "count": 16
           },
           "weight": 50
         }
@@ -33,21 +33,21 @@
         {
           "item": {
             "id": "minecraft:lapis_block",
-            "count": 4
+            "count": 2
           },
           "weight": 5
         },
         {
           "item": {
             "id": "minecraft:lapis_ore",
-            "count": 4
+            "count": 2
           },
           "weight": 30
         },
         {
           "item": {
             "id": "minecraft:lapis_lazuli",
-            "count": 32
+            "count": 16
           },
           "weight": 50
         }
@@ -57,9 +57,9 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 500 }}
       ]
     }
   ],
-  "time": 1200
+  "time": 500
 }

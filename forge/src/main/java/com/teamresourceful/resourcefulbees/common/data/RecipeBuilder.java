@@ -140,12 +140,11 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         return new ShapedRecipe(
                 Objects.requireNonNull(Registry.ITEM.getKey(comb.getStorageBlockItem())),
                 "",
-                3,
-                3,
+                2,
+                2,
                 NonNullList.of(Ingredient.EMPTY,
-                        honeycombItem, honeycombItem, honeycombItem,
-                        honeycombItem, honeycombItem, honeycombItem,
-                        honeycombItem, honeycombItem, honeycombItem
+                        honeycombItem, honeycombItem,
+                        honeycombItem, honeycombItem
                 ),
                 new ItemStack(comb.getStorageBlockItem())
         );
@@ -246,7 +245,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         return new ShapelessRecipe(
                 Objects.requireNonNull(Registry.ITEM.getKey(comb)),
                 "",
-                new ItemStack(comb, 9),
+                new ItemStack(comb, 4),
                 NonNullList.of(Ingredient.EMPTY, Ingredient.of(comb.getStorageBlockItem()))
         );
     }

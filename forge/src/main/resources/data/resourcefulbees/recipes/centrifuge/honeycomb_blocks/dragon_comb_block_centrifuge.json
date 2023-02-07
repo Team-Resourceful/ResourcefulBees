@@ -8,14 +8,14 @@
         {
           "item": {
             "id": "minecraft:end_crystal",
-            "count": 4
+            "count": 2
           },
           "weight": 5
         },
         {
           "item": {
             "id": "minecraft:end_crystal",
-            "count": 2
+            "count": 1
           },
           "weight": 25
         },
@@ -34,21 +34,21 @@
         {
           "item": {
             "id": "minecraft:dragon_egg",
-            "count": 8
+            "count": 4
           },
           "weight": 1
         },
         {
           "item": {
             "id": "minecraft:dragon_head",
-            "count": 4
+            "count": 2
           },
           "weight": 99
         },
         {
           "item": {
             "id": "minecraft:end_crystal",
-            "count": 4
+            "count": 2
           },
           "weight": 100
         }
@@ -64,9 +64,9 @@
     },
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 500 }}
       ]
     }
   ],
-  "time": 1400
+  "time": 700
 }
