@@ -303,7 +303,11 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
 
     @Override
     public @NotNull CompoundTag mergeNBTs(@NotNull CompoundTag nbtA, @NotNull CompoundTag nbtB) {
-        return null; //TODO implement merging
+        CompoundTag newTag = new CompoundTag();
+        int energyStoredA = nbtA.getInt("storedEnergy");
+        int energyStoredB = nbtB.getInt("storedEnergy");
+        newTag.putInt("storedEnergy", energyStoredA+energyStoredB);
+        return newTag;
     }
 
 /*    @Override
@@ -316,7 +320,7 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
     public void updateCentrifugeState(CentrifugeState centrifugeState) {
         centrifugeState.setMaxCentrifugeTier(terminal.getTier());
         centrifugeState.setTerminal(terminal.getBlockPos().asLong());
-        centrifugeState.setEnergyCapacity(energyStorage.getCapacity());
+        //centrifugeState.setEnergyCapacity(energyStorage.getCapacity());
         centrifugeState.setInputs(inputs.keySet());
         centrifugeState.setItemOutputs(itemOutputs.keySet().stream().toList());
         centrifugeState.setFluidOutputs(fluidOutputs.keySet().stream().toList());
