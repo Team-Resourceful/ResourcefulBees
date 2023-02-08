@@ -32,6 +32,51 @@ public final class CentrifugeConfig {
     @IntRange(min = 2, max = 1000)
     public static int centrifugeRfPerTick = 30;
 
+    @ConfigEntry(
+            id = "recipeTimeExponent",
+            type = EntryType.DOUBLE,
+            translation = "Recipe Time Exponent"
+    )
+    @Comment(
+            value = """
+                    The recipe time modifier is calculated as:
+                    numGearboxes^(1-x/numInputs)
+                    Larger values for X means gearboxes have more impact on the time reduction.
+                    """
+    )
+    @DoubleRange(min = 0, max = 1)
+    public static double recipeTimeExponent = 0.1;
 
+    @ConfigEntry(
+            id = "gearboxPowerExponent",
+            type = EntryType.DOUBLE,
+            translation = "Gearbox Power Exponent"
+    )
+    @Comment(
+            value = """
+                    The gearbox power modifier is calculated as:
+                    1 + (x * numGearboxes^1.1)
+                    Larger values for X means gearboxes have more impact on the power required to process a recipe.
+                    The calculated modifier is multiplied by the processor power modifier before being applied to the recipe rf/t.
+                    """
+    )
+    @DoubleRange(min = 0, max = 1)
+    public static double gearboxPowerExponent = 0.2;
+
+    @ConfigEntry(
+            id = "cpuPowerExponent",
+            type = EntryType.DOUBLE,
+            translation = "Processor Power Exponent"
+    )
+    @Comment(
+            value = """
+                    The processor power modifier is calculated as:
+                    1 + (x * numProcessors^1.1)
+                    Larger values for X means processors have more impact on the power required to process a recipe.
+                    The calculated modifier is multiplied by the gearbox power modifier before being applied to the recipe rf/t.
+                    """
+    )
+    @DoubleRange(min = 0, max = 1)
+    public static double cpuPowerExponent = 0.4;
 
 }
