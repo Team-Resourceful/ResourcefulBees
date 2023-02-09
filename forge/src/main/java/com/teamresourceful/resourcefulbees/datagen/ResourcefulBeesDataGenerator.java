@@ -29,10 +29,12 @@ public final class ResourcefulBeesDataGenerator {
     public static void gatherData(GatherDataEvent event) {
         ModConstants.LOGGER.info("Data Generator Loaded!");
         DataGenerator generator = event.getGenerator();
+
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         generator.addProvider(event.includeClient(), new ModBlockStateProvider(generator, existingFileHelper));
         generator.addProvider(event.includeClient(), new ModItemModelProvider(generator, existingFileHelper));
-        generator.addProvider(event.includeServer(), new ModLootTableProvider(generator));
+        generator.addProvider(event.includeClient(), new ModLanguageProvider(generator));
+
         ModBlockTagProvider blockTagProvider = new ModBlockTagProvider(generator, existingFileHelper);
         generator.addProvider(event.includeServer(), blockTagProvider);
         generator.addProvider(event.includeServer(), new ModPoiTagProvider(generator, existingFileHelper));
@@ -40,6 +42,6 @@ public final class ResourcefulBeesDataGenerator {
         generator.addProvider(event.includeServer(), new ModFluidTagProvider(generator, existingFileHelper));
         generator.addProvider(event.includeServer(), new ModRecipeProvider(generator));
         generator.addProvider(event.includeServer(), new ModAdvancementProvider(generator));
-        generator.addProvider(event.includeClient(), new ModLanguageProvider(generator));
+        generator.addProvider(event.includeServer(), new ModLootTableProvider(generator));
     }
 }

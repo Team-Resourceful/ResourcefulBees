@@ -6,10 +6,8 @@ import com.teamresourceful.resourcefulbees.common.recipe.recipes.MutationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -55,7 +53,7 @@ public class ThrownMutatedPollen extends ThrowableItemProjectile {
             return;
         }
         if (this.level instanceof ServerLevel serverLevel) {
-            MutationRecipe recipe = MutationRecipe.getRecipe(level, new ResourceLocation(item.getTag().getString(NBTConstants.POLLEN_ID)));
+            MutationRecipe recipe = MutationRecipe.getRecipe(level, ResourceLocation.tryParse(item.getTag().getString(NBTConstants.POLLEN_ID)));
             if (recipe == null) return;
             BeeMutateGoal.doMutation(recipe.mutations(), serverLevel, result);
         }

@@ -8,8 +8,10 @@
         "common.BeehiveBeeDataAccessor",
         "common.BeehiveEntityAccessor",
         "common.MixinBlock",
+        "common.ReloadableServerResourcesAccessor",
         "common.ServerLevelAccessor",
-        "common.StructureCheckAccessor"
+        "common.StructureCheckAccessor",
+        "common.TagManagerAccessor"
     ],
     "client": [
         "client.ScreenInvoker"
