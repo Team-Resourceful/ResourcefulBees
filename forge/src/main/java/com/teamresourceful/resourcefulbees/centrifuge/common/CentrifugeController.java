@@ -300,6 +300,12 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
     }
     //endregion
 
+    /*  note for self:
+     *  for handling the situations where the controllers aren't "aware" of their NBT yet
+     *  ie: merged while loading
+     *  if both have all blocks loaded, then its assumed they have their NBT, and can handle merging the data themselves
+     *  via merge
+     */
     @Override
     public @NotNull CompoundTag mergeNBTs(@NotNull CompoundTag nbtA, @NotNull CompoundTag nbtB) {
         CompoundTag newTag = new CompoundTag();
@@ -309,17 +315,28 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         return newTag;
     }
 
-/*    @Override
-    protected void onMerge(@NotNull CentrifugeController otherController) {
-        energyStorage.storeEnergy(otherController.energyStorage.getStored());
-        energyStorage.increaseCapacity(otherController.energyStorage.getCapacity());
-        //TODO test this ^^ make two separate centrifuges 3x3x3 with a one block space in between then combine the
-    }*/
+    @Override
+    protected void merge(@NotNull CentrifugeController other) {
+        energyStorage.storeEnergy(other.energyStorage.getStored());
+    }
+
+    @Override
+    protected void split(@NotNull List<CentrifugeController> others) {
+        int capacity = energyStorage.getCapacity();
+        if (capacity == 0) return;
+        int stored = energyStorage.getStored();
+        for (CentrifugeController other : others) {
+            CentrifugeEnergyStorage otherEnergyStorage = other.energyStorage;
+            int otherCapacity = otherEnergyStorage.getCapacity();
+            if (otherCapacity == 0) continue;
+            double percent = (double) otherCapacity / capacity;
+            otherEnergyStorage.storeEnergy((int) (stored * percent));
+        }
+    }
 
     public void updateCentrifugeState(CentrifugeState centrifugeState) {
         centrifugeState.setMaxCentrifugeTier(terminal.getTier());
         centrifugeState.setTerminal(terminal.getBlockPos().asLong());
-        //centrifugeState.setEnergyCapacity(energyStorage.getCapacity());
         centrifugeState.setInputs(inputs.keySet());
         centrifugeState.setItemOutputs(itemOutputs.keySet().stream().toList());
         centrifugeState.setFluidOutputs(fluidOutputs.keySet().stream().toList());
