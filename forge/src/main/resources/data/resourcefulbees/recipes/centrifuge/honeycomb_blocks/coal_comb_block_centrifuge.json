@@ -8,21 +8,21 @@
         {
           "item": {
             "id": "minecraft:coal_block",
-            "count": 8
+            "count": 4
           },
           "weight": 5
         },
         {
           "item": {
             "id": "minecraft:coal_block",
-            "count": 4
+            "count": 2
           },
           "weight": 25
         },
         {
           "item": {
             "id": "minecraft:coal_block",
-            "count": 2
+            "count": 1
           },
           "weight": 50
         }
@@ -33,21 +33,21 @@
         {
           "item": {
             "id": "minecraft:charcoal",
-            "count": 32
+            "count": 16
           },
           "weight": 5
         },
         {
           "item": {
             "id": "minecraft:charcoal",
-            "count": 24
+            "count": 12
           },
           "weight": 25
         },
         {
           "item": {
             "id": "minecraft:charcoal",
-            "count": 12
+            "count": 6
           },
           "weight": 50
         }
@@ -57,9 +57,9 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 500 }}
       ]
     }
   ],
-  "time": 1200
+  "time": 500
 }

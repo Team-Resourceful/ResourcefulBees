@@ -4,16 +4,16 @@
   "itemOutputs": [
     {
       "chance": 0.2,
-      "pool": [{"item": { "id": "minecraft:cat_spawn_egg", "count": 4 }}]
+      "pool": [{"item": { "id": "minecraft:cat_spawn_egg", "count": 2 }}]
     }
   ],
   "fluidOutputs": [
     {
       "chance": 0.05,
       "pool": [
-        {"fluid": { "id": "resourcefulbees:catnip_honey", "amount": 2000 }}
+        {"fluid": { "id": "resourcefulbees:catnip_honey", "amount": 1000 }}
       ]
     }
   ],
-  "time": 1400
+  "time": 700
 }

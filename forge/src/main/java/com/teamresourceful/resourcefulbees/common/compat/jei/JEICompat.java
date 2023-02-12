@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeInputScreen;
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeVoidScreen;
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeItems;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.CentrifugeInputGhostIngredientHandler;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredientHelper;
@@ -58,18 +59,32 @@ public final class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T1_APIARY_ITEM.get()), HiveCategory.RECIPE);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T2_APIARY_ITEM.get()), HiveCategory.RECIPE);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T3_APIARY_ITEM.get()), HiveCategory.RECIPE);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.T4_APIARY_ITEM.get()), HiveCategory.RECIPE);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.BREEDER_ITEM.get()), BeeBreedingCategory.RECIPE);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get()), SolidificationCategory.RECIPE);
+        registration.addRecipeCatalyst(ModItems.T1_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(ModItems.T2_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(ModItems.T3_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(ModItems.T4_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(ModItems.BREEDER_ITEM.get().getDefaultInstance(), BeeBreedingCategory.RECIPE);
+        registration.addRecipeCatalyst(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get().getDefaultInstance(), SolidificationCategory.RECIPE);
         registration.addRecipeCatalyst(ModItems.HONEY_GENERATOR_ITEM.get().getDefaultInstance(), HoneyGenCategory.RECIPE);
         registration.addRecipeCatalyst(ModItems.FLOW_HIVE.get().getDefaultInstance(), FlowHiveCategory.RECIPE);
-        var nests = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T1_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).map(ItemStack::new).toList();
+        var nests = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T1_NEST_ITEMS.getEntries().stream()
+                .map(RegistryEntry::get)
+                .map(ItemStack::new)
+                .toList();
         for (ItemStack stack : nests) {
             registration.addRecipeCatalyst(stack, HiveCategory.RECIPE);
         }
+        registration.addRecipeCatalyst(ModItems.CENTRIFUGE.get().getDefaultInstance(), CentrifugeCategory.RECIPE);
+        registration.addRecipeCatalyst(ModItems.CENTRIFUGE_CRANK.get().getDefaultInstance(), CentrifugeCategory.RECIPE);
+        registration.addRecipeCatalyst(CentrifugeItems.CENTRIFUGE_BASIC_INPUT.get().getDefaultInstance(), CentrifugeCategory.RECIPE);
+        registration.addRecipeCatalyst(CentrifugeItems.CENTRIFUGE_ADVANCED_INPUT.get().getDefaultInstance(), CentrifugeCategory.RECIPE);
+        registration.addRecipeCatalyst(CentrifugeItems.CENTRIFUGE_ELITE_INPUT.get().getDefaultInstance(), CentrifugeCategory.RECIPE);
+        registration.addRecipeCatalyst(CentrifugeItems.CENTRIFUGE_ULTIMATE_INPUT.get().getDefaultInstance(), CentrifugeCategory.RECIPE);
+        //IDK if I should include so many of the blocks as catalysts
+        /*registration.addRecipeCatalyst(CentrifugeItems.CENTRIFUGE_BASIC_TERMINAL.get().getDefaultInstance(), CentrifugeCategory.RECIPE);
+        registration.addRecipeCatalyst(CentrifugeItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance(), CentrifugeCategory.RECIPE);
+        registration.addRecipeCatalyst(CentrifugeItems.CENTRIFUGE_ELITE_TERMINAL.get().getDefaultInstance(), CentrifugeCategory.RECIPE);
+        registration.addRecipeCatalyst(CentrifugeItems.CENTRIFUGE_ULTIMATE_TERMINAL.get().getDefaultInstance(), CentrifugeCategory.RECIPE);*/
     }
 
     @Override
@@ -85,15 +100,7 @@ public final class JEICompat implements IModPlugin {
         registration.addRecipes(SolidificationCategory.RECIPE, recipeManager.getAllRecipesFor(ModRecipeTypes.SOLIDIFICATION_RECIPE_TYPE.get()));
         registration.addRecipes(HoneyGenCategory.RECIPE, recipeManager.getAllRecipesFor(ModRecipeTypes.HONEY_GEN_RECIPE_TYPE.get()));
         registration.addRecipes(FlowHiveCategory.RECIPE, FlowHiveCategory.getHoneycombRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.FLOW_HIVE_RECIPE_TYPE.get())));
-        CentrifugeInfo.registerCasingInfo(registration);
-        CentrifugeInfo.registerGearboxInfo(registration);
-        CentrifugeInfo.registerProcessorInfo(registration);
-        CentrifugeInfo.registerTerminalInfo(registration);
-        CentrifugeInfo.registerEnergyInputInfo(registration);
-        CentrifugeInfo.registerInputInfo(registration);
-        CentrifugeInfo.registerItemOutputInfo(registration);
-        CentrifugeInfo.registerFluidOutputInfo(registration);
-        CentrifugeInfo.registerVoidInfo(registration);
+        CentrifugeInfo.register(registration);
     }
 
     @Override

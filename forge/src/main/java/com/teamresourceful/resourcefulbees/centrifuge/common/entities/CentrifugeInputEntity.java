@@ -298,12 +298,16 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     public CompoundTag getSyncData() {
         CompoundTag tag = super.getSyncData();
         tag.putString(NBTConstants.NBT_PROCESS_STAGE, processStage.toString().toLowerCase(Locale.ROOT));
+        tag.put(NBTConstants.NBT_ITEM_OUTPUTS, itemOutputs.serialize());
+        tag.put(NBTConstants.NBT_FLUID_OUTPUTS, fluidOutputs.serialize());
         return tag;
     }
 
     @Override
     public void readSyncData(@NotNull CompoundTag tag) {
         if (tag.contains(NBTConstants.NBT_PROCESS_STAGE)) processStage = ProcessStage.deserialize(tag);
+        itemOutputs.deserialize(tag.getCompound(NBTConstants.NBT_ITEM_OUTPUTS), CentrifugeItemOutputEntity.class, this::getLevel);
+        fluidOutputs.deserialize(tag.getCompound(NBTConstants.NBT_FLUID_OUTPUTS), CentrifugeFluidOutputEntity.class, this::getLevel);
     }
 
     //endregion

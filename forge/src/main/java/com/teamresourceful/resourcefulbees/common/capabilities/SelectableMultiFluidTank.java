@@ -11,6 +11,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -151,16 +152,22 @@ public class SelectableMultiFluidTank implements IFluidTank, IFluidHandler, INBT
     }
 
     public FluidStack drain(FluidStack stack, int drain, FluidAction action) {
-        for (FluidStack fluid : fluids) {
+        Iterator<FluidStack> iterator = fluids.iterator();
+        while (iterator.hasNext()) {
+            FluidStack fluid = iterator.next();
             if (stack.isFluidEqual(fluid)) {
                 int drained = Math.min(stack.getAmount(), drain);
                 FluidStack newStack = new FluidStack(fluid, drained);
                 if (action.execute() && drained > 0) {
                     fluid.shrink(drained);
                 }
+                if (fluid.isEmpty()) {
+                    iterator.remove();
+                }
                 return newStack;
             }
         }
+
         return FluidStack.EMPTY;
     }
     //endregion

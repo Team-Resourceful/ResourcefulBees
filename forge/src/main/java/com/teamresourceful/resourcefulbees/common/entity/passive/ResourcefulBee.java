@@ -199,7 +199,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     @Override
     public boolean isFlowerValid(@NotNull BlockPos pos) {
         if (getCoreData().hasEntityFlower()) {
-            return this.level.getEntity(this.entityFlower.get()) != null;
+            return this.entityFlower.hasData() && this.level.getEntity(this.entityFlower.get()) != null;
         }
         return WorldUtils.checkBlock(this.level, pos, state -> state.is(getCoreData().flowers()));
     }

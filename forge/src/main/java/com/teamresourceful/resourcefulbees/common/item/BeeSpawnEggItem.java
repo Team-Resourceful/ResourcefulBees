@@ -29,7 +29,7 @@ public class BeeSpawnEggItem extends ForgeSpawnEggItem {
     private final CustomBeeData beeData;
 
 	public BeeSpawnEggItem(Supplier<EntityType<? extends CustomBeeEntity>> entityType, String beeType) {
-		super(entityType, 0xffcc33, 0x303030, new Properties());
+		super(entityType, 0xFFCC33, 0x303030, new Properties());
 		this.beeData = BeeRegistry.get().getBeeData(beeType);
 	}
 

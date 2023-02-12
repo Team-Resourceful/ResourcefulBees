@@ -15,14 +15,14 @@
         {
           "item": {
             "id": "minecraft:end_rod",
-            "count": 4
+            "count": 2
           },
           "weight": 25
         },
         {
           "item": {
             "id": "minecraft:ender_pearl",
-            "count": 12
+            "count": 6
           },
           "weight": 50
         }
@@ -53,14 +53,14 @@
         {
           "item": {
             "id": "minecraft:shulker_shell",
-            "count": 2
+            "count": 1
           },
           "weight": 50
         },
         {
           "item": {
             "id": "minecraft:shulker_shell",
-            "count": 4
+            "count": 2
           },
           "weight": 25
         }
@@ -70,9 +70,9 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 500 }}
       ]
     }
   ],
-  "time": 1400
+  "time": 700
 }

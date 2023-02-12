@@ -1,6 +1,7 @@
 {
   "type": "resourcefulbees:centrifuge",
   "ingredient": { "item": "resourcefulbees:wither_honeycomb" },
+  "energyPerTick": 14,
   "itemOutputs": [
     {
       "pool": [
@@ -78,5 +79,5 @@
       ]
     }
   ],
-  "time": 200
+  "time": 250
 }

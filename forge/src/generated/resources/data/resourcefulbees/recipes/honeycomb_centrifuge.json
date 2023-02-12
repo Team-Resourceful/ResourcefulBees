@@ -25,7 +25,7 @@
       "pool": [
         {
           "item": {
-            "count": 1,
+            "count": 2,
             "id": "minecraft:sugar"
           },
           "weight": 10.0
@@ -37,7 +37,7 @@
       "pool": [
         {
           "item": {
-            "count": 1,
+            "count": 2,
             "id": "resourcefulbees:wax"
           },
           "weight": 10.0

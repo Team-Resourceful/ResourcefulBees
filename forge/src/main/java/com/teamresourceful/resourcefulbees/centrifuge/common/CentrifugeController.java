@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common;
 
-import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.centrifuge.common.blocks.AbstractCentrifuge;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.*;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractCentrifugeEntity;
@@ -10,6 +9,8 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeE
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeActivity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeState;
+import com.teamresourceful.resourcefulbees.common.config.CentrifugeConfig;
+import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -224,15 +225,13 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
     //endregion
 
     public double getRecipeTimeModifier() {
-        return gearboxes.isEmpty() ? 1 : Math.pow(1-0.1/inputs.size(), gearboxes.size());
-        //TODO change 0.05 to be a config value or passed in as block property **make dividing by inputs configurable**
+        return gearboxes.isEmpty() ? 1 : Math.pow(1- CentrifugeConfig.recipeTimeExponent /inputs.size(), gearboxes.size());
+        //consider making the divide by inputs a configurable option
     }
 
     public double getRecipePowerModifier() {
-        double cpuModifier = processors.isEmpty() ? 1 : 1 + (0.4 * Math.pow(1.1, processors.size()));
-        //TODO change 0.4 to be a config value or passed in as block property
-        double gbxModifier = gearboxes.isEmpty() ? 1 : 1 + (0.2 * Math.pow(1.1, gearboxes.size()));
-        //TODO change 0.2 to be a config value or passed in as block property
+        double cpuModifier = processors.isEmpty() ? 1 : 1 + (CentrifugeConfig.cpuPowerExponent * Math.pow(1.1, processors.size()));
+        double gbxModifier = gearboxes.isEmpty() ? 1 : 1 + (CentrifugeConfig.gearboxPowerExponent * Math.pow(1.1, gearboxes.size()));
         return gbxModifier * cpuModifier;
     }
 
@@ -303,7 +302,11 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
 
     @Override
     public @NotNull CompoundTag mergeNBTs(@NotNull CompoundTag nbtA, @NotNull CompoundTag nbtB) {
-        return null; //TODO implement merging
+        CompoundTag newTag = new CompoundTag();
+        int energyStoredA = nbtA.getInt("storedEnergy");
+        int energyStoredB = nbtB.getInt("storedEnergy");
+        newTag.putInt("storedEnergy", energyStoredA+energyStoredB);
+        return newTag;
     }
 
 /*    @Override
@@ -316,7 +319,7 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
     public void updateCentrifugeState(CentrifugeState centrifugeState) {
         centrifugeState.setMaxCentrifugeTier(terminal.getTier());
         centrifugeState.setTerminal(terminal.getBlockPos().asLong());
-        centrifugeState.setEnergyCapacity(energyStorage.getCapacity());
+        //centrifugeState.setEnergyCapacity(energyStorage.getCapacity());
         centrifugeState.setInputs(inputs.keySet());
         centrifugeState.setItemOutputs(itemOutputs.keySet().stream().toList());
         centrifugeState.setFluidOutputs(fluidOutputs.keySet().stream().toList());

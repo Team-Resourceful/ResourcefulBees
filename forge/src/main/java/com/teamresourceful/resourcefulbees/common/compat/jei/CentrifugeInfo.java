@@ -18,6 +18,18 @@ public final class CentrifugeInfo {
         throw new UtilityClassError();
     }
 
+    public static void register(@NotNull IRecipeRegistration registration) {
+        CentrifugeInfo.registerCasingInfo(registration);
+        CentrifugeInfo.registerGearboxInfo(registration);
+        CentrifugeInfo.registerProcessorInfo(registration);
+        CentrifugeInfo.registerTerminalInfo(registration);
+        CentrifugeInfo.registerEnergyInputInfo(registration);
+        CentrifugeInfo.registerInputInfo(registration);
+        CentrifugeInfo.registerItemOutputInfo(registration);
+        CentrifugeInfo.registerFluidOutputInfo(registration);
+        CentrifugeInfo.registerVoidInfo(registration);
+    }
+
     public static void registerCasingInfo(@NotNull IRecipeRegistration registration) {
         registration.addIngredientInfo(CentrifugeItems.CENTRIFUGE_CASING.get().getDefaultInstance(), VanillaTypes.ITEM_STACK,
                 Component.literal("Casings are used as filler for the shell of the multiblock. They can be placed on the edges, corners, and all faces")

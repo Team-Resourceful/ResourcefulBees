@@ -7,21 +7,21 @@
         {
           "item": {
             "id": "minecraft:slime_block",
-            "count": 4
+            "count": 2
           },
           "weight": 50
         },
         {
           "item": {
             "id": "minecraft:slime_block",
-            "count": 6
+            "count": 3
           },
           "weight": 30
         },
         {
           "item": {
             "id": "minecraft:slime_block",
-            "count": 8
+            "count": 4
           },
           "weight": 5
         }
@@ -33,21 +33,21 @@
         {
           "item": {
             "id": "minecraft:slime_block",
-            "count": 4
+            "count": 2
           },
           "weight": 50
         },
         {
           "item": {
             "id": "minecraft:slime_block",
-            "count": 6
+            "count": 3
           },
           "weight": 30
         },
         {
           "item": {
             "id": "minecraft:slime_block",
-            "count": 8
+            "count": 4
           },
           "weight": 5
         }
@@ -57,9 +57,9 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 1000 }}
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 500 }}
       ]
     }
   ],
-  "time": 1200
+  "time": 500
 }

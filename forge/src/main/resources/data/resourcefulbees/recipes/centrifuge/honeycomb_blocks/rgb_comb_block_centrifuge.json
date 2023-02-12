@@ -4,73 +4,73 @@
   "itemOutputs": [
     {
       "pool": [
-        {"item": {"id": "minecraft:white_dye", "count": 8}},
-        {"item": {"id": "minecraft:orange_dye", "count": 8}},
-        {"item": {"id": "minecraft:magenta_dye", "count": 8}},
-        {"item": {"id": "minecraft:light_blue_dye", "count": 8}},
-        {"item": {"id": "minecraft:yellow_dye", "count": 8}},
-        {"item": {"id": "minecraft:lime_dye", "count": 8}},
-        {"item": {"id": "minecraft:pink_dye", "count": 8}},
-        {"item": {"id": "minecraft:gray_dye", "count": 8}},
-        {"item": {"id": "minecraft:light_gray_dye", "count": 8}},
-        {"item": {"id": "minecraft:cyan_dye", "count": 8}},
-        {"item": {"id": "minecraft:purple_dye", "count": 8}},
-        {"item": {"id": "minecraft:blue_dye", "count": 8}},
-        {"item": {"id": "minecraft:brown_dye", "count": 8}},
-        {"item": {"id": "minecraft:green_dye", "count": 8}},
-        {"item": {"id": "minecraft:red_dye", "count": 8}},
-        {"item": {"id": "minecraft:black_dye", "count": 8}}
+        {"item": {"id": "minecraft:white_dye", "count": 4}},
+        {"item": {"id": "minecraft:orange_dye", "count": 4}},
+        {"item": {"id": "minecraft:magenta_dye", "count": 4}},
+        {"item": {"id": "minecraft:light_blue_dye", "count": 4}},
+        {"item": {"id": "minecraft:yellow_dye", "count": 4}},
+        {"item": {"id": "minecraft:lime_dye", "count": 4}},
+        {"item": {"id": "minecraft:pink_dye", "count": 4}},
+        {"item": {"id": "minecraft:gray_dye", "count": 4}},
+        {"item": {"id": "minecraft:light_gray_dye", "count": 4}},
+        {"item": {"id": "minecraft:cyan_dye", "count": 4}},
+        {"item": {"id": "minecraft:purple_dye", "count": 4}},
+        {"item": {"id": "minecraft:blue_dye", "count": 4}},
+        {"item": {"id": "minecraft:brown_dye", "count": 4}},
+        {"item": {"id": "minecraft:green_dye", "count": 4}},
+        {"item": {"id": "minecraft:red_dye", "count": 4}},
+        {"item": {"id": "minecraft:black_dye", "count": 4}}
       ]
     },
     {
       "chance": 0.7,
       "pool": [
-        {"item": {"id": "minecraft:white_dye", "count": 8}},
-        {"item": {"id": "minecraft:orange_dye", "count": 8}},
-        {"item": {"id": "minecraft:magenta_dye", "count": 8}},
-        {"item": {"id": "minecraft:light_blue_dye", "count": 8}},
-        {"item": {"id": "minecraft:yellow_dye", "count": 8}},
-        {"item": {"id": "minecraft:lime_dye", "count": 8}},
-        {"item": {"id": "minecraft:pink_dye", "count": 8}},
-        {"item": {"id": "minecraft:gray_dye", "count": 8}},
-        {"item": {"id": "minecraft:light_gray_dye", "count": 8}},
-        {"item": {"id": "minecraft:cyan_dye", "count": 8}},
-        {"item": {"id": "minecraft:purple_dye", "count": 8}},
-        {"item": {"id": "minecraft:blue_dye", "count": 8}},
-        {"item": {"id": "minecraft:brown_dye", "count": 8}},
-        {"item": {"id": "minecraft:green_dye", "count": 8}},
-        {"item": {"id": "minecraft:red_dye", "count": 8}},
-        {"item": {"id": "minecraft:black_dye", "count": 8}}
+        {"item": {"id": "minecraft:white_dye", "count": 4}},
+        {"item": {"id": "minecraft:orange_dye", "count": 4}},
+        {"item": {"id": "minecraft:magenta_dye", "count": 4}},
+        {"item": {"id": "minecraft:light_blue_dye", "count": 4}},
+        {"item": {"id": "minecraft:yellow_dye", "count": 4}},
+        {"item": {"id": "minecraft:lime_dye", "count": 4}},
+        {"item": {"id": "minecraft:pink_dye", "count": 4}},
+        {"item": {"id": "minecraft:gray_dye", "count": 4}},
+        {"item": {"id": "minecraft:light_gray_dye", "count": 4}},
+        {"item": {"id": "minecraft:cyan_dye", "count": 4}},
+        {"item": {"id": "minecraft:purple_dye", "count": 4}},
+        {"item": {"id": "minecraft:blue_dye", "count": 4}},
+        {"item": {"id": "minecraft:brown_dye", "count": 4}},
+        {"item": {"id": "minecraft:green_dye", "count": 4}},
+        {"item": {"id": "minecraft:red_dye", "count": 4}},
+        {"item": {"id": "minecraft:black_dye", "count": 4}}
       ]
     },
     {
       "chance": 0.4,
       "pool": [
-        {"item": {"id": "minecraft:white_dye", "count": 8}},
-        {"item": {"id": "minecraft:orange_dye", "count": 8}},
-        {"item": {"id": "minecraft:magenta_dye", "count": 8}},
-        {"item": {"id": "minecraft:light_blue_dye", "count": 8}},
-        {"item": {"id": "minecraft:yellow_dye", "count": 8}},
-        {"item": {"id": "minecraft:lime_dye", "count": 8}},
-        {"item": {"id": "minecraft:pink_dye", "count": 8}},
-        {"item": {"id": "minecraft:gray_dye", "count": 8}},
-        {"item": {"id": "minecraft:light_gray_dye", "count": 8}},
-        {"item": {"id": "minecraft:cyan_dye", "count": 8}},
-        {"item": {"id": "minecraft:purple_dye", "count": 8}},
-        {"item": {"id": "minecraft:blue_dye", "count": 8}},
-        {"item": {"id": "minecraft:brown_dye", "count": 8}},
-        {"item": {"id": "minecraft:green_dye", "count": 8}},
-        {"item": {"id": "minecraft:red_dye", "count": 8}},
-        {"item": {"id": "minecraft:black_dye", "count": 8}}
+        {"item": {"id": "minecraft:white_dye", "count": 4}},
+        {"item": {"id": "minecraft:orange_dye", "count": 4}},
+        {"item": {"id": "minecraft:magenta_dye", "count": 4}},
+        {"item": {"id": "minecraft:light_blue_dye", "count": 4}},
+        {"item": {"id": "minecraft:yellow_dye", "count": 4}},
+        {"item": {"id": "minecraft:lime_dye", "count": 4}},
+        {"item": {"id": "minecraft:pink_dye", "count": 4}},
+        {"item": {"id": "minecraft:gray_dye", "count": 4}},
+        {"item": {"id": "minecraft:light_gray_dye", "count": 4}},
+        {"item": {"id": "minecraft:cyan_dye", "count": 4}},
+        {"item": {"id": "minecraft:purple_dye", "count": 4}},
+        {"item": {"id": "minecraft:blue_dye", "count": 4}},
+        {"item": {"id": "minecraft:brown_dye", "count": 4}},
+        {"item": {"id": "minecraft:green_dye", "count": 4}},
+        {"item": {"id": "minecraft:red_dye", "count": 4}},
+        {"item": {"id": "minecraft:black_dye", "count": 4}}
       ]
     }
   ],
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:rainbow_honey", "amount": 1000 }}
+        {"fluid": { "id": "resourcefulbees:rainbow_honey", "amount": 500 }}
       ]
     }
   ],
-  "time": 1200
+  "time": 500
 }

@@ -2,13 +2,13 @@ package com.teamresourceful.resourcefulbees.common.network.packets.client;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 public record BeeconChangePacket(Option option, int value, BlockPos pos) implements Packet<BeeconChangePacket> {
 
@@ -46,11 +46,8 @@ public record BeeconChangePacket(Option option, int value, BlockPos pos) impleme
         @Override
         public PacketContext handle(BeeconChangePacket message) {
             return (player, level) -> {
-                if (level.isLoaded(message.pos())){
-                    BlockEntity tileEntity = level.getBlockEntity(message.pos());
-                    if (tileEntity instanceof EnderBeeconBlockEntity beecon) {
-                        beecon.handleBeeconUpdate(message.option(), message.value());
-                    }
+                if (WorldUtils.getTileEntity(level, message.pos()) instanceof EnderBeeconBlockEntity beecon) {
+                    beecon.handleBeeconUpdate(message.option(), message.value());
                 }
             };
         }
@@ -61,6 +58,6 @@ public record BeeconChangePacket(Option option, int value, BlockPos pos) impleme
         EFFECT_OFF,
         BEAM,
         SOUND,
-        RANGE
+        RANGE,
     }
 }
