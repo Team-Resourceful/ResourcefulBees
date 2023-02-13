@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentities.base;
 import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 
 public class BlockBee {
     //TODO streamline bee storage and bee jar tags even further to eliminate redundancies
@@ -45,6 +46,11 @@ public class BlockBee {
     }
 
     public void setTicksInHive(int ticksInHive) {
-        this.ticksInHive = ticksInHive;
+        this.ticksInHive = Mth.clamp(ticksInHive, 0, Integer.MAX_VALUE);
+    }
+
+    //can use this and the method above for a cool enchantment or something that can accelerate or slow bees in the hive/apiary
+    public void incrementTicksInHive(int amount) {
+        ticksInHive = Math.min(ticksInHive + amount, Integer.MAX_VALUE - amount);
     }
 }
