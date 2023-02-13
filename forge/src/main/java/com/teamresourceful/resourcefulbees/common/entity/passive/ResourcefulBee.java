@@ -12,7 +12,6 @@ import com.teamresourceful.resourcefulbees.common.entities.goals.*;
 import com.teamresourceful.resourcefulbees.common.entities.pathfinding.BeePathNavigation;
 import com.teamresourceful.resourcefulbees.common.entity.goals.BeeFakeFlowerGoal;
 import com.teamresourceful.resourcefulbees.common.entity.goals.BeeMutateGoal;
-import com.teamresourceful.resourcefulbees.common.entity.goals.ModBeeEnterHiveGoal;
 import com.teamresourceful.resourcefulbees.common.entity.goals.ModBeePollinateGoal;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
