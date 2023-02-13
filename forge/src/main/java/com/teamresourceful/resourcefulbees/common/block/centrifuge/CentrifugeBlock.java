@@ -1,9 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.block.centrifuge;
 
-import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -65,5 +66,13 @@ public class CentrifugeBlock extends RenderingBaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new CentrifugeBlockEntity(pos, state);
+    }
+
+    @Override
+    public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
+        if (state.getBlock() != newState.getBlock() && level.getBlockEntity(pos) instanceof CentrifugeBlockEntity centrifuge) {
+            Containers.dropContents(level, pos, centrifuge.getInventory().getItems());
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 }
