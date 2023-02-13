@@ -18,13 +18,14 @@ import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.mixin.common.ReloadableServerResourcesAccessor;
+import com.teamresourceful.resourcefulbees.mixin.common.TagManagerAccessor;
 import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.IngredientHelper;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -55,8 +56,8 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
             ModConstants.LOGGER.info("Generating comb recipes for {} honeycombs...", ModItems.HONEYCOMB_ITEMS.getEntries().size());
             ModItems.HONEYCOMB_ITEMS.getEntries().stream()
                     .map(RegistryEntry::get)
-                    .filter(CustomHoneycombItem.class::isInstance)
-                    .map(CustomHoneycombItem.class::cast)
+                    .filter(item -> item instanceof CustomHoneycombItem)
+                    .map(item -> (CustomHoneycombItem) item)
                     .filter(CustomHoneycombItem::hasStorageBlockItem)
                     .flatMap(comb -> Stream.of(makeHoneycombRecipe(comb), makeCombBlockToCombRecipe(comb)))
                     .forEach(this::addRecipe);
@@ -98,8 +99,9 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         //REQUIRED Check if this can be put in another place
         //its here so it can have the items in the data before the
         //recipes are generated.
-        //TODO check if this is proper. BUILTIN.get()
-        BeeRegistry.getRegistry().regenerateCustomBeeData(RegistryAccess.BUILTIN.get());
+        if (event.getServerResources() instanceof ReloadableServerResourcesAccessor accessor) {
+            BeeRegistry.getRegistry().regenerateCustomBeeData(((TagManagerAccessor) accessor.getTagManager()).getRegistryAccess());
+        }
         ModConstants.LOGGER.info("Adding Reload Listener: 'resourcefulbees recipe manager'");
     }
 

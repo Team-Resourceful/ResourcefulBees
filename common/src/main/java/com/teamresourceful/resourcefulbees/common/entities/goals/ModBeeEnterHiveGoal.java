@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.entity.goals;
+package com.teamresourceful.resourcefulbees.common.entities.goals;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;

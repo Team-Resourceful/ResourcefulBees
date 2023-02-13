@@ -35,7 +35,8 @@ public record FlowHiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees,
         return manager
                 .getAllRecipesFor(ModRecipeTypes.FLOW_HIVE_RECIPE_TYPE.get())
                 .stream()
-                .filter(recipe -> recipe.bees().contains(bee.builtInRegistryHolder())).findFirst();
+                .filter(recipe -> recipe.bees().contains(bee.builtInRegistryHolder()))
+                .findFirst();
     }
 
     @Override

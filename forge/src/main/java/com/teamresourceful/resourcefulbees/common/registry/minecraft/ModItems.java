@@ -133,5 +133,8 @@ public final class ModItems {
     public static final RegistryEntry<Item> TRIMMED_WAXED_PLANKS = ITEMS.register("trimmed_waxed_planks", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.TRIMMED_WAXED_PLANKS.get(), new Item.Properties()));
     public static final RegistryEntry<Item> WAXED_MACHINE_BLOCK = ITEMS.register("waxed_machine_block", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_MACHINE_BLOCK.get(), new Item.Properties()));
     public static final RegistryEntry<Item> FAKE_FLOWER = ITEMS.register("fake_flower", () -> new BlockItem(ModBlocks.FAKE_FLOWER.get(), new Item.Properties()));
+
+    public static final RegistryEntry<Item> POLLEN_SPREADER_FAN = ITEMS.register("pollen_spreader_fan", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.POLLEN_SPREADER_FAN.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> POLLEN_SPREADER = ITEMS.register("pollen_spreader", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.POLLEN_SPREADER.get(), new Item.Properties()));
     //endregion
 }

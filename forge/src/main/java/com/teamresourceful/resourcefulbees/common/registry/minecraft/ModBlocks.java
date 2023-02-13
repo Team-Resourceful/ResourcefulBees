@@ -62,7 +62,7 @@ public final class ModBlocks {
     public static final RegistryEntry<Block> BASIC_CENTRIFUGE = CENTRIFUGE_BLOCKS.register("centrifuge", () -> new CentrifugeBlock(BlockBehaviour.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL).noOcclusion()));
     public static final RegistryEntry<Block> CENTRIFUGE_CRANK = CENTRIFUGE_BLOCKS.register("centrifuge_crank", () -> new CentrifugeCrankBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2).sound(SoundType.WOOD).noOcclusion()));
 
-    public static final RegistryEntry<Block> FAKE_FLOWER = BLOCKS.register("fake_flower", () -> new FakeFlower(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.GOLD).strength(2.0f, 3.0f).sound(SoundType.WOOD).noOcclusion().lightLevel(value -> 1)));
+    public static final RegistryEntry<Block> FAKE_FLOWER = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BLOCKS.register("fake_flower", () -> new FakeFlower(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.GOLD).strength(2.0f, 3.0f).sound(SoundType.WOOD).noOcclusion().lightLevel(value -> 1)));
     @SuppressWarnings("unused")
     private static boolean never(BlockState state, BlockGetter blockGetter, BlockPos blockPos) {
         return false;
