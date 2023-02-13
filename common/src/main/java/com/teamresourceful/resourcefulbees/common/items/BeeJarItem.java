@@ -51,6 +51,10 @@ public class BeeJarItem extends Item {
                 && stack.getOrCreateTag().getCompound(NBTConstants.BeeJar.ENTITY).contains(NBTConstants.NBT_ID);
     }
 
+    public static ItemStack createFilledJar(Bee bee) {
+        return createFilledJar(EntityUtils.createJarBeeTag(bee), Component.Serializer.toJson(bee.getType().getDescription()));
+    }
+
     public static ItemStack createFilledJar(ResourceLocation id, int color) {
         return createFilledJar(id, new Color(color));
     }
@@ -72,10 +76,6 @@ public class BeeJarItem extends Item {
         stackTag.put(NBTConstants.BeeJar.ENTITY, beeData);
         stack.setTag(stackTag);
         return stack;
-    }
-
-    public static ItemStack createFilledJar(Bee bee) {
-        return createFilledJar(EntityUtils.createJarBeeTag(bee), Component.Serializer.toJson(bee.getType().getDescription()));
     }
 
     public static boolean hasEntityDisplay(ItemStack stack) {

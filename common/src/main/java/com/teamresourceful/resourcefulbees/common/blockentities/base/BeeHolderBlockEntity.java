@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.blockentities.base;
 
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import com.teamresourceful.resourcefullib.common.utils.TagUtils;
@@ -73,7 +74,8 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
             bee.ejectPassengers();
             CompoundTag nbt = new CompoundTag();
             bee.save(nbt);
-            this.bees.add(new BlockBee(nbt, ticksInHive, hasNectar ? getMaxTimeInHive(beeCompat) : MIN_HIVE_TIME, bee.getName()));
+            String beeColor = EntityUtils.getBeeColorOrDefault(bee);
+            this.bees.add(new BlockBee(nbt, ticksInHive, hasNectar ? getMaxTimeInHive(beeCompat) : MIN_HIVE_TIME, bee.getName(), beeColor));
             this.level.playSound(null, this.getBlockPos(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
             bee.discard();
         }
@@ -118,7 +120,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
 
     //region NBT
     @NotNull
-    public ListTag writeBees() {
+    public CompoundTag writeBees() {
         ListTag listTag = new ListTag();
         this.bees.forEach(apiaryBee -> {
             CompoundTag tag = new CompoundTag();
@@ -127,9 +129,10 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
             tag.putInt("MinOccupationTicks", apiaryBee.minOccupationTicks);
             tag.putBoolean(NBTConstants.NBT_LOCKED, apiaryBee.isLocked());
             tag.putString(NBTConstants.NBT_BEE_NAME, Component.Serializer.toJson(apiaryBee.displayName));
+            tag.putString(NBTConstants.BeeJar.COLOR, apiaryBee.color);
             listTag.add(tag);
         });
-        return listTag;
+        return TagUtils.tagWithData(NBTConstants.NBT_BEES, listTag);
     }
 
     public void loadBees(CompoundTag nbt) {
@@ -138,13 +141,14 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
             .map(CompoundTag.class::cast)
             .forEachOrdered(data -> {
                 Component displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? Component.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : Component.literal("Temp Bee Name");
-                this.bees.add(new BlockBee(data.getCompound("EntityData"), data.getInt("TicksInHive"), data.getInt("MinOccupationTicks"), displayName, data.getBoolean(NBTConstants.NBT_LOCKED)));
+                String beeColor = data.contains(NBTConstants.BeeJar.COLOR) ? data.getString(NBTConstants.BeeJar.COLOR) : BeeConstants.VANILLA_BEE_COLOR;
+                this.bees.add(new BlockBee(data.getCompound("EntityData"), data.getInt("TicksInHive"), data.getInt("MinOccupationTicks"), displayName, beeColor, data.getBoolean(NBTConstants.NBT_LOCKED)));
             });
     }
 
     @Override
     public @NotNull CompoundTag getSyncData() {
-        return TagUtils.tagWithData(NBTConstants.NBT_BEES, writeBees());
+        return writeBees();
     }
 
     @Override

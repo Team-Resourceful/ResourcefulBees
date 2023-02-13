@@ -9,12 +9,12 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
-import com.teamresourceful.resourcefullib.common.utils.TagUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -149,7 +149,11 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
             int j = i - this.beeIndexOffset;
             int i1 = top + j * 18 + 2;
 
-            ItemStack beeJar = BeeJarItem.createFilledJar(TagUtils.tagWithData(NBTConstants.BeeJar.ENTITY, this.menu.getApiaryBee(i).entityData.copy()), null);
+            BlockBee bee = this.menu.getApiaryBee(i);
+            CompoundTag entityTag = bee.entityData.copy();
+            entityTag.putString(NBTConstants.BeeJar.COLOR, bee.color);
+
+            ItemStack beeJar = BeeJarItem.createFilledJar(entityTag, null);
             this.itemRenderer.renderAndDecorateItem(beeJar, left, i1);
         }
     }
