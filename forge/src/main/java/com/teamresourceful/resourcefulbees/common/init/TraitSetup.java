@@ -29,6 +29,11 @@ public final class TraitSetup {
             FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_traits", TraitSetup::parseTrait, ModPaths.MOD_ROOT);
         }
 
+        if (GeneralConfig.enableSupporterBees) {
+            ModConstants.LOGGER.info("Loading Supporter Traits...");
+            FileUtils.setupDevResources("/data/resourcefulbees/supporter/traits", TraitSetup::parseTrait, ModPaths.MOD_ROOT);
+        }
+
         if (GeneralConfig.generateDefaults) {
             ModConstants.LOGGER.info("Copying Default Traits...");
             FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_traits", ModPaths.BEE_TRAITS, ModPaths.MOD_ROOT);

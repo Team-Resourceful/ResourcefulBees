@@ -53,6 +53,16 @@ public final class ModItems {
             .rarity(Rarity.EPIC))
     );
 
+    public static final RegistryEntry<Item> STRAWBEERRY_MILKSHAKE = ITEMS.register("strawbeerry_milkshake", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
+            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 1200, 1), 1)
+            .effect(() -> new MobEffectInstance(MobEffects.LUCK, 1200, 0), 0)
+            .effect(() -> new MobEffectInstance(MobEffects.JUMP, 1200, 1), 1)
+            .nutrition(6)
+            .saturationMod(1.5f)
+            .alwaysEat()
+            .build())
+            .rarity(Rarity.EPIC))
+    );
 
     public static final RegistryEntry<Item> BEE_BOX_TEMP = ITEMS.register("bee_box_temp", () -> BeeBoxItem.temp(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX_TEMP.get(), new Item.Properties().stacksTo(1)));
     public static final RegistryEntry<Item> BEE_BOX = ITEMS.register("bee_box", () -> BeeBoxItem.of(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX.get(), new Item.Properties().stacksTo(1)));

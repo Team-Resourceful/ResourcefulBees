@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeItems;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
@@ -22,6 +23,9 @@ public final class ItemGroupResourcefulBees {
             .setAddingFunction(list -> {
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR);
                 list.add(ModItems.OREO_COOKIE);
+                if (GeneralConfig.enableSupporterBees) {
+                    list.add(ModItems.STRAWBEERRY_MILKSHAKE);
+                }
                 list.add(ModItems.BEE_BOX);
                 list.add(ModItems.BEE_BOX_TEMP);
                 ItemStack creativeBeepedia = new ItemStack(ModItems.BEEPEDIA.get());

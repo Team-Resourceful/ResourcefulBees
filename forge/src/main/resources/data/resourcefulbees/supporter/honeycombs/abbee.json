@@ -1,0 +1,14 @@
+{
+    "variations": [
+        {
+            "identifier": "abbee",
+            "defaultComb": {"id":  "resourcefulbees:strawbeerry_milkshake"},
+            "apiaryCombs": {
+                "resourcefulbees:t1" : {"id":  "resourcefulbees:strawbeerry_milkshake", "count":  1},
+                "resourcefulbees:t2": {"id":  "resourcefulbees:strawbeerry_milkshake", "count":  2},
+                "resourcefulbees:t3": {"id":  "resourcefulbees:strawbeerry_milkshake", "count":  3},
+                "resourcefulbees:t4": {"id":  "resourcefulbees:strawbeerry_milkshake", "count":  4}
+            }
+        }
+    ]
+}

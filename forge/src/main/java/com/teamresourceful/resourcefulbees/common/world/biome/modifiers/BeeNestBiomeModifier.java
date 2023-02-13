@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.world;
+package com.teamresourceful.resourcefulbees.common.world.biome.modifiers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

@@ -26,6 +26,11 @@ public final class HoneySetup {
             FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honey", HoneySetup::parseHoney, ModPaths.MOD_ROOT);
         }
 
+        if (GeneralConfig.enableSupporterBees) {
+            ModConstants.LOGGER.info("Loading Supporter Honeys...");
+            FileUtils.setupDevResources("/data/resourcefulbees/supporter/honey", HoneySetup::parseHoney, ModPaths.MOD_ROOT);
+        }
+
         if (GeneralConfig.generateDefaults) {
             ModConstants.LOGGER.info("Copying Default Honeys...");
             FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_honey", ModPaths.HONEY, ModPaths.MOD_ROOT);
