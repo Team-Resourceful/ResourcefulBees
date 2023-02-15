@@ -13,7 +13,7 @@ public class PetInfo {
 
     private static final int VERSION = 1;
 
-    private static final PetModelData FALLBACK_MODEL = new PetModelData(-1, "fallback", ModelTypes.DEFAULT.model, new ResourceLocation("textures/entity/bee/bee.png"), new HashSet<>());
+    private static final PetModelData FALLBACK_MODEL = new PetModelData(-1, "fallback", ModelTypes.DEFAULT.model, new ResourceLocation("textures/entity/bee/bee.png"), Optional.empty(), new HashSet<>());
 
     protected static PetModelData defaultModel = null;
 
@@ -22,6 +22,12 @@ public class PetInfo {
 
     private PetInfo()   {
         throw new IllegalStateException(ModConstants.UTILITY_CLASS);
+    }
+
+    public static void clearInfo() {
+        defaultModel = null;
+        PET_MODELS.clear();
+        USER_PETS.clear();
     }
 
     protected static void addUser(String uuid, String model){

@@ -5,6 +5,7 @@ import com.resourcefulbees.resourcefulbees.capabilities.BeepediaData;
 import com.resourcefulbees.resourcefulbees.client.gui.IncompatibleModWarning;
 import com.resourcefulbees.resourcefulbees.client.render.patreon.PetLoader;
 import com.resourcefulbees.resourcefulbees.command.BeepediaCommand;
+import com.resourcefulbees.resourcefulbees.command.HelpCommand;
 import com.resourcefulbees.resourcefulbees.compat.top.TopCompat;
 import com.resourcefulbees.resourcefulbees.config.Config;
 import com.resourcefulbees.resourcefulbees.config.ConfigLoader;
@@ -16,9 +17,9 @@ import com.resourcefulbees.resourcefulbees.network.NetPacketHandler;
 import com.resourcefulbees.resourcefulbees.recipe.HiveIngredient;
 import com.resourcefulbees.resourcefulbees.registry.*;
 import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
+import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.ArgumentSerializer;
 import net.minecraft.command.arguments.ArgumentTypes;
-import net.minecraft.command.arguments.GameProfileArgument;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -59,6 +60,7 @@ public class ResourcefulBees {
     public static final String MOD_ID = "resourcefulbees";
 
     public static final Logger LOGGER = LogManager.getLogger();
+    public static final long STARTED_TIME = System.currentTimeMillis();
 
     public ResourcefulBees() {
         ModSetup.initialize();
@@ -110,6 +112,9 @@ public class ResourcefulBees {
 
     private void registerCommand(RegisterCommandsEvent event) {
         BeepediaCommand.register(event.getDispatcher());
+        if (event.getEnvironment().equals(Commands.EnvironmentType.INTEGRATED)) {
+            HelpCommand.register(event.getDispatcher());
+        }
     }
 
     private void setupCommon(FMLCommonSetupEvent event) {

@@ -54,7 +54,7 @@ public class RenderInterfaceBee implements ICustomComponent {
 
         Set<LayerData> vars = element.isJsonArray() ? layers.asStream().map(v -> LayerData.CODEC.parse(JsonOps.INSTANCE, v.unwrap()).result()).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet()) : new LinkedHashSet<>();
 
-        bee = new PetModelData(0,"UI", new ResourceLocation(geo), new ResourceLocation(tex), vars);
+        bee = new PetModelData(0,"UI", new ResourceLocation(geo), new ResourceLocation(tex), Optional.empty(), vars);
 
         modelScale = scale.asNumber().floatValue();
     }
