@@ -26,7 +26,8 @@
         "resourcefulbees:wither_bee",
         "resourcefulbees:zombee_bee",
         "resourcefulbees:oreo_bee",
-        "resourcefulbees:yeti_bee"
+        "resourcefulbees:yeti_bee",
+        "resourcefulbees:abbee_bee"
     ],
     "fluid": {
         "id": "resourcefulbees:honey",

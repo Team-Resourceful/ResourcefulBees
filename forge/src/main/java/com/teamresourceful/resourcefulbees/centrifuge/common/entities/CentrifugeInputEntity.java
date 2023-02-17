@@ -209,7 +209,13 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         }
     }
 
-    // Downside to this method is the result is not cached therefore it is randomized each time this method gets called
+    /*  Downside to this method is the result is not cached, therefore it is randomized each time this method gets called
+     *  to further elaborate since I'm an idiot:
+     *  unless the chosen recipe results are cached even if they could not be successfully deposited,
+     *  then the recipe will eventually complete. This could take 1 tick, or it could take 100 ticks
+     *  it just depends on RNG. This is not intentional and consideration for caching should probably be done
+     *  as it theoretically could make the void blocks somewhat useless
+     */
     private <T extends AbstractOutput<E>,A extends AbstractCentrifugeOutputEntity<T, E>, E> boolean depositResults(List<CentrifugeRecipe.Output<T, E>> recipeOutputs, OutputLocationGroup<A, T, E> outputLocationGroup) {
         for (int i = 0; i < recipeOutputs.size(); i++) {
             CentrifugeRecipe.Output<T, E> recipeOutput = recipeOutputs.get(i);

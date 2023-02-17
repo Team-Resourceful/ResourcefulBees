@@ -1,0 +1,39 @@
+{
+    "resourcefulbees:core/v1": {
+        "flower": "#minecraft:beds",
+        "honeycombVariation": "abbee",
+        "maxTimeInHive": 600,
+        "lore": [
+            {
+                "text":"Bunny Bun Bun.",
+                "color": "rainbow"
+            },
+            {
+                "translate":"tooltip.resourcefulbees.bee.creator",
+                "with": ["§6absent-"]
+            }
+        ]
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "/abbee/bee",
+        "model": "resourcefulbees:geo/bunny.geo.json",
+        "ColorData": {
+            "spawnEggPrimaryColor": "#E5DED5",
+            "spawnEggSecondaryColor": "#FFB1C5",
+            "jarColor": "#E5DED5"
+        },
+        "sizeModifier": 0.75
+    },
+    "resourcefulbees:trait/v1": {
+        "traits": [ "clingy" ]
+    },
+    "resourcefulbees:combat/v1": {
+        "removeStingerOnAttack": false,
+        "inflictsPoison": false,
+        "attributes": {
+            "generic.attack_damage": 0,
+            "generic.max_health": 20
+        },
+        "isPassive": true
+    }
+}

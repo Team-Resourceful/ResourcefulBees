@@ -9,17 +9,19 @@ import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.entities.ai.AuraHandler;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entities.goals.*;
-import com.teamresourceful.resourcefulbees.common.entity.goals.*;
 import com.teamresourceful.resourcefulbees.common.entities.pathfinding.BeePathNavigation;
+import com.teamresourceful.resourcefulbees.common.entity.goals.BeeFakeFlowerGoal;
+import com.teamresourceful.resourcefulbees.common.entity.goals.BeeMutateGoal;
+import com.teamresourceful.resourcefulbees.common.entity.goals.ModBeePollinateGoal;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeGoToHiveGoalInvoker;
 import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.util.SerializedDataEntry;
 import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
+import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
@@ -208,7 +210,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     public void makeStuckInBlock(BlockState state, @NotNull Vec3 vector) {
         BeeTraitData info = getTraitData();
         boolean isSpider = info.hasSpecialAbilities() && info.specialAbilities().contains(TraitConstants.SPIDER);
-        if (state.is(Blocks.COBWEB) && isSpider) return;
+        if (state.is(Blocks.COBWEB) && isSpider || state.is(Blocks.SWEET_BERRY_BUSH)) return;
         super.makeStuckInBlock(state, vector);
     }
 

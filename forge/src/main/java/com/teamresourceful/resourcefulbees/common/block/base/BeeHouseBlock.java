@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block.base;
 
+import com.teamresourceful.resourcefulbees.common.blockentity.FlowHiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import net.minecraft.core.BlockPos;
@@ -62,7 +63,8 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
     public InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult) {
         if (!player.isShiftKeyDown() && !world.isClientSide) {
             MenuProvider blockEntity = state.getMenuProvider(world,pos);
-            NetworkHooks.openScreen((ServerPlayer) player, blockEntity, pos);
+            if (blockEntity != null && !(blockEntity instanceof FlowHiveBlockEntity))
+                NetworkHooks.openScreen((ServerPlayer) player, blockEntity, pos);
         }
         return InteractionResult.SUCCESS;
     }

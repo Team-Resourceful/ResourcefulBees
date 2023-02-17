@@ -1,0 +1,12 @@
+{
+  "type": "resourcefulbees:supporter_spawns",
+  "whitelist": [
+    "#forge:is_rare"
+  ],
+  "spawns": {
+    "type": "resourcefulbees:abbee_bee",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

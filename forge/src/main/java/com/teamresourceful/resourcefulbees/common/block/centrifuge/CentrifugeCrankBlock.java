@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.block.centrifuge;
 
-import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeCrankBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -49,5 +49,12 @@ public class CentrifugeCrankBlock extends RenderingBaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new CentrifugeCrankBlockEntity(pos, state);
+    }
+
+    @Override
+    public void neighborChanged(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Block block, @NotNull BlockPos neighborPos, boolean moving) {
+        if (!(level.getBlockState(pos.below()).getBlock() instanceof CentrifugeBlock))
+            level.destroyBlock(pos, true);
+        super.neighborChanged(state, level, pos, block, neighborPos, moving);
     }
 }

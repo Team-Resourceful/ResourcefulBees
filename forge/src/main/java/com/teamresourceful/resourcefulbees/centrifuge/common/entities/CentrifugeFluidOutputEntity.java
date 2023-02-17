@@ -77,7 +77,7 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
         FluidStack fluidStack = result.multiply(processQuantity);
         CentrifugeController controller = nullableController();
         if (fluidStack.isEmpty() || controller != null && controller.dumpsContainFluid(fluidStack)) return true;
-        if ((voidExcess || simulateDeposit(fluidStack))) {
+        if (voidExcess || simulateDeposit(fluidStack)) {
             fluidTank.fillTank(fluidStack, IFluidHandler.FluidAction.EXECUTE);
             return true;
         }
@@ -85,7 +85,7 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
     }
 
     private boolean simulateDeposit(FluidStack result) {
-        return result.isFluidEqual(fluidTank.getFluid()) && result.getAmount() + fluidTank.getFluidAmount() > fluidTank.getCapacity();
+        return (fluidTank.isEmpty() || result.isFluidEqual(fluidTank.getFluid())) && result.getAmount() + fluidTank.getFluidAmount() < fluidTank.getCapacity();
     }
 
     @Override

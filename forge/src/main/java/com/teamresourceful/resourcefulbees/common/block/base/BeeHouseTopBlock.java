@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block.base;
 
+import com.teamresourceful.resourcefulbees.common.blockentity.FlowHiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -65,7 +66,7 @@ public class BeeHouseTopBlock extends Block {
             BlockPos posBelow = pos.below();
             BlockState stateBelow = world.getBlockState(posBelow);
             MenuProvider blockEntity = stateBelow.getMenuProvider(world,posBelow);
-            if (blockEntity != null)
+            if (blockEntity != null && !(blockEntity instanceof FlowHiveBlockEntity))
                 NetworkHooks.openScreen((ServerPlayer) player, blockEntity, posBelow);
         }
         return InteractionResult.SUCCESS;

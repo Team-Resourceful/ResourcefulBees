@@ -32,6 +32,11 @@ public final class BeeSetup {
             FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_bees", BeeSetup::parseBee, ModPaths.MOD_ROOT);
         }
 
+        if (GeneralConfig.enableSupporterBees) {
+            ModConstants.LOGGER.info("Loading Supporter Bees...");
+            FileUtils.setupDevResources("/data/resourcefulbees/supporter/bees", BeeSetup::parseBee, ModPaths.MOD_ROOT);
+        }
+
         if (GeneralConfig.generateDefaults) {
             ModConstants.LOGGER.info("Copying Default Bees...");
             FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_bees", ModPaths.BEES, ModPaths.MOD_ROOT);

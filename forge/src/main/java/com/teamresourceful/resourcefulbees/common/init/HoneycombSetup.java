@@ -28,6 +28,11 @@ public final class HoneycombSetup {
             FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honeycombs", HoneycombSetup::parseHoneycomb, ModPaths.MOD_ROOT);
         }
 
+        if (GeneralConfig.enableSupporterBees) {
+            ModConstants.LOGGER.info("Loading Supporter Honeycombs...");
+            FileUtils.setupDevResources("/data/resourcefulbees/supporter/honeycombs", HoneycombSetup::parseHoneycomb, ModPaths.MOD_ROOT);
+        }
+
         if (GeneralConfig.generateDefaults) {
             ModConstants.LOGGER.info("Copying Default Honeycombs...");
             FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_honeycombs", ModPaths.HONEYCOMBS, ModPaths.MOD_ROOT);

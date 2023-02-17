@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.centrifuge.common.states;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
-import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -17,7 +16,6 @@ public class CentrifugeState {
 
     private CentrifugeTier maxCentrifugeTier = CentrifugeTier.ERROR;
     private String owner = "null";
-    //private int energyCapacity = 0;
     private long terminal = 0;
     private Set<BlockPos> inputs = new HashSet<>();
     private List<BlockPos> itemOutputs = new ArrayList<>();
@@ -61,17 +59,6 @@ public class CentrifugeState {
     }
 
     /**
-     * max energy the centrifuge can hold
-     */
-    /*public int getEnergyCapacity() {
-        return energyCapacity;
-    }*/
-
-    /*public void setEnergyCapacity(int energyCapacity) {
-        this.energyCapacity = energyCapacity;
-    }*/
-
-    /**
      * total number of inputs attached to the centrifuge
      */
     public Set<BlockPos> getInputs() {
@@ -102,11 +89,6 @@ public class CentrifugeState {
 
     public void setFluidOutputs(List<BlockPos> fluidOutputs) {
         this.fluidOutputs = fluidOutputs;
-    }
-
-    //might not be worth keeping...
-    public List<BlockPos> getOutputsByType(CentrifugeOutputType outputType) {
-        return outputType.isItem() ? itemOutputs : fluidOutputs;
     }
 
     /**
@@ -182,7 +164,6 @@ public class CentrifugeState {
     public void serializeBytes(FriendlyByteBuf buf) {
         buf.writeUtf(owner);
         buf.writeEnum(maxCentrifugeTier);
-        //buf.writeInt(energyCapacity);
         buf.writeLong(terminal);
         buf.writeCollection(inputs, FriendlyByteBuf::writeBlockPos);
         buf.writeCollection(itemOutputs, FriendlyByteBuf::writeBlockPos);
@@ -198,7 +179,6 @@ public class CentrifugeState {
     public CentrifugeState deserializeBytes(FriendlyByteBuf buf) {
         owner = buf.readUtf();
         maxCentrifugeTier = buf.readEnum(CentrifugeTier.class);
-        //energyCapacity = buf.readInt();
         terminal = buf.readLong();
         inputs = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
         itemOutputs = buf.readCollection(Lists::newArrayListWithExpectedSize, FriendlyByteBuf::readBlockPos);

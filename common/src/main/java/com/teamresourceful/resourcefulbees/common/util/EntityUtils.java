@@ -45,12 +45,14 @@ public final class EntityUtils {
                 });
     }
 
+    public static String getBeeColorOrDefault(Entity bee) {
+        return bee instanceof CustomBee iBee ? iBee.getRenderData().colorData().jarColor().toString() : BeeConstants.VANILLA_BEE_COLOR;
+    }
+
     public static @NotNull CompoundTag createJarBeeTag(Bee bee) {
         CompoundTag nbt = new CompoundTag();
         bee.saveAsPassenger(nbt);
-
-        String beeColor = bee instanceof CustomBee iBee ? iBee.getRenderData().colorData().jarColor().toString() : BeeConstants.VANILLA_BEE_COLOR;
-
+        String beeColor = EntityUtils.getBeeColorOrDefault(bee);
         nbt.putString(NBTConstants.BeeJar.COLOR, beeColor);
         BeehiveEntityAccessor.callRemoveIgnoredBeeTags(nbt);
         return nbt;

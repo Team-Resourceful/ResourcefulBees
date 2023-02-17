@@ -31,6 +31,16 @@ public final class GeneralConfig {
     public static boolean enableDevBees = true;
 
     @ConfigEntry(
+            id = "enableSupporterBees",
+            type = EntryType.BOOLEAN,
+            translation = "Enable Supporter Bees"
+    )
+    @Comment(
+            value = "Set to true if you want supporter bees to generate. [true/false]"
+    )
+    public static boolean enableSupporterBees = true;
+
+    @ConfigEntry(
             id = "showDebugInfo",
             type = EntryType.BOOLEAN,
             translation = "Show Debug Info"
