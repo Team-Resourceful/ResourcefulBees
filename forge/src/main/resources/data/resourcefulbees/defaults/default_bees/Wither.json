@@ -8,7 +8,8 @@
         "texture": "wither/wither_bee",
         "ColorData": {
             "spawnEggPrimaryColor": "#444444",
-            "spawnEggSecondaryColor": "#303030"
+            "spawnEggSecondaryColor": "#303030",
+            "jarColor": "#303030"
         }
     },
     "resourcefulbees:mutation/v1": {
