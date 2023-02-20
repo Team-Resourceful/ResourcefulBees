@@ -88,7 +88,7 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
 
         registry.getSetOfBees()
             .stream()
-            .filter(bee -> DimensionalBeeHolder.DIMENSIONAL_BEES.get(level.dimension()).contains(bee.name()))
+            .filter(bee -> DimensionalBeeHolder.getBees(level.dimension()).contains(bee.name()))
             .sorted(Comparator.comparing(CustomBeeData::name))
             .forEach(bee -> {
                 Entity entity = bee.entityType().create(level);
