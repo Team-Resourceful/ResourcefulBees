@@ -5,7 +5,10 @@ import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBl
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
 import com.teamresourceful.resourcefulbees.common.config.HoneyGenConfig;
+import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGeneratorMenu;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.Upgrade;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
@@ -19,6 +22,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -53,9 +57,11 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
             dirty = true;
         }
     };
+    private final TileStackHandler inventory = new TileStackHandler();
 
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
     private final LazyOptional<FluidTank> tankOptional = LazyOptional.of(() -> tank);
+    private final LazyOptional<TileStackHandler> inventoryOptional = LazyOptional.of(() -> inventory);
 
     private Optional<HoneyGenRecipe> recipe = Optional.empty();
     private boolean validRecipe = true;
@@ -199,6 +205,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap.equals(ForgeCapabilities.ENERGY)) return energyOptional.cast();
         if (cap.equals(ForgeCapabilities.FLUID_HANDLER)) return tankOptional.cast();
+        if (cap.equals(ForgeCapabilities.ITEM_HANDLER)) return inventoryOptional.cast();
         return super.getCapability(cap, side);
     }
 
@@ -206,6 +213,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     public void invalidateCaps() {
         this.energyOptional.invalidate();
         this.tankOptional.invalidate();
+        this.inventoryOptional.invalidate();
     }
 
     @Nullable
@@ -226,5 +234,28 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
 
     public CustomEnergyStorage getEnergyStorage() {
         return energyStorage;
+    }
+
+    protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
+        protected TileStackHandler() {
+            super(4, (slot, stack, automation) -> true, (slot, automation) -> false);
+        }
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+            setChanged();
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return switch (slot) {
+                case 3 -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.HONEY_CONSUMPTION);
+                case 2 -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.ENERGY_XFER);
+                case 1 -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.ENERGY_CAPACITY);
+                case 0 -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.HONEY_CAPACITY);
+                default -> false;
+            };
+        }
     }
 }

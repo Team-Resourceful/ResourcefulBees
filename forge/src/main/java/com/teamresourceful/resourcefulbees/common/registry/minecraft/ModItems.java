@@ -2,12 +2,14 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.item.HoneyDipperItem;
+import com.teamresourceful.resourcefulbees.common.item.HoneyGenUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.item.MutatedPollenItem;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.CrankItem;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.ManualCentrifugeItem;
 import com.teamresourceful.resourcefulbees.common.items.*;
 import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.BreederTimeUpgradeItem;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.BeehiveUpgrade;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.NestUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
@@ -85,6 +87,10 @@ public final class ModItems {
     public static final RegistryEntry<Item> MUTATED_POLLEN = ITEMS.register("mutated_pollen", () -> new MutatedPollenItem(new Item.Properties()));
 
     public static final RegistryEntry<Item> HONEY_GENERATOR_ITEM = ITEMS.register("honey_generator", () -> new BlockItem(ModBlocks.HONEY_GENERATOR.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> HONEY_CAP_UPGRADE = ITEMS.register("hg_honey_cap_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties(), UpgradeType.HONEY_CAPACITY));
+    public static final RegistryEntry<Item> ENERGY_CAP_UPGRADE = ITEMS.register("hg_energy_cap_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties(), UpgradeType.ENERGY_CAPACITY));
+    public static final RegistryEntry<Item> ENERGY_XFER_UPGRADE = ITEMS.register("hg_energy_xfer_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties(), UpgradeType.ENERGY_XFER));
+    public static final RegistryEntry<Item> HONEY_CONSUMPTION_UPGRADE = ITEMS.register("honey_consumption_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties(), UpgradeType.HONEY_CONSUMPTION));
 
     public static final RegistryEntry<Item> WAX_BLOCK_ITEM = ITEMS.register("wax_block", () -> new BlockItem(ModBlocks.WAX_BLOCK.get(), new Item.Properties()) {
         @Override
