@@ -8,9 +8,11 @@ import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModStructures;
 import com.teamresourceful.resourcefulbees.common.resources.conditions.LoadDevRecipes;
 import com.teamresourceful.resourcefulbees.common.worldgen.GoldenFlower;
 import com.teamresourceful.resourcefulbees.platform.common.events.*;
+import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.ServerGoingToStartEvent;
 import com.teamresourceful.resourcefulbees.platform.common.registry.RegistryHelper;
 import com.teamresourceful.resourcefulbees.platform.common.registry.potion.PotionRegistry;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.ConditionRegistry;
@@ -37,6 +39,7 @@ public final class GameSetup {
         BlockBonemealedEvent.EVENT.addListener(GoldenFlower::onBlockBonemealed);
         SyncedDatapackEvent.EVENT.addListener(DimensionalBeeHolder::onDatapackSync);
         RegisterIngredientsEvent.EVENT.addListener(GameSetup::initIngredients);
+        ServerGoingToStartEvent.EVENT.addListener(ModStructures::addStructures);
     }
 
     public static void initSerializersAndConditions() {

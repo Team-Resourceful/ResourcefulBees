@@ -28,6 +28,7 @@ import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
 import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.SyncedDatapackEvent;
+import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.ServerGoingToStartEvent;
 import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.forge.ForgeIngredientHelper;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import com.teamresourceful.resourcefulconfig.common.config.Configurator;
@@ -141,6 +142,7 @@ public class ResourcefulBees {
     @SubscribeEvent
     public void serverAboutToStart(ServerAboutToStartEvent event) {
         ModSpawnData.initialize(event.getServer());
+        ServerGoingToStartEvent.EVENT.fire(new ServerGoingToStartEvent(event.getServer(), event.getServer().registryAccess()));
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
