@@ -47,6 +47,10 @@ public final class DimensionalBeeHolder {
         }
     }
 
+    public static List<String> getBees(ResourceKey<Level> dimension) {
+        return DIMENSIONAL_BEES.getOrDefault(dimension, List.of());
+    }
+
     public static void onDatapackSync(SyncedDatapackEvent event) {
         if (event.player() == null) {
             updateBees(event.allPlayers().getServer());

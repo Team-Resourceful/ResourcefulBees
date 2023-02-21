@@ -70,6 +70,8 @@ dependencies {
     modCompileOnly("net.roguelogix.phosphophyllite:Phosphophyllite:$phos_version")
     modRuntimeOnly("net.roguelogix.phosphophyllite:Phosphophyllite:$phos_version")
 
+    modLocalRuntime("com.telepathicgrunt:CommandStructures-Forge:3.1.0+1.19")
+
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
