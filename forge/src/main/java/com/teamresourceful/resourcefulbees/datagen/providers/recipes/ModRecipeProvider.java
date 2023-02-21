@@ -31,17 +31,17 @@ public class ModRecipeProvider extends RecipeProvider {
 
         CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB), new ResourceLocation(ModConstants.MOD_ID, "honeycomb_centrifuge"), 1)
                 .time(200)
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(Items.SUGAR.getDefaultInstance(), 10))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(ModItems.WAX.get().getDefaultInstance(), 10))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 2), 10))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(new ItemStack(ModItems.WAX.get(), 2), 10))
                 .addOutput(new CentrifugeRecipeBuilder.FluidOutputBuilder(0.20).addOutput(new FluidStack(ModFluids.HONEY_STILL.get(), 250), 10))
                 .rf(5)
                 .save(recipes);
 
         CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB_BLOCK), new ResourceLocation(ModConstants.MOD_ID, "honeycomb_block_centrifuge"), 1)
-                .time(200)
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 9), 10))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(new ItemStack(ModItems.WAX.get(), 9), 10))
-                .addOutput(new CentrifugeRecipeBuilder.FluidOutputBuilder(0.20).addOutput(new FluidStack(ModFluids.HONEY_STILL.get(), 250*9), 10))
+                .time(400)
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 6), 10))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(ModItems.WAX_BLOCK_ITEM.get().getDefaultInstance(), 10))
+                .addOutput(new CentrifugeRecipeBuilder.FluidOutputBuilder(0.20).addOutput(new FluidStack(ModFluids.HONEY_STILL.get(), 1250), 10))
                 .rf(10)
                 .save(recipes);
 
@@ -68,12 +68,74 @@ public class ModRecipeProvider extends RecipeProvider {
         RecipeHelper.createCornerWithMid(Ingredient.of(Items.NETHER_STAR), Ingredient.of(ModItemTags.HONEYCOMB_BLOCK), Ingredient.of(ModItems.T3_APIARY_ITEM.get()), ModItems.T4_APIARY_ITEM.get())
                 .unlockedBy(hasHoneycombBlock).save(recipes);
         //endregion
+
+        //region Nests
+        RecipeCriteria hasWaxPlanks = new RecipeCriteria("has_wax_planks", RecipeProvider.has(ModItems.WAXED_PLANKS.get()));
+        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.ACACIA_BEE_NEST_ITEM)
+                .pattern("WPW", "PHP", "WPW")
+                .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
+                .define('P', Ingredient.of(Items.ACACIA_PLANKS))
+                .define('H', Ingredient.of(Items.BEEHIVE))
+                .unlockedBy(hasWaxPlanks)
+                .save(recipes);
+        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BIRCH_BEE_NEST_ITEM)
+                .pattern("WPW", "PHP", "WPW")
+                .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
+                .define('P', Ingredient.of(Items.BIRCH_PLANKS))
+                .define('H', Ingredient.of(Items.BEEHIVE))
+                .unlockedBy(hasWaxPlanks)
+                .save(recipes);
+        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.DARK_OAK_NEST_ITEM)
+                .pattern("WPW", "PHP", "WPW")
+                .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
+                .define('P', Ingredient.of(Items.DARK_OAK_PLANKS))
+                .define('H', Ingredient.of(Items.BEEHIVE))
+                .unlockedBy(hasWaxPlanks)
+                .save(recipes);
+        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.JUNGLE_BEE_NEST_ITEM)
+                .pattern("WPW", "PHP", "WPW")
+                .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
+                .define('P', Ingredient.of(Items.JUNGLE_PLANKS))
+                .define('H', Ingredient.of(Items.BEEHIVE))
+                .unlockedBy(hasWaxPlanks)
+                .save(recipes);
+        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.OAK_BEE_NEST_ITEM)
+                .pattern("WPW", "PHP", "WPW")
+                .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
+                .define('P', Ingredient.of(Items.OAK_PLANKS))
+                .define('H', Ingredient.of(Items.BEEHIVE))
+                .unlockedBy(hasWaxPlanks)
+                .save(recipes);
+        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SPRUCE_BEE_NEST_ITEM)
+                .pattern("WPW", "PHP", "WPW")
+                .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
+                .define('P', Ingredient.of(Items.SPRUCE_PLANKS))
+                .define('H', Ingredient.of(Items.BEEHIVE))
+                .unlockedBy(hasWaxPlanks)
+                .save(recipes);
+        //endregion
+
         //region Honey Conversion
         ShapelessRecipeBuilder.shapeless(ModItems.HONEY_FLUID_BUCKET.get()).requires(Items.HONEY_BOTTLE, 4).requires(Items.BUCKET)
                 .unlockedBy("has_honey_bottle", RecipeProvider.has(Items.HONEY_BOTTLE)).save(recipes, new ResourceLocation(ModConstants.MOD_ID, "honey_bottles_to_bucket"));
         ShapelessRecipeBuilder.shapeless(Items.HONEY_BOTTLE, 4).requires(Items.GLASS_BOTTLE, 4).requires(ModItems.HONEY_FLUID_BUCKET.get())
                 .unlockedBy("has_honey_bottle", RecipeProvider.has(Items.HONEY_BOTTLE)).save(recipes, new ResourceLocation(ModConstants.MOD_ID, "honey_bucket_to_bottles"));
         //endregion
+
+        AdvancedShapedRecipeBuilder.shaped(ModItems.HONEY_GLASS, 4)
+                .pattern("HG", "GH")
+                .define('G', Ingredient.of(Tags.Items.GLASS))
+                .define('H', Ingredient.of(ModItemTags.HONEY_BLOCKS))
+                .unlockedBy("has_honey_block", RecipeProvider.has(ModItemTags.HONEY_BLOCKS))
+                .save(recipes);
+        ShapelessRecipeBuilder.shapeless(ModItems.HONEY_GLASS.get())
+                .requires(ModItems.HONEY_GLASS_PLAYER.get())
+                .unlockedBy("has_honey_glass", RecipeProvider.has(ModItems.HONEY_GLASS.get()))
+                .save(recipes, "resourcefulbees:honey_glass_inverse");
+        ShapelessRecipeBuilder.shapeless(ModItems.HONEY_GLASS_PLAYER.get())
+                .requires(ModItems.HONEY_GLASS.get())
+                .unlockedBy("has_honey_glass", RecipeProvider.has(ModItems.HONEY_GLASS.get()))
+                .save(recipes);
 
         //region Wax
         RecipeHelper.getStorageRecipe(ModItems.WAX_BLOCK_ITEM.get(), Ingredient.of(ModItems.WAX.get()))
@@ -149,12 +211,13 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.WAXED_MACHINE_BLOCK, 2)
                 .pattern("RHR", "HWH", "RHR")
-                .define('W', Ingredient.of(ModItemTags.WAX_BLOCK))
+                .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
                 .define('H', Ingredient.of(ModItemTags.HONEYCOMB))
-                .define('R', Ingredient.of(Tags.Items.DUSTS_REDSTONE))
+                .define('R', Ingredient.of(Tags.Items.STORAGE_BLOCKS_REDSTONE))
                 .unlockedBy(hasWax)
                 .save(recipes);
         //endregion
+
         //region Tools
         AdvancedShapedRecipeBuilder.shaped(ModItems.SMOKERCAN)
                 .pattern("II ", "I I", "ICI")
@@ -202,10 +265,11 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipes);
         ShapelessRecipeBuilder.shapeless(ModItems.SMOKER.get()).requires(ModItems.SMOKERCAN.get()).requires(ModItems.BELLOW.get()).unlockedBy("has_honeycomb", RecipeProvider.has(ModItems.SMOKERCAN.get())).save(recipes);
         //endregion
+
         //region Machines
         RecipeCriteria hasObsidian = new RecipeCriteria("has_obsidian", RecipeProvider.has(Tags.Items.OBSIDIAN));
         AdvancedShapedRecipeBuilder.shaped(ModItems.ENDER_BEECON_ITEM)
-                .pattern("PPP","GEG","POP")
+                .pattern("PPP","GEG","PBP")
                 .define('E', Ingredient.of(Items.ENDER_EYE))
                 .define('P', Ingredient.of(Items.PURPUR_BLOCK))
                 .define('G', Ingredient.of(Tags.Items.GLASS))

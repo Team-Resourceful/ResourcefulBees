@@ -8,7 +8,7 @@
             "items": [
               "resourcefulbees:bee_jar"
             ],
-            "nbt": "{Count:1b,id:\"resourcefulbees:bee_jar\",tag:{Entity:{Color:\"#edc343\",id:\"minecraft:bee\"}}}"
+            "nbt": "{Count:1b,id:\"resourcefulbees:bee_jar\",tag:{DisplayName:'{\"translate\":\"entity.minecraft.bee\"}',Entity:{Color:\"#edc343\",id:\"minecraft:bee\"}}}"
           }
         ]
       },
@@ -24,7 +24,7 @@
     "hidden": false,
     "icon": {
       "item": "resourcefulbees:bee_jar",
-      "nbt": "{Entity:{Color:\"#edc343\",id:\"minecraft:bee\"}}"
+      "nbt": "{DisplayName:'{\"translate\":\"entity.minecraft.bee\"}',Entity:{Color:\"#edc343\",id:\"minecraft:bee\"}}"
     },
     "show_toast": true,
     "title": {

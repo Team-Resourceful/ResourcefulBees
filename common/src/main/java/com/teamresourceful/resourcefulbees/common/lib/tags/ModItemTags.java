@@ -23,6 +23,7 @@ public final class ModItemTags {
     public static final TagKey<Item> MUSHROOM = createItemTag("forge", "mushrooms");
     public static final TagKey<Item> HONEY_BOTTLES = createItemTag("forge", "honey_bottles");
     public static final TagKey<Item> HONEY_BUCKETS = createItemTag("forge", "buckets/honey");
+    public static final TagKey<Item> HONEY_BLOCKS = createItemTag("forge", "honey_blocks");
 
     public static final TagKey<Item> HEAT_SOURCES = createItemTag("forge", "heat_sources");
 

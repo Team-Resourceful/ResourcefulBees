@@ -1,5 +1,7 @@
 {
   "values": [
+    "resourcefulbees:centrifuge",
+    "resourcefulbees:centrifuge_crank",
     "resourcefulbees:centrifuge/casing",
     "resourcefulbees:centrifuge/processor",
     "resourcefulbees:centrifuge/gearbox",
@@ -27,8 +29,6 @@
     "resourcefulbees:centrifuge/output/fluid/advanced",
     "resourcefulbees:centrifuge/output/fluid/elite",
     "resourcefulbees:centrifuge/output/fluid/ultimate",
-    "resourcefulbees:centrifuge",
-    "resourcefulbees:centrifuge_crank",
     "resourcefulbees:honey_generator",
     "resourcefulbees:ender_beecon",
     "resourcefulbees:solidification_chamber",

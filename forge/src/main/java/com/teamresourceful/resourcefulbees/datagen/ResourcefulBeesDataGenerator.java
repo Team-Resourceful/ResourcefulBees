@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.datagen;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefulbees.datagen.providers.advancements.ModAdvancementProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.blockstates.ModBlockStateProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.items.ModItemModelProvider;
@@ -28,6 +29,7 @@ public final class ResourcefulBeesDataGenerator {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
         ModConstants.LOGGER.info("Data Generator Loaded!");
+        ModUtils.IS_DATAGEN = true;
         DataGenerator generator = event.getGenerator();
 
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();

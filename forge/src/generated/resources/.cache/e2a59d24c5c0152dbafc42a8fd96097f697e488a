@@ -1,4 +1,4 @@
-// 1.19.2	2022-09-24T04:40:20.0324517	ResourcefulBees Loot Table Provider
+// 1.19.2	2023-02-21T17:23:53.3795252	ResourcefulBees Loot Table Provider
 43b5faa39567daf91b64fda62db3601462c3777d data/resourcefulbees/loot_tables/blocks/bee_box.json
 b0a96d0a33989f534d4b4d65c1361066723d1e0c data/resourcefulbees/loot_tables/blocks/bee_box_temp.json
 659a79b2b45190bfdf0538d1db93f7878aafe009 data/resourcefulbees/loot_tables/blocks/breeder.json
@@ -32,6 +32,7 @@ c80d665f03924ae8f06a323f97e1fc5306d25477 data/resourcefulbees/loot_tables/blocks
 262403662bd0b9683a750e8e36aa83f2bbb342d4 data/resourcefulbees/loot_tables/blocks/centrifuge/void/ultimate.json
 baee60585757b6cc403123eadd044f2ffef52d4f data/resourcefulbees/loot_tables/blocks/centrifuge_crank.json
 ecb34f7f6f978710c3c10172cf4c49aef377287c data/resourcefulbees/loot_tables/blocks/ender_beecon.json
+ee9881bbea95355d452bb60baa14184a7d5fdef7 data/resourcefulbees/loot_tables/blocks/flow_hive.json
 f62fe37a57ee56bb8b94f3874c2312564b869906 data/resourcefulbees/loot_tables/blocks/gold_flower.json
 acd0e86ddf009209467c9630aedd8c03e5701a84 data/resourcefulbees/loot_tables/blocks/honey_generator.json
 578dfe09003ddf4b189bb9fbe1159fa2f66ac314 data/resourcefulbees/loot_tables/blocks/honey_pot.json

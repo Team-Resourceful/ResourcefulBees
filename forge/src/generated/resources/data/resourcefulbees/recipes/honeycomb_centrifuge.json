@@ -19,6 +19,7 @@
   "ingredient": {
     "item": "minecraft:honeycomb"
   },
+  "inputAmount": 1,
   "itemOutputs": [
     {
       "chance": 1.0,

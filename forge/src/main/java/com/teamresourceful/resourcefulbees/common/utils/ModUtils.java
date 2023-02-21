@@ -54,4 +54,6 @@ public final class ModUtils {
     public static boolean itemStackIsIdentical(ItemStack stack, ItemStack other) {
         return stack.getCount() == other.getCount() && ItemStack.isSameItemSameTags(stack, other);
     }
+
+    public static boolean IS_DATAGEN = false;
 }

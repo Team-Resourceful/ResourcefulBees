@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.loottables;
 
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockLootTable;
@@ -43,6 +44,7 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.T3_APIARY_BLOCK);
         dropSelf(ModBlocks.T4_APIARY_BLOCK);
         dropSelf(ModBlocks.BREEDER_BLOCK);
+        dropSelf(ModBlocks.FLOW_HIVE);
         //endregion
         //region Machines
         dropSelf(ModBlocks.HONEY_GENERATOR);
@@ -66,6 +68,7 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.TRIMMED_WAXED_PLANKS);
 
         ModBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
+        CentrifugeBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
         addBeeBox(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX, false);
         addBeeBox(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX_TEMP, true);
     }

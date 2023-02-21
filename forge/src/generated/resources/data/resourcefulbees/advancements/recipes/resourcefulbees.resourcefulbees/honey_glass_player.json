@@ -1,11 +1,13 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_planks": {
+    "has_honey_glass": {
       "conditions": {
         "items": [
           {
-            "tag": "minecraft:planks"
+            "items": [
+              "resourcefulbees:honey_glass"
+            ]
           }
         ]
       },
@@ -13,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:t1_nest_upgrade"
+        "recipe": "resourcefulbees:honey_glass_player"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_planks",
+      "has_honey_glass",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "resourcefulbees:t1_nest_upgrade"
+      "resourcefulbees:honey_glass_player"
     ]
   }
 }

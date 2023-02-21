@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "resourcefulbees:nest/jungle/1"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wax_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "resourcefulbees:waxed_planks"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_wax_planks",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "resourcefulbees:nest/jungle/1"
+    ]
+  }
+}

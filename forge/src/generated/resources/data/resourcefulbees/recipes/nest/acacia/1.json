@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "W": {
-      "item": "resourcefulbees:waxed_planks"
+    "H": {
+      "item": "minecraft:beehive"
     },
     "P": {
       "item": "minecraft:acacia_planks"
     },
-    "H": {
-      "item": "minecraft:beehive"
+    "W": {
+      "item": "resourcefulbees:waxed_planks"
     }
   },
   "pattern": [

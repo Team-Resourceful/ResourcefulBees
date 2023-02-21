@@ -25,6 +25,9 @@ public class ModItemTagProvider extends ItemTagsProvider {
     protected void addTags() {
         tag(ModItemTags.HONEYCOMB).add(Items.HONEYCOMB);
         tag(ModItemTags.HONEYCOMB_BLOCK).add(Items.HONEYCOMB_BLOCK);
+        tag(ModItemTags.HONEY_BUCKETS).add(ModItems.HONEY_FLUID_BUCKET.get());
+        tag(ModItemTags.HONEY_BLOCKS).add(Items.HONEY_BLOCK);
+        tag(ModItemTags.HONEY_BOTTLES).add(Items.HONEY_BOTTLE);
         TagAppender<Item> hiveBuilder = tag(ModItemTags.BEEHIVES).add(Items.BEEHIVE).add(Items.BEE_NEST);
         TagAppender<Item> t0Nests = tag(ModItemTags.T0_NESTS);
         TagAppender<Item> t1Nests = tag(ModItemTags.T1_NESTS);
@@ -40,9 +43,18 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(Tags.Items.STORAGE_BLOCKS).addTags(ModItemTags.WAX_BLOCK);
         tag(ModItemTags.SHEARS).add(Items.SHEARS);
         tag(ModItemTags.MUSHROOM).add(Items.RED_MUSHROOM).add(Items.BROWN_MUSHROOM);
-        tag(ModItemTags.HONEY_BOTTLES).add(Items.HONEY_BOTTLE);
-        tag(ModItemTags.HEAT_SOURCES).add(Items.TORCH, Items.SOUL_TORCH, Items.LAVA_BUCKET, Items.CAMPFIRE, Items.SOUL_CAMPFIRE, Items.MAGMA_BLOCK, Items.LANTERN, Items.SEA_LANTERN, Items.SOUL_LANTERN, Items.JACK_O_LANTERN);
-        tag(ModItemTags.HEAT_SOURCES).addTags(ItemTags.CANDLES);
+        tag(ModItemTags.HEAT_SOURCES)
+                .add(Items.TORCH, Items.SOUL_TORCH, Items.LAVA_BUCKET, Items.CAMPFIRE, Items.SOUL_CAMPFIRE, Items.MAGMA_BLOCK)
+                .add(Items.LANTERN, Items.SEA_LANTERN, Items.SOUL_LANTERN, Items.JACK_O_LANTERN)
+                .addTags(ItemTags.CANDLES);
+
+        tag(ItemTags.WOODEN_DOORS).add(ModItems.WAXED_DOOR.get());
+        tag(ItemTags.WOODEN_BUTTONS).add(ModItems.WAXED_BUTTON.get());
+        tag(ItemTags.WOODEN_FENCES).add(ModItems.WAXED_DOOR.get());
+        tag(ItemTags.WOODEN_SLABS).add(ModItems.WAXED_SLAB.get());
+        tag(ItemTags.WOODEN_STAIRS).add(ModItems.WAXED_STAIRS.get());
+        tag(ItemTags.WOODEN_PRESSURE_PLATES).add(ModItems.WAXED_PRESSURE_PLATE.get());
+        tag(ItemTags.WOODEN_TRAPDOORS).add(ModItems.WAXED_TRAPDOOR.get());
     }
 
     @SafeVarargs

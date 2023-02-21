@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "#minecraft:logs",
     "#minecraft:planks",
@@ -11,7 +10,6 @@
     "#minecraft:stone_bricks",
     "#forge:sandstone",
     "#forge:stone",
-    "#forge:sand",
     "#forge:netherrack",
     "#forge:end_stones",
     "#forge:cobblestone",

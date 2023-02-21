@@ -4,17 +4,17 @@
     "C": {
       "tag": "forge:honeycombs"
     },
-    "U": {
-      "item": "resourcefulbees:t2_nest_upgrade"
+    "M": {
+      "tag": "minecraft:planks"
     },
-    "G": {
-      "tag": "forge:nuggets/gold"
+    "S": {
+      "tag": "forge:wax"
     }
   },
   "pattern": [
-    "CGC",
-    "GUG",
-    "CGC"
+    "CSC",
+    "SMS",
+    "CSC"
   ],
   "result": {
     "item": "resourcefulbees:t3_nest_upgrade"

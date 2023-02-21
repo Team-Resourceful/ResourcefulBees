@@ -1,15 +1,24 @@
-// 1.19.2	2022-09-04T01:29:46.0761469	Resourceful Bees Item Tag Provider
+// 1.19.2	2023-02-21T17:23:53.3895284	Resourceful Bees Item Tag Provider
+f95fe53b59cee6bcd3cf85b9ca90168a800d2602 data/forge/tags/items/buckets/honey.json
 d87a9f8fd22293746481df0b90caf0f2b3abe6c8 data/forge/tags/items/heat_sources.json
-4546095bedc2f00f5b292731ce930510bc0fe87a data/forge/tags/items/honey_bottle.json
+d878c230cd5cb1b54fbe6e53f3ef71379d080c6f data/forge/tags/items/honeycombs.json
+b7c610fe74377a42b51b7a87a3693fc1244cd9d6 data/forge/tags/items/honey_blocks.json
+4546095bedc2f00f5b292731ce930510bc0fe87a data/forge/tags/items/honey_bottles.json
 36a491a695201f5b03b2c0cca537c626edbc6f3f data/forge/tags/items/mushrooms.json
 8fb2c86ef1e8e3e5c111578b51da91908ea5deb9 data/forge/tags/items/shears.json
 73be7b5ade3737979ca0a35c875e0c5a80f848f3 data/forge/tags/items/storage_blocks.json
+d6cf88ab73624a67b1cffc6e2fe8d4b95b053a79 data/forge/tags/items/storage_blocks/honeycombs.json
 97db687cb55b4a5035a83a364f8a26096ca17e7f data/forge/tags/items/storage_blocks/wax.json
 6a27f753764c8cb4f67d5209c793c4f0f51ea70a data/forge/tags/items/wax.json
 3ad7892a06e0a67fc3840e52cb57652955979913 data/minecraft/tags/items/beehives.json
 70cd4e1a0eaf500fa1b392262afeaeaaff74a6d4 data/minecraft/tags/items/small_flowers.json
-d878c230cd5cb1b54fbe6e53f3ef71379d080c6f data/resourcefulbees/tags/items/resourceful_honeycomb.json
-d6cf88ab73624a67b1cffc6e2fe8d4b95b053a79 data/resourcefulbees/tags/items/resourceful_honeycomb_block.json
+4e7d97482f63a2f0eade2239ea7fda350aa2ac9f data/minecraft/tags/items/wooden_buttons.json
+82ad92ee1b2ea8a7998dc670055448bc48d090ac data/minecraft/tags/items/wooden_doors.json
+82ad92ee1b2ea8a7998dc670055448bc48d090ac data/minecraft/tags/items/wooden_fences.json
+f65d846a9850662435bc04ba4cfc3ef286c95149 data/minecraft/tags/items/wooden_pressure_plates.json
+1ccef0138663648744c480496898695d9fe1cba2 data/minecraft/tags/items/wooden_slabs.json
+22d290ab9f9d905be675e07ca15d3bd94bb68735 data/minecraft/tags/items/wooden_stairs.json
+6fa8cc47a9d02fe2420b12f09d28e9dfc2eda1bc data/minecraft/tags/items/wooden_trapdoors.json
 21d7702fa0214254a6971f7bc5092297e3683297 data/resourcefulbees/tags/items/t0_nests.json
 728d04608d2d71bd1b62d9a93df54cddcb34b782 data/resourcefulbees/tags/items/t1_nests.json
 6fd9a4611cdb1297e3a4cd5ed506acc9bfb857ef data/resourcefulbees/tags/items/t2_nests.json

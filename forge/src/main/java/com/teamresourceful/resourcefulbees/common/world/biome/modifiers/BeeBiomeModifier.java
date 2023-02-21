@@ -19,7 +19,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.BooleanSupplier;
 
 public record BeeBiomeModifier(
         List<HolderSet<Biome>> whitelist,
@@ -31,7 +31,7 @@ public record BeeBiomeModifier(
 
     @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
-        if(Boolean.FALSE.equals(type().abortCriteria().get())) return;
+        if(type().abortCriteria().getAsBoolean()) return;
         if (phase.equals(Phase.ADD) && isInList(whitelist(), biome) && !isInList(blacklist(), biome)) {
             builder.getMobSpawnSettings().addSpawn(spawns().type.getCategory(), spawns());
         }
@@ -88,15 +88,15 @@ public record BeeBiomeModifier(
         DEV(() -> GeneralConfig.enableDevBees, ModBiomeModifiers.DEV_SPAWN_MODIFIER),
         SUPPORTER(() -> GeneralConfig.enableSupporterBees, ModBiomeModifiers.SUPPORTER_SPAWN_MODIFIER);
 
-        private final Supplier<Boolean> abortCriteria;
+        private final BooleanSupplier abortCriteria;
         private final RegistryObject<Codec<BeeBiomeModifier>> modifier;
 
-        Type(Supplier<Boolean> abortCriteria, RegistryObject<Codec<BeeBiomeModifier>> modifier) {
+        Type(BooleanSupplier abortCriteria, RegistryObject<Codec<BeeBiomeModifier>> modifier) {
             this.abortCriteria = abortCriteria;
             this.modifier = modifier;
         }
 
-        public Supplier<Boolean> abortCriteria() {
+        public BooleanSupplier abortCriteria() {
             return abortCriteria;
         }
 

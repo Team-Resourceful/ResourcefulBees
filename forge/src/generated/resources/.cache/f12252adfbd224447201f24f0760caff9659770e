@@ -1,4 +1,4 @@
-// 1.19.2	2022-09-24T04:40:20.0264695	Block States: resourcefulbees
+// 1.19.2	2023-02-21T03:35:29.2820789	Block States: resourcefulbees
 7ec1405dc5c9e153f475609c11307358acd8275a assets/resourcefulbees/blockstates/beehouse_top.json
 a724b891cc443fb3f7e96d097c8a034bb81cb3d0 assets/resourcefulbees/blockstates/bee_box.json
 aea0a8c392b41b95e2e5d504c16d7671a9e882ea assets/resourcefulbees/blockstates/bee_box_temp.json
@@ -258,9 +258,9 @@ bd6081a55016c1f46b8bef727247ab5d834e4161 assets/resourcefulbees/models/block/wax
 ced668afb884276195a235f2ab284f5cc6d49566 assets/resourcefulbees/models/block/waxed_stairs_stair.json
 5fca6f214e0e80094f794763bed579cd9ecb59dd assets/resourcefulbees/models/block/waxed_stairs_stair_inner.json
 68a45b74e08bd07cc56c826cf4064d97241818e9 assets/resourcefulbees/models/block/waxed_stairs_stair_outer.json
-fbfee3d0281ec48895e5b641348c4ce2ae98dc18 assets/resourcefulbees/models/block/waxed_trapdoor_trapdoor_bottom.json
-55e2206141fa9135233e7a330417f9dbaa8893c4 assets/resourcefulbees/models/block/waxed_trapdoor_trapdoor_open.json
-db26f642d431f66e761b856c292f9ac4a94b401a assets/resourcefulbees/models/block/waxed_trapdoor_trapdoor_top.json
+6e3375eac8715606439b7abd21178e815e360c78 assets/resourcefulbees/models/block/waxed_trapdoor_trapdoor_bottom.json
+18c21f968a2d41043f23045bee64402807b2a64d assets/resourcefulbees/models/block/waxed_trapdoor_trapdoor_open.json
+75d1bc071c35f667674e5071ccc5e07301333df3 assets/resourcefulbees/models/block/waxed_trapdoor_trapdoor_top.json
 bc7a4eb0ad4ee852cd797a6046e5065b62352862 assets/resourcefulbees/models/block/wax_block.json
 1099ae127dd2bc54a2e9ea09da6f595eae12ce72 assets/resourcefulbees/models/item/bee_box.json
 20db54c53e50325508161f287184b8ad445ec0bd assets/resourcefulbees/models/item/bee_box_temp.json

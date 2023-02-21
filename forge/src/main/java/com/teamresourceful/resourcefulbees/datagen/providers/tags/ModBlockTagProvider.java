@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeBlocks;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
@@ -38,11 +39,27 @@ public class ModBlockTagProvider extends BlockTagsProvider {
 
         TagAppender<Block> pickaxeTagBuilder = tag(BlockTags.MINEABLE_WITH_PICKAXE);
         ModBlocks.CENTRIFUGE_BLOCKS.getEntries().stream().map(RegistryEntry::get).forEach(pickaxeTagBuilder::add);
+        CentrifugeBlocks.CENTRIFUGE_BLOCKS.getEntries().stream().map(RegistryEntry::get).forEach(pickaxeTagBuilder::add);
         pickaxeTagBuilder.add(ModBlocks.HONEY_GENERATOR.get(), ModBlocks.ENDER_BEECON.get(), ModBlocks.SOLIDIFICATION_CHAMBER.get(), ModBlocks.HONEY_POT.get());
 
         tag(ModBlockTags.HEAT_SOURCES).add(Blocks.TORCH, Blocks.SOUL_TORCH, Blocks.WALL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.LAVA, Blocks.LAVA_CAULDRON,
                 Blocks.MAGMA_BLOCK, Blocks.LANTERN, Blocks.SEA_LANTERN, Blocks.SOUL_LANTERN, Blocks.JACK_O_LANTERN);
         tag(ModBlockTags.HEAT_SOURCES).addTags(BlockTags.CAMPFIRES, BlockTags.FIRE, BlockTags.CANDLES);
+
+        tag(ModBlockTags.NEST_PLACEABLE_ON)
+                .addTags(BlockTags.LOGS, BlockTags.PLANKS, BlockTags.SAND, BlockTags.LEAVES, BlockTags.DIRT, BlockTags.ICE, BlockTags.SNOW)
+                .addTags(BlockTags.STONE_BRICKS, Tags.Blocks.SANDSTONE, Tags.Blocks.STONE, Tags.Blocks.NETHERRACK, Tags.Blocks.END_STONES)
+                .addTags(Tags.Blocks.COBBLESTONE, Tags.Blocks.GLASS, Tags.Blocks.GRAVEL, Tags.Blocks.OBSIDIAN, Tags.Blocks.ORES)
+                .add(Blocks.SOUL_SAND, Blocks.BASALT, Blocks.BLACKSTONE, Blocks.POLISHED_BLACKSTONE, Blocks.WATER, Blocks.LAVA, Blocks.CLAY)
+                .add(Blocks.SOUL_SOIL, Blocks.POLISHED_BASALT, Blocks.GLOWSTONE, Blocks.PACKED_MUD, Blocks.MUD_BRICKS, Blocks.MAGMA_BLOCK);
+
+        tag(BlockTags.WOODEN_FENCES).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_FENCE.get());
+        tag(BlockTags.WOODEN_TRAPDOORS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_TRAPDOOR.get());
+        tag(BlockTags.WOODEN_SLABS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_SLAB.get());
+        tag(BlockTags.WOODEN_STAIRS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_STAIRS.get());
+        tag(BlockTags.WOODEN_PRESSURE_PLATES).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_PRESSURE_PLATE.get());
+        tag(BlockTags.WOODEN_DOORS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_DOOR.get());
+        tag(BlockTags.WOODEN_BUTTONS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_BUTTON.get());
     }
 
     @Override

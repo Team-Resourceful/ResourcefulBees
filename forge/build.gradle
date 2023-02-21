@@ -9,7 +9,7 @@ architectury {
 sourceSets {
     main {
         resources {
-            srcDirs += 'src/generated/resources'
+            srcDirs += project(":forge").file('src/generated/resources').absolutePath
             exclude '.cache'
         }
     }
@@ -25,16 +25,16 @@ loom {
         mixinConfig "resourcefulbees.mixins.json"
         mixinConfig "resourcefulbees-common.mixins.json"
 
-        /*dataGen {
+        dataGen {
             mod "resourcefulbees"
-        }*/
+        }
     }
 
-    /*runs {
+    runs {
         data {
-            programArgs "--existing", file("src/main/resources").absolutePath
+            programArgs "--existing", project(":forge").file("src/main/resources").absolutePath
         }
-    }*/
+    }
 }
 
 configurations {
@@ -78,6 +78,7 @@ dependencies {
 }
 
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property "version", project.version
 
     filesMatching("META-INF/mods.toml") {

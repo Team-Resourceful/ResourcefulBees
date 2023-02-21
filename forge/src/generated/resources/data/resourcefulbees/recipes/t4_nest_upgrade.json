@@ -4,17 +4,17 @@
     "C": {
       "tag": "forge:storage_blocks/honeycombs"
     },
-    "U": {
-      "item": "resourcefulbees:t3_nest_upgrade"
+    "M": {
+      "tag": "minecraft:planks"
     },
-    "D": {
-      "item": "minecraft:diamond"
+    "S": {
+      "tag": "forge:storage_blocks/wax"
     }
   },
   "pattern": [
-    "CDC",
-    "DUD",
-    "CDC"
+    "CSC",
+    "SMS",
+    "CSC"
   ],
   "result": {
     "item": "resourcefulbees:t4_nest_upgrade"

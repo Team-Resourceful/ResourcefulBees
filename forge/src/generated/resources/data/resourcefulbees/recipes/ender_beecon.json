@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
+    "B": {
+      "item": "minecraft:beacon"
+    },
     "E": {
       "item": "minecraft:ender_eye"
     },
     "G": {
       "tag": "forge:glass"
-    },
-    "B": {
-      "item": "minecraft:beacon"
     },
     "P": {
       "item": "minecraft:purpur_block"
