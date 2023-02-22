@@ -22,6 +22,7 @@ public class ContainerSlot extends Slot {
 
     @Override
     public boolean mayPickup(@NotNull Player player) {
-        return this.basicContainer.canTakeItem(this.index, player);
+        ItemStack stack = this.getItem();
+        return this.basicContainer.canTakeItem(this.index, stack);
     }
 }

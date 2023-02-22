@@ -43,7 +43,7 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.T2_APIARY_BLOCK);
         dropSelf(ModBlocks.T3_APIARY_BLOCK);
         dropSelf(ModBlocks.T4_APIARY_BLOCK);
-        dropSelf(ModBlocks.BREEDER_BLOCK);
+        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BREEDER_BLOCK);
         dropSelf(ModBlocks.FLOW_HIVE);
         //endregion
         //region Machines

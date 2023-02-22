@@ -35,7 +35,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
 
         TagAppender<Block> axeTagBuilder = tag(BlockTags.MINEABLE_WITH_AXE);
         ModBlocks.APIARIES.getEntries().stream().map(RegistryEntry::get).forEach(axeTagBuilder::add);
-        axeTagBuilder.add(ModBlocks.BEEHOUSE_TOP.get(), ModBlocks.BREEDER_BLOCK.get(), ModBlocks.FLOW_HIVE.get());
+        axeTagBuilder.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEEHOUSE_TOP.get(), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BREEDER_BLOCK.get(), ModBlocks.FLOW_HIVE.get());
 
         TagAppender<Block> pickaxeTagBuilder = tag(BlockTags.MINEABLE_WITH_PICKAXE);
         ModBlocks.CENTRIFUGE_BLOCKS.getEntries().stream().map(RegistryEntry::get).forEach(pickaxeTagBuilder::add);

@@ -1,11 +1,9 @@
-package com.teamresourceful.resourcefulbees.common.inventory.menus;
+package com.teamresourceful.resourcefulbees.common.menus;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.BreederBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.BreederBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
-import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
-import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
-import com.teamresourceful.resourcefulbees.common.menus.AbstractModContainerMenu;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
+import com.teamresourceful.resourcefulbees.common.menus.base.ContainerSlot;
+import com.teamresourceful.resourcefulbees.platform.common.util.TempPlatformUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -23,7 +21,7 @@ public class BreederMenu extends AbstractModContainerMenu<BreederBlockEntity> {
     }
 
     public BreederMenu(int id, Inventory inv, BreederBlockEntity entity, ContainerData times, ContainerData endTimes) {
-        super(ModMenus.BREEDER_MENU.get(), id, inv, entity);
+        super(TempPlatformUtils.getBreederMenuType().get(), id, inv, entity);
         this.times = times;
         this.endTimes = endTimes;
         this.addDataSlots(times);
@@ -57,19 +55,19 @@ public class BreederMenu extends AbstractModContainerMenu<BreederBlockEntity> {
 
     @Override
     protected void addMenuSlots() {
-        this.addSlot(new SlotItemHandlerUnconditioned(getEntity().getInventory(), 0, 6, 18));
+        this.addSlot(new ContainerSlot(getEntity(), 0, 6, 18));
 
         for (int i = 0; i < BreederConstants.NUM_OF_BREEDERS; i++) {
-            this.addSlot(new SlotItemHandlerUnconditioned(getEntity().getInventory(), BreederConstants.PARENT_1_SLOTS.get(i), 30, 18 +(i *20)));
-            this.addSlot(new SlotItemHandlerUnconditioned(getEntity().getInventory(), BreederConstants.FEED_1_SLOTS.get(i), 66, 18 +(i*20)));
-            this.addSlot(new SlotItemHandlerUnconditioned(getEntity().getInventory(), BreederConstants.PARENT_2_SLOTS.get(i), 102, 18 +(i*20)));
-            this.addSlot(new SlotItemHandlerUnconditioned(getEntity().getInventory(), BreederConstants.FEED_2_SLOTS.get(i), 138, 18 +(i*20)));
-            this.addSlot(new SlotItemHandlerUnconditioned(getEntity().getInventory(), BreederConstants.EMPTY_JAR_SLOTS.get(i), 174, 18 +(i*20)));
+            this.addSlot(new ContainerSlot(getEntity(), BreederConstants.PARENT_1_SLOTS.get(i), 30, 18 +(i *20)));
+            this.addSlot(new ContainerSlot(getEntity(), BreederConstants.FEED_1_SLOTS.get(i), 66, 18 +(i*20)));
+            this.addSlot(new ContainerSlot(getEntity(), BreederConstants.PARENT_2_SLOTS.get(i), 102, 18 +(i*20)));
+            this.addSlot(new ContainerSlot(getEntity(), BreederConstants.FEED_2_SLOTS.get(i), 138, 18 +(i*20)));
+            this.addSlot(new ContainerSlot(getEntity(), BreederConstants.EMPTY_JAR_SLOTS.get(i), 174, 18 +(i*20)));
         }
 
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 9; j++) {
-                this.addSlot(new OutputSlot(getEntity().getInventory(), 11 + (j + i * 9), 30+(j*18), 58 + (i*18)));
+                this.addSlot(new ContainerSlot(getEntity(), 11 + (j + i * 9), 30+(j*18), 58 + (i*18)));
             }
         }
     }

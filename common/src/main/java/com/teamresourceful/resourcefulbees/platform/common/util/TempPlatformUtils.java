@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.platform.common.util;
 
 import com.teamresourceful.resourcefulbees.common.entities.entity.ThrownMutatedPollen;
+import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
 import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;
 import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
@@ -22,6 +23,11 @@ public class TempPlatformUtils {
 
     @ExpectPlatform
     public static RegistryEntry<MenuType<FakeFlowerMenu>> getFakeFlowerMenuType() {
+        throw new NotImplementedError();
+    }
+
+    @ExpectPlatform
+    public static RegistryEntry<MenuType<BreederMenu>> getBreederMenuType() {
         throw new NotImplementedError();
     }
 

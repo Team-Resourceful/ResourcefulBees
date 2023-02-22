@@ -56,7 +56,7 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
     @Override
     public boolean matches(@NotNull Container inventory, @NotNull Level level) {
         final boolean hasInput = (input.isEmpty() || input.get().test(inventory.getItem(4)));
-        return (parent1.matches(inventory, 0) && parent2.matches(inventory, 2)) || (parent1.matches(inventory, 2) && parent2.matches(inventory, 0)) && hasInput;
+        return ((parent1.matches(inventory, 0) && parent2.matches(inventory, 2)) || (parent1.matches(inventory, 2) && parent2.matches(inventory, 0))) && hasInput;
     }
 
     @Override

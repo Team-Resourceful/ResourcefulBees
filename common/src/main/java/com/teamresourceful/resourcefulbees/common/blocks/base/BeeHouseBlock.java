@@ -1,11 +1,9 @@
-package com.teamresourceful.resourcefulbees.common.block.base;
+package com.teamresourceful.resourcefulbees.common.blocks.base;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.FlowHiveBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -24,7 +22,6 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,8 +60,9 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
     public InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult) {
         if (!player.isShiftKeyDown() && !world.isClientSide) {
             MenuProvider blockEntity = state.getMenuProvider(world,pos);
-            if (blockEntity != null && !(blockEntity instanceof FlowHiveBlockEntity))
-                NetworkHooks.openScreen((ServerPlayer) player, blockEntity, pos);
+            if (blockEntity != null) {
+                ModUtils.openScreen(player, blockEntity, pos);
+            }
         }
         return InteractionResult.SUCCESS;
     }

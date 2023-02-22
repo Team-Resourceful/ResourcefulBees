@@ -43,7 +43,7 @@ public final class ItemGroupResourcefulBees {
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM);
 
                 list.add(ModItems.FLOW_HIVE);
-                list.add(ModItems.BREEDER_ITEM);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BREEDER_ITEM);
                 list.add(ModItems.T1_APIARY_ITEM);
                 list.add(ModItems.T2_APIARY_ITEM);
                 list.add(ModItems.T3_APIARY_ITEM);

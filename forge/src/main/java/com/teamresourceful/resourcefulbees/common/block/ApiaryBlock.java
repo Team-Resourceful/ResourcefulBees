@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
