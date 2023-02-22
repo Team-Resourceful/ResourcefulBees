@@ -1,15 +1,15 @@
-package com.teamresourceful.resourcefulbees.common.data.beedata.rendering;
+package com.teamresourceful.resourcefulbees.common.setup.data.beedata.rendering;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerTexture;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.NeutralMob;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public record LayerTexture(ResourceLocation texture, ResourceLocation angryTexture) implements BeeLayerTexture {
 
@@ -28,9 +28,9 @@ public record LayerTexture(ResourceLocation texture, ResourceLocation angryTextu
                 : DataResult.error("Not a valid resource location: " + s);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public ResourceLocation getTexture(NeutralMob neutralMob) {
-        return ClientUtils.DEFAULT_TEXTURER.apply(neutralMob.isAngry() ? angryTexture() : texture(), texture());
+        return ClientRenderUtils.DEFAULT_TEXTURER.apply(neutralMob.isAngry() ? angryTexture() : texture(), texture());
     }
 
     @Override

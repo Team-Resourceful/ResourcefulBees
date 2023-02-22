@@ -13,7 +13,7 @@ public class BlockLanguageModule implements LanguageModule {
     @Override
     public void addEntries(BaseLanguageProvider provider) {
         provider.addBlock(ModBlocks.WAX_BLOCK, "Beeswax Block");
-        provider.addBlock(ModBlocks.GOLD_FLOWER, "Golden Flower");
+        provider.addBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.GOLD_FLOWER, "Golden Flower");
         provider.addBlock(ModBlocks.T1_APIARY_BLOCK, "Tier 1 Apiary");
         provider.addBlock(ModBlocks.T2_APIARY_BLOCK, "Tier 2 Apiary");
         provider.addBlock(ModBlocks.T3_APIARY_BLOCK, "Tier 3 Apiary");

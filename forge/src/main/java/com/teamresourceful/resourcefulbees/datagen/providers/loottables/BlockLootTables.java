@@ -35,7 +35,7 @@ public class BlockLootTables extends BaseBlockLootTable {
     protected void addTables() {
         //region Misc
         dropSelf(ModBlocks.WAX_BLOCK);
-        dropSelf(ModBlocks.GOLD_FLOWER);
+        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.GOLD_FLOWER);
         //endregion
         com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HIVES.getEntries().forEach(this::addNest);
         //region Apiary

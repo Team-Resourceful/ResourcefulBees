@@ -54,7 +54,7 @@ public final class Beekeeper {
 
     private static void addTrade(List<VillagerTrades.ItemListing> list, UniformInt flowerQty, Item costB, UniformInt costBQty, Item result, UniformInt resultQty, int maxUses, float priceMultiplier, int xp) {
         list.add((trader, random) -> new MerchantOffer(
-                new ItemStack(ModItems.GOLD_FLOWER_ITEM.get(), flowerQty.sample(random)),
+                new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM.get(), flowerQty.sample(random)),
                 new ItemStack(costB, costBQty.sample(random)),
                 new ItemStack(result, resultQty.sample(random)),
                 0, maxUses, xp, priceMultiplier
@@ -176,7 +176,7 @@ public final class Beekeeper {
 
     private static void addCalmingPotion(List<VillagerTrades.ItemListing> list, PotionType potionType, boolean isLong) {
         list.add((trader, random) -> new MerchantOffer(
-                new ItemStack(ModItems.GOLD_FLOWER_ITEM.get(), random.nextIntBetweenInclusive(4, 12)),
+                new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM.get(), random.nextIntBetweenInclusive(4, 12)),
                 waterBottle(random, potionType),
                 calmingPotion(random, potionType, isLong),
                 random.nextIntBetweenInclusive(0, 12), 8, 2, 0.05f
@@ -210,7 +210,7 @@ public final class Beekeeper {
     //region Level Five Trades
     private static void createLevelFiveTrades(List<VillagerTrades.ItemListing> list) {
         list.add((trader, random) -> new MerchantOffer(
-                new ItemStack(ModItems.GOLD_FLOWER_ITEM.get(), random.nextIntBetweenInclusive(32, 64)),
+                new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM.get(), random.nextIntBetweenInclusive(32, 64)),
                 new ItemStack(Items.BLACK_BANNER),
                 getQueenBeeBanner(),
                 random.nextIntBetweenInclusive(0, 2), 1, 2, .05f

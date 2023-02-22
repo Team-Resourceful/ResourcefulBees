@@ -1,10 +1,10 @@
-package com.teamresourceful.resourcefulbees.common.data.beedata;
+package com.teamresourceful.resourcefulbees.common.setup.data.beedata;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.bounds.UniformedNumberCodecs;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;

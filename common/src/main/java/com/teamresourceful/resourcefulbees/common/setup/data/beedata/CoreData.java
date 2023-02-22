@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.data.beedata;
+package com.teamresourceful.resourcefulbees.common.setup.data.beedata;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;

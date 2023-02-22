@@ -2,14 +2,13 @@ package com.teamresourceful.resourcefulbees.client.utils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
-import com.teamresourceful.resourcefullib.common.caches.CacheableBiFunction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.event.ModelEvent;
@@ -17,8 +16,6 @@ import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
 public final class ClientUtils {
-
-    public static final CacheableBiFunction<ResourceLocation, ResourceLocation, ResourceLocation> DEFAULT_TEXTURER = new CacheableBiFunction<>((texture, other) -> texture == other ? texture : Minecraft.getInstance().getResourceManager().getResource(texture).isPresent() ? texture : other);
 
     private ClientUtils() {
         throw new UtilityClassError();
@@ -55,6 +52,6 @@ public final class ClientUtils {
     }
 
     public static void onResourceReload(ModelEvent.BakingCompleted event) {
-        DEFAULT_TEXTURER.clear();
+        ClientRenderUtils.DEFAULT_TEXTURER.clear();
     }
 }

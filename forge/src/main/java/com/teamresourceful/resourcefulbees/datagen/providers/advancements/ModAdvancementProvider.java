@@ -23,7 +23,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
 
     @Override
     public void buildAdvancements() {
-        Advancement root = addAdvancement(createRootAdvancement(ModItems.GOLD_FLOWER_ITEM,
+        Advancement root = addAdvancement(createRootAdvancement(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM,
                 Component.translatable("advancements.resourcefulbees.root.title"),
                 Component.translatable("advancements.resourcefulbees.root.description"),
                 new ResourceLocation(ModConstants.MOD_ID, "textures/gui/advancements/backgrounds/resourcefulbees.png"),

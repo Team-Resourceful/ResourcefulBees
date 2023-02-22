@@ -31,7 +31,7 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         simpleBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX.get(), models().cubeBottomTop("bee_box", modLoc("block/bee_box_side"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top")));
         simpleBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX_TEMP.get(), models().cubeBottomTop("bee_box_temp", modLoc("block/bee_box_side_temp"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top_temp")));
         simpleBlock(ModBlocks.CREATIVE_GEN.get(), cubeAll(ModBlocks.CREATIVE_GEN.get()));
-        simpleBlock(ModBlocks.GOLD_FLOWER.get(), models().cross(id(ModBlocks.GOLD_FLOWER), modLoc("block/gold_flower")).renderType("cutout"));
+        simpleBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.GOLD_FLOWER.get(), models().cross(id(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.GOLD_FLOWER), modLoc("block/gold_flower")).renderType("cutout"));
     }
 
     private void registerWaxedBlocks() {

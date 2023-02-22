@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.data.beedata.rendering;
+package com.teamresourceful.resourcefulbees.common.setup.data.beedata.rendering;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

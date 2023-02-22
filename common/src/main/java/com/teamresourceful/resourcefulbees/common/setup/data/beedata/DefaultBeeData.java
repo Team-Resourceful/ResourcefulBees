@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.data.beedata;
+package com.teamresourceful.resourcefulbees.common.setup.data.beedata;
 
 import com.google.common.base.Suppliers;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
@@ -9,10 +9,10 @@ import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
-import com.teamresourceful.resourcefulbees.common.data.beedata.breeding.BreedData;
+import com.teamresourceful.resourcefulbees.common.setup.data.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.MutationData;
-import com.teamresourceful.resourcefulbees.common.data.beedata.rendering.RenderData;
-import com.teamresourceful.resourcefulbees.common.data.beedata.traits.TraitData;
+import com.teamresourceful.resourcefulbees.common.setup.data.beedata.rendering.RenderData;
+import com.teamresourceful.resourcefulbees.common.setup.data.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;

@@ -25,7 +25,7 @@ public class ModItemModelProvider extends BaseItemModelProvider {
         basicItem(ModItems.OREO_COOKIE.get());
         basicItem(ModItems.WAXED_DOOR.get());
         basicItem(ModItems.WAXED_SIGN.get());
-        var flower = ModItems.GOLD_FLOWER_ITEM.getId();
+        var flower = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM.getId();
         getBuilder(flower.toString())
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
                 .texture("layer0", new ResourceLocation(flower.getNamespace(), "block/" + flower.getPath()));

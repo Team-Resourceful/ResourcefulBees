@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyDataSerializ
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidAttributesData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
-import com.teamresourceful.resourcefulbees.common.data.beedata.TradeData;
+import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.LazyHolders;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
