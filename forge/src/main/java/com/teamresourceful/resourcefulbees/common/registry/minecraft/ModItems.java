@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.item.HoneyDipperItem;
 import com.teamresourceful.resourcefulbees.common.item.HoneyGenUpgradeItem;
-import com.teamresourceful.resourcefulbees.common.item.MutatedPollenItem;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.CrankItem;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.ManualCentrifugeItem;
 import com.teamresourceful.resourcefulbees.common.items.*;
@@ -84,8 +83,6 @@ public final class ModItems {
         }
     });
 
-    public static final RegistryEntry<Item> MUTATED_POLLEN = ITEMS.register("mutated_pollen", () -> new MutatedPollenItem(new Item.Properties()));
-
     public static final RegistryEntry<Item> HONEY_GENERATOR_ITEM = ITEMS.register("honey_generator", () -> new BlockItem(ModBlocks.HONEY_GENERATOR.get(), new Item.Properties()));
     public static final RegistryEntry<Item> HONEY_CAP_UPGRADE = ITEMS.register("hg_honey_cap_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties(), UpgradeType.HONEY_CAPACITY));
     public static final RegistryEntry<Item> ENERGY_CAP_UPGRADE = ITEMS.register("hg_energy_cap_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties(), UpgradeType.ENERGY_CAPACITY));
@@ -138,6 +135,5 @@ public final class ModItems {
     public static final RegistryEntry<Item> WAXED_SIGN = ITEMS.register("waxed_sign", () -> new SignItem(new Item.Properties(), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_SIGN.get(), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_WALL_SIGN.get()));
     public static final RegistryEntry<Item> TRIMMED_WAXED_PLANKS = ITEMS.register("trimmed_waxed_planks", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.TRIMMED_WAXED_PLANKS.get(), new Item.Properties()));
     public static final RegistryEntry<Item> WAXED_MACHINE_BLOCK = ITEMS.register("waxed_machine_block", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_MACHINE_BLOCK.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> FAKE_FLOWER = ITEMS.register("fake_flower", () -> new BlockItem(ModBlocks.FAKE_FLOWER.get(), new Item.Properties()));
     //endregion
 }

@@ -3,11 +3,16 @@ package com.teamresourceful.resourcefulbees.platform.common.util;
 import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
 import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Contract;
 
 public class ModUtils {
@@ -50,6 +55,16 @@ public class ModUtils {
 
     @ExpectPlatform
     public static ResourceKey<? extends Registry<?>> getSpawnDataRegistryKey() {
+        throw new NotImplementedError();
+    }
+
+    @ExpectPlatform
+    public static void openScreen(Player player, MenuProvider provider, BlockPos pos) {
+        throw new NotImplementedError();
+    }
+
+    @ExpectPlatform
+    public static Explosion.BlockInteraction getExplosionInteraction(Level level, Entity entity) {
         throw new NotImplementedError();
     }
 }

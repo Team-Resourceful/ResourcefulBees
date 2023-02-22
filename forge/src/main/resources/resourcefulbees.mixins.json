@@ -9,10 +9,7 @@
         "MixinDispenserBlock",
         "MixinItem",
         "accessors.RecipeManagerAccessor",
-        "compat.ProductiveBeeMixin",
-        "invokers.BeeGoToHiveGoalInvoker",
-        "invokers.BeeInvoker",
-        "invokers.RecipeManagerInvoker"
+        "compat.ProductiveBeeMixin"
     ],
     "minVersion": "0.8.5",
     "client": [

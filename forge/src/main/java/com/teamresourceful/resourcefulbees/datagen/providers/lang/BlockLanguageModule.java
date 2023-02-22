@@ -34,7 +34,7 @@ public class BlockLanguageModule implements LanguageModule {
         provider.addBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_TRAPDOOR, "Waxed Trapdoor");
         provider.addBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_FENCE, "Waxed Fence");
         provider.addBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_FENCE_GATE, "Waxed Fence Gate");
-        provider.addBlock(ModBlocks.FAKE_FLOWER, "Fake Golden Flower");
+        provider.addBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.FAKE_FLOWER, "Fake Golden Flower");
         provider.addFluid(ModFluids.HONEY, "Honey");
 
         provider.addBlock(ModBlocks.HONEY_POT, "Honey Pot");

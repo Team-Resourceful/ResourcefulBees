@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.entity.projectile.ThrownMutatedPollen;
+import com.teamresourceful.resourcefulbees.common.entities.entity.ThrownMutatedPollen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;

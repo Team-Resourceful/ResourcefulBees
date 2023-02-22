@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.data.beedata.mutation.types;
+package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.types;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

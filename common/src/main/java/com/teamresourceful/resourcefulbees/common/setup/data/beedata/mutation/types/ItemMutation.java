@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.data.beedata.mutation.types;
+package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.types;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -54,7 +54,9 @@ public record ItemMutation(RestrictedItemPredicate predicate, double chance, dou
 
     @Override
     public ItemStack displayedItem() {
-        return new ItemStack(predicate.item(), 1, predicate.getTag().orElse(null));
+        ItemStack stack = new ItemStack(predicate.item());
+        predicate.getTag().ifPresent(stack::setTag);
+        return stack;
     }
 
     private static class Serializer implements GenericSerializer<MutationType> {

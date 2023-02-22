@@ -1,8 +1,8 @@
-package com.teamresourceful.resourcefulbees.common.entity.goals;
+package com.teamresourceful.resourcefulbees.common.entities.goals;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
-import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
+import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

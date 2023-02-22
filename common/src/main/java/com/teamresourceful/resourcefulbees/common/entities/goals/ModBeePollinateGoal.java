@@ -1,9 +1,9 @@
-package com.teamresourceful.resourcefulbees.common.entity.goals;
+package com.teamresourceful.resourcefulbees.common.entities.goals;
 
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
-import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
+import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
+import com.teamresourceful.resourcefulbees.mixin.common.BeeInvoker;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;

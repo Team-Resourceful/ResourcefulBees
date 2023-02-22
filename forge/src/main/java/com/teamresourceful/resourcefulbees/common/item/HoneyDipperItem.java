@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentity.FakeFlowerEntity;
-import com.teamresourceful.resourcefulbees.common.entity.passive.ResourcefulBee;
+import com.teamresourceful.resourcefulbees.common.blockentities.FakeFlowerBlockEntity;
+import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
@@ -69,7 +69,7 @@ public class HoneyDipperItem extends Item {
                 return InteractionResult.SUCCESS;
             }
 
-            if (clickedTile instanceof FakeFlowerEntity && bee instanceof ResourcefulBee resourcefulBee) {
+            if (clickedTile instanceof FakeFlowerBlockEntity && bee instanceof ResourcefulBee resourcefulBee) {
                 resourcefulBee.fakeFlower.set(context.getClickedPos());
                 sendMessageToPlayer(bee, player, MessageTypes.FAKE_FLOWER, context.getClickedPos());
                 player.setItemInHand(context.getHand(), setEntity(stack, null));
@@ -148,10 +148,6 @@ public class HoneyDipperItem extends Item {
             stack.setTag(stackTag);
         }
         return stack;
-    }
-
-    public static boolean isHoldingHoneyDipper(Player player) {
-        return player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof HoneyDipperItem || player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof HoneyDipperItem;
     }
 
     private enum MessageTypes {

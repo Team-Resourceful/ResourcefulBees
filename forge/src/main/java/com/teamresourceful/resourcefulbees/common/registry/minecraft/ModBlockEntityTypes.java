@@ -33,9 +33,6 @@ public final class ModBlockEntityTypes {
     public static final RegistryEntry<BlockEntityType<? extends FlowHiveBlockEntity>> FLOW_HIVE_ENTITY = BLOCK_ENTITY_TYPES.register("flow_hive", () -> build(BlockEntityType.Builder
             .of(FlowHiveBlockEntity::new, ModBlocks.FLOW_HIVE.get())));
 
-    public static final RegistryEntry<BlockEntityType<? extends FakeFlowerEntity>> FAKE_FLOWER_ENTITY = BLOCK_ENTITY_TYPES.register("fake_flower", () -> build(BlockEntityType.Builder
-            .of(FakeFlowerEntity::new, ModBlocks.FAKE_FLOWER.get())));
-
     public static final RegistryEntry<BlockEntityType<HoneyGeneratorBlockEntity>> HONEY_GENERATOR_ENTITY = BLOCK_ENTITY_TYPES.register("honey_generator", () -> build(BlockEntityType.Builder
             .of(HoneyGeneratorBlockEntity::new, ModBlocks.HONEY_GENERATOR.get())));
     public static final RegistryEntry<BlockEntityType<CreativeGenBlockEntity>> CREATIVE_GEN_ENTITY = BLOCK_ENTITY_TYPES.register("creative_gen", () -> build(BlockEntityType.Builder

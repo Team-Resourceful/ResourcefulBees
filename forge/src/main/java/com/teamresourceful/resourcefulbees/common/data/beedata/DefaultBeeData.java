@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.breeding.BreedData;
-import com.teamresourceful.resourcefulbees.common.data.beedata.mutation.MutationData;
+import com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.rendering.RenderData;
 import com.teamresourceful.resourcefulbees.common.data.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;

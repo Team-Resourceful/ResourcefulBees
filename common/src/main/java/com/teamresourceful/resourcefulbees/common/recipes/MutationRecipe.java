@@ -1,13 +1,13 @@
-package com.teamresourceful.resourcefulbees.common.recipe.recipes;
+package com.teamresourceful.resourcefulbees.common.recipes;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
-import com.teamresourceful.resourcefulbees.common.data.beedata.mutation.MutationEntry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.invokers.RecipeManagerInvoker;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
+import com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.MutationEntry;
+import com.teamresourceful.resourcefulbees.mixin.common.RecipeManagerInvoker;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
@@ -33,7 +33,7 @@ public record MutationRecipe(ResourceLocation id, Color pollenBaseColor, Color p
     }
 
     public static MutationRecipe getRecipe(@NotNull Level level, ResourceLocation id) {
-        return ((RecipeManagerInvoker) level.getRecipeManager()).callByType(ModRecipeTypes.MUTATION_RECIPE_TYPE.get()).get(id);
+        return ((RecipeManagerInvoker) level.getRecipeManager()).callByType(ModRecipes.MUTATION_RECIPE_TYPE.get()).get(id);
     }
 
     public Color getPollenBaseColor() {
@@ -58,6 +58,6 @@ public record MutationRecipe(ResourceLocation id, Color pollenBaseColor, Color p
     @Override
     public @NotNull
     RecipeType<?> getType() {
-        return ModRecipeTypes.MUTATION_RECIPE_TYPE.get();
+        return ModRecipes.MUTATION_RECIPE_TYPE.get();
     }
 }

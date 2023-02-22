@@ -1,10 +1,10 @@
-package com.teamresourceful.resourcefulbees.common.entity.projectile;
+package com.teamresourceful.resourcefulbees.common.entities.entity;
 
-import com.teamresourceful.resourcefulbees.common.entity.goals.BeeMutateGoal;
+import com.teamresourceful.resourcefulbees.common.entities.goals.BeeMutateGoal;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.MutationRecipe;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.recipes.MutationRecipe;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.platform.common.util.TempPlatformUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -24,7 +24,7 @@ public class ThrownMutatedPollen extends ThrowableItemProjectile {
     }
 
     public ThrownMutatedPollen(Level level) {
-        super(ModEntities.THROWN_MUTATED_POLLEN.get(), level);
+        super(TempPlatformUtils.getThrownMutatedPollenType().get(), level);
     }
 
     @Override

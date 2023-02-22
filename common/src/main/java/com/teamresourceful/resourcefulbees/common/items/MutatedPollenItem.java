@@ -1,14 +1,15 @@
-package com.teamresourceful.resourcefulbees.common.item;
+package com.teamresourceful.resourcefulbees.common.items;
 
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
-import com.teamresourceful.resourcefulbees.common.entity.projectile.ThrownMutatedPollen;
+import com.teamresourceful.resourcefulbees.common.entities.entity.ThrownMutatedPollen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.MutationRecipe;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.recipes.MutationRecipe;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.color.Color;
-import com.teamresourceful.resourcefullib.common.color.ConstantColors;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
@@ -25,8 +26,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +35,6 @@ import java.util.List;
 public class MutatedPollenItem extends Item {
     public MutatedPollenItem(Properties arg) {
         super(arg);
-        Color color = ConstantColors.aliceblue;
     }
 
     public static ItemStack getPollen(ResourceLocation id, Level level) {
@@ -90,7 +88,7 @@ public class MutatedPollenItem extends Item {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
         if (stack.getTag() != null && stack.getTag().contains(NBTConstants.POLLEN_ID)) {

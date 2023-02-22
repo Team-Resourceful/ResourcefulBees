@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.entity.passive;
+package com.teamresourceful.resourcefulbees.common.entities.entity;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
@@ -7,21 +7,17 @@ import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlo
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.entities.ai.AuraHandler;
-import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entities.goals.*;
 import com.teamresourceful.resourcefulbees.common.entities.pathfinding.BeePathNavigation;
-import com.teamresourceful.resourcefulbees.common.entity.goals.BeeFakeFlowerGoal;
-import com.teamresourceful.resourcefulbees.common.entity.goals.BeeMutateGoal;
-import com.teamresourceful.resourcefulbees.common.entity.goals.ModBeePollinateGoal;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
-import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeGoToHiveGoalInvoker;
-import com.teamresourceful.resourcefulbees.common.mixin.invokers.BeeInvoker;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.util.SerializedDataEntry;
 import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
+import com.teamresourceful.resourcefulbees.mixin.common.BeeGoToHiveGoalInvoker;
+import com.teamresourceful.resourcefulbees.mixin.common.BeeInvoker;
+import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
@@ -155,15 +151,10 @@ public class ResourcefulBee extends CustomBeeEntity {
     @Override
     public void tick() {
         super.tick();
-        if (explosiveCooldown > 0) explosiveCooldown--;
-    }
-
-    @Override
-    public void onAddedToWorld() {
-        super.onAddedToWorld();
         if (getTarget() != null && getTraitData().damageTypes().stream().anyMatch(damageType -> damageType.type().equals(TraitConstants.EXPLOSIVE))) {
             this.explosiveCooldown = 60;
         }
+        if (explosiveCooldown > 0) explosiveCooldown--;
     }
 
     @Override
@@ -195,7 +186,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     public boolean isFakeFlowerValid() {
-        return this.fakeFlower.hasData() && WorldUtils.checkBlock(this.level, this.fakeFlower.get(), state -> state.is(ModBlocks.FAKE_FLOWER.get()));
+        return this.fakeFlower.hasData() && WorldUtils.checkBlock(this.level, this.fakeFlower.get(), state -> state.is(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.FAKE_FLOWER.get()));
     }
 
     @Override
@@ -305,7 +296,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     private void explode(int radius) {
         if (!this.level.isClientSide) {
-            Explosion.BlockInteraction mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE;
+            Explosion.BlockInteraction mode = ModUtils.getExplosionInteraction(level, this);
             this.dead = true;
             this.level.explode(this, this.getX(), this.getY(), this.getZ(), random.nextFloat() * radius, explosiveCooldown > 0 ? Explosion.BlockInteraction.NONE : mode);
             this.discard();

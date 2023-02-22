@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.mixin.invokers;
+package com.teamresourceful.resourcefulbees.mixin.common;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;

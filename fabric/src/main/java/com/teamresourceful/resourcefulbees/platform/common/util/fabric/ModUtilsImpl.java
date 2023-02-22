@@ -4,12 +4,18 @@ import com.teamresourceful.resourcefulbees.common.util.EnumBuilder;
 import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
 import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
 public class ModUtilsImpl {
     public static boolean isModLoaded(String modId) {
@@ -47,5 +53,12 @@ public class ModUtilsImpl {
 
     public static ResourceKey<? extends Registry<?>> getSpawnDataRegistryKey() {
         throw new NotImplementedError();
+    }
+
+    public static void openScreen(Player player, MenuProvider provider, BlockPos pos) {
+    }
+
+    public static Explosion.BlockInteraction getExplosionInteraction(Level level, Entity entity) {
+        return level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE;
     }
 }

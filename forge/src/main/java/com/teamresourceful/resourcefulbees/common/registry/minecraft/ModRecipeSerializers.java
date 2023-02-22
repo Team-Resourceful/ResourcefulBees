@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.FlowHiveRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.HoneyGenRecipe;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.MutationRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipeSerializer;
@@ -25,7 +24,6 @@ public final class ModRecipeSerializers {
     public static final RegistryEntry<CodecRecipeSerializer<CentrifugeRecipe>> CENTRIFUGE_RECIPE = RECIPE_SERIALIZERS.register("centrifuge", () -> new CodecRecipeSerializer<>(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get(), CentrifugeRecipe::codec));
     public static final RegistryEntry<CodecRecipeSerializer<SolidificationRecipe>> SOLIDIFICATION_RECIPE = RECIPE_SERIALIZERS.register("solidification", () -> new CodecRecipeSerializer<>(ModRecipeTypes.SOLIDIFICATION_RECIPE_TYPE.get(), SolidificationRecipe::codec));
     public static final RegistryEntry<CodecRecipeSerializer<FlowHiveRecipe>> FLOW_HIVE_RECIPE = RECIPE_SERIALIZERS.register("flow_hive", () -> new CodecRecipeSerializer<>(ModRecipeTypes.FLOW_HIVE_RECIPE_TYPE.get(), FlowHiveRecipe::codec));
-    public static final RegistryEntry<CodecRecipeSerializer<MutationRecipe>> MUTATION_RECIPE = RECIPE_SERIALIZERS.register("mutation", () -> new CodecRecipeSerializer<>(ModRecipeTypes.MUTATION_RECIPE_TYPE.get(), MutationRecipe::codec));
     public static final RegistryEntry<CodecRecipeSerializer<HoneyGenRecipe>> HONEY_GEN_RECIPE = RECIPE_SERIALIZERS.register("honey_gen", () -> new CodecRecipeSerializer<>(ModRecipeTypes.HONEY_GEN_RECIPE_TYPE.get(), HoneyGenRecipe::codec));
 
 }

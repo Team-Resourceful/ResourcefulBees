@@ -1,9 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
-import com.teamresourceful.resourcefulbees.common.blockentities.AcceleratorBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentities.BeeBoxBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentities.WaxedSignBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
@@ -200,6 +197,9 @@ public final class ModBlockEntityTypes {
             .of(WaxedSignBlockEntity::new, ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get())));
     public static final RegistryEntry<BlockEntityType<AcceleratorBlockEntity>> ACCELERATOR_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("accelerator", () -> build(BlockEntityType.Builder
             .of(AcceleratorBlockEntity::new, ModBlocks.ACCELERATOR.get())));
+
+    public static final RegistryEntry<BlockEntityType<? extends FakeFlowerBlockEntity>> FAKE_FLOWER_ENTITY = BLOCK_ENTITY_TYPES.register("fake_flower", () -> build(BlockEntityType.Builder
+            .of(FakeFlowerBlockEntity::new, ModBlocks.FAKE_FLOWER.get())));
 
     private static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.Builder<T> builder) {
         //noinspection ConstantConditions

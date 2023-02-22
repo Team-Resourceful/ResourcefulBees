@@ -30,7 +30,7 @@ public final class DataGen {
     }
 
     public static void generateCommonData() {
-        generateTags(ModEntities.BEES, new ResourceLocation("minecraft", "tags/entity_types/beehive_inhabitors.json"));
+        generateTags(ModEntities.BEES, new ResourceLocation("tags/entity_types/beehive_inhabitors.json"));
 
         generateTags(ModItems.HONEYCOMB_BLOCK_ITEMS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/items/storage_blocks/honeycombs.json"));
         generateTags(ModBlocks.HONEYCOMB_BLOCKS, new ResourceLocation(ForgeVersion.MOD_ID, "tags/blocks/storage_blocks/honeycombs.json"));
@@ -46,7 +46,7 @@ public final class DataGen {
     }
 
     private static void generateHoneyTags() {
-        TAGS.put(new ResourceLocation("forge", "tags/fluids/honey.json"),
+        TAGS.put(new ResourceLocation(ForgeVersion.MOD_ID, "tags/fluids/honey.json"),
                 Stream.concat(ModFluids.FLOWING_HONEY_FLUIDS.getEntries().stream(), ModFluids.STILL_HONEY_FLUIDS.getEntries().stream())
                         .map(RegistryEntry::getId)
                         .collect(Collectors.toSet()));

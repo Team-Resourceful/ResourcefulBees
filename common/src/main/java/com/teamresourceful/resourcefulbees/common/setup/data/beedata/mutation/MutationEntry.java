@@ -1,11 +1,11 @@
-package com.teamresourceful.resourcefulbees.common.data.beedata.mutation;
+package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationEntry;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
-import com.teamresourceful.resourcefulbees.common.data.beedata.mutation.types.MutationCodec;
+import com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.types.MutationCodec;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 
