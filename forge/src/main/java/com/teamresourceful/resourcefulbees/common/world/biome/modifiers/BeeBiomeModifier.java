@@ -31,7 +31,7 @@ public record BeeBiomeModifier(
 
     @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
-        if(type().abortCriteria().getAsBoolean()) return;
+        if(!type().abortCriteria().getAsBoolean()) return;
         if (phase.equals(Phase.ADD) && isInList(whitelist(), biome) && !isInList(blacklist(), biome)) {
             builder.getMobSpawnSettings().addSpawn(spawns().type.getCategory(), spawns());
         }
