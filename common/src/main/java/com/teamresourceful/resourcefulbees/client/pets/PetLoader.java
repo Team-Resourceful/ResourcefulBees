@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public final class PetLoader {
 
-    private static final String URL = "https://gist.githubusercontent.com/ThatGravyBoat/28b0d4dc1e1fa2ec341d7ef245519e4c/raw/d97751204f17370ac8cc7352d668d1f3b6cb8d93/users.json";
+    private static final String URL = "https://pets.resourcefulbees.com/pets";
 
     private PetLoader()  {
         throw new UtilityClassError();

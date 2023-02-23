@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.containers.*;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
 import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;

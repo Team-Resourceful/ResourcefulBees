@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.platform.common.util.forge;
 
 import com.teamresourceful.resourcefulbees.common.entities.entity.ThrownMutatedPollen;
 import com.teamresourceful.resourcefulbees.common.item.HoneyDipperItem;
+import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
 import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
@@ -27,5 +28,9 @@ public class TempPlatformUtilsImpl {
 
     public static RegistryEntry<MenuType<BreederMenu>> getBreederMenuType() {
         return ModMenus.BREEDER_MENU;
+    }
+
+    public static RegistryEntry<MenuType<ApiaryMenu>> getApiaryMenuType() {
+        return ModMenus.VALIDATED_APIARY_CONTAINER;
     }
 }

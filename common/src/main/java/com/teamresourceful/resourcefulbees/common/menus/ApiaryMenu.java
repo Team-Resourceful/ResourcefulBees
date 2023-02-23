@@ -1,12 +1,11 @@
-package com.teamresourceful.resourcefulbees.common.inventory.menus;
+package com.teamresourceful.resourcefulbees.common.menus;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BlockBee;
-import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
-import com.teamresourceful.resourcefulbees.common.menus.AbstractModContainerMenu;
-import com.teamresourceful.resourcefulbees.common.network.packets.client.LockBeePacket;
+import com.teamresourceful.resourcefulbees.common.menus.base.ContainerSlot;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
+import com.teamresourceful.resourcefulbees.common.networking.packets.client.LockBeePacket;
+import com.teamresourceful.resourcefulbees.platform.common.util.TempPlatformUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -20,14 +19,14 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
     }
 
     public ApiaryMenu(int id, Inventory inv, ApiaryBlockEntity entity) {
-        super(ModMenus.VALIDATED_APIARY_CONTAINER.get(), id, inv, entity);
+        super(TempPlatformUtils.getApiaryMenuType().get(), id, inv, entity);
     }
 
     @Override
     protected void addMenuSlots() {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new OutputSlot(entity.getInventory(), j + i * 9, 56 + j * 18, 18 + i * 18));
+                this.addSlot(new ContainerSlot(entity, j + i * 9, 56 + j * 18, 18 + i * 18));
             }
         }
     }

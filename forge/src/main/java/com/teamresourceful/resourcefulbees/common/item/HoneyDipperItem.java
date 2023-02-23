@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.FakeFlowerBlockEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;

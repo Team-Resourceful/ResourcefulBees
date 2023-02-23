@@ -6,8 +6,8 @@ import net.minecraft.client.gui.components.Widget;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
-import static com.teamresourceful.resourcefulbees.client.utils.TextUtils.FONT_COLOR_1;
-import static com.teamresourceful.resourcefulbees.client.utils.TextUtils.TERMINAL_FONT_8;
+import static com.teamresourceful.resourcefulbees.client.util.TextUtils.FONT_COLOR_1;
+import static com.teamresourceful.resourcefulbees.client.util.TextUtils.TERMINAL_FONT_8;
 
 public class TerminalToastWidget extends GuiComponent implements Widget {
 

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.components.buttons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
+import com.teamresourceful.resourcefulbees.client.util.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefullib.client.components.ImageButton;

@@ -1,42 +1,37 @@
-package com.teamresourceful.resourcefulbees.common.blockentity;
+package com.teamresourceful.resourcefulbees.common.blockentities;
 
 
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
-import com.teamresourceful.resourcefulbees.common.block.ApiaryBlock;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.BasicWorldlyContainer;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
-import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
-import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
+import com.teamresourceful.resourcefulbees.common.blocks.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.common.util.ContainerUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler.ACCEPT_FALSE;
-import static com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler.REMOVE_TRUE;
-
-public class ApiaryBlockEntity extends BeeHolderBlockEntity {
+public class ApiaryBlockEntity extends BeeHolderBlockEntity implements BasicWorldlyContainer {
 
     protected final ApiaryTier tier;
 
-    private final AutomationSensitiveItemStackHandler inventory = new AutomationSensitiveItemStackHandler(27, ACCEPT_FALSE, REMOVE_TRUE);
-    private final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(() -> inventory);
+    private static final int[] SLOTS = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
+    private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
 
     public ApiaryBlockEntity(ApiaryTier tier, BlockPos pos, BlockState state) {
         super(tier.getBlockEntityType(), pos, state);
@@ -53,8 +48,9 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
             if (bee instanceof BeeCompat compat) compat.nectarDroppedOff();
             HiveRecipe.getApiaryOutput(tier, bee)
                 .ifPresent(stack -> {
-                    for (int i = 0; i < inventory.getSlots() && !stack.isEmpty(); i++) {
-                        stack = ModUtils.insertItem(inventory, i, stack);
+                    for (int i = 0; i < items.size() && !stack.isEmpty(); i++) {
+                        stack = ContainerUtils.insertItem(this, i, stack);
+                        if (stack.isEmpty()) break;
                     }
                 });
         }
@@ -81,23 +77,17 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
-        inventory.deserializeNBTWithoutCheckingSize(tag.getCompound(NBTConstants.NBT_INVENTORY));
+        deserializeContainer(tag.getCompound(NBTConstants.NBT_INVENTORY));
         readSyncData(tag.getCompound(NBTConstants.SYNC_DATA));
     }
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put(NBTConstants.NBT_INVENTORY, inventory.serializeNBT());
+        tag.put(NBTConstants.NBT_INVENTORY, serializeContainer());
         tag.put(NBTConstants.SYNC_DATA, getSyncData());
     }
     //endregion
-
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap == ForgeCapabilities.ITEM_HANDLER ? inventoryOptional.cast() : super.getCapability(cap, side);
-    }
 
     @Override
     public @NotNull Component getDisplayName() {
@@ -110,7 +100,23 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
         return new ApiaryMenu(id, inventory, this);
     }
 
-    public AutomationSensitiveItemStackHandler getInventory() {
-        return inventory;
+    @Override
+    public NonNullList<ItemStack> getItems() {
+        return items;
+    }
+
+    @Override
+    public int @NotNull [] getSlotsForFace(@NotNull Direction side) {
+        return SLOTS;
+    }
+
+    @Override
+    public boolean stillValid(@NotNull Player player) {
+        return true;
+    }
+
+    @Override
+    public boolean canPlaceItem(int index, @NotNull ItemStack stack) {
+        return false;
     }
 }

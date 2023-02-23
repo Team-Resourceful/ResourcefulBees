@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.platform.common.util.fabric;
 
 import com.teamresourceful.resourcefulbees.common.entities.entity.ThrownMutatedPollen;
+import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
 import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
@@ -23,6 +24,10 @@ public class TempPlatformUtilsImpl {
     }
 
     public static RegistryEntry<MenuType<BreederMenu>> getBreederMenuType() {
+        return null;
+    }
+
+    public static RegistryEntry<MenuType<ApiaryMenu>> getApiaryMenuType() {
         return null;
     }
 }

@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.centrifuge.client.components;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.buttons.NavButton;
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeTextures;
-import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
+import com.teamresourceful.resourcefulbees.client.util.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeInputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeUtils;

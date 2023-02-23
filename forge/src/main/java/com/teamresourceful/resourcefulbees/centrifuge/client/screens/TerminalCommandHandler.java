@@ -18,8 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import static com.teamresourceful.resourcefulbees.client.utils.TextUtils.FONT_COLOR_1;
-import static com.teamresourceful.resourcefulbees.client.utils.TextUtils.TERMINAL_FONT_8;
+import static com.teamresourceful.resourcefulbees.client.util.TextUtils.FONT_COLOR_1;
+import static com.teamresourceful.resourcefulbees.client.util.TextUtils.TERMINAL_FONT_8;
 
 public final class TerminalCommandHandler {
 

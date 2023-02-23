@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.text.NumberFormat;
 
-import static com.teamresourceful.resourcefulbees.client.utils.TextUtils.FONT_COLOR_1;
-import static com.teamresourceful.resourcefulbees.client.utils.TextUtils.TERMINAL_FONT_8;
+import static com.teamresourceful.resourcefulbees.client.util.TextUtils.FONT_COLOR_1;
+import static com.teamresourceful.resourcefulbees.client.util.TextUtils.TERMINAL_FONT_8;
 
 public class NeofetchWidget extends ParentWidget {
     

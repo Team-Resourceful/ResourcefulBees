@@ -15,7 +15,10 @@ import com.teamresourceful.resourcefulbees.client.render.blocks.centrifuge.Centr
 import com.teamresourceful.resourcefulbees.client.render.entities.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.render.fluids.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
-import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
+import com.teamresourceful.resourcefulbees.client.rendering.pet.BeeRewardRender;
+import com.teamresourceful.resourcefulbees.client.screen.ApiaryScreen;
+import com.teamresourceful.resourcefulbees.client.screen.BreederScreen;
+import com.teamresourceful.resourcefulbees.client.screen.FakeFlowerScreen;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;

@@ -14,7 +14,7 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.Purg
 import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.SwitchGuiPacket;
 import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.VoidExcessPacket;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeState;
-import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
+import com.teamresourceful.resourcefulbees.client.util.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;

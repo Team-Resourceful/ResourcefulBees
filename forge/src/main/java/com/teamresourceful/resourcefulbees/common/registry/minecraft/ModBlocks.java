@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 import com.teamresourceful.resourcefulbees.common.block.*;
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeCrankBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModMaterials;
 import com.teamresourceful.resourcefulbees.common.lib.tiers.DefaultApiaryTiers;

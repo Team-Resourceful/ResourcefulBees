@@ -1,6 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.network.packets.client;
+package com.teamresourceful.resourcefulbees.common.networking.packets.client;
 
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
