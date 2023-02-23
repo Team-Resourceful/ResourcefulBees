@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.centrifuge.common.containers;
 import com.teamresourceful.resourcefulbees.centrifuge.common.blocks.CentrifugeFluidOutput;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeFluidOutputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeEnergyStorage;
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeMenus;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeState;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +18,7 @@ public class CentrifugeFluidOutputContainer extends CentrifugeContainer<Centrifu
     }
 
     public CentrifugeFluidOutputContainer(int id, Inventory inv, CentrifugeFluidOutputEntity entity, CentrifugeState state, CentrifugeEnergyStorage energyStorage) {
-        super(ModMenus.CENTRIFUGE_FLUID_OUTPUT_CONTAINER.get(), id, inv, entity, state, energyStorage);
+        super(CentrifugeMenus.CENTRIFUGE_FLUID_OUTPUT_CONTAINER.get(), id, inv, entity, state, energyStorage);
     }
 
     @Override

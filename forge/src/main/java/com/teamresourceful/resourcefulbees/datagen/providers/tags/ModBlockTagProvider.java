@@ -25,16 +25,16 @@ public class ModBlockTagProvider extends BlockTagsProvider {
     @SuppressWarnings("unchecked")
     protected void addTags() {
         tag(ModBlockTags.HONEYCOMB).add(Blocks.HONEYCOMB_BLOCK);
-        tag(ModBlockTags.WAX).add(ModBlocks.WAX_BLOCK.get());
+        tag(ModBlockTags.WAX).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAX_BLOCK.get());
         tag(ModBlockTags.MUSHROOM).add(Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM);
         //noinspection unchecked
         tag(Tags.Blocks.STORAGE_BLOCKS).addTags(ModBlockTags.WAX);
         TagAppender<Block> hiveBuilder = tag(BlockTags.BEEHIVES);
         com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HIVES.getEntries().stream().map(RegistryEntry::get).forEach(hiveBuilder::add);
-        ModBlocks.APIARIES.getEntries().stream().map(RegistryEntry::get).forEach(hiveBuilder::add);
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.APIARIES.getEntries().stream().map(RegistryEntry::get).forEach(hiveBuilder::add);
 
         TagAppender<Block> axeTagBuilder = tag(BlockTags.MINEABLE_WITH_AXE);
-        ModBlocks.APIARIES.getEntries().stream().map(RegistryEntry::get).forEach(axeTagBuilder::add);
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.APIARIES.getEntries().stream().map(RegistryEntry::get).forEach(axeTagBuilder::add);
         axeTagBuilder.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEEHOUSE_TOP.get(), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BREEDER_BLOCK.get(), ModBlocks.FLOW_HIVE.get());
 
         TagAppender<Block> pickaxeTagBuilder = tag(BlockTags.MINEABLE_WITH_PICKAXE);

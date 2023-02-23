@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.containers;
 
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeMenus;
 import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.centrifuge.common.blocks.CentrifugeVoid;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeVoidEntity;
@@ -22,7 +23,7 @@ public class CentrifugeVoidContainer extends CentrifugeContainer<CentrifugeVoidE
     }
 
     public CentrifugeVoidContainer(int id, Inventory inv, CentrifugeVoidEntity entity, CentrifugeState state, CentrifugeEnergyStorage energyStorage) {
-        super(ModMenus.CENTRIFUGE_VOID_CONTAINER.get(), id, inv, entity, state, energyStorage);
+        super(CentrifugeMenus.CENTRIFUGE_VOID_CONTAINER.get(), id, inv, entity, state, energyStorage);
     }
 
     protected void addCentrifugeSlots() {

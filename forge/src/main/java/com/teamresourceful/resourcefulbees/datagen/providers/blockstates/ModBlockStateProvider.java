@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.blockstates;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeBlocks;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockStateProvider;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.data.DataGenerator;
@@ -20,35 +20,35 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HIVES.getEntries().forEach(this::registerNest);
+        ModBlocks.HIVES.getEntries().forEach(this::registerNest);
         ModBlocks.APIARIES.getEntries().forEach(this::registerApiary);
-        registerApiary(ModBlocks.FLOW_HIVE);
-        registerApiary(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BREEDER_BLOCK);
+        registerApiary(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.FLOW_HIVE);
+        registerApiary(ModBlocks.BREEDER_BLOCK);
         registerCentrifuge();
         registerWaxedBlocks();
         //using sign generator as it does what we need and only generates a model with particle field.
-        simpleBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEEHOUSE_TOP.get(), models().sign("bee_house_top", modLoc("block/apiary/t1_apiary")));
-        simpleBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX.get(), models().cubeBottomTop("bee_box", modLoc("block/bee_box_side"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top")));
-        simpleBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX_TEMP.get(), models().cubeBottomTop("bee_box_temp", modLoc("block/bee_box_side_temp"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top_temp")));
-        simpleBlock(ModBlocks.CREATIVE_GEN.get(), cubeAll(ModBlocks.CREATIVE_GEN.get()));
-        simpleBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.GOLD_FLOWER.get(), models().cross(id(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.GOLD_FLOWER), modLoc("block/gold_flower")).renderType("cutout"));
+        simpleBlock(ModBlocks.BEEHOUSE_TOP.get(), models().sign("bee_house_top", modLoc("block/apiary/t1_apiary")));
+        simpleBlockWithItem(ModBlocks.BEE_BOX.get(), models().cubeBottomTop("bee_box", modLoc("block/bee_box_side"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top")));
+        simpleBlockWithItem(ModBlocks.BEE_BOX_TEMP.get(), models().cubeBottomTop("bee_box_temp", modLoc("block/bee_box_side_temp"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top_temp")));
+        simpleBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.CREATIVE_GEN.get(), cubeAll(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.CREATIVE_GEN.get()));
+        simpleBlock(ModBlocks.GOLD_FLOWER.get(), models().cross(id(ModBlocks.GOLD_FLOWER), modLoc("block/gold_flower")).renderType("cutout"));
     }
 
     private void registerWaxedBlocks() {
-        simpleBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_GLASS_PLAYER.get(), models().cubeAll("honey_glass_player", mcLoc("block/honey_block_bottom")).renderType("translucent"));
-        simpleBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_GLASS.get(), models().cubeAll("honey_glass", mcLoc("block/honey_block_bottom")).renderType("translucent"));
-        simpleBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_PLANKS.get(), models().cubeAll("waxed_planks", modLoc("block/waxed_planks")));
-        simpleBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.TRIMMED_WAXED_PLANKS.get(), models().cubeAll("trimmed_waxed_planks", modLoc("block/trimmed_waxed_planks")));
-        simpleBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_MACHINE_BLOCK.get(), models().cubeAll("waxed_machine_block", modLoc("block/waxed_machine_block")));
-        buttonBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_BUTTON, modLoc("block/waxed_planks"));
-        doorBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_DOOR.get(), modLoc("block/waxed_door_bottom"), modLoc("block/waxed_door_top"));
-        fenceBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_FENCE, modLoc("block/waxed_planks"));
-        fenceGateBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_FENCE_GATE, modLoc("block/waxed_planks"));
-        preasurePlateBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_PRESSURE_PLATE, modLoc("block/waxed_planks"));
-        slabBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_SLAB, modLoc("block/waxed_planks"));
-        trapdoorBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_TRAPDOOR, modLoc("block/waxed_trapdoor"));
-        stairBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_STAIRS, modLoc("block/waxed_planks"));
-        signBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_SIGN.get(), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_WALL_SIGN.get(), modLoc("block/waxed_planks"));
+        simpleBlockWithItem(ModBlocks.HONEY_GLASS_PLAYER.get(), models().cubeAll("honey_glass_player", mcLoc("block/honey_block_bottom")).renderType("translucent"));
+        simpleBlockWithItem(ModBlocks.HONEY_GLASS.get(), models().cubeAll("honey_glass", mcLoc("block/honey_block_bottom")).renderType("translucent"));
+        simpleBlockWithItem(ModBlocks.WAXED_PLANKS.get(), models().cubeAll("waxed_planks", modLoc("block/waxed_planks")));
+        simpleBlockWithItem(ModBlocks.TRIMMED_WAXED_PLANKS.get(), models().cubeAll("trimmed_waxed_planks", modLoc("block/trimmed_waxed_planks")));
+        simpleBlockWithItem(ModBlocks.WAXED_MACHINE_BLOCK.get(), models().cubeAll("waxed_machine_block", modLoc("block/waxed_machine_block")));
+        buttonBlockWithItem(ModBlocks.WAXED_BUTTON, modLoc("block/waxed_planks"));
+        doorBlock(ModBlocks.WAXED_DOOR.get(), modLoc("block/waxed_door_bottom"), modLoc("block/waxed_door_top"));
+        fenceBlockWithItem(ModBlocks.WAXED_FENCE, modLoc("block/waxed_planks"));
+        fenceGateBlockWithItem(ModBlocks.WAXED_FENCE_GATE, modLoc("block/waxed_planks"));
+        preasurePlateBlockWithItem(ModBlocks.WAXED_PRESSURE_PLATE, modLoc("block/waxed_planks"));
+        slabBlockWithItem(ModBlocks.WAXED_SLAB, modLoc("block/waxed_planks"));
+        trapdoorBlockWithItem(ModBlocks.WAXED_TRAPDOOR, modLoc("block/waxed_trapdoor"));
+        stairBlockWithItem(ModBlocks.WAXED_STAIRS, modLoc("block/waxed_planks"));
+        signBlock(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get(), modLoc("block/waxed_planks"));
         simpleBlockWithItem(ModBlocks.WAX_BLOCK.get(), cubeAll(ModBlocks.WAX_BLOCK.get()));
     }
 

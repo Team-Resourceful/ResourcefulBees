@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.registry.minecraft;
+package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ThrownMutatedPollen;

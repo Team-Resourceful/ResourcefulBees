@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
@@ -189,6 +190,17 @@ public final class ModBlockEntityTypes {
     public static final RegistryEntry<BlockEntityType<TieredBeehiveBlockEntity>> T3_WITHER_BEEHIVE_ENTITY = BLOCK_ENTITY_TYPES.register("nest/wither/4", () -> build(BlockEntityType.Builder
             .of((pos, state) -> new TieredBeehiveBlockEntity(ModBlockEntityTypes.T3_WITHER_BEEHIVE_ENTITY, pos, state), ModBlocks.T3_WITHER_BEEHIVE.get())));
     //endregion
+    //endregion
+
+    //region Apiaries
+    public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T1_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t1_apiary", () -> build(BlockEntityType.Builder
+            .of((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T1_APIARY, pos, state), ModBlocks.T1_APIARY_BLOCK.get())));
+    public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T2_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t2_apiary", () -> build(BlockEntityType.Builder
+            .of((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T2_APIARY, pos, state), ModBlocks.T2_APIARY_BLOCK.get())));
+    public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T3_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t3_apiary", () -> build(BlockEntityType.Builder
+            .of((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T3_APIARY, pos, state), ModBlocks.T3_APIARY_BLOCK.get())));
+    public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T4_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t4_apiary", () -> build(BlockEntityType.Builder
+            .of((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T4_APIARY, pos, state), ModBlocks.T4_APIARY_BLOCK.get())));
     //endregion
 
     public static final RegistryEntry<BlockEntityType<BreederBlockEntity>> BREEDER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("breeder", () -> build(BlockEntityType.Builder

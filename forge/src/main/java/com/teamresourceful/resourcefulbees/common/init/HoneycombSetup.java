@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.custom.HoneycombRegistry;
+import com.teamresourceful.resourcefulbees.common.registries.custom.HoneycombRegistry;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.FileUtils;
 import net.minecraft.util.GsonHelper;

@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.loottables;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeBlocks;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockLootTable;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.advancements.critereon.EntityFlagsPredicate;
@@ -35,42 +35,42 @@ public class BlockLootTables extends BaseBlockLootTable {
     protected void addTables() {
         //region Misc
         dropSelf(ModBlocks.WAX_BLOCK);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.GOLD_FLOWER);
+        dropSelf(ModBlocks.GOLD_FLOWER);
         //endregion
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HIVES.getEntries().forEach(this::addNest);
+        ModBlocks.HIVES.getEntries().forEach(this::addNest);
         //region Apiary
         dropSelf(ModBlocks.T1_APIARY_BLOCK);
         dropSelf(ModBlocks.T2_APIARY_BLOCK);
         dropSelf(ModBlocks.T3_APIARY_BLOCK);
         dropSelf(ModBlocks.T4_APIARY_BLOCK);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BREEDER_BLOCK);
-        dropSelf(ModBlocks.FLOW_HIVE);
+        dropSelf(ModBlocks.BREEDER_BLOCK);
+        dropSelf(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.FLOW_HIVE);
         //endregion
         //region Machines
-        dropSelf(ModBlocks.HONEY_GENERATOR);
-        dropSelf(ModBlocks.SOLIDIFICATION_CHAMBER);
-        dropSelf(ModBlocks.ENDER_BEECON);
-        dropSelf(ModBlocks.HONEY_POT);
+        dropSelf(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.HONEY_GENERATOR);
+        dropSelf(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.SOLIDIFICATION_CHAMBER);
+        dropSelf(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.ENDER_BEECON);
+        dropSelf(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.HONEY_POT);
         //endregion
 
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_MACHINE_BLOCK);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_PLANKS);
-        BlockLoot.createDoorTable(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_DOOR.get());
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_BUTTON);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_FENCE);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_FENCE_GATE);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_PRESSURE_PLATE);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_SLAB);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_STAIRS);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_TRAPDOOR);
-        dropOther(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_SIGN.get(), ModItems.WAXED_SIGN.get());
-        dropOther(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_WALL_SIGN.get(), ModItems.WAXED_SIGN.get());
-        dropSelf(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.TRIMMED_WAXED_PLANKS);
+        dropSelf(ModBlocks.WAXED_MACHINE_BLOCK);
+        dropSelf(ModBlocks.WAXED_PLANKS);
+        BlockLoot.createDoorTable(ModBlocks.WAXED_DOOR.get());
+        dropSelf(ModBlocks.WAXED_BUTTON);
+        dropSelf(ModBlocks.WAXED_FENCE);
+        dropSelf(ModBlocks.WAXED_FENCE_GATE);
+        dropSelf(ModBlocks.WAXED_PRESSURE_PLATE);
+        dropSelf(ModBlocks.WAXED_SLAB);
+        dropSelf(ModBlocks.WAXED_STAIRS);
+        dropSelf(ModBlocks.WAXED_TRAPDOOR);
+        dropOther(ModBlocks.WAXED_SIGN.get(), ModItems.WAXED_SIGN.get());
+        dropOther(ModBlocks.WAXED_WALL_SIGN.get(), ModItems.WAXED_SIGN.get());
+        dropSelf(ModBlocks.TRIMMED_WAXED_PLANKS);
 
-        ModBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
+        com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
         CentrifugeBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
-        addBeeBox(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX, false);
-        addBeeBox(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX_TEMP, true);
+        addBeeBox(ModBlocks.BEE_BOX, false);
+        addBeeBox(ModBlocks.BEE_BOX_TEMP, true);
     }
 
     private void addBeeBox(Supplier<Block> box, boolean temp) {

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.client.event;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.*;
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeMenus;
 import com.teamresourceful.resourcefulbees.client.ResourcefulBeesClient;
 import com.teamresourceful.resourcefulbees.client.color.ColorHandler;
 import com.teamresourceful.resourcefulbees.client.gui.screen.*;
@@ -26,7 +27,7 @@ import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import com.teamresourceful.resourcefulbees.platform.client.events.RegisterColorHandlerEvent;
 import com.teamresourceful.resourcefulbees.platform.client.events.RegisterRendererEvent;
@@ -174,10 +175,10 @@ public final class ClientEventHandlers {
         MenuScreens.register(ModMenus.CENTRIFUGE_MENU.get(), NormalCentrifugeScreen::new);
 
         //centrifuge
-        MenuScreens.register(ModMenus.CENTRIFUGE_INPUT_CONTAINER.get(), CentrifugeInputScreen::new);
-        MenuScreens.register(ModMenus.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), CentrifugeItemOutputScreen::new);
-        MenuScreens.register(ModMenus.CENTRIFUGE_FLUID_OUTPUT_CONTAINER.get(), CentrifugeFluidOutputScreen::new);
-        MenuScreens.register(ModMenus.CENTRIFUGE_VOID_CONTAINER.get(), CentrifugeVoidScreen::new);
-        MenuScreens.register(ModMenus.CENTRIFUGE_TERMINAL_CONTAINER.get(), CentrifugeTerminalScreen::new);
+        MenuScreens.register(CentrifugeMenus.CENTRIFUGE_INPUT_CONTAINER.get(), CentrifugeInputScreen::new);
+        MenuScreens.register(CentrifugeMenus.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), CentrifugeItemOutputScreen::new);
+        MenuScreens.register(CentrifugeMenus.CENTRIFUGE_FLUID_OUTPUT_CONTAINER.get(), CentrifugeFluidOutputScreen::new);
+        MenuScreens.register(CentrifugeMenus.CENTRIFUGE_VOID_CONTAINER.get(), CentrifugeVoidScreen::new);
+        MenuScreens.register(CentrifugeMenus.CENTRIFUGE_TERMINAL_CONTAINER.get(), CentrifugeTerminalScreen::new);
     }
 }

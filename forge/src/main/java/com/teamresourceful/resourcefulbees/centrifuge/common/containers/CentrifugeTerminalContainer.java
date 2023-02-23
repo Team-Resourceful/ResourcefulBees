@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.entities.Centrifuge
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeTerminalEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.ProcessContainerData;
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeMenus;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeState;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -28,7 +28,7 @@ public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeT
     }
 
     public CentrifugeTerminalContainer(int id, Inventory inv, CentrifugeTerminalEntity entity, CentrifugeState state, CentrifugeEnergyStorage energyStorage) {
-        super(ModMenus.CENTRIFUGE_TERMINAL_CONTAINER.get(), id, inv, entity, state, energyStorage);
+        super(CentrifugeMenus.CENTRIFUGE_TERMINAL_CONTAINER.get(), id, inv, entity, state, energyStorage);
 
         for (BlockPos pos : state.getInputs()) {
             BlockEntity blockEntity = level.getBlockEntity(pos);

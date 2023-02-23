@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityI
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;

@@ -17,7 +17,7 @@ import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.util.IngredientUtils;
 import com.teamresourceful.resourcefulbees.mixin.common.ReloadableServerResourcesAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.TagManagerAccessor;
 import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.IngredientHelper;
@@ -53,8 +53,8 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     public void onResourceManagerReload(@NotNull ResourceManager resourceManager) {
 
         if (RecipeConfig.honeycombBlockRecipes) {
-            ModConstants.LOGGER.info("Generating comb recipes for {} honeycombs...", ModItems.HONEYCOMB_ITEMS.getEntries().size());
-            ModItems.HONEYCOMB_ITEMS.getEntries().stream()
+            ModConstants.LOGGER.info("Generating comb recipes for {} honeycombs...", com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.getEntries().size());
+            com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.getEntries().stream()
                     .map(RegistryEntry::get)
                     .filter(item -> item instanceof CustomHoneycombItem)
                     .map(item -> (CustomHoneycombItem) item)
@@ -110,11 +110,11 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         ResourceLocation id = new ResourceLocation(ModConstants.MOD_ID, parents.getParent1() + "_" + parents.getParent2() + "_" + families.get(0).getChild());
         Ingredient beeJarParent1 = IngredientHelper.getIngredient(new BeeJarIngredient(Set.of(parents.getParent1Data().id().toString())));
         BeeBreedData parent1BreedData = parents.getParent1Data().getBreedData();
-        var parent1FeedItems = Ingredient.of(parent1BreedData.feedItems().stream().map(ItemStack::new));
+        var parent1FeedItems = IngredientUtils.of(parent1BreedData.feedItems());
         BreederRecipe.BreederPair parent1 = new BreederRecipe.BreederPair(beeJarParent1, Optional.of(parents.getParent1Data().id().toString()), parent1BreedData.feedAmount(), parent1FeedItems, parent1BreedData.feedReturnItem());
         BeeBreedData parent2BreedData = parents.getParent2Data().getBreedData();
         Ingredient beeJarParent2 = IngredientHelper.getIngredient(new BeeJarIngredient(Set.of(parents.getParent2Data().id().toString())));
-        var parent2FeedItems = Ingredient.of(parent2BreedData.feedItems().stream().map(ItemStack::new));
+        var parent2FeedItems = IngredientUtils.of(parent2BreedData.feedItems());
         BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parents.getParent2Data().id().toString()), parent2BreedData.feedAmount(), parent2FeedItems, parent2BreedData.feedReturnItem());
         return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(WeightedCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
     }
@@ -153,7 +153,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     private Recipe<?> makeHoneyBlockRecipe(CustomHoneyData info) {
-        Ingredient honeyBottleItem = Ingredient.of(info.getBottleData().bottle().get());
+        Ingredient honeyBottleItem = IngredientUtils.of(info.getBottleData().bottle());
         return new ShapedRecipe(
                 new ResourceLocation(ModConstants.MOD_ID, info.name() + "_honey_block"),
                 "",
@@ -168,14 +168,13 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     private Recipe<?> makeBottleToBucketRecipe(CustomHoneyData info) {
-        Ingredient honeyBottleItem = Ingredient.of(info.getBottleData().bottle().get());
-        Ingredient bucketItem = Ingredient.of(Items.BUCKET);
+        Ingredient honeyBottleItem = IngredientUtils.of(info.getBottleData().bottle());
         return new ShapelessRecipe(
                 new ResourceLocation(ModConstants.MOD_ID, info.name() + "_bottle_to_bucket"),
                 "",
                 new ItemStack(info.getFluidData().fluidBucket().get()),
                 NonNullList.of(Ingredient.EMPTY,
-                        bucketItem, honeyBottleItem,
+                        Ingredient.of(Items.BUCKET), honeyBottleItem,
                         honeyBottleItem, honeyBottleItem,
                         honeyBottleItem
                 )
@@ -183,7 +182,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     private Recipe<?> makeBucketToBottleRecipe(CustomHoneyData info) {
-        Ingredient honeyBucketItem = Ingredient.of(info.getFluidData().fluidBucket().get());
+        Ingredient honeyBucketItem = IngredientUtils.of(info.getFluidData().fluidBucket());
         Ingredient bottleItem = Ingredient.of(Items.GLASS_BOTTLE);
         return new ShapelessRecipe(
                 new ResourceLocation(ModConstants.MOD_ID, info.name() + "_bucket_to_bottle"),
@@ -198,7 +197,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     private Recipe<?> makeBlockToBucketRecipe(CustomHoneyData info) {
-        Ingredient honeyBlockItem = Ingredient.of(info.getBlockData().blockItem().get());
+        Ingredient honeyBlockItem = IngredientUtils.of(info.getBlockData().blockItem());
         Ingredient bucketItem = Ingredient.of(Items.BUCKET);
         return new ShapelessRecipe(
                 new ResourceLocation(ModConstants.MOD_ID, info.name() + "_block_to_bucket"),
@@ -219,7 +218,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     private Recipe<?> makeBucketToBlockRecipe(CustomHoneyData info) {
-        Ingredient honeyBucketItem = Ingredient.of(info.getFluidData().fluidBucket().get());
+        Ingredient honeyBucketItem = IngredientUtils.of(info.getFluidData().fluidBucket());
         return new ShapelessRecipe(
                 new ResourceLocation(ModConstants.MOD_ID, info.name() + "_bucket_to_block"),
                 "",
@@ -229,7 +228,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     private Recipe<?> makeHoneyBottleRecipe(CustomHoneyData info) {
-        Ingredient honeyBlockItem = Ingredient.of(info.getBlockData().blockItem().get());
+        Ingredient honeyBlockItem = IngredientUtils.of(info.getBlockData().blockItem());
         Ingredient bottleItem = Ingredient.of(Items.GLASS_BOTTLE);
         return new ShapelessRecipe(
                 new ResourceLocation(ModConstants.MOD_ID, info.name() + "_honey_bottle"),

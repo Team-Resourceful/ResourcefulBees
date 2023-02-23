@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeBlockEntities;
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeBlocks;
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeItems;
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeMenus;
 import com.teamresourceful.resourcefulbees.common.block.CustomHoneyFluidBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.data.honeydata.CustomHoneyBlockData;
@@ -81,6 +82,7 @@ public final class RegistryHandler {
         ModPOIs.POIS.init();
         ModPotions.POTIONS.init();
         ModMenus.CONTAINER_TYPES.init();
+        CentrifugeMenus.CENTRIFUGE_MENUS.init();
         ModMenuTypes.MENUS.init();
         ModRecipeSerializers.RECIPE_SERIALIZERS.init();
         com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers.RECIPE_SERIALIZERS.init();
@@ -111,7 +113,7 @@ public final class RegistryHandler {
     private static void registerBee(String name, float sizeModifier) {
         RegistryEntry<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.BEES.register(name + "_bee",
                 () -> CustomBeeEntityType.of(name, (type, world) -> new ResourcefulBee(type, world, name), 0.7F * sizeModifier, 0.6F * sizeModifier));
-        ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> new BeeSpawnEggItem(beeEntityType, name));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> new BeeSpawnEggItem(beeEntityType, name));
         ModEntities.getModBees().put(name, beeEntityType);
     }
 
@@ -137,13 +139,13 @@ public final class RegistryHandler {
 
     private static void registerHoneyBlock(String name, CustomHoneyData input) {
         input.getOptionalData(CustomHoneyBlockData.SERIALIZER).ifPresent(data -> {
-            RegistryEntry<Block> block = ModBlocks.HONEY_BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(data));
-            ModItems.HONEY_BLOCK_ITEMS.register(name + "_honey_block", () -> new BlockItem(block.get(), new Item.Properties()));
+            RegistryEntry<Block> block = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(data));
+            com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BLOCK_ITEMS.register(name + "_honey_block", () -> new BlockItem(block.get(), new Item.Properties()));
         });
     }
 
     private static void registerHoneyBottle(String name, CustomHoneyData data) {
-        ModItems.HONEY_BOTTLE_ITEMS.register(name + "_honey_bottle", () -> new CustomHoneyBottleItem(data.getBottleData()));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BOTTLE_ITEMS.register(name + "_honey_bottle", () -> new CustomHoneyBottleItem(data.getBottleData()));
     }
 
     private static void registerHoneyFluid(String name, CustomHoneyData data) {
@@ -153,8 +155,8 @@ public final class RegistryHandler {
             RegistryObject<FluidType> fluidType = ModFluids.FLUID_TYPES.register(name + "_honey", () -> honeyFluid(CustomHoneyFluidAttributesData.getProperties(fluidData.fluidAttributesData()), fluidData.renderData()));
             RegistryEntry<FlowingFluid> stillFluidRegistry = ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey", () -> new CustomHoneyFluid.Source(properties[0], fluidData));
             RegistryEntry<FlowingFluid> flowingFluidRegistry = ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_flowing", () -> new CustomHoneyFluid.Flowing(properties[0], fluidData));
-            RegistryEntry<Item> fluidBucketRegistry = ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", () -> new CustomHoneyBucketItem(stillFluidRegistry, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1), fluidData));
-            RegistryEntry<LiquidBlock> blockFluidRegistry = ModBlocks.HONEY_FLUID_BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluidRegistry, ModBlocks.HONEY_FLUID_BLOCK_PROPERTIES, fluidData));
+            RegistryEntry<Item> fluidBucketRegistry = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", () -> new CustomHoneyBucketItem(stillFluidRegistry, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1), fluidData));
+            RegistryEntry<LiquidBlock> blockFluidRegistry = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_FLUID_BLOCKS.register(name + "_honey", () -> new CustomHoneyFluidBlock(stillFluidRegistry, ModBlocks.HONEY_FLUID_BLOCK_PROPERTIES, fluidData));
 
             properties[0] = new ForgeFlowingFluid.Properties(fluidType, stillFluidRegistry, flowingFluidRegistry)
                     .bucket(fluidBucketRegistry)
@@ -174,6 +176,6 @@ public final class RegistryHandler {
     }
 
     public static void registerDispenserBehaviors() {
-        DispenserBlock.registerBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
+        DispenserBlock.registerBehavior(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
     }
 }

@@ -9,7 +9,6 @@ import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
@@ -28,12 +27,6 @@ public final class ModFluids {
     //Used for registering to its own registry to let us easily query it later.
     public static final ResourcefulRegistry<Fluid> STILL_HONEY_FLUIDS = ResourcefulRegistries.create(FLUIDS);
     public static final ResourcefulRegistry<Fluid> FLOWING_HONEY_FLUIDS = ResourcefulRegistries.create(FLUIDS);
-
-    //TODO either remove this method or replace the calls in @RegistryHandler.java with this method
-    public static void initializeRegistries(IEventBus bus) {
-        FLUIDS.init();
-        FLUID_TYPES.register(bus);
-    }
 
     private static ForgeFlowingFluid.Properties makeProperties() {
         return new ForgeFlowingFluid.Properties(HONEY, HONEY_STILL, HONEY_FLOWING)

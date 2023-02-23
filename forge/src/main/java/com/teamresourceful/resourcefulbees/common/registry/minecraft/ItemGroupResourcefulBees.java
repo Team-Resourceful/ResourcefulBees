@@ -18,7 +18,7 @@ public final class ItemGroupResourcefulBees {
     }
 
     public static final CreativeModeTab RESOURCEFUL_BEES = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees"))
-            .setIcon(() -> new ItemStack(ModItems.HONEY_DIPPER.get()))
+            .setIcon(() -> new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_DIPPER.get()))
             .addRegistry(() -> CentrifugeItems.CENTRIFUGE_ITEMS)
             .setAddingFunction(list -> {
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR);
@@ -26,28 +26,28 @@ public final class ItemGroupResourcefulBees {
                 if (GeneralConfig.enableSupporterBees) {
                     list.add(ModItems.STRAWBEERRY_MILKSHAKE);
                 }
-                list.add(ModItems.BEE_BOX);
-                list.add(ModItems.BEE_BOX_TEMP);
-                ItemStack creativeBeepedia = new ItemStack(ModItems.BEEPEDIA.get());
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_BOX);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_BOX_TEMP);
+                ItemStack creativeBeepedia = new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEEPEDIA.get());
                 creativeBeepedia.getOrCreateTag().putBoolean(NBTConstants.Beepedia.CREATIVE, true);
-                list.add(ModItems.BEEPEDIA);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEEPEDIA);
                 list.add(creativeBeepedia);
-                list.add(ModItems.BEE_LOCATOR);
-                list.add(ModItems.HONEY_DIPPER);
-                list.add(ModItems.SCRAPER);
-                list.add(ModItems.SMOKER);
-                list.add(ModItems.BELLOW);
-                list.add(ModItems.SMOKERCAN);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_LOCATOR);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_DIPPER);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SCRAPER);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SMOKER);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BELLOW);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SMOKERCAN);
                 list.add(ModItems.WAX);
                 list.add(ModItems.WAX_BLOCK_ITEM);
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM);
 
                 list.add(ModItems.FLOW_HIVE);
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BREEDER_ITEM);
-                list.add(ModItems.T1_APIARY_ITEM);
-                list.add(ModItems.T2_APIARY_ITEM);
-                list.add(ModItems.T3_APIARY_ITEM);
-                list.add(ModItems.T4_APIARY_ITEM);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T1_APIARY_ITEM);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T2_APIARY_ITEM);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T3_APIARY_ITEM);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T4_APIARY_ITEM);
 
                 list.add(ModItems.HONEY_GENERATOR_ITEM);
                 list.add(ModItems.ENDER_BEECON_ITEM);
@@ -55,27 +55,27 @@ public final class ItemGroupResourcefulBees {
                 list.add(ModItems.HONEY_POT_ITEM);
                 list.add(ModItems.CENTRIFUGE_CRANK);
                 list.add(ModItems.CENTRIFUGE);
-                list.add(ModItems.WAXED_MACHINE_BLOCK);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_MACHINE_BLOCK);
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.FAKE_FLOWER);
 
-                list.add(ModItems.BREED_TIME_UPGRADE);
-                list.add(ModItems.T2_NEST_UPGRADE);
-                list.add(ModItems.T3_NEST_UPGRADE);
-                list.add(ModItems.T4_NEST_UPGRADE);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BREED_TIME_UPGRADE);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T2_NEST_UPGRADE);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T3_NEST_UPGRADE);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T4_NEST_UPGRADE);
 
-                list.add(ModItems.HONEY_GLASS);
-                list.add(ModItems.HONEY_GLASS_PLAYER);
-                list.add(ModItems.TRIMMED_WAXED_PLANKS);
-                list.add(ModItems.WAXED_PLANKS);
-                list.add(ModItems.WAXED_STAIRS);
-                list.add(ModItems.WAXED_SLAB);
-                list.add(ModItems.WAXED_FENCE);
-                list.add(ModItems.WAXED_FENCE_GATE);
-                list.add(ModItems.WAXED_BUTTON);
-                list.add(ModItems.WAXED_PRESSURE_PLATE);
-                list.add(ModItems.WAXED_DOOR);
-                list.add(ModItems.WAXED_TRAPDOOR);
-                list.add(ModItems.WAXED_SIGN);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_GLASS);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_GLASS_PLAYER);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.TRIMMED_WAXED_PLANKS);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_PLANKS);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_STAIRS);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_SLAB);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_FENCE);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_FENCE_GATE);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_BUTTON);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_PRESSURE_PLATE);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_DOOR);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_TRAPDOOR);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_SIGN);
             })
             .build();
 
@@ -86,20 +86,20 @@ public final class ItemGroupResourcefulBees {
 
     public static final CreativeModeTab RESOURCEFUL_BEES_HONEY = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "honey"))
             .setIcon(() -> new ItemStack(Items.HONEY_BOTTLE))
-            .addRegistry(() -> ModItems.HONEY_BOTTLE_ITEMS)
-            .addRegistry(() -> ModItems.HONEY_BLOCK_ITEMS)
-            .addRegistry(() -> ModItems.HONEY_BUCKET_ITEMS)
+            .addRegistry(() -> com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BOTTLE_ITEMS)
+            .addRegistry(() -> com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BLOCK_ITEMS)
+            .addRegistry(() -> com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BUCKET_ITEMS)
             .build();
 
     public static final CreativeModeTab RESOURCEFUL_BEES_COMBS = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "combs"))
             .setIcon(() -> new ItemStack(Items.HONEYCOMB))
-            .addRegistry(() -> ModItems.HONEYCOMB_ITEMS)
-            .addRegistry(() -> ModItems.HONEYCOMB_BLOCK_ITEMS)
+            .addRegistry(() -> com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS)
+            .addRegistry(() -> com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_BLOCK_ITEMS)
             .build();
 
     public static final CreativeModeTab RESOURCEFUL_BEES_BEES = CreativeTabBuilder.of(new ResourceLocation(ModConstants.MOD_ID, "bees"))
             .setIcon(() -> new ItemStack(Items.BEE_SPAWN_EGG))
-            .addRegistry(() -> ModItems.SPAWN_EGG_ITEMS)
+            .addRegistry(() -> com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SPAWN_EGG_ITEMS)
             .build();
 
     public static void register() {

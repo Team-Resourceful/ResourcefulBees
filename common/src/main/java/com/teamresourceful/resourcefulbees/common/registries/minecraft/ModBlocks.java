@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.blocks.*;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseTopBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.registry.RegistryHelper;
@@ -38,6 +39,11 @@ public final class ModBlocks {
 
     public static final ResourcefulRegistry<Block> BLOCKS = ResourcefulRegistries.create(Registry.BLOCK, ModConstants.MOD_ID);
     public static final ResourcefulRegistry<Block> HIVES = ResourcefulRegistries.create(BLOCKS);
+    public static final ResourcefulRegistry<Block> APIARIES = ResourcefulRegistries.create(BLOCKS);
+
+    public static final ResourcefulRegistry<Block> HONEYCOMB_BLOCKS = ResourcefulRegistries.create(BLOCKS);
+    public static final ResourcefulRegistry<Block> HONEY_BLOCKS = ResourcefulRegistries.create(BLOCKS);
+    public static final ResourcefulRegistry<Block> HONEY_FLUID_BLOCKS = ResourcefulRegistries.create(BLOCKS);
 
     public static final BlockBehaviour.Properties WAXED_PLANKS_PROPERTIES = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
     public static final BlockBehaviour.Properties CENTRIFUGE_PROPERTIES = BlockBehaviour.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL);
@@ -163,6 +169,12 @@ public final class ModBlocks {
     //endregion
     //endregion
 
+    public static final RegistryEntry<Block> T1_APIARY_BLOCK = APIARIES.register("t1_apiary", () -> new ApiaryBlock(DefaultApiaryTiers.T1_APIARY));
+    public static final RegistryEntry<Block> T2_APIARY_BLOCK = APIARIES.register("t2_apiary", () -> new ApiaryBlock(DefaultApiaryTiers.T2_APIARY));
+    public static final RegistryEntry<Block> T3_APIARY_BLOCK = APIARIES.register("t3_apiary", () -> new ApiaryBlock(DefaultApiaryTiers.T3_APIARY));
+    public static final RegistryEntry<Block> T4_APIARY_BLOCK = APIARIES.register("t4_apiary", () -> new ApiaryBlock(DefaultApiaryTiers.T4_APIARY));
+
+    public static final RegistryEntry<Block> WAX_BLOCK = BLOCKS.register("wax_block", () -> new Block(BlockBehaviour.Properties.of(Material.CLAY).sound(SoundType.SNOW).strength(0.3F)));
 
     public static final RegistryEntry<Block> BEE_BOX = BLOCKS.register("bee_box", () -> new BeeBoxBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(0.5f)));
     public static final RegistryEntry<Block> BEE_BOX_TEMP = BLOCKS.register("bee_box_temp", () -> new BeeBoxBlock(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).strength(0.5f)));

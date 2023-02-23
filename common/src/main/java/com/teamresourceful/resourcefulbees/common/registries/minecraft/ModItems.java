@@ -1,7 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
-import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
-import com.teamresourceful.resourcefulbees.common.items.MutatedPollenItem;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.items.*;
+import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.BreederTimeUpgradeItem;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.BeehiveUpgrade;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.NestUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
@@ -9,6 +13,7 @@ import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SignItem;
 
 public class ModItems {
 
@@ -19,6 +24,13 @@ public class ModItems {
     public static final ResourcefulRegistry<Item> T2_NEST_ITEMS = ResourcefulRegistries.create(NEST_ITEMS);
     public static final ResourcefulRegistry<Item> T3_NEST_ITEMS = ResourcefulRegistries.create(NEST_ITEMS);
     public static final ResourcefulRegistry<Item> T4_NEST_ITEMS = ResourcefulRegistries.create(NEST_ITEMS);
+
+    public static final ResourcefulRegistry<Item> SPAWN_EGG_ITEMS = ResourcefulRegistries.create(ITEMS);
+    public static final ResourcefulRegistry<Item> HONEYCOMB_ITEMS = ResourcefulRegistries.create(ITEMS);
+    public static final ResourcefulRegistry<Item> HONEYCOMB_BLOCK_ITEMS = ResourcefulRegistries.create(ITEMS);
+    public static final ResourcefulRegistry<Item> HONEY_BOTTLE_ITEMS = ResourcefulRegistries.create(ITEMS);
+    public static final ResourcefulRegistry<Item> HONEY_BLOCK_ITEMS = ResourcefulRegistries.create(ITEMS);
+    public static final ResourcefulRegistry<Item> HONEY_BUCKET_ITEMS = ResourcefulRegistries.create(ITEMS);
 
     //region Nests
     //region Acacia
@@ -125,6 +137,22 @@ public class ModItems {
     //endregion
     //endregion
 
+    public static final RegistryEntry<Item> T1_APIARY_ITEM = NEST_ITEMS.register("t1_apiary", () -> new BlockItem(ModBlocks.T1_APIARY_BLOCK.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> T2_APIARY_ITEM = NEST_ITEMS.register("t2_apiary", () -> new BlockItem(ModBlocks.T2_APIARY_BLOCK.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> T3_APIARY_ITEM = NEST_ITEMS.register("t3_apiary", () -> new BlockItem(ModBlocks.T3_APIARY_BLOCK.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> T4_APIARY_ITEM = NEST_ITEMS.register("t4_apiary", () -> new BlockItem(ModBlocks.T4_APIARY_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryEntry<Item> SCRAPER = ITEMS.register("scraper", () -> new ScraperItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryEntry<Item> SMOKER = ITEMS.register("smoker", () -> new SmokerItem(new Item.Properties().durability(GeneralConfig.smokerDurability)));
+    public static final RegistryEntry<Item> BELLOW = ITEMS.register("bellow", () -> new Item(new Item.Properties()));
+    public static final RegistryEntry<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(new Item.Properties()));
+
+    public static final RegistryEntry<Item> BEE_BOX_TEMP = ITEMS.register("bee_box_temp", () -> BeeBoxItem.temp(ModBlocks.BEE_BOX_TEMP.get(), new Item.Properties().stacksTo(1)));
+    public static final RegistryEntry<Item> BEE_BOX = ITEMS.register("bee_box", () -> BeeBoxItem.of(ModBlocks.BEE_BOX.get(), new Item.Properties().stacksTo(1)));
+    public static final RegistryEntry<Item> BEEPEDIA = ITEMS.register("beepedia", () -> new BeepediaItem(new Item.Properties().stacksTo(1)));
+    public static final RegistryEntry<Item> HONEY_DIPPER = ITEMS.register("honey_dipper", () -> new HoneyDipperItem(new Item.Properties().stacksTo(1)));
+
     public static final RegistryEntry<Item> BEE_JAR = ITEMS.register("bee_jar", () -> new BeeJarItem(new Item.Properties().durability(0).stacksTo(16)));
     public static final RegistryEntry<Item> POLLEN_SPREADER_FAN = ITEMS.register("pollen_spreader_fan", () -> new BlockItem(ModBlocks.POLLEN_SPREADER_FAN.get(), new Item.Properties()));
     public static final RegistryEntry<Item> POLLEN_SPREADER = ITEMS.register("pollen_spreader", () -> new BlockItem(ModBlocks.POLLEN_SPREADER.get(), new Item.Properties()));
@@ -134,4 +162,28 @@ public class ModItems {
     public static final RegistryEntry<Item> GOLD_FLOWER_ITEM = ITEMS.register("gold_flower", () -> new BlockItem(ModBlocks.GOLD_FLOWER.get(), new Item.Properties()));
 
     public static final RegistryEntry<Item> BREEDER_ITEM = NEST_ITEMS.register("breeder", () -> new BlockItem(ModBlocks.BREEDER_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryEntry<Item> T2_NEST_UPGRADE = ITEMS.register("t2_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T1_TO_T2, new Item.Properties().stacksTo(16)));
+    public static final RegistryEntry<Item> T3_NEST_UPGRADE = ITEMS.register("t3_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T2_TO_T3, new Item.Properties().stacksTo(16)));
+    public static final RegistryEntry<Item> T4_NEST_UPGRADE = ITEMS.register("t4_nest_upgrade", () -> new NestUpgradeItem(BeehiveUpgrade.T3_TO_T4, new Item.Properties().stacksTo(16)));
+    public static final RegistryEntry<Item> BREED_TIME_UPGRADE = ITEMS.register("breed_time_upgrade", () -> new BreederTimeUpgradeItem(new Item.Properties().stacksTo(4)));
+
+    public static final RegistryEntry<Item> BEE_LOCATOR = ITEMS.register("bee_locator", () -> new BeeLocatorItem(new Item.Properties().stacksTo(1)));
+
+    //region Waxed Blocks
+    public static final RegistryEntry<Item> HONEY_GLASS = ITEMS.register("honey_glass", () -> new BlockItem(ModBlocks.HONEY_GLASS.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> HONEY_GLASS_PLAYER = ITEMS.register("honey_glass_player", () -> new BlockItem(ModBlocks.HONEY_GLASS_PLAYER.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_PLANKS = ITEMS.register("waxed_planks", () -> new BlockItem(ModBlocks.WAXED_PLANKS.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_STAIRS = ITEMS.register("waxed_stairs", () -> new BlockItem(ModBlocks.WAXED_STAIRS.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_SLAB = ITEMS.register("waxed_slab", () -> new BlockItem(ModBlocks.WAXED_SLAB.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_FENCE = ITEMS.register("waxed_fence", () -> new BlockItem(ModBlocks.WAXED_FENCE.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_FENCE_GATE = ITEMS.register("waxed_fence_gate", () -> new BlockItem(ModBlocks.WAXED_FENCE_GATE.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_BUTTON = ITEMS.register("waxed_button", () -> new BlockItem(ModBlocks.WAXED_BUTTON.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_PRESSURE_PLATE = ITEMS.register("waxed_pressure_plate", () -> new BlockItem(ModBlocks.WAXED_PRESSURE_PLATE.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_DOOR = ITEMS.register("waxed_door", () -> new BlockItem(ModBlocks.WAXED_DOOR.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_TRAPDOOR = ITEMS.register("waxed_trapdoor", () -> new BlockItem(ModBlocks.WAXED_TRAPDOOR.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_SIGN = ITEMS.register("waxed_sign", () -> new SignItem(new Item.Properties(), ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get()));
+    public static final RegistryEntry<Item> TRIMMED_WAXED_PLANKS = ITEMS.register("trimmed_waxed_planks", () -> new BlockItem(ModBlocks.TRIMMED_WAXED_PLANKS.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> WAXED_MACHINE_BLOCK = ITEMS.register("waxed_machine_block", () -> new BlockItem(ModBlocks.WAXED_MACHINE_BLOCK.get(), new Item.Properties()));
+    //endregion
 }

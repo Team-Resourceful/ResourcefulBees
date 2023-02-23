@@ -59,10 +59,10 @@ public final class JEICompat implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(ModItems.T1_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
-        registration.addRecipeCatalyst(ModItems.T2_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
-        registration.addRecipeCatalyst(ModItems.T3_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
-        registration.addRecipeCatalyst(ModItems.T4_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T1_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T2_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T3_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
+        registration.addRecipeCatalyst(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T4_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
         registration.addRecipeCatalyst(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BREEDER_ITEM.get().getDefaultInstance(), BeeBreedingCategory.RECIPE);
         registration.addRecipeCatalyst(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get().getDefaultInstance(), SolidificationCategory.RECIPE);
         registration.addRecipeCatalyst(ModItems.HONEY_GENERATOR_ITEM.get().getDefaultInstance(), HoneyGenCategory.RECIPE);
@@ -116,7 +116,7 @@ public final class JEICompat implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK,
-                ModItems.BEEPEDIA.get(),
+                com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEEPEDIA.get(),
                 (ingredient, context) -> ingredient.hasTag() && ingredient.getTag() != null && ingredient.getTag().contains(NBTConstants.Beepedia.CREATIVE) ? "creative.beepedia" : "");
     }
 

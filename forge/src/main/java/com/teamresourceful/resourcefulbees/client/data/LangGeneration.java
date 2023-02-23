@@ -13,9 +13,7 @@ import com.teamresourceful.resourcefulbees.common.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraftforge.registries.DeferredRegister;
 import org.apache.commons.lang3.StringUtils;
@@ -58,12 +56,12 @@ public final class LangGeneration {
         generateLang(HoneycombRegistry.get().getStreamOfHoneycombs().map(OutputVariation::id), COMB_RESOURCEFULBEES, object);
         generateLang(TraitRegistry.get().getStreamOfTraits().map(Trait::name), TRAIT_RESOURCEFULBEES, object);
 
-        generateLang(ModItems.SPAWN_EGG_ITEMS, ITEM_RESOURCEFULBEES, object);
-        generateLang(ModItems.HONEYCOMB_ITEMS, ITEM_RESOURCEFULBEES, object);
-        generateLang(ModItems.HONEY_BOTTLE_ITEMS, ITEM_RESOURCEFULBEES, object);
-        generateLang(ModItems.HONEY_BUCKET_ITEMS, ITEM_RESOURCEFULBEES, object);
-        generateLang(ModBlocks.HONEYCOMB_BLOCKS, BLOCK_RESOURCEFULBEES, object);
-        generateLang(ModBlocks.HONEY_FLUID_BLOCKS, BLOCK_RESOURCEFULBEES, object);
+        generateLang(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SPAWN_EGG_ITEMS, ITEM_RESOURCEFULBEES, object);
+        generateLang(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS, ITEM_RESOURCEFULBEES, object);
+        generateLang(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BOTTLE_ITEMS, ITEM_RESOURCEFULBEES, object);
+        generateLang(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BUCKET_ITEMS, ITEM_RESOURCEFULBEES, object);
+        generateLang(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEYCOMB_BLOCKS, BLOCK_RESOURCEFULBEES, object);
+        generateLang(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_FLUID_BLOCKS, BLOCK_RESOURCEFULBEES, object);
         generateLang(ModFluids.STILL_HONEY_FLUIDS, FLUID_RESOURCEFULBEES, object);
         generateLang(ModFluids.FLUID_TYPES, FLUID_TYPE_RESOURCEFULBEES, object);
 

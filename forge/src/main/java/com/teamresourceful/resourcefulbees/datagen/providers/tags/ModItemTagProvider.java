@@ -48,13 +48,13 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(Items.LANTERN, Items.SEA_LANTERN, Items.SOUL_LANTERN, Items.JACK_O_LANTERN)
                 .addTags(ItemTags.CANDLES);
 
-        tag(ItemTags.WOODEN_DOORS).add(ModItems.WAXED_DOOR.get());
-        tag(ItemTags.WOODEN_BUTTONS).add(ModItems.WAXED_BUTTON.get());
-        tag(ItemTags.WOODEN_FENCES).add(ModItems.WAXED_DOOR.get());
-        tag(ItemTags.WOODEN_SLABS).add(ModItems.WAXED_SLAB.get());
-        tag(ItemTags.WOODEN_STAIRS).add(ModItems.WAXED_STAIRS.get());
-        tag(ItemTags.WOODEN_PRESSURE_PLATES).add(ModItems.WAXED_PRESSURE_PLATE.get());
-        tag(ItemTags.WOODEN_TRAPDOORS).add(ModItems.WAXED_TRAPDOOR.get());
+        tag(ItemTags.WOODEN_DOORS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_DOOR.get());
+        tag(ItemTags.WOODEN_BUTTONS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_BUTTON.get());
+        tag(ItemTags.WOODEN_FENCES).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_DOOR.get());
+        tag(ItemTags.WOODEN_SLABS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_SLAB.get());
+        tag(ItemTags.WOODEN_STAIRS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_STAIRS.get());
+        tag(ItemTags.WOODEN_PRESSURE_PLATES).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_PRESSURE_PLATE.get());
+        tag(ItemTags.WOODEN_TRAPDOORS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_TRAPDOOR.get());
     }
 
     @SafeVarargs

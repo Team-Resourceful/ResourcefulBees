@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
-import com.teamresourceful.resourcefulbees.centrifuge.common.containers.*;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
@@ -32,17 +31,4 @@ public final class ModMenus {
 
     public static final RegistryEntry<MenuType<CentrifugeMenu>> CENTRIFUGE_MENU = CONTAINER_TYPES.register("centrifuge", () -> IForgeMenuType
             .create(CentrifugeMenu::new));
-
-    // region Centrifuge Containers
-    public static final RegistryEntry<MenuType<CentrifugeTerminalContainer>> CENTRIFUGE_TERMINAL_CONTAINER = CONTAINER_TYPES.register("centrifuge/terminal", () -> IForgeMenuType
-            .create(CentrifugeTerminalContainer::new));
-    public static final RegistryEntry<MenuType<CentrifugeInputContainer>> CENTRIFUGE_INPUT_CONTAINER = CONTAINER_TYPES.register("centrifuge/input/item", () -> IForgeMenuType
-            .create(CentrifugeInputContainer::new));
-    public static final RegistryEntry<MenuType<CentrifugeItemOutputContainer>> CENTRIFUGE_ITEM_OUTPUT_CONTAINER = CONTAINER_TYPES.register("centrifuge/output/item", () -> IForgeMenuType
-            .create(CentrifugeItemOutputContainer::new));
-    public static final RegistryEntry<MenuType<CentrifugeFluidOutputContainer>> CENTRIFUGE_FLUID_OUTPUT_CONTAINER = CONTAINER_TYPES.register("centrifuge/output/fluid", () -> IForgeMenuType
-            .create(CentrifugeFluidOutputContainer::new));
-    public static final RegistryEntry<MenuType<CentrifugeVoidContainer>> CENTRIFUGE_VOID_CONTAINER = CONTAINER_TYPES.register("centrifuge/void", () -> IForgeMenuType
-            .create(CentrifugeVoidContainer::new));
-    // endregion
 }

@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.registry.custom;
+package com.teamresourceful.resourcefulbees.common.registries.custom;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
@@ -8,12 +8,10 @@ import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
-import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.world.item.BlockItem;
@@ -141,16 +139,16 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
 
         private RegistryData {
             if (block) {
-                RegistryEntry<Block> customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(color, BlockBehaviour.Properties.copy(Blocks.HONEYCOMB_BLOCK)));
-                final RegistryEntry<Item> blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties()) {
+                RegistryEntry<Block> customHoneycombBlock = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEYCOMB_BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(color, BlockBehaviour.Properties.copy(Blocks.HONEYCOMB_BLOCK)));
+                final RegistryEntry<Item> blockItem = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_BLOCK_ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties()) {
                     @Override
                     public boolean isFoil(@NotNull ItemStack stack) {
                         return enchanted || stack.isEnchanted();
                     }
                 });
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new CustomHoneycombItem(color, edible, blockItem, enchanted, tradeData));
+                com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new CustomHoneycombItem(color, edible, blockItem, enchanted, tradeData));
             } else {
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new CustomHoneycombItem(color, edible, null, enchanted, tradeData));
+                com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new CustomHoneycombItem(color, edible, null, enchanted, tradeData));
             }
         }
 

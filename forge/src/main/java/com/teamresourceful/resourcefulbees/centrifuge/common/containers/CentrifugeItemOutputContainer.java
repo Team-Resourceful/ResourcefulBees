@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.containers;
 
-import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import com.teamresourceful.resourcefulbees.centrifuge.common.blocks.CentrifugeItemOutput;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeItemOutputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeEnergyStorage;
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeMenus;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeState;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
+import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +19,7 @@ public class CentrifugeItemOutputContainer extends CentrifugeContainer<Centrifug
     }
 
     public CentrifugeItemOutputContainer(int id, Inventory inv, CentrifugeItemOutputEntity entity, CentrifugeState state, CentrifugeEnergyStorage energyStorage) {
-        super(ModMenus.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), id, inv, entity, state, energyStorage);
+        super(CentrifugeMenus.CENTRIFUGE_ITEM_OUTPUT_CONTAINER.get(), id, inv, entity, state, energyStorage);
     }
 
     protected void addCentrifugeSlots() {

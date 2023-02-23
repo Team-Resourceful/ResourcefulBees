@@ -4,8 +4,6 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -55,18 +53,18 @@ public final class ModelHandler {
     public static void onAddAdditional(ModelEvent.RegisterAdditional event) {
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
-        ModItems.HONEYCOMB_ITEMS.getEntries().forEach(comb -> registerGenericItem(event, comb, ModConstants.MOD_ID + ":honeycomb", resourceManager));
-        ModItems.HONEYCOMB_BLOCK_ITEMS.getEntries().forEach(combBlock -> registerGenericItem(event, combBlock, ModConstants.MOD_ID + ":honeycomb_block", resourceManager));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.getEntries().forEach(comb -> registerGenericItem(event, comb, ModConstants.MOD_ID + ":honeycomb", resourceManager));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_BLOCK_ITEMS.getEntries().forEach(combBlock -> registerGenericItem(event, combBlock, ModConstants.MOD_ID + ":honeycomb_block", resourceManager));
 
-        ModItems.HONEY_BLOCK_ITEMS.getEntries().forEach(honeyBlock -> registerGenericItem(event, honeyBlock, ModConstants.MOD_ID + ":honey_block", resourceManager));
-        ModItems.HONEY_BUCKET_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, ModConstants.MOD_ID + ":custom_honey_fluid_bucket", resourceManager));
-        ModItems.HONEY_BOTTLE_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, ModConstants.MOD_ID + ":honey_bottle", resourceManager));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BLOCK_ITEMS.getEntries().forEach(honeyBlock -> registerGenericItem(event, honeyBlock, ModConstants.MOD_ID + ":honey_block", resourceManager));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BUCKET_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, ModConstants.MOD_ID + ":custom_honey_fluid_bucket", resourceManager));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BOTTLE_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, ModConstants.MOD_ID + ":honey_bottle", resourceManager));
 
-        ModItems.SPAWN_EGG_ITEMS.getEntries().forEach(egg -> registerGenericItem(event, egg, "minecraft:template_spawn_egg", resourceManager));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SPAWN_EGG_ITEMS.getEntries().forEach(egg -> registerGenericItem(event, egg, "minecraft:template_spawn_egg", resourceManager));
 
-        ModBlocks.HONEYCOMB_BLOCKS.getEntries().forEach(combBlock -> registerGenericBlockState(event, combBlock, ModConstants.MOD_ID + ":honeycomb_block", null, resourceManager));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEYCOMB_BLOCKS.getEntries().forEach(combBlock -> registerGenericBlockState(event, combBlock, ModConstants.MOD_ID + ":honeycomb_block", null, resourceManager));
 
-        ModBlocks.HONEY_BLOCKS.getEntries().forEach(honeyBlock -> registerGenericBlockState(event, honeyBlock, ModConstants.MOD_ID + ":honey_block", RenderType.translucent(), resourceManager));
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_BLOCKS.getEntries().forEach(honeyBlock -> registerGenericBlockState(event, honeyBlock, ModConstants.MOD_ID + ":honey_block", RenderType.translucent(), resourceManager));
     }
 
     public static void onModelBake(ModelEvent.BakingCompleted event) {

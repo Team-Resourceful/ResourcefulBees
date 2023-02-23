@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.Cent
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
@@ -176,7 +175,9 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             Map<ItemStack, Double> weightMap = itemWeights.get(slot);
             if (weightMap == null) return null;
             for (Map.Entry<ItemStack, Double> entry : weightMap.entrySet()) {
-                if (ModUtils.itemStackIsIdentical(entry.getKey(), displayedStack)) return entry.getValue();
+                if (ItemStack.matches(entry.getKey(), displayedStack)) {
+                    return entry.getValue();
+                }
             }
             return null;
         }

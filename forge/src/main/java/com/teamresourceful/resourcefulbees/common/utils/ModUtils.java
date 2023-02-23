@@ -51,9 +51,5 @@ public final class ModUtils {
         return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
     }
 
-    public static boolean itemStackIsIdentical(ItemStack stack, ItemStack other) {
-        return stack.getCount() == other.getCount() && ItemStack.isSameItemSameTags(stack, other);
-    }
-
     public static boolean IS_DATAGEN = false;
 }

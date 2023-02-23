@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeItems;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -32,7 +32,7 @@ public class ModRecipeProvider extends RecipeProvider {
         CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB), new ResourceLocation(ModConstants.MOD_ID, "honeycomb_centrifuge"), 1)
                 .time(200)
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 2), 10))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(new ItemStack(ModItems.WAX.get(), 2), 10))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(new ItemStack(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX.get(), 2), 10))
                 .addOutput(new CentrifugeRecipeBuilder.FluidOutputBuilder(0.20).addOutput(new FluidStack(ModFluids.HONEY_STILL.get(), 250), 10))
                 .rf(5)
                 .save(recipes);
@@ -40,7 +40,7 @@ public class ModRecipeProvider extends RecipeProvider {
         CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB_BLOCK), new ResourceLocation(ModConstants.MOD_ID, "honeycomb_block_centrifuge"), 1)
                 .time(400)
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 6), 10))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(ModItems.WAX_BLOCK_ITEM.get().getDefaultInstance(), 10))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX_BLOCK_ITEM.get().getDefaultInstance(), 10))
                 .addOutput(new CentrifugeRecipeBuilder.FluidOutputBuilder(0.20).addOutput(new FluidStack(ModFluids.HONEY_STILL.get(), 1250), 10))
                 .rf(10)
                 .save(recipes);
@@ -71,42 +71,42 @@ public class ModRecipeProvider extends RecipeProvider {
 
         //region Nests
         RecipeCriteria hasWaxPlanks = new RecipeCriteria("has_wax_planks", RecipeProvider.has(ModItems.WAXED_PLANKS.get()));
-        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.ACACIA_BEE_NEST_ITEM)
+        AdvancedShapedRecipeBuilder.shaped(ModItems.ACACIA_BEE_NEST_ITEM)
                 .pattern("WPW", "PHP", "WPW")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
                 .define('P', Ingredient.of(Items.ACACIA_PLANKS))
                 .define('H', Ingredient.of(Items.BEEHIVE))
                 .unlockedBy(hasWaxPlanks)
                 .save(recipes);
-        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BIRCH_BEE_NEST_ITEM)
+        AdvancedShapedRecipeBuilder.shaped(ModItems.BIRCH_BEE_NEST_ITEM)
                 .pattern("WPW", "PHP", "WPW")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
                 .define('P', Ingredient.of(Items.BIRCH_PLANKS))
                 .define('H', Ingredient.of(Items.BEEHIVE))
                 .unlockedBy(hasWaxPlanks)
                 .save(recipes);
-        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.DARK_OAK_NEST_ITEM)
+        AdvancedShapedRecipeBuilder.shaped(ModItems.DARK_OAK_NEST_ITEM)
                 .pattern("WPW", "PHP", "WPW")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
                 .define('P', Ingredient.of(Items.DARK_OAK_PLANKS))
                 .define('H', Ingredient.of(Items.BEEHIVE))
                 .unlockedBy(hasWaxPlanks)
                 .save(recipes);
-        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.JUNGLE_BEE_NEST_ITEM)
+        AdvancedShapedRecipeBuilder.shaped(ModItems.JUNGLE_BEE_NEST_ITEM)
                 .pattern("WPW", "PHP", "WPW")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
                 .define('P', Ingredient.of(Items.JUNGLE_PLANKS))
                 .define('H', Ingredient.of(Items.BEEHIVE))
                 .unlockedBy(hasWaxPlanks)
                 .save(recipes);
-        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.OAK_BEE_NEST_ITEM)
+        AdvancedShapedRecipeBuilder.shaped(ModItems.OAK_BEE_NEST_ITEM)
                 .pattern("WPW", "PHP", "WPW")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
                 .define('P', Ingredient.of(Items.OAK_PLANKS))
                 .define('H', Ingredient.of(Items.BEEHIVE))
                 .unlockedBy(hasWaxPlanks)
                 .save(recipes);
-        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SPRUCE_BEE_NEST_ITEM)
+        AdvancedShapedRecipeBuilder.shaped(ModItems.SPRUCE_BEE_NEST_ITEM)
                 .pattern("WPW", "PHP", "WPW")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
                 .define('P', Ingredient.of(Items.SPRUCE_PLANKS))
@@ -116,9 +116,9 @@ public class ModRecipeProvider extends RecipeProvider {
         //endregion
 
         //region Honey Conversion
-        ShapelessRecipeBuilder.shapeless(ModItems.HONEY_FLUID_BUCKET.get()).requires(Items.HONEY_BOTTLE, 4).requires(Items.BUCKET)
+        ShapelessRecipeBuilder.shapeless(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_FLUID_BUCKET.get()).requires(Items.HONEY_BOTTLE, 4).requires(Items.BUCKET)
                 .unlockedBy("has_honey_bottle", RecipeProvider.has(Items.HONEY_BOTTLE)).save(recipes, new ResourceLocation(ModConstants.MOD_ID, "honey_bottles_to_bucket"));
-        ShapelessRecipeBuilder.shapeless(Items.HONEY_BOTTLE, 4).requires(Items.GLASS_BOTTLE, 4).requires(ModItems.HONEY_FLUID_BUCKET.get())
+        ShapelessRecipeBuilder.shapeless(Items.HONEY_BOTTLE, 4).requires(Items.GLASS_BOTTLE, 4).requires(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_FLUID_BUCKET.get())
                 .unlockedBy("has_honey_bottle", RecipeProvider.has(Items.HONEY_BOTTLE)).save(recipes, new ResourceLocation(ModConstants.MOD_ID, "honey_bucket_to_bottles"));
         //endregion
 
@@ -138,12 +138,12 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipes);
 
         //region Wax
-        RecipeHelper.getStorageRecipe(ModItems.WAX_BLOCK_ITEM.get(), Ingredient.of(ModItems.WAX.get()))
-                .unlockedBy("has_wax", RecipeProvider.has(ModItems.WAX.get())).save(recipes);
-        RecipeHelper.getStorageToItemRecipe(ModItems.WAX.get(), Ingredient.of(ModItems.WAX_BLOCK_ITEM.get()))
-                .unlockedBy("has_wax_block", RecipeProvider.has(ModItems.WAX_BLOCK_ITEM.get())).save(recipes);
+        RecipeHelper.getStorageRecipe(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX_BLOCK_ITEM.get(), Ingredient.of(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX.get()))
+                .unlockedBy("has_wax", RecipeProvider.has(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX.get())).save(recipes);
+        RecipeHelper.getStorageToItemRecipe(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX.get(), Ingredient.of(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX_BLOCK_ITEM.get()))
+                .unlockedBy("has_wax_block", RecipeProvider.has(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX_BLOCK_ITEM.get())).save(recipes);
         //endregion
-        AdvancedShapedRecipeBuilder.shaped(ModItems.HONEY_POT_ITEM)
+        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_POT_ITEM)
                 .pattern("HCH", "CBC", "HCH")
                 .define('H', Ingredient.of(ModItemTags.HONEY_BOTTLES))
                 .define('C', Ingredient.of(ModItemTags.HONEYCOMB))
@@ -231,7 +231,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
                 .unlockedBy(hasIron)
                 .save(recipes);
-        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR)
+        AdvancedShapedRecipeBuilder.shaped(ModItems.BEE_JAR)
                 .pattern(" G ", "G G", "GGG")
                 .define('G', Ingredient.of(Tags.Items.GLASS_PANES_COLORLESS))
                 .unlockedBy("has_glass_panes", RecipeProvider.has(Tags.Items.GLASS_PANES_COLORLESS))
@@ -268,7 +268,7 @@ public class ModRecipeProvider extends RecipeProvider {
 
         //region Machines
         RecipeCriteria hasObsidian = new RecipeCriteria("has_obsidian", RecipeProvider.has(Tags.Items.OBSIDIAN));
-        AdvancedShapedRecipeBuilder.shaped(ModItems.ENDER_BEECON_ITEM)
+        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.ENDER_BEECON_ITEM)
                 .pattern("PPP","GEG","PBP")
                 .define('E', Ingredient.of(Items.ENDER_EYE))
                 .define('P', Ingredient.of(Items.PURPUR_BLOCK))
@@ -276,7 +276,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('B', Ingredient.of(Items.BEACON))
                 .unlockedBy(hasObsidian)
                 .save(recipes);
-        AdvancedShapedRecipeBuilder.shaped(ModItems.SOLIDIFICATION_CHAMBER_ITEM)
+        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.SOLIDIFICATION_CHAMBER_ITEM)
                 .pattern(" G ","IGI","SWS")
                 .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
                 .define('G', Ingredient.of(Tags.Items.GLASS))
@@ -284,7 +284,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Ingredient.of(Tags.Items.STONE))
                 .unlockedBy(hasIron)
                 .save(recipes);
-        AdvancedShapedRecipeBuilder.shaped(ModItems.HONEY_GENERATOR_ITEM)
+        AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_GENERATOR_ITEM)
                 .pattern("I@I","SGR","IBI")
                 .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
                 .define('B', Ingredient.of(Items.BUCKET))
@@ -321,7 +321,7 @@ public class ModRecipeProvider extends RecipeProvider {
         //region Terminal
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_BASIC_TERMINAL)
                 .pattern("OCO","CFC","OCO")
-                .define('F', Ingredient.of(ModItems.CENTRIFUGE.get()))
+                .define('F', Ingredient.of(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.CENTRIFUGE.get()))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
                 .define('O', Ingredient.of(Tags.Items.OBSIDIAN))
                 .unlockedBy(hasObsidian)
@@ -414,7 +414,7 @@ public class ModRecipeProvider extends RecipeProvider {
         //region Energy Input
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_BASIC_ENERGY_PORT)
                 .pattern("OCO","CGC","OCO")
-                .define('G', Ingredient.of(ModItems.HONEY_GENERATOR_ITEM.get()))
+                .define('G', Ingredient.of(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_GENERATOR_ITEM.get()))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
                 .define('O', Ingredient.of(Tags.Items.OBSIDIAN))
                 .unlockedBy(hasObsidian)
@@ -476,7 +476,7 @@ public class ModRecipeProvider extends RecipeProvider {
         //region Fluid Output
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_BASIC_FLUID_OUTPUT)
                 .pattern("OCO","CHC","OCO")
-                .define('H', Ingredient.of(ModItems.HONEY_POT_ITEM.get()))
+                .define('H', Ingredient.of(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_POT_ITEM.get()))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
                 .define('O', Ingredient.of(Tags.Items.OBSIDIAN))
                 .unlockedBy(hasObsidian)

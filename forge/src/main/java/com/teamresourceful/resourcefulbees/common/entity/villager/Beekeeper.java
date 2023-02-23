@@ -81,14 +81,14 @@ public final class Beekeeper {
 
     //region Level Two Trades
     private static void createLevelTwoTrades(List<VillagerTrades.ItemListing> list) {
-        addTrade(list, UniformInt.of(2,6), Items.IRON_INGOT, UniformInt.of(1,3), ModItems.SCRAPER.get(), UniformInt.of(1,1), 2, 2);
-        addTrade(list, UniformInt.of(4,8), Items.IRON_INGOT, UniformInt.of(2,6), ModItems.SMOKER.get(), UniformInt.of(1,1), 4, 2);
-        addTrade(list, UniformInt.of(2,6), Items.IRON_INGOT, UniformInt.of(1,3), ModItems.SMOKERCAN.get(), UniformInt.of(1,1), 4, 2);
-        addTrade(list, UniformInt.of(1,3), Items.LEATHER, UniformInt.of(2,4), ModItems.BELLOW.get(), UniformInt.of(1,1), 4, 2);
-        addTrade(list, UniformInt.of(1,3), ModItems.HONEY_DIPPER.get(), UniformInt.of(1,1), 2, 2);
-        addTrade(list, UniformInt.of(6,12), Items.REDSTONE, UniformInt.of(1,4), ModItems.BEEPEDIA.get(), UniformInt.of(1,1), 2, 2);
-        addTrade(list, UniformInt.of(6,12), Items.COMPASS, UniformInt.of(1,4), ModItems.BEE_LOCATOR.get(), UniformInt.of(1,1), 2, 2);
-        addTrade(list, UniformInt.of(6,12), ModItems.WAXED_PLANKS.get(), UniformInt.of(1,2), ModItems.BEE_BOX.get(), UniformInt.of(1,1), 2, 2);
+        addTrade(list, UniformInt.of(2,6), Items.IRON_INGOT, UniformInt.of(1,3), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SCRAPER.get(), UniformInt.of(1,1), 2, 2);
+        addTrade(list, UniformInt.of(4,8), Items.IRON_INGOT, UniformInt.of(2,6), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SMOKER.get(), UniformInt.of(1,1), 4, 2);
+        addTrade(list, UniformInt.of(2,6), Items.IRON_INGOT, UniformInt.of(1,3), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SMOKERCAN.get(), UniformInt.of(1,1), 4, 2);
+        addTrade(list, UniformInt.of(1,3), Items.LEATHER, UniformInt.of(2,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BELLOW.get(), UniformInt.of(1,1), 4, 2);
+        addTrade(list, UniformInt.of(1,3), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_DIPPER.get(), UniformInt.of(1,1), 2, 2);
+        addTrade(list, UniformInt.of(6,12), Items.REDSTONE, UniformInt.of(1,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEEPEDIA.get(), UniformInt.of(1,1), 2, 2);
+        addTrade(list, UniformInt.of(6,12), Items.COMPASS, UniformInt.of(1,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_LOCATOR.get(), UniformInt.of(1,1), 2, 2);
+        addTrade(list, UniformInt.of(6,12), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_PLANKS.get(), UniformInt.of(1,2), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_BOX.get(), UniformInt.of(1,1), 2, 2);
     }
     //endregion
 
@@ -111,7 +111,7 @@ public final class Beekeeper {
     private static void addHoneycombs(List<VillagerTrades.ItemListing> list) {
         addVanillaBeeProduct(list, Items.HONEYCOMB);
 
-        Collection<RegistryEntry<Item>> honeycombs = ModItems.HONEYCOMB_ITEMS.getEntries();
+        Collection<RegistryEntry<Item>> honeycombs = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.getEntries();
         honeycombs.forEach(registryEntry -> {
             if (registryEntry.get() instanceof CustomHoneycombItem honeycombItem && honeycombItem.isTradable()) {
                 addBeeProduct(list, honeycombItem.getDefaultInstance(), honeycombItem.getTradeData());
@@ -122,7 +122,7 @@ public final class Beekeeper {
     private static void addHoneyBottles(List<VillagerTrades.ItemListing> list) {
         addVanillaBeeProduct(list, Items.HONEY_BOTTLE);
 
-        Collection<RegistryEntry<Item>> honeyBottles = ModItems.HONEY_BOTTLE_ITEMS.getEntries();
+        Collection<RegistryEntry<Item>> honeyBottles = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BOTTLE_ITEMS.getEntries();
         honeyBottles.forEach(registryEntry -> {
             if (registryEntry.get() instanceof CustomHoneyBottleItem honeyBottleItem && honeyBottleItem.isTradable()) {
                 addBeeProduct(list, honeyBottleItem.getDefaultInstance(), honeyBottleItem.getTradeData());
@@ -133,7 +133,7 @@ public final class Beekeeper {
     private static void addHoneyBuckets(List<VillagerTrades.ItemListing> list) {
         addTrade(list, UniformInt.of(8,16), Items.BUCKET, UniformInt.of(1,1), ModItems.HONEY_FLUID_BUCKET.get(), UniformInt.of(1,1), 4, 2);
 
-        Collection<RegistryEntry<Item>> honeyBuckets = ModItems.HONEY_BUCKET_ITEMS.getEntries();
+        Collection<RegistryEntry<Item>> honeyBuckets = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BUCKET_ITEMS.getEntries();
         honeyBuckets.forEach(registryEntry -> {
             if (registryEntry.get() instanceof CustomHoneyBucketItem honeyBucketItem && honeyBucketItem.isTradable()) {
                 addBeeProduct(list, honeyBucketItem.getDefaultInstance(), honeyBucketItem.getTradeData());
@@ -144,7 +144,7 @@ public final class Beekeeper {
     private static void addHoneyBlocks(List<VillagerTrades.ItemListing> list) {
         addVanillaBeeProduct(list, Items.HONEY_BLOCK);
 
-        Collection<RegistryEntry<Item>> entries = ModItems.HONEY_BLOCK_ITEMS.getEntries();
+        Collection<RegistryEntry<Item>> entries = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BLOCK_ITEMS.getEntries();
         entries.forEach(registryEntry -> {
             if (registryEntry.get() instanceof BlockItem blockItem && blockItem.getBlock() instanceof CustomHoneyBlock honeyBlock && honeyBlock.isTradable()) {
                 addBeeProduct(list, blockItem.getDefaultInstance(), honeyBlock.getTradeData());
