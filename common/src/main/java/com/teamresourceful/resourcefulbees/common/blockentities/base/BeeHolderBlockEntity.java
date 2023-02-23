@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentities.base;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import com.teamresourceful.resourcefullib.common.utils.TagUtils;
 import net.minecraft.core.BlockPos;
@@ -146,7 +147,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
             .stream()
             .map(CompoundTag.class::cast)
             .forEachOrdered(data -> {
-                Component displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? Component.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : Component.literal("Temp Bee Name");
+                Component displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? Component.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : ModTranslations.TEMP_BEE_NAME;
                 String beeColor = data.contains(NBTConstants.BeeJar.COLOR) ? data.getString(NBTConstants.BeeJar.COLOR) : BeeConstants.VANILLA_BEE_COLOR;
                 this.bees.add(new BlockBee(data.getCompound("EntityData"), data.getInt("TicksInHive"), data.getInt("MinOccupationTicks"), displayName, beeColor, data.getBoolean(NBTConstants.NBT_LOCKED)));
             });

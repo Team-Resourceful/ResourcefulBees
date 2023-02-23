@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.api.registry.TraitAbilityRegistry;
 import com.teamresourceful.resourcefulbees.client.component.ItemSlotWidget;
 import com.teamresourceful.resourcefulbees.client.component.SlotButton;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.honeys.EffectEntry;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.HistoryScreen;
@@ -116,23 +116,23 @@ public class TraitPage extends HistoryScreen implements TooltipProvider {
     }
 
     @Override
-    protected <T extends GuiEventListener & Widget & NarratableEntry> T addRenderableWidget(T widget) {
+    protected <T extends GuiEventListener & Widget & NarratableEntry> @NotNull T addRenderableWidget(@NotNull T widget) {
         this.renderables.add(widget);
         return super.addRenderableWidget(widget);
     }
 
     @Override
-    protected <T extends Widget> T addRenderableOnly(T widget) {
+    protected <T extends Widget> @NotNull T addRenderableOnly(@NotNull T widget) {
         this.renderables.add(widget);
         return super.addRenderableOnly(widget);
     }
 
     enum Category {
-        POTIONS(new ResourceLocation("textures/item/brewing_stand.png"), TranslationConstants.Beepedia.Traits.POTION_DAMAGE_EFFECTS),
-        IMMUNITIES(new ResourceLocation("textures/item/barrier.png"), TranslationConstants.Beepedia.Traits.IMMUNITIES),
-        DAMAGE(new ResourceLocation("textures/item/iron_axe.png"), TranslationConstants.Beepedia.Traits.DAMAGE_TYPES),
-        ABILITIES(new ResourceLocation("textures/item/nether_star.png"), TranslationConstants.Beepedia.Traits.ABILITIES),
-        AURAS(new ResourceLocation("textures/item/end_crystal.png"), TranslationConstants.Beepedia.Traits.AURAS);
+        POTIONS(new ResourceLocation("textures/item/brewing_stand.png"), BeepediaTranslations.Traits.POTION_DAMAGE_EFFECTS),
+        IMMUNITIES(new ResourceLocation("textures/item/barrier.png"), BeepediaTranslations.Traits.IMMUNITIES),
+        DAMAGE(new ResourceLocation("textures/item/iron_axe.png"), BeepediaTranslations.Traits.DAMAGE_TYPES),
+        ABILITIES(new ResourceLocation("textures/item/nether_star.png"), BeepediaTranslations.Traits.ABILITIES),
+        AURAS(new ResourceLocation("textures/item/end_crystal.png"), BeepediaTranslations.Traits.AURAS);
 
         public final ResourceLocation texture;
         public final MutableComponent component;

@@ -3,11 +3,11 @@ package com.teamresourceful.resourcefulbees.centrifuge.client.screens;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.controlpanels.OutputControlPanel;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.terminal.output.TerminalOutputHomePanel;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
-import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeFluidOutputContainer;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeFluidOutputEntity;
+import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -61,7 +61,7 @@ public class CentrifugeFluidOutputScreen extends CentrifugeInventoryScreen<Centr
     }
 
     private Component getDisplayName(FluidStack stack) {
-        return stack.isEmpty() ? TranslationConstants.Guis.NO_FLUID : stack.getDisplayName();
+        return stack.isEmpty() ? GuiTranslations.NO_FLUID : stack.getDisplayName();
     }
 
     private Component getMillibuckets(int fluidAmount) {

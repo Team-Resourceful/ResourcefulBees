@@ -36,8 +36,12 @@ public class BlockLanguageModule implements LanguageModule {
         provider.addBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.WAXED_FENCE_GATE, "Waxed Fence Gate");
         provider.addBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.FAKE_FLOWER, "Fake Golden Flower");
         provider.addFluid(ModFluids.HONEY, "Honey");
-
         provider.addBlock(ModBlocks.HONEY_POT, "Honey Pot");
+        provider.addBlock(ModBlocks.BASIC_CENTRIFUGE, "Centrifuge");
+        provider.addBlock(ModBlocks.CENTRIFUGE_CRANK, "Centrifuge Crank");
+        provider.addBlock(ModBlocks.FLOW_HIVE, "Flow Hive");
+        provider.addBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_GLASS, "§6Honey Glass (Bee)");
+        provider.addBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_GLASS_PLAYER, "§6Honey Glass (Player)");
 
         com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HIVES.getEntries().forEach(registryObject -> addNest(provider, registryObject));
     }

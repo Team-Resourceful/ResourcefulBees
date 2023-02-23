@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import com.teamresourceful.resourcefullib.common.color.Color;
@@ -138,7 +138,7 @@ public class BeeJarItem extends Item {
             if (display != null) {
                 Color color = getColor(stack);
                 display = color != null ? display.withStyle(Style.EMPTY.withColor(color.getValue())) : display.withStyle(ChatFormatting.GRAY);
-                component.append(Component.translatable(TranslationConstants.Items.BEE_BOX_ENTITY_NAME, display));
+                component.append(Component.translatable(ItemTranslations.BEE_BOX_ENTITY_NAME, display));
             }
         }
         return component;
@@ -147,6 +147,6 @@ public class BeeJarItem extends Item {
     @NotNull
     @Override
     public String getDescriptionId(@NotNull ItemStack stack) {
-        return isFilled(stack) ? TranslationConstants.Items.BEE_JAR_FILLED : TranslationConstants.Items.BEE_JAR_EMPTY;
+        return isFilled(stack) ? ItemTranslations.BEE_JAR_FILLED : ItemTranslations.BEE_JAR_EMPTY;
     }
 }

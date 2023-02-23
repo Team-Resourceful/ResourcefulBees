@@ -3,11 +3,12 @@ package com.teamresourceful.resourcefulbees.centrifuge.client.components;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.buttons.NavButton;
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeTextures;
-import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
-import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeInputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.OutputLocationSelectionPacket;
+import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefullib.client.components.ParentWidget;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
@@ -23,7 +24,6 @@ import java.util.List;
 public class OutputLocationSelectionWidget extends ParentWidget {
 
     private static final ItemStack NULL_OUTPUT_ICON = Items.BARRIER.getDefaultInstance();
-    private static final Component NULL_OUTPUT_POS = Component.literal("Output Not Linked!");
 
     private final CentrifugeInputEntity inputEntity;
     private final int recipeOutputSlot;
@@ -38,7 +38,7 @@ public class OutputLocationSelectionWidget extends ParentWidget {
         this.recipeOutputSlot = recipeOutputSlot;
         this.outputType = outputType;
         this.outputsList = outputsList;
-        this.outputSlot = Component.literal("Output " + (recipeOutputSlot + 1));
+        this.outputSlot = Component.translatable(CentrifugeTranslations.OUTPUT_SLOT, recipeOutputSlot + 1);
         init();
     }
 
@@ -61,7 +61,7 @@ public class OutputLocationSelectionWidget extends ParentWidget {
         TextUtils.tf8DrawCenteredStringNoShadow(stack, outputSlot, x+38.5f, y, TextUtils.FONT_COLOR_1);
 
         BlockPos blockPos = inputEntity.getOutputLocationGroup(outputType).get(recipeOutputSlot).getPos();
-        drawOutputPos(stack, blockPos == null ? NULL_OUTPUT_POS : Component.literal(CentrifugeUtils.formatBlockPos(blockPos)));
+        drawOutputPos(stack, blockPos == null ? CentrifugeTranslations.OUTPUT_NOT_LINKED : Component.literal(CentrifugeUtils.formatBlockPos(blockPos)));
     }
 
     private void drawOutputItem(ItemStack itemStack) {

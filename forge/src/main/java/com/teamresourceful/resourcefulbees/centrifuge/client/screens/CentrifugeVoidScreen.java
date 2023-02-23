@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.centrifuge.client.screens;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.controlpanels.VoidControlPanel;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.terminal.dump.TerminalVoidHomePanel;
-import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeVoidContainer;
+import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ public class CentrifugeVoidScreen extends CentrifugeInventoryScreen<CentrifugeVo
         if (initialize) {
             switchNavPanelTab(this.navPanelTab, currentInfoPanel);
         } else switch (controlPanelTab) {
-            case HOME -> setDefaultNavPanelTab(TerminalPanels.DUMPS_HOME);
+            case HOME -> setDefaultNavPanelTab(TerminalPanels.FILTERS_HOME);
             case INVENTORY -> setDefaultNavPanelTab(TerminalPanels.INVENTORY);
             default -> removeNavPanelIfExists();
         }
@@ -43,7 +43,7 @@ public class CentrifugeVoidScreen extends CentrifugeInventoryScreen<CentrifugeVo
                 removeInfoPanelIfExists();
                 menu.enableSlots();
             }
-            case DUMPS_HOME -> {
+            case FILTERS_HOME -> {
                 updateInfoPanel(new TerminalVoidHomePanel(pX, pY, false));
                 menu.disableSlots();
             }

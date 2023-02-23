@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.HoneyGeneratorBlockEntity;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.ChatFormatting;
@@ -66,7 +66,7 @@ public class HoneyGenerator extends TickingBlock<HoneyGeneratorBlockEntity> {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        tooltip.add(TranslationConstants.Items.GEN_TOOLTIP.withStyle(ChatFormatting.GOLD));
+        tooltip.add(ItemTranslations.GEN_TOOLTIP.withStyle(ChatFormatting.GOLD));
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.honeys;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyBottleEffectData;
 import com.teamresourceful.resourcefulbees.api.data.trait.PotionEffect;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
@@ -40,14 +41,14 @@ public class EffectEntry extends ListEntry {
     public EffectEntry(PotionEffect effect) {
         this.effect = effect.effect();
         this.strength = effect.strength();
-        this.durationText = Component.literal("Time depends on difficulty.");
+        this.durationText = BeepediaTranslations.EFFECT_TIME;
         this.chance = 0f;
     }
 
     public EffectEntry(MobEffect effect) {
         this.effect = effect;
         this.strength = 0;
-        this.durationText = Component.literal("Immune no matter the strength.");
+        this.durationText = BeepediaTranslations.IMMUNITY;
         this.chance = 0f;
     }
 

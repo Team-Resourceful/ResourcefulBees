@@ -10,6 +10,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
@@ -148,4 +149,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         }
     }
 
+    public void addEnchantmentDesc(Supplier<? extends Enchantment> key, String desc) {
+        add(key.get().getDescriptionId() + ".desc", desc);
+    }
 }

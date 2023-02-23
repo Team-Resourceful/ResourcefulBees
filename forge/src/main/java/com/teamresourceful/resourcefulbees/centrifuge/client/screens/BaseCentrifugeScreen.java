@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.Swit
 import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.VoidExcessPacket;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
@@ -144,9 +145,6 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         updateNavPanelSelection(initialize);
         setNavPanelTab(initialize);
         if (newNavPanel != null) addRenderableWidget(newNavPanel);
-            /* else {
-            removeInfoPanelIfExists();
-        }*/
     }
 
     private void updateNavPanelSelection(boolean initialize) {
@@ -220,8 +218,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
         AbstractGUICentrifugeEntity selectedEntity = navPanel == null ? menu.getEntity() : navPanel.selectedEntity();
         if (selectedEntity instanceof AbstractCentrifugeOutputEntity<?, ?> outputEntity) {
             boolean voidsExcess = !outputEntity.voidsExcess();
-            //TODO make translatable
-            setToastText(Component.literal(voidsExcess ? "Excess contents will be voided for output" : "Excess contents will not be voided for output"));
+            setToastText(voidsExcess ? CentrifugeTranslations.VOIDING_EXCESS : CentrifugeTranslations.NOT_VOIDING_EXCESS);
             NetworkHandler.CHANNEL.sendToServer(new VoidExcessPacket(selectedEntity.getBlockPos(), voidsExcess));
         }
     }
@@ -235,8 +232,7 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     public void purgeContents() {
         AbstractGUICentrifugeEntity selectedEntity = navPanel == null ? menu.getEntity() : navPanel.selectedEntity();
         if (selectedEntity instanceof AbstractCentrifugeOutputEntity<?,?>) {
-            //TODO make translatable
-            setToastText(Component.literal("Output contents purged!"));
+            setToastText(CentrifugeTranslations.CONTENTS_PURGED);
             NetworkHandler.CHANNEL.sendToServer(new PurgeContentsPacket(selectedEntity.getBlockPos()));
         }
     }

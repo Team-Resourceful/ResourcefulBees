@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.MissingRegistryTranslations;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
 import com.teamresourceful.resourcefulbees.platform.client.events.ScreenOpenEvent;
 import net.minecraft.client.Minecraft;
@@ -20,10 +20,10 @@ public class MissingRegistryScreen extends ConfirmScreen {
                     Minecraft.getInstance().stop();
                 }
             },
-            TranslationConstants.MissingRegistry.TITLE,
-            TranslationConstants.MissingRegistry.DESCRIPTION,
-            TranslationConstants.MissingRegistry.PROCEED,
-            TranslationConstants.MissingRegistry.QUIT
+            MissingRegistryTranslations.TITLE,
+            MissingRegistryTranslations.DESCRIPTION,
+            MissingRegistryTranslations.PROCEED,
+            MissingRegistryTranslations.QUIT
         );
         setDelay(30);
     }

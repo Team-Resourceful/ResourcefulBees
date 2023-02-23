@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBl
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.items.MutatedPollenItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.FakeFlowerTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
@@ -80,7 +80,7 @@ public class FakeFlowerBlockEntity extends GUISyncedBlockEntity implements Insta
 
     @Override
     public @NotNull Component getDisplayName() {
-        return TranslationConstants.FakeFLower.TITLE;
+        return FakeFlowerTranslations.TITLE;
     }
 
     @Nullable

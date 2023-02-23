@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.centrifuge.client.components.buttons
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.components.AbstractButton;
@@ -42,7 +43,6 @@ public class ViewButton extends AbstractButton implements TooltipProvider {
 
     @Override
     public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
-        //TODO make translatable
-        return this.isHovered ? List.of(Component.literal("View Block")) : List.of();
+        return this.isHovered ? List.of(CentrifugeTranslations.VIEW) : List.of();
     }
 }

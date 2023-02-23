@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.client.component.selection;
 import com.teamresourceful.resourcefulbees.client.component.SlotButton;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.state.BeepediaState;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
 import com.teamresourceful.resourcefullib.client.components.ParentWidget;
 
 import java.util.List;
@@ -21,11 +21,11 @@ public class SelectionButtons extends ParentWidget {
     @Override
     protected void init() {
         addRenderableWidget(createButton(x, y, BeepediaState.Type.BEES))
-                .setTooltipProvider(() -> List.of(TranslationConstants.Beepedia.BEES));
+                .setTooltipProvider(() -> List.of(BeepediaTranslations.BEES));
         addRenderableWidget(createButton(x + 22, y, BeepediaState.Type.TRAITS))
-                .setTooltipProvider(() -> List.of(TranslationConstants.Beepedia.TRAITS));
+                .setTooltipProvider(() -> List.of(BeepediaTranslations.TRAITS));
         addRenderableWidget(createButton(x + 44, y, BeepediaState.Type.HONEY))
-                .setTooltipProvider(() -> List.of(TranslationConstants.Beepedia.HONEY));
+                .setTooltipProvider(() -> List.of(BeepediaTranslations.HONEY));
     }
 
     private SlotButton createButton(int x, int y, BeepediaState.Type type) {

@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.forge.ForgeTypes;
@@ -42,7 +42,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
 
     public FlowersCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
-            TranslationConstants.Jei.FLOWERS,
+            JeiTranslations.FLOWERS,
             guiHelper.drawableBuilder(GUI_BACK, 0, 0, 100, 75).addPadding(0, 0, 0, 0).build(),
             guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.GOLD_FLOWER.get())));
     }

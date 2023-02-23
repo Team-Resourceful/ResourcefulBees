@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeconTranslations;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
@@ -94,20 +94,20 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
     @Override
     protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
         super.renderLabels(matrixStack, mouseX, mouseY);
-        this.font.draw(matrixStack, TranslationConstants.Guis.EnderBeecon.PRIMARY_LABEL, 10, 6, 4210752);
+        this.font.draw(matrixStack, BeeconTranslations.PRIMARY_LABEL, 10, 6, 4210752);
 
-        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.ACTIVE_LABEL, 110, 20, 14737632);
+        drawString(matrixStack, font, BeeconTranslations.ACTIVE_LABEL, 110, 20, 14737632);
         drawString(matrixStack, font, tileEntity.doEffects() ? "Yes" : "No", 160, 20, tileEntity.doEffects() ? 47104 : 12320768);
-        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.DRAIN_LABEL, 110, 32, 14737632);
+        drawString(matrixStack, font, BeeconTranslations.DRAIN_LABEL, 110, 32, 14737632);
         drawString(matrixStack, font, tileEntity.getDrain() + " mb/t", 141, 32, 16751628);
-        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.RANGE_LABEL, 110, 44, 14737632);
+        drawString(matrixStack, font, BeeconTranslations.RANGE_LABEL, 110, 44, 14737632);
         drawString(matrixStack, font, tileEntity.getRange() + " blocks", 145, 44, 34815);
 
         FluidStack fluidStack = menu.getEntity().getTank().getFluid();
 
-        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.FLUID_LABEL, 110, 56, 14737632);
-        drawString(matrixStack, font, fluidStack.isEmpty() ? TranslationConstants.Guis.EnderBeecon.NO_FLUID_LABEL : fluidStack.getDisplayName(), 137, 56, 16751628);
-        drawString(matrixStack, font, TranslationConstants.Guis.EnderBeecon.FLUID_AMOUNT_LABEL, 110, 68, 14737632);
+        drawString(matrixStack, font, BeeconTranslations.FLUID_LABEL, 110, 56, 14737632);
+        drawString(matrixStack, font, fluidStack.isEmpty() ? BeeconTranslations.NO_FLUID_LABEL : fluidStack.getDisplayName(), 137, 56, 16751628);
+        drawString(matrixStack, font, BeeconTranslations.FLUID_AMOUNT_LABEL, 110, 68, 14737632);
         drawString(matrixStack, font, fluidStack.getAmount()+"mB", 148, 68, 47104);
     }
 
@@ -142,7 +142,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
 
         @Override
         protected void updateMessage() {
-            setMessage(Component.literal("Range: " + (int)((value * 40)+10)));
+            setMessage(Component.translatable(BeeconTranslations.EFFECT_RANGE, (int)((value * 40)+10)));
         }
 
         @Override

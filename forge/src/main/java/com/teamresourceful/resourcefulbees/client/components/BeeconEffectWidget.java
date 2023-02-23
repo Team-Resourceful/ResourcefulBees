@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.components;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeconTranslations;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
@@ -29,7 +30,7 @@ public class BeeconEffectWidget extends AbstractWidget {
     private boolean selected;
 
     public BeeconEffectWidget(Screen screen, int x, int y, MobEffect effect, EnderBeeconBlockEntity tile) {
-        super(x, y, 88, 22, Component.literal("Beecon Effect Button"));
+        super(x, y, 88, 22, BeeconTranslations.BEECON_EFFECT_BUTTON);
         this.screen = screen;
         this.tile = tile;
         this.effect = effect;
@@ -77,7 +78,7 @@ public class BeeconEffectWidget extends AbstractWidget {
 
 
         if (MathUtils.inRangeInclusive(mouseX, x+60, x+85) && MathUtils.inRangeInclusive(mouseY, y+4, y+19)) {
-            this.screen.renderTooltip(stack, Component.literal(this.selected ? "Active" : "Not Active"), mouseX, mouseY);
+            this.screen.renderTooltip(stack, this.selected ? BeeconTranslations.EFFECT_ACTIVE : BeeconTranslations.EFFECT_INACTIVE, mouseX, mouseY);
         }
 
         if (MathUtils.inRangeInclusive(mouseX, x+4, x+22) && MathUtils.inRangeInclusive(mouseY, y+4, y+22)) {

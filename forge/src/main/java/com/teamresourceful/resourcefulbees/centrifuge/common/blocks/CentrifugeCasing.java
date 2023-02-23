@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.blocks;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeCasingEntity;
-import net.minecraft.ChatFormatting;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -26,10 +26,9 @@ public class CentrifugeCasing extends AbstractCentrifuge implements IAssemblySta
         return true;
     }
 
-    //TODO make translatable
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-        tooltip.add(Component.literal("Multiblock edges, corners, and faces only").withStyle(ChatFormatting.GOLD));
+        tooltip.add(CentrifugeTranslations.NO_INTERIOR_TOOLTIP);
     }
 
     @Override

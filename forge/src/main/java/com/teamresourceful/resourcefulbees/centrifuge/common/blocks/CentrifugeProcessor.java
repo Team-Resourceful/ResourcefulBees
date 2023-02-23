@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.blocks;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeProcessorEntity;
-import net.minecraft.ChatFormatting;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -26,11 +26,10 @@ public class CentrifugeProcessor extends AbstractCentrifuge {
         return new CentrifugeProcessorEntity(pos, state);
     }
 
-    //TODO make translatable
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-        tooltip.add(Component.literal("Multiblock interior only").withStyle(ChatFormatting.GOLD));
-        tooltip.add(Component.literal("Limit 63 per multiblock").withStyle(ChatFormatting.GOLD));
+        tooltip.add(CentrifugeTranslations.INTERIOR_ONLY_TOOLTIP);
+        tooltip.add(CentrifugeTranslations.PROCESSOR_LIMIT_TOOLTIP);
     }
 
     @Override

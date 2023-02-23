@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
@@ -53,7 +53,7 @@ public class HomePage extends Screen {
         font.draw(stack, Component.translatable("itemGroup.resourcefulbees.resourcefulbees").withStyle(ChatFormatting.GRAY), 41, 76, -1);
         RenderUtils.bindTexture(LOGO);
         GuiComponent.blit(stack, 41,  85, 0, 0, 104, 16, 104, 16);
-        font.draw(stack, TranslationConstants.Beepedia.NAME.withStyle(ChatFormatting.GRAY), 41, 103, -1);
+        font.draw(stack, BeepediaTranslations.NAME.withStyle(ChatFormatting.GRAY), 41, 103, -1);
 
         font.draw(stack, getProgress(), 93 - font.width(getProgress())/2f, 133, -1);
 
@@ -66,7 +66,7 @@ public class HomePage extends Screen {
                 .map(BeepediaSavedData::getBeepediaData)
                 .map(BeepediaData::size)
                 .orElse(0);
-        return Component.translatable(TranslationConstants.Beepedia.PROGRESS, amount, BeeRegistry.get().getBees().size()).withStyle(ChatFormatting.GRAY);
+        return Component.translatable(BeepediaTranslations.PROGRESS, amount, BeeRegistry.get().getBees().size()).withStyle(ChatFormatting.GRAY);
     }
 
     @Override

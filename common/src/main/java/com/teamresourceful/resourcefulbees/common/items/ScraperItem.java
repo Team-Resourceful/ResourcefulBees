@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.platform.common.item.ItemAction;
 import com.teamresourceful.resourcefulbees.platform.common.item.ItemExtension;
 import net.fabricmc.api.EnvType;
@@ -31,7 +31,7 @@ public class ScraperItem extends Item implements ItemExtension {
     @Override
     @Environment(EnvType.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(TranslationConstants.Items.SCRAPER_TOOLTIP.withStyle(ChatFormatting.GOLD));
-        components.add(TranslationConstants.Items.SCRAPER_TOOLTIP_1.withStyle(ChatFormatting.GOLD));
+        components.add(ItemTranslations.SCRAPER_TOOLTIP.withStyle(ChatFormatting.GOLD));
+        components.add(ItemTranslations.SCRAPER_TOOLTIP_1.withStyle(ChatFormatting.GOLD));
     }
 }

@@ -20,7 +20,7 @@ public class CentrifugeState {
     private Set<BlockPos> inputs = new HashSet<>();
     private List<BlockPos> itemOutputs = new ArrayList<>();
     private List<BlockPos> fluidOutputs = new ArrayList<>();
-    private Set<BlockPos> dumps = new HashSet<>();
+    private Set<BlockPos> filters = new HashSet<>();
     private int energyPorts = 0;
     private int gearboxes = 0;
     private int processors = 0;
@@ -105,16 +105,16 @@ public class CentrifugeState {
     /**
      * total number of voids attached to the centrifuge
      */
-    public Set<BlockPos> getDumps() {
-        return dumps;
+    public Set<BlockPos> getFilters() {
+        return filters;
     }
 
-    public void setDumps(Set<BlockPos> dumps) {
-        this.dumps = dumps;
+    public void setFilters(Set<BlockPos> filters) {
+        this.filters = filters;
     }
 
-    public boolean hasDumps() {
-        return !this.dumps.isEmpty();
+    public boolean hasFilters() {
+        return !this.filters.isEmpty();
     }
 
     /**
@@ -168,7 +168,7 @@ public class CentrifugeState {
         buf.writeCollection(inputs, FriendlyByteBuf::writeBlockPos);
         buf.writeCollection(itemOutputs, FriendlyByteBuf::writeBlockPos);
         buf.writeCollection(fluidOutputs, FriendlyByteBuf::writeBlockPos);
-        buf.writeCollection(dumps, FriendlyByteBuf::writeBlockPos);
+        buf.writeCollection(filters, FriendlyByteBuf::writeBlockPos);
         buf.writeInt(energyPorts);
         buf.writeInt(gearboxes);
         buf.writeInt(processors);
@@ -183,7 +183,7 @@ public class CentrifugeState {
         inputs = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
         itemOutputs = buf.readCollection(Lists::newArrayListWithExpectedSize, FriendlyByteBuf::readBlockPos);
         fluidOutputs = buf.readCollection(Lists::newArrayListWithExpectedSize, FriendlyByteBuf::readBlockPos);
-        dumps = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
+        filters = buf.readCollection(Sets::newHashSetWithExpectedSize, FriendlyByteBuf::readBlockPos);
         energyPorts = buf.readInt();
         gearboxes = buf.readInt();
         processors = buf.readInt();

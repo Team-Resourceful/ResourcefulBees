@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.entities;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.centrifuge.common.CentrifugeController;
 import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeItemOutputContainer;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
+import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -116,7 +116,7 @@ public class CentrifugeItemOutputEntity extends AbstractCentrifugeOutputEntity<I
 
         private boolean depositResult(ItemStack result) {
             CentrifugeController controller = nullableController();
-            if (result.isEmpty() || controller != null && controller.dumpsContainItem(result)) return true;
+            if (result.isEmpty() || controller != null && controller.filtersContainItem(result)) return true;
 
             if (voidExcess || simulateDeposit(result)) {
                 int slotIndex = 0;

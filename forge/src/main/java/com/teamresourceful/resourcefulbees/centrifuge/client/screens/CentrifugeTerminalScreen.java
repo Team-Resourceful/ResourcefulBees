@@ -43,7 +43,7 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
             case INPUTS -> setNavPanelAndUpdate(new TerminalInputNavPanel(pX, pY, this), initialize);
             case ITEM_OUTPUTS -> setNavPanelAndUpdate(new TerminalItemOutputNavPanel(pX, pY, this), initialize);
             case FLUID_OUTPUTS -> setNavPanelAndUpdate(new TerminalFluidOutputNavPanel(pX, pY, this), initialize);
-            case DUMPS -> setNavPanelAndUpdate(new TerminalVoidNavPanel(pX, pY, this), initialize);
+            case FILTERS -> setNavPanelAndUpdate(new TerminalVoidNavPanel(pX, pY, this), initialize);
             default -> setNavPanelAndUpdate(null, initialize);
         }
     }
@@ -57,7 +57,7 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
             case INPUTS -> setDefaultNavPanelTab(TerminalPanels.INPUTS_HOME);
             case ITEM_OUTPUTS -> setDefaultNavPanelTab(TerminalPanels.ITEM_OUTPUTS_HOME);
             case FLUID_OUTPUTS -> setDefaultNavPanelTab(TerminalPanels.FLUID_OUTPUTS_HOME);
-            case DUMPS -> setDefaultNavPanelTab(TerminalPanels.DUMPS_HOME);
+            case FILTERS -> setDefaultNavPanelTab(TerminalPanels.FILTERS_HOME);
             default -> removeNavPanelIfExists();
         }
     }
@@ -74,7 +74,7 @@ public class CentrifugeTerminalScreen extends BaseCentrifugeScreen<CentrifugeTer
             case INPUTS_FLUID_OUTPUTS -> updateInfoPanel(new TerminalIOPanel(pX, pY, CentrifugeOutputType.FLUID, centrifugeState.getFluidOutputs()));
             case ITEM_OUTPUTS_HOME -> updateInfoPanel(new TerminalOutputHomePanel<>(pX, pY, CentrifugeItemOutputEntity.class));
             case FLUID_OUTPUTS_HOME -> updateInfoPanel(new TerminalOutputHomePanel<>(pX, pY, CentrifugeFluidOutputEntity.class));
-            case DUMPS_HOME -> updateInfoPanel(new TerminalVoidHomePanel(pX, pY));
+            case FILTERS_HOME -> updateInfoPanel(new TerminalVoidHomePanel(pX, pY));
             default -> removeInfoPanelIfExists();
         }
     }

@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.component.search;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.state.BeepediaState;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefullib.client.components.ImageButton;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import net.minecraft.client.gui.GuiComponent;
@@ -63,13 +64,14 @@ public class SearchButton extends ImageButton implements TooltipProvider {
     @Override
     public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
         if (isHovered) {
+            String name = this.type.name().toLowerCase(Locale.ROOT);
             Component sortingState = switch (this.state.getSorting(this.type)) {
-                case TRUE -> Component.literal(String.format(Locale.ROOT, "Sorting by having %s", this.type.name().toLowerCase()));
-                case FALSE -> Component.literal(String.format(Locale.ROOT, "Sorting by not having %s", this.type.name().toLowerCase()));
-                case UNSET -> Component.literal(String.format(Locale.ROOT, "Not Sorting by %s", this.type.name().toLowerCase()));
+                case TRUE -> Component.translatable(GuiTranslations.SORT_TRUE, name);
+                case FALSE -> Component.translatable(GuiTranslations.SORT_FALSE, name);
+                case UNSET -> Component.translatable(GuiTranslations.SORT_UNSET, name);
             };
 
-            return List.of(Component.literal("Sort by " + this.type.name().toLowerCase(Locale.ROOT)), sortingState);
+            return List.of(Component.translatable(GuiTranslations.SORT_BY, name), sortingState);
         }
         return List.of();
     }

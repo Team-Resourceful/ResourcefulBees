@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntit
 import com.teamresourceful.resourcefulbees.common.inventory.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
@@ -76,7 +76,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     @NotNull
     @Override
     public Component getDisplayName() {
-        return TranslationConstants.Guis.BEECON;
+        return GuiTranslations.BEECON;
     }
 
     @Nullable

@@ -57,7 +57,7 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
     private final Map<BlockPos, CentrifugeInputEntity> inputs = new HashMap<>();
     private final Map<BlockPos, CentrifugeItemOutputEntity> itemOutputs = new HashMap<>();
     private final Map<BlockPos, CentrifugeFluidOutputEntity> fluidOutputs = new HashMap<>();
-    private final Map<BlockPos, CentrifugeVoidEntity> dumps = new HashMap<>();
+    private final Map<BlockPos, CentrifugeVoidEntity> filters = new HashMap<>();
     private final CentrifugeEnergyStorage energyStorage = new CentrifugeEnergyStorage();
 
     private CentrifugeTerminalEntity terminal;
@@ -86,7 +86,7 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
     public void validateStage2() throws ValidationException {
         this.terminal = terminals.iterator().next();
         CentrifugeTier tier = this.terminal.getTier();
-        checkBlockExceedsTier(dumps.values(), tier, "void_exceeds_tier");
+        checkBlockExceedsTier(filters.values(), tier, "void_exceeds_tier");
         checkBlockExceedsTier(inputs.values(), tier, "input_exceeds_tier");
         checkBlockExceedsTier(itemOutputs.values(), tier, "item_output_exceeds_tier");
         checkBlockExceedsTier(fluidOutputs.values(), tier, "fluid_output_exceeds_tier");
@@ -160,7 +160,7 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         for (CentrifugeFluidOutputEntity fluidOutputOutput : fluidOutputs.values()) {
             if (fluidOutputOutput.getBlockPos().getY() == max().y()) throwValidationException(WRONG_OUTPUT_LOC);
         }
-        for (CentrifugeVoidEntity dump : dumps.values()) {
+        for (CentrifugeVoidEntity dump : filters.values()) {
             if (dump.getBlockPos().getY() == max().y()) throwValidationException(WRONG_OUTPUT_LOC);
         }
     }
@@ -183,7 +183,7 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
             fluidOutputs.put(fluidOutput.getBlockPos(), fluidOutput);
         }
         if (tile instanceof CentrifugeVoidEntity voidEntity) {
-            dumps.put(voidEntity.getBlockPos(), voidEntity);
+            filters.put(voidEntity.getBlockPos(), voidEntity);
         }
         if (tile instanceof CentrifugeEnergyPortEntity energyPort) {
             energyPorts.add(energyPort);
@@ -212,7 +212,7 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
             fluidOutputs.remove(tile.getBlockPos());
         }
         if (tile instanceof CentrifugeVoidEntity) {
-            dumps.remove(tile.getBlockPos());
+            filters.remove(tile.getBlockPos());
         }
         if (tile instanceof CentrifugeEnergyPortEntity energyPort) {
             energyPorts.remove(tile);
@@ -239,16 +239,16 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         return 1 + processors.size();
     }
 
-    public synchronized boolean dumpsContainItem(ItemStack stack) {
-        for (CentrifugeVoidEntity dump : dumps.values()) {
-            if (dump.containsItem(stack)) return true;
+    public synchronized boolean filtersContainItem(ItemStack stack) {
+        for (CentrifugeVoidEntity filter : filters.values()) {
+            if (filter.containsItem(stack)) return true;
         }
         return false;
     }
 
-    public synchronized boolean dumpsContainFluid(FluidStack stack) {
-        for (CentrifugeVoidEntity dump : dumps.values()) {
-            if (dump.containsFluid(stack)) return true;
+    public synchronized boolean filtersContainFluid(FluidStack stack) {
+        for (CentrifugeVoidEntity filter : filters.values()) {
+            if (filter.containsFluid(stack)) return true;
         }
         return false;
     }
@@ -340,7 +340,7 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         centrifugeState.setInputs(inputs.keySet());
         centrifugeState.setItemOutputs(itemOutputs.keySet().stream().toList());
         centrifugeState.setFluidOutputs(fluidOutputs.keySet().stream().toList());
-        centrifugeState.setDumps(dumps.keySet());
+        centrifugeState.setFilters(filters.keySet());
         centrifugeState.setEnergyPorts(energyPorts.size());
         centrifugeState.setGearboxes(gearboxes.size());
         centrifugeState.setProcessors(processors.size());

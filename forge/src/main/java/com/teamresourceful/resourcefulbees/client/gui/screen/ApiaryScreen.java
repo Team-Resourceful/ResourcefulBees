@@ -7,7 +7,8 @@ import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ApiaryTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -90,7 +91,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
         String s = String.format("(%1$s/%2$s)", apiaryBlockEntity.beeCount(), apiaryBlockEntity.getTier().maxBees());
         this.font.draw(matrix, s, 4, 17, 0x404040);
         this.font.draw(matrix, getTitle(), 55, 7, 0x404040);
-        this.font.draw(matrix, TranslationConstants.Guis.INVENTORY, 55, 75, 0x404040);
+        this.font.draw(matrix, GuiTranslations.INVENTORY, 55, 75, 0x404040);
 
         for (Widget widget : this.renderables) {
             if (widget instanceof AbstractWidget aWidget && aWidget.isMouseOver(mouseX, mouseY)) {
@@ -111,8 +112,8 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
                 int ticksInHive = apiaryBee.getTicksInHive();
                 beeInfo.add(apiaryBee.displayName);
-                beeInfo.add(Component.translatable(TranslationConstants.Apiary.TICKS_HIVE, ticksInHive));
-                beeInfo.add(Component.translatable(TranslationConstants.Apiary.TICKS_LEFT, Math.max(apiaryBee.minOccupationTicks - ticksInHive, 0)));
+                beeInfo.add(Component.translatable(ApiaryTranslations.TICKS_HIVE, ticksInHive));
+                beeInfo.add(Component.translatable(ApiaryTranslations.TICKS_LEFT, Math.max(apiaryBee.minOccupationTicks - ticksInHive, 0)));
                 this.renderComponentTooltip(matrix, beeInfo, mouseX, mouseY);
             }
         }

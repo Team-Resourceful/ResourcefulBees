@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeItems;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
@@ -38,7 +38,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
 
     public CentrifugeCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
-                TranslationConstants.Jei.CENTRIFUGE,
+                JeiTranslations.CENTRIFUGE,
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 134, 66).addPadding(0, 0, 0, 0).build(),
                 guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, CentrifugeItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance()));
     }
@@ -128,18 +128,18 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
             List<Component> tooltip = new ArrayList<>();
             if (displayName != null) tooltip.add(displayName);
             if (weight != null) {
-                tooltip.add(Component.translatable(TranslationConstants.Jei.CENTRIFUGE_WEIGHT, NumberFormat.getPercentInstance().format(weight)));
+                tooltip.add(Component.translatable(JeiTranslations.CENTRIFUGE_WEIGHT, NumberFormat.getPercentInstance().format(weight)));
             } else {
-                tooltip.add(TranslationConstants.Jei.CENTRIFUGE_WEIGHT_EMPTY);
+                tooltip.add(JeiTranslations.CENTRIFUGE_WEIGHT_EMPTY);
             }
             return tooltip;
         }
         inBounds = MathUtils.inRangeInclusive((int) mouseX, min, max) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
         if (inBounds) {
             if (outputSize > i)
-                return Collections.singletonList(Component.translatable(TranslationConstants.Jei.CENTRIFUGE_CHANCE, NumberFormat.getPercentInstance().format(chance)));
+                return Collections.singletonList(Component.translatable(JeiTranslations.CENTRIFUGE_CHANCE, NumberFormat.getPercentInstance().format(chance)));
             else {
-                return Collections.singletonList(TranslationConstants.Jei.CENTRIFUGE_CHANCE_EMPTY);
+                return Collections.singletonList(JeiTranslations.CENTRIFUGE_CHANCE_EMPTY);
             }
         }
         return Collections.emptyList();

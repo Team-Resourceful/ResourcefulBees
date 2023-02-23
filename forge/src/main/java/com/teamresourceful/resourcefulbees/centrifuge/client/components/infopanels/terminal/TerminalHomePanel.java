@@ -53,7 +53,7 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
             TERMINAL_FONT_8.draw(stack, "Inputs: " + centrifugeState.getInputs().size(), 6, 32, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(stack, "Item Outputs: " + centrifugeState.getItemOutputs().size(), 6, 40, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(stack, "Fluid Outputs: " + centrifugeState.getFluidOutputs().size(), 6, 48, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Voids: " + centrifugeState.getDumps().size(), 6, 56, FONT_COLOR_1);
+            TERMINAL_FONT_8.draw(stack, "Voids: " + centrifugeState.getFilters().size(), 6, 56, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(stack, "Energy Ports: " + centrifugeState.getEnergyPorts(), 6, 64, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(stack, "Gearboxes: " + centrifugeState.getGearboxes(), 6, 72, FONT_COLOR_1);
             TERMINAL_FONT_8.draw(stack, "Processors: " + centrifugeState.getProcessors(), 6, 80, FONT_COLOR_1);

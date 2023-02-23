@@ -76,7 +76,7 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
     public boolean depositResult(FluidOutput result, int processQuantity) {
         FluidStack fluidStack = result.multiply(processQuantity);
         CentrifugeController controller = nullableController();
-        if (fluidStack.isEmpty() || controller != null && controller.dumpsContainFluid(fluidStack)) return true;
+        if (fluidStack.isEmpty() || controller != null && controller.filtersContainFluid(fluidStack)) return true;
         if (voidExcess || simulateDeposit(fluidStack)) {
             fluidTank.fillTank(fluidStack, IFluidHandler.FluidAction.EXECUTE);
             return true;

@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.FakeFlowerBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.HoneyDipperTranslations;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -151,11 +151,11 @@ public class HoneyDipperItem extends Item {
     }
 
     private enum MessageTypes {
-        FLOWER(args -> Component.translatable(TranslationConstants.HoneyDipper.FLOWER_SET, args)),
-        HIVE(args -> Component.translatable(TranslationConstants.HoneyDipper.HIVE_SET, args)),
-        FAKE_FLOWER(args -> Component.translatable(TranslationConstants.HoneyDipper.FAKE_FLOWER_SET, args)),
-        BEE_SELECTED(args -> Component.translatable(TranslationConstants.HoneyDipper.BEE_SET, args)),
-        BEE_CLEARED(args -> TranslationConstants.HoneyDipper.SELECTION_CLEARED);
+        FLOWER(args -> Component.translatable(HoneyDipperTranslations.FLOWER_SET, args)),
+        HIVE(args -> Component.translatable(HoneyDipperTranslations.HIVE_SET, args)),
+        FAKE_FLOWER(args -> Component.translatable(HoneyDipperTranslations.FAKE_FLOWER_SET, args)),
+        BEE_SELECTED(args -> Component.translatable(HoneyDipperTranslations.BEE_SET, args)),
+        BEE_CLEARED(args -> HoneyDipperTranslations.SELECTION_CLEARED);
 
         private final Function<Object[], MutableComponent> component;
 

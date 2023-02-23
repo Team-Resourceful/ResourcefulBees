@@ -10,7 +10,8 @@ import com.teamresourceful.resourcefulbees.common.compat.jei.BaseCategory;
 import com.teamresourceful.resourcefulbees.common.compat.jei.JEICompat;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -44,7 +45,7 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
 
     public MutationCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
-                TranslationConstants.Jei.MUTATIONS,
+                JeiTranslations.MUTATIONS,
                 guiHelper.drawableBuilder(GUI_BACK, -12, 0, 117, 75).build(),
                 guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModItems.BEE_BOX.get())));
     }
@@ -97,21 +98,21 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
                     .map(Component::literal)
                     .map(c -> c.withStyle(ChatFormatting.DARK_PURPLE))
                     .forEach(tooltip::add);
-            else tooltip.add(TranslationConstants.Jei.NBT.withStyle(ChatFormatting.DARK_PURPLE));
+            else tooltip.add(JeiTranslations.NBT.withStyle(ChatFormatting.DARK_PURPLE));
         });
     }
 
     @Override
     public @NotNull List<Component> getTooltipStrings(@NotNull MutationRecipe recipe, @NotNull IRecipeSlotsView view, double mouseX, double mouseY) {
         if (mouseX >= 63 && mouseX <= 72 && mouseY >= 8 && mouseY <= 17) {
-            return Collections.singletonList(TranslationConstants.Jei.MUTATION_INFO);
+            return Collections.singletonList(JeiTranslations.MUTATION_INFO);
         }
         double outputWeightChance = recipe.pool().getAdjustedWeight(recipe.output().weight()) * recipe.output().chance();
         if (mouseX >= 54 && mouseX <= 63 && mouseY >= 34 && mouseY <= 43 && outputWeightChance < 1) {
-            List<Component> tooltip = Lists.newArrayList(TranslationConstants.Jei.MUTATION_WEIGHT_CHANCE_INFO);
+            List<Component> tooltip = Lists.newArrayList(JeiTranslations.MUTATION_WEIGHT_CHANCE_INFO);
             tooltip.add(Component.empty());
-            tooltip.add(Component.literal("Weight: " + NumberFormat.getPercentInstance().format(recipe.pool().getAdjustedWeight(recipe.output().weight()))));
-            tooltip.add(Component.literal("Chance: " + NumberFormat.getPercentInstance().format(recipe.output().chance())));
+            tooltip.add(Component.translatable(ModTranslations.WEIGHT, recipe.displayFormattedWeight()));
+            tooltip.add(Component.translatable(ModTranslations.CHANCE, recipe.displayFormattedChance()));
             return tooltip;
         }
         return super.getTooltipStrings(recipe, view, mouseX, mouseY);

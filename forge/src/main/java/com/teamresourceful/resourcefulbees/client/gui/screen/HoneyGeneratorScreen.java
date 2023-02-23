@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGeneratorMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -54,7 +54,7 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
     }
 
     private Component getDisplayName(FluidStack stack) {
-        return stack.isEmpty() ? TranslationConstants.Guis.NO_FLUID : stack.getDisplayName();
+        return stack.isEmpty() ? GuiTranslations.NO_FLUID : stack.getDisplayName();
     }
 
     private void renderEnergy(PoseStack stack, int x, int y, float percentage) {

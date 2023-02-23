@@ -7,7 +7,7 @@ public enum TerminalPanels {
     INPUTS_FLUID_OUTPUTS,
     ITEM_OUTPUTS_HOME,
     FLUID_OUTPUTS_HOME,
-    DUMPS_HOME,
+    FILTERS_HOME,
     INVENTORY,
     NONE
 }

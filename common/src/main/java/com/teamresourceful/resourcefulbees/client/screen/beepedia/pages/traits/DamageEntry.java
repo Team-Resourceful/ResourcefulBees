@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.traits;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.trait.DamageType;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
@@ -50,7 +50,7 @@ public class DamageEntry extends ListEntry {
             GuiComponent.blit(stack, 1, 0, 0, 0, 20, 20, 20, 60);
 
             GuiComponent.drawString(stack, font, Component.translatable("damage_type.resourcefulbees."+ this.id), 24, 1, 0x55FF55);
-            GuiComponent.drawString(stack, font, Component.translatable(TranslationConstants.Beepedia.Traits.AMPLIFIER, this.amplifier), 24, 11, 0xAAAAAA);
+            GuiComponent.drawString(stack, font, Component.translatable(BeepediaTranslations.Traits.AMPLIFIER, this.amplifier), 24, 11, 0xAAAAAA);
             GuiComponent.drawString(stack, font, Component.translatable("damage_type.resourcefulbees.desc."+ this.id), 24, 21, 0xAAAAAA);
         }
     }

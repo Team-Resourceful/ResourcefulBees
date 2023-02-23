@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.screen.locator;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeLocatorTranslations;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.FindBeePacket;
 import net.minecraft.client.Minecraft;
@@ -35,9 +35,9 @@ public class BeeLocatorScreen extends Screen {
         this.listWidget = new BeeListWidget(this::setSelected, this.minecraft, this.width, this.height, 32, this.height - 32, 36);
         this.listWidget.updateEntries(BeeRegistry.get());
 
-        var closeButton = new Button((this.width / 2) - 90, this.height - 26, 80, 20, TranslationConstants.BeeLocator.CANCEL, button -> this.onClose());
+        var closeButton = new Button((this.width / 2) - 90, this.height - 26, 80, 20, BeeLocatorTranslations.CANCEL, button -> this.onClose());
 
-        this.selectButton = new Button((this.width / 2) + 10, this.height - 26, 80, 20, TranslationConstants.BeeLocator.SEARCH, button ->
+        this.selectButton = new Button((this.width / 2) + 10, this.height - 26, 80, 20, BeeLocatorTranslations.SEARCH, button ->
             getSelected().ifPresent(bee -> {
                 String type = bee.getType();
                 if (type != null) {
@@ -57,7 +57,7 @@ public class BeeLocatorScreen extends Screen {
     @Override
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
-        Component title = Component.translatable(TranslationConstants.BeeLocator.SELECTED, this.getSelected().map(BeeLocatorEntry::getDisplayName).orElse(TranslationConstants.BeeLocator.NONE));
+        Component title = Component.translatable(BeeLocatorTranslations.SELECTED, this.getSelected().map(BeeLocatorEntry::getDisplayName).orElse(BeeLocatorTranslations.NONE));
         GuiComponent.drawCenteredString(stack, this.font, title, this.width / 2, 11, 16777215);
     }
 

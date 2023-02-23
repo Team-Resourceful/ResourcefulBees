@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.FlowHiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -15,7 +16,6 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.core.Holder;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.fluids.FluidStack;
@@ -36,7 +36,7 @@ public class FlowHiveCategory extends BaseCategory<FlowHiveCategory.Recipe> {
 
     public FlowHiveCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
-                Component.literal("Flow Hive Outputs"),
+                JeiTranslations.FLOW_HIVE_OUTPUTS,
                 guiHelper.createBlankDrawable(160, 26),
                 guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ModItems.FLOW_HIVE.get().getDefaultInstance()));
 

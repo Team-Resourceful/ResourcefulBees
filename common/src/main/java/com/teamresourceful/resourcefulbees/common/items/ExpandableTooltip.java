@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.items;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
@@ -19,10 +19,10 @@ public interface ExpandableTooltip {
     default void setupTooltip(@NotNull ItemStack stack, @Nullable BlockGetter pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
         boolean shiftDown = Screen.hasShiftDown();
         boolean ctrlDown = !shiftDown && Screen.hasControlDown();
-        String shift = shiftDown ? TranslationConstants.Items.SHIFT_TOOLTIP_HIGHLIGHT : TranslationConstants.Items.SHIFT_TOOLTIP;
+        String shift = shiftDown ? ItemTranslations.SHIFT_TOOLTIP_HIGHLIGHT : ItemTranslations.SHIFT_TOOLTIP;
         components.add(Component.translatable(shift, getShiftingDisplay()));
         if (getControlDisplay() != null) {
-            String ctrl = ctrlDown ? TranslationConstants.Items.CTRL_TOOLTIP_HIGHLIGHT : TranslationConstants.Items.CTRL_TOOLTIP;
+            String ctrl = ctrlDown ? ItemTranslations.CTRL_TOOLTIP_HIGHLIGHT : ItemTranslations.CTRL_TOOLTIP;
             components.add(Component.translatable(ctrl, getControlDisplay()));
         }
         if (shiftDown){

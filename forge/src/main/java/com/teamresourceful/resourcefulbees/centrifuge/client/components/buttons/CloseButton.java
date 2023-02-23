@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.centrifuge.client.components.buttons
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.components.AbstractButton;
@@ -43,6 +43,6 @@ public class CloseButton extends AbstractButton implements TooltipProvider {
 
     @Override
     public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
-        return this.isHovered ? List.of(TranslationConstants.Centrifuge.CLOSE) : List.of();
+        return this.isHovered ? List.of(CentrifugeTranslations.CLOSE) : List.of();
     }
 }

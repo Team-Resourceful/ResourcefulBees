@@ -1,11 +1,12 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.components.controlpanels.terminal;
 
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.controlpanels.NavigableControlPanel;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
-import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeTerminalScreen;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeInputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
+import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import net.minecraft.network.chat.Component;
 
 public class TerminalInputNavPanel extends NavigableControlPanel<CentrifugeInputEntity> {
@@ -23,7 +24,7 @@ public class TerminalInputNavPanel extends NavigableControlPanel<CentrifugeInput
 
     @Override
     protected Component getNavType() {
-        return Component.literal("Input");
+        return CentrifugeTranslations.INPUT_TAB;
     }
 
     @Override

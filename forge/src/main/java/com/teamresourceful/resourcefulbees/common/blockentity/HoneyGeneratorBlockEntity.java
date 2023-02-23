@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGenerator
 import com.teamresourceful.resourcefulbees.common.items.upgrade.Upgrade;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.HoneyGenRecipe;
@@ -225,7 +225,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     @NotNull
     @Override
     public Component getDisplayName() {
-        return TranslationConstants.Guis.GENERATOR;
+        return GuiTranslations.GENERATOR;
     }
 
     public FluidTank getTank() {

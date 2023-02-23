@@ -10,7 +10,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 public class BeeArgument implements ArgumentType<String> {
 
-    private static final DynamicCommandExceptionType BEE_NOT_FOUND = new DynamicCommandExceptionType(input -> TranslationConstants.Beepedia.COMMAND_NONE_FOUND);
+    private static final DynamicCommandExceptionType BEE_NOT_FOUND = new DynamicCommandExceptionType(input -> BeepediaTranslations.COMMAND_NONE_FOUND);
 
     public static final Set<String> BEES = ResourcefulBeesAPI.getRegistry().getBeeRegistry()
             .getStreamOfBees()

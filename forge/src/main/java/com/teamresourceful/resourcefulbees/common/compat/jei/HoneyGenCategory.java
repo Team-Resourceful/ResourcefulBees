@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.HoneyGenRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -51,7 +52,7 @@ public class HoneyGenCategory extends BaseCategory<HoneyGenRecipe> {
                 .setFluidRenderer(1000, false, 16, 54)
                 .setOverlay(tankOverlay, 0, 0)
                 .setSlotName("input")
-                .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(Component.literal("Drain Rate: " + recipe.honeyDrainRate() + " mB/t")));
+                .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(Component.translatable(JeiTranslations.DRAIN_RATE, recipe.honeyDrainRate())));
     }
 
     @Override
@@ -68,8 +69,8 @@ public class HoneyGenCategory extends BaseCategory<HoneyGenRecipe> {
         List<Component> tooltip = new ArrayList<>();
 
         if (mouseX >= 80 && mouseX <= 80 + energyContainer.getWidth() && mouseY >= 3 && mouseY <= 3 + energyContainer.getHeight()) {
-            tooltip.add(Component.literal("Energy: " + ((1000 / recipe.honeyDrainRate()) * recipe.energyFillRate()) + " RF"));
-            tooltip.add(Component.literal("Fill Rate: " + recipe.energyFillRate() + " RF/t"));
+            tooltip.add(Component.translatable(JeiTranslations.ENERGY, (1000 / recipe.honeyDrainRate()) * recipe.energyFillRate()));
+            tooltip.add(Component.translatable(JeiTranslations.FILL_RATE, recipe.energyFillRate()));
         }
 
         return tooltip;

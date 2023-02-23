@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.items.upgrade.Upgrade;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.BoundSafeContainerData;
 import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
@@ -160,7 +160,7 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
     @NotNull
     @Override
     public Component getDisplayName() {
-        return TranslationConstants.Guis.APIARY_BREEDER;
+        return GuiTranslations.APIARY_BREEDER;
     }
 
     public @NotNull TileStackHandler getInventory() {

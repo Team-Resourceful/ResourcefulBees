@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import net.minecraft.core.BlockPos;
@@ -76,7 +77,7 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
         ItemStack stack = new ItemStack(Items.BARRIER);
         Item item = predicate.block().asItem();
         if (item.equals(Items.AIR)) {
-            stack.setHoverName(Component.literal("Block: " + Registry.BLOCK.getKey(predicate.block())));
+            stack.setHoverName(Component.translatable(ModTranslations.MUTATION_BLOCK, Registry.BLOCK.getKey(predicate.block())));
         } else {
             stack = new ItemStack(item);
         }

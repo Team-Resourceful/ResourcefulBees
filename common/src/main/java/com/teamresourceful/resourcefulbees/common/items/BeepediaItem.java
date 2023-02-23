@@ -3,7 +3,8 @@ package com.teamresourceful.resourcefulbees.common.items;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncBeepediaPacket;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
@@ -60,7 +61,7 @@ public class BeepediaItem extends Item {
     @Override
     public @NotNull Component getName(ItemStack stack) {
         if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
-            if (stack.getTag().getBoolean(NBTConstants.Beepedia.CREATIVE)) return TranslationConstants.Items.CREATIVE_BEEPEDIA.withStyle(ChatFormatting.LIGHT_PURPLE);
+            if (stack.getTag().getBoolean(NBTConstants.Beepedia.CREATIVE)) return ItemTranslations.CREATIVE_BEEPEDIA.withStyle(ChatFormatting.LIGHT_PURPLE);
             if (stack.getTag().getBoolean(NBTConstants.Beepedia.COMPLETE)) return Component.literal("✦ ").withStyle(ChatFormatting.GREEN).append(super.getName(stack).copy().withStyle(ChatFormatting.WHITE));
         }
         return super.getName(stack);
@@ -70,12 +71,12 @@ public class BeepediaItem extends Item {
     @Environment(EnvType.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
-        tooltip.add(TranslationConstants.Items.INFO_BEEPEDIA.withStyle(ChatFormatting.GREEN));
+        tooltip.add(ItemTranslations.INFO_BEEPEDIA.withStyle(ChatFormatting.GREEN));
         if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
             boolean complete = stack.getTag().getBoolean(NBTConstants.Beepedia.COMPLETE) || stack.getTag().getBoolean(NBTConstants.Beepedia.CREATIVE);
             int total = BeeRegistry.get().getBees().size();
             int count = stack.getTag().getList(NBTConstants.NBT_BEES, 8).size();
-            tooltip.add(Component.translatable(TranslationConstants.Beepedia.PROGRESS, complete? total : count, total).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable(BeepediaTranslations.PROGRESS, complete? total : count, total).withStyle(ChatFormatting.GRAY));
         }
 
     }

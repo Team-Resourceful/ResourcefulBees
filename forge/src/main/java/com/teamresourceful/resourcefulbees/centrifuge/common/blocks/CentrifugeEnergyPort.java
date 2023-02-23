@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.centrifuge.common.blocks;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeEnergyPortEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -41,13 +42,12 @@ public class CentrifugeEnergyPort extends AbstractCentrifuge implements IAssembl
         builder.add(BlockStateProperties.HORIZONTAL_FACING);
     }
 
-    //TODO make translatable
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-        tooltip.add(Component.literal("Multiblock sides only").withStyle(ChatFormatting.GOLD));
-        tooltip.add(Component.literal("Cannot be used on edges").withStyle(ChatFormatting.GOLD));
-        tooltip.add(Component.literal("Capacity: " + tier.getEnergyCapacity() + "rf").withStyle(ChatFormatting.GOLD));
-        tooltip.add(Component.literal("Receive: " + tier.getEnergyReceiveRate() + "rf/t").withStyle(ChatFormatting.GOLD));
+        tooltip.add(CentrifugeTranslations.SIDES_ONLY_TOOLTIP);
+        tooltip.add(CentrifugeTranslations.NO_EDGES_TOOLTIP);
+        tooltip.add(Component.translatable(CentrifugeTranslations.ENERGY_CAPACITY_TOOLTIP, tier.getEnergyCapacity()).withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.translatable(CentrifugeTranslations.ENERGY_RECEIVE_TOOLTIP, tier.getEnergyReceiveRate()).withStyle(ChatFormatting.GOLD));
     }
 
     @Nullable

@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.compat.top;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.TopTranslations;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -27,9 +28,21 @@ public class BeeDisplayOverride implements IEntityDisplayOverride {
                 .text(CompoundText.create().style(TextStyleClass.MODNAME).text(BeeConstants.MOD_NAME));
 
         if (probeMode.equals(ProbeMode.EXTENDED)) {
-            iProbeInfo.text(Component.literal("Flower Pos: ").append(beeEntity.getSavedFlowerPos() == null ? "none" : beeEntity.getSavedFlowerPos().toShortString()))
-                    .text(Component.literal("Hive Pos: ").append(beeEntity.getHivePos() == null ? "none" : beeEntity.getHivePos().toShortString()));
+            iProbeInfo.text(displayFormattedFlowerPos(beeEntity))
+                    .text(displayFormattedHivePos(beeEntity));
         }
+    }
+
+    private static Component displayFormattedFlowerPos(Bee beeEntity) {
+        return beeEntity.getSavedFlowerPos() == null
+                ? TopTranslations.FLOWER_POS_NONE
+                : Component.translatable(TopTranslations.FLOWER_POS, beeEntity.getSavedFlowerPos().toShortString());
+    }
+
+    private static Component displayFormattedHivePos(Bee beeEntity) {
+        return beeEntity.getHivePos() == null
+                ? TopTranslations.HIVE_POS_NONE
+                : Component.translatable(TopTranslations.HIVE_POS, beeEntity.getHivePos().toShortString());
     }
 }
 

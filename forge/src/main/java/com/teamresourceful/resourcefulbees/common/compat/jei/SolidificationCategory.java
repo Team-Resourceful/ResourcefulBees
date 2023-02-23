@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -22,7 +22,7 @@ public class SolidificationCategory extends BaseCategory<SolidificationRecipe> {
 
     protected SolidificationCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
-                TranslationConstants.Jei.SOLIDIFICATION,
+                JeiTranslations.SOLIDIFICATION,
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 46, 61).addPadding(10, 10, 20, 20).build(),
                 guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ModItems.SOLIDIFICATION_CHAMBER_ITEM.get().getDefaultInstance()));
     }

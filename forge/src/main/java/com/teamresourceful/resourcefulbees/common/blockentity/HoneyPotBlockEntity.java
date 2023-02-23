@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentity;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyPotMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
@@ -51,7 +51,7 @@ public class HoneyPotBlockEntity extends GUISyncedBlockEntity {
 
     @Override
     public @NotNull Component getDisplayName() {
-        return TranslationConstants.Guis.POT;
+        return GuiTranslations.POT;
     }
 
     @Override

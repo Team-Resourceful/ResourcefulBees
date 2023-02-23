@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.components;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.capabilities.SelectableMultiFluidTank;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.SelectFluidPacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefullib.common.utils.SelectableList;
@@ -59,9 +60,9 @@ public class SelectableFluidWidget extends AbstractWidget {
         tooltip.add(CommonComponents.EMPTY);
         FluidStack fluid = tank.getFluid();
         if (fluid.isEmpty()) {
-            tooltip.add(Component.literal("Tank Empty")); //TODO Translate
+            tooltip.add(ModTranslations.TANK_EMPTY);
         } else {
-            tooltip.add(Component.literal("Hold [CTRL] and [SCROLL] to switch between fluids!")); //TODO Translate
+            tooltip.add(ModTranslations.FLUID_SWITCH);
             tooltip.add(CommonComponents.EMPTY);
             for (FluidStack tankFluid : tank.getFluids()) {
                 MutableComponent line;

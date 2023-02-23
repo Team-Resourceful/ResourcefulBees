@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -28,7 +28,7 @@ public class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.Breedi
 
     public BeeBreedingCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
-                TranslationConstants.Jei.BREEDING,
+                JeiTranslations.BREEDING,
                 guiHelper.drawableBuilder(GUI_BACK, 0, 0, 150, 118).addPadding(11, 11, 10, 10).build(),
                 guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ModItems.BREEDER_ITEM.get().getDefaultInstance()));
     }

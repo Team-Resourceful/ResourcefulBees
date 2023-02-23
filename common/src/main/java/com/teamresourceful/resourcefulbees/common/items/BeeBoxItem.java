@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -80,33 +80,33 @@ public class BeeBoxItem extends BlockItem implements ExpandableTooltip {
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level world, @NotNull List<Component> components, @NotNull TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, world, components, tooltipFlag);
         if (this.temp) {
-            components.add(TranslationConstants.Items.BEE_BOX_TOOLTIP_TEMP.withStyle(ChatFormatting.GOLD));
+            components.add(ItemTranslations.BEE_BOX_TOOLTIP_TEMP.withStyle(ChatFormatting.GOLD));
         } else {
-            components.add(Component.translatable(TranslationConstants.Items.BEE_BOX_TOOLTIP, BeeConstants.MAX_BEES_BEE_BOX).withStyle(ChatFormatting.GOLD));
+            components.add(Component.translatable(ItemTranslations.BEE_BOX_TOOLTIP, BeeConstants.MAX_BEES_BEE_BOX).withStyle(ChatFormatting.GOLD));
         }
         setupTooltip(stack, world, components, tooltipFlag);
     }
 
     @Override
     public Component getShiftingDisplay() {
-        return TranslationConstants.Items.TOOLTIP_CONTENTS;
+        return ItemTranslations.TOOLTIP_CONTENTS;
     }
 
     @Override
     public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(TranslationConstants.Items.BEES.withStyle(ChatFormatting.YELLOW));
+        components.add(ItemTranslations.BEES.withStyle(ChatFormatting.YELLOW));
 
         //noinspection ConstantConditions
         ListTag bees = isFilled(stack) ? stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING) : new ListTag();
 
         if (bees.isEmpty()) {
-            components.add(TranslationConstants.Items.NO_BEES.withStyle(ChatFormatting.GOLD));
+            components.add(ItemTranslations.NO_BEES.withStyle(ChatFormatting.GOLD));
         } else {
             bees.stream()
                 .map(StringTag.class::cast)
                 .forEach(displayJson -> {
                     Component display = Component.Serializer.fromJson(displayJson.getAsString());
-                    components.add(Component.translatable(TranslationConstants.Items.BEE_BOX_ENTITY_NAME, display).withStyle(ChatFormatting.GRAY));
+                    components.add(Component.translatable(ItemTranslations.BEE_BOX_ENTITY_NAME, display).withStyle(ChatFormatting.GRAY));
                 });
         }
     }

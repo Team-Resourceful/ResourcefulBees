@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.ingredients;
 
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
@@ -62,7 +62,7 @@ public class EntityIngredient {
         if (entity != null) {
             if (entity instanceof CustomBeeEntity customBee) {
                 tooltip.addAll(customBee.getCoreData().lore());
-                tooltip.add(TranslationConstants.Jei.CLICK_INFO.withStyle(ChatFormatting.GOLD));
+                tooltip.add(JeiTranslations.CLICK_INFO.withStyle(ChatFormatting.GOLD));
             }
             if (Minecraft.getInstance().options.advancedItemTooltips) {
                 tooltip.add(Component.literal(toString()).withStyle(ChatFormatting.DARK_GRAY));

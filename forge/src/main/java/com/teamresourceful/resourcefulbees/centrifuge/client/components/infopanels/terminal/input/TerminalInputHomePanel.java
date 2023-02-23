@@ -2,15 +2,17 @@ package com.teamresourceful.resourcefulbees.centrifuge.client.components.infopan
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.AbstractInfoPanel;
-import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
-import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeInputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.OutputLocationGroup;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.ProcessContainerData;
+import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,25 +54,24 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
             String recipe = formatRecipeID(recipeID.getPath());
             drawRecipeString(stack, recipe, tX, tY+8);
         } else {
-            drawRecipeString(stack, "Filter slot not set!", tX, tY+8);
+            drawRecipeString(stack, CentrifugeTranslations.FILTER_SLOT_NOT_SET.toString(), tX, tY+8);
         }
         drawEnergyPerTickString(stack, processData.getEnergy(), tX, tY+16);
         drawProcessingStageString(stack, selectedEntity.getProcessStage(), tX, tY+24);
         int timeLeft = !selectedEntity.getProcessStage().isProcessing() || energyStorage.isEmpty() ? Integer.MAX_VALUE : processData.getTime();
         drawProcessTimeLeftString(stack, timeLeft, tX, tY+32);
-        drawOutputTypeString(stack, "Item", tX, tY+40);
+        drawOutputTypeString(stack, CentrifugeTranslations.ITEM.toString(), tX, tY+40);
         drawOutputString(stack, selectedEntity.getItemOutputs(), tX, tY+48);
-        drawOutputTypeString(stack, "Fluid", tX, tY+72);
+        drawOutputTypeString(stack, CentrifugeTranslations.FLUID.toString(), tX, tY+72);
         drawOutputString(stack, selectedEntity.getFluidOutputs(), tX, tY+80);
     }
 
-    //TODO make these translatable texts
     private static void drawProcessTimeLeftString(PoseStack stack, int timeLeft, int x, int y) {
-        drawString(stack, "Process Time Left: " + formatTicksAsSeconds(timeLeft), x, y);
+        drawString(stack, Component.translatable(CentrifugeTranslations.TIME_LEFT, formatTicksAsSeconds(timeLeft)), x, y);
     }
 
     private static void drawEnergyPerTickString(PoseStack stack, int energy, int x, int y) {
-        drawString(stack, "Energy Usage: " + energy + " rf/t", x, y);
+        drawString(stack, Component.translatable(CentrifugeTranslations.ENERGY_USAGE, energy), x, y);
     }
 
     @NotNull
@@ -79,19 +80,19 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
     }
 
     private static void drawLocationString(PoseStack stack, String location, int x, int y) {
-        drawString(stack, "Location: " + location, x, y);
+        drawString(stack, Component.translatable(CentrifugeTranslations.LOCATION, location), x, y);
     }
 
     private static void drawRecipeString(PoseStack stack, String recipeID, int x, int y) {
-        drawString(stack, "Recipe: " + recipeID, x, y);
+        drawString(stack, Component.translatable(CentrifugeTranslations.RECIPE, recipeID), x, y);
     }
 
     private static void drawProcessingStageString(PoseStack stack, ProcessStage processingStage, int x, int y) {
-        drawString(stack, "Processing Stage: " + processingStage, x, y);
+        drawString(stack, Component.translatable(CentrifugeTranslations.STAGE, processingStage), x, y);
     }
 
     private static void drawOutputTypeString(PoseStack stack, String type, int x, int y) {
-        drawString(stack, type + " Outputs: ", x, y);
+        drawString(stack, Component.translatable(CentrifugeTranslations.OUTPUTS, type), x, y);
     }
 
     private static void drawOutputString(PoseStack stack, OutputLocationGroup<?,?,?> outputLocationGroup, int x, int y) {
@@ -101,21 +102,20 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
     }
 
     private static void drawOutputString(PoseStack stack, int index, String location, int x, int y) {
-        drawString(stack, "  Output #:" + index + " " + location, x, y);
+        drawString(stack, Component.translatable(CentrifugeTranslations.OUTPUT_NUM, index, location), x, y);
     }
 
-    private static void drawString(PoseStack stack, String string, int x, int y) {
-        TextUtils.TERMINAL_FONT_8.draw(stack, string, x, y, TextUtils.FONT_COLOR_1);
+    private static void drawString(PoseStack stack, Component component, int x, int y) {
+        TextUtils.TERMINAL_FONT_8.draw(stack, component, x, y, TextUtils.FONT_COLOR_1);
     }
 
     private static String getOutputPos(OutputLocationGroup<?,?,?> outputLocationGroup, int index) {
         BlockPos output = outputLocationGroup.get(index).getPos();
-        //TODO make this translatable
-        return output == null ? "Output not linked!" : CentrifugeUtils.formatBlockPos(output);
+        return output == null ? CentrifugeTranslations.OUTPUT_NOT_LINKED.toString() : CentrifugeUtils.formatBlockPos(output);
     }
 
     private static String formatTicksAsSeconds(int ticks) {
-        if(ticks == Integer.MAX_VALUE) return "Unknown";
+        if(ticks == Integer.MAX_VALUE) return CentrifugeTranslations.UNKNOWN.toString();
         float seconds = ticks*0.05f;
         return String.format("%06.2fs", seconds);
     }

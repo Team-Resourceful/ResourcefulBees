@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyPotMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.screens.Screen;
@@ -43,7 +43,7 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
     }
 
     private Component getDisplayName(FluidStack stack) {
-        return stack.isEmpty() ? TranslationConstants.Guis.NO_FLUID : stack.getDisplayName();
+        return stack.isEmpty() ? GuiTranslations.NO_FLUID : stack.getDisplayName();
     }
 
     @Override

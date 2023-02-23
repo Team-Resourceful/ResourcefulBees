@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.FlowHiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.FlowHiveTranslations;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.ChatFormatting;
@@ -55,9 +55,9 @@ public class FlowHiveBlock extends BeeHouseBlock implements BeeHolderBlock {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(TranslationConstants.FlowHive.INFO.withStyle(ChatFormatting.GOLD));
-        components.add(TranslationConstants.FlowHive.HARVEST.withStyle(ChatFormatting.GOLD));
-        components.add(TranslationConstants.FlowHive.CAPACITY.withStyle(ChatFormatting.GOLD));
+        components.add(FlowHiveTranslations.INFO.withStyle(ChatFormatting.GOLD));
+        components.add(FlowHiveTranslations.HARVEST.withStyle(ChatFormatting.GOLD));
+        components.add(FlowHiveTranslations.CAPACITY.withStyle(ChatFormatting.GOLD));
     }
 
     @Nullable

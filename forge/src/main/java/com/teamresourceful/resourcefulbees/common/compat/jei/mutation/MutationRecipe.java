@@ -4,4 +4,15 @@ import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.world.entity.EntityType;
 
-public record MutationRecipe(EntityType<?> bee, MutationType input, MutationType output, WeightedCollection<MutationType> pool) {}
+import java.text.NumberFormat;
+
+public record MutationRecipe(EntityType<?> bee, MutationType input, MutationType output, WeightedCollection<MutationType> pool) {
+
+    public String displayFormattedWeight() {
+        return NumberFormat.getPercentInstance().format(pool().getAdjustedWeight(output().weight()));
+    }
+
+    public String displayFormattedChance() {
+        return NumberFormat.getPercentInstance().format(output().chance());
+    }
+}

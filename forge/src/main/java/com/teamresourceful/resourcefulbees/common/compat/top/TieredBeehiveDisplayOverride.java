@@ -1,10 +1,10 @@
 
 package com.teamresourceful.resourcefulbees.common.compat.top;
 
-import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.TopTranslations;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -42,9 +42,9 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
 
         probeInfo.horizontal()
                 .vertical()
-                .text(Component.translatable(TranslationConstants.Top.BEES, getHiveBeeCount(tileEntity), getHiveMaxBees(blockState)))
-                .text(Component.translatable(TranslationConstants.Top.HONEY_LEVEL, getHoneyLevel(tileEntity)))
-                .text(Component.translatable(TranslationConstants.Top.SMOKED, getSmokedStatus(tileEntity)));
+                .text(Component.translatable(TopTranslations.BEES, getHiveBeeCount(tileEntity), getHiveMaxBees(blockState)))
+                .text(Component.translatable(TopTranslations.HONEY_LEVEL, getHoneyLevel(tileEntity)))
+                .text(Component.translatable(TopTranslations.SMOKED, getSmokedStatus(tileEntity)));
 
         createSmokedProbeData(probeInfo, tileEntity);
 
@@ -123,7 +123,7 @@ public class TieredBeehiveDisplayOverride implements IBlockDisplayOverride {
     private void createSmokedProbeData(IProbeInfo probeInfo, TieredBeehiveBlockEntity tileEntity) {
         if (tileEntity.getTicksSmoked() != -1) {
             probeInfo.horizontal().vertical()
-                    .text(TranslationConstants.Top.SMOKE_TIME)
+                    .text(TopTranslations.SMOKE_TIME)
                     .progress((int) Math.floor(tileEntity.getTicksSmoked() / 20.0), 30);
         }
     }

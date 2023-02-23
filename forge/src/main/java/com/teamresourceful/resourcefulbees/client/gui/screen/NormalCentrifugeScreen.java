@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.client.components.SelectableFluidWidg
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.CentrifugeMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -26,7 +27,7 @@ public class NormalCentrifugeScreen extends AbstractContainerScreen<CentrifugeMe
     protected void init() {
         super.init();
         clearWidgets();
-        addRenderableWidget(new SelectableFluidWidget(this, tileEntity.getContainer(), 0, tileEntity.getBlkPos(), this.leftPos + 152, this.topPos + 11, 16, 64, Component.literal("Centrifuge Tank!")));
+        addRenderableWidget(new SelectableFluidWidget(this, tileEntity.getContainer(), 0, tileEntity.getBlkPos(), this.leftPos + 152, this.topPos + 11, 16, 64, CentrifugeTranslations.TANK));
     }
 
     @Override

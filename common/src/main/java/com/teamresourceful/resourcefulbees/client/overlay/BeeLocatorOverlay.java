@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeLocatorTranslations;
 import com.teamresourceful.resourcefulbees.platform.client.renderer.overlay.OverlayRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -47,20 +47,20 @@ public class BeeLocatorOverlay implements OverlayRenderer {
 
             poseStack.pushPose();
             poseStack.scale(0.75f, 0.75f, 0.75f);
-            Component location = Component.translatable(TranslationConstants.BeeLocator.LOCATION, pos.getX(), pos.getZ());
+            Component location = Component.translatable(BeeLocatorTranslations.LOCATION, pos.getX(), pos.getZ());
             mc.font.draw(poseStack, location, 60, 20, 0xFFFFFFFF);
             poseStack.popPose();
 
             poseStack.pushPose();
             poseStack.scale(0.75f, 0.75f, 0.75f);
-            Component distance = Component.translatable(TranslationConstants.BeeLocator.DISTANCE, pos.distManhattan(player.blockPosition()));
+            Component distance = Component.translatable(BeeLocatorTranslations.DISTANCE, pos.distManhattan(player.blockPosition()));
             mc.font.draw(poseStack, distance, 60, 30, 0xFFFFFFFF);
             poseStack.popPose();
 
             if (biome != null && !biome.getPath().isEmpty()) {
                 poseStack.pushPose();
                 poseStack.scale(0.75f, 0.75f, 0.75f);
-                Component text = Component.translatable(TranslationConstants.BeeLocator.BIOME, Component.translatable(String.format("biome.%s.%s", biome.getNamespace(), biome.getPath())));
+                Component text = Component.translatable(BeeLocatorTranslations.BIOME, Component.translatable(String.format("biome.%s.%s", biome.getNamespace(), biome.getPath())));
                 mc.font.draw(poseStack, text, 60, 40, 0xFFFFFFFF);
                 poseStack.popPose();
             }

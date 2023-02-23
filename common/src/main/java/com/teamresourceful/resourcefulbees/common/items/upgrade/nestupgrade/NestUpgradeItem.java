@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade;
 
 import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -24,7 +24,7 @@ public class NestUpgradeItem extends Item implements NestUpgrade {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(TranslationConstants.Items.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
+        components.add(ItemTranslations.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
     }
 
     @Override

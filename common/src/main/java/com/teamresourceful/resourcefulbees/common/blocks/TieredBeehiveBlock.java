@@ -9,7 +9,8 @@ import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.NestUpgrade;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeehiveTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
@@ -22,7 +23,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -54,8 +54,6 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableTooltip, BeeHolderBlock {
-
-    private static final MutableComponent NONE_TEXT = Component.literal("     NONE");
 
     private final Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
     private final BeehiveTier tier;
@@ -130,7 +128,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
                 }
                 return result;
             } else {
-                player.displayClientMessage(Component.literal("You can not upgrade this nest with that upgrade."), true);
+                player.displayClientMessage(BeehiveTranslations.INVALID_UPGRADE, true);
             }
         }
 
@@ -207,14 +205,14 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
     @Environment(EnvType.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(Component.translatable(TranslationConstants.BeeHive.MAX_BEES, tier.maxBees()).withStyle(ChatFormatting.GOLD));
-        components.add(Component.translatable(TranslationConstants.BeeHive.MAX_COMBS, tier.maxCombs()).withStyle(ChatFormatting.GOLD));
-        components.add(Component.translatable(TranslationConstants.BeeHive.HIVE_TIME, tier.getTimeModificationAsPercent()).withStyle(ChatFormatting.GOLD));
+        components.add(Component.translatable(BeehiveTranslations.MAX_BEES, tier.maxBees()).withStyle(ChatFormatting.GOLD));
+        components.add(Component.translatable(BeehiveTranslations.MAX_COMBS, tier.maxCombs()).withStyle(ChatFormatting.GOLD));
+        components.add(Component.translatable(BeehiveTranslations.HIVE_TIME, tier.getTimeModificationAsPercent()).withStyle(ChatFormatting.GOLD));
         setupTooltip(stack, level, components, flag);
     }
 
     private void createHoneycombsTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {
-        tooltip.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
+        tooltip.add(BeehiveTranslations.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
         if (blockEntityTag.contains(NBTConstants.BeeHive.HONEYCOMBS, Tag.TAG_LIST)) {
             HashMap<String, Integer> combs = new HashMap<>();
             ListTag combList = blockEntityTag.getList(NBTConstants.BeeHive.HONEYCOMBS, Tag.TAG_LIST);
@@ -231,12 +229,12 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
                     .append("x ")
                     .append(WordUtils.capitalize(comb))));
         } else {
-            tooltip.add(NONE_TEXT);
+            tooltip.add(BeehiveTranslations.NONE_TEXT);
         }
     }
 
     private void createBeesTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {
-        tooltip.add(TranslationConstants.BeeHive.BEES.withStyle(ChatFormatting.GOLD));
+        tooltip.add(BeehiveTranslations.BEES.withStyle(ChatFormatting.GOLD));
         if (blockEntityTag.contains("Bees", Tag.TAG_LIST)) {
             HashMap<String, Integer> bees = new HashMap<>();
             ListTag beeList = blockEntityTag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND);
@@ -258,14 +256,14 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
                     .append("x ")
                     .append(WordUtils.capitalize(name))));
         } else {
-            tooltip.add(NONE_TEXT);
+            tooltip.add(BeehiveTranslations.NONE_TEXT);
         }
         tooltip.add(Component.empty());
     }
 
     @Override
     public Component getShiftingDisplay() {
-        return TranslationConstants.Items.TOOLTIP_CONTENTS;
+        return ItemTranslations.TOOLTIP_CONTENTS;
     }
 
     @Override
@@ -278,11 +276,11 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
                 createHoneycombsTooltip(components, blockEntityTag);
             }
         } else {
-            components.add(TranslationConstants.BeeHive.BEES.withStyle(ChatFormatting.GOLD));
-            components.add(NONE_TEXT);
+            components.add(BeehiveTranslations.BEES.withStyle(ChatFormatting.GOLD));
+            components.add(BeehiveTranslations.NONE_TEXT);
             components.add(Component.empty());
-            components.add(TranslationConstants.BeeHive.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
-            components.add(NONE_TEXT);
+            components.add(BeehiveTranslations.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
+            components.add(BeehiveTranslations.NONE_TEXT);
         }
     }
 }

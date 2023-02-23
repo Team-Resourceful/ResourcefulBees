@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
@@ -39,7 +39,7 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
 
     public HiveCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
-                TranslationConstants.Jei.HIVE,
+                JeiTranslations.HIVE,
                 guiHelper.createBlankDrawable(160, 26),
                 guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModItems.OAK_BEE_NEST_ITEM.get())));
 

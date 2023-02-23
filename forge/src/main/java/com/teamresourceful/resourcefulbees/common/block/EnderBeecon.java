@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.blockentity.EnderBeeconBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.ChatFormatting;
@@ -129,8 +129,8 @@ public class EnderBeecon extends TickingBlock<EnderBeeconBlockEntity> {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        tooltip.add(TranslationConstants.Items.BEECON_TOOLTIP.withStyle(ChatFormatting.LIGHT_PURPLE));
-        tooltip.add(TranslationConstants.Items.BEECON_TOOLTIP_1.withStyle(ChatFormatting.LIGHT_PURPLE));
+        tooltip.add(ItemTranslations.BEECON_TOOLTIP.withStyle(ChatFormatting.LIGHT_PURPLE));
+        tooltip.add(ItemTranslations.BEECON_TOOLTIP_1.withStyle(ChatFormatting.LIGHT_PURPLE));
 
         if (!stack.hasTag()) return;
         if (!stack.getTag().contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) return;

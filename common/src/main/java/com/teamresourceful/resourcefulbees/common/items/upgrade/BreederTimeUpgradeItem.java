@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.items.upgrade;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -28,7 +28,7 @@ public class BreederTimeUpgradeItem extends Item implements IntegerUpgrade {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(Component.translatable(TranslationConstants.Items.BREED_TIME_UPGRADE, getUpgradeTier(stack)).withStyle(ChatFormatting.GOLD));
+        components.add(Component.translatable(ItemTranslations.BREED_TIME_UPGRADE, getUpgradeTier(stack)).withStyle(ChatFormatting.GOLD));
     }
 
     @Override

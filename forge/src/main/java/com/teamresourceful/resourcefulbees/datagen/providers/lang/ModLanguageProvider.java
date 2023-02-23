@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.*;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ItemGroupResourcefulBees;
@@ -11,13 +11,30 @@ import org.jetbrains.annotations.NotNull;
 public class ModLanguageProvider extends BaseLanguageProvider {
 
     public ModLanguageProvider(DataGenerator gen) {
-        super(gen, TranslationConstants.class);
+        super(gen,
+                ApiaryTranslations.class,
+                BeehiveTranslations.class,
+                BeeLocatorTranslations.class,
+                BeepediaTranslations.class,
+                CentrifugeTranslations.class,
+                BeeconTranslations.class,
+                FakeFlowerTranslations.class,
+                FlowHiveTranslations.class,
+                GuiTranslations.class,
+                HoneyDipperTranslations.class,
+                ItemTranslations.class,
+                JeiTranslations.class,
+                MissingRegistryTranslations.class,
+                ModTranslations.class,
+                TopTranslations.class
+        );
         addModule(new CentrifugeLanguageModule());
         addModule(new AdvancementLanguageModule());
         addModule(new BlockLanguageModule());
         addModule(new BeeLanguageModule());
         addModule(new BookLanguageModule());
         addModule(new ItemLanguageModule());
+        addModule(new EnchantmentLanguageModule());
     }
 
     @Override

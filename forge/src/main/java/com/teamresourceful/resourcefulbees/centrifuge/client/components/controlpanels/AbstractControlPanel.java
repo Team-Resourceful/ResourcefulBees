@@ -28,7 +28,7 @@ public abstract class AbstractControlPanel extends ParentWidget {
     }
 
     protected final void createNavPanelVoidExcessTab(int y, Supplier<Boolean> isSelected) {
-        addRenderableWidget(new ToggleDisplayTab(x+2, y, ControlPanelTabs.VOID_EXCESS, isSelected, () -> this.screen.centrifugeState().hasDumps(), this.screen::voidExcess, false));
+        addRenderableWidget(new ToggleDisplayTab(x+2, y, ControlPanelTabs.VOID_EXCESS, isSelected, () -> this.screen.centrifugeState().hasFilters(), this.screen::voidExcess, false));
     }
 
     protected final void createNavPanelPurgeTab(int y) {

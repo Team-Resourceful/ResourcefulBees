@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;
-import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModVillagerProfessions;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
@@ -27,7 +27,6 @@ import net.minecraftforge.event.village.VillagerTradesEvent;
 import java.util.Collection;
 import java.util.List;
 
-//TODO UPDATE TRADES
 public final class Beekeeper {
 /*
     arg1=input1
@@ -244,7 +243,7 @@ public final class Beekeeper {
                 .addPattern(BannerPatterns.CURLY_BORDER, DyeColor.YELLOW)
                 .toListTag();
         tag.put("Patterns", listTag);
-        queenBeeBanner.setHoverName(TranslationConstants.Items.QUEEN_BEE_BANNER.withStyle(ChatFormatting.GOLD));
+        queenBeeBanner.setHoverName(ItemTranslations.QUEEN_BEE_BANNER.withStyle(ChatFormatting.GOLD));
         queenBeeBanner.setCount(1);
         return queenBeeBanner;
     }
