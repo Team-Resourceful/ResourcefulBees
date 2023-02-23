@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.item.HoneyDipperItem;
-import com.teamresourceful.resourcefulbees.common.item.HoneyGenUpgradeItem;
+import com.teamresourceful.resourcefulbees.common.items.HoneyDipperItem;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.HoneyGenUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.CrankItem;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.ManualCentrifugeItem;
 import com.teamresourceful.resourcefulbees.common.items.*;

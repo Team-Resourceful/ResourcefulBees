@@ -9,17 +9,18 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.menus.BoundSafeContainerData;
 import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefulbees.common.util.ContainerUtils;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import com.teamresourceful.resourcefulbees.platform.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -31,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class BreederBlockEntity extends BlockEntity implements MenuProvider, BasicWorldlyContainer {
+public class BreederBlockEntity extends BlockEntity implements ContentMenuProvider<PositionContent>, BasicWorldlyContainer {
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(29, ItemStack.EMPTY);
 
@@ -151,6 +152,11 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider, Bas
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         return new BreederMenu(id, playerInventory, this, times, endTimes);
+    }
+
+    @Override
+    public PositionContent createContent() {
+        return new PositionContent(this.worldPosition);
     }
 
     @NotNull

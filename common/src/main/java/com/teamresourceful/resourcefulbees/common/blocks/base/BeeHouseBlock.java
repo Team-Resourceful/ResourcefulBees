@@ -1,9 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.blocks.base;
 
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.platform.common.menu.ContentMenuProvider;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -60,7 +62,9 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
     public InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult) {
         if (!player.isShiftKeyDown() && !world.isClientSide) {
             MenuProvider blockEntity = state.getMenuProvider(world,pos);
-            if (blockEntity != null) {
+            if (blockEntity instanceof ContentMenuProvider<?> contentMenu) {
+                contentMenu.openMenu((ServerPlayer) player);
+            } else if (blockEntity != null) {
                 ModUtils.openScreen(player, blockEntity, pos);
             }
         }

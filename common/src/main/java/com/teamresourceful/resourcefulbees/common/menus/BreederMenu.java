@@ -3,25 +3,27 @@ package com.teamresourceful.resourcefulbees.common.menus;
 import com.teamresourceful.resourcefulbees.common.blockentities.BreederBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.menus.base.ContainerSlot;
-import com.teamresourceful.resourcefulbees.platform.common.util.TempPlatformUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class BreederMenu extends AbstractModContainerMenu<BreederBlockEntity> {
 
     public final ContainerData times;
     public final ContainerData endTimes;
 
-    public BreederMenu(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(inv.player.level, buffer, BreederBlockEntity.class), new SimpleContainerData(2), new SimpleContainerData(2));
+    public BreederMenu(int id, Inventory inv, Optional<PositionContent> content) {
+        this(id, inv, PositionContent.getOrNull(content, inv.player.level, BreederBlockEntity.class), new SimpleContainerData(2), new SimpleContainerData(2));
     }
 
     public BreederMenu(int id, Inventory inv, BreederBlockEntity entity, ContainerData times, ContainerData endTimes) {
-        super(TempPlatformUtils.getBreederMenuType().get(), id, inv, entity);
+        super(ModMenuTypes.BREEDER.get(), id, inv, entity);
         this.times = times;
         this.endTimes = endTimes;
         this.addDataSlots(times);

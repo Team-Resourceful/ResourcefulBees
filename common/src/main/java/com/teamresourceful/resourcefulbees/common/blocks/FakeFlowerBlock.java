@@ -2,10 +2,10 @@ package com.teamresourceful.resourcefulbees.common.blocks;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.FakeFlowerBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
-import com.teamresourceful.resourcefulbees.platform.common.util.TempPlatformUtils;
+import com.teamresourceful.resourcefulbees.common.items.HoneyDipperItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -46,11 +46,11 @@ public class FakeFlowerBlock extends RenderingBaseEntityBlock {
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
-        if (TempPlatformUtils.isHoneyDipper(player.getItemInHand(InteractionHand.MAIN_HAND)) || TempPlatformUtils.isHoneyDipper(player.getItemInHand(InteractionHand.OFF_HAND))) {
+        if (HoneyDipperItem.isHoldingHoneyDipper(player)) {
             return InteractionResult.FAIL;
         } else if (level.getBlockEntity(pos) instanceof FakeFlowerBlockEntity fakeFlower) {
             if (!level.isClientSide) {
-                ModUtils.openScreen(player, fakeFlower, pos);
+                fakeFlower.openMenu((ServerPlayer) player);
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }

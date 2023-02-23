@@ -3,23 +3,25 @@ package com.teamresourceful.resourcefulbees.common.menus;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BlockBee;
 import com.teamresourceful.resourcefulbees.common.menus.base.ContainerSlot;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.LockBeePacket;
-import com.teamresourceful.resourcefulbees.platform.common.util.TempPlatformUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
 
-    public ApiaryMenu(int id, Inventory inv, FriendlyByteBuf buf) {
-        this(id, inv, getTileFromBuf(inv.player.level, buf, ApiaryBlockEntity.class));
+    public ApiaryMenu(int id, Inventory inv, Optional<PositionContent> content) {
+        this(id, inv, PositionContent.getOrNull(content, inv.player.level, ApiaryBlockEntity.class));
     }
 
     public ApiaryMenu(int id, Inventory inv, ApiaryBlockEntity entity) {
-        super(TempPlatformUtils.getApiaryMenuType().get(), id, inv, entity);
+        super(ModMenuTypes.APIARY.get(), id, inv, entity);
     }
 
     @Override

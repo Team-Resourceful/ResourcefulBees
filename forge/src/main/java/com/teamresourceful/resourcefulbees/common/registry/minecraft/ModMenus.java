@@ -4,9 +4,6 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.containers.*;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
-import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
-import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -26,16 +23,10 @@ public final class ModMenus {
 
     public static final RegistryEntry<MenuType<HoneyGeneratorMenu>> HONEY_GENERATOR_CONTAINER = CONTAINER_TYPES.register("honey_generator", () -> IForgeMenuType
             .create(HoneyGeneratorMenu::new));
-    public static final RegistryEntry<MenuType<ApiaryMenu>> VALIDATED_APIARY_CONTAINER = CONTAINER_TYPES.register("validated_apiary", () -> IForgeMenuType
-            .create(ApiaryMenu::new));
-    public static final RegistryEntry<MenuType<BreederMenu>> BREEDER_MENU = CONTAINER_TYPES.register("breeder", () -> IForgeMenuType
-            .create(BreederMenu::new));
     public static final RegistryEntry<MenuType<EnderBeeconMenu>> ENDER_BEECON_CONTAINER = CONTAINER_TYPES.register("ender_beecon", () -> IForgeMenuType
             .create(EnderBeeconMenu::new));
     public static final RegistryEntry<MenuType<SolidificationChamberMenu>> SOLIDIFICATION_CHAMBER_CONTAINER = CONTAINER_TYPES.register("solidification_chamber", () -> IForgeMenuType
             .create(SolidificationChamberMenu::new));
-    public static final RegistryEntry<MenuType<FakeFlowerMenu>> FAKE_FLOWER_CONTAINER = CONTAINER_TYPES.register("fake_flower", () -> IForgeMenuType
-            .create(FakeFlowerMenu::new));
     public static final RegistryEntry<MenuType<HoneyPotMenu>> HONEY_POT_CONTAINER = CONTAINER_TYPES.register("honey_pot", () -> IForgeMenuType
             .create(HoneyPotMenu::new));
 

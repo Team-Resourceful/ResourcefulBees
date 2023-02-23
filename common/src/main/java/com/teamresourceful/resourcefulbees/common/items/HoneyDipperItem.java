@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.item;
+package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
@@ -96,6 +96,10 @@ public class HoneyDipperItem extends Item {
             case BEE_SELECTED -> playerEntity.displayClientMessage(messageTypes.create(bee.getDisplayName()), false);
             default -> throw new IllegalStateException("Unexpected value: " + messageTypes);
         }
+    }
+
+    public static boolean isHoldingHoneyDipper(Player player) {
+        return player.getMainHandItem().getItem() instanceof HoneyDipperItem || player.getOffhandItem().getItem() instanceof HoneyDipperItem;
     }
 
     @Override

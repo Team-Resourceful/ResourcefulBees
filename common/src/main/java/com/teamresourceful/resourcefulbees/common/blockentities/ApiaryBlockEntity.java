@@ -9,8 +9,10 @@ import com.teamresourceful.resourcefulbees.common.blocks.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
 import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.util.ContainerUtils;
+import com.teamresourceful.resourcefulbees.platform.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -26,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ApiaryBlockEntity extends BeeHolderBlockEntity implements BasicWorldlyContainer {
+public class ApiaryBlockEntity extends BeeHolderBlockEntity implements BasicWorldlyContainer, ContentMenuProvider<PositionContent> {
 
     protected final ApiaryTier tier;
 
@@ -98,6 +100,11 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity implements BasicWorl
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory inventory, @NotNull Player player) {
         return new ApiaryMenu(id, inventory, this);
+    }
+
+    @Override
+    public PositionContent createContent() {
+        return new PositionContent(this.worldPosition);
     }
 
     @Override
