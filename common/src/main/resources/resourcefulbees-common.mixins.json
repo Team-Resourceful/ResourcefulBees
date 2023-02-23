@@ -18,6 +18,9 @@
         "common.TagManagerAccessor"
     ],
     "client": [
+        "client.FontResourceManagerAccessor",
+        "client.MinecraftAccessor",
+        "client.ScreenAccessor",
         "client.ScreenInvoker"
     ],
     "injectors": {

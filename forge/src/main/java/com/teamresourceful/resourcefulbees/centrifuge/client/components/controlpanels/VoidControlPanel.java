@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeT
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeVoidScreen;
 import com.teamresourceful.resourcefulbees.client.utils.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
+import com.teamresourceful.resourcefulbees.client.util.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import org.jetbrains.annotations.NotNull;

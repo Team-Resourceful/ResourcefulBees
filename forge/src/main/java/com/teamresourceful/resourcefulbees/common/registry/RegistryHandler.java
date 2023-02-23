@@ -81,6 +81,7 @@ public final class RegistryHandler {
         ModPOIs.POIS.init();
         ModPotions.POTIONS.init();
         ModMenus.CONTAINER_TYPES.init();
+        ModMenuTypes.MENUS.init();
         ModRecipeSerializers.RECIPE_SERIALIZERS.init();
         com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers.RECIPE_SERIALIZERS.init();
         ModRecipeTypes.RECIPE_TYPES.init();

@@ -8,9 +8,11 @@ import com.teamresourceful.resourcefulbees.common.items.MutatedPollenItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.FakeFlowerTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.ContainerUtils;
+import com.teamresourceful.resourcefulbees.platform.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -26,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FakeFlowerBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, BasicContainer, WorldlyContainer {
+public class FakeFlowerBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, BasicContainer, WorldlyContainer, ContentMenuProvider<PositionContent> {
 
     private static final int[] SLOTS = new int[]{0, 1, 2, 3, 4};
     private final NonNullList<ItemStack> items = NonNullList.withSize(5, ItemStack.EMPTY);
@@ -88,6 +90,11 @@ public class FakeFlowerBlockEntity extends GUISyncedBlockEntity implements Insta
     public AbstractContainerMenu createMenu(int i, @NotNull Inventory inventory, @NotNull Player player) {
         if (level == null) return null;
         return new FakeFlowerMenu(i, inventory, this);
+    }
+
+    @Override
+    public PositionContent createContent() {
+        return new PositionContent(this.worldPosition);
     }
 
     @Override

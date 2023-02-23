@@ -2,6 +2,8 @@ package com.teamresourceful.resourcefulbees.centrifuge.client.components.infopan
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.AbstractInfoPanel;
+import com.teamresourceful.resourcefulbees.client.util.TextUtils;
+import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeInputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeEnergyStorage;

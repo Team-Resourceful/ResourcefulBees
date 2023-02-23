@@ -2,19 +2,21 @@ package com.teamresourceful.resourcefulbees.common.menus;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.FakeFlowerBlockEntity;
 import com.teamresourceful.resourcefulbees.common.menus.base.ContainerSlot;
-import com.teamresourceful.resourcefulbees.platform.common.util.TempPlatformUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public class FakeFlowerMenu extends AbstractModContainerMenu<FakeFlowerBlockEntity> {
 
-    public FakeFlowerMenu(int id, Inventory inv, FriendlyByteBuf buf) {
-        this(id, inv, getTileFromBuf(inv.player.level, buf, FakeFlowerBlockEntity.class));
+    public FakeFlowerMenu(int id, Inventory inv, Optional<PositionContent> content) {
+        this(id, inv, PositionContent.getOrNull(content, inv.player.level, FakeFlowerBlockEntity.class));
     }
     public FakeFlowerMenu(int id, Inventory inv, FakeFlowerBlockEntity entity) {
-        super(TempPlatformUtils.getFakeFlowerMenuType().get(), id, inv, entity);
+        super(ModMenuTypes.FAKE_FLOWER.get(), id, inv, entity);
     }
 
     @Override

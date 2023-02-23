@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
+import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.*;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeCrankBlockEntity;
@@ -37,8 +38,6 @@ public final class ModBlockEntityTypes {
             .of(HoneyGeneratorBlockEntity::new, ModBlocks.HONEY_GENERATOR.get())));
     public static final RegistryEntry<BlockEntityType<CreativeGenBlockEntity>> CREATIVE_GEN_ENTITY = BLOCK_ENTITY_TYPES.register("creative_gen", () -> build(BlockEntityType.Builder
             .of(CreativeGenBlockEntity::new, ModBlocks.CREATIVE_GEN.get())));
-    public static final RegistryEntry<BlockEntityType<BreederBlockEntity>> BREEDER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("breeder", () -> build(BlockEntityType.Builder
-            .of(BreederBlockEntity::new, ModBlocks.BREEDER_BLOCK.get())));
     public static final RegistryEntry<BlockEntityType<EnderBeeconBlockEntity>> ENDER_BEECON_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("ender_beecon", () -> build(BlockEntityType.Builder
             .of(EnderBeeconBlockEntity::new, ModBlocks.ENDER_BEECON.get())));
     public static final RegistryEntry<BlockEntityType<SolidificationChamberBlockEntity>> SOLIDIFICATION_CHAMBER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("solidification_chamber", () -> build(BlockEntityType.Builder

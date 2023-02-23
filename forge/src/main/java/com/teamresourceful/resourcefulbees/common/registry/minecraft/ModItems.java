@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.item.HoneyDipperItem;
-import com.teamresourceful.resourcefulbees.common.item.HoneyGenUpgradeItem;
+import com.teamresourceful.resourcefulbees.common.items.HoneyDipperItem;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.HoneyGenUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.CrankItem;
 import com.teamresourceful.resourcefulbees.common.item.centrifuge.ManualCentrifugeItem;
 import com.teamresourceful.resourcefulbees.common.items.*;
@@ -100,14 +100,13 @@ public final class ModItems {
     public static final RegistryEntry<Item> T2_APIARY_ITEM = NEST_ITEMS.register("t2_apiary", () -> new BlockItem(ModBlocks.T2_APIARY_BLOCK.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T3_APIARY_ITEM = NEST_ITEMS.register("t3_apiary", () -> new BlockItem(ModBlocks.T3_APIARY_BLOCK.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T4_APIARY_ITEM = NEST_ITEMS.register("t4_apiary", () -> new BlockItem(ModBlocks.T4_APIARY_BLOCK.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> BREEDER_ITEM = NEST_ITEMS.register("breeder", () -> new BlockItem(ModBlocks.BREEDER_BLOCK.get(), new Item.Properties()));
     public static final RegistryEntry<Item> FLOW_HIVE = NEST_ITEMS.register("flow_hive", () -> new BlockItem(ModBlocks.FLOW_HIVE.get(), new Item.Properties()));
     public static final RegistryEntry<Item> ENDER_BEECON_ITEM = ITEMS.register("ender_beecon", () -> new BlockItem(ModBlocks.ENDER_BEECON.get(), new Item.Properties()));
     public static final RegistryEntry<Item> SOLIDIFICATION_CHAMBER_ITEM = ITEMS.register("solidification_chamber", () -> new BlockItem(ModBlocks.SOLIDIFICATION_CHAMBER.get(), new Item.Properties()));
     public static final RegistryEntry<Item> HONEY_POT_ITEM = ITEMS.register("honey_pot", () -> new BlockItem(ModBlocks.HONEY_POT.get(), new Item.Properties()));
 
     public static final RegistryEntry<Item> BREED_TIME_UPGRADE = ITEMS.register("breed_time_upgrade", () ->
-            new BreederTimeUpgradeItem(new Item.Properties().stacksTo(16)));
+            new BreederTimeUpgradeItem(new Item.Properties().stacksTo(4)));
 
     public static final RegistryEntry<Item> HONEY_FLUID_BUCKET = HONEY_BUCKET_ITEMS.register("honey_bucket", () -> new BucketItem(ModFluids.HONEY_STILL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 

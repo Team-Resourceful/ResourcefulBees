@@ -15,12 +15,16 @@ import com.teamresourceful.resourcefulbees.client.render.blocks.centrifuge.Centr
 import com.teamresourceful.resourcefulbees.client.render.entities.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.render.fluids.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
-import com.teamresourceful.resourcefulbees.client.render.pet.BeeRewardRender;
+import com.teamresourceful.resourcefulbees.client.rendering.pet.BeeRewardRender;
+import com.teamresourceful.resourcefulbees.client.screen.ApiaryScreen;
+import com.teamresourceful.resourcefulbees.client.screen.BreederScreen;
+import com.teamresourceful.resourcefulbees.client.screen.FakeFlowerScreen;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
@@ -160,12 +164,12 @@ public final class ClientEventHandlers {
     }
 
     private static void registerScreens() {
-        MenuScreens.register(ModMenus.VALIDATED_APIARY_CONTAINER.get(), ApiaryScreen::new);
-        MenuScreens.register(ModMenus.BREEDER_MENU.get(), BreederScreen::new);
+        MenuScreens.register(ModMenuTypes.APIARY.get(), ApiaryScreen::new);
+        MenuScreens.register(ModMenuTypes.BREEDER.get(), BreederScreen::new);
         MenuScreens.register(ModMenus.HONEY_GENERATOR_CONTAINER.get(), HoneyGeneratorScreen::new);
         MenuScreens.register(ModMenus.ENDER_BEECON_CONTAINER.get(), EnderBeeconScreen::new);
         MenuScreens.register(ModMenus.SOLIDIFICATION_CHAMBER_CONTAINER.get(), SolidificationChamberScreen::new);
-        MenuScreens.register(ModMenus.FAKE_FLOWER_CONTAINER.get(), FakeFlowerScreen::new);
+        MenuScreens.register(ModMenuTypes.FAKE_FLOWER.get(), FakeFlowerScreen::new);
         MenuScreens.register(ModMenus.HONEY_POT_CONTAINER.get(), HoneyPotScreen::new);
         MenuScreens.register(ModMenus.CENTRIFUGE_MENU.get(), NormalCentrifugeScreen::new);
 

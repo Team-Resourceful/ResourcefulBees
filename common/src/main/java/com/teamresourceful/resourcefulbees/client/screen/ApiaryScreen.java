@@ -1,15 +1,19 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen;
+package com.teamresourceful.resourcefulbees.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BlockBee;
-import com.teamresourceful.resourcefulbees.common.blockentity.ApiaryBlockEntity;
-import com.teamresourceful.resourcefulbees.common.inventory.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ApiaryTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.constants.TranslationConstants;
+import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
+import com.teamresourceful.resourcefulbees.mixin.client.ScreenAccessor;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
@@ -22,14 +26,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
     private static final ResourceLocation VALIDATED_TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/apiary/validated.png");
@@ -93,7 +95,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
         this.font.draw(matrix, getTitle(), 55, 7, 0x404040);
         this.font.draw(matrix, GuiTranslations.INVENTORY, 55, 75, 0x404040);
 
-        for (Widget widget : this.renderables) {
+        for (Widget widget : ((ScreenAccessor)this).getRenderables()) {
             if (widget instanceof AbstractWidget aWidget && aWidget.isMouseOver(mouseX, mouseY)) {
                 aWidget.renderToolTip(matrix, mouseX - this.leftPos, mouseY - this.topPos);
                 break;

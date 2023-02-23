@@ -1,7 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.blockentity;
+package com.teamresourceful.resourcefulbees.common.blockentities;
 
-import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
-import com.teamresourceful.resourcefulbees.common.inventory.menus.BreederMenu;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.BasicWorldlyContainer;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.BreederTimeUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.Upgrade;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
@@ -9,16 +8,19 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.BoundSafeContainerData;
+import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.util.ContainerUtils;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
+import com.teamresourceful.resourcefulbees.platform.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -26,19 +28,13 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class BreederBlockEntity extends BlockEntity implements MenuProvider {
+public class BreederBlockEntity extends BlockEntity implements ContentMenuProvider<PositionContent>, BasicWorldlyContainer {
 
-    private final TileStackHandler inventory = new TileStackHandler();
-    private final LazyOptional<IItemHandler> inventoryOptional = LazyOptional.of(this::getInventory);
+    private final NonNullList<ItemStack> items = NonNullList.withSize(29, ItemStack.EMPTY);
 
     private final BreederRecipe[] recipes = {null, null};
 
@@ -47,11 +43,19 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
 
     private int timeReduction = 0;
 
+    private boolean firstLoad = true;
+
     public BreederBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.BREEDER_BLOCK_ENTITY.get(), pos, state);
     }
 
     public static void serverTick(BreederBlockEntity entity) {
+        if (entity.firstLoad) {
+            for (int i = 0; i < BreederConstants.NUM_OF_BREEDERS; i++) {
+                entity.checkAndCacheRecipe(i);
+            }
+            entity.firstLoad = false;
+        }
         boolean dirty = false;
         for (int i = 0; i < BreederConstants.NUM_OF_BREEDERS; i++) {
             if (entity.recipes[i] != null) {
@@ -86,14 +90,14 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    private ItemStack getItem(int i) {
-        return inventory.getStackInSlot(i);
+    @Override
+    public NonNullList<ItemStack> getItems() {
+        return items;
     }
 
     @Override
-    public void onLoad() {
-        super.onLoad();
-        for (int i = 0; i < BreederConstants.NUM_OF_BREEDERS; i++) { checkAndCacheRecipe(i); }
+    public boolean stillValid(@NotNull Player player) {
+        return true;
     }
 
     private void processBreed(int slot) {
@@ -127,34 +131,32 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
 
     private void deliverItem(ItemStack stack) {
         for (int i = 11; i < 29 && !stack.isEmpty(); i++) {
-            stack = ModUtils.insertItem(inventory, i, stack);
+            stack = ContainerUtils.insertItem(this, i, stack);
         }
     }
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put(NBTConstants.NBT_INVENTORY, getInventory().serializeNBT());
+        tag.put(NBTConstants.NBT_INVENTORY, serializeContainer());
         tag.putInt(NBTConstants.Breeder.TIME_REDUCTION, timeReduction);
     }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
-        inventory.deserializeNBTWithoutCheckingSize(tag.getCompound(NBTConstants.NBT_INVENTORY));
+        deserializeContainer(tag.getCompound(NBTConstants.NBT_INVENTORY));
         timeReduction = tag.getInt(NBTConstants.Breeder.TIME_REDUCTION);
-    }
-
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap.equals(ForgeCapabilities.ITEM_HANDLER)) return inventoryOptional.cast();
-        return super.getCapability(cap, side);
     }
 
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         return new BreederMenu(id, playerInventory, this, times, endTimes);
+    }
+
+    @Override
+    public PositionContent createContent() {
+        return new PositionContent(this.worldPosition);
     }
 
     @NotNull
@@ -163,58 +165,11 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
         return GuiTranslations.APIARY_BREEDER;
     }
 
-    public @NotNull TileStackHandler getInventory() {
-        return inventory;
-    }
-
-    public class TileStackHandler extends AutomationSensitiveItemStackHandler {
-
-        protected TileStackHandler() {
-            super(29);
-        }
-
-        @Override
-        public IAcceptor getAcceptor() {
-            return (slot, stack, automation) -> {
-                if (slot >= 0 && slot < 11) {
-                    return slot != 0 || stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.BREEDER);
-                }
-                return false;
-            };
-        }
-
-        @Override
-        public IRemover getRemover() {
-            return (slot, automation) -> !automation || (slot > 10 && slot < 29);
-        }
-
-        @Override
-        protected void onContentsChanged(int slot) {
-            super.onContentsChanged(slot);
-            setChanged();
-
-            if (slot == 0){
-                inventory.updateBreedTime(this);
-            }
-            if (MathUtils.inRangeInclusive(slot, 1, 10)) {
-                for (int i = 0; i < BreederConstants.NUM_OF_BREEDERS; i++) { checkAndCacheRecipe(i); }
-            }
-        }
-
-        @Override
-        public int getSlotLimit(int slot) {
-            return slot == 0 ? 4 : 64;
-        }
-
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return slot != 0 || stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.BREEDER);
-        }
-
-        private void updateBreedTime(TileStackHandler stackHandler) {
-            var stackInSlot = stackHandler.getStackInSlot(0);
-            if (stackInSlot.getItem() instanceof BreederTimeUpgradeItem upgrade) {
-                int reduction = calculateReduction(upgrade, stackInSlot);
+    @Override
+    public void setSlotChanged(int slot, ItemStack stack) {
+        if (slot == 0){
+            if (stack.getItem() instanceof BreederTimeUpgradeItem upgrade) {
+                int reduction = calculateReduction(upgrade, stack);
                 if (reduction != timeReduction) {
                     timeReduction = reduction;
                     for (int i = 0; i < BreederConstants.NUM_OF_BREEDERS; i++) {
@@ -222,11 +177,34 @@ public class BreederBlockEntity extends BlockEntity implements MenuProvider {
                         if (recipe != null) endTimes.set(i, recipe.time() - timeReduction);
                     }
                 }
+            } else {
+                timeReduction = 0;
             }
         }
-
-        private static int calculateReduction(BreederTimeUpgradeItem upgrade, ItemStack stack) {
-            return Math.max(100, upgrade.getUpgradeTier(stack) * stack.getCount());
+        if (MathUtils.inRangeInclusive(slot, 1, 10)) {
+            for (int i = 0; i < BreederConstants.NUM_OF_BREEDERS; i++) { checkAndCacheRecipe(i); }
         }
+    }
+
+    private static int calculateReduction(BreederTimeUpgradeItem upgrade, ItemStack stack) {
+        return Math.max(100, upgrade.getUpgradeTier(stack) * stack.getCount());
+    }
+
+    @Override
+    public boolean canPlaceItem(int index, @NotNull ItemStack stack) {
+        if (index >= 0 && index < 11) {
+            return index != 0 || stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.BREEDER);
+        }
+        return false;
+    }
+
+    @Override
+    public int @NotNull [] getSlotsForFace(@NotNull Direction side) {
+        return BreederConstants.SLOTS;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int index, @NotNull ItemStack stack, @NotNull Direction direction) {
+        return index > 10 && index < 29;
     }
 }

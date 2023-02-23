@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.block.*;
-import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseTopBlock;
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeCrankBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModMaterials;
 import com.teamresourceful.resourcefulbees.common.lib.tiers.DefaultApiaryTiers;
@@ -43,9 +43,7 @@ public final class ModBlocks {
     public static final RegistryEntry<Block> T2_APIARY_BLOCK = APIARIES.register("t2_apiary", () -> new ApiaryBlock(DefaultApiaryTiers.T2_APIARY));
     public static final RegistryEntry<Block> T3_APIARY_BLOCK = APIARIES.register("t3_apiary", () -> new ApiaryBlock(DefaultApiaryTiers.T3_APIARY));
     public static final RegistryEntry<Block> T4_APIARY_BLOCK = APIARIES.register("t4_apiary", () -> new ApiaryBlock(DefaultApiaryTiers.T4_APIARY));
-    public static final RegistryEntry<Block> BEEHOUSE_TOP = BLOCKS.register("beehouse_top", BeeHouseTopBlock::new);
     public static final RegistryEntry<Block> FLOW_HIVE = BLOCKS.register("flow_hive", FlowHiveBlock::new);
-    public static final RegistryEntry<Block> BREEDER_BLOCK = BLOCKS.register("breeder", () -> new BreederBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(1F).sound(SoundType.WOOD)));
     //endregion
 
     public static final RegistryEntry<LiquidBlock> HONEY_FLUID_BLOCK = HONEY_FLUID_BLOCKS.register("honey", () -> new LiquidBlock(ModFluids.HONEY_STILL, HONEY_FLUID_BLOCK_PROPERTIES));

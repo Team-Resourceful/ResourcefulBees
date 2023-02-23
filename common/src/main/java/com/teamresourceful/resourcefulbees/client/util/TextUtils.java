@@ -1,10 +1,10 @@
-package com.teamresourceful.resourcefulbees.client.utils;
+package com.teamresourceful.resourcefulbees.client.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.FontResourceManagerAccessor;
-import com.teamresourceful.resourcefulbees.common.mixin.accessors.MinecraftAccessor;
+import com.teamresourceful.resourcefulbees.mixin.client.FontResourceManagerAccessor;
+import com.teamresourceful.resourcefulbees.mixin.client.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.FontSet;

@@ -132,4 +132,6 @@ public class ModItems {
     public static final RegistryEntry<Item> FAKE_FLOWER = ITEMS.register("fake_flower", () -> new BlockItem(ModBlocks.FAKE_FLOWER.get(), new Item.Properties()));
 
     public static final RegistryEntry<Item> GOLD_FLOWER_ITEM = ITEMS.register("gold_flower", () -> new BlockItem(ModBlocks.GOLD_FLOWER.get(), new Item.Properties()));
+
+    public static final RegistryEntry<Item> BREEDER_ITEM = NEST_ITEMS.register("breeder", () -> new BlockItem(ModBlocks.BREEDER_BLOCK.get(), new Item.Properties()));
 }

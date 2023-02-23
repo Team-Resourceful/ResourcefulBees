@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.mixin.accessors;
+package com.teamresourceful.resourcefulbees.mixin.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.font.FontManager;

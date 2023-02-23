@@ -15,8 +15,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import static com.teamresourceful.resourcefulbees.client.utils.TextUtils.FONT_COLOR_1;
-import static com.teamresourceful.resourcefulbees.client.utils.TextUtils.TERMINAL_FONT_8;
+import static com.teamresourceful.resourcefulbees.client.util.TextUtils.FONT_COLOR_1;
+import static com.teamresourceful.resourcefulbees.client.util.TextUtils.TERMINAL_FONT_8;
 
 public class CentrifugeFluidOutputScreen extends CentrifugeInventoryScreen<CentrifugeFluidOutputContainer> {
 

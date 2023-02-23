@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.*;
 import com.teamresourceful.resourcefulbees.centrifuge.common.network.server.CommandResponsePacket;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
-import com.teamresourceful.resourcefulbees.common.network.packets.client.LockBeePacket;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.SelectFluidPacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
@@ -18,11 +17,9 @@ public final class ForgeNetworkHandler {
     }
 
     public static void init() {
-        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, LockBeePacket.ID, LockBeePacket.HANDLER, LockBeePacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, BeeconChangePacket.ID, BeeconChangePacket.HANDLER, BeeconChangePacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, SelectFluidPacket.ID, SelectFluidPacket.HANDLER, SelectFluidPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, CommandPacket.ID, CommandPacket.HANDLER, CommandPacket.class);
-        CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, LockBeePacket.ID, LockBeePacket.HANDLER, LockBeePacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, OutputLocationSelectionPacket.ID, OutputLocationSelectionPacket.HANDLER, OutputLocationSelectionPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, VoidExcessPacket.ID, VoidExcessPacket.HANDLER, VoidExcessPacket.class);
         CHANNEL.registerPacket(NetworkDirection.CLIENT_TO_SERVER, PurgeContentsPacket.ID, PurgeContentsPacket.HANDLER, PurgeContentsPacket.class);

@@ -63,7 +63,7 @@ public final class JEICompat implements IModPlugin {
         registration.addRecipeCatalyst(ModItems.T2_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
         registration.addRecipeCatalyst(ModItems.T3_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
         registration.addRecipeCatalyst(ModItems.T4_APIARY_ITEM.get().getDefaultInstance(), HiveCategory.RECIPE);
-        registration.addRecipeCatalyst(ModItems.BREEDER_ITEM.get().getDefaultInstance(), BeeBreedingCategory.RECIPE);
+        registration.addRecipeCatalyst(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BREEDER_ITEM.get().getDefaultInstance(), BeeBreedingCategory.RECIPE);
         registration.addRecipeCatalyst(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get().getDefaultInstance(), SolidificationCategory.RECIPE);
         registration.addRecipeCatalyst(ModItems.HONEY_GENERATOR_ITEM.get().getDefaultInstance(), HoneyGenCategory.RECIPE);
         registration.addRecipeCatalyst(ModItems.FLOW_HIVE.get().getDefaultInstance(), FlowHiveCategory.RECIPE);

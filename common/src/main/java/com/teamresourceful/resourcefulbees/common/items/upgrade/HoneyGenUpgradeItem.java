@@ -1,7 +1,5 @@
-package com.teamresourceful.resourcefulbees.common.item;
+package com.teamresourceful.resourcefulbees.common.items.upgrade;
 
-import com.teamresourceful.resourcefulbees.common.items.upgrade.Upgrade;
-import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
 import net.minecraft.world.item.Item;
 
 public class HoneyGenUpgradeItem extends Item implements Upgrade {

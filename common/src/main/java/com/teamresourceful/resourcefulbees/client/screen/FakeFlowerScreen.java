@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.gui.screen;
+package com.teamresourceful.resourcefulbees.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;

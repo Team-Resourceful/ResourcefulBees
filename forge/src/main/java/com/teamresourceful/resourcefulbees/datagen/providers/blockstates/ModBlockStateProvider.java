@@ -23,11 +23,11 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HIVES.getEntries().forEach(this::registerNest);
         ModBlocks.APIARIES.getEntries().forEach(this::registerApiary);
         registerApiary(ModBlocks.FLOW_HIVE);
-        registerApiary(ModBlocks.BREEDER_BLOCK);
+        registerApiary(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BREEDER_BLOCK);
         registerCentrifuge();
         registerWaxedBlocks();
         //using sign generator as it does what we need and only generates a model with particle field.
-        simpleBlock(ModBlocks.BEEHOUSE_TOP.get(), models().sign("bee_house_top", modLoc("block/apiary/t1_apiary")));
+        simpleBlock(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEEHOUSE_TOP.get(), models().sign("bee_house_top", modLoc("block/apiary/t1_apiary")));
         simpleBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX.get(), models().cubeBottomTop("bee_box", modLoc("block/bee_box_side"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top")));
         simpleBlockWithItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEE_BOX_TEMP.get(), models().cubeBottomTop("bee_box_temp", modLoc("block/bee_box_side_temp"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top_temp")));
         simpleBlock(ModBlocks.CREATIVE_GEN.get(), cubeAll(ModBlocks.CREATIVE_GEN.get()));

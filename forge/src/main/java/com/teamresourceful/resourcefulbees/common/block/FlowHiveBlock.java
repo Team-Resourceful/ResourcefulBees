@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.block.base.BeeHouseBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.FlowHiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
@@ -64,6 +65,12 @@ public class FlowHiveBlock extends BeeHouseBlock implements BeeHolderBlock {
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new FlowHiveBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public MenuProvider getMenuProvider(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
+        return null;
     }
 
     @Nullable

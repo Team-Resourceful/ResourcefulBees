@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.render.pet;
+package com.teamresourceful.resourcefulbees.client.rendering.pet;
 
 import com.teamresourceful.resourcefulbees.client.pets.PetBeeModel;
 import com.teamresourceful.resourcefulbees.client.pets.PetModelData;
@@ -27,6 +27,11 @@ public class PetBeeRenderer implements IGeoRenderer<PetModelData> {
 
     @Override
     public ResourceLocation getTextureLocation(PetModelData instance) {
+        return instance.getTexture();
+    }
+
+    @Override
+    public ResourceLocation getTextureResource(PetModelData instance) {
         return instance.getTexture();
     }
 

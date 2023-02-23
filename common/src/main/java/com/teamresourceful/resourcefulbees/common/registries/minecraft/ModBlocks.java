@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.*;
+import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseTopBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
@@ -200,6 +201,9 @@ public final class ModBlocks {
     public static final RegistryEntry<Block> FAKE_FLOWER = BLOCKS.register("fake_flower", () -> new FakeFlowerBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.GOLD).strength(2.0f, 3.0f).sound(SoundType.WOOD).noOcclusion().lightLevel(value -> 1)));
 
     public static final RegistryEntry<Block> GOLD_FLOWER = BLOCKS.register("gold_flower", () -> new FlowerBlock(MobEffects.INVISIBILITY, 10, BlockBehaviour.Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS)));
+
+    public static final RegistryEntry<Block> BEEHOUSE_TOP = BLOCKS.register("beehouse_top", BeeHouseTopBlock::new);
+    public static final RegistryEntry<Block> BREEDER_BLOCK = BLOCKS.register("breeder", () -> new BreederBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(1F).sound(SoundType.WOOD)));
 
     private static boolean never(BlockState state, BlockGetter blockGetter, BlockPos blockPos) {
         return false;
