@@ -2,13 +2,13 @@ package com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.out
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.utils.CodecUtils;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraftforge.fluids.FluidStack;
 
 public record FluidOutput(FluidStack fluid, double weight) implements AbstractOutput<FluidStack> {
 
     public static final Codec<FluidOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            CodecUtils.FLUID_STACK_CODEC.fieldOf("fluid").orElse(FluidStack.EMPTY).forGetter(FluidOutput::fluid),
+            FluidUtils.FLUID_STACK_CODEC.fieldOf("fluid").orElse(FluidStack.EMPTY).forGetter(FluidOutput::fluid),
             Codec.doubleRange(1.0d, Double.MAX_VALUE).fieldOf("weight").orElse(1.0d).forGetter(FluidOutput::weight)
     ).apply(instance, FluidOutput::new));
 

@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.init;
+package com.teamresourceful.resourcefulbees.common.setup.data;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;

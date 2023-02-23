@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.common.recipe.recipes;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.utils.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +24,7 @@ public record SolidificationRecipe(ResourceLocation id, FluidStack fluid, ItemSt
     public static Codec<SolidificationRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
-                CodecUtils.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(SolidificationRecipe::fluid),
+                FluidUtils.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(SolidificationRecipe::fluid),
                 ItemStackCodec.CODEC.fieldOf("result").forGetter(SolidificationRecipe::stack)
         ).apply(instance, SolidificationRecipe::new));
     }

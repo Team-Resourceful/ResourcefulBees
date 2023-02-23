@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.common.recipe.recipes;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.utils.CodecUtils;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import net.minecraft.core.HolderSet;
@@ -27,7 +27,7 @@ public record FlowHiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees,
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 HolderSetCodec.of(Registry.ENTITY_TYPE).fieldOf("bees").forGetter(FlowHiveRecipe::bees),
-                CodecUtils.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(FlowHiveRecipe::fluid)
+                FluidUtils.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(FlowHiveRecipe::fluid)
         ).apply(instance, FlowHiveRecipe::new));
     }
 

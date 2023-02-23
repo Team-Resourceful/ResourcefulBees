@@ -25,6 +25,9 @@ import com.teamresourceful.resourcefulbees.common.registry.custom.DefaultTraitAb
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
+import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
+import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
+import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
 import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.SyncedDatapackEvent;
