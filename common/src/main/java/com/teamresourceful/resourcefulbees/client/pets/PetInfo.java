@@ -15,7 +15,7 @@ public final class PetInfo {
 
     private static final int VERSION = 1;
 
-    private static final PetModelData FALLBACK_MODEL = new PetModelData(-1, "fallback", new ResourceLocation("resourcefulbees:geo/base-nocloak.geo.json"), new ResourceLocation("textures/entity/bee/bee.png"), new HashSet<>());
+    private static final PetModelData FALLBACK_MODEL = new PetModelData(-1, "fallback", new ResourceLocation("resourcefulbees:geo/base-nocloak.geo.json"), new ResourceLocation("textures/entity/bee/bee.png"), Optional.empty(), new HashSet<>());
 
     static PetModelData defaultModel = null;
 

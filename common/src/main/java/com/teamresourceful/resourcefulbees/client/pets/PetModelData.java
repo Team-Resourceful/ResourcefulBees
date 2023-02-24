@@ -18,6 +18,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class PetModelData implements IAnimatable {
@@ -29,6 +30,7 @@ public class PetModelData implements IAnimatable {
             Codec.STRING.fieldOf("id").orElse("error").forGetter(PetModelData::getId),
             ResourceLocation.CODEC.fieldOf("model").orElse(BASE_MODEL).forGetter(PetModelData::getModelLocation),
             ResourceLocation.CODEC.fieldOf("texture").orElse(LayerTexture.MISSING_TEXTURE.texture()).forGetter(PetModelData::getTexture),
+            Codec.STRING.optionalFieldOf("asset").forGetter(data -> Optional.ofNullable(data.getUrlTexture())),
             CodecExtras.linkedSet(LayerData.CODEC).fieldOf("layers").orElse(new LinkedHashSet<>()).forGetter(PetModelData::getLayers)
     ).apply(instance, PetModelData::new));
 
@@ -44,13 +46,15 @@ public class PetModelData implements IAnimatable {
     private final String id;
     private final ResourceLocation modelLocation;
     private final ResourceLocation texture;
+    private final PetTexture urlTexture;
     private final Set<BeeLayerData> layers;
 
-    public PetModelData(int version, String id, ResourceLocation modelLocation, ResourceLocation texture, Set<BeeLayerData> layers) {
+    public PetModelData(int version, String id, ResourceLocation modelLocation, ResourceLocation texture, Optional<String> urlTexture, Set<BeeLayerData> layers) {
         this.version = version;
         this.id = id;
         this.modelLocation = modelLocation;
         this.texture = texture;
+        this.urlTexture = new PetTexture(id, urlTexture.orElse(null));
         this.layers = layers;
     }
 
@@ -76,7 +80,13 @@ public class PetModelData implements IAnimatable {
     }
 
     public ResourceLocation getTexture() {
+        ResourceLocation urlTexture = this.urlTexture.getResourceLocation();
+        if (urlTexture != null) return urlTexture;
         return texture;
+    }
+
+    public String getUrlTexture() {
+        return urlTexture.getTexture();
     }
 
     public Set<BeeLayerData> getLayers() {
