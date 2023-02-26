@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.*;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -48,6 +49,10 @@ public class BeeSetup {
     private static Path beePath;
     private static Path resourcePath;
     private static Path honeyPath;
+
+    // Flag to reparse the biome data from forge so that all biomes are accounted for w.r.t.
+    // allowed biomes for bees to spawn in.
+    private static boolean reparseBiomesCallOnce = true;
 
     public static void setBeePath(Path path) {
         beePath = path;
@@ -302,6 +307,19 @@ public class BeeSetup {
     }
 
     public static void onBiomeLoad(BiomeLoadingEvent event) {
+        // Call parseBiomes on all of the bees _once_ before we load into a world. This is to ensure
+        // that all biomes are accounted for since the initial checking of biome tags happens potentially
+        // before any mods register any of their biomes.
+        if (reparseBiomesCallOnce) {
+            Map<String, CustomBeeData> bees = BeeRegistry.getRegistry().getBees();
+            bees.forEach((name, customBeeData) -> {
+                if (customBeeData.getSpawnData().canSpawnInWorld()) {
+                    BeeInfoUtils.parseBiomes(customBeeData);
+                }
+            });
+            reparseBiomesCallOnce = false;
+        }
+
         if (event.getName() != null && BeeRegistry.getSpawnableBiomes().containsKey(event.getName())) {
             BeeRegistry.getSpawnableBiomes().get(event.getName()).forEach(customBeeData -> {
                 EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(customBeeData.getEntityTypeRegistryID());
