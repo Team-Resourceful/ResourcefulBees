@@ -71,7 +71,12 @@ public class SpawnData extends AbstractBeeData {
         if (biomeBlacklist != null) {
             return biomeBlacklist.toLowerCase(Locale.ENGLISH);
         }
-        return biomeWhitelist.equals("tag:ocean") ? "" : "tag:ocean";
+
+        if (biomeWhitelist != null) {
+            return biomeWhitelist.equals("tag:ocean") ? "" : "tag:ocean";
+        }
+        
+        return "";
     }
 
     public LightLevels getLightLevel() { return lightLevel != null ? lightLevel : LightLevels.ANY; }
