@@ -9,7 +9,7 @@ issueTrackerURL="https://github.com/Team-Resourceful/ResourcefulBees/issues/new/
     displayName="Resourceful Bees"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"
     logoFile="logo.png"
-    authors="Epic_Oreo, ThatGravyBoat, Dawn Felstar, (Textures) Vik, (Textures) QBert, (Textures) Joosh"
+    authors="Epic_Oreo, ThatGravyBoat, Dawn Felstar, (Textures) QBert, (Textures) Joosh"
     description="This mod provides pack makers with useful capabilities for creating custom Resource Bees."
 
 [[dependencies.resourcefulbees]]
