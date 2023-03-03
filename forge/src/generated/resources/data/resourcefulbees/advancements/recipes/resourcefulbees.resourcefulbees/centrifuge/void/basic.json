@@ -1,11 +1,13 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_obsidian": {
+    "has_amethyst_shard": {
       "conditions": {
         "items": [
           {
-            "tag": "forge:obsidian"
+            "items": [
+              "minecraft:amethyst_shard"
+            ]
           }
         ]
       },
@@ -20,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_obsidian",
+      "has_amethyst_shard",
       "has_the_recipe"
     ]
   ],

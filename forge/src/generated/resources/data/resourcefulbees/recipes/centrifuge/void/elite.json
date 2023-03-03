@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "E": {
-      "item": "minecraft:ender_eye"
-    },
     "N": {
       "tag": "forge:ingots/netherite"
+    },
+    "S": {
+      "item": "minecraft:shulker_shell"
     },
     "V": {
       "item": "resourcefulbees:centrifuge/void/advanced"
     }
   },
   "pattern": [
-    "NEN",
-    "EVE",
-    "NEN"
+    "NSN",
+    "SVS",
+    "NSN"
   ],
   "result": {
     "item": "resourcefulbees:centrifuge/void/elite"

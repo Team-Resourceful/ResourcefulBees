@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
     "C": {
       "item": "resourcefulbees:centrifuge/casing"
     },
     "E": {
       "tag": "forge:chests/ender"
-    },
-    "O": {
-      "tag": "forge:obsidian"
     }
   },
   "pattern": [
-    "OCO",
+    "ACA",
     "CEC",
-    "OCO"
+    "ACA"
   ],
   "result": {
     "item": "resourcefulbees:centrifuge/void/basic"

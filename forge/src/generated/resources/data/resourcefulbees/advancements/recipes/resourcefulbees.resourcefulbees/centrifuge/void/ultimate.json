@@ -1,6 +1,18 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
+    "has_echo_shard": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:echo_shard"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "has_netherite": {
       "conditions": {
         "items": [
@@ -21,6 +33,7 @@
   "requirements": [
     [
       "has_netherite",
+      "has_echo_shard",
       "has_the_recipe"
     ]
   ],

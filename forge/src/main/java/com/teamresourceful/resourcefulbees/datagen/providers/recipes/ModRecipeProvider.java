@@ -351,33 +351,35 @@ public class ModRecipeProvider extends RecipeProvider {
         //endregion
         //region Void
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_BASIC_VOID)
-                .pattern("OCO","CEC","OCO")
+                .pattern("ACA","CEC","ACA")
                 .define('E', Ingredient.of(Tags.Items.CHESTS_ENDER))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
-                .define('O', Ingredient.of(Tags.Items.OBSIDIAN))
-                .unlockedBy(hasObsidian)
+                .define('A', Ingredient.of(Items.AMETHYST_SHARD))
+                .unlockedBy(new RecipeCriteria("has_amethyst_shard", RecipeProvider.has(Items.AMETHYST_SHARD)))
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ADVANCED_VOID)
                 .pattern("ECE","CVC","ECE")
                 .define('V', Ingredient.of(CentrifugeItems.CENTRIFUGE_BASIC_VOID.get()))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
                 .define('E', Ingredient.of(Items.ENDER_EYE))
-                .unlockedBy(hasObsidian)
+                .unlockedBy(new RecipeCriteria("has_ender_eye", RecipeProvider.has(Items.ENDER_EYE)))
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ELITE_VOID)
-                .pattern("NEN","EVE","NEN")
+                .pattern("NSN","SVS","NSN")
                 .define('V', Ingredient.of(CentrifugeItems.CENTRIFUGE_ADVANCED_VOID.get()))
-                .define('E', Ingredient.of(Items.ENDER_EYE))
+                .define('S', Ingredient.of(Items.SHULKER_SHELL))
                 .define('N', Ingredient.of(Tags.Items.INGOTS_NETHERITE))
                 .unlockedBy(hasNetherite)
+                .unlockedBy(new RecipeCriteria("has_shulker_shell", RecipeProvider.has(Items.SHULKER_SHELL)))
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ULTIMATE_VOID)
                 .pattern("NEN","STS","NEN")
                 .define('T', Ingredient.of(CentrifugeItems.CENTRIFUGE_ELITE_VOID.get()))
-                .define('E', Ingredient.of(Items.END_ROD))
+                .define('E', Ingredient.of(Items.ECHO_SHARD))
                 .define('N', Ingredient.of(Tags.Items.STORAGE_BLOCKS_NETHERITE))
                 .define('S', Ingredient.of(Tags.Items.NETHER_STARS))
                 .unlockedBy(hasNetherite)
+                .unlockedBy(new RecipeCriteria("has_echo_shard", RecipeProvider.has(Items.ECHO_SHARD)))
                 .save(recipes);
         //endregion
         //region Input

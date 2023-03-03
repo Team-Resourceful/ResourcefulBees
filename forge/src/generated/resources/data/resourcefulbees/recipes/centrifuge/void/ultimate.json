@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "E": {
-      "item": "minecraft:end_rod"
+      "item": "minecraft:echo_shard"
     },
     "N": {
       "tag": "forge:storage_blocks/netherite"
