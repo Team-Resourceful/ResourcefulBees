@@ -48,8 +48,8 @@ configurations {
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
 
-    include modApi("com.teamresourceful.resourcefullib:resourcefullib-forge-$rootProject.resourcefullib_version")
-    modApi("com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-$rootProject.resourcefulconfig_version")
+    modImplementation("com.teamresourceful.resourcefullib:resourcefullib-forge-$rootProject.minecraft_version:$rootProject.resourcefullib_version")
+    modImplementation("com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-$rootProject.minecraft_version:$rootProject.resourcefulconfig_version")
 
     modCompileOnly("mezz.jei:jei-${rootProject.minecraft_version}-forge-api:${rootProject.jei_version}")
     modLocalRuntime("mezz.jei:jei-${rootProject.minecraft_version}-forge:${rootProject.jei_version}") {
@@ -63,7 +63,7 @@ dependencies {
         transitive = false
     }
 
-    modImplementation "software.bernie.geckolib:${rootProject.geckolib_version}"
+    modImplementation "software.bernie.geckolib:${rootProject.geckolib_forge}:${rootProject.geckolib_forge_version}"
 
     modImplementation("com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version")
 
@@ -81,10 +81,22 @@ dependencies {
 
 processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    inputs.property "version", project.version
+
+    def versionProperties = [
+            "version": mod_version,
+            "fml_version": forge_version.substring(0, forge_version.indexOf('.')),
+            "forge_version": forge_version,
+            "mc_version": minecraft_version,
+            "phos_version": phos_version,
+            "gecko_version": geckolib_forge_version,
+            "rlib_version": resourcefullib_version,
+            "rconfig_version": resourcefulconfig_version
+    ]
+
+    inputs.properties versionProperties
 
     filesMatching("META-INF/mods.toml") {
-        expand "version": project.version
+        expand(versionProperties)
     }
 }
 

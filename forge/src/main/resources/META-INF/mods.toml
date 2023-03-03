@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[43,)"
+loaderVersion="[${fml_version},)"
 license="https://www.gnu.org/licenses/lgpl-3.0.en.html"
 issueTrackerURL="https://github.com/Team-Resourceful/ResourcefulBees/issues/new/choose"
 
@@ -15,27 +15,41 @@ issueTrackerURL="https://github.com/Team-Resourceful/ResourcefulBees/issues/new/
 [[dependencies.resourcefulbees]]
     modId="geckolib3"
     mandatory=true
-    versionRange="[3.1.22,)"
+    versionRange="[${gecko_version},)"
     ordering="NONE"
     side="CLIENT"
 
 [[dependencies.resourcefulbees]]
     modId="phosphophyllite"
     mandatory=true
-    versionRange="[0.6.0-beta.5,)"
+    versionRange="[${phos_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.resourcefulbees]]
+    modId="resourcefullib"
+    mandatory=true
+    versionRange="[${rlib_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.resourcefulbees]]
+    modId="resourcefulconfig"
+    mandatory=true
+    versionRange="[${rconfig_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.resourcefulbees]]
     modId="forge"
     mandatory=true
-    versionRange="[43.1.33,)"
+    versionRange="[${forge_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.resourcefulbees]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.2,)"
+    versionRange="[${mc_version}]"
     ordering="NONE"
     side="BOTH"
