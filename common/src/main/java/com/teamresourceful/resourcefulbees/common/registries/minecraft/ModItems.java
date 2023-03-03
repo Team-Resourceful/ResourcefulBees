@@ -1,12 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.config.HoneyGenConfig;
 import com.teamresourceful.resourcefulbees.common.items.*;
 import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.BreederTimeUpgradeItem;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.HoneyGenUpgradeItem;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.BeehiveUpgrade;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.NestUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -15,7 +19,10 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SignItem;
 
-public class ModItems {
+public final class ModItems {
+    private ModItems() {
+        throw new UtilityClassError();
+    }
 
     public static final ResourcefulRegistry<Item> ITEMS = ResourcefulRegistries.create(Registry.ITEM, ModConstants.MOD_ID);
 
@@ -45,7 +52,7 @@ public class ModItems {
     public static final RegistryEntry<Item> T2_BIRCH_BEEHIVE_ITEM = T3_NEST_ITEMS.register("nest/birch/3", () -> new BlockItem(ModBlocks.T2_BIRCH_BEEHIVE.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T3_BIRCH_BEEHIVE_ITEM = T4_NEST_ITEMS.register("nest/birch/4", () -> new BlockItem(ModBlocks.T3_BIRCH_BEEHIVE.get(), new Item.Properties()));
     //endregion
-    //region Brown Mushr
+    //region Brown Mushroom
     public static final RegistryEntry<Item> BROWN_MUSHROOM_NEST_ITEM = T1_NEST_ITEMS.register("nest/brown_mushroom/1", () -> new BlockItem(ModBlocks.BROWN_MUSHROOM_BEE_NEST.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T1_BROWN_MUSHROOM_NEST_ITEM = T2_NEST_ITEMS.register("nest/brown_mushroom/2", () -> new BlockItem(ModBlocks.T1_BROWN_MUSHROOM_BEEHIVE.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T2_BROWN_MUSHROOM_NEST_ITEM = T3_NEST_ITEMS.register("nest/brown_mushroom/3", () -> new BlockItem(ModBlocks.T2_BROWN_MUSHROOM_BEEHIVE.get(), new Item.Properties()));
@@ -57,7 +64,7 @@ public class ModItems {
     public static final RegistryEntry<Item> T2_CRIMSON_BEEHIVE_ITEM = T3_NEST_ITEMS.register("nest/crimson/3", () -> new BlockItem(ModBlocks.T2_CRIMSON_BEEHIVE.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T3_CRIMSON_BEEHIVE_ITEM = T4_NEST_ITEMS.register("nest/crimson/4", () -> new BlockItem(ModBlocks.T3_CRIMSON_BEEHIVE.get(), new Item.Properties()));
     //endregion
-    //region Crimson Nyl
+    //region Crimson Nylium
     public static final RegistryEntry<Item> CRIMSON_NYLIUM_BEE_NEST_ITEM = T1_NEST_ITEMS.register("nest/crimson_nylium/1", () -> new BlockItem(ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T1_CRIMSON_NYLIUM_BEEHIVE_ITEM = T2_NEST_ITEMS.register("nest/crimson_nylium/2", () -> new BlockItem(ModBlocks.T1_CRIMSON_NYLIUM_BEEHIVE.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T2_CRIMSON_NYLIUM_BEEHIVE_ITEM = T3_NEST_ITEMS.register("nest/crimson_nylium/3", () -> new BlockItem(ModBlocks.T2_CRIMSON_NYLIUM_BEEHIVE.get(), new Item.Properties()));
@@ -105,7 +112,7 @@ public class ModItems {
     public static final RegistryEntry<Item> T2_PURPUR_BEEHIVE_ITEM = T3_NEST_ITEMS.register("nest/chorus/3", () -> new BlockItem(ModBlocks.T2_PURPUR_BEEHIVE.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T3_PURPUR_BEEHIVE_ITEM = T4_NEST_ITEMS.register("nest/chorus/4", () -> new BlockItem(ModBlocks.T3_PURPUR_BEEHIVE.get(), new Item.Properties()));
     //endregion
-    //region Red Mushroo
+    //region Red Mushroom
     public static final RegistryEntry<Item> RED_MUSHROOM_NEST_ITEM = T1_NEST_ITEMS.register("nest/red_mushroom/1", () -> new BlockItem(ModBlocks.RED_MUSHROOM_BEE_NEST.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T1_RED_MUSHROOM_NEST_ITEM = T2_NEST_ITEMS.register("nest/red_mushroom/2", () -> new BlockItem(ModBlocks.T1_RED_MUSHROOM_BEEHIVE.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T2_RED_MUSHROOM_NEST_ITEM = T3_NEST_ITEMS.register("nest/red_mushroom/3", () -> new BlockItem(ModBlocks.T2_RED_MUSHROOM_BEEHIVE.get(), new Item.Properties()));
@@ -123,7 +130,7 @@ public class ModItems {
     public static final RegistryEntry<Item> T2_WARPED_BEEHIVE_ITEM = T3_NEST_ITEMS.register("nest/warped/3", () -> new BlockItem(ModBlocks.T2_WARPED_BEEHIVE.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T3_WARPED_BEEHIVE_ITEM = T4_NEST_ITEMS.register("nest/warped/4", () -> new BlockItem(ModBlocks.T3_WARPED_BEEHIVE.get(), new Item.Properties()));
     //endregion
-    //region Warped Nyli
+    //region Warped Nylium
     public static final RegistryEntry<Item> WARPED_NYLIUM_BEE_NEST_ITEM = T1_NEST_ITEMS.register("nest/warped_nylium/1", () -> new BlockItem(ModBlocks.WARPED_NYLIUM_BEE_NEST.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T1_WARPED_NYLIUM_BEEHIVE_ITEM = T2_NEST_ITEMS.register("nest/warped_nylium/2", () -> new BlockItem(ModBlocks.T1_WARPED_NYLIUM_BEEHIVE.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T2_WARPED_NYLIUM_BEEHIVE_ITEM = T3_NEST_ITEMS.register("nest/warped_nylium/3", () -> new BlockItem(ModBlocks.T2_WARPED_NYLIUM_BEEHIVE.get(), new Item.Properties()));
@@ -185,5 +192,9 @@ public class ModItems {
     public static final RegistryEntry<Item> WAXED_SIGN = ITEMS.register("waxed_sign", () -> new SignItem(new Item.Properties(), ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get()));
     public static final RegistryEntry<Item> TRIMMED_WAXED_PLANKS = ITEMS.register("trimmed_waxed_planks", () -> new BlockItem(ModBlocks.TRIMMED_WAXED_PLANKS.get(), new Item.Properties()));
     public static final RegistryEntry<Item> WAXED_MACHINE_BLOCK = ITEMS.register("waxed_machine_block", () -> new BlockItem(ModBlocks.WAXED_MACHINE_BLOCK.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> HONEY_CAP_UPGRADE = ModItems.ITEMS.register("honey_cap_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.HONEY_CAPACITY));
+    public static final RegistryEntry<Item> ENERGY_CAP_UPGRADE = ModItems.ITEMS.register("energy_cap_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.ENERGY_CAPACITY));
+    public static final RegistryEntry<Item> ENERGY_XFER_UPGRADE = ModItems.ITEMS.register("energy_xfer_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.ENERGY_XFER));
+    public static final RegistryEntry<Item> ENERGY_FILL_UPGRADE = ModItems.ITEMS.register("energy_fill_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.ENERGY_FILL));
     //endregion
 }

@@ -41,6 +41,11 @@ import java.util.Optional;
 
 public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker {
 
+    public static final int ENERGY_FILL_UPGRADE_SLOT = 3;
+    public static final int ENERGY_XFER_UPGRADE_SLOT = 2;
+    public static final int ENERGY_CAP_UPGRADE_SLOT = 1;
+    public static final int TANK_CAP_UPGRADE_SLOT = 0;
+
     public static final int ENERGY_TRANSFER_AMOUNT = HoneyGenConfig.energyTransferAmount;
     public static final int MAX_ENERGY_CAPACITY = HoneyGenConfig.maxEnergyCapacity;
     public static final int MAX_TANK_STORAGE = HoneyGenConfig.maxTankCapacity;
@@ -51,12 +56,23 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
             dirty = true;
         }
     };
+
     private final FluidTank tank = new FluidTank(MAX_TANK_STORAGE, fluidStack -> fluidStack.getFluid().is(ModFluidTags.HONEY)) {
         @Override
         protected void onContentsChanged() {
             dirty = true;
         }
+
+        @Override
+        public FluidTank setCapacity(int capacity) {
+            this.capacity = capacity;
+            if (this.getFluidAmount() > capacity) {
+                this.fluid.setAmount(capacity);
+            }
+            return this;
+        }
     };
+
     private final TileStackHandler inventory = new TileStackHandler();
 
     private final LazyOptional<IEnergyStorage> energyOptional = LazyOptional.of(() -> energyStorage);
@@ -139,9 +155,8 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     }
 
     private void processEnergy() {
-        if (recipe.isEmpty()) return;
-        tank.drain(recipe.get().honeyDrainRate(), IFluidHandler.FluidAction.EXECUTE);
-        energyStorage.addEnergy(recipe.get().energyFillRate());
+        tank.drain(honeyDrainAmount(), IFluidHandler.FluidAction.EXECUTE);
+        energyStorage.addEnergy(energyFillAmount());
     }
 
     private void processCompleted(Level level) {
@@ -159,6 +174,17 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
         }
     }
 
+    public int honeyDrainAmount() {
+        return recipe.map(r -> {
+            int drain = r.honeyDrainRate();
+            return (int) (drain + drain * inventory.numEnergyFillUpgrades() * HoneyGenConfig.honeyConsumptionUpgradePenalty);
+        }).orElse(0);
+    }
+
+    public int energyFillAmount() {
+        return recipe.map(r -> (int) (r.energyFillRate() * Math.pow(inventory.numEnergyFillUpgrades(), HoneyGenConfig.energyFillUpgradeBonus))).orElse(0);
+    }
+
     @Override
     public void setChanged() {
         super.setChanged();
@@ -170,6 +196,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
         CompoundTag tag = new CompoundTag();
         tag.put(NBTConstants.NBT_ENERGY, energyStorage.serializeNBT());
         tag.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundTag()));
+        tag.put(NBTConstants.NBT_INVENTORY, inventory.serializeNBT());
         return tag;
     }
 
@@ -177,6 +204,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     public void readSyncData(@NotNull CompoundTag tag) {
         tank.readFromNBT(tag.getCompound(NBTConstants.NBT_TANK));
         energyStorage.deserializeNBT(tag.getCompound(NBTConstants.NBT_ENERGY));
+        inventory.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
     }
 
     @Override
@@ -236,26 +264,60 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
         return energyStorage;
     }
 
+    public @NotNull TileStackHandler getInventory() {
+        return inventory;
+    }
+
     protected class TileStackHandler extends AutomationSensitiveItemStackHandler {
         protected TileStackHandler() {
-            super(4, (slot, stack, automation) -> true, (slot, automation) -> false);
+            super(4, (slot, stack, automation) -> true, (slot, automation) -> !automation);
         }
 
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
+            int upgrades = getStackInSlot(slot).getCount();
+            switch (slot) {
+                case ENERGY_XFER_UPGRADE_SLOT -> energyStorage.setMaxTransfer((int) (ENERGY_TRANSFER_AMOUNT * Math.pow(HoneyGenConfig.energyTransferUpgradeBonus, upgrades)));
+                case ENERGY_CAP_UPGRADE_SLOT -> energyStorage.setCapacity((int) (MAX_ENERGY_CAPACITY + MAX_ENERGY_CAPACITY * HoneyGenConfig.energyCapacityUpgradeBonus * upgrades));
+                case TANK_CAP_UPGRADE_SLOT -> tank.setCapacity((int) (MAX_TANK_STORAGE + MAX_TANK_STORAGE * HoneyGenConfig.tankCapacityUpgradeBonus * upgrades));
+                default -> {/*nothing*/}
+            }
             setChanged();
         }
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             return switch (slot) {
-                case 3 -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.HONEY_CONSUMPTION);
-                case 2 -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.ENERGY_XFER);
-                case 1 -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.ENERGY_CAPACITY);
-                case 0 -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.HONEY_CAPACITY);
+                case ENERGY_FILL_UPGRADE_SLOT -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.ENERGY_FILL);
+                case ENERGY_XFER_UPGRADE_SLOT -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.ENERGY_XFER);
+                case ENERGY_CAP_UPGRADE_SLOT -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.ENERGY_CAPACITY);
+                case TANK_CAP_UPGRADE_SLOT -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.HONEY_CAPACITY);
                 default -> false;
             };
+        }
+
+        @Override
+        protected void onLoad() {
+            energyStorage.setMaxTransfer((int) (ENERGY_TRANSFER_AMOUNT * Math.pow(HoneyGenConfig.energyTransferUpgradeBonus, numEnergyFillUpgrades())));
+            energyStorage.setCapacity((int) (MAX_ENERGY_CAPACITY + MAX_ENERGY_CAPACITY * HoneyGenConfig.energyCapacityUpgradeBonus * numEnergyCapUpgrades()));
+            tank.setCapacity((int) (MAX_TANK_STORAGE + MAX_TANK_STORAGE * HoneyGenConfig.tankCapacityUpgradeBonus * numTankCapUpgrades()));
+        }
+
+        private int numEnergyFillUpgrades() {
+            return inventory.getStackInSlot(ENERGY_FILL_UPGRADE_SLOT).getCount();
+        }
+
+        private int numEnergyXferUpgrades() {
+            return inventory.getStackInSlot(ENERGY_XFER_UPGRADE_SLOT).getCount();
+        }
+
+        private int numEnergyCapUpgrades() {
+            return inventory.getStackInSlot(ENERGY_CAP_UPGRADE_SLOT).getCount();
+        }
+
+        private int numTankCapUpgrades() {
+            return inventory.getStackInSlot(TANK_CAP_UPGRADE_SLOT).getCount();
         }
     }
 }

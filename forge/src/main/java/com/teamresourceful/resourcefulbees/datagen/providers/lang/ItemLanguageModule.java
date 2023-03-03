@@ -23,6 +23,10 @@ public class ItemLanguageModule implements LanguageModule {
         provider.addItem(ModItems.T2_NEST_UPGRADE, "Tier 2 Nest Upgrade");
         provider.addItem(ModItems.T3_NEST_UPGRADE, "Tier 3 Nest Upgrade");
         provider.addItem(ModItems.T4_NEST_UPGRADE, "Tier 4 Nest Upgrade");
+        provider.addItem(ModItems.ENERGY_CAP_UPGRADE, "Energy Capacity Upgrade (WIP)");
+        provider.addItem(ModItems.ENERGY_XFER_UPGRADE, "Energy Transfer Upgrade (WIP)");
+        provider.addItem(ModItems.ENERGY_FILL_UPGRADE, "Energy Conversion Upgrade (WIP)");
+        provider.addItem(ModItems.HONEY_CAP_UPGRADE, "Honey Capacity Upgrade (WIP)");
         provider.addItem(ModItems.BEE_LOCATOR, "Bee Locator");
         provider.addItem(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.STRAWBEERRY_MILKSHAKE, "Strawbeerry Milkshake");
     }

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.inventory.menus;
 
 import com.teamresourceful.resourcefulbees.common.blockentity.HoneyGeneratorBlockEntity;
 import com.teamresourceful.resourcefulbees.common.capabilities.CustomEnergyStorage;
+import com.teamresourceful.resourcefulbees.common.inventory.slots.SlotItemHandlerUnconditioned;
 import com.teamresourceful.resourcefulbees.common.menus.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,12 +34,12 @@ public class HoneyGeneratorMenu extends AbstractModContainerMenu<HoneyGeneratorB
 
     @Override
     public int getContainerInputEnd() {
-        return 0;
+        return 4;
     }
 
     @Override
     public int getInventoryStart() {
-        return 0;
+        return 4;
     }
 
     @Override
@@ -53,6 +54,8 @@ public class HoneyGeneratorMenu extends AbstractModContainerMenu<HoneyGeneratorB
 
     @Override
     protected void addMenuSlots() {
-        //nothing
+        for (int i = 0; i < 4; i++) {
+            this.addSlot(new SlotItemHandlerUnconditioned(getEntity().getInventory(), i, 53 + i * 18, 54));
+        }
     }
 }

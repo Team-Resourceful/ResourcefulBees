@@ -22,7 +22,9 @@ public final class ItemGroupResourcefulBees {
             .addRegistry(() -> CentrifugeItems.CENTRIFUGE_ITEMS)
             .setAddingFunction(list -> {
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR);
-                list.add(ModItems.OREO_COOKIE);
+                if (GeneralConfig.enableDevBees) {
+                    list.add(ModItems.OREO_COOKIE);
+                }
                 if (GeneralConfig.enableSupporterBees) {
                     list.add(ModItems.STRAWBEERRY_MILKSHAKE);
                 }
@@ -58,6 +60,10 @@ public final class ItemGroupResourcefulBees {
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_MACHINE_BLOCK);
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.FAKE_FLOWER);
 
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.ENERGY_CAP_UPGRADE);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.ENERGY_XFER_UPGRADE);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.ENERGY_FILL_UPGRADE);
+                list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_CAP_UPGRADE);
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BREED_TIME_UPGRADE);
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T2_NEST_UPGRADE);
                 list.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T3_NEST_UPGRADE);

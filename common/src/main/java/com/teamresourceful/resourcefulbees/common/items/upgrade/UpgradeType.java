@@ -6,7 +6,7 @@ public enum UpgradeType {
     HONEY_CAPACITY,
     ENERGY_CAPACITY,
     ENERGY_XFER,
-    HONEY_CONSUMPTION;
+    ENERGY_FILL;
 
     public boolean isType(UpgradeType type) {
         return this == type;

@@ -97,4 +97,19 @@ public final class ItemTranslations {
 
     @Translate("No Bees.")
     public static final MutableComponent NO_BEES = Component.translatable("item.resourcefulbees.information.bee_box.no_bees");
+
+    @Translate("Increases Honey Generator Energy Capacity.")
+    public static final MutableComponent ENERGY_CAP_TOOLTIP = Component.translatable("item.resourcefulbees.generator.upgrade.energy.capacity");
+
+    @Translate("Increases Honey Generator Energy Conversion Rate.")
+    public static final MutableComponent ENERGY_FILL_TOOLTIP_1 = Component.translatable("item.resourcefulbees.generator.upgrade.energy.conversion.1");
+
+    @Translate("Honey consumption is also increased.")
+    public static final MutableComponent ENERGY_FILL_TOOLTIP_2 = Component.translatable("item.resourcefulbees.generator.upgrade.energy.conversion.2");
+
+    @Translate("Increases Honey Generator Energy Capacity.")
+    public static final MutableComponent ENERGY_XFER_TOOLTIP = Component.translatable("item.resourcefulbees.generator.upgrade.energy.transfer");
+
+    @Translate("Increases Honey Generator Honey Capacity.")
+    public static final MutableComponent HONEY_CAP_TOOLTIP = Component.translatable("item.resourcefulbees.generator.upgrade.honey.capacity");
 }

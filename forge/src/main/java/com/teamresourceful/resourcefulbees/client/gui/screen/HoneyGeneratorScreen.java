@@ -46,10 +46,13 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
             int height = (int)(54*((float)tank.getFluidAmount() / tank.getCapacity()));
             ClientUtils.drawFluid(matrix, height, 12, fluidStack, i+28, j+16+(54-height), getBlitOffset());
 
-            this.font.drawShadow(matrix, "Fluid: ",this.leftPos + 44f, this.topPos + 17f, 0xffffff);
-            this.font.drawShadow(matrix, getDisplayName(fluidStack),this.leftPos + 48f, this.topPos + 27f, 0xffffff);
-            this.font.drawShadow(matrix, "Amount: ",this.leftPos + 44f, this.topPos + 37f, 0xffffff);
-            this.font.drawShadow(matrix, fluidStack.getAmount()+"mB",this.leftPos + 48f, this.topPos + 47f, 0xffffff);
+            matrix.pushPose();
+            matrix.scale(.8f, .8f, .8f);
+            this.font.drawShadow(matrix, "Fluid: ",i+114f, j + 44f, 0xffffff);
+            this.font.drawShadow(matrix, getDisplayName(fluidStack),i + 118f, j + 54f, 0xffffff);
+            this.font.drawShadow(matrix, "Amount: ",i + 114f, j + 64f, 0xffffff);
+            this.font.drawShadow(matrix, fluidStack.getAmount()+"mB",i + 118f, j + 74f, 0xffffff);
+            matrix.popPose();
         }
     }
 
@@ -74,7 +77,7 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
     public void renderEnergyTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 136, this.leftPos + 148) && MathUtils.inRangeInclusive(mouseY, this.topPos + 16, this.topPos + 70)) {
             if (Screen.hasShiftDown() || this.menu.getEnergy().getEnergyStored() < 500)
-                this.renderTooltip(matrix, Component.literal(this.menu.getEnergy().getEnergyStored() + " RF"), mouseX, mouseY);
+                this.renderTooltip(matrix, Component.literal(NumberFormat.getNumberInstance().format(this.menu.getEnergy().getEnergyStored()) + " RF"), mouseX, mouseY);
             else
                 this.renderTooltip(matrix, Component.literal(NumberFormat.getNumberInstance().format((double) this.menu.getEnergy().getEnergyStored() / 1000) + " kRF"), mouseX, mouseY);
         }
