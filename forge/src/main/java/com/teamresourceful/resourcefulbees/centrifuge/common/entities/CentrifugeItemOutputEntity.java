@@ -70,7 +70,6 @@ public class CentrifugeItemOutputEntity extends AbstractCentrifugeOutputEntity<I
     @Override
     protected void readNBT(@NotNull CompoundTag tag) {
         inventoryHandler.deserializeNBT(tag.getCompound(NBTConstants.NBT_INVENTORY));
-        voidExcess = tag.getBoolean("void_excess");
         super.readNBT(tag);
     }
 
@@ -79,7 +78,6 @@ public class CentrifugeItemOutputEntity extends AbstractCentrifugeOutputEntity<I
     protected CompoundTag writeNBT() {
         CompoundTag tag = super.writeNBT();
         tag.put(NBTConstants.NBT_INVENTORY, inventoryHandler.serializeNBT());
-        tag.putBoolean("void_excess", voidExcess);
         return tag;
     }
     //endregion

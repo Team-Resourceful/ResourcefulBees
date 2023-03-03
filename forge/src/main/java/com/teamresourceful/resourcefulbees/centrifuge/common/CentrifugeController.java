@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeT
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeActivity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.config.CentrifugeConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import net.minecraft.core.BlockPos;
@@ -46,7 +47,6 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
 
     private static final Vector3i MIN_SIZE = new Vector3i(3);
     private static final Vector3i MAX_SIZE = new Vector3i(7,8,7);
-    private static final String WRONG_OUTPUT_LOC = "wrong_output_location";
 
     private CentrifugeActivity centrifugeActivity = CentrifugeActivity.INACTIVE;
 
@@ -73,27 +73,27 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
     public void validateStage1() throws ValidationException {
         //checking size 26 instead of 27 bc air doesn't get added to blocks map but is allowed in centrifuge
         if (blocks.size() < 26) {
-            throw new ValidationException("min blocks");
+            throwValidationException(CentrifugeTranslations.MIN_BLOCKS);
         }
-        checkRequiredBlocksExist(terminals, "no_terminal");
-        checkRequiredBlocksExist(inputs.values(), "no_input");
-        checkRequiredBlocksExist(itemOutputs.values(), "no_item_output");
-        checkRequiredBlocksExist(fluidOutputs.values(), "no_fluid_output");
-        checkRequiredBlocksExist(energyPorts, "no_energy_port");
+        checkRequiredBlocksExist(terminals, CentrifugeTranslations.NO_TERMINAL);
+        checkRequiredBlocksExist(inputs.values(), CentrifugeTranslations.NO_INPUTS);
+        checkRequiredBlocksExist(itemOutputs.values(), CentrifugeTranslations.NO_ITEM_OUTPUTS);
+        checkRequiredBlocksExist(fluidOutputs.values(), CentrifugeTranslations.NO_FLUID_OUTPUTS);
+        checkRequiredBlocksExist(energyPorts, CentrifugeTranslations.NO_ENERGY_PORTS);
     }
 
     @Override
     public void validateStage2() throws ValidationException {
         this.terminal = terminals.iterator().next();
         CentrifugeTier tier = this.terminal.getTier();
-        checkBlockExceedsTier(filters.values(), tier, "void_exceeds_tier");
-        checkBlockExceedsTier(inputs.values(), tier, "input_exceeds_tier");
-        checkBlockExceedsTier(itemOutputs.values(), tier, "item_output_exceeds_tier");
-        checkBlockExceedsTier(fluidOutputs.values(), tier, "fluid_output_exceeds_tier");
-        checkBlockExceedsTier(energyPorts, tier, "energy_port_exceeds_tier");
-        if (terminals.size() != 1) throwValidationException("too_many_terminal");
-        checkHasTooManyBlocks(processors, 63, "too_many_cpu");
-        checkHasTooManyBlocks(gearboxes, 64, "too_many_gearbox");
+        checkBlockExceedsTier(filters.values(), tier, CentrifugeTranslations.VOID_EXCEEDS_TIER);
+        checkBlockExceedsTier(inputs.values(), tier, CentrifugeTranslations.INPUT_EXCEEDS_TIER);
+        checkBlockExceedsTier(itemOutputs.values(), tier, CentrifugeTranslations.ITEM_OUTPUT_EXCEEDS_TIER);
+        checkBlockExceedsTier(fluidOutputs.values(), tier, CentrifugeTranslations.FLUID_OUTPUT_EXCEEDS_TIER);
+        checkBlockExceedsTier(energyPorts, tier, CentrifugeTranslations.ENERGY_PORT_EXCEEDS_TIER);
+        if (terminals.size() != 1) throwValidationException(CentrifugeTranslations.TOO_MANY_TERMINALS);
+        checkHasTooManyBlocks(processors, 63, CentrifugeTranslations.TOO_MANY_CPUS);
+        checkHasTooManyBlocks(gearboxes, 64, CentrifugeTranslations.TOO_MANY_GEARBOXES);
     }
 
     @Override
@@ -132,36 +132,40 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         return outputType.isItem() ? (Map<BlockPos, A>) itemOutputs : (Map<BlockPos, A>) fluidOutputs;
     }
 
-    private <T extends AbstractCentrifugeEntity> void checkRequiredBlocksExist(Collection<T> blockSet, String error) throws ValidationException {
+    private <T extends AbstractCentrifugeEntity> void checkRequiredBlocksExist(Collection<T> blockSet, Component error) throws ValidationException {
         if (blockSet.isEmpty()) throwValidationException(error);
     }
 
-    private <T extends AbstractCentrifugeEntity> void checkHasTooManyBlocks(Collection<T> blockSet, int allowed, String error) throws ValidationException {
+    private <T extends AbstractCentrifugeEntity> void checkHasTooManyBlocks(Collection<T> blockSet, int allowed, Component error) throws ValidationException {
         if (blockSet.size() > allowed) throwValidationException(error);
     }
 
-    private <T extends AbstractTieredCentrifugeEntity> void checkBlockExceedsTier(Collection<T> blockSet, CentrifugeTier tier, String error) throws ValidationException {
+    private <T extends AbstractTieredCentrifugeEntity> void checkBlockExceedsTier(Collection<T> blockSet, CentrifugeTier tier, Component error) throws ValidationException {
         for (T block : blockSet) {
             if (block.getTier().ordinal() > tier.ordinal()) throwValidationException(error);
         }
     }
 
-    private void throwValidationException(String error) throws ValidationException {
-        throw new ValidationException(Component.translatable("multiblock.error.resourcefulbees." + error));
+    private void throwValidationException(BlockPos pos) throws ValidationException {
+        throwValidationException(Component.translatable(CentrifugeTranslations.WRONG_OUTPUT_LOC, pos));
+    }
+
+    private void throwValidationException(Component error) throws ValidationException {
+        throw new ValidationException(error);
     }
 
     private void validateBlockLocations() throws ValidationException {
         for (CentrifugeInputEntity input : inputs.values()) {
-            if (input.getBlockPos().getY() != max().y()) throwValidationException("input_not_on_top");
+            if (input.getBlockPos().getY() != max().y()) throwValidationException(CentrifugeTranslations.INPUT_NOT_ON_TOP);
         }
         for (CentrifugeItemOutputEntity itemOutput : itemOutputs.values()) {
-            if (itemOutput.getBlockPos().getY() == max().y()) throwValidationException(WRONG_OUTPUT_LOC);
+            if (itemOutput.getBlockPos().getY() == max().y()) throwValidationException(itemOutput.getBlockPos());
         }
         for (CentrifugeFluidOutputEntity fluidOutputOutput : fluidOutputs.values()) {
-            if (fluidOutputOutput.getBlockPos().getY() == max().y()) throwValidationException(WRONG_OUTPUT_LOC);
+            if (fluidOutputOutput.getBlockPos().getY() == max().y()) throwValidationException(fluidOutputOutput.getBlockPos());
         }
-        for (CentrifugeVoidEntity dump : filters.values()) {
-            if (dump.getBlockPos().getY() == max().y()) throwValidationException(WRONG_OUTPUT_LOC);
+        for (CentrifugeVoidEntity filter : filters.values()) {
+            if (filter.getBlockPos().getY() == max().y()) throwValidationException(filter.getBlockPos());
         }
     }
 
@@ -346,5 +350,10 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         centrifugeState.setProcessors(processors.size());
         centrifugeState.setRecipePowerModifier(getRecipePowerModifier());
         centrifugeState.setRecipeTimeModifier(getRecipeTimeModifier());
+    }
+
+    @Override
+    public void tick() {
+        dirty();
     }
 }

@@ -39,6 +39,18 @@ public class CustomEnergyStorage extends EnergyStorage {
         onEnergyChanged();
     }
 
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+        if (this.energy > getMaxEnergyStored()) {
+            this.energy = capacity;
+        }
+        onEnergyChanged();
+    }
+
+    public void setMaxTransfer(int maxTransfer) {
+        this.maxExtract = maxTransfer;
+    }
+
     public float getPercentage() {
         return this.getEnergyStored() / (float)this.getMaxEnergyStored();
     }

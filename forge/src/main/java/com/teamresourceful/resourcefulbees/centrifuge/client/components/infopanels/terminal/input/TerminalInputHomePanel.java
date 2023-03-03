@@ -54,15 +54,15 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
             String recipe = formatRecipeID(recipeID.getPath());
             drawRecipeString(stack, recipe, tX, tY+8);
         } else {
-            drawRecipeString(stack, CentrifugeTranslations.FILTER_SLOT_NOT_SET.toString(), tX, tY+8);
+            drawRecipeString(stack, CentrifugeTranslations.FILTER_SLOT_NOT_SET.getString(), tX, tY+8);
         }
         drawEnergyPerTickString(stack, processData.getEnergy(), tX, tY+16);
         drawProcessingStageString(stack, selectedEntity.getProcessStage(), tX, tY+24);
         int timeLeft = !selectedEntity.getProcessStage().isProcessing() || energyStorage.isEmpty() ? Integer.MAX_VALUE : processData.getTime();
         drawProcessTimeLeftString(stack, timeLeft, tX, tY+32);
-        drawOutputTypeString(stack, CentrifugeTranslations.ITEM.toString(), tX, tY+40);
+        drawOutputTypeString(stack, CentrifugeTranslations.ITEM.getString(), tX, tY+40);
         drawOutputString(stack, selectedEntity.getItemOutputs(), tX, tY+48);
-        drawOutputTypeString(stack, CentrifugeTranslations.FLUID.toString(), tX, tY+72);
+        drawOutputTypeString(stack, CentrifugeTranslations.FLUID.getString(), tX, tY+72);
         drawOutputString(stack, selectedEntity.getFluidOutputs(), tX, tY+80);
     }
 
@@ -111,11 +111,11 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
 
     private static String getOutputPos(OutputLocationGroup<?,?,?> outputLocationGroup, int index) {
         BlockPos output = outputLocationGroup.get(index).getPos();
-        return output == null ? CentrifugeTranslations.OUTPUT_NOT_LINKED.toString() : CentrifugeUtils.formatBlockPos(output);
+        return output == null ? CentrifugeTranslations.OUTPUT_NOT_LINKED.getString() : CentrifugeUtils.formatBlockPos(output);
     }
 
     private static String formatTicksAsSeconds(int ticks) {
-        if(ticks == Integer.MAX_VALUE) return CentrifugeTranslations.UNKNOWN.toString();
+        if(ticks == Integer.MAX_VALUE) return CentrifugeTranslations.UNKNOWN.getString();
         float seconds = ticks*0.05f;
         return String.format("%06.2fs", seconds);
     }

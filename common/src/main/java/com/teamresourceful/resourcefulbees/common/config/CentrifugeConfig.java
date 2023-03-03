@@ -55,7 +55,7 @@ public final class CentrifugeConfig {
     @Comment(
             value = """
                     The gearbox power modifier is calculated as:
-                    1 + (x * numGearboxes^1.1)
+                    1 + (x * 1.1^numGearboxes)
                     Larger values for X means gearboxes have more impact on the power required to process a recipe.
                     The calculated modifier is multiplied by the processor power modifier before being applied to the recipe rf/t.
                     """
@@ -71,7 +71,7 @@ public final class CentrifugeConfig {
     @Comment(
             value = """
                     The processor power modifier is calculated as:
-                    1 + (x * numProcessors^1.1)
+                    1 + (x * 1.1^numProcessors)
                     Larger values for X means processors have more impact on the power required to process a recipe.
                     The calculated modifier is multiplied by the gearbox power modifier before being applied to the recipe rf/t.
                     """

@@ -1,81 +1,75 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.helpers;
 
-import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import com.teamresourceful.resourcefullib.common.inventory.IntContainerData;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.inventory.ContainerData;
 
-public class CentrifugeEnergyStorage implements ContainerData {
+public class CentrifugeEnergyStorage extends IntContainerData {
 
     private static final int CAPACITY = 0;
     private static final int STORED = 1;
 
-    private final int[] energy = new int[2];
+    //private final int[] energy = new int[2];
+
+    public CentrifugeEnergyStorage() {
+        super(2);
+    }
 
     public void reset() {
-        energy[CAPACITY] = 0;
-        energy[STORED] = 0;
+        setInt(CAPACITY, 0);
+        setInt(STORED, 0);
     }
 
     public int getCapacity() {
-        return energy[CAPACITY];
+        return getInt(CAPACITY);
     }
 
     public int getStored() {
-        return energy[STORED];
+        return getInt(STORED);
     }
 
     public void increaseCapacity(int amount) {
-        energy[CAPACITY] += amount;
+        setInt(CAPACITY, getCapacity() + amount);
     }
 
     public void decreaseCapacity(int amount) {
-        energy[CAPACITY] -= amount;
-        if (energy[STORED] > energy[CAPACITY]) energy[STORED] = energy[CAPACITY];
+        int capacity = getCapacity();
+        capacity -= amount;
+        setInt(CAPACITY, capacity);
+        int stored = getStored();
+        if (stored > capacity) {
+            stored = capacity;
+            setInt(STORED, stored);
+        }
     }
 
     public int getMaxTransfer() {
-        return energy[CAPACITY] - energy[STORED];
+        return getCapacity() - getStored();
     }
 
     public boolean consumeEnergy(int amount, boolean simulate) {
-        boolean canConsume = amount > 0 && energy[STORED] - amount > -1;
-        if (!simulate && canConsume) energy[STORED] -= amount;
+        int stored = getStored();
+        boolean canConsume = amount > 0 && stored - amount > -1;
+        if (!simulate && canConsume) {
+            stored -= amount;
+            setInt(STORED, stored);
+        }
         return canConsume;
     }
 
     public void storeEnergy(int amount) {
-        energy[STORED] += amount;
+        setInt(STORED, getStored() + amount);
     }
 
     public boolean isEmpty() {
-        return energy[STORED] == 0;
+        return getStored() == 0;
     }
 
     public void serializeNBT(CompoundTag tag) {
-        tag.putInt("storedEnergy", energy[STORED]);
+        tag.putInt("storedEnergy", getStored());
     }
 
     public void deserializeNBT(CompoundTag tag) {
-        energy[STORED] = tag.getInt("storedEnergy");
+        setInt(STORED, tag.getInt("storedEnergy"));
     }
 
-    @Override
-    public int get(int index) {
-        return inBounds(index) ? energy[index] : -1;
-    }
-
-    @Override
-    public void set(int index, int value) {
-        if (!inBounds(index)) return;
-        energy[index] = value;
-    }
-
-    private boolean inBounds(int index) {
-        return MathUtils.inRangeInclusive(index, 0, getCount()-1);
-    }
-
-    @Override
-    public int getCount() {
-        return 2;
-    }
 }

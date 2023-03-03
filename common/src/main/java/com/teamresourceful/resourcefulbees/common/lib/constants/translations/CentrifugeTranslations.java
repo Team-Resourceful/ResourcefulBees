@@ -37,7 +37,7 @@ public final class CentrifugeTranslations {
     @Translate("Energy Usage: %s rf/t")
     public static final String ENERGY_USAGE = "gui.resourcefulbees.centrifuge.energy_usage";
 
-    @Translate("Recipe: %S")
+    @Translate("Recipe: %s")
     public static final String RECIPE = "gui.resourcefulbees.centrifuge.recipe";
 
     @Translate("Processing Stage: %s")
@@ -54,6 +54,7 @@ public final class CentrifugeTranslations {
 
     @Translate("Output %s")
     public static final String OUTPUT_SLOT = "gui.resourcefulbees.centrifuge.output_slot";
+
     @Translate("Unknown")
     public static final MutableComponent UNKNOWN = Component.translatable("gui.resourcefulbees.centrifuge.unknown");
 
@@ -178,4 +179,90 @@ public final class CentrifugeTranslations {
 
     @Translate("Centrifuge Tank!")
     public static final MutableComponent TANK = Component.translatable("gui.resourcefulbees.centrifuge.tank");
+
+    //region Terminal Home Panel
+
+    @Translate("Max Tier: %s")
+    public static final String MAX_TIER = "gui.resourcefulbees.centrifuge.terminal.home.max_tier";
+
+    @Translate("Energy: %s/%srf")
+    public static final String ENERGY = "gui.resourcefulbees.centrifuge.terminal.home.energy";
+
+    @Translate("Inputs: %s")
+    public static final String INPUTS = "gui.resourcefulbees.centrifuge.terminal.home.inputs";
+
+    @Translate("Item Outputs: %s")
+    public static final String ITEM_OUTPUTS = "gui.resourcefulbees.centrifuge.terminal.home.item_outputs";
+
+    @Translate("Fluid Outputs: %s")
+    public static final String FLUID_OUTPUTS = "gui.resourcefulbees.centrifuge.terminal.home.fluid_outputs";
+
+    @Translate("Voids: %s")
+    public static final String VOIDS = "gui.resourcefulbees.centrifuge.terminal.home.voids";
+
+    @Translate("Energy Ports: %s")
+    public static final String ENERGY_PORTS = "gui.resourcefulbees.centrifuge.terminal.home.energy_ports";
+
+    @Translate("Gearboxes: %s")
+    public static final String GEARBOXES = "gui.resourcefulbees.centrifuge.terminal.home.gearboxes";
+
+    @Translate("Processors: %s")
+    public static final String PROCESSORS = "gui.resourcefulbees.centrifuge.terminal.home.processors";
+
+    @Translate("Recipe Power Modifier: %s")
+    public static final String RECIPE_POWER = "gui.resourcefulbees.centrifuge.terminal.home.recipe.power";
+
+    @Translate("Recipe Time Modifier: %s")
+    public static final String RECIPE_TIME = "gui.resourcefulbees.centrifuge.terminal.home.recipe.time";
+    //endregion
+
+    //region Multiblock Validation
+    @Translate("Wrong Output Location: %s")
+    public static final String WRONG_OUTPUT_LOC = "multiblock.error.resourcefulbees.wrong_output_location";
+
+    @Translate("Centrifuge must have at minimum 26 blocks!")
+    public static final Component MIN_BLOCKS = Component.translatable("multiblock.error.resourcefulbees.min_blocks");
+
+    @Translate("Centrifuge must have a Terminal!")
+    public static final Component NO_TERMINAL = Component.translatable("multiblock.error.resourcefulbees.no_terminal");
+
+    @Translate("Centrifuge must have an Input!")
+    public static final Component NO_INPUTS = Component.translatable("multiblock.error.resourcefulbees.no_input");
+
+    @Translate("Centrifuge must have an Item Output!")
+    public static final Component NO_ITEM_OUTPUTS = Component.translatable("multiblock.error.resourcefulbees.no_item_output");
+
+    @Translate("Centrifuge must have a Fluid Output!")
+    public static final Component NO_FLUID_OUTPUTS = Component.translatable("multiblock.error.resourcefulbees.no_fluid_output");
+
+    @Translate("Centrifuge must have an Energy Port!")
+    public static final Component NO_ENERGY_PORTS = Component.translatable("multiblock.error.resourcefulbees.no_energy_port");
+
+    @Translate("Void exceeds tier of Terminal!")
+    public static final Component VOID_EXCEEDS_TIER = Component.translatable("multiblock.error.resourcefulbees.void_exceeds_tier");
+
+    @Translate("Input exceeds tier of Terminal!")
+    public static final Component INPUT_EXCEEDS_TIER = Component.translatable("multiblock.error.resourcefulbees.input_exceeds_tier");
+
+    @Translate("Item Output exceeds tier of Terminal!")
+    public static final Component ITEM_OUTPUT_EXCEEDS_TIER = Component.translatable("multiblock.error.resourcefulbees.item_output_exceeds_tier");
+
+    @Translate("Fluid Output exceeds tier of Terminal!")
+    public static final Component FLUID_OUTPUT_EXCEEDS_TIER = Component.translatable("multiblock.error.resourcefulbees.fluid_output_exceeds_tier");
+
+    @Translate("Energy Port exceeds tier of Terminal!")
+    public static final Component ENERGY_PORT_EXCEEDS_TIER = Component.translatable("multiblock.error.resourcefulbees.energy_port_exceeds_tier");
+
+    @Translate("Centrifuge has too many terminals!")
+    public static final Component TOO_MANY_TERMINALS = Component.translatable("multiblock.error.resourcefulbees.too_many_terminal");
+
+    @Translate("Centrifuge has too many processors!")
+    public static final Component TOO_MANY_CPUS = Component.translatable("multiblock.error.resourcefulbees.too_many_cpu");
+
+    @Translate("Centrifuge has too many gearboxes!")
+    public static final Component TOO_MANY_GEARBOXES = Component.translatable("multiblock.error.resourcefulbees.too_many_gearbox");
+
+    @Translate("Centrifuge input can only be at the top!")
+    public static final Component INPUT_NOT_ON_TOP = Component.translatable("multiblock.error.resourcefulbees.input_not_on_top");
+    //endregion
 }

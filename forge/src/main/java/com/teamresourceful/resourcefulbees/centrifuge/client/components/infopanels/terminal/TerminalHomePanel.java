@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.entities.Centrifuge
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractGUICentrifugeEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeState;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,7 @@ import java.text.NumberFormat;
 
 import static com.teamresourceful.resourcefulbees.client.util.TextUtils.FONT_COLOR_1;
 import static com.teamresourceful.resourcefulbees.client.util.TextUtils.TERMINAL_FONT_8;
+
 
 public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntity> {
 
@@ -46,19 +48,19 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
             stack.pushPose();
             stack.translate(tX + 90d, y+20d, 0);
             String owner = centrifugeState.getOwner()+"@centrifuge";
-            TERMINAL_FONT_8.draw(stack, owner, 6, 0, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, StringUtils.repeat('─', owner.length()), 6, 8, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Max Tier: " + StringUtils.capitalize(centrifugeState.getMaxCentrifugeTier().getName()), 6, 16, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Energy: " + energyStorage.getStored() + "/" + energyStorage.getCapacity() + "rf", 6, 24, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Inputs: " + centrifugeState.getInputs().size(), 6, 32, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Item Outputs: " + centrifugeState.getItemOutputs().size(), 6, 40, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Fluid Outputs: " + centrifugeState.getFluidOutputs().size(), 6, 48, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Voids: " + centrifugeState.getFilters().size(), 6, 56, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Energy Ports: " + centrifugeState.getEnergyPorts(), 6, 64, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Gearboxes: " + centrifugeState.getGearboxes(), 6, 72, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Processors: " + centrifugeState.getProcessors(), 6, 80, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Recipe Power Modifier: " + NumberFormat.getPercentInstance().format(centrifugeState.getRecipePowerModifier()), 6, 88, FONT_COLOR_1);
-            TERMINAL_FONT_8.draw(stack, "Recipe Time Modifier: " + NumberFormat.getPercentInstance().format(centrifugeState.getRecipeTimeModifier()), 6, 96, FONT_COLOR_1);
+            drawComponent(stack, owner, 0);
+            drawComponent(stack, StringUtils.repeat('─', owner.length()), 8);
+            drawComponent(stack, CentrifugeTranslations.MAX_TIER, StringUtils.capitalize(centrifugeState.getMaxCentrifugeTier().getName()), 16);
+            drawComponent(stack, CentrifugeTranslations.ENERGY, energyStorage.getStored(), energyStorage.getCapacity(), 24);
+            drawComponent(stack, CentrifugeTranslations.INPUTS, centrifugeState.getInputs().size(), 32);
+            drawComponent(stack, CentrifugeTranslations.ITEM_OUTPUTS, centrifugeState.getItemOutputs().size(), 40);
+            drawComponent(stack, CentrifugeTranslations.VOIDS, centrifugeState.getFilters().size(), 56);
+            drawComponent(stack, CentrifugeTranslations.FLUID_OUTPUTS, centrifugeState.getFluidOutputs().size(), 48);
+            drawComponent(stack, CentrifugeTranslations.ENERGY_PORTS, centrifugeState.getEnergyPorts(), 64);
+            drawComponent(stack, CentrifugeTranslations.GEARBOXES, centrifugeState.getGearboxes(), 72);
+            drawComponent(stack, CentrifugeTranslations.PROCESSORS, centrifugeState.getProcessors(), 80);
+            drawComponent(stack, CentrifugeTranslations.RECIPE_POWER, formatAsPercent(centrifugeState.getRecipePowerModifier()), 88);
+            drawComponent(stack, CentrifugeTranslations.RECIPE_TIME, formatAsPercent(centrifugeState.getRecipeTimeModifier()), 96);
             stack.popPose();
             this.commandHandler.drawInput(stack, tX + 4f, y + 135f);
         } else {
@@ -84,23 +86,48 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
         stack.pushPose();
         stack.translate(tX - 10d, y+20d, 0);
         stack.scale(0.8f, 0.8f, 0.8f);
-        TERMINAL_FONT_8.draw(stack, "     ^^      .-=-=-=-.  ^^", 6, 24, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, " ^^        (`-=-=-=-=-`)", 6, 32, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, "         (`-=-=-=-=-=-=-`)  ^^", 6, 40, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, "   ^^   (`-=-=-=-=-=-=-=-`)   ^^", 6, 48, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, "       (`-=-=-=-=(@)=-=-=-`)", 6, 56, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, "       (`-=-=-=-=-=-=-=-=-`)  ^^", 6, 64, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, "       (`-=-=-=-=-=-=-=-=-`)", 6, 72, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, "       (`-=-=-=-=-=-=-=-=-`)", 6, 80, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, "       (`-=-=-=-=-=-=-=-=-`)  ^^", 6, 88, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, "        (`-=-=-=-=-=-=-=-`)", 6, 96, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, "         (`-=-=-=-=-=-=-`)  ^^", 6, 104, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, "           (`-=-=-=-=-`)", 6, 112, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(stack, "            `-=-=-=-=-`", 6, 120, FONT_COLOR_1);
+        drawComponent(stack, "     ^^      .-=-=-=-.  ^^", 24);
+        drawComponent(stack, " ^^        (`-=-=-=-=-`)", 32);
+        drawComponent(stack, "         (`-=-=-=-=-=-=-`)  ^^", 40);
+        drawComponent(stack, "   ^^   (`-=-=-=-=-=-=-=-`)   ^^", 48);
+        drawComponent(stack, "       (`-=-=-=-=(@)=-=-=-`)", 56);
+        drawComponent(stack, "       (`-=-=-=-=-=-=-=-=-`)  ^^", 64);
+        drawComponent(stack, "       (`-=-=-=-=-=-=-=-=-`)", 72);
+        drawComponent(stack, "       (`-=-=-=-=-=-=-=-=-`)", 80);
+        drawComponent(stack, "       (`-=-=-=-=-=-=-=-=-`)  ^^", 88);
+        drawComponent(stack, "        (`-=-=-=-=-=-=-=-`)", 96);
+        drawComponent(stack, "         (`-=-=-=-=-=-=-`)  ^^", 104);
+        drawComponent(stack, "           (`-=-=-=-=-`)", 112);
+        drawComponent(stack, "            `-=-=-=-=-`", 120);
         stack.popPose();
     }
 
     public void addResponse(Component response) {
         this.commandHandler.onResponse(response);
+    }
+
+    private static String formatAsPercent(double value) {
+        return NumberFormat.getPercentInstance().format(value);
+    }
+
+    private static void drawComponent(PoseStack stack, String translation, int arg, int y) {
+        drawComponent(stack, Component.translatable(translation, arg), y);
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static void drawComponent(PoseStack stack, String translation, int arg, int arg2, int y) {
+        drawComponent(stack, Component.translatable(translation, arg, arg2), y);
+    }
+
+    private static void drawComponent(PoseStack stack, String translation, String arg, int y) {
+        drawComponent(stack, Component.translatable(translation, arg), y);
+    }
+
+    private static void drawComponent(PoseStack stack, Component component, int y) {
+        TERMINAL_FONT_8.draw(stack, component, 6, y, FONT_COLOR_1);
+    }
+
+    private static void drawComponent(PoseStack stack, String component, int y) {
+        TERMINAL_FONT_8.draw(stack, component, 6, y, FONT_COLOR_1);
     }
 }

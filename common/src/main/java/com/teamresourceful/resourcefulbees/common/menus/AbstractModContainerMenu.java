@@ -37,10 +37,23 @@ public abstract class AbstractModContainerMenu<T extends BlockEntity> extends Ab
         return entity;
     }
 
+    /**
+     * @return The last slot number for the container input slots
+     */
     protected abstract int getContainerInputEnd();
 
+    /**
+     * @return Returns an integer representing the starting slot number
+     * of the player inventory
+     */
     protected abstract int getInventoryStart();
 
+    /**
+     * Because this value is used for the quickMoveStack method it is not
+     * required for this value to be 0 if the implementation doesn't require it.
+     *
+     * @return Starting input slot number for the container inventory
+     */
     protected int startIndex() {
         return START_INDEX;
     }
