@@ -64,3 +64,21 @@ allprojects {
         withSourcesJar()
     }
 }
+
+tasks.register("updateReadme", Copy) {
+    def versionProperties = [
+            "version": mod_version,
+            "mc_version": minecraft_version,
+            "phos_version": phos_version,
+            "gecko_forge": geckolib_forge,
+            "gecko_forge_version": geckolib_forge_version,
+            "rlib_version": resourcefullib_version,
+            "rconfig_version": resourcefulconfig_version
+    ]
+
+    from "dev_resources/project_templates"
+    into "."
+    include "README.md.template"
+    rename { file -> "README.md" }
+    expand(versionProperties)
+}
