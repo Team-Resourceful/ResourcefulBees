@@ -14,8 +14,10 @@ The mod is licensed under LGPL 3.0 and is available on [Curseforge](https://www.
 ### Contributions
 
 If you would like to contribute to the mod feel free to submit a PR.
+<br>TODO: Add more info about importing the project in IntelliJ and any additional setup required.
 
-### For Mod Developers
+## For Mod Developers
+<hr>
 
 Be sure to add our maven to your `build.gradle`:
 ```gradle
