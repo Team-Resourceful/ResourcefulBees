@@ -18,6 +18,9 @@
     "sizeModifier": 0.75,
     "texture": "/kitten/bee",
     "model": "resourcefulbees:geo/kitten.geo.json",
+    "layers" : [
+      { "isPollen": true, "color": "#FFDCC4", "texture": "custom_nectar" }
+    ],
     "ColorData": {
       "spawnEggPrimaryColor": "#EAA939",
       "spawnEggSecondaryColor": "#4C483B",

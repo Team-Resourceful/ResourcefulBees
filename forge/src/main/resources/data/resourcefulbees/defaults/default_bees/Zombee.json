@@ -1,15 +1,14 @@
 {
     "resourcefulbees:core/v1": {
         "flower": "#minecraft:bee_growables",
-        "honeycombVariation": "zombee",
+        "honeycombVariation": "zombie",
         "maxTimeInHive": 600
     },
     "resourcefulbees:rendering/v1": {
         "texture": "zombie/zombie_bee",
         "ColorData": {
-            "spawnEggPrimaryColor": "#799C65",
-            "spawnEggSecondaryColor": "#00AFAF",
-            "jarColor": "#799C65"
+            "spawnEggPrimaryColor": "#2F4E32",
+            "spawnEggSecondaryColor": "#303030"
         }
     },
     "resourcefulbees:mutation/v1": {

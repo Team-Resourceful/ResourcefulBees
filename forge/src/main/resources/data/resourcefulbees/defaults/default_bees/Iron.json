@@ -6,10 +6,13 @@
     },
     "resourcefulbees:rendering/v1": {
         "texture": "ores/iron/iron_bee",
-        "model": "resourcefulbees:geo/crystal.geo.json",
+        "model": "resourcefulbees:geo/ore.geo.json",
+        "layers" : [
+            { "isPollen": true, "color": "#E2C0AA", "texture": "custom_nectar" }
+        ],
         "ColorData": {
-            "spawnEggPrimaryColor": "#ffcc99",
-            "spawnEggSecondaryColor": "#303030",
+            "spawnEggPrimaryColor": "#8F8F8F",
+            "spawnEggSecondaryColor": "#ffcc99",
             "jarColor": "#ffcc99"
         }
     },
