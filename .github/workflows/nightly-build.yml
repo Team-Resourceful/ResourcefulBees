@@ -1,0 +1,55 @@
+name: Build Nightly
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if automatic run should exit early
+        if: github.event_name == 'schedule'
+        run: |
+          if [[ "$(git log --since='24 hours ago' | wc -l)" -eq 0 ]] ||
+             [[ "$(curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                -s https://api.github.com/repos/${{ github.repository }}/actions/workflows \
+                | jq '.workflow_runs[] | select(.event == "workflow_dispatch") | .created_at' \
+                | grep -c "$(date -u +%F)" )" -gt 0 ]]; then
+            echo "Skipping automatic run"
+            exit 78
+          fi
+      - uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+      - name: Set Gradle Perms
+        run: chmod +x gradlew
+
+      - name: Set nightly version
+        run: ./gradlew setNightlyVersion
+
+      - name: Publish package
+        run: ./gradlew publish --info
+        env:
+          MAVEN_USER: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASS: ${{ secrets.MAVEN_PASSWORD }}
+
+      - name: Create Discord Embed
+        run: ./gradlew createDiscordEmbed -Pnightly=true
+
+      - name: Send Discord Webhook
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_NIGHTLY_WEBHOOK }}
+          raw-data: build/nightly_embed.json

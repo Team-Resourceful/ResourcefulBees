@@ -1,0 +1,49 @@
+{
+  "username": "Beekeeper",
+  "avatar_url": "https://cdn.discordapp.com/avatars/738571182101626930/72ad643b1ee4036cd79f8c457ed1d420.png",
+  "content": "<@&873346297053204561>",
+  "embeds": [
+    {
+      "title": "Resourceful Bees",
+      "color": 16744512,
+      "description": "A new update is available!",
+      "timestamp": "",
+      "author": {
+        "name": "Team Resourceful",
+        "url": "https://resourcefulbees.com"
+      },
+      "image": {
+        "url": ""
+      },
+      "thumbnail": {
+        "url": "https://cdn.discordapp.com/icons/738561073916936333/a_1fbe6ba7f98d83919ecd80c9bb5ac2b5.webp"
+      },
+      "footer": {
+        "text": "Support us on Patreon or by using code TEAMRESOURCEFUL to get a discounted server from Bisect Hosting"
+      },
+      "fields": [
+        {
+          "name": "Changelog",
+          "value": "[View Changelog](https://raw.githubusercontent.com/Team-Resourceful/ResourcefulBees/1.19/changelog.md)"
+        },
+        {
+          "name": "Mod Version",
+          "value": "${version}"
+        },
+        {
+          "name": "Minecraft Version",
+          "value": "1.19.2"
+        },
+        {
+          "name": "Forge Version",
+          "value": "43.2.0"
+        },
+        {
+          "name": "Download",
+          "value": "[Curseforge](https://www.curseforge.com/minecraft/mc-mods/resourceful-bees)\\n[Modrinth](https://modrinth.com/mod/resourceful-bees)"
+        }
+      ]
+    }
+  ],
+  "components": []
+}

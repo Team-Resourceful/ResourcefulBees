@@ -33,7 +33,7 @@ Forge:
 dependencies {
     <--- Other dependencies here --->
 
-    implementation fg.deobf("com.teamresourceful.resourcefulbees:resourcefulbees-forge-1.19.2:1.0.0-alpha.14")
+    implementation fg.deobf("com.teamresourceful.resourcefulbees:resourcefulbees-forge-1.19.2:1.0.0-alpha.15")
     
     //below are required dependencies for resourceful bees to work.
     runtimeOnly fg.deobf("com.teamresourceful.resourcefullib:resourcefullib-forge-1.19.2:1.1.23")

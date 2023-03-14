@@ -7,6 +7,6 @@ pluginManagement {
     }
 }
 
-include("common")
-include("fabric")
-include("forge")
+include("common", "fabric", "forge")
+
+rootProject.name = "Resourceful Bees"

@@ -1,3 +1,6 @@
+import com.teamresourceful.ModVersionPlugin
+import com.teamresourceful.tasks.CopyTemplateTask
+
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
     id "dev.architectury.loom" version "1.0.+" apply false
@@ -12,6 +15,20 @@ ext {
     repoUrl = "https://nexus.resourcefulbees.com/repository/maven-releases/"
     ENV = System.getenv()
 }
+
+apply plugin: ModVersionPlugin
+modVersion {
+    updateModVersion {
+        initialMCVersion = initial_mc_version
+        currentMCVersion = minecraft_version
+        patchVersion = patch
+        versionPostfix = postfix
+        postfixBuild = postfix_build
+        isNightly = nightly.toBoolean()
+        buildTime = build_time
+    }
+}
+
 
 subprojects {
     apply plugin: "dev.architectury.loom"
@@ -31,6 +48,7 @@ subprojects {
         // mappings "net.fabricmc:yarn:@YARN_MAPPINGS@:v2"
     }
 }
+println "${name}:  ${modVersion.version}"
 
 sonar {
     properties {
@@ -46,7 +64,7 @@ allprojects {
     apply plugin: "maven-publish"
 
     archivesBaseName = rootProject.archives_base_name
-    version = rootProject.mod_version
+    version = modVersion.version
     group = rootProject.maven_group
 
     repositories {
@@ -65,20 +83,28 @@ allprojects {
     }
 }
 
-tasks.register("updateReadme", Copy) {
-    def versionProperties = [
-            "version": mod_version,
-            "mc_version": minecraft_version,
-            "phos_version": phos_version,
-            "gecko_forge": geckolib_forge,
-            "gecko_forge_version": geckolib_forge_version,
-            "rlib_version": resourcefullib_version,
-            "rconfig_version": resourcefulconfig_version
+tasks.register('createDiscordEmbed', CopyTemplateTask) {
+    versionProperties = [
+            "version"      : version,
+            "mc_version"   : minecraft_version,
+            "forge_version": forge_version
     ]
 
-    from "dev_resources/project_templates"
-    into "."
-    include "README.md.template"
-    rename { file -> "README.md" }
-    expand(versionProperties)
+    def template = nightly.toBoolean() ? "nightly_embed.json.template" : "release_embed.json.template"
+    source = file("dev_resources/project_templates/$template")
+    //targetDir = file(".")
+}
+
+tasks.register('updateReadme', CopyTemplateTask) {
+    source = file("dev_resources/project_templates/README.md.template")
+    //targetDir = file(".")
+    versionProperties = [
+            "version"            : version,
+            "mc_version"         : minecraft_version,
+            "phos_version"       : phos_version,
+            "gecko_forge"        : geckolib_forge,
+            "gecko_forge_version": geckolib_forge_version,
+            "rlib_version"       : resourcefullib_version,
+            "rconfig_version"    : resourcefulconfig_version
+    ]
 }

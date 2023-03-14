@@ -1,0 +1,105 @@
+name: Build Nightly
+on:
+  workflow_dispatch:
+    inputs:
+      patch:
+        description: "Patch version"
+        required: true
+        type: string
+      postfix:
+        description: "Version postfix"
+        required: false
+        type: choice
+        options:
+          - alpha
+          - beta
+      postfix-build:
+        description: "Postfix build"
+        required: false
+        type: string
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+      - name: Set Gradle Perms
+        run: chmod +x gradlew
+
+      - name: Update Mod Version
+        run: ./gradlew updateModVersion -Ppatch=${{ inputs.patch }} -Ppostfix=${{ inputs.postfix }} -Ppostfix_build=${{ inputs.postfix-build }}
+
+      - name: Get Mod Version
+        id: version
+        uses: christian-draeger/read-properties@1.1.1
+        with:
+          path: "./version.properties"
+          property: "version"
+
+      - name: Get MC Version
+        id: mc_version
+        uses: christian-draeger/read-properties@1.1.1
+        with:
+          path: "./gradle.properties"
+          property: "minecraft_version"
+
+      - name: Publish package
+        run: ./gradlew publish --info
+        env:
+          MAVEN_USER: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASS: ${{ secrets.MAVEN_PASSWORD }}
+
+      ### Need to duplicate this block for fabric or abuse the files-secondary field
+      - name: Upload Forge Releases (Curse/Modrinth/Github)
+        uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          curseforge-id: ${{ vars.CURSE_ID }}
+          curseforge-token: ${{ secrets.CURSE_API_KEY }}
+
+          modrinth-id: ${{ vars.MODRINTH_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
+
+          github-tag: "v${{ steps.version.outputs.version }}"
+          github-token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
+
+          files: ./forge/build/libs/!(*-@(dev|sources|dev-shadow)).jar
+          name: ""
+          version: ${{ steps.version.outputs.version }}
+          changelog-file: changelog.md
+          loaders: forge
+          game-versions: ${{ steps.mc_version.outputs.mc_version }}
+
+      - name: Update Readme
+        run: |
+          ./gradlew updateReadme
+          mv -f ./build/README.md .
+
+      - name: Create Discord Embed
+        run: ./gradlew createDiscordEmbed
+
+      - name: Send Discord Webhook
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_NIGHTLY_WEBHOOK }}
+          raw-data: ./build/release_embed.json
+
+      - name: Commit Version Updates
+        run: |
+          git config --global user.name "TeamResourcefulBot"
+          git config --global user.email "teamresourcefulbot@users.noreply.github.com"
+          git commit -am "Released v${{ steps.version.outputs.version }}"
