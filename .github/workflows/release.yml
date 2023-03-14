@@ -1,4 +1,4 @@
-name: Build Nightly
+name: Release
 on:
   workflow_dispatch:
     inputs:
