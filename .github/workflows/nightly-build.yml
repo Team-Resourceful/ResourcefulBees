@@ -40,7 +40,7 @@ jobs:
         run: ./gradlew setNightlyVersion
 
       - name: Publish package
-        run: ./gradlew publish --info
+        run: ./gradlew publish -Pnightly=true --info
         env:
           MAVEN_USER: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASS: ${{ secrets.MAVEN_PASSWORD }}

@@ -12,7 +12,7 @@ architectury {
 }
 
 ext {
-    repoUrl = "https://nexus.resourcefulbees.com/repository/maven-releases/"
+    repoUrl = nightly ? "https://nexus.resourcefulbees.com/repository/maven-nightly/" : "https://nexus.resourcefulbees.com/repository/maven-releases/"
     ENV = System.getenv()
 }
 
