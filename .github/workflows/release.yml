@@ -95,11 +95,11 @@ jobs:
       - name: Send Discord Webhook
         uses: tsickert/discord-webhook@v5.3.0
         with:
-          webhook-url: ${{ secrets.DISCORD_NIGHTLY_WEBHOOK }}
+          webhook-url: ${{ secrets.DISCORD_RELEASE_WEBHOOK }}
           raw-data: ./build/release_embed.json
 
       - name: Commit Version Updates
         run: |
           git config --global user.name "TeamResourcefulBot"
           git config --global user.email "teamresourcefulbot@users.noreply.github.com"
-          git commit -am "Released v${{ steps.version.outputs.version }}"
+          git diff-index --quiet HEAD || commit -am "Released v${{ steps.version.outputs.version }}"

@@ -40,16 +40,19 @@ processResources {
 shadowJar {
     configurations = [project.configurations.shadowCommon]
     archiveClassifier.set "dev-shadow"
+    archiveAppendix.set "${project.name}-$minecraft_version"
 }
 
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
     archiveClassifier.set null
+    archiveAppendix.set "${project.name}-$minecraft_version"
 }
 
 jar {
     archiveClassifier.set "dev"
+    archiveAppendix.set "${project.name}-$minecraft_version"
 }
 
 sourcesJar {
@@ -66,8 +69,8 @@ components.java {
 
 publishing {
     publications {
-        mavenFabric(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name + "-" + rootProject.minecraft_version
+        mavenCommon(MavenPublication) {
+            artifactId = "${rootProject.archives_base_name}-${project.name}-${rootProject.minecraft_version}"
             from components.java
 
             pom {
