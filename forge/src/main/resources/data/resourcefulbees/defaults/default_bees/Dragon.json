@@ -5,11 +5,10 @@
         "maxTimeInHive": 2400
     },
     "resourcefulbees:rendering/v1": {
-        "texture": "dragon/dragon_bee",
+        "texture": "dragon/ender_dragon_bee",
         "model": "resourcefulbees:geo/dragon.geo.json",
         "layers": [
-            { "texture": "dragon/dragon_bee_primary", "color": "#222222" },
-            { "texture": "dragon/dragon_bee_secondary", "color": "#171717" },
+            { "isPollen": true, "color": "#E400FF", "texture": "custom_nectar" },
             { "layerEffect": "GLOW", "texture": "dragon/dragon_bee_emissive", "color": "#E400FF" }
         ],
         "ColorData": {

@@ -1,42 +1,49 @@
 {
-    "resourcefulbees:core/v1": {
-        "flower": "#forge:storage_blocks/diamond",
-        "honeycombVariation": "diamond",
-        "maxTimeInHive": 600
-    },
-    "resourcefulbees:rendering/v1": {
-        "texture": "ores/diamond/diamond_bee",
-        "model": "resourcefulbees:geo/crystal.geo.json",
-        "ColorData": {
-            "spawnEggPrimaryColor": "#00ffff",
-            "spawnEggSecondaryColor": "#303030",
-            "jarColor": "#00ffff"
-        }
-    },
-    "resourcefulbees:mutation/v1": {
-        "mutation": "resourcefulbees:mutations/diamond"
-    },
-    "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
-            {
-                "parent1": "coal",
-                "parent2": "skeleton"
-            }
-        ],
-        "feedItem": "forge:ores"
-    },
-    "resourcefulbees:trade/v1": {
-        "amount": {
-            "min": 1,
-            "max": 1
-        },
-        "secondaryItem": "minecraft:diamond_block",
-        "secondaryItemCost": {
-            "min": 4,
-            "max": 8
-        },
-        "priceMultiplier": 4,
-        "maxTrades": 2
+  "resourcefulbees:core/v1": {
+    "flower": "#forge:storage_blocks/diamond",
+    "honeycombVariation": "diamond",
+    "maxTimeInHive": 600
+  },
+  "resourcefulbees:rendering/v1": {
+    "texture": "ores/diamond/diamond_bee",
+    "model": "resourcefulbees:geo/crystal.geo.json",
+    "layers": [
+      {
+        "layerEffect": "GLOW",
+        "texture": "ores/diamond/diamond_bee_emissive"
+      },
+      { "isPollen": true, "color": "#77E7D1", "texture": "custom_nectar" }
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#8F8F8F",
+      "spawnEggSecondaryColor": "#00ffff",
+      "jarColor": "#00ffff"
     }
+  },
+  "resourcefulbees:mutation/v1": {
+    "mutation": "resourcefulbees:mutations/diamond"
+  },
+  "resourcefulbees:breeding/v1": {
+    "isBreedable": true,
+    "parents": [
+      {
+        "parent1": "coal",
+        "parent2": "skeleton"
+      }
+    ],
+    "feedItem": "forge:ores"
+  },
+  "resourcefulbees:trade/v1": {
+    "amount": {
+      "min": 1,
+      "max": 1
+    },
+    "secondaryItem": "minecraft:diamond_block",
+    "secondaryItemCost": {
+      "min": 4,
+      "max": 8
+    },
+    "priceMultiplier": 4,
+    "maxTrades": 2
+  }
 }
