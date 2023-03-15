@@ -54,7 +54,7 @@ public class PetModelData implements IAnimatable {
         this.id = id;
         this.modelLocation = modelLocation;
         this.texture = texture;
-        this.urlTexture = new PetTexture(id, urlTexture.orElse(null));
+        this.urlTexture = urlTexture.map(url -> new PetTexture(id, url)).orElse(null);
         this.layers = layers;
     }
 
@@ -80,13 +80,12 @@ public class PetModelData implements IAnimatable {
     }
 
     public ResourceLocation getTexture() {
-        ResourceLocation urlTexture = this.urlTexture.getResourceLocation();
-        if (urlTexture != null) return urlTexture;
+        if (this.urlTexture != null) return this.urlTexture.getResourceLocation();
         return texture;
     }
 
     public String getUrlTexture() {
-        return urlTexture.getTexture();
+        return urlTexture == null ? null : urlTexture.getTexture();
     }
 
     public Set<BeeLayerData> getLayers() {
