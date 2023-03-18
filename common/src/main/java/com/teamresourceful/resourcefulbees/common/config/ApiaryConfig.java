@@ -5,8 +5,10 @@ import com.teamresourceful.resourcefulconfig.common.annotations.Category;
 import com.teamresourceful.resourcefulconfig.common.annotations.ConfigEntry;
 import com.teamresourceful.resourcefulconfig.common.annotations.IntRange;
 import com.teamresourceful.resourcefulconfig.common.config.EntryType;
+import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
 
 @Category(id = "apiary", translation = "Apiary")
+@WebInfo(icon = "archive")
 public final class ApiaryConfig {
 
     @ConfigEntry(

@@ -2,8 +2,10 @@ package com.teamresourceful.resourcefulbees.common.config;
 
 import com.teamresourceful.resourcefulconfig.common.annotations.*;
 import com.teamresourceful.resourcefulconfig.common.config.EntryType;
+import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
 
 @Category(id = "centrifuge", translation = "Centrifuge")
+@WebInfo(icon = "settings")
 public final class CentrifugeConfig {
 
     @ConfigEntry(

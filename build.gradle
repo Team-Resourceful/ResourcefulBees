@@ -71,6 +71,7 @@ allprojects {
         maven { url = "https://nexus.resourcefulbees.com/repository/maven-public/" }
         mavenCentral()
         maven { url = "https://www.cursemaven.com" }
+        mavenLocal()
     }
 
     tasks.withType(JavaCompile) {

@@ -2,8 +2,10 @@ package com.teamresourceful.resourcefulbees.common.config;
 
 import com.teamresourceful.resourcefulconfig.common.annotations.*;
 import com.teamresourceful.resourcefulconfig.common.config.EntryType;
+import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
 
 @Category(id = "honey_generator", translation = "Honey Generator")
+@WebInfo(icon = "factory")
 public final class HoneyGenConfig {
 
     @ConfigEntry(

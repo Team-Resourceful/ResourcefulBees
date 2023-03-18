@@ -5,8 +5,10 @@ import com.teamresourceful.resourcefulconfig.common.annotations.Comment;
 import com.teamresourceful.resourcefulconfig.common.annotations.ConfigEntry;
 import com.teamresourceful.resourcefulconfig.common.annotations.IntRange;
 import com.teamresourceful.resourcefulconfig.common.config.EntryType;
+import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
 
 @Category(id = "solidfication", translation = "Solidification Chamber")
+@WebInfo(icon = "boxes")
 public final class SolidficationConfig {
 
     @ConfigEntry(

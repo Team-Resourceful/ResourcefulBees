@@ -2,8 +2,10 @@ package com.teamresourceful.resourcefulbees.common.config;
 
 import com.teamresourceful.resourcefulconfig.common.annotations.*;
 import com.teamresourceful.resourcefulconfig.common.config.EntryType;
+import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
 
 @Category(id = "worldgen", translation = "World Generation")
+@WebInfo(icon = "mountain-snow")
 public final class WorldGenConfig {
 
     @ConfigEntry(

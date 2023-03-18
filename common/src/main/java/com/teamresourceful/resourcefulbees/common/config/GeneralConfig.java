@@ -2,8 +2,33 @@ package com.teamresourceful.resourcefulbees.common.config;
 
 import com.teamresourceful.resourcefulconfig.common.annotations.*;
 import com.teamresourceful.resourcefulconfig.common.config.EntryType;
+import com.teamresourceful.resourcefulconfig.web.annotations.Link;
+import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
 
 @Config("resourcefulbees/config")
+@WebInfo(
+        icon = "honeycomb",
+        title = "Resourceful Bees",
+        description = "Create bees the way you want!",
+        color = "#EF5552",
+        links = {
+                @Link(
+                        value = "https://modrinth.com/mod/resourceful-bees",
+                        icon = "modrinth",
+                        title = "Modrinth"
+                ),
+                @Link(
+                        value = "https://www.curseforge.com/minecraft/mc-mods/resourcefulbees",
+                        icon = "curseforge",
+                        title = "Curseforge"
+                ),
+                @Link(
+                        value = "https://github.com/Team-Resourceful/ResourcefulBees",
+                        icon = "github",
+                        title = "Github"
+                )
+        }
+)
 public final class GeneralConfig {
 
     @ConfigSeparator(translation = "General")
@@ -14,7 +39,7 @@ public final class GeneralConfig {
     )
     @Comment(
             value = """
-        Set this to false when you want to overwrite the default bee files. [true/false]
+        Set this to false when you want to overwrite the default bee files.
         This should be run at least once for initial generation.
         """
     )
@@ -26,7 +51,7 @@ public final class GeneralConfig {
             translation = "Enable Dev Bees"
     )
     @Comment(
-            value = "Set to true if you want dev bees to generate. [true/false]"
+            value = "Set to true if you want dev bees to generate."
     )
     public static boolean enableDevBees = true;
 
@@ -36,7 +61,7 @@ public final class GeneralConfig {
             translation = "Enable Supporter Bees"
     )
     @Comment(
-            value = "Set to true if you want supporter bees to generate. [true/false]"
+            value = "Set to true if you want supporter bees to generate."
     )
     public static boolean enableSupporterBees = true;
 
@@ -46,7 +71,7 @@ public final class GeneralConfig {
             translation = "Show Debug Info"
     )
     @Comment(
-            value = "When set to true will display some debug info in console. [true/false]"
+            value = "When set to true will display some debug info in console."
     )
     public static boolean showDebugInfo = false;
 
@@ -57,7 +82,7 @@ public final class GeneralConfig {
             translation = "Allow Shears"
     )
     @Comment(
-            value = "Set to false if you want the player to only be able to get honeycombs from the beehive using the scraper [true/false]"
+            value = "Set to false if you want the player to only be able to get honeycombs from the beehive using the scraper"
     )
     public static boolean allowShears = true;
 
