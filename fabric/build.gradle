@@ -16,43 +16,41 @@ configurations {
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
+    modApi "net.fabricmc.fabric-api:fabric-api:$fabric_api_version"
 
-    modApi("com.teamresourceful.resourcefullib:resourcefullib-fabric-$rootProject.minecraft_version:$rootProject.resourcefullib_version")
-    modApi("com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-$rootProject.minecraft_version:$rootProject.resourcefulconfig_version")
+    modApi "com.teamresourceful.resourcefullib:resourcefullib-fabric-$mc_version:$rlib_version"
+    modApi "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-$mc_version:$rconfig_version"
 
     //TODO when fabric gets running we do need transitive, this was just disabled so I could not deal with updating the maven
-    modImplementation("com.telepathicgrunt:Bumblezone-Fabric:$rootProject.bumblezone_version") { transitive false }
+    modImplementation "com.telepathicgrunt:Bumblezone-Fabric:$bumblezone_version" transitive false
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+    common(project(path: ":common", configuration: "namedElements")) transitive false
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) transitive false
 }
 
 processResources {
-    inputs.property "version", project.version
-
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand "version": version
     }
 }
 
 shadowJar {
     configurations = [project.configurations.shadowCommon]
     archiveClassifier.set "dev-shadow"
-    archiveAppendix.set "${project.name}-$minecraft_version"
+    archiveAppendix.set "$project.name-$mc_version"
 }
 
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
     archiveClassifier.set null
-    archiveAppendix.set "${project.name}-$minecraft_version"
+    archiveAppendix.set "$project.name-$mc_version"
 }
 
 jar {
     archiveClassifier.set "dev"
-    archiveAppendix.set "${project.name}-$minecraft_version"
+    archiveAppendix.set "$project.name-$mc_version"
 }
 
 sourcesJar {
@@ -70,7 +68,7 @@ components.java {
 publishing {
     publications {
         mavenCommon(MavenPublication) {
-            artifactId = "${rootProject.archives_base_name}-${project.name}-${rootProject.minecraft_version}"
+            artifactId = "${rootProject.archives_base_name}-${project.name}-${rootProject.mc_version}"
             from components.java
 
             pom {

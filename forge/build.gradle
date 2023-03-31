@@ -46,36 +46,22 @@ configurations {
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+    forge "net.minecraftforge:forge:$mc_version-$forge_version"
+    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-$project.name-$mc_version:$rlib_version"
+    modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-$project.name-$mc_version:$rconfig_version"
+    modImplementation "software.bernie.geckolib:$geckolib_forge:$geckolib_version"
+    modImplementation "com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version"
+    modImplementation "net.roguelogix.phosphophyllite:Phosphophyllite:$phos_version"
+    modCompileOnly "mezz.jei:jei-$mc_version-forge-api:$jei_version"
+    modLocalRuntime "mezz.jei:jei-$mc_version-forge:$jei_version" transitive false
+    modCompileOnly "mcjty.theoneprobe:theoneprobe:$top_version:api" transitive false
+    modLocalRuntime "mcjty.theoneprobe:theoneprobe:$top_version" transitive false
+    modLocalRuntime "com.telepathicgrunt:CommandStructures-Forge:$cstructures_version"
 
-    modImplementation("com.teamresourceful.resourcefullib:resourcefullib-forge-$rootProject.minecraft_version:$rootProject.resourcefullib_version")
-    modImplementation("com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-$rootProject.minecraft_version:$rootProject.resourcefulconfig_version")
+    common(project(path: ":common", configuration: "namedElements")) transitive false
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) transitive false
 
-    modCompileOnly("mezz.jei:jei-${rootProject.minecraft_version}-forge-api:${rootProject.jei_version}")
-    modLocalRuntime("mezz.jei:jei-${rootProject.minecraft_version}-forge:${rootProject.jei_version}") {
-        transitive = false
-    }
-
-    modCompileOnly("mcjty.theoneprobe:theoneprobe:${rootProject.top_version}:api"){
-        transitive = false
-    }
-    modRuntimeOnly("mcjty.theoneprobe:theoneprobe:${rootProject.top_version}"){
-        transitive = false
-    }
-
-    modImplementation "software.bernie.geckolib:${rootProject.geckolib_forge}:${rootProject.geckolib_forge_version}"
-
-    modImplementation("com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version")
-
-    modCompileOnly("net.roguelogix.phosphophyllite:Phosphophyllite:$phos_version")
-    modRuntimeOnly("net.roguelogix.phosphophyllite:Phosphophyllite:$phos_version")
-
-    modLocalRuntime("com.telepathicgrunt:CommandStructures-Forge:3.1.0+1.19")
-
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
-
-    compileOnly 'org.jetbrains:annotations:23.0.0'
+    compileOnly 'org.jetbrains:annotations:24.0.1'
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
 }
 
@@ -86,11 +72,11 @@ processResources {
             "version": version,
             "fml_version": forge_version.substring(0, forge_version.indexOf('.')),
             "forge_version": forge_version,
-            "mc_version": minecraft_version,
+            "mc_version": mc_version,
             "phos_version": phos_version,
-            "gecko_version": geckolib_forge_version,
-            "rlib_version": resourcefullib_version,
-            "rconfig_version": resourcefulconfig_version
+            "gecko_version": geckolib_version,
+            "rlib_version": rlib_version,
+            "rconfig_version": rconfig_version
     ]
 
     inputs.properties versionProperties
@@ -104,19 +90,19 @@ shadowJar {
     exclude "fabric.mod.json"
 
     configurations = [project.configurations.shadowCommon]
-    archiveAppendix.set "${project.name}-$minecraft_version"
+    archiveAppendix.set "$project.name-$mc_version"
     archiveClassifier.set "dev-shadow"
 }
 
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    archiveAppendix.set "${project.name}-$minecraft_version"
+    archiveAppendix.set "$project.name-$mc_version"
     archiveClassifier.set null
 }
 
 jar {
-    archiveAppendix.set "${project.name}-$minecraft_version"
+    archiveAppendix.set "$project.name-$mc_version"
     archiveClassifier.set "dev"
 }
 
@@ -136,7 +122,7 @@ components.java {
 publishing {
     publications {
         mavenCommon(MavenPublication) {
-            artifactId = "${rootProject.archives_base_name}-${project.name}-${rootProject.minecraft_version}"
+            artifactId = "$archives_base_name-$project.name-$mc_version"
             from components.java
 
             pom {

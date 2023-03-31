@@ -1,34 +1,18 @@
-import com.teamresourceful.ModVersionPlugin
-import com.teamresourceful.tasks.CopyTemplateTask
-
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.0.+" apply false
+    id "architectury-plugin" version "3.4+"
+    id "dev.architectury.loom" version "1.1.+" apply false
     id "org.sonarqube" version "4.0.+"
+    id "com.teamresourceful.resourcefulgradle"
 }
 
 architectury {
-    minecraft = rootProject.minecraft_version
+    minecraft = mc_version
 }
 
 ext {
     repoUrl = nightly.toBoolean() ? "https://nexus.resourcefulbees.com/repository/maven-nightly/" : "https://nexus.resourcefulbees.com/repository/maven-releases/"
     ENV = System.getenv()
 }
-
-apply plugin: ModVersionPlugin
-modVersion {
-    updateModVersion {
-        initialMCVersion = initial_mc_version
-        currentMCVersion = minecraft_version
-        patchVersion = patch
-        versionPostfix = postfix
-        postfixBuild = postfix_build
-        isNightly = nightly.toBoolean()
-        buildTime = build_time
-    }
-}
-
 
 subprojects {
     apply plugin: "dev.architectury.loom"
@@ -38,17 +22,16 @@ subprojects {
     }
 
     dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        minecraft "com.mojang:minecraft:$mc_version"
         // The following line declares the mojmap mappings, you may use other mappings as well
         mappings loom.layered() {
             officialMojangMappings()
-            parchment("org.parchmentmc.data:parchment-${rootProject.minecraft_version}:${rootProject.parchment_version}@zip")
+            parchment("org.parchmentmc.data:parchment-$mc_version:$parchment_version@zip")
         }
         // The following line declares the yarn mappings you may select this one as well.
         // mappings "net.fabricmc:yarn:@YARN_MAPPINGS@:v2"
     }
 }
-println "${name}: ${modVersion.version}"
 
 sonar {
     properties {
@@ -63,9 +46,9 @@ allprojects {
     apply plugin: "architectury-plugin"
     apply plugin: "maven-publish"
 
-    archivesBaseName = rootProject.archives_base_name
-    version = modVersion.version
-    group = rootProject.maven_group
+    archivesBaseName = archives_base_name
+    version = libs.versions.mod.version.get() //resourcefulGradle.modVersion.getModVersion(project)
+    group = maven_group
 
     repositories {
         maven { url = "https://nexus.resourcefulbees.com/repository/maven-public/" }
@@ -84,28 +67,34 @@ allprojects {
     }
 }
 
-tasks.register('createDiscordEmbed', CopyTemplateTask) {
-    versionProperties = [
-            "version"      : version,
-            "mc_version"   : minecraft_version,
-            "forge_version": forge_version
-    ]
 
-    def template = nightly.toBoolean() ? "nightly_embed.json.template" : "release_embed.json.template"
-    source = file("dev_resources/project_templates/$template")
-    //targetDir = file(".")
-}
+resourcefulGradle {
+    templates {
+        //I have no idea how to get rid of the warnings in idea. switching from interface to abstract
+        //gets rid of *some* warnings. so we just have to live with them as they are now since that's how
+        //the gradle docs say to make a plugin with nested DSL
 
-tasks.register('updateReadme', CopyTemplateTask) {
-    source = file("dev_resources/project_templates/README.md.template")
-    //targetDir = file(".")
-    versionProperties = [
-            "version"            : version,
-            "mc_version"         : minecraft_version,
-            "phos_version"       : phos_version,
-            "gecko_forge"        : geckolib_forge,
-            "gecko_forge_version": geckolib_forge_version,
-            "rlib_version"       : resourcefullib_version,
-            "rconfig_version"    : resourcefulconfig_version
-    ]
+        readme {
+            source = file("dev_resources/project_templates/README.md.template")
+            injectedValues = [
+                    "version"            : libs.versions.mod.version.get(),
+                    "mc_version"         : mc_version,
+                    "phos_version"       : phos_version,
+                    "gecko_forge"        : geckolib_forge,
+                    "gecko_forge_version": geckolib_version,
+                    "rlib_version"       : rlib_version,
+                    "rconfig_version"    : rconfig_version
+            ]
+        }
+        discordEmbed {
+            injectedValues = [
+                    "version"      : libs.versions.mod.version.get(),
+                    "mc_version"   : mc_version,
+                    "forge_version": forge_version
+            ]
+
+            def template = nightly.toBoolean() ? "nightly_embed.json.template" : "release_embed.json.template"
+            source = file("dev_resources/project_templates/$template")
+        }
+    }
 }

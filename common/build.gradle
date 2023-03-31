@@ -1,14 +1,13 @@
 dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modCompileOnly "mezz.jei:jei-${rootProject.minecraft_version}-common-api:${rootProject.jei_version}"
-    modRuntimeOnly "mezz.jei:jei-${rootProject.minecraft_version}-common:${rootProject.jei_version}"
-    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-common-$rootProject.minecraft_version:$rootProject.resourcefullib_version"
-    modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-$rootProject.minecraft_version:$rootProject.resourcefulconfig_version"
-    modImplementation "software.bernie.geckolib:$rootProject.geckolib_fabric_version"
-
-    modImplementation("com.telepathicgrunt:Bumblezone-Forge:$rootProject.bumblezone_version")
+    modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
+    modCompileOnly "mezz.jei:jei-$mc_version-common-api:$jei_version"
+    modLocalRuntime "mezz.jei:jei-$mc_version-common:$jei_version"
+    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-common-$mc_version:$rlib_version"
+    modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-$mc_version:$rconfig_version"
+    modImplementation "software.bernie.geckolib:$geckolib_fabric_version"
+    modImplementation("com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version")
 }
 
 architectury {
@@ -22,7 +21,7 @@ loom {
 publishing {
     publications {
         mavenCommon(MavenPublication) {
-            artifactId = "${rootProject.archives_base_name}-${project.name}-${rootProject.minecraft_version}"
+            artifactId = "$archivesBaseName-$project.name-$mc_version"
             from components.java
 
             pom {
