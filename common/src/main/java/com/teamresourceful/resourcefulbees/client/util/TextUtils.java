@@ -11,6 +11,8 @@ import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+import java.text.NumberFormat;
+
 public final class TextUtils {
 
     public static final int FONT_COLOR_1 = 0xffc9c9c9;
@@ -22,8 +24,20 @@ public final class TextUtils {
     private static final FontSet FONT_12 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(new ResourceLocation(ModConstants.MOD_ID, "jetbrains_mono_12"));
     public static final Font TERMINAL_FONT_12 = new Font(resourceLocation -> FONT_12, false); //IDK if this should be true or false tbh
 
+    /**
+     * A custom number format instance that forces the number of fraction digits to always be 3
+     */
+    public static final NumberFormat NUMBER_FORMAT = createNumberFormatter();
+
     private TextUtils() {
         throw new UtilityClassError();
+    }
+
+    private static NumberFormat createNumberFormatter() {
+        NumberFormat formatter = NumberFormat.getNumberInstance();
+        formatter.setMinimumFractionDigits(1);
+        formatter.setMaximumFractionDigits(1);
+        return formatter;
     }
 
     public static void drawCenteredStringNoShadow(Font font, PoseStack stack, Component component, float x, float y, int color) {

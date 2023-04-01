@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.teamresourceful.resourcefulbees.client.util.TextUtils;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyGeneratorMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -47,11 +48,12 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
             ClientUtils.drawFluid(matrix, height, 12, fluidStack, i+28, j+16+(54-height), getBlitOffset());
 
             matrix.pushPose();
+            matrix.translate(i, j, 0);
             matrix.scale(.8f, .8f, .8f);
-            this.font.drawShadow(matrix, "Fluid: ",i+114f, j + 44f, 0xffffff);
-            this.font.drawShadow(matrix, getDisplayName(fluidStack),i + 118f, j + 54f, 0xffffff);
-            this.font.drawShadow(matrix, "Amount: ",i + 114f, j + 64f, 0xffffff);
-            this.font.drawShadow(matrix, fluidStack.getAmount()+"mB",i + 118f, j + 74f, 0xffffff);
+            this.font.drawShadow(matrix, "Fluid: ", 57, 22, 0xffffff);
+            this.font.drawShadow(matrix, getDisplayName(fluidStack), 61, 32f, 0xffffff);
+            this.font.drawShadow(matrix, "Amount: ", 57, 42, 0xffffff);
+            this.font.drawShadow(matrix, fluidStack.getAmount()+"mB", 61, 52, 0xffffff);
             matrix.popPose();
         }
     }
@@ -77,9 +79,9 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
     public void renderEnergyTooltip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 136, this.leftPos + 148) && MathUtils.inRangeInclusive(mouseY, this.topPos + 16, this.topPos + 70)) {
             if (Screen.hasShiftDown() || this.menu.getEnergy().getEnergyStored() < 500)
-                this.renderTooltip(matrix, Component.literal(NumberFormat.getNumberInstance().format(this.menu.getEnergy().getEnergyStored()) + " RF"), mouseX, mouseY);
+                this.renderTooltip(matrix, Component.literal(NumberFormat.getInstance().format(this.menu.getEnergy().getEnergyStored()) + " RF"), mouseX, mouseY);
             else
-                this.renderTooltip(matrix, Component.literal(NumberFormat.getNumberInstance().format((double) this.menu.getEnergy().getEnergyStored() / 1000) + " kRF"), mouseX, mouseY);
+                this.renderTooltip(matrix, Component.literal(TextUtils.NUMBER_FORMAT.format((double) this.menu.getEnergy().getEnergyStored() / 1000) + " kRF"), mouseX, mouseY);
         }
     }
 
@@ -87,9 +89,9 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 28, this.leftPos + 40) && MathUtils.inRangeInclusive(mouseY, this.topPos + 16, this.topPos + 70)) {
             FluidStack fluid = this.menu.getEntity().getTank().getFluid();
             if (Screen.hasShiftDown() || fluid.getAmount() < 500)
-                this.renderTooltip(matrix, Component.literal(fluid.getAmount() + " MB"), mouseX, mouseY);
+                this.renderTooltip(matrix, Component.literal(NumberFormat.getInstance().format(fluid.getAmount()) + " MB"), mouseX, mouseY);
             else
-                this.renderTooltip(matrix, Component.literal(NumberFormat.getNumberInstance().format((double) fluid.getAmount() / 1000) + " Buckets"), mouseX, mouseY);
+                this.renderTooltip(matrix, Component.literal(TextUtils.NUMBER_FORMAT.format((double) fluid.getAmount() / 1000) + " Buckets"), mouseX, mouseY);
         }
     }
 }
