@@ -51,7 +51,7 @@ jobs:
           MAVEN_PASS: ${{ secrets.MAVEN_PASSWORD }}
 
       - name: Create Discord Embed
-        run: ./gradlew createDiscordEmbed -Pnightly=true
+        run: ./gradlew injectDiscordEmbed -Pnightly=true
 
       - name: Send Discord Webhook
         uses: tsickert/discord-webhook@v5.3.0
