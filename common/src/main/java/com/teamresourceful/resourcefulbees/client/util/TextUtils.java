@@ -25,7 +25,7 @@ public final class TextUtils {
     public static final Font TERMINAL_FONT_12 = new Font(resourceLocation -> FONT_12, false); //IDK if this should be true or false tbh
 
     /**
-     * A custom number format instance that forces the number of fraction digits to always be 3
+     * A custom number format instance that forces the number of fraction digits to always be 1
      */
     public static final NumberFormat NUMBER_FORMAT = createNumberFormatter();
 
