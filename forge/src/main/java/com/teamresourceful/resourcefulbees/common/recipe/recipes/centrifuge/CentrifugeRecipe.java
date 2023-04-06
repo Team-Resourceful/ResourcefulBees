@@ -46,7 +46,7 @@ public record CentrifugeRecipe(
                 Codec.INT.fieldOf("inputAmount").orElse(1).forGetter(CentrifugeRecipe::inputAmount),
                 Output.codec(ItemOutput.CODEC).listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::itemOutputs),
                 Output.codec(FluidOutput.CODEC).listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::fluidOutputs),
-                Codec.INT.fieldOf("time").orElse(CentrifugeConfig.globalCentrifugeRecipeTime).forGetter(CentrifugeRecipe::time),
+                Codec.INT.fieldOf("time").orElse(CentrifugeConfig.defaultCentrifugeRecipeTime).forGetter(CentrifugeRecipe::time),
                 Codec.INT.fieldOf("energyPerTick").orElse(CentrifugeConfig.centrifugeRfPerTick).forGetter(CentrifugeRecipe::energyPerTick),
                 Codec.INT.optionalFieldOf("rotations").forGetter(CentrifugeRecipe::rotations)
         ).apply(instance, CentrifugeRecipe::new));
