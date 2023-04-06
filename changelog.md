@@ -26,5 +26,5 @@
 #### Please keep in mind this mod is still in alpha. There can and likely will be more breaking changes, and as such the mod should only be included in packs if you accept the risks.
 #### We are releasing this publicly in such an early state because we would like to get more feedback from the community. We need to know what you like and don't like. What bugs are there? What is confusing and should be clarified better? How can we improve and make this mod the best bee mod there is?
 
-<br>Please report any and all bugs on our [Gihub Issue Tracker](https://github.com/Team-Resourceful/ResourcefulBees/issues/new/choose)
+<br>Please report any and all bugs on our [GitHub Issue Tracker](https://github.com/Team-Resourceful/ResourcefulBees/issues/new/choose)
 <br>Feel free to ask questions in our [Discord](https://discord.resourcefulbees.com)
