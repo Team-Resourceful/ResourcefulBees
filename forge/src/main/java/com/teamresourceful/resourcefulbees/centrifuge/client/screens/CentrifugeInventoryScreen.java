@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.centrifuge.client.screens;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.buttons.BackButton;
+import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeContainer;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
-import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeContainer;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -86,5 +86,12 @@ public abstract class CentrifugeInventoryScreen<T extends CentrifugeContainer<?>
     @Override
     protected final TerminalPanels defaultInfoPanelTab() {
         return TerminalPanels.INVENTORY;
+    }
+
+    @Override
+    protected boolean isHovering(int x, int y, int width, int height, double mouseX, double mouseY) {
+        int i = this.leftPos;
+        int j = this.topPos;
+        return (mouseX -= i) >= (x) && mouseX < (x + width) && (mouseY -= j) >= (y) && mouseY < (y + height);
     }
 }

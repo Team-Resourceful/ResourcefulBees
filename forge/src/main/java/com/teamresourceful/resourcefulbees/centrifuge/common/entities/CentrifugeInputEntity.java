@@ -59,6 +59,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     private ResourceLocation filterRecipeID = null;//needed to load the recipe on world load for client
     private CentrifugeRecipe processRecipe = null; //recipe currently being processed
     private ResourceLocation processRecipeID = null; //needed to load the recipe on world load
+    private CentrifugeRecipe tempRecipe = null; //used when filter is not set
     private int processQuantity; //# of inputs being currently being processed
     private ProcessStage processStage = ProcessStage.IDLE;
     private final ProcessContainerData processData = new ProcessContainerData(); //contains synchronized data - time and energy
@@ -130,7 +131,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         if (level == null) return;
         processStage = newStage;
         sendToPlayersTrackingChunk();
-        /*if (!processStage.isIdle())*/ tickProcess();
+        tickProcess();
     }
 
     @Override
@@ -156,42 +157,27 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         }
     }
 
+    //TODO figure out a clean way to combine filter recipe and temp recipe to reduce clutter
     private boolean canProcess() {
-        //add check for output location groups to verify all outputs are linked in order to function
-        return filterRecipe != null && consumeInputs(true);
+        if (!itemOutputs.allLinked() && !fluidOutputs.allLinked()) return false;
+        if (filterRecipe != null) return inventoryHandler.consumeInputs(true, filterRecipe);
+        if (tempRecipe == null) getTempRecipe();
+        return tempRecipe != null && inventoryHandler.consumeInputs(true, tempRecipe);
     }
 
     private void startProcess() {
+        CentrifugeRecipe recipe = pickRecipe();
+        if (recipe == null) {
+            processCompleted();
+            return;
+        }
         setProcessStage(ProcessStage.PROCESSING);
-        processRecipe = filterRecipe;
+        processRecipe = recipe;
         processRecipeID = processRecipe.getId();
         processData.setTime(getRecipeTime());
         processData.setEnergy((int) (processRecipe.energyPerTick() * this.controller().getRecipePowerModifier()));
-        consumeInputs(false);
+        inventoryHandler.consumeInputs(false, processRecipe);
         setChanged();
-    }
-
-    private boolean consumeInputs(boolean simulate) {
-        if (filterRecipe == null) {
-            processCompleted();
-            return false;
-        }
-
-        Ingredient ingredient = filterRecipe.ingredient();
-        int needed = simulate ? filterRecipe.inputAmount() * controller().getMaxInputRecipes() : processQuantity;
-        int collected = 0;
-
-        for (int slot = 0; collected < needed && slot < inventoryHandler.getSlots(); slot++) {
-            ItemStack stackInSlot = inventoryHandler.getStackInSlot(slot);
-            if (stackInSlot == ItemStack.EMPTY || !ingredient.test(stackInSlot)) continue;
-            int found = Math.min(needed-collected, stackInSlot.getCount());
-            collected += found;
-            if (!simulate) stackInSlot.shrink(found);
-        }
-
-        if (simulate) processQuantity = collected - collected % filterRecipe.inputAmount();
-
-        return collected >= filterRecipe.inputAmount();
     }
 
     private void processRecipe() {
@@ -240,6 +226,16 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     public void updateRecipe() {
         filterRecipe = CentrifugeUtils.getRecipe(level, filterInventory.getStackInSlot(RECIPE_SLOT)).orElse(null);
         filterRecipeID =  filterRecipe == null ? null : filterRecipe.getId();
+    }
+
+    private void getTempRecipe() {
+        inventoryHandler.findFirst().ifPresent(itemStack -> tempRecipe = CentrifugeUtils.getRecipe(level, itemStack).orElse(null));
+    }
+
+    private CentrifugeRecipe pickRecipe() {
+        if (filterRecipe != null) return filterRecipe;
+        if (tempRecipe != null) return tempRecipe;
+        return null;
     }
 
     //region CAPABILITIES
@@ -368,13 +364,37 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
 
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return filterRecipe != null && filterRecipe.ingredient().test(stack);
+            return filterRecipe == null || filterRecipe.ingredient().test(stack);
         }
 
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             setChanged();
+        }
+
+        private boolean consumeInputs(boolean simulate, @NotNull CentrifugeRecipe recipe) {
+            Ingredient ingredient = recipe.ingredient();
+            int needed = simulate ? recipe.inputAmount() * controller().getMaxInputRecipes() : processQuantity;
+            int collected = 0;
+            int remaining = needed;
+
+            for (ItemStack stackInSlot : stacks) {
+                if (collected >= needed) break;
+                if (stackInSlot.isEmpty() || !ingredient.test(stackInSlot)) continue;
+                int found = Math.min(remaining, stackInSlot.getCount());
+                collected += found;
+                remaining -= found;
+                if (!simulate) stackInSlot.shrink(found);
+            }
+
+            if (simulate) processQuantity = collected - collected % recipe.inputAmount();
+
+            return collected >= recipe.inputAmount();
+        }
+
+        private Optional<ItemStack> findFirst() {
+            return stacks.stream().filter(itemStack -> !itemStack.isEmpty()).findFirst();
         }
     }
 }

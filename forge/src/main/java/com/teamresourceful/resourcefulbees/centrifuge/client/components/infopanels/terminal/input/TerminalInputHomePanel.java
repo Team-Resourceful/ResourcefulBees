@@ -13,6 +13,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Cen
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,22 +49,16 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
         int tY = displayTitleBar ? y+30 : y+14;
 
         drawLocationString(stack, CentrifugeUtils.formatBlockPos(selectedEntity.getBlockPos()), tX, tY);
-
-        ResourceLocation recipeID = selectedEntity.getFilterRecipeID();
-        if (recipeID != null) {
-            String recipe = formatRecipeID(recipeID.getPath());
-            drawRecipeString(stack, recipe, tX, tY+8);
-        } else {
-            drawRecipeString(stack, CentrifugeTranslations.FILTER_SLOT_NOT_SET.getString(), tX, tY+8);
-        }
-        drawEnergyPerTickString(stack, processData.getEnergy(), tX, tY+16);
-        drawProcessingStageString(stack, selectedEntity.getProcessStage(), tX, tY+24);
+        drawRecipe(stack, selectedEntity.getFilterRecipeID(), CentrifugeTranslations.FILTER_RECIPE, CentrifugeTranslations.FILTER_SLOT_NOT_SET, tX, tY+8);
+        drawRecipe(stack, selectedEntity.getProcessRecipeID(), CentrifugeTranslations.PROCESS_RECIPE, CentrifugeTranslations.RECIPE_NOT_PROCESSED, tX, tY+16);
+        drawEnergyPerTickString(stack, processData.getEnergy(), tX, tY+24);
+        drawProcessingStageString(stack, selectedEntity.getProcessStage(), tX, tY+32);
         int timeLeft = !selectedEntity.getProcessStage().isProcessing() || energyStorage.isEmpty() ? Integer.MAX_VALUE : processData.getTime();
-        drawProcessTimeLeftString(stack, timeLeft, tX, tY+32);
-        drawOutputTypeString(stack, CentrifugeTranslations.ITEM.getString(), tX, tY+40);
-        drawOutputString(stack, selectedEntity.getItemOutputs(), tX, tY+48);
-        drawOutputTypeString(stack, CentrifugeTranslations.FLUID.getString(), tX, tY+72);
-        drawOutputString(stack, selectedEntity.getFluidOutputs(), tX, tY+80);
+        drawProcessTimeLeftString(stack, timeLeft, tX, tY+40);
+        drawOutputTypeString(stack, CentrifugeTranslations.ITEM.getString(), tX, tY+48);
+        drawOutputString(stack, selectedEntity.getItemOutputs(), tX, tY+56);
+        drawOutputTypeString(stack, CentrifugeTranslations.FLUID.getString(), tX, tY+80);
+        drawOutputString(stack, selectedEntity.getFluidOutputs(), tX, tY+88);
     }
 
     private static void drawProcessTimeLeftString(PoseStack stack, int timeLeft, int x, int y) {
@@ -83,8 +78,17 @@ public class TerminalInputHomePanel extends AbstractInfoPanel<CentrifugeInputEnt
         drawString(stack, Component.translatable(CentrifugeTranslations.LOCATION, location), x, y);
     }
 
-    private static void drawRecipeString(PoseStack stack, String recipeID, int x, int y) {
-        drawString(stack, Component.translatable(CentrifugeTranslations.RECIPE, recipeID), x, y);
+    private static void drawRecipe(PoseStack stack, ResourceLocation recipeID, String translation, MutableComponent error, int x, int y) {
+        if (recipeID != null) {
+            String recipe = formatRecipeID(recipeID.getPath());
+            drawRecipeString(stack, translation, recipe, x, y);
+        } else {
+            drawRecipeString(stack, translation, error.getString(), x, y);
+        }
+    }
+
+    private static void drawRecipeString(PoseStack stack, String translation, String recipeID, int x, int y) {
+        drawString(stack, Component.translatable(translation, recipeID), x, y);
     }
 
     private static void drawProcessingStageString(PoseStack stack, ProcessStage processingStage, int x, int y) {

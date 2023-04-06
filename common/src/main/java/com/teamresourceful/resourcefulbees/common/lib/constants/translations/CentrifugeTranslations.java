@@ -37,8 +37,11 @@ public final class CentrifugeTranslations {
     @Translate("Energy Usage: %s rf/t")
     public static final String ENERGY_USAGE = "gui.resourcefulbees.centrifuge.energy_usage";
 
-    @Translate("Recipe: %s")
-    public static final String RECIPE = "gui.resourcefulbees.centrifuge.recipe";
+    @Translate("Filter Recipe: %s")
+    public static final String FILTER_RECIPE = "gui.resourcefulbees.centrifuge.recipe.filter";
+
+    @Translate("Process Recipe: %s")
+    public static final String PROCESS_RECIPE = "gui.resourcefulbees.centrifuge.recipe.process";
 
     @Translate("Processing Stage: %s")
     public static final String STAGE = "gui.resourcefulbees.centrifuge.process_stage";
@@ -60,6 +63,9 @@ public final class CentrifugeTranslations {
 
     @Translate("Filter slot not set!")
     public static final MutableComponent FILTER_SLOT_NOT_SET = Component.translatable("gui.resourcefulbees.centrifuge.filter_slot_not_set");
+
+    @Translate("No recipe being processed!")
+    public static final MutableComponent RECIPE_NOT_PROCESSED = Component.translatable("gui.resourcefulbees.centrifuge.recipe_not_processed");
 
     @Translate("Item")
     public static final MutableComponent ITEM = Component.translatable("gui.resourcefulbees.centrifuge.item");

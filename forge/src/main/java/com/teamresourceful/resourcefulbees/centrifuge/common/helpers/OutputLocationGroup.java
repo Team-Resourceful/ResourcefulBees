@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.helpers;
 
 import com.google.common.base.Suppliers;
+import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -116,6 +116,10 @@ public class OutputLocationGroup<T extends AbstractCentrifugeOutputEntity<E, V>,
         location3.deposited = false;
     }
 
+    public boolean allLinked() {
+        return location1.isLinked() && location2.isLinked() && location3.isLinked();
+    }
+
 /*    public int getRollsLeft(int i) {
         return outputs[i].rollsLeft;
     }
@@ -185,6 +189,10 @@ public class OutputLocationGroup<T extends AbstractCentrifugeOutputEntity<E, V>,
 
         public @Nullable BlockPos getPos() {
             return pos;
+        }
+
+        public boolean isLinked() {
+            return pos != null && tileSupplier.get() != null;
         }
 
         public boolean depositResult(E result, int processQuantity) {
