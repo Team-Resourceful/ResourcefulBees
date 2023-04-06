@@ -1,3 +1,14 @@
+# -----{ 1.0.0-alpha.16 }-----
+- Updated dependency versions
+- Made Centrifuge Filter-style slots more distinguishable
+- Made corrections to Centrifuge Config
+- Centrifuge Input can now process combs without setting the filter slot
+  - Filter slot will restrict processing but allow any valid centrifuge recipe ingredient to be placed 
+- Fixed Honey Gen not generating rf when no upgrades are placed
+- Fixed wither trait not preventing wither damage
+- Resourceful Web Config is now implemented. (See the mod's details for more information on usage)
+- Added astronaut bee textures
+
 # -----{ 1.0.0-alpha.15 }-----
 - It's a brand-new mod.
 
