@@ -11,6 +11,7 @@ import com.resourcefulbees.resourcefulbees.lib.ModConstants;
 import com.resourcefulbees.resourcefulbees.registry.BeeRegistry;
 import com.resourcefulbees.resourcefulbees.registry.ModEntities;
 import com.resourcefulbees.resourcefulbees.registry.ModFeatures;
+import com.resourcefulbees.resourcefulbees.utils.BeeInfoUtils;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;

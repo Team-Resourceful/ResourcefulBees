@@ -1,9 +1,12 @@
 package com.resourcefulbees.resourcefulbees.client.render.patreon;
 
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 public class PetBeeRenderer implements IGeoRenderer<PetModelData> {
+
+    private IRenderTypeBuffer rtb;
 
     @Override
     public PetBeeModel getGeoModelProvider() {
@@ -18,5 +21,13 @@ public class PetBeeRenderer implements IGeoRenderer<PetModelData> {
     @Override
     public Integer getUniqueID(PetModelData animatable) {
         return animatable.getId().hashCode();
+    }
+
+    public void setCurrentRTB(IRenderTypeBuffer rtb) {
+        this.rtb = rtb;
+    }
+
+    public IRenderTypeBuffer getCurrentRTB() {
+        return rtb;
     }
 }
