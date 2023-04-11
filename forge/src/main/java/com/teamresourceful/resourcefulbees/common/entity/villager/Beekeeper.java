@@ -69,26 +69,26 @@ public final class Beekeeper {
     }
 
     private static void addTrade(List<VillagerTrades.ItemListing> list, UniformInt flowerQty, Item result, UniformInt resultQty, int maxUses) {
-        addTrade(list, flowerQty, result, resultQty, maxUses, 2);
+        addTrade(list, flowerQty, result, resultQty, maxUses, 3);
     }
 
     //region Level One Trades
     private static void createLevelOneTrades(List<VillagerTrades.ItemListing> list) {
-        addTrade(list, UniformInt.of(1,2), ModItems.WAX.get(), UniformInt.of(1,4), 8, 1);
-        addTrade(list, UniformInt.of(2,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR.get(), UniformInt.of(1,4), 4, 1);
+        addTrade(list, UniformInt.of(1,2), ModItems.WAX.get(), UniformInt.of(1,4), 12, 3);
+        addTrade(list, UniformInt.of(2,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR.get(), UniformInt.of(1,4), 8, 3);
     }
     //endregion
 
     //region Level Two Trades
     private static void createLevelTwoTrades(List<VillagerTrades.ItemListing> list) {
-        addTrade(list, UniformInt.of(2,6), Items.IRON_INGOT, UniformInt.of(1,3), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SCRAPER.get(), UniformInt.of(1,1), 2, 2);
-        addTrade(list, UniformInt.of(4,8), Items.IRON_INGOT, UniformInt.of(2,6), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SMOKER.get(), UniformInt.of(1,1), 4, 2);
-        addTrade(list, UniformInt.of(2,6), Items.IRON_INGOT, UniformInt.of(1,3), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SMOKERCAN.get(), UniformInt.of(1,1), 4, 2);
-        addTrade(list, UniformInt.of(1,3), Items.LEATHER, UniformInt.of(2,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BELLOW.get(), UniformInt.of(1,1), 4, 2);
-        addTrade(list, UniformInt.of(1,3), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_DIPPER.get(), UniformInt.of(1,1), 2, 2);
-        addTrade(list, UniformInt.of(6,12), Items.REDSTONE, UniformInt.of(1,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEEPEDIA.get(), UniformInt.of(1,1), 2, 2);
-        addTrade(list, UniformInt.of(6,12), Items.COMPASS, UniformInt.of(1,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_LOCATOR.get(), UniformInt.of(1,1), 2, 2);
-        addTrade(list, UniformInt.of(6,12), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_PLANKS.get(), UniformInt.of(1,2), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_BOX.get(), UniformInt.of(1,1), 2, 2);
+        addTrade(list, UniformInt.of(2,6), Items.IRON_INGOT, UniformInt.of(1,3), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SCRAPER.get(), UniformInt.of(1,1), 4, 3);
+        addTrade(list, UniformInt.of(4,8), Items.IRON_INGOT, UniformInt.of(2,6), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SMOKER.get(), UniformInt.of(1,1), 8, 3);
+        addTrade(list, UniformInt.of(2,6), Items.IRON_INGOT, UniformInt.of(1,3), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SMOKERCAN.get(), UniformInt.of(1,1), 8, 3);
+        addTrade(list, UniformInt.of(1,3), Items.LEATHER, UniformInt.of(2,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BELLOW.get(), UniformInt.of(1,1), 8, 3);
+        addTrade(list, UniformInt.of(1,3), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_DIPPER.get(), UniformInt.of(1,1), 4, 3);
+        addTrade(list, UniformInt.of(6,12), Items.REDSTONE, UniformInt.of(1,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEEPEDIA.get(), UniformInt.of(1,1), 4, 3);
+        addTrade(list, UniformInt.of(6,12), Items.COMPASS, UniformInt.of(1,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_LOCATOR.get(), UniformInt.of(1,1), 4, 3);
+        addTrade(list, UniformInt.of(6,12), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_PLANKS.get(), UniformInt.of(1,2), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_BOX.get(), UniformInt.of(1,1), 4, 3);
     }
     //endregion
 
@@ -101,7 +101,7 @@ public final class Beekeeper {
     }
 
     private static void addVanillaBeeProduct(List<VillagerTrades.ItemListing> list, Item product) {
-        addTrade(list, UniformInt.of(8,16), product, UniformInt.of(1,1), 4, 2);
+        addTrade(list, UniformInt.of(8,16), product, UniformInt.of(1,1), 8, 3);
     }
 
     private static void addBeeProduct(List<VillagerTrades.ItemListing> list, ItemStack product, BeekeeperTradeData tradeData) {
@@ -131,7 +131,7 @@ public final class Beekeeper {
     }
 
     private static void addHoneyBuckets(List<VillagerTrades.ItemListing> list) {
-        addTrade(list, UniformInt.of(8,16), Items.BUCKET, UniformInt.of(1,1), ModItems.HONEY_FLUID_BUCKET.get(), UniformInt.of(1,1), 4, 2);
+        addTrade(list, UniformInt.of(8,16), Items.BUCKET, UniformInt.of(1,1), ModItems.HONEY_FLUID_BUCKET.get(), UniformInt.of(1,1), 8, 3);
 
         Collection<RegistryEntry<Item>> honeyBuckets = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BUCKET_ITEMS.getEntries();
         honeyBuckets.forEach(registryEntry -> {
@@ -170,7 +170,7 @@ public final class Beekeeper {
     }
 
     private static void addNest(List<VillagerTrades.ItemListing> list, Item nest) {
-        addTrade(list, UniformInt.of(16,32), Items.GRASS, UniformInt.of(8,24), nest, UniformInt.of(1,1), 2, 0.02f, 2);
+        addTrade(list, UniformInt.of(16,32), Items.GRASS, UniformInt.of(8,24), nest, UniformInt.of(1,1), 4, 0.02f, 3);
     }
 
     private static void addCalmingPotion(List<VillagerTrades.ItemListing> list, PotionType potionType, boolean isLong) {
@@ -178,7 +178,7 @@ public final class Beekeeper {
                 new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM.get(), random.nextIntBetweenInclusive(4, 12)),
                 waterBottle(random, potionType),
                 calmingPotion(random, potionType, isLong),
-                random.nextIntBetweenInclusive(0, 12), 8, 2, 0.05f
+                random.nextIntBetweenInclusive(0, 12), 12, 3, 0.05f
         ));
     }
 
@@ -212,7 +212,7 @@ public final class Beekeeper {
                 new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM.get(), random.nextIntBetweenInclusive(32, 64)),
                 new ItemStack(Items.BLACK_BANNER),
                 getQueenBeeBanner(),
-                random.nextIntBetweenInclusive(0, 2), 1, 2, .05f
+                random.nextIntBetweenInclusive(1, 3), 1, 3, .05f
         ));
 
         addBees(list);

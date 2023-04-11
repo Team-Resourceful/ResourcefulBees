@@ -44,8 +44,8 @@ public record TradeData(
             ItemStackCodec.CODEC.fieldOf("secondaryItem").orElse(ItemStack.EMPTY).forGetter(BeekeeperTradeData::secondaryItem),
             UniformedNumberCodecs.rangedUniformIntCodec(1, 64).fieldOf("secondaryItemCost").orElse(UniformInt.of(1, 4)).forGetter(BeekeeperTradeData::secondaryItemCost),
             Codec.floatRange(0, 1).fieldOf("priceMultiplier").orElse(0.05f).forGetter(BeekeeperTradeData::priceMultiplier),
-            Codec.intRange(1, 64).fieldOf("maxTrades").orElse(4).forGetter(BeekeeperTradeData::maxTrades),
-            Codec.intRange(1, 64).fieldOf("xp").orElse(2).forGetter(BeekeeperTradeData::xp)
+            Codec.intRange(1, 64).fieldOf("maxTrades").orElse(8).forGetter(BeekeeperTradeData::maxTrades),
+            Codec.intRange(1, 64).fieldOf("xp").orElse(3).forGetter(BeekeeperTradeData::xp)
     ).apply(tradeDataInstance, TradeData::new));
 
     public static final BeekeeperTradeData DEFAULT = new TradeData(UniformInt.of(0,0), ItemStack.EMPTY, UniformInt.of(0,0), 0, 0, 0);
