@@ -42,7 +42,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Update Mod Version
-        run: ./gradlew updateModVersion --patchVersion=${{ inputs.patch }} --postfixVersion=${{ inputs.postfix }} --postfix_build=${{ inputs.postfix-build }}
+        run: ./gradlew updateModVersion --patchVersion=${{ inputs.patch }} --versionPostfix=${{ inputs.postfix }} --postfixBuild=${{ inputs.postfix-build }}
 
       - name: Get Mod Version
         id: version
