@@ -1,4 +1,5 @@
 # -----{ 1.0.0-alpha.16 }-----
+- Bumped Beekeeper trade experience from 2 -> 3 and doubled initial trade amounts to allow for faster leveling 
 - Updated dependency versions
 - Made Centrifuge Filter-style slots more distinguishable
 - Made corrections to Centrifuge Config
@@ -8,6 +9,7 @@
 - Fixed wither trait not preventing wither damage
 - Resourceful Web Config is now implemented. (See the mod's details for more information on usage)
 - Added astronaut bee textures
+- Fixed RGBee not having correct honeycomb ID
 
 # -----{ 1.0.0-alpha.15 }-----
 - It's a brand-new mod.
