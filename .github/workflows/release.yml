@@ -83,6 +83,7 @@ jobs:
           changelog-file: changelog.md
           loaders: forge
           game-versions: ${{ steps.mc_version.outputs.mc_version }}
+          version-resolver: exact
 
       - name: Update Readme
         run: |

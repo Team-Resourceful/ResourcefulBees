@@ -18,6 +18,10 @@ issueTrackerURL="https://github.com/Team-Resourceful/ResourcefulBees/issues/new/
     versionRange="[${gecko_version},)"
     ordering="NONE"
     side="CLIENT"
+    [dependencies.resourcefulbees.custom.mc-publish]
+        ignore=false
+        modrinth="geckolib"
+        curseforge="geckolib"
 
 [[dependencies.resourcefulbees]]
     modId="phosphophyllite"
@@ -25,6 +29,9 @@ issueTrackerURL="https://github.com/Team-Resourceful/ResourcefulBees/issues/new/
     versionRange="[${phos_version},)"
     ordering="NONE"
     side="BOTH"
+    [dependencies.resourcefulbees.custom.mc-publish]
+        ignore=false
+        curseforge="phosphophyllite"
 
 [[dependencies.resourcefulbees]]
     modId="resourcefullib"
@@ -32,6 +39,10 @@ issueTrackerURL="https://github.com/Team-Resourceful/ResourcefulBees/issues/new/
     versionRange="[${rlib_version},)"
     ordering="NONE"
     side="BOTH"
+    [dependencies.resourcefulbees.custom.mc-publish]
+        ignore=false
+        modrinth="resourceful-lib"
+        curseforge="resourceful-lib"
 
 [[dependencies.resourcefulbees]]
     modId="resourcefulconfig"
@@ -39,6 +50,10 @@ issueTrackerURL="https://github.com/Team-Resourceful/ResourcefulBees/issues/new/
     versionRange="[${rconfig_version},)"
     ordering="NONE"
     side="BOTH"
+    [dependencies.resourcefulbees.custom.mc-publish]
+        ignore=false
+        modrinth="resourceful-config"
+        curseforge="resourceful-config"
 
 [[dependencies.resourcefulbees]]
     modId="forge"
