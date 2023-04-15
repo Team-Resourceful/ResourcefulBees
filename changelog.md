@@ -1,3 +1,15 @@
+# -----{ 1.0.0-alpha.17 }-----
+- Changed despawn logic to use modified vanilla despawning mechanics. Bees should now only despawn when the player moves >128 blocks from them AND they fail to meet the following criteria:
+  - Has a custom name
+  - Is a passenger
+  - Is leashed
+  - Is a baby
+  - Has a have in range 
+  - Has a saved flower position
+  - Is carrying nectar
+  - Has beecon in range
+  The 10-minute timer will no longer apply. This needs extensive testing!
+
 # -----{ 1.0.0-alpha.16 }-----
 - Bumped Beekeeper trade experience from 2 -> 3 and doubled initial trade amounts to allow for faster leveling 
 - Updated dependency versions

@@ -11,6 +11,7 @@ import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
+import com.teamresourceful.resourcefulbees.platform.common.entity.DespawnHandler;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -113,6 +114,21 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     }
 
     @Override
+    public void checkDespawn() {
+        DespawnHandler.checkDespawn(this, random, shouldDespawnInPeaceful());
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return true;
+    }
+
+    @Override
+    public boolean requiresCustomPersistence() {
+        return isPassenger() || hasNectar() || hasHiveInRange() || hasSavedFlowerPos() || isLeashed() || hasDisruptorInRange() || isBaby();
+    }
+
+    @Override
     public void aiStep() {
         if (this.level.isClientSide) {
             if (this.tickCount % 40 == 0) {
@@ -132,20 +148,15 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
             if (BeeConfig.beesDieInVoid && this.position().y <= level.getMinBuildHeight()) {
                 this.remove(RemovalReason.KILLED);
             }
-            if (!hasCustomName() && this.tickCount % 100 == 0) {
-                timeWithoutHive += 100;
-                if (hasHiveInRange() || hasSavedFlowerPos() || isPassenger() || isPersistenceRequired() || isLeashed() || hasNectar() || disruptorInRange > 0 || isBaby()) {
-                    timeWithoutHive = 0;
-                } else if (timeWithoutHive >= 12000) {
-                    this.discard();
-                }
-                hasHiveInRange = false;
-            }
             if (this.tickCount % 100 == 0 && (disruptorInRange--) < 0) {
                 disruptorInRange = 0;
             }
         }
         super.aiStep();
+    }
+
+    public boolean hasDisruptorInRange() {
+        return disruptorInRange > 0;
     }
 
     public boolean hasHiveInRange() {

@@ -21,6 +21,7 @@ dependencies {
 
     modApi "com.teamresourceful.resourcefullib:resourcefullib-fabric-$mc_version:$rlib_version"
     modApi "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-$mc_version:$rconfig_version"
+    modImplementation "software.bernie.geckolib:$geckolib_fabric_version"
 
     //TODO when fabric gets running we do need transitive, this was just disabled so I could not deal with updating the maven
     modImplementation "com.telepathicgrunt:Bumblezone-Fabric:$bumblezone_version" transitive false
