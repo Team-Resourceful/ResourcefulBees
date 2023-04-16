@@ -103,4 +103,4 @@ jobs:
         run: |
           git config --global user.name "TeamResourcefulBot"
           git config --global user.email "teamresourcefulbot@users.noreply.github.com"
-          git diff-index --quiet HEAD || git commit -am "Released v${{ steps.version.outputs.version }}"
+          git diff-index --quiet HEAD || { git commit -am "Released v${{ steps.version.outputs.version }}" && git push }
