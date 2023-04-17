@@ -39,8 +39,12 @@ public final class DefaultTraitAbilities {
         return registry;
     }
 
+    private static boolean canTeleport(ResourcefulBee bee) {
+        return !bee.level.isClientSide() && bee.isAlive() && bee.tickCount % 150 == 0 && !bee.hasCustomName() && bee.level.isDay() && !bee.isPollinating() && !bee.hasHiveInRange() && !bee.hasDisruptorInRange();
+    }
+
     private static void enderAbility(Bee input) {
-        if (input instanceof ResourcefulBee bee && !bee.hasCustomName() && bee.tickCount % 150 == 0 && bee.level.isDay() && !bee.isPollinating() && !bee.hasHiveInRange() && !bee.getDisruptorInRange() && !bee.level.isClientSide() && bee.isAlive()) {
+        if (input instanceof ResourcefulBee bee && canTeleport(bee)) {
             double x = bee.getX() + (bee.getRandom().nextDouble() - 0.5D) * 4.0D;
             double y = bee.getY() + (bee.getRandom().nextInt(4) - 2);
             double z = bee.getZ() + (bee.getRandom().nextDouble() - 0.5D) * 4.0D;

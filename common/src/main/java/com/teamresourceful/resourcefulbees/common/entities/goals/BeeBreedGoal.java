@@ -28,10 +28,8 @@ public class BeeBreedGoal extends BreedGoal {
 
     @Override
     public boolean canUse() {
-        if (this.animal.isInLove()) {
-            if (super.canUse() && this.partner instanceof CustomBee parent1){
-                return BeeRegistry.get().canParentsBreed(parent1.getBeeType(), beeType);
-            }
+        if (this.animal.isInLove() && super.canUse() && this.partner instanceof CustomBee parent1){
+            return BeeRegistry.get().canParentsBreed(parent1.getBeeType(), beeType);
         }
         return false;
     }
@@ -53,6 +51,7 @@ public class BeeBreedGoal extends BreedGoal {
             resetBreed();
 
             if (beeFamily.chance() >= level.random.nextFloat()) {
+                selectedChild.setPersistenceRequired();
                 spawnChildInLevel(beeFamily, selectedChild);
             } else {
                 this.animal.playSound(SoundEvents.BEE_HURT, 2.0f, 1.0f);

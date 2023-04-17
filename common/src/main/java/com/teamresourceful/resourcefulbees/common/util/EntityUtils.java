@@ -41,6 +41,9 @@ public final class EntityUtils {
                         if (bee.isAngry()) {
                             bee.setTarget(player);
                         }
+                        if (entity instanceof CustomBeeEntity customBee) {
+                            customBee.setPersistenceRequired();
+                        }
                     }
                 });
     }

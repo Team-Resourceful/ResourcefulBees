@@ -50,8 +50,12 @@ public class BeeSpawnEggItem extends ForgeSpawnEggItem {
                 BlockPos pos = level.getBlockState(blockPos).getCollisionShape(level, blockPos).isEmpty() ? blockPos : blockPos.relative(direction);
 
                 EntityType<?> entityType = this.getType(stack.getTag());
-                if (entityType.spawn(level, stack, context.getPlayer(), pos, MobSpawnType.SPAWN_EGG, true, !Objects.equals(blockPos, pos) && direction == Direction.UP) != null) {
+                boolean shouldOffsetYMore = !Objects.equals(blockPos, pos) && direction == Direction.UP;
+                CustomBeeEntity entity = (CustomBeeEntity) entityType.spawn(level, stack, context.getPlayer(), pos, MobSpawnType.SPAWN_EGG, true, shouldOffsetYMore);
+
+                if (entity != null) {
                     stack.shrink(1);
+                    entity.setPersistenceRequired();
                 }
             }
             return InteractionResult.sidedSuccess(context.getLevel().isClientSide());

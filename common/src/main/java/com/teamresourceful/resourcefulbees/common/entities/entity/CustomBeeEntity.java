@@ -11,7 +11,6 @@ import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
-import com.teamresourceful.resourcefulbees.platform.common.entity.DespawnHandler;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -52,7 +51,6 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     protected final CustomBeeData customBeeData;
-    protected int timeWithoutHive;
     private boolean hasHiveInRange;
     private int disruptorInRange;
 
@@ -114,49 +112,47 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     }
 
     @Override
-    public void checkDespawn() {
-        DespawnHandler.checkDespawn(this, random, shouldDespawnInPeaceful());
-    }
-
-    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return true;
     }
 
     @Override
-    public boolean requiresCustomPersistence() {
-        return isPassenger() || hasNectar() || hasHiveInRange() || hasSavedFlowerPos() || isLeashed() || hasDisruptorInRange() || isBaby();
-    }
-
-    @Override
     public void aiStep() {
-        if (this.level.isClientSide) {
-            if (this.tickCount % 40 == 0) {
-                BeeTraitData info = getTraitData();
-                if (info.hasTraits() && info.hasParticleEffects()) {
-                    info.particleEffects().forEach(basicParticleType -> {
-                        for (int i = 0; i < 10; ++i) {
-                            this.level.addParticle((ParticleOptions) basicParticleType, this.getRandomX(0.5D),
-                                    this.getRandomY() - 0.25D, this.getRandomZ(0.5D),
-                                    (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
-                                    (this.random.nextDouble() - 0.5D) * 2.0D);
-                        }
-                    });
-                }
-            }
-        } else {
-            if (BeeConfig.beesDieInVoid && this.position().y <= level.getMinBuildHeight()) {
-                this.remove(RemovalReason.KILLED);
-            }
-            if (this.tickCount % 100 == 0 && (disruptorInRange--) < 0) {
-                disruptorInRange = 0;
-            }
-        }
+        if (this.level.isClientSide) clientAIStep();
+        else serverAIStep();
         super.aiStep();
     }
 
-    public boolean hasDisruptorInRange() {
-        return disruptorInRange > 0;
+    //TODO Should I just override customServerAIStep instead?
+    // What exactly is the difference if customServerAIStep is called from aiStep?
+    private void serverAIStep() {
+        if (BeeConfig.beesDieInVoid && this.position().y <= level.getMinBuildHeight()) {
+            this.remove(RemovalReason.KILLED);
+        }
+        if (this.tickCount % 100 == 0) {
+            hasHiveInRange = false;
+            if ((disruptorInRange--) < 0) {
+                disruptorInRange = 0;
+            }
+        }
+    }
+
+    private void clientAIStep() {
+        if (this.tickCount % 40 == 0) {
+            BeeTraitData info = getTraitData();
+            if (info.hasTraits() && info.hasParticleEffects()) {
+                info.particleEffects().forEach(basicParticleType -> addParticles((ParticleOptions) basicParticleType));
+            }
+        }
+    }
+
+    private void addParticles(ParticleOptions basicParticleType) {
+        for (int i = 0; i < 10; ++i) {
+            this.level.addParticle(basicParticleType, this.getRandomX(0.5D),
+                    this.getRandomY() - 0.25D, this.getRandomZ(0.5D),
+                    (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
+                    (this.random.nextDouble() - 0.5D) * 2.0D);
+        }
     }
 
     public boolean hasHiveInRange() {
@@ -259,12 +255,12 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
         }
     }
 
-    public void setHasDisruptorInRange() {
+    public void setDisruptorInRange() {
         disruptorInRange += 2;
         if (disruptorInRange > 10) disruptorInRange = 10;
     }
 
-    public boolean getDisruptorInRange() {
+    public boolean hasDisruptorInRange() {
         return disruptorInRange > 0;
     }
 

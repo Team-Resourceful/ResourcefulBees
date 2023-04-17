@@ -138,7 +138,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         // give effects
         if (level.getGameTime() % 80L == 0L && !this.tank.isEmpty()) {
             List<Bee> bees = level.getEntitiesOfClass(Bee.class, getEffectBox(level, pos, this.range));
-            bees.stream().filter(CustomBeeEntity.class::isInstance).map(CustomBeeEntity.class::cast).forEach(CustomBeeEntity::setHasDisruptorInRange);
+            bees.stream().filter(CustomBeeEntity.class::isInstance).map(CustomBeeEntity.class::cast).forEach(CustomBeeEntity::setDisruptorInRange);
             this.effects
                     .stream()
                     .map(effect -> new MobEffectInstance(effect, 120, 0, false, false))
