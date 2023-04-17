@@ -1,3 +1,8 @@
+# -----{ 1.0.0-alpha.18 }-----
+- Changed despawn logic again. This time bees will be marked as persistent when released from a jar, spawned from an egg, or when bred. All other bees will despawn following normal vanilla mechanics and when the player moves >128 blocks away
+- fixed nether quartz and rgbee not giving combs (and verified!)
+- Bees should stop occasionally dragging across the ground when pollinating however they may seem slightly further away from normal flowers as a result.
+
 # -----{ 1.0.0-alpha.17 }-----
 - Changed despawn logic to use modified vanilla despawning mechanics. Bees should now only despawn when the player moves >128 blocks from them AND they fail to meet the following criteria:
   - Has a custom name
