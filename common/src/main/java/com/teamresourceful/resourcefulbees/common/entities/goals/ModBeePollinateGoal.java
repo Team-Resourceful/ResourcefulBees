@@ -160,7 +160,8 @@ public class ModBeePollinateGoal extends Goal {
 
     private void handleBlockFlower() {
         if (bee.getSavedFlowerPos() != null) {
-            Vec3 vector3d = Vec3.atBottomCenterOf(bee.getSavedFlowerPos()).add(0.0D, 0.6F, 0.0D);
+            //target position for path find. vertical offset of 1.5 keeps bee from dragging on ground
+            Vec3 vector3d = Vec3.upFromBottomCenterOf(bee.getSavedFlowerPos(), 1.5);
             if (boundingBox != null) vector3d = boundingBox.add(0.0D, 0.4F, 0.0D);
             if (vector3d.distanceTo(bee.position()) > 1D) {
                 this.nextTarget = vector3d;
@@ -183,7 +184,10 @@ public class ModBeePollinateGoal extends Goal {
         } else {
             if (closeToTarget) {
                 if (bee.getRandom().nextInt(25) == 0) {
-                    this.nextTarget = new Vec3(vector3d.x() + this.getRandomOffset(), vector3d.y(), vector3d.z() + this.getRandomOffset());
+                    //todo reduce target y by .5 so bee is closer to "flower" when performing pollination action
+                    // bees appear close for full blocks but normal flowers they seem too far away. need to find
+                    // a good way of determining the difference or try to balance the value as much as possible
+                    this.nextTarget = new Vec3(vector3d.x() + this.getRandomOffset(), vector3d.y()-.5, vector3d.z() + this.getRandomOffset());
                     bee.getNavigation().stop();
                 } else {
                     shouldMoveToNewTarget = false;
