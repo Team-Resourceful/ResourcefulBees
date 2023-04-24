@@ -11,10 +11,11 @@ import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
 import com.teamresourceful.resourcefulbees.common.data.DataSetup;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
-import com.teamresourceful.resourcefulbees.common.init.*;
+import com.teamresourceful.resourcefulbees.common.init.BeeSetup;
+import com.teamresourceful.resourcefulbees.common.init.ModSetup;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.network.ForgeNetworkHandler;
@@ -22,7 +23,6 @@ import com.teamresourceful.resourcefulbees.common.registries.custom.*;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registry.custom.DefaultTraitAbilities;
-import com.teamresourceful.resourcefulbees.common.registries.custom.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
@@ -103,10 +103,6 @@ public class ResourcefulBees {
         RegistryHandler.registerDynamicBees();
         HoneySetup.setupHoney();
         RegistryHandler.registerDynamicHoney();
-        if (FMLLoader.isProduction()) {
-            GeneralConfig.generateDefaults = false;
-            CONFIGURATOR.saveConfig(GeneralConfig.class);
-        }
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(RegistryHandler::addEntityAttributes);
@@ -188,8 +184,11 @@ public class ResourcefulBees {
         DataGen.generateCommonData();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PetLoader::loadAPI);
         HoneycombRegistry.getRegistry().regenerateVariationData();
-
         MissingRegistrySetup.checkMissingRegistries();
+        if (FMLLoader.isProduction()) {
+            GeneralConfig.generateDefaults = false;
+            CONFIGURATOR.saveConfig(GeneralConfig.class);
+        }
     }
 
     @SubscribeEvent

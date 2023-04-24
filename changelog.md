@@ -1,3 +1,8 @@
+# -----{ 1.0.0-alpha.19 }-----
+- Fixed `generateDefaults` config value being automatically set to false too early in load process.
+  - This caused default trait files to not get copied over and used.
+  - You will need to set `generateDefaults` back to true for all changes to take effect!
+
 # -----{ 1.0.0-alpha.18 }-----
 - Changed despawn logic again. This time bees will be marked as persistent when released from a jar, spawned from an egg, or when bred. All other bees will despawn following normal vanilla mechanics and when the player moves >128 blocks away
 - fixed nether quartz and rgbee not giving combs (and verified!)
@@ -13,7 +18,7 @@
   - Has a saved flower position
   - Is carrying nectar
   - Has beecon in range
-  The 10-minute timer will no longer apply. This needs extensive testing!
+    - The 10-minute timer will no longer apply. This needs extensive testing!
 
 # -----{ 1.0.0-alpha.16 }-----
 - Bumped Beekeeper trade experience from 2 -> 3 and doubled initial trade amounts to allow for faster leveling 
