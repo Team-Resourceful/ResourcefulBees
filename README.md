@@ -5,7 +5,7 @@ Resourceful Bees is a Minecraft mod that provides a feature rich framework API f
 
 ### Wiki
 
-TODO: Add wiki link when gitbook wiki is ready
+You can find our wiki [here](https://wiki.resourcefulbees.com/).
 
 ### License and Availability
 
@@ -28,12 +28,12 @@ repositories {
 ```
 You can then add our mod as a dependency:
 
-Forge:
+### Forge:
 ```gradle
 dependencies {
     <--- Other dependencies here --->
 
-    implementation fg.deobf("com.teamresourceful.resourcefulbees:resourcefulbees-forge-1.19.2:1.0.0-alpha.18")
+    implementation fg.deobf("com.teamresourceful.resourcefulbees:resourcefulbees-forge-1.19.2:1.0.0-alpha.19")
     
     //below are required dependencies for resourceful bees to work.
     runtimeOnly fg.deobf("com.teamresourceful.resourcefullib:resourcefullib-forge-1.19.2:1.1.23")
