@@ -6,18 +6,22 @@ on:
         description: "Patch version"
         required: true
         type: string
-      postfix:
-        description: "Version postfix"
-        required: false
+      release-type:
+        description: "Release Type"
+        required: true
         type: choice
         options:
-          -
+          - release
           - alpha
           - beta
-      postfix-build:
-        description: "Postfix build"
-        required: false
+          - pre
+          - rc
+        default: release
+      build:
+        description: "Build"
+        required: true
         type: string
+        default: "0"
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -43,21 +47,21 @@ jobs:
         run: chmod +x gradlew
 
       - name: Update Mod Version
-        run: ./gradlew updateModVersion --patchVersion=${{ inputs.patch }} --versionPostfix=${{ inputs.postfix }} --postfixBuild=${{ inputs.postfix-build }}
+        run: ./gradlew updateModVersion --patch=${{ inputs.patch }} --releaseType=${{ inputs.release-type }} --build=${{ inputs.build }}
 
       - name: Get Mod Version
         id: version
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: "./version.properties"
-          property: "version"
+          properties: "version"
 
       - name: Get MC Version
         id: mc_version
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: "./gradle.properties"
-          property: "mc_version"
+          properties: "mc_version"
 
       - name: Publish package
         run: ./gradlew publish --info

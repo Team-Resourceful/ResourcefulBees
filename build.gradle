@@ -9,11 +9,6 @@ architectury {
     minecraft = mc_version
 }
 
-ext {
-    repoUrl = nightly.toBoolean() ? "https://nexus.resourcefulbees.com/repository/maven-nightly/" : "https://nexus.resourcefulbees.com/repository/maven-releases/"
-    ENV = System.getenv()
-}
-
 subprojects {
     apply plugin: "dev.architectury.loom"
 
@@ -64,6 +59,68 @@ allprojects {
 
     java {
         withSourcesJar()
+    }
+
+    publishing {
+        if (project != rootProject) {
+            publications {
+                maven(MavenPublication) {
+                    artifactId = "$archives_base_name-$project.name-$mc_version"
+                    from components.java
+
+                    pom {
+                        name = 'Resourceful Bees'
+                        description = 'A mod for minecraft to add own bees to minecraft through a powerful api.'
+                        url = 'https://github.com/Team-Resourceful/ResourcefulBees'
+
+                        scm {
+                            connection = 'git:https://github.com/Team-Resourceful/ResourcefulBees.git'
+                            developerConnection = 'git:https://github.com/Team-Resourceful/ResourcefulBees.git'
+                            url = 'https://github.com/Team-Resourceful/ResourcefulBees/'
+                        }
+
+                        licenses {
+                            license {
+                                name = 'GNU Lesser General Public License v3.0'
+                                url = 'https://www.gnu.org/licenses/lgpl-3.0.txt'
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id = 'epic428'
+                                name = 'Epic_Oreo'
+                                email = 'admin@resourcefulbees.com'
+                            }
+                            developer {
+                                id = 'thatgravyboat'
+                                name = 'ThatGravyBoat'
+                                email = 'admin@resourcefulbees.com'
+                            }
+                            developer {
+                                id = 'dawn_felstar'
+                                name = 'Dawn Felstar'
+                                email = 'admin@resourcefulbees.com'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+        repositories {
+            maven {
+                url = nightly.toBoolean()
+                        ? "https://nexus.resourcefulbees.com/repository/maven-nightly/"
+                        : "https://nexus.resourcefulbees.com/repository/maven-releases/"
+                credentials {
+                    def ENV = System.getenv()
+                    username ENV.MAVEN_USER
+                    password ENV.MAVEN_PASS
+                }
+            }
+        }
     }
 }
 

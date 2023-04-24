@@ -36,7 +36,7 @@
         },
         {
           "name": "Forge Version",
-          "value": "43.2.0"
+          "value": "${forge_version}"
         },
         {
           "name": "Download",
