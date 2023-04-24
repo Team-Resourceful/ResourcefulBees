@@ -9,10 +9,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: check some shit
-        run: |
-          ls -al
-          git status
+
       - name: Check if automatic run should exit early
         if: github.event_name == 'schedule'
         run: |
