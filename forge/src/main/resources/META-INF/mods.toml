@@ -7,6 +7,7 @@ issueTrackerURL="https://github.com/Team-Resourceful/ResourcefulBees/issues/new/
     modId="resourcefulbees"
     version="${version}"
     displayName="Resourceful Bees"
+    updateJSONURL="https://api.modrinth.com/updates/jcJ8MbSV/forge_updates.json"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/resourceful-bees"
     logoFile="logo.png"
     authors="Epic_Oreo, ThatGravyBoat, Dawn Felstar, (Textures) QBert, (Textures) Joosh"
