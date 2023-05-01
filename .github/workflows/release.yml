@@ -69,6 +69,12 @@ jobs:
           MAVEN_USER: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASS: ${{ secrets.MAVEN_PASSWORD }}
 
+      - name: Update Changelog
+        uses: Team-Resourceful/ResourcefulChangelog@0.0.1
+        with:
+          release_version: ${{ steps.version.outputs.version }}
+          github_token: ${{ secrets.GH_TOKEN }}
+
       ### Need to duplicate this block for fabric or abuse the files-secondary field
       - name: Upload Forge Releases (Curse/Modrinth/Github)
         uses: Kir-Antipov/mc-publish@v3.2
