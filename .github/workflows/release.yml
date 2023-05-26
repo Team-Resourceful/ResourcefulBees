@@ -70,7 +70,7 @@ jobs:
           MAVEN_PASS: ${{ secrets.MAVEN_PASSWORD }}
 
       - name: Update Changelog
-        uses: Team-Resourceful/ResourcefulChangelog@0.0.1
+        uses: Team-Resourceful/ResourcefulChangelog@v0.0.1
         with:
           release_version: ${{ steps.version.outputs.version }}
           github_token: ${{ secrets.GH_TOKEN }}
