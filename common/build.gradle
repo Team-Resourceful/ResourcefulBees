@@ -11,7 +11,7 @@ dependencies {
 }
 
 architectury {
-    common("fabric", "forge")
+    common(enabled_platforms.split(","))
 }
 
 loom {

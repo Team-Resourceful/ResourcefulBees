@@ -61,7 +61,7 @@ jobs:
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: "./gradle.properties"
-          properties: "mc_version"
+          properties: "mc_version enabled_platforms"
 
       - name: Publish package
         run: ./gradlew publish --info
@@ -73,10 +73,11 @@ jobs:
         uses: Team-Resourceful/ResourcefulChangelog@v0.0.1
         with:
           release_version: ${{ steps.version.outputs.version }}
-          github_token: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
 
       ### Need to duplicate this block for fabric or abuse the files-secondary field
       - name: Upload Forge Releases (Curse/Modrinth/Github)
+        if: contains(steps.props.outputs.enabled_platforms, 'forge')
         uses: Kir-Antipov/mc-publish@v3.2
         with:
           curseforge-id: ${{ vars.CURSE_ID }}
@@ -89,11 +90,32 @@ jobs:
           github-token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
 
           files: ./forge/build/libs/!(*-@(dev|sources|dev-shadow)).jar
-          name: ""
+          name: "[Forge] Resourceful Bees ${{ steps.version.outputs.version }}"
           version: ${{ steps.version.outputs.version }}
           changelog-file: changelog.md
           loaders: forge
           game-versions: ${{ steps.mc_version.outputs.mc_version }}
+          version-resolver: exact
+
+      - name: Upload Fabric Releases (Curse/Modrinth/Github)
+        if: contains(steps.props.outputs.enabled_platforms, 'fabric')
+        uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          curseforge-id: ${{ vars.CURSE_ID }}
+          curseforge-token: ${{ secrets.CURSE_API_KEY }}
+
+          modrinth-id: ${{ vars.MODRINTH_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
+
+          github-tag: "v${{ steps.version.outputs.version }}"
+          github-token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
+
+          files: ./fabric/build/libs/!(*-@(dev|sources|dev-shadow)).jar
+          name: "[Fabric] Resourceful Bees ${{ steps.version.outputs.version }}"
+          version: ${{ steps.version.outputs.version }}
+          changelog-file: changelog.md
+          loaders: fabric
+          game-versions: ${{ steps.props.outputs.mc_version }}
           version-resolver: exact
 
       - name: Update Readme
