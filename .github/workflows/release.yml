@@ -86,7 +86,7 @@ jobs:
           modrinth-id: ${{ vars.MODRINTH_ID }}
           modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
 
-          github-tag: "v${{ steps.version.outputs.version }}"
+          github-tag: "v${{ steps.version.outputs.version }}-forge"
           github-token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
 
           files: ./forge/build/libs/!(*-@(dev|sources|dev-shadow)).jar
@@ -107,7 +107,7 @@ jobs:
           modrinth-id: ${{ vars.MODRINTH_ID }}
           modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
 
-          github-tag: "v${{ steps.version.outputs.version }}"
+          github-tag: "v${{ steps.version.outputs.version }}-fabric"
           github-token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
 
           files: ./fabric/build/libs/!(*-@(dev|sources|dev-shadow)).jar
@@ -124,7 +124,7 @@ jobs:
           mv -f ./build/README.md .
 
       - name: Create Discord Embed
-        run: ./gradlew injectDiscordEmbed
+        run: ./gradlew injectDiscordEmbed --escapeBackslash
 
       - name: Send Discord Webhook
         uses: tsickert/discord-webhook@v5.3.0
