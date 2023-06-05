@@ -1,3 +1,7 @@
+# -----{ 1.0.0-alpha.20 }-----
+- Fixed Inputs not auto-processing next available recipe (watch recipe input amounts!)
+- Added position validation for Energy Inputs - sides-only for now.
+
 # -----{ 1.0.0-alpha.19 }-----
 - Fixed `generateDefaults` config value being automatically set to false too early in load process.
   - This caused default trait files to not get copied over and used.

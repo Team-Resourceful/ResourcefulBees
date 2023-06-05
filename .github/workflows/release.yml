@@ -69,11 +69,11 @@ jobs:
           MAVEN_USER: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASS: ${{ secrets.MAVEN_PASSWORD }}
 
-      - name: Update Changelog
-        uses: Team-Resourceful/ResourcefulChangelog@v0.0.1
-        with:
-          release_version: ${{ steps.version.outputs.version }}
-          github_token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
+      #- name: Update Changelog
+      #  uses: Team-Resourceful/ResourcefulChangelog@v0.0.1
+      #  with:
+      #    release_version: ${{ steps.version.outputs.version }}
+      #    github_token: ${{ secrets.TEAM_RESOURCEFUL_BOT }}
 
       ### Need to duplicate this block for fabric or abuse the files-secondary field
       - name: Upload Forge Releases (Curse/Modrinth/Github)
