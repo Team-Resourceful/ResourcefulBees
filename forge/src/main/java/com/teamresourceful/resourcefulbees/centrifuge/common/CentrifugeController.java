@@ -158,14 +158,15 @@ public class CentrifugeController extends MultiblockController<AbstractCentrifug
         for (CentrifugeInputEntity input : inputs.values()) {
             if (input.getBlockPos().getY() != max().y()) throwValidationException(CentrifugeTranslations.INPUT_NOT_ON_TOP);
         }
-        for (CentrifugeItemOutputEntity itemOutput : itemOutputs.values()) {
-            if (itemOutput.getBlockPos().getY() == max().y()) throwValidationException(itemOutput.getBlockPos());
-        }
-        for (CentrifugeFluidOutputEntity fluidOutputOutput : fluidOutputs.values()) {
-            if (fluidOutputOutput.getBlockPos().getY() == max().y()) throwValidationException(fluidOutputOutput.getBlockPos());
-        }
-        for (CentrifugeVoidEntity filter : filters.values()) {
-            if (filter.getBlockPos().getY() == max().y()) throwValidationException(filter.getBlockPos());
+        validateSidesOnly(itemOutputs.values());
+        validateSidesOnly(fluidOutputs.values());
+        validateSidesOnly(filters.values());
+        validateSidesOnly(energyPorts);
+    }
+
+    private void validateSidesOnly(Collection<? extends AbstractTieredCentrifugeEntity> entities) throws ValidationException {
+        for (AbstractTieredCentrifugeEntity entity : entities) {
+            if (entity.getBlockPos().getY() == max().y()) throwValidationException(entity.getBlockPos());
         }
     }
 
