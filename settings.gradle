@@ -12,6 +12,6 @@ plugins {
     id 'com.teamresourceful.resourcefulsettings' version '0.0.7'
 }
 
-include("common", "fabric", "forge")
+include("common", "forge")
 
 rootProject.name = "Resourceful Bees"
