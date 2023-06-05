@@ -161,7 +161,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     private boolean canProcess() {
         if (!itemOutputs.allLinked() && !fluidOutputs.allLinked()) return false;
         if (filterRecipe != null) return inventoryHandler.consumeInputs(true, filterRecipe);
-        if (tempRecipe == null) getTempRecipe();
+        if (tempRecipe == null || !inventoryHandler.consumeInputs(true, tempRecipe)) getTempRecipe();
         return tempRecipe != null && inventoryHandler.consumeInputs(true, tempRecipe);
     }
 
@@ -171,13 +171,15 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
             processCompleted();
             return;
         }
-        setProcessStage(ProcessStage.PROCESSING);
         processRecipe = recipe;
         processRecipeID = processRecipe.getId();
         processData.setTime(getRecipeTime());
         processData.setEnergy((int) (processRecipe.energyPerTick() * this.controller().getRecipePowerModifier()));
         inventoryHandler.consumeInputs(false, processRecipe);
         setChanged();
+        //setProcessStage is now called last due to the sync packet being sent and re-ticking the process
+        // this prevents certain information from being out of sync or delayed by a tick on the client
+        setProcessStage(ProcessStage.PROCESSING);
     }
 
     private void processRecipe() {
@@ -302,6 +304,8 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         tag.putString(NBTConstants.NBT_PROCESS_STAGE, processStage.toString().toLowerCase(Locale.ROOT));
         tag.put(NBTConstants.NBT_ITEM_OUTPUTS, itemOutputs.serialize());
         tag.put(NBTConstants.NBT_FLUID_OUTPUTS, fluidOutputs.serialize());
+        if (processRecipe != null && processRecipeID != null) tag.putString(NBTConstants.NBT_PROCESS_RECIPE, processRecipeID.toString());
+        if (filterRecipe != null && filterRecipeID != null) tag.putString(NBTConstants.NBT_FILTER_RECIPE, filterRecipeID.toString());
         return tag;
     }
 
@@ -310,6 +314,8 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         if (tag.contains(NBTConstants.NBT_PROCESS_STAGE)) processStage = ProcessStage.deserialize(tag);
         itemOutputs.deserialize(tag.getCompound(NBTConstants.NBT_ITEM_OUTPUTS), CentrifugeItemOutputEntity.class, this::getLevel);
         fluidOutputs.deserialize(tag.getCompound(NBTConstants.NBT_FLUID_OUTPUTS), CentrifugeFluidOutputEntity.class, this::getLevel);
+        if (tag.contains(NBTConstants.NBT_PROCESS_RECIPE)) processRecipeID = ResourceLocation.tryParse(tag.getString(NBTConstants.NBT_PROCESS_RECIPE));
+        if (tag.contains(NBTConstants.NBT_FILTER_RECIPE)) filterRecipeID = ResourceLocation.tryParse(tag.getString(NBTConstants.NBT_FILTER_RECIPE));
     }
 
     //endregion
