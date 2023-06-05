@@ -11,7 +11,9 @@ dependencies {
 }
 
 architectury {
-    common(enabled_platforms.split(","))
+    //this should be using `enabled_platforms.split(",")`
+    // however need to temporarily hold off until I can figure out why it causes publish failures
+    common("fabric", "forge")
 }
 
 loom {
