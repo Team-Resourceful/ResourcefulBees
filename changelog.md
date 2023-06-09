@@ -1,5 +1,8 @@
+# -----{ 1.0.0-alpha.21 }-----
+- re-release of alpha.20 due to broken workflow
+
 # -----{ 1.0.0-alpha.20 }-----
-- Fixed Inputs not auto-processing next available recipe (watch recipe input amounts!)
+- Fixed Centrifuge Inputs not auto-processing next available recipe (watch recipe input amounts!)
 - Added position validation for Energy Inputs - sides-only for now.
 
 # -----{ 1.0.0-alpha.19 }-----

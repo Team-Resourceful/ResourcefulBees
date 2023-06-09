@@ -57,7 +57,7 @@ jobs:
           properties: "version"
 
       - name: Get MC Version
-        id: mc_version
+        id: props
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: "./gradle.properties"
@@ -94,7 +94,7 @@ jobs:
           version: ${{ steps.version.outputs.version }}
           changelog-file: changelog.md
           loaders: forge
-          game-versions: ${{ steps.mc_version.outputs.mc_version }}
+          game-versions: ${{ steps.props.outputs.mc_version }}
           version-resolver: exact
 
       - name: Upload Fabric Releases (Curse/Modrinth/Github)
