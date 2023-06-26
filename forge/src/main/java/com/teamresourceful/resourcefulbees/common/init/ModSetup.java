@@ -2,11 +2,13 @@ package com.teamresourceful.resourcefulbees.common.init;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.platform.common.events.RegisterHiveBreakBlocksEvent;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.packs.FolderPackResources;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.packs.FilePackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
@@ -35,7 +37,8 @@ public final class ModSetup {
         ModConstants.LOGGER.info("Setting up config paths...");
 
         try (FileWriter file = new FileWriter(Paths.get(ModPaths.RESOURCES.toAbsolutePath().toString(), "pack.mcmeta").toFile())) {
-            String mcMetaContent = "{\"pack\":{\"pack_format\":"+ PackType.CLIENT_RESOURCES.getVersion(SharedConstants.getCurrentVersion()) +",\"description\":\"Resourceful Bees resource pack used for lang purposes for the user to add lang for bee/items.\"}}";
+            int clientVersion = SharedConstants.getCurrentVersion().getPackVersion(PackType.CLIENT_RESOURCES);
+            String mcMetaContent = "{\"pack\":{\"pack_format\":" + clientVersion + ",\"description\":\"Resourceful Bees resource pack used for lang purposes for the user to add lang for bee/items.\"}}";
             file.write(mcMetaContent);
         } catch (FileAlreadyExistsException ignored) { //ignored
         } catch (IOException e) {
@@ -48,19 +51,15 @@ public final class ModSetup {
         //noinspection ConstantConditions
         if (Minecraft.getInstance() == null) return;
 
-        Minecraft.getInstance().getResourcePackRepository().addPackFinder((consumer, factory) -> {
-            final Pack packInfo = Pack.create(
-                    ModConstants.MOD_ID,
-                    true,
-                    () -> new FolderPackResources(ModPaths.RESOURCES.toFile()) {
-                        @Override
-                        public boolean isHidden() {
-                            return true;
-                        }
-                    },
-                    factory,
-                    Pack.Position.TOP,
-                    PackSource.BUILT_IN
+        Minecraft.getInstance().getResourcePackRepository().addPackFinder((consumer) -> {
+            final Pack packInfo = Pack.readMetaAndCreate(
+                ModConstants.MOD_ID,
+                Component.empty(),
+                true,
+                (input) -> new FilePackResources("builtin/resourcefulbees_pack_dev", ModPaths.RESOURCES.toFile(), true),
+                PackType.CLIENT_RESOURCES,
+                Pack.Position.TOP,
+                PackSource.BUILT_IN
             );
             if (packInfo == null) {
                 ModConstants.LOGGER.error("Failed to load resource pack, some things may not work.");

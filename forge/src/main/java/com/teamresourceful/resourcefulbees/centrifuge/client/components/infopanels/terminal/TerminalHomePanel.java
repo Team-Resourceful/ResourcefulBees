@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.terminal;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.AbstractInfoPanel;
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.TerminalCommandHandler;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeTerminalEntity;
@@ -8,6 +7,8 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.Abstr
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeState;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
+import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -41,30 +42,30 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
         if (this.commandHandler.isNeofetch()) {
-            drawASCII(stack);
-            stack.pushPose();
-            stack.translate(tX + 90d, y+20d, 0);
-            String owner = centrifugeState.getOwner()+"@centrifuge";
-            drawComponent(stack, owner, 0);
-            drawComponent(stack, StringUtils.repeat('─', owner.length()), 8);
-            drawComponent(stack, CentrifugeTranslations.MAX_TIER, StringUtils.capitalize(centrifugeState.getMaxCentrifugeTier().getName()), 16);
-            drawComponent(stack, CentrifugeTranslations.ENERGY, energyStorage.getStored(), energyStorage.getCapacity(), 24);
-            drawComponent(stack, CentrifugeTranslations.INPUTS, centrifugeState.getInputs().size(), 32);
-            drawComponent(stack, CentrifugeTranslations.ITEM_OUTPUTS, centrifugeState.getItemOutputs().size(), 40);
-            drawComponent(stack, CentrifugeTranslations.VOIDS, centrifugeState.getFilters().size(), 56);
-            drawComponent(stack, CentrifugeTranslations.FLUID_OUTPUTS, centrifugeState.getFluidOutputs().size(), 48);
-            drawComponent(stack, CentrifugeTranslations.ENERGY_PORTS, centrifugeState.getEnergyPorts(), 64);
-            drawComponent(stack, CentrifugeTranslations.GEARBOXES, centrifugeState.getGearboxes(), 72);
-            drawComponent(stack, CentrifugeTranslations.PROCESSORS, centrifugeState.getProcessors(), 80);
-            drawComponent(stack, CentrifugeTranslations.RECIPE_POWER, formatAsPercent(centrifugeState.getRecipePowerModifier()), 88);
-            drawComponent(stack, CentrifugeTranslations.RECIPE_TIME, formatAsPercent(centrifugeState.getRecipeTimeModifier()), 96);
-            stack.popPose();
-            this.commandHandler.drawInput(stack, tX + 4f, y + 135f);
+            drawASCII(graphics);
+            try (var pose = new CloseablePoseStack(graphics)) {
+                pose.translate(tX + 90d, y + 20d, 0);
+                String owner = centrifugeState.getOwner() + "@centrifuge";
+                drawComponent(graphics, owner, 0);
+                drawComponent(graphics, StringUtils.repeat('─', owner.length()), 8);
+                drawComponent(graphics, CentrifugeTranslations.MAX_TIER, StringUtils.capitalize(centrifugeState.getMaxCentrifugeTier().getName()), 16);
+                drawComponent(graphics, CentrifugeTranslations.ENERGY, energyStorage.getStored(), energyStorage.getCapacity(), 24);
+                drawComponent(graphics, CentrifugeTranslations.INPUTS, centrifugeState.getInputs().size(), 32);
+                drawComponent(graphics, CentrifugeTranslations.ITEM_OUTPUTS, centrifugeState.getItemOutputs().size(), 40);
+                drawComponent(graphics, CentrifugeTranslations.VOIDS, centrifugeState.getFilters().size(), 56);
+                drawComponent(graphics, CentrifugeTranslations.FLUID_OUTPUTS, centrifugeState.getFluidOutputs().size(), 48);
+                drawComponent(graphics, CentrifugeTranslations.ENERGY_PORTS, centrifugeState.getEnergyPorts(), 64);
+                drawComponent(graphics, CentrifugeTranslations.GEARBOXES, centrifugeState.getGearboxes(), 72);
+                drawComponent(graphics, CentrifugeTranslations.PROCESSORS, centrifugeState.getProcessors(), 80);
+                drawComponent(graphics, CentrifugeTranslations.RECIPE_POWER, formatAsPercent(centrifugeState.getRecipePowerModifier()), 88);
+                drawComponent(graphics, CentrifugeTranslations.RECIPE_TIME, formatAsPercent(centrifugeState.getRecipeTimeModifier()), 96);
+            }
+            this.commandHandler.drawInput(graphics, tX + 4, y + 135);
         } else {
-            this.commandHandler.render(stack, tX, y);
+            this.commandHandler.render(graphics, tX, y);
         }
     }
 
@@ -82,24 +83,24 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
         return true;
     }
 
-    private void drawASCII(@NotNull PoseStack stack) {
-        stack.pushPose();
-        stack.translate(tX - 10d, y+20d, 0);
-        stack.scale(0.8f, 0.8f, 0.8f);
-        drawComponent(stack, "     ^^      .-=-=-=-.  ^^", 24);
-        drawComponent(stack, " ^^        (`-=-=-=-=-`)", 32);
-        drawComponent(stack, "         (`-=-=-=-=-=-=-`)  ^^", 40);
-        drawComponent(stack, "   ^^   (`-=-=-=-=-=-=-=-`)   ^^", 48);
-        drawComponent(stack, "       (`-=-=-=-=(@)=-=-=-`)", 56);
-        drawComponent(stack, "       (`-=-=-=-=-=-=-=-=-`)  ^^", 64);
-        drawComponent(stack, "       (`-=-=-=-=-=-=-=-=-`)", 72);
-        drawComponent(stack, "       (`-=-=-=-=-=-=-=-=-`)", 80);
-        drawComponent(stack, "       (`-=-=-=-=-=-=-=-=-`)  ^^", 88);
-        drawComponent(stack, "        (`-=-=-=-=-=-=-=-`)", 96);
-        drawComponent(stack, "         (`-=-=-=-=-=-=-`)  ^^", 104);
-        drawComponent(stack, "           (`-=-=-=-=-`)", 112);
-        drawComponent(stack, "            `-=-=-=-=-`", 120);
-        stack.popPose();
+    private void drawASCII(@NotNull GuiGraphics graphics) {
+        try (var pose = new CloseablePoseStack(graphics)) {
+            pose.translate(tX - 10d, y + 20d, 0);
+            pose.scale(0.8f, 0.8f, 0.8f);
+            drawComponent(graphics, "     ^^      .-=-=-=-.  ^^", 24);
+            drawComponent(graphics, " ^^        (`-=-=-=-=-`)", 32);
+            drawComponent(graphics, "         (`-=-=-=-=-=-=-`)  ^^", 40);
+            drawComponent(graphics, "   ^^   (`-=-=-=-=-=-=-=-`)   ^^", 48);
+            drawComponent(graphics, "       (`-=-=-=-=(@)=-=-=-`)", 56);
+            drawComponent(graphics, "       (`-=-=-=-=-=-=-=-=-`)  ^^", 64);
+            drawComponent(graphics, "       (`-=-=-=-=-=-=-=-=-`)", 72);
+            drawComponent(graphics, "       (`-=-=-=-=-=-=-=-=-`)", 80);
+            drawComponent(graphics, "       (`-=-=-=-=-=-=-=-=-`)  ^^", 88);
+            drawComponent(graphics, "        (`-=-=-=-=-=-=-=-`)", 96);
+            drawComponent(graphics, "         (`-=-=-=-=-=-=-`)  ^^", 104);
+            drawComponent(graphics, "           (`-=-=-=-=-`)", 112);
+            drawComponent(graphics, "            `-=-=-=-=-`", 120);
+        }
     }
 
     public void addResponse(Component response) {
@@ -110,24 +111,24 @@ public class TerminalHomePanel extends AbstractInfoPanel<CentrifugeTerminalEntit
         return NumberFormat.getPercentInstance().format(value);
     }
 
-    private static void drawComponent(PoseStack stack, String translation, int arg, int y) {
-        drawComponent(stack, Component.translatable(translation, arg), y);
+    private static void drawComponent(GuiGraphics graphics, String translation, int arg, int y) {
+        drawComponent(graphics, Component.translatable(translation, arg), y);
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static void drawComponent(PoseStack stack, String translation, int arg, int arg2, int y) {
-        drawComponent(stack, Component.translatable(translation, arg, arg2), y);
+    private static void drawComponent(GuiGraphics graphics, String translation, int arg, int arg2, int y) {
+        drawComponent(graphics, Component.translatable(translation, arg, arg2), y);
     }
 
-    private static void drawComponent(PoseStack stack, String translation, String arg, int y) {
-        drawComponent(stack, Component.translatable(translation, arg), y);
+    private static void drawComponent(GuiGraphics graphics, String translation, String arg, int y) {
+        drawComponent(graphics, Component.translatable(translation, arg), y);
     }
 
-    private static void drawComponent(PoseStack stack, Component component, int y) {
-        TERMINAL_FONT_8.draw(stack, component, 6, y, FONT_COLOR_1);
+    private static void drawComponent(GuiGraphics graphics, Component component, int y) {
+        graphics.drawString(TERMINAL_FONT_8, component, 6, y, FONT_COLOR_1, false);
     }
 
-    private static void drawComponent(PoseStack stack, String component, int y) {
-        TERMINAL_FONT_8.draw(stack, component, 6, y, FONT_COLOR_1);
+    private static void drawComponent(GuiGraphics graphics, String component, int y) {
+        graphics.drawString(TERMINAL_FONT_8, component, 6, y, FONT_COLOR_1, false);
     }
 }

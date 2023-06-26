@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import com.teamresourceful.resourcefullib.common.item.OptionalItemStack;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
@@ -33,7 +33,7 @@ public record HiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees, Map
     public static Codec<HiveRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
-                HolderSetCodec.of(Registry.ENTITY_TYPE).fieldOf("bees").forGetter(HiveRecipe::bees),
+                HolderSetCodec.of(BuiltInRegistries.ENTITY_TYPE).fieldOf("bees").forGetter(HiveRecipe::bees),
                 Codec.unboundedMap(BeehiveTier.CODEC, ItemStackCodec.CODEC).fieldOf("hiveCombs").orElseGet(HashMap::new).forGetter(HiveRecipe::hiveCombs),
                 Codec.unboundedMap(ApiaryTier.CODEC, ItemStackCodec.CODEC).fieldOf("apiaryCombs").orElseGet(HashMap::new).forGetter(HiveRecipe::apiaryCombs)
         ).apply(instance, HiveRecipe::new));
@@ -47,7 +47,7 @@ public record HiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees, Map
     }
 
     public static Optional<ItemStack> getHiveOutput(BeehiveTier tier, Entity entity) {
-        Optional<HiveRecipe> recipe = findRecipe(entity.level.getRecipeManager(), entity.getType());
+        Optional<HiveRecipe> recipe = findRecipe(entity.level().getRecipeManager(), entity.getType());
         return OptionalItemStack.ofNullable(recipe.map(t -> t.getHiveOutput(tier)).orElseGet(() -> {
             if (entity instanceof BeeCompat compat) {
                 return compat.getHiveOutput(tier);
@@ -57,7 +57,7 @@ public record HiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees, Map
     }
 
     public static Optional<ItemStack> getApiaryOutput(ApiaryTier tier, Entity entity) {
-        Optional<HiveRecipe> recipe = findRecipe(entity.level.getRecipeManager(), entity.getType());
+        Optional<HiveRecipe> recipe = findRecipe(entity.level().getRecipeManager(), entity.getType());
         return OptionalItemStack.ofNullable(recipe.map(t -> t.getApiaryOutput(tier)).orElseGet(() -> {
             if (entity instanceof BeeCompat compat) {
                 return compat.getApiaryOutput(tier);

@@ -1,42 +1,58 @@
 package com.teamresourceful.resourcefulbees.client.rendering.pet;
 
-import com.teamresourceful.resourcefulbees.client.pets.PetBeeModel;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefulbees.client.pets.PetModelData;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import net.minecraft.client.renderer.RenderType;
+import org.joml.Matrix4f;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoObjectRenderer;
 
-public class PetBeeRenderer implements IGeoRenderer<PetModelData> {
+public class PetBeeRenderer extends GeoObjectRenderer<PetModelData> {
 
-    private MultiBufferSource rtb;
+    private GeoModel<PetModelData> model;
 
-    @Override
-    public void setCurrentRTB(MultiBufferSource rtb) {
-        this.rtb = rtb;
+    public PetBeeRenderer() {
+        super(null);
     }
 
     @Override
-    public MultiBufferSource getCurrentRTB() {
-        return rtb;
+    public GeoModel<PetModelData> getGeoModel() {
+        return this.model;
+    }
+
+    public void setGeoModel(GeoModel<PetModelData> model) {
+        this.model = model;
     }
 
     @Override
-    public PetBeeModel<PetModelData> getGeoModelProvider() {
-        return null;
-    }
+    public void actuallyRender(
+        PoseStack poseStack, PetModelData data, BakedGeoModel model, RenderType renderType,
+        MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick,
+        int packedLight, int packedOverlay, float red, float green, float blue, float alpha
+    ) {
+        if (getGeoModel() == null) return;
+        poseStack.pushPose();
 
-    @Override
-    public ResourceLocation getTextureLocation(PetModelData instance) {
-        return instance.getTexture();
-    }
+        if (!isReRender) {
+            AnimationState<PetModelData> animationState = new AnimationState<>(data, 0, 0, partialTick, false);
+            long instanceId = getInstanceId(animatable);
 
-    @Override
-    public ResourceLocation getTextureResource(PetModelData instance) {
-        return instance.getTexture();
-    }
+            getGeoModel().addAdditionalStateData(animatable, instanceId, animationState::setData);
+            getGeoModel().handleAnimations(animatable, instanceId, animationState);
+        }
 
-    @Override
-    public int getInstanceId(PetModelData animatable) {
-        return animatable.getId().hashCode();
+        this.modelRenderTranslations = new Matrix4f(poseStack.last().pose());
+
+        updateAnimatedTextureFrame(data);
+        for (GeoBone group : model.topLevelBones()) {
+            renderRecursively(poseStack, data, group, renderType, bufferSource, buffer, isReRender, partialTick, packedLight,
+                packedOverlay, red, green, blue, alpha);
+        }
+        poseStack.popPose();
     }
 }

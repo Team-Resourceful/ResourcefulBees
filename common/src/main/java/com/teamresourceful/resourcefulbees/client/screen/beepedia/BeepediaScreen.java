@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.client.screen.beepedia;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
@@ -26,7 +25,7 @@ import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.Cre
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.state.ScreenStateManager;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -37,7 +36,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.function.Function;
 
 public class BeepediaScreen extends SubdividedScreen {
@@ -71,17 +69,15 @@ public class BeepediaScreen extends SubdividedScreen {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        renderBackground(stack);
-        super.render(stack, mouseX, mouseY, partialTicks);
-        renderTooltip(stack, getTooltip(mouseX, mouseY), Optional.empty(), mouseX, mouseY);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     @Override
-    public void renderScreen(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        RenderUtils.bindTexture(BACKGROUND);
-        blit(stack, 0, 0, 0, 0, 328, 200, 328, 200);
-        super.renderScreen(stack, mouseX, mouseY, partialTicks);
+    public void renderScreen(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        graphics.blit(BACKGROUND, 0, 0, 0, 0, 328, 200, 328, 200);
+        super.renderScreen(graphics, mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -124,13 +120,13 @@ public class BeepediaScreen extends SubdividedScreen {
             case TRAITS -> TraitRegistry.get()
                     .getStreamOfTraits()
                     .filter(trait -> getState().getSearch() == null || trait.name().toLowerCase(Locale.ROOT).contains(getState().getSearch().toLowerCase(Locale.ROOT)))
-                    .sorted((o1, o2) -> getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isUnset() ? 0 : o1.name().compareTo(o2.name()) * (getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isFalse() ? -1 : 1))
+                    .sorted((o1, o2) -> getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isUndefined() ? 0 : o1.name().compareTo(o2.name()) * (getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isFalse() ? -1 : 1))
                     .map(trait -> new ItemEntry<>(trait, a -> new ItemStack(a.displayItem()), Trait::getDisplayName))
                     .toList();
             case HONEY -> HoneyRegistry.get()
                     .getStreamOfHoney()
                     .filter(honey -> getState().getSearch() == null || honey.name().toLowerCase(Locale.ROOT).contains(getState().getSearch().toLowerCase(Locale.ROOT)))
-                    .sorted((o1, o2) -> getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isUnset() ? 0 : o1.name().compareTo(o2.name()) * (getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isFalse() ? -1 : 1))
+                    .sorted((o1, o2) -> getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isUndefined() ? 0 : o1.name().compareTo(o2.name()) * (getState().getSorting(BeepediaState.Sorting.ALPHABETICAL).isFalse() ? -1 : 1))
                     .map(honey -> new ItemEntry<>(honey, a -> new ItemStack(honey.getBottleData().bottle().get()), a -> honey.displayName()))
                     .toList();
         };
@@ -150,7 +146,7 @@ public class BeepediaScreen extends SubdividedScreen {
     }
 
     public static <T extends Comparable<T>> Comparator<CustomBeeData> sortBee(BeepediaState state, BeepediaState.Sorting sorting, Function<CustomBeeData, T> comparator) {
-        return (o1, o2) -> state.getSorting(sorting).isUnset() ? 0 : comparator.apply(o1).compareTo(comparator.apply(o2)) * (state.getSorting(sorting).isFalse() ? -1 : 1);
+        return (o1, o2) -> state.getSorting(sorting).isUndefined() ? 0 : comparator.apply(o1).compareTo(comparator.apply(o2)) * (state.getSorting(sorting).isFalse() ? -1 : 1);
     }
 
     public void updateSelection(ListEntry entry) {

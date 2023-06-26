@@ -27,14 +27,14 @@ public abstract class ProductiveBeeMixin extends Bee implements BeeCompat {
 
     @Override
     public ItemStack getHiveOutput(BeehiveTier tier) {
-        List<ItemStack> output = ProductiveBeesCompat.getBeeProduce(this.level, this, false);
+        List<ItemStack> output = ProductiveBeesCompat.getBeeProduce(this.level(), this, false);
         if (output.isEmpty()) return ItemStack.EMPTY;
         return output.get(this.getRandom().nextInt(output.size()));
     }
 
     @Override
     public ItemStack getApiaryOutput(ApiaryTier tier) {
-        List<ItemStack> output = ProductiveBeesCompat.getBeeProduce(this.level, this, true);
+        List<ItemStack> output = ProductiveBeesCompat.getBeeProduce(this.level(), this, true);
         if (output.isEmpty()) return ItemStack.EMPTY;
         return output.get(this.getRandom().nextInt(output.size()));
     }

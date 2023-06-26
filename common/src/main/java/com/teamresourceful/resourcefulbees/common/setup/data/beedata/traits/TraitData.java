@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
-import com.teamresourceful.resourcefulbees.api.data.trait.DamageType;
+import com.teamresourceful.resourcefulbees.api.data.trait.TraitDamageType;
 import com.teamresourceful.resourcefulbees.api.data.trait.PotionEffect;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.api.registry.TraitRegistry;
@@ -24,7 +24,7 @@ public record TraitData(
         Set<PotionEffect> potionDamageEffects,
         Set<String> damageImmunities,
         Set<MobEffect> potionImmunities,
-        Set<DamageType> damageTypes,
+        Set<TraitDamageType> damageTypes,
         Set<String> specialAbilities,
         Set<ParticleType<?>> particleEffects,
         Set<Aura> auras
@@ -41,7 +41,7 @@ public record TraitData(
         Set<PotionEffect> potionDamageEffects = new HashSet<>();
         Set<String> damageImmunities = new HashSet<>();
         Set<MobEffect> potionImmunities = new HashSet<>();
-        Set<DamageType> damageTypes = new HashSet<>();
+        Set<TraitDamageType> damageTypes = new HashSet<>();
         Set<String> specialAbilities = new HashSet<>();
         Set<ParticleType<?>> particleEffects = new HashSet<>();
         Set<Aura> auras = new HashSet<>();

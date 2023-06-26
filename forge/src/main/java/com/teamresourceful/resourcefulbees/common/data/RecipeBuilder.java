@@ -25,7 +25,7 @@ import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -55,28 +55,28 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         if (RecipeConfig.honeycombBlockRecipes) {
             ModConstants.LOGGER.info("Generating comb recipes for {} honeycombs...", com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.getEntries().size());
             com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.getEntries().stream()
-                    .map(RegistryEntry::get)
-                    .filter(item -> item instanceof CustomHoneycombItem)
-                    .map(item -> (CustomHoneycombItem) item)
-                    .filter(CustomHoneycombItem::hasStorageBlockItem)
-                    .flatMap(comb -> Stream.of(makeHoneycombRecipe(comb), makeCombBlockToCombRecipe(comb)))
-                    .forEach(this::addRecipe);
+                .map(RegistryEntry::get)
+                .filter(item -> item instanceof CustomHoneycombItem)
+                .map(item -> (CustomHoneycombItem) item)
+                .filter(CustomHoneycombItem::hasStorageBlockItem)
+                .flatMap(comb -> Stream.of(makeHoneycombRecipe(comb), makeCombBlockToCombRecipe(comb)))
+                .forEach(this::addRecipe);
         }
 
         if (RecipeConfig.honeyBlockRecipes) {
             HoneyRegistry.get().getStreamOfHoney()
-                    .flatMap(data ->
-                        Stream.of(
-                            makeHoneyBlockRecipe(data),
-                            makeHoneyBottleRecipe(data),
-                            makeBottleToBucketRecipe(data),
-                            makeBucketToBottleRecipe(data),
-                            makeBlockToBucketRecipe(data),
-                            makeBucketToBlockRecipe(data),
-                            makeFluidToBlockRecipe(data)
-                        )
+                .flatMap(data ->
+                    Stream.of(
+                        makeHoneyBlockRecipe(data),
+                        makeHoneyBottleRecipe(data),
+                        makeBottleToBucketRecipe(data),
+                        makeBucketToBottleRecipe(data),
+                        makeBlockToBucketRecipe(data),
+                        makeBucketToBlockRecipe(data),
+                        makeFluidToBlockRecipe(data)
                     )
-                    .forEach(this::addRecipe);
+                )
+                .forEach(this::addRecipe);
         }
 
         ResourcefulBeesAPI.getRegistry().getBeeRegistry()
@@ -140,44 +140,47 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     private Recipe<?> makeHoneycombRecipe(CustomHoneycombItem comb) {
         Ingredient honeycombItem = Ingredient.of(comb);
         return new ShapedRecipe(
-                Objects.requireNonNull(Registry.ITEM.getKey(comb.getStorageBlockItem())),
-                "",
-                2,
-                2,
-                NonNullList.of(Ingredient.EMPTY,
-                        honeycombItem, honeycombItem,
-                        honeycombItem, honeycombItem
-                ),
-                new ItemStack(comb.getStorageBlockItem())
+            Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(comb.getStorageBlockItem())),
+            "",
+            CraftingBookCategory.MISC,
+            2,
+            2,
+            NonNullList.of(Ingredient.EMPTY,
+                honeycombItem, honeycombItem,
+                honeycombItem, honeycombItem
+            ),
+            new ItemStack(comb.getStorageBlockItem())
         );
     }
 
     private Recipe<?> makeHoneyBlockRecipe(CustomHoneyData info) {
         Ingredient honeyBottleItem = IngredientUtils.of(info.getBottleData().bottle());
         return new ShapedRecipe(
-                new ResourceLocation(ModConstants.MOD_ID, info.name() + "_honey_block"),
-                "",
-                2,
-                2,
-                NonNullList.of(Ingredient.EMPTY,
-                        honeyBottleItem, honeyBottleItem,
-                        honeyBottleItem, honeyBottleItem
-                ),
-                new ItemStack(info.getBlockData().blockItem().get())
+            new ResourceLocation(ModConstants.MOD_ID, info.name() + "_honey_block"),
+            "",
+            CraftingBookCategory.MISC,
+            2,
+            2,
+            NonNullList.of(Ingredient.EMPTY,
+                honeyBottleItem, honeyBottleItem,
+                honeyBottleItem, honeyBottleItem
+            ),
+            new ItemStack(info.getBlockData().blockItem().get())
         );
     }
 
     private Recipe<?> makeBottleToBucketRecipe(CustomHoneyData info) {
         Ingredient honeyBottleItem = IngredientUtils.of(info.getBottleData().bottle());
         return new ShapelessRecipe(
-                new ResourceLocation(ModConstants.MOD_ID, info.name() + "_bottle_to_bucket"),
-                "",
-                new ItemStack(info.getFluidData().fluidBucket().get()),
-                NonNullList.of(Ingredient.EMPTY,
-                        Ingredient.of(Items.BUCKET), honeyBottleItem,
-                        honeyBottleItem, honeyBottleItem,
-                        honeyBottleItem
-                )
+            new ResourceLocation(ModConstants.MOD_ID, info.name() + "_bottle_to_bucket"),
+            "",
+            CraftingBookCategory.MISC,
+            new ItemStack(info.getFluidData().fluidBucket().get()),
+            NonNullList.of(Ingredient.EMPTY,
+                Ingredient.of(Items.BUCKET), honeyBottleItem,
+                honeyBottleItem, honeyBottleItem,
+                honeyBottleItem
+            )
         );
     }
 
@@ -185,14 +188,15 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         Ingredient honeyBucketItem = IngredientUtils.of(info.getFluidData().fluidBucket());
         Ingredient bottleItem = Ingredient.of(Items.GLASS_BOTTLE);
         return new ShapelessRecipe(
-                new ResourceLocation(ModConstants.MOD_ID, info.name() + "_bucket_to_bottle"),
-                "",
-                new ItemStack(info.getBottleData().bottle().get(), 4),
-                NonNullList.of(Ingredient.EMPTY,
-                        bottleItem, bottleItem,
-                        bottleItem, bottleItem,
-                        honeyBucketItem
-                )
+            new ResourceLocation(ModConstants.MOD_ID, info.name() + "_bucket_to_bottle"),
+            "",
+            CraftingBookCategory.MISC,
+            new ItemStack(info.getBottleData().bottle().get(), 4),
+            NonNullList.of(Ingredient.EMPTY,
+                bottleItem, bottleItem,
+                bottleItem, bottleItem,
+                honeyBucketItem
+            )
         );
     }
 
@@ -200,30 +204,32 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         Ingredient honeyBlockItem = IngredientUtils.of(info.getBlockData().blockItem());
         Ingredient bucketItem = Ingredient.of(Items.BUCKET);
         return new ShapelessRecipe(
-                new ResourceLocation(ModConstants.MOD_ID, info.name() + "_block_to_bucket"),
-                "",
-                new ItemStack(info.getFluidData().fluidBucket().get()),
-                NonNullList.of(Ingredient.EMPTY,
-                        honeyBlockItem, bucketItem
-                )
+            new ResourceLocation(ModConstants.MOD_ID, info.name() + "_block_to_bucket"),
+            "",
+            CraftingBookCategory.MISC,
+            new ItemStack(info.getFluidData().fluidBucket().get()),
+            NonNullList.of(Ingredient.EMPTY,
+                honeyBlockItem, bucketItem
+            )
         );
     }
 
     private Recipe<?> makeFluidToBlockRecipe(CustomHoneyData info) {
         return new SolidificationRecipe(
-                new ResourceLocation(ModConstants.MOD_ID, info.name() + "_fluid_to_block"),
-                new FluidStack(info.getFluidData().stillFluid().get(), 1000),
-                new ItemStack(info.getBlockData().blockItem().get())
+            new ResourceLocation(ModConstants.MOD_ID, info.name() + "_fluid_to_block"),
+            new FluidStack(info.getFluidData().stillFluid().get(), 1000),
+            new ItemStack(info.getBlockData().blockItem().get())
         );
     }
 
     private Recipe<?> makeBucketToBlockRecipe(CustomHoneyData info) {
         Ingredient honeyBucketItem = IngredientUtils.of(info.getFluidData().fluidBucket());
         return new ShapelessRecipe(
-                new ResourceLocation(ModConstants.MOD_ID, info.name() + "_bucket_to_block"),
-                "",
-                new ItemStack(info.getBlockData().blockItem().get()),
-                NonNullList.of(Ingredient.EMPTY, honeyBucketItem)
+            new ResourceLocation(ModConstants.MOD_ID, info.name() + "_bucket_to_block"),
+            "",
+            CraftingBookCategory.MISC,
+            new ItemStack(info.getBlockData().blockItem().get()),
+            NonNullList.of(Ingredient.EMPTY, honeyBucketItem)
         );
     }
 
@@ -231,28 +237,30 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         Ingredient honeyBlockItem = IngredientUtils.of(info.getBlockData().blockItem());
         Ingredient bottleItem = Ingredient.of(Items.GLASS_BOTTLE);
         return new ShapelessRecipe(
-                new ResourceLocation(ModConstants.MOD_ID, info.name() + "_honey_bottle"),
-                "",
-                new ItemStack(info.getBottleData().bottle().get(), 4),
-                NonNullList.of(Ingredient.EMPTY,
-                        honeyBlockItem, bottleItem,
-                        bottleItem, bottleItem,
-                        bottleItem
-                )
+            new ResourceLocation(ModConstants.MOD_ID, info.name() + "_honey_bottle"),
+            "",
+            CraftingBookCategory.MISC,
+            new ItemStack(info.getBottleData().bottle().get(), 4),
+            NonNullList.of(Ingredient.EMPTY,
+                honeyBlockItem, bottleItem,
+                bottleItem, bottleItem,
+                bottleItem
+            )
         );
     }
 
     private Recipe<?> makeCombBlockToCombRecipe(CustomHoneycombItem comb) {
         return new ShapelessRecipe(
-                Objects.requireNonNull(Registry.ITEM.getKey(comb)),
-                "",
-                new ItemStack(comb, 4),
-                NonNullList.of(Ingredient.EMPTY, Ingredient.of(comb.getStorageBlockItem()))
+            Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(comb)),
+            "",
+            CraftingBookCategory.MISC,
+            new ItemStack(comb, 4),
+            NonNullList.of(Ingredient.EMPTY, Ingredient.of(comb.getStorageBlockItem()))
         );
     }
 
     public static RecipeManagerAccessor getRecipeManager() {
-        RecipeManagerAccessor recipeManagerInvoker = (RecipeManagerAccessor)recipeManager;
+        RecipeManagerAccessor recipeManagerInvoker = (RecipeManagerAccessor) recipeManager;
         if (!recipeManagerInvoker.getRecipes().getClass().equals(HashMap.class)) {
             recipeManagerInvoker.setRecipes(new HashMap<>(recipeManagerInvoker.getRecipes()));
             recipeManagerInvoker.getRecipes().replaceAll((t, v) -> new HashMap<>(recipeManagerInvoker.getRecipes().get(t)));

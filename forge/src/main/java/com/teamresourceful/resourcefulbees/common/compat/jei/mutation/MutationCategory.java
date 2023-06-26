@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei.mutation;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.util.displays.EntityDisplay;
 import com.teamresourceful.resourcefulbees.client.util.displays.FluidDisplay;
@@ -25,6 +24,7 @@ import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -45,9 +45,9 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
 
     public MutationCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
-                JeiTranslations.MUTATIONS,
-                guiHelper.drawableBuilder(GUI_BACK, -12, 0, 117, 75).build(),
-                guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModItems.BEE_BOX.get())));
+            JeiTranslations.MUTATIONS,
+            guiHelper.drawableBuilder(GUI_BACK, -12, 0, 117, 75).build(),
+            guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModItems.BEE_BOX.get())));
     }
 
     public static List<MutationRecipe> getMutationRecipes(Level level) {
@@ -65,24 +65,27 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull MutationRecipe recipe, @NotNull IFocusGroup focuses) {
         IRecipeSlotBuilder input = builder.addSlot(RecipeIngredientRole.INPUT, 16, 53)
-                .setSlotName("input")
-                .addTooltipCallback(getToolTip(recipe));
+            .setSlotName("input")
+            .addTooltipCallback(getToolTip(recipe));
 
         if (recipe.input() instanceof ItemDisplay itemRender) input.addItemStack(itemRender.displayedItem());
         if (recipe.input() instanceof FluidDisplay fluidRender) input.addFluidStack(fluidRender.displayedFluid(), 1000);
-        if (recipe.input() instanceof EntityDisplay entityRender) input.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.displayedEntity(), 45f, recipe.input().tag()));
+        if (recipe.input() instanceof EntityDisplay entityRender)
+            input.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.displayedEntity(), 45f, recipe.input().tag()));
 
         builder.addSlot(RecipeIngredientRole.INPUT, 17, 8)
-                .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.bee(), 45f))
-                .setSlotName("bee");
+            .addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(recipe.bee(), 45f))
+            .setSlotName("bee");
 
         IRecipeSlotBuilder output = builder.addSlot(RecipeIngredientRole.OUTPUT, 90, 48)
-                .setSlotName("output")
-                .addTooltipCallback(getToolTip(recipe));
+            .setSlotName("output")
+            .addTooltipCallback(getToolTip(recipe));
 
         if (recipe.output() instanceof ItemDisplay itemRender) output.addItemStack(itemRender.displayedItem());
-        if (recipe.output() instanceof FluidDisplay fluidRender) output.addFluidStack(fluidRender.displayedFluid(), 1000);
-        if (recipe.output() instanceof EntityDisplay entityRender) output.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.displayedEntity(), -45f, recipe.output().tag()));
+        if (recipe.output() instanceof FluidDisplay fluidRender)
+            output.addFluidStack(fluidRender.displayedFluid(), 1000);
+        if (recipe.output() instanceof EntityDisplay entityRender)
+            output.addIngredient(JEICompat.ENTITY_INGREDIENT, new EntityIngredient(entityRender.displayedEntity(), -45f, recipe.output().tag()));
     }
 
     private static IRecipeSlotTooltipCallback getToolTip(MutationRecipe recipe) {
@@ -95,9 +98,9 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
     private static void setTagToolTip(Optional<CompoundTag> tag, List<Component> tooltip) {
         tag.ifPresent(nbt -> {
             if (Screen.hasShiftDown()) Arrays.stream(NbtUtils.prettyPrint(nbt).split("\n"))
-                    .map(Component::literal)
-                    .map(c -> c.withStyle(ChatFormatting.DARK_PURPLE))
-                    .forEach(tooltip::add);
+                .map(Component::literal)
+                .map(c -> c.withStyle(ChatFormatting.DARK_PURPLE))
+                .forEach(tooltip::add);
             else tooltip.add(JeiTranslations.NBT.withStyle(ChatFormatting.DARK_PURPLE));
         });
     }
@@ -119,26 +122,26 @@ public class MutationCategory extends BaseCategory<MutationRecipe> {
     }
 
     @Override
-    public void draw(@NotNull MutationRecipe recipe, @NotNull IRecipeSlotsView view, @NotNull PoseStack stack, double mouseX, double mouseY) {
-        super.draw(recipe, view, stack, mouseX, mouseY);
-        beeHive.draw(stack, 65, 10);
-        info.draw(stack, 63, 8);
-        Font fontRenderer = Minecraft.getInstance().font;
+    public void draw(@NotNull MutationRecipe recipe, @NotNull IRecipeSlotsView view, @NotNull GuiGraphics graphics, double mouseX, double mouseY) {
+        super.draw(recipe, view, graphics, mouseX, mouseY);
+        beeHive.draw(graphics, 65, 10);
+        info.draw(graphics, 63, 8);
+        Font font = Minecraft.getInstance().font;
 
         double outputWeightChance = recipe.pool().getAdjustedWeight(recipe.output().weight()) * recipe.output().chance();
 
         if (outputWeightChance < 1) {
             String chanceString = NumberFormat.getPercentInstance().format(outputWeightChance);
-            int padding = fontRenderer.width(chanceString) / 2;
-            info.draw(stack, 54, 34);
-            fontRenderer.draw(stack, chanceString, 76F - padding, 35, 0xff808080);
+            int padding = font.width(chanceString) / 2;
+            info.draw(graphics, 54, 34);
+            graphics.drawString(font, chanceString, 76 - padding, 35, 0xff808080, false);
         }
         if (recipe.input().chance() < 1) {
             String chanceString = NumberFormat.getPercentInstance().format(recipe.input().chance());
-            int padding = fontRenderer.width(chanceString) / 2;
-            fontRenderer.draw(stack, chanceString, 48F - padding, 66, 0xff808080);
+            int padding = font.width(chanceString) / 2;
+            graphics.drawString(font, chanceString, 48 - padding, 66, 0xff808080, false);
         }
-        if (!(recipe.input() instanceof EntityDisplay)) this.slot.draw(stack, 15, 52);
-        if (!(recipe.output() instanceof EntityDisplay)) this.outputSlot.draw(stack, 85, 43);
+        if (!(recipe.input() instanceof EntityDisplay)) this.slot.draw(graphics, 15, 52);
+        if (!(recipe.output() instanceof EntityDisplay)) this.outputSlot.draw(graphics, 85, 43);
     }
 }

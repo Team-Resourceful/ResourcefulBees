@@ -27,7 +27,7 @@ public abstract class AbstractModContainerMenu<T extends BlockEntity> extends Ab
         this.entity = entity;
         this.inv = inv;
         this.player = inv.player;
-        this.level = player.level;
+        this.level = player.level();
         if (entity == null) return;
         addMenuSlots();
         addPlayerInvSlots();

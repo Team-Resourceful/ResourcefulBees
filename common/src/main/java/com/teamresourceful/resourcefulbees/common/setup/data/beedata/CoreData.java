@@ -10,7 +10,7 @@ import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EntityType;
@@ -31,8 +31,8 @@ public record CoreData(
     private static final BeeCoreData DEFAULT = new CoreData("", HolderSet.direct(), HolderSet.direct(), BeeConstants.MAX_TIME_IN_HIVE, new ArrayList<>());
     private static final Codec<BeeCoreData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("honeycombVariation").orElse("").forGetter(BeeCoreData::honeycomb),
-            HolderSetCodec.of(Registry.BLOCK).fieldOf("flower").orElse(HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY)).forGetter(BeeCoreData::flowers),
-            HolderSetCodec.of(Registry.ENTITY_TYPE).fieldOf("entityFlower").orElse(HolderSet.direct()).forGetter(BeeCoreData::entityFlowers),
+            HolderSetCodec.of(BuiltInRegistries.BLOCK).fieldOf("flower").orElse(HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY)).forGetter(BeeCoreData::flowers),
+            HolderSetCodec.of(BuiltInRegistries.ENTITY_TYPE).fieldOf("entityFlower").orElse(HolderSet.direct()).forGetter(BeeCoreData::entityFlowers),
             Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(BeeCoreData::maxTimeInHive),
             CodecExtras.passthrough(Component.Serializer::toJsonTree, Component.Serializer::fromJson).listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(BeeCoreData::lore)
     ).apply(instance, CoreData::new));

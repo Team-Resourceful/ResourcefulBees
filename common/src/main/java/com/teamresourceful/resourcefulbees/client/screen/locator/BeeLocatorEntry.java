@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.screen.locator;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -40,12 +39,12 @@ public class BeeLocatorEntry extends ObjectSelectionList.Entry<BeeLocatorEntry> 
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int id, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick) {
+    public void render(@NotNull GuiGraphics graphics, int id, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick) {
         Minecraft instance = Minecraft.getInstance();
         Font font = instance.font;
-        GuiComponent.drawString(stack, font, displayName, left + 30, top + 5, 10526880);
-        try (var ignored = new CloseablePoseStack(stack)) {
-            ClientRenderUtils.renderEntity(stack, this.displayEntity, left + 5, top + 5, 45F, 1f);
+        graphics.drawString(font, displayName, left + 30, top + 5, 10526880);
+        try (var ignored = new CloseablePoseStack(graphics)) {
+            ClientRenderUtils.renderEntity(graphics, this.displayEntity, left + 5, top + 5, 45F, 1f);
         }
     }
 

@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -31,7 +32,7 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
     }
 
     @Override
-    protected void renderBackground(@NotNull PoseStack stack) {
+    protected void renderBackground(@NotNull GuiGraphics graphics) {
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
@@ -46,7 +47,7 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
     }
 
     @Override
-    protected void renderDecorations(@NotNull PoseStack stack, int mouseX, int mouseY) {
+    protected void renderDecorations(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
@@ -67,7 +68,6 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
         RenderSystem.disableDepthTest();
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
-        RenderSystem.disableTexture();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         bufferbuilder.vertex(this.x0, (this.y0 + 4), 0.0D).color(0, 0, 0, 0).endVertex();

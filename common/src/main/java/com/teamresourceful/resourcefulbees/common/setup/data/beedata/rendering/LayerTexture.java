@@ -24,8 +24,8 @@ public record LayerTexture(ResourceLocation texture, ResourceLocation angryTextu
         ResourceLocation normalTexture = ResourceLocation.tryParse(ModConstants.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + s + PNG_SUFFIX);
         ResourceLocation angryTexture = ResourceLocation.tryParse(ModConstants.MOD_ID + ":" + BeeConstants.ENTITY_TEXTURES_DIR + s + ANGRY_PNG_SUFFIX);
         return normalTexture != null && angryTexture != null
-                ? DataResult.success(new LayerTexture(normalTexture, angryTexture))
-                : DataResult.error("Not a valid resource location: " + s);
+            ? DataResult.success(new LayerTexture(normalTexture, angryTexture))
+            : DataResult.error(() -> "Not a valid resource location: " + s);
     }
 
     @Environment(EnvType.CLIENT)

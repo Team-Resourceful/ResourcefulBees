@@ -1,13 +1,12 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.components.controlpanels;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.BaseCentrifugeScreen;
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeTextures;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.client.util.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 
 public class OutputControlPanel extends AbstractControlPanel {
@@ -18,17 +17,16 @@ public class OutputControlPanel extends AbstractControlPanel {
 
     @Override
     protected void init() {
-        createControlPanelDisplayTab(y+18, ControlPanelTabs.HOME);
-        createControlPanelDisplayTab(y+32, ControlPanelTabs.INVENTORY);
-        createNavPanelVoidExcessTab(y+60, ((AbstractCentrifugeOutputEntity<?, ?>) screen.getMenu().getEntity())::voidsExcess);
-        createNavPanelPurgeTab(y+74);
+        createControlPanelDisplayTab(y + 18, ControlPanelTabs.HOME);
+        createControlPanelDisplayTab(y + 32, ControlPanelTabs.INVENTORY);
+        createNavPanelVoidExcessTab(y + 60, ((AbstractCentrifugeOutputEntity<?, ?>) screen.getMenu().getEntity())::voidsExcess);
+        createNavPanelPurgeTab(y + 74);
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        RenderUtils.bindTexture(CentrifugeTextures.COMPONENTS);
-        blit(stack, x, y, 75, 165, 75, 91);
-        TextUtils.tf12DrawCenteredStringNoShadow(stack, CentrifugeTranslations.TERMINAL_TAB, x+37f, y+6.5f, TextUtils.FONT_COLOR_1);
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        graphics.blit(CentrifugeTextures.COMPONENTS, x, y, 75, 165, 75, 91);
+        TextUtils.tf12DrawCenteredStringNoShadow(graphics, CentrifugeTranslations.TERMINAL_TAB, x + 37, y + 6, TextUtils.FONT_COLOR_1);
+        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 }

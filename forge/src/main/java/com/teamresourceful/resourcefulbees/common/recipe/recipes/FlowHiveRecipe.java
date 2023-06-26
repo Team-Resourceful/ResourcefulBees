@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EntityType;
@@ -26,7 +26,7 @@ public record FlowHiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees,
     public static Codec<FlowHiveRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
-                HolderSetCodec.of(Registry.ENTITY_TYPE).fieldOf("bees").forGetter(FlowHiveRecipe::bees),
+                HolderSetCodec.of(BuiltInRegistries.ENTITY_TYPE).fieldOf("bees").forGetter(FlowHiveRecipe::bees),
                 FluidUtils.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(FlowHiveRecipe::fluid)
         ).apply(instance, FlowHiveRecipe::new));
     }

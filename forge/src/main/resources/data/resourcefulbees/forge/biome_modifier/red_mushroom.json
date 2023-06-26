@@ -7,7 +7,7 @@
   "spawns": {
     "type": "resourcefulbees:red_mushroom_bee",
     "weight": 8,
-    "minCount": 0,
+    "minCount": 1,
     "maxCount": 3
   }
 }

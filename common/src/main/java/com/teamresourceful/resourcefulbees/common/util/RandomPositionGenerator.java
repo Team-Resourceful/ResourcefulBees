@@ -67,24 +67,24 @@ public final class RandomPositionGenerator {
                 }
 
                 //create new target block position using relative position and offset
-                BlockPos targetPos = new BlockPos(rndPosX + bee.getX(), rndPosY + bee.getY(), rndPosZ + bee.getZ());
+                BlockPos targetPos = BlockPos.containing(rndPosX + bee.getX(), rndPosY + bee.getY(), rndPosZ + bee.getZ());
 
                 //if target Y is between 0 and world height AND (is not in Distance of home OR target pos is in distance of home) AND entity can stand on target pos
-                if (MathUtils.inRangeInclusive(targetPos.getY(), bee.level.getMinBuildHeight(), bee.level.getMaxBuildHeight()) && (!inDistanceOfHome || bee.isWithinRestriction(targetPos)) && pathnavigator.isStableDestination(targetPos)) {
+                if (MathUtils.inRangeInclusive(targetPos.getY(), bee.level().getMinBuildHeight(), bee.level().getMaxBuildHeight()) && (!inDistanceOfHome || bee.isWithinRestriction(targetPos)) && pathnavigator.isStableDestination(targetPos)) {
 
                     //flip a coin heads = check block above is air if so find valid position above else go below
-                    if (random.nextBoolean() && bee.level.isEmptyBlock(bee.blockPosition().above())) {
-                        targetPos = findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level.getMaxBuildHeight(),
-                                pos -> bee.level.getBlockState(pos).getMaterial().isSolid());
+                    if (random.nextBoolean() && bee.level().isEmptyBlock(bee.blockPosition().above())) {
+                        targetPos = findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level().getMaxBuildHeight(),
+                                pos -> bee.level().getBlockState(pos).isSolid());
                     } else {
-                        targetPos = findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level.getMinBuildHeight(),
-                                pos -> bee.level.getBlockState(pos).getMaterial().isSolid());
+                        targetPos = findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level().getMinBuildHeight(),
+                                pos -> bee.level().getBlockState(pos).isSolid());
                     }
 
                     // if can travel through water or target pos is not tagged as water
-                    if (pathOnWater || !bee.level.getFluidState(targetPos).is(FluidTags.WATER)) {
+                    if (pathOnWater || !bee.level().getFluidState(targetPos).is(FluidTags.WATER)) {
                         //set path node type based on target position
-                        BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(bee.level, targetPos.mutable());
+                        BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(bee.level(), targetPos.mutable());
                         if (bee.getPathfindingMalus(pathnodetype) == 0.0F) {
                             //calculate if weight of new target position is better than previous target position
                             double d1 = blockWeightOfBeePOS.applyAsDouble(targetPos);
@@ -115,7 +115,7 @@ public final class RandomPositionGenerator {
                 //15 - 7 - 0 = 8
                 //21 - 10 - 8 = 3 = -18
                 int l = random.nextInt(2 * verticalOffset + 1) - verticalOffset + minusTwo;
-                return new BlockPos(d1, l, d2);
+                return BlockPos.containing(d1, l, d2);
             } else {
                 return null;
             }

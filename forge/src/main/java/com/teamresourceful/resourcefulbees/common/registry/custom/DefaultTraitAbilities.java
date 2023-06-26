@@ -40,7 +40,7 @@ public final class DefaultTraitAbilities {
     }
 
     private static boolean canTeleport(ResourcefulBee bee) {
-        return !bee.level.isClientSide() && bee.isAlive() && bee.tickCount % 150 == 0 && !bee.hasCustomName() && bee.level.isDay() && !bee.isPollinating() && !bee.hasHiveInRange() && !bee.hasDisruptorInRange();
+        return !bee.level().isClientSide() && bee.isAlive() && bee.tickCount % 150 == 0 && !bee.hasCustomName() && bee.level().isDay() && !bee.isPollinating() && !bee.hasHiveInRange() && !bee.hasDisruptorInRange();
     }
 
     private static void enderAbility(Bee input) {
@@ -50,19 +50,18 @@ public final class DefaultTraitAbilities {
             double z = bee.getZ() + (bee.getRandom().nextDouble() - 0.5D) * 4.0D;
             BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(x, y, z);
 
-            while (blockPos.getY() > 0 && !bee.level.getBlockState(blockPos).getMaterial().blocksMotion()) {
+            while (blockPos.getY() > 0 && !bee.level().getBlockState(blockPos).blocksMotion()) {
                 blockPos.move(Direction.DOWN);
             }
 
-            BlockState blockstate = bee.level.getBlockState(blockPos);
-            boolean canMove = blockstate.getMaterial().blocksMotion();
+            BlockState blockstate = bee.level().getBlockState(blockPos);
             boolean water = blockstate.getFluidState().is(FluidTags.WATER);
-            if (canMove && !water) {
+            if (blockstate.blocksMotion() && !water) {
                 EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(bee, x, y, z);
                 if (MinecraftForge.EVENT_BUS.post(event)) return;
                 boolean teleported = bee.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
                 if (teleported) {
-                    bee.level.playSound(null, event.getTargetX(), event.getTargetY(), event.getTargetZ(), SoundEvents.ENDERMAN_TELEPORT, bee.getSoundSource(), 1.0F, 1.0F);
+                    bee.level().playSound(null, event.getTargetX(), event.getTargetY(), event.getTargetZ(), SoundEvents.ENDERMAN_TELEPORT, bee.getSoundSource(), 1.0F, 1.0F);
                     bee.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
                 }
             }
@@ -70,13 +69,13 @@ public final class DefaultTraitAbilities {
     }
 
     private static void slimeAbility(Bee input) {
-        if (input instanceof ResourcefulBee bee && !bee.checkSpawnObstruction(bee.level) && !bee.wasColliding()) {
+        if (input instanceof ResourcefulBee bee && !bee.checkSpawnObstruction(bee.level()) && !bee.wasColliding()) {
             for (int j = 0; j < 8; ++j) {
                 float f = bee.getRandom().nextFloat() * ((float) Math.PI * 2F);
                 float f1 = bee.getRandom().nextFloat() * 0.5F + 0.5F;
                 float f2 = Mth.sin(f) * 1 * 0.5F * f1;
                 float f3 = Mth.cos(f) * 1 * 0.5F * f1;
-                bee.level.addParticle(ParticleTypes.ITEM_SLIME, bee.getX() + f2, bee.getY(), bee.getZ() + f3, 0.0D, 0.0D, 0.0D);
+                bee.level().addParticle(ParticleTypes.ITEM_SLIME, bee.getX() + f2, bee.getY(), bee.getZ() + f3, 0.0D, 0.0D, 0.0D);
             }
 
             bee.playSound(SoundEvents.SLIME_SQUISH, 0.4F, ((bee.getRandom().nextFloat() - bee.getRandom().nextFloat()) * 0.2F + 1.0F) / 0.8F);
@@ -92,7 +91,7 @@ public final class DefaultTraitAbilities {
 
     private static void angryAbility(Bee bee) {
         if (!bee.hasEffect(ModEffects.CALMING.get())) {
-            Entity player = bee.level.getNearestPlayer(bee, 20);
+            Entity player = bee.level().getNearestPlayer(bee, 20);
             bee.setPersistentAngerTarget(player != null ? player.getUUID() : null);
             bee.setRemainingPersistentAngerTime(1000);
         }

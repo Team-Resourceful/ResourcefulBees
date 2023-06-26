@@ -42,7 +42,7 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
         ).apply(instance, BreederRecipe::new));
     }
 
-    public static Codec<BreederRecipe> networkCodec(ResourceLocation id) {
+    public static Codec<BreederRecipe> packetCodec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 BreederPair.NETWORK_CODEC.fieldOf("parent1").forGetter(BreederRecipe::parent1),

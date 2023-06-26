@@ -2,16 +2,18 @@ package com.teamresourceful.resourcefulbees.client.component.search;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
-import com.teamresourceful.resourcefullib.common.utils.types.Vec2i;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -25,6 +27,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2ic;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Objects;
@@ -216,32 +219,28 @@ public class SearchBox extends AbstractWidget {
 
             return true;
         } else {
-            switch (key) {
-                case GLFW.GLFW_KEY_DELETE:
-                case GLFW.GLFW_KEY_BACKSPACE:
+            return switch (key) {
+                case GLFW.GLFW_KEY_DELETE, GLFW.GLFW_KEY_BACKSPACE -> {
                     this.shiftPressed = false;
                     this.deleteText(key == GLFW.GLFW_KEY_BACKSPACE ? -1 : 1);
                     this.shiftPressed = Screen.hasShiftDown();
-                    return true;
-                case GLFW.GLFW_KEY_LEFT:
-                case GLFW.GLFW_KEY_RIGHT:
+                    yield true;
+                }
+                case GLFW.GLFW_KEY_LEFT, GLFW.GLFW_KEY_RIGHT -> {
                     int amount = key == GLFW.GLFW_KEY_RIGHT ? 1 : -1;
                     this.moveCursorTo(Screen.hasControlDown() ? this.getWordPosition(amount) : amount);
-                    return true;
-                case GLFW.GLFW_KEY_HOME:
+                    yield true;
+                }
+                case GLFW.GLFW_KEY_HOME -> {
                     this.moveCursorToStart();
-                    return true;
-                case GLFW.GLFW_KEY_END:
+                    yield true;
+                }
+                case GLFW.GLFW_KEY_END -> {
                     this.moveCursorToEnd();
-                    return true;
-                case GLFW.GLFW_KEY_INSERT:
-                case GLFW.GLFW_KEY_DOWN:
-                case GLFW.GLFW_KEY_UP:
-                case GLFW.GLFW_KEY_PAGE_UP:
-                case GLFW.GLFW_KEY_PAGE_DOWN:
-                default:
-                    return false;
-            }
+                    yield true;
+                }
+                default -> false;
+            };
         }
     }
 
@@ -264,10 +263,10 @@ public class SearchBox extends AbstractWidget {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!this.isVisible()) return false;
 
-        this.setFocused(mouseX >= this.x && mouseX < (this.x + this.width) && mouseY >= this.y && mouseY < (this.y + this.height));
+        this.setFocused(mouseX >= this.getX() && mouseX < (this.getX() + this.width) && mouseY >= this.getY() && mouseY < (this.getY() + this.height));
 
         if (this.isFocused() && button == 0) {
-            int i = Mth.floor(mouseX) - this.x - 4;
+            int i = Mth.floor(mouseX) - this.getX() - 4;
 
             String s = this.font.plainSubstrByWidth(this.value.substring(this.displayPos), this.getInnerWidth());
             this.moveCursorTo(this.font.plainSubstrByWidth(s, i).length() + this.displayPos);
@@ -277,56 +276,55 @@ public class SearchBox extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         if (!this.isVisible()) return;
 
-        RenderUtils.bindTexture(TEXTURE);
-        blit(stack, this.x, this.y, 0, 0, this.width, this.height, this.width, this.height);
+        graphics.blit(TEXTURE, this.getX(), this.getY(), 0, 0, this.width, this.height, this.width, this.height);
 
         int j = this.cursorPos - this.displayPos;
         int k = this.highlightPos - this.displayPos;
         String displayText = this.font.plainSubstrByWidth(this.value.substring(this.displayPos), this.getInnerWidth());
         boolean flag = j >= 0 && j <= displayText.length();
         boolean showFlash = this.isFocused() && this.frame / 6 % 2 == 0 && flag;
-        int j1 = this.x + 3;
+        int j1 = this.getX() + 3;
         if (k > displayText.length()) {
             k = displayText.length();
         }
 
         if (!displayText.isEmpty()) {
             String s1 = flag ? displayText.substring(0, j) : displayText;
-            j1 = this.font.drawShadow(stack, FormattedCharSequence.forward(s1, Style.EMPTY), this.x + 2f, this.y + 2f, 0xE0E0E0);
+            j1 = graphics.drawString(this.font, FormattedCharSequence.forward(s1, Style.EMPTY), this.getX() + 2, this.getY() + 2, 0xE0E0E0, false);
         }
 
         boolean showVerticalBar = this.cursorPos < this.value.length() || this.value.length() >= 32;
         int k1 = j1;
         if (!flag) {
-            k1 = j > 0 ? this.x + this.width : this.x;
+            k1 = j > 0 ? this.getX() + this.width : this.getX();
         } else if (showVerticalBar) {
             k1 = j1 - 1;
             --j1;
         }
 
         if (!displayText.isEmpty() && flag && j < displayText.length()) {
-            this.font.drawShadow(stack, FormattedCharSequence.forward(displayText.substring(j), Style.EMPTY), j1, this.y + 2f, 0xE0E0E0);
+            graphics.drawString(this.font, FormattedCharSequence.forward(displayText.substring(j), Style.EMPTY), j1, this.getY() + 2, 0xE0E0E0, false);
         }
 
         if (showFlash) {
             if (showVerticalBar) {
-                GuiComponent.fill(stack, k1, this.y - 2, k1 + 1, this.y + 11, -3092272);
+                graphics.fill(k1, this.getY() - 2, k1 + 1, this.getY() + 11, -3092272);
             } else {
-                this.font.drawShadow(stack, "_", k1, this.y + 1f, 0xE0E0E0);
+                graphics.drawString(this.font, "_", k1, this.getY() + 1, 0xE0E0E0, false);
             }
         }
 
         if (k != j) {
-            int l1 = this.x + this.font.width(displayText.substring(0, k));
-            this.renderHighlight(stack, k1, this.y + 1, l1, this.y + 11);
+            int l1 = this.getX() + this.font.width(displayText.substring(0, k));
+            this.renderHighlight(graphics, k1, this.getY() + 1, l1, this.getY() + 11);
         }
 
     }
 
-    private void renderHighlight(PoseStack stack, int startX, int startY, int endX, int endY) {
+    private void renderHighlight(GuiGraphics graphics, int startX, int startY, int endX, int endY) {
         if (startX < endX) {
             int i = startX;
             startX = endX;
@@ -339,15 +337,15 @@ public class SearchBox extends AbstractWidget {
             endY = j;
         }
 
-        if (endX > this.x + this.width) {
-            endX = this.x + this.width;
+        if (endX > this.getX() + this.width) {
+            endX = this.getX() + this.width;
         }
 
-        if (startX > this.x + this.width) {
-            startX = this.x + this.width;
+        if (startX > this.getX() + this.width) {
+            startX = this.getX() + this.width;
         }
 
-        Vec2i coords = RenderUtils.getTranslation(stack);
+        Vector2ic coords = RenderUtils.getTranslation(graphics.pose());
         startX += coords.x();
         startY += coords.y();
         endX += coords.x();
@@ -357,7 +355,6 @@ public class SearchBox extends AbstractWidget {
         BufferBuilder bufferbuilder = tesselator.getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionShader);
         RenderSystem.setShaderColor(0.0F, 0.0F, 1.0F, 1.0F);
-        RenderSystem.disableTexture();
         RenderSystem.enableColorLogicOp();
         RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
@@ -368,7 +365,6 @@ public class SearchBox extends AbstractWidget {
         tesselator.end();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableColorLogicOp();
-        RenderSystem.enableTexture();
     }
 
     public int getCursorPosition() {
@@ -376,18 +372,19 @@ public class SearchBox extends AbstractWidget {
     }
 
     @Override
-    public boolean changeFocus(boolean focus) {
-        return this.isVisible() && super.changeFocus(focus);
+    public boolean isFocused() {
+        return this.isVisible() && super.isFocused();
     }
 
     @Override
     public boolean isMouseOver(double x, double y) {
-        return this.isVisible() && x >= this.x && x < (this.x + this.width) && y >= this.y && y < (this.y + this.height);
+        return this.isVisible() && x >= this.getX() && x < (this.getX() + this.width) && y >= this.getY() && y < (this.getY() + this.height);
     }
 
     @Override
-    protected void onFocusedChanged(boolean focused) {
-        if (focused) {
+    public void setFocused(boolean focus) {
+        super.setFocused(focus);
+        if (focus) {
             this.frame = 0;
         }
     }
@@ -423,7 +420,8 @@ public class SearchBox extends AbstractWidget {
         return this.screen.getState().getSearch() != null && this.visible;
     }
 
-    public void updateNarration(NarrationElementOutput output) {
+    @Override
+    protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {
         output.add(NarratedElementType.TITLE, Component.translatable("narration.edit_box", this.getValue()));
     }
 }

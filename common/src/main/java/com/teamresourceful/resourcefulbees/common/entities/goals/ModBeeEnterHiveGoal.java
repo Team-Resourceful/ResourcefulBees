@@ -24,7 +24,7 @@ public class ModBeeEnterHiveGoal extends Goal {
 
         BlockPos pos = this.bee.getHivePos();
         if (pos != null && this.bee.wantsToEnterHive() && pos.closerThan(this.bee.blockPosition(), 2.0D)) {
-            BlockEntity block = this.bee.level.getBlockEntity(pos);
+            BlockEntity block = this.bee.level().getBlockEntity(pos);
             if (block instanceof BeehiveBlockEntity hive) {
                 if (!hive.isFull()) {
                     return true;
@@ -51,7 +51,7 @@ public class ModBeeEnterHiveGoal extends Goal {
     public void start() {
         BlockPos pos = this.bee.getHivePos();
         if (pos != null) {
-            BlockEntity block = this.bee.level.getBlockEntity(pos);
+            BlockEntity block = this.bee.level().getBlockEntity(pos);
             if (block instanceof BeehiveBlockEntity hive) {
                 hive.addOccupant(this.bee, this.bee.hasNectar());
             } else if (block instanceof BeeHolderBlockEntity holder) {

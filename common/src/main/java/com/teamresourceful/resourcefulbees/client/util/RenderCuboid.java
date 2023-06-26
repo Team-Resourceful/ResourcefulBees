@@ -2,9 +2,6 @@ package com.teamresourceful.resourcefulbees.client.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.client.Minecraft;
@@ -15,6 +12,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import java.util.Arrays;
 
@@ -97,7 +97,7 @@ public final class RenderCuboid {
     private static void renderPoint(Matrix4f matrix4f, Matrix3f normal, VertexConsumer buffer, Direction face, Direction.Axis u, Direction.Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV, int color, int light, int overlay) {
         int uArray = minU ? 0 : 1;
         int vArray = minV ? 2 : 3;
-        Vector3f vertex = withValue(Vector3f.ZERO, u, xyz[uArray]);
+        Vector3f vertex = withValue(new Vector3f(0), u, xyz[uArray]);
         vertex = withValue(vertex, v, xyz[vArray]);
         vertex = withValue(vertex, face.getAxis(), other);
         Vec3i normalForFace = face.getNormal();

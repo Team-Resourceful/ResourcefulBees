@@ -1,11 +1,10 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.components.buttons;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.util.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefullib.client.components.ImageButton;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +21,7 @@ public class DisplayTab extends ImageButton {
     private final boolean showArrow;
 
     public DisplayTab(int x, int y, ControlPanelTabs type, Supplier<Boolean> isSelected, Supplier<Boolean> isEnabled, Runnable onPress, boolean showArrow) {
-        super(x+1, y+1, 69, 13);
+        super(x + 1, y + 1, 69, 13);
         this.imageWidth = 71;
         this.imageHeight = 45;
         this.type = type;
@@ -33,16 +32,15 @@ public class DisplayTab extends ImageButton {
     }
 
     /**
-     *  Use this to show the arrow on the button and enable by default
+     * Use this to show the arrow on the button and enable by default
      */
     public DisplayTab(int x, int y, ControlPanelTabs type, Supplier<Boolean> isSelected, Runnable onPress) {
         this(x, y, type, isSelected, () -> true, onPress, true);
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        RenderUtils.bindTexture(getTexture(mouseX, mouseY));
-        blit(stack, this.x-1, this.y-1, getU(mouseX, mouseY), getV(mouseX, mouseY), this.width+2, this.height+2, this.imageWidth, this.imageHeight);
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        graphics.blit(getTexture(mouseX, mouseY), this.getX() - 1, this.getY() - 1, getU(mouseX, mouseY), getV(mouseX, mouseY), this.width + 2, this.height + 2, this.imageWidth, this.imageHeight);
         int color;
         if (isEnabled()) {
             if (isSelected()) {
@@ -55,7 +53,7 @@ public class DisplayTab extends ImageButton {
         } else {
             color = TextUtils.FONT_COLOR_4;
         }
-        TextUtils.TERMINAL_FONT_8.draw(stack, type.label, x+4f, y+6f, color);
+        graphics.drawString(TextUtils.TERMINAL_FONT_8, type.label, getX() + 4, getY() + 6, color, false);
     }
 
     public boolean isSelected() {

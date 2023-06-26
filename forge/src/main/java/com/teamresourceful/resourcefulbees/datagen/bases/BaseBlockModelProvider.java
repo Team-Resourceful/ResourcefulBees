@@ -16,7 +16,7 @@ public abstract class BaseBlockModelProvider extends BlockModelProvider {
     public final Lazy<ModelFile> EMPTY_MODEL = Lazy.of(() -> getExistingFile(mcLoc("air")));
 
     protected BaseBlockModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, ModConstants.MOD_ID, existingFileHelper);
+        super(generator.getPackOutput(), ModConstants.MOD_ID, existingFileHelper);
     }
 
     @Override

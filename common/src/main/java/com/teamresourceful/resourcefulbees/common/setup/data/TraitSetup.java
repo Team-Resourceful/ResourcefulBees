@@ -26,21 +26,21 @@ public final class TraitSetup {
     public static void buildCustomTraits() {
         if (GeneralConfig.enableDevBees) {
             ModConstants.LOGGER.info("Loading Dev Traits...");
-            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_traits", TraitSetup::parseTrait, ModPaths.MOD_ROOT);
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_traits", TraitSetup::parseTrait, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         if (GeneralConfig.enableSupporterBees) {
             ModConstants.LOGGER.info("Loading Supporter Traits...");
-            FileUtils.setupDevResources("/data/resourcefulbees/supporter/traits", TraitSetup::parseTrait, ModPaths.MOD_ROOT);
+            FileUtils.setupDevResources("/data/resourcefulbees/supporter/traits", TraitSetup::parseTrait, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         if (GeneralConfig.generateDefaults) {
             ModConstants.LOGGER.info("Copying Default Traits...");
-            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_traits", ModPaths.BEE_TRAITS, ModPaths.MOD_ROOT);
+            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_traits", ModPaths.BEE_TRAITS, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         ModConstants.LOGGER.info("Loading Custom Traits...");
-        FileUtils.streamFilesAndParse(ModPaths.BEE_TRAITS, TraitSetup::parseTrait);
+        FileUtils.streamFilesAndParse(ModPaths.BEE_TRAITS, TraitSetup::parseTrait, FileUtils::isJson);
     }
 
     private static void parseTrait(Reader reader, String name) {

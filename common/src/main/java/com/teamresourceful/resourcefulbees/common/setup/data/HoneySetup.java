@@ -23,21 +23,21 @@ public final class HoneySetup {
     public static void setupHoney() {
         if (GeneralConfig.enableDevBees) {
             ModConstants.LOGGER.info("Loading Dev Honeys...");
-            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honey", HoneySetup::parseHoney, ModPaths.MOD_ROOT);
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honey", HoneySetup::parseHoney, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         if (GeneralConfig.enableSupporterBees) {
             ModConstants.LOGGER.info("Loading Supporter Honeys...");
-            FileUtils.setupDevResources("/data/resourcefulbees/supporter/honey", HoneySetup::parseHoney, ModPaths.MOD_ROOT);
+            FileUtils.setupDevResources("/data/resourcefulbees/supporter/honey", HoneySetup::parseHoney, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         if (GeneralConfig.generateDefaults) {
             ModConstants.LOGGER.info("Copying Default Honeys...");
-            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_honey", ModPaths.HONEY, ModPaths.MOD_ROOT);
+            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_honey", ModPaths.HONEY, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         ModConstants.LOGGER.info("Loading Custom Honeys...");
-        FileUtils.streamFilesAndParse(ModPaths.HONEY, HoneySetup::parseHoney);
+        FileUtils.streamFilesAndParse(ModPaths.HONEY, HoneySetup::parseHoney, FileUtils::isJson);
     }
 
     private static void parseHoney(Reader reader, String name) {

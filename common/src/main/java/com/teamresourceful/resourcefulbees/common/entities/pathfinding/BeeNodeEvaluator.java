@@ -9,7 +9,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.FlyNodeEvaluator;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -29,9 +28,7 @@ public class BeeNodeEvaluator extends FlyNodeEvaluator {
         if (pathTypes == BlockPathTypes.OPEN && y >= level.getMinBuildHeight() + 1) {
             BlockPathTypes pathTypes1 = getRawPathType(level, mutableBlockPos.set(x, y - 1, z), this.mob);
             if (pathTypes1 != BlockPathTypes.DAMAGE_FIRE && pathTypes1 != BlockPathTypes.LAVA) {
-                if (pathTypes1 == BlockPathTypes.DAMAGE_CACTUS) {
-                    pathTypes = BlockPathTypes.DAMAGE_CACTUS;
-                } else if (pathTypes1 == BlockPathTypes.DAMAGE_OTHER) {
+                if (pathTypes1 == BlockPathTypes.DAMAGE_OTHER) {
                     pathTypes = BlockPathTypes.DAMAGE_OTHER;
                 } else if (pathTypes1 == BlockPathTypes.COCOA) {
                     pathTypes = BlockPathTypes.COCOA;
@@ -61,14 +58,11 @@ public class BeeNodeEvaluator extends FlyNodeEvaluator {
             return type;
         } else {
             Block block = blockstate.getBlock();
-            Material material = blockstate.getMaterial();
             if (blockstate.isAir()) {
                 return BlockPathTypes.OPEN;
             } else if (!blockstate.is(BlockTags.TRAPDOORS) && !blockstate.is(Blocks.LILY_PAD) && !blockstate.is(Blocks.BIG_DRIPLEAF)) {
                 if (blockstate.is(Blocks.POWDER_SNOW)) {
                     return BlockPathTypes.POWDER_SNOW;
-                } else if (blockstate.is(Blocks.CACTUS)) {
-                    return BlockPathTypes.DAMAGE_CACTUS;
                 } else if (blockstate.is(Blocks.SWEET_BERRY_BUSH)) {
                     return BlockPathTypes.DAMAGE_OTHER;
                 } else if (blockstate.is(Blocks.HONEY_BLOCK)) {
@@ -86,7 +80,7 @@ public class BeeNodeEvaluator extends FlyNodeEvaluator {
                         return BlockPathTypes.DAMAGE_FIRE;
                     } else if (DoorBlock.isWoodenDoor(blockstate) && !blockstate.getValue(DoorBlock.OPEN)) {
                         return BlockPathTypes.DOOR_WOOD_CLOSED;
-                    } else if (block instanceof DoorBlock && material == Material.METAL && blockstate.getValue(DoorBlock.OPEN)) {
+                    } else if (block instanceof DoorBlock door && !door.type().canOpenByHand() && blockstate.getValue(DoorBlock.OPEN)) {
                         return BlockPathTypes.DOOR_IRON_CLOSED;
                     } else if (block instanceof DoorBlock && blockstate.getValue(DoorBlock.OPEN)) {
                         return BlockPathTypes.DOOR_OPEN;

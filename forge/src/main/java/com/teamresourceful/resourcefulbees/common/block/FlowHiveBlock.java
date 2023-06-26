@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.block;
 
-import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentity.FlowHiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
+import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.FlowHiveTranslations;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,7 +33,7 @@ import java.util.List;
 public class FlowHiveBlock extends BeeHouseBlock implements BeeHolderBlock {
 
     public FlowHiveBlock() {
-        super(Properties.of(Material.WOOD).strength(5f, 6f).sound(SoundType.WOOD));
+        super(Properties.of().strength(5f, 6f).sound(SoundType.WOOD));
     }
 
     @Override

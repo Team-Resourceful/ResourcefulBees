@@ -8,22 +8,23 @@ import com.teamresourceful.resourcefulbees.common.setup.data.beedata.rendering.L
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
+import software.bernie.geckolib.util.RenderUtils;
 
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public class PetModelData implements IAnimatable {
+public class PetModelData implements GeoAnimatable {
 
     private static final ResourceLocation BASE_MODEL = new ModResourceLocation("geo/base.geo.json");
+    private static final RawAnimation ANIMATION = RawAnimation.begin().thenLoop("animation.bee.fly").thenLoop("animation.bee.fly.bobbing");
 
     public static final Codec<PetModelData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("version").orElse(-1).forGetter(PetModelData::getVersion),
@@ -34,13 +35,8 @@ public class PetModelData implements IAnimatable {
             CodecExtras.linkedSet(LayerData.CODEC).fieldOf("layers").orElse(new LinkedHashSet<>()).forGetter(PetModelData::getLayers)
     ).apply(instance, PetModelData::new));
 
-    static {
-        //noinspection unchecked
-        AnimationController.addModelFetcher((IAnimatable object) -> object instanceof PetModelData data ? data.getModelRaw() : null);
-    }
-
     private final PetBeeModel<PetModelData> model = new PetBeeModel<>();
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
 
     private final int version;
     private final String id;
@@ -93,15 +89,20 @@ public class PetModelData implements IAnimatable {
     }
 
     @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, event -> {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bee.fly", ILoopType.EDefaultLoopTypes.LOOP).addAnimation("animation.bee.fly.bobbing", ILoopType.EDefaultLoopTypes.LOOP));
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "bee_controller", 0, event -> {
+            event.getController().setAnimation(ANIMATION);
             return PlayState.CONTINUE;
         }));
     }
 
     @Override
-    public AnimationFactory getFactory() {
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.factory;
+    }
+
+    @Override
+    public double getTick(Object o) {
+        return RenderUtils.getCurrentTick();
     }
 }

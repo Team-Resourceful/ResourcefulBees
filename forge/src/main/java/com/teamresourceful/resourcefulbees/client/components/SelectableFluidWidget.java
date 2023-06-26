@@ -1,13 +1,14 @@
 package com.teamresourceful.resourcefulbees.client.components;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.capabilities.SelectableMultiFluidTank;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.SelectFluidPacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
-import com.teamresourceful.resourcefullib.common.utils.SelectableList;
+import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
+import com.teamresourceful.resourcefullib.common.collections.SelectableList;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
@@ -20,41 +21,37 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class SelectableFluidWidget extends AbstractWidget {
 
     private final SelectableMultiFluidTank tank;
-    private final Screen screen;
     private final int id;
     private final BlockPos pos;
     private FluidStack lastStack;
 
-    public SelectableFluidWidget(Screen screen, SelectableMultiFluidTank tank, int id, BlockPos pos, int x, int y, int width, int height, Component text) {
+    public SelectableFluidWidget(SelectableMultiFluidTank tank, int id, BlockPos pos, int x, int y, int width, int height, Component text) {
         super(x, y, width, height, text);
-        this.screen = screen;
         this.tank = tank;
         this.id = id;
         this.pos = pos;
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         FluidStack fluid = tank.getFluid();
         if (!fluid.isEmpty()) {
             int height = Math.round((fluid.getAmount() / (float)tank.getCapacity()) * this.height);
-            ClientUtils.drawFluid(stack, height, this.width, fluid, this.x, this.y + this.height - height, getBlitOffset());
+            ClientUtils.drawFluid(graphics, height, this.width, fluid, this.getX(), this.getY() + this.height - height);
         }
         if (this.isHoveredOrFocused()) {
-            this.renderToolTip(stack, mouseX, mouseY);
+            this.renderToolTip();
         }
         if (!Screen.hasControlDown()) {
             sendToServer();
         }
     }
 
-    @Override
-    public void renderToolTip(@NotNull PoseStack stack, int mouseX, int mouseY) {
+    public void renderToolTip() {
         List<Component> tooltip = new ArrayList<>();
         tooltip.add(this.getMessage());
         tooltip.add(CommonComponents.EMPTY);
@@ -76,7 +73,7 @@ public class SelectableFluidWidget extends AbstractWidget {
                 tooltip.add(line);
             }
         }
-        screen.renderTooltip(stack, tooltip, Optional.empty(), mouseX, mouseY);
+        ScreenUtils.setTooltip(tooltip);
     }
 
     @Override
@@ -103,7 +100,8 @@ public class SelectableFluidWidget extends AbstractWidget {
     }
 
     @Override
-    protected void onFocusedChanged(boolean focused) {
+    public void setFocused(boolean focused) {
+        super.setFocused(focused);
         if (!focused) {
             sendToServer();
         }
@@ -119,7 +117,7 @@ public class SelectableFluidWidget extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(@NotNull NarrationElementOutput output) {
+    protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {
 
     }
 }

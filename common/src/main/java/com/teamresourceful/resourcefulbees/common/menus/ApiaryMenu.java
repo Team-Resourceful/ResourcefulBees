@@ -17,7 +17,7 @@ import java.util.Optional;
 public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
 
     public ApiaryMenu(int id, Inventory inv, Optional<PositionContent> content) {
-        this(id, inv, PositionContent.getOrNull(content, inv.player.level, ApiaryBlockEntity.class));
+        this(id, inv, PositionContent.getOrNull(content, inv.player.level(), ApiaryBlockEntity.class));
     }
 
     public ApiaryMenu(int id, Inventory inv, ApiaryBlockEntity entity) {

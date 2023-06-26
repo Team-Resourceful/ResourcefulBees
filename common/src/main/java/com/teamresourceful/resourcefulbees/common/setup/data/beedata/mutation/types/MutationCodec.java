@@ -29,7 +29,7 @@ public final class MutationCodec {
     public static final Codec<MutationType> CODEC = TYPE_CODEC.dispatch(MutationType::serializer, GenericSerializer::codec);
 
     private static DataResult<GenericSerializer<MutationType>> decode(String id) {
-        return Optional.ofNullable(SERIALIZERS.get(id)).map(DataResult::success).orElse(DataResult.error("No mutation serializer found with id '" + id + "'."));
+        return Optional.ofNullable(SERIALIZERS.get(id)).map(DataResult::success).orElse(DataResult.error(() -> "No mutation serializer found with id '" + id + "'."));
     }
 
     private static void register(GenericSerializer<MutationType> serializer) {

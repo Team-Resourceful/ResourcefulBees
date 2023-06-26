@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.platform.common.workers.LevelWorker;
-import com.teamresourceful.resourcefullib.common.utils.types.Vec2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.NbtUtils;
@@ -15,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import org.joml.Vector2i;
+import org.joml.Vector2ic;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ public class BeeLocatorWorker implements LevelWorker {
     private boolean isRunning = true;
     private final Player player;
     private final int slot;
-    private final Queue<Vec2i> queue;
+    private final Queue<Vector2ic> queue;
     private final ChunkPos chunk;
     private final Set<Biome> visited = new HashSet<>();
     private final EntityType<?> type;
@@ -36,7 +37,7 @@ public class BeeLocatorWorker implements LevelWorker {
         this.player = player;
         this.slot = slot;
         this.queue = createRange(range);
-        this.chunk = player.level.getChunk(player.blockPosition()).getPos();
+        this.chunk = player.level().getChunk(player.blockPosition()).getPos();
         this.type = BeeRegistry.get().containsBeeType(bee) ? BeeRegistry.get().getBeeData(bee).entityType() : null;
         this.bee = bee;
         if (this.type == null) {
@@ -51,13 +52,13 @@ public class BeeLocatorWorker implements LevelWorker {
 
     @Override
     public boolean work() {
-        Vec2i offset = queue.poll();
+        Vector2ic offset = queue.poll();
         if (offset == null) {
             fail();
             return false;
         }
         BlockPos pos = new ChunkPos(this.chunk.x + offset.x(), this.chunk.z + offset.y()).getMiddleBlockPosition(0);
-        Holder<Biome> holder = player.level.getBiome(pos);
+        Holder<Biome> holder = player.level().getBiome(pos);
         if (holder.isBound()) {
             Biome biome = holder.value();
             if (visited.contains(biome)) return true;
@@ -102,12 +103,12 @@ public class BeeLocatorWorker implements LevelWorker {
         }
     }
 
-    private static Queue<Vec2i> createRange(int range) {
-        Queue<Vec2i> queue = new ArrayDeque<>();
+    private static Queue<Vector2ic> createRange(int range) {
+        Queue<Vector2ic> queue = new ArrayDeque<>();
         for (int i = 0; (double) i < range; ++i) {
             for (int j = 0; j <= i; j = j > 0 ? -j : 1 - j) {
                 for (int k = j < i && j > -i ? i : 0; k <= i; k = k > 0 ? -k : 1 - k) {
-                    queue.add(new Vec2i(j, k));
+                    queue.add(new Vector2i(j, k));
                 }
             }
         }

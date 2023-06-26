@@ -1,8 +1,7 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.components.buttons;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
@@ -23,17 +22,12 @@ public class NavButton extends AbstractButton {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        RenderUtils.bindTexture(TEXTURE);
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         if (reverse) {
-            drawButton(stack,this.x+3, this.y+3, isHovered ? 7 : 0);
+            graphics.blit(TEXTURE, this.getX() + 3, this.getY() + 3, isHovered ? 7 : 0, 0, 4, 7, 14, 7);
         } else {
-            drawButton(stack,this.x, this.y+3, isHovered ? 10 : 3);
+            graphics.blit(TEXTURE, this.getX(), this.getY() + 3, isHovered ? 10 : 3, 0, 4, 7, 14, 7);
         }
-    }
-
-    private void drawButton(PoseStack stack, int x, int y, int u) {
-        blit(stack, x, y, u, 0, 4, 7, 14, 7);
     }
 
     @Override
@@ -42,7 +36,7 @@ public class NavButton extends AbstractButton {
     }
 
     @Override
-    public void updateNarration(@NotNull NarrationElementOutput pNarrationElementOutput) {
-        //not used
+    protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {
+
     }
 }

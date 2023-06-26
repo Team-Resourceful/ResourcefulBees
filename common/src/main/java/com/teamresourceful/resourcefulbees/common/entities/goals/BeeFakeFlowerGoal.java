@@ -22,7 +22,7 @@ public class BeeFakeFlowerGoal extends Goal {
     private Path lastPath = null;
 
     public BeeFakeFlowerGoal(ResourcefulBee bee) {
-        this.level = bee.level;
+        this.level = bee.level();
         this.bee = bee;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }

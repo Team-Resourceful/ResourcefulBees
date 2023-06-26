@@ -1,38 +1,25 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.loottables;
 
-import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.ValidationContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 public class ModLootTableProvider extends LootTableProvider {
 
-    public ModLootTableProvider(DataGenerator pGenerator) {
-        super(pGenerator);
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return "ResourcefulBees Loot Table Provider";
-    }
-
-    @Override
-    protected @NotNull List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
-        List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> tables = new ArrayList<>();
-        tables.add(Pair.of(BlockLootTables::new, LootContextParamSets.BLOCK));
-        return tables;
+    public ModLootTableProvider(DataGenerator generator, CompletableFuture<HolderLookup.Provider> provider) {
+        super(generator.getPackOutput(), Set.of(), List.of(
+            new SubProviderEntry(BlockLootTables::new, LootContextParamSets.BLOCK)
+        ));
     }
 
     @Override

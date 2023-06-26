@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.client.util.displays.EntityDisplay;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
-import com.teamresourceful.resourcefullib.common.utils.TagUtils;
+import com.teamresourceful.resourcefullib.common.nbt.TagUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -38,7 +38,7 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
     @Override
     public boolean activate(ServerLevel level, BlockPos pos) {
         CompoundTag entityTag = predicate().getTag().map(nbt -> TagUtils.tagWithData(NBTConstants.ENTITY_TAG, nbt)).orElse(new CompoundTag());
-        Entity entity = predicate().entityType().spawn(level, entityTag, null, null, pos, MobSpawnType.CONVERSION, false, false);
+        Entity entity = predicate().entityType().spawn(level, entityTag, null, pos, MobSpawnType.CONVERSION, false, false);
         if (entity != null) {
             level.levelEvent(2005, pos.below(1), 0);
         }

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class SolidificationChamberMenu extends AbstractModContainerMenu<SolidificationChamberBlockEntity> {
 
     public SolidificationChamberMenu(int id, Inventory inv, FriendlyByteBuf buf) {
-        this(id, inv, getTileFromBuf(inv.player.level, buf, SolidificationChamberBlockEntity.class));
+        this(id, inv, getTileFromBuf(inv.player.level(), buf, SolidificationChamberBlockEntity.class));
     }
 
     public SolidificationChamberMenu(int id, Inventory inv, SolidificationChamberBlockEntity entity) {

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class CentrifugeItemOutputContainer extends CentrifugeContainer<CentrifugeItemOutputEntity> {
 
     public CentrifugeItemOutputContainer(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeItemOutputEntity.class), new CentrifugeState().deserializeBytes(buffer), dummyEnergyStorageData());
+        this(id, inv, getTileFromBuf(inv.player.level(), buffer, CentrifugeItemOutputEntity.class), new CentrifugeState().deserializeBytes(buffer), dummyEnergyStorageData());
     }
 
     public CentrifugeItemOutputContainer(int id, Inventory inv, CentrifugeItemOutputEntity entity, CentrifugeState state, CentrifugeEnergyStorage energyStorage) {

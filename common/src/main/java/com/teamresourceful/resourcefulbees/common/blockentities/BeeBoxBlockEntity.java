@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
-import com.teamresourceful.resourcefullib.common.utils.TagUtils;
+import com.teamresourceful.resourcefullib.common.nbt.TagUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;

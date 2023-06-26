@@ -10,13 +10,12 @@ import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
 
 public final class CentrifugeBlocks {
 
     public static final ResourcefulRegistry<Block> CENTRIFUGE_BLOCKS = ResourcefulRegistries.create(ModBlocks.BLOCKS);
 
-    public static final BlockBehaviour.Properties CENTRIFUGE_PROPERTIES = BlockBehaviour.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL);
+    public static final BlockBehaviour.Properties CENTRIFUGE_PROPERTIES = BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL);
 
     //region Centrifuge Multiblock Blocks
     public static final RegistryEntry<Block> CENTRIFUGE_CASING = CENTRIFUGE_BLOCKS.register("centrifuge/casing", () -> new CentrifugeCasing(CENTRIFUGE_PROPERTIES));

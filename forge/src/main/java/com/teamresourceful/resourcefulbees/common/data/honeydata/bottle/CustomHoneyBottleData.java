@@ -13,6 +13,7 @@ import com.teamresourceful.resourcefullib.common.codecs.recipes.LazyHolders;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
@@ -32,7 +33,7 @@ public record CustomHoneyBottleData(
                 Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneyBottleData::color),
                 CustomHoneyFoodData.CODEC.fieldOf("food").orElse(CustomHoneyFoodData.DEFAULT).forGetter(HoneyBottleData::food),
                 EnumCodec.of(Rarity.class).fieldOf("rarity").orElse(Rarity.COMMON).forGetter(HoneyBottleData::rarity),
-                LazyHolders.LAZY_ITEM.fieldOf("honeyBottle").orElse(LazyHolder.of(Registry.ITEM, Items.HONEY_BOTTLE)).forGetter(HoneyBottleData::bottle),
+                LazyHolders.LAZY_ITEM.fieldOf("honeyBottle").orElse(LazyHolder.of(BuiltInRegistries.ITEM, Items.HONEY_BOTTLE)).forGetter(HoneyBottleData::bottle),
                 TradeData.CODEC.fieldOf("tradeData").orElse(TradeData.DEFAULT).forGetter(HoneyBottleData::tradeData)
         ).apply(instance, CustomHoneyBottleData::new));
     }

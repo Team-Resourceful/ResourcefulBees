@@ -11,7 +11,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Contract;
 
@@ -64,7 +63,7 @@ public class ModUtils {
     }
 
     @ExpectPlatform
-    public static Explosion.BlockInteraction getExplosionInteraction(Level level, Entity entity) {
+    public static Level.ExplosionInteraction getExplosionInteraction(Level level, Entity entity) {
         throw new NotImplementedError();
     }
 }

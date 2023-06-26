@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.traits;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.api.registry.TraitAbilityRegistry;
@@ -11,14 +10,9 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Bee
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.HistoryScreen;
-import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Widget;
-import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -26,7 +20,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
@@ -34,9 +27,7 @@ import java.util.stream.Stream;
 
 import static com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.bees.BeePage.TEXTURE;
 
-public class TraitPage extends HistoryScreen implements TooltipProvider {
-
-    private final List<Widget> renderables = new ArrayList<>();
+public class TraitPage extends HistoryScreen {
 
     private Category category;
     private SelectionList<ListEntry> list;
@@ -75,21 +66,15 @@ public class TraitPage extends HistoryScreen implements TooltipProvider {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
 
-        RenderUtils.bindTexture(TEXTURE);
-        GuiComponent.blit(stack, 0, 19, 0, 0, 186, 3, 186, 3);
+        graphics.blit(TEXTURE, 0, 19, 0, 0, 186, 3, 186, 3);
 
         Font font = Minecraft.getInstance().font;
-        font.draw(stack, this.data.getDisplayName(), 24, 1, 0xFFFFFF);
-        font.draw(stack, this.data.name(), 24, 10, 0x555555);
+        graphics.drawString(font, this.data.getDisplayName(), 24, 1, 0xFFFFFF, false);
+        graphics.drawString(font, this.data.name(), 24, 10, 0x555555, false);
 
-    }
-
-    @Override
-    public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
-        return TooltipProvider.getTooltips(this.renderables, mouseX, mouseY);
     }
 
     public Trait getData() {
@@ -113,18 +98,6 @@ public class TraitPage extends HistoryScreen implements TooltipProvider {
             case ABILITIES -> this.data.specialAbilities().stream().map(TraitAbilityRegistry.get()::getAbility).filter(Objects::nonNull).map(BasicEntry::of).toList();
             case AURAS -> this.data.auras().stream().map(BasicEntry::of).toList();
         });
-    }
-
-    @Override
-    protected <T extends GuiEventListener & Widget & NarratableEntry> @NotNull T addRenderableWidget(@NotNull T widget) {
-        this.renderables.add(widget);
-        return super.addRenderableWidget(widget);
-    }
-
-    @Override
-    protected <T extends Widget> @NotNull T addRenderableOnly(@NotNull T widget) {
-        this.renderables.add(widget);
-        return super.addRenderableOnly(widget);
     }
 
     enum Category {

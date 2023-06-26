@@ -5,16 +5,16 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
-public class CrankItem extends BlockItem implements IAnimatable {
+public class CrankItem extends BlockItem implements GeoItem {
 
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
 
     public CrankItem(Block block, Properties pProperties) {
         super(block, pProperties);
@@ -34,10 +34,10 @@ public class CrankItem extends BlockItem implements IAnimatable {
     }
 
     @Override
-    public void registerControllers(AnimationData data) {}
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {}
 
     @Override
-    public AnimationFactory getFactory() {
-        return factory;
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return animationCache;
     }
 }

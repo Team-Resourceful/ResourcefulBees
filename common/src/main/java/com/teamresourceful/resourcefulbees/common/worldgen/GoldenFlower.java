@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.tags.ModBiomeTags;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -25,7 +26,7 @@ public final class GoldenFlower {
         if (!event.isCanceled() && event.level() instanceof ServerLevel level && event.state().is(Blocks.GRASS_BLOCK) && level.getBiome(event.pos()).is(ModBiomeTags.ALLOWS_GOLD_FLOWER)) {
             RandomSource random = level.getRandom();
             if (random.nextInt(10) == 0) {
-                Optional<? extends Registry<ConfiguredFeature<?, ?>>> registry = level.registryAccess().registry(Registry.CONFIGURED_FEATURE_REGISTRY);
+                Optional<? extends Registry<ConfiguredFeature<?, ?>>> registry = level.registryAccess().registry(Registries.CONFIGURED_FEATURE);
                 if (registry.isPresent()) {
                     ConfiguredFeature<?, ?> feature = registry.get().get(GOLD_FLOWER_FEATURE);
                     if (feature != null) {

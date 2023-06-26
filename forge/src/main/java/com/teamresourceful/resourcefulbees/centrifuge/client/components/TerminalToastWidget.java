@@ -1,15 +1,14 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.components;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import static com.teamresourceful.resourcefulbees.client.util.TextUtils.FONT_COLOR_1;
 import static com.teamresourceful.resourcefulbees.client.util.TextUtils.TERMINAL_FONT_8;
 
-public class TerminalToastWidget extends GuiComponent implements Widget {
+public class TerminalToastWidget implements Renderable {
 
     private @NotNull Component toastText;
     private int displayTime;
@@ -29,10 +28,10 @@ public class TerminalToastWidget extends GuiComponent implements Widget {
     }
 
     @Override
-    public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(@NotNull GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         if (displayTime > 0) {
             --displayTime;
-            TERMINAL_FONT_8.draw(pPoseStack, toastText, x, y, FONT_COLOR_1);
+            graphics.drawString(TERMINAL_FONT_8, toastText, x, y, FONT_COLOR_1, false);
         } else if (displayTime == 0) {
             displayTime = -1;
         }

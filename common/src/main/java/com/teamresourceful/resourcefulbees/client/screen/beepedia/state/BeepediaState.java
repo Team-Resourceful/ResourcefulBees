@@ -3,9 +3,9 @@ package com.teamresourceful.resourcefulbees.client.screen.beepedia.state;
 import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaTextures;
-import com.teamresourceful.resourcefulbees.common.util.TriState;
 import com.teamresourceful.resourcefullib.client.screens.state.PageState;
 import com.teamresourceful.resourcefullib.client.screens.state.ScreenState;
+import com.teamresourceful.resourcefullib.common.utils.TriState;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +23,7 @@ public class BeepediaState implements ScreenState {
 
     public TriState getSorting(Sorting sorting) {
         if (sorting.equals(this.sorting.getFirst())) return this.sorting.getSecond();
-        return TriState.UNSET;
+        return TriState.UNDEFINED;
     }
 
     @Override

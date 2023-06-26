@@ -1,18 +1,16 @@
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.traits;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
+import com.teamresourceful.resourcefulbees.client.component.selection.BaseListEntry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
-import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
-import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -22,9 +20,7 @@ import java.util.List;
 
 import static com.teamresourceful.resourcefulbees.client.component.selection.BeeEntry.SLOT_TEXTURE;
 
-public class BasicEntry extends ListEntry implements TooltipProvider {
-
-    private boolean hovered;
+public class BasicEntry extends BaseListEntry {
 
     private final ItemStack icon;
     private final Component title;
@@ -70,28 +66,22 @@ public class BasicEntry extends ListEntry implements TooltipProvider {
     }
 
     @Override
-    protected void render(@NotNull ScissorBoxStack scissorStack, @NotNull PoseStack stack, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
-        this.hovered = hovered;
-        try (var ignored = new CloseablePoseStack(stack)) {
-            ignored.translate(left, top, 0);
+    protected void render(@NotNull GuiGraphics graphics, @NotNull ScissorBoxStack scissorStack, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
+        try (var pose = new CloseablePoseStack(graphics)) {
+            pose.translate(left, top, 0);
             Minecraft instance = Minecraft.getInstance();
             Font font = instance.font;
 
-            RenderUtils.renderItem(stack, this.icon, 3, 2);
+            graphics.renderItem(this.icon, 3, 2);
 
-            RenderUtils.bindTexture(SLOT_TEXTURE);
-            GuiComponent.blit(stack, 1, 0, 0, 0, 20, 20, 20, 60);
+            graphics.blit(SLOT_TEXTURE, 1, 0, 0, 0, 20, 20, 20, 60);
 
-            GuiComponent.drawString(stack, font, this.title, 24, 1, this.color);
-            GuiComponent.drawString(stack, font, this.tooltip != null ? this.tooltip : this.description, 24, 11, 0xAAAAAA);
+            graphics.drawString(font, this.title, 24, 1, this.color);
+            graphics.drawString(font, this.tooltip != null ? this.tooltip : this.description, 24, 11, 0xAAAAAA);
         }
-    }
 
-    @Override
-    public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
-        if (!this.hovered || this.tooltip == null) {
-            return List.of();
+        if (hovered) {
+            ScreenUtils.setTooltip(List.of(this.title, this.description));
         }
-        return List.of(this.title, this.description);
     }
 }

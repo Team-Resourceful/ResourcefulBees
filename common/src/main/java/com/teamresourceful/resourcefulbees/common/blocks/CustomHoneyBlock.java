@@ -12,7 +12,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -26,8 +25,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -44,7 +42,7 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
     protected final HoneyBlockData data;
 
     public CustomHoneyBlock(HoneyBlockData data) {
-        super(Properties.of(Material.CLAY).speedFactor(data.speedFactor()).jumpFactor(data.jumpFactor()).noOcclusion().sound(SoundType.HONEY_BLOCK));
+        super(Properties.of().speedFactor(data.speedFactor()).jumpFactor(data.jumpFactor()).noOcclusion().sound(SoundType.HONEY_BLOCK));
         this.color = data.color();
         this.data = data;
     }
@@ -83,9 +81,10 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
 
 
     //region Item stuff
+
     @NotNull
     @Override
-    public List<ItemStack> getDrops(@NotNull BlockState state, @NotNull LootContext.Builder builder) {
+    public List<ItemStack> getDrops(@NotNull BlockState blockState, @NotNull LootParams.Builder builder) {
         return Collections.singletonList(this.asItem().getDefaultInstance());
     }
 
@@ -100,20 +99,20 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
     //region Sliding Stuff
 
     @Override
-    public void fallOn(Level world, @NotNull BlockState state, @NotNull BlockPos blockPos, Entity entity, float distance) {
+    public void fallOn(Level level, @NotNull BlockState state, @NotNull BlockPos blockPos, Entity entity, float distance) {
         entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
-        if (world.isClientSide) {
+        if (level.isClientSide) {
             addParticles(entity);
         }
 
-        if (entity.causeFallDamage(distance, 0.2F, DamageSource.FALL)) {
+        if (entity.causeFallDamage(distance, 0.2F, level.damageSources().fall())) {
             entity.playSound(this.soundType.getFallSound(), this.soundType.getVolume() * 0.5F, this.soundType.getPitch() * 0.75F);
         }
 
     }
 
     private boolean isSliding(BlockPos pos, Entity entity) {
-        if (entity.isOnGround()) return false;
+        if (entity.onGround()) return false;
         else if (entity.getY() > pos.getY() + 0.9375D - 1.0E-7D) return false;
         else if (entity.getDeltaMovement().y >= -0.08D) return false;
 
@@ -134,8 +133,8 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
     }
 
     private void triggerAdvancement(Entity entity, BlockPos blockPos) {
-        if (entity instanceof ServerPlayer player && entity.level.getGameTime() % 20L == 0L) {
-            CriteriaTriggers.HONEY_BLOCK_SLIDE.trigger(player, entity.level.getBlockState(blockPos));
+        if (entity instanceof ServerPlayer player && entity.level().getGameTime() % 20L == 0L) {
+            CriteriaTriggers.HONEY_BLOCK_SLIDE.trigger(player, entity.level().getBlockState(blockPos));
         }
     }
 
@@ -168,7 +167,7 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
     private void addParticles(Entity entity) {
         BlockParticleOption particleData = new BlockParticleOption(ParticleTypes.BLOCK, this.defaultBlockState());
         for (int i = 0; i < 5; ++i) {
-            entity.level.addParticle(particleData, entity.getX(), entity.getY(), entity.getZ(), 0.0D, 0.0D, 0.0D);
+            entity.level().addParticle(particleData, entity.getX(), entity.getY(), entity.getZ(), 0.0D, 0.0D, 0.0D);
         }
     }
 }

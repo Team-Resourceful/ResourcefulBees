@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Mod
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -40,7 +40,7 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
 
     @Override
     public boolean activate(ServerLevel level, BlockPos pos) {
-        if (!level.getBlockState(pos).getMaterial().isReplaceable()) return false;
+        if (!level.getBlockState(pos).canBeReplaced()) return false;
         //TODO see about changing the block codec to allow for blockstates (current one doesn't expose them even if they are avaliable to input)
         BlockState state = this.predicate.block().defaultBlockState();
         BlockState blockState = Block.updateFromNeighbourShapes(state, level, pos);
@@ -77,7 +77,7 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
         ItemStack stack = new ItemStack(Items.BARRIER);
         Item item = predicate.block().asItem();
         if (item.equals(Items.AIR)) {
-            stack.setHoverName(Component.translatable(ModTranslations.MUTATION_BLOCK, Registry.BLOCK.getKey(predicate.block())));
+            stack.setHoverName(Component.translatable(ModTranslations.MUTATION_BLOCK, BuiltInRegistries.BLOCK.getKey(predicate.block())));
         } else {
             stack = new ItemStack(item);
         }

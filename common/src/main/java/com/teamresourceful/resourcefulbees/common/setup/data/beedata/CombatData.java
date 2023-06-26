@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.BeeCombatData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import net.minecraft.Util;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -36,7 +36,7 @@ public record CombatData(
             Codec.BOOL.fieldOf("removeStingerOnAttack").orElse(true).forGetter(BeeCombatData::removeStingerOnAttack),
             Codec.BOOL.fieldOf("inflictsPoison").orElse(true).forGetter(BeeCombatData::inflictsPoison),
             Codec.BOOL.fieldOf("isInvulnerable").orElse(false).forGetter(BeeCombatData::isInvulnerable),
-            Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("attributes").orElse(DEFAULT_ATTRIBUTES).forGetter(BeeCombatData::attributes)
+            Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("attributes").orElse(DEFAULT_ATTRIBUTES).forGetter(BeeCombatData::attributes)
     ).apply(instance, CombatData::new));
     public static final BeeDataSerializer<BeeCombatData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("combat"), 1, id -> CODEC, DEFAULT);
 

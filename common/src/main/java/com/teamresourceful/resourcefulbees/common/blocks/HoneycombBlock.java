@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -38,8 +38,8 @@ public class HoneycombBlock extends Block {
 
     @NotNull
     @Override
-    public List<ItemStack> getDrops(@NotNull BlockState state, @NotNull LootContext.Builder builder) {
-        List<ItemStack> drops = super.getDrops(state, builder);
+    public List<ItemStack> getDrops(@NotNull BlockState blockState, @NotNull LootParams.Builder builder) {
+        List<ItemStack> drops = super.getDrops(blockState, builder);
         drops.add(this.asItem().getDefaultInstance());
         return drops;
     }

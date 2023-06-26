@@ -215,7 +215,7 @@ public class ModBeePollinateGoal extends Goal {
 
     private void handleEntityFlower() {
         if (bee.tickCount % 5 == 0 && bee.getCoreData().hasEntityFlower()) {
-            Entity flowerEntity = bee.level.getEntity(bee.entityFlower.get());
+            Entity flowerEntity = bee.level().getEntity(bee.entityFlower.get());
             if (flowerEntity != null) {
                 boundingBox = new Vec3(flowerEntity.getBoundingBox().getCenter().x(), flowerEntity.getBoundingBox().maxY, flowerEntity.getBoundingBox().getCenter().z());
                 bee.setSavedFlowerPos(flowerEntity.blockPosition());
@@ -234,7 +234,7 @@ public class ModBeePollinateGoal extends Goal {
     public Optional<BlockPos> findFlower(double range) {
         BlockPos beePos = bee.blockPosition();
         if (bee.getCoreData().hasEntityFlower()) {
-            return bee.level.getEntities(bee, new AABB(bee.blockPosition()).inflate(range), entity -> bee.getCoreData().isEntityFlower(entity.getType()))
+            return bee.level().getEntities(bee, new AABB(bee.blockPosition()).inflate(range), entity -> bee.getCoreData().isEntityFlower(entity.getType()))
                     .stream()
                     .filter(Entity::isAlive)
                     .findFirst()
@@ -258,8 +258,8 @@ public class ModBeePollinateGoal extends Goal {
     public Predicate<BlockPos> getFlowerBlockPredicate() {
         return pos -> {
             if (bee.getCoreData().flowers().size() > 0){
-                if (!bee.level.isInWorldBounds(pos)) return false;
-                BlockState state = bee.level.getBlockState(pos);
+                if (!bee.level().isInWorldBounds(pos)) return false;
+                BlockState state = bee.level().getBlockState(pos);
                 if (state.isAir()) return false;
                 return state.is(bee.getCoreData().flowers());
             }

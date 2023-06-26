@@ -18,13 +18,10 @@ subprojects {
 
     dependencies {
         minecraft "com.mojang:minecraft:$mc_version"
-        // The following line declares the mojmap mappings, you may use other mappings as well
         mappings loom.layered() {
             officialMojangMappings()
             parchment("org.parchmentmc.data:parchment-$mc_version:$parchment_version@zip")
         }
-        // The following line declares the yarn mappings you may select this one as well.
-        // mappings "net.fabricmc:yarn:@YARN_MAPPINGS@:v2"
     }
 }
 
@@ -127,10 +124,6 @@ allprojects {
 
 resourcefulGradle {
     templates {
-        //I have no idea how to get rid of the warnings in idea. switching from interface to abstract
-        //gets rid of *some* warnings. so we just have to live with them as they are now since that's how
-        //the gradle docs say to make a plugin with nested DSL
-
         readme {
             source = file("dev_resources/project_templates/README.md.template")
             injectedValues = [

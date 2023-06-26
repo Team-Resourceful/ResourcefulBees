@@ -46,7 +46,7 @@ public class BeeBoxItem extends BlockItem implements ExpandableTooltip {
     @NotNull
     @Override
     public InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
-        if (temp || entity.level.isClientSide() || !(entity instanceof Bee target) || !entity.isAlive()) {
+        if (temp || entity.level().isClientSide() || !(entity instanceof Bee target) || !entity.isAlive()) {
             return InteractionResult.FAIL;
         }
 

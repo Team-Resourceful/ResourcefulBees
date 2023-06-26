@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class CentrifugeMenu extends AbstractModContainerMenu<CentrifugeBlockEntity> {
 
     public CentrifugeMenu(int id, Inventory inv, FriendlyByteBuf buf) {
-        this(id, inv, getTileFromBuf(inv.player.level, buf, CentrifugeBlockEntity.class));
+        this(id, inv, getTileFromBuf(inv.player.level(), buf, CentrifugeBlockEntity.class));
     }
 
     public CentrifugeMenu(int id, Inventory inv, CentrifugeBlockEntity entity) {

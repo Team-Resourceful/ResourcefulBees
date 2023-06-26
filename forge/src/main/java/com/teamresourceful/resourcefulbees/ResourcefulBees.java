@@ -56,14 +56,14 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
-import software.bernie.geckolib3.GeckoLib;
+import software.bernie.geckolib.GeckoLib;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mod(ModConstants.MOD_ID)
 public class ResourcefulBees {
 
-    public static final Configurator CONFIGURATOR = new Configurator(true);
+    public static final Configurator CONFIGURATOR = new Configurator();
 
     public ResourcefulBees() {
         ModConstants.forceInit();

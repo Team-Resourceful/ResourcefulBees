@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.blockentity.centrifuge;
 
+import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeBlock;
-import com.teamresourceful.resourcefulbees.common.blockentity.base.SelectableFluidContainerHandler;
 import com.teamresourceful.resourcefulbees.common.blockentity.base.InventorySyncedBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentity.base.SelectableFluidContainerHandler;
 import com.teamresourceful.resourcefulbees.common.capabilities.SelectableMultiFluidTank;
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.CentrifugeMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
@@ -31,21 +31,31 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements IAnimatable, SelectableFluidContainerHandler {
+public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements GeoBlockEntity, SelectableFluidContainerHandler {
+
+    private static final RawAnimation ROT_360 = RawAnimation.begin().thenPlay("animation.centrifuge.360");
+    private static final RawAnimation ROT_45 = RawAnimation.begin().thenPlay("animation.centrifuge.45");
+    private static final RawAnimation ROT_90 = RawAnimation.begin().thenPlay("animation.centrifuge.90");
+    private static final RawAnimation ROT_135 = RawAnimation.begin().thenPlay("animation.centrifuge.135");
+    private static final RawAnimation ROT_180 = RawAnimation.begin().thenPlay("animation.centrifuge.180");
+    private static final RawAnimation ROT_225 = RawAnimation.begin().thenPlay("animation.centrifuge.225");
+    private static final RawAnimation ROT_270 = RawAnimation.begin().thenPlay("animation.centrifuge.270");
+    private static final RawAnimation ROT_315 = RawAnimation.begin().thenPlay("animation.centrifuge.315");
+
 
     private final SelectableMultiFluidTank tank = new SelectableMultiFluidTank(32000, fluid -> false);
     private final LazyOptional<SelectableMultiFluidTank> tankOptional = LazyOptional.of(() -> tank);
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
 
     private boolean firstCheck = true;
 
@@ -192,30 +202,29 @@ public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements
     }
 
     //region Animation
-    protected  <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+    protected  <E extends GeoAnimatable> PlayState predicate(AnimationState<E> event) {
         int value = getBlockState().getValue(CentrifugeBlock.ROTATION);
-        var animationBuilder = new AnimationBuilder();
-        switch (value) {
-            case 1 -> animationBuilder.addAnimation("animation.centrifuge.360", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("animation.centrifuge.0", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-            case 2 -> animationBuilder.addAnimation("animation.centrifuge.45", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-            case 3 -> animationBuilder.addAnimation("animation.centrifuge.90", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-            case 4 -> animationBuilder.addAnimation("animation.centrifuge.135", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-            case 5 -> animationBuilder.addAnimation("animation.centrifuge.180", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-            case 6 -> animationBuilder.addAnimation("animation.centrifuge.225", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-            case 7 -> animationBuilder.addAnimation("animation.centrifuge.270", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-            case 8 -> animationBuilder.addAnimation("animation.centrifuge.315", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
-        }
-        event.getController().setAnimation(animationBuilder);
+        RawAnimation animation = switch (value) {
+            case 2 -> ROT_45;
+            case 3 -> ROT_90;
+            case 4 -> ROT_135;
+            case 5 -> ROT_180;
+            case 6 -> ROT_225;
+            case 7 -> ROT_270;
+            case 8 -> ROT_315;
+            default -> ROT_360;
+        };
+        event.getController().setAnimation(animation);
         return PlayState.CONTINUE;
     }
 
     @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "controller", 10, this::predicate));
     }
 
     @Override
-    public AnimationFactory getFactory() {
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
         return factory;
     }
     //endregion

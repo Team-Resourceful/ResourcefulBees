@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.render.entities.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
@@ -9,25 +10,25 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
-import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.renderer.GeoRenderer;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
-public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoLayerRenderer<E> {
+public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoRenderLayer<E> {
 
     private final BeeRenderData renderData;
     private final BeeLayerData layerData;
-    private final IGeoRenderer<E> renderer;
+    private final GeoRenderer<E> renderer;
 
-    public CustomBeeLayer(IGeoRenderer<E> renderer, BeeRenderData renderData, BeeLayerData layerData) {
+    public CustomBeeLayer(GeoRenderer<E> renderer, BeeRenderData renderData, BeeLayerData layerData) {
         super(renderer);
         this.renderData = renderData;
         this.layerData = layerData;
         this.renderer = renderer;
     }
 
-
     @Override
-    public void render(PoseStack stack, MultiBufferSource buffer, int packedLight, E bee, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack stack, E bee, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource buffer, VertexConsumer consumer, float partialTicks, int packedLight, int packedOverlay) {
         if (!bee.hasNectar() && layerData.pollenLayer()) return;
         ResourceLocation texture = layerData.texture().getTexture(bee);
 
@@ -36,7 +37,6 @@ public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoLayerRenderer<
             case GLOW -> renderGlowLayer(stack, buffer, bee, partialTicks, texture);
             case ENCHANTED -> renderEnchantedLayer(stack, buffer, packedLight, bee, partialTicks);
         }
-
     }
 
     private void renderEnchantedLayer(PoseStack stack, MultiBufferSource buffer, int packedLight, E bee, float partialTicks) {
@@ -54,9 +54,8 @@ public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoLayerRenderer<
     }
 
     private void renderLayer(E bee, float partialTicks, PoseStack stack, MultiBufferSource buffer, RenderType texture, int packedLight, int bee1, float layerData, float layerData1, float layerData2, float alpha) {
-        renderer.render(this.getEntityModel().getModel(renderData.model()),
-                bee, partialTicks,
-                null, stack, null, buffer.getBuffer(texture),
+        renderer.reRender(this.getGeoModel().getBakedModel(renderData.model()),
+                stack, buffer, bee, texture, buffer.getBuffer(texture), partialTicks,
                 packedLight, bee1,
                 layerData, layerData1, layerData2, alpha);
     }

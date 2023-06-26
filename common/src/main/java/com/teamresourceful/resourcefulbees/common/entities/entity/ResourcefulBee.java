@@ -123,7 +123,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             this.goalSelector.addGoal(3, new BeeTemptGoal(this, 1.25D));
             this.goalSelector.addGoal(6, new FollowParentGoal(this, 1.25D));
         }
-        if (getMutationData().hasMutation(level)) {
+        if (getMutationData().hasMutation(level())) {
             this.goalSelector.addGoal(5, new BeeFakeFlowerGoal(this));
             this.goalSelector.addGoal(8, new BeeMutateGoal(this));
         }
@@ -139,7 +139,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (this.hasHive()) {
             BlockPos pos = this.getHivePos();
             if (pos != null) {
-                BlockEntity blockEntity = this.level.getBlockEntity(pos);
+                BlockEntity blockEntity = this.level().getBlockEntity(pos);
                 return blockEntity instanceof TieredBeehiveBlockEntity hive && hive.isAllowedBee()
                         || blockEntity instanceof BeeHolderBlockEntity apiary && apiary.isAllowedBee()
                         || blockEntity instanceof BeehiveBlockEntity;
@@ -186,15 +186,15 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     public boolean isFakeFlowerValid() {
-        return this.fakeFlower.hasData() && WorldUtils.checkBlock(this.level, this.fakeFlower.get(), state -> state.is(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.FAKE_FLOWER.get()));
+        return this.fakeFlower.hasData() && WorldUtils.checkBlock(this.level(), this.fakeFlower.get(), state -> state.is(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.FAKE_FLOWER.get()));
     }
 
     @Override
     public boolean isFlowerValid(@NotNull BlockPos pos) {
         if (getCoreData().hasEntityFlower()) {
-            return this.entityFlower.hasData() && this.level.getEntity(this.entityFlower.get()) != null;
+            return this.entityFlower.hasData() && this.level().getEntity(this.entityFlower.get()) != null;
         }
-        return WorldUtils.checkBlock(this.level, pos, state -> state.is(getCoreData().flowers()));
+        return WorldUtils.checkBlock(this.level(), pos, state -> state.is(getCoreData().flowers()));
     }
 
     @Override
@@ -244,7 +244,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     @Override
     public boolean doHurtTarget(@NotNull Entity entity) {
         float damage = (float) getAttributeValue(Attributes.ATTACK_DAMAGE);
-        if (entity.hurt(DamageSource.sting(this), damage)) {
+        if (entity.hurt(damageSources().sting(this), damage)) {
             this.doEnchantDamageEffects(this, entity);
             if (entity instanceof LivingEntity target) {
                 target.setStingerCount(target.getStingerCount() + 1);
@@ -282,7 +282,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private int getDifficultyModifier() {
-        return switch (this.level.getDifficulty()) {
+        return switch (this.level().getDifficulty()) {
             case EASY -> 5;
             case NORMAL -> 10;
             case HARD -> 18;
@@ -295,10 +295,10 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private void explode(int radius) {
-        if (!this.level.isClientSide) {
-            Explosion.BlockInteraction mode = ModUtils.getExplosionInteraction(level, this);
+        if (!this.level().isClientSide) {
+            Level.ExplosionInteraction mode = ModUtils.getExplosionInteraction(level(), this);
             this.dead = true;
-            this.level.explode(this, this.getX(), this.getY(), this.getZ(), random.nextFloat() * radius, explosiveCooldown > 0 ? Explosion.BlockInteraction.NONE : mode);
+            this.level().explode(this, this.getX(), this.getY(), this.getZ(), random.nextFloat() * radius, explosiveCooldown > 0 ? Level.ExplosionInteraction.NONE : mode);
             this.discard();
             this.spawnLingeringCloud(this.getActiveEffects().stream().map(MobEffectInstance::new).toList());
         }
@@ -306,7 +306,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     private void spawnLingeringCloud(Collection<MobEffectInstance> effects) {
         if (!effects.isEmpty()) {
-            AreaEffectCloud cloud = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
+            AreaEffectCloud cloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
             cloud.setRadius(2.5F);
             cloud.setRadiusOnUse(-0.5F);
             cloud.setWaitTime(10);
@@ -314,7 +314,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             cloud.setRadiusPerTick(-cloud.getRadius() / cloud.getDuration());
             effects.forEach(cloud::addEffect);
 
-            this.level.addFreshEntity(cloud);
+            this.level().addFreshEntity(cloud);
         }
 
     }
@@ -336,7 +336,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     public void dropOffMutations() {
         this.numberOfMutations = getMutationData().count();
         if (isFakeFlowerValid()) {
-            level.getBlockEntity(fakeFlower.get(), ModBlockEntityTypes.FAKE_FLOWER_ENTITY.get())
+            level().getBlockEntity(fakeFlower.get(), ModBlockEntityTypes.FAKE_FLOWER_ENTITY.get())
                 .ifPresent(entity -> entity.createPollen(this));
         }
     }

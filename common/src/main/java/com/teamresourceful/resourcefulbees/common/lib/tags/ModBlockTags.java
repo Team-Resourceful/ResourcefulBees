@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.lib.tags;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -20,6 +20,6 @@ public final class ModBlockTags {
     }
 
     private static TagKey<Block> createBlockTag(String mod, String path) {
-        return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(mod, path));
+        return TagKey.create(Registries.BLOCK, new ResourceLocation(mod, path));
     }
 }

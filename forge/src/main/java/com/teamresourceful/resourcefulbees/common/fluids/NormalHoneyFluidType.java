@@ -75,9 +75,9 @@ public class NormalHoneyFluidType extends FluidType {
 
     private float getEntitySlowdownModifier(FluidState state, LivingEntity entity) {
         final float divisor = entity.isSprinting() ? 7_000F : 10_000F;
-        var density = getDensity(state, entity.level, entity.blockPosition());
+        var density = getDensity(state, entity.level(), entity.blockPosition());
 
-        if (entity.getLevel().dimensionType().ultraWarm()) {
+        if (entity.level().dimensionType().ultraWarm()) {
             density *= 0.5;
         }
 

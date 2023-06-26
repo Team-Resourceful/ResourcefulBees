@@ -104,7 +104,7 @@ public class HoneyDipperItem extends Item {
 
     @Override
     public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
-        if (player.level instanceof ServerLevel serverLevel) {
+        if (player.level() instanceof ServerLevel serverLevel) {
             Entity stackEntity = getEntity(serverLevel, stack);
 
             if (entity instanceof Bee bee && stackEntity == null) {

@@ -31,7 +31,7 @@ public class BeeAngerGoal extends HurtByTargetGoal {
     protected void alertOthers() {
         if (this.mob.getLastHurtByMob() != null) {
             double dist = this.getFollowDistance();
-            for (Bee bee : this.mob.level.getEntitiesOfClass(Bee.class, this.mob.getBoundingBox().inflate(dist, 10.0D, dist))) {
+            for (Bee bee : this.mob.level().getEntitiesOfClass(Bee.class, this.mob.getBoundingBox().inflate(dist, 10.0D, dist))) {
                 this.alertOther(bee, this.mob.getLastHurtByMob());
             }
         }

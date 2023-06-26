@@ -52,7 +52,7 @@ public final class TemplateCommand {
         DataResult<JsonElement> beeResult = new DispatchMapCodec<>(ResourceLocation.CODEC, BeeDataRegistry.codec(TEMPLATE_STRING))
                 .encodeStart(registryOps(context), DummyBeeData.DATA);
         ModConstants.LOGGER.info(PRETTY_GSON.toJson(beeResult.getOrThrow(false, ModConstants.LOGGER::error)));
-        context.getSource().sendSuccess(ModTranslations.BEE_TEMPLATE_PRINTED, true);
+        context.getSource().sendSuccess(() -> ModTranslations.BEE_TEMPLATE_PRINTED, true);
 
         //TODO move these into their own template commands and finish the entity predicate
         /*LocationPredicate predicate = new LocationPredicate(
@@ -93,7 +93,7 @@ public final class TemplateCommand {
     private static int printHoneycombTemplate(CommandContext<CommandSourceStack> context) {
         DataResult<JsonElement> variationResult = OutputVariation.CODEC.encodeStart(registryOps(context), DummyHoneycombData.DUMMY_OUTPUT_VARIATION);
         ModConstants.LOGGER.info(PRETTY_GSON.toJson(variationResult.getOrThrow(false, ModConstants.LOGGER::error)));
-        context.getSource().sendSuccess(ModTranslations.HONEYCOMB_TEMPLATE_PRINTED, true);
+        context.getSource().sendSuccess(() -> ModTranslations.HONEYCOMB_TEMPLATE_PRINTED, true);
         return 1;
     }
 
@@ -101,14 +101,14 @@ public final class TemplateCommand {
         DataResult<JsonElement> honeyResult = new DispatchMapCodec<>(ResourceLocation.CODEC, HoneyDataRegistry.codec(TEMPLATE_STRING))
                 .encodeStart(registryOps(context), DummyHoneyData.DATA);
         ModConstants.LOGGER.info(PRETTY_GSON.toJson(honeyResult.getOrThrow(false, ModConstants.LOGGER::error)));
-        context.getSource().sendSuccess(ModTranslations.HONEY_TEMPLATE_PRINTED, true);
+        context.getSource().sendSuccess(() -> ModTranslations.HONEY_TEMPLATE_PRINTED, true);
         return 1;
     }
 
     private static int printTraitTemplate(CommandContext<CommandSourceStack> context) {
         DataResult<JsonElement> traitResult = Trait.getCodec(TEMPLATE_STRING).encodeStart(registryOps(context), DummyTraitData.DUMMY_TRAIT_DATA);
         ModConstants.LOGGER.info(PRETTY_GSON.toJson(traitResult.getOrThrow(false, ModConstants.LOGGER::error)));
-        context.getSource().sendSuccess(ModTranslations.TRAIT_TEMPLATE_PRINTED, true);
+        context.getSource().sendSuccess(() -> ModTranslations.TRAIT_TEMPLATE_PRINTED, true);
         return 1;
     }
 }

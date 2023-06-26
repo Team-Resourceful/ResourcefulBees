@@ -23,7 +23,7 @@ public class CentrifugeInputContainer extends CentrifugeContainer<CentrifugeInpu
     private final ProcessContainerData processData;
 
     public CentrifugeInputContainer(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeInputEntity.class), new CentrifugeState().deserializeBytes(buffer), dummyEnergyStorageData());
+        this(id, inv, getTileFromBuf(inv.player.level(), buffer, CentrifugeInputEntity.class), new CentrifugeState().deserializeBytes(buffer), dummyEnergyStorageData());
     }
 
     public CentrifugeInputContainer(int id, Inventory inv, CentrifugeInputEntity entity, CentrifugeState state, CentrifugeEnergyStorage energyStorage) {

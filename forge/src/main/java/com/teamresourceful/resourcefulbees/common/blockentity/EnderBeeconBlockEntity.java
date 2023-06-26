@@ -15,7 +15,7 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffect
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -93,7 +93,8 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         CompoundTag tag = new CompoundTag();
         tag.put(NBTConstants.NBT_TANK, tank.writeToNBT(new CompoundTag()));
         tag.putInt(NBTConstants.Beecon.RANGE, range);
-        if (effects != null && !effects.isEmpty()) tag.put(NBTConstants.Beecon.ACTIVE_EFFECTS, writeEffectsToNBT(new ListTag()));
+        if (effects != null && !effects.isEmpty())
+            tag.put(NBTConstants.Beecon.ACTIVE_EFFECTS, writeEffectsToNBT(new ListTag()));
         return tag;
     }
 
@@ -140,9 +141,9 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
             List<Bee> bees = level.getEntitiesOfClass(Bee.class, getEffectBox(level, pos, this.range));
             bees.stream().filter(CustomBeeEntity.class::isInstance).map(CustomBeeEntity.class::cast).forEach(CustomBeeEntity::setDisruptorInRange);
             this.effects
-                    .stream()
-                    .map(effect -> new MobEffectInstance(effect, 120, 0, false, false))
-                    .forEach(effect -> bees.forEach(bee -> bee.addEffect(new MobEffectInstance(effect))));
+                .stream()
+                .map(effect -> new MobEffectInstance(effect, 120, 0, false, false))
+                .forEach(effect -> bees.forEach(bee -> bee.addEffect(new MobEffectInstance(effect))));
 
             if (state.hasProperty(EnderBeecon.SOUND) && Boolean.TRUE.equals(state.getValue(EnderBeecon.SOUND)))
                 level.playSound(null, pos, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 1f, 1f);
@@ -245,13 +246,16 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
                     this.sendToPlayersTrackingChunk();
                 }
             }
-            case BEAM -> this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(EnderBeecon.BEAM, value == 1), Block.UPDATE_ALL);
-            case SOUND -> this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(EnderBeecon.SOUND, value == 1), Block.UPDATE_ALL);
+            case BEAM ->
+                this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(EnderBeecon.BEAM, value == 1), Block.UPDATE_ALL);
+            case SOUND ->
+                this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(EnderBeecon.SOUND, value == 1), Block.UPDATE_ALL);
             case RANGE -> {
                 this.setRange(value);
                 this.sendToPlayersTrackingChunk();
             }
-            default -> ModConstants.LOGGER.error("UNKNOWN Beecon Configuration Option '{}' please report to github!", option);
+            default ->
+                ModConstants.LOGGER.error("UNKNOWN Beecon Configuration Option '{}' please report to github!", option);
         }
     }
 
@@ -270,23 +274,23 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
 
     public ListTag writeEffectsToNBT(ListTag nbt) {
         effects.stream()
-                .map(Registry.MOB_EFFECT::getKey)
-                .filter(Objects::nonNull)
-                .map(ResourceLocation::toString)
-                .map(StringTag::valueOf)
-                .forEachOrdered(nbt::add);
+            .map(BuiltInRegistries.MOB_EFFECT::getKey)
+            .filter(Objects::nonNull)
+            .map(ResourceLocation::toString)
+            .map(StringTag::valueOf)
+            .forEachOrdered(nbt::add);
         return nbt;
     }
 
     public Set<MobEffect> readEffectsFromNBT(ListTag nbt) {
         return nbt.stream()
-                .filter(StringTag.class::isInstance)
-                .map(Tag::getAsString)
-                .map(ResourceLocation::tryParse)
-                .map(Registry.MOB_EFFECT::getOptional)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toSet());
+            .filter(StringTag.class::isInstance)
+            .map(Tag::getAsString)
+            .map(ResourceLocation::tryParse)
+            .map(BuiltInRegistries.MOB_EFFECT::getOptional)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toSet());
     }
 
     public double getEffectValue(MobEffect effect) {

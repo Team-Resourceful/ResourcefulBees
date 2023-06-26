@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.terminal.input;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.OutputLocationSelectionWidget;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.AbstractInfoPanel;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeInputEntity;
@@ -8,6 +7,7 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.Abstr
 import com.teamresourceful.resourcefulbees.client.util.TextUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,10 +45,10 @@ public class TerminalIOPanel extends AbstractInfoPanel<CentrifugeInputEntity> {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         if (selectedEntity == null) return;
-        super.render(stack, mouseX, mouseY, partialTicks);
-        TextUtils.tf8DrawCenteredStringNoShadow(stack, CentrifugeTranslations.INSTRUCTIONS, x+118.5f, y+36f, TextUtils.FONT_COLOR_1);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        TextUtils.tf8DrawCenteredStringNoShadow(graphics, CentrifugeTranslations.INSTRUCTIONS, x+118, y+36, TextUtils.FONT_COLOR_1);
     }
 
     private void clearOutputLocationSelectionWidgets() {

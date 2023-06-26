@@ -1,10 +1,11 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.screens;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeTerminalEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.CommandPacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
+import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -101,26 +102,26 @@ public final class TerminalCommandHandler {
         return getHistory().subList(Math.max(0, this.history.size() - amount), this.history.size());
     }
 
-    public void render(PoseStack stack, int x, int y) {
-        stack.pushPose();
-        stack.translate(x-2f, y+20d, 0);
-        float pos = 0;
-        List<FormattedCharSequence> history = this.getLastHistory(12);
-        for (int i = 0; i < history.size(); i++) {
-            pos = i * TERMINAL_FONT_8.lineHeight;
-            TERMINAL_FONT_8.draw(stack, history.get(i), 6, pos, FONT_COLOR_1);
+    public void render(GuiGraphics graphics, int x, int y) {
+        try (var pose = new CloseablePoseStack(graphics)) {
+            pose.translate(x - 2f, y + 20d, 0);
+            int pos = 0;
+            List<FormattedCharSequence> history = this.getLastHistory(12);
+            for (int i = 0; i < history.size(); i++) {
+                pos = i * TERMINAL_FONT_8.lineHeight;
+                graphics.drawString(TERMINAL_FONT_8, history.get(i), 6, pos, FONT_COLOR_1, false);
+            }
+            drawInput(graphics, 6, pos + TERMINAL_FONT_8.lineHeight);
         }
-        drawInput(stack, 6, pos + TERMINAL_FONT_8.lineHeight);
-        stack.popPose();
     }
 
-    public void drawInput(PoseStack stack, float x, float y) {
-        TERMINAL_FONT_8.draw(stack, this.getUserInput(), x, y, FONT_COLOR_1);
+    public void drawInput(GuiGraphics graphics, int x, int y) {
+        graphics.drawString(TERMINAL_FONT_8, this.getUserInput(), x, y, FONT_COLOR_1, false);
         long time = System.currentTimeMillis() % 1000;
         if (time / 500 == 0 && TERMINAL_FONT_8.width(this.input + "i") <= 200) {
             Component underline = Component.literal("_").withStyle(Style.EMPTY.withColor(FONT_COLOR_1));
             int width = TERMINAL_FONT_8.width(this.getUserInput());
-            TERMINAL_FONT_8.draw(stack, underline, x + width, y, FONT_COLOR_1);
+            graphics.drawString(TERMINAL_FONT_8, underline, x + width, y, FONT_COLOR_1, false);
         }
     }
 

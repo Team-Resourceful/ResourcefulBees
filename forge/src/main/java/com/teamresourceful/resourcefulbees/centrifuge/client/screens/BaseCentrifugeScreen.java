@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.screens;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.TerminalToastWidget;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.buttons.CloseButton;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.buttons.HelpButton;
@@ -20,8 +19,7 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.ControlPanelTabs;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
-import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -29,8 +27,6 @@ import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> extends AbstractContainerScreen<T> {
 
@@ -71,27 +67,22 @@ public abstract class BaseCentrifugeScreen<T extends CentrifugeContainer<?>> ext
     }
 
     @Override
-    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
-        renderTooltip(matrixStack, TooltipProvider.getTooltips(this.renderables, mouseX, mouseY), Optional.empty(), mouseX, mouseY);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack matrix, int pX, int pY) {
-        TextUtils.tf12DrawCenteredStringNoShadow(matrix, this.title, 166, 5.5f, TextUtils.FONT_COLOR_1);
+    protected void renderLabels(@NotNull GuiGraphics graphics, int pX, int pY) {
+        TextUtils.tf12DrawCenteredStringNoShadow(graphics, this.title, 166, 5, TextUtils.FONT_COLOR_1);
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack matrix, float pPartialTicks, int pX, int pY) {
-        this.renderBackground(matrix);
+    protected void renderBg(@NotNull GuiGraphics graphics, float pPartialTicks, int pX, int pY) {
+        this.renderBackground(graphics);
         if (minecraft == null) return;
-        //BACKGROUND
-        RenderUtils.bindTexture(CentrifugeTextures.BACKGROUND);
-        blit(matrix, leftPos, topPos, 0, 0, imageWidth, imageHeight, 360, 228);
-        //COMPONENTS
-        RenderUtils.bindTexture(CentrifugeTextures.COMPONENTS);
-        blit(matrix, leftPos+102, topPos+39, 19, 0, 237, 164);
+        graphics.blit(CentrifugeTextures.BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight, 360, 228);
+        graphics.blit(CentrifugeTextures.COMPONENTS, leftPos+102, topPos+39, 19, 0, 237, 164);
     }
 
     private void closeScreen() {

@@ -34,7 +34,7 @@ public record BeehiveTier(ResourceLocation id, int maxBees, int maxCombs, double
         if (TIERS.containsKey(id)) {
             return DataResult.success(TIERS.get(id));
         }
-        return DataResult.error("Unknown Beehive Tier: " + id);
+        return DataResult.error(() -> "Unknown Beehive Tier: " + id);
     }
 
     public static BeehiveTier getOrThrow(ResourceLocation id) {

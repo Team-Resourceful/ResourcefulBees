@@ -48,15 +48,16 @@ configurations {
 dependencies {
     forge "net.minecraftforge:forge:$mc_version-$forge_version"
     modImplementation "com.teamresourceful.resourcefullib:resourcefullib-$project.name-$mc_version:$rlib_version"
-    modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-$project.name-$mc_version:$rconfig_version"
+    compileOnly "com.teamresourceful:yabn:1.0.3"
+    modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-$project.name-1.20:$rconfig_version"
     modImplementation "software.bernie.geckolib:$geckolib_forge:$geckolib_version"
-    modImplementation "com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version"
+    modCompileOnly "com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version"
     modImplementation "net.roguelogix.phosphophyllite:Phosphophyllite:$phos_version"
     modCompileOnly "mezz.jei:jei-$mc_version-forge-api:$jei_version"
     modLocalRuntime "mezz.jei:jei-$mc_version-forge:$jei_version" transitive false
     modCompileOnly "mcjty.theoneprobe:theoneprobe:$top_version:api" transitive false
     modLocalRuntime "mcjty.theoneprobe:theoneprobe:$top_version" transitive false
-    modLocalRuntime "com.telepathicgrunt:CommandStructures-Forge:$cstructures_version"
+//    modLocalRuntime "com.telepathicgrunt:CommandStructures-Forge:$cstructures_version"
 
     common(project(path: ":common", configuration: "namedElements")) transitive false
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) transitive false

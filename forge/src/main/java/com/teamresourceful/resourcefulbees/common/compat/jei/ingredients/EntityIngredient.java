@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntit
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -72,7 +72,7 @@ public class EntityIngredient {
     }
 
     public ResourceLocation getEntityId() {
-        return Registry.ENTITY_TYPE.getKey(entityType);
+        return BuiltInRegistries.ENTITY_TYPE.getKey(entityType);
     }
 
     @Override

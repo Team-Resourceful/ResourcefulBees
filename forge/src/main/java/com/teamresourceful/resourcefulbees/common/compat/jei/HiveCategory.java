@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
@@ -16,6 +15,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -91,10 +91,10 @@ public class HiveCategory extends BaseCategory<HiveCategory.Recipe> {
     }
 
     @Override
-    public void draw(@NotNull Recipe recipe, @NotNull IRecipeSlotsView view, @NotNull PoseStack stack, double mouseX, double mouseY) {
-        super.draw(recipe, view, stack, mouseX, mouseY);
-        if (recipe.isApiary) this.apiaryBackground.draw(stack);
-        else this.hiveBackground.draw(stack);
+    public void draw(@NotNull Recipe recipe, @NotNull IRecipeSlotsView view, @NotNull GuiGraphics graphics, double mouseX, double mouseY) {
+        super.draw(recipe, view, graphics, mouseX, mouseY);
+        if (recipe.isApiary) this.apiaryBackground.draw(graphics);
+        else this.hiveBackground.draw(graphics);
     }
 
     public record Recipe(ItemStack comb, List<ItemStack> hives, EntityType<?> entityType, boolean isApiary) {

@@ -127,22 +127,22 @@ public class WanderWorkerGoal extends WorkerGoal {
         }
 
         //create new target block position using relative position and offset
-        BlockPos targetPos = new BlockPos(rndPosX + bee.getX(), rndPosY + bee.getY(), rndPosZ + bee.getZ());
+        BlockPos targetPos = BlockPos.containing(rndPosX + bee.getX(), rndPosY + bee.getY(), rndPosZ + bee.getZ());
 
         //if target Y is between 0 and world height AND (is not in Distance of home OR target pos is in distance of home) AND entity can stand on target pos
-        if (!bee.level.isOutsideBuildHeight(targetPos) && (!this.inDistanceOfHome || bee.isWithinRestriction(targetPos)) && navigation.isStableDestination(targetPos)) {
+        if (!bee.level().isOutsideBuildHeight(targetPos) && (!this.inDistanceOfHome || bee.isWithinRestriction(targetPos)) && navigation.isStableDestination(targetPos)) {
 
             //flip a coin heads = check block above is air if so find valid position above else go below
-            if (random.nextBoolean() && bee.level.isEmptyBlock(bee.blockPosition().above())) {
-                targetPos = RandomPositionGenerator.findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level.getMaxBuildHeight(), pos -> bee.level.getBlockState(pos).getMaterial().isSolid());
+            if (random.nextBoolean() && bee.level().isEmptyBlock(bee.blockPosition().above())) {
+                targetPos = RandomPositionGenerator.findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level().getMaxBuildHeight(), pos -> bee.level().getBlockState(pos).blocksMotion());
             } else {
-                targetPos = RandomPositionGenerator.findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level.getMinBuildHeight(), pos -> bee.level.getBlockState(pos).getMaterial().isSolid());
+                targetPos = RandomPositionGenerator.findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level().getMinBuildHeight(), pos -> bee.level().getBlockState(pos).blocksMotion());
             }
 
             // if can travel through water or target pos is not tagged as water
             if (pathOnWater || !GoalUtils.isWater(bee, targetPos)) {
                 //set path node type based on target position
-                if (bee.getPathfindingMalus(WalkNodeEvaluator.getBlockPathTypeStatic(bee.level, targetPos.mutable())) == 0.0F) {
+                if (bee.getPathfindingMalus(WalkNodeEvaluator.getBlockPathTypeStatic(bee.level(), targetPos.mutable())) == 0.0F) {
                     //calculate if weight of new target position is better than previous target position
                     final double d1 = weightCalculator.applyAsDouble(targetPos);
                     if (d1 > this.currentWeight) {
@@ -161,7 +161,7 @@ public class WanderWorkerGoal extends WorkerGoal {
             final double d1 = -d0 * Mth.sin((float)d4);
             final double d2 = d0 * Mth.cos((float)d4);
             if ((Math.abs(d1) <= horizontalOffset) && (Math.abs(d2) <= horizontalOffset)) {
-                return new BlockPos(d1, random.nextInt(randInt) - randIntMinus, d2);
+                return BlockPos.containing(d1, random.nextInt(randInt) - randIntMinus, d2);
             }
             return null;
         }

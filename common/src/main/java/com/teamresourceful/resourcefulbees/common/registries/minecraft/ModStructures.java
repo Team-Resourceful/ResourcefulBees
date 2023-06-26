@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.mixin.common.StructureTemplatePoolAcc
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.ServerGoingToStartEvent;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 public final class ModStructures {
 
-    private static final ResourceKey<StructureProcessorList> EMPTY_PROCESSOR_LIST_KEY = ResourceKey.create(Registry.PROCESSOR_LIST_REGISTRY, new ResourceLocation("empty"));
+    private static final ResourceKey<StructureProcessorList> EMPTY_PROCESSOR_LIST_KEY = ResourceKey.create(Registries.PROCESSOR_LIST, new ResourceLocation("empty"));
 
     private static void addBuildingToPool(Registry<StructureTemplatePool> pools, Registry<StructureProcessorList> processors, ResourceLocation pool, ResourceLocation piece, int weight) {
         Holder<StructureProcessorList> emptyProcessorList = processors.getHolderOrThrow(EMPTY_PROCESSOR_LIST_KEY);
@@ -41,8 +42,8 @@ public final class ModStructures {
     }
 
     public static void addStructures(ServerGoingToStartEvent event) {
-        Registry<StructureTemplatePool> pools = event.access().registry(Registry.TEMPLATE_POOL_REGISTRY).orElseThrow();
-        Registry<StructureProcessorList> processors = event.access().registry(Registry.PROCESSOR_LIST_REGISTRY).orElseThrow();
+        Registry<StructureTemplatePool> pools = event.access().registry(Registries.TEMPLATE_POOL).orElseThrow();
+        Registry<StructureProcessorList> processors = event.access().registry(Registries.PROCESSOR_LIST).orElseThrow();
 
         addBuildingToPool(pools, processors,
                 new ResourceLocation("village/plains/houses"),

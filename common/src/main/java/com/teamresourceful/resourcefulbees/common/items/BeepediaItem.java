@@ -47,7 +47,7 @@ public class BeepediaItem extends Item {
     @Override
     public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
         if (entity.getType() instanceof CustomBeeEntityType<?> beeType) {
-            if (player.level.isClientSide()) {
+            if (player.level().isClientSide()) {
                 return InteractionResult.PASS;
             } else {
                 BeepediaSavedData.addBee(player, beeType.getBeeType());

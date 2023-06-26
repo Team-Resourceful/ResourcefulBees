@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.components.SelectableFluidWidget;
 import com.teamresourceful.resourcefulbees.common.blockentity.centrifuge.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.CentrifugeMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -27,26 +26,25 @@ public class NormalCentrifugeScreen extends AbstractContainerScreen<CentrifugeMe
     protected void init() {
         super.init();
         clearWidgets();
-        addRenderableWidget(new SelectableFluidWidget(this, tileEntity.getContainer(), 0, tileEntity.getBlkPos(), this.leftPos + 152, this.topPos + 11, 16, 64, CentrifugeTranslations.TANK));
+        addRenderableWidget(new SelectableFluidWidget(tileEntity.getContainer(), 0, tileEntity.getBlkPos(), this.leftPos + 152, this.topPos + 11, 16, 64, CentrifugeTranslations.TANK));
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/centrifuges/basic.png");
         if (tileEntity != null) {
-            RenderUtils.bindTexture(texture);
             int i = this.leftPos;
             int j = this.topPos;
-            this.blit(matrix, i, j, 0, 0, this.imageWidth, this.imageHeight);
+            graphics.blit(texture, i, j, 0, 0, this.imageWidth, this.imageHeight);
         }
     }
 
     @Override
-    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         if (this.tileEntity != null) {
-            this.renderBackground(matrix);
-            super.render(matrix, mouseX, mouseY, partialTicks);
-            this.renderTooltip(matrix, mouseX, mouseY);
+            this.renderBackground(graphics);
+            super.render(graphics, mouseX, mouseY, partialTicks);
+            this.renderTooltip(graphics, mouseX, mouseY);
         }
     }
 

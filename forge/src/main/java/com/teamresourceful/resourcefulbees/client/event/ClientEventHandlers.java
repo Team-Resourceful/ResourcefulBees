@@ -25,9 +25,9 @@ import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModMenus;
 import com.teamresourceful.resourcefulbees.platform.client.events.RegisterColorHandlerEvent;
 import com.teamresourceful.resourcefulbees.platform.client.events.RegisterRendererEvent;
@@ -105,8 +105,6 @@ public final class ClientEventHandlers {
                 event.setCanceled(true);
             }
         });
-
-        Sheets.addWoodType(ModBlocks.WAXED_WOOD_TYPE);
     }
 
     public static void onRegisterGuiOverlay(RegisterGuiOverlaysEvent event) {
@@ -154,6 +152,7 @@ public final class ClientEventHandlers {
         ItemModelPropertiesHandler.registerProperties();
         registerTERs();
         event.enqueueWork(FluidRender::setHoneyRenderType);
+        event.enqueueWork(() -> Sheets.addWoodType(ModBlocks.WAXED_WOOD_TYPE));
     }
 
     private static void registerTERs() {

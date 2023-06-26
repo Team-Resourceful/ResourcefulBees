@@ -42,7 +42,7 @@ public class BeeWanderGoal extends Goal {
     public void start() {
         Vec3 vector3d = this.getRandomLocation();
         if (vector3d != null) {
-            bee.getNavigation().moveTo(bee.getNavigation().createPath(new BlockPos(vector3d), 1), 1.0D);
+            bee.getNavigation().moveTo(bee.getNavigation().createPath(BlockPos.containing(vector3d), 1), 1.0D);
         }
 
     }

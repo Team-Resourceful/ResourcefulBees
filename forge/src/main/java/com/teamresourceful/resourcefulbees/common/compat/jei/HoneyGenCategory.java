@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.HoneyGenRecipe;
@@ -15,6 +14,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +35,7 @@ public class HoneyGenCategory extends BaseCategory<HoneyGenRecipe> {
 
     protected HoneyGenCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE,
-                Component.translatable("Honey Generator"),
+                Component.literal("Honey Generator"),
                 guiHelper.createBlankDrawable(120, 60),
                 guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ModItems.HONEY_GENERATOR_ITEM.get().getDefaultInstance()));
 
@@ -56,11 +56,11 @@ public class HoneyGenCategory extends BaseCategory<HoneyGenRecipe> {
     }
 
     @Override
-    public void draw(@NotNull HoneyGenRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull PoseStack stack, double mouseX, double mouseY) {
-        super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
-        tank.draw(stack, 20, 3);
-        energyContainer.draw(stack, 80, 3);
-        energyBar.draw(stack, 81, 4);
+    public void draw(@NotNull HoneyGenRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull GuiGraphics graphics, double mouseX, double mouseY) {
+        super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
+        tank.draw(graphics, 20, 3);
+        energyContainer.draw(graphics, 80, 3);
+        energyBar.draw(graphics, 81, 4);
     }
 
     @Override

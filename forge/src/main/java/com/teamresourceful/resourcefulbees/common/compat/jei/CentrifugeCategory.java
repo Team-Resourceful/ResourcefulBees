@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeItems;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
@@ -8,7 +7,6 @@ import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.Cent
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import mezz.jei.api.constants.VanillaTypes;
@@ -19,10 +17,10 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.gui.ScreenUtils;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,21 +74,20 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     }
 
     @Override
-    public void draw(@NotNull CentrifugeRecipeAdapter recipe, @NotNull IRecipeSlotsView view, @NotNull PoseStack stack, double mouseX, double mouseY) {
-        super.draw(recipe, view, stack, mouseX, mouseY);
-        RenderUtils.bindTexture(GUI_BACK);
+    public void draw(@NotNull CentrifugeRecipeAdapter recipe, @NotNull IRecipeSlotsView view, @NotNull GuiGraphics graphics, double mouseX, double mouseY) {
+        super.draw(recipe, view, graphics, mouseX, mouseY);
         for (int i = 0; i < 3; i++) {
             int finalI = i;
-            view.findSlotByName("item_output_"+i).ifPresent(slot -> drawWeightAndChance(stack, 61, mouseX, mouseY, finalI));
-            view.findSlotByName("fluid_output_"+i).ifPresent(slot -> drawWeightAndChance(stack, 97, mouseX, mouseY, finalI));
+            view.findSlotByName("item_output_"+i).ifPresent(slot -> drawWeightAndChance(graphics, 61, mouseX, mouseY, finalI));
+            view.findSlotByName("fluid_output_"+i).ifPresent(slot -> drawWeightAndChance(graphics, 97, mouseX, mouseY, finalI));
         }
     }
 
-    private static void drawWeightAndChance(PoseStack matrixStack, int start, double mouseX, double mouseY, int i){
+    private static void drawWeightAndChance(GuiGraphics graphics, int start, double mouseX, double mouseY, int i){
         boolean inBounds = MathUtils.inRangeInclusive((int) mouseX, start, start+9) && MathUtils.inRangeInclusive((int) mouseY, 6 + (18*i), 6 + (18*i) + 9);
-        ScreenUtils.drawTexturedModalRect(matrixStack, start, 6 + (18*i), 134, (inBounds ? 18 : 0), 9,9, 100);
+        graphics.blit(GUI_BACK, start, 6 + (18*i), 134, (inBounds ? 18 : 0), 9,9);
         inBounds = MathUtils.inRangeInclusive((int) mouseX, start, start+9) && MathUtils.inRangeInclusive((int) mouseY, 15 + (18*i), 15 + (18*i) + 9);
-        ScreenUtils.drawTexturedModalRect(matrixStack, start, 15 + (18*i), 134, 9 + (inBounds ? 18 : 0), 9,9, 100);
+        graphics.blit(GUI_BACK, start, 15 + (18*i), 134, 9 + (inBounds ? 18 : 0), 9,9);
     }
 
     @Override

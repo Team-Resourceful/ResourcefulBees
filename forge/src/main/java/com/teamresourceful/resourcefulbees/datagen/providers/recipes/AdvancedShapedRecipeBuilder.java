@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -36,7 +37,7 @@ public class AdvancedShapedRecipeBuilder {
     }
 
     private AdvancedShapedRecipeBuilder(ItemLike result, int qty) {
-        this.builder = ShapedRecipeBuilder.shaped(result, qty);
+        this.builder = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result, qty);
     }
 
     public AdvancedShapedRecipeBuilder pattern(String... pattern) {

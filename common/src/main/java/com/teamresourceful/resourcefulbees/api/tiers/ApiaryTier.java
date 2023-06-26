@@ -42,7 +42,7 @@ public record ApiaryTier(ResourceLocation id, int maxBees, double timeMod, Suppl
         if (TIERS.containsKey(id)) {
             return DataResult.success(TIERS.get(id));
         }
-        return DataResult.error("Unknown Beehive Tier: " + id);
+        return DataResult.error(() -> "Unknown Beehive Tier: " + id);
     }
 
     public static ApiaryTier getOrThrow(ResourceLocation id) {

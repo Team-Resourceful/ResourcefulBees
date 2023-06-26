@@ -16,7 +16,7 @@ import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.Serv
 import com.teamresourceful.resourcefulbees.platform.common.registry.RegistryHelper;
 import com.teamresourceful.resourcefulbees.platform.common.registry.potion.PotionRegistry;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.ConditionRegistry;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -27,7 +27,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 public final class GameSetup {
 
     //TODO Change to common tag for forge and fabric.
-    private static final TagKey<Item> HONEY_BOTTLE_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "honey_bottles"));
+    private static final TagKey<Item> HONEY_BOTTLE_TAG = TagKey.create(Registries.ITEM, new ResourceLocation("forge", "honey_bottles"));
 
     private GameSetup() {
         throw new UtilityClassError();

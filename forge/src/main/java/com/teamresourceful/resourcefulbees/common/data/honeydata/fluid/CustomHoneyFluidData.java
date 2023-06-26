@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.LazyHolders;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -30,7 +30,7 @@ public record CustomHoneyFluidData(
         BeekeeperTradeData tradeData
 ) implements HoneyFluidData {
 
-    private static final HoneyFluidData DEFAULT = new CustomHoneyFluidData("", CustomHoneyRenderData.DEFAULT, CustomHoneyFluidAttributesData.DEFAULT, LazyHolder.of(Registry.FLUID, Fluids.EMPTY), LazyHolder.of(Registry.FLUID, Fluids.EMPTY), LazyHolder.of(Registry.ITEM, Items.AIR), LazyHolder.of(Registry.BLOCK, Blocks.AIR), TradeData.DEFAULT);
+    private static final HoneyFluidData DEFAULT = new CustomHoneyFluidData("", CustomHoneyRenderData.DEFAULT, CustomHoneyFluidAttributesData.DEFAULT, LazyHolder.of(BuiltInRegistries.FLUID, Fluids.EMPTY), LazyHolder.of(BuiltInRegistries.FLUID, Fluids.EMPTY), LazyHolder.of(BuiltInRegistries.ITEM, Items.AIR), LazyHolder.of(BuiltInRegistries.BLOCK, Blocks.AIR), TradeData.DEFAULT);
     private static Codec<HoneyFluidData> codec(String id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),

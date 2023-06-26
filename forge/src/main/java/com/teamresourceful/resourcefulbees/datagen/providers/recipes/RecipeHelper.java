@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -17,7 +18,7 @@ public final class RecipeHelper {
     }
 
     public static ShapelessRecipeBuilder getStorageToItemRecipe(ItemLike result, Ingredient item){
-        return ShapelessRecipeBuilder.shapeless(result, 9).requires(item);
+        return ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, result, 9).requires(item);
     }
 
     public static AdvancedShapedRecipeBuilder createBoxed(Ingredient middle, Ingredient sides, ItemLike result) {

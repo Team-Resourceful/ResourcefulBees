@@ -35,7 +35,7 @@ public class BeeTemptGoal extends Goal {
             --this.delayTemptCounter;
             return false;
         }
-        this.closestPlayer = this.bee.level.getNearestPlayer(ENTITY_PREDICATE, this.bee);
+        this.closestPlayer = this.bee.level().getNearestPlayer(ENTITY_PREDICATE, this.bee);
         return this.closestPlayer != null && (bee.isFood(this.closestPlayer.getMainHandItem()) || bee.isFood(this.closestPlayer.getOffhandItem()));
     }
 

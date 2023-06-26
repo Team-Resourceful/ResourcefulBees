@@ -19,7 +19,7 @@ public class BreederMenu extends AbstractModContainerMenu<BreederBlockEntity> {
     public final ContainerData endTimes;
 
     public BreederMenu(int id, Inventory inv, Optional<PositionContent> content) {
-        this(id, inv, PositionContent.getOrNull(content, inv.player.level, BreederBlockEntity.class), new SimpleContainerData(2), new SimpleContainerData(2));
+        this(id, inv, PositionContent.getOrNull(content, inv.player.level(), BreederBlockEntity.class), new SimpleContainerData(2), new SimpleContainerData(2));
     }
 
     public BreederMenu(int id, Inventory inv, BreederBlockEntity entity, ContainerData times, ContainerData endTimes) {

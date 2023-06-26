@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class HoneyGeneratorMenu extends AbstractModContainerMenu<HoneyGeneratorBlockEntity> {
 
     public HoneyGeneratorMenu(int id, Inventory inv, FriendlyByteBuf buf) {
-        this(id, inv, getTileFromBuf(inv.player.level, buf, HoneyGeneratorBlockEntity.class));
+        this(id, inv, getTileFromBuf(inv.player.level(), buf, HoneyGeneratorBlockEntity.class));
     }
 
     public HoneyGeneratorMenu(int id, Inventory inv, HoneyGeneratorBlockEntity entity) {

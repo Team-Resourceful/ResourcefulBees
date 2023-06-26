@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +29,7 @@ public class ApiaryBlock extends BeeHouseBlock implements BeeHolderBlock {
   private final ApiaryTier tier;
 
   public ApiaryBlock(final ApiaryTier tier) {
-    super(Properties.of(Material.WOOD).strength(5f, 6f).sound(SoundType.METAL));
+    super(Properties.of().sound(SoundType.WOOD).strength(5f, 6f).sound(SoundType.METAL));
     this.tier = tier;
   }
 

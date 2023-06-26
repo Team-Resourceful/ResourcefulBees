@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.centrifuge.common.network.client.SetFilterSlotPacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
+import mezz.jei.api.ingredients.ITypedIngredient;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.inventory.Slot;
@@ -16,9 +17,9 @@ import java.util.List;
 public class CentrifugeInputGhostIngredientHandler<S extends AbstractContainerScreen<?>> implements IGhostIngredientHandler<S> {
 
     @Override
-    public <I> @NotNull List<Target<I>> getTargets(@NotNull S gui, @NotNull I ingredient, boolean doStart) {
+    public <I> @NotNull List<Target<I>> getTargetsTyped(@NotNull S gui, @NotNull ITypedIngredient<I> ingredient, boolean doStart) {
         var targets = new ArrayList<Target<I>>();
-        if (ingredient instanceof ItemStack ghostStack) {
+        if (ingredient.getIngredient() instanceof ItemStack ghostStack) {
             gui.getMenu().slots.stream()
                 .filter(FilterSlot.class::isInstance)
                 .filter(slot -> slot.mayPlace(ghostStack))

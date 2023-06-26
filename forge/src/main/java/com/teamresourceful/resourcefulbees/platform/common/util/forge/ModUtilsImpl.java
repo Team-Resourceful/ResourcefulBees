@@ -10,7 +10,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
@@ -60,7 +59,7 @@ public class ModUtilsImpl {
         NetworkHooks.openScreen((net.minecraft.server.level.ServerPlayer) player, provider, pos);
     }
 
-    public static Explosion.BlockInteraction getExplosionInteraction(Level level, Entity entity) {
-        return ForgeEventFactory.getMobGriefingEvent(level, entity) ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE;
+    public static Level.ExplosionInteraction getExplosionInteraction(Level level, Entity entity) {
+        return ForgeEventFactory.getMobGriefingEvent(level, entity) ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE;
     }
 }

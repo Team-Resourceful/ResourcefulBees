@@ -4,8 +4,10 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
     modCompileOnly "mezz.jei:jei-$mc_version-common-api:$jei_version"
     modLocalRuntime "mezz.jei:jei-$mc_version-common:$jei_version"
-    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-common-$mc_version:$rlib_version"
-    modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-$mc_version:$rconfig_version"
+    modApi "com.teamresourceful.resourcefullib:resourcefullib-common-$mc_version:$rlib_version"
+    compileOnly "com.teamresourceful:yabn:1.0.3"
+    modApi "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-1.20:$rconfig_version"
+
     modImplementation "software.bernie.geckolib:$geckolib_fabric_version"
     modImplementation("com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version")
 }

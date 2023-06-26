@@ -31,7 +31,7 @@ public record Aura(AuraType type, DamageEffect damageEffect, PotionEffect potion
             case POTION -> player.addEffect(potionEffect.createInstance(interval));
             case BURNING -> player.setRemainingFireTicks(interval);
             case HEALING -> player.heal(modifier);
-            case DAMAGING -> player.hurt(damageEffect.getDamageSource(player), damageEffect.strength());
+            case DAMAGING -> player.hurt(damageEffect.getDamageSource(player.level(), player), damageEffect.strength());
             case EXPERIENCE, EXPERIENCE_DRAIN -> {
                 player.giveExperiencePoints(modifier);
                 SoundEvent sound = type == AuraType.EXPERIENCE ? SoundEvents.EXPERIENCE_ORB_PICKUP : SoundEvents.GRINDSTONE_USE;
@@ -49,7 +49,7 @@ public record Aura(AuraType type, DamageEffect damageEffect, PotionEffect potion
 
     public static void spawnParticles(LivingEntity entity, SimpleParticleType particle) {
         float power = particle.equals(ParticleTypes.ENCHANT) ? 1f : particle.equals(ParticleTypes.CRIT) ? 0.5f : 0.1f;
-        if (entity.getLevel() instanceof ServerLevel level) {
+        if (entity.level() instanceof ServerLevel level) {
             double d0 = level.random.nextGaussian() * 0.1D;
             double d1 = level.random.nextGaussian() * 0.1D;
             double d2 = level.random.nextGaussian() * 0.1D;

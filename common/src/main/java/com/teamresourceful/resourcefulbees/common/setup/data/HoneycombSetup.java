@@ -25,21 +25,21 @@ public final class HoneycombSetup {
     public static void setupHoneycombs() {
         if (GeneralConfig.enableDevBees) {
             ModConstants.LOGGER.info("Loading Dev Honeycombs...");
-            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honeycombs", HoneycombSetup::parseHoneycomb, ModPaths.MOD_ROOT);
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_honeycombs", HoneycombSetup::parseHoneycomb, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         if (GeneralConfig.enableSupporterBees) {
             ModConstants.LOGGER.info("Loading Supporter Honeycombs...");
-            FileUtils.setupDevResources("/data/resourcefulbees/supporter/honeycombs", HoneycombSetup::parseHoneycomb, ModPaths.MOD_ROOT);
+            FileUtils.setupDevResources("/data/resourcefulbees/supporter/honeycombs", HoneycombSetup::parseHoneycomb, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         if (GeneralConfig.generateDefaults) {
             ModConstants.LOGGER.info("Copying Default Honeycombs...");
-            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_honeycombs", ModPaths.HONEYCOMBS, ModPaths.MOD_ROOT);
+            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_honeycombs", ModPaths.HONEYCOMBS, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         ModConstants.LOGGER.info("Loading Custom Honeycombs...");
-        FileUtils.streamFilesAndParse(ModPaths.HONEYCOMBS, HoneycombSetup::parseHoneycomb);
+        FileUtils.streamFilesAndParse(ModPaths.HONEYCOMBS, HoneycombSetup::parseHoneycomb, FileUtils::isJson);
 
         if (!HoneycombRegistry.areItemsRegistered()) {
             HoneycombRegistry.registerHoneycombItems();

@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.screen.locator;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeLocatorTranslations;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.FindBeePacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -35,17 +34,19 @@ public class BeeLocatorScreen extends Screen {
         this.listWidget = new BeeListWidget(this::setSelected, this.minecraft, this.width, this.height, 32, this.height - 32, 36);
         this.listWidget.updateEntries(BeeRegistry.get());
 
-        var closeButton = new Button((this.width / 2) - 90, this.height - 26, 80, 20, BeeLocatorTranslations.CANCEL, button -> this.onClose());
+        var closeButton = Button.builder(BeeLocatorTranslations.CANCEL, button -> this.onClose())
+            .bounds((this.width / 2) - 90, this.height - 26, 80, 20)
+            .build();
 
-        this.selectButton = new Button((this.width / 2) + 10, this.height - 26, 80, 20, BeeLocatorTranslations.SEARCH, button ->
-            getSelected().ifPresent(bee -> {
+        this.selectButton = Button.builder(BeeLocatorTranslations.SEARCH, button -> getSelected().ifPresent(bee -> {
                 String type = bee.getType();
                 if (type != null) {
                     NetworkHandler.CHANNEL.sendToServer(new FindBeePacket(type, this.slot));
                 }
                 this.onClose();
-            })
-        );
+            }))
+            .bounds((this.width / 2) + 10, this.height - 26, 80, 20)
+            .build();
 
         this.selectButton.active = false;
 
@@ -55,10 +56,10 @@ public class BeeLocatorScreen extends Screen {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
         Component title = Component.translatable(BeeLocatorTranslations.SELECTED, this.getSelected().map(BeeLocatorEntry::getDisplayName).orElse(BeeLocatorTranslations.NONE));
-        GuiComponent.drawCenteredString(stack, this.font, title, this.width / 2, 11, 16777215);
+        graphics.drawCenteredString(this.font, title, this.width / 2, 11, 16777215);
     }
 
     public void setSelected(BeeLocatorEntry entry) {

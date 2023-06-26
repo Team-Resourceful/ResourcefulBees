@@ -46,14 +46,14 @@ public class ThrownMutatedPollen extends ThrowableItemProjectile {
     }
 
     private void doMutation(BlockPos result) {
-        BeeMutateGoal.spawnParticles(this.level, this);
+        BeeMutateGoal.spawnParticles(this.level(), this);
         this.discard();
         ItemStack item = this.getItem();
         if (item.getTag() == null || !item.getTag().contains(NBTConstants.POLLEN_ID)) {
             return;
         }
-        if (this.level instanceof ServerLevel serverLevel) {
-            MutationRecipe recipe = MutationRecipe.getRecipe(level, ResourceLocation.tryParse(item.getTag().getString(NBTConstants.POLLEN_ID)));
+        if (this.level() instanceof ServerLevel serverLevel) {
+            MutationRecipe recipe = MutationRecipe.getRecipe(level(), ResourceLocation.tryParse(item.getTag().getString(NBTConstants.POLLEN_ID)));
             if (recipe == null) return;
             BeeMutateGoal.doMutation(recipe.mutations(), serverLevel, result);
         }

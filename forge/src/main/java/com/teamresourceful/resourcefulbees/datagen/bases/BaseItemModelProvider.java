@@ -12,7 +12,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 public abstract class BaseItemModelProvider extends ItemModelProvider {
 
     protected BaseItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, ModConstants.MOD_ID, existingFileHelper);
+        super(generator.getPackOutput(), ModConstants.MOD_ID, existingFileHelper);
     }
 
     @Override

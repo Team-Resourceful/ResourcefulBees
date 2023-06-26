@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
@@ -10,12 +9,11 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Bee
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
-import com.teamresourceful.resourcefullib.common.utils.CycleableList;
+import com.teamresourceful.resourcefullib.common.collections.CycleableList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -46,18 +44,17 @@ public class HomePage extends Screen {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        ClientRenderUtils.renderEntity(stack, bees.getSelected(), 85, 5, -45, 3);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        ClientRenderUtils.renderEntity(graphics, bees.getSelected(), 85, 5, -45, 3);
         Font font = Minecraft.getInstance().font;
 
-        font.draw(stack, Component.translatable("itemGroup.resourcefulbees.resourcefulbees").withStyle(ChatFormatting.GRAY), 41, 76, -1);
-        RenderUtils.bindTexture(LOGO);
-        GuiComponent.blit(stack, 41,  85, 0, 0, 104, 16, 104, 16);
-        font.draw(stack, BeepediaTranslations.NAME.withStyle(ChatFormatting.GRAY), 41, 103, -1);
+        graphics.drawString(font, Component.translatable("itemGroup.resourcefulbees.resourcefulbees").withStyle(ChatFormatting.GRAY), 41, 76, -1, false);
+        graphics.blit(LOGO, 41,  85, 0, 0, 104, 16, 104, 16);
+        graphics.drawString(font, BeepediaTranslations.NAME.withStyle(ChatFormatting.GRAY), 41, 103, -1, false);
 
-        font.draw(stack, getProgress(), 93 - font.width(getProgress())/2f, 133, -1);
+        graphics.drawString(font, getProgress(), 93 - font.width(getProgress())/2, 133, -1, false);
 
-        super.render(stack, mouseX, mouseY, partialTicks);
+        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     private Component getProgress() {

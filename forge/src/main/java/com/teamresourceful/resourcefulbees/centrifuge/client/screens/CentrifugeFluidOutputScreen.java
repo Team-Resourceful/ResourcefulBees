@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.screens;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.controlpanels.OutputControlPanel;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.terminal.output.TerminalOutputHomePanel;
 import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeFluidOutputContainer;
@@ -9,6 +8,7 @@ import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,31 +32,31 @@ public class CentrifugeFluidOutputScreen extends CentrifugeInventoryScreen<Centr
     }
 
     @Override
-    protected void drawContainerSlots(@NotNull PoseStack matrix, int x, int y) {
+    protected void drawContainerSlots(@NotNull GuiGraphics graphics, int x, int y) {
         //has fluid tank!
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack matrix, float pPartialTicks, int pX, int pY) {
-        super.renderBg(matrix, pPartialTicks, pX, pY);
+    protected void renderBg(@NotNull GuiGraphics graphics, float pPartialTicks, int pX, int pY) {
+        super.renderBg(graphics, pPartialTicks, pX, pY);
         if (!menu.displaySlots()) return;
-        drawFluidTank(matrix, leftPos + 228, topPos + 45);
+        drawFluidTank(graphics, leftPos + 228, topPos + 45);
         FluidStack fluidStack = menu.getEntity().getFluidTank().getFluid();
 
-        TERMINAL_FONT_8.draw(matrix, "Fluid: ", this.leftPos + 148f, this.topPos + 55f, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(matrix, getDisplayName(fluidStack), this.leftPos + 150f, this.topPos + 65f, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(matrix, "Amount: ", this.leftPos + 148f, this.topPos + 75f, FONT_COLOR_1);
-        TERMINAL_FONT_8.draw(matrix, fluidStack.getAmount() + "mB", this.leftPos + 150f, this.topPos + 85f, FONT_COLOR_1);
+        graphics.drawString(TERMINAL_FONT_8, "Fluid: ", this.leftPos + 148, this.topPos + 55, FONT_COLOR_1, false);
+        graphics.drawString(TERMINAL_FONT_8, getDisplayName(fluidStack), this.leftPos + 150, this.topPos + 65, FONT_COLOR_1, false);
+        graphics.drawString(TERMINAL_FONT_8, "Amount: ", this.leftPos + 148, this.topPos + 75, FONT_COLOR_1, false);
+        graphics.drawString(TERMINAL_FONT_8, fluidStack.getAmount() + "mB", this.leftPos + 150, this.topPos + 85, FONT_COLOR_1, false);
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
         if (!menu.displaySlots()) return;
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos+229, this.leftPos+245) && MathUtils.inRangeInclusive(mouseY, this.topPos+46, this.topPos+113)) {
             int fluidAmount = menu.getEntity().getFluidTank().getFluidAmount();
             Component tooltip = Screen.hasShiftDown() || fluidAmount < 1000 ? getMillibuckets(fluidAmount) : getBuckets(fluidAmount);
-            this.renderTooltip(stack, tooltip, mouseX, mouseY);
+            setTooltipForNextRenderPass(tooltip);
         }
     }
 
@@ -72,11 +72,11 @@ public class CentrifugeFluidOutputScreen extends CentrifugeInventoryScreen<Centr
         return Component.literal(((double) fluidAmount / 1000) + "B");
     }
 
-    private void drawFluidTank(PoseStack matrix, int x, int y) {
-        blit(matrix, x, y, u, v, 18, 69);
+    private void drawFluidTank(GuiGraphics graphics, int x, int y) {
+        graphics.blit(CentrifugeTextures.COMPONENTS, x, y, u, v, 18, 69);
         FluidStack fluidStack = menu.getEntity().getFluidTank().getFluid();
         int height = (int) ((float) fluidStack.getAmount() / tier.getTankCapacity() * 67);
-        ClientUtils.drawFluid(matrix, height, 16, fluidStack, x+1, y+68-height, getBlitOffset());
+        ClientUtils.drawFluid(graphics, height, 16, fluidStack, x+1, y+68-height);
     }
 
     @Override

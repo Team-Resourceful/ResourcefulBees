@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.common.fluids;
 
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.math.Vector3f;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Camera;
@@ -15,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 public class NormalHoneyRenderProperties implements IClientFluidTypeExtensions {
 
@@ -51,8 +51,8 @@ public class NormalHoneyRenderProperties implements IClientFluidTypeExtensions {
 
     @Override
     public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
-        BlockPos blockpos = new BlockPos(camera.getEntity().getX(), camera.getEntity().getEyeY(), camera.getEntity().getZ());
-        float brightnessAtEyes = LightTexture.getBrightness(camera.getEntity().level.dimensionType(), camera.getEntity().level.getMaxLocalRawBrightness(blockpos));
+        BlockPos blockpos = BlockPos.containing(camera.getEntity().getX(), camera.getEntity().getEyeY(), camera.getEntity().getZ());
+        float brightnessAtEyes = LightTexture.getBrightness(camera.getEntity().level().dimensionType(), camera.getEntity().level().getMaxLocalRawBrightness(blockpos));
         float brightness = (float)Math.max(Math.pow(ClientUtils.getDimensionBrightnessAtEyes(camera.getEntity()), 2.0), brightnessAtEyes);
         float fogRed = 0.945F * brightness;
         float fogGreen = 0.67F * brightness;

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class EnderBeeconMenu extends AbstractModContainerMenu<EnderBeeconBlockEntity> {
 
     public EnderBeeconMenu(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(inv.player.level, buffer, EnderBeeconBlockEntity.class));
+        this(id, inv, getTileFromBuf(inv.player.level(), buffer, EnderBeeconBlockEntity.class));
     }
 
     public EnderBeeconMenu(int id, Inventory inv, EnderBeeconBlockEntity entity) {

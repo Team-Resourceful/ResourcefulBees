@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.api.data.bee;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
-import com.teamresourceful.resourcefulbees.api.data.trait.DamageType;
 import com.teamresourceful.resourcefulbees.api.data.trait.PotionEffect;
+import com.teamresourceful.resourcefulbees.api.data.trait.TraitDamageType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.effect.MobEffect;
 
@@ -17,7 +17,7 @@ public interface BeeTraitData extends BeeData<BeeTraitData> {
     Set<PotionEffect> potionDamageEffects();
     Set<String> damageImmunities();
     Set<MobEffect> potionImmunities();
-    Set<DamageType> damageTypes();
+    Set<TraitDamageType> damageTypes();
     Set<String> specialAbilities();
     Set<ParticleType<?>> particleEffects();
     Set<Aura> auras();

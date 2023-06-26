@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
@@ -63,8 +63,8 @@ public enum BeehiveUpgrade {
     }
 
     public static Block getUpdateFor(Block block, char i) {
-        ResourceLocation id = Registry.BLOCK.getKey(block);
-        return Registry.BLOCK.getOptional(new ResourceLocation(id.getNamespace(), id.getPath().substring(0, id.getPath().length() - 1) + i)).orElse(null);
+        ResourceLocation id = BuiltInRegistries.BLOCK.getKey(block);
+        return BuiltInRegistries.BLOCK.getOptional(new ResourceLocation(id.getNamespace(), id.getPath().substring(0, id.getPath().length() - 1) + i)).orElse(null);
     }
 
     @FunctionalInterface

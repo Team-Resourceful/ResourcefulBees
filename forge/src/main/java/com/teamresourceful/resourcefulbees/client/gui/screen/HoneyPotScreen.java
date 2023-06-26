@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.HoneyPotMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -24,22 +23,21 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int x, int y) {
-        this.renderBackground(matrix);
+    protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int x, int y) {
+        this.renderBackground(graphics);
 
         if (this.minecraft == null) return;
-        RenderUtils.bindTexture(BACKGROUND);
-        blit(matrix, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         FluidStack fluidStack = menu.getEntity().getTank().getFluid();
 
-        this.font.drawShadow(matrix, "Fluid: ",this.leftPos + 36f, this.topPos + 17f, 0xffffff);
-        this.font.drawShadow(matrix, getDisplayName(fluidStack),this.leftPos + 40f, this.topPos + 27f, 0xffffff);
-        this.font.drawShadow(matrix, "Amount: ",this.leftPos + 36f, this.topPos + 37f, 0xffffff);
-        this.font.drawShadow(matrix, fluidStack.getAmount()+"mB",this.leftPos + 40f, this.topPos + 47f, 0xffffff);
+        graphics.drawString(this.font, "Fluid: ",this.leftPos + 36, this.topPos + 17, 0xffffff);
+        graphics.drawString(this.font, getDisplayName(fluidStack),this.leftPos + 40, this.topPos + 27, 0xffffff);
+        graphics.drawString(this.font, "Amount: ",this.leftPos + 36, this.topPos + 37, 0xffffff);
+        graphics.drawString(this.font, fluidStack.getAmount()+"mB",this.leftPos + 40, this.topPos + 47, 0xffffff);
 
         int height = (int) ((fluidStack.getAmount() / 64000f) * 54);
-        ClientUtils.drawFluid(matrix, height, 12, fluidStack, this.leftPos+129, this.topPos+16+(54-height), this.getBlitOffset());
+        ClientUtils.drawFluid(graphics, height, 12, fluidStack, this.leftPos+129, this.topPos+16+(54-height));
     }
 
     private Component getDisplayName(FluidStack stack) {
@@ -47,15 +45,15 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
-        renderTooltip(stack, mouseX, mouseY);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        renderTooltip(graphics, mouseX, mouseY);
         if (this.minecraft == null) return;
 
         if (MathUtils.inRangeInclusive(mouseX, leftPos+129, leftPos+141) && MathUtils.inRangeInclusive(mouseY, topPos+16, topPos+70)) {
             int fluidAmount = menu.getEntity().getTank().getFluidAmount();
             Component tooltip = Screen.hasShiftDown() || fluidAmount < 1000 ? getMillibuckets(fluidAmount) : getBuckets(fluidAmount);
-            this.renderTooltip(stack, tooltip, mouseX, mouseY);
+            setTooltipForNextRenderPass(tooltip);
         }
 
 /*        if (MathUtils.inRangeInclusive(mouseX, this.leftPos+129, this.leftPos+141) && MathUtils.inRangeInclusive(mouseY, this.topPos+16, this.topPos+70)) {

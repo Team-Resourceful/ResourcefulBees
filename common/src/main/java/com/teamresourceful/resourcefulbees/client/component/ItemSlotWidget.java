@@ -1,19 +1,14 @@
 package com.teamresourceful.resourcefulbees.client.component;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Widget;
-import net.minecraft.network.chat.Component;
+import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public class ItemSlotWidget implements Widget, TooltipProvider {
+public class ItemSlotWidget implements Renderable {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/list_button.png");
 
@@ -34,17 +29,13 @@ public class ItemSlotWidget implements Widget, TooltipProvider {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        RenderUtils.bindTexture(TEXTURE);
-        GuiComponent.blit(stack, this.x, this.y, 0, 0, 20, 20, 20, 60);
-        RenderUtils.renderItem(stack, this.stack, this.x + 2, this.y + 2);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        graphics.blit(TEXTURE, this.x, this.y, 0, 0, 20, 20, 20, 60);
+        graphics.renderItem(this.stack, this.x + 2, this.y + 2);
+
+        if (mouseX >= this.x && mouseX <= this.x + 20 && mouseY >= this.y && mouseY <= this.y + 20 && this.tooltip) {
+            ScreenUtils.setTooltip(stack.getHoverName());
+        }
     }
 
-    @Override
-    public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
-        if (mouseX >= this.x && mouseX <= this.x + 20 && mouseY >= this.y && mouseY <= this.y + 20 && this.tooltip) {
-            return List.of(stack.getHoverName());
-        }
-        return List.of();
-    }
 }

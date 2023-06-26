@@ -25,7 +25,7 @@ public class AuraHandler {
     }
 
     public void tick() {
-        ServerLevel level = (ServerLevel)this.bee.level;
+        ServerLevel level = (ServerLevel)this.bee.level();
         List<ServerPlayer> players = level.getPlayers(this::isPlayerApplicable);
 
         for (Aura aura : auras) {
@@ -50,6 +50,6 @@ public class AuraHandler {
     }
 
     private boolean isPeaceful(Aura aura) {
-        return !aura.isBeneficial() && this.bee.level.getDifficulty() == Difficulty.PEACEFUL;
+        return !aura.isBeneficial() && this.bee.level().getDifficulty() == Difficulty.PEACEFUL;
     }
 }

@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefulbees.common.setup.data.beedata.rendering.R
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.traits.TraitData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +33,7 @@ public record DefaultBeeData(String name, Map<ResourceLocation, BeeData<?>> data
             data,
             id,
             Component.translatable("bee_type.resourcefulbees." + name),
-            Suppliers.memoize(() -> Registry.ENTITY_TYPE.getOptional(id).orElse(EntityType.BEE))
+            Suppliers.memoize(() -> BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(EntityType.BEE))
         );
     }
 

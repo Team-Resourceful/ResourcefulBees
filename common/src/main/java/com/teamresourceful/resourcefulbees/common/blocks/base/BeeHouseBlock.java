@@ -79,7 +79,7 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
     @Override
     public boolean canSurvive(@NotNull BlockState state, @NotNull LevelReader level, @NotNull BlockPos pos) {
         BlockState topState = level.getBlockState(pos.above());
-        return topState.getMaterial().isReplaceable() || topState.getBlock() instanceof BeeHouseTopBlock;
+        return topState.canBeReplaced() || topState.getBlock() instanceof BeeHouseTopBlock;
     }
 
     @Override

@@ -29,21 +29,21 @@ public final class BeeSetup {
     public static void setupBees() {
         if (GeneralConfig.enableDevBees) {
             ModConstants.LOGGER.info("Loading Dev Bees...");
-            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_bees", BeeSetup::parseBee, ModPaths.MOD_ROOT);
+            FileUtils.setupDevResources("/data/resourcefulbees/dev/dev_bees", BeeSetup::parseBee, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         if (GeneralConfig.enableSupporterBees) {
             ModConstants.LOGGER.info("Loading Supporter Bees...");
-            FileUtils.setupDevResources("/data/resourcefulbees/supporter/bees", BeeSetup::parseBee, ModPaths.MOD_ROOT);
+            FileUtils.setupDevResources("/data/resourcefulbees/supporter/bees", BeeSetup::parseBee, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         if (GeneralConfig.generateDefaults) {
             ModConstants.LOGGER.info("Copying Default Bees...");
-            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_bees", ModPaths.BEES, ModPaths.MOD_ROOT);
+            FileUtils.copyDefaultFiles("/data/resourcefulbees/defaults/default_bees", ModPaths.BEES, ModPaths.MOD_ROOT, FileUtils::isJson);
         }
 
         ModConstants.LOGGER.info("Loading Custom Bees...");
-        FileUtils.streamFilesAndParse(ModPaths.BEES, BeeSetup::parseBee);
+        FileUtils.streamFilesAndParse(ModPaths.BEES, BeeSetup::parseBee, FileUtils::isJson);
 
         BeeRegistry.getRegistry().regenerateCustomBeeData(null);
     }

@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.bees;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.client.component.SlotButton;
@@ -13,7 +12,7 @@ import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -67,19 +66,18 @@ public class BeePage extends SubdividedScreen {
     }
 
     @Override
-    public void renderScreen(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.renderScreen(stack, mouseX, mouseY, partialTicks);
-        RenderUtils.bindTexture(TEXTURE);
-        GuiComponent.blit(stack, 0, 46, 0, 0, 186, 3, 186, 3);
+    public void renderScreen(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.renderScreen(graphics, mouseX, mouseY, partialTicks);
+        graphics.blit(TEXTURE, 0, 46, 0, 0, 186, 3, 186, 3);
 
         if (bee != null) {
-            try (var ignored = RenderUtils.createScissorBox(Minecraft.getInstance(), stack, 0, 0, 49, 49)) {
-                ClientRenderUtils.renderEntity(stack, bee, 14, 12, -45, 2f);
+            try (var ignored = RenderUtils.createScissorBox(Minecraft.getInstance(), graphics.pose(), 0, 0, 49, 49)) {
+                ClientRenderUtils.renderEntity(graphics, bee, 14, 12, -45, 2f);
             }
         }
 
         Font font = Minecraft.getInstance().font;
-        font.draw(stack, data.displayName(), 50, 10, 0xFFFFFF);
+        graphics.drawString(font, data.displayName(), 50, 10, 0xFFFFFF, false);
     }
 
     public CustomBeeData getData() {

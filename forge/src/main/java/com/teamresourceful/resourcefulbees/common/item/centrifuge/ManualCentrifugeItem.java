@@ -5,16 +5,16 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
-public class ManualCentrifugeItem extends BlockItem implements IAnimatable {
+public class ManualCentrifugeItem extends BlockItem implements GeoAnimatable {
 
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
 
     public ManualCentrifugeItem(Block block, Properties pProperties) {
         super(block, pProperties);
@@ -34,10 +34,15 @@ public class ManualCentrifugeItem extends BlockItem implements IAnimatable {
     }
 
     @Override
-    public void registerControllers(AnimationData data) {}
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {}
 
     @Override
-    public AnimationFactory getFactory() {
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
         return factory;
+    }
+
+    @Override
+    public double getTick(Object o) {
+        return 0;
     }
 }

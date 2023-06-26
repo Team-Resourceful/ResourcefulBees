@@ -17,10 +17,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -55,7 +55,7 @@ public class BeeHouseTopBlock extends Block {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     public BeeHouseTopBlock() {
-        super(Properties.of(Material.WOOD).strength(5f, 6f));
+        super(Properties.of().sound(SoundType.WOOD).strength(5f, 6f).pushReaction(PushReaction.BLOCK));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
@@ -105,11 +105,6 @@ public class BeeHouseTopBlock extends Block {
     @Override
     public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.INVISIBLE;
-    }
-
-    @Override
-    public @NotNull PushReaction getPistonPushReaction(@NotNull BlockState state) {
-        return PushReaction.BLOCK;
     }
 
     public @NotNull ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, @NotNull BlockState state) {

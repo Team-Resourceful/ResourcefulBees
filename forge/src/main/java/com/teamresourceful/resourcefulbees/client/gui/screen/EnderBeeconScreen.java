@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.client.gui.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.component.BasicImageButton;
 import com.teamresourceful.resourcefulbees.client.components.BeeconEffectWidget;
 import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
@@ -10,7 +9,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeconTranslations;
 import com.teamresourceful.resourcefulbees.common.network.packets.client.BeeconChangePacket;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -70,11 +69,10 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         if (tileEntity != null) {
-            RenderUtils.bindTexture(BACKGROUND);
-            this.blit(matrix, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
-            this.blit(matrix, this.leftPos+100, this.topPos+17, 138, 200, 6, 27);
+            graphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+            graphics.blit(BACKGROUND, this.leftPos+100, this.topPos+17, 138, 200, 6, 27);
         }
         drawButtons();
     }
@@ -83,7 +81,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
         int buttonStartY = this.topPos + 17;
         powerButtons.clear();
         for (MobEffect allowedEffect : EnderBeeconBlockEntity.ALLOWED_EFFECTS) {
-            BeeconEffectWidget button = new BeeconEffectWidget(this, this.leftPos + 9, buttonStartY, allowedEffect, menu.getEntity());
+            BeeconEffectWidget button = new BeeconEffectWidget(this.leftPos + 9, buttonStartY, allowedEffect, menu.getEntity());
             button.active = true;
             button.setSelected(tileEntity.hasEffect(allowedEffect));
             powerButtons.add(button);
@@ -92,33 +90,32 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
-        super.renderLabels(matrixStack, mouseX, mouseY);
-        this.font.draw(matrixStack, BeeconTranslations.PRIMARY_LABEL, 10, 6, 4210752);
+    protected void renderLabels(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
+        super.renderLabels(graphics, mouseX, mouseY);
+        graphics.drawString(this.font, BeeconTranslations.PRIMARY_LABEL, 10, 6, 4210752, false);
 
-        drawString(matrixStack, font, BeeconTranslations.ACTIVE_LABEL, 110, 20, 14737632);
-        drawString(matrixStack, font, tileEntity.doEffects() ? "Yes" : "No", 160, 20, tileEntity.doEffects() ? 47104 : 12320768);
-        drawString(matrixStack, font, BeeconTranslations.DRAIN_LABEL, 110, 32, 14737632);
-        drawString(matrixStack, font, tileEntity.getDrain() + " mb/t", 141, 32, 16751628);
-        drawString(matrixStack, font, BeeconTranslations.RANGE_LABEL, 110, 44, 14737632);
-        drawString(matrixStack, font, tileEntity.getRange() + " blocks", 145, 44, 34815);
+        graphics.drawString(font, BeeconTranslations.ACTIVE_LABEL, 110, 20, 14737632);
+        graphics.drawString(font, tileEntity.doEffects() ? "Yes" : "No", 160, 20, tileEntity.doEffects() ? 47104 : 12320768);
+        graphics.drawString(font, BeeconTranslations.DRAIN_LABEL, 110, 32, 14737632);
+        graphics.drawString(font, tileEntity.getDrain() + " mb/t", 141, 32, 16751628);
+        graphics.drawString(font, BeeconTranslations.RANGE_LABEL, 110, 44, 14737632);
+        graphics.drawString(font, tileEntity.getRange() + " blocks", 145, 44, 34815);
 
         FluidStack fluidStack = menu.getEntity().getTank().getFluid();
 
-        drawString(matrixStack, font, BeeconTranslations.FLUID_LABEL, 110, 56, 14737632);
-        drawString(matrixStack, font, fluidStack.isEmpty() ? BeeconTranslations.NO_FLUID_LABEL : fluidStack.getDisplayName(), 137, 56, 16751628);
-        drawString(matrixStack, font, BeeconTranslations.FLUID_AMOUNT_LABEL, 110, 68, 14737632);
-        drawString(matrixStack, font, fluidStack.getAmount()+"mB", 148, 68, 47104);
+        graphics.drawString(font, BeeconTranslations.FLUID_LABEL, 110, 56, 14737632);
+        graphics.drawString(font, fluidStack.isEmpty() ? BeeconTranslations.NO_FLUID_LABEL : fluidStack.getDisplayName(), 137, 56, 16751628);
+        graphics.drawString(font, BeeconTranslations.FLUID_AMOUNT_LABEL, 110, 68, 14737632);
+        graphics.drawString(font, fluidStack.getAmount()+"mB", 148, 68, 47104);
     }
 
     @Override
-    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
         for (BeeconEffectWidget widget : this.powerButtons) {
-            widget.render(matrix, mouseX, mouseY, partialTicks);
-            if (widget.isMouseOver(mouseX, mouseY)) widget.renderToolTip(matrix, mouseX, mouseY);
+            widget.render(graphics, mouseX, mouseY, partialTicks);
         }
     }
 

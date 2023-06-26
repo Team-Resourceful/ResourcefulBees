@@ -18,6 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -35,20 +36,20 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeCompat {
+public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCompat {
 
     private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
 
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private static final RawAnimation ANIMATION = RawAnimation.begin().thenLoop("animation.bee.fly").thenLoop("animation.bee.fly.bobbing");
+    private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
 
     protected final CustomBeeData customBeeData;
     private boolean hasHiveInRange;
@@ -86,16 +87,16 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     @Override
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
-        if (getCombatData().isInvulnerable() && !source.equals(DamageSource.OUT_OF_WORLD)) return true;
+        if (getCombatData().isInvulnerable() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return true;
 
         BeeTraitData info = getTraitData();
-        if (hasEffect(MobEffects.WATER_BREATHING) && source == DamageSource.DROWN) {
+        if (hasEffect(MobEffects.WATER_BREATHING) && source.is(DamageTypeTags.IS_DROWNING)) {
             return true;
         }
-        if (source.equals(DamageSource.SWEET_BERRY_BUSH)) {
+        if (source.equals(damageSources().sweetBerryBush())) {
             return true;
         }
-        if (info.hasTraits() && info.hasDamageImmunities() && info.damageImmunities().stream().anyMatch(source.msgId::equalsIgnoreCase)) {
+        if (info.hasTraits() && info.hasDamageImmunities() && info.damageImmunities().contains(source.getMsgId())) {
             return true;
         }
         return super.isInvulnerableTo(source);
@@ -118,7 +119,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     @Override
     public void aiStep() {
-        if (this.level.isClientSide) clientAIStep();
+        if (this.level().isClientSide) clientAIStep();
         else serverAIStep();
         super.aiStep();
     }
@@ -126,7 +127,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     //TODO Should I just override customServerAIStep instead?
     // What exactly is the difference if customServerAIStep is called from aiStep?
     private void serverAIStep() {
-        if (BeeConfig.beesDieInVoid && this.position().y <= level.getMinBuildHeight()) {
+        if (BeeConfig.beesDieInVoid && this.position().y <= level().getMinBuildHeight()) {
             this.remove(RemovalReason.KILLED);
         }
         if (this.tickCount % 100 == 0) {
@@ -148,7 +149,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     private void addParticles(ParticleOptions basicParticleType) {
         for (int i = 0; i < 10; ++i) {
-            this.level.addParticle(basicParticleType, this.getRandomX(0.5D),
+            this.level().addParticle(basicParticleType, this.getRandomX(0.5D),
                     this.getRandomY() - 0.25D, this.getRandomZ(0.5D),
                     (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
                     (this.random.nextDouble() - 0.5D) * 2.0D);
@@ -190,7 +191,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
 
     @Override
     public AgeableMob createSelectedChild(FamilyUnit family) {
-        return (AgeableMob) family.getChildData().entityType().create(level);
+        return (AgeableMob) family.getChildData().entityType().create(level());
     }
 
     //This is because we don't want IF being able to breed our animals
@@ -226,7 +227,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (this.isFood(itemstack)) {
-            if (!this.level.isClientSide && this.getAge() == 0 && !this.isInLove()) {
+            if (!this.level().isClientSide && this.getAge() == 0 && !this.isInLove()) {
                 this.usePlayerItem(player, hand, itemstack);
                 getBreedData().feedReturnItem().map(ItemStack::copy).ifPresent(player::addItem);
                 this.addFeedCount();
@@ -265,19 +266,16 @@ public class CustomBeeEntity extends Bee implements CustomBee, IAnimatable, BeeC
     }
 
     @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "bee_controller", 0, event -> {
-            event.getController().setAnimation(new AnimationBuilder()
-                .addAnimation("animation.bee.fly", ILoopType.EDefaultLoopTypes.LOOP)
-                .addAnimation("animation.bee.fly.bobbing", ILoopType.EDefaultLoopTypes.LOOP)
-            );
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "controller", 0, state -> {
+            state.getController().setAnimation(ANIMATION);
             return PlayState.CONTINUE;
         }));
     }
 
     @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return animationCache;
     }
 
     @Override

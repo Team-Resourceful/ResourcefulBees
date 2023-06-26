@@ -14,7 +14,7 @@ issueTrackerURL="https://github.com/Team-Resourceful/ResourcefulBees/issues/new/
     description="This mod provides pack makers with useful capabilities for creating custom Resource Bees."
 
 [[dependencies.resourcefulbees]]
-    modId="geckolib3"
+    modId="geckolib"
     mandatory=true
     versionRange="[${gecko_version},)"
     ordering="NONE"

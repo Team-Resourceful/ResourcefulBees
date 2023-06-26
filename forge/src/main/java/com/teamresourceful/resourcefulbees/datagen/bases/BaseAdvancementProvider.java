@@ -3,13 +3,14 @@ package com.teamresourceful.resourcefulbees.datagen.bases;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
-import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.data.CachedOutput;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
+import net.minecraft.data.advancements.AdvancementProvider;
+import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -18,26 +19,22 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
-public abstract class BaseAdvancementProvider implements DataProvider {
+public abstract class BaseAdvancementProvider extends AdvancementProvider {
 
     public static final String TRANSLATIONS_PREFIX = "advancements.resourcefulbees.";
     public static final String TITLE_SUFFIX = ".title";
     public static final String DESCRIPTION_SUFFIX = ".description";
 
-    private final DataGenerator generator;
-    private final Map<ResourceLocation, Advancement> advancements = new HashMap<>();
-
-    protected BaseAdvancementProvider(DataGenerator pGenerator) {
-        this.generator = pGenerator;
+    protected BaseAdvancementProvider(DataGenerator generator, CompletableFuture<HolderLookup.Provider> completableFuture, List<AdvancementSubProvider> list) {
+        super(generator.getPackOutput(), completableFuture, list);
     }
-
-    public abstract void buildAdvancements();
 
     protected static Advancement createRootAdvancement(Supplier<Item> item, Component title, Component desc, ResourceLocation background, ItemPredicate predicate) {
         return Advancement.Builder.advancement()
@@ -98,34 +95,22 @@ public abstract class BaseAdvancementProvider implements DataProvider {
     }
 
     protected static InventoryChangeTrigger.TriggerInstance inventoryTrigger(ItemPredicate... pPredicate) {
-        return new InventoryChangeTrigger.TriggerInstance(EntityPredicate.Composite.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, pPredicate);
-    }
-
-    public Advancement addAdvancement(Advancement advancement) {
-        if (this.advancements.containsKey(advancement.getId()))
-            throw new IllegalStateException("Duplicate advancement " + advancement.getId());
-        this.advancements.put(advancement.getId(), advancement);
-        return advancement;
-    }
-
-    @Override
-    public void run(@NotNull CachedOutput cache) throws IOException {
-        Path path = this.generator.getOutputFolder();
-
-        buildAdvancements();
-
-        for (Advancement advancement : this.advancements.values()) {
-            Path path1 = createPath(path, advancement);
-            DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path1);
-        }
+        return new InventoryChangeTrigger.TriggerInstance(ContextAwarePredicate.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, pPredicate);
     }
 
     private static Path createPath(Path path, Advancement advancement) {
         return path.resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
     }
 
-    @Override
-    public @NotNull String getName() {
-        return "Resourceful Bees Advancement Provider";
+    public interface AdvancementGenerator extends AdvancementSubProvider {
+        @Override
+        default void generate(HolderLookup.@NotNull Provider registries, @NotNull Consumer<Advancement> writer) {
+            generate(registries, value -> {
+                writer.accept(value);
+                return value;
+            });
+        }
+
+        void generate(HolderLookup.Provider registries, UnaryOperator<Advancement> writer);
     }
 }

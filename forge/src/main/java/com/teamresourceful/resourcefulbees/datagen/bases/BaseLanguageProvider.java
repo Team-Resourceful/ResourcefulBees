@@ -25,8 +25,8 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
     private final List<LanguageModule> modules = new ArrayList<>();
     private final Class<?>[] miscTranslationsClazz;
 
-    protected BaseLanguageProvider(DataGenerator gen, @Nullable Class<?>... miscTranslationsClazz) {
-        super(gen, ModConstants.MOD_ID, "en_us");
+    protected BaseLanguageProvider(DataGenerator generator, @Nullable Class<?>... miscTranslationsClazz) {
+        super(generator.getPackOutput(), ModConstants.MOD_ID, "en_us");
         this.miscTranslationsClazz = miscTranslationsClazz;
     }
 

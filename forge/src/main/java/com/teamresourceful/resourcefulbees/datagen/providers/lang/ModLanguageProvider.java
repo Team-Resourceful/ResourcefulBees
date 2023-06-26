@@ -52,11 +52,11 @@ public class ModLanguageProvider extends BaseLanguageProvider {
     }
 
     private void addItemGroups() {
-        add(ItemGroupResourcefulBees.RESOURCEFUL_BEES, "Resourceful Bees");
-        add(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY, "Resourceful Bees - Honey");
-        add(ItemGroupResourcefulBees.RESOURCEFUL_BEES_BEES, "Resourceful Bees - Spawn Eggs");
-        add(ItemGroupResourcefulBees.RESOURCEFUL_BEES_COMBS, "Resourceful Bees - Combs");
-        add(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HIVES, "Resourceful Bees - Hives");
+        add(ItemGroupResourcefulBees.RESOURCEFUL_BEES.get(), "Resourceful Bees");
+        add(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HONEY.get(), "Resourceful Bees - Honey");
+        add(ItemGroupResourcefulBees.RESOURCEFUL_BEES_BEES.get(), "Resourceful Bees - Spawn Eggs");
+        add(ItemGroupResourcefulBees.RESOURCEFUL_BEES_COMBS.get(), "Resourceful Bees - Combs");
+        add(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HIVES.get(), "Resourceful Bees - Hives");
     }
 
     private void addPotions() {

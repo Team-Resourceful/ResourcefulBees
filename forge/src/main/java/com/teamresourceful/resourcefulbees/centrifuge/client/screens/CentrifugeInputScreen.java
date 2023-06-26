@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.screens;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.controlpanels.InputControlPanel;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.terminal.input.TerminalIOPanel;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.terminal.input.TerminalInputHomePanel;
+import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeInputContainer;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
-import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeInputContainer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -64,9 +64,9 @@ public class CentrifugeInputScreen extends CentrifugeInventoryScreen<CentrifugeI
     }
 
     @Override
-    protected void drawContainerSlots(@NotNull PoseStack matrix, int x, int y) {
-        drawSlot(matrix, x+125, y+63, 0, 0);
-        super.drawContainerSlots(matrix, x, y);
+    protected void drawContainerSlots(@NotNull GuiGraphics graphics, int x, int y) {
+        drawSlot(graphics, x+125, y+63, 0, 0);
+        super.drawContainerSlots(graphics, x, y);
     }
 
     @Override

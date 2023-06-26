@@ -43,7 +43,7 @@ public abstract class MixinBee extends Animal implements BeeCompat {
 
     @Inject(at = @At("HEAD"), method = "doesHiveHaveSpace", cancellable = true)
     private void doesHiveHaveSpace(BlockPos pos, CallbackInfoReturnable<Boolean> callback) {
-        BlockEntity blockEntity = this.level.getBlockEntity(pos);
+        BlockEntity blockEntity = this.level().getBlockEntity(pos);
         if ((blockEntity instanceof TieredBeehiveBlockEntity tieredHive && !tieredHive.isFull())
                 || (blockEntity instanceof BeeHolderBlockEntity apiary && apiary.hasSpace())
                 || (blockEntity instanceof BeehiveBlockEntity beeHive && !beeHive.isFull())) {
@@ -56,7 +56,7 @@ public abstract class MixinBee extends Animal implements BeeCompat {
         if (this.hasHive()) {
             BlockPos pos = this.hivePos;
             if (pos != null) {
-                BlockEntity blockEntity = this.level.getBlockEntity(this.hivePos);
+                BlockEntity blockEntity = this.level().getBlockEntity(this.hivePos);
                 if ((blockEntity instanceof TieredBeehiveBlockEntity tieredHive && tieredHive.isAllowedBee())
                         || (blockEntity instanceof BeeHolderBlockEntity apiary && apiary.isAllowedBee())) {
                     callback.setReturnValue(true);

@@ -9,12 +9,12 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
-import com.teamresourceful.resourcefullib.common.utils.TagUtils;
+import com.teamresourceful.resourcefullib.common.nbt.TagUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceKey;
@@ -37,7 +37,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -148,12 +147,12 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         else if (biome.is(BiomeTags.IS_NETHER)) return Blocks.OBSIDIAN.defaultBlockState();
         else if (biome.is(BiomeTags.IS_SAVANNA))return Blocks.ACACIA_WOOD.defaultBlockState();
         else if (biome.is(BiomeTags.IS_JUNGLE)) return Blocks.JUNGLE_WOOD.defaultBlockState();
-        else if (biome.is(BiomeTags.IS_BEACH)) return isFrozenBiome(biome) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.STRIPPED_OAK_WOOD.defaultBlockState();
-        else if (biome.is(BiomeTags.IS_OCEAN)) return isFrozenBiome(biome) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.STRIPPED_OAK_WOOD.defaultBlockState();
+        else if (biome.is(BiomeTags.IS_BEACH)) return doesSnowInBiome(biome) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.STRIPPED_OAK_WOOD.defaultBlockState();
+        else if (biome.is(BiomeTags.IS_OCEAN)) return doesSnowInBiome(biome) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.STRIPPED_OAK_WOOD.defaultBlockState();
         else if (biome.is(BiomeTags.IS_TAIGA)) return Blocks.PACKED_ICE.defaultBlockState();
         else if (doesSnowInBiome(biome)) return Blocks.PACKED_ICE.defaultBlockState();
         else if (biome.is(BiomeTags.HAS_SWAMP_HUT)) return  Blocks.STRIPPED_SPRUCE_WOOD.defaultBlockState();
-        else if (biome.is(BiomeTags.IS_RIVER)) return isFrozenBiome(biome) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.OAK_WOOD.defaultBlockState();
+        else if (biome.is(BiomeTags.IS_RIVER)) return doesSnowInBiome(biome) ? Blocks.PACKED_ICE.defaultBlockState() : Blocks.OAK_WOOD.defaultBlockState();
         return Blocks.OAK_WOOD.defaultBlockState();
     }
 
@@ -189,7 +188,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private static boolean doesSnowInBiome(Holder<Biome> biome) {
-        return biome.isBound() && biome.value().getPrecipitation() == Biome.Precipitation.SNOW;
+        return biome.isBound() && biome.value().hasPrecipitation() && biome.value().getBaseTemperature() < 0.15F;
     }
 
     private static Block getNetherNest(boolean headsOrTails, Holder<Biome> biome){
@@ -201,13 +200,6 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
     private static Block selectNest(boolean headsOrTails, Block blockOne, Block blockTwo){
         return headsOrTails ? blockOne : blockTwo;
-    }
-
-    private static boolean isFrozenBiome(@Nullable Holder<Biome> biome) {
-        if (biome != null && biome.isBound()) {
-            return biome.value().getPrecipitation() == Biome.Precipitation.SNOW || biome.value().getBaseTemperature() < 0.15F;
-        }
-        return false;
     }
 
     private static void setNestBees(BlockPos pos, Holder<Biome> biome, WorldGenLevel level, RandomSource rand){
@@ -226,8 +218,8 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private static void addBeeToNest(CustomBeeEntityType<?> entity, RandomSource rand, TieredBeehiveBlockEntity nest) {
-        ResourceLocation id = Registry.ENTITY_TYPE.getKey(entity);
-        if (id != Registry.ENTITY_TYPE.getDefaultKey()) {
+        ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(entity);
+        if (id != BuiltInRegistries.ENTITY_TYPE.getDefaultKey()) {
             CompoundTag tag = TagUtils.tagWithData(NBTConstants.NBT_ID, StringTag.valueOf(id.toString()));
             int timeInHive = rand.nextInt(entity.getData().getCoreData().maxTimeInHive());
             nest.getBees().add(new BeehiveBlockEntity.BeeData(tag, 0, timeInHive));

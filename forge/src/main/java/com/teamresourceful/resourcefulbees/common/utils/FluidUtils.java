@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -36,7 +36,7 @@ public final class FluidUtils {
     }
 
     public static final Codec<FluidStack> FLUID_STACK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Registry.FLUID.byNameCodec().fieldOf("id").forGetter(FluidStack::getFluid),
+            BuiltInRegistries.FLUID.byNameCodec().fieldOf("id").forGetter(FluidStack::getFluid),
             Codec.INT.fieldOf("amount").orElse(1000).forGetter(FluidStack::getAmount),
             CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
     ).apply(instance, (fluid, amount, tag) -> new FluidStack(fluid, amount, tag.orElse(null))));
@@ -57,7 +57,7 @@ public final class FluidUtils {
                 } else {
                     player.setItemInHand(hand, itemStack);
                 }
-                player.level.playSound(null, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                player.level().playSound(null, player.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
         }
     }
@@ -77,7 +77,7 @@ public final class FluidUtils {
             } else {
                 player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE, 1));
             }
-            player.level.playSound(null, player.blockPosition(), SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+            player.level().playSound(null, player.blockPosition(), SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
     }
 

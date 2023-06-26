@@ -40,17 +40,17 @@ public class BeeMutateGoal extends Goal {
     public boolean canUse() {
         if (bee.fakeFlower.hasData()) return false;
         if (bee.getNumberOfMutations() >= bee.getMutationData().count()) return false;
-        if (bee.level.random.nextFloat() < 0.3F) return false;
+        if (bee.level().random.nextFloat() < 0.3F) return false;
         return bee.hasNectar() && !bee.isAngry();
     }
 
     @Override
     public void tick() {
-        if (!(bee.getLevel() instanceof ServerLevel serverLevel)) return;
+        if (!(bee.level() instanceof ServerLevel serverLevel)) return;
         if (bee.tickCount % 5 == 0) {
             BeeMutationData mutationData = bee.getMutationData();
             Map<MutationType, WeightedCollection<MutationType>> mutationMap = mutationData.mutations(serverLevel);
-            if (doMutation(mutationMap, (ServerLevel) bee.level, bee.blockPosition())) {
+            if (doMutation(mutationMap, (ServerLevel) bee.level(), bee.blockPosition())) {
                 bee.incrementNumCropsGrownSincePollination();
                 spawnParticles(serverLevel, bee);
             }

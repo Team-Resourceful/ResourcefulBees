@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.lib.tags;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
@@ -16,6 +16,6 @@ public final class ModBiomeTags {
     }
 
     private static TagKey<Biome> createBiomeTag(String mod, String path) {
-        return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(mod, path));
+        return TagKey.create(Registries.BIOME, new ResourceLocation(mod, path));
     }
 }

@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.datagen;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import com.teamresourceful.resourcefulbees.datagen.providers.advancements.ModAdvancementProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.blockstates.ModBlockStateProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.items.ModItemModelProvider;
@@ -13,11 +12,14 @@ import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModBlockTagPro
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModFluidTagProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModItemTagProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModPoiTagProvider;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.concurrent.CompletableFuture;
 
 @Mod.EventBusSubscriber(modid = ModConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ResourcefulBeesDataGenerator {
@@ -29,21 +31,21 @@ public final class ResourcefulBeesDataGenerator {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
         ModConstants.LOGGER.info("Data Generator Loaded!");
-        ModUtils.IS_DATAGEN = true;
         DataGenerator generator = event.getGenerator();
-
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+        CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
+
         generator.addProvider(event.includeClient(), new ModBlockStateProvider(generator, existingFileHelper));
         generator.addProvider(event.includeClient(), new ModItemModelProvider(generator, existingFileHelper));
         generator.addProvider(event.includeClient(), new ModLanguageProvider(generator));
 
-        ModBlockTagProvider blockTagProvider = new ModBlockTagProvider(generator, existingFileHelper);
+        ModBlockTagProvider blockTagProvider = new ModBlockTagProvider(generator, provider, existingFileHelper);
         generator.addProvider(event.includeServer(), blockTagProvider);
-        generator.addProvider(event.includeServer(), new ModPoiTagProvider(generator, existingFileHelper));
-        generator.addProvider(event.includeServer(), new ModItemTagProvider(generator, blockTagProvider, existingFileHelper));
-        generator.addProvider(event.includeServer(), new ModFluidTagProvider(generator, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ModPoiTagProvider(generator, provider, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ModItemTagProvider(generator, provider, blockTagProvider.contentsGetter(), existingFileHelper));
+        generator.addProvider(event.includeServer(), new ModFluidTagProvider(generator, provider, existingFileHelper));
         generator.addProvider(event.includeServer(), new ModRecipeProvider(generator));
-        generator.addProvider(event.includeServer(), new ModAdvancementProvider(generator));
-        generator.addProvider(event.includeServer(), new ModLootTableProvider(generator));
+        generator.addProvider(event.includeServer(), new ModAdvancementProvider(generator, provider));
+        generator.addProvider(event.includeServer(), new ModLootTableProvider(generator, provider));
     }
 }

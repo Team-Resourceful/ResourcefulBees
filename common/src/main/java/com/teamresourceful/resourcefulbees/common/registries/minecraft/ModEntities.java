@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
@@ -19,7 +19,7 @@ public final class ModEntities {
     private ModEntities() {
         throw new UtilityClassError();
     }
-    public static final ResourcefulRegistry<EntityType<?>> ENTITY_TYPES = ResourcefulRegistries.create(Registry.ENTITY_TYPE, ModConstants.MOD_ID);
+    public static final ResourcefulRegistry<EntityType<?>> ENTITY_TYPES = ResourcefulRegistries.create(BuiltInRegistries.ENTITY_TYPE, ModConstants.MOD_ID);
     public static final ResourcefulRegistry<EntityType<?>> BEES = ResourcefulRegistries.create(ENTITY_TYPES);
     private static final Map<String, RegistryEntry<EntityType<? extends CustomBeeEntity>>> MOD_BEES = new HashMap<>();
     public static Map<String, RegistryEntry<EntityType<? extends CustomBeeEntity>>> getModBees() {

@@ -5,13 +5,13 @@ import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefullib.common.utils.forge.HiddenGenericMemoryPack;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagFile;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -23,23 +23,24 @@ public final class DataPackLoader implements RepositorySource {
     private DataPackLoader() {}
 
     @Override
-    public void loadPacks(@NotNull Consumer<Pack> packList, @NotNull Pack.PackConstructor factory) {
+    public void loadPacks(Consumer<Pack> onLoad) {
         try (MemoryDataPack dataPack = new MemoryDataPack()) {
             DataGen.getTags().forEach((location, resourceLocations) -> {
                 TagBuilder builder = TagBuilder.create();
                 resourceLocations.forEach(builder::addElement);
                 TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(builder.build(), false))
-                        .result()
-                        .ifPresent(json -> dataPack.putJson(PackType.SERVER_DATA, location, json));
+                    .result()
+                    .ifPresent(json -> dataPack.putJson(PackType.SERVER_DATA, location, json));
             });
 
-            packList.accept(Pack.create(
-                    DATAPACK_NAME,
-                    true,
-                    () -> dataPack,
-                    factory,
-                    Pack.Position.BOTTOM,
-                    PackSource.BUILT_IN
+            onLoad.accept(Pack.readMetaAndCreate(
+                DATAPACK_NAME,
+                Component.empty(),
+                true,
+                (id) -> dataPack,
+                PackType.SERVER_DATA,
+                Pack.Position.BOTTOM,
+                PackSource.BUILT_IN
             ));
         }
     }
@@ -47,7 +48,7 @@ public final class DataPackLoader implements RepositorySource {
     private static class MemoryDataPack extends HiddenGenericMemoryPack {
 
         private static final JsonObject META = Util.make(new JsonObject(), meta -> {
-           meta.addProperty("pack_format", PackType.SERVER_DATA.getVersion(SharedConstants.getCurrentVersion()));
+           meta.addProperty("pack_format", SharedConstants.getCurrentVersion().getPackVersion(PackType.SERVER_DATA));
            meta.addProperty("description", "Data for resourcefulbees tags.");
         });
 

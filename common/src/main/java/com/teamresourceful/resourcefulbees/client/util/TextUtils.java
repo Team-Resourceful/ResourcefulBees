@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.client.util;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.mixin.client.FontResourceManagerAccessor;
 import com.teamresourceful.resourcefulbees.mixin.client.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -40,19 +40,19 @@ public final class TextUtils {
         return formatter;
     }
 
-    public static void drawCenteredStringNoShadow(Font font, PoseStack stack, Component component, float x, float y, int color) {
-        font.draw(stack, component, x - halfWidthOfText(font, component), y, color);
+    public static void drawCenteredStringNoShadow(Font font, GuiGraphics graphics, Component component, int x, int y, int color) {
+        graphics.drawString(font, component, x - halfWidthOfText(font, component), y, color, false);
     }
 
-    public static void tf8DrawCenteredStringNoShadow(PoseStack stack, Component component, float x, float y, int color) {
-        drawCenteredStringNoShadow(TERMINAL_FONT_8, stack, component, x, y, color);
+    public static void tf8DrawCenteredStringNoShadow(GuiGraphics graphics, Component component, int x, int y, int color) {
+        drawCenteredStringNoShadow(TERMINAL_FONT_8, graphics, component, x, y, color);
     }
 
-    public static void tf12DrawCenteredStringNoShadow(PoseStack stack, Component component, float x, float y, int color) {
-        drawCenteredStringNoShadow(TERMINAL_FONT_12, stack, component, x, y, color);
+    public static void tf12DrawCenteredStringNoShadow(GuiGraphics graphics, Component component, int x, int y, int color) {
+        drawCenteredStringNoShadow(TERMINAL_FONT_12, graphics, component, x, y, color);
     }
 
-    public static float halfWidthOfText(Font font, Component component) {
-        return font.width(component)/2f;
+    public static int halfWidthOfText(Font font, Component component) {
+        return font.width(component)/2;
     }
 }

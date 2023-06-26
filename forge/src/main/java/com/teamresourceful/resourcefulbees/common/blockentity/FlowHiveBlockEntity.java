@@ -64,7 +64,7 @@ public class FlowHiveBlockEntity extends BeeHolderBlockEntity {
     protected void deliverNectar(CompoundTag nbt, Entity bee) {
         if (nbt.getBoolean("HasNectar")) {
             if (bee instanceof BeeCompat compat) compat.nectarDroppedOff();
-            FlowHiveRecipe.findRecipe(bee.level.getRecipeManager(), bee.getType())
+            FlowHiveRecipe.findRecipe(bee.level().getRecipeManager(), bee.getType())
                 .ifPresent(recipe -> {
                     if (!tank.getFluid().isEmpty() && tank.getFluid().isFluidEqual(recipe.fluid())) {
                         tank.setFluid(new FluidStack(tank.getFluid(), Math.min(tank.getCapacity(), tank.getFluidAmount() + recipe.fluid().getAmount())));

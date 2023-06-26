@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
-import com.teamresourceful.resourcefullib.common.utils.TagUtils;
+import com.teamresourceful.resourcefullib.common.nbt.TagUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

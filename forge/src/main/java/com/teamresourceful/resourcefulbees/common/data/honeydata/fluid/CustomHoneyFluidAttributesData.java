@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidAttributesData;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -29,8 +29,8 @@ public record CustomHoneyFluidAttributesData(
         LazyHolder<SoundEvent> bucketEmpty
 ) implements HoneyFluidAttributesData {
 
-    private static final Codec<LazyHolder<SoundEvent>> SOUND_CODEC = ResourceLocation.CODEC.xmap(LazyHolder.map(Registry.SOUND_EVENT), LazyHolder::getId);
-    public static final CustomHoneyFluidAttributesData DEFAULT = new CustomHoneyFluidAttributesData(1, 1000, 300, 1000, 0.5f, 0.014, true, true, true, false, false, false, false, LazyHolder.of(Registry.SOUND_EVENT, SoundEvents.BUCKET_FILL), LazyHolder.of(Registry.SOUND_EVENT, SoundEvents.BUCKET_EMPTY));
+    private static final Codec<LazyHolder<SoundEvent>> SOUND_CODEC = ResourceLocation.CODEC.xmap(LazyHolder.map(BuiltInRegistries.SOUND_EVENT), LazyHolder::getId);
+    public static final CustomHoneyFluidAttributesData DEFAULT = new CustomHoneyFluidAttributesData(1, 1000, 300, 1000, 0.5f, 0.014, true, true, true, false, false, false, false, LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_FILL), LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_EMPTY));
     public static final Codec<HoneyFluidAttributesData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.intRange(0, 15).fieldOf("lightLevel").orElse(1).forGetter(HoneyFluidAttributesData::lightLevel),
             Codec.INT.fieldOf("density").orElse(1000).forGetter(HoneyFluidAttributesData::density),
@@ -45,8 +45,8 @@ public record CustomHoneyFluidAttributesData(
             Codec.BOOL.fieldOf("canConvertToSource").orElse(false).forGetter(HoneyFluidAttributesData::canConvertToSource),
             Codec.BOOL.fieldOf("supportsBoating").orElse(false).forGetter(HoneyFluidAttributesData::supportsBoating),
             Codec.BOOL.fieldOf("canHydrate").orElse(false).forGetter(HoneyFluidAttributesData::canHydrate),
-            SOUND_CODEC.fieldOf("fillSound").orElse(LazyHolder.of(Registry.SOUND_EVENT, SoundEvents.BUCKET_FILL)).forGetter(HoneyFluidAttributesData::bucketFill),
-            SOUND_CODEC.fieldOf("emptySound").orElse(LazyHolder.of(Registry.SOUND_EVENT, SoundEvents.BUCKET_EMPTY)).forGetter(HoneyFluidAttributesData::bucketEmpty)
+            SOUND_CODEC.fieldOf("fillSound").orElse(LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_FILL)).forGetter(HoneyFluidAttributesData::bucketFill),
+            SOUND_CODEC.fieldOf("emptySound").orElse(LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_EMPTY)).forGetter(HoneyFluidAttributesData::bucketEmpty)
     ).apply(instance, CustomHoneyFluidAttributesData::new));
 
     public static FluidType.Properties getProperties(HoneyFluidAttributesData data) {

@@ -5,16 +5,13 @@ import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.api.registry.TraitRegistry;
 import com.teamresourceful.resourcefulbees.client.screen.base.RenderingScreen;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
-import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class TraitsPage extends RenderingScreen implements TooltipProvider {
+public class TraitsPage extends RenderingScreen {
 
     private final Consumer<Trait> traitConsumer;
 
@@ -38,11 +35,6 @@ public class TraitsPage extends RenderingScreen implements TooltipProvider {
             }
         }));
         list.updateEntries(this.traits.stream().map(TraitEntry::new).toList());
-    }
-
-    @Override
-    public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
-        return TooltipProvider.getTooltips(this.getRenderables(), mouseX, mouseY);
     }
 }
 

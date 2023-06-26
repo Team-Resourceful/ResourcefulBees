@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -38,7 +38,7 @@ public record DimensionalBeesPacket(Map<ResourceKey<Level>, List<String>> bees) 
 
         @Override
         public DimensionalBeesPacket decode(FriendlyByteBuf buffer) {
-            return new DimensionalBeesPacket(buffer.readMap(buf -> buf.readResourceKey(Registry.DIMENSION_REGISTRY), buf -> buf.readList(FriendlyByteBuf::readUtf)));
+            return new DimensionalBeesPacket(buffer.readMap(buf -> buf.readResourceKey(Registries.DIMENSION), buf -> buf.readList(FriendlyByteBuf::readUtf)));
         }
 
         @Override

@@ -9,13 +9,15 @@
         "common.BeehiveBeeDataAccessor",
         "common.BeehiveEntityAccessor",
         "common.BeeInvoker",
+        "common.BlockSetTypeInvoker",
         "common.MixinBlock",
         "common.RecipeManagerInvoker",
         "common.ReloadableServerResourcesAccessor",
         "common.ServerLevelAccessor",
         "common.StructureCheckAccessor",
         "common.StructureTemplatePoolAccessor",
-        "common.TagManagerAccessor"
+        "common.TagManagerAccessor",
+        "common.WoodTypeInvoker"
     ],
     "client": [
         "client.FontResourceManagerAccessor",

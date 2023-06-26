@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class HoneyPotMenu extends AbstractModContainerMenu<HoneyPotBlockEntity> {
 
     public HoneyPotMenu(int id, Inventory inv, FriendlyByteBuf buf) {
-        this(id, inv, getTileFromBuf(inv.player.level, buf, HoneyPotBlockEntity.class));
+        this(id, inv, getTileFromBuf(inv.player.level(), buf, HoneyPotBlockEntity.class));
     }
 
     public HoneyPotMenu(int id, Inventory inv, HoneyPotBlockEntity entity) {

@@ -7,7 +7,6 @@
         "MixinBee",
         "MixinBeeEnterHiveGoal",
         "MixinDispenserBlock",
-        "MixinItem",
         "accessors.RecipeManagerAccessor",
         "compat.ProductiveBeeMixin"
     ],

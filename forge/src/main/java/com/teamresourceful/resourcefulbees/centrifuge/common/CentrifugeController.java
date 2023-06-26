@@ -29,10 +29,10 @@ import net.roguelogix.phosphophyllite.multiblock2.common.ITickablePartsMultibloc
 import net.roguelogix.phosphophyllite.multiblock2.rectangular.IRectangularMultiblock;
 import net.roguelogix.phosphophyllite.multiblock2.touching.ITouchingMultiblock;
 import net.roguelogix.phosphophyllite.multiblock2.validated.IValidatedMultiblock;
-import net.roguelogix.phosphophyllite.repack.org.joml.Vector3i;
-import net.roguelogix.phosphophyllite.repack.org.joml.Vector3ic;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 
 import javax.annotation.Nonnull;
 import java.util.*;

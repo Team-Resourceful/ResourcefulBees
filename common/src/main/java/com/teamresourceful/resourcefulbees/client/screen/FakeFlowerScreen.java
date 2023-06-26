@@ -1,9 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -21,15 +20,14 @@ public class FakeFlowerScreen extends AbstractContainerScreen<FakeFlowerMenu> {
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
-        RenderUtils.bindTexture(FAKE_FLOWER_BACKGROUND);
-        this.blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+    protected void renderBg(@NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        graphics.blit(FAKE_FLOWER_BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
     }
 
     @Override
-    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 }

@@ -15,10 +15,10 @@ public abstract class BaseBlockStateProvider extends BlockStateProvider {
     protected final BaseItemModelProvider itemModelProvider;
 
 
-    protected BaseBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, ModConstants.MOD_ID, exFileHelper);
-        this.blockModelProvider = new BaseBlockModelProvider(gen, exFileHelper) { @Override protected void registerModels() {} };
-        this.itemModelProvider = new BaseItemModelProvider(gen, exFileHelper) { @Override protected void registerModels() {} };
+    protected BaseBlockStateProvider(DataGenerator generator, ExistingFileHelper exFileHelper) {
+        super(generator.getPackOutput(), ModConstants.MOD_ID, exFileHelper);
+        this.blockModelProvider = new BaseBlockModelProvider(generator, exFileHelper) { @Override protected void registerModels() {} };
+        this.itemModelProvider = new BaseItemModelProvider(generator, exFileHelper) { @Override protected void registerModels() {} };
     }
 
     protected String id(RegistryEntry<? extends Block> block) {
@@ -41,11 +41,6 @@ public abstract class BaseBlockStateProvider extends BlockStateProvider {
 
     protected void simpleBlockWithItem(Block block) {
         ModelFile model = cubeAll(block);
-        this.simpleBlock(block, model);
-        this.simpleBlockItem(block, model);
-    }
-
-    protected void simpleBlockWithItem(Block block, ModelFile model) {
         this.simpleBlock(block, model);
         this.simpleBlockItem(block, model);
     }

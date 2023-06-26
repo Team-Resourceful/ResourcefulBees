@@ -50,6 +50,4 @@ public final class ModUtils {
 
         return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
     }
-
-    public static boolean IS_DATAGEN = false;
 }

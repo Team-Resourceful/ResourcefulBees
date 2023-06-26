@@ -28,10 +28,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -60,13 +60,15 @@ public class EnderBeecon extends TickingBlock<EnderBeeconBlockEntity> {
     public static final BooleanProperty BEAM = BooleanProperty.create("beam");
     public static final BooleanProperty SOUND = BooleanProperty.create("sound");
 
-    public static final Properties PROPERTIES = Properties.of(Material.GLASS, MaterialColor.COLOR_PURPLE)
-            .requiresCorrectToolForDrops()
-            .strength(5)
-            .sound(SoundType.LODESTONE)
-            .lightLevel(luminance -> 15)
-            .noOcclusion()
-            .dynamicShape();
+    public static final Properties PROPERTIES = Properties.of()
+        .instrument(NoteBlockInstrument.HAT)
+        .mapColor(MapColor.COLOR_PURPLE)
+        .requiresCorrectToolForDrops()
+        .strength(5)
+        .sound(SoundType.LODESTONE)
+        .lightLevel(luminance -> 15)
+        .noOcclusion()
+        .dynamicShape();
 
     public EnderBeecon() {
         super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY, PROPERTIES);
@@ -140,8 +142,8 @@ public class EnderBeecon extends TickingBlock<EnderBeeconBlockEntity> {
         FluidStack fluid = tank.getFluid();
         if (!fluid.isEmpty()) {
             tooltip.add(Component.translatable(fluid.getTranslationKey())
-                    .append(": [" + tank.getFluidAmount() + "/" + tank.getCapacity() + "]")
-                    .withStyle(ChatFormatting.GOLD));
+                .append(": [" + tank.getFluidAmount() + "/" + tank.getCapacity() + "]")
+                .withStyle(ChatFormatting.GOLD));
         }
     }
 }

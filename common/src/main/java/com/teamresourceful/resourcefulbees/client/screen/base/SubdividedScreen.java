@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.screen.base;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.mixin.client.ScreenInvoker;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.client.screens.HistoryScreen;
 import com.teamresourceful.resourcefullib.client.screens.ScreenHistory;
-import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
@@ -19,9 +18,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
-public class SubdividedScreen extends HistoryScreen implements TooltipProvider {
+public class SubdividedScreen extends HistoryScreen {
 
-    private final List<Widget> renderables = new ArrayList<>();
+    private final List<Renderable> renderables = new ArrayList<>();
 
     protected int screenWidth;
     protected int screenHeight;
@@ -85,8 +84,8 @@ public class SubdividedScreen extends HistoryScreen implements TooltipProvider {
         return top() + subY;
     }
 
-    public void renderScreen(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void renderScreen(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -96,13 +95,13 @@ public class SubdividedScreen extends HistoryScreen implements TooltipProvider {
 
     //region Event Listeners
     @Override
-    public void render(@NotNull PoseStack stackIn, int mouseX, int mouseY, float partialTicks) {
-        try (var stack = new CloseablePoseStack(stackIn)) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        try (var stack = new CloseablePoseStack(graphics)) {
             stack.translate(left(), top(), 0);
-            renderScreen(stackIn, mouseX - left(), mouseY - top(), partialTicks);
+            renderScreen(graphics, mouseX - left(), mouseY - top(), partialTicks);
             if (getSubScreen() != null) {
                 stack.translate(subX, subY, 0);
-                getSubScreen().render(stackIn, mouseX - subLeft(), mouseY - subTop(), partialTicks);
+                getSubScreen().render(graphics, mouseX - subLeft(), mouseY - subTop(), partialTicks);
             }
         }
     }
@@ -172,22 +171,13 @@ public class SubdividedScreen extends HistoryScreen implements TooltipProvider {
     //endregion
 
     @Override
-    public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
-        List<Component> components = TooltipProvider.getTooltips(this.renderables, mouseX, mouseY);
-        if (getSubScreen() instanceof TooltipProvider provider) {
-            components.addAll(provider.getTooltip(mouseX - subLeft(), mouseY - subTop()));
-        }
-        return components;
-    }
-
-    @Override
-    protected <T extends GuiEventListener & Widget & NarratableEntry> T addRenderableWidget(T widget) {
+    protected <T extends GuiEventListener & Renderable & NarratableEntry> T addRenderableWidget(T widget) {
         this.renderables.add(widget);
         return super.addRenderableWidget(widget);
     }
 
     @Override
-    protected <T extends Widget> T addRenderableOnly(T widget) {
+    protected <T extends Renderable> T addRenderableOnly(T widget) {
         this.renderables.add(widget);
         return super.addRenderableOnly(widget);
     }

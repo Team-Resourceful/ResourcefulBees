@@ -6,8 +6,8 @@ import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
@@ -20,7 +20,7 @@ import java.util.Set;
 
 public record Trait(String name, Item displayItem,
                     Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities,
-                    Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities,
+                    Set<MobEffect> potionImmunities, Set<TraitDamageType> damageTypes, Set<String> specialAbilities,
                     Set<ParticleType<?>> particleEffects, Set<Aura> auras
 ) {
     public static final Trait DEFAULT = new Trait("this is a test string", null, Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
@@ -38,19 +38,19 @@ public record Trait(String name, Item displayItem,
      */
     public static Codec<Trait> getCodec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(Trait::name),
-                Registry.ITEM.byNameCodec().fieldOf("displayItem").orElse(Items.NETHER_STAR).forGetter(Trait::displayItem),
-                CodecExtras.set(PotionEffect.CODEC).fieldOf("potionDamageEffects").orElse(new HashSet<>()).forGetter(Trait::potionDamageEffects),
-                CodecExtras.set(Codec.STRING).fieldOf("damageImmunities").orElse(new HashSet<>()).forGetter(Trait::damageImmunities),
-                CodecExtras.set(Registry.MOB_EFFECT.byNameCodec()).fieldOf("potionImmunities").orElse(new HashSet<>()).forGetter(Trait::potionImmunities),
-                CodecExtras.set(DamageType.CODEC).fieldOf("damageTypes").orElse(new HashSet<>()).forGetter(Trait::damageTypes),
-                CodecExtras.set(Codec.STRING).fieldOf("specialAbilities").orElse(new HashSet<>()).forGetter(Trait::specialAbilities),
-                CodecExtras.set(Registry.PARTICLE_TYPE.byNameCodec()).fieldOf("particleType").orElse(new HashSet<>()).forGetter(Trait::particleEffects),
-                CodecExtras.set(Aura.CODEC).fieldOf("auras").orElse(new HashSet<>()).forGetter(Trait::auras)
+            MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(Trait::name),
+            BuiltInRegistries.ITEM.byNameCodec().fieldOf("displayItem").orElse(Items.NETHER_STAR).forGetter(Trait::displayItem),
+            CodecExtras.set(PotionEffect.CODEC).fieldOf("potionDamageEffects").orElse(new HashSet<>()).forGetter(Trait::potionDamageEffects),
+            CodecExtras.set(Codec.STRING).fieldOf("damageImmunities").orElse(new HashSet<>()).forGetter(Trait::damageImmunities),
+            CodecExtras.set(BuiltInRegistries.MOB_EFFECT.byNameCodec()).fieldOf("potionImmunities").orElse(new HashSet<>()).forGetter(Trait::potionImmunities),
+            CodecExtras.set(TraitDamageType.CODEC).fieldOf("damageTypes").orElse(new HashSet<>()).forGetter(Trait::damageTypes),
+            CodecExtras.set(Codec.STRING).fieldOf("specialAbilities").orElse(new HashSet<>()).forGetter(Trait::specialAbilities),
+            CodecExtras.set(BuiltInRegistries.PARTICLE_TYPE.byNameCodec()).fieldOf("particleType").orElse(new HashSet<>()).forGetter(Trait::particleEffects),
+            CodecExtras.set(Aura.CODEC).fieldOf("auras").orElse(new HashSet<>()).forGetter(Trait::auras)
         ).apply(instance, Trait::new));
     }
 
-    public Trait(String name, Item displayItem, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<DamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<Aura> auras) {
+    public Trait(String name, Item displayItem, Set<PotionEffect> potionDamageEffects, Set<String> damageImmunities, Set<MobEffect> potionImmunities, Set<TraitDamageType> damageTypes, Set<String> specialAbilities, Set<ParticleType<?>> particleEffects, Set<Aura> auras) {
         this.name = name.toLowerCase(Locale.ROOT).replace(" ", "_");
         this.displayItem = displayItem == null ? Items.BLAZE_POWDER : displayItem; //covers trait data object codec
         this.potionDamageEffects = potionDamageEffects;
@@ -122,10 +122,10 @@ public record Trait(String name, Item displayItem,
      * <p>
      * Damage types can, however, have an amplifier amount.
      *
-     * @return Returns a {@link Set} of {@link DamageType}s.
+     * @return Returns a {@link Set} of {@link TraitDamageType}s.
      */
     @Override
-    public Set<DamageType> damageTypes() {
+    public Set<TraitDamageType> damageTypes() {
         return damageTypes;
     }
 

@@ -1,17 +1,15 @@
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.honeys;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyBottleEffectData;
 import com.teamresourceful.resourcefulbees.api.data.trait.PotionEffect;
+import com.teamresourceful.resourcefulbees.client.component.selection.BaseListEntry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
-import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.network.chat.Component;
@@ -24,7 +22,7 @@ import java.text.NumberFormat;
 
 import static com.teamresourceful.resourcefulbees.client.component.selection.BeeEntry.SLOT_TEXTURE;
 
-public class EffectEntry extends ListEntry {
+public class EffectEntry extends BaseListEntry {
 
     private final MobEffect effect;
     private final int strength;
@@ -53,28 +51,25 @@ public class EffectEntry extends ListEntry {
     }
 
     @Override
-    protected void render(@NotNull ScissorBoxStack scissorStack, @NotNull PoseStack stack, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
-        try (var ignored = new CloseablePoseStack(stack)) {
-            ignored.translate(left, top, 0);
+    protected void render(@NotNull GuiGraphics graphics, @NotNull ScissorBoxStack scissorStack, int id, int left, int top, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick, boolean selected) {
+        try (var pose = new CloseablePoseStack(graphics)) {
+            pose.translate(left, top, 0);
             Minecraft instance = Minecraft.getInstance();
             Font font = instance.font;
             MobEffectTextureManager textureManager = instance.getMobEffectTextures();
 
             TextureAtlasSprite sprite = textureManager.get(this.effect);
-            RenderUtils.bindTexture(sprite.atlas().location());
-            GuiComponent.blit(stack, 2, 1, 0, 18, 18, sprite);
-
-            RenderUtils.bindTexture(SLOT_TEXTURE);
-            GuiComponent.blit(stack, 1, 0, 0, 0, 20, 20, 20, 60);
+            graphics.blit(2, 1, 0, 18, 18, sprite);
+            graphics.blit(SLOT_TEXTURE, 1, 0, 0, 0, 20, 20, 20, 60);
 
             int color = effect.getCategory() == MobEffectCategory.HARMFUL ? 16733525 : 5592575;
             MutableComponent component = effect.getDisplayName().copy();
             if (this.strength > 0) component.append(" " + MathUtils.createRomanNumeral(this.strength));
-            GuiComponent.drawString(stack, font, component, 24, 1, color);
+            graphics.drawString(font, component, 24, 1, color);
             MutableComponent text = durationText.copy();
             if (chance < 1 && chance > 0) text.append(" " + NumberFormat.getPercentInstance().format(chance));
 
-            GuiComponent.drawString(stack, font, text, 24, 11, 11184810);
+            graphics.drawString(font, text, 24, 11, 11184810);
         }
     }
 }

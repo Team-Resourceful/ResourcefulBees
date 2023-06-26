@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -52,12 +52,12 @@ public final class DummyHoneyData {
                 false,
                 false,
                 List.of(
-                        HONEY_API.effect(LazyHolder.of(Registry.MOB_EFFECT, MobEffects.WITHER), 25, 2, 0.75f),
-                        HONEY_API.effect(LazyHolder.of(Registry.MOB_EFFECT, MobEffects.INVISIBILITY), 50, 1, 1f)
+                        HONEY_API.effect(LazyHolder.of(BuiltInRegistries.MOB_EFFECT, MobEffects.WITHER), 25, 2, 0.75f),
+                        HONEY_API.effect(LazyHolder.of(BuiltInRegistries.MOB_EFFECT, MobEffects.INVISIBILITY), 50, 1, 1f)
                 )
             ),
             Rarity.EPIC,
-            LazyHolder.of(Registry.ITEM, Items.HONEY_BOTTLE),
+            LazyHolder.of(BuiltInRegistries.ITEM, Items.HONEY_BOTTLE),
             DEFAULT_TRADE
     );
 
@@ -65,8 +65,8 @@ public final class DummyHoneyData {
             ConstantColors.blue,
             2,
             8,
-            LazyHolder.of(Registry.ITEM, Items.HONEY_BLOCK),
-            LazyHolder.of(Registry.BLOCK, Blocks.HONEY_BLOCK),
+            LazyHolder.of(BuiltInRegistries.ITEM, Items.HONEY_BLOCK),
+            LazyHolder.of(BuiltInRegistries.BLOCK, Blocks.HONEY_BLOCK),
             DEFAULT_TRADE
     );
 
@@ -93,13 +93,13 @@ public final class DummyHoneyData {
                     false,
                     false,
                     false,
-                    LazyHolder.of(Registry.SOUND_EVENT, SoundEvents.BUCKET_FILL),
-                    LazyHolder.of(Registry.SOUND_EVENT, SoundEvents.BUCKET_EMPTY)
+                    LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_FILL),
+                    LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_EMPTY)
             ),
-            LazyHolder.of(Registry.FLUID, new ResourceLocation(ModConstants.MOD_ID, "honey")),
-            LazyHolder.of(Registry.FLUID, new ResourceLocation(ModConstants.MOD_ID, "honey_flowing")),
-            LazyHolder.of(Registry.ITEM, new ResourceLocation(ModConstants.MOD_ID, "honey_bucket")),
-            LazyHolder.of(Registry.BLOCK, new ResourceLocation(ModConstants.MOD_ID, "honey")),
+            LazyHolder.of(BuiltInRegistries.FLUID, new ResourceLocation(ModConstants.MOD_ID, "honey")),
+            LazyHolder.of(BuiltInRegistries.FLUID, new ResourceLocation(ModConstants.MOD_ID, "honey_flowing")),
+            LazyHolder.of(BuiltInRegistries.ITEM, new ResourceLocation(ModConstants.MOD_ID, "honey_bucket")),
+            LazyHolder.of(BuiltInRegistries.BLOCK, new ResourceLocation(ModConstants.MOD_ID, "honey")),
             DEFAULT_TRADE
     );
 

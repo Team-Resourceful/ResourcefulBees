@@ -12,20 +12,20 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class CustomBeeRenderer<E extends CustomBeeEntity> extends GeoEntityRenderer<E> {
 
     public CustomBeeRenderer(EntityRendererProvider.Context ctx, BeeRenderData renderData) {
         super(ctx, new CustomBeeModel<>());
-        renderData.layers().stream().limit(6).forEach(layerData -> addLayer(new CustomBeeLayer<>(this, renderData, layerData)));
+        renderData.layers().stream().limit(6).forEach(layerData -> addRenderLayer(new CustomBeeLayer<>(this, renderData, layerData)));
     }
 
     @Override
-    public void render(GeoModel model, E bee, float partialTicks, RenderType type, PoseStack matrixStackIn, @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void reRender(BakedGeoModel model, PoseStack poseStack, MultiBufferSource bufferSource, E bee, RenderType renderType, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         model.getBone("stinger").ifPresent(bone -> bone.setHidden(bee.hasStung()));
-        super.render(model, bee, partialTicks, type, matrixStackIn, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        super.reRender(model, poseStack, bufferSource, animatable, renderType, buffer, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class CustomBeeRenderer<E extends CustomBeeEntity> extends GeoEntityRende
     }
 
     @Override
-    public RenderType getRenderType(E animatable, float partialTicks, PoseStack stack, MultiBufferSource bufferSource, VertexConsumer consumer, int light, ResourceLocation textureLocation) {
+    public RenderType getRenderType(E animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
         return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 }

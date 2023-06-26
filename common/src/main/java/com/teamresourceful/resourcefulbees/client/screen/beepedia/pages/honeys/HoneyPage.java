@@ -1,22 +1,18 @@
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.honeys;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.client.component.ItemSlotWidget;
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaTextures;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
 import com.teamresourceful.resourcefullib.client.screens.HistoryScreen;
-import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,9 +21,9 @@ import java.util.List;
 
 import static com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.bees.BeePage.TEXTURE;
 
-public class HoneyPage extends HistoryScreen implements TooltipProvider {
+public class HoneyPage extends HistoryScreen {
 
-    private final List<Widget> renderables = new ArrayList<>();
+    private final List<Renderable> renderables = new ArrayList<>();
 
     private final CustomHoneyData data;
     private final ItemStack honeyBottle;
@@ -46,37 +42,29 @@ public class HoneyPage extends HistoryScreen implements TooltipProvider {
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
 
-        RenderUtils.bindTexture(TEXTURE);
-        GuiComponent.blit(stack, 0, 19, 0, 0, 186, 3, 186, 3);
+        graphics.blit(TEXTURE, 0, 19, 0, 0, 186, 3, 186, 3);
 
         Font font = Minecraft.getInstance().font;
-        font.draw(stack,  this.honeyBottle.getHoverName(), 24, 1, 0xFFFFFF);
+        graphics.drawString(font,  this.honeyBottle.getHoverName(), 24, 1, 0xFFFFFF, false);
         int food = Math.min(this.data.getBottleData().food().hunger(), 20);
-        float staturation = Math.min(food * this.data.getBottleData().food().saturation() * 2f, 20);
-        RenderUtils.bindTexture(BeepediaTextures.HUNGER_BAR);
-        GuiComponent.blit(stack, 24, 10, 0, 0, 90, 9, 90, 9);
 
-        RenderUtils.bindTexture(BeepediaTextures.SATURATION);
+        float staturation = Math.min(food * this.data.getBottleData().food().saturation() * 2f, 20);
+        graphics.blit(BeepediaTextures.HUNGER_BAR, 24, 10, 0, 0, 90, 9, 90, 9);
+
         float percent = staturation / 20f;
-        GuiComponent.blit(stack, 24 + 90 - (int)(percent * 90), 10, 90f - (int)(percent * 90), 0, (int)(percent * 90), 9, 90, 9);
+        graphics.blit(BeepediaTextures.SATURATION, 24 + 90 - (int)(percent * 90), 10, 90f - (int)(percent * 90), 0, (int)(percent * 90), 9, 90, 9);
 
         int amount = food / 2;
         int startX = (10 - amount) * 9;
 
-        RenderUtils.bindTexture(BeepediaTextures.HUNGER);
-        if (food % 2 == 1) GuiComponent.blit(stack, 24 + startX - 9, 10, 0, 9, 9, 9, 9, 18);
+        if (food % 2 == 1) graphics.blit(BeepediaTextures.HUNGER, 24 + startX - 9, 10, 0, 9, 9, 9, 9, 18);
         for (int i = 0; i < amount; i++) {
-            GuiComponent.blit(stack, 24 + startX, 10, 0, 0, 9, 9, 9, 18);
+            graphics.blit(BeepediaTextures.HUNGER, 24 + startX, 10, 0, 0, 9, 9, 9, 18);
             startX += 9;
         }
-    }
-
-    @Override
-    public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
-        return TooltipProvider.getTooltips(this.renderables, mouseX, mouseY);
     }
 
     public CustomHoneyData getData() {
@@ -84,13 +72,13 @@ public class HoneyPage extends HistoryScreen implements TooltipProvider {
     }
 
     @Override
-    protected <T extends GuiEventListener & Widget & NarratableEntry> T addRenderableWidget(T widget) {
+    protected <T extends GuiEventListener & Renderable & NarratableEntry> T addRenderableWidget(T widget) {
         this.renderables.add(widget);
         return super.addRenderableWidget(widget);
     }
 
     @Override
-    protected <T extends Widget> T addRenderableOnly(T widget) {
+    protected <T extends Renderable> T addRenderableOnly(T widget) {
         this.renderables.add(widget);
         return super.addRenderableOnly(widget);
     }

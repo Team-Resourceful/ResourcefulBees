@@ -2,15 +2,15 @@ package com.teamresourceful.resourcefulbees.client.pets;
 
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class PetBeeModel<T extends PetModelData> extends AnimatedGeoModel<T> {
+public class PetBeeModel<T extends PetModelData> extends GeoModel<T> {
 
     private static final ResourceLocation ANIMATION = new ModResourceLocation( "animations/bee.animation.json");
 
-    public GeoModel getModel(PetModelData object){
-        return this.getModel(getModelResource(object));
+    public BakedGeoModel getModel(PetModelData object){
+        return this.getBakedModel(getModelResource(object));
     }
 
     @Override

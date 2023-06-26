@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -23,12 +24,11 @@ import java.util.function.Consumer;
 public class ModRecipeProvider extends RecipeProvider {
 
     public ModRecipeProvider(DataGenerator pGenerator) {
-        super(pGenerator);
+        super(pGenerator.getPackOutput());
     }
 
     @Override
-    protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> recipes) {
-
+    protected void buildRecipes(@NotNull Consumer<FinishedRecipe> recipes) {
         CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB), new ResourceLocation(ModConstants.MOD_ID, "honeycomb_centrifuge"), 1)
                 .time(200)
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 2), 10))
@@ -116,9 +116,9 @@ public class ModRecipeProvider extends RecipeProvider {
         //endregion
 
         //region Honey Conversion
-        ShapelessRecipeBuilder.shapeless(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_FLUID_BUCKET.get()).requires(Items.HONEY_BOTTLE, 4).requires(Items.BUCKET)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_FLUID_BUCKET.get()).requires(Items.HONEY_BOTTLE, 4).requires(Items.BUCKET)
                 .unlockedBy("has_honey_bottle", RecipeProvider.has(Items.HONEY_BOTTLE)).save(recipes, new ResourceLocation(ModConstants.MOD_ID, "honey_bottles_to_bucket"));
-        ShapelessRecipeBuilder.shapeless(Items.HONEY_BOTTLE, 4).requires(Items.GLASS_BOTTLE, 4).requires(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_FLUID_BUCKET.get())
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.HONEY_BOTTLE, 4).requires(Items.GLASS_BOTTLE, 4).requires(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_FLUID_BUCKET.get())
                 .unlockedBy("has_honey_bottle", RecipeProvider.has(Items.HONEY_BOTTLE)).save(recipes, new ResourceLocation(ModConstants.MOD_ID, "honey_bucket_to_bottles"));
         //endregion
 
@@ -128,11 +128,11 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('H', Ingredient.of(ModItemTags.HONEY_BLOCKS))
                 .unlockedBy("has_honey_block", RecipeProvider.has(ModItemTags.HONEY_BLOCKS))
                 .save(recipes);
-        ShapelessRecipeBuilder.shapeless(ModItems.HONEY_GLASS.get())
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.HONEY_GLASS.get())
                 .requires(ModItems.HONEY_GLASS_PLAYER.get())
                 .unlockedBy("has_honey_glass", RecipeProvider.has(ModItems.HONEY_GLASS.get()))
                 .save(recipes, "resourcefulbees:honey_glass_inverse");
-        ShapelessRecipeBuilder.shapeless(ModItems.HONEY_GLASS_PLAYER.get())
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.HONEY_GLASS_PLAYER.get())
                 .requires(ModItems.HONEY_GLASS.get())
                 .unlockedBy("has_honey_glass", RecipeProvider.has(ModItems.HONEY_GLASS.get()))
                 .save(recipes);
@@ -180,7 +180,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
                 .unlockedBy(hasWax)
                 .save(recipes);
-        ShapelessRecipeBuilder.shapeless(ModItems.WAXED_BUTTON.get())
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.WAXED_BUTTON.get())
                 .requires(ModItems.WAXED_PLANKS.get())
                 .unlockedBy("has_wax", RecipeProvider.has(ModItemTags.WAX))
                 .save(recipes);
@@ -205,7 +205,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
                 .unlockedBy(hasWax)
                 .save(recipes);
-        ShapelessRecipeBuilder.shapeless(ModItems.TRIMMED_WAXED_PLANKS.get(), 4)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.TRIMMED_WAXED_PLANKS.get(), 4)
                 .requires(ModItems.WAXED_PLANKS.get(), 4)
                 .unlockedBy("has_wax", RecipeProvider.has(ModItemTags.WAX))
                 .save(recipes);
@@ -263,7 +263,10 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('W', Ingredient.of(ModItemTags.WAX))
                 .unlockedBy("has_honeycomb", RecipeProvider.has(ModItemTags.HONEYCOMB))
                 .save(recipes);
-        ShapelessRecipeBuilder.shapeless(ModItems.SMOKER.get()).requires(ModItems.SMOKERCAN.get()).requires(ModItems.BELLOW.get()).unlockedBy("has_honeycomb", RecipeProvider.has(ModItems.SMOKERCAN.get())).save(recipes);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.SMOKER.get())
+            .requires(ModItems.SMOKERCAN.get())
+            .requires(ModItems.BELLOW.get())
+            .unlockedBy("has_honeycomb", RecipeProvider.has(ModItems.SMOKERCAN.get())).save(recipes);
         //endregion
 
         //region Machines

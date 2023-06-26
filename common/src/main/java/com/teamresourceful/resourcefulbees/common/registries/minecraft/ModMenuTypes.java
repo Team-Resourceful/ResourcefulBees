@@ -9,12 +9,12 @@ import com.teamresourceful.resourcefulbees.platform.common.menu.MenuContentHelpe
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.inventory.MenuType;
 
 public class ModMenuTypes {
 
-    public static final ResourcefulRegistry<MenuType<?>> MENUS = ResourcefulRegistries.create(Registry.MENU, ModConstants.MOD_ID);
+    public static final ResourcefulRegistry<MenuType<?>> MENUS = ResourcefulRegistries.create(BuiltInRegistries.MENU, ModConstants.MOD_ID);
 
     public static final RegistryEntry<MenuType<FakeFlowerMenu>> FAKE_FLOWER = MENUS.register("fake_flower",
             () -> MenuContentHelper.create(FakeFlowerMenu::new, PositionContent.SERIALIZER));

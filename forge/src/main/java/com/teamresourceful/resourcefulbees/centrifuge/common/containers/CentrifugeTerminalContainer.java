@@ -24,7 +24,7 @@ public class CentrifugeTerminalContainer extends CentrifugeContainer<CentrifugeT
 
 
     public CentrifugeTerminalContainer(int id, Inventory inv, FriendlyByteBuf buffer) {
-        this(id, inv, getTileFromBuf(inv.player.level, buffer, CentrifugeTerminalEntity.class), new CentrifugeState().deserializeBytes(buffer), dummyEnergyStorageData());
+        this(id, inv, getTileFromBuf(inv.player.level(), buffer, CentrifugeTerminalEntity.class), new CentrifugeState().deserializeBytes(buffer), dummyEnergyStorageData());
     }
 
     public CentrifugeTerminalContainer(int id, Inventory inv, CentrifugeTerminalEntity entity, CentrifugeState state, CentrifugeEnergyStorage energyStorage) {

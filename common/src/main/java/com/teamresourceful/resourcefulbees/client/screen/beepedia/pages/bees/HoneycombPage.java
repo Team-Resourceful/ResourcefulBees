@@ -6,17 +6,12 @@ import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.client.screen.base.RenderingScreen;
 import com.teamresourceful.resourcefullib.client.components.selection.ListEntry;
 import com.teamresourceful.resourcefullib.client.components.selection.SelectionList;
-import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
-import com.teamresourceful.resourcefullib.common.utils.CycleableList;
+import com.teamresourceful.resourcefullib.common.collections.CycleableList;
 import net.minecraft.Util;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public class HoneycombPage extends RenderingScreen implements TooltipProvider {
+public class HoneycombPage extends RenderingScreen {
 
     private SelectionList<ListEntry> list;
     private int ticks = 0;
@@ -48,10 +43,5 @@ public class HoneycombPage extends RenderingScreen implements TooltipProvider {
             this.ticks = 0;
             this.list.children().forEach(child -> ((HoneycombEntry) child).cycle());
         }
-    }
-
-    @Override
-    public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
-        return TooltipProvider.getTooltips(this.getRenderables(), mouseX, mouseY);
     }
 }

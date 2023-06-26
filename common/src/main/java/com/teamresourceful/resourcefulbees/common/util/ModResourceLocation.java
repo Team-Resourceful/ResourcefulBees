@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 public class ModResourceLocation extends ResourceLocation {
 
     public ModResourceLocation(String[] strings) {
-        super(ifNoNamespace(strings));
+        this(ifNoNamespace(strings)[0], ifNoNamespace(strings)[1]);
     }
 
     public ModResourceLocation(String string) {
@@ -15,7 +15,7 @@ public class ModResourceLocation extends ResourceLocation {
     }
 
     public ModResourceLocation(String string, String string2) {
-        this(new String[]{string, string2});
+        super(string, string2);
     }
 
     private static String[] ifNoNamespace(String[] strings) {

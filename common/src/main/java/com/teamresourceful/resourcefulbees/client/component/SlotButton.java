@@ -1,11 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.component;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.client.components.ImageButton;
-import com.teamresourceful.resourcefullib.client.screens.TooltipProvider;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
-import net.minecraft.client.gui.GuiComponent;
+import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +12,7 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-public class SlotButton extends ImageButton implements TooltipProvider {
+public class SlotButton extends ImageButton {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/beepedia/list_button.png");
 
@@ -38,10 +36,13 @@ public class SlotButton extends ImageButton implements TooltipProvider {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        super.renderButton(stack, mouseX, mouseY, partialTicks);
-        RenderUtils.bindTexture(this.texture);
-        GuiComponent.blit(stack, this.x + 2, this.y + 2, 0, 0, 16, 16, 16, 16);
+    public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.renderWidget(graphics, mouseX, mouseY, partialTicks);
+        graphics.blit(this.texture, this.getX() + 2, this.getY() + 2, 0, 0, 16, 16, 16, 16);
+
+        if (this.tooltip != null && this.isHovered) {
+            ScreenUtils.setTooltip(this.tooltip.get());
+        }
     }
 
     @Override
@@ -62,10 +63,5 @@ public class SlotButton extends ImageButton implements TooltipProvider {
     @Override
     public void onPress() {
         onPress.run();
-    }
-
-    @Override
-    public @NotNull List<Component> getTooltip(int mouseX, int mouseY) {
-        return this.tooltip == null || !this.isHovered ? List.of() : this.tooltip.get();
     }
 }

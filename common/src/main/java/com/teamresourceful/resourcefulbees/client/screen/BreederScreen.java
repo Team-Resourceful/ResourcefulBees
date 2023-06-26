@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -32,20 +31,19 @@ public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
     }
 
     @Override
-    public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrix);
-        super.render(matrix, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrix, mouseX, mouseY);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
-        RenderUtils.bindTexture(BACKGROUND);
-        blit(matrix, this.leftPos, this.topPos, 0, 0, 198, 188);
+    protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+        graphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, 198, 188);
         int y = this.topPos + 21;
         for (int i = 0; i < BreederConstants.NUM_OF_BREEDERS; i++) {
             int width = (int)(((float)menu.times.get(i) / menu.endTimes.get(i)) * 118);
-            this.blit(matrix, this.leftPos+51, y, 0, 246, width, 10);
+            graphics.blit(BACKGROUND, this.leftPos+51, y, 0, 246, width, 10);
             y+= 20;
         }
     }

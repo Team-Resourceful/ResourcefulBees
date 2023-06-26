@@ -5,10 +5,7 @@ import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.CodecIngredient;
 import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.CodecIngredientSerializer;
-import com.teamresourceful.resourcefullib.common.codecs.yabn.YabnOps;
 import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
-import com.teamresourceful.resourcefullib.common.utils.readers.ByteBufByteReader;
-import com.teamresourceful.resourcefullib.common.yabn.YabnParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -34,9 +31,8 @@ public class ForgeIngredientSerializer<T extends CodecIngredient<T>> implements 
 
     @Override
     public @NotNull ForgeIngredient<T> parse(@NotNull FriendlyByteBuf buf) {
-        T ingredient = serializer.network()
-                .parse(YabnOps.COMPRESSED, YabnParser.parseCompress(new ByteBufByteReader(buf)))
-                .getOrThrow(false, ModConstants.LOGGER::error);
+        T ingredient = PacketHelper.readWithYabn(buf, serializer.network(), true)
+            .getOrThrow(false, ModConstants.LOGGER::error);
         return new ForgeIngredient<>(ingredient);
     }
 

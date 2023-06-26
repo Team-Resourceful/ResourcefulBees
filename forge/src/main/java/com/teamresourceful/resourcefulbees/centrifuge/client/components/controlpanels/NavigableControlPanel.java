@@ -1,12 +1,11 @@
 package com.teamresourceful.resourcefulbees.centrifuge.client.components.controlpanels;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.buttons.NavButton;
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeTerminalScreen;
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.CentrifugeTextures;
-import com.teamresourceful.resourcefulbees.client.util.TextUtils;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractGUICentrifugeEntity;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import com.teamresourceful.resourcefulbees.client.util.TextUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -33,16 +32,15 @@ public abstract class NavigableControlPanel<T extends AbstractGUICentrifugeEntit
 
     private void addNavButtons() {
         if (navList.size() <= 1) return;
-        addRenderableWidget(new NavButton(x+3, y+3, true, () -> navigate(true)));
-        addRenderableWidget(new NavButton(x+65, y+3, false, () -> navigate(false)));
+        addRenderableWidget(new NavButton(x + 3, y + 3, true, () -> navigate(true)));
+        addRenderableWidget(new NavButton(x + 65, y + 3, false, () -> navigate(false)));
     }
 
     @Override
-    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        RenderUtils.bindTexture(CentrifugeTextures.COMPONENTS);
-        blit(stack, x, y, 0, 193, 75, 63);
-        TextUtils.tf12DrawCenteredStringNoShadow(stack, navLabel, x+37f, y+6.5f, TextUtils.FONT_COLOR_1);
-        super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        graphics.blit(CentrifugeTextures.COMPONENTS, x, y, 0, 193, 75, 63);
+        TextUtils.tf12DrawCenteredStringNoShadow(graphics, navLabel, x + 37, y + 6, TextUtils.FONT_COLOR_1);
+        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     private void navigate(boolean reverse) {

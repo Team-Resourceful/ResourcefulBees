@@ -13,7 +13,7 @@ import java.util.Optional;
 public class FakeFlowerMenu extends AbstractModContainerMenu<FakeFlowerBlockEntity> {
 
     public FakeFlowerMenu(int id, Inventory inv, Optional<PositionContent> content) {
-        this(id, inv, PositionContent.getOrNull(content, inv.player.level, FakeFlowerBlockEntity.class));
+        this(id, inv, PositionContent.getOrNull(content, inv.player.level(), FakeFlowerBlockEntity.class));
     }
     public FakeFlowerMenu(int id, Inventory inv, FakeFlowerBlockEntity entity) {
         super(ModMenuTypes.FAKE_FLOWER.get(), id, inv, entity);
