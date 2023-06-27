@@ -6,16 +6,17 @@ import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public record HoneyGenRecipe(ResourceLocation id, RecipeFluid honey, int energyFillRate, int honeyDrainRate) implements CodecRecipe<Container> {
 
@@ -28,15 +29,11 @@ public record HoneyGenRecipe(ResourceLocation id, RecipeFluid honey, int energyF
         ).apply(instance, HoneyGenRecipe::new));
     }
 
-    public static Optional<HoneyGenRecipe> findRecipe(RecipeManager manager, Predicate<RecipeFluid> tester) {
+    public static Optional<HoneyGenRecipe> findRecipe(RecipeManager manager, Fluid fluid, CompoundTag tag) {
         return manager.getAllRecipesFor(ModRecipes.HONEY_GEN_RECIPE_TYPE.get())
                 .stream()
-                .filter(recipe -> recipe.honey.matches(tester))
+                .filter(recipe -> recipe.honey.matches(fluid, tag))
                 .findFirst();
-    }
-
-    public static boolean matches(RecipeManager manager, Predicate<RecipeFluid> tester) {
-        return findRecipe(manager, tester).isPresent();
     }
 
     @Override

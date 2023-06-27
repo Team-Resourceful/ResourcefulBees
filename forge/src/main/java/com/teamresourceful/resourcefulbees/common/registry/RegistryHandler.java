@@ -31,7 +31,6 @@ import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistr
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.*;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
@@ -84,9 +83,7 @@ public final class RegistryHandler {
         ModMenus.CONTAINER_TYPES.init();
         CentrifugeMenus.CENTRIFUGE_MENUS.init();
         ModMenuTypes.MENUS.init();
-        ModRecipeSerializers.RECIPE_SERIALIZERS.init();
         com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers.RECIPE_SERIALIZERS.init();
-        ModRecipeTypes.RECIPE_TYPES.init();
         ModRecipes.RECIPE_TYPES.init();
         ModVillagerProfessions.PROFESSIONS.init();
         ModFeatures.FEATURES.init();

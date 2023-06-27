@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs;
+package com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs;
 
 public interface AbstractOutput<T> {
 

@@ -3,17 +3,20 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeItems;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.FluidOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
-import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.helpers.IJeiHelpers;
+import mezz.jei.api.helpers.IPlatformFluidHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -33,11 +36,14 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
     public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "centrifuge");
     public static final RecipeType<CentrifugeRecipeAdapter> RECIPE = new RecipeType<>(ID, CentrifugeRecipeAdapter.class);
 
-    public CentrifugeCategory(IGuiHelper guiHelper) {
-        super(guiHelper, RECIPE,
+    private final IJeiHelpers helpers;
+
+    public CentrifugeCategory(IJeiHelpers helpers) {
+        super(helpers.getGuiHelper(), RECIPE,
                 JeiTranslations.CENTRIFUGE,
-                guiHelper.drawableBuilder(GUI_BACK, 0, 0, 134, 66).addPadding(0, 0, 0, 0).build(),
-                guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, CentrifugeItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance()));
+                helpers.getGuiHelper().drawableBuilder(GUI_BACK, 0, 0, 134, 66).addPadding(0, 0, 0, 0).build(),
+                helpers.getGuiHelper().createDrawableIngredient(VanillaTypes.ITEM_STACK, CentrifugeItems.CENTRIFUGE_ADVANCED_TERMINAL.get().getDefaultInstance()));
+        this.helpers = helpers;
     }
 
     public static List<CentrifugeRecipeAdapter> getRecipes(Collection<CentrifugeRecipe> recipes) {
@@ -50,7 +56,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
 
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull CentrifugeRecipeAdapter recipe, @NotNull IFocusGroup focuses) {
-        List<List<FluidStack>> fluidStacks = recipe.recipe.fluidOutputs().stream()
+        List<List<RecipeFluid>> fluids = recipe.recipe.fluidOutputs().stream()
                 .map(output -> output.pool().stream().map(FluidOutput::fluid).toList()).toList();
         List<List<ItemStack>> itemStacks = recipe.recipe.itemOutputs().stream()
                 .map(output -> output.pool().stream().map(ItemOutput::itemStack).toList()).toList();
@@ -65,12 +71,22 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
                         .addIngredients(VanillaTypes.ITEM_STACK, itemStacks.get(i))
                         .setSlotName("item_output_"+i);
 
-            if (i < fluidStacks.size())
-                builder.addSlot(RecipeIngredientRole.OUTPUT, 108, 7 + (i * 18))
-                        .addIngredients(ForgeTypes.FLUID_STACK, fluidStacks.get(i))
-                        .setFluidRenderer(1, false, 16, 16)
+            if (i < fluids.size())
+                addFluids(
+                        builder.addSlot(RecipeIngredientRole.OUTPUT, 108, 7 + (i * 18)),
+                        helpers.getPlatformFluidHelper(),
+                        fluids.get(i)
+                ).setFluidRenderer(1, false, 16, 16)
                         .setSlotName("fluid_output_"+i);
         }
+    }
+
+    private static <T> IRecipeSlotBuilder addFluids(IRecipeSlotBuilder builder, IPlatformFluidHelper<T> helper, List<RecipeFluid> input) {
+        List<T> fluids = new ArrayList<>();
+        for (RecipeFluid fluid : input) {
+            fluids.add(helper.create(fluid.fluid(), fluid.amount(), fluid.tag()));
+        }
+        return builder.addIngredients(helper.getFluidIngredientType(), fluids);
     }
 
     @Override
@@ -146,7 +162,7 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         private final CentrifugeRecipe recipe;
 
         private final HashMap<String, Object2DoubleMap<ItemStack>> itemWeights = new HashMap<>();
-        private final HashMap<String, Object2DoubleMap<FluidStack>> fluidWeights = new HashMap<>();
+        private final HashMap<String, Object2DoubleMap<RecipeFluid>> fluidWeights = new HashMap<>();
 
         public CentrifugeRecipeAdapter(CentrifugeRecipe recipe) {
             this.recipe = recipe;
@@ -159,10 +175,10 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
                 itemWeights.put("item_output_"+i, weights);
             }
 
-            List<CentrifugeRecipe.Output<FluidOutput, FluidStack>> fluidOutputList = this.recipe.fluidOutputs();
+            List<CentrifugeRecipe.Output<FluidOutput, RecipeFluid>> fluidOutputList = this.recipe.fluidOutputs();
 
             for (int i = 0; i < fluidOutputList.size(); i++) {
-                Object2DoubleMap<FluidStack> weights = new Object2DoubleOpenHashMap<>();
+                Object2DoubleMap<RecipeFluid> weights = new Object2DoubleOpenHashMap<>();
                 fluidOutputList.get(i).pool().forEachWithSelf((pool, output) -> weights.put(output.fluid(), pool.getAdjustedWeight(output.weight())));
                 fluidWeights.put("fluid_output_"+i, weights);
             }
@@ -180,10 +196,10 @@ public class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Centrifu
         }
 
         public Double getFluidWeight(String slot, FluidStack displayedStack) {
-            Map<FluidStack, Double> weightMap = fluidWeights.get(slot);
+            Map<RecipeFluid, Double> weightMap = fluidWeights.get(slot);
             if (weightMap == null) return null;
-            for (Map.Entry<FluidStack, Double> entry : weightMap.entrySet()) {
-                if (entry.getKey().isFluidStackIdentical(displayedStack)) return entry.getValue();
+            for (Map.Entry<RecipeFluid, Double> entry : weightMap.entrySet()) {
+                if (entry.getKey().matches(displayedStack.getFluid(), displayedStack.getAmount(), displayedStack.getTag())) return entry.getValue();
             }
             return null;
         }

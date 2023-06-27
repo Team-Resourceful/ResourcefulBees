@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.helpers;
 
 import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
@@ -21,12 +21,12 @@ public final class CentrifugeUtils {
 
     @NotNull
     public static Optional<CentrifugeRecipe> getRecipe(Level level, ItemStack recipeStack) {
-        return level != null ? level.getRecipeManager().getRecipeFor(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get(), new SimpleContainer(recipeStack), level) : Optional.empty();
+        return level != null ? level.getRecipeManager().getRecipeFor(ModRecipes.CENTRIFUGE_RECIPE_TYPE.get(), new SimpleContainer(recipeStack), level) : Optional.empty();
     }
 
     @NotNull
     public static Optional<CentrifugeRecipe> getFilterRecipe(Level level, ItemStack recipeStack) {
-        return level != null ? FilterSlot.getRecipeFor(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get(), new SimpleContainer(recipeStack), level) : Optional.empty();
+        return level != null ? FilterSlot.getRecipeFor(ModRecipes.CENTRIFUGE_RECIPE_TYPE.get(), new SimpleContainer(recipeStack), level) : Optional.empty();
     }
 
     public static <T> T getFromCollection(Collection<T> collection, int index) {

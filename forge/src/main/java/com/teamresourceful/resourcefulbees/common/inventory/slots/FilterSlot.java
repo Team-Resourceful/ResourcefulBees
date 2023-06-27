@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.inventory.slots;
 
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeMatcher;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -48,12 +49,7 @@ public class FilterSlot extends SlotItemHandler {
 
     public static <C extends Container, T extends Recipe<C>> Optional<T> getRecipeFor(RecipeType<T> recipeType, C inventory, Level level) {
        return level.getRecipeManager().getAllRecipesFor(recipeType).stream()
-               .filter(t -> t instanceof IFilterMatch filterMatch && filterMatch.matchesItemAndNBT(inventory))
+               .filter(t -> t instanceof RecipeMatcher matcher && matcher.matches(inventory))
                .findFirst();
-    }
-
-    public interface IFilterMatch {
-
-        boolean matchesItemAndNBT(Container inventory);
     }
 }

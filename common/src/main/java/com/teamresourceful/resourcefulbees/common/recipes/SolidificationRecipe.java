@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipe
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -14,10 +15,10 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public record SolidificationRecipe(ResourceLocation id, RecipeFluid fluid, ItemStack stack) implements CodecRecipe<Container> {
 
@@ -29,16 +30,16 @@ public record SolidificationRecipe(ResourceLocation id, RecipeFluid fluid, ItemS
         ).apply(instance, SolidificationRecipe::new));
     }
 
-    public static Optional<SolidificationRecipe> findRecipe(RecipeManager manager, Predicate<RecipeFluid> tester) {
+    public static Optional<SolidificationRecipe> findRecipe(RecipeManager manager, Fluid fluid, CompoundTag tag) {
         return manager
             .getAllRecipesFor(ModRecipes.SOLIDIFICATION_RECIPE_TYPE.get())
             .stream()
-            .filter(recipe -> recipe.fluid().matches(tester))
+            .filter(recipe -> recipe.fluid().matches(fluid, tag))
             .findFirst();
     }
 
-    public static boolean matches(RecipeManager manager, Predicate<RecipeFluid> tester) {
-        return findRecipe(manager, tester).isPresent();
+    public static boolean matches(RecipeManager manager, Fluid fluid, CompoundTag tag) {
+        return findRecipe(manager, fluid, tag).isPresent();
     }
 
     @Override

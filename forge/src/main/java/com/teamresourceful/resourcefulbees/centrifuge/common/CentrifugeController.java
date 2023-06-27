@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeSt
 import com.teamresourceful.resourcefulbees.common.config.CentrifugeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.AbstractOutput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

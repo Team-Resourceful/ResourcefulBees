@@ -36,7 +36,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
 
     public static final int BLOCK_OUTPUT = 0;
 
-    private final FluidTank tank = new FluidTank(16000, fluid -> this.level != null && SolidificationRecipe.matches(level.getRecipeManager(), FluidUtils.fluidsMatch(fluid))) {
+    private final FluidTank tank = new FluidTank(16000, fluid -> this.level != null && SolidificationRecipe.matches(level.getRecipeManager(), fluid.getFluid(), fluid.getTag())) {
         @Override
         protected void onContentsChanged() {
             sendToPlayersTrackingChunk();
@@ -81,22 +81,22 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
 
     public boolean canProcessHoney() {
         if (level == null) return false;
-        FluidStack fluidStack = tank.getFluid();
-        if (fluidStack.isEmpty()) {
+        FluidStack stack = tank.getFluid();
+        if (stack.isEmpty()) {
             cachedRecipe = null;
             lastFluid = null;
             return false;
         }
         ItemStack outputStack = getInventory().getStackInSlot(BLOCK_OUTPUT);
-        final SolidificationRecipe recipe = fluidStack.getFluid().equals(lastFluid) && cachedRecipe != null ?
-                cachedRecipe : SolidificationRecipe.findRecipe(level.getRecipeManager(), FluidUtils.fluidsMatch(fluidStack)).orElse(null);
+        final SolidificationRecipe recipe = stack.getFluid().equals(lastFluid) && cachedRecipe != null ?
+                cachedRecipe : SolidificationRecipe.findRecipe(level.getRecipeManager(), stack.getFluid(), stack.getTag()).orElse(null);
         if (recipe == null) return false;
 
-        boolean isTankReady = !fluidStack.isEmpty() && tank.getFluidAmount() >= recipe.fluid().amount();
+        boolean isTankReady = !stack.isEmpty() && tank.getFluidAmount() >= recipe.fluid().amount();
         boolean canOutput = outputStack.isEmpty() || ItemStack.isSameItemSameTags(recipe.stack(), outputStack) && outputStack.getCount() < outputStack.getMaxStackSize();
 
         cachedRecipe = recipe;
-        lastFluid = fluidStack.getFluid();
+        lastFluid = stack.getFluid();
         return isTankReady && canOutput;
     }
 

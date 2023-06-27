@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBl
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.recipes.FlowHiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -67,7 +66,7 @@ public class FlowHiveBlockEntity extends BeeHolderBlockEntity {
             if (bee instanceof BeeCompat compat) compat.nectarDroppedOff();
             FlowHiveRecipe.findRecipe(bee.level().getRecipeManager(), bee.getType())
                 .ifPresent(recipe -> {
-                    if (!tank.getFluid().isEmpty() && recipe.fluid().matches(FluidUtils.fluidsMatch(tank.getFluid()))) {
+                    if (!tank.getFluid().isEmpty() && recipe.fluid().matches(tank.getFluid().getFluid(), tank.getFluid().getTag())) {
                         tank.setFluid(new FluidStack(tank.getFluid(), Math.min(tank.getCapacity(), tank.getFluidAmount() + recipe.fluid().amount())));
                     } else if (!recipe.fluid().isEmpty()) {
                         tank.setFluid(new FluidStack(

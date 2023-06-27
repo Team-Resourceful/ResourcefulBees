@@ -9,6 +9,7 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -20,6 +21,7 @@ import java.util.function.Predicate;
  */
 public record RecipeFluid(Fluid fluid, int amount, CompoundTag tag) {
 
+    public static final RecipeFluid EMPTY = new RecipeFluid(Fluids.EMPTY, 0);
     public static final Codec<RecipeFluid> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BuiltInRegistries.FLUID.byNameCodec().fieldOf("id").forGetter(RecipeFluid::fluid),
             ExtraCodecs.POSITIVE_INT.fieldOf("amount").orElse(1000).forGetter(RecipeFluid::amount),
@@ -47,7 +49,15 @@ public record RecipeFluid(Fluid fluid, int amount, CompoundTag tag) {
     }
 
     public boolean matches(Fluid fluid, int amount, CompoundTag tag) {
-        return matches(fluid, amount) && this.tag.equals(tag);
+        return matches(fluid, amount) && Objects.equals(this.tag, tag);
+    }
+
+    public boolean matches(Fluid fluid, CompoundTag tag) {
+        return matches(fluid) && Objects.equals(this.tag, tag);
+    }
+
+    public boolean matches(RecipeFluid other) {
+        return matches(other.fluid(), other.amount(), other.tag());
     }
 
     public boolean isEmpty() {

@@ -1,15 +1,16 @@
 
-package com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge;
+package com.teamresourceful.resourcefulbees.common.recipes.centrifuge;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.config.CentrifugeConfig;
-import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeMatcher;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.AbstractOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.FluidOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.IngredientCodec;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
@@ -21,7 +22,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -33,11 +33,11 @@ public record CentrifugeRecipe(
         Ingredient ingredient,
         int inputAmount,
         List<Output<ItemOutput, ItemStack>> itemOutputs,
-        List<Output<FluidOutput, FluidStack>> fluidOutputs,
+        List<Output<FluidOutput, RecipeFluid>> fluidOutputs,
         int time,
         int energyPerTick,
         Optional<Integer> rotations
-) implements CodecRecipe<Container>, FilterSlot.IFilterMatch {
+) implements CodecRecipe<Container>, RecipeMatcher {
 
     public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -58,7 +58,8 @@ public record CentrifugeRecipe(
         return !stack.isEmpty() && ingredient.test(stack);
     }
 
-    public boolean matchesItemAndNBT(Container inventory) {
+    @Override
+    public boolean matches(Container inventory) {
         ItemStack stack = inventory.getItem(0);
         return !stack.isEmpty() && ItemStack.isSameItemSameTags(ingredient.getItems()[0], stack);
     }
@@ -72,7 +73,7 @@ public record CentrifugeRecipe(
     @NotNull
     @Override
     public RecipeType<?> getType() {
-        return ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get();
+        return ModRecipes.CENTRIFUGE_RECIPE_TYPE.get();
     }
 
     public int getRotations() {

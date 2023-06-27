@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.entities.base;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.AbstractOutput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;

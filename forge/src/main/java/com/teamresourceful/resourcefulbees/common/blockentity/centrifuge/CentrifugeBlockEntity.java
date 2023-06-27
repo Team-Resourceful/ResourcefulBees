@@ -8,10 +8,12 @@ import com.teamresourceful.resourcefulbees.common.capabilities.SelectableMultiFl
 import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveItemStackHandler;
 import com.teamresourceful.resourcefulbees.common.inventory.menus.CentrifugeMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.FluidOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import com.teamresourceful.resourcefulbees.common.utils.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -174,8 +176,8 @@ public class CentrifugeBlockEntity extends InventorySyncedBlockEntity implements
         }
     }
 
-    private void deliverFluid(FluidStack stack) {
-        tank.forceFill(stack, IFluidHandler.FluidAction.EXECUTE, true);
+    private void deliverFluid(RecipeFluid fluid) {
+        tank.forceFill(FluidUtils.fromRecipe(fluid), IFluidHandler.FluidAction.EXECUTE, true);
     }
 
     @Override

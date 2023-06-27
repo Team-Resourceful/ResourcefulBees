@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.containers.Centrifu
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.ItemOutput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

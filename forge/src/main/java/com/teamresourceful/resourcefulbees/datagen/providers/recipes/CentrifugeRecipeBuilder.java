@@ -4,10 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.FluidOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -18,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +34,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
     private final int inputAmount;
 
     private final List<CentrifugeRecipe.Output<ItemOutput, ItemStack>> itemOutputs = new ArrayList<>();
-    private final List<CentrifugeRecipe.Output<FluidOutput, FluidStack>> fluidOutputs = new ArrayList<>();
+    private final List<CentrifugeRecipe.Output<FluidOutput, RecipeFluid>> fluidOutputs = new ArrayList<>();
 
     private Integer time;
     private Integer rfPerTick;
@@ -115,7 +115,7 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
     public record CentrifugeFinishedRecipe(Ingredient ingredient, ResourceLocation id,
                                            int inputAmount,
                                            List<CentrifugeRecipe.Output<ItemOutput, ItemStack>> itemOutputs,
-                                           List<CentrifugeRecipe.Output<FluidOutput, FluidStack>> fluidOutputs,
+                                           List<CentrifugeRecipe.Output<FluidOutput, RecipeFluid>> fluidOutputs,
                                            Integer time, Integer rfPerTick, Optional<Integer> uses,
                                            List<JsonObject> conditions) implements FinishedRecipe {
 
@@ -190,11 +190,11 @@ public class CentrifugeRecipeBuilder implements RecipeBuilder {
             return this;
         }
 
-        public FluidOutputBuilder addOutput(FluidStack stack, double weight) {
-            return addOutput(new FluidOutput(stack, weight));
+        public FluidOutputBuilder addOutput(RecipeFluid fluid, double weight) {
+            return addOutput(new FluidOutput(fluid, weight));
         }
 
-        public CentrifugeRecipe.Output<FluidOutput, FluidStack> build() {
+        public CentrifugeRecipe.Output<FluidOutput, RecipeFluid> build() {
             return new CentrifugeRecipe.Output<>(chance, fluidOutputs.stream().collect(WeightedCollection.getCollector(FluidOutput::weight)));
         }
 

@@ -12,10 +12,11 @@ import com.teamresourceful.resourcefulbees.common.inventory.AbstractFilterItemHa
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.CentrifugeRecipe;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.AbstractOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.FluidOutput;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.AbstractOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.FluidOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.ItemOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,7 +34,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.roguelogix.phosphophyllite.multiblock2.common.ITickablePartsMultiblock;
@@ -51,7 +51,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
     public static final int RECIPE_SLOT = 0;
 
     private final OutputLocationGroup<CentrifugeItemOutputEntity, ItemOutput, ItemStack> itemOutputs = new OutputLocationGroup<>();
-    private final OutputLocationGroup<CentrifugeFluidOutputEntity, FluidOutput, FluidStack> fluidOutputs = new OutputLocationGroup<>();
+    private final OutputLocationGroup<CentrifugeFluidOutputEntity, FluidOutput, RecipeFluid> fluidOutputs = new OutputLocationGroup<>();
     private final FilterInventory filterInventory = new FilterInventory(1);
     private final InventoryHandler inventoryHandler;
     private final LazyOptional<IItemHandler> lazyOptional;
@@ -100,7 +100,7 @@ public class CentrifugeInputEntity extends AbstractGUICentrifugeEntity implement
         return itemOutputs;
     }
 
-    public OutputLocationGroup<CentrifugeFluidOutputEntity, FluidOutput, FluidStack> getFluidOutputs() {
+    public OutputLocationGroup<CentrifugeFluidOutputEntity, FluidOutput, RecipeFluid> getFluidOutputs() {
         return fluidOutputs;
     }
 
