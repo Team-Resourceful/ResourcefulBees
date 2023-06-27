@@ -27,8 +27,8 @@ public final class ItemGroupResourcefulBees {
             .addContent(() -> {
                 List<ItemStack> list = new ArrayList<>();
                 list.add(new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR.get()));
-                if (GeneralConfig.enableDevBees) list.add(new ItemStack(ModItems.OREO_COOKIE.get()));
-                if (GeneralConfig.enableSupporterBees) list.add(new ItemStack(ModItems.STRAWBEERRY_MILKSHAKE.get()));
+                if (GeneralConfig.enableDevBees) list.add(new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.OREO_COOKIE.get()));
+                if (GeneralConfig.enableSupporterBees) list.add(new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.STRAWBEERRY_MILKSHAKE.get()));
                 list.add(new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_BOX.get()));
                 list.add(new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_BOX_TEMP.get()));
                 ItemStack creativeBeepedia = new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEEPEDIA.get());
@@ -41,8 +41,8 @@ public final class ItemGroupResourcefulBees {
                 list.add(new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SMOKER.get()));
                 list.add(new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BELLOW.get()));
                 list.add(new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SMOKERCAN.get()));
-                list.add(new ItemStack(ModItems.WAX.get()));
-                list.add(new ItemStack(ModItems.WAX_BLOCK_ITEM.get()));
+                list.add(new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAX.get()));
+                list.add(new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAX_BLOCK_ITEM.get()));
                 list.add(new ItemStack(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM.get()));
 
                 list.add(new ItemStack(ModItems.FLOW_HIVE.get()));

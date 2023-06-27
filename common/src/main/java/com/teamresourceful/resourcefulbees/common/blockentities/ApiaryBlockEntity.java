@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.util.ContainerUtils;
-import com.teamresourceful.resourcefulbees.platform.common.menu.ContentMenuProvider;
+import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;

@@ -37,7 +37,7 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
                 ItemPredicate.Builder.item().of(ModItemTags.HONEYCOMB).build()
             ));
 
-            writer.apply(createSimpleAdvancement(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX, "wax", root));
+            writer.apply(createSimpleAdvancement(ModItems.WAX, "wax", root));
             Advancement scraper = writer.apply(createSimpleAdvancement(ModItems.SCRAPER, "scraper", root));
             Advancement beeJar = writer.apply(createSimpleAdvancement(ModItems.BEE_JAR, "bee_jar", root));
             Advancement beepedia = writer.apply(createSimpleAdvancement(ModItems.BEEPEDIA, "beepedia", root));

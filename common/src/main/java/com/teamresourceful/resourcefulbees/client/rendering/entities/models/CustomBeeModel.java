@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.render.entities.models;
+package com.teamresourceful.resourcefulbees.client.rendering.entities.models;
 
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import net.minecraft.resources.ResourceLocation;

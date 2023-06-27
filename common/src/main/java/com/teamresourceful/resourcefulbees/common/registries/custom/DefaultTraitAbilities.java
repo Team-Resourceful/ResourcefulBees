@@ -1,11 +1,11 @@
-package com.teamresourceful.resourcefulbees.common.registry.custom;
+package com.teamresourceful.resourcefulbees.common.registries.custom;
 
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.registries.custom.TraitAbilityRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
+import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -19,15 +19,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityTeleportEvent;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
 
 public final class DefaultTraitAbilities {
 
-    private DefaultTraitAbilities() {
-        throw new UtilityClassError();
+    private DefaultTraitAbilities() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static TraitAbilityRegistry registerDefaultAbilities(TraitAbilityRegistry registry) {
@@ -57,11 +56,12 @@ public final class DefaultTraitAbilities {
             BlockState blockstate = bee.level().getBlockState(blockPos);
             boolean water = blockstate.getFluidState().is(FluidTags.WATER);
             if (blockstate.blocksMotion() && !water) {
-                EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(bee, x, y, z);
-                if (MinecraftForge.EVENT_BUS.post(event)) return;
-                boolean teleported = bee.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+                var result = ModUtils.enderEntityTeleport(bee, x, y, z);
+                if (result.keyBoolean()) return;
+                Vec3 target = result.value();
+                boolean teleported = bee.randomTeleport(target.x(), target.y(), target.z(), true);
                 if (teleported) {
-                    bee.level().playSound(null, event.getTargetX(), event.getTargetY(), event.getTargetZ(), SoundEvents.ENDERMAN_TELEPORT, bee.getSoundSource(), 1.0F, 1.0F);
+                    bee.level().playSound(null, target.x(), target.y(), target.z(), SoundEvents.ENDERMAN_TELEPORT, bee.getSoundSource(), 1.0F, 1.0F);
                     bee.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
                 }
             }

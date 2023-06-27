@@ -1,10 +1,10 @@
-package com.teamresourceful.resourcefulbees.common.recipe.recipes;
+package com.teamresourceful.resourcefulbees.common.recipes;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeSerializers;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModRecipeTypes;
-import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import net.minecraft.core.HolderSet;
@@ -16,24 +16,23 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public record FlowHiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees, FluidStack fluid) implements CodecRecipe<Container> {
+public record FlowHiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees, RecipeFluid fluid) implements CodecRecipe<Container> {
 
     public static Codec<FlowHiveRecipe> codec(ResourceLocation id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 HolderSetCodec.of(BuiltInRegistries.ENTITY_TYPE).fieldOf("bees").forGetter(FlowHiveRecipe::bees),
-                FluidUtils.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(FlowHiveRecipe::fluid)
+                RecipeFluid.CODEC.fieldOf("fluid").forGetter(FlowHiveRecipe::fluid)
         ).apply(instance, FlowHiveRecipe::new));
     }
 
     public static Optional<FlowHiveRecipe> findRecipe(RecipeManager manager, EntityType<?> bee) {
         return manager
-                .getAllRecipesFor(ModRecipeTypes.FLOW_HIVE_RECIPE_TYPE.get())
+                .getAllRecipesFor(ModRecipes.FLOW_HIVE_RECIPE_TYPE.get())
                 .stream()
                 .filter(recipe -> recipe.bees().contains(bee.builtInRegistryHolder()))
                 .findFirst();
@@ -53,6 +52,6 @@ public record FlowHiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees,
     @Override
     public @NotNull
     RecipeType<?> getType() {
-        return ModRecipeTypes.FLOW_HIVE_RECIPE_TYPE.get();
+        return ModRecipes.FLOW_HIVE_RECIPE_TYPE.get();
     }
 }

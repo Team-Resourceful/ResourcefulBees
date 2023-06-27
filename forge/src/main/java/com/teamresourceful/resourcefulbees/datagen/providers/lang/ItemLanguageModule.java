@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;
 public class ItemLanguageModule implements LanguageModule {
     @Override
     public void addEntries(BaseLanguageProvider provider) {
-        provider.addItem(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.OREO_COOKIE, "Epic Oreo");
+        provider.addItem(ModItems.OREO_COOKIE, "Epic Oreo");
         provider.addItem(ModItems.BEE_BOX_TEMP, "Lost Bee Box");
         provider.addItem(ModItems.BEE_BOX, "Bee Box");
         provider.addItem(ModItems.BEEPEDIA, "Beepedia");
@@ -16,7 +16,7 @@ public class ItemLanguageModule implements LanguageModule {
         provider.addItem(ModItems.SMOKER, "Bee Smoker");
         provider.addItem(ModItems.BELLOW, "Bellow");
         provider.addItem(ModItems.SMOKERCAN, "Smoker Canister");
-        provider.addItem(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX, "Beeswax");
+        provider.addItem(ModItems.WAX, "Beeswax");
         provider.addItem(ModItems.BREED_TIME_UPGRADE, "Breed Time Upgrade");
         provider.addItem(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_FLUID_BUCKET, "Honey Bucket");
         provider.addItem(ModItems.MUTATED_POLLEN, "Mutated Pollen");
@@ -28,6 +28,6 @@ public class ItemLanguageModule implements LanguageModule {
         provider.addItem(ModItems.ENERGY_FILL_UPGRADE, "Energy Conversion Upgrade (WIP)");
         provider.addItem(ModItems.HONEY_CAP_UPGRADE, "Honey Capacity Upgrade (WIP)");
         provider.addItem(ModItems.BEE_LOCATOR, "Bee Locator");
-        provider.addItem(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.STRAWBEERRY_MILKSHAKE, "Strawbeerry Milkshake");
+        provider.addItem(ModItems.STRAWBEERRY_MILKSHAKE, "Strawbeerry Milkshake");
     }
 }

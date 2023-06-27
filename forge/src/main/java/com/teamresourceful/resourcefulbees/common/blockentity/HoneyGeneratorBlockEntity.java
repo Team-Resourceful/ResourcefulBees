@@ -13,8 +13,9 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.HoneyGenRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.HoneyGenRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -171,7 +172,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
             recipe = Optional.empty();
             validRecipe = true;
         } else if (validRecipe && !tank.isEmpty() && recipe.isEmpty() && level != null) {
-            recipe = HoneyGenRecipe.findRecipe(level.getRecipeManager(), tank.getFluid());
+            recipe = HoneyGenRecipe.findRecipe(level.getRecipeManager(), FluidUtils.fluidsMatch(tank.getFluid()));
             validRecipe = recipe.isPresent();
         }
     }

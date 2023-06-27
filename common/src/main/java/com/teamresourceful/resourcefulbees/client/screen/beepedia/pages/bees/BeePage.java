@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
+import com.teamresourceful.resourcefullib.common.utils.modinfo.ModInfoUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -58,8 +59,8 @@ public class BeePage extends SubdividedScreen {
                     .setTooltipProvider(() -> List.of(BeepediaTranslations.Honeycombs.TITLE));
         }
 
-        addRenderableWidget(new SlotButton(160, 25, BeepediaTextures.RECIPE_BOOK, () -> ModUtils.isModLoaded("jei"), () -> {
-            if (ModUtils.isModLoaded("jei")) {
+        addRenderableWidget(new SlotButton(160, 25, BeepediaTextures.RECIPE_BOOK, () -> ModInfoUtils.isModLoaded("jei"), () -> {
+            if (ModInfoUtils.isModLoaded("jei")) {
                 ModUtils.openEntityInJEI(this.data.entityType());
             }
         })).setTooltipProvider(() -> List.of(BeepediaTranslations.OPEN_JEI));

@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.menus.content;
 
 import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
-import com.teamresourceful.resourcefulbees.platform.common.menu.MenuContent;
-import com.teamresourceful.resourcefulbees.platform.common.menu.MenuContentSerializer;
+import com.teamresourceful.resourcefullib.common.menu.MenuContent;
+import com.teamresourceful.resourcefullib.common.menu.MenuContentSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;

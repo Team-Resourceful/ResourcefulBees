@@ -2,10 +2,9 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -30,8 +29,8 @@ public class SolidificationCategory extends BaseCategory<SolidificationRecipe> {
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull SolidificationRecipe recipe, @NotNull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 21, 11)
-                .addIngredient(ForgeTypes.FLUID_STACK, recipe.fluid())
-                .setFluidRenderer(recipe.fluid().getAmount(), false, 16, 16)
+                .addFluidStack(recipe.fluid().fluid(), recipe.fluid().amount(), recipe.fluid().tag())
+                .setFluidRenderer(recipe.fluid().amount(), false, 16, 16)
                 .setSlotName("input");
         builder.addSlot(RecipeIngredientRole.OUTPUT, 49, 54)
                 .addIngredient(VanillaTypes.ITEM_STACK, recipe.stack())

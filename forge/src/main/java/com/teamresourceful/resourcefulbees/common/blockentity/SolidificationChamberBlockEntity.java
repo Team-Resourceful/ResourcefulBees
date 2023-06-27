@@ -7,8 +7,9 @@ import com.teamresourceful.resourcefulbees.common.inventory.AutomationSensitiveI
 import com.teamresourceful.resourcefulbees.common.inventory.menus.SolidificationChamberMenu;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -35,7 +36,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
 
     public static final int BLOCK_OUTPUT = 0;
 
-    private final FluidTank tank = new FluidTank(16000, fluid -> this.level != null && SolidificationRecipe.matches(level.getRecipeManager(), fluid)) {
+    private final FluidTank tank = new FluidTank(16000, fluid -> this.level != null && SolidificationRecipe.matches(level.getRecipeManager(), FluidUtils.fluidsMatch(fluid))) {
         @Override
         protected void onContentsChanged() {
             sendToPlayersTrackingChunk();
@@ -88,10 +89,10 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
         }
         ItemStack outputStack = getInventory().getStackInSlot(BLOCK_OUTPUT);
         final SolidificationRecipe recipe = fluidStack.getFluid().equals(lastFluid) && cachedRecipe != null ?
-                cachedRecipe : SolidificationRecipe.findRecipe(level.getRecipeManager(), fluidStack).orElse(null);
+                cachedRecipe : SolidificationRecipe.findRecipe(level.getRecipeManager(), FluidUtils.fluidsMatch(fluidStack)).orElse(null);
         if (recipe == null) return false;
 
-        boolean isTankReady = !fluidStack.isEmpty() && tank.getFluidAmount() >= recipe.fluid().getAmount();
+        boolean isTankReady = !fluidStack.isEmpty() && tank.getFluidAmount() >= recipe.fluid().amount();
         boolean canOutput = outputStack.isEmpty() || ItemStack.isSameItemSameTags(recipe.stack(), outputStack) && outputStack.getCount() < outputStack.getMaxStackSize();
 
         cachedRecipe = recipe;
@@ -104,7 +105,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
         if (outputStack.isEmpty()) outputStack = cachedRecipe.stack().copy();
         else outputStack.grow(1);
         getInventory().setStackInSlot(BLOCK_OUTPUT, outputStack);
-        tank.drain(cachedRecipe.fluid().copy(), IFluidHandler.FluidAction.EXECUTE);
+        tank.drain(FluidUtils.fromRecipe(cachedRecipe.fluid()), IFluidHandler.FluidAction.EXECUTE);
     }
 
     public @NotNull AutomationSensitiveItemStackHandler getInventory() {

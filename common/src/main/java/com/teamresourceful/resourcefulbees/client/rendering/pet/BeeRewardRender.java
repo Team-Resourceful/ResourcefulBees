@@ -55,7 +55,7 @@ public class BeeRewardRender extends RenderLayer<AbstractClientPlayer, PlayerMod
             renderer.setGeoModel(provider);
 
             AnimationState<PetModelData> event = new AnimationState<>(data, 0, 0, Minecraft.getInstance().getFrameTime(), true);
-            provider.setCustomAnimations(data, renderer.getInstanceId(data), event); //TODO determine if this is the right method call
+            provider.setCustomAnimations(data, renderer.getInstanceId(data), event);
             renderer.reRender(model, stack, buffer, data, renderType, consumer, partialTicks, packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
 
             for (BeeLayerData layer : data.getLayers()) {

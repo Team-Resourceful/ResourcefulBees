@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
 import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
-import com.teamresourceful.resourcefulbees.platform.common.menu.MenuContentHelper;
+import com.teamresourceful.resourcefullib.common.menu.MenuContentHelper;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;

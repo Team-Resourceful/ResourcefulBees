@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.platform.common.workers;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
+import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 
 public final class LevelWorkManager {
@@ -12,6 +12,6 @@ public final class LevelWorkManager {
 
     @ExpectPlatform
     public static synchronized void addWork(LevelWorker worker) {
-        throw new NotImplementedError();
+        throw new NotImplementedException();
     }
 }

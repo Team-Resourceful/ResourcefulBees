@@ -40,8 +40,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
         com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T3_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t2Nests));
         com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T4_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t3Nests));
         tag(ItemTags.SMALL_FLOWERS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM.get());
-        tag(ModItemTags.WAX).add(ModItems.WAX.get());
-        tag(ModItemTags.WAX_BLOCK).add(ModItems.WAX_BLOCK_ITEM.get());
+        tag(ModItemTags.WAX).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAX.get());
+        tag(ModItemTags.WAX_BLOCK).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAX_BLOCK_ITEM.get());
         tag(Tags.Items.STORAGE_BLOCKS).addTags(ModItemTags.WAX_BLOCK);
         tag(ModItemTags.SHEARS).add(Items.SHEARS);
         tag(ModItemTags.MUSHROOM).add(Items.RED_MUSHROOM).add(Items.BROWN_MUSHROOM);

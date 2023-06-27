@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.blocks.base;
 
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.platform.common.menu.ContentMenuProvider;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;

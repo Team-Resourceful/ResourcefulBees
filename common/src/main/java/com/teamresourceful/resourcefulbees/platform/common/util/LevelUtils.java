@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.platform.common.util;
 
-import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
+import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;
@@ -13,11 +13,11 @@ public  class LevelUtils {
 
     @ExpectPlatform
     public static BlockPathTypes getType(BlockState state, BlockGetter level, BlockPos pos, Mob mob) {
-        throw new NotImplementedError();
+        throw new NotImplementedException();
     }
 
     @ExpectPlatform
     public static BlockPathTypes getType(FluidState state, BlockGetter level, BlockPos pos, Mob mob, boolean logging) {
-        throw new NotImplementedError();
+        throw new NotImplementedException();
     }
 }

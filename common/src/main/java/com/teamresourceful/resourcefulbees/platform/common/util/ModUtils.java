@@ -1,29 +1,27 @@
 package com.teamresourceful.resourcefulbees.platform.common.util;
 
-import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
 import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
+import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import it.unimi.dsi.fastutil.booleans.BooleanObjectPair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Contract;
 
 public class ModUtils {
 
     @ExpectPlatform
-    public static boolean isModLoaded(String modId) {
-        throw new NotImplementedError();
-    }
-
-    @ExpectPlatform
     public static void openEntityInJEI(EntityType<?> entity) {
-        throw new NotImplementedError();
+        throw new NotImplementedException();
     }
 
     /**
@@ -37,33 +35,38 @@ public class ModUtils {
      */
     @ExpectPlatform
     public static MobCategory createMobCategory(String name, String id, int max, boolean isFriendly, boolean isPersistent, int despawnDistance, MobCategory fallback) {
-        throw new NotImplementedError();
+        throw new NotImplementedException();
     }
 
     @ExpectPlatform
     public static void spawnBabyEvent(SpawnBabyEvent event) {
-        throw new NotImplementedError();
+        throw new NotImplementedException();
+    }
+
+    @ExpectPlatform
+    public static BooleanObjectPair<Vec3> enderEntityTeleport(LivingEntity entity, double x, double y, double z) {
+        throw new NotImplementedException();
     }
 
     @ExpectPlatform
     @SuppressWarnings("Contract")
     @Contract(value = "null -> false", pure = true)
     public static boolean isRealPlayer(Player player) {
-        throw new NotImplementedError();
+        throw new NotImplementedException();
     }
 
     @ExpectPlatform
     public static ResourceKey<? extends Registry<?>> getSpawnDataRegistryKey() {
-        throw new NotImplementedError();
+        throw new NotImplementedException();
     }
 
     @ExpectPlatform
     public static void openScreen(Player player, MenuProvider provider, BlockPos pos) {
-        throw new NotImplementedError();
+        throw new NotImplementedException();
     }
 
     @ExpectPlatform
     public static Level.ExplosionInteraction getExplosionInteraction(Level level, Entity entity) {
-        throw new NotImplementedError();
+        throw new NotImplementedException();
     }
 }

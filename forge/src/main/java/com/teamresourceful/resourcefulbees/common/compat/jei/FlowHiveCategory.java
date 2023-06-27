@@ -3,10 +3,10 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 import com.teamresourceful.resourcefulbees.common.compat.jei.ingredients.EntityIngredient;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.FlowHiveRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.FlowHiveRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -18,7 +18,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class FlowHiveCategory extends BaseCategory<FlowHiveCategory.Recipe> {
     private static Stream<FlowHiveCategory.Recipe> createRecipes(FlowHiveRecipe recipe) {
         List<FlowHiveCategory.Recipe> recipes = new ArrayList<>();
 
-        FluidStack honey = recipe.fluid();
+        RecipeFluid honey = recipe.fluid();
         if (!honey.isEmpty()) {
             recipe.bees().stream()
                 .filter(Holder::isBound)
@@ -65,8 +64,8 @@ public class FlowHiveCategory extends BaseCategory<FlowHiveCategory.Recipe> {
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull FlowHiveCategory.Recipe recipe, @NotNull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.OUTPUT, 139, 5)
-            .addIngredient(ForgeTypes.FLUID_STACK, recipe.fluid())
-            .setFluidRenderer(recipe.fluid().getAmount(), false, 16, 16)
+            .addFluidStack(recipe.fluid().fluid(), recipe.fluid().amount(), recipe.fluid().tag())
+            .setFluidRenderer(recipe.fluid().amount(), false, 16, 16)
             .setSlotName("honey");
         builder.addSlot(RecipeIngredientRole.INPUT, 63, 5)
             .addIngredient(VanillaTypes.ITEM_STACK, ModItems.FLOW_HIVE.get().getDefaultInstance())
@@ -82,5 +81,5 @@ public class FlowHiveCategory extends BaseCategory<FlowHiveCategory.Recipe> {
         flowHiveBackground.draw(graphics);
     }
 
-    public record Recipe(FluidStack fluid, EntityType<?> bee) {}
+    public record Recipe(RecipeFluid fluid, EntityType<?> bee) {}
 }

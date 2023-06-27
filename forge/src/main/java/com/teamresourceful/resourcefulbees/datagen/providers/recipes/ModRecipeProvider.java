@@ -32,7 +32,7 @@ public class ModRecipeProvider extends RecipeProvider {
         CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB), new ResourceLocation(ModConstants.MOD_ID, "honeycomb_centrifuge"), 1)
                 .time(200)
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 2), 10))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(new ItemStack(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX.get(), 2), 10))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(new ItemStack(ModItems.WAX.get(), 2), 10))
                 .addOutput(new CentrifugeRecipeBuilder.FluidOutputBuilder(0.20).addOutput(new FluidStack(ModFluids.HONEY_STILL.get(), 250), 10))
                 .rf(5)
                 .save(recipes);
@@ -40,7 +40,7 @@ public class ModRecipeProvider extends RecipeProvider {
         CentrifugeRecipeBuilder.of(Ingredient.of(Items.HONEYCOMB_BLOCK), new ResourceLocation(ModConstants.MOD_ID, "honeycomb_block_centrifuge"), 1)
                 .time(400)
                 .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(1).addOutput(new ItemStack(Items.SUGAR, 6), 10))
-                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX_BLOCK_ITEM.get().getDefaultInstance(), 10))
+                .addOutput(new CentrifugeRecipeBuilder.ItemOutputBuilder(0.25).addOutput(ModItems.WAX_BLOCK_ITEM.get().getDefaultInstance(), 10))
                 .addOutput(new CentrifugeRecipeBuilder.FluidOutputBuilder(0.20).addOutput(new FluidStack(ModFluids.HONEY_STILL.get(), 1250), 10))
                 .rf(10)
                 .save(recipes);
@@ -138,10 +138,10 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipes);
 
         //region Wax
-        RecipeHelper.getStorageRecipe(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX_BLOCK_ITEM.get(), Ingredient.of(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX.get()))
-                .unlockedBy("has_wax", RecipeProvider.has(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX.get())).save(recipes);
-        RecipeHelper.getStorageToItemRecipe(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX.get(), Ingredient.of(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX_BLOCK_ITEM.get()))
-                .unlockedBy("has_wax_block", RecipeProvider.has(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX_BLOCK_ITEM.get())).save(recipes);
+        RecipeHelper.getStorageRecipe(ModItems.WAX_BLOCK_ITEM.get(), Ingredient.of(ModItems.WAX.get()))
+                .unlockedBy("has_wax", RecipeProvider.has(ModItems.WAX.get())).save(recipes);
+        RecipeHelper.getStorageToItemRecipe(ModItems.WAX.get(), Ingredient.of(ModItems.WAX_BLOCK_ITEM.get()))
+                .unlockedBy("has_wax_block", RecipeProvider.has(ModItems.WAX_BLOCK_ITEM.get())).save(recipes);
         //endregion
         AdvancedShapedRecipeBuilder.shaped(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_POT_ITEM)
                 .pattern("HCH", "CBC", "HCH")

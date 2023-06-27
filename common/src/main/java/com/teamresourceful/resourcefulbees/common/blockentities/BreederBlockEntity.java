@@ -15,7 +15,7 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockE
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefulbees.common.util.ContainerUtils;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
-import com.teamresourceful.resourcefulbees.platform.common.menu.ContentMenuProvider;
+import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;

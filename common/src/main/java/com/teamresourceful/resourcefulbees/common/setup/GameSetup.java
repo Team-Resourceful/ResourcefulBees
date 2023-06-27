@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHo
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModStructures;
 import com.teamresourceful.resourcefulbees.common.resources.conditions.LoadDevRecipes;
@@ -40,6 +41,7 @@ public final class GameSetup {
         SyncedDatapackEvent.EVENT.addListener(DimensionalBeeHolder::onDatapackSync);
         RegisterIngredientsEvent.EVENT.addListener(GameSetup::initIngredients);
         ServerGoingToStartEvent.EVENT.addListener(ModStructures::addStructures);
+        RegisterBurnablesEvent.EVENT.addListener(GameSetup::initBurnables);
     }
 
     public static void initSerializersAndConditions() {
@@ -57,5 +59,10 @@ public final class GameSetup {
 
     public static void initIngredients(RegisterIngredientsEvent event) {
         event.register(BeeJarIngredient.SERIALIZER);
+    }
+
+    public static void initBurnables(RegisterBurnablesEvent event) {
+        event.register(400, ModItems.WAX.get());
+        event.register(4000, ModItems.WAX_BLOCK_ITEM.get());
     }
 }

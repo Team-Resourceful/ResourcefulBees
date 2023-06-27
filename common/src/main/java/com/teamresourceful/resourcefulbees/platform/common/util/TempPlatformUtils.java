@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.platform.common.util;
 
 import com.teamresourceful.resourcefulbees.common.entities.entity.ThrownMutatedPollen;
-import com.teamresourceful.resourcefulbees.platform.NotImplementedError;
+import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.entity.EntityType;
@@ -14,6 +14,6 @@ public class TempPlatformUtils {
 
     @ExpectPlatform
     public static RegistryEntry<EntityType<? extends ThrownMutatedPollen>> getThrownMutatedPollenType() {
-        throw new NotImplementedError();
+        throw new NotImplementedException();
     }
 }

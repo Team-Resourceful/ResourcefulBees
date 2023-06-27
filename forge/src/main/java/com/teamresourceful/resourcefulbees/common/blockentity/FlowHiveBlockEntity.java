@@ -4,8 +4,9 @@ import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.block.FlowHiveBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.FlowHiveRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.FlowHiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -66,10 +67,14 @@ public class FlowHiveBlockEntity extends BeeHolderBlockEntity {
             if (bee instanceof BeeCompat compat) compat.nectarDroppedOff();
             FlowHiveRecipe.findRecipe(bee.level().getRecipeManager(), bee.getType())
                 .ifPresent(recipe -> {
-                    if (!tank.getFluid().isEmpty() && tank.getFluid().isFluidEqual(recipe.fluid())) {
-                        tank.setFluid(new FluidStack(tank.getFluid(), Math.min(tank.getCapacity(), tank.getFluidAmount() + recipe.fluid().getAmount())));
+                    if (!tank.getFluid().isEmpty() && recipe.fluid().matches(FluidUtils.fluidsMatch(tank.getFluid()))) {
+                        tank.setFluid(new FluidStack(tank.getFluid(), Math.min(tank.getCapacity(), tank.getFluidAmount() + recipe.fluid().amount())));
                     } else if (!recipe.fluid().isEmpty()) {
-                        tank.setFluid(new FluidStack(recipe.fluid(), Math.min(tank.getCapacity(), recipe.fluid().getAmount())));
+                        tank.setFluid(new FluidStack(
+                                recipe.fluid().fluid(),
+                                Math.min(tank.getCapacity(), recipe.fluid().amount()),
+                                recipe.fluid().tag()
+                        ));
                     }
                 });
         }

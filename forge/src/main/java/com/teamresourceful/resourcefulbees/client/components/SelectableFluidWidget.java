@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.components;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
 import com.teamresourceful.resourcefulbees.common.capabilities.SelectableMultiFluidTank;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
@@ -78,11 +79,24 @@ public class SelectableFluidWidget extends AbstractWidget {
 
     @Override
     public boolean mouseScrolled(double scrollX, double scrollY, double delta) {
-        //TODO consider adding up/down arrow key support for people who may not have a scroll wheel
         if (this.isHoveredOrFocused() && Screen.hasControlDown()) {
             this.lastStack = nextStack(this.lastStack != null ? this.lastStack : this.tank.getFluid(), delta < 0 ? 1 : -1);
         }
         return false;
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (this.isHoveredOrFocused() && Screen.hasControlDown()) {
+            if (keyCode == InputConstants.KEY_UP) {
+                this.lastStack = nextStack(this.lastStack != null ? this.lastStack : this.tank.getFluid(), -1);
+                return true;
+            } else if (keyCode == InputConstants.KEY_DOWN) {
+                this.lastStack = nextStack(this.lastStack != null ? this.lastStack : this.tank.getFluid(), 1);
+                return true;
+            }
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     private FluidStack nextStack(FluidStack stack, int direction) {

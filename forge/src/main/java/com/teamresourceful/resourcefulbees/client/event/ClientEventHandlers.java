@@ -13,7 +13,7 @@ import com.teamresourceful.resourcefulbees.client.render.blocks.RenderHoneyGener
 import com.teamresourceful.resourcefulbees.client.render.blocks.RenderSolidificationChamber;
 import com.teamresourceful.resourcefulbees.client.render.blocks.centrifuge.CentrifugeCrankRenderer;
 import com.teamresourceful.resourcefulbees.client.render.blocks.centrifuge.CentrifugeRenderer;
-import com.teamresourceful.resourcefulbees.client.render.entities.CustomBeeRenderer;
+import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.render.fluids.FluidRender;
 import com.teamresourceful.resourcefulbees.client.render.items.ItemModelPropertiesHandler;
 import com.teamresourceful.resourcefulbees.client.rendering.pet.BeeRewardRender;

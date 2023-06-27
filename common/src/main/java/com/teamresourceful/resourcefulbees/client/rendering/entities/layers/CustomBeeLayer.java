@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.client.render.entities.layers;
+package com.teamresourceful.resourcefulbees.client.rendering.entities.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

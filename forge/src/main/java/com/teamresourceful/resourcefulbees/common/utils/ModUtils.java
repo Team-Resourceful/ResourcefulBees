@@ -44,8 +44,7 @@ public final class ModUtils {
         if (limit <= 0) return stack;
 
         boolean reachedLimit = stack.getCount() > limit;
-        //TODO Change to copyWithCount in 1.19.3
-        if (existing.isEmpty()) handler.setStackInSlot(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
+        if (existing.isEmpty()) handler.setStackInSlot(slot, reachedLimit ? stack.copyWithCount(limit) : stack);
         else existing.grow(reachedLimit ? limit : stack.getCount());
 
         return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;

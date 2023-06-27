@@ -12,11 +12,13 @@ import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.mixin.accessors.RecipeManagerAccessor;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.SolidificationRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
 import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.IngredientUtils;
 import com.teamresourceful.resourcefulbees.mixin.common.ReloadableServerResourcesAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.TagManagerAccessor;
@@ -36,7 +38,6 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -53,8 +54,8 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     public void onResourceManagerReload(@NotNull ResourceManager resourceManager) {
 
         if (RecipeConfig.honeycombBlockRecipes) {
-            ModConstants.LOGGER.info("Generating comb recipes for {} honeycombs...", com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.getEntries().size());
-            com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.getEntries().stream()
+            ModConstants.LOGGER.info("Generating comb recipes for {} honeycombs...", ModItems.HONEYCOMB_ITEMS.getEntries().size());
+            ModItems.HONEYCOMB_ITEMS.getEntries().stream()
                 .map(RegistryEntry::get)
                 .filter(item -> item instanceof CustomHoneycombItem)
                 .map(item -> (CustomHoneycombItem) item)
@@ -116,7 +117,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         Ingredient beeJarParent2 = IngredientHelper.getIngredient(new BeeJarIngredient(Set.of(parents.getParent2Data().id().toString())));
         var parent2FeedItems = IngredientUtils.of(parent2BreedData.feedItems());
         BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parents.getParent2Data().id().toString()), parent2BreedData.feedAmount(), parent2FeedItems, parent2BreedData.feedReturnItem());
-        return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(WeightedCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
+        return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(WeightedCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
     }
 
     private BreederRecipe.BreederOutput makeOutput(FamilyUnit family) {
@@ -217,7 +218,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     private Recipe<?> makeFluidToBlockRecipe(CustomHoneyData info) {
         return new SolidificationRecipe(
             new ResourceLocation(ModConstants.MOD_ID, info.name() + "_fluid_to_block"),
-            new FluidStack(info.getFluidData().stillFluid().get(), 1000),
+            new RecipeFluid(info.getFluidData().stillFluid().get()),
             new ItemStack(info.getBlockData().blockItem().get())
         );
     }

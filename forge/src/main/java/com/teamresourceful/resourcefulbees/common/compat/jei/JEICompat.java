@@ -97,9 +97,9 @@ public final class JEICompat implements IModPlugin {
         registration.addRecipes(MutationCategory.RECIPE, MutationCategory.getMutationRecipes(level));
         registration.addRecipes(FlowersCategory.RECIPE, FlowersCategory.getFlowersRecipes());
         registration.addRecipes(CentrifugeCategory.RECIPE, CentrifugeCategory.getRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.CENTRIFUGE_RECIPE_TYPE.get())));
-        registration.addRecipes(SolidificationCategory.RECIPE, recipeManager.getAllRecipesFor(ModRecipeTypes.SOLIDIFICATION_RECIPE_TYPE.get()));
-        registration.addRecipes(HoneyGenCategory.RECIPE, recipeManager.getAllRecipesFor(ModRecipeTypes.HONEY_GEN_RECIPE_TYPE.get()));
-        registration.addRecipes(FlowHiveCategory.RECIPE, FlowHiveCategory.getHoneycombRecipes(recipeManager.getAllRecipesFor(ModRecipeTypes.FLOW_HIVE_RECIPE_TYPE.get())));
+        registration.addRecipes(SolidificationCategory.RECIPE, recipeManager.getAllRecipesFor(ModRecipes.SOLIDIFICATION_RECIPE_TYPE.get()));
+        registration.addRecipes(HoneyGenCategory.RECIPE, recipeManager.getAllRecipesFor(ModRecipes.HONEY_GEN_RECIPE_TYPE.get()));
+        registration.addRecipes(FlowHiveCategory.RECIPE, FlowHiveCategory.getHoneycombRecipes(recipeManager.getAllRecipesFor(ModRecipes.FLOW_HIVE_RECIPE_TYPE.get())));
         CentrifugeInfo.register(registration);
     }
 

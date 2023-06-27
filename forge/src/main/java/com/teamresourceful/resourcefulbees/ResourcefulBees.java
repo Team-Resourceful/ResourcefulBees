@@ -11,6 +11,7 @@ import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
 import com.teamresourceful.resourcefulbees.common.data.DataSetup;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
+import com.teamresourceful.resourcefulbees.common.events.ItemEventHandler;
 import com.teamresourceful.resourcefulbees.common.init.BeeSetup;
 import com.teamresourceful.resourcefulbees.common.init.ModSetup;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -22,7 +23,7 @@ import com.teamresourceful.resourcefulbees.common.network.ForgeNetworkHandler;
 import com.teamresourceful.resourcefulbees.common.registries.custom.*;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
-import com.teamresourceful.resourcefulbees.common.registry.custom.DefaultTraitAbilities;
+import com.teamresourceful.resourcefulbees.common.registries.custom.DefaultTraitAbilities;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
@@ -129,6 +130,7 @@ public class ResourcefulBees {
         ModValidation.init();
 
         GameSetup.initSerializersAndConditions();
+        ItemEventHandler.init();
     }
 
     @SubscribeEvent

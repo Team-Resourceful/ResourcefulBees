@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,7 +28,9 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public final class FluidUtils {
 
@@ -40,6 +43,14 @@ public final class FluidUtils {
             Codec.INT.fieldOf("amount").orElse(1000).forGetter(FluidStack::getAmount),
             CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(o -> Optional.ofNullable(o.getTag()))
     ).apply(instance, (fluid, amount, tag) -> new FluidStack(fluid, amount, tag.orElse(null))));
+
+    public static Predicate<RecipeFluid> fluidsMatch(FluidStack stack) {
+        return recipeFluid -> recipeFluid.fluid() == stack.getFluid() && Objects.equals(recipeFluid.tag(), stack.getTag());
+    }
+
+    public static FluidStack fromRecipe(RecipeFluid fluid) {
+        return new FluidStack(fluid.fluid(), fluid.amount(), fluid.tag());
+    }
 
     public static void fillBottle(IFluidTank tank, Player player, InteractionHand hand) {
         FluidStack tankFluid = tank.getFluid();

@@ -15,8 +15,11 @@ import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SignItem;
 
 public final class ModItems {
@@ -149,6 +152,10 @@ public final class ModItems {
     public static final RegistryEntry<Item> T3_APIARY_ITEM = NEST_ITEMS.register("t3_apiary", () -> new BlockItem(ModBlocks.T3_APIARY_BLOCK.get(), new Item.Properties()));
     public static final RegistryEntry<Item> T4_APIARY_ITEM = NEST_ITEMS.register("t4_apiary", () -> new BlockItem(ModBlocks.T4_APIARY_BLOCK.get(), new Item.Properties()));
 
+
+    public static final RegistryEntry<Item> WAX = ITEMS.register("wax", () -> new WaxItem(new Item.Properties()));
+    public static final RegistryEntry<Item> WAX_BLOCK_ITEM = ITEMS.register("wax_block", () -> new BlockItem(ModBlocks.WAX_BLOCK.get(), new Item.Properties()));
+
     public static final RegistryEntry<Item> SCRAPER = ITEMS.register("scraper", () -> new ScraperItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryEntry<Item> SMOKER = ITEMS.register("smoker", () -> new SmokerItem(new Item.Properties().durability(GeneralConfig.smokerDurability)));
@@ -197,4 +204,36 @@ public final class ModItems {
     public static final RegistryEntry<Item> ENERGY_XFER_UPGRADE = ModItems.ITEMS.register("energy_xfer_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.ENERGY_XFER));
     public static final RegistryEntry<Item> ENERGY_FILL_UPGRADE = ModItems.ITEMS.register("energy_fill_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.ENERGY_FILL));
     //endregion
+
+    //region Special Items
+    public static final RegistryEntry<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new SpecialFoodItem(
+            new Item.Properties().rarity(Rarity.EPIC),
+            builder -> builder
+                .effect(new MobEffectInstance(MobEffects.REGENERATION, 600, 1), 1)
+                .effect(new MobEffectInstance(MobEffects.ABSORPTION, 2400, 3), 1)
+                .effect(new MobEffectInstance(MobEffects.SATURATION, 2400, 1), 1)
+                .effect(new MobEffectInstance(MobEffects.LUCK, 600, 3), 1)
+                .effect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 6000, 0), 1)
+                .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 6000, 0), 1)
+                .effect(new MobEffectInstance(MobEffects.WATER_BREATHING, 6000, 0), 1)
+                .effect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1200, 0), 1)
+                .nutrition(8)
+                .saturationMod(2)
+                .alwaysEat()
+            )
+    );
+
+    public static final RegistryEntry<Item> STRAWBEERRY_MILKSHAKE = ITEMS.register("strawbeerry_milkshake", () -> new SpecialFoodItem(
+            new Item.Properties().rarity(Rarity.EPIC),
+            builder -> builder
+                    .effect(new MobEffectInstance(MobEffects.REGENERATION, 1200, 1), 1)
+                    .effect(new MobEffectInstance(MobEffects.LUCK, 1200, 0), 0)
+                    .effect(new MobEffectInstance(MobEffects.JUMP, 1200, 1), 1)
+                    .nutrition(6)
+                    .saturationMod(1.5f)
+                    .alwaysEat()
+            )
+    );
+
+
 }

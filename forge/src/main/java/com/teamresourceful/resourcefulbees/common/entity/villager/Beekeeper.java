@@ -74,7 +74,7 @@ public final class Beekeeper {
 
     //region Level One Trades
     private static void createLevelOneTrades(List<VillagerTrades.ItemListing> list) {
-        addTrade(list, UniformInt.of(1,2), ModItems.WAX.get(), UniformInt.of(1,4), 12, 3);
+        addTrade(list, UniformInt.of(1,2), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAX.get(), UniformInt.of(1,4), 12, 3);
         addTrade(list, UniformInt.of(2,4), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.BEE_JAR.get(), UniformInt.of(1,4), 8, 3);
     }
     //endregion

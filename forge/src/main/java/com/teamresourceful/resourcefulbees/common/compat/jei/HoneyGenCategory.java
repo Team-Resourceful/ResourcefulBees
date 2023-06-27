@@ -2,10 +2,9 @@ package com.teamresourceful.resourcefulbees.common.compat.jei;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
-import com.teamresourceful.resourcefulbees.common.recipe.recipes.HoneyGenRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.HoneyGenRecipe;
 import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -48,7 +47,7 @@ public class HoneyGenCategory extends BaseCategory<HoneyGenRecipe> {
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, HoneyGenRecipe recipe, @NotNull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 21, 4)
-                .addIngredient(ForgeTypes.FLUID_STACK, recipe.honey())
+                .addFluidStack(recipe.honey().fluid(), recipe.honey().amount(), recipe.honey().tag())
                 .setFluidRenderer(1000, false, 16, 54)
                 .setOverlay(tankOverlay, 0, 0)
                 .setSlotName("input")

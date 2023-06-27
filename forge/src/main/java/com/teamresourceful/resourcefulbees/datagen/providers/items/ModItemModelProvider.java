@@ -15,14 +15,14 @@ public class ModItemModelProvider extends BaseItemModelProvider {
 
     @Override
     protected void registerModels() {
-        basicItem(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.WAX.get());
+        basicItem(ModItems.WAX.get());
         basicItem(ModItems.T2_NEST_UPGRADE.get());
         basicItem(ModItems.T3_NEST_UPGRADE.get());
         basicItem(ModItems.T4_NEST_UPGRADE.get());
         basicItem(ModItems.SMOKER.get());
         basicItem(ModItems.SMOKERCAN.get());
         basicItem(ModItems.BELLOW.get());
-        basicItem(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.OREO_COOKIE.get());
+        basicItem(ModItems.OREO_COOKIE.get());
         basicItem(ModItems.WAXED_DOOR.get());
         basicItem(ModItems.WAXED_SIGN.get());
         basicItem(ModItems.ENERGY_CAP_UPGRADE.get());
