@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.pets;
 
 import com.mojang.util.UUIDTypeAdapter;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,8 +22,8 @@ public final class PetInfo {
     private static final Map<String, PetModelData> PET_MODELS = new HashMap<>();
     private static final Map<UUID, String> USER_PETS = new HashMap<>();
 
-    private PetInfo()   {
-        throw new UtilityClassError();
+    private PetInfo() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     static void addUser(String uuid, String model){

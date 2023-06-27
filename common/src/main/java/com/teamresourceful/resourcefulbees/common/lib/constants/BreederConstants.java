@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 
 import java.util.List;
 
 public final class BreederConstants {
 
-    private BreederConstants() {
-        throw new UtilityClassError();
+    private BreederConstants() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final int NUM_OF_BREEDERS = 2;

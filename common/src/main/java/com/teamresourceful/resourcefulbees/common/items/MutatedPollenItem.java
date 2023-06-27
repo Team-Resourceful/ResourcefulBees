@@ -55,7 +55,7 @@ public class MutatedPollenItem extends Item {
         ItemStack itemStack = player.getItemInHand(usedHand);
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
         player.getCooldowns().addCooldown(this, 5);
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             ThrownMutatedPollen thrownPollen = new ThrownMutatedPollen(level);
             thrownPollen.setItem(itemStack);
             thrownPollen.setPos(player.getX(), player.getEyeY(), player.getZ());

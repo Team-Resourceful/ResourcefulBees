@@ -12,7 +12,6 @@ import com.teamresourceful.resourcefulbees.common.data.DataSetup;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
 import com.teamresourceful.resourcefulbees.common.events.ItemEventHandler;
-import com.teamresourceful.resourcefulbees.common.init.BeeSetup;
 import com.teamresourceful.resourcefulbees.common.init.ModSetup;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
@@ -23,26 +22,30 @@ import com.teamresourceful.resourcefulbees.common.network.ForgeNetworkHandler;
 import com.teamresourceful.resourcefulbees.common.registries.custom.*;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
-import com.teamresourceful.resourcefulbees.common.registries.custom.DefaultTraitAbilities;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
+import com.teamresourceful.resourcefulbees.common.setup.data.BeeSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
-import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
+import com.teamresourceful.resourcefulbees.platform.common.events.RegisterSpawnPlacementsEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.SyncedDatapackEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.ServerGoingToStartEvent;
 import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.forge.ForgeIngredientHelper;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import com.teamresourceful.resourcefulconfig.common.config.Configurator;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.entity.player.BonemealEvent;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -57,9 +60,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.GeckoLib;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mod(ModConstants.MOD_ID)
 public class ResourcefulBees {
@@ -111,7 +113,15 @@ public class ResourcefulBees {
         modEventBus.addListener(this::onInterModEnqueue);
         modEventBus.addListener(this::loadComplete);
         modEventBus.addListener(this::onPackFinders);
-        modEventBus.addListener(BeeSetup::onSpawnPlacementRegisterEvent);
+
+        modEventBus.addListener((SpawnPlacementRegisterEvent event) ->
+                RegisterSpawnPlacementsEvent.EVENT.fire(new RegisterSpawnPlacementsEvent(new RegisterSpawnPlacementsEvent.Registry() {
+                    @Override
+                    public <T extends Entity> void register(EntityType<T> entityType, SpawnPlacements.@Nullable Type placementType, Heightmap.@Nullable Types heightmap, SpawnPlacements.SpawnPredicate<T> predicate) {
+                        event.register(entityType, placementType, heightmap, predicate, SpawnPlacementRegisterEvent.Operation.REPLACE);
+                    }
+                }))
+        );
 
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
         forgeEventBus.addListener(this::serverLoaded);
@@ -155,20 +165,6 @@ public class ResourcefulBees {
         GameSetup.initPotionRecipes();
         GameSetup.initArguments();
         ConditionRegistryImpl.freeze();
-        MinecraftForge.EVENT_BUS.addListener((BonemealEvent bonemealEvent) -> {
-            BlockBonemealedEvent newEvent = new BlockBonemealedEvent(
-                    bonemealEvent.getEntity(),
-                    bonemealEvent.getLevel(),
-                    bonemealEvent.getPos(),
-                    bonemealEvent.getBlock(),
-                    bonemealEvent.getStack(),
-                    new AtomicBoolean(bonemealEvent.isCanceled())
-            );
-            BlockBonemealedEvent.EVENT.fire(newEvent);
-            if (newEvent.isCanceled()) {
-                bonemealEvent.setCanceled(true);
-            }
-        });
     }
 
     @SubscribeEvent

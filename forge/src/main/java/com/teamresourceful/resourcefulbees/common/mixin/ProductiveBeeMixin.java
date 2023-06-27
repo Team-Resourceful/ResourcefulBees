@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.mixin.compat;
+package com.teamresourceful.resourcefulbees.common.mixin;
 
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.modcompat.productivebees.ProductiveBeesCompat;

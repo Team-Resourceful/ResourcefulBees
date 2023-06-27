@@ -4,6 +4,8 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.client.Minecraft;
@@ -56,18 +58,18 @@ public final class ModelHandler {
     public static void onAddAdditional(ModelEvent.RegisterAdditional event) {
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.getEntries().forEach(comb -> registerGenericItem(event, comb, new ModResourceLocation("honeycomb"), resourceManager));
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_BLOCK_ITEMS.getEntries().forEach(combBlock -> registerGenericItem(event, combBlock, new ModResourceLocation("honeycomb_block"), resourceManager));
+        ModItems.HONEYCOMB_ITEMS.getEntries().forEach(comb -> registerGenericItem(event, comb, new ModResourceLocation("honeycomb"), resourceManager));
+        ModItems.HONEYCOMB_BLOCK_ITEMS.getEntries().forEach(combBlock -> registerGenericItem(event, combBlock, new ModResourceLocation("honeycomb_block"), resourceManager));
 
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BLOCK_ITEMS.getEntries().forEach(honeyBlock -> registerGenericItem(event, honeyBlock, new ModResourceLocation("honey_block"), resourceManager));
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BUCKET_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, new ModResourceLocation("custom_honey_fluid_bucket"), resourceManager));
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BOTTLE_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, new ModResourceLocation("honey_bottle"), resourceManager));
+        ModItems.HONEY_BLOCK_ITEMS.getEntries().forEach(honeyBlock -> registerGenericItem(event, honeyBlock, new ModResourceLocation("honey_block"), resourceManager));
+        ModItems.HONEY_BUCKET_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, new ModResourceLocation("custom_honey_fluid_bucket"), resourceManager));
+        ModItems.HONEY_BOTTLE_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, new ModResourceLocation("honey_bottle"), resourceManager));
 
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.SPAWN_EGG_ITEMS.getEntries().forEach(egg -> registerGenericItem(event, egg,  new ResourceLocation("minecraft:template_spawn_egg"), resourceManager));
+        ModItems.SPAWN_EGG_ITEMS.getEntries().forEach(egg -> registerGenericItem(event, egg,  new ResourceLocation("minecraft:template_spawn_egg"), resourceManager));
 
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEYCOMB_BLOCKS.getEntries().forEach(combBlock -> registerGenericBlockState(event, combBlock, new ModResourceLocation("honeycomb_block"), null, resourceManager));
+        ModBlocks.HONEYCOMB_BLOCKS.getEntries().forEach(combBlock -> registerGenericBlockState(event, combBlock, new ModResourceLocation("honeycomb_block"), null, resourceManager));
 
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_BLOCKS.getEntries().forEach(honeyBlock -> registerGenericBlockState(event, honeyBlock, new ModResourceLocation("honey_block"), RenderType.translucent(), resourceManager));
+        ModBlocks.HONEY_BLOCKS.getEntries().forEach(honeyBlock -> registerGenericBlockState(event, honeyBlock, new ModResourceLocation("honey_block"), RenderType.translucent(), resourceManager));
     }
 
     public static void onModelBake(ModelEvent.BakingCompleted event) {

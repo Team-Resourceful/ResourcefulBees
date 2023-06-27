@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.item.dispenser;
+package com.teamresourceful.resourcefulbees.common.items.dispenser;
 
 import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;

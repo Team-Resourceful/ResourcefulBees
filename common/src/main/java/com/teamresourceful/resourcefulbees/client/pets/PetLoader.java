@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.JsonOps;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.utils.WebUtils;
 
 import java.util.Map;
@@ -15,8 +15,8 @@ public final class PetLoader {
 
     private static final String URL = "https://pets.resourcefulbees.com/pets";
 
-    private PetLoader()  {
-        throw new UtilityClassError();
+    private PetLoader() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void loadAPI() {

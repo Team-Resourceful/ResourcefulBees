@@ -1,31 +1,35 @@
 {
-    "required": true,
-    "minVersion": "0.8",
-    "package": "com.teamresourceful.resourcefulbees.mixin",
-    "compatibilityLevel": "JAVA_17",
-    "mixins": [
-        "common.BeeEntityAccessor",
-        "common.BeeGoToHiveGoalInvoker",
-        "common.BeehiveBeeDataAccessor",
-        "common.BeehiveEntityAccessor",
-        "common.BeeInvoker",
-        "common.BlockSetTypeInvoker",
-        "common.MixinBlock",
-        "common.RecipeManagerInvoker",
-        "common.ReloadableServerResourcesAccessor",
-        "common.ServerLevelAccessor",
-        "common.StructureCheckAccessor",
-        "common.StructureTemplatePoolAccessor",
-        "common.TagManagerAccessor",
-        "common.WoodTypeInvoker"
-    ],
-    "client": [
-        "client.FontResourceManagerAccessor",
-        "client.MinecraftAccessor",
-        "client.ScreenAccessor",
-        "client.ScreenInvoker"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-    }
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.teamresourceful.resourcefulbees.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "common.BeeEntityAccessor",
+    "common.BeeGoToHiveGoalInvoker",
+    "common.BeehiveBeeDataAccessor",
+    "common.BeehiveEntityAccessor",
+    "common.BeeInvoker",
+    "common.BlockSetTypeInvoker",
+    "common.MixinBee",
+    "common.MixinBeeEnterHiveGoal",
+    "common.MixinBlock",
+    "common.MixinDispenserBlock",
+    "common.RecipeManagerAccessor",
+    "common.RecipeManagerInvoker",
+    "common.ReloadableServerResourcesAccessor",
+    "common.ServerLevelAccessor",
+    "common.StructureCheckAccessor",
+    "common.StructureTemplatePoolAccessor",
+    "common.TagManagerAccessor",
+    "common.WoodTypeInvoker"
+  ],
+  "client": [
+    "client.FontResourceManagerAccessor",
+    "client.MinecraftAccessor",
+    "client.ScreenAccessor",
+    "client.ScreenInvoker"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

@@ -1,6 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.mixin;
+package com.teamresourceful.resourcefulbees.mixin.common;
 
-import com.teamresourceful.resourcefulbees.common.item.dispenser.ShearsDispenserBehavior;
+import com.teamresourceful.resourcefulbees.common.items.dispenser.ShearsDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSourceImpl;

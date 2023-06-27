@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.mixin.accessors;
+package com.teamresourceful.resourcefulbees.mixin.common;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;

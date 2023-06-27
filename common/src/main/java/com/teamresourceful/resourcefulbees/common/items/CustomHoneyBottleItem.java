@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
-public class CustomHoneyBottleItem extends HoneyBottleItem {
+public class CustomHoneyBottleItem extends HoneyBottleItem implements Tradeable {
 
     public final HoneyBottleData data;
     private FoodProperties food = null;
@@ -36,10 +36,12 @@ public class CustomHoneyBottleItem extends HoneyBottleItem {
         return true;
     }
 
+    @Override
     public boolean isTradable() {
         return data.tradeData().isTradable();
     }
 
+    @Override
     public BeekeeperTradeData getTradeData() {
         return data.tradeData();
     }

@@ -2,8 +2,8 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.DontCheckCasing;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.lib.tools.ValidationException;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import com.teamresourceful.resourcefullib.common.exceptions.ValidationException;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.reflect.Field;
@@ -12,8 +12,8 @@ import java.util.List;
 
 public final class NBTConstants {
 
-    private NBTConstants() {
-        throw new UtilityClassError();
+    private NBTConstants() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
 

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.item;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
+import com.teamresourceful.resourcefulbees.common.items.Tradeable;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BucketItem;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class CustomHoneyBucketItem extends BucketItem {
+public class CustomHoneyBucketItem extends BucketItem implements Tradeable {
 
     private final HoneyFluidData data;
 
@@ -39,10 +40,12 @@ public class CustomHoneyBucketItem extends BucketItem {
         return new FluidBucketWrapper(stack);
     }
 
+    @Override
     public boolean isTradable() {
         return data.tradeData().isTradable();
     }
 
+    @Override
     public BeekeeperTradeData getTradeData() {
         return data.tradeData();
     }

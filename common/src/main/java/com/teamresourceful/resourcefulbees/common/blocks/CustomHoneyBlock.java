@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.blocks;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
+import com.teamresourceful.resourcefulbees.common.items.Tradeable;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -35,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class CustomHoneyBlock extends HalfTransparentBlock {
+public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable {
 
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     protected final Color color;
@@ -47,10 +48,12 @@ public class CustomHoneyBlock extends HalfTransparentBlock {
         this.data = data;
     }
 
+    @Override
     public BeekeeperTradeData getTradeData() {
         return data.tradeData();
     }
 
+    @Override
     public boolean isTradable() {
         return data.tradeData().isTradable();
     }

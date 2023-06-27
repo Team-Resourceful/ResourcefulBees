@@ -4,11 +4,7 @@
     "compatibilityLevel": "JAVA_17",
     "refmap": "resourcefulbees-forge-refmap.json",
     "mixins": [
-        "MixinBee",
-        "MixinBeeEnterHiveGoal",
-        "MixinDispenserBlock",
-        "accessors.RecipeManagerAccessor",
-        "compat.ProductiveBeeMixin"
+      "ProductiveBeeMixin"
     ],
     "minVersion": "0.8.5"
 }

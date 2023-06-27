@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.mixin;
+package com.teamresourceful.resourcefulbees.mixin.common;
 
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
@@ -28,7 +28,7 @@ public abstract class MixinBee extends Animal implements BeeCompat {
     }
 
     @Shadow
-    private BlockPos hivePos;
+    BlockPos hivePos;
 
     @Shadow
     public boolean hasHive() {

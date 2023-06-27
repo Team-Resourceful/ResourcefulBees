@@ -1,14 +1,14 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants.translations;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.Translate;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 public final class HoneyDipperTranslations {
 
-    private HoneyDipperTranslations() {
-        throw new UtilityClassError();
+    private HoneyDipperTranslations() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     @Translate("Hive position for [%s] has been set to %s")

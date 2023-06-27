@@ -1,29 +1,23 @@
-package com.teamresourceful.resourcefulbees.common.init;
+package com.teamresourceful.resourcefulbees.common.setup.data;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.FileUtils;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.io.Reader;
 import java.util.Locale;
 
 public final class BeeSetup {
 
-    private BeeSetup() {
-        throw new UtilityClassError();
+    private BeeSetup() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void setupBees() {
@@ -59,11 +53,5 @@ public final class BeeSetup {
             ModConstants.LOGGER.error("Error parsing bee: {}", name);
             throw e;
         }
-    }
-
-    @SubscribeEvent
-    public static void onSpawnPlacementRegisterEvent(SpawnPlacementRegisterEvent event) {
-        ModEntities.getModBees().forEach((s, entityType) ->
-                event.register(entityType.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CustomBeeEntity::canBeeSpawn, SpawnPlacementRegisterEvent.Operation.REPLACE));
     }
 }

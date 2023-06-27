@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class CustomHoneycombItem extends HoneycombItem {
+public class CustomHoneycombItem extends HoneycombItem implements Tradeable {
 
     private final Supplier<Item> storageBlock;
     private final Color color;
@@ -44,10 +44,12 @@ public class CustomHoneycombItem extends HoneycombItem {
         return storageBlock != null;
     }
 
+    @Override
     public boolean isTradable() {
         return tradeData.isTradable();
     }
 
+    @Override
     public BeekeeperTradeData getTradeData() {
         return tradeData;
     }

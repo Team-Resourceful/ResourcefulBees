@@ -2,11 +2,8 @@ package com.teamresourceful.resourcefulbees.common.entity.villager;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
-import com.teamresourceful.resourcefulbees.common.item.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
-import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBottleItem;
-import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;
+import com.teamresourceful.resourcefulbees.common.items.Tradeable;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModVillagerProfessions;
@@ -113,8 +110,9 @@ public final class Beekeeper {
 
         Collection<RegistryEntry<Item>> honeycombs = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEYCOMB_ITEMS.getEntries();
         honeycombs.forEach(registryEntry -> {
-            if (registryEntry.get() instanceof CustomHoneycombItem honeycombItem && honeycombItem.isTradable()) {
-                addBeeProduct(list, honeycombItem.getDefaultInstance(), honeycombItem.getTradeData());
+            Item item = registryEntry.get();
+            if (item instanceof Tradeable tradeable && tradeable.isTradable()) {
+                addBeeProduct(list, item.getDefaultInstance(), tradeable.getTradeData());
             }
         });
     }
@@ -124,8 +122,9 @@ public final class Beekeeper {
 
         Collection<RegistryEntry<Item>> honeyBottles = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BOTTLE_ITEMS.getEntries();
         honeyBottles.forEach(registryEntry -> {
-            if (registryEntry.get() instanceof CustomHoneyBottleItem honeyBottleItem && honeyBottleItem.isTradable()) {
-                addBeeProduct(list, honeyBottleItem.getDefaultInstance(), honeyBottleItem.getTradeData());
+            Item item = registryEntry.get();
+            if (item instanceof Tradeable tradeable && tradeable.isTradable()) {
+                addBeeProduct(list, item.getDefaultInstance(), tradeable.getTradeData());
             }
         });
     }
@@ -135,8 +134,9 @@ public final class Beekeeper {
 
         Collection<RegistryEntry<Item>> honeyBuckets = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BUCKET_ITEMS.getEntries();
         honeyBuckets.forEach(registryEntry -> {
-            if (registryEntry.get() instanceof CustomHoneyBucketItem honeyBucketItem && honeyBucketItem.isTradable()) {
-                addBeeProduct(list, honeyBucketItem.getDefaultInstance(), honeyBucketItem.getTradeData());
+            Item item = registryEntry.get();
+            if (item instanceof Tradeable tradeable && tradeable.isTradable()) {
+                addBeeProduct(list, item.getDefaultInstance(), tradeable.getTradeData());
             }
         });
     }
@@ -146,8 +146,9 @@ public final class Beekeeper {
 
         Collection<RegistryEntry<Item>> entries = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.HONEY_BLOCK_ITEMS.getEntries();
         entries.forEach(registryEntry -> {
-            if (registryEntry.get() instanceof BlockItem blockItem && blockItem.getBlock() instanceof CustomHoneyBlock honeyBlock && honeyBlock.isTradable()) {
-                addBeeProduct(list, blockItem.getDefaultInstance(), honeyBlock.getTradeData());
+            Item item = registryEntry.get();
+            if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof Tradeable tradeable && tradeable.isTradable()) {
+                addBeeProduct(list, item.getDefaultInstance(), tradeable.getTradeData());
             }
         });
     }
