@@ -33,5 +33,6 @@
     [
       "has_t3_apiary"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

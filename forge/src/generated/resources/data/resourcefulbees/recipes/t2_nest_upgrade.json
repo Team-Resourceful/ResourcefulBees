@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "M": {
       "tag": "minecraft:planks"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "resourcefulbees:t2_nest_upgrade"
-  }
+  },
+  "show_notification": true
 }

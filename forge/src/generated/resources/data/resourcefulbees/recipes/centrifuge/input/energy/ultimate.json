@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "E": {
       "item": "resourcefulbees:centrifuge/input/energy/elite"
@@ -21,5 +22,6 @@
   ],
   "result": {
     "item": "resourcefulbees:centrifuge/input/energy/ultimate"
-  }
+  },
+  "show_notification": true
 }

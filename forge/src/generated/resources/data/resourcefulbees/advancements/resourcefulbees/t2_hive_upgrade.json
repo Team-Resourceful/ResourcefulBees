@@ -33,5 +33,6 @@
     [
       "has_t2_hive_upgrade"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

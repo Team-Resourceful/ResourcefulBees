@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "G": {
       "tag": "forge:glass"
@@ -15,5 +16,6 @@
   "result": {
     "count": 4,
     "item": "resourcefulbees:honey_glass"
-  }
+  },
+  "show_notification": true
 }

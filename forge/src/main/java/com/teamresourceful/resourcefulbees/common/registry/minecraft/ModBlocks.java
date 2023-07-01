@@ -1,6 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.registry.minecraft;
 
-import com.teamresourceful.resourcefulbees.common.block.*;
+import com.teamresourceful.resourcefulbees.common.block.EnderBeecon;
+import com.teamresourceful.resourcefulbees.common.block.HoneyGenerator;
+import com.teamresourceful.resourcefulbees.common.block.HoneyPotBlock;
+import com.teamresourceful.resourcefulbees.common.block.SolidificationChamber;
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.common.block.centrifuge.CentrifugeCrankBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
@@ -32,10 +35,6 @@ public final class ModBlocks {
         .replaceable()
         .noCollission().strength(100.0F).noLootTable();
     public static final BlockBehaviour.Properties CENTRIFUGE_PROPERTIES = BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL);
-
-    //region Apiaries
-    public static final RegistryEntry<Block> FLOW_HIVE = BLOCKS.register("flow_hive", FlowHiveBlock::new);
-    //endregion
 
     public static final RegistryEntry<LiquidBlock> HONEY_FLUID_BLOCK = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_FLUID_BLOCKS.register("honey", () -> new LiquidBlock(ModFluids.HONEY_STILL, HONEY_FLUID_BLOCK_PROPERTIES));
     public static final RegistryEntry<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(CENTRIFUGE_PROPERTIES));

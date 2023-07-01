@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "C": {
       "tag": "forge:honeycombs"
@@ -18,5 +19,6 @@
   ],
   "result": {
     "item": "resourcefulbees:t3_nest_upgrade"
-  }
+  },
+  "show_notification": true
 }

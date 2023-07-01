@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "B": {
       "item": "minecraft:beacon"
@@ -21,5 +22,6 @@
   ],
   "result": {
     "item": "resourcefulbees:ender_beecon"
-  }
+  },
+  "show_notification": true
 }

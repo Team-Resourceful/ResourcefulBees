@@ -35,5 +35,6 @@
     [
       "has_oreo_jar"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

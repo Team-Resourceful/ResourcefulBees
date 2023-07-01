@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "E": {
       "item": "minecraft:echo_shard"
@@ -21,5 +22,6 @@
   ],
   "result": {
     "item": "resourcefulbees:centrifuge/void/ultimate"
-  }
+  },
+  "show_notification": true
 }

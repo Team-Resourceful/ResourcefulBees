@@ -33,5 +33,6 @@
     [
       "has_bee_box"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

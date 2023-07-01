@@ -33,5 +33,6 @@
     [
       "has_ender_beecon"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

@@ -33,5 +33,6 @@
     [
       "has_beepedia"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

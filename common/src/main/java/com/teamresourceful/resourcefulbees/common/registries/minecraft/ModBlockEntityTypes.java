@@ -216,6 +216,9 @@ public final class ModBlockEntityTypes {
     public static final RegistryEntry<BlockEntityType<? extends FakeFlowerBlockEntity>> FAKE_FLOWER_ENTITY = BLOCK_ENTITY_TYPES.register("fake_flower", () -> build(BlockEntityType.Builder
             .of(FakeFlowerBlockEntity::new, ModBlocks.FAKE_FLOWER.get())));
 
+    public static final RegistryEntry<BlockEntityType<? extends FlowHiveBlockEntity>> FLOW_HIVE_ENTITY = BLOCK_ENTITY_TYPES.register("flow_hive", () -> build(BlockEntityType.Builder
+            .of(FlowHiveBlockEntity::new, ModBlocks.FLOW_HIVE.get())));
+
     private static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.Builder<T> builder) {
         //noinspection ConstantConditions
         return builder.build(null);

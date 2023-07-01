@@ -32,4 +32,5 @@ public final class BeeConstants {
     public static final int MAX_BEES_BEE_BOX = 10;
 
     public static final int HONEY_PER_BOTTLE = 250;
+    public static final double HONEY_PER_BOTTLE_BUCKETS = 0.25;
 }

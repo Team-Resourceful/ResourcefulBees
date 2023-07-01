@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "H": {
       "tag": "forge:chests"
@@ -18,5 +19,6 @@
   ],
   "result": {
     "item": "resourcefulbees:centrifuge/output/item/elite"
-  }
+  },
+  "show_notification": true
 }

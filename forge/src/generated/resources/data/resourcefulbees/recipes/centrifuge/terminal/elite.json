@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "G": {
       "item": "resourcefulbees:centrifuge/gearbox"
@@ -18,5 +19,6 @@
   ],
   "result": {
     "item": "resourcefulbees:centrifuge/terminal/elite"
-  }
+  },
+  "show_notification": true
 }

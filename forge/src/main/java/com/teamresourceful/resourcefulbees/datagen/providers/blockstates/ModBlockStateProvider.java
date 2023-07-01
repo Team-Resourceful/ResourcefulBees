@@ -22,7 +22,7 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
     protected void registerStatesAndModels() {
         ModBlocks.HIVES.getEntries().forEach(this::registerNest);
         ModBlocks.APIARIES.getEntries().forEach(this::registerApiary);
-        registerApiary(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.FLOW_HIVE);
+        registerApiary(ModBlocks.FLOW_HIVE);
         registerApiary(ModBlocks.BREEDER_BLOCK);
         registerCentrifuge();
         registerWaxedBlocks();

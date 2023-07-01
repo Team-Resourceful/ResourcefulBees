@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "N": {
       "tag": "forge:storage_blocks/netherite"
@@ -21,5 +22,6 @@
   ],
   "result": {
     "item": "resourcefulbees:centrifuge/terminal/ultimate"
-  }
+  },
+  "show_notification": true
 }

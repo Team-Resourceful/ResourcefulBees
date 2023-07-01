@@ -33,5 +33,6 @@
     [
       "has_bee_jar"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

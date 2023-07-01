@@ -31,5 +31,6 @@
     [
       "has_nest"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

@@ -35,5 +35,6 @@
     [
       "has_filled_jar"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

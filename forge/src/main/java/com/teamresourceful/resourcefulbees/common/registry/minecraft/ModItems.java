@@ -22,7 +22,7 @@ public final class ModItems {
 
     public static final RegistryEntry<Item> HONEY_GENERATOR_ITEM = ITEMS.register("honey_generator", () -> new BlockItem(ModBlocks.HONEY_GENERATOR.get(), new Item.Properties()));
 
-    public static final RegistryEntry<Item> FLOW_HIVE = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.NEST_ITEMS.register("flow_hive", () -> new BlockItem(ModBlocks.FLOW_HIVE.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> FLOW_HIVE = com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.NEST_ITEMS.register("flow_hive", () -> new BlockItem(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.FLOW_HIVE.get(), new Item.Properties()));
     public static final RegistryEntry<Item> ENDER_BEECON_ITEM = ITEMS.register("ender_beecon", () -> new BlockItem(ModBlocks.ENDER_BEECON.get(), new Item.Properties()));
     public static final RegistryEntry<Item> SOLIDIFICATION_CHAMBER_ITEM = ITEMS.register("solidification_chamber", () -> new BlockItem(ModBlocks.SOLIDIFICATION_CHAMBER.get(), new Item.Properties()));
     public static final RegistryEntry<Item> HONEY_POT_ITEM = ITEMS.register("honey_pot", () -> new BlockItem(ModBlocks.HONEY_POT.get(), new Item.Properties()));

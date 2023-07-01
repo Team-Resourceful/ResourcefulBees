@@ -33,5 +33,6 @@
     [
       "has_honey_generator"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

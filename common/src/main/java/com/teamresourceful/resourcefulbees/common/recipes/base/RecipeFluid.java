@@ -3,6 +3,8 @@ package com.teamresourceful.resourcefulbees.common.recipes.base;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
+import earth.terrarium.botarium.common.fluid.base.FluidHolder;
+import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ExtraCodecs;
@@ -62,5 +64,9 @@ public record RecipeFluid(Fluid fluid, int amount, CompoundTag tag) {
 
     public boolean isEmpty() {
         return fluid == null || fluid == Fluids.EMPTY || amount <= 0;
+    }
+
+    public FluidHolder toHolder() {
+        return FluidHooks.newFluidHolder(fluid, amount, tag);
     }
 }

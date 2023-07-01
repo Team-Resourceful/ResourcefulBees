@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "W": {
       "item": "resourcefulbees:waxed_planks"
@@ -13,5 +14,6 @@
   "result": {
     "count": 2,
     "item": "resourcefulbees:waxed_trapdoor"
-  }
+  },
+  "show_notification": true
 }

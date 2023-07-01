@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "@": {
       "tag": "forge:storage_blocks/iron"
@@ -27,5 +28,6 @@
   ],
   "result": {
     "item": "resourcefulbees:honey_generator"
-  }
+  },
+  "show_notification": true
 }

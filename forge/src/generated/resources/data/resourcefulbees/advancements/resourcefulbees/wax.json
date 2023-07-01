@@ -33,5 +33,6 @@
     [
       "has_wax"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

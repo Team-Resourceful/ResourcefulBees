@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "C": {
       "item": "resourcefulbees:centrifuge/casing"
@@ -18,5 +19,6 @@
   ],
   "result": {
     "item": "resourcefulbees:centrifuge/void/advanced"
-  }
+  },
+  "show_notification": true
 }

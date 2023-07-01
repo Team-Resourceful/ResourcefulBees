@@ -38,7 +38,7 @@ public class BlockLanguageModule implements LanguageModule {
         provider.addBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.HONEY_POT, "Honey Pot");
         provider.addBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.BASIC_CENTRIFUGE, "Centrifuge");
         provider.addBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.CENTRIFUGE_CRANK, "Centrifuge Crank");
-        provider.addBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.FLOW_HIVE, "Flow Hive");
+        provider.addBlock(ModBlocks.FLOW_HIVE, "Flow Hive");
         provider.addBlock(ModBlocks.HONEY_GLASS, "§6Honey Glass (Bee)");
         provider.addBlock(ModBlocks.HONEY_GLASS_PLAYER, "§6Honey Glass (Player)");
 

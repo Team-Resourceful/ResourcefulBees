@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "H": {
       "item": "minecraft:beehive"
@@ -18,5 +19,6 @@
   ],
   "result": {
     "item": "resourcefulbees:nest/spruce/1"
-  }
+  },
+  "show_notification": true
 }

@@ -33,5 +33,6 @@
     [
       "has_honey_dipper"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

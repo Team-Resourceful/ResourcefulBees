@@ -35,5 +35,6 @@
     [
       "has_kitten_jar"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }
