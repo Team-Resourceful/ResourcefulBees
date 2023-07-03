@@ -1,10 +1,10 @@
 
 package com.teamresourceful.resourcefulbees.common.blocks;
 
+import com.teamresourceful.resourcefulbees.common.items.honey.ColoredObject;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -15,25 +15,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class HoneycombBlock extends Block {
+public class HoneycombBlock extends Block implements ColoredObject {
 
     private final Color color;
 
     public HoneycombBlock(Color color, Properties properties) {
         super(properties);
         this.color = color;
-    }
-
-    public int getHoneycombColor() { return color.getValue(); }
-
-
-    public static int getBlockColor(BlockState state){
-        return ((HoneycombBlock) state.getBlock()).getHoneycombColor();
-    }
-
-    @SuppressWarnings("unused")
-    public static int getItemColor(ItemStack stack, int tintIndex) {
-        return ((HoneycombBlock) ((BlockItem) stack.getItem()).getBlock()).getHoneycombColor();
     }
 
     @NotNull
@@ -48,6 +36,11 @@ public class HoneycombBlock extends Block {
     public void animateTick(@NotNull BlockState stateIn, @NotNull Level world, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         if (color.isRainbow()) world.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
         super.animateTick(stateIn, world, pos, rand);
+    }
+
+    @Override
+    public int getObjectColor(int index) {
+        return color.getValue();
     }
 }
 

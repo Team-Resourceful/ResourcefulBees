@@ -4,9 +4,8 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.CentrifugeControlle
 import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeFluidOutputContainer;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
-import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
-import com.teamresourceful.resourcefulbees.common.utils.FluidUtils;
+import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.FluidOutput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -66,7 +65,8 @@ public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<
     }
 
     public boolean depositResult(FluidOutput result, int processQuantity) {
-        FluidStack fluidStack = FluidUtils.fromRecipe(result.multiply(processQuantity));
+        RecipeFluid fluid = result.multiply(processQuantity);
+        FluidStack fluidStack = new FluidStack(fluid.fluid(), fluid.amount(), fluid.tag());
         CentrifugeController controller = nullableController();
         if (fluidStack.isEmpty() || controller != null && controller.filtersContainFluid(fluidStack)) return true;
         if (voidExcess || simulateDeposit(fluidStack)) {

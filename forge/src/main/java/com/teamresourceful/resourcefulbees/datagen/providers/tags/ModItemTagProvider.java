@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -27,7 +27,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(ModItemTags.HONEYCOMB).add(Items.HONEYCOMB);
         tag(ModItemTags.HONEYCOMB_BLOCK).add(Items.HONEYCOMB_BLOCK);
-        tag(ModItemTags.HONEY_BUCKETS).add(ModItems.HONEY_FLUID_BUCKET.get());
+        tag(ModItemTags.HONEY_BUCKETS).add(ModItems.HONEY_BUCKET.get());
         tag(ModItemTags.HONEY_BLOCKS).add(Items.HONEY_BLOCK);
         tag(ModItemTags.HONEY_BOTTLES).add(Items.HONEY_BOTTLE);
         IntrinsicTagAppender<Item> hiveBuilder = tag(ModItemTags.BEEHIVES).add(Items.BEEHIVE).add(Items.BEE_NEST);
@@ -35,13 +35,13 @@ public class ModItemTagProvider extends ItemTagsProvider {
         IntrinsicTagAppender<Item> t1Nests = tag(ModItemTags.T1_NESTS);
         IntrinsicTagAppender<Item> t2Nests = tag(ModItemTags.T2_NESTS);
         IntrinsicTagAppender<Item> t3Nests = tag(ModItemTags.T3_NESTS);
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T1_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t0Nests));
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T2_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t1Nests));
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T3_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t2Nests));
-        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.T4_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t3Nests));
-        tag(ItemTags.SMALL_FLOWERS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.GOLD_FLOWER_ITEM.get());
-        tag(ModItemTags.WAX).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAX.get());
-        tag(ModItemTags.WAX_BLOCK).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAX_BLOCK_ITEM.get());
+        ModItems.T1_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t0Nests));
+        ModItems.T2_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t1Nests));
+        ModItems.T3_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t2Nests));
+        ModItems.T4_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t3Nests));
+        tag(ItemTags.SMALL_FLOWERS).add(ModItems.GOLD_FLOWER_ITEM.get());
+        tag(ModItemTags.WAX).add(ModItems.WAX.get());
+        tag(ModItemTags.WAX_BLOCK).add(ModItems.WAX_BLOCK_ITEM.get());
         tag(Tags.Items.STORAGE_BLOCKS).addTags(ModItemTags.WAX_BLOCK);
         tag(ModItemTags.SHEARS).add(Items.SHEARS);
         tag(ModItemTags.MUSHROOM).add(Items.RED_MUSHROOM).add(Items.BROWN_MUSHROOM);
@@ -50,13 +50,13 @@ public class ModItemTagProvider extends ItemTagsProvider {
             .add(Items.LANTERN, Items.SEA_LANTERN, Items.SOUL_LANTERN, Items.JACK_O_LANTERN)
             .addTags(ItemTags.CANDLES);
 
-        tag(ItemTags.WOODEN_DOORS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_DOOR.get());
-        tag(ItemTags.WOODEN_BUTTONS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_BUTTON.get());
-        tag(ItemTags.WOODEN_FENCES).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_DOOR.get());
-        tag(ItemTags.WOODEN_SLABS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_SLAB.get());
-        tag(ItemTags.WOODEN_STAIRS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_STAIRS.get());
-        tag(ItemTags.WOODEN_PRESSURE_PLATES).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_PRESSURE_PLATE.get());
-        tag(ItemTags.WOODEN_TRAPDOORS).add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems.WAXED_TRAPDOOR.get());
+        tag(ItemTags.WOODEN_DOORS).add(ModItems.WAXED_DOOR.get());
+        tag(ItemTags.WOODEN_BUTTONS).add(ModItems.WAXED_BUTTON.get());
+        tag(ItemTags.WOODEN_FENCES).add(ModItems.WAXED_DOOR.get());
+        tag(ItemTags.WOODEN_SLABS).add(ModItems.WAXED_SLAB.get());
+        tag(ItemTags.WOODEN_STAIRS).add(ModItems.WAXED_STAIRS.get());
+        tag(ItemTags.WOODEN_PRESSURE_PLATES).add(ModItems.WAXED_PRESSURE_PLATE.get());
+        tag(ItemTags.WOODEN_TRAPDOORS).add(ModItems.WAXED_TRAPDOOR.get());
     }
 
     @SafeVarargs

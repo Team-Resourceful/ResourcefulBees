@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.entities.Centrifuge
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeEnergyStorage;
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeMenus;
 import com.teamresourceful.resourcefulbees.centrifuge.common.states.CentrifugeState;
-import com.teamresourceful.resourcefulbees.common.inventory.slots.OutputSlot;
+import com.teamresourceful.resourcefulbees.centrifuge.common.containers.slots.OutputSlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

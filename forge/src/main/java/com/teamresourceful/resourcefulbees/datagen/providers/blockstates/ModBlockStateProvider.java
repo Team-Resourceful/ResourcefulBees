@@ -30,7 +30,7 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         simpleBlock(ModBlocks.BEEHOUSE_TOP.get(), models().sign("bee_house_top", modLoc("block/apiary/t1_apiary")));
         simpleBlockWithItem(ModBlocks.BEE_BOX.get(), models().cubeBottomTop("bee_box", modLoc("block/bee_box_side"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top")));
         simpleBlockWithItem(ModBlocks.BEE_BOX_TEMP.get(), models().cubeBottomTop("bee_box_temp", modLoc("block/bee_box_side_temp"), modLoc("block/trimmed_waxed_planks"), modLoc("block/bee_box_top_temp")));
-        simpleBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.CREATIVE_GEN.get(), cubeAll(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.CREATIVE_GEN.get()));
+        simpleBlock(ModBlocks.CREATIVE_GEN.get(), cubeAll(ModBlocks.CREATIVE_GEN.get()));
         simpleBlock(ModBlocks.GOLD_FLOWER.get(), models().cross(id(ModBlocks.GOLD_FLOWER), modLoc("block/gold_flower")).renderType("cutout"));
     }
 

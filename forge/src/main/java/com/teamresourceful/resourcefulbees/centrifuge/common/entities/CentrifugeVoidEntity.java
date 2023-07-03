@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.entities;
 
-import com.teamresourceful.resourcefulbees.common.inventory.AbstractFilterItemHandler;
+import com.teamresourceful.resourcefulbees.centrifuge.common.containers.AbstractFilterItemHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.centrifuge.common.CentrifugeController;
 import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeVoidContainer;

@@ -2,20 +2,27 @@ package com.teamresourceful.resourcefulbees.common.util;
 
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
+import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFluids;
+import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import earth.terrarium.botarium.common.fluid.base.FluidContainer;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 
@@ -43,11 +50,11 @@ public final class FluidUtils {
         FluidHolder holder = tank.getFluids().get(0);
         ItemStack itemStack = new ItemStack(getHoneyBottleFromFluid(holder.getFluid()), 1);
 
-        if (holder.getFluidAmount() < BeeConstants.HONEY_PER_BOTTLE) return;
+        if (holder.getFluidAmount() < FluidHooks.getBottleAmount()) return;
         if (holder.isEmpty()) return;
         if (itemStack.isEmpty()) return;
 
-        FluidHolder extracted = exactExtract(tank, holder);
+        FluidHolder extracted = exactExtract(tank, holder.copyWithAmount(FluidHooks.getBottleAmount()));
         if (extracted.isEmpty()) return;
 
         bottleAction(itemStack, SoundEvents.BOTTLE_FILL, player, hand);
@@ -66,7 +73,9 @@ public final class FluidUtils {
     private static void bottleAction(ItemStack returnStack, SoundEvent sound, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getCount() > 1) {
-            stack.shrink(1);
+            if (!player.getAbilities().instabuild) {
+                stack.shrink(1);
+            }
             player.addItem(returnStack);
         } else {
             player.setItemInHand(hand, returnStack);
@@ -77,8 +86,7 @@ public final class FluidUtils {
     public static Fluid getHoneyFluidFromBottle(ItemStack bottleOutput) {
         Item item = bottleOutput.getItem();
         if (item == Items.HONEY_BOTTLE) {
-            //TODO fix this
-            //return ModFluids.HONEY_STILL.get().getSource();
+            return ModFluids.HONEY_STILL.get();
         } else if (item instanceof CustomHoneyBottleItem honey) {
             String id = honey.getHoneyData().id();
             if (id.isEmpty()) return Fluids.EMPTY;
@@ -89,15 +97,42 @@ public final class FluidUtils {
     }
 
     public static Item getHoneyBottleFromFluid(Fluid fluid) {
-        //TODO fix this
-//        if (fluid instanceof CustomHoneyFluid honeyFluid) {
-//            String id = honeyFluid.getHoneyData().id();
-//            if (id.isEmpty()) return null;
-//            return HoneyRegistry.get().getHoneyData(id).getBottleData().bottle().get();
-//        }
-        if (fluid.is(ModFluidTags.HONEY)) {
+        if (fluid instanceof CustomHoneyFluid honeyFluid) {
+            String id = honeyFluid.getHoneyData().id();
+            if (id.isEmpty()) return Items.AIR;
+            return HoneyRegistry.get().getHoneyData(id).getBottleData().bottle().get();
+        } else if (fluid.is(ModFluidTags.HONEY)) {
             return Items.HONEY_BOTTLE;
         }
         return Items.AIR;
+    }
+
+    public static void checkBottleAndCapability(FluidContainer tank, BlockEntity entity, Player player, Level level, BlockPos pos, InteractionHand hand) {
+        Item item = player.getItemInHand(hand).getItem();
+        if (item instanceof BottleItem) {
+            fillBottle(tank, player, hand);
+        } else if (item instanceof HoneyBottleItem) {
+            emptyBottle(tank, player, hand);
+        } else if (!player.isShiftKeyDown() && !level.isClientSide() && entity instanceof MenuProvider menuProvider) {
+            ModUtils.openScreen(player, menuProvider, pos);
+        }
+    }
+
+    public static void writeToBuffer(FluidHolder holder, FriendlyByteBuf buffer) {
+        if (holder.isEmpty()) {
+            buffer.writeBoolean(false);
+        } else {
+            buffer.writeBoolean(true);
+            buffer.writeVarInt(BuiltInRegistries.FLUID.getId(holder.getFluid()));
+            buffer.writeVarLong(holder.getFluidAmount());
+            buffer.writeNbt(holder.getCompound());
+        }
+    }
+
+    public static FluidHolder readFromBuffer(FriendlyByteBuf buffer) {
+        if (!buffer.readBoolean()) return FluidHooks.emptyFluid();
+        Fluid fluid = BuiltInRegistries.FLUID.byId(buffer.readVarInt());
+        long amount = buffer.readVarLong();
+        return FluidHolder.of(fluid, amount, buffer.readNbt());
     }
 }

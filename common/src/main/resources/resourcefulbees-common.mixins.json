@@ -4,12 +4,14 @@
   "package": "com.teamresourceful.resourcefulbees.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "client.PackRepositoryAccessor",
     "common.BeeEntityAccessor",
     "common.BeeGoToHiveGoalInvoker",
     "common.BeehiveBeeDataAccessor",
     "common.BeehiveEntityAccessor",
     "common.BeeInvoker",
     "common.BlockSetTypeInvoker",
+    "common.DamageSourcesInvoker",
     "common.MixinBee",
     "common.MixinBeeEnterHiveGoal",
     "common.MixinBlock",
@@ -25,6 +27,7 @@
   ],
   "client": [
     "client.FontResourceManagerAccessor",
+    "client.LivingEntityRendererInvoker",
     "client.MinecraftAccessor",
     "client.ScreenAccessor",
     "client.ScreenInvoker"

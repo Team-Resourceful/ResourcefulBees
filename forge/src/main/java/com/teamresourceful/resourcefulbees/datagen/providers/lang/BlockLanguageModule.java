@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFluidProperties;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.bases.LanguageModule;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
@@ -18,9 +19,9 @@ public class BlockLanguageModule implements LanguageModule {
         provider.addBlock(ModBlocks.T3_APIARY_BLOCK, "Tier 3 Apiary");
         provider.addBlock(ModBlocks.T4_APIARY_BLOCK, "Tier 4 Apiary");
         provider.addBlock(ModBlocks.BREEDER_BLOCK, "Breeder");
-        provider.addBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.HONEY_GENERATOR, "Honey Generator");
-        provider.addBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.ENDER_BEECON, "Ender Beecon");
-        provider.addBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.SOLIDIFICATION_CHAMBER, "Solidification Chamber");
+        provider.addBlock(ModBlocks.HONEY_GENERATOR, "Honey Generator");
+        provider.addBlock(ModBlocks.ENDER_BEECON, "Ender Beecon");
+        provider.addBlock(ModBlocks.SOLIDIFICATION_CHAMBER, "Solidification Chamber");
         provider.addBlock(ModBlocks.WAXED_PLANKS, "Waxed Planks");
         provider.addBlock(ModBlocks.TRIMMED_WAXED_PLANKS, "Trimmed Waxed Planks");
         provider.addBlock(ModBlocks.WAXED_MACHINE_BLOCK, "Waxed Machine Block");
@@ -34,10 +35,10 @@ public class BlockLanguageModule implements LanguageModule {
         provider.addBlock(ModBlocks.WAXED_FENCE, "Waxed Fence");
         provider.addBlock(ModBlocks.WAXED_FENCE_GATE, "Waxed Fence Gate");
         provider.addBlock(ModBlocks.FAKE_FLOWER, "Fake Golden Flower");
-        provider.addFluid(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids.HONEY, "Honey");
-        provider.addBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.HONEY_POT, "Honey Pot");
-        provider.addBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.BASIC_CENTRIFUGE, "Centrifuge");
-        provider.addBlock(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.CENTRIFUGE_CRANK, "Centrifuge Crank");
+        provider.addFluid(ModFluidProperties.HONEY, "Honey");
+        provider.addBlock(ModBlocks.HONEY_POT, "Honey Pot");
+        provider.addBlock(ModBlocks.BASIC_CENTRIFUGE, "Centrifuge");
+        provider.addBlock(ModBlocks.CENTRIFUGE_CRANK, "Centrifuge Crank");
         provider.addBlock(ModBlocks.FLOW_HIVE, "Flow Hive");
         provider.addBlock(ModBlocks.HONEY_GLASS, "§6Honey Glass (Bee)");
         provider.addBlock(ModBlocks.HONEY_GLASS_PLAYER, "§6Honey Glass (Player)");

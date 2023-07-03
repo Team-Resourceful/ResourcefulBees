@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.helpers;
 
-import com.teamresourceful.resourcefulbees.common.inventory.slots.FilterSlot;
+import com.teamresourceful.resourcefulbees.centrifuge.common.containers.slots.FilterSlot;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;

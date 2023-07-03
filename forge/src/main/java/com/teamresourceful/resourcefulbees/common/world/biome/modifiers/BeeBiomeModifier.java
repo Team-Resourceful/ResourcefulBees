@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.world.biome.modifiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBiomeModifiers;
+import com.teamresourceful.resourcefulbees.common.registry.forge.ModBiomeModifiers;
 import com.teamresourceful.resourcefulbees.common.worldgen.SpawnDataModifier;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.advancements.critereon.LocationPredicate;

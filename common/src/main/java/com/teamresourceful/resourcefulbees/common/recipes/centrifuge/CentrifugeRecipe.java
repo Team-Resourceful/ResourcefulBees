@@ -17,6 +17,7 @@ import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -62,6 +63,12 @@ public record CentrifugeRecipe(
     public boolean matches(Container inventory) {
         ItemStack stack = inventory.getItem(0);
         return !stack.isEmpty() && ItemStack.isSameItemSameTags(ingredient.getItems()[0], stack);
+    }
+
+    public static Optional<CentrifugeRecipe> getRecipe(Level level, ItemStack recipeStack) {
+        return level != null ? level.getRecipeManager()
+                .getRecipeFor(ModRecipes.CENTRIFUGE_RECIPE_TYPE.get(), new SimpleContainer(recipeStack), level) :
+                Optional.empty();
     }
 
     @NotNull

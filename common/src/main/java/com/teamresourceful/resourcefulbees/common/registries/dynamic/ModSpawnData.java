@@ -2,11 +2,11 @@ package com.teamresourceful.resourcefulbees.common.registries.dynamic;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.worldgen.SpawnDataModifier;
+import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.ServerGoingToStartEvent;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 
@@ -28,9 +28,9 @@ public final class ModSpawnData {
             .orElse(true);
     }
 
-    public static void initialize(MinecraftServer server) {
+    public static void initialize(ServerGoingToStartEvent event) {
         SPAWN_PREDICATES.clear();
-        server.registryAccess().registryOrThrow(ModUtils.getSpawnDataRegistryKey())
+        event.access().registryOrThrow(ModUtils.getSpawnDataRegistryKey())
             .holders()
             .map(Holder::value)
             .filter(SpawnDataModifier.class::isInstance)

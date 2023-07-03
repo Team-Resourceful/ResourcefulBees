@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModFluids;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFluids;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.FluidTagsProvider;

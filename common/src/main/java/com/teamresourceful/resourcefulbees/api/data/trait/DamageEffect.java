@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.api.data.trait;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.mixin.common.DamageSourcesInvoker;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -27,10 +28,11 @@ public record DamageEffect(ResourceKey<DamageType> type, boolean hasEntity, int 
     ).apply(instance, DamageEffect::new));
 
     public DamageSource getDamageSource(Level level, @Nullable LivingEntity livingEntity) {
+        DamageSourcesInvoker invoker = (DamageSourcesInvoker) level.damageSources();
         if (hasEntity()) {
-            return level.damageSources().source(this.type(), livingEntity);
+            return invoker.invokeSource(this.type(), livingEntity);
         }
-        return level.damageSources().source(this.type());
+        return invoker.invokeSource(this.type(), null);
     }
 
     public Component getDisplayName() {

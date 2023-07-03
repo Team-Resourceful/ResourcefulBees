@@ -8,29 +8,23 @@ import com.teamresourceful.resourcefulbees.common.compat.top.TopCompat;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.data.DataGen;
 import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
-import com.teamresourceful.resourcefulbees.common.data.DataSetup;
-import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
-import com.teamresourceful.resourcefulbees.common.entity.villager.Beekeeper;
 import com.teamresourceful.resourcefulbees.common.events.ItemEventHandler;
-import com.teamresourceful.resourcefulbees.common.init.ModSetup;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
-import com.teamresourceful.resourcefulbees.common.network.ForgeNetworkHandler;
+import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
+import com.teamresourceful.resourcefulbees.common.registries.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registries.custom.*;
-import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
-import com.teamresourceful.resourcefulbees.common.registry.RegistryHandler;
+import com.teamresourceful.resourcefulbees.common.setup.DataSetup;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.BeeSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
-import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
-import com.teamresourceful.resourcefulbees.platform.common.events.RegisterSpawnPlacementsEvent;
-import com.teamresourceful.resourcefulbees.platform.common.events.SyncedDatapackEvent;
+import com.teamresourceful.resourcefulbees.platform.common.events.*;
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.ServerGoingToStartEvent;
 import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.forge.ForgeIngredientHelper;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
@@ -43,11 +37,14 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddPackFindersEvent;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -90,7 +87,7 @@ public class ResourcefulBees {
         LoadConditionRegistry.init();
 
         GeckoLib.initialize();
-        ModSetup.initialize();
+        GameSetup.initPaths();
         RegistryHandler.init();
         ModCompatHelper.registerCompats();
 
@@ -108,7 +105,7 @@ public class ResourcefulBees {
         RegistryHandler.registerDynamicHoney();
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(RegistryHandler::addEntityAttributes);
+        modEventBus.addListener((EntityAttributeCreationEvent event) -> RegisterEntityAttributesEvent.EVENT.fire(new RegisterEntityAttributesEvent(event::put)));
         modEventBus.addListener(EventPriority.LOW, this::setup);
         modEventBus.addListener(this::onInterModEnqueue);
         modEventBus.addListener(this::loadComplete);
@@ -125,7 +122,9 @@ public class ResourcefulBees {
 
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
         forgeEventBus.addListener(this::serverLoaded);
-        forgeEventBus.addListener(Beekeeper::setupBeekeeper);
+        forgeEventBus.addListener((VillagerTradesEvent event) ->
+                RegisterVillagerTradesEvent.EVENT.fire(new RegisterVillagerTradesEvent((listing, i) -> event.getTrades().get(i).add(listing), event.getType()))
+        );
         forgeEventBus.addListener((OnDatapackSyncEvent event) ->
             SyncedDatapackEvent.EVENT.fire(new SyncedDatapackEvent(event.getPlayerList(), event.getPlayer()))
         );
@@ -139,8 +138,12 @@ public class ResourcefulBees {
         forgeEventBus.register(this);
         ModValidation.init();
 
-        GameSetup.initSerializersAndConditions();
+        GameSetup.init();
         ItemEventHandler.init();
+
+        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) ->
+                RegisterReloadListenerEvent.EVENT.fire(new RegisterReloadListenerEvent(event::addListener, event.getServerResources()))
+        );
     }
 
     @SubscribeEvent
@@ -152,15 +155,13 @@ public class ResourcefulBees {
 
     @SubscribeEvent
     public void serverAboutToStart(ServerAboutToStartEvent event) {
-        ModSpawnData.initialize(event.getServer());
         ServerGoingToStartEvent.EVENT.fire(new ServerGoingToStartEvent(event.getServer(), event.getServer().registryAccess()));
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void setup(FMLCommonSetupEvent event) {
         event.enqueueWork(RegistryHandler::registerDispenserBehaviors);
-        ForgeNetworkHandler.init();
-        MinecraftForge.EVENT_BUS.register(new RecipeBuilder());
+        NetworkHandler.init();
         ForgeIngredientHelper.init();
         GameSetup.initPotionRecipes();
         GameSetup.initArguments();

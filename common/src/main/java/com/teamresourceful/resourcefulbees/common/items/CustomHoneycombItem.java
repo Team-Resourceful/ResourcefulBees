@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.common.config.HoneycombConfig;
+import com.teamresourceful.resourcefulbees.common.items.honey.ColoredObject;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.HoneycombItem;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class CustomHoneycombItem extends HoneycombItem implements Tradeable {
+public class CustomHoneycombItem extends HoneycombItem implements Tradeable, ColoredObject {
 
     private final Supplier<Item> storageBlock;
     private final Color color;
@@ -29,12 +30,10 @@ public class CustomHoneycombItem extends HoneycombItem implements Tradeable {
         this.tradeData = tradeData;
     }
 
-    @SuppressWarnings("unused")
-    public static int getColor(ItemStack stack, int tintIndex) {
-        return ((CustomHoneycombItem) stack.getItem()).getHoneycombColor();
+    @Override
+    public int getObjectColor(int index) {
+        return color.getValue();
     }
-
-    public int getHoneycombColor() { return color.getValue(); }
 
     public Item getStorageBlockItem() {
         return storageBlock.get();
@@ -66,7 +65,6 @@ public class CustomHoneycombItem extends HoneycombItem implements Tradeable {
 
     @Nullable
     @Override
-    @SuppressWarnings("deprecation")
     public FoodProperties getFoodProperties() {
         if (HoneycombConfig.honeycombsEdible && !isEdible) {
             return super.getFoodProperties();

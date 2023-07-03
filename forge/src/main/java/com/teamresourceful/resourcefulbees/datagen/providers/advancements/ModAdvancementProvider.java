@@ -41,8 +41,8 @@ public class ModAdvancementProvider extends BaseAdvancementProvider {
             Advancement scraper = writer.apply(createSimpleAdvancement(ModItems.SCRAPER, "scraper", root));
             Advancement beeJar = writer.apply(createSimpleAdvancement(ModItems.BEE_JAR, "bee_jar", root));
             Advancement beepedia = writer.apply(createSimpleAdvancement(ModItems.BEEPEDIA, "beepedia", root));
-            writer.apply(createSimpleAdvancement(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.ENDER_BEECON_ITEM, "ender_beecon", root));
-            writer.apply(createSimpleAdvancement(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModItems.HONEY_GENERATOR_ITEM, "honey_generator", root));
+            writer.apply(createSimpleAdvancement(ModItems.ENDER_BEECON_ITEM, "ender_beecon", root));
+            writer.apply(createSimpleAdvancement(ModItems.HONEY_GENERATOR_ITEM, "honey_generator", root));
             Advancement nest = writer.apply(createAdvancement(ModItems.OAK_BEE_NEST_ITEM, "obtain_bee_nest", root)
                 .addCriterion("has_nest", has(ModItemTags.BEEHIVES))
                 .build(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees/obtain_bee_nest")));

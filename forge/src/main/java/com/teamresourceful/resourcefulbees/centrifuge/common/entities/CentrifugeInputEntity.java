@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeT
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.OutputLocationGroup;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.ProcessContainerData;
-import com.teamresourceful.resourcefulbees.common.inventory.AbstractFilterItemHandler;
+import com.teamresourceful.resourcefulbees.centrifuge.common.containers.AbstractFilterItemHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;

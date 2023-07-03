@@ -46,10 +46,10 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.FLOW_HIVE);
         //endregion
         //region Machines
-        dropSelf(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.HONEY_GENERATOR);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.SOLIDIFICATION_CHAMBER);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.ENDER_BEECON);
-        dropSelf(com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.HONEY_POT);
+        dropSelf(ModBlocks.HONEY_GENERATOR);
+        dropSelf(ModBlocks.SOLIDIFICATION_CHAMBER);
+        dropSelf(ModBlocks.ENDER_BEECON);
+        dropSelf(ModBlocks.HONEY_POT);
         //endregion
 
         dropSelf(ModBlocks.WAXED_MACHINE_BLOCK);
@@ -66,7 +66,7 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropOther(ModBlocks.WAXED_WALL_SIGN.get(), ModItems.WAXED_SIGN.get());
         dropSelf(ModBlocks.TRIMMED_WAXED_PLANKS);
 
-        com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
+        ModBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
         CentrifugeBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
         addBeeBox(ModBlocks.BEE_BOX, false);
         addBeeBox(ModBlocks.BEE_BOX_TEMP, true);

@@ -4,6 +4,8 @@ import com.teamresourceful.resourcefulbees.client.data.LangGeneration;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.Translate;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import earth.terrarium.botarium.common.registry.fluid.FluidData;
+import net.minecraft.Util;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
@@ -12,7 +14,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
@@ -130,8 +131,8 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         add("mutation.resourcefulbees.mutation." + id, name);
     }
 
-    public void addFluid(Supplier<FluidType> fluid, String name) {
-        add(fluid.get().getDescriptionId(), name);
+    public void addFluid(FluidData fluid, String name) {
+        add(Util.makeDescriptionId("fluid_type", fluid.getInformation().id()), name);
     }
 
     public void addPotion(RegistryEntry<Potion> key, String name){

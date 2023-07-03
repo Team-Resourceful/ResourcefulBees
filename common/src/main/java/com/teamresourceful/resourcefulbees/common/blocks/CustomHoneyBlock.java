@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blocks;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.items.Tradeable;
+import com.teamresourceful.resourcefulbees.common.items.honey.ColoredObject;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -36,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable {
+public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable, ColoredObject {
 
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     protected final Color color;
@@ -59,19 +59,9 @@ public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable 
     }
 
     //region Color stuff
-    public Color getHoneyColor() {
-        return color;
-    }
-
-    public static int getBlockColor(BlockState state) {
-        return ((CustomHoneyBlock) state.getBlock()).getHoneyColor().getValue();
-    }
-
-    @SuppressWarnings("unused")
-    public static int getItemColor(ItemStack stack, int tintIndex) {
-        BlockItem blockItem = (BlockItem) stack.getItem();
-        if (!(blockItem.getBlock() instanceof CustomHoneyBlock customHoney)) return -1;
-        return customHoney.getHoneyColor().getValue();
+    @Override
+    public int getObjectColor(int index) {
+        return color.getValue();
     }
 
     @Override

@@ -14,6 +14,7 @@ import com.teamresourceful.resourcefulbees.mixin.common.WoodTypeInvoker;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
+import earth.terrarium.botarium.common.registry.fluid.BotariumLiquidBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffects;
@@ -40,6 +41,7 @@ public final class ModBlocks {
     public static final ResourcefulRegistry<Block> BLOCKS = ResourcefulRegistries.create(BuiltInRegistries.BLOCK, ModConstants.MOD_ID);
     public static final ResourcefulRegistry<Block> HIVES = ResourcefulRegistries.create(BLOCKS);
     public static final ResourcefulRegistry<Block> APIARIES = ResourcefulRegistries.create(BLOCKS);
+    public static final ResourcefulRegistry<Block> CENTRIFUGE_BLOCKS = ResourcefulRegistries.create(BLOCKS);
 
     public static final ResourcefulRegistry<Block> HONEYCOMB_BLOCKS = ResourcefulRegistries.create(BLOCKS);
     public static final ResourcefulRegistry<Block> HONEY_BLOCKS = ResourcefulRegistries.create(BLOCKS);
@@ -48,6 +50,11 @@ public final class ModBlocks {
     public static final BlockBehaviour.Properties WAXED_PLANKS_PROPERTIES = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
     public static final BlockBehaviour.Properties CENTRIFUGE_PROPERTIES = BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL);
     private static final BlockBehaviour.Properties NEST_PROPERTIES = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1F).sound(SoundType.WOOD);
+    public static final BlockBehaviour.Properties HONEY_FLUID_BLOCK_PROPERTIES = BlockBehaviour.Properties.of()
+            .mapColor(MapColor.TERRACOTTA_ORANGE)
+            .noOcclusion()
+            .replaceable()
+            .noCollission().strength(100.0F).noLootTable();
 
     public static final BlockSetType WAX_BLOCK_SET = BlockSetTypeInvoker.register(new BlockSetType("resourcefulbees_waxed"));
     public static final WoodType WAXED_WOOD_TYPE = WoodTypeInvoker.register(new WoodType("resourcefulbees_waxed", WAX_BLOCK_SET));
@@ -218,6 +225,15 @@ public final class ModBlocks {
 
     public static final RegistryEntry<Block> BEEHOUSE_TOP = BLOCKS.register("beehouse_top", BeeHouseTopBlock::new);
     public static final RegistryEntry<Block> BREEDER_BLOCK = BLOCKS.register("breeder", () -> new BreederBlock(BlockBehaviour.Properties.of().strength(1F).sound(SoundType.WOOD)));
+    public static final RegistryEntry<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new TickingBlock<>(ModBlockEntityTypes.CREATIVE_GEN_ENTITY, CENTRIFUGE_PROPERTIES));
+    public static final RegistryEntry<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", EnderBeeconBlock::new);
+    public static final RegistryEntry<Block> HONEY_POT = BLOCKS.register("honey_pot", () -> new HoneyPotBlock(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops()));
+    public static final RegistryEntry<Block> SOLIDIFICATION_CHAMBER = BLOCKS.register("solidification_chamber", () -> new SolidificationChamberBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops()));
+    public static final RegistryEntry<Block> BASIC_CENTRIFUGE = CENTRIFUGE_BLOCKS.register("centrifuge", () -> new CentrifugeBlock(BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL).noOcclusion()));
+    public static final RegistryEntry<Block> CENTRIFUGE_CRANK = CENTRIFUGE_BLOCKS.register("centrifuge_crank", () -> new CentrifugeCrankBlock(BlockBehaviour.Properties.of().strength(2).sound(SoundType.WOOD).noOcclusion()));
+    public static final RegistryEntry<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(CENTRIFUGE_PROPERTIES));
+
+    public static final RegistryEntry<Block> HONEY_FLUID_BLOCK = HONEY_FLUID_BLOCKS.register("honey", () -> new BotariumLiquidBlock(ModFluidProperties.HONEY, HONEY_FLUID_BLOCK_PROPERTIES));
 
     private static boolean never(BlockState state, BlockGetter blockGetter, BlockPos blockPos) {
         return false;

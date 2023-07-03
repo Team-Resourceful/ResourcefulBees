@@ -1,0 +1,134 @@
+package com.teamresourceful.resourcefulbees.common.blocks;
+
+import com.teamresourceful.resourcefulbees.common.blockentities.EnderBeeconBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.util.FluidUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
+public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> {
+
+    protected static final VoxelShape VOXEL_SHAPE_TOP = Util.make(() -> {
+        VoxelShape shape = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 1.0D, 14.0D);
+        shape = Shapes.join(shape, Block.box(3.0D, 1.0D, 3.0D, 13.0D, 3.0D, 13.0D), BooleanOp.OR);
+        shape = Shapes.join(shape, Block.box(4.0D, 3.0D, 4.0D, 12.0D, 11.0D, 12.0D), BooleanOp.OR);
+        shape = Shapes.join(shape, Block.box(3.0D, 11.0D, 3.0D, 13.0D, 13.0D, 13.0D), BooleanOp.OR);
+        return shape;
+    });
+
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public static final BooleanProperty BEAM = BooleanProperty.create("beam");
+    public static final BooleanProperty SOUND = BooleanProperty.create("sound");
+
+    public static final Properties PROPERTIES = Properties.of()
+        .instrument(NoteBlockInstrument.HAT)
+        .mapColor(MapColor.COLOR_PURPLE)
+        .requiresCorrectToolForDrops()
+        .strength(5)
+        .sound(SoundType.LODESTONE)
+        .lightLevel(luminance -> 15)
+        .noOcclusion()
+        .dynamicShape();
+
+    public EnderBeeconBlock() {
+        super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY, PROPERTIES);
+        this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(BEAM, true).setValue(SOUND, true));
+    }
+
+    @NotNull
+    @Override
+    @Deprecated
+    public InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
+        if (level.getBlockEntity(pos) instanceof EnderBeeconBlockEntity beecon) {
+            if (!level.isClientSide) {
+                ItemStack stack = player.getItemInHand(hand);
+
+                if (stack.is(ItemTags.WOOL)) {
+                    level.setBlock(pos, state.cycle(SOUND), Block.UPDATE_ALL);
+                } else if (stack.is(Items.STICK)) {
+                    level.setBlock(pos, state.cycle(BEAM), Block.UPDATE_ALL);
+                } else {
+                    FluidUtils.checkBottleAndCapability(beecon.getFluidContainer(), beecon, player, level, pos, hand);
+                }
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        return super.use(state, level, pos, player, hand, rayTraceResult);
+    }
+
+    @NotNull
+    @Override
+    @Deprecated
+    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+        return VOXEL_SHAPE_TOP;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(WATERLOGGED).add(BEAM).add(SOUND);
+    }
+
+    @NotNull
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return Boolean.TRUE.equals(state.getValue(BlockStateProperties.WATERLOGGED)) ? Fluids.WATER.getSource(false) : Fluids.EMPTY.defaultFluidState();
+    }
+
+    @Override
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+        return this.defaultBlockState();
+    }
+
+    @NotNull
+    @Override
+    public BlockState updateShape(BlockState stateIn, @NotNull Direction facing, @NotNull BlockState facingState, @NotNull LevelAccessor world, @NotNull BlockPos currentPos, @NotNull BlockPos facingPos) {
+        if (Boolean.TRUE.equals(stateIn.getValue(BlockStateProperties.WATERLOGGED))) {
+            world.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+        }
+        return stateIn;
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+        tooltip.add(ItemTranslations.BEECON_TOOLTIP.withStyle(ChatFormatting.LIGHT_PURPLE));
+        tooltip.add(ItemTranslations.BEECON_TOOLTIP_1.withStyle(ChatFormatting.LIGHT_PURPLE));
+    }
+}

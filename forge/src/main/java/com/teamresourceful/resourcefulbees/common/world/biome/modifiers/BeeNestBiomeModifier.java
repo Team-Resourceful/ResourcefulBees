@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.world.biome.modifiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBiomeModifiers;
+import com.teamresourceful.resourcefulbees.common.registry.forge.ModBiomeModifiers;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.biome.Biome;

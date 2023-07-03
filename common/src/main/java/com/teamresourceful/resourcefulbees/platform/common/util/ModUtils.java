@@ -1,7 +1,10 @@
 package com.teamresourceful.resourcefulbees.platform.common.util;
 
+import com.google.gson.JsonObject;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
 import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
+import com.teamresourceful.resourcefullib.common.utils.GenericMemoryPack;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import it.unimi.dsi.fastutil.booleans.BooleanObjectPair;
 import net.minecraft.core.BlockPos;
@@ -13,9 +16,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Contract;
+
+import java.util.function.Supplier;
 
 public class ModUtils {
 
@@ -67,6 +75,21 @@ public class ModUtils {
 
     @ExpectPlatform
     public static Level.ExplosionInteraction getExplosionInteraction(Level level, Entity entity) {
+        throw new NotImplementedException();
+    }
+
+    @ExpectPlatform
+    public static Fluid getFluid(LiquidBlock block) {
+        throw new NotImplementedException();
+    }
+
+    @ExpectPlatform
+    public static SpawnEggItem createCustomBeeSpawnEgg(Supplier<EntityType<? extends CustomBeeEntity>> entityType, String beeType) {
+        throw new NotImplementedException();
+    }
+
+    @ExpectPlatform
+    public static GenericMemoryPack createHiddenDataPack(String id, JsonObject meta) {
         throw new NotImplementedException();
     }
 }

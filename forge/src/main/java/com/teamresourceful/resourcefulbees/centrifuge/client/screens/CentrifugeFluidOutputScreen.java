@@ -4,14 +4,17 @@ import com.teamresourceful.resourcefulbees.centrifuge.client.components.controlp
 import com.teamresourceful.resourcefulbees.centrifuge.client.components.infopanels.terminal.output.TerminalOutputHomePanel;
 import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeFluidOutputContainer;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.CentrifugeFluidOutputEntity;
-import com.teamresourceful.resourcefulbees.client.utils.ClientUtils;
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.TerminalPanels;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,7 +79,10 @@ public class CentrifugeFluidOutputScreen extends CentrifugeInventoryScreen<Centr
         graphics.blit(CentrifugeTextures.COMPONENTS, x, y, u, v, 18, 69);
         FluidStack fluidStack = menu.getEntity().getFluidTank().getFluid();
         int height = (int) ((float) fluidStack.getAmount() / tier.getTankCapacity() * 67);
-        ClientUtils.drawFluid(graphics, height, 16, fluidStack, x+1, y+68-height);
+        IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluidStack.getFluid());
+        TextureAtlasSprite sprite = minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(props.getStillTexture(fluidStack));
+        int fluidColor = props.getTintColor(fluidStack);
+        ClientRenderUtils.drawFluid(graphics, height, 16, sprite, fluidColor, x+1, y+68-height);
     }
 
     @Override

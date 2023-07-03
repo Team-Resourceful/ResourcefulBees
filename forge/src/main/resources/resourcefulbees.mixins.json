@@ -6,5 +6,8 @@
     "mixins": [
       "ProductiveBeeMixin"
     ],
+    "client": [
+        "CustomGeoBlockItemMixin"
+    ],
     "minVersion": "0.8.5"
 }

@@ -14,13 +14,11 @@ import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
+import earth.terrarium.botarium.common.registry.fluid.FluidBucketItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.SignItem;
+import net.minecraft.world.item.*;
 
 public final class ModItems {
     private ModItems() {
@@ -204,6 +202,19 @@ public final class ModItems {
     public static final RegistryEntry<Item> ENERGY_XFER_UPGRADE = ModItems.ITEMS.register("energy_xfer_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.ENERGY_XFER));
     public static final RegistryEntry<Item> ENERGY_FILL_UPGRADE = ModItems.ITEMS.register("energy_fill_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.ENERGY_FILL));
     //endregion
+
+    //region Machines
+
+    public static final RegistryEntry<Item> FLOW_HIVE = NEST_ITEMS.register("flow_hive", () -> new BlockItem(ModBlocks.FLOW_HIVE.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> ENDER_BEECON_ITEM = ITEMS.register("ender_beecon", () -> new BlockItem(ModBlocks.ENDER_BEECON.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> HONEY_POT_ITEM = ITEMS.register("honey_pot", () -> new BlockItem(ModBlocks.HONEY_POT.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> SOLIDIFICATION_CHAMBER_ITEM = ITEMS.register("solidification_chamber", () -> new BlockItem(ModBlocks.SOLIDIFICATION_CHAMBER.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> CENTRIFUGE_CRANK = ITEMS.register("centrifuge_crank", () -> new CrankItem(ModBlocks.CENTRIFUGE_CRANK.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> CENTRIFUGE = ITEMS.register("centrifuge", () -> new ManualCentrifugeItem(ModBlocks.BASIC_CENTRIFUGE.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> HONEY_GENERATOR_ITEM = ITEMS.register("honey_generator", () -> new BlockItem(ModBlocks.HONEY_GENERATOR.get(), new Item.Properties()));
+    //endregion
+
+    public static final RegistryEntry<Item> HONEY_BUCKET = ITEMS.register("honey_bucket", () -> new FluidBucketItem(ModFluidProperties.HONEY, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     //region Special Items
     public static final RegistryEntry<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new SpecialFoodItem(

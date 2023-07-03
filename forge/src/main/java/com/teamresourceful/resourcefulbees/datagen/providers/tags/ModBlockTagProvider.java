@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeBlocks;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBlockTags;
-import com.teamresourceful.resourcefulbees.common.registry.minecraft.ModBlocks;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -40,9 +39,14 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         axeTagBuilder.add(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BEEHOUSE_TOP.get(), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.BREEDER_BLOCK.get(), com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.FLOW_HIVE.get());
 
         IntrinsicTagAppender<Block> pickaxeTagBuilder = tag(BlockTags.MINEABLE_WITH_PICKAXE);
-        ModBlocks.CENTRIFUGE_BLOCKS.getEntries().stream().map(RegistryEntry::get).forEach(pickaxeTagBuilder::add);
+        com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.CENTRIFUGE_BLOCKS.getEntries().stream().map(RegistryEntry::get).forEach(pickaxeTagBuilder::add);
         CentrifugeBlocks.CENTRIFUGE_BLOCKS.getEntries().stream().map(RegistryEntry::get).forEach(pickaxeTagBuilder::add);
-        pickaxeTagBuilder.add(ModBlocks.HONEY_GENERATOR.get(), ModBlocks.ENDER_BEECON.get(), ModBlocks.SOLIDIFICATION_CHAMBER.get(), ModBlocks.HONEY_POT.get());
+        pickaxeTagBuilder.add(
+                com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_GENERATOR.get(),
+                com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.ENDER_BEECON.get(),
+                com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.SOLIDIFICATION_CHAMBER.get(),
+                com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.HONEY_POT.get()
+        );
 
         tag(ModBlockTags.HEAT_SOURCES).add(Blocks.TORCH, Blocks.SOUL_TORCH, Blocks.WALL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.LAVA, Blocks.LAVA_CAULDRON,
                 Blocks.MAGMA_BLOCK, Blocks.LANTERN, Blocks.SEA_LANTERN, Blocks.SOUL_LANTERN, Blocks.JACK_O_LANTERN);
