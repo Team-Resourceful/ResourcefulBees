@@ -7,6 +7,10 @@ architectury {
     fabric()
 }
 
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
 configurations {
     common
     shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
@@ -19,12 +23,13 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
     modApi "net.fabricmc.fabric-api:fabric-api:$fabric_api_version"
 
-    modApi "com.teamresourceful.resourcefullib:resourcefullib-fabric-$mc_version:$rlib_version"
-    modApi "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-$mc_version:$rconfig_version"
-    modImplementation "software.bernie.geckolib:$geckolib_fabric_version"
-
-    //TODO when fabric gets running we do need transitive, this was just disabled so I could not deal with updating the maven
-    modImplementation "com.telepathicgrunt:Bumblezone-Fabric:$bumblezone_version" transitive false
+    modImplementation "com.teamresourceful.resourcefullib:resourcefullib-$project.name-$mc_version:$rlib_version"
+    compileOnly "com.teamresourceful:yabn:1.0.3"
+    modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-$project.name-1.20:$rconfig_version"
+    modImplementation "software.bernie.geckolib:$geckolib_fabric:$geckolib_version"
+    modCompileOnly "com.telepathicgrunt:Bumblezone-Fabric:$bumblezone_version" transitive false
+    modCompileOnly "mezz.jei:jei-$mc_version-fabric-api:$jei_version"
+    modLocalRuntime "mezz.jei:jei-$mc_version-fabric:$jei_version" transitive false
 
     common(project(path: ":common", configuration: "namedElements")) transitive false
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) transitive false
@@ -43,6 +48,7 @@ shadowJar {
 }
 
 remapJar {
+    injectAccessWidener = true
     input.set shadowJar.archiveFile
     dependsOn shadowJar
     archiveClassifier.set null

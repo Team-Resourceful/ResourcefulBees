@@ -27,11 +27,6 @@ import java.util.function.Supplier;
 
 public class ModUtils {
 
-    @ExpectPlatform
-    public static void openEntityInJEI(EntityType<?> entity) {
-        throw new NotImplementedException();
-    }
-
     /**
      * Creates a new MobCategory
      * @param name The internal id of the enum ie. MONSTER or CREATURE (This is what it would be named if you named it in the enum itself)

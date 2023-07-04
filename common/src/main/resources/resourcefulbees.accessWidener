@@ -26,3 +26,5 @@ accessible class net/minecraft/world/entity/animal/Bee$BeePollinateGoal
 accessible method net/minecraft/world/entity/animal/Bee$BeePollinateGoal <init> (Lnet/minecraft/world/entity/animal/Bee;)V
 accessible method net/minecraft/world/entity/animal/Bee$BeePollinateGoal stopPollinating ()V
 accessible method net/minecraft/world/entity/animal/Bee$BeePollinateGoal isPollinating ()Z
+
+accessible class net/minecraft/client/resources/model/ModelManager$ReloadState

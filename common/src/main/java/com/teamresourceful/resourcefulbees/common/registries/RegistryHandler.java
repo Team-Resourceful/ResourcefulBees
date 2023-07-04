@@ -49,20 +49,20 @@ public final class RegistryHandler {
                 .forEach(RegistrySubsystem::init);
 
         ItemGroupResourcefulBees.register();
-        ModItems.ITEMS.init();
+        ModFluidProperties.PROPERTIES.initialize();
+        ModFluids.FLUIDS.init();
+        ModEntities.ENTITY_TYPES.init();
         ModBlocks.BLOCKS.init();
+        ModItems.ITEMS.init();
+        ModBlockEntityTypes.BLOCK_ENTITY_TYPES.init();
+        ModRecipes.RECIPE_TYPES.init();
+        ModRecipeSerializers.RECIPE_SERIALIZERS.init();
+        ModMenuTypes.MENUS.init();
         ModEffects.EFFECTS.init();
         ModArguments.ARGUMENTS.init();
-        ModFluids.FLUIDS.init();
-        ModFluidProperties.PROPERTIES.initialize();
-        ModEntities.ENTITY_TYPES.init();
-        ModBlockEntityTypes.BLOCK_ENTITY_TYPES.init();
         ModEnchantments.ENCHANTMENTS.init();
         ModPOIs.POIS.init();
         ModPotions.POTIONS.init();
-        ModMenuTypes.MENUS.init();
-        ModRecipeSerializers.RECIPE_SERIALIZERS.init();
-        ModRecipes.RECIPE_TYPES.init();
         ModVillagerProfessions.PROFESSIONS.init();
         ModFeatures.FEATURES.init();
     }

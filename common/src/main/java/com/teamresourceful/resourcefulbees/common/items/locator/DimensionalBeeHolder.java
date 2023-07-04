@@ -52,12 +52,7 @@ public final class DimensionalBeeHolder {
     }
 
     public static void onDatapackSync(SyncedDatapackEvent event) {
-        if (event.player() == null) {
-            updateBees(event.allPlayers().getServer());
-            NetworkHandler.CHANNEL.sendToPlayers(new DimensionalBeesPacket(DIMENSIONAL_BEES), event.allPlayers().getPlayers());
-        } else {
-            if (DIMENSIONAL_BEES.isEmpty()) updateBees(event.player().server);
-            NetworkHandler.CHANNEL.sendToPlayer(new DimensionalBeesPacket(DIMENSIONAL_BEES), event.player());
-        }
+        if (DIMENSIONAL_BEES.isEmpty()) updateBees(event.player().server);
+        NetworkHandler.CHANNEL.sendToPlayer(new DimensionalBeesPacket(DIMENSIONAL_BEES), event.player());
     }
 }

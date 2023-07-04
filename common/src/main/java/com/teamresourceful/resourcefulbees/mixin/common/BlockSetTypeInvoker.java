@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface BlockSetTypeInvoker {
 
     @Invoker("register")
-    static BlockSetType register(BlockSetType type) {
+    static BlockSetType invokeRegister(BlockSetType type) {
         throw new NotImplementedException();
     }
 }

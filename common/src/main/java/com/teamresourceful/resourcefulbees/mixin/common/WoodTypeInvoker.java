@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface WoodTypeInvoker {
 
     @Invoker("register")
-    static WoodType register(WoodType type) {
+    static WoodType invokeRegister(WoodType type) {
         throw new NotImplementedException();
     }
 }

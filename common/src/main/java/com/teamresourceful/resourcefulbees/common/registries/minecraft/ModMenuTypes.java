@@ -3,16 +3,16 @@ package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.menus.*;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
+import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
 import com.teamresourceful.resourcefullib.common.menu.MenuContentHelper;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
-import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.inventory.MenuType;
 
 public class ModMenuTypes {
 
-    public static final ResourcefulRegistry<MenuType<?>> MENUS = ResourcefulRegistries.create(BuiltInRegistries.MENU, ModConstants.MOD_ID);
+    public static final ResourcefulRegistry<MenuType<?>> MENUS = RegistryHelper.create(BuiltInRegistries.MENU, ModConstants.MOD_ID);
 
     public static final RegistryEntry<MenuType<FakeFlowerMenu>> FAKE_FLOWER = MENUS.register("fake_flower",
             () -> MenuContentHelper.create(FakeFlowerMenu::new, PositionContent.SERIALIZER));

@@ -21,7 +21,6 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
 import com.teamresourceful.resourcefulbees.mixin.client.LivingEntityRendererInvoker;
 import com.teamresourceful.resourcefulbees.mixin.client.PackRepositoryAccessor;
 import com.teamresourceful.resourcefulbees.platform.client.events.*;
-import com.teamresourceful.resourcefulbees.platform.client.events.registry.RegisterWoodTypeSheetsEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.UpdateEvent;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.client.Minecraft;
@@ -53,7 +52,6 @@ public class ResourcefulBeesClient {
         RegisterRenderLayersEvent.EVENT.addListener(ResourcefulBeesClient::registerRenderLayers);
         RegisterEntityLayersEvent.EVENT.addListener(ResourcefulBeesClient::registerEntityLayers);
         RegisterOverlayEvent.EVENT.addListener(ResourcefulBeesClient::registerOverlay);
-        RegisterWoodTypeSheetsEvent.EVENT.addListener(ResourcefulBeesClient::registerWoodTypeSheets);
         RegisterAdditionaModelsEvent.EVENT.addListener(ModelHandler::onAddAdditional);
         ModelBakingCompletedEvent.EVENT.addListener(ModelHandler::onModelBake);
         UpdateEvent.EVENT.addListener(ClientDataSetup::onUpdates);
@@ -115,7 +113,7 @@ public class ResourcefulBeesClient {
     }
 
     public static void registerColors(RegisterColorHandlerEvent event) {
-        if (event.phase() == RegisterColorHandlerEvent.Phase.ITEMS) {
+        if (event.items() != null) {
             Item[] collect = Stream.concat(
                     Stream.concat(
                             Stream.concat(
@@ -132,14 +130,10 @@ public class ResourcefulBeesClient {
             event.register(ColoredObject::getItemColor, collect);
             event.register(BeeJarItem::getColor, ModItems.BEE_JAR.get());
             event.register(MutatedPollenItem::getColor, ModItems.MUTATED_POLLEN.get());
-        } else if (event.phase() == RegisterColorHandlerEvent.Phase.BLOCKS) {
+        } else if (event.blocks() != null) {
             event.register(ColoredObject::getBlockColor, ModBlocks.HONEYCOMB_BLOCKS.boundStream().toArray(Block[]::new));
             event.register(ColoredObject::getBlockColor, ModBlocks.HONEY_BLOCKS.boundStream().toArray(Block[]::new));
         }
-    }
-
-    public static void registerWoodTypeSheets(RegisterWoodTypeSheetsEvent event) {
-        event.register(ModBlocks.WAXED_WOOD_TYPE);
     }
 
     private static void loadResources() {

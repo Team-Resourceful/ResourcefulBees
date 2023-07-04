@@ -11,12 +11,12 @@
     "environment": "*",
     "entrypoints": {
         "main": [
-            "com.teamresourceful.resourcefulbees.ResourcefulBees"
+          "com.teamresourceful.resourcefulbees.ResourcefulBeesFabric"
         ]
     },
-    "accessWidener": "resourcefulbees.accesswidener",
     "mixins": [
-        "resourcefulbees.mixins.json"
+        "resourcefulbees.mixins.json",
+        "resourcefulbees-common.mixins.json"
     ],
     "depends": {
         "fabricloader": ">=0.14.9",

@@ -5,14 +5,12 @@ import com.teamresourceful.resourcefulbees.common.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.client.events.*;
-import com.teamresourceful.resourcefulbees.platform.client.events.registry.RegisterWoodTypeSheetsEvent;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
 import net.minecraft.Optionull;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -59,10 +57,10 @@ public final class ResourcefulBeesForgeClient {
             ))
         );
         eventBus.addListener((RegisterColorHandlersEvent.Item event) ->
-            RegisterColorHandlerEvent.EVENT.fire(new RegisterColorHandlerEvent(event.getItemColors(), event.getBlockColors(), RegisterColorHandlerEvent.Phase.ITEMS))
+            RegisterColorHandlerEvent.EVENT.fire(new RegisterColorHandlerEvent(event::register, null))
         );
         eventBus.addListener((RegisterColorHandlersEvent.Block event) ->
-            RegisterColorHandlerEvent.EVENT.fire(new RegisterColorHandlerEvent(null, event.getBlockColors(), RegisterColorHandlerEvent.Phase.BLOCKS))
+            RegisterColorHandlerEvent.EVENT.fire(new RegisterColorHandlerEvent(null, event::register))
         );
         eventBus.addListener((EntityRenderersEvent.RegisterRenderers event) ->
             RegisterRendererEvent.EVENT.fire(new RegisterRendererEvent(event::registerEntityRenderer, event::registerBlockEntityRenderer))
@@ -92,7 +90,6 @@ public final class ResourcefulBeesForgeClient {
                     ItemBlockRenderTypes::setRenderLayer,
                     ItemBlockRenderTypes::setRenderLayer
             ));
-            RegisterWoodTypeSheetsEvent.EVENT.fire(new RegisterWoodTypeSheetsEvent(Sheets::addWoodType));
         });
     }
 }

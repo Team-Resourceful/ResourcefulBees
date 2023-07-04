@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockE
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("Convert2MethodRef")
 public final class DefaultApiaryTiers {
 
     private DefaultApiaryTiers() {
@@ -19,7 +20,7 @@ public final class DefaultApiaryTiers {
         .time(0.8)
         .output(() -> ApiaryConfig.tierOneApiaryOutput)
         .amount(() -> ApiaryConfig.tierOneApiaryQuantity)
-        .blockEntity(ModBlockEntityTypes.T1_APIARY_ENTITY::get)
+        .blockEntity(() -> ModBlockEntityTypes.T1_APIARY_ENTITY.get())
         .item(ModItems.T1_APIARY_ITEM)
         .build(new ResourceLocation(ModConstants.MOD_ID, "t1"));
 
@@ -28,7 +29,7 @@ public final class DefaultApiaryTiers {
             .time(0.7)
             .output(() -> ApiaryConfig.tierTwoApiaryOutput)
             .amount(() -> ApiaryConfig.tierTwoApiaryQuantity)
-            .blockEntity(ModBlockEntityTypes.T2_APIARY_ENTITY::get)
+            .blockEntity(() -> ModBlockEntityTypes.T2_APIARY_ENTITY.get())
             .item(ModItems.T2_APIARY_ITEM)
             .build(new ResourceLocation(ModConstants.MOD_ID, "t2"));
 
@@ -37,7 +38,7 @@ public final class DefaultApiaryTiers {
             .time(0.6)
             .output(() -> ApiaryConfig.tierThreeApiaryOutput)
             .amount(() -> ApiaryConfig.tierThreeApiaryQuantity)
-            .blockEntity(ModBlockEntityTypes.T3_APIARY_ENTITY::get)
+            .blockEntity(() -> ModBlockEntityTypes.T3_APIARY_ENTITY.get())
             .item(ModItems.T3_APIARY_ITEM)
             .build(new ResourceLocation(ModConstants.MOD_ID, "t3"));
 
@@ -46,7 +47,7 @@ public final class DefaultApiaryTiers {
             .time(0.5)
             .output(() -> ApiaryConfig.tierFourApiaryOutput)
             .amount(() -> ApiaryConfig.tierFourApiaryQuantity)
-            .blockEntity(ModBlockEntityTypes.T4_APIARY_ENTITY::get)
+            .blockEntity(() -> ModBlockEntityTypes.T4_APIARY_ENTITY.get())
             .item(ModItems.T4_APIARY_ITEM)
             .build(new ResourceLocation(ModConstants.MOD_ID, "t4"));
 

@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
 import com.teamresourceful.resourcefulbees.mixin.common.BlockSetTypeInvoker;
 import com.teamresourceful.resourcefulbees.mixin.common.WoodTypeInvoker;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
@@ -38,7 +39,7 @@ public final class ModBlocks {
         throw new UtilityClassError();
     }
 
-    public static final ResourcefulRegistry<Block> BLOCKS = ResourcefulRegistries.create(BuiltInRegistries.BLOCK, ModConstants.MOD_ID);
+    public static final ResourcefulRegistry<Block> BLOCKS = RegistryHelper.create(BuiltInRegistries.BLOCK, ModConstants.MOD_ID);
     public static final ResourcefulRegistry<Block> HIVES = ResourcefulRegistries.create(BLOCKS);
     public static final ResourcefulRegistry<Block> APIARIES = ResourcefulRegistries.create(BLOCKS);
     public static final ResourcefulRegistry<Block> CENTRIFUGE_BLOCKS = ResourcefulRegistries.create(BLOCKS);
@@ -56,8 +57,8 @@ public final class ModBlocks {
             .replaceable()
             .noCollission().strength(100.0F).noLootTable();
 
-    public static final BlockSetType WAX_BLOCK_SET = BlockSetTypeInvoker.register(new BlockSetType("resourcefulbees_waxed"));
-    public static final WoodType WAXED_WOOD_TYPE = WoodTypeInvoker.register(new WoodType("resourcefulbees_waxed", WAX_BLOCK_SET));
+    public static final BlockSetType WAX_BLOCK_SET = BlockSetTypeInvoker.invokeRegister(new BlockSetType("resourcefulbees_waxed"));
+    public static final WoodType WAXED_WOOD_TYPE = WoodTypeInvoker.invokeRegister(new WoodType("resourcefulbees_waxed", WAX_BLOCK_SET));
 
     private static BlockBehaviour.Properties makeNestProperty(MapColor color, SoundType soundType){
         return BlockBehaviour.Properties.of().strength(1.0F).mapColor(color).sound(soundType);
@@ -74,7 +75,10 @@ public final class ModBlocks {
     //TODO figure out how to make this nest registration cleaner and reduce duplicate processes
     //region Nests
     //region Acacia
-    public static final RegistryEntry<TieredBeehiveBlock> ACACIA_BEE_NEST = HIVES.register("nest/acacia/1", createWoodNest(ModBlockEntityTypes.ACACIA_BEE_NEST_ENTITY, DefaultBeehiveTiers.T1_NEST));
+    public static final RegistryEntry<TieredBeehiveBlock> ACACIA_BEE_NEST = HIVES.register("nest/acacia/1", () -> {
+        System.out.println("ACACIA_BEE_NEST");
+        return createWoodNest(ModBlockEntityTypes.ACACIA_BEE_NEST_ENTITY, DefaultBeehiveTiers.T1_NEST).get();
+    });
     public static final RegistryEntry<TieredBeehiveBlock> T1_ACACIA_BEEHIVE = HIVES.register("nest/acacia/2", createWoodNest(ModBlockEntityTypes.T1_ACACIA_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST));
     public static final RegistryEntry<TieredBeehiveBlock> T2_ACACIA_BEEHIVE = HIVES.register("nest/acacia/3", createWoodNest(ModBlockEntityTypes.T2_ACACIA_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST));
     public static final RegistryEntry<TieredBeehiveBlock> T3_ACACIA_BEEHIVE = HIVES.register("nest/acacia/4", createWoodNest(ModBlockEntityTypes.T3_ACACIA_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST));

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.platform.common.registry.potion.fabric;
 
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.Potion;
@@ -12,9 +12,9 @@ public class PotionRegistryImpl {
 
     public static void registerItemRecipe(@NotNull Item from, @NotNull Ingredient ingredient, @NotNull Item to) {
         if (!(from instanceof PotionItem fromPotion)) {
-            throw new IllegalArgumentException("Expected a potion, got: " + Registry.ITEM.getKey(from));
+            throw new IllegalArgumentException("Expected a potion, got: " + BuiltInRegistries.ITEM.getKey(from));
         } else if (!(to instanceof PotionItem toPotion)) {
-            throw new IllegalArgumentException("Expected a potion, got: " + Registry.ITEM.getKey(to));
+            throw new IllegalArgumentException("Expected a potion, got: " + BuiltInRegistries.ITEM.getKey(to));
         } else {
             FabricBrewingRecipeRegistry.registerItemRecipe(fromPotion, ingredient, toPotion);
         }

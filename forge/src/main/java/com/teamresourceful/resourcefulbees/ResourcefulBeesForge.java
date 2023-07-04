@@ -14,8 +14,9 @@ import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.for
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -39,7 +40,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLLoader;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -76,7 +77,7 @@ public class ResourcefulBeesForge {
         modEventBus.addListener((SpawnPlacementRegisterEvent event) ->
             RegisterSpawnPlacementsEvent.EVENT.fire(new RegisterSpawnPlacementsEvent(new RegisterSpawnPlacementsEvent.Registry() {
                 @Override
-                public <T extends Entity> void register(EntityType<T> entityType, SpawnPlacements.@Nullable Type placementType, Heightmap.@Nullable Types heightmap, SpawnPlacements.SpawnPredicate<T> predicate) {
+                public <T extends Mob> void register(EntityType<T> entityType, @NotNull SpawnPlacements.Type placementType, @NotNull Heightmap.Types heightmap, SpawnPlacements.SpawnPredicate<T> predicate) {
                     event.register(entityType, placementType, heightmap, predicate, SpawnPlacementRegisterEvent.Operation.REPLACE);
                 }
             }))
@@ -91,9 +92,15 @@ public class ResourcefulBeesForge {
         MinecraftForge.EVENT_BUS.addListener((VillagerTradesEvent event) ->
             RegisterVillagerTradesEvent.EVENT.fire(new RegisterVillagerTradesEvent((listing, i) -> event.getTrades().get(i).add(listing), event.getType()))
         );
-        MinecraftForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) ->
-            SyncedDatapackEvent.EVENT.fire(new SyncedDatapackEvent(event.getPlayerList(), event.getPlayer()))
-        );
+        MinecraftForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
+            if (event.getPlayer() == null) {
+                for (ServerPlayer player : event.getPlayerList().getPlayers()) {
+                    SyncedDatapackEvent.EVENT.fire(new SyncedDatapackEvent(player));
+                }
+            } else {
+                SyncedDatapackEvent.EVENT.fire(new SyncedDatapackEvent(event.getPlayer()));
+            }
+        });
         MinecraftForge.EVENT_BUS.addListener((RegisterCommandsEvent event) ->
             CommandRegisterEvent.EVENT.fire(new CommandRegisterEvent(event.getDispatcher(), event.getCommandSelection(), event.getBuildContext()))
         );

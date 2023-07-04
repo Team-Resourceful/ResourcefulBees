@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaTextur
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefulbees.common.modcompat.jei.JEICompat;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import com.teamresourceful.resourcefullib.common.utils.modinfo.ModInfoUtils;
 import net.minecraft.client.Minecraft;
@@ -61,7 +61,7 @@ public class BeePage extends SubdividedScreen {
 
         addRenderableWidget(new SlotButton(160, 25, BeepediaTextures.RECIPE_BOOK, () -> ModInfoUtils.isModLoaded("jei"), () -> {
             if (ModInfoUtils.isModLoaded("jei")) {
-                ModUtils.openEntityInJEI(this.data.entityType());
+                JEICompat.searchEntity(this.data.entityType());
             }
         })).setTooltipProvider(() -> List.of(BeepediaTranslations.OPEN_JEI));
     }

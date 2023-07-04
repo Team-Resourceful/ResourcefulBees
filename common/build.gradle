@@ -10,12 +10,8 @@ dependencies {
 
     modApi "tech.thatgravyboat:commonats:1.0"
 
-    modCompileOnly("software.bernie.geckolib:$geckolib_fabric_version") {
-        transitive = false
-    }
-    modCompileOnly("com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version") {
-        transitive = false
-    }
+    modCompileOnly("software.bernie.geckolib:$geckolib_fabric:$geckolib_version") transitive false
+    modCompileOnly("com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version") transitive false
 }
 
 architectury {
@@ -23,5 +19,5 @@ architectury {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/resourcefulbees.accesswidener")
+    accessWidenerPath = file("src/main/resources/resourcefulbees.accessWidener")
 }

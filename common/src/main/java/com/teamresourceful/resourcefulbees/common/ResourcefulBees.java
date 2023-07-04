@@ -23,7 +23,6 @@ import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.Game
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.LoadingCompletedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefulconfig.common.config.Configurator;
-import software.bernie.geckolib.GeckoLib;
 
 public class ResourcefulBees {
 
@@ -32,6 +31,7 @@ public class ResourcefulBees {
     public static void init() {
         CONFIGURATOR.registerConfig(GeneralConfig.class);
         ModConstants.forceInit();
+        RegistryHandler.init();
         GameSetup.initEvents();
         DefaultBeehiveTiers.loadDefaults();
         DefaultApiaryTiers.loadDefaults();
@@ -41,9 +41,8 @@ public class ResourcefulBees {
         BeeDataRegistry.init();
         HoneyDataRegistry.init();
         LoadConditionRegistry.init();
-        GeckoLib.initialize();
+        //GeckoLib.initialize();
         GameSetup.initPaths();
-        RegistryHandler.init();
         ModCompatHelper.registerCompats();
 
         ResourcefulBeesAPI.getRegistry().setBeeRegistry(BeeRegistry.getRegistry());

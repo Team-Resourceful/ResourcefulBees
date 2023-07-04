@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.platform.common.util.forge;
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
-import com.teamresourceful.resourcefulbees.common.modcompat.jei.JEICompat;
 import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
 import com.teamresourceful.resourcefullib.common.utils.GenericMemoryPack;
 import com.teamresourceful.resourcefullib.common.utils.forge.HiddenGenericMemoryPack;
@@ -37,9 +36,6 @@ import org.jetbrains.annotations.Contract;
 import java.util.function.Supplier;
 
 public class ModUtilsImpl {
-    public static void openEntityInJEI(EntityType<?> entity) {
-        JEICompat.searchEntity(entity);
-    }
 
     public static MobCategory createMobCategory(String name, String id, int max, boolean isFriendly, boolean isPersistent, int despawnDistance, MobCategory fallback) {
         try {

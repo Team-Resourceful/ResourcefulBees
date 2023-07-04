@@ -6,10 +6,7 @@ import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.CodecIngredient;
 import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.CodecIngredientSerializer;
-import com.teamresourceful.resourcefullib.common.codecs.yabn.YabnOps;
 import com.teamresourceful.resourcefullib.common.networking.PacketHelper;
-import com.teamresourceful.resourcefullib.common.utils.readers.ByteBufByteReader;
-import com.teamresourceful.resourcefullib.common.yabn.YabnParser;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -51,9 +48,8 @@ public class FabricIngredientSerializer<T extends CodecIngredient<T>> implements
 
     @Override
     public FabricIngredient<T> read(FriendlyByteBuf buf) {
-        T ingredient = serializer.network()
-                .parse(YabnOps.COMPRESSED, YabnParser.parseCompress(new ByteBufByteReader(buf)))
-                .getOrThrow(false, ModConstants.LOGGER::error);
+        T ingredient = PacketHelper.readWithYabn(buf, serializer.network(), true)
+                .getOrThrow(false, s -> ModConstants.LOGGER.error("Could not parse {}", s));
         return new FabricIngredient<>(ingredient);
     }
 
