@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.setup;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesCommand;
 import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument;
+import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.enchantments.HiveBreakEnchantment;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
@@ -18,6 +19,7 @@ import com.teamresourceful.resourcefulbees.common.resources.conditions.LoadDevRe
 import com.teamresourceful.resourcefulbees.common.worldgen.GoldenFlower;
 import com.teamresourceful.resourcefulbees.platform.common.events.*;
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.ServerGoingToStartEvent;
+import com.teamresourceful.resourcefulbees.platform.common.events.registry.RegisterRepositorySourceEvent;
 import com.teamresourceful.resourcefulbees.platform.common.registry.RegistryHelper;
 import com.teamresourceful.resourcefulbees.platform.common.registry.potion.PotionRegistry;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.ConditionRegistry;
@@ -63,6 +65,7 @@ public final class GameSetup {
         RegisterVillagerTradesEvent.EVENT.addListener(Beekeeper::setupBeekeeper);
         RegisterEntityAttributesEvent.EVENT.addListener(GameSetup::registerAttributes);
         RegisterHiveBreakBlocksEvent.EVENT.addListener(GameSetup::onHiveBreakConversions);
+        RegisterRepositorySourceEvent.EVENT.addListener(GameSetup::registerRepoistorySources);
     }
 
     public static void init() {
@@ -102,6 +105,12 @@ public final class GameSetup {
                 entityType.get(),
                 BeeRegistry.get().getBeeData(s).getCombatData().buildAttributes(Mob.createMobAttributes()).build()
         ));
+    }
+
+    public static void registerRepoistorySources(RegisterRepositorySourceEvent event) {
+        if (event.type().equals(PackType.SERVER_DATA)) {
+            event.register(DataPackLoader.INSTANCE);
+        }
     }
 
     public static void onHiveBreakConversions(RegisterHiveBreakBlocksEvent event) {

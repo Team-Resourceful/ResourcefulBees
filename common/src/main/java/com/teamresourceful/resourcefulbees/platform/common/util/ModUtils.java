@@ -92,4 +92,10 @@ public class ModUtils {
     public static GenericMemoryPack createHiddenDataPack(String id, JsonObject meta) {
         throw new NotImplementedException();
     }
+
+    @ExpectPlatform
+    @Contract(pure = true)
+    public static boolean isProduction() {
+        throw new NotImplementedException();
+    }
 }

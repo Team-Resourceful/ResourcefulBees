@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.client;
 
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.data.ModelHandler;
+import com.teamresourceful.resourcefulbees.client.overlay.BeeLocatorOverlay;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.EnderBeeconRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.RenderHoneyGenerator;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.RenderSolidificationChamber;
@@ -20,6 +21,8 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
 import com.teamresourceful.resourcefulbees.mixin.client.LivingEntityRendererInvoker;
 import com.teamresourceful.resourcefulbees.mixin.client.PackRepositoryAccessor;
 import com.teamresourceful.resourcefulbees.platform.client.events.*;
+import com.teamresourceful.resourcefulbees.platform.client.events.registry.RegisterWoodTypeSheetsEvent;
+import com.teamresourceful.resourcefulbees.platform.common.events.UpdateEvent;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -49,12 +52,19 @@ public class ResourcefulBeesClient {
         RegisterItemPropertiesEvent.EVENT.addListener(ResourcefulBeesClient::registerItemProperties);
         RegisterRenderLayersEvent.EVENT.addListener(ResourcefulBeesClient::registerRenderLayers);
         RegisterEntityLayersEvent.EVENT.addListener(ResourcefulBeesClient::registerEntityLayers);
+        RegisterOverlayEvent.EVENT.addListener(ResourcefulBeesClient::registerOverlay);
+        RegisterWoodTypeSheetsEvent.EVENT.addListener(ResourcefulBeesClient::registerWoodTypeSheets);
         RegisterAdditionaModelsEvent.EVENT.addListener(ModelHandler::onAddAdditional);
         ModelBakingCompletedEvent.EVENT.addListener(ModelHandler::onModelBake);
+        UpdateEvent.EVENT.addListener(ClientDataSetup::onUpdates);
 
         Color.initRainbow();
 
         loadResources();
+    }
+
+    public static void registerOverlay(RegisterOverlayEvent event) {
+        event.register("bee_locator", BeeLocatorOverlay.INSTANCE);
     }
 
     public static void registerRenderLayers(RegisterRenderLayersEvent event) {
@@ -126,6 +136,10 @@ public class ResourcefulBeesClient {
             event.register(ColoredObject::getBlockColor, ModBlocks.HONEYCOMB_BLOCKS.boundStream().toArray(Block[]::new));
             event.register(ColoredObject::getBlockColor, ModBlocks.HONEY_BLOCKS.boundStream().toArray(Block[]::new));
         }
+    }
+
+    public static void registerWoodTypeSheets(RegisterWoodTypeSheetsEvent event) {
+        event.register(ModBlocks.WAXED_WOOD_TYPE);
     }
 
     private static void loadResources() {

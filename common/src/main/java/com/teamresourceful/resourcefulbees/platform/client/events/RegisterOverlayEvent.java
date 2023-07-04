@@ -1,19 +1,15 @@
 package com.teamresourceful.resourcefulbees.platform.client.events;
 
 import com.teamresourceful.resourcefulbees.platform.client.renderer.overlay.OverlayRenderer;
+import com.teamresourceful.resourcefulbees.platform.common.events.base.EventHelper;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.function.BiConsumer;
 
-public class RegisterOverlayEvent {
+public record RegisterOverlayEvent(BiConsumer<String, OverlayRenderer> registry) {
 
-    private final Map<String, OverlayRenderer> renderers = new HashMap<>();
+    public static final EventHelper<RegisterOverlayEvent> EVENT = new EventHelper<>();
 
     public void register(String name, OverlayRenderer renderer) {
-        renderers.put(name, renderer);
-    }
-
-    public Map<String, OverlayRenderer> getRenderers() {
-        return renderers;
+        registry.accept(name, renderer);
     }
 }

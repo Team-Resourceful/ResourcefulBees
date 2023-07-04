@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.world.biome.modifiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.registry.forge.ModBiomeModifiers;
+import com.teamresourceful.resourcefulbees.common.registry.forge.ForgeRegistrySubsystem;
 import com.teamresourceful.resourcefulbees.common.worldgen.SpawnDataModifier;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.advancements.critereon.LocationPredicate;
@@ -84,9 +84,9 @@ public record BeeBiomeModifier(
     }
 
     private enum Type {
-        CUSTOM(() -> true, ModBiomeModifiers.SPAWN_MODIFIER),
-        DEV(() -> GeneralConfig.enableDevBees, ModBiomeModifiers.DEV_SPAWN_MODIFIER),
-        SUPPORTER(() -> GeneralConfig.enableSupporterBees, ModBiomeModifiers.SUPPORTER_SPAWN_MODIFIER);
+        CUSTOM(() -> true, ForgeRegistrySubsystem.SPAWN_MODIFIER),
+        DEV(() -> GeneralConfig.enableDevBees, ForgeRegistrySubsystem.DEV_SPAWN_MODIFIER),
+        SUPPORTER(() -> GeneralConfig.enableSupporterBees, ForgeRegistrySubsystem.SUPPORTER_SPAWN_MODIFIER);
 
         private final BooleanSupplier abortCriteria;
         private final RegistryObject<Codec<BeeBiomeModifier>> modifier;

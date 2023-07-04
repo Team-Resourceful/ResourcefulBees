@@ -10,10 +10,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = ModConstants.MOD_ID)
 public class CentrifugeCommon {
 
-    public static void init() {
-
-    }
-
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {
         CentrifugeNetworkHandler.init();

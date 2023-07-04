@@ -29,8 +29,10 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Contract;
 
 import java.util.function.Supplier;
 
@@ -94,5 +96,10 @@ public class ModUtilsImpl {
         return new HiddenGenericMemoryPack(PackType.SERVER_DATA, id, meta) {
             // I don't know why I made HiddenGenericMemoryPack protected.
         };
+    }
+
+    @Contract(pure = true)
+    public static boolean isProduction() {
+        return FMLLoader.isProduction();
     }
 }
