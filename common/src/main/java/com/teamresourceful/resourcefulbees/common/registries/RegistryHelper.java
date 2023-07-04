@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
@@ -26,6 +25,7 @@ public final class RegistryHelper {
 
     private static class DeferredRegistry<T> implements ResourcefulRegistry<T> {
 
+        private boolean initalized = false;
         private final List<DeferredRegistry.Entry<?>> entries = new ArrayList<>();
         private final ResourcefulRegistry<T> registry;
 
@@ -35,12 +35,12 @@ public final class RegistryHelper {
 
         @Override
         public <I extends T> RegistryEntry<I> register(String id, Supplier<I> supplier) {
-            if (Objects.equals(ArchitecturyTarget.getCurrentTarget(), "fabric")) {
-                var entry = new DeferredRegistry.Entry<>(new AtomicBoolean(false), Suppliers.memoize(() -> registry.register(id, supplier)));
-                entries.add(entry);
-                return entry;
+            if (initalized) {
+                return registry.register(id, supplier);
             }
-            return registry.register(id, supplier);
+            var entry = new DeferredRegistry.Entry<>(new AtomicBoolean(false), Suppliers.memoize(() -> registry.register(id, supplier)));
+            entries.add(entry);
+            return entry;
         }
 
         @Override
@@ -50,6 +50,7 @@ public final class RegistryHelper {
 
         @Override
         public void init() {
+            initalized = true;
             entries.forEach(Entry::init);
         }
 
