@@ -1,8 +1,8 @@
-package com.teamresourceful.resourcefulbees.common.items;
+package com.teamresourceful.resourcefulbees.common.items.honey;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.common.config.HoneycombConfig;
-import com.teamresourceful.resourcefulbees.common.items.honey.ColoredObject;
+import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.HoneycombItem;

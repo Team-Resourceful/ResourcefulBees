@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.entities;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.CentrifugeController;
+import com.teamresourceful.resourcefulbees.centrifuge.common.containers.AbstractFilterItemHandler;
 import com.teamresourceful.resourcefulbees.centrifuge.common.containers.CentrifugeInputContainer;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractCentrifugeOutputEntity;
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.base.AbstractGUICentrifugeEntity;
@@ -8,15 +9,14 @@ import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeT
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeUtils;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.OutputLocationGroup;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.ProcessContainerData;
-import com.teamresourceful.resourcefulbees.centrifuge.common.containers.AbstractFilterItemHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.CentrifugeOutputType;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
+import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.ItemOutput;
-import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -36,8 +36,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.roguelogix.phosphophyllite.multiblock2.common.ITickablePartsMultiblock;
-import net.roguelogix.phosphophyllite.multiblock2.validated.IValidatedMultiblock;
+import net.roguelogix.phosphophyllite.multiblock.common.ITickablePartsMultiblock;
+import net.roguelogix.phosphophyllite.multiblock.validated.IValidatedMultiblock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

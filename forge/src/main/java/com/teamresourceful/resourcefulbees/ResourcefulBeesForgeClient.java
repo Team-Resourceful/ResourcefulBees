@@ -46,6 +46,9 @@ public final class ResourcefulBeesForgeClient {
         eventBus.addListener((ModelEvent.BakingCompleted event) ->
             ModelBakingCompletedEvent.EVENT.fire(new ModelBakingCompletedEvent(event.getModelBakery()))
         );
+        eventBus.addListener((ModelEvent.ModifyBakingResult event) ->
+                ModelModifyResultEvent.EVENT.fire(new ModelModifyResultEvent(event.getModels(), event.getModelBakery()))
+        );
         eventBus.addListener((EntityRenderersEvent.AddLayers event) ->
             RegisterEntityLayersEvent.EVENT.fire(new RegisterEntityLayersEvent(event::getSkin))
         );

@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.items.ExpandableTooltip;
+import com.teamresourceful.resourcefulbees.common.items.base.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.NestUpgrade;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;

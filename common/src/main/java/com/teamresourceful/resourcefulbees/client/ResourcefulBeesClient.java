@@ -54,6 +54,7 @@ public class ResourcefulBeesClient {
         RegisterOverlayEvent.EVENT.addListener(ResourcefulBeesClient::registerOverlay);
         RegisterAdditionaModelsEvent.EVENT.addListener(ModelHandler::onAddAdditional);
         ModelBakingCompletedEvent.EVENT.addListener(ModelHandler::onModelBake);
+        ModelModifyResultEvent.EVENT.addListener(ModelHandler::onModifyModel);
         UpdateEvent.EVENT.addListener(ClientDataSetup::onUpdates);
 
         Color.initRainbow();
@@ -66,8 +67,22 @@ public class ResourcefulBeesClient {
     }
 
     public static void registerRenderLayers(RegisterRenderLayersEvent event) {
-        event.registerFluid(ModFluids.HONEY_STILL.get(), RenderType.translucent());
-        event.registerFluid(ModFluids.HONEY_FLOWING.get(), RenderType.translucent());
+        event.registerFluids(ModFluids.STILL_HONEY_FLUIDS.boundStream(), RenderType.translucent());
+        event.registerFluids(ModFluids.FLOWING_HONEY_FLUIDS.boundStream(), RenderType.translucent());
+
+        event.registerBlock(ModBlocks.HONEY_GLASS.get(), RenderType.translucent());
+        event.registerBlock(ModBlocks.HONEY_GLASS_PLAYER.get(), RenderType.translucent());
+        event.registerBlock(ModBlocks.SOLIDIFICATION_CHAMBER.get(), RenderType.translucent());
+        event.registerBlock(ModBlocks.HONEY_GENERATOR.get(), RenderType.translucent());
+        event.registerBlock(ModBlocks.FAKE_FLOWER.get(), RenderType.cutout());
+        event.registerBlock(ModBlocks.GOLD_FLOWER.get(), RenderType.cutout());
+        event.registerBlock(ModBlocks.ENDER_BEECON.get(), RenderType.cutout());
+        event.registerBlock(ModBlocks.WAXED_DOOR.get(), RenderType.cutout());
+        event.registerBlock(ModBlocks.WAXED_TRAPDOOR.get(), RenderType.cutout());
+
+        event.registerBlocks(ModBlocks.HONEY_BLOCKS.boundStream(), RenderType.translucent());
+
+        event.registerBlocks(ModBlocks.HIVES.boundStream(), RenderType.cutout());
     }
 
     public static void registerItemProperties(RegisterItemPropertiesEvent event) {
@@ -107,7 +122,7 @@ public class ResourcefulBeesClient {
         event.register(ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get(), CentrifugeCrankRenderer::new);
 
         ModEntities.getModBees().forEach((s, entityType) ->
-            event.register(entityType.get(), manager -> new CustomBeeRenderer<>(manager, BeeRegistry.get().getBeeData(s).getRenderData()))
+                event.register(entityType.get(), manager -> new CustomBeeRenderer<>(manager, BeeRegistry.get().getBeeData(s).getRenderData()))
         );
         event.register(ModEntities.THROWN_MUTATED_POLLEN.get(), ThrownItemRenderer::new);
     }
@@ -125,12 +140,16 @@ public class ResourcefulBeesClient {
                                     ModItems.HONEY_BOTTLE_ITEMS.boundStream()
                             )
                     ),
-                    ModItems.HONEY_BLOCK_ITEMS.boundStream()
+                    Stream.concat(
+                            ModItems.HONEY_BLOCK_ITEMS.boundStream(),
+                            ModItems.SPAWN_EGG_ITEMS.boundStream()
+                    )
             ).toArray(Item[]::new);
             event.register(ColoredObject::getItemColor, collect);
             event.register(BeeJarItem::getColor, ModItems.BEE_JAR.get());
             event.register(MutatedPollenItem::getColor, ModItems.MUTATED_POLLEN.get());
-        } else if (event.blocks() != null) {
+        }
+        if (event.blocks() != null) {
             event.register(ColoredObject::getBlockColor, ModBlocks.HONEYCOMB_BLOCKS.boundStream().toArray(Block[]::new));
             event.register(ColoredObject::getBlockColor, ModBlocks.HONEY_BLOCKS.boundStream().toArray(Block[]::new));
         }

@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.items;
+package com.teamresourceful.resourcefulbees.common.items.base;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 

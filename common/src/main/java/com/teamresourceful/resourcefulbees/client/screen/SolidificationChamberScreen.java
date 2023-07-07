@@ -33,7 +33,7 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
             int j = this.topPos;
             graphics.blit(texture, i, j, 0, 0, this.imageWidth, this.imageHeight);
             FluidHolder holder = tileEntity.getFluid();
-            int height = (int) ((holder.getFluidAmount() / 16000f) * 62);
+            int height = (int) ((holder.getFluidAmount() / FluidHooks.buckets(16)) * 62);
             ClientRenderUtils.drawFluid(graphics, height, 14, holder, i + 67, j + 12+(62-height));
         }
     }

@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.config.RecipeConfig;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
-import com.teamresourceful.resourcefulbees.common.items.CustomHoneycombItem;
+import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;

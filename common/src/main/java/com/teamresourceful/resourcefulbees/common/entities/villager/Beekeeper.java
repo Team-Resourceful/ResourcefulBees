@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.entities.villager;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
-import com.teamresourceful.resourcefulbees.common.items.Tradeable;
+import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;

@@ -3,22 +3,22 @@ package com.teamresourceful.resourcefulbees.common.util;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
-import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBottleItem;
+import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFluids;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import earth.terrarium.botarium.common.fluid.base.FluidContainer;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -113,8 +113,8 @@ public final class FluidUtils {
             fillBottle(tank, player, hand);
         } else if (item instanceof HoneyBottleItem) {
             emptyBottle(tank, player, hand);
-        } else if (!player.isShiftKeyDown() && !level.isClientSide() && entity instanceof MenuProvider menuProvider) {
-            ModUtils.openScreen(player, menuProvider, pos);
+        } else if (!player.isShiftKeyDown() && !level.isClientSide() && player instanceof ServerPlayer serverPlayer && entity instanceof ContentMenuProvider<?> provider) {
+            provider.openMenu(serverPlayer);
         }
     }
 

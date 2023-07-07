@@ -6,10 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.roguelogix.phosphophyllite.modular.tile.PhosphophylliteTile;
-import net.roguelogix.phosphophyllite.multiblock2.IMultiblockTile;
-import net.roguelogix.phosphophyllite.multiblock2.common.IPersistentMultiblockTile;
-import net.roguelogix.phosphophyllite.multiblock2.rectangular.IRectangularMultiblockTile;
-import net.roguelogix.phosphophyllite.multiblock2.touching.ITouchingMultiblockTile;
+import net.roguelogix.phosphophyllite.multiblock.IMultiblockTile;
+import net.roguelogix.phosphophyllite.multiblock.common.IPersistentMultiblockTile;
+import net.roguelogix.phosphophyllite.multiblock.rectangular.IRectangularMultiblockTile;
+import net.roguelogix.phosphophyllite.multiblock.touching.ITouchingMultiblockTile;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractCentrifugeEntity extends PhosphophylliteTile

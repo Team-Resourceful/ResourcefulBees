@@ -15,7 +15,8 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
-import static net.roguelogix.phosphophyllite.multiblock2.IAssemblyStateBlock.ASSEMBLED;
+import static net.roguelogix.phosphophyllite.multiblock.IAssemblyStateBlock.ASSEMBLED;
+
 
 public abstract class AbstractGUICentrifuge extends AbstractCentrifuge {
 

@@ -1,8 +1,6 @@
 package com.teamresourceful.resourcefulbees.platform.common.util.forge;
 
 import com.google.gson.JsonObject;
-import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.item.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
 import com.teamresourceful.resourcefullib.common.utils.GenericMemoryPack;
 import com.teamresourceful.resourcefullib.common.utils.forge.HiddenGenericMemoryPack;
@@ -14,11 +12,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
@@ -32,8 +28,6 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Contract;
-
-import java.util.function.Supplier;
 
 public class ModUtilsImpl {
 
@@ -82,10 +76,6 @@ public class ModUtilsImpl {
 
     public static Fluid getFluid(LiquidBlock block) {
         return block.getFluid();
-    }
-
-    public static SpawnEggItem createCustomBeeSpawnEgg(Supplier<EntityType<? extends CustomBeeEntity>> entityType, String beeType) {
-        return new BeeSpawnEggItem(entityType, beeType);
     }
 
     public static GenericMemoryPack createHiddenDataPack(String id, JsonObject meta) {

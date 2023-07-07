@@ -1,10 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.blockentities;
 
+import com.teamresourceful.resourcefulbees.common.blockentities.base.ContentContainerBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.SelectableFluidContainerHandler;
 import com.teamresourceful.resourcefulbees.common.blocks.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.menus.CentrifugeMenu;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.FluidOutput;
@@ -13,10 +15,8 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockE
 import com.teamresourceful.resourcefulbees.common.util.ContainerUtils;
 import com.teamresourceful.resourcefulbees.common.util.containers.AutomationSensitiveContainer;
 import com.teamresourceful.resourcefulbees.common.util.containers.SelectableFluidContainer;
-import earth.terrarium.botarium.common.fluid.base.BotariumFluidBlock;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.impl.WrappedBlockFluidContainer;
-import earth.terrarium.botarium.common.item.ItemContainerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.CommonComponents;
@@ -42,7 +42,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Predicate;
 
-public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBlockEntity, SelectableFluidContainerHandler, ItemContainerBlock, BotariumFluidBlock<WrappedBlockFluidContainer> {
+public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBlockEntity, SelectableFluidContainerHandler, ContentContainerBlock<PositionContent> {
 
     private static final RawAnimation ROT_360 = RawAnimation.begin().thenPlay("animation.centrifuge.360");
     private static final RawAnimation ROT_45 = RawAnimation.begin().thenPlay("animation.centrifuge.45");
@@ -252,6 +252,11 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
             wrappedFluidContainer = new WrappedBlockFluidContainer(this, fluidContainer);
         }
         return wrappedFluidContainer;
+    }
+
+    @Override
+    public PositionContent createContent() {
+        return new PositionContent(getBlockPos());
     }
 
     private static class FluidContainer extends SelectableFluidContainer {

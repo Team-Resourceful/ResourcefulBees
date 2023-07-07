@@ -29,8 +29,8 @@ public class ReloadableServerResourcesMixin implements ReloadableServerResources
     @Inject(
             method = "loadResources",
             at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/server/packs/resources/SimpleReloadInstance;create(Lnet/minecraft/server/packs/resources/ResourceManager;Ljava/util/List;Ljava/util/concurrent/Executor;Ljava/util/concurrent/Executor;Ljava/util/concurrent/CompletableFuture;Z)Lnet/minecraft/server/packs/resources/ReloadInstance;",
+                    value = "INVOKE_ASSIGN",
+                    target = "Lnet/minecraft/server/ReloadableServerResources;listeners()Ljava/util/List;",
                     shift = At.Shift.BEFORE
             ),
             locals = LocalCapture.CAPTURE_FAILHARD

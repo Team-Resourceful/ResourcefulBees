@@ -10,9 +10,11 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.menus.EnderBeeconMenu;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconChangePacket.Option;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
+import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import earth.terrarium.botarium.common.fluid.base.BotariumFluidBlock;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.impl.InsertOnlyFluidContainer;
@@ -47,7 +49,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, BotariumFluidBlock<WrappedBlockFluidContainer> {
+public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, BotariumFluidBlock<WrappedBlockFluidContainer>, ContentMenuProvider<PositionContent> {
 
     public static final Set<MobEffect> ALLOWED_EFFECTS = Set.of(ModEffects.CALMING.get(), MobEffects.WATER_BREATHING, MobEffects.FIRE_RESISTANCE, MobEffects.REGENERATION);
 
@@ -188,7 +190,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     }
 
     public FluidHolder getFluid() {
-        return this.tank.getFluids().get(0);
+        return getFluidContainer().getFluids().get(0);
     }
 
     public Set<MobEffect> getEffects() {
@@ -232,13 +234,15 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
                 this.sendToPlayersTrackingChunk();
             }
             default ->
-                ModConstants.LOGGER.error("UNKNOWN Beecon Configuration Option '{}' please report to github!", option);
+                ModConstants.LOGGER.error("UNKNOWN Beecon Configuration Option '{}' please report to GitHub!", option);
         }
     }
 
     public int getDrain() {
         double base = EnderBeeconConfig.beeconBaseDrain;
-        for (MobEffect e : effects) base += getEffectValue(e);
+        for (MobEffect e : effects) {
+            base += getEffectValue(e);
+        }
         base = (base * (range * EnderBeeconConfig.beeconRangeMultiplier * 0.10d));
         return (int) base;
     }
@@ -293,8 +297,13 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     @Override
     public WrappedBlockFluidContainer getFluidContainer() {
         if (tank == null) {
-            tank = new WrappedBlockFluidContainer(this, new InsertOnlyFluidContainer(i -> FluidHooks.buckets(16), 1, (amount, fluid) -> fluid.getFluid().is(ModFluidTags.HONEY)));
+            tank = new WrappedBlockFluidContainer(this, new InsertOnlyFluidContainer(i -> FluidHooks.buckets(16), 1, (amount, fluid) -> fluid.is(ModFluidTags.HONEY)));
         }
         return this.tank;
+    }
+
+    @Override
+    public PositionContent createContent() {
+        return new PositionContent(this.getBlockPos());
     }
 }

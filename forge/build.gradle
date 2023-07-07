@@ -6,15 +6,6 @@ architectury {
     forge()
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs += project(":forge").file('src/generated/resources').absolutePath
-            exclude '.cache'
-        }
-    }
-}
-
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
 
@@ -67,8 +58,6 @@ dependencies {
 }
 
 processResources {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
     def versionProperties = [
             "version": version,
             "fml_version": forge_version.substring(0, forge_version.indexOf('.')),

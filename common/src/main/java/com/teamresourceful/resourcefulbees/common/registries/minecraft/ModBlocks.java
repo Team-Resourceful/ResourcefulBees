@@ -75,10 +75,7 @@ public final class ModBlocks {
     //TODO figure out how to make this nest registration cleaner and reduce duplicate processes
     //region Nests
     //region Acacia
-    public static final RegistryEntry<TieredBeehiveBlock> ACACIA_BEE_NEST = HIVES.register("nest/acacia/1", () -> {
-        System.out.println("ACACIA_BEE_NEST");
-        return createWoodNest(ModBlockEntityTypes.ACACIA_BEE_NEST_ENTITY, DefaultBeehiveTiers.T1_NEST).get();
-    });
+    public static final RegistryEntry<TieredBeehiveBlock> ACACIA_BEE_NEST = HIVES.register("nest/acacia/1", createWoodNest(ModBlockEntityTypes.ACACIA_BEE_NEST_ENTITY, DefaultBeehiveTiers.T1_NEST));
     public static final RegistryEntry<TieredBeehiveBlock> T1_ACACIA_BEEHIVE = HIVES.register("nest/acacia/2", createWoodNest(ModBlockEntityTypes.T1_ACACIA_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST));
     public static final RegistryEntry<TieredBeehiveBlock> T2_ACACIA_BEEHIVE = HIVES.register("nest/acacia/3", createWoodNest(ModBlockEntityTypes.T2_ACACIA_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST));
     public static final RegistryEntry<TieredBeehiveBlock> T3_ACACIA_BEEHIVE = HIVES.register("nest/acacia/4", createWoodNest(ModBlockEntityTypes.T3_ACACIA_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST));

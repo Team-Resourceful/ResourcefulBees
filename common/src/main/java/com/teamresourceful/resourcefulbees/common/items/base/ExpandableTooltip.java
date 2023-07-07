@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.items;
+package com.teamresourceful.resourcefulbees.common.items.base;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import net.fabricmc.api.EnvType;

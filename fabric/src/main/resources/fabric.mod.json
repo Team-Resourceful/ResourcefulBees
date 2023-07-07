@@ -12,6 +12,12 @@
     "entrypoints": {
         "main": [
           "com.teamresourceful.resourcefulbees.ResourcefulBeesFabric"
+        ],
+        "client": [
+            "com.teamresourceful.resourcefulbees.ResourcefulBeesFabricClient"
+        ],
+        "server": [
+            "com.teamresourceful.resourcefulbees.ResourcefulBeesFabricServer"
         ]
     },
     "mixins": [

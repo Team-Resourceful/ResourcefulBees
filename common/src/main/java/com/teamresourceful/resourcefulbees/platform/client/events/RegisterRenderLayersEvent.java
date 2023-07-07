@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 public record RegisterRenderLayersEvent(BiConsumer<Block, RenderType> blockRegistry, BiConsumer<Fluid, RenderType> fluidRegistry) {
 
@@ -15,7 +16,15 @@ public record RegisterRenderLayersEvent(BiConsumer<Block, RenderType> blockRegis
         blockRegistry.accept(block, renderType);
     }
 
+    public void registerBlocks(Stream<Block> blocks, RenderType renderType) {
+        blocks.forEach(block -> registerBlock(block, renderType));
+    }
+
     public void registerFluid(Fluid fluid, RenderType renderType) {
         fluidRegistry.accept(fluid, renderType);
+    }
+
+    public void registerFluids(Stream<Fluid> fluids, RenderType renderType) {
+        fluids.forEach(fluid -> registerFluid(fluid, renderType));
     }
 }

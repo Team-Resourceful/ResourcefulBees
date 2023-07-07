@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.items;
 
+import com.teamresourceful.resourcefulbees.common.items.base.ExpandableTooltip;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;

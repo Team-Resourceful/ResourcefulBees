@@ -12,9 +12,10 @@ import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntit
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.fluids.HoneyFluidInformation;
-import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBottleItem;
-import com.teamresourceful.resourcefulbees.common.items.CustomHoneyBucketItem;
+import com.teamresourceful.resourcefulbees.common.items.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.items.dispenser.ScraperDispenserBehavior;
+import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneyBottleItem;
+import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyDataRegistry;
@@ -23,7 +24,6 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.CustomHoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.fluid.CustomHoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.subsystems.RegistrySubsystem;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import earth.terrarium.botarium.common.registry.fluid.FluidData;
@@ -80,7 +80,7 @@ public final class RegistryHandler {
     private static void registerBee(String name, float sizeModifier) {
         RegistryEntry<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.BEES.register(name + "_bee",
                 () -> CustomBeeEntityType.of(name, (type, world) -> new ResourcefulBee(type, world, name), 0.7F * sizeModifier, 0.6F * sizeModifier));
-        ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> ModUtils.createCustomBeeSpawnEgg(beeEntityType, name));
+        ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> new BeeSpawnEggItem(beeEntityType, name));
         ModEntities.getModBees().put(name, beeEntityType);
     }
 

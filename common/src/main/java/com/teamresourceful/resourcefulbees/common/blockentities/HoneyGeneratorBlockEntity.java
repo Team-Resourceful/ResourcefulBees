@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blockentities;
 
+import com.teamresourceful.resourcefulbees.common.blockentities.base.ContentContainerBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.HoneyGenerator;
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
@@ -11,6 +12,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Gui
 import com.teamresourceful.resourcefulbees.common.lib.enums.ProcessStage;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.menus.HoneyGeneratorMenu;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.HoneyGenRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.util.containers.AutomationSensitiveContainer;
@@ -22,7 +24,6 @@ import earth.terrarium.botarium.common.fluid.base.BotariumFluidBlock;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.impl.InsertOnlyFluidContainer;
 import earth.terrarium.botarium.common.fluid.impl.WrappedBlockFluidContainer;
-import earth.terrarium.botarium.common.item.ItemContainerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -39,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 import java.util.Optional;
 
-public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, BotariumFluidBlock<WrappedBlockFluidContainer>, BotariumEnergyBlock<WrappedBlockEnergyContainer>, ItemContainerBlock {
+public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, BotariumFluidBlock<WrappedBlockFluidContainer>, BotariumEnergyBlock<WrappedBlockEnergyContainer>, ContentContainerBlock<PositionContent> {
 
     public static final int ENERGY_FILL_UPGRADE_SLOT = 3;
     public static final int ENERGY_XFER_UPGRADE_SLOT = 2;
@@ -190,7 +191,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     }
 
     public FluidHolder getFluid() {
-        return fluidContainer.getFluids().get(0);
+        return getFluidContainer().getFluids().get(0);
     }
 
     @Override
@@ -222,6 +223,11 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     public void readSyncData(@NotNull CompoundTag tag) {
         energyContainer.deserialize(tag);
         fluidContainer.deserialize(tag);
+    }
+
+    @Override
+    public PositionContent createContent() {
+        return new PositionContent(getBlockPos());
     }
 
     private static class EnergyContainer extends ExtractOnlyEnergyContainer {

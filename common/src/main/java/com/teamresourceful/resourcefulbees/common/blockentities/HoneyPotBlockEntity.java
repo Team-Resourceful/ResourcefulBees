@@ -5,7 +5,9 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.menus.HoneyPotMenu;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import earth.terrarium.botarium.common.fluid.base.BotariumFluidBlock;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.impl.SimpleFluidContainer;
@@ -21,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HoneyPotBlockEntity extends GUISyncedBlockEntity implements BotariumFluidBlock<WrappedBlockFluidContainer> {
+public class HoneyPotBlockEntity extends GUISyncedBlockEntity implements BotariumFluidBlock<WrappedBlockFluidContainer>, ContentMenuProvider<PositionContent> {
 
     private WrappedBlockFluidContainer tank;
 
@@ -68,6 +70,11 @@ public class HoneyPotBlockEntity extends GUISyncedBlockEntity implements Botariu
 
     public FluidHolder getFluid() {
         return tank.getFluids().get(0);
+    }
+
+    @Override
+    public PositionContent createContent() {
+        return new PositionContent(this.getBlockPos());
     }
 
     private static class HoneyFluidContainer extends SimpleFluidContainer {

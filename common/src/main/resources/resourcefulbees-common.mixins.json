@@ -20,6 +20,7 @@
     "common.RecipeManagerInvoker",
     "common.ReloadableServerResourcesAccessor",
     "common.ServerLevelAccessor",
+    "common.SpawnEggItemAccessor",
     "common.StructureCheckAccessor",
     "common.StructureTemplatePoolAccessor",
     "common.TagManagerAccessor",

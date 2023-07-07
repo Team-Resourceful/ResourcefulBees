@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class ResourcefulBeesFabricClient implements ClientModInitializer {
 
-    private static Map<String, OverlayRenderer> OVERLAY_RENDERERS = new LinkedHashMap<>();
+    private static final Map<String, OverlayRenderer> OVERLAY_RENDERERS = new LinkedHashMap<>();
 
     @Override
     public void onInitializeClient() {

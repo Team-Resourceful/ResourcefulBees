@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefulbees.platform.client.events.ModelBakingCompletedEvent;
+import com.teamresourceful.resourcefulbees.platform.client.events.ModelModifyResultEvent;
 import com.teamresourceful.resourcefulbees.platform.client.events.RegisterAdditionaModelsEvent;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.client.Minecraft;
@@ -73,21 +74,24 @@ public final class ModelHandler {
         ModBlocks.HONEY_BLOCKS.getEntries().forEach(honeyBlock -> registerGenericBlockState(event, honeyBlock, new ModResourceLocation("honey_block"), RenderType.translucent(), resourceManager));
     }
 
-    public static void onModelBake(ModelBakingCompletedEvent event) {
-        ClientRenderUtils.DEFAULT_TEXTURER.clear();
-        Map<ResourceLocation, BakedModel> modelRegistry = event.bakery().getBakedTopLevelModels();
+    public static void onModifyModel(ModelModifyResultEvent event) {
+        Map<ResourceLocation, BakedModel> modelRegistry = event.models();
         BakedModel missingModel = modelRegistry.get(ModelBakery.MISSING_MODEL_LOCATION);
         MODEL_MAP.asMap().forEach(((resourceLocation, resourceLocations) -> {
             BakedModel defaultModel = modelRegistry.getOrDefault(resourceLocation, missingModel);
             resourceLocations.forEach(modelLocation ->
-                modelRegistry.computeIfPresent(modelLocation, (resourceLocation1, iBakedModel) -> {
-                    TextureAtlasSprite sprite = iBakedModel.getParticleIcon();
-                    if (sprite.contents().name().equals(MissingTextureAtlasSprite.getLocation())) {
-                        return defaultModel;
-                    }
-                    return iBakedModel;
-                })
+                    modelRegistry.computeIfPresent(modelLocation, (resourceLocation1, iBakedModel) -> {
+                        TextureAtlasSprite sprite = iBakedModel.getParticleIcon();
+                        if (sprite.contents().name().equals(MissingTextureAtlasSprite.getLocation())) {
+                            return defaultModel;
+                        }
+                        return iBakedModel;
+                    })
             );
         }));
+    }
+
+    public static void onModelBake(ModelBakingCompletedEvent event) {
+        ClientRenderUtils.DEFAULT_TEXTURER.clear();
     }
 }

@@ -1,11 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.blockentities;
 
+import com.teamresourceful.resourcefulbees.common.blockentities.base.ContentContainerBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.config.SolidficationConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.SolidificationChamberMenu;
+import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.util.containers.AutomationSensitiveContainer;
@@ -14,7 +16,6 @@ import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.impl.InsertOnlyFluidContainer;
 import earth.terrarium.botarium.common.fluid.impl.WrappedBlockFluidContainer;
 import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
-import earth.terrarium.botarium.common.item.ItemContainerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, BotariumFluidBlock<WrappedBlockFluidContainer>, ItemContainerBlock {
+public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, BotariumFluidBlock<WrappedBlockFluidContainer>, ContentContainerBlock<PositionContent> {
 
     public static final int BLOCK_OUTPUT = 0;
 
@@ -146,7 +147,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
     }
 
     public FluidHolder getFluid() {
-        return tank.getFluids().get(0);
+        return getFluidContainer().getFluids().get(0);
     }
 
     @Override
@@ -155,6 +156,11 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
             container = new Container(this, 2, player -> true);
         }
         return container;
+    }
+
+    @Override
+    public PositionContent createContent() {
+        return new PositionContent(this.getBlockPos());
     }
 
     protected static class Container extends AutomationSensitiveContainer {

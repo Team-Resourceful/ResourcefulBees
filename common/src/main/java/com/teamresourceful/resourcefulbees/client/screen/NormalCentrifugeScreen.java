@@ -31,7 +31,7 @@ public class NormalCentrifugeScreen extends AbstractContainerScreen<CentrifugeMe
 
     @Override
     protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/centrifuges/basic.png");
+        ResourceLocation texture = new ResourceLocation(ModConstants.MOD_ID, "textures/gui/centrifuge/basic.png");
         if (tileEntity != null) {
             int i = this.leftPos;
             int j = this.topPos;

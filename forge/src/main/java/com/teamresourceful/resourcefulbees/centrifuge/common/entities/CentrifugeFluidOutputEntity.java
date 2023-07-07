@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-import static net.roguelogix.phosphophyllite.multiblock2.IAssemblyStateBlock.ASSEMBLED;
+import static net.roguelogix.phosphophyllite.multiblock.IAssemblyStateBlock.ASSEMBLED;
 
 public class CentrifugeFluidOutputEntity extends AbstractCentrifugeOutputEntity<FluidOutput, RecipeFluid> {
 

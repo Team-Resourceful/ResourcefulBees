@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.blocks;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
-import com.teamresourceful.resourcefulbees.common.items.Tradeable;
+import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
 import com.teamresourceful.resourcefulbees.common.items.honey.ColoredObject;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.fabricmc.api.EnvType;

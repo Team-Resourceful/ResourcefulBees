@@ -1,8 +1,8 @@
-package com.teamresourceful.resourcefulbees.common.items;
+package com.teamresourceful.resourcefulbees.common.items.honey;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
-import com.teamresourceful.resourcefulbees.common.items.honey.ColoredObject;
+import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import earth.terrarium.botarium.common.registry.fluid.FluidBucketItem;
 import earth.terrarium.botarium.common.registry.fluid.FluidData;

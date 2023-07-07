@@ -13,7 +13,7 @@ import net.minecraft.world.Nameable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.roguelogix.phosphophyllite.multiblock2.validated.IValidatedMultiblock;
+import net.roguelogix.phosphophyllite.multiblock.validated.IValidatedMultiblock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
