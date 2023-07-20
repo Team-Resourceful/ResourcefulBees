@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:honeycomb",
+    {
+      "id": "#forge:honeycombs",
+      "required": false
+    },
+    {
+      "id": "#c:honeycombs",
+      "required": false
+    }
+  ]
+}

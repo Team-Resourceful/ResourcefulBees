@@ -1,0 +1,36 @@
+{
+    "resourcefulbees:core/v1": {
+        "flower": ["minecraft:obsidian"],
+        "honeycombVariation": "dragon",
+        "maxTimeInHive": 2400
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "dragon/ender_dragon_bee",
+        "model": "resourcefulbees:geo/dragon.geo.json",
+        "layers": [
+            { "isPollen": true, "color": "#E400FF", "texture": "custom_nectar" },
+            { "layerEffect": "GLOW", "texture": "dragon/dragon_bee_emissive", "color": "#E400FF" }
+        ],
+        "ColorData": {
+            "spawnEggPrimaryColor": "#171717",
+            "spawnEggSecondaryColor": "#E400FF",
+            "jarColor": "#222222"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation": "resourcefulbees:mutations/dragon"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "wither",
+                "parent2": "ender",
+                "chance": 0.25
+            }
+        ]
+    },
+    "resourcefulbees:trait/v1": {
+        "traits": [ "ender", "nether", "wither" ]
+    }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "resourcefulbees:centrifuge/casing"
+    },
+    "E": {
+      "item": "resourcefulbees:centrifuge/input/energy/basic"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "pattern": [
+    "RCR",
+    "CEC",
+    "RCR"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/input/energy/advanced"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,44 @@
+{
+    "resourcefulbees:core/v1": {
+        "flower": ["minecraft:water"],
+        "maxTimeInHive": 1200
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "icy/icy_bee",
+        "model": "resourcefulbees:geo/slime.geo.json",
+        "ColorData": {
+            "spawnEggPrimaryColor": "#92b9fe",
+            "spawnEggSecondaryColor": "#303030",
+            "jarColor": "#92b9fe"
+        },
+        "sizeModifier": 0.75
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation": "resourcefulbees:mutations/icy"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "icy",
+                "parent2": "icy"
+            }
+        ]
+    },
+    "resourcefulbees:trait/v1": {
+        "traits": ["can_swim"]
+    },
+    "resourcefulbees:trade/v1": {
+        "amount": {
+            "min": 1,
+            "max": 1
+        },
+        "secondaryItem": "minecraft:ice",
+        "secondaryItemCost": {
+            "min": 16,
+            "max": 32
+        },
+        "priceMultiplier": 4,
+        "maxTrades": 2
+    }
+}

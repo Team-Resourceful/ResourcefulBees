@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "tag": "rbees_common:storage_blocks/honeycombs"
+    },
+    "M": {
+      "item": "minecraft:nether_star"
+    },
+    "S": {
+      "tag": "resourcefulbees:t3_nests"
+    }
+  },
+  "pattern": [
+    "CSC",
+    "SMS",
+    "CSC"
+  ],
+  "result": {
+    "item": "resourcefulbees:t1_apiary"
+  },
+  "show_notification": true
+}

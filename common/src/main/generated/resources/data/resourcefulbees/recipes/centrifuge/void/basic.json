@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "C": {
+      "item": "resourcefulbees:centrifuge/casing"
+    },
+    "E": {
+      "item": "minecraft:ender_chest"
+    }
+  },
+  "pattern": [
+    "ACA",
+    "CEC",
+    "ACA"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/void/basic"
+  },
+  "show_notification": true
+}

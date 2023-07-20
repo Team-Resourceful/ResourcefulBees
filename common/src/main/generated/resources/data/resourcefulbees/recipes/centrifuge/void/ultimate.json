@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "minecraft:echo_shard"
+    },
+    "N": {
+      "item": "minecraft:netherite_block"
+    },
+    "S": {
+      "tag": "rbees_common:nether_stars"
+    },
+    "T": {
+      "item": "resourcefulbees:centrifuge/void/elite"
+    }
+  },
+  "pattern": [
+    "NEN",
+    "STS",
+    "NEN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/void/ultimate"
+  },
+  "show_notification": true
+}

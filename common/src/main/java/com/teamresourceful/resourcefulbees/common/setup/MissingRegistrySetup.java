@@ -71,7 +71,7 @@ public final class MissingRegistrySetup {
         object.put("h", honeyArray);
         object.put("c", combArray);
         try {
-            FileUtils.writeByteArrayToFile(registryCheckFile, object.toData());
+            FileUtils.writeByteArrayToFile(registryCheckFile, object.toFullData());
         } catch (Exception e) {
             ModConstants.LOGGER.error("Failed to write registry check file. Registries may be missing next run!");
         }

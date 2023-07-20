@@ -1,6 +1,6 @@
 {
   "resourcefulbees:core/v1": {
-    "flower": "#forge:storage_blocks/diamond",
+    "flower": "minecraft:diamond_block",
     "honeycombVariation": "diamond",
     "maxTimeInHive": 600
   },
@@ -31,7 +31,7 @@
         "parent2": "skeleton"
       }
     ],
-    "feedItem": "forge:ores"
+    "feedItem": "rbees_common:ores"
   },
   "resourcefulbees:trade/v1": {
     "amount": {

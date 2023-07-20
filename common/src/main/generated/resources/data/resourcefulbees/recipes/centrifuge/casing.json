@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "H": {
+      "tag": "rbees_common:storage_blocks/honeycombs"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "W": {
+      "item": "resourcefulbees:waxed_machine_block"
+    }
+  },
+  "pattern": [
+    "IWI",
+    "WHW",
+    "IWI"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/casing"
+  },
+  "show_notification": true
+}

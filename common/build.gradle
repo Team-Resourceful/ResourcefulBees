@@ -21,3 +21,7 @@ architectury {
 loom {
     accessWidenerPath = file("src/main/resources/resourcefulbees.accessWidener")
 }
+
+sourceSets.main.resources {
+    srcDirs += ["src/main/generated/resources"]
+}

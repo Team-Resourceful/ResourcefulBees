@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:beacon"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "G": {
+      "tag": "rbees_common:glass"
+    },
+    "P": {
+      "item": "minecraft:purpur_block"
+    }
+  },
+  "pattern": [
+    "PPP",
+    "GEG",
+    "PBP"
+  ],
+  "result": {
+    "item": "resourcefulbees:ender_beecon"
+  },
+  "show_notification": true
+}

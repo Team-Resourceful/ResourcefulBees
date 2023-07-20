@@ -1,0 +1,46 @@
+{
+  "resourcefulbees:core/v1":{
+    "flower": "#minecraft:flowers",
+    "honeycombVariation": "beeper",
+    "maxTimeInHive": 600
+  },
+  "resourcefulbees:rendering/v1": {
+    "texture": "/creeper/creeper_bee",
+    "layers": [
+      { "layerEffect": "GLOW", "texture": "/creeper/creeper_bee_emissive", "color": "#E2D3D3", "pulseFrequency": 10 }
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#0C9F0A",
+      "spawnEggSecondaryColor": "#303030",
+      "jarColor": "#0C9F0A"
+    }
+  },
+  "resourcefulbees:mutation/v1": {
+    "mutation": "resourcefulbees:mutations/beeper"
+  },
+  "resourcefulbees:breeding/v1": {
+    "parents": [
+      {
+        "parent1": "beeper",
+        "parent2": "beeper"
+      }
+    ],
+    "isBreedable": true
+  },
+  "resourcefulbees:trait/v1": {
+    "traits" : ["creeper"]
+  },
+  "resourcefulbees:trade/v1": {
+    "amount": {
+      "min": 1,
+      "max": 1
+    },
+    "secondaryItem": "minecraft:tnt",
+    "secondaryItemCost": {
+      "min": 4,
+      "max": 8
+    },
+    "priceMultiplier": 4,
+    "maxTrades": 2
+  }
+}

@@ -1,0 +1,32 @@
+{
+    "resourcefulbees:core/v1": {
+        "flower": ["minecraft:wither_rose"],
+        "honeycombVariation": "wither",
+        "maxTimeInHive": 600
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "wither/wither_bee",
+        "ColorData": {
+            "spawnEggPrimaryColor": "#444444",
+            "spawnEggSecondaryColor": "#303030"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation": "resourcefulbees:mutations/wither"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "coal",
+                "parent2": "skeleton"
+            }
+        ],
+        "feedItem": ["minecraft:rotten_flesh"],
+        "feedAmount": 12
+    },
+    "resourcefulbees:trait/v1": {
+        "hasTraits": true,
+        "traits": ["nether", "wither"]
+    }
+}

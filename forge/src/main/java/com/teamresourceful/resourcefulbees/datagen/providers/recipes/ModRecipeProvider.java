@@ -16,7 +16,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -47,7 +46,7 @@ public class ModRecipeProvider extends RecipeProvider {
 
         RecipeCriteria hasPlanks = new RecipeCriteria("has_planks", RecipeProvider.has(ItemTags.PLANKS));
         RecipeCriteria hasHoneycombBlock = new RecipeCriteria("has_honeycomb_block", RecipeProvider.has(ModItemTags.HONEYCOMB_BLOCK));
-        RecipeCriteria hasIron = new RecipeCriteria("has_iron", RecipeProvider.has(Tags.Items.INGOTS_IRON));
+        RecipeCriteria hasIron = new RecipeCriteria("has_iron", RecipeProvider.has(Items.IRON_INGOT));
 
         //region Hive Upgrades
         RecipeHelper.createBoxed(Ingredient.of(ItemTags.PLANKS), Ingredient.of(Items.GRASS), ModItems.T2_NEST_UPGRADE.get())
@@ -124,7 +123,7 @@ public class ModRecipeProvider extends RecipeProvider {
 
         AdvancedShapedRecipeBuilder.shaped(ModItems.HONEY_GLASS, 4)
                 .pattern("HG", "GH")
-                .define('G', Ingredient.of(Tags.Items.GLASS))
+                .define('G', Ingredient.of(ModItemTags.GLASS))
                 .define('H', Ingredient.of(ModItemTags.HONEY_BLOCKS))
                 .unlockedBy("has_honey_block", RecipeProvider.has(ModItemTags.HONEY_BLOCKS))
                 .save(recipes);
@@ -171,13 +170,13 @@ public class ModRecipeProvider extends RecipeProvider {
         AdvancedShapedRecipeBuilder.shaped(ModItems.WAXED_FENCE, 3)
                 .pattern("   ", "WSW", "WSW")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
-                .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
+                .define('S', Ingredient.of(Items.STICK))
                 .unlockedBy(hasWax)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.WAXED_FENCE_GATE)
                 .pattern("   ", "SWS", "SWS")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
-                .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
+                .define('S', Ingredient.of(Items.STICK))
                 .unlockedBy(hasWax)
                 .save(recipes);
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.WAXED_BUTTON.get())
@@ -202,7 +201,7 @@ public class ModRecipeProvider extends RecipeProvider {
         AdvancedShapedRecipeBuilder.shaped(ModItems.WAXED_SIGN, 3)
                 .pattern("WWW", "WWW", " S ")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
-                .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
+                .define('S', Ingredient.of(Items.STICK))
                 .unlockedBy(hasWax)
                 .save(recipes);
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.TRIMMED_WAXED_PLANKS.get(), 4)
@@ -213,7 +212,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("RHR", "HWH", "RHR")
                 .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
                 .define('H', Ingredient.of(ModItemTags.HONEYCOMB))
-                .define('R', Ingredient.of(Tags.Items.STORAGE_BLOCKS_REDSTONE))
+                .define('R', Ingredient.of(Items.REDSTONE_BLOCK))
                 .unlockedBy(hasWax)
                 .save(recipes);
         //endregion
@@ -221,20 +220,20 @@ public class ModRecipeProvider extends RecipeProvider {
         //region Tools
         AdvancedShapedRecipeBuilder.shaped(ModItems.SMOKERCAN)
                 .pattern("II ", "I I", "ICI")
-                .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
+                .define('I', Ingredient.of(Items.IRON_INGOT))
                 .define('C', Ingredient.of(Items.CAMPFIRE))
                 .unlockedBy(hasIron)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.SCRAPER)
                 .pattern(" II", " SI", "S  ")
-                .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
-                .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
+                .define('I', Ingredient.of(Items.IRON_INGOT))
+                .define('S', Ingredient.of(Items.STICK))
                 .unlockedBy(hasIron)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.BEE_JAR)
                 .pattern(" G ", "G G", "GGG")
-                .define('G', Ingredient.of(Tags.Items.GLASS_PANES_COLORLESS))
-                .unlockedBy("has_glass_panes", RecipeProvider.has(Tags.Items.GLASS_PANES_COLORLESS))
+                .define('G', Ingredient.of(ModItemTags.COLORLESS_GLASS_PANES))
+                .unlockedBy("has_glass_panes", RecipeProvider.has(ModItemTags.COLORLESS_GLASS_PANES))
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.BELLOW)
                 .pattern("LL ", "L L", " LL")
@@ -243,15 +242,15 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.BEEPEDIA)
                 .pattern("IRI", "IGI", "IHI")
-                .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
-                .define('G', Ingredient.of(Tags.Items.GLASS_PANES))
+                .define('I', Ingredient.of(Items.IRON_INGOT))
+                .define('G', Ingredient.of(ModItemTags.GLASS_PANES))
                 .define('H', Ingredient.of(ModItemTags.HONEY_BOTTLES))
-                .define('R', Ingredient.of(Tags.Items.DUSTS_REDSTONE))
+                .define('R', Ingredient.of(Items.REDSTONE))
                 .unlockedBy(hasIron)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.BEE_BOX)
                 .pattern("PPP", "WIW", "PPP")
-                .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
+                .define('I', Ingredient.of(Items.IRON_INGOT))
                 .define('P', Ingredient.of(ItemTags.PLANKS))
                 .define('W', Ingredient.of(ModItemTags.WAX))
                 .unlockedBy(hasIron)
@@ -259,7 +258,7 @@ public class ModRecipeProvider extends RecipeProvider {
         AdvancedShapedRecipeBuilder.shaped(ModItems.HONEY_DIPPER)
                 .pattern(" CW", " SC", "S  ")
                 .define('C', Ingredient.of(ModItemTags.HONEYCOMB))
-                .define('S', Ingredient.of(Tags.Items.RODS_WOODEN))
+                .define('S', Ingredient.of(Items.STICK))
                 .define('W', Ingredient.of(ModItemTags.WAX))
                 .unlockedBy("has_honeycomb", RecipeProvider.has(ModItemTags.HONEYCOMB))
                 .save(recipes);
@@ -270,40 +269,40 @@ public class ModRecipeProvider extends RecipeProvider {
         //endregion
 
         //region Machines
-        RecipeCriteria hasObsidian = new RecipeCriteria("has_obsidian", RecipeProvider.has(Tags.Items.OBSIDIAN));
+        RecipeCriteria hasObsidian = new RecipeCriteria("has_obsidian", RecipeProvider.has(ModItemTags.OBSIDIAN));
         AdvancedShapedRecipeBuilder.shaped(ModItems.ENDER_BEECON_ITEM)
                 .pattern("PPP","GEG","PBP")
                 .define('E', Ingredient.of(Items.ENDER_EYE))
                 .define('P', Ingredient.of(Items.PURPUR_BLOCK))
-                .define('G', Ingredient.of(Tags.Items.GLASS))
+                .define('G', Ingredient.of(ModItemTags.GLASS))
                 .define('B', Ingredient.of(Items.BEACON))
                 .unlockedBy(hasObsidian)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.SOLIDIFICATION_CHAMBER_ITEM)
                 .pattern(" G ","IGI","SWS")
-                .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
-                .define('G', Ingredient.of(Tags.Items.GLASS))
+                .define('I', Ingredient.of(Items.IRON_INGOT))
+                .define('G', Ingredient.of(ModItemTags.GLASS))
                 .define('W', Ingredient.of(ModItemTags.WAX))
-                .define('S', Ingredient.of(Tags.Items.STONE))
+                .define('S', Ingredient.of(ItemTags.STONE_TOOL_MATERIALS))
                 .unlockedBy(hasIron)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(ModItems.HONEY_GENERATOR_ITEM)
                 .pattern("I@I","SGR","IBI")
-                .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
+                .define('I', Ingredient.of(Items.IRON_INGOT))
                 .define('B', Ingredient.of(Items.BUCKET))
-                .define('G', Ingredient.of(Tags.Items.GLASS))
+                .define('G', Ingredient.of(ModItemTags.GLASS))
                 .define('S', Ingredient.of(Items.IRON_BARS))
-                .define('R', Ingredient.of(Tags.Items.DUSTS_REDSTONE))
-                .define('@', Ingredient.of(Tags.Items.STORAGE_BLOCKS_IRON))
+                .define('R', Ingredient.of(Items.REDSTONE))
+                .define('@', Ingredient.of(Items.IRON_BLOCK))
                 .unlockedBy(hasIron)
                 .save(recipes);
 
         //region Centrifuge
-        RecipeCriteria hasNetherite = new RecipeCriteria("has_netherite", RecipeProvider.has(Tags.Items.INGOTS_NETHERITE));
+        RecipeCriteria hasNetherite = new RecipeCriteria("has_netherite", RecipeProvider.has(Items.NETHERITE_INGOT));
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_CASING)
                 .pattern("IWI","WHW","IWI")
                 .define('H', Ingredient.of(ModItemTags.HONEYCOMB_BLOCK))
-                .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
+                .define('I', Ingredient.of(Items.IRON_INGOT))
                 .define('W', Ingredient.of(ModItems.WAXED_MACHINE_BLOCK.get()))
                 .unlockedBy(hasIron)
                 .save(recipes);
@@ -311,14 +310,14 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("NCN","CLC","NCN")
                 .define('L', Ingredient.of(Items.CLOCK))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
-                .define('N', Ingredient.of(Tags.Items.INGOTS_NETHERITE))
+                .define('N', Ingredient.of(Items.NETHERITE_INGOT))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_GEARBOX)
                 .pattern("NCN","CRC","NCN")
                 .define('R', Ingredient.of(Items.REPEATER))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
-                .define('N', Ingredient.of(Tags.Items.INGOTS_NETHERITE))
+                .define('N', Ingredient.of(Items.NETHERITE_INGOT))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         //region Terminal
@@ -326,36 +325,36 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("OCO","CFC","OCO")
                 .define('F', Ingredient.of(ModItems.CENTRIFUGE.get()))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
-                .define('O', Ingredient.of(Tags.Items.OBSIDIAN))
+                .define('O', Ingredient.of(ModItemTags.OBSIDIAN))
                 .unlockedBy(hasObsidian)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ADVANCED_TERMINAL)
                 .pattern("NCN","CTC","NCN")
                 .define('T', Ingredient.of(CentrifugeItems.CENTRIFUGE_BASIC_TERMINAL.get()))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
-                .define('N', Ingredient.of(Tags.Items.INGOTS_NETHERITE))
+                .define('N', Ingredient.of(Items.NETHERITE_INGOT))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ELITE_TERMINAL)
                 .pattern("NGN","GTG","NGN")
                 .define('T', Ingredient.of(CentrifugeItems.CENTRIFUGE_ADVANCED_TERMINAL.get()))
                 .define('G', Ingredient.of(CentrifugeItems.CENTRIFUGE_GEARBOX.get()))
-                .define('N', Ingredient.of(Tags.Items.INGOTS_NETHERITE))
+                .define('N', Ingredient.of(Items.NETHERITE_INGOT))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ULTIMATE_TERMINAL)
                 .pattern("NPN","STS","NPN")
                 .define('T', Ingredient.of(CentrifugeItems.CENTRIFUGE_ELITE_TERMINAL.get()))
                 .define('P', Ingredient.of(CentrifugeItems.CENTRIFUGE_PROCESSOR.get()))
-                .define('N', Ingredient.of(Tags.Items.STORAGE_BLOCKS_NETHERITE))
-                .define('S', Ingredient.of(Tags.Items.NETHER_STARS))
+                .define('N', Ingredient.of(Items.NETHERITE_BLOCK))
+                .define('S', Ingredient.of(ModItemTags.NETHER_STARS))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         //endregion
         //region Void
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_BASIC_VOID)
                 .pattern("ACA","CEC","ACA")
-                .define('E', Ingredient.of(Tags.Items.CHESTS_ENDER))
+                .define('E', Ingredient.of(Items.ENDER_CHEST))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
                 .define('A', Ingredient.of(Items.AMETHYST_SHARD))
                 .unlockedBy(new RecipeCriteria("has_amethyst_shard", RecipeProvider.has(Items.AMETHYST_SHARD)))
@@ -371,7 +370,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("NSN","SVS","NSN")
                 .define('V', Ingredient.of(CentrifugeItems.CENTRIFUGE_ADVANCED_VOID.get()))
                 .define('S', Ingredient.of(Items.SHULKER_SHELL))
-                .define('N', Ingredient.of(Tags.Items.INGOTS_NETHERITE))
+                .define('N', Ingredient.of(Items.NETHERITE_INGOT))
                 .unlockedBy(hasNetherite)
                 .unlockedBy(new RecipeCriteria("has_shulker_shell", RecipeProvider.has(Items.SHULKER_SHELL)))
                 .save(recipes);
@@ -379,8 +378,8 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("NEN","STS","NEN")
                 .define('T', Ingredient.of(CentrifugeItems.CENTRIFUGE_ELITE_VOID.get()))
                 .define('E', Ingredient.of(Items.ECHO_SHARD))
-                .define('N', Ingredient.of(Tags.Items.STORAGE_BLOCKS_NETHERITE))
-                .define('S', Ingredient.of(Tags.Items.NETHER_STARS))
+                .define('N', Ingredient.of(Items.NETHERITE_BLOCK))
+                .define('S', Ingredient.of(ModItemTags.NETHER_STARS))
                 .unlockedBy(hasNetherite)
                 .unlockedBy(new RecipeCriteria("has_echo_shard", RecipeProvider.has(Items.ECHO_SHARD)))
                 .save(recipes);
@@ -390,7 +389,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("OCO","CHC","OCO")
                 .define('H', Ingredient.of(Items.HOPPER))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
-                .define('O', Ingredient.of(Tags.Items.OBSIDIAN))
+                .define('O', Ingredient.of(ModItemTags.OBSIDIAN))
                 .unlockedBy(hasObsidian)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ADVANCED_INPUT)
@@ -404,15 +403,15 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("NHN","HIH","NHN")
                 .define('I', Ingredient.of(CentrifugeItems.CENTRIFUGE_ADVANCED_INPUT.get()))
                 .define('H', Ingredient.of(Items.HOPPER))
-                .define('N', Ingredient.of(Tags.Items.INGOTS_NETHERITE))
+                .define('N', Ingredient.of(Items.NETHERITE_INGOT))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ULTIMATE_INPUT)
                 .pattern("NHN","SIS","NHN")
                 .define('I', Ingredient.of(CentrifugeItems.CENTRIFUGE_ELITE_INPUT.get()))
                 .define('H', Ingredient.of(Items.HOPPER))
-                .define('N', Ingredient.of(Tags.Items.STORAGE_BLOCKS_NETHERITE))
-                .define('S', Ingredient.of(Tags.Items.NETHER_STARS))
+                .define('N', Ingredient.of(Items.NETHERITE_BLOCK))
+                .define('S', Ingredient.of(ModItemTags.NETHER_STARS))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         //endregion
@@ -421,60 +420,60 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("OCO","CGC","OCO")
                 .define('G', Ingredient.of(ModItems.HONEY_GENERATOR_ITEM.get()))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
-                .define('O', Ingredient.of(Tags.Items.OBSIDIAN))
+                .define('O', Ingredient.of(ModItemTags.OBSIDIAN))
                 .unlockedBy(hasObsidian)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ADVANCED_ENERGY_PORT)
                 .pattern("RCR","CEC","RCR")
                 .define('E', Ingredient.of(CentrifugeItems.CENTRIFUGE_BASIC_ENERGY_PORT.get()))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
-                .define('R', Ingredient.of(Tags.Items.STORAGE_BLOCKS_REDSTONE))
+                .define('R', Ingredient.of(Items.REDSTONE_BLOCK))
                 .unlockedBy(hasObsidian)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ELITE_ENERGY_PORT)
                 .pattern("NRN","RER","NRN")
                 .define('E', Ingredient.of(CentrifugeItems.CENTRIFUGE_ADVANCED_ENERGY_PORT.get()))
-                .define('R', Ingredient.of(Tags.Items.STORAGE_BLOCKS_REDSTONE))
-                .define('N', Ingredient.of(Tags.Items.INGOTS_NETHERITE))
+                .define('R', Ingredient.of(Items.REDSTONE_BLOCK))
+                .define('N', Ingredient.of(Items.NETHERITE_INGOT))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ULTIMATE_ENERGY_PORT)
                 .pattern("NRN","SES","NRN")
                 .define('E', Ingredient.of(CentrifugeItems.CENTRIFUGE_ELITE_ENERGY_PORT.get()))
-                .define('R', Ingredient.of(Tags.Items.STORAGE_BLOCKS_REDSTONE))
-                .define('N', Ingredient.of(Tags.Items.STORAGE_BLOCKS_NETHERITE))
-                .define('S', Ingredient.of(Tags.Items.NETHER_STARS))
+                .define('R', Ingredient.of(Items.REDSTONE_BLOCK))
+                .define('N', Ingredient.of(Items.NETHERITE_BLOCK))
+                .define('S', Ingredient.of(ModItemTags.NETHER_STARS))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         //endregion
         //region Item Output
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_BASIC_ITEM_OUTPUT)
                 .pattern("OCO","CHC","OCO")
-                .define('H', Ingredient.of(Tags.Items.CHESTS))
+                .define('H', Ingredient.of(ModItemTags.CHESTS))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
-                .define('O', Ingredient.of(Tags.Items.OBSIDIAN))
+                .define('O', Ingredient.of(ModItemTags.OBSIDIAN))
                 .unlockedBy(hasObsidian)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ADVANCED_ITEM_OUTPUT)
                 .pattern("HCH","COC","HCH")
                 .define('O', Ingredient.of(CentrifugeItems.CENTRIFUGE_BASIC_ITEM_OUTPUT.get()))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
-                .define('H', Ingredient.of(Tags.Items.CHESTS))
+                .define('H', Ingredient.of(ModItemTags.CHESTS))
                 .unlockedBy(hasObsidian)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ELITE_ITEM_OUTPUT)
                 .pattern("NHN","HOH","NHN")
                 .define('O', Ingredient.of(CentrifugeItems.CENTRIFUGE_ADVANCED_ITEM_OUTPUT.get()))
-                .define('H', Ingredient.of(Tags.Items.CHESTS))
-                .define('N', Ingredient.of(Tags.Items.INGOTS_NETHERITE))
+                .define('H', Ingredient.of(ModItemTags.CHESTS))
+                .define('N', Ingredient.of(Items.NETHERITE_INGOT))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ULTIMATE_ITEM_OUTPUT)
                 .pattern("NHN","SOS","NHN")
                 .define('O', Ingredient.of(CentrifugeItems.CENTRIFUGE_ELITE_ITEM_OUTPUT.get()))
-                .define('H', Ingredient.of(Tags.Items.CHESTS))
-                .define('N', Ingredient.of(Tags.Items.STORAGE_BLOCKS_NETHERITE))
-                .define('S', Ingredient.of(Tags.Items.NETHER_STARS))
+                .define('H', Ingredient.of(ModItemTags.CHESTS))
+                .define('N', Ingredient.of(Items.NETHERITE_BLOCK))
+                .define('S', Ingredient.of(ModItemTags.NETHER_STARS))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         //endregion
@@ -483,7 +482,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("OCO","CHC","OCO")
                 .define('H', Ingredient.of(ModItems.HONEY_POT_ITEM.get()))
                 .define('C', Ingredient.of(CentrifugeItems.CENTRIFUGE_CASING.get()))
-                .define('O', Ingredient.of(Tags.Items.OBSIDIAN))
+                .define('O', Ingredient.of(ModItemTags.OBSIDIAN))
                 .unlockedBy(hasObsidian)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ADVANCED_FLUID_OUTPUT)
@@ -497,15 +496,15 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("NBN","BOB","NBN")
                 .define('O', Ingredient.of(CentrifugeItems.CENTRIFUGE_ADVANCED_FLUID_OUTPUT.get()))
                 .define('B', Ingredient.of(Items.BUCKET))
-                .define('N', Ingredient.of(Tags.Items.INGOTS_NETHERITE))
+                .define('N', Ingredient.of(Items.NETHERITE_INGOT))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         AdvancedShapedRecipeBuilder.shaped(CentrifugeItems.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT)
                 .pattern("NBN","SOS","NBN")
                 .define('O', Ingredient.of(CentrifugeItems.CENTRIFUGE_ELITE_FLUID_OUTPUT.get()))
                 .define('B', Ingredient.of(Items.BUCKET))
-                .define('N', Ingredient.of(Tags.Items.STORAGE_BLOCKS_NETHERITE))
-                .define('S', Ingredient.of(Tags.Items.NETHER_STARS))
+                .define('N', Ingredient.of(Items.NETHERITE_BLOCK))
+                .define('S', Ingredient.of(ModItemTags.NETHER_STARS))
                 .unlockedBy(hasNetherite)
                 .save(recipes);
         //endregion

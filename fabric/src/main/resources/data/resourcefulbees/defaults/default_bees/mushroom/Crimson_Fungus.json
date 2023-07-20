@@ -1,0 +1,44 @@
+{
+  "resourcefulbees:core/v1": {
+    "flower": "#minecraft:mushroom_grow_block",
+    "creator": "Team Resourceful",
+    "maxTimeInHive": 1200
+  },
+  "resourcefulbees:rendering/v1": {
+    "texture": "mushroom/bee_crimson",
+    "model": "resourcefulbees:geo/flower_moss.geo.json",
+    "layers" : [
+      { "isPollen": true, "color": "#FFDCC4", "texture": "custom_nectar" }
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#941818",
+      "spawnEggSecondaryColor": "#FFA468",
+      "jarColor": "#8B4513"
+    }
+  },
+  "resourcefulbees:mutation/v1": {
+    "mutationCount": 15,
+    "mutation": "resourcefulbees:mutations/crimson_fungus"
+  },
+  "resourcefulbees:breeding/v1": {
+    "isBreedable": true,
+    "feedItem": ["minecraft:crimson_fungus"],
+    "feedAmount": 4
+  },
+  "resourcefulbees:trait/v1" : {
+    "traits": ["nether"]
+  },
+  "resourcefulbees:trade/v1": {
+    "amount": {
+      "min": 1,
+      "max": 1
+    },
+    "secondaryItem": "minecraft:crimson_hyphae",
+    "secondaryItemCost": {
+      "min": 4,
+      "max": 8
+    },
+    "priceMultiplier": 4,
+    "maxTrades": 2
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "W": {
+      "tag": "rbees_common:wax"
+    }
+  },
+  "pattern": [
+    "PPP",
+    "WIW",
+    "PPP"
+  ],
+  "result": {
+    "item": "resourcefulbees:bee_box"
+  },
+  "show_notification": true
+}

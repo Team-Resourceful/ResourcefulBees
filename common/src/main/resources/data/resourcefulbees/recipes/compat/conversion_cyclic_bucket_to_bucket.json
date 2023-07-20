@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "cyclic"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "cyclic"
+      ]
+    }
+  ],
+  "ingredients": [
+    { "item": "cyclic:honey_bucket" }
+  ],
+  "result": {
+    "item": "resourcefulbees:honey_fluid_bucket",
+    "count": 1
+  }
+}

@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.platform.common.events;
 
 import com.teamresourceful.resourcefulbees.platform.common.events.base.EventHelper;
-import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.CodecIngredient;
-import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.CodecIngredientSerializer;
+import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
+import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredientSerializer;
 
 public record RegisterIngredientsEvent(IngredientRegister register) {
 

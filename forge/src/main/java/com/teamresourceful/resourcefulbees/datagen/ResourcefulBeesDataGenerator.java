@@ -47,5 +47,6 @@ public final class ResourcefulBeesDataGenerator {
         generator.addProvider(event.includeServer(), new ModRecipeProvider(generator));
         generator.addProvider(event.includeServer(), new ModAdvancementProvider(generator, provider));
         generator.addProvider(event.includeServer(), new ModLootTableProvider(generator, provider));
+        System.out.println("Data Generator Loaded!");
     }
 }

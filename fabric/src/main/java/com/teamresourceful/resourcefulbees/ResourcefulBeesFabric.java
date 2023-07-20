@@ -4,7 +4,6 @@ import com.teamresourceful.resourcefulbees.common.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.platform.common.events.*;
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.CommonSetupEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.GameServerStartedEvent;
-import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.fabric.FabricIngredientHelper;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
@@ -24,7 +23,6 @@ public class ResourcefulBeesFabric implements ModInitializer {
 
         RegisterEntityAttributesEvent.EVENT.fire(new RegisterEntityAttributesEvent(FabricDefaultAttributeRegistry::register));
         CommonSetupEvent.fire();
-        FabricIngredientHelper.init();
         RegisterBurnablesEvent.EVENT.fire(new RegisterBurnablesEvent(FuelRegistry.INSTANCE::add));
         RegisterSpawnPlacementsEvent.EVENT.fire(new RegisterSpawnPlacementsEvent(new RegisterSpawnPlacementsEvent.Registry() {
             @Override

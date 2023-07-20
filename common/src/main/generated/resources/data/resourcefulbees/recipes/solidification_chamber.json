@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "rbees_common:glass"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "tag": "minecraft:stone_tool_materials"
+    },
+    "W": {
+      "tag": "rbees_common:wax"
+    }
+  },
+  "pattern": [
+    " G ",
+    "IGI",
+    "SWS"
+  ],
+  "result": {
+    "item": "resourcefulbees:solidification_chamber"
+  },
+  "show_notification": true
+}

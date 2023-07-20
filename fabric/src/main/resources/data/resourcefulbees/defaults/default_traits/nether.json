@@ -1,0 +1,9 @@
+{
+  "displayItem": "minecraft:netherrack",
+  "damageImmunities": [
+    "lava",
+    "hotFloor",
+    "inFire",
+    "onFire"
+  ]
+}

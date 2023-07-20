@@ -1,0 +1,16 @@
+{
+  "values": [
+    "minecraft:cobblestone",
+    "minecraft:mossy_cobblestone",
+    "minecraft:infested_cobblestone",
+    "minecraft:cobbled_deepslate",
+    {
+      "id": "#forge:cobblestone",
+      "required": false
+    },
+    {
+      "id": "#c:cobblestone",
+      "required": false
+    }
+  ]
+}

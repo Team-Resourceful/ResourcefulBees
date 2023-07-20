@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "tag": "rbees_common:honeycombs"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "tag": "rbees_common:wax"
+    }
+  },
+  "pattern": [
+    " CW",
+    " SC",
+    "S  "
+  ],
+  "result": {
+    "item": "resourcefulbees:honey_dipper"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:honeycomb_block",
+    {
+      "id": "#forge:storage_blocks/honeycombs",
+      "required": false
+    },
+    {
+      "id": "#c:honeycomb_blocks",
+      "required": false
+    }
+  ]
+}

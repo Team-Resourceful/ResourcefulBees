@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "resourcefulbees:centrifuge/casing"
+    },
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "R": {
+      "item": "minecraft:repeater"
+    }
+  },
+  "pattern": [
+    "NCN",
+    "CRC",
+    "NCN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/gearbox"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "H": {
+      "tag": "rbees_common:chests"
+    },
+    "N": {
+      "item": "minecraft:netherite_block"
+    },
+    "O": {
+      "item": "resourcefulbees:centrifuge/output/item/elite"
+    },
+    "S": {
+      "tag": "rbees_common:nether_stars"
+    }
+  },
+  "pattern": [
+    "NHN",
+    "SOS",
+    "NHN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/output/item/ultimate"
+  },
+  "show_notification": true
+}

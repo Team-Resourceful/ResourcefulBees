@@ -21,11 +21,13 @@ import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
 import com.teamresourceful.resourcefulbees.mixin.common.SpawnEggItemAccessor;
+import com.teamresourceful.resourcefulbees.platform.common.events.RegisterIngredientsEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.CommonSetupEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.GameServerStartedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.LoadingCompletedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefulconfig.common.config.Configurator;
+import com.teamresourceful.resourcefullib.common.recipe.ingredient.IngredientHelper;
 
 public class ResourcefulBees {
 
@@ -102,5 +104,7 @@ public class ResourcefulBees {
                 });
 
         SpawnEggItemAccessor.getById().remove(null);
+
+        RegisterIngredientsEvent.EVENT.fire(new RegisterIngredientsEvent(IngredientHelper::registerIngredient));
     }
 }

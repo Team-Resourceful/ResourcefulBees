@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:honey_bottle",
+    {
+      "id": "#forge:honey_bottles",
+      "required": false
+    },
+    {
+      "id": "#c:honey_bottles",
+      "required": false
+    }
+  ]
+}

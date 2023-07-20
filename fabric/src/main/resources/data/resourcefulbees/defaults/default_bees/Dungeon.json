@@ -1,0 +1,49 @@
+{
+    "resourcefulbees:core/v1":{
+        "flower": ["minecraft:spawner"],
+        "maxTimeInHive": 1200
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "dungeon/dungeon_bee",
+        "model": "resourcefulbees:geo/flower_moss.geo.json",
+        "layers" : [
+            { "isPollen": true, "color": "#406278", "texture": "custom_nectar" }
+        ],
+        "ColorData": {
+            "spawnEggPrimaryColor": "#406278",
+            "spawnEggSecondaryColor": "#303030",
+            "jarColor": "#406278"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutationCount": 5,
+        "mutation": "resourcefulbees:mutations/dungeon"
+    },
+    "resourcefulbees:breeding/v1": {
+        "parents": [
+            {
+                "parent1": "dungeon",
+                "parent2": "dungeon"
+            }
+        ],
+        "isBreedable": true,
+        "feedItem": ["minecraft:mossy_cobblestone"],
+        "feedAmount": 4
+    },
+    "resourcefulbees:trade/v1": {
+        "amount": {
+            "min": 1,
+            "max": 1
+        },
+        "secondaryItem": {
+            "id": "minecraft:chest",
+            "nbt": "{ \"Items\": [{\"Slot\": 0b, \"id\": \"minecraft:raw_copper\", \"Count\": 4b}, {\"Slot\": 1b, \"id\": \"minecraft:raw_iron\", \"Count\": 4b}, {\"Slot\": 2b, \"id\": \"minecraft:raw_gold\", \"Count\": 4b}, {\"Slot\": 3b, \"id\": \"minecraft:diamond\", \"Count\": 4b}, {\"Slot\": 4b, \"id\": \"minecraft:emerald\", \"Count\": 4b}, {\"Slot\": 5b, \"id\": \"minecraft:netherite_scrap\", \"Count\": 4b}, {\"Slot\": 6b, \"id\": \"minecraft:quartz\", \"Count\": 4b}, {\"Slot\": 7b, \"id\": \"minecraft:lapis_lazuli\", \"Count\": 4b}, {\"Slot\": 8b, \"id\": \"minecraft:redstone\", \"Count\": 4b}, {\"Slot\": 9b, \"id\": \"minecraft:amethyst_shard\", \"Count\": 4b}, {\"Slot\": 10b, \"id\": \"minecraft:ender_pearl\", \"Count\": 4b}]}"
+        },
+        "secondaryItemCost": {
+            "min": 4,
+            "max": 8
+        },
+        "priceMultiplier": 4,
+        "maxTrades": 2
+    }
+}

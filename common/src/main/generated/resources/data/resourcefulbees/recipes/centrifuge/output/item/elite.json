@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "H": {
+      "tag": "rbees_common:chests"
+    },
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "O": {
+      "item": "resourcefulbees:centrifuge/output/item/advanced"
+    }
+  },
+  "pattern": [
+    "NHN",
+    "HOH",
+    "NHN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/output/item/elite"
+  },
+  "show_notification": true
+}

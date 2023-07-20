@@ -1,0 +1,48 @@
+{
+    "resourcefulbees:core/v1":{
+        "flower": ["minecraft:emerald_block"],
+        "honeycombVariation": "emerald"
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "ores/emerald/emerald_bee",
+        "model": "resourcefulbees:geo/crystal.geo.json",
+        "layers": [
+            {
+                "layerEffect": "GLOW",
+                "texture": "ores/emerald/emerald_bee_emissive"
+            },
+            { "isPollen": true, "color": "#17C544", "texture": "custom_nectar" }
+        ],
+        "ColorData": {
+            "spawnEggPrimaryColor": "#8F8F8F",
+            "spawnEggSecondaryColor": "#18eb09",
+            "jarColor": "#18eb09"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation": "resourcefulbees:mutations/emerald"
+    },
+    "resourcefulbees:breeding/v1": {
+        "parents": [
+            {
+                "parent1": "emerald",
+                "parent2": "emerald"
+            }
+        ],
+        "isBreedable": true,
+        "spawnWeight": 4
+    },
+    "resourcefulbees:trade/v1": {
+        "amount": {
+            "min": 1,
+            "max": 1
+        },
+        "secondaryItem": "minecraft:emerald_block",
+        "secondaryItemCost": {
+            "min": 8,
+            "max": 12
+        },
+        "priceMultiplier": 4,
+        "maxTrades": 2
+    }
+}

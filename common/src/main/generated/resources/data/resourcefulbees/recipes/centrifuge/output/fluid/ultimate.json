@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "N": {
+      "item": "minecraft:netherite_block"
+    },
+    "O": {
+      "item": "resourcefulbees:centrifuge/output/fluid/elite"
+    },
+    "S": {
+      "tag": "rbees_common:nether_stars"
+    }
+  },
+  "pattern": [
+    "NBN",
+    "SOS",
+    "NBN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/output/fluid/ultimate"
+  },
+  "show_notification": true
+}

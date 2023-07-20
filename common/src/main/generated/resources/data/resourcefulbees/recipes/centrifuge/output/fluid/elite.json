@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "O": {
+      "item": "resourcefulbees:centrifuge/output/fluid/advanced"
+    }
+  },
+  "pattern": [
+    "NBN",
+    "BOB",
+    "NBN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/output/fluid/elite"
+  },
+  "show_notification": true
+}

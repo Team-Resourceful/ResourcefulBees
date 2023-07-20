@@ -1,0 +1,13 @@
+{
+  "values": [
+    "resourcefulbees:wax_block",
+    {
+      "id": "#forge:storage_blocks/wax",
+      "required": false
+    },
+    {
+      "id": "#c:wax_blocks",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "values": [
+    "resourcefulbees:wax",
+    {
+      "id": "#forge:wax",
+      "required": false
+    },
+    {
+      "id": "#c:wax",
+      "required": false
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
     "resourcefulbees:core/v1": {
-        "flower": "#forge:storage_blocks/netherite",
+        "flower": ["minecraft:netherite_block"],
         "honeycombVariation": "netherite",
         "maxTimeInHive": 600
     },

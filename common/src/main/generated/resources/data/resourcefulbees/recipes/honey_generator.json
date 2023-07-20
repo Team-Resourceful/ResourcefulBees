@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "@": {
+      "item": "minecraft:iron_block"
+    },
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "G": {
+      "tag": "rbees_common:glass"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "pattern": [
+    "I@I",
+    "SGR",
+    "IBI"
+  ],
+  "result": {
+    "item": "resourcefulbees:honey_generator"
+  },
+  "show_notification": true
+}

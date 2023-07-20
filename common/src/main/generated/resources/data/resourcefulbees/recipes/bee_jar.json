@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "rbees_common:glass_colorless_panes"
+    }
+  },
+  "pattern": [
+    " G ",
+    "G G",
+    "GGG"
+  ],
+  "result": {
+    "item": "resourcefulbees:bee_jar"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,19 @@
+{
+  "honeycomb": {
+    "edible": true,
+    "block": true,
+    "color": "#FFA500"
+  },
+  "variations": [
+    {
+      "identifier": "starry",
+      "defaultComb": "resourcefulbees:starry_honeycomb",
+      "apiaryCombs": {
+        "resourcefulbees:t1" : {"id":  "resourcefulbees:starry_honeycomb", "count":  1},
+        "resourcefulbees:t2": {"id":  "resourcefulbees:starry_honeycomb", "count":  1},
+        "resourcefulbees:t3": {"id":  "resourcefulbees:starry_honeycomb", "count":  1},
+        "resourcefulbees:t4": {"id":  "resourcefulbees:starry_honeycomb", "count":  1}
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "N": {
+      "item": "minecraft:netherite_block"
+    },
+    "P": {
+      "item": "resourcefulbees:centrifuge/processor"
+    },
+    "S": {
+      "tag": "rbees_common:nether_stars"
+    },
+    "T": {
+      "item": "resourcefulbees:centrifuge/terminal/elite"
+    }
+  },
+  "pattern": [
+    "NPN",
+    "STS",
+    "NPN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/terminal/ultimate"
+  },
+  "show_notification": true
+}

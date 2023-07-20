@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:glass",
+    {
+      "id": "#forge:glass_colorless",
+      "required": false
+    },
+    {
+      "id": "#c:glass_colorless",
+      "required": false
+    }
+  ]
+}

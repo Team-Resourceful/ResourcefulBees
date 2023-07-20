@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "H": {
+      "tag": "rbees_common:honeycombs"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "W": {
+      "item": "resourcefulbees:waxed_planks"
+    }
+  },
+  "pattern": [
+    "RHR",
+    "HWH",
+    "RHR"
+  ],
+  "result": {
+    "count": 2,
+    "item": "resourcefulbees:waxed_machine_block"
+  },
+  "show_notification": true
+}

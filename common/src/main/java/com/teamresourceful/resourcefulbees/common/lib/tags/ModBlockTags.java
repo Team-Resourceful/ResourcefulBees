@@ -14,6 +14,13 @@ public final class ModBlockTags {
 
     public static final TagKey<Block> HEAT_SOURCES = createBlockTag("forge", "heat_sources");
     public static final TagKey<Block> NEST_PLACEABLE_ON = createBlockTag(ModConstants.MOD_ID, "nest_placeable_on");
+    public static final TagKey<Block> GLASS = createBlockTag("rbees_common", "glass");
+    public static final TagKey<Block> OBSIDIAN = createBlockTag("rbees_common", "obsidian");
+    public static final TagKey<Block> GRAVEL = createBlockTag("rbees_common", "gravel");
+    public static final TagKey<Block> COBBLESTONE = createBlockTag("rbees_common", "cobblestone");
+    public static final TagKey<Block> ORES = createBlockTag("rbees_common", "ores");
+
+    public static final TagKey<Block> CENTRIFUGE_PICKABLE = createBlockTag("rbees_centrifuge", "pickaxe_mineable");
 
     private ModBlockTags() {
         throw new UtilityClassError();

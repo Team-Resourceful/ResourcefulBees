@@ -1,0 +1,18 @@
+// 1.20.1	2023-07-15T05:02:41.2646547	Resourceful Bees Block Tag Provider
+10d6735ffb502bb2ffbab87542621fd71a6b8f05 data/forge/tags/blocks/heat_sources.json
+36a491a695201f5b03b2c0cca537c626edbc6f3f data/forge/tags/blocks/mushrooms.json
+73be7b5ade3737979ca0a35c875e0c5a80f848f3 data/forge/tags/blocks/storage_blocks.json
+d6cf88ab73624a67b1cffc6e2fe8d4b95b053a79 data/forge/tags/blocks/storage_blocks/honeycombs.json
+97db687cb55b4a5035a83a364f8a26096ca17e7f data/forge/tags/blocks/storage_blocks/wax.json
+6dcc16859b63414967e1bb3a9cddb1fcf731c349 data/minecraft/tags/blocks/beehives.json
+631220615efb224b3d520f62afdea530775151d4 data/minecraft/tags/blocks/mineable/axe.json
+3fbd492babafeb04c14de061430ca0d4e9debe89 data/minecraft/tags/blocks/mineable/pickaxe.json
+4e7d97482f63a2f0eade2239ea7fda350aa2ac9f data/minecraft/tags/blocks/wooden_buttons.json
+82ad92ee1b2ea8a7998dc670055448bc48d090ac data/minecraft/tags/blocks/wooden_doors.json
+6e3cff71b97a16a431bf8e782cda2843eceac86c data/minecraft/tags/blocks/wooden_fences.json
+f65d846a9850662435bc04ba4cfc3ef286c95149 data/minecraft/tags/blocks/wooden_pressure_plates.json
+1ccef0138663648744c480496898695d9fe1cba2 data/minecraft/tags/blocks/wooden_slabs.json
+22d290ab9f9d905be675e07ca15d3bd94bb68735 data/minecraft/tags/blocks/wooden_stairs.json
+6fa8cc47a9d02fe2420b12f09d28e9dfc2eda1bc data/minecraft/tags/blocks/wooden_trapdoors.json
+e66474cf8e2d3377d85286ac5552cd9ddc232bce data/rbees_centrifuge/tags/blocks/pickaxe_mineable.json
+1cbe9b327e86965603deea3601188423cf51f866 data/resourcefulbees/tags/blocks/nest_placeable_on.json

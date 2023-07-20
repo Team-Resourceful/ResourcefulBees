@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:honey_block",
+    {
+      "id": "#forge:honey_blocks",
+      "required": false
+    },
+    {
+      "id": "#c:honey_blocks",
+      "required": false
+    }
+  ]
+}

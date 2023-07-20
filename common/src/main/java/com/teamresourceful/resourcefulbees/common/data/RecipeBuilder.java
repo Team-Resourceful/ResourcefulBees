@@ -23,7 +23,6 @@ import com.teamresourceful.resourcefulbees.mixin.common.RecipeManagerAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.ReloadableServerResourcesAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.TagManagerAccessor;
 import com.teamresourceful.resourcefulbees.platform.common.events.RegisterReloadListenerEvent;
-import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.IngredientHelper;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.core.HolderSet;
@@ -97,12 +96,12 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     private Recipe<?> makeBreedingRecipe(WeightedCollection<FamilyUnit> families) {
         Parents parents = families.get(0).getParents();
         ResourceLocation id = new ResourceLocation(ModConstants.MOD_ID, parents.getParent1() + "_" + parents.getParent2() + "_" + families.get(0).getChild());
-        Ingredient beeJarParent1 = IngredientHelper.getIngredient(new BeeJarIngredient(Set.of(parents.getParent1Data().id().toString())));
+        Ingredient beeJarParent1 = com.teamresourceful.resourcefullib.common.recipe.ingredient.IngredientHelper.getIngredient(new BeeJarIngredient(Set.of(parents.getParent1Data().id().toString())));
         BeeBreedData parent1BreedData = parents.getParent1Data().getBreedData();
         var parent1FeedItems = IngredientUtils.of(parent1BreedData.feedItems());
         BreederRecipe.BreederPair parent1 = new BreederRecipe.BreederPair(beeJarParent1, Optional.of(parents.getParent1Data().id().toString()), parent1BreedData.feedAmount(), parent1FeedItems, parent1BreedData.feedReturnItem());
         BeeBreedData parent2BreedData = parents.getParent2Data().getBreedData();
-        Ingredient beeJarParent2 = IngredientHelper.getIngredient(new BeeJarIngredient(Set.of(parents.getParent2Data().id().toString())));
+        Ingredient beeJarParent2 = com.teamresourceful.resourcefullib.common.recipe.ingredient.IngredientHelper.getIngredient(new BeeJarIngredient(Set.of(parents.getParent2Data().id().toString())));
         var parent2FeedItems = IngredientUtils.of(parent2BreedData.feedItems());
         BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parents.getParent2Data().id().toString()), parent2BreedData.feedAmount(), parent2FeedItems, parent2BreedData.feedReturnItem());
         return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(WeightedCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);

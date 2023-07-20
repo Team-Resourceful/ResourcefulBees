@@ -15,15 +15,14 @@ loom {
 
         mixinConfig "resourcefulbees.mixins.json"
         mixinConfig "resourcefulbees-common.mixins.json"
-
-        dataGen {
-            mod "resourcefulbees"
-        }
     }
 
     runs {
         data {
-            programArgs "--existing", project(":forge").file("src/main/resources").absolutePath
+            data()
+            programArgs("--all", "--mod", "resourcefulbees")
+            programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
+            programArgs("--output", project(":common").file("src/main/generated/resources").absolutePath)
         }
     }
 }

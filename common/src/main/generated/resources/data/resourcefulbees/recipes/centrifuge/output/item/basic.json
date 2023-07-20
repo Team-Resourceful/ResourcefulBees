@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "resourcefulbees:centrifuge/casing"
+    },
+    "H": {
+      "tag": "rbees_common:chests"
+    },
+    "O": {
+      "tag": "rbees_common:obsidian"
+    }
+  },
+  "pattern": [
+    "OCO",
+    "CHC",
+    "OCO"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/output/item/basic"
+  },
+  "show_notification": true
+}

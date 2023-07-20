@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "rbees_common:glass"
+    },
+    "H": {
+      "tag": "rbees_common:honey_blocks"
+    }
+  },
+  "pattern": [
+    "HG",
+    "GH"
+  ],
+  "result": {
+    "count": 4,
+    "item": "resourcefulbees:honey_glass"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "inventory_changed": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "rbees_common:honeycombs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "resourcefulbees:textures/gui/advancements/backgrounds/resourcefulbees.png",
+    "description": {
+      "translate": "advancements.resourcefulbees.root.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "resourcefulbees:gold_flower"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.resourcefulbees.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

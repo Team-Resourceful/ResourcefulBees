@@ -3,15 +3,20 @@ package com.teamresourceful.resourcefulbees.datagen.providers.tags;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
+import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.versions.forge.ForgeVersion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,27 +30,25 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
-        tag(ModItemTags.HONEYCOMB).add(Items.HONEYCOMB);
-        tag(ModItemTags.HONEYCOMB_BLOCK).add(Items.HONEYCOMB_BLOCK);
-        tag(ModItemTags.HONEY_BUCKETS).add(ModItems.HONEY_BUCKET.get());
-        tag(ModItemTags.HONEY_BLOCKS).add(Items.HONEY_BLOCK);
-        tag(ModItemTags.HONEY_BOTTLES).add(Items.HONEY_BOTTLE);
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation(ForgeVersion.MOD_ID, "honeycombs"))).add(Items.HONEYCOMB);
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation(ForgeVersion.MOD_ID, "storage_blocks/honeycombs"))).add(Items.HONEYCOMB_BLOCK);
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation(ForgeVersion.MOD_ID, "buckets/honey"))).add(ModItems.HONEY_BUCKET.get());
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation(ForgeVersion.MOD_ID, "honey_blocks"))).add(Items.HONEY_BLOCK);
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation(ForgeVersion.MOD_ID, "honey_bottles"))).add(Items.HONEY_BOTTLE);
         IntrinsicTagAppender<Item> hiveBuilder = tag(ModItemTags.BEEHIVES).add(Items.BEEHIVE).add(Items.BEE_NEST);
         IntrinsicTagAppender<Item> t0Nests = tag(ModItemTags.T0_NESTS);
         IntrinsicTagAppender<Item> t1Nests = tag(ModItemTags.T1_NESTS);
         IntrinsicTagAppender<Item> t2Nests = tag(ModItemTags.T2_NESTS);
         IntrinsicTagAppender<Item> t3Nests = tag(ModItemTags.T3_NESTS);
-        ModItems.T1_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t0Nests));
-        ModItems.T2_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t1Nests));
-        ModItems.T3_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t2Nests));
-        ModItems.T4_NEST_ITEMS.getEntries().stream().map(com.teamresourceful.resourcefullib.common.registry.RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t3Nests));
+        ModItems.T1_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t0Nests));
+        ModItems.T2_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t1Nests));
+        ModItems.T3_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t2Nests));
+        ModItems.T4_NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).forEach(item -> addToBuilders(item, hiveBuilder, t3Nests));
         tag(ItemTags.SMALL_FLOWERS).add(ModItems.GOLD_FLOWER_ITEM.get());
-        tag(ModItemTags.WAX).add(ModItems.WAX.get());
-        tag(ModItemTags.WAX_BLOCK).add(ModItems.WAX_BLOCK_ITEM.get());
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation(ForgeVersion.MOD_ID, "wax"))).add(ModItems.WAX.get());
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation(ForgeVersion.MOD_ID, "storage_blocks/wax"))).add(ModItems.WAX_BLOCK_ITEM.get());
         tag(Tags.Items.STORAGE_BLOCKS).addTags(ModItemTags.WAX_BLOCK);
-        tag(ModItemTags.SHEARS).add(Items.SHEARS);
-        tag(ModItemTags.MUSHROOM).add(Items.RED_MUSHROOM).add(Items.BROWN_MUSHROOM);
-        tag(ModItemTags.HEAT_SOURCES)
+        tag(TagKey.create(Registries.ITEM, new ResourceLocation(ForgeVersion.MOD_ID, "heat_sources")))
             .add(Items.TORCH, Items.SOUL_TORCH, Items.LAVA_BUCKET, Items.CAMPFIRE, Items.SOUL_CAMPFIRE, Items.MAGMA_BLOCK)
             .add(Items.LANTERN, Items.SEA_LANTERN, Items.SOUL_LANTERN, Items.JACK_O_LANTERN)
             .addTags(ItemTags.CANDLES);

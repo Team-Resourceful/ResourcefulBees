@@ -1,0 +1,46 @@
+{
+  "resourcefulbees:core/v1": {
+    "flower": ["minecraft:coal_block"],
+    "honeycombVariation": "coal",
+    "maxTimeInHive": 600
+  },
+  "resourcefulbees:rendering/v1": {
+    "texture": "ores/coal/coal_bee",
+    "model": "resourcefulbees:geo/ore.geo.json",
+    "layers" : [
+      { "isPollen": true, "color": "#494B3F", "texture": "custom_nectar" }
+    ],
+    "ColorData": {
+      "spawnEggPrimaryColor": "#8F8F8F",
+      "spawnEggSecondaryColor": "#101010",
+      "jarColor": "#303030"
+    }
+  },
+  "resourcefulbees:mutation/v1": {
+    "mutation": "resourcefulbees:mutations/coal"
+  },
+  "resourcefulbees:breeding/v1": {
+    "parents": [
+      {
+        "parent1": "coal",
+        "parent2": "coal"
+      }
+    ],
+    "feedItem": ["minecraft:poppy"],
+    "feedAmount": 4,
+    "isBreedable": true
+  },
+  "resourcefulbees:trade/v1": {
+    "amount": {
+      "min": 1,
+      "max": 1
+    },
+    "secondaryItem": "minecraft:coal_block",
+    "secondaryItemCost": {
+      "min": 4,
+      "max": 8
+    },
+    "priceMultiplier": 4,
+    "maxTrades": 2
+  }
+}

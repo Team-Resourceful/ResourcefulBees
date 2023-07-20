@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "S S",
+    " I ",
+    "S S"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge_crank"
+  }
+}

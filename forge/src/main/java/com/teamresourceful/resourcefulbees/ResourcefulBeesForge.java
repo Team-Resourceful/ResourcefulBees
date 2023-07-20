@@ -10,7 +10,6 @@ import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.Game
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.LoadingCompletedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.ServerGoingToStartEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.registry.RegisterRepositorySourceEvent;
-import com.teamresourceful.resourcefulbees.platform.common.recipe.ingredient.forge.ForgeIngredientHelper;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.forge.ConditionRegistryImpl;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -59,7 +58,6 @@ public class ResourcefulBeesForge {
         );
         modEventBus.addListener((FMLCommonSetupEvent event) -> {
             event.enqueueWork(CommonSetupEvent::fire);
-            ForgeIngredientHelper.init();
             ConditionRegistryImpl.freeze();
             RegisterBurnablesEvent.EVENT.fire(new RegisterBurnablesEvent((item, value) -> burnables.put(item.asItem(), value)));
         });

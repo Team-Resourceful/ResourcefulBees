@@ -1,0 +1,14 @@
+{
+  "values": [
+    "resourcefulbees:centrifuge",
+    "resourcefulbees:centrifuge_crank",
+    "resourcefulbees:honey_generator",
+    "resourcefulbees:ender_beecon",
+    "resourcefulbees:solidification_chamber",
+    "resourcefulbees:honey_pot",
+    {
+      "id": "#rbees_centrifuge:pickaxe_mineable",
+      "required": false
+    }
+  ]
+}

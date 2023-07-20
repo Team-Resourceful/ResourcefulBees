@@ -1,0 +1,31 @@
+{
+    "resourcefulbees:core/v1": {
+        "flower": "minecraft:netherite_block",
+        "honeycombVariation": "netherite",
+        "maxTimeInHive": 600
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "ores/netherite/netherite_bee",
+        "ColorData": {
+            "spawnEggPrimaryColor": "#654740",
+            "spawnEggSecondaryColor": "#303030",
+            "jarColor": "#654740"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation": "resourcefulbees:mutations/netherite"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "wither",
+                "parent2": "diamond"
+            }
+        ]
+    },
+    "resourcefulbees:trait/v1": {
+        "hasTraits": true,
+        "traits": ["nether", "wither"]
+    }
+}

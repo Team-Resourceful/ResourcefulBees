@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "tag": "rbees_common:honeycombs"
+    },
+    "M": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "tag": "rbees_common:wax"
+    }
+  },
+  "pattern": [
+    "CSC",
+    "SMS",
+    "CSC"
+  ],
+  "result": {
+    "item": "resourcefulbees:t3_nest_upgrade"
+  },
+  "show_notification": true
+}

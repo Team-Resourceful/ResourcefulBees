@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "I": {
+      "item": "resourcefulbees:centrifuge/input/item/elite"
+    },
+    "N": {
+      "item": "minecraft:netherite_block"
+    },
+    "S": {
+      "tag": "rbees_common:nether_stars"
+    }
+  },
+  "pattern": [
+    "NHN",
+    "SIS",
+    "NHN"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge/input/item/ultimate"
+  },
+  "show_notification": true
+}

@@ -6,7 +6,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +18,7 @@ public class PotionRegistryImpl {
         ItemStack fromStack = PotionUtils.setPotion(new ItemStack(Items.POTION), from);
         ItemStack toStack = PotionUtils.setPotion(new ItemStack(Items.POTION), to);
         BrewingRecipeRegistry.addRecipe(Ingredient.of(fromStack), ingredient, toStack);
-        BrewingRecipeRegistry.addRecipe(Ingredient.of(fromStack), Ingredient.of(Tags.Items.GUNPOWDER), PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), to));
+        BrewingRecipeRegistry.addRecipe(Ingredient.of(fromStack), Ingredient.of(Items.GUNPOWDER), PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), to));
         BrewingRecipeRegistry.addRecipe(Ingredient.of(fromStack), Ingredient.of(Items.DRAGON_BREATH), PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), to));
     }
 }

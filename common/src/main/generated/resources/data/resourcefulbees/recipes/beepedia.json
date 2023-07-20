@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "rbees_common:glass_panes"
+    },
+    "H": {
+      "tag": "rbees_common:honey_bottles"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "IRI",
+    "IGI",
+    "IHI"
+  ],
+  "result": {
+    "item": "resourcefulbees:beepedia"
+  },
+  "show_notification": true
+}

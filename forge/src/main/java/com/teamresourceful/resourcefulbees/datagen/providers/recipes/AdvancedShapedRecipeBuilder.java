@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -62,6 +63,10 @@ public class AdvancedShapedRecipeBuilder {
 
     public void save(Consumer<FinishedRecipe> recipeConsumer, String modid, String path){
         builder.save(recipeConsumer, new ResourceLocation(modid, path));
+    }
+
+    public void save(Consumer<FinishedRecipe> recipeConsumer, String modid){
+        builder.save(recipeConsumer, new ResourceLocation(modid, RecipeBuilder.getDefaultRecipeId(builder.getResult()).getPath()));
     }
 
     public void save(Consumer<FinishedRecipe> recipeConsumer){

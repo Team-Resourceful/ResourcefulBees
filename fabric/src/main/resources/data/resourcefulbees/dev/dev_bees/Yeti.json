@@ -1,0 +1,34 @@
+{
+  "resourcefulbees:core/v1": {
+    "flower": "#minecraft:flowers",
+    "maxTimeInHive": 4000
+  },
+  "resourcefulbees:rendering/v1": {
+    "texture": "/yeti/yeti_bee",
+    "model":  "resourcefulbees:geo/yeti.geo.json",
+    "ColorData": {
+      "spawnEggPrimaryColor": "#e9f4f6",
+      "spawnEggSecondaryColor": "#c1d3d6",
+      "jarColor": "#e9f4f6"
+    },
+    "sizeModifier": 1.25
+  },
+  "resourcefulbees:trait/v1": {
+    "traits": [ "oreo" ]
+  },
+  "resourcefulbees:combat/v1": {
+    "removeStingerOnAttack": false,
+    "inflictsPoison": false,
+    "attributes": {
+      "generic.attack_damage": 0,
+      "generic.max_health": 2,
+      "generic.armor": 5,
+      "generic.armor_toughness": 10,
+      "generic.attack_knockback": 3
+    }
+  },
+  "resourcefulbees:mutation/v1": {
+    "mutationCount": 1,
+    "mutation": "resourcefulbees:mutations/yeti"
+  }
+}

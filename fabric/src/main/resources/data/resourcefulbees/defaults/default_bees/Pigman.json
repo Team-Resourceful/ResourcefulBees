@@ -1,0 +1,42 @@
+{
+    "resourcefulbees:core/v1": {
+        "flower": ["minecraft:nether_wart"],
+        "maxTimeInHive": 1000
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "pigman/pigman_bee",
+        "ColorData": {
+            "spawnEggPrimaryColor": "#885956",
+            "spawnEggSecondaryColor": "#303030",
+            "jarColor": "#885956"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation" : "resourcefulbees:mutations/pigman"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "pigman",
+                "parent2": "pigman"
+            }
+        ]
+    },
+    "resourcefulbees:trait/v1": {
+        "traits": ["nether", "pigman"]
+    },
+    "resourcefulbees:trade/v1": {
+        "amount": {
+            "min": 1,
+            "max": 1
+        },
+        "secondaryItem": "minecraft:glowstone",
+        "secondaryItemCost": {
+            "min": 12,
+            "max": 16
+        },
+        "priceMultiplier": 4,
+        "maxTrades": 2
+    }
+}

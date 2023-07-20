@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:obsidian",
+    {
+      "id": "#forge:obsidian",
+      "required": false
+    },
+    {
+      "id": "#c:obsidian",
+      "required": false
+    }
+  ]
+}
