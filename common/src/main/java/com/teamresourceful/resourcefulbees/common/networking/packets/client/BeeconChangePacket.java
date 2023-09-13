@@ -1,13 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.networking.packets.client;
 
+import com.teamresourceful.bytecodecs.base.ByteCodec;
+import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
+import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
+import com.teamresourceful.resourcefullib.common.networking.base.CodecPacketHandler;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public record BeeconChangePacket(Option option, int value, BlockPos pos) implements Packet<BeeconChangePacket> {
@@ -29,18 +32,16 @@ public record BeeconChangePacket(Option option, int value, BlockPos pos) impleme
         return HANDLER;
     }
 
-    private static class Handler implements PacketHandler<BeeconChangePacket> {
+    @SuppressWarnings("UnstableApiUsage")
+    private static class Handler extends CodecPacketHandler<BeeconChangePacket> {
 
-        @Override
-        public void encode(BeeconChangePacket message, FriendlyByteBuf buffer) {
-            buffer.writeEnum(message.option);
-            buffer.writeVarInt(message.value);
-            buffer.writeBlockPos(message.pos);
-        }
-
-        @Override
-        public BeeconChangePacket decode(FriendlyByteBuf buffer) {
-            return new BeeconChangePacket(buffer.readEnum(Option.class), buffer.readVarInt(), buffer.readBlockPos());
+        public Handler() {
+            super(ObjectByteCodec.create(
+                ByteCodec.ofEnum(Option.class).fieldOf(BeeconChangePacket::option),
+                ByteCodec.VAR_INT.fieldOf(BeeconChangePacket::value),
+                ExtraByteCodecs.BLOCK_POS.fieldOf(BeeconChangePacket::pos),
+                BeeconChangePacket::new
+            ));
         }
 
         @Override

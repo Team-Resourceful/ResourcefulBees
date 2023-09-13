@@ -1,11 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.networking.packets.client;
 
+import com.teamresourceful.bytecodecs.base.ByteCodec;
+import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
 import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefullib.common.networking.base.CodecPacketHandler;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public record FindBeePacket(String bee, int slot) implements Packet<FindBeePacket> {
@@ -23,17 +25,15 @@ public record FindBeePacket(String bee, int slot) implements Packet<FindBeePacke
         return HANDLER;
     }
 
-    private static class Handler implements PacketHandler<FindBeePacket> {
+    @SuppressWarnings("UnstableApiUsage")
+    private static class Handler extends CodecPacketHandler<FindBeePacket> {
 
-        @Override
-        public void encode(FindBeePacket message, FriendlyByteBuf buffer) {
-            buffer.writeUtf(message.bee);
-            buffer.writeVarInt(message.slot);
-        }
-
-        @Override
-        public FindBeePacket decode(FriendlyByteBuf buffer) {
-            return new FindBeePacket(buffer.readUtf(), buffer.readVarInt());
+        public Handler() {
+            super(ObjectByteCodec.create(
+                ByteCodec.STRING.fieldOf(FindBeePacket::bee),
+                ByteCodec.VAR_INT.fieldOf(FindBeePacket::slot),
+                FindBeePacket::new
+            ));
         }
 
         @Override

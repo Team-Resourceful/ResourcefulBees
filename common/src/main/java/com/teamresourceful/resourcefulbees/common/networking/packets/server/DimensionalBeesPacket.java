@@ -1,12 +1,14 @@
 package com.teamresourceful.resourcefulbees.common.networking.packets.server;
 
+import com.teamresourceful.bytecodecs.base.ByteCodec;
+import com.teamresourceful.bytecodecs.defaults.MapCodec;
 import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
+import com.teamresourceful.resourcefullib.common.networking.base.CodecPacketHandler;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -29,16 +31,13 @@ public record DimensionalBeesPacket(Map<ResourceKey<Level>, List<String>> bees) 
         return HANDLER;
     }
 
-    private static class Handler implements PacketHandler<DimensionalBeesPacket> {
+    @SuppressWarnings("UnstableApiUsage")
+    private static class Handler extends CodecPacketHandler<DimensionalBeesPacket> {
 
-        @Override
-        public void encode(DimensionalBeesPacket message, FriendlyByteBuf buffer) {
-            buffer.writeMap(message.bees, FriendlyByteBuf::writeResourceKey, (buf, list) -> buf.writeCollection(list, FriendlyByteBuf::writeUtf));
-        }
-
-        @Override
-        public DimensionalBeesPacket decode(FriendlyByteBuf buffer) {
-            return new DimensionalBeesPacket(buffer.readMap(buf -> buf.readResourceKey(Registries.DIMENSION), buf -> buf.readList(FriendlyByteBuf::readUtf)));
+        public Handler() {
+            super(
+                new MapCodec<>(ExtraByteCodecs.DIMENSION, ByteCodec.STRING.listOf()).map(DimensionalBeesPacket::new, DimensionalBeesPacket::bees)
+            );
         }
 
         @Override

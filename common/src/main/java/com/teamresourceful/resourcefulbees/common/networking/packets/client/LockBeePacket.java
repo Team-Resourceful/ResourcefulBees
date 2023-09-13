@@ -1,12 +1,15 @@
 package com.teamresourceful.resourcefulbees.common.networking.packets.client;
 
+import com.teamresourceful.bytecodecs.base.ByteCodec;
+import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
+import com.teamresourceful.resourcefullib.common.networking.base.CodecPacketHandler;
 import com.teamresourceful.resourcefullib.common.networking.base.Packet;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketContext;
 import com.teamresourceful.resourcefullib.common.networking.base.PacketHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public record LockBeePacket(BlockPos pos, int bee) implements Packet<LockBeePacket> {
@@ -24,17 +27,15 @@ public record LockBeePacket(BlockPos pos, int bee) implements Packet<LockBeePack
         return HANDLER;
     }
 
-    private static class Handler implements PacketHandler<LockBeePacket> {
+    @SuppressWarnings("UnstableApiUsage")
+    private static class Handler extends CodecPacketHandler<LockBeePacket> {
 
-        @Override
-        public void encode(LockBeePacket message, FriendlyByteBuf buffer) {
-            buffer.writeBlockPos(message.pos);
-            buffer.writeVarInt(message.bee);
-        }
-
-        @Override
-        public LockBeePacket decode(FriendlyByteBuf buffer) {
-            return new LockBeePacket(buffer.readBlockPos(), buffer.readVarInt());
+        public Handler() {
+            super(ObjectByteCodec.create(
+                ExtraByteCodecs.BLOCK_POS.fieldOf(LockBeePacket::pos),
+                ByteCodec.VAR_INT.fieldOf(LockBeePacket::bee),
+                LockBeePacket::new
+            ));
         }
 
         @Override
