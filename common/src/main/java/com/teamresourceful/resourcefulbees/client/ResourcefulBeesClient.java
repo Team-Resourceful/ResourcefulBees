@@ -34,6 +34,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.FilePackResources;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.item.Item;
@@ -162,12 +163,12 @@ public class ResourcefulBeesClient {
 
         PackRepositoryAccessor accessor = (PackRepositoryAccessor) Minecraft.getInstance().getResourcePackRepository();
 
-        accessor.getSources().add((consumer) -> {
+        accessor.getSources().add(consumer -> {
             final Pack packInfo = Pack.readMetaAndCreate(
                     ModConstants.MOD_ID,
                     Component.empty(),
                     true,
-                    (input) -> new FilePackResources("builtin/resourcefulbees_pack_dev", ModPaths.RESOURCES.toFile(), true),
+                    input -> new PathPackResources("builtin/resourcefulbees_pack_dev", ModPaths.RESOURCES, true),
                     PackType.CLIENT_RESOURCES,
                     Pack.Position.TOP,
                     PackSource.BUILT_IN
