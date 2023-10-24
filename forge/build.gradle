@@ -42,13 +42,19 @@ dependencies {
     forgeRuntimeLibrary "com.teamresourceful:bytecodecs:1.0.2"
     modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-$project.name-1.20:$rconfig_version"
     include(modImplementation("software.bernie.geckolib:$geckolib_forge:$geckolib_version"))
-    modCompileOnly "com.telepathicgrunt:Bumblezone-Forge:$bumblezone_version"
+    compileOnly "com.telepathicgrunt:Bumblezone:$bumblezone_version-forge"
+    //modLocalRuntime "com.telepathicgrunt:Bumblezone:$bumblezone_version-forge"
     modImplementation "net.roguelogix.phosphophyllite:Phosphophyllite:$phos_version"
     modCompileOnly "mezz.jei:jei-$mc_version-forge-api:$jei_version"
     modLocalRuntime "mezz.jei:jei-$mc_version-forge:$jei_version" transitive false
     modCompileOnly "mcjty.theoneprobe:theoneprobe:$top_version:api" transitive false
     modLocalRuntime "mcjty.theoneprobe:theoneprobe:$top_version" transitive false
 //    modLocalRuntime "com.telepathicgrunt:CommandStructures-Forge:$cstructures_version"
+
+    modLocalRuntime "mekanism:Mekanism:$mekanism_version"// core
+    //modLocalRuntime "mekanism:Mekanism:$mekanism_version:additions"// Mekanism: Additions
+    //modLocalRuntime "mekanism:Mekanism:$mekanism_version:generators"// Mekanism: Generators
+    //modLocalRuntime "mekanism:Mekanism:$mekanism_version:tools"// Mekanism: Tools
 
     common(project(path: ":common", configuration: "namedElements")) transitive false
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) transitive false

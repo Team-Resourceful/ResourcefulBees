@@ -27,7 +27,7 @@ dependencies {
     compileOnly "com.teamresourceful:yabn:1.0.3"
     modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-$project.name-1.20:$rconfig_version"
     include(modImplementation("software.bernie.geckolib:$geckolib_fabric:$geckolib_version"))
-    modCompileOnly "com.telepathicgrunt:Bumblezone-Fabric:$bumblezone_version" transitive false
+    modCompileOnly "com.telepathicgrunt:Bumblezone:$bumblezone_version-fabric"
     modCompileOnly "mezz.jei:jei-$mc_version-fabric-api:$jei_version"
     modLocalRuntime "mezz.jei:jei-$mc_version-fabric:$jei_version" transitive false
 

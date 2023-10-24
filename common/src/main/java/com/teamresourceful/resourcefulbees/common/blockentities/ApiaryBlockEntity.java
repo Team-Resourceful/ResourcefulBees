@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BasicWorldlyContainer;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.ContentContainerBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
@@ -12,6 +13,7 @@ import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.util.ContainerUtils;
+import com.teamresourceful.resourcefulbees.common.util.containers.AutomationSensitiveContainer;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,16 +26,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ApiaryBlockEntity extends BeeHolderBlockEntity implements BasicWorldlyContainer, ContentMenuProvider<PositionContent> {
+public class ApiaryBlockEntity extends BeeHolderBlockEntity implements ContentContainerBlock<PositionContent> {
 
     protected final ApiaryTier tier;
 
     private static final int[] SLOTS = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
     private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
+
+    private AutomationSensitiveContainer container;
 
     public ApiaryBlockEntity(ApiaryTier tier, BlockPos pos, BlockState state) {
         super(tier.getBlockEntityType(), pos, state);
@@ -50,8 +55,8 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity implements BasicWorl
             if (bee instanceof BeeCompat compat) compat.nectarDroppedOff();
             HiveRecipe.getApiaryOutput(tier, bee)
                 .ifPresent(stack -> {
-                    for (int i = 0; i < items.size() && !stack.isEmpty(); i++) {
-                        stack = ContainerUtils.insertItem(this, i, stack);
+                    for (int i = 0; i < getContainer().getContainerSize() && !stack.isEmpty(); i++) {
+                        stack = ContainerUtils.internalInsertItem(getContainer(), i, stack);
                         if (stack.isEmpty()) break;
                     }
                 });
@@ -79,14 +84,26 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity implements BasicWorl
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
-        deserializeContainer(tag.getCompound(NBTConstants.NBT_INVENTORY));
+        getContainer().deserialize(tag);
+        //deserializeContainer(tag.getCompound(NBTConstants.NBT_INVENTORY));
         readSyncData(tag.getCompound(NBTConstants.SYNC_DATA));
+    }
+
+    @Override
+    public void readSyncData(@NotNull CompoundTag tag) {
+        super.readSyncData(tag);
+        getContainer().deserialize(tag);
+    }
+    //todo figure out why I have to override these methods while centrifuge and honeygen don't for the item container.
+    @Override
+    public @NotNull CompoundTag getSyncData() {
+        return getContainer().serialize(super.getSyncData());
     }
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put(NBTConstants.NBT_INVENTORY, serializeContainer());
+        //tag.put(NBTConstants.NBT_INVENTORY, serializeContainer());
         tag.put(NBTConstants.SYNC_DATA, getSyncData());
     }
     //endregion
@@ -107,7 +124,7 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity implements BasicWorl
         return new PositionContent(this.worldPosition);
     }
 
-    @Override
+/*    @Override
     public NonNullList<ItemStack> getItems() {
         return items;
     }
@@ -125,5 +142,30 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity implements BasicWorl
     @Override
     public boolean canPlaceItem(int index, @NotNull ItemStack stack) {
         return false;
+    }*/
+
+    @Override
+    public AutomationSensitiveContainer getContainer() {
+        if (container == null) {
+            container = new Container(this);
+        }
+        return container;
+    }
+
+    private static class Container extends AutomationSensitiveContainer {
+
+        public Container(BlockEntity entity) {
+            super(entity, 27, player -> true);
+        }
+
+        @Override
+        public boolean canAccept(int slot, ItemStack stack, boolean automation) {
+            return false;
+        }
+
+        @Override
+        public boolean canRemove(int slot, boolean automation) {
+            return true;
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.menus;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BlockBee;
+import com.teamresourceful.resourcefulbees.common.menus.base.AutomationSensitiveSlot;
 import com.teamresourceful.resourcefulbees.common.menus.base.ContainerSlot;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
@@ -28,7 +29,7 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
     protected void addMenuSlots() {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new ContainerSlot(entity, j + i * 9, 56 + j * 18, 18 + i * 18));
+                this.addSlot(new AutomationSensitiveSlot(entity.getContainer(), j + i * 9, 56 + j * 18, 18 + i * 18));
             }
         }
     }
