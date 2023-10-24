@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.lang;
 
+import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeCreativeTabs;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.*;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
@@ -57,6 +58,7 @@ public class ModLanguageProvider extends BaseLanguageProvider {
         add(ItemGroupResourcefulBees.RESOURCEFUL_BEES_BEES.get(), "Resourceful Bees - Spawn Eggs");
         add(ItemGroupResourcefulBees.RESOURCEFUL_BEES_COMBS.get(), "Resourceful Bees - Combs");
         add(ItemGroupResourcefulBees.RESOURCEFUL_BEES_HIVES.get(), "Resourceful Bees - Hives");
+        add(CentrifugeCreativeTabs.RESOURCEFUL_BEES_CENTRIFUGE.get(), "Resourceful Bees - Centrifuge");
     }
 
     private void addPotions() {
