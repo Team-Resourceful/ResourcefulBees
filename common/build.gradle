@@ -11,7 +11,7 @@ dependencies {
     modApi "tech.thatgravyboat:commonats:1.0"
 
     modCompileOnly("software.bernie.geckolib:$geckolib_fabric:$geckolib_version") transitive false
-    modCompileOnly ("com.telepathicgrunt:Bumblezone:$bumblezone_version-fabric")
+    modCompileOnly ("com.telepathicgrunt:Bumblezone:$bumblezone_version-common")
     //modCompileOnly("com.telepathicgrunt:Bumblezone:$bumblezone_version-common") transitive false
 }
 
