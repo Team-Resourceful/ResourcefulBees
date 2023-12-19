@@ -51,7 +51,5 @@ jobs:
         run: ./gradlew injectDiscordEmbed -Pnightly=true
 
       - name: Send Discord Webhook
-        uses: tsickert/discord-webhook@v5.3.0
-        with:
-          webhook-url: ${{ secrets.DISCORD_NIGHTLY_WEBHOOK }}
-          raw-data: build/nightly_embed.json
+        run: |
+          curl -H "Content-Type: application/json" -d @./build/nightly_embed.json ${{ secrets.DISCORD_NIGHTLY_WEBHOOK }}

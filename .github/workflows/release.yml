@@ -126,14 +126,12 @@ jobs:
       - name: Create Discord Embed
         run: ./gradlew injectDiscordEmbed --escapeBackslash
 
-      - name: Send Discord Webhook
-        uses: tsickert/discord-webhook@v5.3.0
-        with:
-          webhook-url: ${{ secrets.DISCORD_RELEASE_WEBHOOK }}
-          raw-data: ./build/release_embed.json
-
       - name: Commit Version Updates
         run: |
           git config --global user.name "TeamResourcefulBot"
           git config --global user.email "teamresourcefulbot@users.noreply.github.com"
           git diff-index --quiet HEAD || { git commit -am "Released v${{ steps.version.outputs.version }}"; git push; }
+
+      - name: Send Discord Webhook
+        run: |
+          curl -H "Content-Type: application/json" -d @./build/release_embed.json ${{ secrets.DISCORD_RELEASE_WEBHOOK }}
