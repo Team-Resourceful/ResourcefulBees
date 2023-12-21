@@ -7,12 +7,11 @@ import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
-import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -25,16 +24,17 @@ public record CoreData(
         HolderSet<Block> flowers,
         HolderSet<EntityType<?>> entityFlowers,
         int maxTimeInHive,
-        List<MutableComponent> lore
+        List<Component> lore
 ) implements BeeCoreData {
 
+    private static final HolderSet<Block> DEFAULT_FLOWERS = HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY);
     private static final BeeCoreData DEFAULT = new CoreData("", HolderSet.direct(), HolderSet.direct(), BeeConstants.MAX_TIME_IN_HIVE, new ArrayList<>());
     private static final Codec<BeeCoreData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.STRING.fieldOf("honeycombVariation").orElse("").forGetter(BeeCoreData::honeycomb),
-            HolderSetCodec.of(BuiltInRegistries.BLOCK).fieldOf("flower").orElse(HolderSet.direct(Block::builtInRegistryHolder, Blocks.POPPY)).forGetter(BeeCoreData::flowers),
-            HolderSetCodec.of(BuiltInRegistries.ENTITY_TYPE).fieldOf("entityFlower").orElse(HolderSet.direct()).forGetter(BeeCoreData::entityFlowers),
-            Codec.intRange(600, Integer.MAX_VALUE).fieldOf("maxTimeInHive").orElse(2400).forGetter(BeeCoreData::maxTimeInHive),
-            CodecExtras.passthrough(Component.Serializer::toJsonTree, Component.Serializer::fromJson).listOf().fieldOf("lore").orElse(Lists.newArrayList()).forGetter(BeeCoreData::lore)
+            Codec.STRING.optionalFieldOf("honeycombVariation", "").forGetter(BeeCoreData::honeycomb),
+            HolderSetCodec.of(BuiltInRegistries.BLOCK).optionalFieldOf("flower", DEFAULT_FLOWERS).forGetter(BeeCoreData::flowers),
+            HolderSetCodec.of(BuiltInRegistries.ENTITY_TYPE).optionalFieldOf("entityFlower", HolderSet.direct()).forGetter(BeeCoreData::entityFlowers),
+            Codec.intRange(600, Integer.MAX_VALUE).optionalFieldOf("maxTimeInHive", 2400).forGetter(BeeCoreData::maxTimeInHive),
+            ExtraCodecs.COMPONENT.listOf().optionalFieldOf("lore", Lists.newArrayList()).forGetter(BeeCoreData::lore)
     ).apply(instance, CoreData::new));
 
     public static final BeeDataSerializer<BeeCoreData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("core"), 1, id -> CODEC, DEFAULT);

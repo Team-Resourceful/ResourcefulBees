@@ -13,8 +13,8 @@ public record CustomHoneyBottleEffectData(LazyHolder<MobEffect> effect, int dura
     private static final Codec<LazyHolder<MobEffect>> EFFECT_CODEC = ResourceLocation.CODEC.xmap(LazyHolder.map(BuiltInRegistries.MOB_EFFECT), LazyHolder::getId);
     public static final Codec<HoneyBottleEffectData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             EFFECT_CODEC.fieldOf("effect").forGetter(HoneyBottleEffectData::effect),
-            Codec.INT.fieldOf("duration").orElse(300).forGetter(HoneyBottleEffectData::duration),
-            Codec.INT.fieldOf("strength").orElse(0).forGetter(HoneyBottleEffectData::strength),
-            Codec.FLOAT.fieldOf("chance").orElse(1.0f).forGetter(HoneyBottleEffectData::chance)
+            Codec.INT.optionalFieldOf("duration", 300).forGetter(HoneyBottleEffectData::duration),
+            Codec.INT.optionalFieldOf("strength", 0).forGetter(HoneyBottleEffectData::strength),
+            Codec.FLOAT.optionalFieldOf("chance", 1.0f).forGetter(HoneyBottleEffectData::chance)
     ).apply(instance, CustomHoneyBottleEffectData::new));
 }

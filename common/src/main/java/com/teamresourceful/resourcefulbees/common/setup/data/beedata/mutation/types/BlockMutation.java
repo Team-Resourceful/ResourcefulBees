@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,7 +25,7 @@ import java.util.Optional;
 
 public record BlockMutation(RestrictedBlockPredicate predicate, double chance, double weight) implements MutationType, ItemDisplay {
 
-    public static final Serializer SERIALIZER = new Serializer();
+    public static final GenericSerializer<MutationType> SERIALIZER = new Serializer();
 
     @Override
     public @Nullable BlockPos check(ServerLevel level, BlockPos pos) {
@@ -41,8 +42,7 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
     @Override
     public boolean activate(ServerLevel level, BlockPos pos) {
         if (!level.getBlockState(pos).canBeReplaced()) return false;
-        //TODO see about changing the block codec to allow for blockstates (current one doesn't expose them even if they are avaliable to input)
-        BlockState state = this.predicate.block().defaultBlockState();
+        BlockState state = this.predicate.properties().construct(this.predicate.block(), level.random);
         BlockState blockState = Block.updateFromNeighbourShapes(state, level, pos);
         if (blockState.isAir()) {
             blockState = state;
@@ -51,11 +51,9 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
         if (!level.setBlock(pos, blockState, Block.UPDATE_ALL)) {
             return false;
         } else {
-            // applies NBT
-            CompoundTag tag = tag().orElse(new CompoundTag());
             BlockEntity entity = level.getBlockEntity(pos);
-            if (entity!= null) {
-                entity.load(tag);
+            if (entity != null && tag().isPresent()) {
+                entity.load(tag().get());
             }
         }
         level.blockUpdated(pos, blockState.getBlock());
@@ -89,8 +87,8 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
 
         public static final Codec<BlockMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 RestrictedBlockPredicate.CODEC.fieldOf("block").forGetter(BlockMutation::predicate),
-                Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(BlockMutation::chance),
-                Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(BlockMutation::weight)
+                CodecExtras.DOUBLE_UNIT_INTERVAL.optionalFieldOf("chance", 1D).forGetter(BlockMutation::chance),
+                CodecExtras.NON_NEGATIVE_DOUBLE.optionalFieldOf("weight", 10D).forGetter(BlockMutation::weight)
         ).apply(instance, BlockMutation::new));
 
         @Override

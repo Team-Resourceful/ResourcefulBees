@@ -21,7 +21,7 @@ import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedIte
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.exceptions.ValidationException;
 import net.minecraft.core.HolderSet;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
@@ -67,7 +67,7 @@ public class InitializerApi {
         return this.combat.create(isPassive, removeStingerOnAttack, inflictsPoison, isInvulnerable, attributes);
     }
 
-    public BeeCoreData core(String honeycomb, HolderSet<Block> flowers, HolderSet<EntityType<?>> entityFlowers, int maxTimeInHive, List<MutableComponent> lore) {
+    public BeeCoreData core(String honeycomb, HolderSet<Block> flowers, HolderSet<EntityType<?>> entityFlowers, int maxTimeInHive, List<Component> lore) {
         return this.core.create(honeycomb, flowers, entityFlowers, maxTimeInHive, lore);
     }
 

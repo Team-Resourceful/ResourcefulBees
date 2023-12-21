@@ -53,9 +53,10 @@ public final class DummyBeeData {
             HolderSet.direct(Block::builtInRegistryHolder, Blocks.DIAMOND_BLOCK, Blocks.EMERALD_BLOCK),
             HolderSet.direct(EntityType::builtInRegistryHolder, EntityType.COW, EntityType.SHEEP),
             4000,
-            List.of(Component.literal("This is a bee template"),
-                    Component.literal("This bee is a dummy and does not exist"),
-                    Component.literal("Let's hope this works...")
+            List.of(
+                Component.literal("This is a bee template"),
+                Component.literal("This bee is a dummy and does not exist"),
+                Component.literal("Let's hope this works...")
             )
     );
 

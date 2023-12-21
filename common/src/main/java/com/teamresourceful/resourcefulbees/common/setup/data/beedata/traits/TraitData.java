@@ -32,8 +32,8 @@ public record TraitData(
 
     private static final BeeTraitData DEFAULT = TraitData.of(BeeConfig.defaultAuraRange, Collections.emptySet());
     private static final Codec<BeeTraitData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.intRange(3, 20).fieldOf("auraRange").orElse(BeeConfig.defaultAuraRange).forGetter(BeeTraitData::auraRange),
-            CodecExtras.set(Codec.STRING).fieldOf("traits").orElse(new HashSet<>()).forGetter(BeeTraitData::traits)
+            Codec.intRange(3, 20).optionalFieldOf("auraRange", BeeConfig.defaultAuraRange).forGetter(BeeTraitData::auraRange),
+            CodecExtras.set(Codec.STRING).optionalFieldOf("traits", new HashSet<>()).forGetter(BeeTraitData::traits)
     ).apply(instance, TraitData::of));
     public static final BeeDataSerializer<BeeTraitData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("trait"), 1, id -> CODEC, DEFAULT);
 

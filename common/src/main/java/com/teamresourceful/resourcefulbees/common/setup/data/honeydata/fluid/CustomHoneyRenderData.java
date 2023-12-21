@@ -23,9 +23,9 @@ public record CustomHoneyRenderData(
 
     public static final Codec<HoneyRenderData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Color.CODEC.fieldOf("color").forGetter(HoneyRenderData::color),
-            ResourceLocation.CODEC.fieldOf("still").orElse(CUSTOM_FLUID_STILL).forGetter(HoneyRenderData::still),
-            ResourceLocation.CODEC.fieldOf("flowing").orElse(CUSTOM_FLUID_FLOWING).forGetter(HoneyRenderData::flowing),
-            ResourceLocation.CODEC.fieldOf("face").orElse(CUSTOM_FLUID_FLOWING).forGetter(HoneyRenderData::face),
-            ResourceLocation.CODEC.fieldOf("overlay").orElse(CUSTOM_FLUID_UNDERWATER).forGetter(HoneyRenderData::overlay)
+            ResourceLocation.CODEC.optionalFieldOf("still", CUSTOM_FLUID_STILL).forGetter(HoneyRenderData::still),
+            ResourceLocation.CODEC.optionalFieldOf("flowing", CUSTOM_FLUID_FLOWING).forGetter(HoneyRenderData::flowing),
+            ResourceLocation.CODEC.optionalFieldOf("face", CUSTOM_FLUID_FLOWING).forGetter(HoneyRenderData::face),
+            ResourceLocation.CODEC.optionalFieldOf("overlay", CUSTOM_FLUID_UNDERWATER).forGetter(HoneyRenderData::overlay)
     ).apply(instance, CustomHoneyRenderData::new));
 }

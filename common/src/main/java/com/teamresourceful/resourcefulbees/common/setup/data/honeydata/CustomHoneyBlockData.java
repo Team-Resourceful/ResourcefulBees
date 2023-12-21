@@ -27,12 +27,12 @@ public record CustomHoneyBlockData(
 
     private static final CustomHoneyBlockData DEFAULT = new CustomHoneyBlockData(Color.DEFAULT, 0.5f, 0.4f, LazyHolder.of(BuiltInRegistries.ITEM, Items.AIR), LazyHolder.of(BuiltInRegistries.BLOCK, Blocks.AIR), TradeData.DEFAULT);
     private static final Codec<HoneyBlockData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneyBlockData::color),
-            Codec.FLOAT.fieldOf("jumpFactor").orElse(0.5f).forGetter(HoneyBlockData::jumpFactor),
-            Codec.FLOAT.fieldOf("speedFactor").orElse(0.4f).forGetter(HoneyBlockData::speedFactor),
-            LazyHolders.LAZY_ITEM.fieldOf("honeyBlockItem").orElse(LazyHolder.of(BuiltInRegistries.ITEM, Items.HONEY_BLOCK)).forGetter(HoneyBlockData::blockItem),
-            LazyHolders.LAZY_BLOCK.fieldOf("honeyBlock").orElse(LazyHolder.of(BuiltInRegistries.BLOCK, Blocks.HONEY_BLOCK)).forGetter(HoneyBlockData::block),
-            TradeData.CODEC.fieldOf("tradeData").orElse(TradeData.DEFAULT).forGetter(HoneyBlockData::tradeData)
+            Color.CODEC.optionalFieldOf("color", Color.DEFAULT).forGetter(HoneyBlockData::color),
+            Codec.FLOAT.optionalFieldOf("jumpFactor", 0.5f).forGetter(HoneyBlockData::jumpFactor),
+            Codec.FLOAT.optionalFieldOf("speedFactor", 0.4f).forGetter(HoneyBlockData::speedFactor),
+            LazyHolders.LAZY_ITEM.optionalFieldOf("honeyBlockItem", LazyHolder.of(BuiltInRegistries.ITEM, Items.HONEY_BLOCK)).forGetter(HoneyBlockData::blockItem),
+            LazyHolders.LAZY_BLOCK.optionalFieldOf("honeyBlock", LazyHolder.of(BuiltInRegistries.BLOCK, Blocks.HONEY_BLOCK)).forGetter(HoneyBlockData::block),
+            TradeData.CODEC.optionalFieldOf("tradeData", TradeData.DEFAULT).forGetter(HoneyBlockData::tradeData)
     ).apply(instance, CustomHoneyBlockData::new));
     public static final HoneyDataSerializer<HoneyBlockData> SERIALIZER = HoneyDataSerializer.of(new ModResourceLocation("block"), 1, id -> CODEC, DEFAULT);
 

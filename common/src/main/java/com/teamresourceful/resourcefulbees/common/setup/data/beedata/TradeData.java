@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.bounds.UniformedNumberCodecs;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import net.minecraft.util.RandomSource;
@@ -40,12 +41,12 @@ public record TradeData(
     }
 
     public static final Codec<BeekeeperTradeData> CODEC = RecordCodecBuilder.create(tradeDataInstance -> tradeDataInstance.group(
-            UniformedNumberCodecs.rangedUniformIntCodec(1, 64).fieldOf("amount").orElse(UniformInt.of(1,1)).forGetter(BeekeeperTradeData::amount),
-            ItemStackCodec.CODEC.fieldOf("secondaryItem").orElse(ItemStack.EMPTY).forGetter(BeekeeperTradeData::secondaryItem),
-            UniformedNumberCodecs.rangedUniformIntCodec(1, 64).fieldOf("secondaryItemCost").orElse(UniformInt.of(1, 4)).forGetter(BeekeeperTradeData::secondaryItemCost),
-            Codec.floatRange(0, 1).fieldOf("priceMultiplier").orElse(0.05f).forGetter(BeekeeperTradeData::priceMultiplier),
-            Codec.intRange(1, 64).fieldOf("maxTrades").orElse(8).forGetter(BeekeeperTradeData::maxTrades),
-            Codec.intRange(1, 64).fieldOf("xp").orElse(3).forGetter(BeekeeperTradeData::xp)
+            UniformedNumberCodecs.rangedUniformIntCodec(1, 64).optionalFieldOf("amount", UniformInt.of(1,1)).forGetter(BeekeeperTradeData::amount),
+            ItemStackCodec.CODEC.optionalFieldOf("secondaryItem", ItemStack.EMPTY).forGetter(BeekeeperTradeData::secondaryItem),
+            UniformedNumberCodecs.rangedUniformIntCodec(1, 64).optionalFieldOf("secondaryItemCost", UniformInt.of(1, 4)).forGetter(BeekeeperTradeData::secondaryItemCost),
+            CodecExtras.FLOAT_UNIT_INTERVAL.optionalFieldOf("priceMultiplier", 0.05f).forGetter(BeekeeperTradeData::priceMultiplier),
+            Codec.intRange(1, 64).optionalFieldOf("maxTrades", 8).forGetter(BeekeeperTradeData::maxTrades),
+            Codec.intRange(1, 64).optionalFieldOf("xp", 3).forGetter(BeekeeperTradeData::xp)
     ).apply(tradeDataInstance, TradeData::new));
 
     public static final BeekeeperTradeData DEFAULT = new TradeData(UniformInt.of(0,0), ItemStack.EMPTY, UniformInt.of(0,0), 0, 0, 0);

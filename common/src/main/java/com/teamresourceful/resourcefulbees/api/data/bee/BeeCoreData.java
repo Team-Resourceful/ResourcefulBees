@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import net.minecraft.core.HolderSet;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 
@@ -33,7 +33,7 @@ public interface BeeCoreData extends BeeData<BeeCoreData> {
 
     int maxTimeInHive();
 
-    List<MutableComponent> lore();
+    List<Component> lore();
 
     default Optional<OutputVariation> getHoneycombData() {
         return Optional.ofNullable(HoneycombRegistry.get().getHoneycomb(honeycomb()));

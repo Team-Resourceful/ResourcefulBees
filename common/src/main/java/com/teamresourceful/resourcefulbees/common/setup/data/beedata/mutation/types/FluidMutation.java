@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.FluidDisplay;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -18,7 +19,7 @@ import java.util.Optional;
 
 public record FluidMutation(Fluid fluid, double chance, double weight) implements MutationType, FluidDisplay {
 
-    public static final Serializer SERIALIZER = new Serializer();
+    public static final GenericSerializer<MutationType> SERIALIZER = new Serializer();
 
     @Override
     public @Nullable BlockPos check(ServerLevel level, BlockPos pos) {
@@ -58,8 +59,8 @@ public record FluidMutation(Fluid fluid, double chance, double weight) implement
 
         public static final Codec<FluidMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BuiltInRegistries.FLUID.byNameCodec().fieldOf("fluid").forGetter(FluidMutation::fluid),
-            Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(FluidMutation::chance),
-            Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(FluidMutation::weight)
+            CodecExtras.DOUBLE_UNIT_INTERVAL.optionalFieldOf("chance", 1D).forGetter(FluidMutation::chance),
+            CodecExtras.NON_NEGATIVE_DOUBLE.optionalFieldOf("weight", 10D).forGetter(FluidMutation::weight)
         ).apply(instance, FluidMutation::new));
 
         @Override

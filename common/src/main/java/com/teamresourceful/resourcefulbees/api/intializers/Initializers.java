@@ -20,7 +20,7 @@ import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEnt
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedItemPredicate;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.HolderSet;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
@@ -74,7 +74,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface CoreInitializer {
-        BeeCoreData create(String honeycomb, HolderSet<Block> flowers, HolderSet<EntityType<?>> entityFlowers, int maxTimeInHive, List<MutableComponent> lore);
+        BeeCoreData create(String honeycomb, HolderSet<Block> flowers, HolderSet<EntityType<?>> entityFlowers, int maxTimeInHive, List<Component> lore);
     }
 
     @FunctionalInterface

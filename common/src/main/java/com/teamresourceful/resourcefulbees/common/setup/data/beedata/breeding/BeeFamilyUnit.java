@@ -2,9 +2,6 @@ package com.teamresourceful.resourcefulbees.common.setup.data.beedata.breeding;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.Decoder;
-import com.mojang.serialization.Encoder;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
@@ -31,11 +28,11 @@ public record BeeFamilyUnit(
     @ApiStatus.Internal
     public static Codec<FamilyUnit> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                Codec.doubleRange(0.0d, Double.MAX_VALUE).fieldOf("weight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(FamilyUnit::weight),
-                Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(FamilyUnit::chance),
-                Codec.STRING.fieldOf("parent1").orElse("").forGetter(unit -> unit.getParents().getParent1()),
-                Codec.STRING.fieldOf("parent2").orElse("").forGetter(unit -> unit.getParents().getParent2()),
-                MapCodec.of(Encoder.empty(), Decoder.unit(() -> name)).forGetter(FamilyUnit::getChild)
+                Codec.doubleRange(0.0d, Double.MAX_VALUE).optionalFieldOf("weight", BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(FamilyUnit::weight),
+                Codec.doubleRange(0.0d, 1.0d).optionalFieldOf("chance", BeeConstants.DEFAULT_BREED_CHANCE).forGetter(FamilyUnit::chance),
+                Codec.STRING.optionalFieldOf("parent1", "").forGetter(unit -> unit.getParents().getParent1()),
+                Codec.STRING.optionalFieldOf("parent2", "").forGetter(unit -> unit.getParents().getParent2()),
+                RecordCodecBuilder.point(name)
         ).apply(instance, BeeFamilyUnit::of));
     }
 

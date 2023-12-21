@@ -25,11 +25,11 @@ public record RenderData(Set<BeeLayerData> layers, BeeColorData colorData, Resou
 
     private static final Codec<BeeRenderData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             CodecExtras.linkedSet(LayerData.CODEC).fieldOf("layers").orElse(new HashSet<>()).forGetter(BeeRenderData::layers),
-            ColorData.CODEC.fieldOf("ColorData").orElse(ColorData.DEFAULT).forGetter(BeeRenderData::colorData),
-            ResourceLocation.CODEC.fieldOf("model").orElse(BASE_MODEL).forGetter(BeeRenderData::model),
-            LayerTexture.CODEC.fieldOf("texture").orElse(LayerTexture.MISSING_TEXTURE).forGetter(BeeRenderData::texture),
-            ResourceLocation.CODEC.fieldOf("animation").orElse(BASE_ANIMATION).forGetter(BeeRenderData::animations),
-            Codec.floatRange(0.5f, 2.0f).fieldOf("sizeModifier").orElse(1.0f).forGetter(BeeRenderData::sizeModifier)
+            ColorData.CODEC.optionalFieldOf("ColorData", ColorData.DEFAULT).forGetter(BeeRenderData::colorData),
+            ResourceLocation.CODEC.optionalFieldOf("model", BASE_MODEL).forGetter(BeeRenderData::model),
+            LayerTexture.CODEC.optionalFieldOf("texture", LayerTexture.MISSING_TEXTURE).forGetter(BeeRenderData::texture),
+            ResourceLocation.CODEC.optionalFieldOf("animation", BASE_ANIMATION).forGetter(BeeRenderData::animations),
+            Codec.floatRange(0.5f, 2.0f).optionalFieldOf("sizeModifier", 1.0f).forGetter(BeeRenderData::sizeModifier)
     ).apply(instance, RenderData::new));
 
     public static final BeeDataSerializer<BeeRenderData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("rendering"), 1, id -> CODEC, DEFAULT);

@@ -29,11 +29,11 @@ public record CustomHoneyBottleData(
     private static Codec<HoneyBottleData> codec(String id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
-                Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(HoneyBottleData::color),
-                CustomHoneyFoodData.CODEC.fieldOf("food").orElse(CustomHoneyFoodData.DEFAULT).forGetter(HoneyBottleData::food),
-                EnumCodec.of(Rarity.class).fieldOf("rarity").orElse(Rarity.COMMON).forGetter(HoneyBottleData::rarity),
-                LazyHolders.LAZY_ITEM.fieldOf("honeyBottle").orElse(LazyHolder.of(BuiltInRegistries.ITEM, Items.HONEY_BOTTLE)).forGetter(HoneyBottleData::bottle),
-                TradeData.CODEC.fieldOf("tradeData").orElse(TradeData.DEFAULT).forGetter(HoneyBottleData::tradeData)
+                Color.CODEC.optionalFieldOf("color", Color.DEFAULT).forGetter(HoneyBottleData::color),
+                CustomHoneyFoodData.CODEC.optionalFieldOf("food", CustomHoneyFoodData.DEFAULT).forGetter(HoneyBottleData::food),
+                EnumCodec.of(Rarity.class).optionalFieldOf("rarity", Rarity.COMMON).forGetter(HoneyBottleData::rarity),
+                LazyHolders.LAZY_ITEM.optionalFieldOf("honeyBottle", LazyHolder.of(BuiltInRegistries.ITEM, Items.HONEY_BOTTLE)).forGetter(HoneyBottleData::bottle),
+                TradeData.CODEC.optionalFieldOf("tradeData", TradeData.DEFAULT).forGetter(HoneyBottleData::tradeData)
         ).apply(instance, CustomHoneyBottleData::new));
     }
     public static final HoneyDataSerializer<HoneyBottleData> SERIALIZER = HoneyDataSerializer.of(new ModResourceLocation("bottle"), 1, CustomHoneyBottleData::codec);

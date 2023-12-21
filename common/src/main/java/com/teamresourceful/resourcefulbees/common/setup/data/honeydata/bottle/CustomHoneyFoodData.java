@@ -11,10 +11,10 @@ public record CustomHoneyFoodData(int hunger, float saturation, boolean canAlway
 
     public static final CustomHoneyFoodData DEFAULT = new CustomHoneyFoodData(1, 1f, false, false, List.of());
     public static final Codec<HoneyFoodData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.INT.fieldOf("hunger").orElse(1).forGetter(HoneyFoodData::hunger),
-            Codec.FLOAT.fieldOf("saturation").orElse(1f).forGetter(HoneyFoodData::saturation),
-            Codec.BOOL.fieldOf("canAlwaysEat").orElse(false).forGetter(HoneyFoodData::canAlwaysEat),
-            Codec.BOOL.fieldOf("fastFood").orElse(false).forGetter(HoneyFoodData::fastFood),
+            Codec.INT.optionalFieldOf("hunger", 1).forGetter(HoneyFoodData::hunger),
+            Codec.FLOAT.optionalFieldOf("saturation", 1f).forGetter(HoneyFoodData::saturation),
+            Codec.BOOL.optionalFieldOf("canAlwaysEat", false).forGetter(HoneyFoodData::canAlwaysEat),
+            Codec.BOOL.optionalFieldOf("fastFood", false).forGetter(HoneyFoodData::fastFood),
             CustomHoneyBottleEffectData.CODEC.listOf().fieldOf("effects").orElse(List.of()).forGetter(HoneyFoodData::effects)
     ).apply(instance, CustomHoneyFoodData::new));
 

@@ -12,6 +12,7 @@ import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -27,17 +28,18 @@ public record BreedData(
         int childGrowthDelay, int breedDelay
 ) implements BeeBreedData {
 
-    private static final BeeBreedData DEFAULT = new BreedData(Collections.emptySet(), HolderSet.direct(Item::builtInRegistryHolder, Items.POPPY), Optional.empty(), 0, 0, 0);
+    private static final HolderSet<Item> DEFAULT_FEED_ITEM = HolderSet.direct(Item::builtInRegistryHolder, Items.POPPY);
+    private static final BeeBreedData DEFAULT = new BreedData(Collections.emptySet(), DEFAULT_FEED_ITEM, Optional.empty(), 0, 0, 0);
     public static final BeeDataSerializer<BeeBreedData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("breeding"), 1, BreedData::codec, DEFAULT);
 
     private static Codec<BeeBreedData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                CodecExtras.set(BeeFamilyUnit.codec(name)).fieldOf("parents").orElse(new HashSet<>()).forGetter(BeeBreedData::families),
-                HolderSetCodec.of(BuiltInRegistries.ITEM).fieldOf("feedItem").orElse(HolderSet.direct(Item::builtInRegistryHolder, Items.POPPY)).forGetter(BeeBreedData::feedItems),
+                CodecExtras.set(BeeFamilyUnit.codec(name)).optionalFieldOf("parents", new HashSet<>()).forGetter(BeeBreedData::families),
+                HolderSetCodec.of(BuiltInRegistries.ITEM).optionalFieldOf("feedItem", DEFAULT_FEED_ITEM).forGetter(BeeBreedData::feedItems),
                 ItemStackCodec.CODEC.optionalFieldOf("feedReturnItem").forGetter(BeeBreedData::feedReturnItem),
-                Codec.intRange(1, Integer.MAX_VALUE).fieldOf("feedAmount").orElse(1).forGetter(BeeBreedData::feedAmount),
-                Codec.intRange(Integer.MIN_VALUE, 0).fieldOf("childGrowthDelay").orElse(BeeConstants.CHILD_GROWTH_DELAY).forGetter(BeeBreedData::childGrowthDelay),
-                Codec.intRange(0, Integer.MAX_VALUE).fieldOf("breedDelay").orElse(BeeConstants.BREED_DELAY).forGetter(BeeBreedData::breedDelay)
+                CodecExtras.POSITIVE_INT.optionalFieldOf("feedAmount", 1).forGetter(BeeBreedData::feedAmount),
+                CodecExtras.NON_POSITIVE_INT.optionalFieldOf("childGrowthDelay", BeeConstants.CHILD_GROWTH_DELAY).forGetter(BeeBreedData::childGrowthDelay),
+                ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("breedDelay", BeeConstants.BREED_DELAY).forGetter(BeeBreedData::breedDelay)
         ).apply(instance, BreedData::new));
     }
 

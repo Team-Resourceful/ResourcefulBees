@@ -34,13 +34,13 @@ public record CustomHoneyFluidData(
     private static Codec<HoneyFluidData> codec(String id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
-                CustomHoneyRenderData.CODEC.fieldOf("rendering").orElse(CustomHoneyRenderData.DEFAULT).forGetter(HoneyFluidData::renderData),
-                CustomHoneyFluidAttributesData.CODEC.fieldOf("attributes").orElse(CustomHoneyFluidAttributesData.DEFAULT).forGetter(HoneyFluidData::fluidAttributesData),
+                CustomHoneyRenderData.CODEC.optionalFieldOf("rendering", CustomHoneyRenderData.DEFAULT).forGetter(HoneyFluidData::renderData),
+                CustomHoneyFluidAttributesData.CODEC.optionalFieldOf("attributes", CustomHoneyFluidAttributesData.DEFAULT).forGetter(HoneyFluidData::fluidAttributesData),
                 LazyHolders.LAZY_FLUID.fieldOf("stillFluid").forGetter(HoneyFluidData::stillFluid),
                 LazyHolders.LAZY_FLUID.fieldOf("flowingFluid").forGetter(HoneyFluidData::flowingFluid),
                 LazyHolders.LAZY_ITEM.fieldOf("fluidBucket").forGetter(HoneyFluidData::fluidBucket),
                 LazyHolders.LAZY_BLOCK.fieldOf("fluidBlock").forGetter(HoneyFluidData::fluidBlock),
-                TradeData.CODEC.fieldOf("tradeData").orElse(TradeData.DEFAULT).forGetter(HoneyFluidData::tradeData)
+                TradeData.CODEC.optionalFieldOf("tradeData", TradeData.DEFAULT).forGetter(HoneyFluidData::tradeData)
         ).apply(instance, CustomHoneyFluidData::new));
     }
     public static final HoneyDataSerializer<HoneyFluidData> SERIALIZER = HoneyDataSerializer.of(new ModResourceLocation("fluid"), 1, CustomHoneyFluidData::codec, DEFAULT);

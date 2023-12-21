@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.common.recipes.MutationRecipe;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.Level;
 
 import java.util.Map;
@@ -17,7 +18,7 @@ public record MutationData(int count, ResourceLocation id) implements BeeMutatio
 
     private static final BeeMutationData DEFAULT = new MutationData(0, new ModResourceLocation("empty"));
     private static final Codec<BeeMutationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.intRange(1, Integer.MAX_VALUE).fieldOf("count").orElse(10).forGetter(BeeMutationData::count),
+            ExtraCodecs.POSITIVE_INT.optionalFieldOf("count", 10).forGetter(BeeMutationData::count),
             ResourceLocation.CODEC.fieldOf("mutation").forGetter(BeeMutationData::id)
     ).apply(instance, MutationData::new));
 

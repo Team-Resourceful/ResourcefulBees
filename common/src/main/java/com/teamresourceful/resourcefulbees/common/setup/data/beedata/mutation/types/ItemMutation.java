@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedItemPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +22,7 @@ import java.util.Optional;
 
 public record ItemMutation(RestrictedItemPredicate predicate, double chance, double weight) implements MutationType, ItemDisplay {
 
-    public static final Serializer SERIALIZER = new Serializer();
+    public static final GenericSerializer<MutationType> SERIALIZER = new Serializer();
 
     @Override
     public @Nullable BlockPos check(ServerLevel level, BlockPos pos) {
@@ -63,8 +64,8 @@ public record ItemMutation(RestrictedItemPredicate predicate, double chance, dou
 
         public static final Codec<ItemMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 RestrictedItemPredicate.CODEC.fieldOf("item").forGetter(ItemMutation::predicate),
-                Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(ItemMutation::chance),
-                Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(ItemMutation::weight)
+                CodecExtras.DOUBLE_UNIT_INTERVAL.optionalFieldOf("chance", 1D).forGetter(ItemMutation::chance),
+                CodecExtras.NON_NEGATIVE_DOUBLE.optionalFieldOf("weight", 10D).forGetter(ItemMutation::weight)
         ).apply(instance, ItemMutation::new));
 
         @Override

@@ -12,11 +12,11 @@ public record LayerData(Color color, BeeLayerTexture texture, LayerEffect effect
     public static final BeeLayerData DEFAULT = new LayerData(Color.DEFAULT, LayerTexture.MISSING_TEXTURE, LayerEffect.NONE, false, 0);
 
     public static final Codec<BeeLayerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Color.CODEC.fieldOf("color").orElse(Color.DEFAULT).forGetter(BeeLayerData::color),
-            LayerTexture.CODEC.fieldOf("texture").orElse(LayerTexture.MISSING_TEXTURE).forGetter(BeeLayerData::texture),
-            LayerEffect.CODEC.fieldOf("layerEffect").orElse(LayerEffect.NONE).forGetter(BeeLayerData::effect),
-            Codec.BOOL.fieldOf("isPollen").orElse(false).forGetter(BeeLayerData::pollenLayer),
-            Codec.floatRange(5f, 100f).fieldOf("pulseFrequency").orElse(0f).forGetter(BeeLayerData::pulseFrequency)
+            Color.CODEC.optionalFieldOf("color", Color.DEFAULT).forGetter(BeeLayerData::color),
+            LayerTexture.CODEC.optionalFieldOf("texture", LayerTexture.MISSING_TEXTURE).forGetter(BeeLayerData::texture),
+            LayerEffect.CODEC.optionalFieldOf("layerEffect", LayerEffect.NONE).forGetter(BeeLayerData::effect),
+            Codec.BOOL.optionalFieldOf("isPollen", false).forGetter(BeeLayerData::pollenLayer),
+            Codec.floatRange(5f, 100f).optionalFieldOf("pulseFrequency", 0f).forGetter(BeeLayerData::pulseFrequency)
     ).apply(instance, LayerData::new));
 
 }

@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.EntityDisplay;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
 import com.teamresourceful.resourcefullib.common.nbt.TagUtils;
 import net.minecraft.core.BlockPos;
@@ -22,7 +23,7 @@ import java.util.Optional;
 
 public record EntityMutation(RestrictedEntityPredicate predicate, double chance, double weight) implements MutationType, EntityDisplay {
 
-    public static final Serializer SERIALIZER = new Serializer();
+    public static final GenericSerializer<MutationType> SERIALIZER = new Serializer();
 
     @Nullable
     @Override
@@ -64,8 +65,8 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
 
         public static final Codec<EntityMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 RestrictedEntityPredicate.CODEC.fieldOf("entity").forGetter(EntityMutation::predicate),
-                Codec.doubleRange(0D, 1D).fieldOf("chance").orElse(1D).forGetter(EntityMutation::chance),
-                Codec.doubleRange(0, Double.MAX_VALUE).fieldOf("weight").orElse(10D).forGetter(EntityMutation::weight)
+                CodecExtras.DOUBLE_UNIT_INTERVAL.optionalFieldOf("chance", 1D).forGetter(EntityMutation::chance),
+                CodecExtras.NON_NEGATIVE_DOUBLE.optionalFieldOf("weight", 10D).forGetter(EntityMutation::weight)
         ).apply(instance, EntityMutation::new));
 
         @Override

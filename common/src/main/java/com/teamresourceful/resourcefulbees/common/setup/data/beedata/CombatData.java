@@ -32,11 +32,11 @@ public record CombatData(
     });
     private static final BeeCombatData DEFAULT = new CombatData(false, true, true, false, DEFAULT_ATTRIBUTES);
     private static final Codec<BeeCombatData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.BOOL.fieldOf("isPassive").orElse(false).forGetter(BeeCombatData::isPassive),
-            Codec.BOOL.fieldOf("removeStingerOnAttack").orElse(true).forGetter(BeeCombatData::removeStingerOnAttack),
-            Codec.BOOL.fieldOf("inflictsPoison").orElse(true).forGetter(BeeCombatData::inflictsPoison),
-            Codec.BOOL.fieldOf("isInvulnerable").orElse(false).forGetter(BeeCombatData::isInvulnerable),
-            Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("attributes").orElse(DEFAULT_ATTRIBUTES).forGetter(BeeCombatData::attributes)
+            Codec.BOOL.optionalFieldOf("isPassive", false).forGetter(BeeCombatData::isPassive),
+            Codec.BOOL.optionalFieldOf("removeStingerOnAttack", true).forGetter(BeeCombatData::removeStingerOnAttack),
+            Codec.BOOL.optionalFieldOf("inflictsPoison", true).forGetter(BeeCombatData::inflictsPoison),
+            Codec.BOOL.optionalFieldOf("isInvulnerable", false).forGetter(BeeCombatData::isInvulnerable),
+            Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("attributes", DEFAULT_ATTRIBUTES).forGetter(BeeCombatData::attributes)
     ).apply(instance, CombatData::new));
     public static final BeeDataSerializer<BeeCombatData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("combat"), 1, id -> CODEC, DEFAULT);
 

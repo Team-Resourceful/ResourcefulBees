@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -24,8 +25,8 @@ public record HoneyGenRecipe(ResourceLocation id, RecipeFluid honey, int energyF
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 RecipeFluid.CODEC.fieldOf("honey").forGetter(HoneyGenRecipe::honey),
-                Codec.intRange(1, Integer.MAX_VALUE).fieldOf("energyFillRate").orElse(125).forGetter(HoneyGenRecipe::energyFillRate),
-                Codec.intRange(1, Integer.MAX_VALUE).fieldOf("honeyDrainRate").orElse(5).forGetter(HoneyGenRecipe::honeyDrainRate)
+                CodecExtras.NON_NEGATIVE_INT.optionalFieldOf("energyFillRate", 125).forGetter(HoneyGenRecipe::energyFillRate),
+                CodecExtras.NON_NEGATIVE_INT.optionalFieldOf("honeyDrainRate", 5).forGetter(HoneyGenRecipe::honeyDrainRate)
         ).apply(instance, HoneyGenRecipe::new));
     }
 
