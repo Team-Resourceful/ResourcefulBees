@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-14T16:17:29.6617839	Item Models: resourcefulbees
+// 1.20.1	2023-12-19T04:45:45.6538418	Item Models: resourcefulbees
 66cb60903350a0d965f8ba4ddb520e6ab2de284d assets/resourcefulbees/models/item/bellow.json
 1d3c30fcb8c1a7878ebb108110daf61c37989aa0 assets/resourcefulbees/models/item/energy_cap_upgrade.json
 997230299e0dff888fc51ca077b07e95863cd9ba assets/resourcefulbees/models/item/energy_fill_upgrade.json
@@ -13,4 +13,5 @@ ab92346cc3af5b00eae7adb27ab403e384fad5e7 assets/resourcefulbees/models/item/t3_n
 5c6ddeaa6d339c9286ff94281abc1b4eba6dc457 assets/resourcefulbees/models/item/t4_nest_upgrade.json
 14d45ee3a3cfb3d61e80ced73ec6b01dfd9fdb51 assets/resourcefulbees/models/item/wax.json
 85ff2979b18c0d7e0cc39145b053dfcfe8632e80 assets/resourcefulbees/models/item/waxed_door.json
+75eefd6a4209296e8e11fa757c9ad7f45152725a assets/resourcefulbees/models/item/waxed_hanging_sign.json
 a20562b130dff588029220c468224df84a3553f8 assets/resourcefulbees/models/item/waxed_sign.json

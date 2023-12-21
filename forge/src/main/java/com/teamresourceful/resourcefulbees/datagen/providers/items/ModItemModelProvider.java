@@ -25,6 +25,7 @@ public class ModItemModelProvider extends BaseItemModelProvider {
         basicItem(ModItems.OREO_COOKIE.get());
         basicItem(ModItems.WAXED_DOOR.get());
         basicItem(ModItems.WAXED_SIGN.get());
+        basicItem(ModItems.WAXED_HANGING_SIGN.get());
         basicItem(ModItems.ENERGY_CAP_UPGRADE.get());
         basicItem(ModItems.ENERGY_XFER_UPGRADE.get());
         basicItem(ModItems.ENERGY_FILL_UPGRADE.get());

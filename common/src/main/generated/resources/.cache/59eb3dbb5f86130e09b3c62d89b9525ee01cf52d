@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-14T16:17:29.6548027	Loot Tables
+// 1.20.1	2023-12-19T04:45:45.6506157	Loot Tables
 fefb6f90a56de667f6d6f24a3de1645aeed1b7c9 data/resourcefulbees/loot_tables/blocks/bee_box.json
 f27a56726f80a37a104dd8e719b14a5397c317ce data/resourcefulbees/loot_tables/blocks/bee_box_temp.json
 dec742ecdc5b035fee1f026f81aed548122eb3ec data/resourcefulbees/loot_tables/blocks/breeder.json
@@ -113,6 +113,7 @@ f0e27bae0aae068b9d8bd4f6a0f216226dc7b89f data/resourcefulbees/loot_tables/blocks
 94c9323f4309b4a6b036e94d9d761208b77247d5 data/resourcefulbees/loot_tables/blocks/waxed_button.json
 14cce07e68131cbc62bd23d16f1830f7c6c0ec53 data/resourcefulbees/loot_tables/blocks/waxed_fence.json
 f0a5b6de60ff8478629ac878a3e1b32ca46c1911 data/resourcefulbees/loot_tables/blocks/waxed_fence_gate.json
+bcace36a023ce022d4105cdaf63180c8041c1c72 data/resourcefulbees/loot_tables/blocks/waxed_hanging_sign.json
 981aae9148fba4cf687d6cde419b909162250cd2 data/resourcefulbees/loot_tables/blocks/waxed_machine_block.json
 e1f6e2f963204e0d2030dfd90d37b514d310437f data/resourcefulbees/loot_tables/blocks/waxed_planks.json
 81cc7adf0cf45716de47b2630829b852c208b52e data/resourcefulbees/loot_tables/blocks/waxed_pressure_plate.json
@@ -120,5 +121,6 @@ bd112df44ddd79c8a497bd496c41efe55709e75f data/resourcefulbees/loot_tables/blocks
 de8e8ac767599c9e61280e38ec4786c65afb4414 data/resourcefulbees/loot_tables/blocks/waxed_slab.json
 6b9add21b4a405969607d9ee8f128ea40da2aaf7 data/resourcefulbees/loot_tables/blocks/waxed_stairs.json
 18fde91a0e655a0d04b515cd68e4af6fd1a41c19 data/resourcefulbees/loot_tables/blocks/waxed_trapdoor.json
+f8bf6ca94b5af6e451c39f3db967216dee64901a data/resourcefulbees/loot_tables/blocks/waxed_wall_hanging_sign.json
 b9049236053c0cabcd27454ba28875df9ec44f7e data/resourcefulbees/loot_tables/blocks/waxed_wall_sign.json
 46f0bfb52f6ce3caee9bad383c540501622e3e5b data/resourcefulbees/loot_tables/blocks/wax_block.json

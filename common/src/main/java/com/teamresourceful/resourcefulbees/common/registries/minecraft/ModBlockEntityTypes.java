@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.blockentities.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
@@ -13,7 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public final class ModBlockEntityTypes {
 
-    private ModBlockEntityTypes() {
+     private ModBlockEntityTypes() {
         throw new UtilityClassError();
     }
 
@@ -210,6 +211,8 @@ public final class ModBlockEntityTypes {
             .of(BeeBoxBlockEntity::new, ModBlocks.BEE_BOX.get(), ModBlocks.BEE_BOX_TEMP.get())));
     public static final RegistryEntry<BlockEntityType<WaxedSignBlockEntity>> WAXED_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_sign", () -> build(BlockEntityType.Builder
             .of(WaxedSignBlockEntity::new, ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get())));
+    public static final RegistryEntry<BlockEntityType<WaxedHangingSignBlockEntity>> WAXED_HANGING_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_hanging_sign", () -> build(BlockEntityType.Builder
+            .of(WaxedHangingSignBlockEntity::new, ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get())));
     public static final RegistryEntry<BlockEntityType<AcceleratorBlockEntity>> ACCELERATOR_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("accelerator", () -> build(BlockEntityType.Builder
             .of(AcceleratorBlockEntity::new, ModBlocks.ACCELERATOR.get())));
 

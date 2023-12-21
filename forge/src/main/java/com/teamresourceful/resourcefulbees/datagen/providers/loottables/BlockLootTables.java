@@ -64,6 +64,8 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.WAXED_TRAPDOOR);
         dropOther(ModBlocks.WAXED_SIGN.get(), ModItems.WAXED_SIGN.get());
         dropOther(ModBlocks.WAXED_WALL_SIGN.get(), ModItems.WAXED_SIGN.get());
+        dropOther(ModBlocks.WAXED_HANGING_SIGN.get(), ModItems.WAXED_HANGING_SIGN.get());
+        dropOther(ModBlocks.WAXED_WALL_HANGING_SIGN.get(), ModItems.WAXED_HANGING_SIGN.get());
         dropSelf(ModBlocks.TRIMMED_WAXED_PLANKS);
 
         ModBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);

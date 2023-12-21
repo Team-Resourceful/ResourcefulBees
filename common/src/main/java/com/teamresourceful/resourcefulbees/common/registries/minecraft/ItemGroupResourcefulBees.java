@@ -81,6 +81,7 @@ public final class ItemGroupResourcefulBees {
                 list.add(new ItemStack(ModItems.WAXED_DOOR.get()));
                 list.add(new ItemStack(ModItems.WAXED_TRAPDOOR.get()));
                 list.add(new ItemStack(ModItems.WAXED_SIGN.get()));
+                list.add(new ItemStack(ModItems.WAXED_HANGING_SIGN.get()));
                 return list.stream();
             })
             .build();

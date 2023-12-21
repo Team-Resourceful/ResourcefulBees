@@ -214,6 +214,21 @@ public final class ModBlocks {
             return ModBlockEntityTypes.WAXED_SIGN_ENTITY.get().create(pos, state);
         }
     });
+
+    public static final RegistryEntry<CeilingHangingSignBlock> WAXED_HANGING_SIGN = BLOCKS.register("waxed_hanging_sign", () -> new CeilingHangingSignBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()), WAXED_WOOD_TYPE) {
+        @Override
+        public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+            return ModBlockEntityTypes.WAXED_HANGING_SIGN_ENTITY.get().create(pos, state);
+        }
+    });
+
+    public static final RegistryEntry<WallHangingSignBlock> WAXED_WALL_HANGING_SIGN = BLOCKS.register("waxed_wall_hanging_sign", () -> new WallHangingSignBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()), WAXED_WOOD_TYPE) {
+        @Override
+        public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+            return ModBlockEntityTypes.WAXED_HANGING_SIGN_ENTITY.get().create(pos, state);
+        }
+    });
+
     public static final RegistryEntry<Block> ACCELERATOR = BLOCKS.register("accelerator", () -> new TickingBlock<>(ModBlockEntityTypes.ACCELERATOR_TILE_ENTITY, CENTRIFUGE_PROPERTIES));
 
 

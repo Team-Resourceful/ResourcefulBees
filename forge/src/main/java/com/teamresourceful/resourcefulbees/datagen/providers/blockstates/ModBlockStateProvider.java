@@ -5,12 +5,14 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockStateProvider;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModBlockStateProvider extends BaseBlockStateProvider {
 
@@ -49,7 +51,23 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         trapdoorBlockWithItem(ModBlocks.WAXED_TRAPDOOR, modLoc("block/waxed_trapdoor"));
         stairBlockWithItem(ModBlocks.WAXED_STAIRS, modLoc("block/waxed_planks"));
         signBlock(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get(), modLoc("block/waxed_planks"));
+        System.out.println("generating hanging sign!!!!!!");
+        hangingSignBlock(ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get(), modLoc("block/waxed_planks"));
         simpleBlockWithItem(ModBlocks.WAX_BLOCK.get(), cubeAll(ModBlocks.WAX_BLOCK.get()));
+    }
+
+    public void hangingSignBlock(CeilingHangingSignBlock signBlock, WallHangingSignBlock wallSignBlock, ResourceLocation texture) {
+        ModelFile sign = models().sign(name(signBlock), texture);
+        simpleBlock(signBlock, sign);
+        simpleBlock(wallSignBlock, sign);
+    }
+
+    private ResourceLocation key(Block block) {
+        return ForgeRegistries.BLOCKS.getKey(block);
+    }
+
+    private String name(Block block) {
+        return key(block).getPath();
     }
 
     private void registerApiary(RegistryEntry<Block> registryObject) {

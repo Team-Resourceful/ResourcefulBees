@@ -11,6 +11,7 @@ import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.Ce
 import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.screen.*;
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.items.BeepediaItem;
 import com.teamresourceful.resourcefulbees.common.items.MutatedPollenItem;
@@ -27,9 +28,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.FilePackResources;
@@ -59,6 +63,9 @@ public class ResourcefulBeesClient {
         UpdateEvent.EVENT.addListener(ClientDataSetup::onUpdates);
 
         Color.initRainbow();
+
+        Sheets.SIGN_MATERIALS.put(ModBlocks.WAXED_WOOD_TYPE, new Material(Sheets.SIGN_SHEET, new ResourceLocation("resourcefulbees", "entity/signs/waxed")));
+        Sheets.HANGING_SIGN_MATERIALS.put(ModBlocks.WAXED_WOOD_TYPE, new Material(Sheets.SIGN_SHEET, new ResourceLocation("resourcefulbees", "entity/signs/hanging/waxed")));
 
         loadResources();
     }
@@ -116,6 +123,7 @@ public class ResourcefulBeesClient {
 
     public static void registerRenderers(RegisterRendererEvent event) {
         event.register(ModBlockEntityTypes.WAXED_SIGN_ENTITY.get(), SignRenderer::new);
+        event.register(ModBlockEntityTypes.WAXED_HANGING_SIGN_ENTITY.get(), HangingSignRenderer::new);
         event.register(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), RenderHoneyGenerator::new);
         event.register(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), RenderSolidificationChamber::new);
         event.register(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), EnderBeeconRenderer::new);
