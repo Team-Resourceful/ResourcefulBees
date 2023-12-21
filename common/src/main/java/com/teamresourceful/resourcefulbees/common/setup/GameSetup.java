@@ -11,7 +11,6 @@ import com.teamresourceful.resourcefulbees.common.entities.villager.Beekeeper;
 import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
@@ -23,6 +22,7 @@ import com.teamresourceful.resourcefulbees.platform.common.events.registry.Regis
 import com.teamresourceful.resourcefulbees.platform.common.registry.RegistryHelper;
 import com.teamresourceful.resourcefulbees.platform.common.registry.potion.PotionRegistry;
 import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.ConditionRegistry;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -47,8 +47,8 @@ public final class GameSetup {
     //TODO Change to common tag for forge and fabric.
     private static final TagKey<Item> HONEY_BOTTLE_TAG = TagKey.create(Registries.ITEM, new ResourceLocation("forge", "honey_bottles"));
 
-    private GameSetup() {
-        throw new UtilityClassError();
+    private GameSetup() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void initEvents() {

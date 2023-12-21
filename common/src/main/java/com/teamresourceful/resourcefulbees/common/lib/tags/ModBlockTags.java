@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.lib.tags;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -22,8 +22,8 @@ public final class ModBlockTags {
 
     public static final TagKey<Block> CENTRIFUGE_PICKABLE = createBlockTag("rbees_centrifuge", "pickaxe_mineable");
 
-    private ModBlockTags() {
-        throw new UtilityClassError();
+    private ModBlockTags() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     private static TagKey<Block> createBlockTag(String mod, String path) {

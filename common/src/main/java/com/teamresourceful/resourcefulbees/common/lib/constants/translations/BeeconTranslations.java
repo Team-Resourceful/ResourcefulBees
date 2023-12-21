@@ -1,14 +1,14 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants.translations;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.Translate;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 public final class BeeconTranslations {
 
-    private BeeconTranslations() {
-        throw new UtilityClassError();
+    private BeeconTranslations() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     @Translate("Bee Effects")

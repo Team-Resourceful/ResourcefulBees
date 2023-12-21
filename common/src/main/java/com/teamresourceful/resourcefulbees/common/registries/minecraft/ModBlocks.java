@@ -8,10 +8,10 @@ import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
 import com.teamresourceful.resourcefulbees.mixin.common.BlockSetTypeInvoker;
 import com.teamresourceful.resourcefulbees.mixin.common.WoodTypeInvoker;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -35,8 +35,8 @@ import java.util.function.Supplier;
 public final class ModBlocks {
 
 
-    private ModBlocks() {
-        throw new UtilityClassError();
+    private ModBlocks() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final ResourcefulRegistry<Block> BLOCKS = RegistryHelper.create(BuiltInRegistries.BLOCK, ModConstants.MOD_ID);

@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.modcompat.base;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.modcompat.bumblezone.BumblezoneCompat;
 import com.teamresourceful.resourcefulbees.common.modcompat.productivebees.ProductiveBeesCompat;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.utils.modinfo.ModInfoUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,8 +16,8 @@ public final class ModCompatHelper {
 
     private static final List<ModCompat> COMPATS = new ArrayList<>();
 
-    private ModCompatHelper() {
-        throw new UtilityClassError();
+    private ModCompatHelper() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void registerCompats() {

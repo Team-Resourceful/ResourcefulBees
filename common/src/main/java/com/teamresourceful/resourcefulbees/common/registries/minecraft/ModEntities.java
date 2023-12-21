@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ThrownMutatedPollen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -17,9 +17,10 @@ import java.util.Map;
 
 public final class ModEntities {
 
-    private ModEntities() {
-        throw new UtilityClassError();
+    private ModEntities() throws UtilityClassException {
+        throw new UtilityClassException();
     }
+
     public static final ResourcefulRegistry<EntityType<?>> ENTITY_TYPES = RegistryHelper.create(BuiltInRegistries.ENTITY_TYPE, ModConstants.MOD_ID);
     public static final ResourcefulRegistry<EntityType<?>> BEES = ResourcefulRegistries.create(ENTITY_TYPES);
     private static final Map<String, RegistryEntry<EntityType<? extends CustomBeeEntity>>> MOD_BEES = new HashMap<>();

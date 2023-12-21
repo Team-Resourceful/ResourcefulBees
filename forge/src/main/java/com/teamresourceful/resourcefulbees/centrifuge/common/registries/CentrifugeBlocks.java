@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.centrifuge.common.registries;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.blocks.*;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -53,7 +53,7 @@ public final class CentrifugeBlocks {
     public static final RegistryEntry<Block> CENTRIFUGE_ULTIMATE_FLUID_OUTPUT = CENTRIFUGE_BLOCKS.register("centrifuge/output/fluid/ultimate", () -> new CentrifugeFluidOutput(CENTRIFUGE_PROPERTIES, CentrifugeBlockEntities.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT_ENTITY, CentrifugeTier.ULTIMATE));
     //endregion
 
-    private CentrifugeBlocks() {
-        throw new UtilityClassError();
+    private CentrifugeBlocks() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 }

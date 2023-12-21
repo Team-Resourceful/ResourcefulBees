@@ -3,9 +3,9 @@ package com.teamresourceful.resourcefulbees;
 import com.teamresourceful.resourcefulbees.client.ResourcefulBeesClient;
 import com.teamresourceful.resourcefulbees.common.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.client.events.*;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.Optionull;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
@@ -25,8 +25,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public final class ResourcefulBeesForgeClient {
 
-    private ResourcefulBeesForgeClient() {
-        throw new UtilityClassError();
+    private ResourcefulBeesForgeClient() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void init() {

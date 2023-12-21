@@ -13,10 +13,10 @@ import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.Util;
 import net.minecraft.core.HolderSet;
 import net.minecraft.nbt.CompoundTag;
@@ -34,8 +34,8 @@ import java.util.*;
 
 public final class DummyBeeData {
 
-    private DummyBeeData() {
-        throw new UtilityClassError();
+    private DummyBeeData() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     private static final InitializerApi API = ResourcefulBeesAPI.getInitializers();

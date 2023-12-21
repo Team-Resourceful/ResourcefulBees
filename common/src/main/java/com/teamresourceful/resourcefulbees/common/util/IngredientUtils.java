@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.util;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -10,8 +10,8 @@ import net.minecraft.world.level.ItemLike;
 
 public final class IngredientUtils {
 
-    private IngredientUtils() {
-        throw new UtilityClassError();
+    private IngredientUtils() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static Ingredient of(HolderSet<? extends ItemLike> holders) {

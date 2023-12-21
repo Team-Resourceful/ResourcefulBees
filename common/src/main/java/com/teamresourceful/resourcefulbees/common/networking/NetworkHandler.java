@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.networking;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconChangePacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.FindBeePacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.LockBeePacket;
@@ -9,13 +8,14 @@ import com.teamresourceful.resourcefulbees.common.networking.packets.client.Sele
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.DimensionalBeesPacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncBeepediaPacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncGuiPacket;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.networking.NetworkChannel;
 import com.teamresourceful.resourcefullib.common.networking.base.NetworkDirection;
 
 public final class NetworkHandler {
 
-    private NetworkHandler() {
-        throw new UtilityClassError();
+    private NetworkHandler() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final NetworkChannel CHANNEL = new NetworkChannel(ModConstants.MOD_ID, 0, "main");

@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.platform.common.workers;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 
 public final class LevelWorkManager {
 
-    private LevelWorkManager() {
-        throw new UtilityClassError();
+    private LevelWorkManager() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     @ExpectPlatform

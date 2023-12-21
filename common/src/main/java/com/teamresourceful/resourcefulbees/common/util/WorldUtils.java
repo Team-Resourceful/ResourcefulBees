@@ -26,7 +26,7 @@
 package com.teamresourceful.resourcefulbees.common.util;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -40,8 +40,8 @@ import java.util.function.Supplier;
 
 public final class WorldUtils {
 
-    private WorldUtils() {
-        throw new UtilityClassError();
+    private WorldUtils() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     @Nullable

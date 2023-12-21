@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.t
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public final class MutationCodec {
 
-    private MutationCodec() {
-        throw new UtilityClassError();
+    private MutationCodec() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     private static final Map<String, GenericSerializer<MutationType>> SERIALIZERS = new HashMap<>();

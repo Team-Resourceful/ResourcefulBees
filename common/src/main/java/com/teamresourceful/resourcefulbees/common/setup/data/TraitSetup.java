@@ -7,9 +7,9 @@ import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.custom.TraitRegistry;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.FileUtils;
 import net.minecraft.util.GsonHelper;
@@ -19,8 +19,8 @@ import java.util.Locale;
 
 public final class TraitSetup {
 
-    private TraitSetup() {
-        throw new UtilityClassError();
+    private TraitSetup() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void buildCustomTraits() {

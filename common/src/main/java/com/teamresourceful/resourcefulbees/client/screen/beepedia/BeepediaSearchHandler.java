@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.screen.beepedia;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,8 +16,8 @@ public final class BeepediaSearchHandler {
     private static final String ID_SYMBOL = "@";
     private static final String NOT_SYMBOL = "!";
 
-    private BeepediaSearchHandler() {
-        throw new UtilityClassError();
+    private BeepediaSearchHandler() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static Predicate<CustomBeeData> search(@Nullable String search) {

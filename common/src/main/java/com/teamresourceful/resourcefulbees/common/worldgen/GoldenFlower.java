@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.worldgen;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModBiomeTags;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.events.BlockBonemealedEvent;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -18,8 +18,8 @@ public final class GoldenFlower {
 
     private static final ResourceLocation GOLD_FLOWER_FEATURE = new ResourceLocation(ModConstants.MOD_ID, "gold_flower");
 
-    private GoldenFlower() {
-        throw new UtilityClassError();
+    private GoldenFlower() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void onBlockBonemealed(BlockBonemealedEvent event) {

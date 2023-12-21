@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees.client.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import com.teamresourceful.resourcefullib.common.caches.CacheableBiFunction;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.utils.ClientFluidHooks;
 import net.minecraft.client.Minecraft;
@@ -19,8 +19,8 @@ import net.minecraft.world.inventory.InventoryMenu;
 
 public final class ClientRenderUtils {
 
-    private ClientRenderUtils() {
-        throw new UtilityClassError();
+    private ClientRenderUtils() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final CacheableBiFunction<ResourceLocation, ResourceLocation, ResourceLocation> DEFAULT_TEXTURER = new CacheableBiFunction<>((texture, other) -> texture == other ? texture : Minecraft.getInstance().getResourceManager().getResource(texture).isPresent() ? texture : other);
@@ -46,6 +46,7 @@ public final class ClientRenderUtils {
     }
 
     public static void drawFluid(GuiGraphics graphics, int height, int width, FluidHolder holder, int x, int y) {
+        if (holder.isEmpty()) return;
         drawFluid(graphics, height, width, ClientFluidHooks.getFluidSprite(holder), ClientFluidHooks.getFluidColor(holder), x, y);
     }
 

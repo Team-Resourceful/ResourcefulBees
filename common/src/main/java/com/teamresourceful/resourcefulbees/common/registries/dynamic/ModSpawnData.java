@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.registries.dynamic;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.worldgen.SpawnDataModifier;
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.ServerGoingToStartEvent;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -41,7 +41,7 @@ public final class ModSpawnData {
             );
     }
 
-    private ModSpawnData() {
-        throw new UtilityClassError();
+    private ModSpawnData() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 }

@@ -1,14 +1,14 @@
 package com.teamresourceful.resourcefulbees.common.util;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.util.containers.AutomationSensitiveContainer;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 
 public final class ContainerUtils {
 
-    private ContainerUtils() {
-        throw new UtilityClassError();
+    private ContainerUtils() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static ItemStack internalInsertItem(AutomationSensitiveContainer container, int slot, ItemStack stack) {

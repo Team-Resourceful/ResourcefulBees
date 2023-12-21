@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.helpers;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.containers.slots.FilterSlot;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
@@ -15,8 +15,8 @@ import java.util.Optional;
 
 public final class CentrifugeUtils {
 
-    private CentrifugeUtils() {
-        throw new UtilityClassError();
+    private CentrifugeUtils() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     @NotNull

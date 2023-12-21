@@ -3,16 +3,16 @@ package com.teamresourceful.resourcefulbees.common.lib.defaults;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.resources.ResourceLocation;
 
 @SuppressWarnings("Convert2MethodRef")
 public final class DefaultApiaryTiers {
 
-    private DefaultApiaryTiers() {
-        throw new UtilityClassError();
+    private DefaultApiaryTiers() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final ApiaryTier T1_APIARY = new ApiaryTier.Builder()

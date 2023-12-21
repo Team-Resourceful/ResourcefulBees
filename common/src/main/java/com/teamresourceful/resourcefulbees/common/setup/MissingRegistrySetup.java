@@ -4,8 +4,8 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.util.PathUtils;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.yabn.YabnParser;
 import com.teamresourceful.yabn.elements.YabnArray;
 import com.teamresourceful.yabn.elements.YabnElement;
@@ -23,8 +23,8 @@ public final class MissingRegistrySetup {
 
     private static boolean anyRegistriesMissing = false;
 
-    private MissingRegistrySetup() {
-        throw new UtilityClassError();
+    private MissingRegistrySetup() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void checkMissingRegistries() {

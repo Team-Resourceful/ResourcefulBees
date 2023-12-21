@@ -6,6 +6,9 @@ import com.teamresourceful.resourcefulbees.api.data.conditions.RegisterCondition
 import com.teamresourceful.resourcefulbees.api.data.honey.base.RegisterHoneyDataEvent;
 import com.teamresourceful.resourcefulbees.api.intializers.HoneyInitializerApi;
 import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
+import com.teamresourceful.resourcefulbees.common.lib.data.conditions.AndCondition;
+import com.teamresourceful.resourcefulbees.common.lib.data.conditions.ModLoadedCondition;
+import com.teamresourceful.resourcefulbees.common.lib.data.conditions.OrCondition;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.CombatData;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.DefaultBeeData;
@@ -22,9 +25,6 @@ import com.teamresourceful.resourcefulbees.common.setup.data.beedata.rendering.L
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.rendering.LayerTexture;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.rendering.RenderData;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.traits.TraitData;
-import com.teamresourceful.resourcefulbees.common.lib.data.conditions.AndCondition;
-import com.teamresourceful.resourcefulbees.common.lib.data.conditions.ModLoadedCondition;
-import com.teamresourceful.resourcefulbees.common.lib.data.conditions.OrCondition;
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.CustomHoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.HoneyDataImpl;
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.bottle.CustomHoneyBottleData;
@@ -33,12 +33,12 @@ import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.bottle.Cu
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.fluid.CustomHoneyFluidAttributesData;
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.fluid.CustomHoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.fluid.CustomHoneyRenderData;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 
 public final class DataSetup {
 
-    private DataSetup() {
-        throw new UtilityClassError();
+    private DataSetup() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void setupInitializers(InitializerApi api) {

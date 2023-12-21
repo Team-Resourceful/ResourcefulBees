@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.util;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 
 import java.util.Random;
 
@@ -11,8 +11,8 @@ public final class MathUtils {
     private static final String[] HUNDREADS = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
     private static final String[] THOUSANDS = {"", "M", "MM", "MMM"};
 
-    private MathUtils() {
-        throw new UtilityClassError();
+    private MathUtils() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static boolean inRangeInclusive(int value, int min, int max) {

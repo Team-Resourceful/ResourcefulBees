@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -9,8 +9,8 @@ import net.minecraft.world.level.ItemLike;
 
 public final class RecipeHelper {
 
-    private RecipeHelper() {
-        throw new UtilityClassError();
+    private RecipeHelper() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static ShapedRecipeBuilder getStorageRecipe(ItemLike result, Ingredient item) {

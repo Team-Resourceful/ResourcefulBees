@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.lib.tags;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -31,8 +31,8 @@ public final class ModItemTags {
     public static final TagKey<Item> COLORLESS_GLASS_PANES = createItemTag("rbees_common", "glass_colorless_panes");
     public static final TagKey<Item> CHESTS = createItemTag("rbees_common", "chests");
 
-    private ModItemTags() {
-        throw new UtilityClassError();
+    private ModItemTags() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     private static TagKey<Item> createItemTag(String mod, String path) {

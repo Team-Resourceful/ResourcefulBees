@@ -5,10 +5,10 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModVillagerProfessions;
 import com.teamresourceful.resourcefulbees.platform.common.events.RegisterVillagerTradesEvent;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -33,8 +33,8 @@ public final class Beekeeper {
     f=priceMultiplier
     l=demand
  */
-    private Beekeeper() {
-        throw new UtilityClassError();
+    private Beekeeper() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void setupBeekeeper(RegisterVillagerTradesEvent event) {

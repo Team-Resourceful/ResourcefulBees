@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.platform.common.item;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -11,8 +11,8 @@ public final class ItemActionHelper {
 
     private static final Map<String, ItemAction> ACTIONS = new ConcurrentHashMap<>();
 
-    private ItemActionHelper() {
-        throw new UtilityClassError();
+    private ItemActionHelper() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static ItemAction get(String id) {

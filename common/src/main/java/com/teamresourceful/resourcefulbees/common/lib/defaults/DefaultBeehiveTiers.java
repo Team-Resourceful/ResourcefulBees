@@ -2,15 +2,15 @@ package com.teamresourceful.resourcefulbees.common.lib.defaults;
 
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.resources.ResourceLocation;
 
 public final class DefaultBeehiveTiers {
 
-    private DefaultBeehiveTiers() {
-        throw new UtilityClassError();
+    private DefaultBeehiveTiers() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final BeehiveTier T1_NEST = new BeehiveTier.Builder()

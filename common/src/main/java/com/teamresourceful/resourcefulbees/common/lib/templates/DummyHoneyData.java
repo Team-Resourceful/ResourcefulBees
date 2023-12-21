@@ -8,9 +8,9 @@ import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.intializers.HoneyInitializerApi;
 import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -27,8 +27,8 @@ import java.util.Map;
 
 public final class DummyHoneyData {
 
-    private DummyHoneyData() {
-        throw new UtilityClassError();
+    private DummyHoneyData() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     private static final HoneyInitializerApi HONEY_API = ResourcefulBeesAPI.getHoneyInitalizers();

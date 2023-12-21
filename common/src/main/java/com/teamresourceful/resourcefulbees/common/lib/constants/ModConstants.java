@@ -1,16 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.mojang.logging.LogUtils;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.item.ItemAction;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.world.entity.MobCategory;
 import org.slf4j.Logger;
 
 public final class ModConstants {
 
-    private ModConstants() {
-        throw new UtilityClassError();
+    private ModConstants() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final String MOD_ID = "resourcefulbees";

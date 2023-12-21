@@ -12,10 +12,10 @@ import com.teamresourceful.resourcefulbees.api.registry.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.config.ClientConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFluids;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,8 +37,8 @@ public final class LangGeneration {
     public static final String COMB_RESOURCEFULBEES = "comb_type.resourcefulbees.";
     public static final String TRAIT_RESOURCEFULBEES = "trait_type.resourcefulbees.";
 
-    private LangGeneration() {
-        throw new UtilityClassError();
+    private LangGeneration() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void generateEnglishLang() {

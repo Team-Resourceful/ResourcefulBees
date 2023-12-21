@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.platform.common.util.PathUtils;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -10,8 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public final class  ModPaths {
-    private ModPaths() {
-        throw new UtilityClassError();
+    private ModPaths() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final Path MOD_ROOT = PathUtils.getModPath(ModConstants.MOD_ID);

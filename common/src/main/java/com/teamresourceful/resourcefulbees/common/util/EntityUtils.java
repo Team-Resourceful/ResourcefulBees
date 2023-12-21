@@ -4,9 +4,9 @@ import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,8 +23,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class EntityUtils {
 
-    private EntityUtils() {
-        throw new UtilityClassError();
+    private EntityUtils() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void summonEntity(CompoundTag tag, Level level, Player player, BlockPos pos) {

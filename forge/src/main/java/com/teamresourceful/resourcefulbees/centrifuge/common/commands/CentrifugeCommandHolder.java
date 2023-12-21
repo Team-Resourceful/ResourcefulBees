@@ -7,15 +7,15 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraftforge.fml.loading.FMLLoader;
 
 import java.util.Collection;
 
 public final class CentrifugeCommandHolder {
 
-    private CentrifugeCommandHolder() {
-        throw new UtilityClassError();
+    private CentrifugeCommandHolder() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     private static CommandDispatcher<CentrifugeCommandSource> dispatcher = generateCommands();

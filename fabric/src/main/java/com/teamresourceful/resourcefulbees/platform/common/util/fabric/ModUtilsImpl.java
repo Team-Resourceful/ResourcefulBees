@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.platform.common.util.fabric;
 
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.util.EnumBuilder;
 import com.teamresourceful.resourcefulbees.platform.common.events.SpawnBabyEvent;
+import com.teamresourceful.resourcefullib.common.utils.EnumBuilder;
 import com.teamresourceful.resourcefullib.common.utils.GenericMemoryPack;
 import it.unimi.dsi.fastutil.booleans.BooleanObjectPair;
 import net.fabricmc.loader.api.FabricLoader;

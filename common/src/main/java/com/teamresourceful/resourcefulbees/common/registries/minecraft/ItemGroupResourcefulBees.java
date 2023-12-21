@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.item.tabs.ResourcefulCreativeTab;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -16,8 +16,8 @@ import java.util.function.Supplier;
 
 public final class ItemGroupResourcefulBees {
 
-    private ItemGroupResourcefulBees() {
-        throw new UtilityClassError();
+    private ItemGroupResourcefulBees() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final Supplier<CreativeModeTab> RESOURCEFUL_BEES = new ResourcefulCreativeTab(new ResourceLocation(ModConstants.MOD_ID, "resourcefulbees"))

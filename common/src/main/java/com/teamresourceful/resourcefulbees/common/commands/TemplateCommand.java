@@ -17,10 +17,10 @@ import com.teamresourceful.resourcefulbees.common.lib.templates.DummyBeeData;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyHoneyData;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyHoneycombData;
 import com.teamresourceful.resourcefulbees.common.lib.templates.DummyTraitData;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeDataRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyDataRegistry;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.resources.RegistryOps;
@@ -31,8 +31,8 @@ public final class TemplateCommand {
     private static final Gson PRETTY_GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String TEMPLATE_STRING = "template";
 
-    private TemplateCommand() {
-        throw new UtilityClassError();
+    private TemplateCommand() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static ArgumentBuilder<CommandSourceStack, ?> register() {

@@ -4,13 +4,13 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefulbees.platform.client.events.ModelBakingCompletedEvent;
 import com.teamresourceful.resourcefulbees.platform.client.events.ModelModifyResultEvent;
 import com.teamresourceful.resourcefulbees.platform.client.events.RegisterAdditionaModelsEvent;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -34,8 +34,8 @@ public final class ModelHandler {
     private static final String ITEM_MODEL_PATH = "item/models/";
     private static final String JSON_FILE_EXTENSION = ".json";
 
-    private ModelHandler() {
-        throw new UtilityClassError();
+    private ModelHandler() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     private static void registerGenericBlockState(RegisterAdditionaModelsEvent event, RegistryEntry<Block> block, ResourceLocation parentModel, RenderType renderType, ResourceManager resourceManager) {

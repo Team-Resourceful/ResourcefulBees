@@ -1,15 +1,15 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants.translations;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.Translate;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 public final class CentrifugeTranslations {
 
-    private CentrifugeTranslations() {
-        throw new UtilityClassError();
+    private CentrifugeTranslations() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
 

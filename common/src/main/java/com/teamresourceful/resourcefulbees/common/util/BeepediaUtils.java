@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.util;
 
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
-import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.CreativeBeepediaData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
+import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.CreativeBeepediaData;
 import com.teamresourceful.resourcefullib.client.screens.state.ScreenStateManager;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.entity.player.Player;
@@ -15,8 +15,8 @@ import net.minecraft.world.item.ItemStack;
 
 public final class BeepediaUtils {
 
-    private BeepediaUtils() {
-        throw new UtilityClassError();
+    private BeepediaUtils() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void loadBeepedia(ItemStack itemstack, Player player) {

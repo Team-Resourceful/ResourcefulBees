@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.util;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -17,8 +17,8 @@ import java.util.function.ToDoubleFunction;
 
 public final class RandomPositionGenerator {
 
-    private RandomPositionGenerator() {
-        throw new UtilityClassError();
+    private RandomPositionGenerator() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     //TODO clean up unnecessary logic from this class that isn't useful to the bee so it is more optimized and readable.

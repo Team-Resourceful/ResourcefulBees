@@ -1,11 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
-import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.blockentities.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,9 +13,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public final class ModBlockEntityTypes {
 
-     private ModBlockEntityTypes() {
-        throw new UtilityClassError();
-    }
+     private ModBlockEntityTypes() throws UtilityClassException {
+         throw new UtilityClassException();
+     }
 
     public static final ResourcefulRegistry<BlockEntityType<?>> BLOCK_ENTITY_TYPES = RegistryHelper.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ModConstants.MOD_ID);
 

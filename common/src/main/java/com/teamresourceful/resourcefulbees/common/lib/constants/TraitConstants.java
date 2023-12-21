@@ -1,11 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 
 public final class TraitConstants {
 
-    private TraitConstants() {
-        throw new UtilityClassError();
+    private TraitConstants() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final String SLIMY = "slimy";

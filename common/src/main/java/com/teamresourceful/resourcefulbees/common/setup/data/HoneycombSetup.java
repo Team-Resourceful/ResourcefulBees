@@ -6,9 +6,9 @@ import com.mojang.serialization.JsonOps;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
-import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneycombRegistry;
+import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.FileUtils;
 import net.minecraft.util.GsonHelper;
@@ -18,8 +18,8 @@ import java.util.Locale;
 
 public final class HoneycombSetup {
 
-    private HoneycombSetup() {
-        throw new UtilityClassError();
+    private HoneycombSetup() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void setupHoneycombs() {

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants.translations;
 
 import com.teamresourceful.resourcefulbees.common.lib.tools.Translate;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -10,8 +10,8 @@ public final class BeepediaTranslations {
 
     //TODO decide if the unused fields in this class will ever be used
     // and if not then remove them and reduce to this single class
-    private BeepediaTranslations() {
-        throw new UtilityClassError();
+    private BeepediaTranslations() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     @Translate("Open JEI")

@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.client.screen.beepedia;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.resources.ResourceLocation;
 
 public final class BeepediaTextures {
 
-    private BeepediaTextures() {
-        throw new UtilityClassError();
+    private BeepediaTextures() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final ResourceLocation BOOK = new ResourceLocation("textures/item/book.png");

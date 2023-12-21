@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.datagen.providers.advancements.ModAdvancementProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.blockstates.ModBlockStateProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.items.ModItemModelProvider;
@@ -12,6 +11,7 @@ import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModBlockTagPro
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModFluidTagProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModItemTagProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.ModPoiTagProvider;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -24,8 +24,8 @@ import java.util.concurrent.CompletableFuture;
 @Mod.EventBusSubscriber(modid = ModConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ResourcefulBeesDataGenerator {
 
-    private ResourcefulBeesDataGenerator() {
-        throw new UtilityClassError();
+    private ResourcefulBeesDataGenerator() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     @SubscribeEvent

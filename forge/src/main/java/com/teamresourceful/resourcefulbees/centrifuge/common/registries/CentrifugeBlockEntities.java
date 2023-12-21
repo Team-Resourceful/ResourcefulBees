@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.centrifuge.common.registries;
 
 import com.teamresourceful.resourcefulbees.centrifuge.common.entities.*;
 import com.teamresourceful.resourcefulbees.centrifuge.common.helpers.CentrifugeTier;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -84,8 +84,8 @@ public final class CentrifugeBlockEntities {
             .of((pos, state) -> new CentrifugeFluidOutputEntity(CentrifugeBlockEntities.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT_ENTITY, CentrifugeTier.ULTIMATE, pos, state), CentrifugeBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT.get())));
     //endregion
 
-    private CentrifugeBlockEntities() {
-        throw new UtilityClassError();
+    private CentrifugeBlockEntities() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     private static <T extends BlockEntity> BlockEntityType<T> build(BlockEntityType.Builder<T> builder) {

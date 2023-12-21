@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.util;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.mixin.client.FontResourceManagerAccessor;
 import com.teamresourceful.resourcefulbees.mixin.client.MinecraftAccessor;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -29,8 +29,8 @@ public final class TextUtils {
      */
     public static final NumberFormat NUMBER_FORMAT = createNumberFormatter();
 
-    private TextUtils() {
-        throw new UtilityClassError();
+    private TextUtils() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     private static NumberFormat createNumberFormatter() {

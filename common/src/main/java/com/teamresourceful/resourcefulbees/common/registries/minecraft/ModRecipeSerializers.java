@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.recipes.*;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipeSerializer;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -13,8 +13,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 
 public final class ModRecipeSerializers {
 
-    private ModRecipeSerializers() {
-        throw new UtilityClassError();
+    private ModRecipeSerializers() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final ResourcefulRegistry<RecipeSerializer<?>> RECIPE_SERIALIZERS = RegistryHelper.create(BuiltInRegistries.RECIPE_SERIALIZER, ModConstants.MOD_ID);

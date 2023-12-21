@@ -1,15 +1,14 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.common.color.Color;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 
 public final class BeeConstants {
 
 
-    private BeeConstants() {
-        throw new UtilityClassError();
+    private BeeConstants() throws UtilityClassException {
+        throw new UtilityClassException();
     }
-
 
     public static final String MOD_NAME = "Resourceful Bees";
     public static final String ENTITY_TEXTURES_DIR = "textures/entity/";

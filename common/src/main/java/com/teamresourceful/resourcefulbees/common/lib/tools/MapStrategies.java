@@ -2,14 +2,15 @@ package com.teamresourceful.resourcefulbees.common.lib.tools;
 
 import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import it.unimi.dsi.fastutil.Hash;
 
 import java.util.Objects;
 
 public final class MapStrategies {
 
-    private MapStrategies() {
-        throw new UtilityClassError();
+    private MapStrategies() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final Hash.Strategy<? super Object> BREED_TREE = new Hash.Strategy<>() {

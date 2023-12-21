@@ -17,7 +17,6 @@ import com.teamresourceful.resourcefulbees.common.items.dispenser.ScraperDispens
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneyBucketItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyDataRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
@@ -25,6 +24,7 @@ import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.CustomHon
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.fluid.CustomHoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.subsystems.RegistrySubsystem;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import earth.terrarium.botarium.common.registry.fluid.FluidData;
 import net.minecraft.resources.ResourceLocation;
@@ -38,8 +38,8 @@ import java.util.ServiceLoader;
 
 public final class RegistryHandler {
 
-    private RegistryHandler() {
-        throw new UtilityClassError();
+    private RegistryHandler() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static void init() {

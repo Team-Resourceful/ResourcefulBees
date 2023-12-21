@@ -3,12 +3,12 @@ package com.teamresourceful.resourcefulbees.api;
 import com.teamresourceful.resourcefulbees.api.intializers.HoneyInitializerApi;
 import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
 import com.teamresourceful.resourcefulbees.api.registry.RegistryApi;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 
 public final class ResourcefulBeesAPI {
 
-    private ResourcefulBeesAPI() {
-        throw new UtilityClassError();
+    private ResourcefulBeesAPI() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     private static final RegistryApi registry = new RegistryApi();

@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.client.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
@@ -107,8 +107,8 @@ public final class RenderCuboid {
         buffer.vertex(matrix4f, vertex.x(), vertex.y(), vertex.z()).color(color).uv(uv[uArray], uv[vArray]).overlayCoords(overlay).uv2(light).normal(normal, norm.x(), norm.y(), norm.z()).endVertex();
     }
 
-    private RenderCuboid() {
-        throw new UtilityClassError();
+    private RenderCuboid() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 }
 

@@ -10,8 +10,8 @@ import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.BeehiveUpgrade;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.NestUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -22,8 +22,9 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.*;
 
 public final class ModItems {
-    private ModItems() {
-        throw new UtilityClassError();
+
+    private ModItems() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static final ResourcefulRegistry<Item> ITEMS = RegistryHelper.create(BuiltInRegistries.ITEM, ModConstants.MOD_ID);

@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.centrifuge.common.registries;
 
-import com.teamresourceful.resourcefulbees.common.lib.tools.UtilityClassError;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
+import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -54,7 +54,7 @@ public final class CentrifugeItems {
     public static final RegistryEntry<Item> CENTRIFUGE_ULTIMATE_FLUID_OUTPUT = CENTRIFUGE_ITEMS.register("centrifuge/output/fluid/ultimate", () -> new BlockItem(CentrifugeBlocks.CENTRIFUGE_ULTIMATE_FLUID_OUTPUT.get(), new Item.Properties()));
     //endregion
     
-    private CentrifugeItems() {
-        throw new UtilityClassError();
+    private CentrifugeItems() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 }
