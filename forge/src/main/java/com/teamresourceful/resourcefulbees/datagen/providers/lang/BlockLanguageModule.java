@@ -30,7 +30,7 @@ public class BlockLanguageModule implements LanguageModule {
         provider.addBlock(ModBlocks.WAXED_PRESSURE_PLATE, "Waxed Pressure Plate");
         provider.addBlock(ModBlocks.WAXED_BUTTON, "Waxed Button");
         provider.addBlock(ModBlocks.WAXED_SIGN, "Waxed Sign");
-        provider.addBlock(ModBlocks.WAXED_HANGING_SIGN, "Waxed hanging Sign");
+        provider.addBlock(ModBlocks.WAXED_HANGING_SIGN, "Waxed Hanging Sign");
         provider.addBlock(ModBlocks.WAXED_DOOR, "Waxed Door");
         provider.addBlock(ModBlocks.WAXED_TRAPDOOR, "Waxed Trapdoor");
         provider.addBlock(ModBlocks.WAXED_FENCE, "Waxed Fence");
