@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.centrifuge.client;
 
 import com.teamresourceful.resourcefulbees.centrifuge.client.screens.*;
 import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeMenus;
+import com.teamresourceful.resourcefulbees.client.ClientHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;

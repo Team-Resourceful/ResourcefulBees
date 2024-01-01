@@ -57,8 +57,8 @@ public final class ModBlocks {
             .replaceable()
             .noCollission().strength(100.0F).noLootTable();
 
-    public static final BlockSetType WAX_BLOCK_SET = BlockSetTypeInvoker.invokeRegister(new BlockSetType("resourcefulbees_waxed"));
-    public static final WoodType WAXED_WOOD_TYPE = WoodTypeInvoker.invokeRegister(new WoodType("resourcefulbees_waxed", WAX_BLOCK_SET));
+    public static final BlockSetType WAX_BLOCK_SET = BlockSetTypeInvoker.invokeRegister(new BlockSetType("resourcefulbees:waxed"));
+    public static final WoodType WAXED_WOOD_TYPE = WoodTypeInvoker.invokeRegister(new WoodType("resourcefulbees:waxed", WAX_BLOCK_SET));
 
     private static BlockBehaviour.Properties makeNestProperty(MapColor color, SoundType soundType){
         return BlockBehaviour.Properties.of().strength(1.0F).mapColor(color).sound(soundType);
@@ -215,14 +215,14 @@ public final class ModBlocks {
         }
     });
 
-    public static final RegistryEntry<CeilingHangingSignBlock> WAXED_HANGING_SIGN = BLOCKS.register("waxed_hanging_sign", () -> new CeilingHangingSignBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()), WAXED_WOOD_TYPE) {
+    public static final RegistryEntry<CeilingHangingSignBlock> WAXED_HANGING_SIGN = BLOCKS.register("waxed_hanging_sign", () -> new CeilingHangingSignBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission(), WAXED_WOOD_TYPE) {
         @Override
         public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
             return ModBlockEntityTypes.WAXED_HANGING_SIGN_ENTITY.get().create(pos, state);
         }
     });
 
-    public static final RegistryEntry<WallHangingSignBlock> WAXED_WALL_HANGING_SIGN = BLOCKS.register("waxed_wall_hanging_sign", () -> new WallHangingSignBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()), WAXED_WOOD_TYPE) {
+    public static final RegistryEntry<WallHangingSignBlock> WAXED_WALL_HANGING_SIGN = BLOCKS.register("waxed_wall_hanging_sign", () -> new WallHangingSignBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission(), WAXED_WOOD_TYPE) {
         @Override
         public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
             return ModBlockEntityTypes.WAXED_HANGING_SIGN_ENTITY.get().create(pos, state);

@@ -60,6 +60,8 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ItemTags.WOODEN_STAIRS).add(ModItems.WAXED_STAIRS.get());
         tag(ItemTags.WOODEN_PRESSURE_PLATES).add(ModItems.WAXED_PRESSURE_PLATE.get());
         tag(ItemTags.WOODEN_TRAPDOORS).add(ModItems.WAXED_TRAPDOOR.get());
+        tag(ItemTags.HANGING_SIGNS).add(ModItems.WAXED_HANGING_SIGN.get());
+        tag(ItemTags.SIGNS).add(ModItems.WAXED_SIGN.get());
     }
 
     @SafeVarargs

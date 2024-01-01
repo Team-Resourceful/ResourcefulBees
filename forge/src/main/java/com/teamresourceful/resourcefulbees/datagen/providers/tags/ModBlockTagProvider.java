@@ -73,6 +73,9 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.WOODEN_PRESSURE_PLATES).add(ModBlocks.WAXED_PRESSURE_PLATE.get());
         tag(BlockTags.WOODEN_DOORS).add(ModBlocks.WAXED_DOOR.get());
         tag(BlockTags.WOODEN_BUTTONS).add(ModBlocks.WAXED_BUTTON.get());
+        tag(BlockTags.CEILING_HANGING_SIGNS).add(ModBlocks.WAXED_HANGING_SIGN.get());
+        tag(BlockTags.WALL_HANGING_SIGNS).add(ModBlocks.WAXED_HANGING_SIGN.get());
+        tag(BlockTags.ALL_HANGING_SIGNS).add(ModBlocks.WAXED_HANGING_SIGN.get());
     }
 
     @Override

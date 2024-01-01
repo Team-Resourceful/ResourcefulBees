@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "C": {
+            "item": "minecraft:chain"
+        },
+        "W": {
+            "item": "resourcefulbees:waxed_planks"
+        }
+    },
+    "pattern": [
+        "C C",
+        "WWW",
+        "WWW"
+    ],
+    "result": {
+        "count": 6,
+        "item": "resourcefulbees:waxed_hanging_sign"
+    },
+    "show_notification": true
+}

@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-15T04:28:44.8250115	Resourceful Bees Item Tag Provider
+// 1.20.1	2024-01-01T16:59:22.5484159	Resourceful Bees Item Tag Provider
 f95fe53b59cee6bcd3cf85b9ca90168a800d2602 data/forge/tags/items/buckets/honey.json
 d87a9f8fd22293746481df0b90caf0f2b3abe6c8 data/forge/tags/items/heat_sources.json
 d878c230cd5cb1b54fbe6e53f3ef71379d080c6f data/forge/tags/items/honeycombs.json
@@ -9,6 +9,8 @@ d6cf88ab73624a67b1cffc6e2fe8d4b95b053a79 data/forge/tags/items/storage_blocks/ho
 97db687cb55b4a5035a83a364f8a26096ca17e7f data/forge/tags/items/storage_blocks/wax.json
 6a27f753764c8cb4f67d5209c793c4f0f51ea70a data/forge/tags/items/wax.json
 3ad7892a06e0a67fc3840e52cb57652955979913 data/minecraft/tags/items/beehives.json
+9d7e57af77bd0bf8bb0026ca33c039f4d2010afc data/minecraft/tags/items/hanging_signs.json
+d535d8574986d19d4b8c405893530a91d2334fad data/minecraft/tags/items/signs.json
 70cd4e1a0eaf500fa1b392262afeaeaaff74a6d4 data/minecraft/tags/items/small_flowers.json
 4e7d97482f63a2f0eade2239ea7fda350aa2ac9f data/minecraft/tags/items/wooden_buttons.json
 82ad92ee1b2ea8a7998dc670055448bc48d090ac data/minecraft/tags/items/wooden_doors.json

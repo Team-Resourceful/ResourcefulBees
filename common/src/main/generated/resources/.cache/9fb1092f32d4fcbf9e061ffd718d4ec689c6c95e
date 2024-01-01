@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-14T18:48:08.8249199	Recipes
+// 1.20.1	2024-01-01T16:59:22.5494167	Recipes
 e2fcc50122fc0121ca0952ef987a7a00d6d2a936 data/resourcefulbees/advancements/recipes/misc/beepedia.json
 45206f917f032e98f445969b752b61334357af8f data/resourcefulbees/advancements/recipes/misc/bee_box.json
 85054d2c395f760dbf6ec663ec102ccc78bc890e data/resourcefulbees/advancements/recipes/misc/bee_jar.json
@@ -62,6 +62,7 @@ ec926bd6178a9bdd2a079bde2a412663df497cb5 data/resourcefulbees/advancements/recip
 33a9f643a4582dc2c867fb1e60febe7cbdc7f3d0 data/resourcefulbees/advancements/recipes/misc/waxed_door.json
 13953086217ba90c8ac3268432c8895ccf9804cf data/resourcefulbees/advancements/recipes/misc/waxed_fence.json
 79994ac9dc1e87a2f91cb12ddd19a83895518dc4 data/resourcefulbees/advancements/recipes/misc/waxed_fence_gate.json
+6c53754160acaccc5f25f6b723ddafd7712702f2 data/resourcefulbees/advancements/recipes/misc/waxed_hanging_sign.json
 bb71f193ff9f7665d6980b56f526f41fd985fd62 data/resourcefulbees/advancements/recipes/misc/waxed_machine_block.json
 d3b55b8c07290024ee671b362aafb2c9ff79eed9 data/resourcefulbees/advancements/recipes/misc/waxed_planks.json
 6b2c37f77391bad15802b53fd597baf5a1578a22 data/resourcefulbees/advancements/recipes/misc/waxed_pressure_plate.json
@@ -135,6 +136,7 @@ d7547043d9f54ea83b133e21600a3e37f69d372f data/resourcefulbees/recipes/wax.json
 6d6ca28029d968db3693b4483d2345dadc535e90 data/resourcefulbees/recipes/waxed_door.json
 721a8799fe8c810b6382da432a4512e9b7b0e674 data/resourcefulbees/recipes/waxed_fence.json
 413d244f975d5c3cb1178e3c06d21d4e5b3fe3bc data/resourcefulbees/recipes/waxed_fence_gate.json
+4c3f95cf7f1addd5114abf660604a0ebdfcc5248 data/resourcefulbees/recipes/waxed_hanging_sign.json
 33ade7095476d776aa82d6f1892a232ea1121b00 data/resourcefulbees/recipes/waxed_machine_block.json
 edcf5148db4dfa30b118dd85beed70078758cdad data/resourcefulbees/recipes/waxed_planks.json
 59238dee4d47dfccc33f694f10e1f0daf4455e69 data/resourcefulbees/recipes/waxed_pressure_plate.json

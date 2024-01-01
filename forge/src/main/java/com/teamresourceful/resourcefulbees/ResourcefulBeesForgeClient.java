@@ -1,8 +1,10 @@
 package com.teamresourceful.resourcefulbees;
 
+import com.teamresourceful.resourcefulbees.client.ClientHandler;
 import com.teamresourceful.resourcefulbees.client.ResourcefulBeesClient;
 import com.teamresourceful.resourcefulbees.common.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.platform.client.events.*;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
@@ -11,6 +13,8 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -94,5 +98,6 @@ public final class ResourcefulBeesForgeClient {
                     ItemBlockRenderTypes::setRenderLayer
             ));
         });
+        ClientHandler.init();
     }
 }

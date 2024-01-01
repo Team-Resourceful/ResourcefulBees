@@ -64,9 +64,6 @@ public class ResourcefulBeesClient {
 
         Color.initRainbow();
 
-        Sheets.SIGN_MATERIALS.put(ModBlocks.WAXED_WOOD_TYPE, new Material(Sheets.SIGN_SHEET, new ResourceLocation("resourcefulbees", "entity/signs/waxed")));
-        Sheets.HANGING_SIGN_MATERIALS.put(ModBlocks.WAXED_WOOD_TYPE, new Material(Sheets.SIGN_SHEET, new ResourceLocation("resourcefulbees", "entity/signs/hanging/waxed")));
-
         loadResources();
     }
 

@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees;
 
+import com.teamresourceful.resourcefulbees.client.ClientHandler;
 import com.teamresourceful.resourcefulbees.client.ResourcefulBeesClient;
 import com.teamresourceful.resourcefulbees.platform.client.events.*;
 import com.teamresourceful.resourcefulbees.platform.client.events.lifecycle.ClientLoadingCompletedEvent;
@@ -30,6 +31,7 @@ public class ResourcefulBeesFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ResourcefulBeesClient.init();
+        ClientHandler.init();
 
         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) ->
             RegisterAdditionaModelsEvent.EVENT.fire(new RegisterAdditionaModelsEvent(out))

@@ -204,6 +204,12 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Ingredient.of(Items.STICK))
                 .unlockedBy(hasWax)
                 .save(recipes);
+        AdvancedShapedRecipeBuilder.shaped(ModItems.WAXED_HANGING_SIGN, 6)
+            .pattern("C C", "WWW", "WWW")
+            .define('W', Ingredient.of(ModItems.WAXED_PLANKS.get()))
+            .define('C', Ingredient.of(Items.CHAIN))
+            .unlockedBy(hasWax)
+            .save(recipes);
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.TRIMMED_WAXED_PLANKS.get(), 4)
                 .requires(ModItems.WAXED_PLANKS.get(), 4)
                 .unlockedBy("has_wax", RecipeProvider.has(ModItemTags.WAX))
