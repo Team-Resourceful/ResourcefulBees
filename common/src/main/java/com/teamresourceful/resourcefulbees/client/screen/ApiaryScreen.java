@@ -50,7 +50,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
                 if (beeIndexOffset + 7 >= apiaryBlockEntity.beeCount()) {
                     beeIndexOffset = Math.max(0, apiaryBlockEntity.beeCount() - 7);
                 }
-            }else {
+            } else {
                 beeIndexOffset = 0;
             }
             this.renderBackground(graphics);
