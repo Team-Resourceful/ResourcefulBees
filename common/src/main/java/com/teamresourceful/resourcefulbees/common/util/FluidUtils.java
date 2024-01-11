@@ -8,9 +8,9 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFluids;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
 import earth.terrarium.botarium.common.fluid.base.FluidContainer;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
-import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,7 +33,7 @@ public final class FluidUtils {
         if (simulated.getFluidAmount() == holder.getFluidAmount()) {
             return container.internalExtract(holder, false);
         }
-        return FluidHooks.emptyFluid();
+        return FluidHolder.empty();
     }
 
     public static long exactInsert(FluidContainer container, FluidHolder holder) {
@@ -50,11 +50,11 @@ public final class FluidUtils {
         FluidHolder holder = tank.getFluids().get(0);
         ItemStack itemStack = new ItemStack(getHoneyBottleFromFluid(holder.getFluid()), 1);
 
-        if (holder.getFluidAmount() < FluidHooks.getBottleAmount()) return;
+        if (holder.getFluidAmount() < FluidConstants.getBottleAmount()) return;
         if (holder.isEmpty()) return;
         if (itemStack.isEmpty()) return;
 
-        FluidHolder extracted = exactExtract(tank, holder.copyWithAmount(FluidHooks.getBottleAmount()));
+        FluidHolder extracted = exactExtract(tank, holder.copyWithAmount(FluidConstants.getBottleAmount()));
         if (extracted.isEmpty()) return;
 
         bottleAction(itemStack, SoundEvents.BOTTLE_FILL, player, hand);
@@ -130,7 +130,7 @@ public final class FluidUtils {
     }
 
     public static FluidHolder readFromBuffer(FriendlyByteBuf buffer) {
-        if (!buffer.readBoolean()) return FluidHooks.emptyFluid();
+        if (!buffer.readBoolean()) return FluidHolder.empty();
         Fluid fluid = BuiltInRegistries.FLUID.byId(buffer.readVarInt());
         long amount = buffer.readVarLong();
         return FluidHolder.of(fluid, amount, buffer.readNbt());

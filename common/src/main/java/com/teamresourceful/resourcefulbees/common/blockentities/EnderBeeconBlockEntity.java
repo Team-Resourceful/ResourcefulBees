@@ -15,11 +15,12 @@ import com.teamresourceful.resourcefulbees.common.networking.packets.client.Beec
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
 import earth.terrarium.botarium.common.fluid.base.BotariumFluidBlock;
+import earth.terrarium.botarium.common.fluid.base.FluidContainer;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.impl.InsertOnlyFluidContainer;
 import earth.terrarium.botarium.common.fluid.impl.WrappedBlockFluidContainer;
-import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -40,7 +41,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
@@ -173,20 +173,18 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
 
     private void pullFluidFromBelow(@NotNull Level level, BlockPos pos) {
         if (this.getFluid().getFluidAmount() >= this.tank.getTankCapacity(0)) return;
-        BlockEntity tileEntity = level.getBlockEntity(pos.below());
-        if (tileEntity == null) return;
+        FluidContainer container = FluidContainer.of(level, pos.below(), Direction.UP);
+        if (container == null) return;
 
-        FluidHooks.safeGetBlockFluidManager(tileEntity, Direction.UP).ifPresent(manager -> {
-            for (FluidHolder fluidTank : manager.getFluidTanks()) {
-                if (fluidTank.isEmpty()) continue;
-                FluidHolder holder = fluidTank.copyWithAmount(Math.min(fluidTank.getFluidAmount(), EnderBeeconConfig.beeconPullAmount));
-                FluidHolder extracted = manager.extractFluid(holder, true);
-                if (!extracted.isEmpty() && this.tank.internalInsert(extracted, true) > 0) {
-                    manager.extractFluid(extracted, false);
-                    this.tank.internalInsert(extracted, false);
-                }
+        for (FluidHolder fluidTank : container.getFluids()) {
+            if (fluidTank.isEmpty()) continue;
+            FluidHolder holder = fluidTank.copyWithAmount(Math.min(fluidTank.getFluidAmount(), EnderBeeconConfig.beeconPullAmount));
+            FluidHolder extracted = container.extractFluid(holder, true);
+            if (!extracted.isEmpty() && this.tank.internalInsert(extracted, true) > 0) {
+                container.extractFluid(extracted, false);
+                this.tank.internalInsert(extracted, false);
             }
-        });
+        }
     }
 
     public FluidHolder getFluid() {
@@ -297,7 +295,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     @Override
     public WrappedBlockFluidContainer getFluidContainer() {
         if (tank == null) {
-            tank = new WrappedBlockFluidContainer(this, new InsertOnlyFluidContainer(i -> FluidHooks.buckets(16), 1, (amount, fluid) -> fluid.is(ModFluidTags.HONEY)));
+            tank = new WrappedBlockFluidContainer(this, new InsertOnlyFluidContainer(i -> FluidConstants.fromMillibuckets(16000), 1, (amount, fluid) -> fluid.is(ModFluidTags.HONEY)));
         }
         return this.tank;
     }

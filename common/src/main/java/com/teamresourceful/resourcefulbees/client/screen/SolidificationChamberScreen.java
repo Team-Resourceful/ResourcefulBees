@@ -5,8 +5,8 @@ import com.teamresourceful.resourcefulbees.common.blockentities.SolidificationCh
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.menus.SolidificationChamberMenu;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
-import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -33,7 +33,7 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
             int j = this.topPos;
             graphics.blit(texture, i, j, 0, 0, this.imageWidth, this.imageHeight);
             FluidHolder holder = tileEntity.getFluid();
-            int height = (int) ((holder.getFluidAmount() / FluidHooks.buckets(16)) * 62);
+            int height = (int) ((holder.getFluidAmount() / FluidConstants.fromMillibuckets(16000)) * 62);
             ClientRenderUtils.drawFluid(graphics, height, 14, holder, i + 67, j + 12+(62-height));
         }
     }
@@ -60,10 +60,10 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
     }
 
     private Component getMillibuckets(long fluidAmount) {
-        return Component.literal(FluidHooks.toMillibuckets(fluidAmount) + "mB");
+        return Component.literal(FluidConstants.toMillibuckets(fluidAmount) + "mB");
     }
 
     private Component getBuckets(long fluidAmount) {
-        return Component.literal(((double) fluidAmount / FluidHooks.getBucketAmount()) + "B");
+        return Component.literal(((double) fluidAmount / FluidConstants.getBucketAmount()) + "B");
     }
 }

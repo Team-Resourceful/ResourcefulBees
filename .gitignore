@@ -29,3 +29,4 @@ forge*changelog.txt
 /.vscode/
 /old.7z
 /.architectury-transformer/
+.DS_Store
