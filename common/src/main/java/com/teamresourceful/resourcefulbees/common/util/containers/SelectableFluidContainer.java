@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 
 public class SelectableFluidContainer implements FluidContainer {
 
-    public SelectableList<FluidHolder> storedFluid = SelectableList.of(FluidHolder.empty());
+    private SelectableList<FluidHolder> storedFluid = SelectableList.of(FluidHolder.empty());
     public final long maxAmount;
     public final Predicate<FluidHolder> fluidFilter;
 
