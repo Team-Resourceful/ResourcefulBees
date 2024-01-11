@@ -12,8 +12,6 @@ import earth.terrarium.botarium.common.fluid.FluidConstants;
 import earth.terrarium.botarium.common.fluid.base.FluidContainer;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -61,7 +59,7 @@ public final class FluidUtils {
     }
 
     public static void emptyBottle(FluidContainer tank, Player player, InteractionHand hand) {
-        FluidHolder holder = FluidHolder.of(getHoneyFluidFromBottle(player.getItemInHand(hand)), BeeConstants.HONEY_PER_BOTTLE_BUCKETS, null);
+        FluidHolder holder = FluidHolder.of(getHoneyFluidFromBottle(player.getItemInHand(hand)), FluidConstants.fromMillibuckets(BeeConstants.HONEY_PER_BOTTLE), null);
         if (holder.isEmpty()) return;
 
         long inserted = exactInsert(tank, holder);
@@ -116,23 +114,5 @@ public final class FluidUtils {
         } else if (!player.isShiftKeyDown() && !level.isClientSide() && player instanceof ServerPlayer serverPlayer && entity instanceof ContentMenuProvider<?> provider) {
             provider.openMenu(serverPlayer);
         }
-    }
-
-    public static void writeToBuffer(FluidHolder holder, FriendlyByteBuf buffer) {
-        if (holder.isEmpty()) {
-            buffer.writeBoolean(false);
-        } else {
-            buffer.writeBoolean(true);
-            buffer.writeVarInt(BuiltInRegistries.FLUID.getId(holder.getFluid()));
-            buffer.writeVarLong(holder.getFluidAmount());
-            buffer.writeNbt(holder.getCompound());
-        }
-    }
-
-    public static FluidHolder readFromBuffer(FriendlyByteBuf buffer) {
-        if (!buffer.readBoolean()) return FluidHolder.empty();
-        Fluid fluid = BuiltInRegistries.FLUID.byId(buffer.readVarInt());
-        long amount = buffer.readVarLong();
-        return FluidHolder.of(fluid, amount, buffer.readNbt());
     }
 }

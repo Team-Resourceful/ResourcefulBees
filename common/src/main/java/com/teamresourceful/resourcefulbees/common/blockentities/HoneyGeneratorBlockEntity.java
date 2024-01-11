@@ -20,6 +20,7 @@ import earth.terrarium.botarium.common.energy.EnergyApi;
 import earth.terrarium.botarium.common.energy.base.BotariumEnergyBlock;
 import earth.terrarium.botarium.common.energy.impl.ExtractOnlyEnergyContainer;
 import earth.terrarium.botarium.common.energy.impl.WrappedBlockEnergyContainer;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
 import earth.terrarium.botarium.common.fluid.base.BotariumFluidBlock;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.impl.InsertOnlyFluidContainer;
@@ -49,7 +50,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
 
     public static final int ENERGY_TRANSFER_AMOUNT = HoneyGenConfig.energyTransferAmount;
     public static final int MAX_ENERGY_CAPACITY = HoneyGenConfig.maxEnergyCapacity;
-    public static final int MAX_TANK_STORAGE = HoneyGenConfig.maxTankCapacity;
+    public static final int MAX_TANK_STORAGE = (int) FluidConstants.fromMillibuckets(HoneyGenConfig.maxTankCapacity);
 
     private FluidContainer fluidContainer;
     private WrappedBlockFluidContainer wrappedFluidContainer;
@@ -257,7 +258,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
         private int capacity;
 
         public FluidContainer() {
-            super(i -> HoneyGenConfig.maxTankCapacity, 1, (i, holder) -> holder.getFluid().is(ModFluidTags.HONEY));
+            super(i -> MAX_TANK_STORAGE, 1, (i, holder) -> holder.getFluid().is(ModFluidTags.HONEY));
         }
 
         @Override
