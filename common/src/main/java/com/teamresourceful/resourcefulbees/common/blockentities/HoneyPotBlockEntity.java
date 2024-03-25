@@ -8,11 +8,11 @@ import com.teamresourceful.resourcefulbees.common.menus.HoneyPotMenu;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
 import earth.terrarium.botarium.common.fluid.base.BotariumFluidBlock;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.impl.SimpleFluidContainer;
 import earth.terrarium.botarium.common.fluid.impl.WrappedBlockFluidContainer;
-import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -80,7 +80,7 @@ public class HoneyPotBlockEntity extends GUISyncedBlockEntity implements Botariu
     private static class HoneyFluidContainer extends SimpleFluidContainer {
 
         public HoneyFluidContainer() {
-            super(i -> FluidHooks.buckets(64), 1, (i, holder) -> holder.is(ModFluidTags.HONEY));
+            super(i -> FluidConstants.fromMillibuckets(64000), 1, (i, holder) -> holder.is(ModFluidTags.HONEY));
         }
 
         @Override

@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntit
 import com.teamresourceful.resourcefulbees.common.lib.enums.HoneyPotState;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.util.FluidUtils;
-import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
+import earth.terrarium.botarium.common.fluid.base.FluidContainer;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -74,7 +74,7 @@ public class HoneyPotBlock extends RenderingBaseEntityBlock {
 
             if (level.getBlockState(pos.above()).getBlock().equals(ModBlocks.ENDER_BEECON.get())) {
                 potState = HoneyPotState.BEECON;
-            } else if (blockEntityAbove != null && FluidHooks.safeGetBlockFluidManager(blockEntityAbove, null).isPresent()) {
+            } else if (blockEntityAbove != null && FluidContainer.holdsFluid(blockEntityAbove, null)) {
                 potState = HoneyPotState.OPEN;
             }
 

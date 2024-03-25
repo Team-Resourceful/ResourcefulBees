@@ -8,9 +8,9 @@ import com.teamresourceful.resourcefulbees.common.networking.packets.client.Sele
 import com.teamresourceful.resourcefulbees.common.util.containers.SelectableFluidContainer;
 import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import com.teamresourceful.resourcefullib.common.collections.SelectableList;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.utils.ClientFluidHooks;
-import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -70,7 +70,7 @@ public class SelectableFluidWidget extends AbstractWidget {
                     line = Component.literal(" ○ ").withStyle(ChatFormatting.DARK_GRAY);
                 }
                 line = line.append(Component.empty().withStyle(ChatFormatting.RESET).append(ClientFluidHooks.getDisplayName(tankFluid)));
-                line = line.append(Component.literal(" " + FluidHooks.toMillibuckets(tankFluid.getFluidAmount()) + "mb").withStyle(ChatFormatting.RESET));
+                line = line.append(Component.literal(" " + FluidConstants.toMillibuckets(tankFluid.getFluidAmount()) + "mb").withStyle(ChatFormatting.RESET));
                 tooltip.add(line);
             }
         }

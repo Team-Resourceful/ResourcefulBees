@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.blocks.FlowHiveBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.recipes.FlowHiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
 import earth.terrarium.botarium.common.fluid.base.BotariumFluidBlock;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.impl.ExtractOnlyFluidContainer;
@@ -101,7 +102,7 @@ public class FlowHiveBlockEntity extends BeeHolderBlockEntity implements Botariu
     @Override
     public WrappedBlockFluidContainer getFluidContainer() {
         if (tank == null) {
-            tank = new WrappedBlockFluidContainer(this, new ExtractOnlyFluidContainer(i -> 16000, 1, (amount, fluid) -> true));
+            tank = new WrappedBlockFluidContainer(this, new ExtractOnlyFluidContainer(i -> FluidConstants.fromMillibuckets(16000), 1, (amount, fluid) -> true));
         }
         return this.tank;
     }

@@ -7,7 +7,6 @@ import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.base.FluidSnapshot;
 import earth.terrarium.botarium.common.fluid.impl.SimpleFluidContainer;
 import earth.terrarium.botarium.common.fluid.impl.SimpleFluidSnapshot;
-import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -19,7 +18,7 @@ import java.util.function.Predicate;
 
 public class SelectableFluidContainer implements FluidContainer {
 
-    public SelectableList<FluidHolder> storedFluid = SelectableList.of(FluidHooks.emptyFluid());
+    private SelectableList<FluidHolder> storedFluid = SelectableList.of(FluidHolder.empty());
     public final long maxAmount;
     public final Predicate<FluidHolder> fluidFilter;
 
@@ -79,18 +78,18 @@ public class SelectableFluidContainer implements FluidContainer {
             if (fluidFilter.test(fluid)) {
                 FluidHolder toExtract = fluid.copyHolder();
                 if (storedFluid.isEmpty()) {
-                    return FluidHooks.emptyFluid();
+                    return FluidHolder.empty();
                 } else if (storedFluid.get(i).matches(fluid)) {
                     long extractedAmount = (long) Mth.clamp(fluid.getFluidAmount(), 0, storedFluid.get(i).getFluidAmount());
                     toExtract.setAmount(extractedAmount);
                     if (simulate) return toExtract;
                     this.storedFluid.get(i).setAmount(storedFluid.get(i).getFluidAmount() - extractedAmount);
-                    if (storedFluid.get(i).getFluidAmount() == 0) storedFluid.set(i, FluidHooks.emptyFluid());
+                    if (storedFluid.get(i).getFluidAmount() == 0) storedFluid.set(i, FluidHolder.empty());
                     return toExtract;
                 }
             }
         }
-        return FluidHooks.emptyFluid();
+        return FluidHolder.empty();
     }
 
     @Override
@@ -165,7 +164,7 @@ public class SelectableFluidContainer implements FluidContainer {
 
     @Override
     public void fromContainer(FluidContainer container) {
-        this.storedFluid = SelectableList.of(FluidHooks.emptyFluid());
+        this.storedFluid = SelectableList.of(FluidHolder.empty());
         for (FluidHolder fluidHolder : container.getFluids()) {
             this.storedFluid.add(fluidHolder.copyHolder());
         }
@@ -177,10 +176,10 @@ public class SelectableFluidContainer implements FluidContainer {
         CompoundTag tag = nbt.getCompound(Botarium.BOTARIUM_DATA);
         CompoundTag fluidTag = tag.getCompound("FluidData");
         ListTag fluids = fluidTag.getList(SimpleFluidContainer.FLUID_KEY, Tag.TAG_COMPOUND);
-        this.storedFluid = SelectableList.of(FluidHooks.emptyFluid());
+        this.storedFluid = SelectableList.of(FluidHolder.empty());
         for (int i = 0; i < fluids.size(); i++) {
             CompoundTag fluid = fluids.getCompound(i);
-            this.storedFluid.add(FluidHooks.fluidFromCompound(fluid));
+            this.storedFluid.add(FluidHolder.fromCompound(fluid));
         }
         this.storedFluid.setSelectedIndex(fluidTag.getInt("Index"));
     }
@@ -204,7 +203,7 @@ public class SelectableFluidContainer implements FluidContainer {
 
     @Override
     public void clearContent() {
-        this.storedFluid = SelectableList.of(FluidHooks.emptyFluid());
+        this.storedFluid = SelectableList.of(FluidHolder.empty());
     }
 
     public long getFluidAmount() {

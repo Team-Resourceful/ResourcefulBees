@@ -8,9 +8,9 @@ import com.teamresourceful.resourcefulbees.common.menus.HoneyGeneratorMenu;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import earth.terrarium.botarium.common.energy.base.EnergyContainer;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.utils.ClientFluidHooks;
-import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -51,7 +51,7 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
                 graphics.drawString(this.font, "Fluid: ", 57, 22, 0xffffff);
                 graphics.drawString(this.font, holder.isEmpty() ? GuiTranslations.NO_FLUID : ClientFluidHooks.getDisplayName(holder), 61, 32, 0xffffff);
                 graphics.drawString(this.font, "Amount: ", 57, 42, 0xffffff);
-                graphics.drawString(this.font, FluidHooks.toMillibuckets(holder.getFluidAmount()) + "mB", 61, 52, 0xffffff);
+                graphics.drawString(this.font, FluidConstants.toMillibuckets(holder.getFluidAmount()) + "mB", 61, 52, 0xffffff);
             }
         }
     }
@@ -84,9 +84,9 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
         if (MathUtils.inRangeInclusive(mouseX, this.leftPos + 28, this.leftPos + 40) && MathUtils.inRangeInclusive(mouseY, this.topPos + 16, this.topPos + 70)) {
             FluidHolder holder = this.menu.getEntity().getFluid();
             if (Screen.hasShiftDown() || holder.getFluidAmount() < 500) {
-                setTooltipForNextRenderPass(Component.literal(FluidHooks.toMillibuckets(holder.getFluidAmount()) + " MB"));
+                setTooltipForNextRenderPass(Component.literal(FluidConstants.toMillibuckets(holder.getFluidAmount()) + " MB"));
             } else {
-                setTooltipForNextRenderPass(Component.literal(TextUtils.NUMBER_FORMAT.format((double) holder.getFluidAmount() / FluidHooks.getBucketAmount()) + " Buckets"));
+                setTooltipForNextRenderPass(Component.literal(TextUtils.NUMBER_FORMAT.format((double) holder.getFluidAmount() / FluidConstants.getBucketAmount()) + " Buckets"));
             }
         }
     }

@@ -11,11 +11,11 @@ import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.util.containers.AutomationSensitiveContainer;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
 import earth.terrarium.botarium.common.fluid.base.BotariumFluidBlock;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.impl.InsertOnlyFluidContainer;
 import earth.terrarium.botarium.common.fluid.impl.WrappedBlockFluidContainer;
-import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -141,7 +141,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
     @Override
     public WrappedBlockFluidContainer getFluidContainer() {
         if (tank == null) {
-            tank = new WrappedBlockFluidContainer(this, new InsertOnlyFluidContainer(i -> FluidHooks.buckets(16), 1, (amount, fluid) -> this.level != null && SolidificationRecipe.matches(level.getRecipeManager(), fluid.getFluid(), fluid.getCompound())));
+            tank = new WrappedBlockFluidContainer(this, new InsertOnlyFluidContainer(i -> FluidConstants.fromMillibuckets(16000), 1, (amount, fluid) -> this.level != null && SolidificationRecipe.matches(level.getRecipeManager(), fluid.getFluid(), fluid.getCompound())));
         }
         return this.tank;
     }

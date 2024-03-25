@@ -9,9 +9,9 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Bee
 import com.teamresourceful.resourcefulbees.common.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconChangePacket;
+import earth.terrarium.botarium.common.fluid.FluidConstants;
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import earth.terrarium.botarium.common.fluid.utils.ClientFluidHooks;
-import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -105,7 +105,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
         graphics.drawString(font, BeeconTranslations.FLUID_LABEL, 110, 56, 14737632);
         graphics.drawString(font, holder.isEmpty() ? BeeconTranslations.NO_FLUID_LABEL : ClientFluidHooks.getDisplayName(holder), 137, 56, 16751628);
         graphics.drawString(font, BeeconTranslations.FLUID_AMOUNT_LABEL, 110, 68, 14737632);
-        graphics.drawString(font, FluidHooks.toMillibuckets(holder.getFluidAmount()) +"mB", 148, 68, 47104);
+        graphics.drawString(font, FluidConstants.toMillibuckets(holder.getFluidAmount()) +"mB", 148, 68, 47104);
     }
 
     @Override
