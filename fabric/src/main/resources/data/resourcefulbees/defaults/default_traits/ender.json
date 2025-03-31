@@ -1,5 +1,0 @@
-{
-  "specialAbilities": ["teleport"],
-  "particleType": ["minecraft:portal"],
-  "displayItem": "minecraft:ender_pearl"
-}

@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "resourcefulbees:block/waxed_planks",
-    "side": "resourcefulbees:block/waxed_planks",
-    "top": "resourcefulbees:block/waxed_planks"
-  }
-}
