@@ -1,7 +1,0 @@
-{
-  "parent": "resourcefulbees:block/beehouse",
-  "textures": {
-    "particle": "resourcefulbees:block/apiary/breeder",
-    "texture": "resourcefulbees:block/apiary/breeder"
-  }
-}

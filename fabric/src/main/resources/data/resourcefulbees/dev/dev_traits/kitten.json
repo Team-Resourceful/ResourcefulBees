@@ -1,9 +1,0 @@
-{
-  "displayItem": "minecraft:red_bed",
-  "potionDamageEffects": [
-    {
-      "effect": "minecraft:speed",
-      "strength": 2
-    }
-  ]
-}

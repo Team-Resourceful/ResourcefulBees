@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "resourcefulbees:item/pollen_base",
-    "layer1": "resourcefulbees:item/pollen_top"
-  }
-}

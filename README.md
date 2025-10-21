@@ -1,46 +1,25 @@
-# Resourceful Bees
-<hr>
 
-Resourceful Bees is a Minecraft mod that provides a feature rich framework API for players and Modpack Developers to create their own customized bees.
+Installation information
+=======
 
-### Wiki
+This template repository can be directly cloned to get you started with a new
+mod. Simply create a new repository cloned from this one, by following the
+instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
 
-You can find our wiki [here](https://wiki.resourcefulbees.com/).
+Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
 
-### License and Availability
+If at any point you are missing libraries in your IDE, or you've run into problems you can
+run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
+{this does not affect your code} and then start the process again.
 
-The mod is licensed under LGPL 3.0 and is available on [Curseforge](https://www.curseforge.com/minecraft/mc-mods/resourceful-bees) and [Modrinth](https://modrinth.com/mod/resourceful-bees).
+Mapping Names:
+============
+By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
+in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
+license. For the latest license text, refer to the mapping file itself, or the reference copy here:
+https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
 
-### Contributions
-
-If you would like to contribute to the mod feel free to submit a PR.
-<br>TODO: Add more info about importing the project in IntelliJ and any additional setup required.
-
-## For Mod Developers
-<hr>
-
-Be sure to add our maven to your `build.gradle`:
-```gradle
-repositories {
-    maven { url = "https://maven.resourcefulbees.com/repository/maven-public/" }
-    <--- other repositories here --->
-}
-```
-You can then add our mod as a dependency:
-
-### Forge:
-```gradle
-dependencies {
-    <--- Other dependencies here --->
-
-    implementation fg.deobf("com.teamresourceful.resourcefulbees:resourcefulbees-forge-1.19.2:1.0.0-alpha.21")
-    
-    //below are required dependencies for resourceful bees to work.
-    runtimeOnly fg.deobf("com.teamresourceful.resourcefullib:resourcefullib-forge-1.19.2:1.1.23")
-    runtimeOnly fg.deobf("com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-1.19.2:1.0.20")
-    runtimeOnly fg.deobf("software.bernie.geckolib:geckolib-forge-1.19:3.1.40")
-    runtimeOnly fg.deobf("net.roguelogix.phosphophyllite:Phosphophyllite:0.6.0-beta.7")
-}
-```
-
-TODO: Update this to include Architectury and Fabric
+Additional Resources: 
+==========
+Community Documentation: https://docs.neoforged.net/  
+NeoForged Discord: https://discord.neoforged.net/

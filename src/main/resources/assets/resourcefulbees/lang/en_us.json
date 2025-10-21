@@ -1,0 +1,13 @@
+{
+  "itemGroup.resourcefulbees": "Example Mod Tab",
+  "block.resourcefulbees.example_block": "Example Block",
+  "item.resourcefulbees.example_item": "Example Item",
+
+  "resourcefulbees.configuration.title": "Resourceful Bees Configs",
+  "resourcefulbees.configuration.section.resourcefulbees.common.toml": "Resourceful Bees Configs",
+  "resourcefulbees.configuration.section.resourcefulbees.common.toml.title": "Resourceful Bees Configs",
+  "resourcefulbees.configuration.items": "Item List",
+  "resourcefulbees.configuration.logDirtBlock": "Log Dirt Block",
+  "resourcefulbees.configuration.magicNumberIntroduction": "Magic Number Text",
+  "resourcefulbees.configuration.magicNumber": "Magic Number"
+}

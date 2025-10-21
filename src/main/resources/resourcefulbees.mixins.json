@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.teamresourceful.resourcefulbees.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

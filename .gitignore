@@ -20,12 +20,7 @@ build
 # other
 eclipse
 run
+runs
+run-data
 
-# Files from Forge MDK
-forge*changelog.txt
-/logs/debug.log
-/logs/latest.log
-/mcmodsrepo/
-/.vscode/
-/old.7z
-/.architectury-transformer/
+repo
