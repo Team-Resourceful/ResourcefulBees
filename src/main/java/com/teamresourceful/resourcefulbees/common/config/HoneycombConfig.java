@@ -1,16 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.config;
 
-import com.teamresourceful.resourcefulconfig.common.annotations.*;
-import com.teamresourceful.resourcefulconfig.common.config.EntryType;
-import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
+import com.teamresourceful.resourcefulconfig.api.annotations.*;
 
-@Category(id = "honeycomb", translation = "Honeycomb")
-@WebInfo(icon = "honeycomb")
+@Category(value = "honeycomb")
+@ConfigInfo(icon = "honeycomb")
 public final class HoneycombConfig {
 
     @ConfigEntry(
         id = "honeycombsEdible",
-        type = EntryType.BOOLEAN,
         translation = "Honeycombs Edible"
     )
     @Comment("Whether all honeycombs should be edible by default or not.")
@@ -18,21 +15,17 @@ public final class HoneycombConfig {
 
     @ConfigEntry(
         id = "honeycombHunger",
-        type = EntryType.INTEGER,
         translation = "Honeycomb Hunger"
     )
     @Comment("The amount of hunger restored when eating a honeycomb.")
-    @IntRange(min = 0, max = 8)
+    @ConfigOption.Range(min = 0, max = 8)
     public static int honeycombHunger = 1;
 
     @ConfigEntry(
         id = "honeycombSaturation",
-        type = EntryType.FLOAT,
         translation = "Honeycomb Saturation"
     )
     @Comment("The amount of saturation restored when eating a honeycomb.")
-    @FloatRange(min = 0, max = 8)
+    @ConfigOption.Range(min = 0.0, max = 8.0)
     public static float honeycombSaturation = 0.6f;
-
-
 }

@@ -1,18 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.config;
 
-import com.teamresourceful.resourcefulconfig.common.annotations.Category;
-import com.teamresourceful.resourcefulconfig.common.annotations.Comment;
-import com.teamresourceful.resourcefulconfig.common.annotations.ConfigEntry;
-import com.teamresourceful.resourcefulconfig.common.config.EntryType;
-import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
+import com.teamresourceful.resourcefulconfig.api.annotations.*;
 
-@Category(id = "client", translation = "Client")
-@WebInfo(icon = "settings-2")
+@Category(value = "client")
+@ConfigInfo(icon = "settings-2")
 public final class ClientConfig {
 
     @ConfigEntry(
         id = "generateEnglishLang",
-        type = EntryType.BOOLEAN,
         translation = "Generate English Lang"
     )
     @Comment(

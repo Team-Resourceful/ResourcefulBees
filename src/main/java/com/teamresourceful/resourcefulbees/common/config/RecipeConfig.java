@@ -1,18 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.config;
 
-import com.teamresourceful.resourcefulconfig.common.annotations.Category;
-import com.teamresourceful.resourcefulconfig.common.annotations.Comment;
-import com.teamresourceful.resourcefulconfig.common.annotations.ConfigEntry;
-import com.teamresourceful.resourcefulconfig.common.config.EntryType;
-import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
+import com.teamresourceful.resourcefulconfig.api.annotations.Category;
+import com.teamresourceful.resourcefulconfig.api.annotations.Comment;
+import com.teamresourceful.resourcefulconfig.api.annotations.ConfigEntry;
+import com.teamresourceful.resourcefulconfig.api.annotations.ConfigInfo;
 
-@Category(id = "recipes", translation = "Recipes")
-@WebInfo(icon = "clipboard-list")
+@Category(value = "recipes")
+@ConfigInfo(icon = "clipboard-list")
 public final class RecipeConfig {
 
     @ConfigEntry(
             id = "generateDefaultRecipes",
-            type = EntryType.BOOLEAN,
             translation = "Generate Default Recipes"
     )
     @Comment(
@@ -22,7 +20,6 @@ public final class RecipeConfig {
 
     @ConfigEntry(
             id = "honeycombBlockRecipes",
-            type = EntryType.BOOLEAN,
             translation = "Honeycomb Block Recipes"
     )
     @Comment(
@@ -32,7 +29,6 @@ public final class RecipeConfig {
 
     @ConfigEntry(
             id = "honeyBlockRecipes",
-            type = EntryType.BOOLEAN,
             translation = "Honey Block Recipes"
     )
     @Comment(

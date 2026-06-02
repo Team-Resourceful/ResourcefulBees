@@ -1,36 +1,32 @@
 package com.teamresourceful.resourcefulbees.common.config;
 
-import com.teamresourceful.resourcefulconfig.common.annotations.*;
-import com.teamresourceful.resourcefulconfig.common.config.EntryType;
-import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
+import com.teamresourceful.resourcefulconfig.api.annotations.*;
 
-@Category(id = "centrifuge", translation = "Centrifuge")
-@WebInfo(icon = "settings")
+@Category(value = "centrifuge")
+@ConfigInfo(icon = "settings")
 public final class CentrifugeConfig {
 
     @ConfigEntry(
         id = "defaultCentrifugeRecipeTime",
-        type = EntryType.INTEGER,
         translation = "Default Centrifuge Recipe Time"
     )
     @Comment(
         value = "Default recipe time for recipes where a time value is not defined."
     )
-    @IntRange(min = 100, max = 2400)
+    @ConfigOption.Range(min = 100, max = 2400)
     public static int defaultCentrifugeRecipeTime = 200;
 
     @ConfigEntry(
         id = "centrifugeRfPerTick",
-        type = EntryType.INTEGER,
         translation = "Centrifuge RF Per Tick"
     )
     @Comment(
         value = "RF/t consumed by the centrifuge when processing recipes."
     )
-    @IntRange(min = 2, max = 1000)
+    @ConfigOption.Range(min = 2, max = 1000)
     public static int centrifugeRfPerTick = 10;
 
-    @ConfigEntry(
+/*    @ConfigEntry(
             id = "recipeTimeExponent",
             type = EntryType.DOUBLE,
             translation = "Recipe Time Exponent"
@@ -75,6 +71,6 @@ public final class CentrifugeConfig {
                     """
     )
     @DoubleRange(min = 0, max = 1)
-    public static double cpuPowerExponent = 0.4;
+    public static double cpuPowerExponent = 0.4;*/
 
 }

@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
 
 @Category(id = "solidfication", translation = "Solidification Chamber")
 @WebInfo(icon = "boxes")
-public final class SolidficationConfig {
+public final class SolidificationConfig {
 
     @ConfigEntry(
         id = "honeyProcessTime",
