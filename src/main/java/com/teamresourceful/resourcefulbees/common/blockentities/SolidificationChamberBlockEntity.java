@@ -51,8 +51,8 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
 
     public float getProcessPercent() {
         if (!canProcessHoney()) return 0;
-        if (processingFill == SolidificationConfig.honeyProcessTime * SolidificationConfig.solidficationTimeMultiplier) return 1;
-        return processingFill / ((float) SolidificationConfig.honeyProcessTime * SolidificationConfig.solidficationTimeMultiplier);
+        if (processingFill == SolidificationConfig.honeyProcessTime * SolidificationConfig.solidificationTimeMultiplier) return 1;
+        return processingFill / ((float) SolidificationConfig.honeyProcessTime * SolidificationConfig.solidificationTimeMultiplier);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state) {
         if (this.canProcessHoney()) {
-            if (this.processingFill >= SolidificationConfig.honeyProcessTime * SolidificationConfig.solidficationTimeMultiplier) {
+            if (this.processingFill >= SolidificationConfig.honeyProcessTime * SolidificationConfig.solidificationTimeMultiplier) {
                 this.processHoney();
                 this.processingFill = 0;
             }

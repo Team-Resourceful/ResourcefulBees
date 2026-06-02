@@ -1,30 +1,23 @@
 package com.teamresourceful.resourcefulbees.common.config;
 
-import com.teamresourceful.resourcefulconfig.common.annotations.Category;
-import com.teamresourceful.resourcefulconfig.common.annotations.Comment;
-import com.teamresourceful.resourcefulconfig.common.annotations.ConfigEntry;
-import com.teamresourceful.resourcefulconfig.common.annotations.IntRange;
-import com.teamresourceful.resourcefulconfig.common.config.EntryType;
-import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
+import com.teamresourceful.resourcefulconfig.api.annotations.*;
 
-@Category(id = "solidfication", translation = "Solidification Chamber")
-@WebInfo(icon = "boxes")
+@Category(value = "solidification")
+@ConfigInfo(icon = "boxes")
 public final class SolidificationConfig {
 
     @ConfigEntry(
         id = "honeyProcessTime",
-        type = EntryType.INTEGER,
         translation = "Honey Process Time"
     )
     @Comment(
         value = "Amount of time in ticks required to finish processing a honey bottle."
     )
-    @IntRange(min = 0, max = 2400)
+    @ConfigOption.Range(min = 0, max = 2400)
     public static int honeyProcessTime = 5;
 
     @ConfigEntry(
-        id = "solidficationTimeMultiplier",
-        type = EntryType.INTEGER,
+        id = "solidificationTimeMultiplier",
         translation = "Solidification Time Multiplier"
     )
     @Comment(
@@ -33,7 +26,7 @@ public final class SolidificationConfig {
                 This value is multiplying the honeyProcessTime.
                 """
     )
-    @IntRange(min = 1, max = 16)
-    public static int solidficationTimeMultiplier = 4;
+    @ConfigOption.Range(min = 1, max = 16)
+    public static int solidificationTimeMultiplier = 4;
 
 }
