@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyDataSerializ
 import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -15,7 +15,7 @@ public interface CustomHoneyData {
 
     String name();
 
-    Map<ResourceLocation, HoneyData<?>> data();
+    Map<Identifier, HoneyData<?>> data();
 
     MutableComponent displayName();
 
@@ -25,7 +25,7 @@ public interface CustomHoneyData {
 
     HoneyBottleData getBottleData();
 
-    default HoneyData<?> getHoneyData(ResourceLocation id) {
+    default HoneyData<?> getHoneyData(Identifier id) {
         return data().get(id);
     }
 

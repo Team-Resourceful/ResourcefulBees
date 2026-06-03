@@ -49,7 +49,7 @@ public class HoneyPage extends HistoryScreen {
 
         Font font = Minecraft.getInstance().font;
         graphics.drawString(font,  this.honeyBottle.getHoverName(), 24, 1, 0xFFFFFF, false);
-        int food = Math.min(this.data.getBottleData().food().hunger(), 20);
+        int food = Math.min(this.data.getBottleData().food().nutrition(), 20);
 
         float staturation = Math.min(food * this.data.getBottleData().food().saturation() * 2f, 20);
         graphics.blit(BeepediaTextures.HUNGER_BAR, 24, 10, 0, 0, 90, 9, 90, 9);

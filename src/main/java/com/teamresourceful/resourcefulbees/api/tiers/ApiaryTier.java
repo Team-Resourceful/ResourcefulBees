@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.api.tiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -14,10 +14,10 @@ import java.util.Map;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public record ApiaryTier(ResourceLocation id, int maxBees, double timeMod, Supplier<ApiaryOutputType> outputType, IntSupplier outputAmount, Supplier<BlockEntityType<? extends BlockEntity>> blockEntity, Supplier<? extends Item> item) {
+public record ApiaryTier(Identifier id, int maxBees, double timeMod, Supplier<ApiaryOutputType> outputType, IntSupplier outputAmount, Supplier<BlockEntityType<? extends BlockEntity>> blockEntity, Supplier<? extends Item> item) {
 
-    private static final Map<ResourceLocation, ApiaryTier> TIERS = new HashMap<>();
-    public static final Codec<ApiaryTier> CODEC = ResourceLocation.CODEC.comapFlatMap(ApiaryTier::get, ApiaryTier::id);
+    private static final Map<Identifier, ApiaryTier> TIERS = new HashMap<>();
+    public static final Codec<ApiaryTier> CODEC = Identifier.CODEC.comapFlatMap(ApiaryTier::get, ApiaryTier::id);
 
     public ApiaryTier {
         if (TIERS.containsKey(id)) {
@@ -38,15 +38,15 @@ public record ApiaryTier(ResourceLocation id, int maxBees, double timeMod, Suppl
         return String.format("%+d",(100 - (int)(timeMod() * 100)) * -1);
     }
 
-    public static DataResult<ApiaryTier> get(ResourceLocation id) {
+    public static DataResult<ApiaryTier> get(Identifier id) {
         if (TIERS.containsKey(id)) {
             return DataResult.success(TIERS.get(id));
         }
         return DataResult.error(() -> "Unknown Beehive Tier: " + id);
     }
 
-    public static ApiaryTier getOrThrow(ResourceLocation id) {
-        return get(id).getOrThrow(false, s -> {});
+    public static ApiaryTier getOrThrow(Identifier id) {
+        return get(id).getOrThrow();
     }
 
     public static Collection<ApiaryTier> values() {
@@ -91,7 +91,7 @@ public record ApiaryTier(ResourceLocation id, int maxBees, double timeMod, Suppl
             return this;
         }
 
-        public ApiaryTier build(ResourceLocation id) {
+        public ApiaryTier build(Identifier id) {
             return new ApiaryTier(id, max, time, output, amount, blockEntity, item);
         }
     }

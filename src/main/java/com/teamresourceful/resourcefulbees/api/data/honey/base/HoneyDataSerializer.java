@@ -1,18 +1,18 @@
 package com.teamresourceful.resourcefulbees.api.data.honey.base;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
 public interface HoneyDataSerializer<T extends HoneyData<T>> {
 
-    default ResourceLocation id() {
-        return new ResourceLocation(type().getNamespace(), type().getPath() + "/v" + version());
+    default Identifier id() {
+        return Identifier.fromNamespaceAndPath(type().getNamespace(), type().getPath() + "/v" + version());
     }
 
-    ResourceLocation type();
+    Identifier type();
 
     int version();
 
@@ -31,10 +31,10 @@ public interface HoneyDataSerializer<T extends HoneyData<T>> {
         return (T) data;
     }
 
-    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(ResourceLocation id, int version, Function<String, Codec<T>> codec) {
+    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(Identifier id, int version, Function<String, Codec<T>> codec) {
         return new HoneyDataSerializer<>() {
             @Override
-            public ResourceLocation type() {
+            public Identifier type() {
                 return id;
             }
 
@@ -55,10 +55,10 @@ public interface HoneyDataSerializer<T extends HoneyData<T>> {
         };
     }
 
-    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(ResourceLocation id, int version, Function<String, Codec<T>> codec, @Nullable T defaultValue) {
+    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(Identifier id, int version, Function<String, Codec<T>> codec, @Nullable T defaultValue) {
         return new HoneyDataSerializer<>() {
             @Override
-            public ResourceLocation type() {
+            public Identifier type() {
                 return id;
             }
 

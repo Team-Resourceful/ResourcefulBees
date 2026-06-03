@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.conditions.LoadCondition;
 import com.teamresourceful.resourcefulbees.api.data.conditions.LoadConditionSerializer;
 import com.teamresourceful.resourcefullib.common.utils.modinfo.ModInfoUtils;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 
 public record ModLoadedCondition(String modid) implements LoadCondition<ModLoadedCondition> {
@@ -28,7 +29,7 @@ public record ModLoadedCondition(String modid) implements LoadCondition<ModLoade
     private static final class Serializer implements LoadConditionSerializer<ModLoadedCondition> {
 
         @Override
-        public ResourceLocation id() {
+        public Identifier id() {
             return ID;
         }
 

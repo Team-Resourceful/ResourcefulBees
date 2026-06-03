@@ -31,7 +31,7 @@ public final class DummyHoneyData {
         throw new UtilityClassException();
     }
 
-    private static final HoneyInitializerApi HONEY_API = ResourcefulBeesAPI.getHoneyInitalizers();
+    private static final HoneyInitializerApi HONEY_API = ResourcefulBeesAPI.getHoneyInitializers();
     private static final InitializerApi API = ResourcefulBeesAPI.getInitializers();
 
     private static final BeekeeperTradeData DEFAULT_TRADE = API.beekeeperTrade(

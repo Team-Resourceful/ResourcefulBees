@@ -22,6 +22,7 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.exceptions.ValidationException;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
@@ -59,7 +60,7 @@ public class InitializerApi {
     private Initializers.BreedInitializer breeding;
     private Initializers.FamilyUnitInitializer familyUnit;
 
-    public CustomBeeData data(String name, Map<ResourceLocation, BeeData<?>> data) {
+    public CustomBeeData data(String name, Map<Identifier, BeeData<?>> data) {
         return this.data.create(name, data);
     }
 
@@ -79,11 +80,11 @@ public class InitializerApi {
         return this.traits.create(range, traits);
     }
 
-    public BeeRenderData render(Set<BeeLayerData> layers, BeeColorData colorData, ResourceLocation model, BeeLayerTexture texture, ResourceLocation animations, float sizeModifier) {
+    public BeeRenderData render(Set<BeeLayerData> layers, BeeColorData colorData, Identifier model, BeeLayerTexture texture, Identifier animations, float sizeModifier) {
         return this.render.create(layers, colorData, model, texture, animations, sizeModifier);
     }
 
-    public BeeLayerTexture layerTexture(ResourceLocation texture, ResourceLocation angryTexture) {
+    public BeeLayerTexture layerTexture(Identifier texture, Identifier angryTexture) {
         return this.layerTexture.create(texture, angryTexture);
     }
 
@@ -95,7 +96,7 @@ public class InitializerApi {
         return this.color.create(primarySpawnEggColor, secondarySpawnEggColor, jarColor);
     }
 
-    public BeeMutationData mutation(int count, ResourceLocation id) {
+    public BeeMutationData mutation(int count, Identifier id) {
         return this.mutation.create(count, id);
     }
 

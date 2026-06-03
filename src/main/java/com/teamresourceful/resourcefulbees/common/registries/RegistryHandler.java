@@ -94,7 +94,7 @@ public final class RegistryHandler {
             ModConstants.LOGGER.error("Could not create Honey Data for {} honey", id);
             throw e;
         }
-        CustomHoneyData customHoneyData = ResourcefulBeesAPI.getHoneyInitalizers().data(id, data);
+        CustomHoneyData customHoneyData = ResourcefulBeesAPI.getHoneyInitializers().data(id, data);
         if (!HoneyRegistry.getRegistry().register(id, customHoneyData)) {
             ModConstants.LOGGER.error("Duplicate honeys with name {}", id);
         } else {

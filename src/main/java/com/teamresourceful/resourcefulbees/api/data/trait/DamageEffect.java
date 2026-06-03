@@ -38,7 +38,7 @@ public record DamageEffect(ResourceKey<DamageType> type, boolean hasEntity, int 
     public Component getDisplayName() {
         return Component.literal(
             String.format("%s %s",
-                WordUtils.capitalizeFully(type.location().getPath().replace("_", " ")),
+                WordUtils.capitalizeFully(type.identifier().getPath().replace("_", " ")),
                 TENS[strength % 100 / 10] + UNITS[strength % 10]
             )
         );

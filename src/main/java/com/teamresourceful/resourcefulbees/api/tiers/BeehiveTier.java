@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.api.tiers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 import java.util.Collection;
@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public record BeehiveTier(ResourceLocation id, int maxBees, int maxCombs, double timeModifier, Supplier<Collection<Item>> displayItems) {
+public record BeehiveTier(Identifier id, int maxBees, int maxCombs, double timeModifier, Supplier<Collection<Item>> displayItems) {
 
-    private static final Map<ResourceLocation, BeehiveTier> TIERS = new HashMap<>();
-    public static final Codec<BeehiveTier> CODEC = ResourceLocation.CODEC.comapFlatMap(BeehiveTier::get, BeehiveTier::id);
+    private static final Map<Identifier, BeehiveTier> TIERS = new HashMap<>();
+    public static final Codec<BeehiveTier> CODEC = Identifier.CODEC.comapFlatMap(BeehiveTier::get, BeehiveTier::id);
 
     public BeehiveTier {
         if (TIERS.containsKey(id)) {
@@ -30,15 +30,15 @@ public record BeehiveTier(ResourceLocation id, int maxBees, int maxCombs, double
         return displayItems.get();
     }
 
-    public static DataResult<BeehiveTier> get(ResourceLocation id) {
+    public static DataResult<BeehiveTier> get(Identifier id) {
         if (TIERS.containsKey(id)) {
             return DataResult.success(TIERS.get(id));
         }
         return DataResult.error(() -> "Unknown Beehive Tier: " + id);
     }
 
-    public static BeehiveTier getOrThrow(ResourceLocation id) {
-        return get(id).getOrThrow(false, s -> {});
+    public static BeehiveTier getOrThrow(Identifier id) {
+        return get(id).getOrThrow();
     }
 
     public static Collection<BeehiveTier> values() {
@@ -71,7 +71,7 @@ public record BeehiveTier(ResourceLocation id, int maxBees, int maxCombs, double
             return this;
         }
 
-        public BeehiveTier build(ResourceLocation id) {
+        public BeehiveTier build(Identifier id) {
             return new BeehiveTier(id, maxBees, maxCombs, timeModifier, displayItems);
         }
     }

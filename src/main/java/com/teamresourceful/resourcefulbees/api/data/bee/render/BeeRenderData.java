@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.api.data.bee.render;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Set;
 
@@ -11,11 +11,11 @@ public interface BeeRenderData extends BeeData<BeeRenderData> {
 
     BeeColorData colorData();
 
-    ResourceLocation model();
+    Identifier model();
 
     BeeLayerTexture texture();
 
-    ResourceLocation animations();
+    Identifier animations();
 
     float sizeModifier();
 }

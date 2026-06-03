@@ -50,9 +50,9 @@ public record Aura(AuraType type, DamageEffect damageEffect, PotionEffect potion
     public static void spawnParticles(LivingEntity entity, SimpleParticleType particle) {
         float power = particle.equals(ParticleTypes.ENCHANT) ? 1f : particle.equals(ParticleTypes.CRIT) ? 0.5f : 0.1f;
         if (entity.level() instanceof ServerLevel level) {
-            double d0 = level.random.nextGaussian() * 0.1D;
-            double d1 = level.random.nextGaussian() * 0.1D;
-            double d2 = level.random.nextGaussian() * 0.1D;
+            double d0 = level.getRandom().nextGaussian() * 0.1D;
+            double d1 = level.getRandom().nextGaussian() * 0.1D;
+            double d2 = level.getRandom().nextGaussian() * 0.1D;
             level.sendParticles(particle,
                     entity.getX(), entity.getY() + entity.getBbHeight() + 0.1D, entity.getZ(),
                     5, d0, d1, d2, power);

@@ -75,7 +75,7 @@ public interface BeeRegistry {
     boolean canParentsBreed(String parent1, String parent2);
 
     /**
-     * Returns the a weighted random bee type based on the supplied parents.
+     * Returns a weighted random bee type based on the supplied parents.
      *
      *  @param parent1 Bee type for Parent 1.
      *  @param parent2 Bee type for parent 2.
