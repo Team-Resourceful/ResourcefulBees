@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component.search;
 
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
@@ -22,3 +23,4 @@ public class SearchBar extends ParentWidget {
         addRenderableWidget(new SearchButton(x + 78, y, screen.getState(), BeepediaState.Sorting.MUTATION, screen::updateSelections));
     }
 }
+*/

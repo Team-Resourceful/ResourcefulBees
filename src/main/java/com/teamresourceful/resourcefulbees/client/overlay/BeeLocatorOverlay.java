@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.overlay;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
@@ -80,3 +81,4 @@ public class BeeLocatorOverlay implements OverlayRenderer {
         return stack.hasTag() && stack.getTag().contains(NBTConstants.BeeLocator.LAST_BIOME, Tag.TAG_COMPOUND) && stack.getTag().contains(NBTConstants.BeeLocator.LAST_BEE, Tag.TAG_STRING);
     }
 }
+*/

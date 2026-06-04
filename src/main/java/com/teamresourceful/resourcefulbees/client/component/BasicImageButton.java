@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component;
 
 import com.teamresourceful.resourcefullib.client.components.ImageButton;
@@ -42,3 +43,4 @@ public class BasicImageButton extends ImageButton {
         setSelected(!this.selected);
     }
 }
+*/

@@ -2,17 +2,13 @@ package com.teamresourceful.resourcefulbees.client.pets;
 
 import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.SimpleTexture;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resources.Identifier;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -37,13 +33,13 @@ public final class PetTexture {
 
     private final String id;
     private final String texture;
-    private final ResourceLocation location;
+    private final Identifier location;
     private SimpleTexture img;
 
     public PetTexture(String id, @Nullable String texture) {
         this.id = getIdHash(id, texture);
         this.texture = texture;
-        this.location = ResourceLocation.fromNamespaceAndPath("resourcefulbees_pet",  "textures/entity/" + this.id);
+        this.location = Identifier.fromNamespaceAndPath("resourcefulbees_pet",  "textures/entity/" + this.id);
     }
 
     @SuppressWarnings({"UnstableApiUsage", "deprecation"})
@@ -52,7 +48,7 @@ public final class PetTexture {
         return Hashing.sha1().hashUnencodedChars(id + (hashedUrl == null ? "" : hashedUrl)).toString();
     }
 
-    public ResourceLocation getResourceLocation() {
+    public Identifier getResourceLocation() {
         checkOrDownload();
         return location;
     }
@@ -77,7 +73,7 @@ public final class PetTexture {
         private CompletableFuture<Void> future;
         private boolean uploaded;
 
-        public DownloadableTexture(@Nullable File file, @Nullable String url, ResourceLocation location) {
+        public DownloadableTexture(@Nullable File file, @Nullable String url, Identifier location) {
             super(location);
             this.file = file;
             this.url = url;
@@ -87,7 +83,7 @@ public final class PetTexture {
             Minecraft.getInstance().execute(() -> {
                 this.uploaded = true;
                 if (!RenderSystem.isOnRenderThread()) {
-                    RenderSystem.recordRenderCall(() -> this.upload(image));
+                    //RenderSystem.recordRenderCall(() -> this.upload(image));
                 } else {
                     this.upload(image);
                 }
@@ -95,18 +91,18 @@ public final class PetTexture {
         }
 
         private void upload(NativeImage image) {
-            TextureUtil.prepareImage(this.getId(), image.getWidth(), image.getHeight());
-            image.upload(0, 0, 0, true);
+            //TextureUtil.prepareImage(this.getId(), image.getWidth(), image.getHeight());
+            //image.upload(0, 0, 0, true);
         }
 
-        @Override
+        /*@Override
         public void load(@NotNull ResourceManager manager) throws IOException {
             Minecraft.getInstance().execute(() -> {
                 if (!this.uploaded) {
                     try {
                         super.load(manager);
                     } catch (Exception ignored) {
-                        /*Do Nothing*/
+                        *//*Do Nothing*//*
                     }
                     this.uploaded = true;
                 }
@@ -120,7 +116,7 @@ public final class PetTexture {
                     this.future = runDownload();
                 }
             }
-        }
+        }*/
 
         private CompletableFuture<Void> runDownload() {
             return CompletableFuture.runAsync(() ->
@@ -144,7 +140,7 @@ public final class PetTexture {
                         } finally {
                             if (httpurlconnection != null) httpurlconnection.disconnect();
                         }
-                    }), Util.backgroundExecutor());
+                    }));//, Util.backgroundExecutor());
         }
 
 

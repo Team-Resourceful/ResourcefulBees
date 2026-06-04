@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component;
 
 import com.mojang.blaze3d.platform.InputConstants;
@@ -35,6 +36,7 @@ public class SelectableFluidWidget extends AbstractWidget {
 
     @Override
     public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+*/
 /*        FluidHolder holder = container.getFluid();
         if (!holder.isEmpty()) {
             int height = Math.round((holder.getFluidAmount() / (float)container.getTankCapacity(0)) * this.height);
@@ -45,14 +47,16 @@ public class SelectableFluidWidget extends AbstractWidget {
         }
         if (!Screen.hasControlDown()) {
             sendToServer();
-        }*/
+        }*//*
+
     }
 
     public void renderToolTip() {
         List<Component> tooltip = new ArrayList<>();
         tooltip.add(this.getMessage());
         tooltip.add(CommonComponents.EMPTY);
-        /*FluidHolder holder = container.getFluid();
+        */
+/*FluidHolder holder = container.getFluid();
         if (holder.isEmpty()) {
             tooltip.add(ModTranslations.TANK_EMPTY);
         } else {
@@ -69,7 +73,8 @@ public class SelectableFluidWidget extends AbstractWidget {
                 line = line.append(Component.literal(" " + FluidHooks.toMillibuckets(tankFluid.getFluidAmount()) + "mb").withStyle(ChatFormatting.RESET));
                 tooltip.add(line);
             }
-        }*/
+        }*//*
+
         ScreenUtils.setTooltip(tooltip);
     }
 
@@ -84,17 +89,20 @@ public class SelectableFluidWidget extends AbstractWidget {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (this.isHoveredOrFocused() && Screen.hasControlDown()) {
-            /*if (keyCode == InputConstants.KEY_UP) {
+            */
+/*if (keyCode == InputConstants.KEY_UP) {
                 this.lastHolder = nextStack(this.lastHolder != null ? this.lastHolder : this.container.getFluid(), -1);
                 return true;
             } else if (keyCode == InputConstants.KEY_DOWN) {
                 this.lastHolder = nextStack(this.lastHolder != null ? this.lastHolder : this.container.getFluid(), 1);
                 return true;
-            }*/
+            }*//*
+
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
+*/
 /*    private FluidHolder nextStack(FluidHolder stack, int direction) {
         SelectableList<FluidHolder> fluids = this.container.getFluids();
         int size = fluids.size();
@@ -107,7 +115,8 @@ public class SelectableFluidWidget extends AbstractWidget {
             }
         }
         return null;
-    }*/
+    }*//*
+
 
     @Override
     public void setFocused(boolean focused) {
@@ -118,12 +127,14 @@ public class SelectableFluidWidget extends AbstractWidget {
     }
 
     private void sendToServer() {
-        /*if (lastHolder != null) {
+        */
+/*if (lastHolder != null) {
             if (!this.container.getFluid().matches(lastHolder)) {
                 NetworkHandler.CHANNEL.sendToServer(new SelectFluidPacket(pos, lastHolder));
             }
             lastHolder = null;
-        }*/
+        }*//*
+
     }
 
     @Override
@@ -131,3 +142,4 @@ public class SelectableFluidWidget extends AbstractWidget {
 
     }
 }
+*/

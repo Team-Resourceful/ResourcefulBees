@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component.selection;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
@@ -57,3 +58,4 @@ public class BeeEntry extends BaseListEntry {
         return this.data;
     }
 }
+*/

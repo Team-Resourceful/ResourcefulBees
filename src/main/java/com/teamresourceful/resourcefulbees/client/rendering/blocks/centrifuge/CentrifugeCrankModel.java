@@ -1,23 +1,25 @@
 package com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge;
 
-import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.model.GeoModel;
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.model.GeoModel;
+import com.geckolib.renderer.base.GeoRenderState;
+import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
 
 public class CentrifugeCrankModel<T extends GeoAnimatable> extends GeoModel<T> {
 
     @Override
-    public ResourceLocation getModelResource(GeoAnimatable object) {
-        return ResourceLocation.fromNamespaceAndPath("resourcefulbees", "geo/blocks/centrifuge_crank.geo.json");
+    public @NonNull Identifier getModelResource(@NonNull GeoRenderState object) {
+        return Identifier.fromNamespaceAndPath("resourcefulbees", "geo/blocks/centrifuge_crank.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureResource(GeoAnimatable object) {
-        return ResourceLocation.fromNamespaceAndPath("resourcefulbees", "textures/block/centrifuge_crank.png");
+    public @NonNull Identifier getTextureResource(@NonNull GeoRenderState object) {
+        return Identifier.fromNamespaceAndPath("resourcefulbees", "textures/block/centrifuge_crank.png");
     }
 
     @Override
-    public ResourceLocation getAnimationResource(GeoAnimatable animatable) {
-        return ResourceLocation.fromNamespaceAndPath("resourcefulbees", "animations/centrifuge_crank.animation.json");
+    public @NonNull Identifier getAnimationResource(@NonNull GeoAnimatable animatable) {
+        return Identifier.fromNamespaceAndPath("resourcefulbees", "animations/centrifuge_crank.animation.json");
     }
 }

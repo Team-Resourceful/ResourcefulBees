@@ -1,28 +1,30 @@
 package com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge;
 
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.model.DefaultedItemGeoModel;
+import com.geckolib.renderer.base.GeoRenderState;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.model.DefaultedItemGeoModel;
+import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
 
 public class CentrifugeModel<T extends GeoAnimatable> extends DefaultedItemGeoModel<T> {
 
     public CentrifugeModel() {
-        super(ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "centrifuge"));
+        super(Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "centrifuge"));
     }
 
     @Override
-    public ResourceLocation getModelResource(GeoAnimatable object) {
-        return ResourceLocation.fromNamespaceAndPath("resourcefulbees", "geo/blocks/centrifuge.geo.json");
+    public @NonNull Identifier getModelResource(@NonNull GeoRenderState object) {
+        return Identifier.fromNamespaceAndPath("resourcefulbees", "geo/blocks/centrifuge.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureResource(T animatable) {
-        return ResourceLocation.fromNamespaceAndPath("resourcefulbees", "textures/block/create_centrifuge.png");
+    public @NonNull Identifier getTextureResource(@NonNull GeoRenderState animatable) {
+        return Identifier.fromNamespaceAndPath("resourcefulbees", "textures/block/create_centrifuge.png");
     }
 
     @Override
-    public ResourceLocation getAnimationResource(GeoAnimatable animatable) {
-        return ResourceLocation.fromNamespaceAndPath("resourcefulbees", "animations/centrifuge.animation.json");
+    public @NonNull Identifier getAnimationResource(@NonNull GeoAnimatable animatable) {
+        return Identifier.fromNamespaceAndPath("resourcefulbees", "animations/centrifuge.animation.json");
     }
 }

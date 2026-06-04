@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component.search;
 
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -90,7 +91,8 @@ public class SearchBox extends AbstractWidget {
         int minPos = Math.min(this.cursorPos, this.highlightPos);
         int maxPos = Math.max(this.cursorPos, this.highlightPos);
         int k = 32 - this.value.length() - (minPos - maxPos);
-        /*String filteredText = SharedConstants.filterText(text);
+        */
+/*String filteredText = SharedConstants.filterText(text);
         int l = filteredText.length();
         if (k < l) {
             filteredText = filteredText.substring(0, k);
@@ -100,7 +102,8 @@ public class SearchBox extends AbstractWidget {
         this.value = new StringBuilder(this.value).replace(minPos, maxPos, filteredText).toString();
         this.setCursorPosition(minPos + l);
         this.setHighlightPos(this.cursorPos);
-        this.onValueChange(this.value);*/
+        this.onValueChange(this.value);*//*
+
     }
 
     private void onValueChange(String text) {
@@ -252,10 +255,12 @@ public class SearchBox extends AbstractWidget {
     public boolean charTyped(char character, int modifiers) {
         if (this.cantConsumeInput()) return false;
 
-        /*if (SharedConstants.isAllowedChatCharacter(character)) {
+        */
+/*if (SharedConstants.isAllowedChatCharacter(character)) {
             this.insertText(Character.toString(character));
             return true;
-        }*/
+        }*//*
+
         return false;
     }
 
@@ -351,7 +356,8 @@ public class SearchBox extends AbstractWidget {
         endX += coords.x();
         endY += coords.y();
 
-        /*Tesselator tesselator = Tesselator.getInstance();
+        */
+/*Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionShader);
         RenderSystem.setShaderColor(0.0F, 0.0F, 1.0F, 1.0F);
@@ -362,7 +368,8 @@ public class SearchBox extends AbstractWidget {
         bufferbuilder.vertex(endX, endY, 0.0D).endVertex();
         bufferbuilder.vertex(endX, startY, 0.0D).endVertex();
         bufferbuilder.vertex(startX, startY, 0.0D).endVertex();
-        tesselator.end();*/
+        tesselator.end();*//*
+
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableColorLogicOp();
     }
@@ -425,3 +432,4 @@ public class SearchBox extends AbstractWidget {
         output.add(NarratedElementType.TITLE, Component.translatable("narration.edit_box", this.getValue()));
     }
 }
+*/

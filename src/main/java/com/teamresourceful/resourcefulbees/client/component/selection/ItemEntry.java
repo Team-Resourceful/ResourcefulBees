@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component.selection;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -47,3 +48,4 @@ public class ItemEntry<T> extends BaseListEntry {
     }
 
 }
+*/

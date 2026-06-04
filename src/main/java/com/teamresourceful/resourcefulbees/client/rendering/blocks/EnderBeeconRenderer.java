@@ -2,30 +2,25 @@ package com.teamresourceful.resourcefulbees.client.rendering.blocks;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.teamresourceful.resourcefulbees.client.util.RenderCuboid;
 import com.teamresourceful.resourcefulbees.common.blockentities.EnderBeeconBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blocks.EnderBeeconBlock;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.blockentity.BeaconRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
 
-public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlockEntity> {
+public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlockEntity, BlockEntityRenderState> {
 
-    public static final ResourceLocation TEXTURE_BEACON_BEAM = ResourceLocation.tryParse("textures/entity/beacon_beam.png");
+    public static final Identifier TEXTURE_BEACON_BEAM = Identifier.tryParse("textures/entity/beacon_beam.png");
 
     public EnderBeeconRenderer(BlockEntityRendererProvider.Context renderer) {}
 
-    @Override
+    /*@Override
     public void render(EnderBeeconBlockEntity tile, float partialTick, @NotNull PoseStack matrix, @NotNull MultiBufferSource renderer, int light, int overlayLight) {
         if (tile.getLevel() == null) return;
-        /*FluidHolder holder = tile.getFluid();
+        *//*FluidHolder holder = tile.getFluid();
         long gameTime = tile.getLevel().getGameTime();
 
         if (!holder.isEmpty()) {
@@ -47,11 +42,21 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
             float alpha = (color >> 24 & 255) / 255f;
             float[] afloats = {red, green, blue, alpha};
             BeaconRenderer.renderBeaconBeam(matrix, renderer, TEXTURE_BEACON_BEAM, partialTick, 1.0F, gameTime, 0, 1024, afloats, 0.2F, 0.25F);
-        }*/
+        }*//*
     }
 
     @Override
     public boolean shouldRenderOffScreen(@NotNull EnderBeeconBlockEntity tile) {
         return true;
+    }*/
+
+    @Override
+    public @NonNull BlockEntityRenderState createRenderState() {
+        return null;
+    }
+
+    @Override
+    public void submit(@NonNull BlockEntityRenderState state, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState camera) {
+
     }
 }

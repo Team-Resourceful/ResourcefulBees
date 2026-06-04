@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Item;
@@ -29,7 +30,7 @@ import java.util.Map;
 
 public final class ModelHandler {
 
-    private static final Multimap<ResourceLocation, ResourceLocation> MODEL_MAP = LinkedHashMultimap.create();
+    private static final Multimap<Identifier, Identifier> MODEL_MAP = LinkedHashMultimap.create();
     private static final String MODEL_INVENTORY_TAG = "inventory";
     private static final String ITEM_MODEL_PATH = "item/models/";
     private static final String JSON_FILE_EXTENSION = ".json";
@@ -38,7 +39,7 @@ public final class ModelHandler {
         throw new UtilityClassException();
     }
 
-    private static void registerGenericBlockState(RegisterAdditionaModelsEvent event, RegistryEntry<Block> block, ResourceLocation parentModel, RenderType renderType, ResourceManager resourceManager) {
+    private static void registerGenericBlockState(RegisterAdditionaModelsEvent event, RegistryEntry<Block> block, Identifier parentModel, RenderType renderType, ResourceManager resourceManager) {
         if (resourceManager.getResource(ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "blockstates/" + block.getId().getPath() + JSON_FILE_EXTENSION)).isEmpty()) {
             block.get().getStateDefinition().getPossibleStates().forEach(state -> {
                 String propertyMapString = BlockModelShaper.statePropertiesToString(state.getValues());

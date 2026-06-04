@@ -9,10 +9,11 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.renderer.GeoRenderer;
-import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
+import com.geckolib.cache.object.BakedGeoModel;
+import com.geckolib.renderer.base.GeoRenderer;
+import com.geckolib.renderer.layer.GeoRenderLayer;
 
 import java.awt.*;
 
@@ -32,7 +33,7 @@ public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoRenderLayer<E>
     @Override
     public void render(PoseStack stack, E bee, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource buffer, VertexConsumer consumer, float partialTicks, int packedLight, int packedOverlay) {
         if (!bee.hasNectar() && layerData.pollenLayer()) return;
-        ResourceLocation texture = layerData.texture().getTexture(bee);
+        Identifier texture = layerData.texture().getTexture(bee);
 
         switch (layerData.effect()) {
             case NONE -> renderNone(stack, buffer, packedLight, bee, partialTicks, texture);
