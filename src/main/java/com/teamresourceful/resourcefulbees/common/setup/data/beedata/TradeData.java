@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.bounds.UniformedNumberCodecs;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
@@ -51,7 +50,7 @@ public record TradeData(
 
     public static final BeekeeperTradeData DEFAULT = new TradeData(UniformInt.of(0,0), ItemStack.EMPTY, UniformInt.of(0,0), 0, 0, 0);
 
-    public static final BeeDataSerializer<BeekeeperTradeData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("trade"), 1, id -> CODEC, DEFAULT);
+    public static final BeeDataSerializer<BeekeeperTradeData> SERIALIZER = BeeDataSerializer.of(new ModIdentifier("trade"), 1, id -> CODEC, DEFAULT);
 
     @Override
     public BeeDataSerializer<BeekeeperTradeData> serializer() {

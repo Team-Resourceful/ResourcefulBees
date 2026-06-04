@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.honeys;
 
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
@@ -83,3 +84,4 @@ public class HoneyPage extends HistoryScreen {
         return super.addRenderableOnly(widget);
     }
 }
+*/

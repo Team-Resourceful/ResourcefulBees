@@ -11,7 +11,6 @@ import com.teamresourceful.resourcefulbees.api.data.conditions.RegisterCondition
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +20,7 @@ import java.util.Map;
 public final class LoadConditionRegistry {
 
     public static final LoadConditionRegistry INSTANCE = new LoadConditionRegistry();
-    private static final LoadConditionSerializer<FakeCondition> DUMMY_SERIALIZER = LoadConditionSerializer.of(new ModResourceLocation("noop"), Codec.unit(FakeCondition::new));
+    private static final LoadConditionSerializer<FakeCondition> DUMMY_SERIALIZER = LoadConditionSerializer.of(new ModIdentifier("noop"), Codec.unit(FakeCondition::new));
 
     private static final Codec<LoadConditionSerializer<?>> SERIALIZER_CODEC = ResourceLocation.CODEC.comapFlatMap(LoadConditionRegistry::decode, LoadConditionSerializer::id);
     public static final Codec<LoadCondition<?>> CODEC = SERIALIZER_CODEC.dispatch(LoadCondition::serializer, LoadConditionSerializer::codec);

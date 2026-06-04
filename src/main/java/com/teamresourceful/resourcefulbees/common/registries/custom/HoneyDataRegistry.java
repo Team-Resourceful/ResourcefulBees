@@ -9,7 +9,6 @@ import com.teamresourceful.resourcefulbees.api.data.honey.base.RegisterHoneyData
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 public final class HoneyDataRegistry {
 
     public static final HoneyDataRegistry INSTANCE = new HoneyDataRegistry();
-    private static final HoneyDataSerializer<DummyHoneyData> DUMMY_SERIALIZER = HoneyDataSerializer.of(new ModResourceLocation("noop"), 0, id -> Codec.unit(DummyHoneyData::new), new DummyHoneyData());
+    private static final HoneyDataSerializer<DummyHoneyData> DUMMY_SERIALIZER = HoneyDataSerializer.of(new ModIdentifier("noop"), 0, id -> Codec.unit(DummyHoneyData::new), new DummyHoneyData());
 
     private final Map<ResourceLocation, HoneyDataSerializer<?>> serializers = new HashMap<>();
     private final Set<ResourceLocation> required = new HashSet<>();

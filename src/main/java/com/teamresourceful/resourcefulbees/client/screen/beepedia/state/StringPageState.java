@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.state;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
@@ -48,3 +49,4 @@ public class StringPageState<T, P> implements PageState<P> {
         return t == null ? null : creator.apply(t);
     }
 }
+*/

@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefulbees.platform.client.events.ModelBakingCompletedEvent;
 import com.teamresourceful.resourcefulbees.platform.client.events.ModelModifyResultEvent;
 import com.teamresourceful.resourcefulbees.platform.client.events.RegisterAdditionaModelsEvent;
@@ -61,18 +60,18 @@ public final class ModelHandler {
     public static void onAddAdditional(RegisterAdditionaModelsEvent event) {
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
-        ModItems.HONEYCOMB_ITEMS.getEntries().forEach(comb -> registerGenericItem(event, comb, new ModResourceLocation("honeycomb"), resourceManager));
-        ModItems.HONEYCOMB_BLOCK_ITEMS.getEntries().forEach(combBlock -> registerGenericItem(event, combBlock, new ModResourceLocation("honeycomb_block"), resourceManager));
+        ModItems.HONEYCOMB_ITEMS.getEntries().forEach(comb -> registerGenericItem(event, comb, new ModIdentifier("honeycomb"), resourceManager));
+        ModItems.HONEYCOMB_BLOCK_ITEMS.getEntries().forEach(combBlock -> registerGenericItem(event, combBlock, new ModIdentifier("honeycomb_block"), resourceManager));
 
-        ModItems.HONEY_BLOCK_ITEMS.getEntries().forEach(honeyBlock -> registerGenericItem(event, honeyBlock, new ModResourceLocation("honey_block"), resourceManager));
-        ModItems.HONEY_BUCKET_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, new ModResourceLocation("custom_honey_fluid_bucket"), resourceManager));
-        ModItems.HONEY_BOTTLE_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, new ModResourceLocation("honey_bottle"), resourceManager));
+        ModItems.HONEY_BLOCK_ITEMS.getEntries().forEach(honeyBlock -> registerGenericItem(event, honeyBlock, new ModIdentifier("honey_block"), resourceManager));
+        ModItems.HONEY_BUCKET_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, new ModIdentifier("custom_honey_fluid_bucket"), resourceManager));
+        ModItems.HONEY_BOTTLE_ITEMS.getEntries().forEach(bucket -> registerGenericItem(event, bucket, new ModIdentifier("honey_bottle"), resourceManager));
 
         ModItems.SPAWN_EGG_ITEMS.getEntries().forEach(egg -> registerGenericItem(event, egg,  ResourceLocation.tryParse("minecraft:template_spawn_egg"), resourceManager));
 
-        ModBlocks.HONEYCOMB_BLOCKS.getEntries().forEach(combBlock -> registerGenericBlockState(event, combBlock, new ModResourceLocation("honeycomb_block"), null, resourceManager));
+        ModBlocks.HONEYCOMB_BLOCKS.getEntries().forEach(combBlock -> registerGenericBlockState(event, combBlock, new ModIdentifier("honeycomb_block"), null, resourceManager));
 
-        ModBlocks.HONEY_BLOCKS.getEntries().forEach(honeyBlock -> registerGenericBlockState(event, honeyBlock, new ModResourceLocation("honey_block"), RenderType.translucent(), resourceManager));
+        ModBlocks.HONEY_BLOCKS.getEntries().forEach(honeyBlock -> registerGenericBlockState(event, honeyBlock, new ModIdentifier("honey_block"), RenderType.translucent(), resourceManager));
     }
 
     public static void onModifyModel(ModelModifyResultEvent event) {

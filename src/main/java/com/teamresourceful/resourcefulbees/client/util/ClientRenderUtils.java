@@ -1,19 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.util;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.math.Axis;
-import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
-import com.teamresourceful.resourcefullib.common.caches.CacheableBiFunction;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.inventory.InventoryMenu;
 
 public final class ClientRenderUtils {
 
@@ -21,7 +8,7 @@ public final class ClientRenderUtils {
         throw new UtilityClassException();
     }
 
-    public static final CacheableBiFunction<ResourceLocation, ResourceLocation, ResourceLocation> DEFAULT_TEXTURER = new CacheableBiFunction<>((texture, other) -> texture == other ? texture : Minecraft.getInstance().getResourceManager().getResource(texture).isPresent() ? texture : other);
+/*    public static final CacheableBiFunction<ResourceLocation, ResourceLocation, ResourceLocation> DEFAULT_TEXTURER = new CacheableBiFunction<>((texture, other) -> texture == other ? texture : Minecraft.getInstance().getResourceManager().getResource(texture).isPresent() ? texture : other);
 
     public static void renderEntity(GuiGraphics graphics, Entity entity, float x, float y, float rotation, float renderScale) {
         Minecraft mc = Minecraft.getInstance();
@@ -43,10 +30,10 @@ public final class ClientRenderUtils {
         }
     }
 
-    /*todo public static void drawFluid(GuiGraphics graphics, int height, int width, FluidHolder holder, int x, int y) {
+    *//*todo public static void drawFluid(GuiGraphics graphics, int height, int width, FluidHolder holder, int x, int y) {
         if (holder.isEmpty()) return;
         drawFluid(graphics, height, width, ClientFluidHooks.getFluidSprite(holder), ClientFluidHooks.getFluidColor(holder), x, y);
-    }*/
+    }*//*
 
     public static void drawFluid(GuiGraphics graphics, int height, int width, TextureAtlasSprite sprite, int color, int x, int y) {
         int remainder = height % 16;
@@ -62,6 +49,6 @@ public final class ClientRenderUtils {
         }
 
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-    }
+    }*/
 
 }

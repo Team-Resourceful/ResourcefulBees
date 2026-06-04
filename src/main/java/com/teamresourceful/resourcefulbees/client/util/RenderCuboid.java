@@ -1,22 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.util;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
-import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
-
-import java.util.Arrays;
 
 public final class RenderCuboid {
 
@@ -36,7 +22,7 @@ public final class RenderCuboid {
         };
     }
 
-    public static void renderCube(AABB box, ResourceLocation texture, PoseStack matrix, VertexConsumer buffer, int argb, int light, int overlay) {
+   /* public static void renderCube(AABB box, ResourceLocation texture, PoseStack matrix, VertexConsumer buffer, int argb, int light, int overlay) {
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(texture);
         renderCube(box, sprite, matrix, buffer, argb, light, overlay);
     }
@@ -109,6 +95,6 @@ public final class RenderCuboid {
 
     private RenderCuboid() throws UtilityClassException {
         throw new UtilityClassException();
-    }
+    }*/
 }
 

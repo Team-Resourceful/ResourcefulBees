@@ -1,15 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.util;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.mixin.client.FontResourceManagerAccessor;
-import com.teamresourceful.resourcefulbees.mixin.client.MinecraftAccessor;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 
 import java.text.NumberFormat;
 
@@ -19,10 +12,10 @@ public final class TextUtils {
     public static final int FONT_COLOR_2 = 0xff2cafc7;
     public static final int FONT_COLOR_3 = 0xffc7bf2c;
     public static final int FONT_COLOR_4 = 0xff3b3b3b;
-    private static final FontSet FONT_8 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "jetbrains_mono_8"));
+/*    private static final FontSet FONT_8 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "jetbrains_mono_8"));
     public static final Font TERMINAL_FONT_8 = new Font(resourceLocation -> FONT_8, false); //IDK if this should be true or false tbh
     private static final FontSet FONT_12 =  ((FontResourceManagerAccessor) ((MinecraftAccessor) Minecraft.getInstance()).getFontManager()).getFontSets().get(ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "jetbrains_mono_12"));
-    public static final Font TERMINAL_FONT_12 = new Font(resourceLocation -> FONT_12, false); //IDK if this should be true or false tbh
+    public static final Font TERMINAL_FONT_12 = new Font(resourceLocation -> FONT_12, false); //IDK if this should be true or false tbh*/
 
     /**
      * A custom number format instance that forces the number of fraction digits to always be 1
@@ -40,7 +33,7 @@ public final class TextUtils {
         return formatter;
     }
 
-    public static void drawCenteredStringNoShadow(Font font, GuiGraphics graphics, Component component, int x, int y, int color) {
+/*    public static void drawCenteredStringNoShadow(Font font, GuiGraphics graphics, Component component, int x, int y, int color) {
         graphics.drawString(font, component, x - halfWidthOfText(font, component), y, color, false);
     }
 
@@ -50,7 +43,7 @@ public final class TextUtils {
 
     public static void tf12DrawCenteredStringNoShadow(GuiGraphics graphics, Component component, int x, int y, int color) {
         drawCenteredStringNoShadow(TERMINAL_FONT_12, graphics, component, x, y, color);
-    }
+    }*/
 
     public static int halfWidthOfText(Font font, Component component) {
         return font.width(component)/2;

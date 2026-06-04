@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.bees;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
@@ -38,3 +39,4 @@ public class TraitsPage extends RenderingScreen {
     }
 }
 
+*/

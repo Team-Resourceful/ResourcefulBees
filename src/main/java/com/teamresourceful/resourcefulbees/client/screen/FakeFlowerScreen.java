@@ -2,24 +2,22 @@ package com.teamresourceful.resourcefulbees.client.screen;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.menus.FakeFlowerMenu;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import org.jetbrains.annotations.NotNull;
 
 public class FakeFlowerScreen extends AbstractContainerScreen<FakeFlowerMenu> {
 
-    public static final ResourceLocation FAKE_FLOWER_BACKGROUND = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/fake_flower/fake_flower.png");
+    public static final Identifier FAKE_FLOWER_BACKGROUND = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/fake_flower/fake_flower.png");
     public FakeFlowerScreen(FakeFlowerMenu container, Inventory inventory, Component displayName) {
         super(container, inventory, displayName);
-        this.imageHeight = 133;
-        this.imageWidth = 176;
+        //this.imageHeight = 133;
+        //this.imageWidth = 176;
         this.inventoryLabelY = this.imageHeight - 94;
     }
 
-    @Override
+/*    @Override
     protected void renderBg(@NotNull GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(FAKE_FLOWER_BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
     }
@@ -29,5 +27,5 @@ public class FakeFlowerScreen extends AbstractContainerScreen<FakeFlowerMenu> {
         this.renderBackground(graphics,mouseX, mouseY, partialTicks);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(graphics, mouseX, mouseY);
-    }
+    }*/
 }

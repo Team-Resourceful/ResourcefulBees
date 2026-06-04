@@ -1,18 +1,15 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import org.jetbrains.annotations.NotNull;
 
 public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
 
-    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/apiary/apiary_breeder_gui.png");
+    private static final Identifier BACKGROUND = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/apiary/apiary_breeder_gui.png");
 
     public BreederScreen(BreederMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
@@ -20,14 +17,14 @@ public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
     }
 
     protected void preInit(){
-        this.imageWidth = 198;
-        this.imageHeight = 148 + BreederConstants.NUM_OF_BREEDERS * 20;
+        //this.imageWidth = 198;
+        //this.imageHeight = 148 + BreederConstants.NUM_OF_BREEDERS * 20;
         this.inventoryLabelX = 30;
         this.inventoryLabelY = 95;
         this.titleLabelX = 30;
     }
 
-    @Override
+ /*   @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(graphics, mouseX, mouseY, partialTicks);
         super.render(graphics, mouseX, mouseY, partialTicks);
@@ -43,5 +40,5 @@ public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
             graphics.blit(BACKGROUND, this.leftPos+51, y, 0, 246, width, 10);
             y+= 20;
         }
-    }
+    }*/
 }

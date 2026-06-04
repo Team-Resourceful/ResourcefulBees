@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.bees;
 
 import net.minecraft.client.Minecraft;
@@ -21,3 +22,4 @@ public class InfoPage extends Screen {
         graphics.drawString(font, "go here!", 10, 30, 0xffffff);
     }
 }
+*/

@@ -1,29 +1,19 @@
 package com.teamresourceful.resourcefulbees.client.screen.locator;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.resources.Identifier;
 
 import java.util.Comparator;
 import java.util.function.Consumer;
 
 public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
 
-    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/advancements/backgrounds/resourcefulbees.png");
+    public static final Identifier BACKGROUND = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/advancements/backgrounds/resourcefulbees.png");
 
     private final Consumer<BeeLocatorEntry> selector;
 
@@ -34,9 +24,9 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
         this.setRenderTopAndBottom(false);*/
     }
 
-    @Override
+/*    @Override
     protected void renderListBackground(GuiGraphics guiGraphics) { //TODO right override?
-/*        Tesselator tesselator = Tesselator.getInstance();
+*//*        Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
         RenderSystem.setShaderTexture(0, BACKGROUND);
@@ -46,12 +36,12 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
         bufferbuilder.vertex(this.x1, this.y1, 0.0D).uv(this.x1 / 32.0f, (this.y1 + (int)this.getScrollAmount()) / 32.0f).color(32, 32, 32, 255).endVertex();
         bufferbuilder.vertex(this.x1, this.y0, 0.0D).uv(this.x1 / 32.0f, (this.y0 + (int)this.getScrollAmount()) / 32.0f).color(32, 32, 32, 255).endVertex();
         bufferbuilder.vertex(this.x0, this.y0, 0.0D).uv(this.x0 / 32.0f, (this.y0 + (int)this.getScrollAmount()) / 32.0f).color(32, 32, 32, 255).endVertex();
-        tesselator.end();*/
+        tesselator.end();*//*
     }
 
     @Override
     protected void renderDecorations(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
-/*        Tesselator tesselator = Tesselator.getInstance();
+*//*        Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
         RenderSystem.setShaderTexture(0, BACKGROUND);
@@ -81,8 +71,8 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
         bufferbuilder.vertex(this.x1, this.y1, 0.0D).color(0, 0, 0, 255).endVertex();
         bufferbuilder.vertex(this.x1, (this.y1 - 4), 0.0D).color(0, 0, 0, 0).endVertex();
         bufferbuilder.vertex(this.x0, (this.y1 - 4), 0.0D).color(0, 0, 0, 0).endVertex();
-        tesselator.end();*/
-    }
+        tesselator.end();*//*
+    }*/
 
     public void updateEntries(BeeRegistry registry) {
         var level = this.minecraft.level;
@@ -94,8 +84,8 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
             .filter(bee -> DimensionalBeeHolder.getBees(level.dimension()).contains(bee.name()))
             .sorted(Comparator.comparing(CustomBeeData::name))
             .forEach(bee -> {
-                Entity entity = bee.entityType().create(level);
-                if (entity != null) this.addEntry(new BeeLocatorEntry(this.selector, entity, bee.displayName().copy()));
+                //Entity entity = bee.entityType().create(level);
+                //if (entity != null) this.addEntry(new BeeLocatorEntry(this.selector, entity, bee.displayName().copy()));
             });
     }
 }

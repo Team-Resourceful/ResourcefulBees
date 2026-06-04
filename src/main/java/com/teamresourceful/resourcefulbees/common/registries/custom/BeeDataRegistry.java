@@ -9,7 +9,6 @@ import com.teamresourceful.resourcefulbees.api.data.bee.base.RegisterBeeDataEven
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +21,7 @@ import java.util.function.Function;
 public final class BeeDataRegistry {
 
     public static final BeeDataRegistry INSTANCE = new BeeDataRegistry();
-    private static final BeeDataSerializer<DummyBeeData> DUMMY_SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("noop"), 0, id -> Codec.unit(DummyBeeData::new), new DummyBeeData());
+    private static final BeeDataSerializer<DummyBeeData> DUMMY_SERIALIZER = BeeDataSerializer.of(new ModIdentifier("noop"), 0, id -> Codec.unit(DummyBeeData::new), new DummyBeeData());
 
     private final Map<ResourceLocation, BeeDataSerializer<?>> serializers = new HashMap<>();
     private final Object2IntMap<ResourceLocation> types = new Object2IntArrayMap<>();

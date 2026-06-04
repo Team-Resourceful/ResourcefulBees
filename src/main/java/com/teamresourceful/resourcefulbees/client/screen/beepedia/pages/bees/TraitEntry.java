@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.bees;
 
 import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
@@ -50,3 +51,4 @@ public class TraitEntry extends BaseListEntry {
         return this.trait;
     }
 }
+*/

@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
@@ -30,7 +29,7 @@ public record BreedData(
 
     private static final HolderSet<Item> DEFAULT_FEED_ITEM = HolderSet.direct(Item::builtInRegistryHolder, Items.POPPY);
     private static final BeeBreedData DEFAULT = new BreedData(Collections.emptySet(), DEFAULT_FEED_ITEM, Optional.empty(), 0, 0, 0);
-    public static final BeeDataSerializer<BeeBreedData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("breeding"), 1, BreedData::codec, DEFAULT);
+    public static final BeeDataSerializer<BeeBreedData> SERIALIZER = BeeDataSerializer.of(new ModIdentifier("breeding"), 1, BreedData::codec, DEFAULT);
 
     private static Codec<BeeBreedData> codec(String name) {
         return RecordCodecBuilder.create(instance -> instance.group(

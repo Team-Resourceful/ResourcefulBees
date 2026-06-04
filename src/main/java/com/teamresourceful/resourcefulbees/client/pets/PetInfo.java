@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.pets;
 
 import com.mojang.util.UndashedUuid;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +16,7 @@ public final class PetInfo {
 
     private static final int VERSION = 1;
 
-    private static final PetModelData FALLBACK_MODEL = new PetModelData(-1, "fallback", Identifier.tryParse("resourcefulbees:geo/base-nocloak.geo.json"), Identifier.tryParse("textures/entity/bee/bee.png"), Optional.empty(), new HashSet<>());
+    private static final PetModelData FALLBACK_MODEL = new PetModelData(-1, "fallback", ModConstants.modIdentifier("geo/base-nocloak.geo.json"), Identifier.tryParse("textures/entity/bee/bee.png"), Optional.empty(), new HashSet<>());
 
     static PetModelData defaultModel = null;
 

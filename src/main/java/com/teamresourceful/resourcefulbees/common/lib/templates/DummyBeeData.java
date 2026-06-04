@@ -13,7 +13,6 @@ import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
@@ -68,9 +67,9 @@ public final class DummyBeeData {
                 API.layer(ConstantColors.cyan, MISSING_LAYER, LayerEffect.GLOW, false, 5)
             ),
             API.color(ConstantColors.antiquewhite, ConstantColors.chocolate, ConstantColors.cadetblue),
-            new ModResourceLocation("geo/base.geo.json"),
+            new ModIdentifier("geo/base.geo.json"),
             MISSING_LAYER,
-            new ModResourceLocation("animations/bee.animation.json"),
+            new ModIdentifier("animations/bee.animation.json"),
             1.0f
     );
 

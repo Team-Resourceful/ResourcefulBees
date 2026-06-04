@@ -1,44 +1,32 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
-import com.teamresourceful.resourcefulbees.client.component.BasicImageButton;
-import com.teamresourceful.resourcefulbees.client.component.BeeconEffectWidget;
 import com.teamresourceful.resourcefulbees.common.blockentities.EnderBeeconBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blocks.EnderBeeconBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeconTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.EnderBeeconMenu;
-import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
-import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconChangePacket;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffect;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> {
 
-    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
+    private static final Identifier BACKGROUND = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/ender_beecon/ender_beecon.png");
 
     private final EnderBeeconBlockEntity tileEntity;
 
     public EnderBeeconScreen(EnderBeeconMenu screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);
         this.tileEntity = screenContainer.getEntity();
-        this.imageWidth = 230;
-        this.imageHeight = 200;
+        //this.imageWidth = 230;
+        //this.imageHeight = 200;
         this.inventoryLabelX = 36;
         this.inventoryLabelY = 107;
         this.titleLabelX = 110;
     }
 
-    private final List<BeeconEffectWidget> powerButtons = new LinkedList<>();
+/*    private final List<BeeconEffectWidget> powerButtons = new LinkedList<>();
 
     @Override
     protected void init() {
@@ -97,12 +85,12 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
         graphics.drawString(font, BeeconTranslations.RANGE_LABEL, 110, 44, 14737632);
         graphics.drawString(font, tileEntity.getRange() + " blocks", 145, 44, 34815);
         //TODO FLUID SHIT
-        /*FluidHolder holder = menu.getEntity().getFluid();
+        *//*FluidHolder holder = menu.getEntity().getFluid();
 
         graphics.drawString(font, BeeconTranslations.FLUID_LABEL, 110, 56, 14737632);
         graphics.drawString(font, holder.isEmpty() ? BeeconTranslations.NO_FLUID_LABEL : ClientFluidHooks.getDisplayName(holder), 137, 56, 16751628);
         graphics.drawString(font, BeeconTranslations.FLUID_AMOUNT_LABEL, 110, 68, 14737632);
-        graphics.drawString(font, FluidHooks.toMillibuckets(holder.getFluidAmount()) +"mB", 148, 68, 47104);*/
+        graphics.drawString(font, FluidHooks.toMillibuckets(holder.getFluidAmount()) +"mB", 148, 68, 47104);*//*
     }
 
     @Override
@@ -124,7 +112,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (BeeconEffectWidget powerButton : this.powerButtons) powerButton.onClick(mouseX, mouseY);
         return super.mouseClicked(mouseX, mouseY, button);
-    }
+    }*/
 
     public class RangeSlider extends AbstractSliderButton {
 

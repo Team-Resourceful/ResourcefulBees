@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCombatData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -38,7 +37,7 @@ public record CombatData(
             Codec.BOOL.optionalFieldOf("isInvulnerable", false).forGetter(BeeCombatData::isInvulnerable),
             Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("attributes", DEFAULT_ATTRIBUTES).forGetter(BeeCombatData::attributes)
     ).apply(instance, CombatData::new));
-    public static final BeeDataSerializer<BeeCombatData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("combat"), 1, id -> CODEC, DEFAULT);
+    public static final BeeDataSerializer<BeeCombatData> SERIALIZER = BeeDataSerializer.of(new ModIdentifier("combat"), 1, id -> CODEC, DEFAULT);
 
     @Override
     public AttributeSupplier.Builder buildAttributes(AttributeSupplier.Builder builder) {

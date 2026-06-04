@@ -4,13 +4,13 @@ import com.geckolib.animatable.GeoAnimatable;
 import com.geckolib.cache.model.BakedGeoModel;
 import com.geckolib.model.GeoModel;
 import com.geckolib.renderer.base.GeoRenderState;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 
 public class PetBeeModel<T extends PetModelData & GeoAnimatable> extends GeoModel<@NonNull T> {
 
-    private static final Identifier ANIMATION = new ModResourceLocation( "animations/bee.animation.json");
+    private static final Identifier ANIMATION = ModConstants.modIdentifier("animations/bee.animation.json");
 
     public BakedGeoModel getModel(PetModelData object){
         return this.getBakedModel(getModelResource(object));

@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulbees.platform.common.item.ItemAction;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.MobCategory;
 import org.slf4j.Logger;
 
@@ -23,5 +24,9 @@ public final class ModConstants {
 
     public static void forceInit() {
         // This is to force the class to load.
+    }
+
+    public static Identifier modIdentifier(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 }
