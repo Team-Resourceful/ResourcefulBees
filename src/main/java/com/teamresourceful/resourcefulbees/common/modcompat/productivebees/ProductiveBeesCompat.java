@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.modcompat.productivebees;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompat;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -42,7 +42,7 @@ public class ProductiveBeesCompat implements ModCompat {
                 List<ItemStack> newStacks = new ArrayList<>();
                 for (ItemStack stack : (List<ItemStack>) BEE_PRODUCE_METHOD.invoke(null, level, bee, hasCombBlockUpgrade)) {
                     for (ItemStack newStack : newStacks) {
-                        if (ItemStack.isSameItemSameTags(newStack, stack)) {
+                        if (ItemStack.isSameItemSameComponents(newStack, stack)) {
                             newStack.grow(stack.getCount());
                             break;
                         }

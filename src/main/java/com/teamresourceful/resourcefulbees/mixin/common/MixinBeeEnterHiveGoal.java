@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.mixin.common;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,7 +20,7 @@ public abstract class MixinBeeEnterHiveGoal {
     @Shadow(aliases = {"field_20367", "f_27970_"})
     private Bee this$0;
 
-    @Inject(method = "<init>(Lnet/minecraft/world/entity/animal/Bee;)V", at = @At(value = "RETURN"))
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/animal/bee/Bee;)V", at = @At(value = "RETURN"))
     private void init(Bee beeEntity, CallbackInfo ci) {
         this.this$0 = beeEntity;
     }

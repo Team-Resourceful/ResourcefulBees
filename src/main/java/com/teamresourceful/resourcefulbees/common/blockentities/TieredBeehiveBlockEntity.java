@@ -117,7 +117,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
                         if (entity instanceof Mob mob) {
                             mob.setTarget(player);
                         } else if (entity instanceof BeeCompat compat) {
-                            compat.setOutOfHiveCooldown(400);
+                            compat.resourcefulBees$setOutOfHiveCooldown(400);
                         }
                     }
                 });
@@ -148,7 +148,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             if (entity != null) {
                 EntityUtils.setEntityLocationAndAngle(hive.worldPosition, direction, entity);
                 if (beehiveState == BeeReleaseStatus.HONEY_DELIVERED) {
-                    if (entity instanceof BeeCompat compat) compat.nectarDroppedOff();
+                    if (entity instanceof BeeCompat compat) compat.resourcefulBees$nectarDroppedOff();
                     if (getHoneyLevel(state) < 5) {
                         HiveRecipe.getHiveOutput(hive.getBlock().getTier(), entity)
                             .filter(Predicate.not(ItemStack::isEmpty))
@@ -177,7 +177,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             bee.save(nbt);
 
             if (this.level != null) {
-                int maxTimeInHive = (int) (compat.getMaxTimeInHive() * getBlock().getTier().timeModifier());
+                int maxTimeInHive = (int) (compat.resourcefulBees$getMaxTimeInHive() * getBlock().getTier().timeModifier());
                 getBees().add(new BeeData(nbt, ticksInHive, hasNectar ? maxTimeInHive : MIN_HIVE_TIME));
                 BlockPos pos = this.getBlockPos();
                 this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);

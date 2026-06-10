@@ -8,14 +8,15 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Supplier;
 
-public class TickingBlock<E extends BlockEntity & InstanceBlockEntityTicker> extends RenderingBaseEntityBlock {
+public abstract class TickingBlock<E extends BlockEntity & InstanceBlockEntityTicker> extends RenderingBaseEntityBlock {
 
-    private final Supplier<BlockEntityType<E>> blockEntity;
+    private final Supplier<BlockEntityType<@NonNull E>> blockEntity;
 
-    public TickingBlock(Supplier<BlockEntityType<E>> blockEntity, Properties properties) {
+    public TickingBlock(Supplier<BlockEntityType<@NonNull E>> blockEntity, Properties properties) {
         super(properties);
         this.blockEntity = blockEntity;
     }

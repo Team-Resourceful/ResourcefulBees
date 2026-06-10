@@ -58,12 +58,12 @@ public record CentrifugeRecipe(
     @Override
     public boolean matches(RecipeInput inventory) {
         ItemStack stack = inventory.getItem(0);
-        return !stack.isEmpty() && ItemStack.isSameItemSameComponents(ingredient.getItems()[0], stack);
+        return !stack.isEmpty() && ItemStack.isSameItemSameComponents(ingredient.test(stack), stack);
     }
 
     public static Optional<RecipeHolder<CentrifugeRecipe>> getRecipe(Level level, ItemStack recipeStack) {
         return level != null
-                ? level.getRecipeManager().getRecipeFor(ModRecipes.CENTRIFUGE_RECIPE_TYPE.get(), CraftingInput.of(1,1,List.of(recipeStack)), level)
+                ? level.getServer().getRecipeManager().getRecipeFor(ModRecipes.CENTRIFUGE_RECIPE_TYPE.get(), CraftingInput.of(1,1,List.of(recipeStack)), level)
                 : Optional.empty();
     }
 

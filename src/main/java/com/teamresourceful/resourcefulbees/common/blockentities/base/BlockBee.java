@@ -6,7 +6,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
 public class BlockBee {
-    //TODO streamline bee storage and bee jar tags even further to eliminate redundancies
     public final Component displayName;
     public final int minOccupationTicks;
     public final CompoundTag entityData;

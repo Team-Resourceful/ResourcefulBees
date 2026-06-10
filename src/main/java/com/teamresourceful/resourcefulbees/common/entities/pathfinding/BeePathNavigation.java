@@ -17,7 +17,6 @@ public class BeePathNavigation extends FlyingPathNavigation {
         super(mob, level);
         setCanOpenDoors(false);
         setCanFloat(false);
-        setCanPassDoors(true);
         this.canTick = canTick;
     }
 

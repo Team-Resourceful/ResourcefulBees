@@ -6,13 +6,13 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.CollisionGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.level.pathfinder.FlyNodeEvaluator;
-import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.pathfinder.*;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class BeeNodeEvaluator extends FlyNodeEvaluator {
 
@@ -22,89 +22,89 @@ public class BeeNodeEvaluator extends FlyNodeEvaluator {
     }
 
     @Override
-    public @NotNull BlockPathTypes getBlockPathType(@NotNull BlockGetter level, int x, int y, int z) {
+    public @NotNull PathType getPathType(@NonNull PathfindingContext context, int x, int y, int z) {
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-        BlockPathTypes pathTypes = getRawPathType(level, mutableBlockPos.set(x, y, z), this.mob);
-        if (pathTypes == BlockPathTypes.OPEN && y >= level.getMinBuildHeight() + 1) {
-            BlockPathTypes pathTypes1 = getRawPathType(level, mutableBlockPos.set(x, y - 1, z), this.mob);
-            if (pathTypes1 != BlockPathTypes.DAMAGE_FIRE && pathTypes1 != BlockPathTypes.LAVA) {
-                if (pathTypes1 == BlockPathTypes.DAMAGE_OTHER) {
-                    pathTypes = BlockPathTypes.DAMAGE_OTHER;
-                } else if (pathTypes1 == BlockPathTypes.COCOA) {
-                    pathTypes = BlockPathTypes.COCOA;
-                } else if (pathTypes1 == BlockPathTypes.FENCE) {
+        PathType pathTypes = getRawPathType(context.level(), mutableBlockPos.set(x, y, z), this.mob);
+        if (pathTypes == PathType.OPEN && y >= context.level().getMinBuildHeight() + 1) {
+            PathType pathTypes1 = getRawPathType(context.level(), mutableBlockPos.set(x, y - 1, z), this.mob);
+            if (pathTypes1 != PathType.FIRE && pathTypes1 != PathType.LAVA) {
+                if (pathTypes1 == PathType.DAMAGE_CAUTIOUS) {
+                    pathTypes = PathType.DAMAGE_CAUTIOUS;
+                } else if (pathTypes1 == PathType.COCOA) {
+                    pathTypes = PathType.COCOA;
+                } else if (pathTypes1 == PathType.FENCE) {
                     if (!mutableBlockPos.equals(this.mob.blockPosition())) {
-                        pathTypes = BlockPathTypes.FENCE;
+                        pathTypes = PathType.FENCE;
                     }
                 } else {
-                    pathTypes = pathTypes1 != BlockPathTypes.WALKABLE && pathTypes1 != BlockPathTypes.OPEN && pathTypes1 != BlockPathTypes.WATER ? BlockPathTypes.WALKABLE : BlockPathTypes.OPEN;
+                    pathTypes = pathTypes1 != PathType.WALKABLE && pathTypes1 != PathType.OPEN && pathTypes1 != PathType.WATER ? PathType.WALKABLE : PathType.OPEN;
                 }
             } else {
-                pathTypes = BlockPathTypes.DAMAGE_FIRE;
+                pathTypes = PathType.FIRE;
             }
         }
 
-        if (pathTypes == BlockPathTypes.WALKABLE || pathTypes == BlockPathTypes.OPEN) {
-            pathTypes = checkNeighbourBlocks(level, mutableBlockPos.set(x, y, z), pathTypes);
+        if (pathTypes == PathType.WALKABLE || pathTypes == PathType.OPEN) {
+            pathTypes = checkNeighbourBlocks(context, x, y, z, pathTypes);
         }
 
         return pathTypes;
     }
 
-    private static BlockPathTypes getRawPathType(BlockGetter level, BlockPos pos, Mob mob) {
-        BlockState blockstate = level.getBlockState(pos);
-        BlockPathTypes type = LevelUtils.getType(blockstate, level, pos, mob);
+    private static PathType getRawPathType(PathfindingContext context, BlockPos pos, Mob mob) {
+        BlockState blockstate = context.level().getBlockState(pos);
+        PathType type = context.getPathTypeFromState(pos.getX(), pos.getY(), pos.getZ());
         if (type != null) {
             return type;
         } else {
             Block block = blockstate.getBlock();
             if (blockstate.isAir()) {
-                return BlockPathTypes.OPEN;
+                return PathType.OPEN;
             } else if (!blockstate.is(BlockTags.TRAPDOORS) && !blockstate.is(Blocks.LILY_PAD) && !blockstate.is(Blocks.BIG_DRIPLEAF)) {
                 if (blockstate.is(Blocks.POWDER_SNOW)) {
-                    return BlockPathTypes.POWDER_SNOW;
+                    return PathType.POWDER_SNOW;
                 } else if (blockstate.is(Blocks.SWEET_BERRY_BUSH)) {
-                    return BlockPathTypes.DAMAGE_OTHER;
+                    return PathType.DAMAGE_CAUTIOUS;
                 } else if (blockstate.is(Blocks.HONEY_BLOCK)) {
-                    return BlockPathTypes.STICKY_HONEY;
+                    return PathType.STICKY_HONEY;
                 } else if (blockstate.is(Blocks.COCOA)) {
-                    return BlockPathTypes.COCOA;
+                    return PathType.COCOA;
                 } else {
                     FluidState fluidstate = level.getFluidState(pos);
-                    BlockPathTypes nonLoggableFluidPathType = LevelUtils.getType(fluidstate, level, pos, mob, false);
+                    PathType nonLoggableFluidPathType = LevelUtils.getType(fluidstate, level, pos, mob, false);
                     if (nonLoggableFluidPathType != null) {
                         return nonLoggableFluidPathType;
                     } else if (fluidstate.is(FluidTags.LAVA)) {
-                        return BlockPathTypes.LAVA;
+                        return PathType.LAVA;
                     } else if (isBurningBlock(blockstate)) {
-                        return BlockPathTypes.DAMAGE_FIRE;
+                        return PathType.FIRE;
                     } else if (DoorBlock.isWoodenDoor(blockstate) && !blockstate.getValue(DoorBlock.OPEN)) {
-                        return BlockPathTypes.DOOR_WOOD_CLOSED;
+                        return PathType.DOOR_WOOD_CLOSED;
                     } else if (block instanceof DoorBlock door && !door.type().canOpenByHand() && blockstate.getValue(DoorBlock.OPEN)) {
-                        return BlockPathTypes.DOOR_IRON_CLOSED;
+                        return PathType.DOOR_IRON_CLOSED;
                     } else if (block instanceof DoorBlock && blockstate.getValue(DoorBlock.OPEN)) {
-                        return BlockPathTypes.DOOR_OPEN;
+                        return PathType.DOOR_OPEN;
                     } else if (block instanceof BaseRailBlock) {
-                        return BlockPathTypes.RAIL;
+                        return PathType.RAIL;
                     } else if (block instanceof LeavesBlock) {
-                        return BlockPathTypes.LEAVES;
+                        return PathType.LEAVES;
                     } else if (!blockstate.is(BlockTags.FENCES) && !blockstate.is(BlockTags.WALLS) && (!(block instanceof FenceGateBlock) || blockstate.getValue(FenceGateBlock.OPEN))) {
                         if (!blockstate.isPathfindable(level, pos, PathComputationType.LAND)) {
-                            return BlockPathTypes.BLOCKED;
+                            return PathType.BLOCKED;
                         } else {
-                            BlockPathTypes loggableFluidPathType = LevelUtils.getType(fluidstate, level, pos, mob, true);
+                            PathType loggableFluidPathType = LevelUtils.getType(fluidstate, level, pos, mob, true);
                             if (loggableFluidPathType != null) {
                                 return loggableFluidPathType;
                             } else {
-                                return fluidstate.is(FluidTags.WATER) ? BlockPathTypes.WATER : BlockPathTypes.OPEN;
+                                return fluidstate.is(FluidTags.WATER) ? PathType.WATER : PathType.OPEN;
                             }
                         }
                     } else {
-                        return BlockPathTypes.FENCE;
+                        return PathType.FENCE;
                     }
                 }
             } else {
-                return BlockPathTypes.TRAPDOOR;
+                return PathType.TRAPDOOR;
             }
         }
     }

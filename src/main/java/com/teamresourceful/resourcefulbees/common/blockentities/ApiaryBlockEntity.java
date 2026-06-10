@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -48,8 +49,8 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity implements ContentCo
 
     //region BEE HANDLING
     protected void deliverNectar(CompoundTag nbt, Entity bee) {
-        if (nbt.getBoolean("HasNectar")) {
-            if (bee instanceof BeeCompat compat) compat.nectarDroppedOff();
+        if (nbt.getBooleanOr("HasNectar", false)) {
+            if (bee instanceof BeeCompat compat) compat.resourcefulBees$nectarDroppedOff();
             HiveRecipe.getApiaryOutput(tier, bee)
                 .ifPresent(stack -> {
                     for (int i = 0; i < getContainer().getContainerSize() && !stack.isEmpty(); i++) {
@@ -61,7 +62,7 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity implements ContentCo
     }
 
     protected int getMaxTimeInHive(@NotNull BeeCompat bee) {
-        return (int) (bee.getMaxTimeInHive() * tier.timeMod());
+        return (int) (bee.resourcefulBees$getMaxTimeInHive() * tier.timeMod());
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, ApiaryBlockEntity apiaryTile) {
@@ -83,7 +84,7 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity implements ContentCo
         //todo super.load(tag);
         getContainer().deserialize(tag);
         //deserializeContainer(tag.getCompound(NBTConstants.NBT_INVENTORY));
-        readSyncData(tag.getCompound(NBTConstants.SYNC_DATA));
+        readSyncData(tag.getCompound(NBTConstants.SYNC_DATA).orElse(new CompoundTag()));
     }
 
     @Override
@@ -147,6 +148,11 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity implements ContentCo
             container = new Container(this);
         }
         return container;
+    }
+
+    @Override
+    public PositionContent createContent(ServerPlayer player) {
+        return null;
     }
 
     private static class Container extends AutomationSensitiveContainer {

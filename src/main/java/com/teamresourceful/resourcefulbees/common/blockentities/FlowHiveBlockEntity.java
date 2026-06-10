@@ -44,7 +44,7 @@ public class FlowHiveBlockEntity extends BeeHolderBlockEntity implements Botariu
     @Override
     protected void deliverNectar(CompoundTag nbt, Entity bee) {
         if (nbt.getBoolean("HasNectar")) {
-            if (bee instanceof BeeCompat compat) compat.nectarDroppedOff();
+            if (bee instanceof BeeCompat compat) compat.resourcefulBees$nectarDroppedOff();
             FlowHiveRecipe.findRecipe(bee.level().getRecipeManager(), bee.getType())
                 .ifPresent(recipe -> {
                     if (!fluid().isEmpty() && recipe.value().fluid().matches(fluid().getFluid(), fluid().getCompound())) {
@@ -58,7 +58,7 @@ public class FlowHiveBlockEntity extends BeeHolderBlockEntity implements Botariu
 
     @Override
     protected int getMaxTimeInHive(@NotNull BeeCompat bee) {
-        return (int) (bee.getMaxTimeInHive() * 0.5);
+        return (int) (bee.resourcefulBees$getMaxTimeInHive() * 0.5);
     }
 
     @Override

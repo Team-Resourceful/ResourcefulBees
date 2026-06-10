@@ -29,7 +29,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -279,27 +279,27 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     }
 
     @Override
-    public ItemStack getHiveOutput(BeehiveTier tier) {
+    public ItemStack resourcefulBees$getHiveOutput(BeehiveTier tier) {
         return getHoneycombData().map(data -> data.getHiveOutput(tier)).orElse(ItemStack.EMPTY);
     }
 
     @Override
-    public ItemStack getApiaryOutput(ApiaryTier tier) {
+    public ItemStack resourcefulBees$getApiaryOutput(ApiaryTier tier) {
         return getHoneycombData().map(data -> data.getApiaryOutput(tier)).orElse(ItemStack.EMPTY);
     }
 
     @Override
-    public int getMaxTimeInHive() {
+    public int resourcefulBees$getMaxTimeInHive() {
         return getBeeData().getCoreData().maxTimeInHive();
     }
 
     @Override
-    public void nectarDroppedOff() {
+    public void resourcefulBees$nectarDroppedOff() {
         this.dropOffNectar();
     }
 
     @Override
-    public void setOutOfHiveCooldown(int cooldown) {
+    public void resourcefulBees$setOutOfHiveCooldown(int cooldown) {
         this.setStayOutOfHiveCountdown(cooldown);
     }
     //endregion

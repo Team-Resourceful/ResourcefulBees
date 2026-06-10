@@ -34,7 +34,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowParentGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
@@ -50,11 +50,11 @@ import java.util.Objects;
 public class ResourcefulBee extends CustomBeeEntity {
 
     private final @Nullable AuraHandler auraHandler;
-    public final SerializedDataEntry<BlockPos, CompoundTag> fakeFlower = SerializedDataEntry.Builder
+    /*public final SerializedDataEntry<BlockPos, CompoundTag> fakeFlower = SerializedDataEntry.Builder
         .of(NBTConstants.FAKE_FLOWER_POS, CompoundTag.TYPE, (BlockPos) null)
         .withWriter(NbtUtils::writeBlockPos)
         .withReader(NbtUtils::readBlockPos)
-        .build();
+        .build();*/
     public final SerializedDataEntry<Integer, IntTag> entityFlower = SerializedDataEntry.Builder
         .of("", IntTag.TYPE, (Integer) null)
         .build();
@@ -264,7 +264,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             if (info.hasDamageTypes()) {
                 info.damageTypes().forEach(damageType -> {
                     if (damageType.type().equals(TraitConstants.SET_ON_FIRE))
-                        target.setSecondsOnFire(diffMod * damageType.amplifier());
+                        target.igniteForSeconds(diffMod * damageType.amplifier());
                     if (damageType.type().equals(TraitConstants.EXPLOSIVE))
                         this.explode(diffMod / damageType.amplifier());
                 });
@@ -293,7 +293,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private void explode(int radius) {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             Level.ExplosionInteraction mode = ModUtils.getExplosionInteraction(level(), this);
             this.dead = true;
             this.level().explode(this, this.getX(), this.getY(), this.getZ(), random.nextFloat() * radius, explosiveCooldown > 0 ? Level.ExplosionInteraction.NONE : mode);
@@ -320,23 +320,23 @@ public class ResourcefulBee extends CustomBeeEntity {
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.fakeFlower.read(tag);
+        //this.fakeFlower.read(tag);
         this.numberOfMutations = tag.getInt(NBTConstants.NBT_MUTATION_COUNT);
     }
 
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        this.fakeFlower.save(compound);
+        //this.fakeFlower.save(compound);
         compound.putInt(NBTConstants.NBT_MUTATION_COUNT, getNumberOfMutations());
     }
 
     public void dropOffMutations() {
         this.numberOfMutations = getMutationData().count();
-        if (isFakeFlowerValid()) {
-            level().getBlockEntity(fakeFlower.get(), ModBlockEntityTypes.FAKE_FLOWER_ENTITY.get())
-                .ifPresent(entity -> entity.createPollen(this));
-        }
+//        if (isFakeFlowerValid()) {
+//            level().getBlockEntity(fakeFlower.get(), ModBlockEntityTypes.FAKE_FLOWER_ENTITY.get())
+//                .ifPresent(entity -> entity.createPollen(this));
+//        }
     }
 
     public class GoToHiveGoal extends BeeGoToHiveGoal {
@@ -351,9 +351,9 @@ public class ResourcefulBee extends CustomBeeEntity {
         }
 
         @Override
-        public void dropHive() {
+        public void dropAndBlacklistHive() {
             if (!BeeConfig.manualMode) {
-                super.dropHive();
+                this.dropHive();
             }  // double check blacklist as it may need to be cleared - epic
         }
     }

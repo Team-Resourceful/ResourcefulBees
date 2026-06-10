@@ -1,8 +1,12 @@
 {
   "required": true,
   "package": "com.teamresourceful.resourcefulbees.mixin",
-  "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "common.BeeEntityAccessor",
+    "common.BeeGoToHiveGoalInvoker",
+    "common.MixinBee"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

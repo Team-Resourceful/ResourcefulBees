@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBl
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -28,7 +28,7 @@ public abstract class MixinBee extends Animal implements BeeCompat {
     }
 
     @Shadow
-    BlockPos hivePos;
+    private BlockPos hivePos;
 
     @Shadow
     public boolean hasHive() {
@@ -66,27 +66,27 @@ public abstract class MixinBee extends Animal implements BeeCompat {
     }
 
     @Override
-    public ItemStack getHiveOutput(BeehiveTier tier) {
+    public ItemStack resourcefulBees$getHiveOutput(BeehiveTier tier) {
         return new ItemStack(Items.HONEYCOMB);
     }
 
     @Override
-    public ItemStack getApiaryOutput(ApiaryTier tier) {
+    public ItemStack resourcefulBees$getApiaryOutput(ApiaryTier tier) {
         return new ItemStack(tier.outputType().get().isComb() ? Items.HONEYCOMB : Items.HONEYCOMB_BLOCK, tier.outputAmount().getAsInt());
     }
 
     @Override
-    public int getMaxTimeInHive() {
+    public int resourcefulBees$getMaxTimeInHive() {
         return this.hasNectar() ? 1200 : 600;
     }
 
     @Override
-    public void nectarDroppedOff() {
+    public void resourcefulBees$nectarDroppedOff() {
         this.dropOffNectar();
     }
 
     @Override
-    public void setOutOfHiveCooldown(int cooldown) {
+    public void resourcefulBees$setOutOfHiveCooldown(int cooldown) {
         this.setStayOutOfHiveCountdown(cooldown);
     }
 }

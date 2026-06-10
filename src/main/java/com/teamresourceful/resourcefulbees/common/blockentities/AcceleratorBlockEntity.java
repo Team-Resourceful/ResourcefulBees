@@ -32,7 +32,7 @@ public class AcceleratorBlockEntity extends BlockEntity implements InstanceBlock
 
     private static void accelerateTick(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
-        if(!level.isClientSide && level instanceof ServerLevel serverLevel && state.isRandomlyTicking() && level.getRandom().nextInt(40) == 0) {
+        if(!level.isClientSide() && level instanceof ServerLevel serverLevel && state.isRandomlyTicking() && level.getRandom().nextInt(40) == 0) {
             state.randomTick(serverLevel, pos, level.getRandom());
         }
         tickBlock(level, pos, state, level.getBlockEntity(pos));
@@ -48,7 +48,7 @@ public class AcceleratorBlockEntity extends BlockEntity implements InstanceBlock
                     ticker.tick(level, pos, state, blockEntity);
                 }
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             //DO NOTHING, This should never happen.
         }
     }

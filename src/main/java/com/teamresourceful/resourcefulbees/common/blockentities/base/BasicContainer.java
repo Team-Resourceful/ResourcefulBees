@@ -2,9 +2,12 @@ package com.teamresourceful.resourcefulbees.common.blockentities.base;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 
 public interface BasicContainer extends Container {
@@ -61,7 +64,7 @@ public interface BasicContainer extends Container {
     }
 
     default CompoundTag serializeContainer() {
-        return ContainerHelper.saveAllItems(new CompoundTag(), getItems(), true);
+        return ContainerHelper.saveAllItems(TagValueOutput.createWithoutContext(ProblemReporter.DISCARDING), getItems(), true);
     }
 
     default void deserializeContainer(CompoundTag tag) {
