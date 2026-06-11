@@ -2,14 +2,13 @@ package com.teamresourceful.resourcefulbees.common.forge;
 
 import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.modifiers.BeeBiomeModifier;
+import com.teamresourceful.resourcefulbees.common.modifiers.BeeNestBiomeModifier;
 import com.teamresourceful.resourcefulbees.common.subsystems.RegistrySubsystem;
-import com.teamresourceful.resourcefulbees.common.world.biome.modifiers.BeeBiomeModifier;
-import com.teamresourceful.resourcefulbees.common.world.biome.modifiers.BeeNestBiomeModifier;
-import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+
+import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
 
 public class ForgeRegistrySubsystem implements RegistrySubsystem {
 

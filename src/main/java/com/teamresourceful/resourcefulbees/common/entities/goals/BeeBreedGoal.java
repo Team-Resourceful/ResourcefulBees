@@ -13,9 +13,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
-import net.minecraft.world.entity.animal.Bee;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.entity.animal.bee.Bee;
+import net.minecraft.world.level.gamerules.GameRules;
 
 public class BeeBreedGoal extends BreedGoal {
 
@@ -50,7 +51,7 @@ public class BeeBreedGoal extends BreedGoal {
             awardPlayerAdvancement(selectedChild);
             resetBreed();
 
-            if (beeFamily.chance() >= level.random.nextFloat()) {
+            if (beeFamily.chance() >= level.getRandom().nextFloat()) {
                 selectedChild.setPersistenceRequired();
                 spawnChildInLevel(beeFamily, selectedChild);
             } else {
@@ -62,10 +63,10 @@ public class BeeBreedGoal extends BreedGoal {
 
     private void spawnChildInLevel(FamilyUnit beeFamily, AgeableMob selectedChild) {
         selectedChild.setAge(beeFamily.getChildData().getBreedData().childGrowthDelay());
-        selectedChild.moveTo(animal.position());
+        selectedChild.move(MoverType.SELF, animal.position());
         this.level.addFreshEntity(selectedChild);
         this.level.broadcastEntityEvent(this.animal, (byte)18);
-        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+        if (this.level.getGameRules().get(GameRules.MOB_DROPS)) {
             this.level.addFreshEntity(new ExperienceOrb(this.level, this.animal.getX(), this.animal.getY(), this.animal.getZ(), this.animal.getRandom().nextInt(7) + 1));
         }
     }
@@ -81,9 +82,9 @@ public class BeeBreedGoal extends BreedGoal {
     protected void spawnParticles() {
         if (level instanceof ServerLevel serverLevel) {
             for(int i = 0; i < 5; ++i) {
-                double d0 = level.random.nextGaussian() * 0.02D;
-                double d1 = level.random.nextGaussian() * 0.02D;
-                double d2 = level.random.nextGaussian() * 0.02D;
+                double d0 = serverLevel.getRandom().nextGaussian() * 0.02D;
+                double d1 = serverLevel.getRandom().nextGaussian() * 0.02D;
+                double d2 = serverLevel.getRandom().nextGaussian() * 0.02D;
                 serverLevel.sendParticles(ParticleTypes.ANGRY_VILLAGER,
                         this.animal.getRandomX(1.0D),
                         this.animal.getRandomY(),

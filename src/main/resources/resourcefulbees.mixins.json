@@ -3,9 +3,13 @@
   "package": "com.teamresourceful.resourcefulbees.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "ServerPlayerAccessor",
     "common.BeeEntityAccessor",
     "common.BeeGoToHiveGoalInvoker",
-    "common.MixinBee"
+    "common.BeeInvoker",
+    "common.MixinBee",
+    "common.MixinBeeEnterHiveGoal",
+    "common.StructureTemplatePoolAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

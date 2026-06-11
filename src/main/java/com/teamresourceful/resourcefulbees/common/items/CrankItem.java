@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.items;
 
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.util.GeckoLibUtil;
 import com.teamresourceful.resourcefulbees.client.rendering.items.CentrifugeCrankItemRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.items.ItemRendererProvider;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.level.block.Block;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 
@@ -14,15 +14,17 @@ public class CrankItem extends CustomGeoBlockItem {
 
     private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
 
-    public CrankItem(Block block, Properties pProperties) {
-        super(block, pProperties);
+    public CrankItem(Block block, Properties properties) {
+        super(block, properties);
     }
 
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar data) {}
+
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
+    public void registerControllers(AnimatableManager.@NonNull ControllerRegistrar data) {}
+
+    @Override
+    public @NonNull AnimatableInstanceCache getAnimatableInstanceCache() {
         return animationCache;
     }
 

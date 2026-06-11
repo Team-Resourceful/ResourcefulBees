@@ -13,8 +13,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +39,7 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
     @Override
     public boolean activate(ServerLevel level, BlockPos pos) {
         CompoundTag entityTag = predicate().getTag().map(nbt -> TagUtils.tagWithData(NBTConstants.ENTITY_TAG, nbt)).orElse(new CompoundTag());
-        Entity entity = predicate().entityType().spawn(level, entityTag, null, pos, MobSpawnType.CONVERSION, false, false);
+        Entity entity = predicate().entityType().spawn(level, entityTag, null, pos, EntitySpawnReason.CONVERSION, false, false);
         if (entity != null) {
             level.levelEvent(2005, pos.below(1), 0);
         }

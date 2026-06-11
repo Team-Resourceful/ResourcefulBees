@@ -46,7 +46,7 @@ public final class TraitSetup {
     private static void parseTrait(Reader reader, String name) {
         JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
         if (LoadConditionRegistry.canLoad(jsonObject)) {
-            name = Codec.STRING.fieldOf("name").orElse(name).codec().parse(JsonOps.INSTANCE, jsonObject).get().orThrow().toLowerCase(Locale.ENGLISH).replace(" ", "_");
+            name = Codec.STRING.fieldOf("name").orElse(name).codec().parse(JsonOps.INSTANCE, jsonObject).getOrThrow().toLowerCase(Locale.ENGLISH).replace(" ", "_");
             Trait beeTrait = Trait.getCodec(name).parse(JsonOps.INSTANCE, jsonObject).getOrThrow(false, s -> ModConstants.LOGGER.error("Could not Create Bee Trait"));
             TraitRegistry.getRegistry().register(name, beeTrait);
         }

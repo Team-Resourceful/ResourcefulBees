@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.mixin.common;
 
 import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
@@ -13,3 +14,4 @@ public interface WoodTypeInvoker {
         throw new NotImplementedException();
     }
 }
+*/

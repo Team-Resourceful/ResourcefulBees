@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.entities.goals;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import org.jetbrains.annotations.NotNull;
 
 public class BeeAngerGoal extends HurtByTargetGoal {
@@ -17,7 +17,7 @@ public class BeeAngerGoal extends HurtByTargetGoal {
 
     @Override
     public boolean canContinueToUse() {
-        return bee.getRemainingPersistentAngerTime() > 0 && super.canContinueToUse();
+        return bee.getPersistentAngerEndTime() > 0 && super.canContinueToUse();
     }
 
     @Override

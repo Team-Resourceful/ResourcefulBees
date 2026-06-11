@@ -23,8 +23,9 @@ import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.permissions.Permissions;
 
 public final class TemplateCommand {
 
@@ -37,10 +38,10 @@ public final class TemplateCommand {
 
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
         LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal(TEMPLATE_STRING);
-        builder.then(Commands.literal("bee").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printBeeTemplate))
-                .then(Commands.literal("honeycomb").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printHoneycombTemplate))
-                .then(Commands.literal("honey").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printHoneyTemplate))
-                .then(Commands.literal("trait").requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(TemplateCommand::printTraitTemplate));
+        builder.then(Commands.literal("bee").requires(stack -> stack.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)).executes(TemplateCommand::printBeeTemplate))
+                .then(Commands.literal("honeycomb").requires(stack -> stack.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)).executes(TemplateCommand::printHoneycombTemplate))
+                .then(Commands.literal("honey").requires(stack -> stack.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)).executes(TemplateCommand::printHoneyTemplate))
+                .then(Commands.literal("trait").requires(stack -> stack.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)).executes(TemplateCommand::printTraitTemplate));
         return builder;
     }
 
@@ -49,9 +50,9 @@ public final class TemplateCommand {
     }
 
     private static int printBeeTemplate(CommandContext<CommandSourceStack> context) {
-        DataResult<JsonElement> beeResult = new DispatchMapCodec<>(ResourceLocation.CODEC, BeeDataRegistry.codec(TEMPLATE_STRING))
+        DataResult<JsonElement> beeResult = new DispatchMapCodec<>(Identifier.CODEC, BeeDataRegistry.codec(TEMPLATE_STRING))
                 .encodeStart(registryOps(context), DummyBeeData.DATA);
-        ModConstants.LOGGER.info(PRETTY_GSON.toJson(beeResult.getOrThrow(false, ModConstants.LOGGER::error)));
+        ModConstants.LOGGER.info(PRETTY_GSON.toJson(beeResult.getOrThrow()));
         context.getSource().sendSuccess(() -> ModTranslations.BEE_TEMPLATE_PRINTED, true);
 
         //TODO move these into their own template commands and finish the entity predicate
@@ -92,22 +93,22 @@ public final class TemplateCommand {
 
     private static int printHoneycombTemplate(CommandContext<CommandSourceStack> context) {
         DataResult<JsonElement> variationResult = OutputVariation.CODEC.encodeStart(registryOps(context), DummyHoneycombData.DUMMY_OUTPUT_VARIATION);
-        ModConstants.LOGGER.info(PRETTY_GSON.toJson(variationResult.getOrThrow(false, ModConstants.LOGGER::error)));
+        ModConstants.LOGGER.info(PRETTY_GSON.toJson(variationResult.getOrThrow())); //todo add loggers back
         context.getSource().sendSuccess(() -> ModTranslations.HONEYCOMB_TEMPLATE_PRINTED, true);
         return 1;
     }
 
     private static int printHoneyTemplate(CommandContext<CommandSourceStack> context) {
-        DataResult<JsonElement> honeyResult = new DispatchMapCodec<>(ResourceLocation.CODEC, HoneyDataRegistry.codec(TEMPLATE_STRING))
+        DataResult<JsonElement> honeyResult = new DispatchMapCodec<>(Identifier.CODEC, HoneyDataRegistry.codec(TEMPLATE_STRING))
                 .encodeStart(registryOps(context), DummyHoneyData.DATA);
-        ModConstants.LOGGER.info(PRETTY_GSON.toJson(honeyResult.getOrThrow(false, ModConstants.LOGGER::error)));
+        ModConstants.LOGGER.info(PRETTY_GSON.toJson(honeyResult.getOrThrow()));
         context.getSource().sendSuccess(() -> ModTranslations.HONEY_TEMPLATE_PRINTED, true);
         return 1;
     }
 
     private static int printTraitTemplate(CommandContext<CommandSourceStack> context) {
         DataResult<JsonElement> traitResult = Trait.getCodec(TEMPLATE_STRING).encodeStart(registryOps(context), DummyTraitData.DUMMY_TRAIT_DATA);
-        ModConstants.LOGGER.info(PRETTY_GSON.toJson(traitResult.getOrThrow(false, ModConstants.LOGGER::error)));
+        ModConstants.LOGGER.info(PRETTY_GSON.toJson(traitResult.getOrThrow()));
         context.getSource().sendSuccess(() -> ModTranslations.TRAIT_TEMPLATE_PRINTED, true);
         return 1;
     }

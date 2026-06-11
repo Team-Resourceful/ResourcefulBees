@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.forge;
 
 import com.google.gson.JsonObject;
@@ -50,3 +51,4 @@ public class ConditionRegistryImpl {
         }
     }
 }
+*/

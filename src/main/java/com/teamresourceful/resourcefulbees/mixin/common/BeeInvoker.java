@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.mixin.common;
 
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 

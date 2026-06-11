@@ -6,18 +6,16 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Ite
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import com.teamresourceful.resourcefullib.common.color.Color;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -37,7 +35,6 @@ public class BeeJarItem extends Item {
         return color.isBlank() || color.equals(BeeConstants.STRING_DEFAULT_ITEM_COLOR) ? null : Color.parse(color);
     }
 
-    @Environment(EnvType.CLIENT)
     public static int getColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 1 && stack.hasTag()) {
             Color color = getColor(stack);
@@ -55,11 +52,11 @@ public class BeeJarItem extends Item {
         return createFilledJar(EntityUtils.createJarBeeTag(bee), Component.Serializer.toJson(bee.getType().getDescription()));
     }
 
-    public static ItemStack createFilledJar(ResourceLocation id, int color) {
+    public static ItemStack createFilledJar(Identifier id, int color) {
         return createFilledJar(id, new Color(color));
     }
 
-    public static ItemStack createFilledJar(ResourceLocation id, Color color) {
+    public static ItemStack createFilledJar(Identifier id, Color color) {
         CompoundTag entityTag = new CompoundTag();
         entityTag.putString(NBTConstants.NBT_ID, id.toString());
         entityTag.putString(NBTConstants.BeeJar.COLOR, color.toString());

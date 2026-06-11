@@ -1,5 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.entities.entity;
 
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.util.GeckoLibUtil;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
@@ -27,8 +34,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -36,13 +43,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import org.jspecify.annotations.NonNull;
 
 public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCompat {
 
@@ -119,7 +120,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
 
     @Override
     public void aiStep() {
-        if (this.level().isClientSide) clientAIStep();
+        if (this.level().isClientSide()) clientAIStep();
         else serverAIStep();
         super.aiStep();
     }
@@ -127,7 +128,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     //TODO Should I just override customServerAIStep instead?
     // What exactly is the difference if customServerAIStep is called from aiStep?
     private void serverAIStep() {
-        if (BeeConfig.beesDieInVoid && this.position().y <= level().getMinBuildHeight()) {
+        if (BeeConfig.beesDieInVoid && this.position().y <= level().getMinY()) {
             this.remove(RemovalReason.KILLED);
         }
         if (this.tickCount % 100 == 0) {
@@ -164,7 +165,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
         this.hasHiveInRange = hasHiveInRange;
     }
 
-    public static boolean canBeeSpawn(EntityType<?> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource randomSource) {
+    public static boolean canBeeSpawn(EntityType<?> type, ServerLevelAccessor level, EntitySpawnReason reason, BlockPos pos, RandomSource randomSource) {
         return switch (reason) {
             case NATURAL, CHUNK_GENERATION -> ModSpawnData.test(type, level.getLevel(), pos);
             default -> true;
@@ -227,7 +228,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (this.isFood(itemstack)) {
-            if (!this.level().isClientSide && this.getAge() == 0 && !this.isInLove()) {
+            if (!this.level().isClientSide() && this.getAge() == 0 && !this.isInLove()) {
                 this.usePlayerItem(player, hand, itemstack);
                 getBreedData().feedReturnItem().map(ItemStack::copy).ifPresent(player::addItem);
                 this.addFeedCount();
@@ -267,14 +268,14 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-        data.add(new AnimationController<>(this, "controller", 0, state -> {
-            state.getController().setAnimation(ANIMATION);
+        data.add(new AnimationController<>("controller", 0, animatable -> {
+            animatable.controller().setAnimation(ANIMATION);
             return PlayState.CONTINUE;
         }));
     }
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
+    public @NonNull AnimatableInstanceCache getAnimatableInstanceCache() {
         return animationCache;
     }
 

@@ -1,20 +1,21 @@
 package com.teamresourceful.resourcefulbees.common.blockentities;
 
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.animatable.GeoBlockEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.util.GeckoLibUtil;
 import com.teamresourceful.resourcefulbees.common.blocks.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import software.bernie.geckolib.animatable.GeoBlockEntity;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import org.jspecify.annotations.NonNull;
 
 public class CentrifugeCrankBlockEntity extends BlockEntity implements GeoBlockEntity {
 
@@ -37,7 +38,7 @@ public class CentrifugeCrankBlockEntity extends BlockEntity implements GeoBlockE
         super(ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get(), pos, state);
     }
 
-    protected  <E extends GeoAnimatable> PlayState predicate(AnimationState<E> event) {
+    protected PlayState animationPredicate(AnimationTest<GeoAnimatable> animatable) {
         if (getLevel() != null) {
             var state = getLevel().getBlockState(getBlockPos().below());
             int value = state.hasProperty(CentrifugeBlock.ROTATION) ? state.getValue(CentrifugeBlock.ROTATION) : 1;
@@ -51,18 +52,18 @@ public class CentrifugeCrankBlockEntity extends BlockEntity implements GeoBlockE
                 case 8 -> ROT_315;
                 default -> ROT_360;
             };
-            event.getController().setAnimation(animation);
+            animatable.controller().setAnimation(animation);
         }
         return PlayState.CONTINUE;
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-        data.add(new AnimationController<>(this, "controller", 10, this::predicate));
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this::animationPredicate));
     }
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
+    public @NonNull AnimatableInstanceCache getAnimatableInstanceCache() {
         return animationCache;
     }
 }

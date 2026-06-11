@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public record SyncBeepediaPacket(@NotNull CompoundTag data) implements Packet<SyncBeepediaPacket> {
@@ -28,7 +28,7 @@ public record SyncBeepediaPacket(@NotNull CompoundTag data) implements Packet<Sy
 
         public Type() {
             super(
-                    ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "sync_beepedia"),
+                    Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "sync_beepedia"),
                     ExtraByteCodecs.NONNULL_COMPOUND_TAG.map(SyncBeepediaPacket::new, SyncBeepediaPacket::data)
             );
         }

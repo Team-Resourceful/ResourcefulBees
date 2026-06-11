@@ -2,24 +2,21 @@ package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentities.FakeFlowerBlockEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.HoneyDipperTranslations;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -69,12 +66,12 @@ public class HoneyDipperItem extends Item {
                 return InteractionResult.SUCCESS;
             }
 
-            if (clickedTile instanceof FakeFlowerBlockEntity && bee instanceof ResourcefulBee resourcefulBee) {
+            /*if (clickedTile instanceof FakeFlowerBlockEntity && bee instanceof ResourcefulBee resourcefulBee) {
                 resourcefulBee.fakeFlower.set(context.getClickedPos());
                 sendMessageToPlayer(bee, player, MessageTypes.FAKE_FLOWER, context.getClickedPos());
                 player.setItemInHand(context.getHand(), setEntity(stack, null));
                 return InteractionResult.SUCCESS;
-            }
+            }*/
         }
         return super.useOn(context);
     }
@@ -91,9 +88,9 @@ public class HoneyDipperItem extends Item {
 
     private void sendMessageToPlayer(Bee bee, Player playerEntity, MessageTypes messageTypes, BlockPos pos) {
         switch (messageTypes) {
-            case FLOWER, HIVE, FAKE_FLOWER -> playerEntity.displayClientMessage(messageTypes.create(bee.getDisplayName(), NbtUtils.writeBlockPos(pos)), false);
-            case BEE_CLEARED -> playerEntity.displayClientMessage(messageTypes.create(), false);
-            case BEE_SELECTED -> playerEntity.displayClientMessage(messageTypes.create(bee.getDisplayName()), false);
+            case FLOWER, HIVE, FAKE_FLOWER -> playerEntity.sendSystemMessage(messageTypes.create(bee.getDisplayName(), pos.toShortString()));
+            case BEE_CLEARED -> playerEntity.sendSystemMessage(messageTypes.create());
+            case BEE_SELECTED -> playerEntity.sendSystemMessage(messageTypes.create(bee.getDisplayName()));
             default -> throw new IllegalStateException("Unexpected value: " + messageTypes);
         }
     }
@@ -125,7 +122,7 @@ public class HoneyDipperItem extends Item {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResult use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
         if (level instanceof ServerLevel serverLevel) {
             ItemStack itemInHand = player.getItemInHand(hand);
             if (player.isShiftKeyDown() && getEntity(serverLevel, itemInHand) != null) {
@@ -159,7 +156,7 @@ public class HoneyDipperItem extends Item {
         HIVE(args -> Component.translatable(HoneyDipperTranslations.HIVE_SET, args)),
         FAKE_FLOWER(args -> Component.translatable(HoneyDipperTranslations.FAKE_FLOWER_SET, args)),
         BEE_SELECTED(args -> Component.translatable(HoneyDipperTranslations.BEE_SET, args)),
-        BEE_CLEARED(args -> HoneyDipperTranslations.SELECTION_CLEARED);
+        BEE_CLEARED(_ -> HoneyDipperTranslations.SELECTION_CLEARED);
 
         private final Function<Object[], MutableComponent> component;
 

@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.registries.custom;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyData;
 import com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyDataSerializer;
@@ -11,7 +12,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -21,11 +22,11 @@ import java.util.stream.Collectors;
 public final class HoneyDataRegistry {
 
     public static final HoneyDataRegistry INSTANCE = new HoneyDataRegistry();
-    private static final HoneyDataSerializer<DummyHoneyData> DUMMY_SERIALIZER = HoneyDataSerializer.of(new ModIdentifier("noop"), 0, id -> Codec.unit(DummyHoneyData::new), new DummyHoneyData());
+    private static final HoneyDataSerializer<DummyHoneyData> DUMMY_SERIALIZER = HoneyDataSerializer.of(ModConstants.modIdentifier("noop"), 0, id -> MapCodec.unit(DummyHoneyData::new), new DummyHoneyData());
 
-    private final Map<ResourceLocation, HoneyDataSerializer<?>> serializers = new HashMap<>();
-    private final Set<ResourceLocation> required = new HashSet<>();
-    private final Object2IntMap<ResourceLocation> types = new Object2IntArrayMap<>();
+    private final Map<Identifier, HoneyDataSerializer<?>> serializers = new HashMap<>();
+    private final Set<Identifier> required = new HashSet<>();
+    private final Object2IntMap<Identifier> types = new Object2IntArrayMap<>();
     private boolean locked = false;
 
     private HoneyDataRegistry() {}
@@ -36,7 +37,7 @@ public final class HoneyDataRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public static Function<ResourceLocation, Codec<HoneyData<?>>> codec(String id) {
+    public static Function<Identifier, Codec<HoneyData<?>>> codec(String id) {
         return type -> (Codec<HoneyData<?>>) decode(type)
                 .map(serializer -> serializer.codec(id))
                 .result().orElse(null);
@@ -60,8 +61,8 @@ public final class HoneyDataRegistry {
     }
 
     public void check(Collection<HoneyData<?>> check) {
-        Set<ResourceLocation> types = check.stream().map(HoneyData::serializer).map(HoneyDataSerializer::type).collect(Collectors.toSet());
-        for (ResourceLocation resourceLocation : required) {
+        Set<Identifier> types = check.stream().map(HoneyData::serializer).map(HoneyDataSerializer::type).collect(Collectors.toSet());
+        for (Identifier resourceLocation : required) {
             if (!types.contains(resourceLocation)) {
                 throw new IllegalStateException("Missing required bee data type: " + resourceLocation);
             }
@@ -69,11 +70,11 @@ public final class HoneyDataRegistry {
     }
 
     @Nullable
-    public HoneyDataSerializer<?> get(ResourceLocation id) {
+    public HoneyDataSerializer<?> get(Identifier id) {
         return this.serializers.get(id);
     }
 
-    private static DataResult<HoneyDataSerializer<?>> decode(ResourceLocation id) {
+    private static DataResult<HoneyDataSerializer<?>> decode(Identifier id) {
         HoneyDataSerializer<?> serializer = INSTANCE.get(id);
         if (serializer == null) {
             if (ModValidation.IS_RUNNING_IN_IDE || GeneralConfig.showDebugInfo) {

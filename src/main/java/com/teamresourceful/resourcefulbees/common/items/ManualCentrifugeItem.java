@@ -1,12 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.items;
 
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.util.GeckoLibUtil;
 import com.teamresourceful.resourcefulbees.client.rendering.items.CentrifugeItemRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.items.ItemRendererProvider;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.level.block.Block;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 
@@ -19,10 +20,10 @@ public class ManualCentrifugeItem extends CustomGeoBlockItem {
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {}
+    public void registerControllers(AnimatableManager.@NonNull ControllerRegistrar controllerRegistrar) {}
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
+    public @NonNull AnimatableInstanceCache getAnimatableInstanceCache() {
         return factory;
     }
 

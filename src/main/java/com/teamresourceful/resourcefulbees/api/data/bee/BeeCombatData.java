@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.api.data.bee;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 
@@ -16,7 +17,7 @@ public interface BeeCombatData extends BeeData<BeeCombatData> {
 
     boolean isInvulnerable();
 
-    Map<Attribute, Double> attributes();
+    Map<Holder<Attribute>, Double> attributes();
 
     AttributeSupplier.Builder buildAttributes(AttributeSupplier.Builder builder);
 }

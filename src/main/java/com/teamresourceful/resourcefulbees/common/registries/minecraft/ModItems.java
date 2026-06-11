@@ -168,7 +168,7 @@ public final class ModItems {
     public static final RegistryEntry<Item> BEE_JAR = ITEMS.register("bee_jar", () -> new BeeJarItem(new Item.Properties().durability(0).stacksTo(16)));
     public static final RegistryEntry<Item> POLLEN_SPREADER_FAN = ITEMS.register("pollen_spreader_fan", () -> new BlockItem(ModBlocks.POLLEN_SPREADER_FAN.get(), new Item.Properties()));
     public static final RegistryEntry<Item> POLLEN_SPREADER = ITEMS.register("pollen_spreader", () -> new BlockItem(ModBlocks.POLLEN_SPREADER.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> MUTATED_POLLEN = ITEMS.register("mutated_pollen", () -> new MutatedPollenItem(new Item.Properties()));
+    //public static final RegistryEntry<Item> MUTATED_POLLEN = ITEMS.register("mutated_pollen", () -> new MutatedPollenItem(new Item.Properties()));
     public static final RegistryEntry<Item> FAKE_FLOWER = ITEMS.register("fake_flower", () -> new BlockItem(ModBlocks.FAKE_FLOWER.get(), new Item.Properties()));
 
     public static final RegistryEntry<Item> GOLD_FLOWER_ITEM = ITEMS.register("gold_flower", () -> new BlockItem(ModBlocks.GOLD_FLOWER.get(), new Item.Properties()));
@@ -240,7 +240,7 @@ public final class ModItems {
                     builder -> builder
                             .effect(new MobEffectInstance(MobEffects.REGENERATION, 1200, 1), 1)
                             .effect(new MobEffectInstance(MobEffects.LUCK, 1200, 0), 0)
-                            .effect(new MobEffectInstance(MobEffects.JUMP, 1200, 1), 1)
+                            .effect(new MobEffectInstance(MobEffects.JUMP_BOOST, 1200, 1), 1)
                             .nutrition(6)
                             .saturationModifier(1.5f)
                             .alwaysEdible()

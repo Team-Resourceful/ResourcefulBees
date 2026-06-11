@@ -1,31 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.items;
 
-import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
-import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
-import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
-import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncBeepediaPacket;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
 import com.teamresourceful.resourcefulbees.common.util.BeepediaUtils;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class BeepediaItem extends Item {
 
@@ -34,14 +19,14 @@ public class BeepediaItem extends Item {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResult use(Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (level.isClientSide()) {
             BeepediaUtils.loadBeepedia(itemstack, player);
         } else {
-            NetworkHandler.NETWORK.sendToPlayer(SyncBeepediaPacket.of(player), player);
+            //NetworkHandler.NETWORK.sendToPlayer(SyncBeepediaPacket.of(player), player); //todo no .of method anymore
         }
-        return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
+        return InteractionResult.SUCCESS_SERVER;
     }
 
     @Override
@@ -58,7 +43,7 @@ public class BeepediaItem extends Item {
         return super.interactLivingEntity(stack, player, entity, hand);
     }
 
-    @Override
+/*    @Override
     public @NotNull Component getName(ItemStack stack) {
         if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
             if (stack.getTag().getBoolean(NBTConstants.Beepedia.CREATIVE)) return ItemTranslations.CREATIVE_BEEPEDIA.withStyle(ChatFormatting.LIGHT_PURPLE);
@@ -83,5 +68,5 @@ public class BeepediaItem extends Item {
 
     public static boolean isCreative(ItemStack stack) {
         return stack.getItem() instanceof BeepediaItem && !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().getBoolean(NBTConstants.Beepedia.CREATIVE);
-    }
+    }*/
 }

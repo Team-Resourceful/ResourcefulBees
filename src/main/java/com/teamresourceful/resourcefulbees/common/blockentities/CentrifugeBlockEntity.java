@@ -1,7 +1,16 @@
 package com.teamresourceful.resourcefulbees.common.blockentities;
 
 
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.animatable.GeoBlockEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.util.GeckoLibUtil;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.ContentContainerBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -19,6 +28,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -28,11 +38,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.geckolib.animatable.GeoAnimatable;
-import com.geckolib.animatable.GeoBlockEntity;
-import com.geckolib.animatable.instance.AnimatableInstanceCache;
-import com.geckolib.animation.*;
-import com.geckolib.util.GeckoLibUtil;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Predicate;
 
@@ -160,13 +166,13 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
             getContainer().getItem(0).shrink(1);
             cachedRecipe.itemOutputs()
                     .stream()
-                    .filter(item -> level.random.nextDouble() < item.chance())
+                    .filter(item -> level.getRandom().nextDouble() < item.chance())
                     .map(item -> item.pool().next())
                     .map(ItemOutput::itemStack)
                     .forEach(this::deliverItem);
             cachedRecipe.fluidOutputs()
                     .stream()
-                    .filter(fluid -> level.random.nextDouble() < fluid.chance())
+                    .filter(fluid -> level.getRandom().nextDouble() < fluid.chance())
                     .map(fluid -> fluid.pool().next())
                     .map(FluidOutput::fluid)
                     .forEach(this::deliverFluid);
@@ -198,29 +204,32 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
     }
 
     //region Animation
-    protected  <E extends GeoAnimatable> PlayState predicate(AnimationState<E> event) {
-        int value = getBlockState().getValue(CentrifugeBlock.ROTATION);
-        RawAnimation animation = switch (value) {
-            case 2 -> ROT_45;
-            case 3 -> ROT_90;
-            case 4 -> ROT_135;
-            case 5 -> ROT_180;
-            case 6 -> ROT_225;
-            case 7 -> ROT_270;
-            case 8 -> ROT_315;
-            default -> ROT_360;
-        };
-        event.getController().setAnimation(animation);
+    protected PlayState animationPredicate(AnimationTest<GeoAnimatable> animatable) {
+        if (getLevel() != null) {
+            var state = getLevel().getBlockState(getBlockPos().below());
+            int value = state.hasProperty(CentrifugeBlock.ROTATION) ? state.getValue(CentrifugeBlock.ROTATION) : 1;
+            RawAnimation animation = switch (value) {
+                case 2 -> ROT_45;
+                case 3 -> ROT_90;
+                case 4 -> ROT_135;
+                case 5 -> ROT_180;
+                case 6 -> ROT_225;
+                case 7 -> ROT_270;
+                case 8 -> ROT_315;
+                default -> ROT_360;
+            };
+            animatable.controller().setAnimation(animation);
+        }
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 10, this::predicate))
+        controllers.add(new AnimationController<>(this::animationPredicate));
     }
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
+    public @NonNull AnimatableInstanceCache getAnimatableInstanceCache() {
         return factory;
     }
     //endregion
@@ -254,7 +263,7 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
     }
 
     @Override
-    public PositionContent createContent() {
+    public PositionContent createContent(ServerPlayer player) {
         return new PositionContent(getBlockPos());
     }
 

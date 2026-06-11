@@ -38,8 +38,8 @@ public class WaxItem extends Item {
             level.setBlock(pos, state, 11);
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, state));
             level.levelEvent(player, 3003, pos, 0);
-            return InteractionResult.sidedSuccess(level.isClientSide);
-        }).orElse(InteractionResult.PASS);
+            return InteractionResult.SUCCESS_SERVER;
+        }).orElse(InteractionResult.SUCCESS); //todo why can't this be PASS?
     }
 
     private static Optional<BlockState> getWaxed(BlockState state) {

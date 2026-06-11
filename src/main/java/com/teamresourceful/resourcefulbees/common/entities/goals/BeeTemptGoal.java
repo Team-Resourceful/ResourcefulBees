@@ -4,7 +4,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.EnumSet;
@@ -35,7 +35,7 @@ public class BeeTemptGoal extends Goal {
             --this.delayTemptCounter;
             return false;
         }
-        this.closestPlayer = this.bee.level().getNearestPlayer(ENTITY_PREDICATE, this.bee);
+        this.closestPlayer = this.bee.level().getNearestPlayer(this.bee, 8); //todo what should dist be or should it be configurable?
         return this.closestPlayer != null && (bee.isFood(this.closestPlayer.getMainHandItem()) || bee.isFood(this.closestPlayer.getOffhandItem()));
     }
 

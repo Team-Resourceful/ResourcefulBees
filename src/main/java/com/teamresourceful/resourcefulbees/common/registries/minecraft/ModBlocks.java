@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.*;
@@ -193,9 +194,9 @@ public final class ModBlocks {
     public static final RegistryEntry<StairBlock> WAXED_STAIRS = BLOCKS.register("waxed_stairs", () -> new StairBlock(WAXED_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).dynamicShape()));
     public static final RegistryEntry<SlabBlock> WAXED_SLAB = BLOCKS.register("waxed_slab", () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).dynamicShape()));
     public static final RegistryEntry<FenceBlock> WAXED_FENCE = BLOCKS.register("waxed_fence", () -> new FenceBlock(BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion()));
-    public static final RegistryEntry<FenceGateBlock> WAXED_FENCE_GATE = BLOCKS.register("waxed_fence_gate", () -> new FenceGateBlock(BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion(), WAXED_WOOD_TYPE));
-    public static final RegistryEntry<ButtonBlock> WAXED_BUTTON = BLOCKS.register("waxed_button", () -> new ButtonBlock(BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision(), WAX_BLOCK_SET, 30, true));
-    public static final RegistryEntry<PressurePlateBlock> WAXED_PRESSURE_PLATE = BLOCKS.register("waxed_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision(), WAX_BLOCK_SET));
+    public static final RegistryEntry<FenceGateBlock> WAXED_FENCE_GATE = BLOCKS.register("waxed_fence_gate", () -> new FenceGateBlock(WAXED_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion()));
+    public static final RegistryEntry<ButtonBlock> WAXED_BUTTON = BLOCKS.register("waxed_button", () -> new ButtonBlock(WAX_BLOCK_SET, 30, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision()));
+    public static final RegistryEntry<PressurePlateBlock> WAXED_PRESSURE_PLATE = BLOCKS.register("waxed_pressure_plate", () -> new PressurePlateBlock( WAX_BLOCK_SET, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision()));
     public static final RegistryEntry<DoorBlock> WAXED_DOOR = BLOCKS.register("waxed_door", () -> new DoorBlock(BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion(), WAX_BLOCK_SET));
     public static final RegistryEntry<TrapDoorBlock> WAXED_TRAPDOOR = BLOCKS.register("waxed_trapdoor", () -> new TrapDoorBlock(BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion(), WAX_BLOCK_SET));
     public static final RegistryEntry<Block> TRIMMED_WAXED_PLANKS = BLOCKS.register("trimmed_waxed_planks", () -> new Block(WAXED_PLANKS_PROPERTIES));
@@ -239,7 +240,12 @@ public final class ModBlocks {
 
     public static final RegistryEntry<Block> BEEHOUSE_TOP = BLOCKS.register("beehouse_top", BeeHouseTopBlock::new);
     public static final RegistryEntry<Block> BREEDER_BLOCK = BLOCKS.register("breeder", () -> new BreederBlock(BlockBehaviour.Properties.of().strength(1F).sound(SoundType.WOOD)));
-    public static final RegistryEntry<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new TickingBlock<>(ModBlockEntityTypes.CREATIVE_GEN_ENTITY, CENTRIFUGE_PROPERTIES));
+    public static final RegistryEntry<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new TickingBlock<>(ModBlockEntityTypes.CREATIVE_GEN_ENTITY, CENTRIFUGE_PROPERTIES) {
+        @Override
+        protected MapCodec<? extends BaseEntityBlock> codec() {
+            return null;
+        }
+    });
     public static final RegistryEntry<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", EnderBeeconBlock::new);
     public static final RegistryEntry<Block> HONEY_POT = BLOCKS.register("honey_pot", () -> new HoneyPotBlock(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops()));
     public static final RegistryEntry<Block> SOLIDIFICATION_CHAMBER = BLOCKS.register("solidification_chamber", () -> new SolidificationChamberBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops()));

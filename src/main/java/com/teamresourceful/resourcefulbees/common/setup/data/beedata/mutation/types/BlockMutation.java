@@ -42,7 +42,7 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
     @Override
     public boolean activate(ServerLevel level, BlockPos pos) {
         if (!level.getBlockState(pos).canBeReplaced()) return false;
-        BlockState state = this.predicate.properties().construct(this.predicate.block(), level.random);
+        BlockState state = this.predicate.properties().construct(this.predicate.block(), level.getRandom());
         BlockState blockState = Block.updateFromNeighbourShapes(state, level, pos);
         if (blockState.isAir()) {
             blockState = state;

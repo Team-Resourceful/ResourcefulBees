@@ -11,7 +11,6 @@ import com.teamresourceful.resourcefulbees.common.entities.goals.*;
 import com.teamresourceful.resourcefulbees.common.entities.pathfinding.BeePathNavigation;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.util.SerializedDataEntry;
 import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
@@ -21,7 +20,6 @@ import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -73,12 +71,10 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     @Override
     protected void registerGoals() {
+        BeeEntityAccessor accessor = (BeeEntityAccessor) this;
         this.goalSelector.addGoal(1, new ModBeeEnterHiveGoal(this));
         this.pollinateGoal = new ModBeePollinateGoal(this);
         this.goalSelector.addGoal(4, this.pollinateGoal);
-
-        BeeEntityAccessor accessor = (BeeEntityAccessor) this;
-
         accessor.setPollinateGoal(new FakePollinateGoal());
 
         this.goalSelector.addGoal(6, new Bee.BeeLocateHiveGoal() {

@@ -4,8 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCombatData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
-import net.minecraft.Util;
+
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -16,10 +19,10 @@ import java.util.Map;
 public record CombatData(
         boolean isPassive, boolean removeStingerOnAttack,
         boolean inflictsPoison, boolean isInvulnerable,
-        Map<Attribute, Double> attributes
+        Map<Holder<Attribute>, Double> attributes //todo probably have to switch back to not using holder
 ) implements BeeCombatData {
 
-    private static final Map<Attribute, Double> DEFAULT_ATTRIBUTES = Util.make(new HashMap<>(), map -> {
+    private static final Map<Holder<Attribute>, Double> DEFAULT_ATTRIBUTES = Util.make(new HashMap<>(), map -> {
         map.put(Attributes.MAX_HEALTH, 10d);
         map.put(Attributes.FLYING_SPEED, 0.6D);
         map.put(Attributes.MOVEMENT_SPEED, 0.3D);
@@ -35,9 +38,9 @@ public record CombatData(
             Codec.BOOL.optionalFieldOf("removeStingerOnAttack", true).forGetter(BeeCombatData::removeStingerOnAttack),
             Codec.BOOL.optionalFieldOf("inflictsPoison", true).forGetter(BeeCombatData::inflictsPoison),
             Codec.BOOL.optionalFieldOf("isInvulnerable", false).forGetter(BeeCombatData::isInvulnerable),
-            Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("attributes", DEFAULT_ATTRIBUTES).forGetter(BeeCombatData::attributes)
+            Codec.unboundedMap(BuiltInRegistries.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("attributes").forGetter(BeeCombatData::attributes)
     ).apply(instance, CombatData::new));
-    public static final BeeDataSerializer<BeeCombatData> SERIALIZER = BeeDataSerializer.of(new ModIdentifier("combat"), 1, id -> CODEC, DEFAULT);
+    public static final BeeDataSerializer<BeeCombatData> SERIALIZER = BeeDataSerializer.of(ModConstants.modIdentifier("combat"), 1, id -> CODEC, DEFAULT);
 
     @Override
     public AttributeSupplier.Builder buildAttributes(AttributeSupplier.Builder builder) {
