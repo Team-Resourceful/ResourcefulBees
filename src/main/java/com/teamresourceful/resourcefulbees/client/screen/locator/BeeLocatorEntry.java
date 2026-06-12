@@ -1,11 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.screen.locator;
 
-import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
-import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -38,7 +34,7 @@ public class BeeLocatorEntry extends ObjectSelectionList.Entry<BeeLocatorEntry> 
         return displayName;
     }
 
-    @Override
+/*    @Override
     public void render(@NotNull GuiGraphics graphics, int id, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovered, float partialTick) {
         Minecraft instance = Minecraft.getInstance();
         Font font = instance.font;
@@ -52,5 +48,10 @@ public class BeeLocatorEntry extends ObjectSelectionList.Entry<BeeLocatorEntry> 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         this.selector.accept(this);
         return false;
+    }*/
+
+    @Override
+    public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a) {
+
     }
 }

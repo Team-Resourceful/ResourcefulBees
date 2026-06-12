@@ -1,18 +1,18 @@
 package com.teamresourceful.resourcefulbees.api.data.conditions;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public interface LoadConditionSerializer<T extends LoadCondition<T>> {
 
-    ResourceLocation id();
+    Identifier id();
 
     Codec<T> codec();
 
-    static <T extends LoadCondition<T>> LoadConditionSerializer<T> of(ResourceLocation id, Codec<T> codec) {
+    static <T extends LoadCondition<T>> LoadConditionSerializer<T> of(Identifier id, Codec<T> codec) {
         return new LoadConditionSerializer<>() {
             @Override
-            public ResourceLocation id() {
+            public Identifier id() {
                 return id;
             }
 

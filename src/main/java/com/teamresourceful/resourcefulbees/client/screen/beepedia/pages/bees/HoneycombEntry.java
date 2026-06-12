@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.bees;
 
 import com.teamresourceful.resourcefulbees.client.component.selection.BaseListEntry;
@@ -67,3 +68,4 @@ public class HoneycombEntry extends BaseListEntry {
         this.hives.next();
     }
 }
+*/

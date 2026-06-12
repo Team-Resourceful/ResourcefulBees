@@ -7,8 +7,8 @@ import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.Serv
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
@@ -22,9 +22,9 @@ import java.util.List;
  */
 public final class ModStructures {
 
-    private static final ResourceKey<StructureProcessorList> EMPTY_PROCESSOR_LIST_KEY = ResourceKey.create(Registries.PROCESSOR_LIST, ResourceLocation.parse("empty"));
+    private static final ResourceKey<StructureProcessorList> EMPTY_PROCESSOR_LIST_KEY = ResourceKey.create(Registries.PROCESSOR_LIST, Identifier.parse("empty"));
 
-    private static void addBuildingToPool(Registry<StructureTemplatePool> pools, Registry<StructureProcessorList> processors, ResourceLocation pool, ResourceLocation piece, int weight) {
+    private static void addBuildingToPool(Registry<StructureTemplatePool> pools, Registry<StructureProcessorList> processors, Identifier pool, Identifier piece, int weight) {
         Holder<StructureProcessorList> emptyProcessorList = processors.getHolderOrThrow(EMPTY_PROCESSOR_LIST_KEY);
         StructureTemplatePoolAccessor templatePool = (StructureTemplatePoolAccessor) pools.get(pool);
 
@@ -46,8 +46,8 @@ public final class ModStructures {
         Registry<StructureProcessorList> processors = event.access().registry(Registries.PROCESSOR_LIST).orElseThrow();
 
         addBuildingToPool(pools, processors,
-                ResourceLocation.parse("village/plains/houses"),
-                ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "village/beekeeper_house_1"), 8);
+                Identifier.parse("village/plains/houses"),
+                Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "village/beekeeper_house_1"), 8);
     }
 
 }

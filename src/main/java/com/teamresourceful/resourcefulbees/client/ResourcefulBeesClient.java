@@ -1,73 +1,48 @@
 package com.teamresourceful.resourcefulbees.client;
 
-import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.data.ModelHandler;
-import com.teamresourceful.resourcefulbees.client.overlay.BeeLocatorOverlay;
-import com.teamresourceful.resourcefulbees.client.rendering.blocks.EnderBeeconRenderer;
-import com.teamresourceful.resourcefulbees.client.rendering.blocks.RenderHoneyGenerator;
-import com.teamresourceful.resourcefulbees.client.rendering.blocks.RenderSolidificationChamber;
-import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.CentrifugeCrankRenderer;
-import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.CentrifugeRenderer;
-import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
-import com.teamresourceful.resourcefulbees.client.rendering.pet.BeeRewardRender;
-import com.teamresourceful.resourcefulbees.client.screen.*;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
-import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
-import com.teamresourceful.resourcefulbees.common.items.BeepediaItem;
-import com.teamresourceful.resourcefulbees.common.items.MutatedPollenItem;
-import com.teamresourceful.resourcefulbees.common.items.honey.ColoredObject;
+import com.teamresourceful.resourcefulbees.client.screen.MissingRegistryScreen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
-import com.teamresourceful.resourcefulbees.mixin.client.LivingEntityRendererInvoker;
 import com.teamresourceful.resourcefulbees.mixin.client.PackRepositoryAccessor;
-import com.teamresourceful.resourcefulbees.platform.client.events.*;
+import com.teamresourceful.resourcefulbees.platform.client.events.ModelBakingCompletedEvent;
+import com.teamresourceful.resourcefulbees.platform.client.events.ModelModifyResultEvent;
+import com.teamresourceful.resourcefulbees.platform.client.events.RegisterAdditionaModelsEvent;
+import com.teamresourceful.resourcefulbees.platform.client.events.ScreenOpenEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.UpdateEvent;
-import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
-import net.minecraft.client.renderer.blockentity.SignRenderer;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class ResourcefulBeesClient {
 
     public static void init() {
         ScreenOpenEvent.EVENT.addListener(MissingRegistryScreen::onScreenChange);
-        RegisterRendererEvent.EVENT.addListener(ResourcefulBeesClient::registerRenderers);
+/*        RegisterRendererEvent.EVENT.addListener(ResourcefulBeesClient::registerRenderers);
         RegisterColorHandlerEvent.EVENT.addListener(ResourcefulBeesClient::registerColors);
         RegisterScreensEvent.EVENT.addListener(ResourcefulBeesClient::registerScreens);
         RegisterItemPropertiesEvent.EVENT.addListener(ResourcefulBeesClient::registerItemProperties);
         RegisterRenderLayersEvent.EVENT.addListener(ResourcefulBeesClient::registerRenderLayers);
         RegisterEntityLayersEvent.EVENT.addListener(ResourcefulBeesClient::registerEntityLayers);
-        RegisterOverlayEvent.EVENT.addListener(ResourcefulBeesClient::registerOverlay);
+        RegisterOverlayEvent.EVENT.addListener(ResourcefulBeesClient::registerOverlay);*/
         RegisterAdditionaModelsEvent.EVENT.addListener(ModelHandler::onAddAdditional);
         ModelBakingCompletedEvent.EVENT.addListener(ModelHandler::onModelBake);
         ModelModifyResultEvent.EVENT.addListener(ModelHandler::onModifyModel);
         UpdateEvent.EVENT.addListener(ClientDataSetup::onUpdates);
 
-        Color.initRainbow();
+        //Color.initRainbow();
 
         loadResources();
     }
 
-    public static void registerOverlay(RegisterOverlayEvent event) {
+/*    public static void registerOverlay(RegisterOverlayEvent event) {
         event.register("bee_locator", BeeLocatorOverlay.INSTANCE);
     }
 
@@ -159,7 +134,7 @@ public class ResourcefulBeesClient {
             event.register(ColoredObject::getBlockColor, ModBlocks.HONEYCOMB_BLOCKS.boundStream().toArray(Block[]::new));
             event.register(ColoredObject::getBlockColor, ModBlocks.HONEY_BLOCKS.boundStream().toArray(Block[]::new));
         }
-    }
+    }*/
 
     private static void loadResources() {
         //This is needed for data gen as Minecraft.getInstance() is null in data gen.

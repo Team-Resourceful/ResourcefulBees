@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -56,3 +57,4 @@ public class BeepediaMainButton extends ImageButton {
         this.onClick.accept(this);
     }
 }
+*/

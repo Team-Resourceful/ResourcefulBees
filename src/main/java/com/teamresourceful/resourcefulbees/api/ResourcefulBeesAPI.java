@@ -24,7 +24,7 @@ public final class ResourcefulBeesAPI {
         return initializers;
     }
 
-    public static HoneyInitializerApi getHoneyInitalizers() {
+    public static HoneyInitializerApi getHoneyInitializers() {
         return honeyInitializers;
     }
 

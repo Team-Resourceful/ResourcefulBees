@@ -21,7 +21,7 @@ import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedIte
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -39,7 +39,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface MutationInitializer {
-        BeeMutationData create(int count, ResourceLocation id);
+        BeeMutationData create(int count, Identifier id);
     }
 
     @FunctionalInterface
@@ -89,12 +89,12 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface LayerTextureInitializer {
-        BeeLayerTexture create(ResourceLocation texture, ResourceLocation angryTexture);
+        BeeLayerTexture create(Identifier texture, Identifier angryTexture);
     }
 
     @FunctionalInterface
     public interface RenderInitializer {
-        BeeRenderData create(Set<BeeLayerData> layers, BeeColorData colorData, ResourceLocation model, BeeLayerTexture texture, ResourceLocation animations, float sizeModifier);
+        BeeRenderData create(Set<BeeLayerData> layers, BeeColorData colorData, Identifier model, BeeLayerTexture texture, Identifier animations, float sizeModifier);
     }
 
     @FunctionalInterface
@@ -114,7 +114,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface DataInitializer {
-        CustomBeeData create(String name, Map<ResourceLocation, BeeData<?>> data);
+        CustomBeeData create(String name, Map<Identifier, BeeData<?>> data);
     }
 
     @FunctionalInterface

@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.api.data.trait;
 
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 
 public interface TraitAbility extends ItemDisplay {
 

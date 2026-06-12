@@ -223,7 +223,7 @@ public class ModRecipeProvider extends RecipeProvider {
         //endregion
 
         //region Tools
-        AdvancedShapedRecipeBuilder.shaped(ModItems.SMOKERCAN)
+        AdvancedShapedRecipeBuilder.shaped(ModItems.SMOKER_CAN)
                 .pattern("II ", "I I", "ICI")
                 .define('I', Ingredient.of(Items.IRON_INGOT))
                 .define('C', Ingredient.of(Items.CAMPFIRE))
@@ -268,9 +268,9 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", RecipeProvider.has(ModItemTags.HONEYCOMB))
                 .save(recipes);
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.SMOKER.get())
-            .requires(ModItems.SMOKERCAN.get())
+            .requires(ModItems.SMOKER_CAN.get())
             .requires(ModItems.BELLOW.get())
-            .unlockedBy("has_honeycomb", RecipeProvider.has(ModItems.SMOKERCAN.get())).save(recipes);
+            .unlockedBy("has_honeycomb", RecipeProvider.has(ModItems.SMOKER_CAN.get())).save(recipes);
         //endregion
 
         //region Machines

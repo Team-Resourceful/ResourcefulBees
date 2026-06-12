@@ -27,6 +27,7 @@ import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidData;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
@@ -85,7 +86,7 @@ public final class RegistryHandler {
     }
 
     private static void registerHoneyBottle(String id, JsonObject honeyData) {
-        var data = new DispatchMapCodec<>(ResourceLocation.CODEC, HoneyDataRegistry.codec(id))
+        var data = new DispatchMapCodec<>(Identifier.CODEC, HoneyDataRegistry.codec(id))
                 .parse(JsonOps.INSTANCE, honeyData)
                 .getOrThrow(false, s -> ModConstants.LOGGER.error("Could not create Honey Data for {} honey", id));
         try {
@@ -94,7 +95,7 @@ public final class RegistryHandler {
             ModConstants.LOGGER.error("Could not create Honey Data for {} honey", id);
             throw e;
         }
-        CustomHoneyData customHoneyData = ResourcefulBeesAPI.getHoneyInitalizers().data(id, data);
+        CustomHoneyData customHoneyData = ResourcefulBeesAPI.getHoneyInitializers().data(id, data);
         if (!HoneyRegistry.getRegistry().register(id, customHoneyData)) {
             ModConstants.LOGGER.error("Duplicate honeys with name {}", id);
         } else {

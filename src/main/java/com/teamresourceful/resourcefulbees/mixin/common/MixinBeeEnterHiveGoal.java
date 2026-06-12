@@ -1,7 +1,8 @@
 package com.teamresourceful.resourcefulbees.mixin.common;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,16 +21,16 @@ public abstract class MixinBeeEnterHiveGoal {
     @Shadow(aliases = {"field_20367", "f_27970_"})
     private Bee this$0;
 
-    @Inject(method = "<init>(Lnet/minecraft/world/entity/animal/Bee;)V", at = @At(value = "RETURN"))
-    private void init(Bee beeEntity, CallbackInfo ci) {
-        this.this$0 = beeEntity;
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/animal/bee/Bee;)V", at = @At(value = "RETURN"))
+    private void init(Bee this$0, CallbackInfo ci) {
+        this.this$0 = this$0;
     }
 
     @Inject(
         method = "canBeeUse",
         at = @At(
-            value = "INVOKE_ASSIGN",
-            target = "Lnet/minecraft/world/level/Level;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;"
+            value = "TAIL" //todo was INVOKE_ASSIGN but it can't find the target. I need to figure out how to fix
+            //target = "Lnet/minecraft/world/level/Level;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;"
         ),
         cancellable = true
     )
@@ -46,9 +47,13 @@ public abstract class MixinBeeEnterHiveGoal {
     }
 
     @Inject(method = "start", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
-    public void onStart(CallbackInfo ci, BlockEntity blockentity) {
-        if (blockentity instanceof BeeHolderBlockEntity holder) {
-            holder.tryEnterHive(this$0, this$0.hasNectar(), 0);
+    public void onStart(CallbackInfo ci) {
+        BlockPos pos = this$0.getHivePos();
+        if (pos != null) {
+            BlockEntity block = this$0.level().getBlockEntity(pos);
+            if (block instanceof BeeHolderBlockEntity holder) {
+                holder.tryEnterHive(this$0, this$0.hasNectar(), 0);
+            }
         }
     }
 }

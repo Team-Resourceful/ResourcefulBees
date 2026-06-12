@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.registries.custom;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
@@ -9,10 +10,9 @@ import com.teamresourceful.resourcefulbees.api.data.bee.base.RegisterBeeDataEven
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -22,10 +22,10 @@ import java.util.function.Function;
 public final class BeeDataRegistry {
 
     public static final BeeDataRegistry INSTANCE = new BeeDataRegistry();
-    private static final BeeDataSerializer<DummyBeeData> DUMMY_SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("noop"), 0, id -> Codec.unit(DummyBeeData::new), new DummyBeeData());
+    private static final BeeDataSerializer<DummyBeeData> DUMMY_SERIALIZER = BeeDataSerializer.of(ModConstants.modIdentifier("noop"), 0, id -> MapCodec.unit(DummyBeeData::new), new DummyBeeData());
 
-    private final Map<ResourceLocation, BeeDataSerializer<?>> serializers = new HashMap<>();
-    private final Object2IntMap<ResourceLocation> types = new Object2IntArrayMap<>();
+    private final Map<Identifier, BeeDataSerializer<?>> serializers = new HashMap<>();
+    private final Object2IntMap<Identifier> types = new Object2IntArrayMap<>();
     private boolean locked = false;
 
     private BeeDataRegistry() {}
@@ -36,7 +36,7 @@ public final class BeeDataRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public static Function<ResourceLocation, Codec<BeeData<?>>> codec(String id) {
+    public static Function<Identifier, Codec<BeeData<?>>> codec(String id) {
         return type -> (Codec<BeeData<?>>) decode(type)
                 .map(serializer -> serializer.codec(id))
                 .result().orElse(null);
@@ -57,11 +57,11 @@ public final class BeeDataRegistry {
     }
 
     @Nullable
-    public BeeDataSerializer<?> get(ResourceLocation id) {
+    public BeeDataSerializer<?> get(Identifier id) {
         return this.serializers.get(id);
     }
 
-    private static DataResult<BeeDataSerializer<?>> decode(ResourceLocation id) {
+    private static DataResult<BeeDataSerializer<?>> decode(Identifier id) {
         BeeDataSerializer<?> serializer = INSTANCE.get(id);
         if (serializer == null) {
             if (ModValidation.IS_RUNNING_IN_IDE || GeneralConfig.showDebugInfo) {

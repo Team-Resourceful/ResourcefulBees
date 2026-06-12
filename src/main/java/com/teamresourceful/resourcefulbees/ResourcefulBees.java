@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees;
 
 import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
-import com.teamresourceful.resourcefulbees.common.config.Config;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.data.DataGen;
 import com.teamresourceful.resourcefulbees.common.items.BeeSpawnEggItem;
@@ -29,8 +28,8 @@ import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.Comm
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.GameServerStartedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.LoadingCompletedEvent;
 import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefulconfig.api.loader.Configurator;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.IngredientHelper;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.food.FoodProperties;
@@ -39,14 +38,11 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -61,7 +57,7 @@ import org.slf4j.Logger;
 @Mod(ModConstants.MOD_ID)
 public class ResourcefulBees {
 
-    //public static final Configurator CONFIGURATOR = Configurator.initialize();
+    public static final Configurator CONFIGURATOR = new Configurator(ModConstants.MOD_ID);
 
 
 
@@ -99,12 +95,12 @@ public class ResourcefulBees {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     // Creates a new Block with the id "resourcefulbees:example_block", combining the namespace and path
-    public static final DeferredBlock<Block> EXAMPLE_BLOCK = BLOCKS.registerSimpleBlock("example_block", BlockBehaviour.Properties.of().mapColor(MapColor.STONE));
+    public static final DeferredBlock<Block> EXAMPLE_BLOCK = BLOCKS.registerSimpleBlock("example_block", p -> p.mapColor(MapColor.STONE));
     // Creates a new BlockItem with the id "resourcefulbees:example_block", combining the namespace and path
     public static final DeferredItem<BlockItem> EXAMPLE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("example_block", EXAMPLE_BLOCK);
 
     // Creates a new food item with the id "resourcefulbees:example_id", nutrition 1 and saturation 2
-    public static final DeferredItem<Item> EXAMPLE_ITEM = ITEMS.registerSimpleItem("example_item", new Item.Properties().food(new FoodProperties.Builder()
+    public static final DeferredItem<Item> EXAMPLE_ITEM = ITEMS.registerSimpleItem("example_item", p -> p.food(new FoodProperties.Builder()
             .alwaysEdible().nutrition(1).saturationModifier(2f).build()));
 
     // Creates a creative tab with the id "resourcefulbees:example_tab" for the example item, that is placed after the combat tab
@@ -126,7 +122,7 @@ public class ResourcefulBees {
         DefaultBeehiveTiers.loadDefaults();
         DefaultApiaryTiers.loadDefaults();
         DataSetup.setupInitializers(ResourcefulBeesAPI.getInitializers());
-        DataSetup.setupInitializers(ResourcefulBeesAPI.getHoneyInitalizers());
+        DataSetup.setupInitializers(ResourcefulBeesAPI.getHoneyInitializers());
         ResourcefulBeesAPI.getEvents().registerCondition(DataSetup::setupRegister);
         BeeDataRegistry.init();
         HoneyDataRegistry.init();
@@ -174,22 +170,11 @@ public class ResourcefulBees {
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
-
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
         // Some common setup code
         LOGGER.info("HELLO FROM COMMON SETUP");
-
-        if (Config.LOG_DIRT_BLOCK.getAsBoolean()) {
-            LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
-        }
-
-        LOGGER.info("{}{}", Config.MAGIC_NUMBER_INTRODUCTION.get(), Config.MAGIC_NUMBER.getAsInt());
-
-        Config.ITEM_STRINGS.get().forEach((item) -> LOGGER.info("ITEM >> {}", item));
     }
 
     // Add the example block item to the building blocks tab

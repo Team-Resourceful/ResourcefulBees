@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.honeys;
 
 import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyBottleEffectData;
@@ -73,4 +74,4 @@ public class EffectEntry extends BaseListEntry {
             graphics.drawString(font, text, 24, 11, 11184810);
         }
     }
-}
+}*/

@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.conditions.LoadCondition;
 import com.teamresourceful.resourcefulbees.api.data.conditions.LoadConditionSerializer;
 import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public record AndCondition(List<LoadCondition<?>> conditions) implements LoadCon
     private static final class Serializer implements LoadConditionSerializer<AndCondition> {
 
         @Override
-        public ResourceLocation id() {
+        public Identifier id() {
             return ID;
         }
 

@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -65,3 +66,4 @@ public class SlotButton extends ImageButton {
         onPress.run();
     }
 }
+*/

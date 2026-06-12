@@ -1,10 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.items.honey;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
+
 import net.minecraft.world.level.block.state.BlockState;
 
 public interface ColoredObject {

@@ -145,10 +145,10 @@ public final class ModItems {
     //endregion
     //endregion
 
-    public static final RegistryEntry<Item> T1_APIARY_ITEM = NEST_ITEMS.register("t1_apiary", () -> new BlockItem(ModBlocks.T1_APIARY_BLOCK.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> T2_APIARY_ITEM = NEST_ITEMS.register("t2_apiary", () -> new BlockItem(ModBlocks.T2_APIARY_BLOCK.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> T3_APIARY_ITEM = NEST_ITEMS.register("t3_apiary", () -> new BlockItem(ModBlocks.T3_APIARY_BLOCK.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> T4_APIARY_ITEM = NEST_ITEMS.register("t4_apiary", () -> new BlockItem(ModBlocks.T4_APIARY_BLOCK.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> T1_APIARY_ITEM = NEST_ITEMS.register("t1_apiary", () -> new ApiaryBlockItem(ModBlocks.T1_APIARY_BLOCK.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> T2_APIARY_ITEM = NEST_ITEMS.register("t2_apiary", () -> new ApiaryBlockItem(ModBlocks.T2_APIARY_BLOCK.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> T3_APIARY_ITEM = NEST_ITEMS.register("t3_apiary", () -> new ApiaryBlockItem(ModBlocks.T3_APIARY_BLOCK.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> T4_APIARY_ITEM = NEST_ITEMS.register("t4_apiary", () -> new ApiaryBlockItem(ModBlocks.T4_APIARY_BLOCK.get(), new Item.Properties()));
 
 
     public static final RegistryEntry<Item> WAX = ITEMS.register("wax", () -> new WaxItem(new Item.Properties()));
@@ -158,7 +158,7 @@ public final class ModItems {
 
     public static final RegistryEntry<Item> SMOKER = ITEMS.register("smoker", () -> new SmokerItem(new Item.Properties().durability(GeneralConfig.smokerDurability)));
     public static final RegistryEntry<Item> BELLOW = ITEMS.register("bellow", () -> new Item(new Item.Properties()));
-    public static final RegistryEntry<Item> SMOKERCAN = ITEMS.register("smoker_can", () -> new Item(new Item.Properties()));
+    public static final RegistryEntry<Item> SMOKER_CAN = ITEMS.register("smoker_can", () -> new Item(new Item.Properties()));
 
     public static final RegistryEntry<Item> BEE_BOX_TEMP = ITEMS.register("bee_box_temp", () -> BeeBoxItem.temp(ModBlocks.BEE_BOX_TEMP.get(), new Item.Properties().stacksTo(1)));
     public static final RegistryEntry<Item> BEE_BOX = ITEMS.register("bee_box", () -> BeeBoxItem.of(ModBlocks.BEE_BOX.get(), new Item.Properties().stacksTo(1)));
@@ -168,7 +168,7 @@ public final class ModItems {
     public static final RegistryEntry<Item> BEE_JAR = ITEMS.register("bee_jar", () -> new BeeJarItem(new Item.Properties().durability(0).stacksTo(16)));
     public static final RegistryEntry<Item> POLLEN_SPREADER_FAN = ITEMS.register("pollen_spreader_fan", () -> new BlockItem(ModBlocks.POLLEN_SPREADER_FAN.get(), new Item.Properties()));
     public static final RegistryEntry<Item> POLLEN_SPREADER = ITEMS.register("pollen_spreader", () -> new BlockItem(ModBlocks.POLLEN_SPREADER.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> MUTATED_POLLEN = ITEMS.register("mutated_pollen", () -> new MutatedPollenItem(new Item.Properties()));
+    //public static final RegistryEntry<Item> MUTATED_POLLEN = ITEMS.register("mutated_pollen", () -> new MutatedPollenItem(new Item.Properties()));
     public static final RegistryEntry<Item> FAKE_FLOWER = ITEMS.register("fake_flower", () -> new BlockItem(ModBlocks.FAKE_FLOWER.get(), new Item.Properties()));
 
     public static final RegistryEntry<Item> GOLD_FLOWER_ITEM = ITEMS.register("gold_flower", () -> new BlockItem(ModBlocks.GOLD_FLOWER.get(), new Item.Properties()));
@@ -194,7 +194,7 @@ public final class ModItems {
     public static final RegistryEntry<Item> WAXED_PRESSURE_PLATE = ITEMS.register("waxed_pressure_plate", () -> new BlockItem(ModBlocks.WAXED_PRESSURE_PLATE.get(), new Item.Properties()));
     public static final RegistryEntry<Item> WAXED_DOOR = ITEMS.register("waxed_door", () -> new BlockItem(ModBlocks.WAXED_DOOR.get(), new Item.Properties()));
     public static final RegistryEntry<Item> WAXED_TRAPDOOR = ITEMS.register("waxed_trapdoor", () -> new BlockItem(ModBlocks.WAXED_TRAPDOOR.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> WAXED_SIGN = ITEMS.register("waxed_sign", () -> new SignItem(new Item.Properties(), ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get()));
+    public static final RegistryEntry<Item> WAXED_SIGN = ITEMS.register("waxed_sign", () -> new SignItem(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get(), new Item.Properties()));
     public static final RegistryEntry<Item> WAXED_HANGING_SIGN = ITEMS.register("waxed_hanging_sign", () -> new HangingSignItem(ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get(), new Item.Properties()));
     public static final RegistryEntry<Item> TRIMMED_WAXED_PLANKS = ITEMS.register("trimmed_waxed_planks", () -> new BlockItem(ModBlocks.TRIMMED_WAXED_PLANKS.get(), new Item.Properties()));
     public static final RegistryEntry<Item> WAXED_MACHINE_BLOCK = ITEMS.register("waxed_machine_block", () -> new BlockItem(ModBlocks.WAXED_MACHINE_BLOCK.get(), new Item.Properties()));
@@ -226,7 +226,7 @@ public final class ModItems {
                             .effect(new MobEffectInstance(MobEffects.SATURATION, 2400, 1), 1)
                             .effect(new MobEffectInstance(MobEffects.LUCK, 600, 3), 1)
                             .effect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 6000, 0), 1)
-                            .effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 6000, 0), 1)
+                            .effect(new MobEffectInstance(MobEffects.RESISTANCE, 6000, 0), 1)
                             .effect(new MobEffectInstance(MobEffects.WATER_BREATHING, 6000, 0), 1)
                             .effect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1200, 0), 1)
                             .nutrition(8)
@@ -240,7 +240,7 @@ public final class ModItems {
                     builder -> builder
                             .effect(new MobEffectInstance(MobEffects.REGENERATION, 1200, 1), 1)
                             .effect(new MobEffectInstance(MobEffects.LUCK, 1200, 0), 0)
-                            .effect(new MobEffectInstance(MobEffects.JUMP, 1200, 1), 1)
+                            .effect(new MobEffectInstance(MobEffects.JUMP_BOOST, 1200, 1), 1)
                             .nutrition(6)
                             .saturationModifier(1.5f)
                             .alwaysEdible()

@@ -24,9 +24,9 @@ public class BeeMutateGoal extends Goal {
     public static void spawnParticles(Level level, Entity entity) {
         if (level instanceof ServerLevel serverLevel) {
             for (int i = 0; i < 5; ++i) {
-                double d0 = level.random.nextGaussian() * 0.02D;
-                double d1 = level.random.nextGaussian() * 0.02D;
-                double d2 = level.random.nextGaussian() * 0.02D;
+                double d0 = serverLevel.getRandom().nextGaussian() * 0.02D;
+                double d1 = serverLevel.getRandom().nextGaussian() * 0.02D;
+                double d2 = serverLevel.getRandom().nextGaussian() * 0.02D;
                 serverLevel.sendParticles(ParticleTypes.COMPOSTER,
                         entity.getRandomX(2.0D),
                         entity.getRandomY(),
@@ -38,9 +38,9 @@ public class BeeMutateGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (bee.fakeFlower.hasData()) return false;
+        //if (bee.fakeFlower.hasData()) return false;
         if (bee.getNumberOfMutations() >= bee.getMutationData().count()) return false;
-        if (bee.level().random.nextFloat() < 0.3F) return false;
+        if (bee.level().getRandom().nextFloat() < 0.3F) return false;
         return bee.hasNectar() && !bee.isAngry();
     }
 
@@ -60,11 +60,11 @@ public class BeeMutateGoal extends Goal {
     public static boolean doMutation(Map<MutationType, WeightedCollection<MutationType>> mutationMap, ServerLevel serverLevel, BlockPos blockPos) {
         for (Map.Entry<MutationType, WeightedCollection<MutationType>> entry : mutationMap.entrySet()) {
             MutationType input = entry.getKey();
-            if (input.chance() < serverLevel.random.nextFloat()) continue;
+            if (input.chance() < serverLevel.getRandom().nextFloat()) continue;
             BlockPos pos = input.check(serverLevel, blockPos);
             if (pos == null) continue;
             MutationType output = entry.getValue().next();
-            if (output.chance() >= serverLevel.random.nextFloat() && output.activate(serverLevel, pos)) {
+            if (output.chance() >= serverLevel.getRandom().nextFloat() && output.activate(serverLevel, pos)) {
                 return true;
             }
         }

@@ -1,19 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.config;
 
-import com.teamresourceful.resourcefulconfig.common.annotations.Category;
-import com.teamresourceful.resourcefulconfig.common.annotations.Comment;
-import com.teamresourceful.resourcefulconfig.common.annotations.ConfigEntry;
-import com.teamresourceful.resourcefulconfig.common.annotations.IntRange;
-import com.teamresourceful.resourcefulconfig.common.config.EntryType;
-import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
+import com.teamresourceful.resourcefulconfig.api.annotations.*;
 
-@Category(id = "bee", translation = "Bee")
-@WebInfo(icon = "bee")
+@Category(value = "bee")
+@ConfigInfo(icon = "bee")
 public final class BeeConfig {
 
     @ConfigEntry(
             id = "beesDieFromSting",
-            type = EntryType.BOOLEAN,
             translation = "Bees Die From Sting"
     )
     @Comment(
@@ -26,7 +20,6 @@ public final class BeeConfig {
 
     @ConfigEntry(
             id = "beesInflictPoison",
-            type = EntryType.BOOLEAN,
             translation = "Bees Inflict Poison"
     )
     @Comment(
@@ -40,7 +33,6 @@ public final class BeeConfig {
 
     @ConfigEntry(
             id = "beesDieInVoid",
-            type = EntryType.BOOLEAN,
             translation = "Bees Die In Void"
     )
     @Comment(
@@ -53,7 +45,6 @@ public final class BeeConfig {
 
     @ConfigEntry(
             id = "use_experimental_manual_mode",
-            type = EntryType.BOOLEAN,
             translation = "Use Experimental Manual Mode"
     )
     @Comment(
@@ -67,16 +58,14 @@ public final class BeeConfig {
 
     @ConfigEntry(
             id = "beeAuraRange",
-            type = EntryType.INTEGER,
             translation = "Bee Aura Range"
     )
     @Comment("The default radius that all bees will use for their auras.")
-    @IntRange(min = 3, max = 20)
+    @ConfigOption.Range(min = 3, max = 20)
     public static int defaultAuraRange = 10;
 
     @ConfigEntry(
             id = "auraFrequency",
-            type = EntryType.INTEGER,
             translation = "Aura Frequency"
     )
     @Comment(
@@ -85,7 +74,7 @@ public final class BeeConfig {
         Set this to a higher value to improve performance
         """
     )
-    @IntRange(min = 5, max = 15)
+    @ConfigOption.Range(min = 5, max = 15)
     public static int auraFrequency = 6;
 
 

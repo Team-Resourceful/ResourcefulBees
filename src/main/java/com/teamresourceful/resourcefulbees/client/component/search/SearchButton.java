@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component.search;
 
 import com.teamresourceful.resourcefulbees.client.screen.beepedia.state.BeepediaState;
@@ -77,3 +78,4 @@ public class SearchButton extends ImageButton {
         this.onPress.run();
     }
 }
+*/

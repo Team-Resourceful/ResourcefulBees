@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.EnderBeeconBlockEntity;
@@ -46,12 +47,14 @@ public class BeeconEffectWidget extends AbstractWidget {
     @Override
     public void onClick(double mouseX, double mouseY) {
         if (MathUtils.inRangeInclusive((int) mouseX, getX() + 60, getX() + 85) && MathUtils.inRangeInclusive((int) mouseY, getY() + 4, getY() + 19)) {
-            /*NetworkHandler.CHANNEL.sendToServer(new BeeconChangePacket(
+            */
+/*NetworkHandler.CHANNEL.sendToServer(new BeeconChangePacket(
                     this.isSelected() ? BeeconChangePacket.Option.EFFECT_OFF : BeeconChangePacket.Option.EFFECT_ON,
                     MobEffect.getId(effect),
                     tile.getBlockPos()
                 )
-            );*/
+            );*//*
+
         }
     }
 
@@ -79,3 +82,4 @@ public class BeeconEffectWidget extends AbstractWidget {
 
     }
 }
+*/

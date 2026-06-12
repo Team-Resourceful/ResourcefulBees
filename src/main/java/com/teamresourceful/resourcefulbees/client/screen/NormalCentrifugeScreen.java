@@ -1,16 +1,10 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
-import com.teamresourceful.resourcefulbees.client.component.SelectableFluidWidget;
 import com.teamresourceful.resourcefulbees.common.blockentities.CentrifugeBlockEntity;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.translations.CentrifugeTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.CentrifugeMenu;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import org.jetbrains.annotations.NotNull;
 
 public class NormalCentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
 
@@ -26,10 +20,10 @@ public class NormalCentrifugeScreen extends AbstractContainerScreen<CentrifugeMe
     protected void init() {
         super.init();
         clearWidgets();
-        addRenderableWidget(new SelectableFluidWidget(tileEntity.getSelectableFluidContainer(), tileEntity.getBlkPos(), this.leftPos + 152, this.topPos + 11, 16, 64, CentrifugeTranslations.TANK));
+        //addRenderableWidget(new SelectableFluidWidget(tileEntity.getSelectableFluidContainer(), tileEntity.getBlkPos(), this.leftPos + 152, this.topPos + 11, 16, 64, CentrifugeTranslations.TANK));
     }
 
-    @Override
+/*    @Override
     protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/centrifuge/basic.png");
         if (tileEntity != null) {
@@ -46,6 +40,6 @@ public class NormalCentrifugeScreen extends AbstractContainerScreen<CentrifugeMe
             super.render(graphics, mouseX, mouseY, partialTicks);
             this.renderTooltip(graphics, mouseX, mouseY);
         }
-    }
+    }*/
 
 }

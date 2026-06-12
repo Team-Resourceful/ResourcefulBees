@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.entities.entity.ThrownMutatedPollen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
@@ -9,7 +8,6 @@ import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,11 +25,11 @@ public final class ModEntities {
         return MOD_BEES;
     }
 
-    public static final RegistryEntry<EntityType<? extends ThrownMutatedPollen>> THROWN_MUTATED_POLLEN = ENTITY_TYPES.register("thrown_mutated_pollen",() ->
+/*    public static final RegistryEntry<EntityType<? extends ThrownMutatedPollen>> THROWN_MUTATED_POLLEN = ENTITY_TYPES.register("thrown_mutated_pollen",() ->
             EntityType.Builder.of((EntityType.EntityFactory<ThrownMutatedPollen>) ThrownMutatedPollen::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .build("resourcefulbees:thrown_mutated_pollen"));
+                    .build("resourcefulbees:thrown_mutated_pollen"));*/
 
 }

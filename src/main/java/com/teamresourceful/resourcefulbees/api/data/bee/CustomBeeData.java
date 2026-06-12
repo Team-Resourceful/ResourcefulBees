@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,9 +18,9 @@ public interface CustomBeeData {
 
     String name();
 
-    ResourceLocation id();
+    Identifier id();
 
-    Map<ResourceLocation, BeeData<?>> data();
+    Map<Identifier, BeeData<?>> data();
 
     MutableComponent displayName();
 
@@ -35,7 +35,7 @@ public interface CustomBeeData {
 
     BeekeeperTradeData getTradeData();
 
-    default BeeData<?> getBeeData(ResourceLocation id) {
+    default BeeData<?> getBeeData(Identifier id) {
         return data().get(id);
     }
 

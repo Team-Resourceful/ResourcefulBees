@@ -8,7 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.util.GoalUtils;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -60,7 +60,8 @@ public class WanderWorkerGoal extends WorkerGoal {
         }
         this.randomValue = this.bee.getRandom().nextInt(8) + 8;
 
-        this.inDistanceOfHome = bee.hasRestriction() && bee.getRestrictCenter().closerThan(bee.blockPosition(), (bee.getRestrictRadius() + this.randomValue) + 1.0D);
+
+        this.inDistanceOfHome = bee.hasHome() && bee.getHomePosition().closerThan(bee.blockPosition(), (bee.getHomeRadius() + this.randomValue) + 1.0D);
     }
 
     @Override
@@ -114,8 +115,8 @@ public class WanderWorkerGoal extends WorkerGoal {
         int rndPosY = randomOffset.getY();
         int rndPosZ = randomOffset.getZ();
 
-        if (bee.hasRestriction()) { //if bee has a home && horizontal offset is greater than 1
-            final BlockPos homePos = bee.getRestrictCenter(); //get home position
+        if (bee.hasHome()) { //if bee has a home && horizontal offset is greater than 1
+            final BlockPos homePos = bee.getHomePosition(); //get home position
 
             //checks if bee is east of home and sets position closer based on direction
             int nextInt = random.nextInt(horizontalOffset / 2);
@@ -130,19 +131,19 @@ public class WanderWorkerGoal extends WorkerGoal {
         BlockPos targetPos = BlockPos.containing(rndPosX + bee.getX(), rndPosY + bee.getY(), rndPosZ + bee.getZ());
 
         //if target Y is between 0 and world height AND (is not in Distance of home OR target pos is in distance of home) AND entity can stand on target pos
-        if (!bee.level().isOutsideBuildHeight(targetPos) && (!this.inDistanceOfHome || bee.isWithinRestriction(targetPos)) && navigation.isStableDestination(targetPos)) {
+        if (!bee.level().isOutsideBuildHeight(targetPos) && (!this.inDistanceOfHome || bee.isWithinHome(targetPos)) && navigation.isStableDestination(targetPos)) {
 
             //flip a coin heads = check block above is air if so find valid position above else go below
             if (random.nextBoolean() && bee.level().isEmptyBlock(bee.blockPosition().above())) {
-                targetPos = RandomPositionGenerator.findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level().getMaxBuildHeight(), pos -> bee.level().getBlockState(pos).blocksMotion());
+                targetPos = RandomPositionGenerator.findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level().getMaxY(), pos -> bee.level().getBlockState(pos).blocksMotion());
             } else {
-                targetPos = RandomPositionGenerator.findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level().getMinBuildHeight(), pos -> bee.level().getBlockState(pos).blocksMotion());
+                targetPos = RandomPositionGenerator.findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level().getMaxY(), pos -> bee.level().getBlockState(pos).blocksMotion());
             }
 
             // if can travel through water or target pos is not tagged as water
             if (pathOnWater || !GoalUtils.isWater(bee, targetPos)) {
                 //set path node type based on target position
-                if (bee.getPathfindingMalus(WalkNodeEvaluator.getBlockPathTypeStatic(bee.level(), targetPos.mutable())) == 0.0F) {
+                if (bee.getPathfindingMalus(WalkNodeEvaluator.getPathTypeStatic(bee, targetPos.mutable())) == 0.0F) {
                     //calculate if weight of new target position is better than previous target position
                     final double d1 = weightCalculator.applyAsDouble(targetPos);
                     if (d1 > this.currentWeight) {

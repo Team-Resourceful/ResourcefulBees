@@ -6,11 +6,12 @@ import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassExceptio
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.NeutralMob;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public final class ModEffects {
 
@@ -22,9 +23,9 @@ public final class ModEffects {
 
     public static final RegistryEntry<MobEffect> CALMING = EFFECTS.register("calming", () -> new MobEffect(MobEffectCategory.BENEFICIAL, 16763783) {
         @Override
-        public boolean applyEffectTick(@NotNull LivingEntity entity, int level) {
-            if (entity instanceof NeutralMob neutralMob) neutralMob.stopBeingAngry();
-            return super.applyEffectTick(entity, level);
+        public boolean applyEffectTick(@NonNull ServerLevel serverLevel, @NonNull LivingEntity mob, int amplification) {
+            if (mob instanceof NeutralMob neutralMob) neutralMob.stopBeingAngry();
+            return super.applyEffectTick(serverLevel, mob, amplification);
         }
 
         @Override

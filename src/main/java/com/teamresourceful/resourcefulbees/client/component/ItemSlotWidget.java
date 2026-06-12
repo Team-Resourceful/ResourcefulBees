@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -39,3 +40,4 @@ public class ItemSlotWidget implements Renderable {
     }
 
 }
+*/

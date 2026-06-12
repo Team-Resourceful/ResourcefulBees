@@ -7,8 +7,8 @@ import com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyDataSerializ
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidAttributesData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.LazyHolders;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -43,7 +43,7 @@ public record CustomHoneyFluidData(
                 TradeData.CODEC.optionalFieldOf("tradeData", TradeData.DEFAULT).forGetter(HoneyFluidData::tradeData)
         ).apply(instance, CustomHoneyFluidData::new));
     }
-    public static final HoneyDataSerializer<HoneyFluidData> SERIALIZER = HoneyDataSerializer.of(new ModResourceLocation("fluid"), 1, CustomHoneyFluidData::codec, DEFAULT);
+    public static final HoneyDataSerializer<HoneyFluidData> SERIALIZER = HoneyDataSerializer.of(ModConstants.modIdentifier("fluid"), 1, CustomHoneyFluidData::codec, DEFAULT);
 
     @Override
     public HoneyDataSerializer<HoneyFluidData> serializer() {

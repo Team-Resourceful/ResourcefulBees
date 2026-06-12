@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.state;
 
 import com.mojang.datafixers.util.Pair;
@@ -78,3 +79,4 @@ public class BeepediaState implements ScreenState {
         }
     }
 }
+*/

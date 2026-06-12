@@ -16,7 +16,7 @@ public final class ModValidation {
         if (IS_RUNNING_IN_IDE) {
             NBTConstants.validate();
             ResourcefulBeesAPI.getInitializers().validate();
-            ResourcefulBeesAPI.getHoneyInitalizers().validate();
+            ResourcefulBeesAPI.getHoneyInitializers().validate();
         }
     }
 }

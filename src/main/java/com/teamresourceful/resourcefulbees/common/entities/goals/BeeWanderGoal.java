@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.entities.goals;
 import com.teamresourceful.resourcefulbees.common.util.RandomPositionGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

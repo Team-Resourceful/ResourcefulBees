@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +25,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.stream.Stream;
 
@@ -57,11 +57,10 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(HORIZONTAL_FACING, Direction.NORTH));
     }
 
-    @NotNull
     @Override
-    public InteractionResult use(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult) {
-        if (!player.isShiftKeyDown() && !world.isClientSide) {
-            MenuProvider blockEntity = state.getMenuProvider(world,pos);
+    protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull BlockHitResult hitResult) {
+        if (!player.isShiftKeyDown() && !level.isClientSide()) {
+            MenuProvider blockEntity = state.getMenuProvider(level,pos);
             if (blockEntity instanceof ContentMenuProvider<?> contentMenu) {
                 contentMenu.openMenu((ServerPlayer) player);
             } else if (blockEntity != null) {

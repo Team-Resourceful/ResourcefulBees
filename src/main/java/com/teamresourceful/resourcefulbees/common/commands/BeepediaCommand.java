@@ -10,6 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 
 public final class BeepediaCommand {
 
@@ -19,7 +20,7 @@ public final class BeepediaCommand {
 
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
         return Commands.literal("beepedia")
-            .requires(stack -> stack.hasPermission(Commands.LEVEL_GAMEMASTERS))
+            .requires(stack -> stack.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
             .then(Commands.argument("player", EntityArgument.player())
                 .then(Commands.literal("add")
                     .then(BeeArgument.argument()).executes(ctx -> add(ctx, false))

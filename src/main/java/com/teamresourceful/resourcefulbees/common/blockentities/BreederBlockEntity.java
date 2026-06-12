@@ -84,7 +84,7 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
                 getItem(BreederConstants.PARENT_2_SLOTS.get(i)), getItem(BreederConstants.FEED_2_SLOTS.get(i)),
                 getItem(BreederConstants.EMPTY_JAR_SLOTS.get(i))
         );
-        recipes[i] = level.getRecipeManager().getRecipeFor(ModRecipes.BREEDER_RECIPE_TYPE.get(), container, level).orElse(null);
+        recipes[i] = level.getServer().getRecipeManager().getRecipeFor(ModRecipes.BREEDER_RECIPE_TYPE.get(), container, level).orElse(null);
         if (recipes[i] != null) {
             endTimes.set(i, recipes[i].time()-timeReduction);
         }
@@ -106,7 +106,7 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
 
         BreederRecipe.BreederOutput output = recipe.outputs().next();
 
-        boolean recipeSuccess = output.chance() >= level.random.nextFloat();
+        boolean recipeSuccess = output.chance() >= level.getRandom().nextFloat();
 
         if (recipeSuccess) {
             recipe.input().ifPresent(input -> getItem(BreederConstants.EMPTY_JAR_SLOTS.get(slot)).shrink(1));

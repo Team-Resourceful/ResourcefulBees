@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages.bees;
 
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
@@ -45,3 +46,4 @@ public class HoneycombPage extends RenderingScreen {
         }
     }
 }
+*/

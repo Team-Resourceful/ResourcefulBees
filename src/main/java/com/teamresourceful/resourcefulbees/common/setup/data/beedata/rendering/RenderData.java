@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerTexture;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.util.ModResourceLocation;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.resources.ResourceLocation;
 
@@ -32,7 +31,7 @@ public record RenderData(Set<BeeLayerData> layers, BeeColorData colorData, Resou
             Codec.floatRange(0.5f, 2.0f).optionalFieldOf("sizeModifier", 1.0f).forGetter(BeeRenderData::sizeModifier)
     ).apply(instance, RenderData::new));
 
-    public static final BeeDataSerializer<BeeRenderData> SERIALIZER = BeeDataSerializer.of(new ModResourceLocation("rendering"), 1, id -> CODEC, DEFAULT);
+    public static final BeeDataSerializer<BeeRenderData> SERIALIZER = BeeDataSerializer.of(new ModIdentifier("rendering"), 1, id -> CODEC, DEFAULT);
 
     @Override
     public BeeDataSerializer<BeeRenderData> serializer() {

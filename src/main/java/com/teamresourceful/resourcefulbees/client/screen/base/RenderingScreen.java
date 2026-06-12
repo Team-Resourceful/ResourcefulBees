@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.screen.base;
 
 import net.minecraft.client.gui.components.Renderable;
@@ -33,3 +34,4 @@ public class RenderingScreen extends Screen {
         return renderables;
     }
 }
+*/

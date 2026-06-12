@@ -9,11 +9,11 @@ import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.bottle.Cu
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.fluid.CustomHoneyFluidData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Map;
 
-public record HoneyDataImpl(String name, Map<ResourceLocation, HoneyData<?>> data) implements CustomHoneyData {
+public record HoneyDataImpl(String name, Map<Identifier, HoneyData<?>> data) implements CustomHoneyData {
 
     @Override
     public MutableComponent displayName() {

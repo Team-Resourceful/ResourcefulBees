@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.component.selection;
 
 import com.teamresourceful.resourcefulbees.client.component.SlotButton;
@@ -35,3 +36,4 @@ public class SelectionButtons extends ParentWidget {
         });
     }
 }
+*/

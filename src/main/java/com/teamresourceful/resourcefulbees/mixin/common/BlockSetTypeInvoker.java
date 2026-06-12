@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.mixin.common;
+/*package com.teamresourceful.resourcefulbees.mixin.common;
 
 import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -12,4 +12,4 @@ public interface BlockSetTypeInvoker {
     static BlockSetType invokeRegister(BlockSetType type) {
         throw new NotImplementedException();
     }
-}
+}*/

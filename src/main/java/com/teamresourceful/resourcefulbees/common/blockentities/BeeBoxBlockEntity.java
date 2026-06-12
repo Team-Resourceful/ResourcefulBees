@@ -12,7 +12,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -27,15 +30,15 @@ public class BeeBoxBlockEntity extends BlockEntity {
 
     //region NBT
     @Override
-    protected void saveAdditional(@NotNull CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.put(NBTConstants.NBT_BEES, TagUtils.toListTag(bees));
-        tag.put(NBTConstants.NBT_DISPLAYNAMES, TagUtils.toListTag(displayNames));
+    protected void saveAdditional(@NonNull ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
+        valueOutput.pu.put(NBTConstants.NBT_BEES, TagUtils.toListTag(bees));
+        valueOutput.put(NBTConstants.NBT_DISPLAYNAMES, TagUtils.toListTag(displayNames));
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(@NotNull ValueInput input) {
+        super.loadAdditional(input);
         this.bees = TagUtils.fromListTag(tag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND), CompoundTag.class);
         this.displayNames = TagUtils.fromListTag(tag.getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING), StringTag.class);
     }

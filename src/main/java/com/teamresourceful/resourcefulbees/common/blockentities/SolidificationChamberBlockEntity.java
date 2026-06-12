@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.ContentContainerBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
-import com.teamresourceful.resourcefulbees.common.config.SolidficationConfig;
+import com.teamresourceful.resourcefulbees.common.config.SolidificationConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.SolidificationChamberMenu;
@@ -51,8 +51,8 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
 
     public float getProcessPercent() {
         if (!canProcessHoney()) return 0;
-        if (processingFill == SolidficationConfig.honeyProcessTime * SolidficationConfig.solidficationTimeMultiplier) return 1;
-        return processingFill / ((float) SolidficationConfig.honeyProcessTime * SolidficationConfig.solidficationTimeMultiplier);
+        if (processingFill == SolidificationConfig.honeyProcessTime * SolidificationConfig.solidificationTimeMultiplier) return 1;
+        return processingFill / ((float) SolidificationConfig.honeyProcessTime * SolidificationConfig.solidificationTimeMultiplier);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state) {
         if (this.canProcessHoney()) {
-            if (this.processingFill >= SolidficationConfig.honeyProcessTime * SolidficationConfig.solidficationTimeMultiplier) {
+            if (this.processingFill >= SolidificationConfig.honeyProcessTime * SolidificationConfig.solidificationTimeMultiplier) {
                 this.processHoney();
                 this.processingFill = 0;
             }

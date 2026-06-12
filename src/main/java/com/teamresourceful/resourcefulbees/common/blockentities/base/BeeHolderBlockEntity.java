@@ -53,7 +53,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
         CompoundTag nbt = apiaryBee.entityData;
 
         if (level != null && this.level.getBlockState(blockPos1).getCollisionShape(this.level, blockPos1).isEmpty()) {
-            Entity entity = EntityType.loadEntityRecursive(nbt, this.level, entity1 -> entity1);
+            Entity entity = EntityType.loadEntityRecursive(nbt, this.level);
             if (entity != null) {
                 EntityUtils.setEntityLocationAndAngle(blockPos, direction, entity);
                 deliverNectar(nbt, entity);
@@ -135,7 +135,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
             tag.putInt("TicksInHive", apiaryBee.getTicksInHive());
             tag.putInt("MinOccupationTicks", apiaryBee.minOccupationTicks);
             tag.putBoolean(NBTConstants.NBT_LOCKED, apiaryBee.isLocked());
-            tag.putString(NBTConstants.NBT_BEE_NAME, Component.Serializer.toJson(apiaryBee.displayName));
+            tag.putString(NBTConstants.NBT_BEE_NAME, Component.Serializer.toJson(apiaryBee.displayName.to));
             tag.putString(NBTConstants.BeeJar.COLOR, apiaryBee.color);
             listTag.add(tag);
         });
@@ -162,7 +162,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
     public void readSyncData(@NotNull CompoundTag tag) {
         bees.clear();
         loadBees(tag);
-        bees.removeIf(bee -> EntityType.byString(bee.entityData.getString("id")).isEmpty());
+        bees.removeIf(bee -> EntityType.byString(String.valueOf(bee.entityData.getString("id"))).isEmpty());
     }
     //endregion
 

@@ -1,40 +1,49 @@
 package com.teamresourceful.resourcefulbees.common.config;
 
-import com.teamresourceful.resourcefulconfig.common.annotations.*;
-import com.teamresourceful.resourcefulconfig.common.config.EntryType;
-import com.teamresourceful.resourcefulconfig.web.annotations.Link;
-import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulconfig.api.annotations.*;
 
-@Config("resourcefulbees/config")
-@WebInfo(
+@Config(
+        value = ModConstants.MOD_ID,
+        categories = {
+                ClientConfig.class,
+                BeeConfig.class,
+                RecipeConfig.class,
+                CentrifugeConfig.class,
+                WorldGenConfig.class,
+                ApiaryConfig.class,
+                EnderBeeconConfig.class,
+                HoneycombConfig.class,
+                SolidificationConfig.class
+        }
+)
+@ConfigInfo(
         icon = "honeycomb",
         title = "Resourceful Bees",
         description = "Create bees the way you want!",
-        color = "#EF5552",
         links = {
-                @Link(
+                @ConfigInfo.Link(
                         value = "https://modrinth.com/mod/resourceful-bees",
                         icon = "modrinth",
-                        title = "Modrinth"
+                        text = "Modrinth"
                 ),
-                @Link(
+                @ConfigInfo.Link(
                         value = "https://www.curseforge.com/minecraft/mc-mods/resourcefulbees",
                         icon = "curseforge",
-                        title = "Curseforge"
+                        text = "Curseforge"
                 ),
-                @Link(
+                @ConfigInfo.Link(
                         value = "https://github.com/Team-Resourceful/ResourcefulBees",
                         icon = "github",
-                        title = "Github"
+                        text = "Github"
                 )
         }
 )
 public final class GeneralConfig {
 
-    @ConfigSeparator(translation = "General")
+    @ConfigOption.Separator(value = "General")
     @ConfigEntry(
             id = "generateDefaults",
-            type = EntryType.BOOLEAN,
             translation = "Generate Defaults"
     )
     @Comment(
@@ -47,7 +56,6 @@ public final class GeneralConfig {
 
     @ConfigEntry(
             id = "enableDevBees",
-            type = EntryType.BOOLEAN,
             translation = "Enable Dev Bees"
     )
     @Comment(
@@ -57,7 +65,6 @@ public final class GeneralConfig {
 
     @ConfigEntry(
             id = "enableSupporterBees",
-            type = EntryType.BOOLEAN,
             translation = "Enable Supporter Bees"
     )
     @Comment(
@@ -67,7 +74,6 @@ public final class GeneralConfig {
 
     @ConfigEntry(
             id = "showDebugInfo",
-            type = EntryType.BOOLEAN,
             translation = "Show Debug Info"
     )
     @Comment(
@@ -75,10 +81,9 @@ public final class GeneralConfig {
     )
     public static boolean showDebugInfo = false;
 
-    @ConfigSeparator(translation = "Tools")
+    @ConfigOption.Separator(value = "Tools")
     @ConfigEntry(
             id = "allowShears",
-            type = EntryType.BOOLEAN,
             translation = "Allow Shears"
     )
     @Comment(
@@ -88,7 +93,6 @@ public final class GeneralConfig {
 
     @ConfigEntry(
             id = "smokerDurability",
-            type = EntryType.INTEGER,
             translation = "Smoker Durability"
     )
     @Comment(
@@ -98,43 +102,14 @@ public final class GeneralConfig {
 
     @ConfigEntry(
             id = "consumeHiveUpgrade",
-            type = EntryType.BOOLEAN,
             translation = "Consume Hive Upgrade"
     )
     @Comment(
             value = "Set to false if you want hive upgrades to be reusable."
     )
-    @IntRange(min = 100, max = 5000)
+    @ConfigOption.Range(min = 100, max = 5000)
     public static boolean consumeHiveUpgrade = true;
 
-    @InlineCategory
-    public static ClientConfig clientConfig;
 
-    @InlineCategory
-    public static BeeConfig beeConfig;
-
-    @InlineCategory
-    public static RecipeConfig recipeConfig;
-
-    @InlineCategory
-    public static CentrifugeConfig centrifugeConfig;
-
-    @InlineCategory
-    public static WorldGenConfig worldGenConfig;
-
-    @InlineCategory
-    public static ApiaryConfig apiaryConfig;
-
-    @InlineCategory
-    public static EnderBeeconConfig enderBeeconConfig;
-
-    @InlineCategory
-    public static HoneycombConfig honeycombConfig;
-
-    @InlineCategory
-    public static HoneyGenConfig honeyGenConfig;
-
-    @InlineCategory
-    public static SolidficationConfig solidficationConfig;
 
 }

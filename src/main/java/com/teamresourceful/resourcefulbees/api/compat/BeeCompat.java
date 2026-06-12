@@ -9,25 +9,25 @@ import java.util.Optional;
 
 public interface BeeCompat {
 
-    ItemStack getHiveOutput(BeehiveTier tier);
+    ItemStack resourcefulBees$getHiveOutput(BeehiveTier tier);
 
     default Optional<ItemStack> getOptionalHiveOutput(BeehiveTier tier) {
-        ItemStack stack = getHiveOutput(tier);
+        ItemStack stack = resourcefulBees$getHiveOutput(tier);
         if (stack.isEmpty()) return Optional.empty();
         return Optional.of(stack);
     }
 
-    ItemStack getApiaryOutput(ApiaryTier tier);
+    ItemStack resourcefulBees$getApiaryOutput(ApiaryTier tier);
 
     default Optional<ItemStack> getOptionalApiaryOutput(ApiaryTier tier) {
-        ItemStack stack = getApiaryOutput(tier);
+        ItemStack stack = resourcefulBees$getApiaryOutput(tier);
         if (stack.isEmpty()) return Optional.empty();
         return Optional.of(stack);
     }
 
-    int getMaxTimeInHive();
+    int resourcefulBees$getMaxTimeInHive();
 
-    void nectarDroppedOff();
+    void resourcefulBees$nectarDroppedOff();
 
-    void setOutOfHiveCooldown(int cooldown);
+    void resourcefulBees$setOutOfHiveCooldown(int cooldown);
 }

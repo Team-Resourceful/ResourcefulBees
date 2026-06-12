@@ -20,7 +20,7 @@ public class ModItemModelProvider extends BaseItemModelProvider {
         basicItem(ModItems.T3_NEST_UPGRADE.get());
         basicItem(ModItems.T4_NEST_UPGRADE.get());
         basicItem(ModItems.SMOKER.get());
-        basicItem(ModItems.SMOKERCAN.get());
+        basicItem(ModItems.SMOKER_CAN.get());
         basicItem(ModItems.BELLOW.get());
         basicItem(ModItems.OREO_COOKIE.get());
         basicItem(ModItems.WAXED_DOOR.get());

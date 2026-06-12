@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
@@ -27,7 +27,7 @@ public final class HoneyInitializers {
 
     @FunctionalInterface
     public interface HoneyDataInitializer {
-        CustomHoneyData create(String name, Map<ResourceLocation, HoneyData<?>> data);
+        CustomHoneyData create(String name, Map<Identifier, HoneyData<?>> data);
     }
 
     @FunctionalInterface
@@ -37,7 +37,7 @@ public final class HoneyInitializers {
 
     @FunctionalInterface
     public interface HoneyRenderDataInitializer {
-        HoneyRenderData create(Color color, ResourceLocation still, ResourceLocation flowing, ResourceLocation face, ResourceLocation overlay);
+        HoneyRenderData create(Color color, Identifier still, Identifier flowing, Identifier face, Identifier overlay);
     }
 
     @FunctionalInterface

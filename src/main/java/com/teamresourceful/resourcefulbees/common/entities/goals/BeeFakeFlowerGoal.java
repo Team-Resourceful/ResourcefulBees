@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.common.entities.goals;
 
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
@@ -107,3 +108,4 @@ public class BeeFakeFlowerGoal extends Goal {
         }
     }
 }
+*/

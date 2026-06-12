@@ -3,7 +3,8 @@ package com.teamresourceful.resourcefulbees.common.items;
 import com.teamresourceful.resourcefulbees.client.rendering.items.ItemRendererProvider;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
-import software.bernie.geckolib.animatable.GeoItem;
+import com.geckolib.animatable.GeoItem;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -26,7 +27,7 @@ public abstract class CustomGeoBlockItem extends BlockItem implements GeoItem {
         throw new RuntimeException("This should only be called on fabric!");
     }
 
-    public Supplier<Object> getRenderProvider() {
+    public @NonNull Supplier<Object> getRenderProvider() {
         throw new RuntimeException("This should only be called on fabric!");
     }
 }

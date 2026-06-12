@@ -15,7 +15,7 @@ public class ItemLanguageModule implements LanguageModule {
         provider.addItem(ModItems.SCRAPER, "Scraper");
         provider.addItem(ModItems.SMOKER, "Bee Smoker");
         provider.addItem(ModItems.BELLOW, "Bellow");
-        provider.addItem(ModItems.SMOKERCAN, "Smoker Canister");
+        provider.addItem(ModItems.SMOKER_CAN, "Smoker Canister");
         provider.addItem(ModItems.WAX, "Beeswax");
         provider.addItem(ModItems.BREED_TIME_UPGRADE, "Breed Time Upgrade");
         provider.addItem(ModItems.HONEY_BUCKET, "Honey Bucket");

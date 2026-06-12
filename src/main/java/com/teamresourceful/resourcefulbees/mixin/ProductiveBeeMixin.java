@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.modcompat.productivebees.ProductiveBeesCompat;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,31 +26,31 @@ public abstract class ProductiveBeeMixin extends Bee implements BeeCompat {
     }
 
     @Override
-    public ItemStack getHiveOutput(BeehiveTier tier) {
+    public ItemStack resourcefulBees$getHiveOutput(BeehiveTier tier) {
         List<ItemStack> output = ProductiveBeesCompat.getBeeProduce(this.level(), this, false);
         if (output.isEmpty()) return ItemStack.EMPTY;
         return output.get(this.getRandom().nextInt(output.size()));
     }
 
     @Override
-    public ItemStack getApiaryOutput(ApiaryTier tier) {
+    public ItemStack resourcefulBees$getApiaryOutput(ApiaryTier tier) {
         List<ItemStack> output = ProductiveBeesCompat.getBeeProduce(this.level(), this, true);
         if (output.isEmpty()) return ItemStack.EMPTY;
         return output.get(this.getRandom().nextInt(output.size()));
     }
 
     @Override
-    public int getMaxTimeInHive() {
+    public int resourcefulBees$getMaxTimeInHive() {
         return getTimeInHive(hasNectar());
     }
 
     @Override
-    public void nectarDroppedOff() {
+    public void resourcefulBees$nectarDroppedOff() {
         dropOffNectar();
     }
 
     @Override
-    public void setOutOfHiveCooldown(int cooldown) {
+    public void resourcefulBees$setOutOfHiveCooldown(int cooldown) {
         setStayOutOfHiveCountdown(cooldown);
     }
 }

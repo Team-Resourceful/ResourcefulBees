@@ -3,30 +3,31 @@ package com.teamresourceful.resourcefulbees.common.blocks;
 import com.teamresourceful.resourcefulbees.platform.common.block.BlockExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.GlassBlock;
+import net.minecraft.world.level.block.TransparentBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
-public class HoneyGlass extends GlassBlock implements BlockExtension {
+public class HoneyGlass extends TransparentBlock implements BlockExtension {
 
     private final boolean collidePlayer; //if true player cannot go through block but bee can - if false player can go through block but bee cannot
 
-    public HoneyGlass(Properties properties, boolean collidePlayer) {
+    public HoneyGlass(BlockBehaviour.Properties properties, boolean collidePlayer) {
         super(properties);
         this.collidePlayer = collidePlayer;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         if (context instanceof EntityCollisionContext entityContext) {
             if ((collidePlayer && isBeeContext(entityContext)) || (isPlayerContext(entityContext) && !collidePlayer)) return Shapes.empty();
@@ -44,8 +45,8 @@ public class HoneyGlass extends GlassBlock implements BlockExtension {
     }
 
     @Override
-    public @Nullable BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
-        return collidePlayer && mob instanceof Bee ? BlockPathTypes.OPEN : BlockPathTypes.BLOCKED;
+    public @Nullable PathType getBlockPathType(@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @Nullable Mob mob) {
+        return collidePlayer && mob instanceof Bee ? PathType.OPEN : PathType.BLOCKED;
     }
 
 }

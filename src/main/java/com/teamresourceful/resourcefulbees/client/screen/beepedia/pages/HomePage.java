@@ -1,3 +1,4 @@
+/*
 package com.teamresourceful.resourcefulbees.client.screen.beepedia.pages;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
@@ -73,3 +74,4 @@ public class HomePage extends Screen {
         }
     }
 }
+*/

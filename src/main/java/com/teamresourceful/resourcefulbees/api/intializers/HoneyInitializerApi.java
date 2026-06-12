@@ -13,7 +13,7 @@ import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.exceptions.ValidationException;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
@@ -43,7 +43,7 @@ public class HoneyInitializerApi {
     private HoneyInitializers.HoneyFoodDataInitializer food;
     private HoneyInitializers.HoneyBottleEffectDataInitializer effect;
 
-    public CustomHoneyData data(String name, Map<ResourceLocation, HoneyData<?>> data) {
+    public CustomHoneyData data(String name, Map<Identifier, HoneyData<?>> data) {
         return this.data.create(name, data);
     }
 
@@ -51,7 +51,7 @@ public class HoneyInitializerApi {
         return this.fluid.create(id, renderData, attributes, still, flowing, bucket, block, tradeData);
     }
 
-    public HoneyRenderData fluidRender(Color color, ResourceLocation still, ResourceLocation flowing, ResourceLocation face, ResourceLocation overlay) {
+    public HoneyRenderData fluidRender(Color color, Identifier still, Identifier flowing, Identifier face, Identifier overlay) {
         return this.fluidRender.create(color, still, flowing, face, overlay);
     }
 

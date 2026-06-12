@@ -11,9 +11,7 @@ import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ItemStack;
@@ -74,14 +72,14 @@ public class BeeSpawnEggItem extends SpawnEggItem implements ColoredObject {
 
                 EntityType<?> entityType = this.getType(stack.getTag());
                 boolean shouldOffsetYMore = !Objects.equals(blockPos, pos) && direction == Direction.UP;
-                CustomBeeEntity entity = (CustomBeeEntity) entityType.spawn(level, stack, context.getPlayer(), pos, MobSpawnType.SPAWN_EGG, true, shouldOffsetYMore);
+                CustomBeeEntity entity = (CustomBeeEntity) entityType.spawn(level, stack, context.getPlayer(), pos, EntitySpawnReason.SPAWN_ITEM_USE, true, shouldOffsetYMore);
 
                 if (entity != null) {
                     stack.shrink(1);
                     entity.setPersistenceRequired();
                 }
             }
-            return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
+            return InteractionResult.SUCCESS_SERVER;
         }
         return InteractionResult.SUCCESS;
     }

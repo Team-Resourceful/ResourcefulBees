@@ -4,10 +4,11 @@ import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.trait.Aura;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 
 import java.util.List;
 import java.util.Set;
@@ -46,7 +47,7 @@ public class AuraHandler {
     }
 
     private boolean isCalmed(Aura aura) {
-        return this.bee.hasEffect(ModEffects.CALMING.get()) && aura.calmingDisabled();
+        return this.bee.hasEffect(Holder.direct(ModEffects.CALMING.get())) && aura.calmingDisabled();
     }
 
     private boolean isPeaceful(Aura aura) {

@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 
 
 import com.google.common.collect.Lists;
+import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -16,29 +17,31 @@ import com.teamresourceful.resourcefullib.common.caches.CacheableFunction;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.protocol.game.DebugPackets;
+import net.minecraft.nbt.*;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -50,6 +53,7 @@ import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConsta
 
 public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements SmokeableHive {
 
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final CacheableFunction<Block, BlockEntityType<?>> HIVE_TO_ENTITY = new CacheableFunction<>(block ->
         ModBlockEntityTypes.BLOCK_ENTITY_TYPES
             .getEntries()
@@ -117,7 +121,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
                         if (entity instanceof Mob mob) {
                             mob.setTarget(player);
                         } else if (entity instanceof BeeCompat compat) {
-                            compat.setOutOfHiveCooldown(400);
+                            compat.resourcefulBees$setOutOfHiveCooldown(400);
                         }
                     }
                 });
@@ -129,13 +133,13 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
         return list;
     }
 
-    private static boolean releaseBee(TieredBeehiveBlockEntity hive, @NotNull BlockState state, @NotNull BeehiveBlockEntity.BeeData tileBee, @Nullable List<Entity> entities, @NotNull BeeReleaseStatus beehiveState) {
+    private static boolean releaseBee(TieredBeehiveBlockEntity hive, @NotNull BlockState state, @NotNull BeehiveBlockEntity.BeeData beeData, @Nullable List<Entity> entities, @NotNull BeeReleaseStatus beehiveState) {
         if (shouldStayInHive(hive.level, beehiveState)) {
             return false;
         } else {
-            CompoundTag nbt = ((BeehiveBeeDataAccessor) tileBee).getEntityData();
+            CompoundTag nbt = ((BeehiveBeeDataAccessor) beeData).getEntityData();
             BeehiveEntityAccessor.callRemoveIgnoredBeeTags(nbt);
-            nbt.put("HivePos", NbtUtils.writeBlockPos(hive.getBlockPos()));
+            nbt.put("HivePos", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, hive.getBlockPos()).getOrThrow());
             nbt.putBoolean("NoGravity", true);
             Direction direction = state.getValue(BeehiveBlock.FACING);
             BlockPos relative = hive.worldPosition.relative(direction);
@@ -144,11 +148,11 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             if (!hive.level.getBlockState(relative).getCollisionShape(hive.level, relative).isEmpty() && beehiveState != BeeReleaseStatus.EMERGENCY) {
                 return false;
             }
-            Entity entity = EntityType.loadEntityRecursive(nbt, hive.level, entity1 -> entity1);
+            Entity entity = beeData.toOccupant().createEntity(hive.level, hive.getBlockPos());//EntityType.loadEntityRecursive(nbt, hive.level, entity1 -> entity1);
             if (entity != null) {
                 EntityUtils.setEntityLocationAndAngle(hive.worldPosition, direction, entity);
                 if (beehiveState == BeeReleaseStatus.HONEY_DELIVERED) {
-                    if (entity instanceof BeeCompat compat) compat.nectarDroppedOff();
+                    if (entity instanceof BeeCompat compat) compat.resourcefulBees$nectarDroppedOff();
                     if (getHoneyLevel(state) < 5) {
                         HiveRecipe.getHiveOutput(hive.getBlock().getTier(), entity)
                             .filter(Predicate.not(ItemStack::isEmpty))
@@ -157,7 +161,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
                     }
 
                     if (entity instanceof Animal animal) {
-                        EntityUtils.ageBee(((BeehiveBeeDataAccessor) tileBee).getTicksInHive(), animal);
+                        EntityUtils.ageBee(((BeehiveBeeDataAccessor) beeData).getTicksInHive(), animal);
                     }
                     if (entities != null) entities.add(entity);
                 }
@@ -169,21 +173,39 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
     }
 
     @Override
-    public void addOccupantWithPresetTicks(@NotNull Entity bee, boolean hasNectar, int ticksInHive) {
+    public void addOccupant(@NotNull Bee bee) {
         if (!(bee instanceof BeeCompat compat)) return;
         if (getOccupantCount() < getBlock().getTier().maxBees()) {
+            bee.stopRiding();
             bee.ejectPassengers();
-            CompoundTag nbt = new CompoundTag();
-            bee.save(nbt);
+            bee.dropLeash();
+            //CompoundTag nbt = new CompoundTag();
+            //bee.save(nbt);
 
             if (this.level != null) {
-                int maxTimeInHive = (int) (compat.getMaxTimeInHive() * getBlock().getTier().timeModifier());
-                getBees().add(new BeeData(nbt, ticksInHive, hasNectar ? maxTimeInHive : MIN_HIVE_TIME));
+                getBees().add(new BeeData(occupantOf(bee, compat, this)));
                 BlockPos pos = this.getBlockPos();
                 this.level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
+                this.level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(bee, this.getBlockState()));
                 bee.discard();
+                super.setChanged();
             }
         }
+    }
+
+    private static BeehiveBlockEntity.Occupant occupantOf(Entity entity, BeeCompat compat, TieredBeehiveBlockEntity hive) {
+        BeehiveBlockEntity.Occupant var5;
+        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), LOGGER)) {
+            TagValueOutput output = TagValueOutput.createWithContext(reporter, entity.registryAccess());
+            entity.save(output);
+            BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(output::discard);
+            CompoundTag entityTag = output.buildResult();
+            boolean hasNectar = entityTag.getBooleanOr("HasNectar", false);
+            int maxTimeInHive = (int) (compat.resourcefulBees$getMaxTimeInHive() * hive.getBlock().getTier().timeModifier());
+            var5 = new BeehiveBlockEntity.Occupant(TypedEntityData.of(entity.getType(), entityTag), 0, hasNectar ? maxTimeInHive : MIN_HIVE_TIME);
+        }
+
+        return var5;
     }
 
     private TieredBeehiveBlock getBlock() {
@@ -216,7 +238,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             level.playSound(null, vec.x(), vec.y(), vec.z(), SoundEvents.BEEHIVE_WORK, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
 
-        DebugPackets.sendHiveInfo(level, pos, state, hive);
+        //DebugPackets.sendHiveInfo(level, pos, state, hive);
     }
 
     private static void tickOccupants(TieredBeehiveBlockEntity hive, BlockState state, List<BeeData> bees) {
@@ -224,7 +246,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
         for (Iterator<BeeData> iterator = bees.iterator(); iterator.hasNext(); increaseTicksInHive(bee, 1)) {
             bee = iterator.next();
             if (((BeehiveBeeDataAccessor) bee).getTicksInHive() > ((BeehiveBeeDataAccessor) bee).getMinOccupationTicks()) {
-                BeeReleaseStatus status = ((BeehiveBeeDataAccessor) bee).getEntityData().getBoolean("HasNectar") ? BeeReleaseStatus.HONEY_DELIVERED : BeeReleaseStatus.BEE_RELEASED;
+                BeeReleaseStatus status = ((BeehiveBeeDataAccessor) bee).getEntityData().getBoolean("HasNectar").get() ? BeeReleaseStatus.HONEY_DELIVERED : BeeReleaseStatus.BEE_RELEASED;
                 if (releaseBee(hive, state, bee, null, status)) {
                     iterator.remove();
                 }
@@ -239,7 +261,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
     }
 
     public static boolean shouldStayInHive(Level level, BeeReleaseStatus beehiveState) {
-        return (level != null && (level.isNight() || level.isRaining())) && beehiveState != BeeReleaseStatus.EMERGENCY;
+        return (level != null && (level.isDarkOutside() || level.isRaining())) && beehiveState != BeeReleaseStatus.EMERGENCY;
     }
 
     @Override

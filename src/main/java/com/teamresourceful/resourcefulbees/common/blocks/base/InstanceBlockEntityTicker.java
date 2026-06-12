@@ -5,6 +5,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.NonNull;
 
 public interface InstanceBlockEntityTicker {
 
@@ -22,7 +23,7 @@ public interface InstanceBlockEntityTicker {
         }
     }
 
-    static <T extends BlockEntity & InstanceBlockEntityTicker> BlockEntityTicker<T> createTicker() {
+    static <T extends BlockEntity & InstanceBlockEntityTicker> BlockEntityTicker<@NonNull T> createTicker() {
         return (level, pos, state, entity) -> {
             if (!level.isClientSide() && entity.getSide() != Side.CLIENT) {
                 entity.serverTick(level, pos, state);

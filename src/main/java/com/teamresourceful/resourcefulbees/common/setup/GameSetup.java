@@ -25,11 +25,11 @@ import com.teamresourceful.resourcefulbees.platform.common.resources.conditions.
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
@@ -45,7 +45,7 @@ import java.nio.file.Paths;
 public final class GameSetup {
 
     //TODO Change to common tag for forge and fabric.
-    private static final TagKey<Item> HONEY_BOTTLE_TAG = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "honey_bottles"));
+    private static final TagKey<Item> HONEY_BOTTLE_TAG = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "honey_bottles"));
 
     private GameSetup() throws UtilityClassException {
         throw new UtilityClassException();
@@ -93,7 +93,7 @@ public final class GameSetup {
     public static void initSpawns(RegisterSpawnPlacementsEvent event) {
         ModEntities.getModBees().forEach((s, entityType) ->
                 event.register(entityType.get(),
-                        SpawnPlacements.Type.ON_GROUND,
+                        SpawnPlacementTypes.ON_GROUND,
                         Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                         CustomBeeEntity::canBeeSpawn
                 )
@@ -136,7 +136,7 @@ public final class GameSetup {
         ModConstants.LOGGER.info("Setting up config paths...");
 
         try (FileWriter file = new FileWriter(Paths.get(ModPaths.RESOURCES.toAbsolutePath().toString(), "pack.mcmeta").toFile())) {
-            int clientVersion = SharedConstants.getCurrentVersion().getPackVersion(PackType.CLIENT_RESOURCES);
+            int clientVersion = SharedConstants.getCurrentVersion().packVersion(PackType.CLIENT_RESOURCES).major(); //todo fix this
             String mcMetaContent = "{\"pack\":{\"pack_format\":" + clientVersion + ",\"description\":\"Resourceful Bees resource pack used for lang purposes for the user to add lang for bee/items.\"}}";
             file.write(mcMetaContent);
         } catch (FileAlreadyExistsException ignored) { //ignored

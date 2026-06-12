@@ -54,7 +54,7 @@ public record HiveRecipe(
         Optional<RecipeHolder<HiveRecipe>> recipe = findRecipe(entity.level().getRecipeManager(), entity.getType());
         return OptionalItemStack.ofNullable(recipe.map(t -> t.value().getHiveOutput(tier)).orElseGet(() -> {
             if (entity instanceof BeeCompat compat) {
-                return compat.getHiveOutput(tier);
+                return compat.resourcefulBees$getHiveOutput(tier);
             }
             return ItemStack.EMPTY;
         }));
@@ -64,7 +64,7 @@ public record HiveRecipe(
         Optional<RecipeHolder<HiveRecipe>> recipe = findRecipe(entity.level().getRecipeManager(), entity.getType());
         return OptionalItemStack.ofNullable(recipe.map(t -> t.value().getApiaryOutput(tier)).orElseGet(() -> {
             if (entity instanceof BeeCompat compat) {
-                return compat.getApiaryOutput(tier);
+                return compat.resourcefulBees$getApiaryOutput(tier);
             }
             return ItemStack.EMPTY;
         }));

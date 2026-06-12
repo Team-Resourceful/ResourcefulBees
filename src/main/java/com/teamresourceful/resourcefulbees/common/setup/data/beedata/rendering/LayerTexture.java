@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.NeutralMob;
 
@@ -29,7 +30,7 @@ public record LayerTexture(ResourceLocation texture, ResourceLocation angryTextu
     }
 
     @Environment(EnvType.CLIENT)
-    public ResourceLocation getTexture(NeutralMob neutralMob) {
+    public Identifier getTexture(NeutralMob neutralMob) {
         return ClientRenderUtils.DEFAULT_TEXTURER.apply(neutralMob.isAngry() ? angryTexture() : texture(), texture());
     }
 

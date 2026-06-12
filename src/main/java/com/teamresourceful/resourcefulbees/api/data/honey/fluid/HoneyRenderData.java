@@ -1,18 +1,18 @@
 package com.teamresourceful.resourcefulbees.api.data.honey.fluid;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public interface HoneyRenderData {
 
     Color color();
 
-    ResourceLocation still();
+    Identifier still();
 
-    ResourceLocation flowing();
+    Identifier flowing();
 
-    ResourceLocation face();
+    Identifier face();
 
-    ResourceLocation overlay();
+    Identifier overlay();
 
 }

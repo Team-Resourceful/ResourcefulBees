@@ -74,7 +74,7 @@ public final class Beekeeper {
     private static void createLevelTwoTrades(RegisterVillagerTradesEvent event) {
         addTrade(2, event, UniformInt.of(2,6), Items.IRON_INGOT, UniformInt.of(1,3), ModItems.SCRAPER.get(), UniformInt.of(1,1), 4);
         addTrade(2, event, UniformInt.of(4,8), Items.IRON_INGOT, UniformInt.of(2,6), ModItems.SMOKER.get(), UniformInt.of(1,1), 8);
-        addTrade(2, event, UniformInt.of(2,6), Items.IRON_INGOT, UniformInt.of(1,3), ModItems.SMOKERCAN.get(), UniformInt.of(1,1), 8);
+        addTrade(2, event, UniformInt.of(2,6), Items.IRON_INGOT, UniformInt.of(1,3), ModItems.SMOKER_CAN.get(), UniformInt.of(1,1), 8);
         addTrade(2, event, UniformInt.of(1,3), Items.LEATHER, UniformInt.of(2,4), ModItems.BELLOW.get(), UniformInt.of(1,1), 8);
         addTrade(2, event, UniformInt.of(1,3), ModItems.HONEY_DIPPER.get(), UniformInt.of(1,1), 4);
         addTrade(2, event, UniformInt.of(6,12), Items.REDSTONE, UniformInt.of(1,4), ModItems.BEEPEDIA.get(), UniformInt.of(1,1), 4);

@@ -2,17 +2,9 @@ package com.teamresourceful.resourcefulbees.client.screen.locator;
 
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeLocatorTranslations;
-import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
-import com.teamresourceful.resourcefulbees.common.networking.packets.client.FindBeePacket;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -55,12 +47,12 @@ public class BeeLocatorScreen extends Screen {
         this.addRenderableWidget(closeButton);
     }
 
-    @Override
+/*    @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         super.render(graphics, mouseX, mouseY, partialTicks);
         Component title = Component.translatable(BeeLocatorTranslations.SELECTED, this.getSelected().map(BeeLocatorEntry::getDisplayName).orElse(BeeLocatorTranslations.NONE));
         graphics.drawCenteredString(this.font, title, this.width / 2, 11, 16777215);
-    }
+    }*/
 
     public void setSelected(BeeLocatorEntry entry) {
         this.listWidget.setSelected(entry);
@@ -76,11 +68,11 @@ public class BeeLocatorScreen extends Screen {
         return false;
     }
 
-    public static void openScreen(Player player, InteractionHand hand) {
+/*    public static void openScreen(Player player, InteractionHand hand) {
         int slot = player.getInventory().selected;
         if (hand == InteractionHand.OFF_HAND) {
             slot = player.getInventory().getContainerSize() - 1;
         }
         Minecraft.getInstance().setScreen(new BeeLocatorScreen(slot));
-    }
+    }*/
 }

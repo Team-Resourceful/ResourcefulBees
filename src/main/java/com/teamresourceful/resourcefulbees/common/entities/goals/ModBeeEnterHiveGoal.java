@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBl
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -53,7 +53,7 @@ public class ModBeeEnterHiveGoal extends Goal {
         if (pos != null) {
             BlockEntity block = this.bee.level().getBlockEntity(pos);
             if (block instanceof BeehiveBlockEntity hive) {
-                hive.addOccupant(this.bee, this.bee.hasNectar());
+                hive.addOccupant(this.bee);
             } else if (block instanceof BeeHolderBlockEntity holder) {
                 holder.tryEnterHive(this.bee, this.bee.hasNectar(), 0);
             }

@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.DimensionalBeesPacket;
+import com.teamresourceful.resourcefulbees.mixin.ServerPlayerAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.ServerLevelAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.StructureCheckAccessor;
 import com.teamresourceful.resourcefulbees.platform.common.events.SyncedDatapackEvent;
@@ -12,7 +13,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
@@ -38,8 +39,8 @@ public final class DimensionalBeeHolder {
                 .stream()
                 .filter(Holder::isBound).map(Holder::value)
                 .map(biome -> biome.getMobSettings().getMobs(ModConstants.BEE_CATEGORY))
-                .map(WeightedRandomList::unwrap).flatMap(List::stream)
-                .map(data -> data.type)
+                .map(WeightedList::unwrap).flatMap(List::stream)//not sure if weighted list is right used to be random list
+                .map(data -> data.value().type())
                 .filter(type -> type instanceof CustomBeeEntityType<?>)
                 .map(type -> (CustomBeeEntityType<?>)type)
                 .map(CustomBeeEntityType::getBeeType)
@@ -52,7 +53,7 @@ public final class DimensionalBeeHolder {
     }
 
     public static void onDatapackSync(SyncedDatapackEvent event) {
-        if (DIMENSIONAL_BEES.isEmpty()) updateBees(event.player().server);
+        if (DIMENSIONAL_BEES.isEmpty()) updateBees(((ServerPlayerAccessor)event.player()).getServer());
         NetworkHandler.NETWORK.sendToPlayer(new DimensionalBeesPacket(DIMENSIONAL_BEES), event.player());
     }
 }
