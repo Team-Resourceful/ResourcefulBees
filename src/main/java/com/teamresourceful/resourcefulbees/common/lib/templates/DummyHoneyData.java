@@ -7,13 +7,13 @@ import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyBottleData
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.intializers.HoneyInitializerApi;
 import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.effect.MobEffects;
@@ -52,8 +52,8 @@ public final class DummyHoneyData {
                 false,
                 false,
                 List.of(
-                        HONEY_API.effect(LazyHolder.of(BuiltInRegistries.MOB_EFFECT, MobEffects.WITHER), 25, 2, 0.75f),
-                        HONEY_API.effect(LazyHolder.of(BuiltInRegistries.MOB_EFFECT, MobEffects.INVISIBILITY), 50, 1, 1f)
+                        HONEY_API.effect(LazyHolder.of(BuiltInRegistries.MOB_EFFECT, MobEffects.WITHER.value()), 25, 2, 0.75f),
+                        HONEY_API.effect(LazyHolder.of(BuiltInRegistries.MOB_EFFECT, MobEffects.INVISIBILITY.value()), 50, 1, 1f)
                 )
             ),
             Rarity.EPIC,
@@ -74,10 +74,10 @@ public final class DummyHoneyData {
             "template",
             HONEY_API.fluidRender(
                     Color.DEFAULT,
-                    new ResourceLocation(ModConstants.MOD_ID, "block/honey/custom_honey_still"),
-                    new ResourceLocation(ModConstants.MOD_ID, "block/honey/custom_honey_flow"),
-                    new ResourceLocation(ModConstants.MOD_ID, "block/honey/custom_honey_flow"),
-                    new ResourceLocation(ModConstants.MOD_ID, "textures/block/honey/custom_honey_underwater.png")
+                    ModIdentifier.of("block/honey/custom_honey_still"),
+                    ModIdentifier.of( "block/honey/custom_honey_flow"),
+                    ModIdentifier.of( "block/honey/custom_honey_flow"),
+                    ModIdentifier.of( "textures/block/honey/custom_honey_underwater.png")
             ),
             HONEY_API.fluidAttributes(
                     1,
@@ -96,14 +96,14 @@ public final class DummyHoneyData {
                     LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_FILL),
                     LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_EMPTY)
             ),
-            LazyHolder.of(BuiltInRegistries.FLUID, new ResourceLocation(ModConstants.MOD_ID, "honey")),
-            LazyHolder.of(BuiltInRegistries.FLUID, new ResourceLocation(ModConstants.MOD_ID, "honey_flowing")),
-            LazyHolder.of(BuiltInRegistries.ITEM, new ResourceLocation(ModConstants.MOD_ID, "honey_bucket")),
-            LazyHolder.of(BuiltInRegistries.BLOCK, new ResourceLocation(ModConstants.MOD_ID, "honey")),
+            LazyHolder.of(BuiltInRegistries.FLUID, ModIdentifier.of( "honey")),
+            LazyHolder.of(BuiltInRegistries.FLUID, ModIdentifier.of("honey_flowing")),
+            LazyHolder.of(BuiltInRegistries.ITEM, ModIdentifier.of("honey_bucket")),
+            LazyHolder.of(BuiltInRegistries.BLOCK, ModIdentifier.of("honey")),
             DEFAULT_TRADE
     );
 
-    public static final Map<ResourceLocation, com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyData<?>> DATA = Map.of(
+    public static final Map<Identifier, com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyData<?>> DATA = Map.of(
             BOTTLE_DATA.serializer().id(), BOTTLE_DATA,
             BLOCK_DATA.serializer().id(), BLOCK_DATA,
             FLUID_DATA.serializer().id(), FLUID_DATA

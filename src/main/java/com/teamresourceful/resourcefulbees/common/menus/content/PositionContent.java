@@ -16,7 +16,7 @@ public record PositionContent(BlockPos pos) implements MenuContent<PositionConte
     public static final MenuContentSerializer<PositionContent> SERIALIZER = new Serializer();
 
     public <T extends BlockEntity> T getBlockEntity(Level level, Class<T> type) {
-        if (!level.isClientSide) return null;
+        if (!level.isClientSide()) return null;
         return WorldUtils.getTileEntity(type, level, pos);
     }
 

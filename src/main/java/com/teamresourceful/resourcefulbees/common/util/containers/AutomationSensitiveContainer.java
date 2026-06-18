@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.util.containers;
 
-import earth.terrarium.botarium.common.item.SerializableContainer;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
@@ -12,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-public abstract class AutomationSensitiveContainer implements SerializableContainer {
+//TODO REWRITE THIS SINCE BOTARIUM NO LONGER EXISTS
+public abstract class AutomationSensitiveContainer  {
 
     protected final NonNullList<ItemStack> items;
     protected final BlockEntity updatable;

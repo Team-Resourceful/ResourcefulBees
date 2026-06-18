@@ -9,8 +9,8 @@ import com.teamresourceful.resourcefullib.common.network.Packet;
 import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketType;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketType;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public record DimensionalBeesPacket(
 
         public Type() {
             super(
-                    ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "dimensional_bees"),
+                    Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "dimensional_bees"),
                     new MapCodec<>(ExtraByteCodecs.DIMENSION, ByteCodec.STRING.listOf()).map(DimensionalBeesPacket::new, DimensionalBeesPacket::bees)
             );
         }

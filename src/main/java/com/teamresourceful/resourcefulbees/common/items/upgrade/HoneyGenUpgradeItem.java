@@ -33,7 +33,7 @@ public class HoneyGenUpgradeItem extends Item implements Upgrade {
                 components.add(ItemTranslations.ENERGY_FILL_TOOLTIP_1);
                 components.add(ItemTranslations.ENERGY_FILL_TOOLTIP_2);
             }
-            case ENERGY_XFER -> components.add(ItemTranslations.ENERGY_XFER_TOOLTIP);
+            case ENERGY_TRANSFER -> components.add(ItemTranslations.ENERGY_XFER_TOOLTIP);
             case HONEY_CAPACITY -> components.add(ItemTranslations.HONEY_CAP_TOOLTIP);
             default -> {/*do nothing*/}
         }

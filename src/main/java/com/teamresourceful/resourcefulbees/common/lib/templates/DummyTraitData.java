@@ -18,16 +18,16 @@ public final class DummyTraitData {
     public static final Trait DUMMY_TRAIT_DATA = new Trait(
             "template",
             Items.WITHER_ROSE,
-            Sets.newHashSet(new PotionEffect(MobEffects.BLINDNESS, 3)),
+            Sets.newHashSet(new PotionEffect(MobEffects.BLINDNESS.value(), 3)),
             Sets.newHashSet("inFire", "wither"),
-            Sets.newHashSet(MobEffects.WEAKNESS, MobEffects.CONFUSION),
+            Sets.newHashSet(MobEffects.WEAKNESS.value(), MobEffects.OOZING.value()),
             Sets.newHashSet(new TraitDamageType("setOnFire", 4), new TraitDamageType("explosive", 3)),
             Sets.newHashSet("teleport"),
             Sets.newHashSet(ParticleTypes.SMOKE, ParticleTypes.SOUL_FIRE_FLAME),
             Sets.newHashSet(new Aura(
                     AuraType.EXPERIENCE,
                     new DamageEffect(DamageTypes.IN_FIRE, false, 0),
-                    new PotionEffect(MobEffects.HEAL, 2),
+                    new PotionEffect(MobEffects.HEALTH_BOOST.value(), 2),
                     3,
                     true
                 )

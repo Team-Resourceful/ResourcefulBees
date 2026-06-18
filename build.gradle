@@ -20,13 +20,6 @@ group = mod_group_id
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
     maven { url = "https://nexus.resourcefulbees.com/repository/maven-public/" }
-    /*maven {
-        name = 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-        content {
-            includeGroup("software.bernie.geckolib")
-        }
-    }*/
 }
 
 base {
@@ -124,7 +117,9 @@ dependencies {
     implementation "com.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
     implementation "com.teamresourceful.resourcefullib:resourcefullib-neoforge-26.1:$rlib_version"
     implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-neoforge-26.1:4.0.1"
-    api "com.teamresourceful:bytecodecs:1.1.2" //need this bc it doesn't get added to classpath through rlib for some reason
+    //need this bc it doesn't get added to classpath through rlib for some reason
+    api "com.teamresourceful:bytecodecs:1.1.2"
+    api "com.teamresourceful:yabn:1.0.3"
     //api "earth.terrarium:botarium-neoforge-1.21:$botarium_version"
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

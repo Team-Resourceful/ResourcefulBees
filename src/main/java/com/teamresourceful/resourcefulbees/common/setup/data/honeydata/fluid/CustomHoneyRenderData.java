@@ -5,27 +5,27 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.color.Color;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public record CustomHoneyRenderData(
         Color color,
-        ResourceLocation still,
-        ResourceLocation flowing,
-        ResourceLocation face,
-        ResourceLocation overlay
+        Identifier still,
+        Identifier flowing,
+        Identifier face,
+        Identifier overlay
 ) implements HoneyRenderData {
 
-    private static final ResourceLocation CUSTOM_FLUID_STILL = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "block/honey/custom_honey_still");
-    private static final ResourceLocation CUSTOM_FLUID_FLOWING = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "block/honey/custom_honey_flow");
-    private static final ResourceLocation CUSTOM_FLUID_UNDERWATER = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/block/honey/custom_honey_underwater.png");
+    private static final Identifier CUSTOM_FLUID_STILL = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "block/honey/custom_honey_still");
+    private static final Identifier CUSTOM_FLUID_FLOWING = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "block/honey/custom_honey_flow");
+    private static final Identifier CUSTOM_FLUID_UNDERWATER = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/block/honey/custom_honey_underwater.png");
 
     public static final CustomHoneyRenderData DEFAULT = new CustomHoneyRenderData(Color.DEFAULT, CUSTOM_FLUID_STILL, CUSTOM_FLUID_FLOWING, CUSTOM_FLUID_FLOWING, CUSTOM_FLUID_UNDERWATER);
 
     public static final Codec<HoneyRenderData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Color.CODEC.fieldOf("color").forGetter(HoneyRenderData::color),
-            ResourceLocation.CODEC.optionalFieldOf("still", CUSTOM_FLUID_STILL).forGetter(HoneyRenderData::still),
-            ResourceLocation.CODEC.optionalFieldOf("flowing", CUSTOM_FLUID_FLOWING).forGetter(HoneyRenderData::flowing),
-            ResourceLocation.CODEC.optionalFieldOf("face", CUSTOM_FLUID_FLOWING).forGetter(HoneyRenderData::face),
-            ResourceLocation.CODEC.optionalFieldOf("overlay", CUSTOM_FLUID_UNDERWATER).forGetter(HoneyRenderData::overlay)
+            Identifier.CODEC.optionalFieldOf("still", CUSTOM_FLUID_STILL).forGetter(HoneyRenderData::still),
+            Identifier.CODEC.optionalFieldOf("flowing", CUSTOM_FLUID_FLOWING).forGetter(HoneyRenderData::flowing),
+            Identifier.CODEC.optionalFieldOf("face", CUSTOM_FLUID_FLOWING).forGetter(HoneyRenderData::face),
+            Identifier.CODEC.optionalFieldOf("overlay", CUSTOM_FLUID_UNDERWATER).forGetter(HoneyRenderData::overlay)
     ).apply(instance, CustomHoneyRenderData::new));
 }

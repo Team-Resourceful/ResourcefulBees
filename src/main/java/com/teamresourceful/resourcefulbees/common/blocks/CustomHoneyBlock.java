@@ -5,8 +5,6 @@ import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
 import com.teamresourceful.resourcefulbees.common.items.honey.ColoredObject;
 import com.teamresourceful.resourcefullib.common.color.Color;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -17,8 +15,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
-import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.entity.vehicle.Minecart;
+import net.minecraft.world.entity.vehicle.boat.Boat;
+import net.minecraft.world.entity.vehicle.minecart.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -66,7 +64,7 @@ public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable,
 
     @Override
     public void animateTick(@NotNull BlockState stateIn, @NotNull Level world, @NotNull BlockPos pos, @NotNull RandomSource rand) {
-        if (color.isRainbow()) world.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
+        if (color.isSpecial()) world.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
         super.animateTick(stateIn, world, pos, rand);
     }
 
@@ -94,7 +92,7 @@ public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable,
     @Override
     public void fallOn(Level level, @NotNull BlockState state, @NotNull BlockPos blockPos, Entity entity, float distance) {
         entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             addParticles(entity);
         }
 
@@ -148,15 +146,14 @@ public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable,
     }
 
     private void addCollisionEffects(Level world, Entity entity) {
-        if (world.random.nextInt(5) == 0 && hasHoneyBlockEffects(entity)) {
+        if (world.getRandom().nextInt(5) == 0 && hasHoneyBlockEffects(entity)) {
             entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
-            if (world.isClientSide) addParticles(entity);
+            if (world.isClientSide()) addParticles(entity);
         }
     }
 
     //endregion
 
-    @Environment(EnvType.CLIENT)
     private void addParticles(Entity entity) {
         BlockParticleOption particleData = new BlockParticleOption(ParticleTypes.BLOCK, this.defaultBlockState());
         for (int i = 0; i < 5; ++i) {

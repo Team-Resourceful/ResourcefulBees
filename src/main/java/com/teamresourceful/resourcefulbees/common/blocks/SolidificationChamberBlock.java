@@ -2,12 +2,11 @@ package com.teamresourceful.resourcefulbees.common.blocks;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
-import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.util.FluidUtils;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -44,10 +43,10 @@ public class SolidificationChamberBlock extends TickingBlock<SolidificationChamb
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (level.getBlockEntity(pos) instanceof SolidificationChamberBlockEntity chamber) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 FluidUtils.checkBottleAndCapability(chamber.getFluidContainer(), chamber, player, level, pos, hand);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS_SERVER;
         }
         return super.use(state, level, pos, player, hand, hitResult);
     }

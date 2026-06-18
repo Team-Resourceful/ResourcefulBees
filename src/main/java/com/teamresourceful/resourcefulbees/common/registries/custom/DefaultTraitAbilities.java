@@ -4,17 +4,19 @@ import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.EntityReference;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -39,7 +41,7 @@ public final class DefaultTraitAbilities {
     }
 
     private static boolean canTeleport(ResourcefulBee bee) {
-        return !bee.level().isClientSide() && bee.isAlive() && bee.tickCount % 150 == 0 && !bee.hasCustomName() && bee.level().isDay() && !bee.isPollinating() && !bee.hasHiveInRange() && !bee.hasDisruptorInRange();
+        return !bee.level().isClientSide() && bee.isAlive() && bee.tickCount % 150 == 0 && !bee.hasCustomName() && bee.level().isBrightOutside() && !bee.isPollinating() && !bee.hasHiveInRange() && !bee.hasDisruptorInRange();
     }
 
     private static void enderAbility(Bee input) {
@@ -90,10 +92,10 @@ public final class DefaultTraitAbilities {
     }
 
     private static void angryAbility(Bee bee) {
-        if (!bee.hasEffect(ModEffects.CALMING.get())) {
-            Entity player = bee.level().getNearestPlayer(bee, 20);
-            bee.setPersistentAngerTarget(player != null ? player.getUUID() : null);
-            bee.setRemainingPersistentAngerTime(1000);
+        if (!bee.hasEffect(Holder.direct(ModEffects.CALMING.get()))) {
+            LivingEntity player = bee.level().getNearestPlayer(bee, 20);
+            bee.setPersistentAngerTarget(player != null ? EntityReference.of(player) : null);
+            bee.setPersistentAngerEndTime(1000);
         }
     }
 

@@ -10,8 +10,11 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredientSerializer;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +29,7 @@ public record BeeJarIngredient(Set<String> ids) implements CodecIngredient<BeeJa
     ).apply(instance, BeeJarIngredient::new));
 
     public static final CodecIngredientSerializer<BeeJarIngredient> SERIALIZER = new CodecIngredientSerializer<>(
-            ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "bee_jar"),
+            Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "bee_jar"),
             CODEC
     );
 
@@ -36,6 +39,11 @@ public record BeeJarIngredient(Set<String> ids) implements CodecIngredient<BeeJa
         if (stack == null) return false;
         CompoundTag entityTag = stack.getTagElement(NBTConstants.BeeJar.ENTITY);
         return entityTag != null && (ids.isEmpty() || ids.contains(entityTag.getString(NBTConstants.NBT_ID)));
+    }
+
+    @Override
+    public Stream<Holder<Item>> getStream() {
+        return Stream.empty();
     }
 
     @Override

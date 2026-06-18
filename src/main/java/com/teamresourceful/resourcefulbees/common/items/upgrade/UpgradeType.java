@@ -5,7 +5,7 @@ public enum UpgradeType {
     NEST,
     HONEY_CAPACITY,
     ENERGY_CAPACITY,
-    ENERGY_XFER,
+    ENERGY_TRANSFER,
     ENERGY_FILL;
 
     public boolean isType(UpgradeType type) {

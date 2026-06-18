@@ -23,11 +23,11 @@ import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
 import com.teamresourceful.resourcefulbees.mixin.common.SpawnEggItemAccessor;
-import com.teamresourceful.resourcefulbees.platform.common.events.RegisterIngredientsEvent;
-import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.CommonSetupEvent;
-import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.GameServerStartedEvent;
-import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.LoadingCompletedEvent;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefulbees.events.RegisterIngredientsEvent;
+import com.teamresourceful.resourcefulbees.events.lifecycle.CommonSetupEvent;
+import com.teamresourceful.resourcefulbees.events.lifecycle.GameServerStartedEvent;
+import com.teamresourceful.resourcefulbees.events.lifecycle.LoadingCompletedEvent;
+import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator;
 import com.teamresourceful.resourcefullib.common.recipe.ingredient.IngredientHelper;
 import net.minecraft.core.registries.Registries;
@@ -206,7 +206,7 @@ public class ResourcefulBees {
         MissingRegistrySetup.checkMissingRegistries();
         if (ModUtils.isProduction()) {
             GeneralConfig.generateDefaults = false;
-            //CONFIGURATOR.saveConfig(GeneralConfig.class);
+            CONFIGURATOR.saveConfig(GeneralConfig.class);
         }
     }
 

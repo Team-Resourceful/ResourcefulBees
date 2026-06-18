@@ -8,7 +8,7 @@ import com.geckolib.util.GeckoLibUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.rendering.LayerData;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.rendering.LayerTexture;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class PetModelData implements GeoAnimatable {
 
-    private static final Identifier BASE_MODEL = ModConstants.modIdentifier("geo/base.geo.json");
+    private static final Identifier BASE_MODEL = ModIdentifier.of("geo/base.geo.json");
     private static final RawAnimation ANIMATION = RawAnimation.begin().thenLoop("animation.bee.fly").thenLoop("animation.bee.fly.bobbing");
 
     public static final Codec<PetModelData> CODEC = RecordCodecBuilder.create(instance -> instance.group(

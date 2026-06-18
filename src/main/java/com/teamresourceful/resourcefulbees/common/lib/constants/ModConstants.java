@@ -1,11 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.mojang.logging.LogUtils;
-import com.teamresourceful.resourcefulbees.platform.common.item.ItemAction;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.MobCategory;
 import org.slf4j.Logger;
 
 public final class ModConstants {
@@ -13,20 +9,17 @@ public final class ModConstants {
     private ModConstants() throws UtilityClassException {
         throw new UtilityClassException();
     }
-
     public static final String MOD_ID = "resourcefulbees";
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static final MobCategory BEE_CATEGORY = ModUtils.createMobCategory("RESOURCEFUL_BEES", "resourceful_bees", 20, true, false, 128, MobCategory.CREATURE);
+    //public static final MobCategory BEE_CATEGORY =
+    //public static final MobCategory BEE_CATEGORY = ModUtils.createMobCategory("RESOURCEFUL_BEES", "resourceful_bees", 20, true, false, 128, MobCategory.CREATURE);
 
     //Actions
-    public static final ItemAction SCRAPE_ACTION = ItemAction.get("scrape_hive");
-    public static final ItemAction SHEAR_ACTION = ItemAction.get("shears_harvest");
+    //public static final ItemAction SCRAPE_ACTION = ItemAction.get("scrape_hive");
+    //public static final ItemAction SHEAR_ACTION = ItemAction.get("shears_harvest");
 
     public static void forceInit() {
         // This is to force the class to load.
     }
 
-    public static Identifier modIdentifier(String path) {
-        return Identifier.fromNamespaceAndPath(MOD_ID, path);
-    }
 }

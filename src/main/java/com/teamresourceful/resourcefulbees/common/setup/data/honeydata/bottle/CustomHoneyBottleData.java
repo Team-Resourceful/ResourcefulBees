@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyDataSerializer;
 import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyBottleData;
 import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyFoodData;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
 import com.teamresourceful.resourcefullib.common.codecs.EnumCodec;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.LazyHolders;
@@ -36,7 +36,7 @@ public record CustomHoneyBottleData(
                 TradeData.CODEC.optionalFieldOf("tradeData", TradeData.DEFAULT).forGetter(HoneyBottleData::tradeData)
         ).apply(instance, CustomHoneyBottleData::new));
     }
-    public static final HoneyDataSerializer<HoneyBottleData> SERIALIZER = HoneyDataSerializer.of(ModConstants.modIdentifier("bottle"), 1, CustomHoneyBottleData::codec);
+    public static final HoneyDataSerializer<HoneyBottleData> SERIALIZER = HoneyDataSerializer.of(ModIdentifier.of("bottle"), 1, CustomHoneyBottleData::codec);
 
     @Override
     public HoneyDataSerializer<HoneyBottleData> serializer() {

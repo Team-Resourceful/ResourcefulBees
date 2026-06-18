@@ -217,8 +217,8 @@ public final class ModBlockEntityTypes {
     public static final RegistryEntry<BlockEntityType<AcceleratorBlockEntity>> ACCELERATOR_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("accelerator",
             () -> new BlockEntityType<>((AcceleratorBlockEntity::new), ModBlocks.ACCELERATOR.get()));
 
-    public static final RegistryEntry<BlockEntityType<? extends FakeFlowerBlockEntity>> FAKE_FLOWER_ENTITY = BLOCK_ENTITY_TYPES.register("fake_flower",
-            () -> new BlockEntityType<>((FakeFlowerBlockEntity::new), ModBlocks.FAKE_FLOWER.get()));
+    //public static final RegistryEntry<BlockEntityType<? extends FakeFlowerBlockEntity>> FAKE_FLOWER_ENTITY = BLOCK_ENTITY_TYPES.register("fake_flower",
+    //        () -> new BlockEntityType<>((FakeFlowerBlockEntity::new), ModBlocks.FAKE_FLOWER.get()));
 
     public static final RegistryEntry<BlockEntityType<? extends FlowHiveBlockEntity>> FLOW_HIVE_ENTITY = BLOCK_ENTITY_TYPES.register("flow_hive",
             () -> new BlockEntityType<>((FlowHiveBlockEntity::new), ModBlocks.FLOW_HIVE.get()));

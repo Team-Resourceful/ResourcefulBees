@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.client.screen;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.MissingRegistryTranslations;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
-import com.teamresourceful.resourcefulbees.platform.client.events.ScreenOpenEvent;
+import com.teamresourceful.resourcefulbees.client.events.ScreenOpenEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;

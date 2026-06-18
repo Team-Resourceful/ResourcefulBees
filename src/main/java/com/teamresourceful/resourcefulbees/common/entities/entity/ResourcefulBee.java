@@ -11,15 +11,15 @@ import com.teamresourceful.resourcefulbees.common.entities.goals.*;
 import com.teamresourceful.resourcefulbees.common.entities.pathfinding.BeePathNavigation;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
+import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import com.teamresourceful.resourcefulbees.common.util.SerializedDataEntry;
 import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeGoToHiveGoalInvoker;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeInvoker;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -38,9 +38,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -53,9 +56,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         .withWriter(NbtUtils::writeBlockPos)
         .withReader(NbtUtils::readBlockPos)
         .build();*/
-    public final SerializedDataEntry<Integer, IntTag> entityFlower = SerializedDataEntry.Builder
-        .of("", IntTag.TYPE, (Integer) null)
-        .build();
+    public final SerializedDataEntry<Integer, Tag> entityFlower = SerializedDataEntry.Builder.of("", (Integer) null).build();
 
     private boolean wasColliding;
     private int numberOfMutations;
@@ -118,7 +119,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             this.goalSelector.addGoal(6, new FollowParentGoal(this, 1.25D));
         }
         if (getMutationData().hasMutation(level())) {
-            this.goalSelector.addGoal(5, new BeeFakeFlowerGoal(this));
+            //this.goalSelector.addGoal(5, new BeeFakeFlowerGoal(this));
             this.goalSelector.addGoal(8, new BeeMutateGoal(this));
         }
     }
@@ -170,20 +171,20 @@ public class ResourcefulBee extends CustomBeeEntity {
         this.numberOfMutations = 0;
     }
 
+
     @Override
     public void incrementNumCropsGrownSincePollination() {
-        ++this.numberOfMutations;
+        this.numberOfMutations++;
     }
 
     public int getNumberOfMutations() {
         return this.numberOfMutations;
     }
 
-    public boolean isFakeFlowerValid() {
-        return this.fakeFlower.hasData() && WorldUtils.checkBlock(this.level(), this.fakeFlower.get(), state -> state.is(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.FAKE_FLOWER.get()));
-    }
+//    public boolean isFakeFlowerValid() {
+//        return this.fakeFlower.hasData() && WorldUtils.checkBlock(this.level(), this.fakeFlower.get(), state -> state.is(com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks.FAKE_FLOWER.get()));
+//    }
 
-    @Override
     public boolean isFlowerValid(@NotNull BlockPos pos) {
         if (getCoreData().hasEntityFlower()) {
             return this.entityFlower.hasData() && this.level().getEntity(this.entityFlower.get()) != null;
@@ -199,8 +200,9 @@ public class ResourcefulBee extends CustomBeeEntity {
         super.makeStuckInBlock(state, vector);
     }
 
+
     @Override
-    protected void customServerAiStep() {
+    protected void customServerAiStep(@NonNull ServerLevel serverLevel) {
         if (auraHandler != null && (this.tickCount + getId()) % BeeConfig.auraFrequency * 20 == 0) {
             auraHandler.tick();
         }
@@ -208,7 +210,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         BeeTraitData info = getTraitData();
 
         if (!info.hasTraits() || !info.hasSpecialAbilities()) {
-            super.customServerAiStep();
+            super.customServerAiStep(serverLevel);
             return;
         }
 
@@ -220,7 +222,7 @@ public class ResourcefulBee extends CustomBeeEntity {
             .filter(TraitAbility::canRun)
             .forEach(ability -> ability.run(this));
 
-        super.customServerAiStep();
+        super.customServerAiStep(serverLevel);
     }
 
     public void setColliding() {
@@ -235,11 +237,12 @@ public class ResourcefulBee extends CustomBeeEntity {
         return this.pollinateGoal.isPollinating();
     }
 
+
     @Override
-    public boolean doHurtTarget(@NotNull Entity entity) {
+    public boolean doHurtTarget(@NonNull ServerLevel serverLevel, @NotNull Entity entity) {
         float damage = (float) getAttributeValue(Attributes.ATTACK_DAMAGE);
-        if (entity.hurt(damageSources().sting(this), damage)) {
-            this.doEnchantDamageEffects(this, entity);
+        if (entity.hurtServer(serverLevel, damageSources().sting(this), damage)) {
+            //this.doEnchantDamageEffects(this, entity); todo find replacement for this
             if (entity instanceof LivingEntity target) {
                 target.setStingerCount(target.getStingerCount() + 1);
                 applyTraitEffectsAndDamage(target, getDifficultyModifier());
@@ -314,14 +317,14 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
+    public void readAdditionalSaveData(@NotNull ValueInput tag) {
         super.readAdditionalSaveData(tag);
         //this.fakeFlower.read(tag);
-        this.numberOfMutations = tag.getInt(NBTConstants.NBT_MUTATION_COUNT);
+        this.numberOfMutations = tag.getIntOr(NBTConstants.NBT_MUTATION_COUNT, 0);
     }
 
     @Override
-    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull ValueOutput compound) {
         super.addAdditionalSaveData(compound);
         //this.fakeFlower.save(compound);
         compound.putInt(NBTConstants.NBT_MUTATION_COUNT, getNumberOfMutations());
@@ -343,13 +346,13 @@ public class ResourcefulBee extends CustomBeeEntity {
 
         @Override
         public boolean canBeeUse() {
-            return getHivePos() != null && !hasRestriction() && wantsToEnterHive() && !((BeeGoToHiveGoalInvoker) this).callHasReachedTarget(getHivePos()) && isHiveValid();
+            return getHivePos() != null && !hasHome() && wantsToEnterHive() && !((BeeGoToHiveGoalInvoker) this).callHasReachedTarget(getHivePos()) && isHiveValid();
         }
 
         @Override
         public void dropAndBlacklistHive() {
             if (!BeeConfig.manualMode) {
-                this.dropHive();
+                ResourcefulBee.this.dropHive();
             }  // double check blacklist as it may need to be cleared - epic
         }
     }

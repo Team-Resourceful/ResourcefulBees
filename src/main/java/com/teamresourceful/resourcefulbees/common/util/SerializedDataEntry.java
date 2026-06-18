@@ -8,15 +8,13 @@ import java.util.function.Supplier;
 public class SerializedDataEntry<T, N extends Tag> implements Supplier<T> {
 
     private final String key;
-    private final byte tagKey;
     private final Function<T, N> writer;
     private final Function<N, T> reader;
     private T data;
 
-    protected SerializedDataEntry(T data, String key, byte tagKey, Function<T, N> writer, Function<N, T> reader) {
+    protected SerializedDataEntry(T data, String key, Function<T, N> writer, Function<N, T> reader) {
         this.data = data;
         this.key = key;
-        this.tagKey = tagKey;
         this.writer = writer;
         this.reader = reader;
     }
@@ -38,7 +36,7 @@ public class SerializedDataEntry<T, N extends Tag> implements Supplier<T> {
     }
 
     public void read(CompoundTag tag) {
-        if (tag.contains(key, tagKey) && reader != null) {
+        if (tag.contains(key) && reader != null) {
             //noinspection unchecked
             this.data = reader.apply((N) tag.get(key));
         }
@@ -52,19 +50,17 @@ public class SerializedDataEntry<T, N extends Tag> implements Supplier<T> {
 
     public static class Builder<T, N extends Tag> {
         private final String key;
-        private final byte tagKey;
         private final T data;
         private Function<T, N> writer;
         private Function<N, T> reader;
 
-        public Builder(String key, byte tagKey, T data) {
+        public Builder(String key, T data) {
             this.key = key;
-            this.tagKey = tagKey;
             this.data = data;
         }
 
-        public static <T, N extends Tag> Builder<T, N> of(String key, TagType<N> tagKey, T data) {
-            return new Builder<>(key, idFromTagType(tagKey), data);
+        public static <T, N extends Tag> Builder<T, N> of(String key, T data) {
+            return new Builder<>(key, data);
         }
 
         public Builder<T, N> withWriter(Function<T, N> writer) {
@@ -78,7 +74,7 @@ public class SerializedDataEntry<T, N extends Tag> implements Supplier<T> {
         }
 
         public SerializedDataEntry<T, N> build() {
-            return new SerializedDataEntry<>(data, key, tagKey, writer, reader);
+            return new SerializedDataEntry<>(data, key, writer, reader);
         }
 
         private static byte idFromTagType(TagType<?> type) {

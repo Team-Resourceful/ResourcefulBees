@@ -104,7 +104,7 @@ public abstract class AbstractModContainerMenu<T extends BlockEntity> extends Ab
 
     protected static <T extends BlockEntity> T getTileFromBuf(Level level, FriendlyByteBuf buf, Class<T> type) {
         if (buf == null) return null;
-        if (!level.isClientSide) return null;
+        if (!level.isClientSide()) return null;
         return WorldUtils.getTileEntity(type, level, buf.readBlockPos());
     }
 }

@@ -10,49 +10,43 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipe
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
-import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
-import com.teamresourceful.resourcefullib.common.recipe.CodecRecipeSerializer;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeInput;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPair parent2, Optional<Ingredient> input, WeightedCollection<BreederOutput> outputs, int time) implements CodecRecipe<RecipeInput> {
+public record BreederRecipe(Identifier id, BreederPair parent1, BreederPair parent2, Optional<Ingredient> input, WeightedCollection<BreederOutput> outputs, int time) implements Recipe<RecipeInput> {
 
     public static final Codec<WeightedCollection<BreederOutput>> RANDOM_COLLECTION_CODEC = CodecExtras.set(BreederOutput.CODEC).comapFlatMap(BreederOutput::convertToRandomCollection, BreederOutput::convertToSet);
-    public static final Codec<WeightedCollection<BreederOutput>> RANDOM_COLLECTION_NETWORK_CODEC = CodecExtras.set(BreederOutput.NETWORK_CODEC).comapFlatMap(BreederOutput::convertToRandomCollection, BreederOutput::convertToSet);
+//    public static final Codec<WeightedCollection<BreederOutput>> RANDOM_COLLECTION_NETWORK_CODEC = CodecExtras.set(BreederOutput.NETWORK_CODEC).comapFlatMap(BreederOutput::convertToRandomCollection, BreederOutput::convertToSet);
 
-    public static Codec<BreederRecipe> codec(ResourceLocation id) {
+    public static Codec<BreederRecipe> codec(Identifier id) {
         return RecordCodecBuilder.create(instance -> instance.group(
             RecordCodecBuilder.point(id),
             BreederPair.CODEC.fieldOf("parent1").forGetter(BreederRecipe::parent1),
             BreederPair.CODEC.fieldOf("parent2").forGetter(BreederRecipe::parent2),
-            IngredientCodec.CODEC.optionalFieldOf("input").forGetter(BreederRecipe::input),
+            Ingredient.CODEC.optionalFieldOf("input").forGetter(BreederRecipe::input),
             BreederRecipe.RANDOM_COLLECTION_CODEC.fieldOf("outputs").forGetter(BreederRecipe::outputs),
             Codec.intRange(100, 72000).fieldOf("time").orElse(BreederConstants.DEFAULT_BREEDER_TIME).forGetter(BreederRecipe::time)
         ).apply(instance, BreederRecipe::new));
     }
 
-    public static Codec<BreederRecipe> packetCodec(ResourceLocation id) {
-        return RecordCodecBuilder.create(instance -> instance.group(
-                RecordCodecBuilder.point(id),
-                BreederPair.NETWORK_CODEC.fieldOf("parent1").forGetter(BreederRecipe::parent1),
-                BreederPair.NETWORK_CODEC.fieldOf("parent2").forGetter(BreederRecipe::parent2),
-                IngredientCodec.NETWORK_CODEC.optionalFieldOf("input").forGetter(BreederRecipe::input),
-                BreederRecipe.RANDOM_COLLECTION_NETWORK_CODEC.fieldOf("outputs").forGetter(BreederRecipe::outputs),
-                Codec.intRange(100, 72000).fieldOf("time").orElse(BreederConstants.DEFAULT_BREEDER_TIME).forGetter(BreederRecipe::time)
-        ).apply(instance, BreederRecipe::new));
-    }
+//    public static Codec<BreederRecipe> packetCodec(Identifier id) {
+//        return RecordCodecBuilder.create(instance -> instance.group(
+//                RecordCodecBuilder.point(id),
+//                BreederPair.NETWORK_CODEC.fieldOf("parent1").forGetter(BreederRecipe::parent1),
+//                BreederPair.NETWORK_CODEC.fieldOf("parent2").forGetter(BreederRecipe::parent2),
+//                Ingredient.CODEC.optionalFieldOf("input").forGetter(BreederRecipe::input),
+//                BreederRecipe.RANDOM_COLLECTION_NETWORK_CODEC.fieldOf("outputs").forGetter(BreederRecipe::outputs),
+//                Codec.intRange(100, 72000).fieldOf("time").orElse(BreederConstants.DEFAULT_BREEDER_TIME).forGetter(BreederRecipe::time)
+//        ).apply(instance, BreederRecipe::new));
+//    }
 
 /*    @Override
     public boolean matches(@NotNull Container inventory, @NotNull Level level) {
@@ -61,13 +55,23 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
     }*/
 
     @Override
-    public CodecRecipeSerializer<? extends CodecRecipe<RecipeInput>> serializer() {
+    public @NonNull RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
         return ModRecipeSerializers.BREEDER_RECIPE.get();
     }
 
     @Override
-    public @NotNull RecipeType<?> getType() {
+    public @NonNull RecipeType<? extends Recipe<RecipeInput>> getType() {
         return ModRecipes.BREEDER_RECIPE_TYPE.get();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return null;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return null;
     }
 
     @Override
@@ -76,25 +80,40 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
     }
 
     @Override
-    public @NotNull NonNullList<Ingredient> getIngredients() {
-        return NonNullList.of(Ingredient.EMPTY, parent1.parent(), parent1.feedItem(), parent2.parent(), parent2.feedItem());
+    public ItemStack assemble(RecipeInput input) {
+        return null;
     }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+
+//    @Override
+//    public @NotNull NonNullList<Ingredient> getIngredients() {
+//        return NonNullList.of(Ingredient.EMPTY, parent1.parent(), parent1.feedItem(), parent2.parent(), parent2.feedItem());
+//    }
 
     public record BreederPair(Ingredient parent, Optional<String> displayEntity, int feedAmount, Ingredient feedItem, Optional<ItemStack> returnItem){
         public static final Codec<BreederPair> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                IngredientCodec.CODEC.fieldOf("parent").forGetter(BreederPair::parent),
+                Ingredient.CODEC.fieldOf("parent").forGetter(BreederPair::parent),
                 Codec.STRING.optionalFieldOf("entity").forGetter(BreederPair::displayEntity),
                 Codec.INT.fieldOf("feedAmount").orElse(1).forGetter(BreederPair::feedAmount),
-                IngredientCodec.CODEC.fieldOf("feedItem").forGetter(BreederPair::feedItem),
+                Ingredient.CODEC.fieldOf("feedItem").forGetter(BreederPair::feedItem),
                 ItemStackCodec.CODEC.optionalFieldOf("returnItem").forGetter(BreederPair::returnItem)
         ).apply(instance, BreederPair::new));
 
         public static final Codec<BreederPair> NETWORK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                IngredientCodec.NETWORK_CODEC.fieldOf("parent").forGetter(BreederPair::parent),
+                Ingredient.CODEC.fieldOf("parent").forGetter(BreederPair::parent),
                 Codec.STRING.optionalFieldOf("entity").forGetter(BreederPair::displayEntity),
                 Codec.INT.fieldOf("feedAmount").orElse(1).forGetter(BreederPair::feedAmount),
-                IngredientCodec.NETWORK_CODEC.fieldOf("feedItem").forGetter(BreederPair::feedItem),
-                ItemStackCodec.NETWORK_CODEC.optionalFieldOf("returnItem").forGetter(BreederPair::returnItem)
+                Ingredient.CODEC.fieldOf("feedItem").forGetter(BreederPair::feedItem),
+                ItemStackCodec.CODEC.optionalFieldOf("returnItem").forGetter(BreederPair::returnItem)
         ).apply(instance, BreederPair::new));
 
         public boolean matches(Container inventory, int offset) {
@@ -110,12 +129,12 @@ public record BreederRecipe(ResourceLocation id, BreederPair parent1, BreederPai
                 Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BreederOutput::chance)
         ).apply(instance, BreederOutput::new));
 
-        public static final Codec<BreederOutput> NETWORK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                ItemStackCodec.NETWORK_CODEC.fieldOf("output").forGetter(BreederOutput::output),
-                Codec.STRING.optionalFieldOf("entity").forGetter(BreederOutput::displayEntity),
-                Codec.doubleRange(0.0d, Double.MAX_VALUE).fieldOf("weight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(BreederOutput::weight),
-                Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BreederOutput::chance)
-        ).apply(instance, BreederOutput::new));
+//        public static final Codec<BreederOutput> NETWORK_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+//                ItemStackCodec.NETWORK_CODEC.fieldOf("output").forGetter(BreederOutput::output),
+//                Codec.STRING.optionalFieldOf("entity").forGetter(BreederOutput::displayEntity),
+//                Codec.doubleRange(0.0d, Double.MAX_VALUE).fieldOf("weight").orElse(BeeConstants.DEFAULT_BREED_WEIGHT).forGetter(BreederOutput::weight),
+//                Codec.doubleRange(0.0d, 1.0d).fieldOf("chance").orElse(BeeConstants.DEFAULT_BREED_CHANCE).forGetter(BreederOutput::chance)
+//        ).apply(instance, BreederOutput::new));
 
         private static DataResult<WeightedCollection<BreederOutput>> convertToRandomCollection(Set<BreederOutput> set) {
             return DataResult.success(set.stream().collect(WeightedCollection.getCollector(BreederOutput::weight)));

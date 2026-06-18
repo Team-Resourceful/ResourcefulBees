@@ -1,59 +1,59 @@
-package com.teamresourceful.resourcefulbees.common.items.locator;
-
-import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
-import com.teamresourceful.resourcefulbees.common.networking.packets.server.DimensionalBeesPacket;
-import com.teamresourceful.resourcefulbees.mixin.ServerPlayerAccessor;
-import com.teamresourceful.resourcefulbees.mixin.common.ServerLevelAccessor;
-import com.teamresourceful.resourcefulbees.mixin.common.StructureCheckAccessor;
-import com.teamresourceful.resourcefulbees.platform.common.events.SyncedDatapackEvent;
-import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.random.WeightedList;
-import net.minecraft.world.level.Level;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public final class DimensionalBeeHolder {
-
-    public static final Map<ResourceKey<Level>, List<String>> DIMENSIONAL_BEES = new HashMap<>();
-
-    private DimensionalBeeHolder() throws UtilityClassException {
-        throw new UtilityClassException();
-    }
-
-    private static void updateBees(MinecraftServer server) {
-        DIMENSIONAL_BEES.clear();
-
-        for (ServerLevel level : server.getAllLevels()) {
-            var generator = ((StructureCheckAccessor) ((ServerLevelAccessor) level).getStructureCheck()).getChunkGenerator();
-
-            DIMENSIONAL_BEES.put(level.dimension(), generator.getBiomeSource()
-                .possibleBiomes()
-                .stream()
-                .filter(Holder::isBound).map(Holder::value)
-                .map(biome -> biome.getMobSettings().getMobs(ModConstants.BEE_CATEGORY))
-                .map(WeightedList::unwrap).flatMap(List::stream)//not sure if weighted list is right used to be random list
-                .map(data -> data.value().type())
-                .filter(type -> type instanceof CustomBeeEntityType<?>)
-                .map(type -> (CustomBeeEntityType<?>)type)
-                .map(CustomBeeEntityType::getBeeType)
-                .toList());
-        }
-    }
-
-    public static List<String> getBees(ResourceKey<Level> dimension) {
-        return DIMENSIONAL_BEES.getOrDefault(dimension, List.of());
-    }
-
-    public static void onDatapackSync(SyncedDatapackEvent event) {
-        if (DIMENSIONAL_BEES.isEmpty()) updateBees(((ServerPlayerAccessor)event.player()).getServer());
-        NetworkHandler.NETWORK.sendToPlayer(new DimensionalBeesPacket(DIMENSIONAL_BEES), event.player());
-    }
-}
+//package com.teamresourceful.resourcefulbees.common.items.locator;
+//
+//import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
+//import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+//import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
+//import com.teamresourceful.resourcefulbees.common.networking.packets.server.DimensionalBeesPacket;
+//import com.teamresourceful.resourcefulbees.mixin.ServerPlayerAccessor;
+//import com.teamresourceful.resourcefulbees.mixin.common.ServerLevelAccessor;
+//import com.teamresourceful.resourcefulbees.mixin.common.StructureCheckAccessor;
+//import com.teamresourceful.resourcefulbees.events.SyncedDatapackEvent;
+//import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+//import net.minecraft.core.Holder;
+//import net.minecraft.resources.ResourceKey;
+//import net.minecraft.server.MinecraftServer;
+//import net.minecraft.server.level.ServerLevel;
+//import net.minecraft.util.random.WeightedList;
+//import net.minecraft.world.level.Level;
+//
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//
+//public final class DimensionalBeeHolder {
+//
+//    public static final Map<ResourceKey<Level>, List<String>> DIMENSIONAL_BEES = new HashMap<>();
+//
+//    private DimensionalBeeHolder() throws UtilityClassException {
+//        throw new UtilityClassException();
+//    }
+//
+//    private static void updateBees(MinecraftServer server) {
+//        DIMENSIONAL_BEES.clear();
+//
+//        for (ServerLevel level : server.getAllLevels()) {
+//            var generator = ((StructureCheckAccessor) ((ServerLevelAccessor) level).getStructureCheck()).getChunkGenerator();
+//
+//            DIMENSIONAL_BEES.put(level.dimension(), generator.getBiomeSource()
+//                .possibleBiomes()
+//                .stream()
+//                .filter(Holder::isBound).map(Holder::value)
+//                .map(biome -> biome.getMobSettings().getMobs(ModConstants.BEE_CATEGORY))
+//                .map(WeightedList::unwrap).flatMap(List::stream)//not sure if weighted list is right used to be random list
+//                .map(data -> data.value().type())
+//                .filter(type -> type instanceof CustomBeeEntityType<?>)
+//                .map(type -> (CustomBeeEntityType<?>)type)
+//                .map(CustomBeeEntityType::getBeeType)
+//                .toList());
+//        }
+//    }
+//
+//    public static List<String> getBees(ResourceKey<Level> dimension) {
+//        return DIMENSIONAL_BEES.getOrDefault(dimension, List.of());
+//    }
+//
+//    public static void onDatapackSync(SyncedDatapackEvent event) {
+//        if (DIMENSIONAL_BEES.isEmpty()) updateBees(((ServerPlayerAccessor)event.player()).getServer());
+//        NetworkHandler.NETWORK.sendToPlayer(new DimensionalBeesPacket(DIMENSIONAL_BEES), event.player());
+//    }
+//}

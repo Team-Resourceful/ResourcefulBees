@@ -10,17 +10,19 @@ import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipeSerializer;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
-public record FlowHiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees, RecipeFluid fluid) implements CodecRecipe<RecipeInput> {
+public record FlowHiveRecipe(Identifier id, HolderSet<EntityType<?>> bees, RecipeFluid fluid) implements Recipe<RecipeInput> {
 
-    public static Codec<FlowHiveRecipe> codec(ResourceLocation id) {
+    public static Codec<FlowHiveRecipe> codec(Identifier id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 HolderSetCodec.of(BuiltInRegistries.ENTITY_TYPE).fieldOf("bees").forGetter(FlowHiveRecipe::bees),
@@ -37,18 +39,42 @@ public record FlowHiveRecipe(ResourceLocation id, HolderSet<EntityType<?>> bees,
     }
 
     @Override
-    public boolean matches(RecipeInput recipeInput, Level level) {
+    public boolean matches(@NonNull RecipeInput recipeInput, @NonNull Level level) {
         return false;
     }
 
     @Override
-    public CodecRecipeSerializer<? extends CodecRecipe<RecipeInput>> serializer() {
+    public ItemStack assemble(@NonNull RecipeInput input) {
+        return null;
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+
+    @Override
+    public @NonNull RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
         return ModRecipeSerializers.FLOW_HIVE_RECIPE.get();
     }
 
     @Override
-    public @NotNull
-    RecipeType<?> getType() {
+    public @NonNull RecipeType<? extends Recipe<RecipeInput>> getType() {
         return ModRecipes.FLOW_HIVE_RECIPE_TYPE.get();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return null;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return null;
     }
 }

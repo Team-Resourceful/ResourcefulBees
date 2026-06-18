@@ -13,9 +13,4 @@ public interface BeehiveEntityAccessor {
 
     @Accessor("stored")
     List<BeehiveBlockEntity.BeeData> getStored();
-
-    @Invoker("removeIgnoredBeeTags")
-    static void callRemoveIgnoredBeeTags(CompoundTag tag) {
-        throw new AssertionError("callRemoveIgnoredBeeTags mixin did not apply!");
-    }
 }

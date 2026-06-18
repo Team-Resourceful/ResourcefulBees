@@ -12,10 +12,8 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeehiveTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,7 +26,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -36,13 +34,11 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import org.apache.commons.lang3.text.WordUtils;
@@ -70,7 +66,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, entityType.get(), TieredBeehiveBlockEntity::serverSideTick);
+        return level.isClientSide() ? null : createTickerHelper(blockEntityType, entityType.get(), TieredBeehiveBlockEntity::serverSideTick);
     }
 
     /**
@@ -128,7 +124,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
                 }
                 return result;
             } else {
-                player.displayClientMessage(BeehiveTranslations.INVALID_UPGRADE, true);
+                player.sendSystemMessage(BeehiveTranslations.INVALID_UPGRADE);
             }
         }
 
@@ -165,7 +161,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
             while (hive.hasCombs()) {
                 ItemStack honeycomb = hive.getResourceHoneycomb();
                 popResource(level, pos, honeycomb);
-                if (rolls > 0 && level.random.nextDouble() < extraRolls.secondDouble()) {
+                if (rolls > 0 && level.getRandom().nextDouble() < extraRolls.secondDouble()) {
                     ItemStack extraHoneycomb = honeycomb.copy();
                     extraHoneycomb.setCount(1);
                     popResource(level, pos, extraHoneycomb);
@@ -197,12 +193,6 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
         }
     }
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HONEY_LEVEL, FACING);
-    }
-
-    @Environment(EnvType.CLIENT)
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
         components.add(Component.translatable(BeehiveTranslations.MAX_BEES, tier.maxBees()).withStyle(ChatFormatting.GOLD));

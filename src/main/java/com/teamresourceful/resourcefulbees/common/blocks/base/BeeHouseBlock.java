@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blocks.base;
 
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -64,7 +63,7 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
             if (blockEntity instanceof ContentMenuProvider<?> contentMenu) {
                 contentMenu.openMenu((ServerPlayer) player);
             } else if (blockEntity != null) {
-                ModUtils.openScreen(player, blockEntity, pos);
+                player.openMenu(blockEntity);
             }
         }
         return InteractionResult.SUCCESS;

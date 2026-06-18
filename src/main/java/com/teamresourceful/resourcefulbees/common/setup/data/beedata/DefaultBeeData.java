@@ -17,16 +17,16 @@ import com.teamresourceful.resourcefulbees.common.setup.data.beedata.traits.Trai
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
-public record DefaultBeeData(String name, Map<ResourceLocation, BeeData<?>> data, ResourceLocation id, MutableComponent displayName, Supplier<EntityType<?>> type) implements com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData {
+public record DefaultBeeData(String name, Map<Identifier, BeeData<?>> data, Identifier id, MutableComponent displayName, Supplier<EntityType<?>> type) implements com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData {
 
-    public static DefaultBeeData of(String name, Map<ResourceLocation, BeeData<?>> data) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, name + "_bee");
+    public static DefaultBeeData of(String name, Map<Identifier, BeeData<?>> data) {
+        Identifier id = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, name + "_bee");
         return new DefaultBeeData(
             name,
             data,

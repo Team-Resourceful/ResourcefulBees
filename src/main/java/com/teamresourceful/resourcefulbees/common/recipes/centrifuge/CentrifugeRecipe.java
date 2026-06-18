@@ -13,20 +13,19 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipe
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
-import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
-import com.teamresourceful.resourcefullib.common.recipe.CodecRecipeSerializer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public record CentrifugeRecipe(
-        ResourceLocation id,
+        Identifier id,
         Ingredient ingredient,
         int inputAmount,
         List<Output<ItemOutput, ItemStack>> itemOutputs,
@@ -34,9 +33,9 @@ public record CentrifugeRecipe(
         int time,
         int energyPerTick,
         Optional<Integer> rotations
-) implements CodecRecipe<RecipeInput>, RecipeMatcher {
+) implements Recipe<RecipeInput>, RecipeMatcher {
 
-    public static Codec<CentrifugeRecipe> codec(ResourceLocation id) {
+    public static Codec<CentrifugeRecipe> codec(Identifier id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 Ingredient.CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::ingredient),
@@ -73,14 +72,38 @@ public record CentrifugeRecipe(
     }
 
     @Override
-    public CodecRecipeSerializer<? extends CodecRecipe<RecipeInput>> serializer() {
+    public ItemStack assemble(RecipeInput input) {
+        return null;
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+
+    @Override
+    public @NonNull RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
         return ModRecipeSerializers.CENTRIFUGE_RECIPE.get();
     }
 
-    @NotNull
     @Override
-    public RecipeType<?> getType() {
+    public @NonNull RecipeType<? extends Recipe<RecipeInput>> getType() {
         return ModRecipes.CENTRIFUGE_RECIPE_TYPE.get();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return null;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return null;
     }
 
     public int getRotations() {

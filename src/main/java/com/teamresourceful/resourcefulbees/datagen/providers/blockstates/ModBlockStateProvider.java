@@ -1,20 +1,18 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.blockstates;
 
-import com.teamresourceful.resourcefulbees.centrifuge.common.registries.CentrifugeBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.datagen.bases.BaseBlockStateProvider;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CeilingHangingSignBlock;
 import net.minecraft.world.level.block.WallHangingSignBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class ModBlockStateProvider extends BaseBlockStateProvider {
 
@@ -64,8 +62,8 @@ public class ModBlockStateProvider extends BaseBlockStateProvider {
         simpleBlock(wallSignBlock, sign);
     }
 
-    private ResourceLocation key(Block block) {
-        return ForgeRegistries.BLOCKS.getKey(block);
+    private Identifier key(Block block) {
+        return BuiltInRegistries.BLOCK.getKey(block);
     }
 
     private String name(Block block) {

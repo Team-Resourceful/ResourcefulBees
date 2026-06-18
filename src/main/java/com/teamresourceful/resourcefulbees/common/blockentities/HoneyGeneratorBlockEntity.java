@@ -285,7 +285,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
             if (automation) return false;
             return switch (slot) {
                 case ENERGY_FILL_UPGRADE_SLOT -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.ENERGY_FILL);
-                case ENERGY_XFER_UPGRADE_SLOT -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.ENERGY_XFER);
+                case ENERGY_XFER_UPGRADE_SLOT -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.ENERGY_TRANSFER);
                 case ENERGY_CAP_UPGRADE_SLOT -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.ENERGY_CAPACITY);
                 case TANK_CAP_UPGRADE_SLOT -> stack.getItem() instanceof Upgrade upgrade && upgrade.isType(UpgradeType.HONEY_CAPACITY);
                 default -> false;

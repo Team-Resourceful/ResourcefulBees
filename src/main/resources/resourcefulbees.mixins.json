@@ -4,11 +4,19 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "ServerPlayerAccessor",
+    "client.PackRepositoryAccessor",
     "common.BeeEntityAccessor",
     "common.BeeGoToHiveGoalInvoker",
+    "common.BeehiveBeeDataAccessor",
+    "common.BeehiveEntityAccessor",
     "common.BeeInvoker",
+    "common.DamageSourcesInvoker",
     "common.MixinBee",
     "common.MixinBeeEnterHiveGoal",
+    "common.MixinBlock",
+    "common.RecipeManagerAccessor",
+    "common.ServerLevelAccessor",
+    "common.StructureCheckAccessor",
     "common.StructureTemplatePoolAccessor"
   ],
   "injectors": {
@@ -16,5 +24,8 @@
   },
   "overwrites": {
     "requireAnnotations": true
-  }
+  },
+  "client": [
+    "client.LivingEntityRendererInvoker"
+  ]
 }

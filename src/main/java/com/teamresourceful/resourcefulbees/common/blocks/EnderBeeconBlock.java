@@ -1,18 +1,17 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.util.FluidUtils;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +22,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -77,7 +77,7 @@ public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> {
     @Deprecated
     public InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult) {
         if (level.getBlockEntity(pos) instanceof EnderBeeconBlockEntity beecon) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 ItemStack stack = player.getItemInHand(hand);
 
                 if (stack.is(ItemTags.WOOL)) {
@@ -88,7 +88,7 @@ public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> {
                     FluidUtils.checkBottleAndCapability(beecon.getFluidContainer(), beecon, player, level, pos, hand);
                 }
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS_SERVER;
         }
         return super.use(state, level, pos, player, hand, rayTraceResult);
     }
@@ -126,9 +126,13 @@ public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> {
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(ItemTranslations.BEECON_TOOLTIP.withStyle(ChatFormatting.LIGHT_PURPLE));
         tooltip.add(ItemTranslations.BEECON_TOOLTIP_1.withStyle(ChatFormatting.LIGHT_PURPLE));
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return null;
     }
 }

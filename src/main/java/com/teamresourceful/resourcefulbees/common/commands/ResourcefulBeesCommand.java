@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.commands;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.platform.common.events.CommandRegisterEvent;
+import com.teamresourceful.resourcefulbees.events.CommandRegisterEvent;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.commands.Commands;
 

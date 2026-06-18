@@ -6,9 +6,9 @@ import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.platform.client.events.ModelBakingCompletedEvent;
-import com.teamresourceful.resourcefulbees.platform.client.events.ModelModifyResultEvent;
-import com.teamresourceful.resourcefulbees.platform.client.events.RegisterAdditionaModelsEvent;
+import com.teamresourceful.resourcefulbees.client.events.ModelBakingCompletedEvent;
+import com.teamresourceful.resourcefulbees.client.events.ModelModifyResultEvent;
+import com.teamresourceful.resourcefulbees.client.events.RegisterAdditionalModelsEvent;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.client.Minecraft;
@@ -38,7 +38,7 @@ public final class ModelHandler {
         throw new UtilityClassException();
     }
 
-    private static void registerGenericBlockState(RegisterAdditionaModelsEvent event, RegistryEntry<Block> block, Identifier parentModel, RenderType renderType, ResourceManager resourceManager) {
+    private static void registerGenericBlockState(RegisterAdditionalModelsEvent event, RegistryEntry<Block> block, Identifier parentModel, RenderType renderType, ResourceManager resourceManager) {
         if (resourceManager.getResource(ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "blockstates/" + block.getId().getPath() + JSON_FILE_EXTENSION)).isEmpty()) {
             block.get().getStateDefinition().getPossibleStates().forEach(state -> {
                 String propertyMapString = BlockModelShaper.statePropertiesToString(state.getValues());
@@ -49,7 +49,7 @@ public final class ModelHandler {
         }
     }
 
-    private static void registerGenericItem(RegisterAdditionaModelsEvent event, RegistryEntry<Item> item, ResourceLocation parentModel, ResourceManager resourceManager) {
+    private static void registerGenericItem(RegisterAdditionalModelsEvent event, RegistryEntry<Item> item, ResourceLocation parentModel, ResourceManager resourceManager) {
         if (resourceManager.getResource(ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, ITEM_MODEL_PATH + item.getId().getPath() + JSON_FILE_EXTENSION)).isEmpty()) {
             ModelResourceLocation defaultModelLocation = new ModelResourceLocation(parentModel, MODEL_INVENTORY_TAG);
             event.register(defaultModelLocation.id());
@@ -57,7 +57,7 @@ public final class ModelHandler {
         }
     }
 
-    public static void onAddAdditional(RegisterAdditionaModelsEvent event) {
+    public static void onAddAdditional(RegisterAdditionalModelsEvent event) {
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 
         ModItems.HONEYCOMB_ITEMS.getEntries().forEach(comb -> registerGenericItem(event, comb, new ModIdentifier("honeycomb"), resourceManager));

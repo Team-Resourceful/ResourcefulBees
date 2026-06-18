@@ -9,21 +9,19 @@ import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipeSerializer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
-public record SolidificationRecipe(ResourceLocation id, RecipeFluid fluid, ItemStack stack) implements CodecRecipe<RecipeInput> {
+public record SolidificationRecipe(Identifier id, RecipeFluid fluid, ItemStack stack) implements Recipe<RecipeInput> {
 
-    public static Codec<SolidificationRecipe> codec(ResourceLocation id) {
+    public static Codec<SolidificationRecipe> codec(Identifier id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 RecipeFluid.CODEC.fieldOf("fluid").forGetter(SolidificationRecipe::fluid),
@@ -44,18 +42,42 @@ public record SolidificationRecipe(ResourceLocation id, RecipeFluid fluid, ItemS
     }
 
     @Override
-    public boolean matches(RecipeInput recipeInput, Level level) {
+    public boolean matches(@NonNull RecipeInput recipeInput, @NonNull Level level) {
         return false;
     }
 
     @Override
-    public @NotNull
-    RecipeType<?> getType() {
+    public ItemStack assemble(@NonNull RecipeInput input) {
+        return null;
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+
+    @Override
+    public @NonNull RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
+        return ModRecipeSerializers.SOLIDIFICATION_RECIPE.get();
+    }
+
+    @Override
+    public @NonNull RecipeType<? extends Recipe<RecipeInput>> getType() {
         return ModRecipes.SOLIDIFICATION_RECIPE_TYPE.get();
     }
 
     @Override
-    public CodecRecipeSerializer<? extends CodecRecipe<RecipeInput>> serializer() {
-        return ModRecipeSerializers.SOLIDIFICATION_RECIPE.get();
+    public PlacementInfo placementInfo() {
+        return null;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return null;
     }
 }

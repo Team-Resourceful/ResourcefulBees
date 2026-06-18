@@ -44,10 +44,10 @@ public class CentrifugeBlock extends RenderingBaseEntityBlock {
     @SuppressWarnings("deprecation")
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
         if (level.getBlockEntity(pos) instanceof CentrifugeBlockEntity centrifuge) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 FluidUtils.checkBottleAndCapability(centrifuge.getFluidContainer(), centrifuge, player, level, pos, hand);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS_SERVER;
         }
         return super.use(state, level, pos, player, hand, result);
     }

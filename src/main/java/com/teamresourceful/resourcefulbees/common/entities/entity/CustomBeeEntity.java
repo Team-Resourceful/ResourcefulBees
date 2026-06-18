@@ -18,13 +18,14 @@ import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -41,6 +42,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -87,7 +90,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     //region CUSTOM BEE RELATED METHODS BELOW
 
     @Override
-    public boolean isInvulnerableTo(@NotNull DamageSource source) {
+    public boolean isInvulnerableTo(@NonNull ServerLevel serverLevel, @NotNull DamageSource source) {
         if (getCombatData().isInvulnerable() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return true;
 
         BeeTraitData info = getTraitData();
@@ -100,14 +103,14 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
         if (info.hasTraits() && info.hasDamageImmunities() && info.damageImmunities().contains(source.getMsgId())) {
             return true;
         }
-        return super.isInvulnerableTo(source);
+        return super.isInvulnerableTo(serverLevel, source);
     }
 
     @Override
     public boolean canBeAffected(@NotNull MobEffectInstance effectInstance) {
         BeeTraitData info = getTraitData();
         if (info.hasTraits() && info.hasPotionImmunities()) {
-            MobEffect potionEffect = effectInstance.getEffect();
+            MobEffect potionEffect = effectInstance.getEffect().value();
             return info.potionImmunities().stream().noneMatch(potionEffect::equals) || super.canBeAffected(effectInstance);
         }
         return super.canBeAffected(effectInstance);
@@ -173,26 +176,26 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(FEED_COUNT, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder entityData) {
+        super.defineSynchedData(entityData);
+        entityData.define(FEED_COUNT, 0);
     }
 
     @Override
-    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
+    public void readAdditionalSaveData(@NotNull ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        this.entityData.set(FEED_COUNT, tag.getInt(NBTConstants.NBT_FEED_COUNT));
+        this.entityData.set(FEED_COUNT, tag.getIntOr(NBTConstants.NBT_FEED_COUNT, 0));
     }
 
     @Override
-    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
+    public void addAdditionalSaveData(@NonNull ValueOutput compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
     @Override
     public AgeableMob createSelectedChild(FamilyUnit family) {
-        return (AgeableMob) family.getChildData().entityType().create(level());
+        return (AgeableMob) family.getChildData().entityType().create(level(), EntitySpawnReason.BREEDING);
     }
 
     //This is because we don't want IF being able to breed our animals

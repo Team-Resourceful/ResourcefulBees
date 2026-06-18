@@ -57,7 +57,7 @@ public final class HoneyInitializers {
 
     @FunctionalInterface
     public interface HoneyFoodDataInitializer {
-        HoneyFoodData create(int hunger, float saturation, boolean canAlwaysEat, boolean fastFood, List<HoneyBottleEffectData> effects);
+        HoneyFoodData create(int hunger, float saturation, boolean canAlwaysEat, float consumeSeconds, List<HoneyBottleEffectData> effects);
     }
 
     @FunctionalInterface

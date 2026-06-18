@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.mixin.common;
 import com.teamresourceful.resourcefulbees.common.items.dispenser.ShearsDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSourceImpl;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+
+//TODO Determine if this mixin is needed anymore
 @Mixin(DispenserBlock.class)
 public abstract class MixinDispenserBlock {
 

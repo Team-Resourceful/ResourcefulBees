@@ -27,6 +27,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+
+//TODO THIS CLASS MAY NOT BE NEEDED ANYMORE
 public class BeeSpawnEggItem extends SpawnEggItem implements ColoredObject {
 
     protected final Supplier<EntityType<? extends CustomBeeEntity>> defaultType;

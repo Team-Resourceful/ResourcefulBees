@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.lib.constants;
 
-import com.teamresourceful.resourcefulbees.platform.common.util.PathUtils;
+import com.teamresourceful.resourcefulbees.common.util.PathUtils;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 
 import java.io.IOException;

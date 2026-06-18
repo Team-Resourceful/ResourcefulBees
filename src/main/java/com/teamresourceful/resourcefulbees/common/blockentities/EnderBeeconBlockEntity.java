@@ -28,6 +28,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -257,7 +258,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         effects.stream()
             .map(BuiltInRegistries.MOB_EFFECT::getKey)
             .filter(Objects::nonNull)
-            .map(ResourceLocation::toString)
+            .map(Identifier::toString)
             .map(StringTag::valueOf)
             .forEachOrdered(nbt::add);
         return nbt;
@@ -266,8 +267,9 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     public Set<MobEffect> readEffectsFromNBT(ListTag nbt) {
         return nbt.stream()
             .filter(StringTag.class::isInstance)
-            .map(Tag::getAsString)
-            .map(ResourceLocation::tryParse)
+            .map(Tag::asString)
+            .filter(Optional::isPresent)
+            .map(s -> Identifier.tryParse(s.get()))
             .map(BuiltInRegistries.MOB_EFFECT::getOptional)
             .filter(Optional::isPresent)
             .map(Optional::get)

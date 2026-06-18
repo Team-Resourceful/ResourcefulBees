@@ -9,17 +9,19 @@ import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipeSerializer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
-public record HoneyGenRecipe(ResourceLocation id, RecipeFluid honey, int energyFillRate, int honeyDrainRate) implements CodecRecipe<RecipeInput> {
+public record HoneyGenRecipe(Identifier id, RecipeFluid honey, int energyFillRate, int honeyDrainRate) implements Recipe<RecipeInput> {
 
-    public static Codec<HoneyGenRecipe> codec(ResourceLocation id) {
+    public static Codec<HoneyGenRecipe> codec(Identifier id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
                 RecipeFluid.CODEC.fieldOf("honey").forGetter(HoneyGenRecipe::honey),
@@ -41,12 +43,39 @@ public record HoneyGenRecipe(ResourceLocation id, RecipeFluid honey, int energyF
     }
 
     @Override
-    public CodecRecipeSerializer<? extends CodecRecipe<RecipeInput>> serializer() {
+    public ItemStack assemble(RecipeInput input) {
+        return null;
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+
+    @Override
+    public RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
         return ModRecipeSerializers.HONEY_GEN_RECIPE.get();
     }
 
     @Override
-    public @NotNull RecipeType<?> getType() {
+    public @NonNull RecipeType<? extends Recipe<RecipeInput>> getType() {
         return ModRecipes.HONEY_GEN_RECIPE_TYPE.get();
     }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return null;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return null;
+    }
+
+
 }

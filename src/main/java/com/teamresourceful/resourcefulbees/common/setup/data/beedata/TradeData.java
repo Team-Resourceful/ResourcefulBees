@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.bounds.UniformedNumberCodecs;
@@ -11,7 +12,10 @@ import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
+
+import java.util.Optional;
 
 public record TradeData(
         UniformInt amount,
@@ -24,11 +28,9 @@ public record TradeData(
 
     public MerchantOffer getMerchantOffer(RandomSource random, ItemStack product, int flowerMin, int flowerMax) {
         product.setCount(amount().sample(random));
-        ItemStack secondaryCost = secondaryItem().copy();
-        secondaryCost.setCount(secondaryItemCost().sample(random));
         return new MerchantOffer(
-                new ItemStack(ModItems.GOLD_FLOWER_ITEM.get(), random.nextIntBetweenInclusive(flowerMin, flowerMax)),
-                secondaryCost,
+                new ItemCost(ModItems.GOLD_FLOWER_ITEM.get(), random.nextIntBetweenInclusive(flowerMin, flowerMax)),
+                Optional.of(new ItemCost(secondaryItem().getItem(), secondaryItemCost().sample(random))),
                 product,
                 0, maxTrades, xp, priceMultiplier
         );
@@ -50,7 +52,7 @@ public record TradeData(
 
     public static final BeekeeperTradeData DEFAULT = new TradeData(UniformInt.of(0,0), ItemStack.EMPTY, UniformInt.of(0,0), 0, 0, 0);
 
-    public static final BeeDataSerializer<BeekeeperTradeData> SERIALIZER = BeeDataSerializer.of(new ModIdentifier("trade"), 1, id -> CODEC, DEFAULT);
+    public static final BeeDataSerializer<BeekeeperTradeData> SERIALIZER = BeeDataSerializer.of(ModIdentifier.of("trade"), 1, id -> CODEC, DEFAULT);
 
     @Override
     public BeeDataSerializer<BeekeeperTradeData> serializer() {

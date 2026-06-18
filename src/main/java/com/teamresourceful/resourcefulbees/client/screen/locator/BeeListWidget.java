@@ -1,19 +1,17 @@
 package com.teamresourceful.resourcefulbees.client.screen.locator;
 
-import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.resources.Identifier;
 
-import java.util.Comparator;
 import java.util.function.Consumer;
 
 public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
 
-    public static final Identifier BACKGROUND = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/advancements/backgrounds/resourcefulbees.png");
+    public static final Identifier BACKGROUND = ModIdentifier.of("textures/gui/advancements/backgrounds/resourcefulbees.png");
 
     private final Consumer<BeeLocatorEntry> selector;
 
@@ -79,13 +77,13 @@ public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
         if (level == null) return;
         this.clearEntries();
 
-        registry.getSetOfBees()
-            .stream()
-            .filter(bee -> DimensionalBeeHolder.getBees(level.dimension()).contains(bee.name()))
-            .sorted(Comparator.comparing(CustomBeeData::name))
-            .forEach(bee -> {
-                //Entity entity = bee.entityType().create(level);
-                //if (entity != null) this.addEntry(new BeeLocatorEntry(this.selector, entity, bee.displayName().copy()));
-            });
+//        registry.getSetOfBees()
+//            .stream()
+//            .filter(bee -> DimensionalBeeHolder.getBees(level.dimension()).contains(bee.name()))
+//            .sorted(Comparator.comparing(CustomBeeData::name))
+//            .forEach(bee -> {
+//                //Entity entity = bee.entityType().create(level);
+//                //if (entity != null) this.addEntry(new BeeLocatorEntry(this.selector, entity, bee.displayName().copy()));
+//            });
     }
 }

@@ -1,12 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.entities.pathfinding;
 
-import com.teamresourceful.resourcefulbees.platform.common.util.LevelUtils;
+import com.teamresourceful.resourcefulbees.common.util.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.CollisionGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -24,9 +22,9 @@ public class BeeNodeEvaluator extends FlyNodeEvaluator {
     @Override
     public @NotNull PathType getPathType(@NonNull PathfindingContext context, int x, int y, int z) {
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-        PathType pathTypes = getRawPathType(context.level(), mutableBlockPos.set(x, y, z), this.mob);
-        if (pathTypes == PathType.OPEN && y >= context.level().getMinBuildHeight() + 1) {
-            PathType pathTypes1 = getRawPathType(context.level(), mutableBlockPos.set(x, y - 1, z), this.mob);
+        PathType pathTypes = getRawPathType(context, mutableBlockPos.set(x, y, z), this.mob);
+        if (pathTypes == PathType.OPEN && y >= context.level().getMinY() + 1) {
+            PathType pathTypes1 = getRawPathType(context, mutableBlockPos.set(x, y - 1, z), this.mob);
             if (pathTypes1 != PathType.FIRE && pathTypes1 != PathType.LAVA) {
                 if (pathTypes1 == PathType.DAMAGE_CAUTIOUS) {
                     pathTypes = PathType.DAMAGE_CAUTIOUS;
@@ -70,8 +68,8 @@ public class BeeNodeEvaluator extends FlyNodeEvaluator {
                 } else if (blockstate.is(Blocks.COCOA)) {
                     return PathType.COCOA;
                 } else {
-                    FluidState fluidstate = level.getFluidState(pos);
-                    PathType nonLoggableFluidPathType = LevelUtils.getType(fluidstate, level, pos, mob, false);
+                    FluidState fluidstate = context.level().getFluidState(pos);
+                    PathType nonLoggableFluidPathType = LevelUtils.getType(fluidstate, context.level(), pos, mob, false);
                     if (nonLoggableFluidPathType != null) {
                         return nonLoggableFluidPathType;
                     } else if (fluidstate.is(FluidTags.LAVA)) {
@@ -89,10 +87,10 @@ public class BeeNodeEvaluator extends FlyNodeEvaluator {
                     } else if (block instanceof LeavesBlock) {
                         return PathType.LEAVES;
                     } else if (!blockstate.is(BlockTags.FENCES) && !blockstate.is(BlockTags.WALLS) && (!(block instanceof FenceGateBlock) || blockstate.getValue(FenceGateBlock.OPEN))) {
-                        if (!blockstate.isPathfindable(level, pos, PathComputationType.LAND)) {
+                        if (!blockstate.isPathfindable(PathComputationType.LAND)) {
                             return PathType.BLOCKED;
                         } else {
-                            PathType loggableFluidPathType = LevelUtils.getType(fluidstate, level, pos, mob, true);
+                            PathType loggableFluidPathType = LevelUtils.getType(fluidstate, context.level(), pos, mob, true);
                             if (loggableFluidPathType != null) {
                                 return loggableFluidPathType;
                             } else {

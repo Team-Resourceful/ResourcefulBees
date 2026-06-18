@@ -19,6 +19,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -53,10 +54,10 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
         } else {
             BlockEntity entity = level.getBlockEntity(pos);
             if (entity != null && tag().isPresent()) {
-                entity.load(tag().get());
+                //entity.load(tag().get());
             }
         }
-        level.blockUpdated(pos, blockState.getBlock());
+        level.setBlockAndUpdate(pos, blockState);
         return true;
     }
 
@@ -75,7 +76,7 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
         ItemStack stack = new ItemStack(Items.BARRIER);
         Item item = predicate.block().asItem();
         if (item.equals(Items.AIR)) {
-            stack.setHoverName(Component.translatable(ModTranslations.MUTATION_BLOCK, BuiltInRegistries.BLOCK.getKey(predicate.block())));
+            //stack.setHoverName(Component.translatable(ModTranslations.MUTATION_BLOCK, BuiltInRegistries.BLOCK.getKey(predicate.block())));
         } else {
             stack = new ItemStack(item);
         }

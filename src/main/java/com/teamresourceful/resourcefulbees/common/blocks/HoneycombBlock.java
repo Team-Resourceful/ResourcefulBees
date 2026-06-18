@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class HoneycombBlock extends Block implements ColoredObject {
 
     private final Color color;
@@ -34,7 +33,7 @@ public class HoneycombBlock extends Block implements ColoredObject {
 
     @Override
     public void animateTick(@NotNull BlockState stateIn, @NotNull Level world, @NotNull BlockPos pos, @NotNull RandomSource rand) {
-        if (color.isRainbow()) world.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
+        if (color.isSpecial()) world.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
         super.animateTick(stateIn, world, pos, rand);
     }
 

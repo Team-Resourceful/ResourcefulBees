@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTie
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -34,21 +34,21 @@ public enum BeehiveUpgrade {
         if (state.isAir()) return InteractionResult.FAIL;
         Block nest = getter.getNest(state.getBlock());
         if (nest == null) return InteractionResult.FAIL;
-        if (performBlockReplacementAndDataMerge(nest, state, level, pos)) return InteractionResult.sidedSuccess(level.isClientSide());
+        if (performBlockReplacementAndDataMerge(nest, state, level, pos)) return InteractionResult.SUCCESS_SERVER;
         return InteractionResult.FAIL;
     }
 
     public static boolean performBlockReplacementAndDataMerge(Block newBlock, BlockState old, Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity == null) return false;
-        CompoundTag data = blockEntity.saveWithoutMetadata();
+        CompoundTag data = blockEntity.saveWithoutMetadata(level.registryAccess());
 
         BlockState newBlockState = newBlock.withPropertiesOf(old);
         level.setBlock(pos, newBlockState, Block.UPDATE_ALL);
         if (newBlock instanceof EntityBlock entityBlock) {
             BlockEntity newBlockEntity = entityBlock.newBlockEntity(pos, newBlockState);
             if (newBlockEntity != null) {
-                CompoundTag freshData = newBlockEntity.saveWithoutMetadata();
+                CompoundTag freshData = newBlockEntity.saveWithoutMetadata(level.registryAccess());
                 freshData.merge(data);
                 newBlockEntity.load(freshData);
                 newBlockEntity.setChanged();
@@ -63,8 +63,8 @@ public enum BeehiveUpgrade {
     }
 
     public static Block getUpdateFor(Block block, char i) {
-        ResourceLocation id = BuiltInRegistries.BLOCK.getKey(block);
-        return BuiltInRegistries.BLOCK.getOptional(new ResourceLocation(id.getNamespace(), id.getPath().substring(0, id.getPath().length() - 1) + i)).orElse(null);
+        Identifier id = BuiltInRegistries.BLOCK.getKey(block);
+        return BuiltInRegistries.BLOCK.getOptional(Identifier.fromNamespaceAndPath(id.getNamespace(), id.getPath().substring(0, id.getPath().length() - 1) + i)).orElse(null);
     }
 
     @FunctionalInterface

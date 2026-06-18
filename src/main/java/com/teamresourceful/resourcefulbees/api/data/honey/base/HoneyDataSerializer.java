@@ -32,7 +32,7 @@ public interface HoneyDataSerializer<T extends HoneyData<T>> {
         return (T) data;
     }
 
-    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(Identifier id, int version, Function<String, MapCodec<T>> codec) {
+    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(Identifier id, int version, Function<String, Codec<T>> codec) {
         return new HoneyDataSerializer<>() {
             @Override
             public Identifier type() {
@@ -46,7 +46,7 @@ public interface HoneyDataSerializer<T extends HoneyData<T>> {
 
             @Override
             public Codec<T> codec(String name) {
-                return codec.apply(name).codec();
+                return codec.apply(name);
             }
 
             @Override
@@ -56,7 +56,7 @@ public interface HoneyDataSerializer<T extends HoneyData<T>> {
         };
     }
 
-    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(Identifier id, int version, Function<String, MapCodec<T>> codec, @Nullable T defaultValue) {
+    static <T extends HoneyData<T>> HoneyDataSerializer<T> of(Identifier id, int version, Function<String, Codec<T>> codec, @Nullable T defaultValue) {
         return new HoneyDataSerializer<>() {
             @Override
             public Identifier type() {
@@ -70,7 +70,7 @@ public interface HoneyDataSerializer<T extends HoneyData<T>> {
 
             @Override
             public Codec<T> codec(String name) {
-                return codec.apply(name).codec();
+                return codec.apply(name);
             }
 
             @Override

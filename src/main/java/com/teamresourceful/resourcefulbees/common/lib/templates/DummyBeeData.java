@@ -11,16 +11,16 @@ import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerTexture;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import net.minecraft.Util;
 import net.minecraft.core.HolderSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
@@ -41,9 +41,9 @@ public final class DummyBeeData {
 
     private static ItemStack getBucketWithNbt() {
         ItemStack bucket = Items.BUCKET.getDefaultInstance();
-        CompoundTag nbt = new CompoundTag();
-        nbt.putString("this_is", "an_nbt_tag");
-        bucket.setTag(nbt);
+        //CompoundTag nbt = new CompoundTag();
+        //nbt.putString("this_is", "an_nbt_tag");
+        //bucket.setTag(nbt);
         return bucket;
     }
 
@@ -59,7 +59,7 @@ public final class DummyBeeData {
             )
     );
 
-    private static final BeeLayerTexture MISSING_LAYER = API.layerTexture(new ResourceLocation(ModConstants.MOD_ID, "textures/entity/missing_texture.png"), new ResourceLocation(ModConstants.MOD_ID, "textures/entity/missing_texture.png"));
+    private static final BeeLayerTexture MISSING_LAYER = API.layerTexture(ModIdentifier.of("textures/entity/missing_texture.png"), ModIdentifier.of("textures/entity/missing_texture.png"));
 
     private static final BeeRenderData RENDER_DATA = API.render(
             Set.of(
@@ -67,9 +67,9 @@ public final class DummyBeeData {
                 API.layer(ConstantColors.cyan, MISSING_LAYER, LayerEffect.GLOW, false, 5)
             ),
             API.color(ConstantColors.antiquewhite, ConstantColors.chocolate, ConstantColors.cadetblue),
-            new ModIdentifier("geo/base.geo.json"),
+            ModIdentifier.of("geo/base.geo.json"),
             MISSING_LAYER,
-            new ModIdentifier("animations/bee.animation.json"),
+            ModIdentifier.of("animations/bee.animation.json"),
             1.0f
     );
 
@@ -91,25 +91,25 @@ public final class DummyBeeData {
             true,
             false,
             Util.make(new HashMap<>(), map -> {
-                map.put(Attributes.MAX_HEALTH, 10d);
-                map.put(Attributes.FLYING_SPEED, 0.6D);
-                map.put(Attributes.MOVEMENT_SPEED, 0.3D);
-                map.put(Attributes.ATTACK_DAMAGE, 1d);
-                map.put(Attributes.FOLLOW_RANGE, 48D);
-                map.put(Attributes.ARMOR, 0d);
-                map.put(Attributes.ARMOR_TOUGHNESS, 0d);
-                map.put(Attributes.ATTACK_KNOCKBACK, 0d);
+                map.put(Attributes.MAX_HEALTH.value(), 10d);
+                map.put(Attributes.FLYING_SPEED.value(), 0.6D);
+                map.put(Attributes.MOVEMENT_SPEED.value(), 0.3D);
+                map.put(Attributes.ATTACK_DAMAGE.value(), 1d);
+                map.put(Attributes.FOLLOW_RANGE.value(), 48D);
+                map.put(Attributes.ARMOR.value(), 0d);
+                map.put(Attributes.ARMOR_TOUGHNESS.value(), 0d);
+                map.put(Attributes.ATTACK_KNOCKBACK.value(), 0d);
             })
     );
 
     private static final BeeMutationData MUTATION_DATA = API.mutation(
             5,
-            new ResourceLocation(ModConstants.MOD_ID, "mutations/template")
+            ModIdentifier.of("mutations/template")
     );
 
     private static final BeeTraitData TRAIT_DATA = API.trait(BeeConfig.defaultAuraRange, Set.of());
 
-    public static final Map<ResourceLocation, BeeData<?>> DATA = Map.of(
+    public static final Map<Identifier, BeeData<?>> DATA = Map.of(
             CORE_DATA.serializer().id(), CORE_DATA,
             RENDER_DATA.serializer().id(), RENDER_DATA,
             BREED_DATA.serializer().id(), BREED_DATA,

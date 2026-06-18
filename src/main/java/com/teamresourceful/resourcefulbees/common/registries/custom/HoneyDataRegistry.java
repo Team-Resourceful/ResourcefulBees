@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyDataSerializ
 import com.teamresourceful.resourcefulbees.api.data.honey.base.RegisterHoneyDataEvent;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 public final class HoneyDataRegistry {
 
     public static final HoneyDataRegistry INSTANCE = new HoneyDataRegistry();
-    private static final HoneyDataSerializer<DummyHoneyData> DUMMY_SERIALIZER = HoneyDataSerializer.of(ModConstants.modIdentifier("noop"), 0, id -> MapCodec.unit(DummyHoneyData::new), new DummyHoneyData());
+    private static final HoneyDataSerializer<DummyHoneyData> DUMMY_SERIALIZER = HoneyDataSerializer.of(ModIdentifier.of("noop"), 0, id -> MapCodec.unit(DummyHoneyData::new).codec(), new DummyHoneyData());
 
     private final Map<Identifier, HoneyDataSerializer<?>> serializers = new HashMap<>();
     private final Set<Identifier> required = new HashSet<>();

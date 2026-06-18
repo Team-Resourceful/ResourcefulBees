@@ -14,7 +14,7 @@ public record CustomHoneyFoodData(int nutrition, float saturation, boolean canAl
             Codec.INT.optionalFieldOf("hunger", 1).forGetter(HoneyFoodData::nutrition),
             Codec.FLOAT.optionalFieldOf("saturation", 1f).forGetter(HoneyFoodData::saturation),
             Codec.BOOL.optionalFieldOf("canAlwaysEat", false).forGetter(HoneyFoodData::canAlwaysEat),
-            Codec.FLOAT.optionalFieldOf("fastFood", 2f).forGetter(HoneyFoodData::consumeSeconds),
+            Codec.FLOAT.optionalFieldOf("consumeSeconds", 2f).forGetter(HoneyFoodData::consumeSeconds),
             CustomHoneyBottleEffectData.CODEC.listOf().fieldOf("effects").orElse(List.of()).forGetter(HoneyFoodData::effects)
     ).apply(instance, CustomHoneyFoodData::new));
 

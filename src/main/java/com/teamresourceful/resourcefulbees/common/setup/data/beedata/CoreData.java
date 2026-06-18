@@ -6,12 +6,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.codecs.tags.HolderSetCodec;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.ExtraCodecs;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -34,10 +34,10 @@ public record CoreData(
             HolderSetCodec.of(BuiltInRegistries.BLOCK).optionalFieldOf("flower", DEFAULT_FLOWERS).forGetter(BeeCoreData::flowers),
             HolderSetCodec.of(BuiltInRegistries.ENTITY_TYPE).optionalFieldOf("entityFlower", HolderSet.direct()).forGetter(BeeCoreData::entityFlowers),
             Codec.intRange(600, Integer.MAX_VALUE).optionalFieldOf("maxTimeInHive", 2400).forGetter(BeeCoreData::maxTimeInHive),
-            ExtraCodecs.COMPONENT.listOf().optionalFieldOf("lore", Lists.newArrayList()).forGetter(BeeCoreData::lore)
+            ComponentSerialization.CODEC.listOf().optionalFieldOf("lore", Lists.newArrayList()).forGetter(BeeCoreData::lore)
     ).apply(instance, CoreData::new));
 
-    public static final BeeDataSerializer<BeeCoreData> SERIALIZER = BeeDataSerializer.of(ModConstants.modIdentifier("core"), 1, id -> CODEC, DEFAULT);
+    public static final BeeDataSerializer<BeeCoreData> SERIALIZER = BeeDataSerializer.of(ModIdentifier.of("core"), 1, id -> CODEC, DEFAULT);
 
     @Override
     public BeeDataSerializer<BeeCoreData> serializer() {

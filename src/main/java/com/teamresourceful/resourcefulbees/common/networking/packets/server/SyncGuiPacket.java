@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketTyp
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public record SyncGuiPacket(BlockPos pos, @NotNull CompoundTag tag) implements Packet<SyncGuiPacket> {
@@ -27,7 +27,7 @@ public record SyncGuiPacket(BlockPos pos, @NotNull CompoundTag tag) implements P
 
         public Type() {
             super(
-                    ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "sync_gui"),
+                    Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "sync_gui"),
                     ObjectByteCodec.create(
                             ExtraByteCodecs.BLOCK_POS.fieldOf(SyncGuiPacket::pos),
                             ExtraByteCodecs.NONNULL_COMPOUND_TAG.fieldOf(SyncGuiPacket::tag),

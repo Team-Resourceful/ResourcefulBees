@@ -6,11 +6,10 @@ import com.teamresourceful.resourcefulbees.api.data.conditions.LoadCondition;
 import com.teamresourceful.resourcefulbees.api.data.conditions.LoadConditionSerializer;
 import com.teamresourceful.resourcefullib.common.utils.modinfo.ModInfoUtils;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceLocation;
 
 public record ModLoadedCondition(String modid) implements LoadCondition<ModLoadedCondition> {
 
-    private static final ResourceLocation ID = new ResourceLocation("mod_loaded");
+    private static final Identifier ID = Identifier.parse("mod_loaded");
     private static final Codec<ModLoadedCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("modid").forGetter(ModLoadedCondition::modid)
     ).apply(instance, ModLoadedCondition::new));

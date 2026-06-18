@@ -1,20 +1,22 @@
 package com.teamresourceful.resourcefulbees.common.modifiers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.registry.forge.ForgeRegistrySubsystem;
-import com.teamresourceful.resourcefulbees.common.worldgen.SpawnDataModifier;
+import com.teamresourceful.resourcefulbees.common.forge.ForgeRegistrySubsystem;
+import com.teamresourceful.resourcefulbees.common.world.gen.SpawnDataModifier;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
-import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.common.world.ModifiableBiomeInfo;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
+import org.jspecify.annotations.NonNull;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +32,10 @@ public record BeeBiomeModifier(
 ) implements BiomeModifier, SpawnDataModifier {
 
     @Override
-    public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
+    public void modify(@NonNull Holder<Biome> biome, @NonNull Phase phase, ModifiableBiomeInfo.BiomeInfo.@NonNull Builder builder) {
         if(!type().abortCriteria().getAsBoolean()) return;
         if (phase.equals(Phase.ADD) && isInList(whitelist(), biome) && !isInList(blacklist(), biome)) {
-            builder.getMobSpawnSettings().addSpawn(spawns().type.getCategory(), spawns());
+            builder.getMobSpawnSettings().addSpawn(spawns().type().getCategory(), spawns());
         }
     }
 
@@ -57,7 +59,7 @@ public record BeeBiomeModifier(
     }
 
     @Override
-    public Codec<? extends BiomeModifier> codec() {
+    public @NonNull MapCodec<? extends BiomeModifier> codec() {
         return type().modifier().get();
     }
 

@@ -21,6 +21,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -154,11 +155,6 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
         return new BreederMenu(id, playerInventory, this, times, endTimes);
     }
 
-    @Override
-    public PositionContent createContent() {
-        return new PositionContent(this.worldPosition);
-    }
-
     @NotNull
     @Override
     public Component getDisplayName() {
@@ -206,5 +202,10 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
     @Override
     public boolean canTakeItemThroughFace(int index, @NotNull ItemStack stack, @NotNull Direction direction) {
         return index > 10 && index < 29;
+    }
+
+    @Override
+    public PositionContent createContent(ServerPlayer player) {
+        return new PositionContent(this.worldPosition);
     }
 }

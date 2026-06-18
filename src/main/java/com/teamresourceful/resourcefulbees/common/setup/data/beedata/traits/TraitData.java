@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitDamageType;
 import com.teamresourceful.resourcefulbees.api.registry.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.effect.MobEffect;
@@ -34,7 +35,7 @@ public record TraitData(
             Codec.intRange(3, 20).optionalFieldOf("auraRange", BeeConfig.defaultAuraRange).forGetter(BeeTraitData::auraRange),
             CodecExtras.set(Codec.STRING).optionalFieldOf("traits", new HashSet<>()).forGetter(BeeTraitData::traits)
     ).apply(instance, TraitData::of));
-    public static final BeeDataSerializer<BeeTraitData> SERIALIZER = BeeDataSerializer.of(new ModIdentifier("trait"), 1, id -> CODEC, DEFAULT);
+    public static final BeeDataSerializer<BeeTraitData> SERIALIZER = BeeDataSerializer.of(ModIdentifier.of("trait"), 1, id -> CODEC, DEFAULT);
 
     public static TraitData of(int range, Set<String> traits) {
         Set<PotionEffect> potionDamageEffects = new HashSet<>();

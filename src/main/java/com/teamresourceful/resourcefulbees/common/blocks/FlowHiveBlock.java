@@ -37,7 +37,7 @@ public class FlowHiveBlock extends BeeHouseBlock implements BeeHolderBlock {
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (level.getBlockEntity(pos) instanceof FlowHiveBlockEntity flowHive) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 Item item = player.getItemInHand(hand).getItem();
                 if (item instanceof BottleItem) {
                     FluidUtils.fillBottle(flowHive.container(), player, hand);
@@ -45,7 +45,7 @@ public class FlowHiveBlock extends BeeHouseBlock implements BeeHolderBlock {
                     FluidUtils.emptyBottle(flowHive.container(), player, hand);
                 }
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS_SERVER;
         }
         return super.use(state, level, pos, player, hand, hitResult);
     }
@@ -72,6 +72,6 @@ public class FlowHiveBlock extends BeeHouseBlock implements BeeHolderBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, ModBlockEntityTypes.FLOW_HIVE_ENTITY.get(), BeeHolderBlockEntity::serverTick);
+        return level.isClientSide() ? null : createTickerHelper(type, ModBlockEntityTypes.FLOW_HIVE_ENTITY.get(), BeeHolderBlockEntity::serverTick);
     }
 }

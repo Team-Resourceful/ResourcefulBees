@@ -19,11 +19,10 @@ public final class IngredientUtils {
                 .filter(Holder::isBound)
                 .map(Holder::value)
                 .map(ItemLike::asItem)
-                .map(Item::getDefaultInstance)
         );
     }
 
     public static Ingredient of(LazyHolder<? extends ItemLike> holder) {
-        return Ingredient.of(holder.get().asItem().getDefaultInstance());
+        return Ingredient.of(holder.get().asItem());
     }
 }

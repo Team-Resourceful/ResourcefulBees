@@ -17,7 +17,7 @@ public interface BeeCombatData extends BeeData<BeeCombatData> {
 
     boolean isInvulnerable();
 
-    Map<Holder<Attribute>, Double> attributes();
+    Map<Attribute, Double> attributes();
 
     AttributeSupplier.Builder buildAttributes(AttributeSupplier.Builder builder);
 }

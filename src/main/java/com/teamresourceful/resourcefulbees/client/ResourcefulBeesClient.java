@@ -5,11 +5,11 @@ import com.teamresourceful.resourcefulbees.client.screen.MissingRegistryScreen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.mixin.client.PackRepositoryAccessor;
-import com.teamresourceful.resourcefulbees.platform.client.events.ModelBakingCompletedEvent;
-import com.teamresourceful.resourcefulbees.platform.client.events.ModelModifyResultEvent;
-import com.teamresourceful.resourcefulbees.platform.client.events.RegisterAdditionaModelsEvent;
-import com.teamresourceful.resourcefulbees.platform.client.events.ScreenOpenEvent;
-import com.teamresourceful.resourcefulbees.platform.common.events.UpdateEvent;
+import com.teamresourceful.resourcefulbees.client.events.ModelBakingCompletedEvent;
+import com.teamresourceful.resourcefulbees.client.events.ModelModifyResultEvent;
+import com.teamresourceful.resourcefulbees.client.events.RegisterAdditionalModelsEvent;
+import com.teamresourceful.resourcefulbees.client.events.ScreenOpenEvent;
+import com.teamresourceful.resourcefulbees.events.UpdateEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackLocationInfo;
@@ -32,7 +32,7 @@ public class ResourcefulBeesClient {
         RegisterRenderLayersEvent.EVENT.addListener(ResourcefulBeesClient::registerRenderLayers);
         RegisterEntityLayersEvent.EVENT.addListener(ResourcefulBeesClient::registerEntityLayers);
         RegisterOverlayEvent.EVENT.addListener(ResourcefulBeesClient::registerOverlay);*/
-        RegisterAdditionaModelsEvent.EVENT.addListener(ModelHandler::onAddAdditional);
+        RegisterAdditionalModelsEvent.EVENT.addListener(ModelHandler::onAddAdditional);
         ModelBakingCompletedEvent.EVENT.addListener(ModelHandler::onModelBake);
         ModelModifyResultEvent.EVENT.addListener(ModelHandler::onModifyModel);
         UpdateEvent.EVENT.addListener(ClientDataSetup::onUpdates);

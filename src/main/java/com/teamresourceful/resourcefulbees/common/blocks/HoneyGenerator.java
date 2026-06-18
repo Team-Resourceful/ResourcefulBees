@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.HoneyGeneratorBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
@@ -10,6 +11,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,6 +30,11 @@ public class HoneyGenerator extends TickingBlock<HoneyGeneratorBlockEntity> {
     public HoneyGenerator(Properties properties) {
         super(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY, properties);
         registerDefaultState(defaultBlockState().setValue(PROPERTY_ON, false).setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return null;
     }
 
     @Override

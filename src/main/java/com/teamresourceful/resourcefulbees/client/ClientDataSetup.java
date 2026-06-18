@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.client;
 
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.platform.common.events.UpdateEvent;
+import com.teamresourceful.resourcefulbees.events.UpdateEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;

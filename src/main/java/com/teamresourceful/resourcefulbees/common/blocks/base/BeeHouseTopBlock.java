@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.blocks.base;
 
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -74,7 +73,7 @@ public class BeeHouseTopBlock extends Block {
             if (blockEntity instanceof ContentMenuProvider<?> contentMenu) {
                 contentMenu.openMenu((ServerPlayer) player);
             } else if (blockEntity != null) {
-                ModUtils.openScreen(player, blockEntity, posBelow);
+                player.openMenu(blockEntity);
             }
         }
         return InteractionResult.SUCCESS;

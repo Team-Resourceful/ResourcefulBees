@@ -7,7 +7,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +40,7 @@ public final class RandomPositionGenerator {
 
 
         //is bee within distance of home position?
-        boolean inDistanceOfHome = bee.hasRestriction() && bee.getRestrictCenter().closerThan(bee.blockPosition(), (bee.getRestrictRadius() + horizontalOffset) + 1.0D);
+        boolean inDistanceOfHome = bee.hasHome() && bee.getHomePosition().closerThan(bee.blockPosition(), (bee.getHomeRadius() + horizontalOffset) + 1.0D);
 
         boolean flag1 = false;
         double d0 = Double.NEGATIVE_INFINITY;
@@ -54,8 +54,8 @@ public final class RandomPositionGenerator {
                 int rndPosY = randomBlockpos.getY();
                 int rndPosZ = randomBlockpos.getZ();
 
-                if (bee.hasRestriction() && horizontalOffset > 1) { //if bee has a home && horizontal offset is greater than 1
-                    BlockPos beeHomePosition = bee.getRestrictCenter(); //get home position
+                if (bee.hasHome() && horizontalOffset > 1) { //if bee has a home && horizontal offset is greater than 1
+                    BlockPos beeHomePosition = bee.getHomePosition(); //get home position
 
                     //checks if bee is east of home and sets position closer based on direction
                     int nextInt = random.nextInt(horizontalOffset / 2);
@@ -70,21 +70,21 @@ public final class RandomPositionGenerator {
                 BlockPos targetPos = BlockPos.containing(rndPosX + bee.getX(), rndPosY + bee.getY(), rndPosZ + bee.getZ());
 
                 //if target Y is between 0 and world height AND (is not in Distance of home OR target pos is in distance of home) AND entity can stand on target pos
-                if (MathUtils.inRangeInclusive(targetPos.getY(), bee.level().getMinBuildHeight(), bee.level().getMaxBuildHeight()) && (!inDistanceOfHome || bee.isWithinRestriction(targetPos)) && pathnavigator.isStableDestination(targetPos)) {
+                if (MathUtils.inRangeInclusive(targetPos.getY(), bee.level().getMinY(), bee.level().getMaxY()) && (!inDistanceOfHome || bee.isWithinHome(targetPos)) && pathnavigator.isStableDestination(targetPos)) {
 
                     //flip a coin heads = check block above is air if so find valid position above else go below
                     if (random.nextBoolean() && bee.level().isEmptyBlock(bee.blockPosition().above())) {
-                        targetPos = findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level().getMaxBuildHeight(),
+                        targetPos = findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level().getMaxY(),
                                 pos -> bee.level().getBlockState(pos).isSolid());
                     } else {
-                        targetPos = findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level().getMinBuildHeight(),
+                        targetPos = findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level().getMinY(),
                                 pos -> bee.level().getBlockState(pos).isSolid());
                     }
 
                     // if can travel through water or target pos is not tagged as water
                     if (pathOnWater || !bee.level().getFluidState(targetPos).is(FluidTags.WATER)) {
                         //set path node type based on target position
-                        BlockPathTypes pathNodeType = WalkNodeEvaluator.getBlockPathTypeStatic(bee.level(), targetPos.mutable());
+                        PathType pathNodeType = WalkNodeEvaluator.getPathTypeStatic(bee, targetPos.mutable());
                         if (bee.getPathfindingMalus(pathNodeType) == 0.0F) {
                             //calculate if weight of new target position is better than previous target position
                             double d1 = blockWeightOfBeePOS.applyAsDouble(targetPos);

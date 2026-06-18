@@ -28,6 +28,6 @@ public enum ProcessStage {
     }
 
     public static ProcessStage deserialize(CompoundTag tag) {
-        return valueOf(tag.getString(NBTConstants.NBT_PROCESS_STAGE).toUpperCase(Locale.ROOT));
+        return valueOf(tag.getString(NBTConstants.NBT_PROCESS_STAGE).get().toUpperCase(Locale.ROOT));
     }
 }

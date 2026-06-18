@@ -8,7 +8,7 @@ import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassExceptio
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 //import dev.architectury.injectables.targets.ArchitecturyTarget;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,37 +23,37 @@ public final class DataGen {
         throw new UtilityClassException();
     }
 
-    private static final Map<ResourceLocation, Set<ResourceLocation>> TAGS = new HashMap<>();
+    private static final Map<Identifier, Set<Identifier>> TAGS = new HashMap<>();
 
-    public static Map<ResourceLocation, Set<ResourceLocation>> getTags() {
+    public static Map<Identifier, Set<Identifier>> getTags() {
         return Collections.unmodifiableMap(TAGS);
     }
 
     public static void generateCommonData() {
-        generateTags(ModEntities.BEES, new ResourceLocation("tags/entity_types/beehive_inhabitors.json"));
+        generateTags(ModEntities.BEES, Identifier.fromNamespaceAndPath("forge","tags/entity_types/beehive_inhabitors.json"));
 
-        generateTags(ModItems.HONEYCOMB_BLOCK_ITEMS, new ResourceLocation(ArchitecturyTarget.getCurrentTarget(), "tags/items/storage_blocks/honeycombs.json"));
-        generateTags(ModBlocks.HONEYCOMB_BLOCKS, new ResourceLocation(ArchitecturyTarget.getCurrentTarget(), "tags/blocks/storage_blocks/honeycombs.json"));
-        generateTags(ModItems.HONEYCOMB_ITEMS, new ResourceLocation(ArchitecturyTarget.getCurrentTarget(), "tags/items/honeycombs.json"));
+        generateTags(ModItems.HONEYCOMB_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/storage_blocks/honeycombs.json"));
+        generateTags(ModBlocks.HONEYCOMB_BLOCKS, Identifier.fromNamespaceAndPath("forge","tags/blocks/storage_blocks/honeycombs.json"));
+        generateTags(ModItems.HONEYCOMB_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honeycombs.json"));
 
         //custom honey data
-        generateTags(ModItems.HONEY_BOTTLE_ITEMS, new ResourceLocation(ArchitecturyTarget.getCurrentTarget(), "tags/items/honey_bottles.json"));
-        generateTags(ModItems.HONEY_BUCKET_ITEMS, new ResourceLocation(ArchitecturyTarget.getCurrentTarget(), "tags/items/buckets/honey.json"));
+        generateTags(ModItems.HONEY_BOTTLE_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honey_bottles.json"));
+        generateTags(ModItems.HONEY_BUCKET_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/buckets/honey.json"));
 
-        generateTags(ModBlocks.HONEY_BLOCKS, new ResourceLocation(ArchitecturyTarget.getCurrentTarget(), "tags/blocks/honey_blocks.json"));
-        generateTags(ModItems.HONEY_BLOCK_ITEMS, new ResourceLocation(ArchitecturyTarget.getCurrentTarget(), "tags/items/honey_blocks.json"));
+        generateTags(ModBlocks.HONEY_BLOCKS, Identifier.fromNamespaceAndPath("forge","tags/blocks/honey_blocks.json"));
+        generateTags(ModItems.HONEY_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honey_blocks.json"));
         generateHoneyTags();
     }
 
     private static void generateHoneyTags() {
-        TAGS.put(new ResourceLocation(ArchitecturyTarget.getCurrentTarget(), "tags/fluids/honey.json"),
+        TAGS.put(Identifier.fromNamespaceAndPath("forge","tags/fluids/honey.json"),
                 Stream.concat(ModFluids.FLOWING_HONEY_FLUIDS.getEntries().stream(), ModFluids.STILL_HONEY_FLUIDS.getEntries().stream())
                         .map(RegistryEntry::getId)
                         .collect(Collectors.toSet()));
     }
 
-    private static void generateTags(ResourcefulRegistry<?> register, ResourceLocation resourceLocation) {
-        TAGS.put(resourceLocation,
+    private static void generateTags(ResourcefulRegistry<?> register, Identifier Identifier) {
+        TAGS.put(Identifier,
                 register.stream()
                         .map(RegistryEntry::getId)
                         .collect(Collectors.toSet()));

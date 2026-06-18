@@ -13,10 +13,4 @@ public interface BeehiveBeeDataAccessor {
 
     @Accessor
     void setTicksInHive(int ticksInHive);
-
-    @Accessor
-    CompoundTag getEntityData();
-
-    @Accessor
-    int getMinOccupationTicks();
 }

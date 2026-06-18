@@ -4,8 +4,7 @@ import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import earth.terrarium.botarium.common.registry.fluid.FluidBucketItem;
-import earth.terrarium.botarium.common.registry.fluid.FluidData;
+import com.teamresourceful.resourcefullib.common.fluid.data.FluidData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 

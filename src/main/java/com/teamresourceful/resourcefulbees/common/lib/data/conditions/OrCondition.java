@@ -6,13 +6,12 @@ import com.teamresourceful.resourcefulbees.api.data.conditions.LoadCondition;
 import com.teamresourceful.resourcefulbees.api.data.conditions.LoadConditionSerializer;
 import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
 public record OrCondition(List<LoadCondition<?>> conditions) implements LoadCondition<OrCondition> {
 
-    private static final ResourceLocation ID = new ResourceLocation("or");
+    private static final Identifier ID = Identifier.parse("or");
     private static final Codec<OrCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             LoadConditionRegistry.CODEC.listOf().fieldOf("values").forGetter(OrCondition::conditions)
     ).apply(instance, OrCondition::new));

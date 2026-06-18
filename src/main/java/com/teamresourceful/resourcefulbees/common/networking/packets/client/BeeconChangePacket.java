@@ -11,7 +11,7 @@ import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
 import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Consumer;
@@ -31,7 +31,7 @@ public record BeeconChangePacket(
 
         public Type() {
             super(
-                    ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "beecon_change"),
+                    Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "beecon_change"),
                     ObjectByteCodec.create(
                             ByteCodec.ofEnum(Option.class).fieldOf(BeeconChangePacket::option),
                             ByteCodec.VAR_INT.fieldOf(BeeconChangePacket::value),

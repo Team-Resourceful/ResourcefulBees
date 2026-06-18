@@ -1,12 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.registries.dynamic;
 
-import com.teamresourceful.resourcefulbees.common.worldgen.SpawnDataModifier;
-import com.teamresourceful.resourcefulbees.platform.common.events.lifecycle.ServerGoingToStartEvent;
-import com.teamresourceful.resourcefulbees.platform.common.util.ModUtils;
+import com.teamresourceful.resourcefulbees.events.lifecycle.ServerGoingToStartEvent;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 
@@ -29,16 +26,16 @@ public final class ModSpawnData {
     }
 
     public static void initialize(ServerGoingToStartEvent event) {
-        SPAWN_PREDICATES.clear();
-        event.access().registryOrThrow(ModUtils.getSpawnDataRegistryKey())
-            .holders()
-            .map(Holder::value)
-            .filter(SpawnDataModifier.class::isInstance)
-            .map(SpawnDataModifier.class::cast)
-            .forEach(modifier -> modifier
-                .getSpawnPredicate()
-                .ifPresent(predicate -> SPAWN_PREDICATES.put(modifier.getEntityType(), predicate))
-            );
+//        SPAWN_PREDICATES.clear();
+//        event.access().registryOrThrow(ModUtils.getSpawnDataRegistryKey())
+//            .holders()
+//            .map(Holder::value)
+//            .filter(SpawnDataModifier.class::isInstance)
+//            .map(SpawnDataModifier.class::cast)
+//            .forEach(modifier -> modifier
+//                .getSpawnPredicate()
+//                .ifPresent(predicate -> SPAWN_PREDICATES.put(modifier.getEntityType(), predicate))
+//            );
     }
 
     private ModSpawnData() throws UtilityClassException {

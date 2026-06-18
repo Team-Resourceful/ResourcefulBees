@@ -1,9 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.items.base;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -15,10 +13,9 @@ import java.util.List;
 
 public interface ExpandableTooltip {
 
-    @Environment(EnvType.CLIENT)
     default void setupTooltip(@NotNull ItemStack stack, @Nullable BlockGetter pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        boolean shiftDown = Screen.hasShiftDown();
-        boolean ctrlDown = !shiftDown && Screen.hasControlDown();
+        boolean shiftDown = Minecraft.getInstance().hasShiftDown();
+        boolean ctrlDown = !shiftDown && Minecraft.getInstance().hasControlDown();
         String shift = shiftDown ? ItemTranslations.SHIFT_TOOLTIP_HIGHLIGHT : ItemTranslations.SHIFT_TOOLTIP;
         components.add(Component.translatable(shift, getShiftingDisplay()));
         if (getControlDisplay() != null) {
@@ -34,18 +31,14 @@ public interface ExpandableTooltip {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     Component getShiftingDisplay();
 
-    @Environment(EnvType.CLIENT)
     void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag);
 
-    @Environment(EnvType.CLIENT)
     default Component getControlDisplay() {
         return null;
     }
 
-    @Environment(EnvType.CLIENT)
     default void appendControlTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
 
     }

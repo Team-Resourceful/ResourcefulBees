@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
+import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
@@ -22,15 +23,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.ProblemReporter;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
@@ -194,7 +194,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
     }
 
     private static BeehiveBlockEntity.Occupant occupantOf(Entity entity, BeeCompat compat, TieredBeehiveBlockEntity hive) {
-        BeehiveBlockEntity.Occupant var5;
+        BeehiveBlockEntity.Occupant occupant;
         try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), LOGGER)) {
             TagValueOutput output = TagValueOutput.createWithContext(reporter, entity.registryAccess());
             entity.save(output);
@@ -202,10 +202,26 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             CompoundTag entityTag = output.buildResult();
             boolean hasNectar = entityTag.getBooleanOr("HasNectar", false);
             int maxTimeInHive = (int) (compat.resourcefulBees$getMaxTimeInHive() * hive.getBlock().getTier().timeModifier());
-            var5 = new BeehiveBlockEntity.Occupant(TypedEntityData.of(entity.getType(), entityTag), 0, hasNectar ? maxTimeInHive : MIN_HIVE_TIME);
+            occupant = new BeehiveBlockEntity.Occupant(TypedEntityData.of(entity.getType(), entityTag), 0, hasNectar ? maxTimeInHive : MIN_HIVE_TIME);
         }
 
-        return var5;
+        return occupant;
+    }
+
+    public static BeehiveBlockEntity.Occupant occupantOf(CustomBeeEntityType<?> entity, WorldGenLevel level, int timeInHive, TieredBeehiveBlockEntity hive) {
+        Entity bee = EntityType.loadEntityRecursive(entity, new CompoundTag(), level.getLevel(), EntitySpawnReason.CHUNK_GENERATION, EntityProcessor.NOP);
+        BeehiveBlockEntity.Occupant occupant;
+        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(bee.problemPath(), LOGGER)) {
+            TagValueOutput output = TagValueOutput.createWithContext(reporter, bee.registryAccess());
+            bee.save(output);
+            BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(output::discard);
+            CompoundTag entityTag = output.buildResult();
+            boolean hasNectar = entityTag.getBooleanOr("HasNectar", false);
+            int maxTimeInHive = (int) (timeInHive * hive.getBlock().getTier().timeModifier());
+            occupant = new BeehiveBlockEntity.Occupant(TypedEntityData.of(entity, entityTag), 0, maxTimeInHive);
+        }
+
+        return occupant;
     }
 
     private TieredBeehiveBlock getBlock() {

@@ -12,18 +12,19 @@ import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipe;
 import com.teamresourceful.resourcefullib.common.recipe.CodecRecipeSerializer;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.RecipeInput;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public record MutationRecipe(ResourceLocation id, Color pollenBaseColor, Color pollenTopColor, Map<MutationType, WeightedCollection<MutationType>> mutations) implements CodecRecipe<RecipeInput> {
+public record MutationRecipe(Identifier id, Color pollenBaseColor, Color pollenTopColor, Map<MutationType, WeightedCollection<MutationType>> mutations) implements Recipe<RecipeInput> {
 
-    public static Codec<MutationRecipe> codec(ResourceLocation id) {
+    public static Codec<MutationRecipe> codec(Identifier id) {
         return RecordCodecBuilder.create(instance -> instance.group(
             RecordCodecBuilder.point(id),
             Color.CODEC.fieldOf("pollenBaseColor").orElse(BeeConstants.DEFAULT_POLLEN_BASE_COLOR).forGetter(MutationRecipe::getPollenBaseColor),
@@ -32,7 +33,7 @@ public record MutationRecipe(ResourceLocation id, Color pollenBaseColor, Color p
         ).apply(instance, MutationRecipe::new));
     }
 
-    public static MutationRecipe getRecipe(@NotNull Level level, ResourceLocation id) {
+    public static MutationRecipe getRecipe(@NotNull Level level, Identifier id) {
         return (MutationRecipe) ((RecipeManagerInvoker) level.getRecipeManager()).callByType(ModRecipes.MUTATION_RECIPE_TYPE.get()).get(id);
     }
 
@@ -50,13 +51,43 @@ public record MutationRecipe(ResourceLocation id, Color pollenBaseColor, Color p
     }
 
     @Override
-    public CodecRecipeSerializer<? extends CodecRecipe<RecipeInput>> serializer() {
+    public ItemStack assemble(RecipeInput input) {
+        return null;
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+
+    @Override
+    public RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
         return ModRecipeSerializers.MUTATION_RECIPE.get();
+    }
+
+    @Override
+    public CodecRecipeSerializer<? extends CodecRecipe<RecipeInput>> serializer() {
+
     }
 
     @Override
     public @NotNull
     RecipeType<?> getType() {
         return ModRecipes.MUTATION_RECIPE_TYPE.get();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return null;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return null;
     }
 }

@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.common.networking.packets.server.Sync
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncGuiPacket;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.network.Network;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public final class NetworkHandler {
 
@@ -17,7 +17,7 @@ public final class NetworkHandler {
         throw new UtilityClassException();
     }
 
-    private static final ResourceLocation MAIN_CHANNEL = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "main");
+    private static final Identifier MAIN_CHANNEL = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "main");
     public static final Network NETWORK = new Network(MAIN_CHANNEL, 0, true);
 
     public static void init() {

@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
 import com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyDataSerializer;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.LazyHolders;
 import com.teamresourceful.resourcefullib.common.color.Color;
@@ -34,7 +34,7 @@ public record CustomHoneyBlockData(
             LazyHolders.LAZY_BLOCK.optionalFieldOf("honeyBlock", LazyHolder.of(BuiltInRegistries.BLOCK, Blocks.HONEY_BLOCK)).forGetter(HoneyBlockData::block),
             TradeData.CODEC.optionalFieldOf("tradeData", TradeData.DEFAULT).forGetter(HoneyBlockData::tradeData)
     ).apply(instance, CustomHoneyBlockData::new));
-    public static final HoneyDataSerializer<HoneyBlockData> SERIALIZER = HoneyDataSerializer.of(ModConstants.modIdentifier("block"), 1, id -> CODEC, DEFAULT);
+    public static final HoneyDataSerializer<HoneyBlockData> SERIALIZER = HoneyDataSerializer.of(ModIdentifier.of("block"), 1, id -> CODEC, DEFAULT);
 
     @Override
     public HoneyDataSerializer<HoneyBlockData> serializer() {

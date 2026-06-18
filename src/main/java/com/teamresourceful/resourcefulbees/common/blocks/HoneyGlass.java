@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.teamresourceful.resourcefulbees.platform.common.block.BlockExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.bee.Bee;
@@ -18,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-public class HoneyGlass extends TransparentBlock implements BlockExtension {
+public class HoneyGlass extends TransparentBlock {
 
     private final boolean collidePlayer; //if true player cannot go through block but bee can - if false player can go through block but bee cannot
 

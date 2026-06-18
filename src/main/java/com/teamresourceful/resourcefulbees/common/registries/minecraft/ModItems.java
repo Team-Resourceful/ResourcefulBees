@@ -200,7 +200,7 @@ public final class ModItems {
     public static final RegistryEntry<Item> WAXED_MACHINE_BLOCK = ITEMS.register("waxed_machine_block", () -> new BlockItem(ModBlocks.WAXED_MACHINE_BLOCK.get(), new Item.Properties()));
     public static final RegistryEntry<Item> HONEY_CAP_UPGRADE = ModItems.ITEMS.register("honey_cap_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.HONEY_CAPACITY));
     public static final RegistryEntry<Item> ENERGY_CAP_UPGRADE = ModItems.ITEMS.register("energy_cap_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.ENERGY_CAPACITY));
-    public static final RegistryEntry<Item> ENERGY_XFER_UPGRADE = ModItems.ITEMS.register("energy_xfer_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.ENERGY_XFER));
+    public static final RegistryEntry<Item> ENERGY_XFER_UPGRADE = ModItems.ITEMS.register("energy_xfer_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.ENERGY_TRANSFER));
     public static final RegistryEntry<Item> ENERGY_FILL_UPGRADE = ModItems.ITEMS.register("energy_fill_upgrade", () -> new HoneyGenUpgradeItem(new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit), UpgradeType.ENERGY_FILL));
     //endregion
 

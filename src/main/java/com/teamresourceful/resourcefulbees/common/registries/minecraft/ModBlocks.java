@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Supplier;
 
@@ -190,6 +191,7 @@ public final class ModBlocks {
     public static final RegistryEntry<Block> BEE_BOX_TEMP = BLOCKS.register("bee_box_temp", () -> new BeeBoxBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(0.5f)));
 
     public static final RegistryEntry<Block> HONEY_GLASS_PLAYER = BLOCKS.register("honey_glass_player", () -> new HoneyGlass(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollision(), false));
+    public static final RegistryEntry<Block> HONEY_GLASS = BLOCKS.register("honey_glass", () -> new HoneyGlass(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollision(), true));
     public static final RegistryEntry<Block> WAXED_PLANKS = BLOCKS.register("waxed_planks", () -> new Block(WAXED_PLANKS_PROPERTIES));
     public static final RegistryEntry<StairBlock> WAXED_STAIRS = BLOCKS.register("waxed_stairs", () -> new StairBlock(WAXED_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).dynamicShape()));
     public static final RegistryEntry<SlabBlock> WAXED_SLAB = BLOCKS.register("waxed_slab", () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).dynamicShape()));
@@ -197,33 +199,33 @@ public final class ModBlocks {
     public static final RegistryEntry<FenceGateBlock> WAXED_FENCE_GATE = BLOCKS.register("waxed_fence_gate", () -> new FenceGateBlock(WAXED_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion()));
     public static final RegistryEntry<ButtonBlock> WAXED_BUTTON = BLOCKS.register("waxed_button", () -> new ButtonBlock(WAX_BLOCK_SET, 30, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision()));
     public static final RegistryEntry<PressurePlateBlock> WAXED_PRESSURE_PLATE = BLOCKS.register("waxed_pressure_plate", () -> new PressurePlateBlock( WAX_BLOCK_SET, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision()));
-    public static final RegistryEntry<DoorBlock> WAXED_DOOR = BLOCKS.register("waxed_door", () -> new DoorBlock(BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion(), WAX_BLOCK_SET));
-    public static final RegistryEntry<TrapDoorBlock> WAXED_TRAPDOOR = BLOCKS.register("waxed_trapdoor", () -> new TrapDoorBlock(BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion(), WAX_BLOCK_SET));
+    public static final RegistryEntry<DoorBlock> WAXED_DOOR = BLOCKS.register("waxed_door", () -> new DoorBlock(WAX_BLOCK_SET, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion()));
+    public static final RegistryEntry<TrapDoorBlock> WAXED_TRAPDOOR = BLOCKS.register("waxed_trapdoor", () -> new TrapDoorBlock(WAX_BLOCK_SET, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion()));
     public static final RegistryEntry<Block> TRIMMED_WAXED_PLANKS = BLOCKS.register("trimmed_waxed_planks", () -> new Block(WAXED_PLANKS_PROPERTIES));
     public static final RegistryEntry<Block> WAXED_MACHINE_BLOCK = BLOCKS.register("waxed_machine_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-    public static final RegistryEntry<StandingSignBlock> WAXED_SIGN = BLOCKS.register("waxed_sign", () -> new StandingSignBlock(BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision(), WAXED_WOOD_TYPE) {
+    public static final RegistryEntry<StandingSignBlock> WAXED_SIGN = BLOCKS.register("waxed_sign", () -> new StandingSignBlock(WAXED_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision()) {
         @Override
-        public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        public @NonNull BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
             return ModBlockEntityTypes.WAXED_SIGN_ENTITY.get().create(pos, state);
         }
     });
-    public static final RegistryEntry<WallSignBlock> WAXED_WALL_SIGN = BLOCKS.register("waxed_wall_sign", () -> new WallSignBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission(), WAXED_WOOD_TYPE) {
+    public static final RegistryEntry<WallSignBlock> WAXED_WALL_SIGN = BLOCKS.register("waxed_wall_sign", () -> new WallSignBlock(WAXED_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision()) {
         @Override
-        public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        public @NonNull BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
             return ModBlockEntityTypes.WAXED_SIGN_ENTITY.get().create(pos, state);
         }
     });
 
-    public static final RegistryEntry<CeilingHangingSignBlock> WAXED_HANGING_SIGN = BLOCKS.register("waxed_hanging_sign", () -> new CeilingHangingSignBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission(), WAXED_WOOD_TYPE) {
+    public static final RegistryEntry<CeilingHangingSignBlock> WAXED_HANGING_SIGN = BLOCKS.register("waxed_hanging_sign", () -> new CeilingHangingSignBlock(WAXED_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision()) {
         @Override
-        public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        public @NonNull BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
             return ModBlockEntityTypes.WAXED_HANGING_SIGN_ENTITY.get().create(pos, state);
         }
     });
 
-    public static final RegistryEntry<WallHangingSignBlock> WAXED_WALL_HANGING_SIGN = BLOCKS.register("waxed_wall_hanging_sign", () -> new WallHangingSignBlock(BlockBehaviour.Properties.copy(WAXED_PLANKS.get()).noOcclusion().noCollission(), WAXED_WOOD_TYPE) {
+    public static final RegistryEntry<WallHangingSignBlock> WAXED_WALL_HANGING_SIGN = BLOCKS.register("waxed_wall_hanging_sign", () -> new WallHangingSignBlock(WAXED_WOOD_TYPE, BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision()) {
         @Override
-        public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        public @NonNull BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
             return ModBlockEntityTypes.WAXED_HANGING_SIGN_ENTITY.get().create(pos, state);
         }
     });
@@ -236,7 +238,7 @@ public final class ModBlocks {
 
     public static final RegistryEntry<Block> FAKE_FLOWER = BLOCKS.register("fake_flower", () -> new FakeFlowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(2.0f, 3.0f).sound(SoundType.WOOD).noOcclusion().lightLevel(value -> 1)));
 
-    public static final RegistryEntry<Block> GOLD_FLOWER = BLOCKS.register("gold_flower", () -> new FlowerBlock(MobEffects.INVISIBILITY, 10, BlockBehaviour.Properties.of().noCollission().strength(0).sound(SoundType.GRASS)));
+    public static final RegistryEntry<Block> GOLD_FLOWER = BLOCKS.register("gold_flower", () -> new FlowerBlock(MobEffects.INVISIBILITY, 10, BlockBehaviour.Properties.of().noCollision().strength(0).sound(SoundType.GRASS)));
 
     public static final RegistryEntry<Block> BEEHOUSE_TOP = BLOCKS.register("beehouse_top", BeeHouseTopBlock::new);
     public static final RegistryEntry<Block> BREEDER_BLOCK = BLOCKS.register("breeder", () -> new BreederBlock(BlockBehaviour.Properties.of().strength(1F).sound(SoundType.WOOD)));

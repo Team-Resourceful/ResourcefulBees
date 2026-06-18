@@ -7,7 +7,7 @@ import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeLocatorTranslations;
-import com.teamresourceful.resourcefulbees.platform.client.renderer.overlay.OverlayRenderer;
+import com.teamresourceful.resourcefulbees.client.rendering.OverlayRenderer;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

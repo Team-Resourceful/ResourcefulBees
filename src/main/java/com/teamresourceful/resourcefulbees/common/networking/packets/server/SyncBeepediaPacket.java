@@ -1,15 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.networking.packets.server;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;
-import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
-import com.teamresourceful.resourcefulbees.common.util.BeepediaUtils;
 import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
 import com.teamresourceful.resourcefullib.common.network.Packet;
 import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketType;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketType;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -36,10 +32,10 @@ public record SyncBeepediaPacket(@NotNull CompoundTag data) implements Packet<Sy
         @Override
         public Runnable handle(SyncBeepediaPacket message) {
             return () -> {
-                assert Minecraft.getInstance().player != null;
-                BeepediaData data = BeepediaSavedData.getBeepediaData(Minecraft.getInstance().player);
-                data.load(message.data);
-                BeepediaUtils.onClientUpdated(data);
+//                assert Minecraft.getInstance().player != null;
+//                BeepediaData data = BeepediaSavedData.getBeepediaData(Minecraft.getInstance().player);
+//                data.load(message.data);
+//                BeepediaUtils.onClientUpdated(data);
             };
         }
     }

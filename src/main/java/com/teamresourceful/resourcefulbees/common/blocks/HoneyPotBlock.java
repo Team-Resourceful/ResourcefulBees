@@ -1,18 +1,19 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.HoneyPotBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.lib.enums.HoneyPotState;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.util.FluidUtils;
-import earth.terrarium.botarium.common.fluid.utils.FluidHooks;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,6 +50,11 @@ public class HoneyPotBlock extends RenderingBaseEntityBlock {
     }
 
     @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return null;
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(LID_STATE);
     }
@@ -57,10 +63,10 @@ public class HoneyPotBlock extends RenderingBaseEntityBlock {
     @Override
     public InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult result) {
         if (level.getBlockEntity(pos) instanceof HoneyPotBlockEntity pot) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 FluidUtils.checkBottleAndCapability(pot.getFluidContainer(), pot, player, level, pos, hand);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS_SERVER;
         }
         return super.use(state, level, pos, player, hand, result);
     }

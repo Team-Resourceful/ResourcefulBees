@@ -46,7 +46,7 @@ public abstract class MixinBeeEnterHiveGoal {
         }
     }
 
-    @Inject(method = "start", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "start", at = @At("TAIL"))
     public void onStart(CallbackInfo ci) {
         BlockPos pos = this$0.getHivePos();
         if (pos != null) {

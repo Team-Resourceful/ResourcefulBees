@@ -1,0 +1,10 @@
+{
+  "entries": [
+      {
+        "enum": "net/minecraft/world/entity/MobSpawnCategory",
+        "name": "RESOURCEFUL_BEES_BEE",
+        "constructor": "(Ljava/lang/String;IZZI)V",
+        "parameters": [ "resourceful_bees:bee", 20, true, true, 128 ]
+      }
+    ]
+}

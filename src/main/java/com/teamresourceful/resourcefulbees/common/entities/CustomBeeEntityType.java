@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.flag.FeatureFlags;
 
 public class CustomBeeEntityType<T extends Bee> extends EntityType<T> {
@@ -14,7 +14,8 @@ public class CustomBeeEntityType<T extends Bee> extends EntityType<T> {
     private final String beeType;
 
     public CustomBeeEntityType(String beeType, EntityFactory<T> factory, EntityDimensions dimensions) {
-        super(factory, ModConstants.BEE_CATEGORY, true, true, false, false, ImmutableSet.of(), dimensions, 5, 3, FeatureFlags.DEFAULT_FLAGS);
+        super();
+        //super(factory, ModConstants.BEE_CATEGORY, true, true, false, false, ImmutableSet.of(), dimensions, 5, 3, FeatureFlags.DEFAULT_FLAGS);
         this.beeType = beeType;
     }
 
