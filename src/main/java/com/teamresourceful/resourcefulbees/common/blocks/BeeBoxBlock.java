@@ -9,13 +9,14 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class BeeBoxBlock extends RenderingBaseEntityBlock {
 
@@ -29,17 +30,18 @@ public class BeeBoxBlock extends RenderingBaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
-        if (!level.isClientSide() && player.isCreative() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+    public @NonNull BlockState playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
+        if (!level.isClientSide() && player.isCreative() && level.getServer().getGameRules().get(GameRules.BLOCK_DROPS)) {
             if (level.getBlockEntity(pos) instanceof BeeBoxBlockEntity beeBox && beeBox.hasBees()) {
                 ItemStack itemstack = new ItemStack(this);
-                BlockItem.setBlockEntityData(itemstack, beeBox.getType(), beeBox.saveWithFullMetadata());
+                //BlockItem.setBlockEntityData(itemstack, beeBox.getType(), beeBox.saveWithFullMetadata(level.registryAccess()));
                 ItemEntity itementity = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), itemstack);
                 itementity.setDefaultPickUpDelay();
                 level.addFreshEntity(itementity);
             }
         }
         super.playerWillDestroy(level, pos, state, player);
+        return state;
     }
 
     @Override

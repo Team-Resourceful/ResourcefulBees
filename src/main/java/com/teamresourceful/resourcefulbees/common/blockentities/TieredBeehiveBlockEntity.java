@@ -165,7 +165,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
                     }
                     if (entities != null) entities.add(entity);
                 }
-                hive.level.playSound(null, hive.worldPosition.getX(), hive.worldPosition.getY(), hive.worldPosition.getZ(), SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
+                hive.level.playSound(null, hive.worldPosition, SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
                 return hive.level.addFreshEntity(entity);
             }
             return true;
@@ -193,6 +193,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
         }
     }
 
+    //todo try to reduce these to a single occupantOf method
     private static BeehiveBlockEntity.Occupant occupantOf(Entity entity, BeeCompat compat, TieredBeehiveBlockEntity hive) {
         BeehiveBlockEntity.Occupant occupant;
         try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), LOGGER)) {
@@ -215,10 +216,8 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             TagValueOutput output = TagValueOutput.createWithContext(reporter, bee.registryAccess());
             bee.save(output);
             BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(output::discard);
-            CompoundTag entityTag = output.buildResult();
-            boolean hasNectar = entityTag.getBooleanOr("HasNectar", false);
             int maxTimeInHive = (int) (timeInHive * hive.getBlock().getTier().timeModifier());
-            occupant = new BeehiveBlockEntity.Occupant(TypedEntityData.of(entity, entityTag), 0, maxTimeInHive);
+            occupant = new BeehiveBlockEntity.Occupant(TypedEntityData.of(entity, output.buildResult()), 0, maxTimeInHive);
         }
 
         return occupant;
@@ -261,8 +260,8 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
         BeehiveBlockEntity.BeeData bee;
         for (Iterator<BeeData> iterator = bees.iterator(); iterator.hasNext(); increaseTicksInHive(bee, 1)) {
             bee = iterator.next();
-            if (((BeehiveBeeDataAccessor) bee).getTicksInHive() > ((BeehiveBeeDataAccessor) bee).getMinOccupationTicks()) {
-                BeeReleaseStatus status = ((BeehiveBeeDataAccessor) bee).getEntityData().getBoolean("HasNectar").get() ? BeeReleaseStatus.HONEY_DELIVERED : BeeReleaseStatus.BEE_RELEASED;
+            if (bee.toOccupant().ticksInHive() > (bee.toOccupant().minTicksInHive())) {
+                BeeReleaseStatus status = bee.hasNectar() ? BeeReleaseStatus.HONEY_DELIVERED : BeeReleaseStatus.BEE_RELEASED;
                 if (releaseBee(hive, state, bee, null, status)) {
                     iterator.remove();
                 }
@@ -330,10 +329,10 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
     }
 
     public Queue<ItemStack> getHoneycombs(CompoundTag nbt) {
-        return nbt.getList(NBTConstants.BeeHive.HONEYCOMBS, Tag.TAG_COMPOUND)
+        return nbt.getList(NBTConstants.BeeHive.HONEYCOMBS)
                 .stream()
                 .map(CompoundTag.class::cast)
-                .map(ItemStack::of)
+                .map(ItemStack::lenientOptionalFieldOf)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 

@@ -1,13 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.BreederBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -32,11 +33,16 @@ public class BreederBlock extends BeeHouseBlock {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        tooltip.add(Component.translatable(ItemTranslations.BREEDER_TOOLTIP_1, BreederConstants.DEFAULT_BREEDER_TIME).withStyle(ChatFormatting.GOLD));
-        tooltip.add(ItemTranslations.BREEDER_TOOLTIP_2.withStyle(ChatFormatting.GOLD));
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return null;
     }
+
+//    @Override
+//    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+//        tooltip.add(Component.translatable(ItemTranslations.BREEDER_TOOLTIP_1, BreederConstants.DEFAULT_BREEDER_TIME).withStyle(ChatFormatting.GOLD));
+//        tooltip.add(ItemTranslations.BREEDER_TOOLTIP_2.withStyle(ChatFormatting.GOLD));
+//        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+//    }
 
     @Nullable
     @Override
