@@ -25,7 +25,7 @@ public final class LoadConditionRegistry {
     private static final LoadConditionSerializer<FakeCondition> DUMMY_SERIALIZER = LoadConditionSerializer.of(ModIdentifier.of("noop"), MapCodec.unit(FakeCondition::new).codec());
 
     private static final Codec<LoadConditionSerializer<?>> SERIALIZER_CODEC = Identifier.CODEC.comapFlatMap(LoadConditionRegistry::decode, LoadConditionSerializer::id);
-    public static final Codec<LoadCondition<?>> CODEC = SERIALIZER_CODEC.dispatch(LoadCondition::serializer, LoadConditionSerializer::codec);
+    //public static final Codec<LoadCondition<?>> CODEC = SERIALIZER_CODEC.dispatch(LoadCondition::serializer, LoadConditionSerializer::codec);
 
     private final Map<Identifier, LoadConditionSerializer<?>> serializers = new HashMap<>();
     private boolean locked = false;
@@ -41,10 +41,11 @@ public final class LoadConditionRegistry {
         if (object != null && object.has("condition") && object.get("condition").isJsonObject()) {
             JsonObject condition = object.getAsJsonObject("condition");
             object.remove("condition");
-            return LoadConditionRegistry.CODEC.parse(JsonOps.INSTANCE, condition)
-                .result()
-                .map(LoadCondition::canLoad)
-                .orElse(true);
+return true;
+            //            return LoadConditionRegistry.CODEC.parse(JsonOps.INSTANCE, condition)
+//                .result()
+//                .map(LoadCondition::canLoad)
+//                .orElse(true);
         }
         return true;
     }

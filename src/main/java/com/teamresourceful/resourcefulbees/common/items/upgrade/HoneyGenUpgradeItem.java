@@ -25,19 +25,19 @@ public class HoneyGenUpgradeItem extends Item implements Upgrade {
         return upgradeType;
     }
 
-    @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
-        switch (upgradeType) {
-            case ENERGY_CAPACITY -> components.add(ItemTranslations.ENERGY_CAP_TOOLTIP);
-            case ENERGY_FILL -> {
-                components.add(ItemTranslations.ENERGY_FILL_TOOLTIP_1);
-                components.add(ItemTranslations.ENERGY_FILL_TOOLTIP_2);
-            }
-            case ENERGY_TRANSFER -> components.add(ItemTranslations.ENERGY_XFER_TOOLTIP);
-            case HONEY_CAPACITY -> components.add(ItemTranslations.HONEY_CAP_TOOLTIP);
-            default -> {/*do nothing*/}
-        }
-    }
+//    @Override
+//    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
+//        switch (upgradeType) {
+//            case ENERGY_CAPACITY -> components.add(ItemTranslations.ENERGY_CAP_TOOLTIP);
+//            case ENERGY_FILL -> {
+//                components.add(ItemTranslations.ENERGY_FILL_TOOLTIP_1);
+//                components.add(ItemTranslations.ENERGY_FILL_TOOLTIP_2);
+//            }
+//            case ENERGY_TRANSFER -> components.add(ItemTranslations.ENERGY_XFER_TOOLTIP);
+//            case HONEY_CAPACITY -> components.add(ItemTranslations.HONEY_CAP_TOOLTIP);
+//            default -> {/*do nothing*/}
+//        }
+//    }
 
 
 }

@@ -50,7 +50,7 @@ public enum BeehiveUpgrade {
             if (newBlockEntity != null) {
                 CompoundTag freshData = newBlockEntity.saveWithoutMetadata(level.registryAccess());
                 freshData.merge(data);
-                newBlockEntity.load(freshData);
+                //newBlockEntity.load(freshData);
                 newBlockEntity.setChanged();
                 level.setBlockEntity(newBlockEntity);
                 if (newBlockEntity instanceof TieredBeehiveBlockEntity hiveBlockEntity) {

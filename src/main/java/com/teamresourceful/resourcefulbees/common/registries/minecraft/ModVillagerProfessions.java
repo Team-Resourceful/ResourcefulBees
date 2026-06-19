@@ -20,5 +20,5 @@ public final class ModVillagerProfessions {
 
     public static final ResourcefulRegistry<VillagerProfession> PROFESSIONS = RegistryHelper.create(BuiltInRegistries.VILLAGER_PROFESSION, ModConstants.MOD_ID);
 
-    public static final RegistryEntry<VillagerProfession> BEEKEEPER = PROFESSIONS.register("beekeeper", () -> new VillagerProfession("beekeeper", poi -> poi.is(PoiTypeTags.BEE_HOME), poi -> poi.is(PoiTypeTags.BEE_HOME), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.BOTTLE_FILL));
+//    public static final RegistryEntry<VillagerProfession> BEEKEEPER = PROFESSIONS.register("beekeeper", () -> new VillagerProfession("beekeeper", poi -> poi.is(PoiTypeTags.BEE_HOME), poi -> poi.is(PoiTypeTags.BEE_HOME), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.BOTTLE_FILL));
 }

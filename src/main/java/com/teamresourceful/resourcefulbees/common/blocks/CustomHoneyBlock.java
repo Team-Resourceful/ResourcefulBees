@@ -89,18 +89,18 @@ public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable,
 
     //region Sliding Stuff
 
-    @Override
-    public void fallOn(Level level, @NotNull BlockState state, @NotNull BlockPos blockPos, Entity entity, float distance) {
-        entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
-        if (level.isClientSide()) {
-            addParticles(entity);
-        }
-
-        if (entity.causeFallDamage(distance, 0.2F, level.damageSources().fall())) {
-            entity.playSound(this.soundType.getFallSound(), this.soundType.getVolume() * 0.5F, this.soundType.getPitch() * 0.75F);
-        }
-
-    }
+//    @Override
+//    public void fallOn(Level level, @NotNull BlockState state, @NotNull BlockPos blockPos, Entity entity, float distance) {
+//        entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
+//        if (level.isClientSide()) {
+//            addParticles(entity);
+//        }
+//
+//        if (entity.causeFallDamage(distance, 0.2F, level.damageSources().fall())) {
+//            entity.playSound(this.soundType.getFallSound(), this.soundType.getVolume() * 0.5F, this.soundType.getPitch() * 0.75F);
+//        }
+//
+//    }
 
     private boolean isSliding(BlockPos pos, Entity entity) {
         if (entity.onGround()) return false;
@@ -113,15 +113,15 @@ public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable,
         return d0 + 1.0E-7D > d2 || d1 + 1.0E-7D > d2;
     }
 
-    @Override
-    public void entityInside(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
-        if (isSliding(blockPos, entity)) {
-            this.triggerAdvancement(entity, blockPos);
-            this.updateSlidingVelocity(entity);
-            this.addCollisionEffects(world, entity);
-        }
-        super.entityInside(state, world, blockPos, entity);
-    }
+//    @Override
+//    public void entityInside(@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos blockPos, @NotNull Entity entity) {
+//        if (isSliding(blockPos, entity)) {
+//            this.triggerAdvancement(entity, blockPos);
+//            this.updateSlidingVelocity(entity);
+//            this.addCollisionEffects(world, entity);
+//        }
+//        super.entityInside(state, world, blockPos, entity);
+//    }
 
     private void triggerAdvancement(Entity entity, BlockPos blockPos) {
         if (entity instanceof ServerPlayer player && entity.level().getGameTime() % 20L == 0L) {

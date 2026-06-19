@@ -1,15 +1,11 @@
 package com.teamresourceful.resourcefulbees.client;
 
-import com.teamresourceful.resourcefulbees.client.data.ModelHandler;
+import com.teamresourceful.resourcefulbees.client.events.ScreenOpenEvent;
 import com.teamresourceful.resourcefulbees.client.screen.MissingRegistryScreen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.mixin.client.PackRepositoryAccessor;
-import com.teamresourceful.resourcefulbees.client.events.ModelBakingCompletedEvent;
-import com.teamresourceful.resourcefulbees.client.events.ModelModifyResultEvent;
-import com.teamresourceful.resourcefulbees.client.events.RegisterAdditionalModelsEvent;
-import com.teamresourceful.resourcefulbees.client.events.ScreenOpenEvent;
 import com.teamresourceful.resourcefulbees.events.UpdateEvent;
+import com.teamresourceful.resourcefulbees.mixin.client.PackRepositoryAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackLocationInfo;
@@ -20,6 +16,8 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 
 import java.util.Optional;
+
+//import com.teamresourceful.resourcefulbees.client.events.ModelModifyResultEvent;
 
 public class ResourcefulBeesClient {
 
@@ -32,9 +30,9 @@ public class ResourcefulBeesClient {
         RegisterRenderLayersEvent.EVENT.addListener(ResourcefulBeesClient::registerRenderLayers);
         RegisterEntityLayersEvent.EVENT.addListener(ResourcefulBeesClient::registerEntityLayers);
         RegisterOverlayEvent.EVENT.addListener(ResourcefulBeesClient::registerOverlay);*/
-        RegisterAdditionalModelsEvent.EVENT.addListener(ModelHandler::onAddAdditional);
-        ModelBakingCompletedEvent.EVENT.addListener(ModelHandler::onModelBake);
-        ModelModifyResultEvent.EVENT.addListener(ModelHandler::onModifyModel);
+ //       RegisterAdditionalModelsEvent.EVENT.addListener(ModelHandler::onAddAdditional);
+//        ModelBakingCompletedEvent.EVENT.addListener(ModelHandler::onModelBake);
+        //ModelModifyResultEvent.EVENT.addListener(ModelHandler::onModifyModel);
         UpdateEvent.EVENT.addListener(ClientDataSetup::onUpdates);
 
         //Color.initRainbow();

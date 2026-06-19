@@ -100,42 +100,42 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
         return level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity hive && hive.isSedated();
     }
 
-    @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
-        ItemStack itemstack = player.getItemInHand(handIn);
-
-        if (state.getValue(HONEY_LEVEL) >= 5) {
-            boolean isShear = GeneralConfig.allowShears && ModConstants.SHEAR_ACTION.test(itemstack);
-            boolean isScraper = ModConstants.SCRAPE_ACTION.test(itemstack);
-
-            if (isShear || isScraper) {
-                InteractionResult success = performHoneyHarvest(state, level, pos, player, handIn, itemstack, isScraper);
-                if (success != null) {
-                    return success;
-                }
-            }
-        }
-
-        if (itemstack.getItem() instanceof NestUpgrade upgrade && upgrade.isType(UpgradeType.NEST)) {
-            if (upgrade.getTier().from.equals(this.tier)) {
-                InteractionResult result = upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
-                if (result != InteractionResult.FAIL && GeneralConfig.consumeHiveUpgrade) {
-                    itemstack.shrink(1);
-                }
-                return result;
-            } else {
-                player.sendSystemMessage(BeehiveTranslations.INVALID_UPGRADE);
-            }
-        }
-
-        return InteractionResult.PASS;
-    }
+//    @Override
+//    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
+//        ItemStack itemstack = player.getItemInHand(handIn);
+//
+//        if (state.getValue(HONEY_LEVEL) >= 5) {
+//            boolean isShear = GeneralConfig.allowShears && ModConstants.SHEAR_ACTION.test(itemstack);
+//            boolean isScraper = ModConstants.SCRAPE_ACTION.test(itemstack);
+//
+//            if (isShear || isScraper) {
+//                InteractionResult success = performHoneyHarvest(state, level, pos, player, handIn, itemstack, isScraper);
+//                if (success != null) {
+//                    return success;
+//                }
+//            }
+//        }
+//
+//        if (itemstack.getItem() instanceof NestUpgrade upgrade && upgrade.isType(UpgradeType.NEST)) {
+//            if (upgrade.getTier().from.equals(this.tier)) {
+//                InteractionResult result = upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
+//                if (result != InteractionResult.FAIL && GeneralConfig.consumeHiveUpgrade) {
+//                    itemstack.shrink(1);
+//                }
+//                return result;
+//            } else {
+//                player.sendSystemMessage(BeehiveTranslations.INVALID_UPGRADE);
+//            }
+//        }
+//
+//        return InteractionResult.PASS;
+//    }
 
     @Nullable
     private InteractionResult performHoneyHarvest(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, ItemStack itemstack, boolean isScraper) {
         level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
         dropResourceHoneycomb(level, pos, player, isScraper);
-        itemstack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(handIn));
+        //itemstack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(handIn));
 
         if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity beehiveTileEntity && !beehiveTileEntity.hasCombs()) {
             if (isHiveSmoked(pos, level)) {
@@ -184,7 +184,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
                 beeEntityList.stream()
                     .filter(beeEntity -> beeEntity.getTarget() == null)
                     .forEach(beeEntity -> {
-                        Player randomPlayer = nearbyPlayers.get(level.random.nextInt(nearbyPlayers.size()));
+                        Player randomPlayer = nearbyPlayers.get(level.getRandom().nextInt(nearbyPlayers.size()));
                         if (ModUtils.isRealPlayer(randomPlayer)) {
                             beeEntity.setTarget(randomPlayer);
                         }
@@ -194,83 +194,93 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(Component.translatable(BeehiveTranslations.MAX_BEES, tier.maxBees()).withStyle(ChatFormatting.GOLD));
-        components.add(Component.translatable(BeehiveTranslations.MAX_COMBS, tier.maxCombs()).withStyle(ChatFormatting.GOLD));
-        components.add(Component.translatable(BeehiveTranslations.HIVE_TIME, tier.getTimeModificationAsPercent()).withStyle(ChatFormatting.GOLD));
-        setupTooltip(stack, level, components, flag);
-    }
-
-    private void createHoneycombsTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {
-        tooltip.add(BeehiveTranslations.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
-        if (blockEntityTag.contains(NBTConstants.BeeHive.HONEYCOMBS, Tag.TAG_LIST)) {
-            HashMap<String, Integer> combs = new HashMap<>();
-            ListTag combList = blockEntityTag.getList(NBTConstants.BeeHive.HONEYCOMBS, Tag.TAG_LIST);
-
-            for (int i = 0; i < combList.size(); i++) {
-                String id = combList.getCompound(i).getString("id");
-                String comb = id.substring(id.indexOf(":") + 1).replace("_", " ");
-                combs.merge(comb, 1, Integer::sum);
-            }
-
-            //noinspection deprecation
-            combs.forEach((comb, count) -> tooltip.add(Component.literal("     ")
-                    .append(String.valueOf(count))
-                    .append("x ")
-                    .append(WordUtils.capitalize(comb))));
-        } else {
-            tooltip.add(BeehiveTranslations.NONE_TEXT);
-        }
-    }
-
-    private void createBeesTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {
-        tooltip.add(BeehiveTranslations.BEES.withStyle(ChatFormatting.GOLD));
-        if (blockEntityTag.contains("Bees", Tag.TAG_LIST)) {
-            HashMap<String, Integer> bees = new HashMap<>();
-            ListTag beeList = blockEntityTag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND);
-
-            for (int i = 0; i < beeList.size(); i++) {
-                CompoundTag entityData = beeList.getCompound(i).getCompound("EntityData");
-                String id = entityData.getString("id");
-                String beeType = id.substring(id.indexOf(":") + 1).replace("_", " ");
-                if (beeType.length() == 3 && beeType.matches("Bee")) {
-                    bees.merge("Minecraft Bee", 1, Integer::sum);
-                } else {
-                    bees.merge(beeType, 1, Integer::sum);
-                }
-            }
-
-            //noinspection deprecation
-            bees.forEach((name, count) -> tooltip.add(Component.literal("     ")
-                    .append(String.valueOf(count))
-                    .append("x ")
-                    .append(WordUtils.capitalize(name))));
-        } else {
-            tooltip.add(BeehiveTranslations.NONE_TEXT);
-        }
-        tooltip.add(Component.empty());
-    }
-
-    @Override
     public Component getShiftingDisplay() {
-        return ItemTranslations.TOOLTIP_CONTENTS;
+        return null;
     }
 
     @Override
     public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        if (stack.hasTag()) {
-            CompoundTag stackTag = stack.getTag();
-            if (stackTag != null && !stackTag.isEmpty() && stackTag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
-                CompoundTag blockEntityTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
-                createBeesTooltip(components, blockEntityTag);
-                createHoneycombsTooltip(components, blockEntityTag);
-            }
-        } else {
-            components.add(BeehiveTranslations.BEES.withStyle(ChatFormatting.GOLD));
-            components.add(BeehiveTranslations.NONE_TEXT);
-            components.add(Component.empty());
-            components.add(BeehiveTranslations.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
-            components.add(BeehiveTranslations.NONE_TEXT);
-        }
+
     }
+
+//    @Override
+//    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+//        components.add(Component.translatable(BeehiveTranslations.MAX_BEES, tier.maxBees()).withStyle(ChatFormatting.GOLD));
+//        components.add(Component.translatable(BeehiveTranslations.MAX_COMBS, tier.maxCombs()).withStyle(ChatFormatting.GOLD));
+//        components.add(Component.translatable(BeehiveTranslations.HIVE_TIME, tier.getTimeModificationAsPercent()).withStyle(ChatFormatting.GOLD));
+//        setupTooltip(stack, level, components, flag);
+//    }
+//
+//    private void createHoneycombsTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {
+//        tooltip.add(BeehiveTranslations.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
+//        if (blockEntityTag.contains(NBTConstants.BeeHive.HONEYCOMBS, Tag.TAG_LIST)) {
+//            HashMap<String, Integer> combs = new HashMap<>();
+//            ListTag combList = blockEntityTag.getList(NBTConstants.BeeHive.HONEYCOMBS, Tag.TAG_LIST);
+//
+//            for (int i = 0; i < combList.size(); i++) {
+//                String id = combList.getCompound(i).getString("id");
+//                String comb = id.substring(id.indexOf(":") + 1).replace("_", " ");
+//                combs.merge(comb, 1, Integer::sum);
+//            }
+//
+//            //noinspection deprecation
+//            combs.forEach((comb, count) -> tooltip.add(Component.literal("     ")
+//                    .append(String.valueOf(count))
+//                    .append("x ")
+//                    .append(WordUtils.capitalize(comb))));
+//        } else {
+//            tooltip.add(BeehiveTranslations.NONE_TEXT);
+//        }
+//    }
+//
+//    private void createBeesTooltip(@NotNull List<Component> tooltip, CompoundTag blockEntityTag) {
+//        tooltip.add(BeehiveTranslations.BEES.withStyle(ChatFormatting.GOLD));
+//        if (blockEntityTag.contains("Bees", Tag.TAG_LIST)) {
+//            HashMap<String, Integer> bees = new HashMap<>();
+//            ListTag beeList = blockEntityTag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND);
+//
+//            for (int i = 0; i < beeList.size(); i++) {
+//                CompoundTag entityData = beeList.getCompound(i).getCompound("EntityData");
+//                String id = entityData.getString("id");
+//                String beeType = id.substring(id.indexOf(":") + 1).replace("_", " ");
+//                if (beeType.length() == 3 && beeType.matches("Bee")) {
+//                    bees.merge("Minecraft Bee", 1, Integer::sum);
+//                } else {
+//                    bees.merge(beeType, 1, Integer::sum);
+//                }
+//            }
+//
+//            //noinspection deprecation
+//            bees.forEach((name, count) -> tooltip.add(Component.literal("     ")
+//                    .append(String.valueOf(count))
+//                    .append("x ")
+//                    .append(WordUtils.capitalize(name))));
+//        } else {
+//            tooltip.add(BeehiveTranslations.NONE_TEXT);
+//        }
+//        tooltip.add(Component.empty());
+//    }
+//
+//    @Override
+//    public Component getShiftingDisplay() {
+//        return ItemTranslations.TOOLTIP_CONTENTS;
+//    }
+//
+//    @Override
+//    public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+//        if (stack.hasTag()) {
+//            CompoundTag stackTag = stack.getTag();
+//            if (stackTag != null && !stackTag.isEmpty() && stackTag.contains(NBTConstants.NBT_BLOCK_ENTITY_TAG)) {
+//                CompoundTag blockEntityTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
+//                createBeesTooltip(components, blockEntityTag);
+//                createHoneycombsTooltip(components, blockEntityTag);
+//            }
+//        } else {
+//            components.add(BeehiveTranslations.BEES.withStyle(ChatFormatting.GOLD));
+//            components.add(BeehiveTranslations.NONE_TEXT);
+//            components.add(Component.empty());
+//            components.add(BeehiveTranslations.HONEYCOMBS.withStyle(ChatFormatting.GOLD));
+//            components.add(BeehiveTranslations.NONE_TEXT);
+//        }
+//    }
 }

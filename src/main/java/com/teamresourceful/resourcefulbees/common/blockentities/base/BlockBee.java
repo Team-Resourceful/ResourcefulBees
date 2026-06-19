@@ -20,7 +20,7 @@ public class BlockBee {
     }
 
     public BlockBee(CompoundTag entityData, int ticksInHive, int minOccupationTicks, Component displayName, String color) {
-        BeehiveEntityAccessor.callRemoveIgnoredBeeTags(entityData);
+        //BeehiveEntityAccessor.callRemoveIgnoredBeeTags(entityData);
         this.entityData = entityData;
         this.ticksInHive = ticksInHive;
         this.minOccupationTicks = minOccupationTicks;

@@ -50,7 +50,7 @@ public final class DummyHoneyData {
                 2,
                 4,
                 false,
-                false,
+                2.0f,
                 List.of(
                         HONEY_API.effect(LazyHolder.of(BuiltInRegistries.MOB_EFFECT, MobEffects.WITHER.value()), 25, 2, 0.75f),
                         HONEY_API.effect(LazyHolder.of(BuiltInRegistries.MOB_EFFECT, MobEffects.INVISIBILITY.value()), 50, 1, 1f)

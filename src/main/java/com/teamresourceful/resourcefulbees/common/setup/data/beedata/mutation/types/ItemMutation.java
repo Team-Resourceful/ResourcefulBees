@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.types;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
@@ -38,7 +39,7 @@ public record ItemMutation(RestrictedItemPredicate predicate, double chance, dou
     @Override
     public boolean activate(ServerLevel level, BlockPos pos) {
         ItemStack stack = new ItemStack(predicate.item());
-        predicate.getTag().ifPresent(stack::setTag);
+        //predicate.getTag().ifPresent(stack::setTag);
         level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), stack));
         return true;
     }
@@ -56,7 +57,7 @@ public record ItemMutation(RestrictedItemPredicate predicate, double chance, dou
     @Override
     public ItemStack displayedItem() {
         ItemStack stack = new ItemStack(predicate.item());
-        predicate.getTag().ifPresent(stack::setTag);
+        //predicate.getTag().ifPresent(stack::setTag);
         return stack;
     }
 
@@ -69,8 +70,8 @@ public record ItemMutation(RestrictedItemPredicate predicate, double chance, dou
         ).apply(instance, ItemMutation::new));
 
         @Override
-        public Codec<? extends MutationType> codec() {
-            return CODEC;
+        public MapCodec<? extends MutationType> codec() {
+            return null;//CODEC;
         }
 
         @Override

@@ -1,17 +1,15 @@
 package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.types;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
-import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +17,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.ValueInput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -93,8 +90,8 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
         ).apply(instance, BlockMutation::new));
 
         @Override
-        public Codec<BlockMutation> codec() {
-            return CODEC;
+        public MapCodec<? extends MutationType> codec() {
+            return null;//CODEC;
         }
 
         @Override

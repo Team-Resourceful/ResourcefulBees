@@ -29,19 +29,19 @@ public class BeeBoxBlockEntity extends BlockEntity {
     }
 
     //region NBT
-    @Override
-    protected void saveAdditional(@NonNull ValueOutput valueOutput) {
-        super.saveAdditional(valueOutput);
-        valueOutput.pu.put(NBTConstants.NBT_BEES, TagUtils.toListTag(bees));
-        valueOutput.put(NBTConstants.NBT_DISPLAYNAMES, TagUtils.toListTag(displayNames));
-    }
-
-    @Override
-    public void loadAdditional(@NotNull ValueInput input) {
-        super.loadAdditional(input);
-        this.bees = TagUtils.fromListTag(tag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND), CompoundTag.class);
-        this.displayNames = TagUtils.fromListTag(tag.getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING), StringTag.class);
-    }
+//    @Override
+//    protected void saveAdditional(@NonNull ValueOutput valueOutput) {
+//        super.saveAdditional(valueOutput);
+//        valueOutput.pu.put(NBTConstants.NBT_BEES, TagUtils.toListTag(bees));
+//        valueOutput.put(NBTConstants.NBT_DISPLAYNAMES, TagUtils.toListTag(displayNames));
+//    }
+//
+//    @Override
+//    public void loadAdditional(@NotNull ValueInput input) {
+//        super.loadAdditional(input);
+//        this.bees = TagUtils.fromListTag(tag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND), CompoundTag.class);
+//        this.displayNames = TagUtils.fromListTag(tag.getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING), StringTag.class);
+//    }
     //endregion
 
     public void summonBees(Level level, BlockPos pos, Player player) {

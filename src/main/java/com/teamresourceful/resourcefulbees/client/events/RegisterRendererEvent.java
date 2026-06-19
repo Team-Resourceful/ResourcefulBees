@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.client.events;
 
 import com.teamresourceful.resourcefulbees.events.base.EventHelper;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,7 +17,7 @@ public record RegisterRendererEvent(EntityRegistrar entity, BlockRegistrar block
         entity.register(entityType, renderer);
     }
 
-    public <T extends BlockEntity> void register(BlockEntityType<? extends T> blockEntityType, BlockEntityRendererProvider<T> renderer) {
+    public <T extends BlockEntity, S extends BlockEntityRenderState> void register(BlockEntityType<? extends T> blockEntityType, BlockEntityRendererProvider<T, S> renderer) {
         block.register(blockEntityType, renderer);
     }
 
@@ -29,6 +30,6 @@ public record RegisterRendererEvent(EntityRegistrar entity, BlockRegistrar block
     @FunctionalInterface
     public interface BlockRegistrar {
 
-        <T extends BlockEntity> void register(BlockEntityType<? extends T> type, BlockEntityRendererProvider<T> renderer);
+        <T extends BlockEntity, S extends BlockEntityRenderState> void register(BlockEntityType<? extends T> type, BlockEntityRendererProvider<T, S> renderer);
     }
 }

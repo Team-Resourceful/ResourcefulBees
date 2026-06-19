@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.util;
 
-import com.teamresourceful.resourcefulbees.common.util.containers.AutomationSensitiveContainer;
+//import com.teamresourceful.resourcefulbees.common.util.containers.AutomationSensitiveContainer;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -11,7 +11,7 @@ public final class ContainerUtils {
         throw new UtilityClassException();
     }
 
-    public static ItemStack internalInsertItem(AutomationSensitiveContainer container, int slot, ItemStack stack) {
+/*    public static ItemStack internalInsertItem(AutomationSensitiveContainer container, int slot, ItemStack stack) {
         if (stack.isEmpty()) return ItemStack.EMPTY;
 
         ItemStack existing = container.getItem(slot);
@@ -55,7 +55,7 @@ public final class ContainerUtils {
         else existing.grow(reachedLimit ? limit : stack.getCount());
 
         return reachedLimit ? stack.copyWithCount(stack.getCount() - limit) : ItemStack.EMPTY;
-    }
+    }*/
 
     public static boolean canStacksMerge(ItemStack stack, ItemStack other) {
         if (stack.isEmpty() || other.isEmpty()) return false;

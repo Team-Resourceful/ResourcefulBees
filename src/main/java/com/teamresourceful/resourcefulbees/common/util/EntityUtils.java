@@ -15,7 +15,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -28,12 +28,12 @@ public final class EntityUtils {
     }
 
     public static void summonEntity(CompoundTag tag, Level level, Player player, BlockPos pos) {
-        if (tag == null) return;
+/*        if (tag == null) return;
         EntityType.by(tag)
                 .map(type -> type.create(level))
                 .ifPresent(entity -> {
                     entity.load(tag);
-                    entity.absMoveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+                    entity.(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
                     level.addFreshEntity(entity);
                     if (entity instanceof Bee bee) {
                         bee.setSavedFlowerPos(null);
@@ -45,7 +45,7 @@ public final class EntityUtils {
                             customBee.setPersistenceRequired();
                         }
                     }
-                });
+                });*/
     }
 
     public static String getBeeColorOrDefault(Entity bee) {
@@ -54,10 +54,10 @@ public final class EntityUtils {
 
     public static @NotNull CompoundTag createJarBeeTag(Bee bee) {
         CompoundTag nbt = new CompoundTag();
-        bee.saveAsPassenger(nbt);
-        String beeColor = EntityUtils.getBeeColorOrDefault(bee);
-        nbt.putString(NBTConstants.BeeJar.COLOR, beeColor);
-        BeehiveEntityAccessor.callRemoveIgnoredBeeTags(nbt);
+//        bee.saveAsPassenger(nbt);
+//        String beeColor = EntityUtils.getBeeColorOrDefault(bee);
+//        nbt.putString(NBTConstants.BeeJar.COLOR, beeColor);
+//        BeehiveEntityAccessor.callRemoveIgnoredBeeTags(nbt);
         return nbt;
     }
 
@@ -67,7 +67,7 @@ public final class EntityUtils {
         double d1 = blockpos.getX() + 0.5D + d0 * direction.getStepX();
         double d2 = blockpos.getY() + Math.max(0.5D - (size.height() / 2.0F), 0);
         double d3 = blockpos.getZ() + 0.5D + d0 * direction.getStepZ();
-        entity.moveTo(d1, d2, d3, entity.getYRot(), entity.getXRot());
+        entity.snapTo(d1, d2, d3, entity.getYRot(), entity.getXRot());
     }
 
     public static void ageBee(int ticksInHive, Animal animal) {

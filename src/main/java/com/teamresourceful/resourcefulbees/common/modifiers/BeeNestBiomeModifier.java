@@ -27,7 +27,7 @@ public record BeeNestBiomeModifier(HolderSet<Biome> biomes, HolderSet<PlacedFeat
 
     @Override
     public @NonNull MapCodec<? extends BiomeModifier> codec() {
-        return ForgeRegistrySubsystem.NEST_MODIFIER.get();
+        return null;//ForgeRegistrySubsystem.NEST_MODIFIER.get();
     }
 
     public static Codec<BeeNestBiomeModifier> makeCodec() {

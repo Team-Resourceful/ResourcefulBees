@@ -67,8 +67,8 @@ public class HoneyInitializerApi {
         return this.bottle.create(id, color, food, rarity, bottle, tradeData);
     }
 
-    public HoneyFoodData food(int hunger, float saturation, boolean canAlwaysEat, boolean fastFood, List<HoneyBottleEffectData> effects) {
-        return this.food.create(hunger, saturation, canAlwaysEat, fastFood, effects);
+    public HoneyFoodData food(int hunger, float saturation, boolean canAlwaysEat, float consumeSeconds, List<HoneyBottleEffectData> effects) {
+        return this.food.create(hunger, saturation, canAlwaysEat, consumeSeconds, effects);
     }
 
     public HoneyBottleEffectData effect(LazyHolder<MobEffect> effect, int duration, int amplifier, float chance) {

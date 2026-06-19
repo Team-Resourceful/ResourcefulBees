@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.types;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.EntityDisplay;
@@ -39,7 +40,7 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
     @Override
     public boolean activate(ServerLevel level, BlockPos pos) {
         CompoundTag entityTag = predicate().getTag().map(nbt -> TagUtils.tagWithData(NBTConstants.ENTITY_TAG, nbt)).orElse(new CompoundTag());
-        Entity entity = predicate().entityType().spawn(level, entityTag, null, pos, EntitySpawnReason.CONVERSION, false, false);
+        Entity entity = predicate().entityType().spawn(level, null, null, pos, EntitySpawnReason.CONVERSION, false, false);
         if (entity != null) {
             level.levelEvent(2005, pos.below(1), 0);
         }
@@ -70,8 +71,8 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
         ).apply(instance, EntityMutation::new));
 
         @Override
-        public Codec<EntityMutation> codec() {
-            return CODEC;
+        public MapCodec<EntityMutation> codec() {
+            return null;//CODEC;
         }
 
         @Override

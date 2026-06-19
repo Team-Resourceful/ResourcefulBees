@@ -134,20 +134,21 @@ public class HoneyDipperItem extends Item {
     }
 
     private static Entity getEntity(ServerLevel level, ItemStack stack) {
-        if (stack.isEmpty() || !stack.hasTag()) return null;
-        CompoundTag stackTag = stack.getOrCreateTag();
-        UUID uuid = stackTag.hasUUID(NBTConstants.HoneyDipper.Entity) ? stackTag.getUUID(NBTConstants.HoneyDipper.Entity) : null;
-        return uuid != null ? level.getEntity(uuid) : null;
+//        if (stack.isEmpty() || !stack.hasTag()) return null;
+//        CompoundTag stackTag = stack.getOrCreateTag();
+//        UUID uuid = stackTag.hasUUID(NBTConstants.HoneyDipper.Entity) ? stackTag.getUUID(NBTConstants.HoneyDipper.Entity) : null;
+//        return uuid != null ? level.getEntity(uuid) : null;
+        return null;
     }
 
     private static ItemStack setEntity(ItemStack stack, Entity entity) {
-        if (entity == null) {
-            stack.setTag(null);
-        }else {
-            CompoundTag stackTag = stack.getOrCreateTag();
-            stackTag.putUUID(NBTConstants.HoneyDipper.Entity, entity.getUUID());
-            stack.setTag(stackTag);
-        }
+//        if (entity == null) {
+//            stack.setTag(null);
+//        }else {
+//            CompoundTag stackTag = stack.getOrCreateTag();
+//            stackTag.putUUID(NBTConstants.HoneyDipper.Entity, entity.getUUID());
+//            stack.setTag(stackTag);
+//        }
         return stack;
     }
 

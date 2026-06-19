@@ -37,10 +37,10 @@ public abstract class GUISyncedBlockEntity extends BlockEntity implements Syncab
         return listeners;
     }
 
-    @Override
-    public @NotNull CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
-    }
+//    @Override
+//    public @NotNull CompoundTag getUpdateTag() {
+//        return this.saveWithoutMetadata();
+//    }
 
     @Nullable
     @Override

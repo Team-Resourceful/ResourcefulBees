@@ -1,10 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.util;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+
+import java.util.Map;
 
 public interface GenericSerializer<T> {
 
-    Codec<? extends T> codec();
+    MapCodec<? extends T> codec();
 
     String id();
 }

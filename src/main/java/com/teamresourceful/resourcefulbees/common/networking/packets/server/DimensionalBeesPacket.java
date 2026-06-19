@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.networking.packets.server;
 
 import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.bytecodecs.defaults.MapCodec;
-import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
+//import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
 import com.teamresourceful.resourcefullib.common.network.Packet;
@@ -39,8 +39,8 @@ public record DimensionalBeesPacket(
         @Override
         public Runnable handle(DimensionalBeesPacket message) {
             return () -> {
-                DimensionalBeeHolder.DIMENSIONAL_BEES.clear();
-                DimensionalBeeHolder.DIMENSIONAL_BEES.putAll(message.bees);
+                //DimensionalBeeHolder.DIMENSIONAL_BEES.clear();
+               // DimensionalBeeHolder.DIMENSIONAL_BEES.putAll(message.bees);
             };
         }
     }

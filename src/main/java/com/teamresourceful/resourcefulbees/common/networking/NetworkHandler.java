@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.networking;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconChangePacket;
-import com.teamresourceful.resourcefulbees.common.networking.packets.client.FindBeePacket;
+//import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconChangePacket;
+//import com.teamresourceful.resourcefulbees.common.networking.packets.client.FindBeePacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.LockBeePacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.DimensionalBeesPacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncBeepediaPacket;
@@ -22,9 +22,9 @@ public final class NetworkHandler {
 
     public static void init() {
         // serverbound
-        NETWORK.register(BeeconChangePacket.PACKET_TYPE);
+        //NETWORK.register(BeeconChangePacket.PACKET_TYPE);
         // todo NETWORK.register(SelectableFluidPacket.PACKET_TYPE);
-        NETWORK.register(FindBeePacket.PACKET_TYPE);
+        //NETWORK.register(FindBeePacket.PACKET_TYPE);
         NETWORK.register(LockBeePacket.PACKET_TYPE);
 
         //clientbound

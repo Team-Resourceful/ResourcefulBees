@@ -53,7 +53,6 @@ public class CustomHoneycombItem extends HoneycombItem implements Tradeable, Col
         return tradeData;
     }
 
-    @Override
     public boolean isEdible() {
         return isEdible;
     }
@@ -63,16 +62,16 @@ public class CustomHoneycombItem extends HoneycombItem implements Tradeable, Col
         return this.enchanted || stack.isEnchanted();
     }
 
-    @Nullable
-    @Override
-    public FoodProperties getFoodProperties() {
-        if (HoneycombConfig.honeycombsEdible && !isEdible) {
-            return super.getFoodProperties();
-        }
-        return new FoodProperties.Builder()
-                .nutrition(HoneycombConfig.honeycombHunger)
-                .saturationMod(HoneycombConfig.honeycombSaturation)
-                .fast()
-                .build();
-    }
+//    @Nullable
+//    @Override
+//    public FoodProperties getFoodProperties() {
+//        if (HoneycombConfig.honeycombsEdible && !isEdible) {
+//            return super.getFoodProperties();
+//        }
+//        return new FoodProperties.Builder()
+//                .nutrition(HoneycombConfig.honeycombHunger)
+//                .saturationMod(HoneycombConfig.honeycombSaturation)
+//                .fast()
+//                .build();
+//    }
 }

@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.world.workers;
 
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 
 public final class LevelWorkManager {
 
@@ -11,10 +10,10 @@ public final class LevelWorkManager {
 
     //todo see https://github.com/neoforged/NeoForge/issues/2436
     public static synchronized void addWork(LevelWorker worker) {
-        WorldWorkerManager.addWorker(new WorkerWorker(worker));
+        //WorldWorkerManager.addWorker(new WorkerWorker(worker));
     }
 
-    private record WorkerWorker(LevelWorker worker) implements WorldWorkerManager.IWorker {
+/*    private record WorkerWorker(LevelWorker worker) implements WorldWorkerManager.IWorker {
 
         @Override
         public boolean hasWork() {
@@ -25,5 +24,5 @@ public final class LevelWorkManager {
         public boolean doWork() {
             return worker.work();
         }
-    }
+    }*/
 }

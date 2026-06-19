@@ -5,7 +5,7 @@ import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.data.DataGen;
-import com.teamresourceful.resourcefulbees.common.items.BeeSpawnEggItem;
+//import com.teamresourceful.resourcefulbees.common.items.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
@@ -54,34 +54,10 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
-@Mod(ModConstants.MOD_ID)
+@Mod("resourcefulbees")
 public class ResourcefulBees {
 
-    public static final Configurator CONFIGURATOR = new Configurator(ModConstants.MOD_ID);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //public static final Configurator CONFIGURATOR = new Configurator(ModConstants.MOD_ID);
 
     // Define mod id in a common place for everything to reference
     public static final String MODID = "resourcefulbees";
@@ -206,7 +182,7 @@ public class ResourcefulBees {
         MissingRegistrySetup.checkMissingRegistries();
         if (ModUtils.isProduction()) {
             GeneralConfig.generateDefaults = false;
-            CONFIGURATOR.saveConfig(GeneralConfig.class);
+            //CONFIGURATOR.saveConfig(GeneralConfig.class);
         }
     }
 
@@ -216,13 +192,13 @@ public class ResourcefulBees {
         GameSetup.initPotionRecipes();
         GameSetup.initArguments();
 
-        ModItems.SPAWN_EGG_ITEMS.boundStream()
+/*        ModItems.SPAWN_EGG_ITEMS.boundStream()
                 .filter(item -> item instanceof BeeSpawnEggItem)
                 .map(item -> (BeeSpawnEggItem) item)
                 .forEach(egg -> {
                     egg.registerDispenserBehavior();
                     SpawnEggItemAccessor.getById().put(egg.getDefaultType(), egg);
-                });
+                });*/
 
         SpawnEggItemAccessor.getById().remove(null);
 

@@ -4,7 +4,6 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument;
-import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -36,10 +35,10 @@ public final class BeepediaCommand {
     private static int add(CommandContext<CommandSourceStack> context, boolean all) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         if (all) {
-            BeepediaSavedData.addBees(player, BeeArgument.BEES);
+            //BeepediaSavedData.addBees(player, BeeArgument.BEES);
         } else {
             String bee = BeeArgument.get(context);
-            BeepediaSavedData.removeBee(player, bee);
+            //BeepediaSavedData.removeBee(player, bee);
         }
         return 1;
     }
@@ -47,10 +46,10 @@ public final class BeepediaCommand {
     private static int remove(CommandContext<CommandSourceStack> context, boolean all) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         if (all) {
-            BeepediaSavedData.clearBees(player);
+            //BeepediaSavedData.clearBees(player);
         } else {
             String bee = BeeArgument.get(context);
-            BeepediaSavedData.removeBee(player, bee);
+            //BeepediaSavedData.removeBee(player, bee);
         }
         return 1;
     }

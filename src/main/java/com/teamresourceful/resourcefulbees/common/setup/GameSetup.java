@@ -7,9 +7,11 @@ import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.world.gen.GoldenFlower;
 import com.teamresourceful.resourcefulbees.events.*;
 import com.teamresourceful.resourcefulbees.events.lifecycle.ServerGoingToStartEvent;
@@ -46,7 +48,7 @@ public final class GameSetup {
         //PlayerBrokeBlockEvent.EVENT.addListener(HiveBreakEnchantment::onBlockBreak);
         BlockBonemealedEvent.EVENT.addListener(GoldenFlower::onBlockBonemealed);
         //SyncedDatapackEvent.EVENT.addListener(DimensionalBeeHolder::onDatapackSync);
-        RegisterIngredientsEvent.EVENT.addListener(GameSetup::initIngredients);
+        //RegisterIngredientsEvent.EVENT.addListener(GameSetup::initIngredients);
         //ServerGoingToStartEvent.EVENT.addListener(ModStructures::addStructures);
         ServerGoingToStartEvent.EVENT.addListener(ModSpawnData::initialize);
         RegisterBurnablesEvent.EVENT.addListener(GameSetup::initBurnables);
@@ -71,9 +73,9 @@ public final class GameSetup {
         ArgumentTypeInfos.registerByClass(BeeArgument.class, ModArguments.BEE_TYPE.get());
     }
 
-    public static void initIngredients(RegisterIngredientsEvent event) {
-        event.register(BeeJarIngredient.SERIALIZER);
-    }
+//    public static void initIngredients(RegisterIngredientsEvent event) {
+//        event.register(BeeJarIngredient.SERIALIZER);
+//    }
 
     public static void initBurnables(RegisterBurnablesEvent event) {
         event.register(400, ModItems.WAX.get());

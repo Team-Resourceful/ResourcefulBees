@@ -17,19 +17,19 @@ public class BreederTimeUpgradeItem extends Item implements IntegerUpgrade {
 
     private final int reduction;
 
-    public BreederTimeUpgradeItem(Properties pProperties) {
-        this(pProperties, 300);
+    public BreederTimeUpgradeItem(Properties properties) {
+        this(properties, 300);
     }
 
-    public BreederTimeUpgradeItem(Properties pProperties, int reduction) {
-        super(pProperties);
+    public BreederTimeUpgradeItem(Properties properties, int reduction) {
+        super(properties);
         this.reduction = reduction;
     }
 
-    @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(Component.translatable(ItemTranslations.BREED_TIME_UPGRADE, getUpgradeTier(stack)).withStyle(ChatFormatting.GOLD));
-    }
+//    @Override
+//    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level pLevel, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+//        components.add(Component.translatable(ItemTranslations.BREED_TIME_UPGRADE, getUpgradeTier(stack)).withStyle(ChatFormatting.GOLD));
+//    }
 
     @Override
     public final int getUpgradeTier(ItemStack stack) {
@@ -38,9 +38,9 @@ public class BreederTimeUpgradeItem extends Item implements IntegerUpgrade {
 
     private int getReduction(ItemStack stack) {
         //noinspection ConstantConditions
-        if (stack.hasTag() && stack.getTag().contains(NBTConstants.Breeder.TIME_REDUCTION)) {
-            return stack.getTag().getInt(NBTConstants.Breeder.TIME_REDUCTION);
-        }
+//        if (stack.hasTag() && stack.getTag().contains(NBTConstants.Breeder.TIME_REDUCTION)) {
+//            return stack.getTag().getInt(NBTConstants.Breeder.TIME_REDUCTION);
+//        }
         return reduction;
     }
 

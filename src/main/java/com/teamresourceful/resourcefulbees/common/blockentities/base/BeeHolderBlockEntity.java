@@ -15,6 +15,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityProcessor;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
@@ -53,7 +55,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
         CompoundTag nbt = apiaryBee.entityData;
 
         if (level != null && this.level.getBlockState(blockPos1).getCollisionShape(this.level, blockPos1).isEmpty()) {
-            Entity entity = EntityType.loadEntityRecursive(nbt, this.level);
+            Entity entity = EntityType.loadEntityRecursive(nbt, this.level, EntitySpawnReason.LOAD, EntityProcessor.NOP);
             if (entity != null) {
                 EntityUtils.setEntityLocationAndAngle(blockPos, direction, entity);
                 deliverNectar(nbt, entity);
@@ -74,7 +76,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
         if (this.level != null && hasSpace() && bee instanceof BeeCompat beeCompat) {
             bee.ejectPassengers();
             CompoundTag nbt = new CompoundTag();
-            bee.save(nbt);
+            //bee.save(nbt);
             String beeColor = EntityUtils.getBeeColorOrDefault(bee);
             this.bees.add(new BlockBee(nbt, ticksInHive, hasNectar ? getMaxTimeInHive(beeCompat) : MIN_HIVE_TIME, bee.getName(), beeColor));
             this.level.playSound(null, this.getBlockPos(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -135,7 +137,7 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
             tag.putInt("TicksInHive", apiaryBee.getTicksInHive());
             tag.putInt("MinOccupationTicks", apiaryBee.minOccupationTicks);
             tag.putBoolean(NBTConstants.NBT_LOCKED, apiaryBee.isLocked());
-            tag.putString(NBTConstants.NBT_BEE_NAME, Component.Serializer.toJson(apiaryBee.displayName.to));
+            //tag.putString(NBTConstants.NBT_BEE_NAME, Component.Serializer.toJson(apiaryBee.displayName.to));
             tag.putString(NBTConstants.BeeJar.COLOR, apiaryBee.color);
             listTag.add(tag);
         });
@@ -143,14 +145,14 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity {
     }
 
     public void loadBees(CompoundTag nbt) {
-        nbt.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND)
-            .stream()
-            .map(CompoundTag.class::cast)
-            .forEachOrdered(data -> {
-                Component displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? Component.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : ModTranslations.TEMP_BEE_NAME;
-                String beeColor = data.contains(NBTConstants.BeeJar.COLOR) ? data.getString(NBTConstants.BeeJar.COLOR) : BeeConstants.VANILLA_BEE_COLOR;
-                this.bees.add(new BlockBee(data.getCompound("EntityData"), data.getInt("TicksInHive"), data.getInt("MinOccupationTicks"), displayName, beeColor, data.getBoolean(NBTConstants.NBT_LOCKED)));
-            });
+//        nbt.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND)
+//            .stream()
+//            .map(CompoundTag.class::cast)
+//            .forEachOrdered(data -> {
+//                Component displayName = data.contains(NBTConstants.NBT_BEE_NAME) ? Component.Serializer.fromJson(data.getString(NBTConstants.NBT_BEE_NAME)) : ModTranslations.TEMP_BEE_NAME;
+//                String beeColor = data.contains(NBTConstants.BeeJar.COLOR) ? data.getString(NBTConstants.BeeJar.COLOR) : BeeConstants.VANILLA_BEE_COLOR;
+//                this.bees.add(new BlockBee(data.getCompound("EntityData"), data.getInt("TicksInHive"), data.getInt("MinOccupationTicks"), displayName, beeColor, data.getBoolean(NBTConstants.NBT_LOCKED)));
+//            });
     }
 
     @Override

@@ -99,8 +99,8 @@ public class ResourcefulBee extends CustomBeeEntity {
      * This is required because vanilla calls registerGoals() in the mob constructor so we can't get any of the data we pass in through the constructor.
      * <br>
      * <br>
-     * Vanilla falls into this problem themself with the fox and rabbit to and have a similar method.
-     * The only difference is they call theirs on finalize spawn because they choose a type on spawn but we choose it before in construction and pass it in.
+     * Vanilla falls into this problem themself with the fox and rabbit too and have a similar method.
+     * The only difference is they call theirs on finalize spawn because they choose a type on spawn, but we choose it before in construction and pass it in.
      * But the premise still apply that they wait because they need data that would not be available in the normal registerGoals method.
      * <br>
      * See {@link net.minecraft.world.entity.animal.Fox#setTargetGoals()}

@@ -92,7 +92,7 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
 
     private static void parseVariationData(String s, JsonObject jsonObject) {
         VARIATION_CODEC.parse(JsonOps.INSTANCE, jsonObject)
-                .getOrThrow(false, s2 -> ModConstants.LOGGER.error("Could not create output variation from {} json file!", s))
+                .getOrThrow()//(false, s2 -> ModConstants.LOGGER.error("Could not create output variation from {} json file!", s))
                 .forEach(HoneycombRegistry::computeVariation);
     }
 
@@ -111,7 +111,7 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
 
     private static void parseRegistryData(String s, JsonObject jsonObject) {
         RegistryData.codec(s).optionalFieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject)
-                .getOrThrow(false, s2 -> ModConstants.LOGGER.warn("Could not create honeycomb registry item from {} json file.", s));
+                .getOrThrow();//(false, s2 -> ModConstants.LOGGER.warn("Could not create honeycomb registry item from {} json file.", s));
     }
 
     @Override
@@ -141,7 +141,7 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
 
         private RegistryData {
             if (block) {
-                RegistryEntry<Block> customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(color, BlockBehaviour.Properties.copy(Blocks.HONEYCOMB_BLOCK)));
+                RegistryEntry<Block> customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(color, BlockBehaviour.Properties.ofFullCopy(Blocks.HONEYCOMB_BLOCK)));
                 final RegistryEntry<Item> blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties()) {
                     @Override
                     public boolean isFoil(@NotNull ItemStack stack) {

@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.types;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.FluidDisplay;
@@ -64,8 +65,8 @@ public record FluidMutation(Fluid fluid, double chance, double weight) implement
         ).apply(instance, FluidMutation::new));
 
         @Override
-        public Codec<FluidMutation> codec() {
-            return CODEC;
+        public MapCodec<? extends MutationType> codec() {
+            return null; //CODEC;
         }
 
         @Override

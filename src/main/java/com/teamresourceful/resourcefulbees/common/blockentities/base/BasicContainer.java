@@ -63,11 +63,11 @@ public interface BasicContainer extends Container {
 
     }
 
-    default CompoundTag serializeContainer() {
-        return ContainerHelper.saveAllItems(TagValueOutput.createWithoutContext(ProblemReporter.DISCARDING), getItems(), true);
-    }
-
-    default void deserializeContainer(CompoundTag tag) {
-        ContainerHelper.loadAllItems(tag, getItems());
-    }
+//    default CompoundTag serializeContainer() {
+//        return ContainerHelper.saveAllItems(TagValueOutput.createWithoutContext(ProblemReporter.DISCARDING), getItems(), true);
+//    }
+//
+//    default void deserializeContainer(CompoundTag tag) {
+//        ContainerHelper.loadAllItems(tag, getItems());
+//    }
 }

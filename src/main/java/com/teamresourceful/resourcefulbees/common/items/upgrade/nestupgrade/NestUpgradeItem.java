@@ -22,10 +22,10 @@ public class NestUpgradeItem extends Item implements NestUpgrade {
         this.upgrade = upgrade;
     }
 
-    @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(ItemTranslations.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
-    }
+//    @Override
+//    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+//        components.add(ItemTranslations.HIVE_UPGRADE.withStyle(ChatFormatting.GOLD));
+//    }
 
     @Override
     public UpgradeType getUpgradeType() {

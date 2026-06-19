@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
-import com.teamresourceful.resourcefulbees.common.items.BeeSpawnEggItem;
+//import com.teamresourceful.resourcefulbees.common.items.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.items.dispenser.ScraperDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -24,6 +24,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 
@@ -66,14 +67,14 @@ public final class RegistryHandler {
     private static void registerBee(String name, float sizeModifier) {
         RegistryEntry<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.BEES.register(name + "_bee",
                 () -> CustomBeeEntityType.of(name, (type, level) -> new ResourcefulBee(type, level, name), 0.7F * sizeModifier, 0.6F * sizeModifier));
-        ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> new BeeSpawnEggItem(beeEntityType, name));
+        ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> new SpawnEggItem(new Item.Properties().spawnEgg(beeEntityType.get())));
         ModEntities.getModBees().put(name, beeEntityType);
     }
 
     private static void registerHoneyBottle(String id, JsonObject honeyData) {
         var data = new DispatchMapCodec<>(Identifier.CODEC, HoneyDataRegistry.codec(id))
                 .parse(JsonOps.INSTANCE, honeyData)
-                .getOrThrow(false, s -> ModConstants.LOGGER.error("Could not create Honey Data for {} honey", id));
+                .getOrThrow();//false, s -> ModConstants.LOGGER.error("Could not create Honey Data for {} honey", id));
         try {
             HoneyDataRegistry.INSTANCE.check(data.values());
         }catch (Exception e) {

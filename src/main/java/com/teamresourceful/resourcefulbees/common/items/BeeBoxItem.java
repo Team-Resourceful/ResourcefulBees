@@ -51,42 +51,43 @@ public class BeeBoxItem extends BlockItem implements ExpandableTooltip {
             return InteractionResult.FAIL;
         }
 
-        CompoundTag stackTag = stack.getOrCreateTag();
-        CompoundTag blockTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
-        ListTag bees = blockTag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND);
-        ListTag displayNames = stackTag.getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING);
-
-        if (bees.size() == BeeConstants.MAX_BEES_BEE_BOX) return InteractionResult.FAIL;
-
-        bees.add(EntityUtils.createJarBeeTag(target));
-        displayNames.add(StringTag.valueOf(Component.Serializer.toJson(target.getType().getDescription())));
-
-        blockTag.put(NBTConstants.NBT_BEES, bees);
-        blockTag.put(NBTConstants.NBT_DISPLAYNAMES, displayNames);
-        stackTag.put(NBTConstants.NBT_BLOCK_ENTITY_TAG, blockTag);
-
-        stack.setTag(stackTag);
-        player.setItemInHand(hand, stack);
-        player.swing(hand);
-        target.discard();
+//        CompoundTag stackTag = stack.getOrCreateTag();
+//        CompoundTag blockTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
+//        ListTag bees = blockTag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND);
+//        ListTag displayNames = stackTag.getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING);
+//
+//        if (bees.size() == BeeConstants.MAX_BEES_BEE_BOX) return InteractionResult.FAIL;
+//
+//        bees.add(EntityUtils.createJarBeeTag(target));
+//        displayNames.add(StringTag.valueOf(Component.Serializer.toJson(target.getType().getDescription())));
+//
+//        blockTag.put(NBTConstants.NBT_BEES, bees);
+//        blockTag.put(NBTConstants.NBT_DISPLAYNAMES, displayNames);
+//        stackTag.put(NBTConstants.NBT_BLOCK_ENTITY_TAG, blockTag);
+//
+//        stack.setTag(stackTag);
+//        player.setItemInHand(hand, stack);
+//        player.swing(hand);
+//        target.discard();
         return InteractionResult.SUCCESS;
     }
 
     public static boolean isFilled(ItemStack stack) {
         //noinspection ConstantConditions
-        return !stack.isEmpty() && stack.hasTag() && stack.getTag().contains(NBTConstants.NBT_BLOCK_ENTITY_TAG) && stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).contains(NBTConstants.NBT_DISPLAYNAMES);
+        //return !stack.isEmpty() && stack.hasTag() && stack.getTag().contains(NBTConstants.NBT_BLOCK_ENTITY_TAG) && stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).contains(NBTConstants.NBT_DISPLAYNAMES);
+        return false;
     }
 
-    @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level world, @NotNull List<Component> components, @NotNull TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, world, components, tooltipFlag);
-        if (this.temp) {
-            components.add(ItemTranslations.BEE_BOX_TOOLTIP_TEMP.withStyle(ChatFormatting.GOLD));
-        } else {
-            components.add(Component.translatable(ItemTranslations.BEE_BOX_TOOLTIP, BeeConstants.MAX_BEES_BEE_BOX).withStyle(ChatFormatting.GOLD));
-        }
-        setupTooltip(stack, world, components, tooltipFlag);
-    }
+//    @Override
+//    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level world, @NotNull List<Component> components, @NotNull TooltipFlag tooltipFlag) {
+//        super.appendHoverText(stack, world, components, tooltipFlag);
+//        if (this.temp) {
+//            components.add(ItemTranslations.BEE_BOX_TOOLTIP_TEMP.withStyle(ChatFormatting.GOLD));
+//        } else {
+//            components.add(Component.translatable(ItemTranslations.BEE_BOX_TOOLTIP, BeeConstants.MAX_BEES_BEE_BOX).withStyle(ChatFormatting.GOLD));
+//        }
+//        setupTooltip(stack, world, components, tooltipFlag);
+//    }
 
     @Override
     public Component getShiftingDisplay() {
@@ -95,20 +96,25 @@ public class BeeBoxItem extends BlockItem implements ExpandableTooltip {
 
     @Override
     public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(ItemTranslations.BEES.withStyle(ChatFormatting.YELLOW));
 
-        //noinspection ConstantConditions
-        ListTag bees = isFilled(stack) ? stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING) : new ListTag();
-
-        if (bees.isEmpty()) {
-            components.add(ItemTranslations.NO_BEES.withStyle(ChatFormatting.GOLD));
-        } else {
-            bees.stream()
-                .map(StringTag.class::cast)
-                .forEach(displayJson -> {
-                    Component display = Component.Serializer.fromJson(displayJson.getAsString());
-                    components.add(Component.translatable(ItemTranslations.BEE_BOX_ENTITY_NAME, display).withStyle(ChatFormatting.GRAY));
-                });
-        }
     }
+
+//    @Override
+//    public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
+//        components.add(ItemTranslations.BEES.withStyle(ChatFormatting.YELLOW));
+//
+//        //noinspection ConstantConditions
+//        ListTag bees = isFilled(stack) ? stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING) : new ListTag();
+//
+//        if (bees.isEmpty()) {
+//            components.add(ItemTranslations.NO_BEES.withStyle(ChatFormatting.GOLD));
+//        } else {
+//            bees.stream()
+//                .map(StringTag.class::cast)
+//                .forEach(displayJson -> {
+//                    Component display = Component.Serializer.fromJson(displayJson.getAsString());
+//                    components.add(Component.translatable(ItemTranslations.BEE_BOX_ENTITY_NAME, display).withStyle(ChatFormatting.GRAY));
+//                });
+//        }
+//    }
 }
