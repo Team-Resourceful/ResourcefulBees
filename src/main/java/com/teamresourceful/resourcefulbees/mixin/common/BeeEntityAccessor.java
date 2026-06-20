@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(Bee.class)
 public interface BeeEntityAccessor {
 
-    @Accessor
-    void setHivePos(BlockPos pos);
+//    @Accessor
+//    void setHivePos(BlockPos pos);
 
     @Accessor
     int getStayOutOfHiveCountdown();

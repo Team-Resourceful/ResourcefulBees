@@ -21,13 +21,14 @@ import org.jspecify.annotations.NonNull;
 public class ApiaryBlock extends BeeHouseBlock implements BeeHolderBlock {
 
   public static final MapCodec<ApiaryBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-          ApiaryTier.CODEC.fieldOf("tier").forGetter(ApiaryBlock::getTier)
+          ApiaryTier.CODEC.fieldOf("tier").forGetter(ApiaryBlock::getTier),
+          Properties.CODEC.fieldOf("properties").forGetter(ApiaryBlock::properties)
   ).apply(instance, ApiaryBlock::new));
 
   private final ApiaryTier tier;
 
-  public ApiaryBlock(final ApiaryTier tier) {
-    super(Properties.of().sound(SoundType.WOOD).strength(5f, 6f).sound(SoundType.METAL));
+  public ApiaryBlock(final ApiaryTier tier, Properties properties) {
+    super(properties);
     this.tier = tier;
   }
 

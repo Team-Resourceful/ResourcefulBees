@@ -29,13 +29,13 @@ public class ModBeeEnterHiveGoal extends Goal {
                 if (!hive.isFull()) {
                     return true;
                 }
-                ((BeeEntityAccessor) this.bee).setHivePos(null);
+                this.bee.setHivePos(null);
             } else if (block instanceof BeeHolderBlockEntity apiary) {
                 if (apiary.hasSpace()) {
                     return true;
                 }
 
-                ((BeeEntityAccessor) this.bee).setHivePos(null);
+                this.bee.setHivePos(null);
             }
         }
 

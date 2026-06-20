@@ -41,7 +41,7 @@ public abstract class MixinBeeEnterHiveGoal {
             if (holder.hasSpace()) {
                 cir.setReturnValue(true);
             } else {
-                ((BeeEntityAccessor) this$0).setHivePos(null);
+                this$0.setHivePos(null);
             }
         }
     }

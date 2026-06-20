@@ -18,7 +18,7 @@ public class CustomBeeEntityType<T extends Bee> extends EntityType<T> {
 
     public CustomBeeEntityType(String beeType, EntityFactory<T> factory, EntityDimensions dimensions) {
         super(factory,
-                MobCategory.valueOf("resourceful_bees:bee"),
+                MobCategory.valueOf("RESOURCEFULBEES_BEE"),
                 true,
                 true,
                 false,

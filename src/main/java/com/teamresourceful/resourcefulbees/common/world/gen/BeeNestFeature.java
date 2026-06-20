@@ -16,6 +16,7 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
 import net.minecraft.util.random.WeightedList;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -37,13 +38,13 @@ import java.util.List;
 public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
 
     private static final WeightedCollection<Block> OVERWORLD_BLOCKS = Util.make(new WeightedCollection<>(), blocks -> {
-        blocks.add(10, ModBlocks.GRASS_BEE_NEST.get());
-        blocks.add(10, ModBlocks.OAK_BEE_NEST.get());
-        blocks.add(7, ModBlocks.DARK_OAK_BEE_NEST.get());
-        blocks.add(7, ModBlocks.SPRUCE_BEE_NEST.get());
-        blocks.add(5, ModBlocks.BIRCH_BEE_NEST.get());
-        blocks.add(3, ModBlocks.RED_MUSHROOM_BEE_NEST.get());
-        blocks.add(3, ModBlocks.BROWN_MUSHROOM_BEE_NEST.get());
+//        blocks.add(10, ModBlocks.GRASS_BEE_NEST.get());
+//        blocks.add(10, ModBlocks.OAK_BEE_NEST.get());
+//        blocks.add(7, ModBlocks.DARK_OAK_BEE_NEST.get());
+//        blocks.add(7, ModBlocks.SPRUCE_BEE_NEST.get());
+//        blocks.add(5, ModBlocks.BIRCH_BEE_NEST.get());
+//        blocks.add(3, ModBlocks.RED_MUSHROOM_BEE_NEST.get());
+//        blocks.add(3, ModBlocks.BROWN_MUSHROOM_BEE_NEST.get());
     });
 
     public BeeNestFeature(Codec<NoneFeatureConfiguration> configFactoryIn) {
@@ -200,7 +201,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity nest) {
             int maxBees = Math.round(WorldGenConfig.hiveMaxBees * 0.5f);
 
-            WeightedList<MobSpawnSettings.SpawnerData> bees = biome.value().getMobSettings().getMobs(ModConstants.BEE_CATEGORY);
+            WeightedList<MobSpawnSettings.SpawnerData> bees = biome.value().getMobSettings().getMobs(MobCategory.valueOf("resourcefulbees:bee"));
             for (int i = rand.nextInt(maxBees); i < maxBees ; i++) {
                 bees.getRandom(rand)
                     .map(MobSpawnSettings.SpawnerData::type)

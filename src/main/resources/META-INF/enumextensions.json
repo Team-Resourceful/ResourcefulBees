@@ -2,9 +2,9 @@
   "entries": [
       {
         "enum": "net/minecraft/world/entity/MobSpawnCategory",
-        "name": "RESOURCEFUL_BEES_BEE",
+        "name": "RESOURCEFULBEES_BEE",
         "constructor": "(Ljava/lang/String;IZZI)V",
-        "parameters": [ "resourceful_bees:bee", 20, true, true, 128 ]
+        "parameters": [ "resourcefulbees:bee", 20, true, true, 128 ]
       }
     ]
 }

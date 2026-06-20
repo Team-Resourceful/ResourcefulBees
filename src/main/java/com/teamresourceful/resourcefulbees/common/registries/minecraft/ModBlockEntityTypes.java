@@ -195,8 +195,8 @@ public final class ModBlockEntityTypes {
     //endregion
 
     //region Apiaries
-    public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T1_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t1_apiary",
-            () -> new BlockEntityType<>((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T1_APIARY, pos, state), ModBlocks.T1_APIARY_BLOCK.get()));
+    //public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T1_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t1_apiary",
+    //        () -> new BlockEntityType<>((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T1_APIARY, pos, state), ModBlocks.T1_APIARY_BLOCK.get()));
     public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T2_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t2_apiary",
             () -> new BlockEntityType<>((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T2_APIARY, pos, state), ModBlocks.T2_APIARY_BLOCK.get()));
     public static final RegistryEntry<BlockEntityType<? extends ApiaryBlockEntity>> T3_APIARY_ENTITY = BLOCK_ENTITY_TYPES.register("t3_apiary",

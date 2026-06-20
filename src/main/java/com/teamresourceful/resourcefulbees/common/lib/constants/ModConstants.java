@@ -12,7 +12,11 @@ public final class ModConstants {
     }
     public static final String MOD_ID = "resourcefulbees";
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static final MobCategory BEE_CATEGORY = MobCategory.valueOf("resourceful_bees:bee");
+    //public static final MobCategory BEE_CATEGORY = MobCategory.valueOf("resourcefulbees:bee");
+
+
+
+
     //public static final MobCategory BEE_CATEGORY = ModUtils.createMobCategory("RESOURCEFUL_BEES", "resourceful_bees", 20, true, false, 128, MobCategory.CREATURE);
 
     //Actions

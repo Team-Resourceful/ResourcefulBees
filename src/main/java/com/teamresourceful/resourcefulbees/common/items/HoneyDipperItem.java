@@ -60,7 +60,7 @@ public class HoneyDipperItem extends Item {
 
             BlockEntity clickedTile = level.getBlockEntity(context.getClickedPos());
             if (clickedTile instanceof BeehiveBlockEntity || clickedTile instanceof ApiaryBlockEntity) {
-                ((BeeEntityAccessor)bee).setHivePos(context.getClickedPos());
+                bee.setHivePos(context.getClickedPos());
                 sendMessageToPlayer(bee, player, MessageTypes.HIVE, context.getClickedPos());
                 player.setItemInHand(context.getHand(), setEntity(stack, null));
                 return InteractionResult.SUCCESS;
