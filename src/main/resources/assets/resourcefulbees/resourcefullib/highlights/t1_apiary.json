@@ -1,0 +1,14 @@
+{
+    "variants": {
+        "facing=south": "resourcefulbees:beehouse",
+        "facing=north": "resourcefulbees:beehouse",
+        "facing=west": {
+            "highlight": "resourcefulbees:beehouse",
+            "rotation": { "y": 90 }
+        },
+        "facing=east": {
+            "highlight": "resourcefulbees:beehouse",
+            "rotation": { "y": 90 }
+        }
+    }
+}

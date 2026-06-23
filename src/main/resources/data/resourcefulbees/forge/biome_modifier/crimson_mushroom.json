@@ -1,0 +1,10 @@
+{
+  "type": "resourcefulbees:spawns",
+  "whitelist": [["minecraft:crimson_forest"]],
+  "spawns": {
+    "type": "resourcefulbees:crimson_fungus_bee",
+    "weight": 8,
+    "minCount": 0,
+    "maxCount": 3
+  }
+}

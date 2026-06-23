@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "tag": "forge:ingots/gold"
+    },
+    "C": {
+      "item": "resourcefulbees:waxed_machine_block"
+    },
+    "W": {
+      "item": "resourcefulbees:waxed_slab"
+    },
+    "F": {
+      "tag": "minecraft:small_flowers"
+    }
+  },
+  "pattern": [
+    " G ",
+    "GFG",
+    "WCW"
+  ],
+  "result": {
+    "item": "resourcefulbees:fake_flower"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "damageTypes": [
+    {
+      "damageType": "setOnFire",
+      "amplifier": 1
+    }
+  ],
+  "specialAbilities": ["flammable"],
+  "particleType": ["minecraft:flame"],
+  "displayItem": "minecraft:blaze_rod",
+  "damageImmunities": [
+    "lava",
+    "hotFloor",
+    "inFire",
+    "onFire"
+  ]
+}

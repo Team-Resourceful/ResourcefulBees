@@ -1,0 +1,13 @@
+{
+  "type": "resourcefulbees:spawns",
+  "whitelist": [
+    "#forge:is_mushroom",
+    "#forge:is_spooky"
+  ],
+  "spawns": {
+    "type": "resourcefulbees:brown_mushroom_bee",
+    "weight": 8,
+    "minCount": 0,
+    "maxCount": 3
+  }
+}

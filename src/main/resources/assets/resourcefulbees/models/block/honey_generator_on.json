@@ -1,0 +1,8 @@
+{
+  "parent": "resourcefulbees:block/honey_generator",
+  "textures": {
+    "0": "resourcefulbees:block/gen_front_on",
+    "1": "resourcefulbees:block/gen_side",
+    "particle": "resourcefulbees:block/gen_side"
+  }
+}

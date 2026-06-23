@@ -10,12 +10,16 @@ import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneycombItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public final class HoneycombRegistry implements com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry {
@@ -127,6 +132,7 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
             boolean enchanted,
             BeekeeperTradeData tradeData
     ) {
+        private static final String HONEYCOMB_BLOCK_SUFFIX = "_honeycomb_block";
 
         private static Codec<RegistryData> codec(String name) {
             return RecordCodecBuilder.create(instance -> instance.group(
@@ -141,19 +147,24 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
 
         private RegistryData {
             if (block) {
-                RegistryEntry<Block> customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(name + "_honeycomb_block", () -> new HoneycombBlock(color, BlockBehaviour.Properties.ofFullCopy(Blocks.HONEYCOMB_BLOCK)));
-                final RegistryEntry<Item> blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(name + "_honeycomb_block", () -> new BlockItem(customHoneycombBlock.get(), new Item.Properties()) {
+                String blockRegistryID = name + HONEYCOMB_BLOCK_SUFFIX;
+                RegistryEntry<Block> customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(blockRegistryID, properties -> new HoneycombBlock(color, properties), honeycombBlockProperties(blockRegistryID));
+                final RegistryEntry<Item> blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(blockRegistryID, properties -> new BlockItem(customHoneycombBlock.get(), properties) {
                     @Override
                     public boolean isFoil(@NotNull ItemStack stack) {
                         return enchanted || stack.isEnchanted();
                     }
-                });
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new CustomHoneycombItem(color, edible, blockItem, enchanted, tradeData));
+                }, Item.Properties::new);
+                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", properties -> new CustomHoneycombItem(color, edible, blockItem, enchanted, tradeData, properties), Item.Properties::new);
             } else {
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", () -> new CustomHoneycombItem(color, edible, null, enchanted, tradeData));
+                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", properties -> new CustomHoneycombItem(color, edible, null, enchanted, tradeData, properties), Item.Properties::new);
             }
         }
 
+    }
+
+    private static Supplier<BlockBehaviour.Properties> honeycombBlockProperties(String registryID) {
+        return () -> BlockBehaviour.Properties.ofFullCopy(Blocks.HONEYCOMB_BLOCK).setId(ResourceKey.create(Registries.BLOCK, ModIdentifier.of(registryID)));
     }
 
     //endregion

@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "resourcefulbees:item/bee_jar_empty"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "filled": 1
+      },
+      "model": "resourcefulbees:item/bee_jar_filled"
+    }
+  ]
+}

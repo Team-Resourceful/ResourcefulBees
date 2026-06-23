@@ -1,0 +1,21 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations": [
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:stone"
+                }
+            },
+            "outputs": [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:gravel"
+                    }
+                }
+            ]
+        }
+    ]
+}

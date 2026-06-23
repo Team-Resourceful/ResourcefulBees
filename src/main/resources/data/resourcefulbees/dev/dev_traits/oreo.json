@@ -1,0 +1,9 @@
+{
+  "displayItem": "resourcefulbees:oreo_cookie",
+  "potionDamageEffects": [
+    {
+      "effect": "minecraft:instant_health",
+      "strength": 2
+    }
+  ]
+}

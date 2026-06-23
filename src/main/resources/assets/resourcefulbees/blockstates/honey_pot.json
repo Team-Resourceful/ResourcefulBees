@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "lid=closed": {
+      "model": "resourcefulbees:block/honey_pot_closed"
+    },
+    "lid=beecon": {
+      "model": "resourcefulbees:block/honey_pot_open"
+    },
+    "lid=open": {
+      "model": "resourcefulbees:block/honey_pot_open"
+    }
+  }
+}

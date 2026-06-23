@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "resourcefulbees:item/bee_jar_filled",
+    "layer1": "resourcefulbees:item/bee_face"
+  }
+}

@@ -57,7 +57,7 @@ public final class GameSetup {
         //RegisterVillagerTradesEvent.EVENT.addListener(Beekeeper::setupBeekeeper);
         RegisterEntityAttributesEvent.EVENT.addListener(GameSetup::registerAttributes);
         RegisterHiveBreakBlocksEvent.EVENT.addListener(GameSetup::onHiveBreakConversions);
-        RegisterRepositorySourceEvent.EVENT.addListener(GameSetup::registerRepoistorySources);
+        RegisterRepositorySourceEvent.EVENT.addListener(GameSetup::registerRepositorySources);
     }
 
     public static void init() {
@@ -99,7 +99,7 @@ public final class GameSetup {
         ));
     }
 
-    public static void registerRepoistorySources(RegisterRepositorySourceEvent event) {
+    public static void registerRepositorySources(RegisterRepositorySourceEvent event) {
         if (event.type().equals(PackType.SERVER_DATA)) {
             event.register(DataPackLoader.INSTANCE);
         }

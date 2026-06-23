@@ -1,0 +1,15 @@
+{
+  "honeycomb": {
+    "color": "#0C9F0A",
+    "edible": true,
+    "block": true,
+    "tradeData": {}
+  },
+  "variations": [
+    {
+      "identifier": "beeper",
+      "defaultComb": {"id":  "resourcefulbees:beeper_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees:beeper_honeycomb_block"}
+    }
+  ]
+}

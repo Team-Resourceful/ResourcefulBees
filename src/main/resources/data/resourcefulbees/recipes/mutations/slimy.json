@@ -1,0 +1,22 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations": [
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:honey_block"
+                },
+                "chance": 0.8
+            },
+            "outputs": [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:slime_block"
+                    }
+                }
+            ]
+        }
+    ]
+}

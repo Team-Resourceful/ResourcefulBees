@@ -1,0 +1,27 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations": [
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:blackstone"
+                }
+            },
+            "outputs" : [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:gilded_blackstone"
+                    }
+                },
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:netherrack"
+                    }
+                }
+            ]
+        }
+    ]
+}

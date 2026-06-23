@@ -1,0 +1,30 @@
+{
+    "type": "resourcefulbees:hive",
+    "bees": [
+        "minecraft:bee"
+    ],
+    "hiveCombs": {
+        "resourcefulbees:t1": "minecraft:honeycomb",
+        "resourcefulbees:t2": "minecraft:honeycomb",
+        "resourcefulbees:t3": "minecraft:honeycomb",
+        "resourcefulbees:t4": "minecraft:honeycomb"
+    },
+    "apiaryCombs": {
+        "resourcefulbees:t1": {
+            "id": "minecraft:honeycomb",
+            "count": 8
+        },
+        "resourcefulbees:t2": {
+            "id": "minecraft:honeycomb",
+            "count": 16
+        },
+        "resourcefulbees:t3": {
+            "id": "minecraft:honeycomb_block",
+            "count": 4
+        },
+        "resourcefulbees:t4": {
+            "id": "minecraft:honeycomb_block",
+            "count": 8
+        }
+    }
+}

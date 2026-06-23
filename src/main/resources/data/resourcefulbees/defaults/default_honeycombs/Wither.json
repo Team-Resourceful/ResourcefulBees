@@ -1,0 +1,14 @@
+{
+  "honeycomb": {
+    "color": "#444444",
+    "edible": true,
+    "block": true
+  },
+  "variations": [
+    {
+      "identifier": "wither",
+      "defaultComb": {"id":  "resourcefulbees:wither_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees:wither_honeycomb_block"}
+    }
+  ]
+}

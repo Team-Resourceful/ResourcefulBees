@@ -1,0 +1,42 @@
+{
+    "resourcefulbees:core/v1": {
+        "flower": "#minecraft:bee_growables",
+        "honeycombVariation": "zombee",
+        "maxTimeInHive": 600
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "zombie/zombie_bee",
+        "ColorData": {
+            "spawnEggPrimaryColor": "#2F4E32",
+            "spawnEggSecondaryColor": "#303030"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation": "resourcefulbees:mutations/zombee"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "zombee",
+                "parent2": "zombee"
+            }
+        ]
+    },
+    "resourcefulbees:trait/v1": {
+        "traits": ["zombie"]
+    },
+    "resourcefulbees:trade/v1": {
+        "amount": {
+            "min": 1,
+            "max": 1
+        },
+        "secondaryItem": "minecraft:mossy_cobblestone",
+        "secondaryItemCost": {
+            "min": 12,
+            "max": 16
+        },
+        "priceMultiplier": 4,
+        "maxTrades": 2
+    }
+}

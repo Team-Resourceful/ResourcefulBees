@@ -1,0 +1,12 @@
+{
+  "type": "resourcefulbees:dev_spawns",
+  "whitelist": [
+    "#forge:is_rare"
+  ],
+  "spawns": {
+    "type": "resourcefulbees:kitten_bee",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

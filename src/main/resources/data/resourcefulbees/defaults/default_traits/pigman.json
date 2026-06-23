@@ -1,0 +1,9 @@
+{
+  "displayItem": "minecraft:gold_nugget",
+  "potionDamageEffects": [
+    {
+      "effect": "minecraft:mining_fatigue",
+      "strength": 0
+    }
+  ]
+}

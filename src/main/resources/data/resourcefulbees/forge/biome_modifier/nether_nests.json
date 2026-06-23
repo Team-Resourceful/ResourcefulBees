@@ -1,0 +1,5 @@
+{
+  "type": "resourcefulbees:nests",
+  "biomes": "#minecraft:is_nether",
+  "features": ["resourcefulbees:nether_nests"]
+}

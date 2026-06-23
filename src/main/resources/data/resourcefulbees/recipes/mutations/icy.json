@@ -1,0 +1,28 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations" : [
+        {
+            "input": {
+                "type": "fluid",
+                "fluid": "minecraft:water",
+                "chance": 0.65
+            },
+            "outputs" : [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:ice"
+                    },
+                    "weight": 7
+                },
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:packed_ice"
+                    },
+                    "weight": 3
+                }
+            ]
+        }
+    ]
+}

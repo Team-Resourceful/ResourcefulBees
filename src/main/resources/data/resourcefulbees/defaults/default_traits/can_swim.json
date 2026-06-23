@@ -1,0 +1,4 @@
+{
+  "displayItem": "minecraft:water_bucket",
+  "damageImmunities": ["drown"]
+}

@@ -1,0 +1,37 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations": [
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:grass"
+                }
+            },
+            "outputs" : [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:red_mushroom"
+                    }
+                }
+            ]
+        },
+        {
+            "input": {
+                "type": "entity",
+                "entity": {
+                    "type": "minecraft:cow"
+                }
+            },
+            "outputs" : [
+                {
+                    "type": "entity",
+                    "entity": {
+                        "type": "minecraft:mooshroom"
+                    }
+                }
+            ]
+        }
+    ]
+}

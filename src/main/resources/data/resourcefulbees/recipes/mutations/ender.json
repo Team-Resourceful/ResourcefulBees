@@ -1,0 +1,22 @@
+{
+    "type": "resourcefulbees:mutation",
+    "mutations" : [
+        {
+            "input": {
+                "type": "block",
+                "block": {
+                    "id": "minecraft:obsidian"
+                },
+                "chance": 0.5
+            },
+            "outputs" : [
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:end_stone"
+                    }
+                }
+            ]
+        }
+    ]
+}

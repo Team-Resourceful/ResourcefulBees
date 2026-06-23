@@ -43,7 +43,7 @@ public final class HoneySetup {
     private static void parseHoney(Reader reader, String name) {
         JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
         if (LoadConditionRegistry.canLoad(jsonObject)) {
-            HoneyRegistry.getRegistry().cacheRawHoneyData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
+            //HoneyRegistry.getRegistry().cacheRawHoneyData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
         }
     }
 }

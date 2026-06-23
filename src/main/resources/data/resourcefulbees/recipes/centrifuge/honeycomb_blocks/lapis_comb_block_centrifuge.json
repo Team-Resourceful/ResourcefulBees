@@ -1,0 +1,65 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "ingredient": { "item": "resourcefulbees:lapis_honeycomb_block" },
+  "itemOutputs": [
+    {
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:lapis_block",
+            "count": 2
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:lapis_ore",
+            "count": 2
+          },
+          "weight": 30
+        },
+        {
+          "item": {
+            "id": "minecraft:lapis_lazuli",
+            "count": 16
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "chance": 0.60,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:lapis_block",
+            "count": 2
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:lapis_ore",
+            "count": 2
+          },
+          "weight": 30
+        },
+        {
+          "item": {
+            "id": "minecraft:lapis_lazuli",
+            "count": 16
+          },
+          "weight": 50
+        }
+      ]
+    }
+  ],
+  "fluidOutputs": [
+    {
+      "pool": [
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 500 }}
+      ]
+    }
+  ],
+  "time": 500
+}

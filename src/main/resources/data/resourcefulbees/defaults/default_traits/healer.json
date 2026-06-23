@@ -1,0 +1,9 @@
+{
+  "displayItem": "minecraft:glistering_melon_slice",
+  "auras": [
+    {
+      "aura": "HEALING",
+      "modifier": 2
+    }
+  ]
+}

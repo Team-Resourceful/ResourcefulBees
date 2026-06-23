@@ -1,0 +1,6 @@
+{
+    "type": "resourcefulbees:honey_gen",
+    "honey": {"id": "resourcefulbees:starry_honey"},
+    "energyFillRate": 1500,
+    "honeyDrainRate": 20
+}

@@ -1,0 +1,15 @@
+{
+  "honeycomb": {
+    "color": "#00ffff",
+    "edible": true,
+    "block": true,
+    "tradeData": {}
+  },
+  "variations": [
+    {
+      "identifier": "diamond",
+      "defaultComb": {"id":  "resourcefulbees:diamond_honeycomb"},
+      "defaultCombBlock": {"id":  "resourcefulbees:diamond_honeycomb_block"}
+    }
+  ]
+}

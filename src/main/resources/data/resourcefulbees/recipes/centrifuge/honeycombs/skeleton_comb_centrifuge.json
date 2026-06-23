@@ -1,0 +1,75 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "ingredient": { "item": "resourcefulbees:skeleton_honeycomb" },
+  "itemOutputs": [
+    {
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:bone_meal",
+            "count": 8
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:bone_meal",
+            "count": 4
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:bone_meal",
+            "count": 2
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:bone",
+            "count": 4
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:bone",
+            "count": 2
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:bone",
+            "count": 1
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "chance": 0.01,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:skeleton_skull",
+            "count": 1
+          }
+        }
+      ]
+    }
+  ],
+  "fluidOutputs": [
+    {
+      "pool": [
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+      ]
+    }
+  ],
+  "time": 200
+}

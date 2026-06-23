@@ -1,0 +1,9 @@
+{
+  "damageTypes": [
+    {
+      "damageType": "explosive",
+      "amplifier": 4
+    }
+  ],
+  "displayItem": "minecraft:tnt"
+}

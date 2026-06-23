@@ -1,0 +1,11 @@
+{
+  "damageImmunities": ["wither"],
+  "potionImmunities": ["minecraft:wither"],
+  "displayItem": "minecraft:wither_rose",
+  "potionDamageEffects": [
+    {
+      "effect": "minecraft:wither",
+      "strength": 1
+    }
+  ]
+}

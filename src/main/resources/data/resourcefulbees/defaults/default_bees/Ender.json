@@ -1,0 +1,49 @@
+{
+    "resourcefulbees:core/v1": {
+        "flower": ["minecraft:chorus_flower"],
+        "honeycombVariation": "ender",
+        "maxTimeInHive": 1800
+    },
+    "resourcefulbees:rendering/v1": {
+        "texture": "ender/ender_bee",
+        "model": "resourcefulbees:geo/dragon.geo.json",
+        "layers" : [
+            { "isPollen": true, "color": "#E69BFF", "texture": "custom_nectar" }
+        ],
+        "ColorData": {
+            "spawnEggPrimaryColor": "#339786",
+            "spawnEggSecondaryColor": "#303030",
+            "jarColor": "#339786"
+        }
+    },
+    "resourcefulbees:mutation/v1": {
+        "mutation": "resourcefulbees:mutations/ender"
+    },
+    "resourcefulbees:breeding/v1": {
+        "isBreedable": true,
+        "parents": [
+            {
+                "parent1": "ender",
+                "parent2": "ender"
+            }
+        ],
+        "feedItem": ["minecraft:end_stone"],
+        "feedAmount": 12
+    },
+    "resourcefulbees:trait/v1": {
+        "traits": ["ender"]
+    },
+    "resourcefulbees:trade/v1": {
+        "amount": {
+            "min": 1,
+            "max": 1
+        },
+        "secondaryItem": "minecraft:ender_pearl",
+        "secondaryItemCost": {
+            "min": 8,
+            "max": 16
+        },
+        "priceMultiplier": 4,
+        "maxTrades": 2
+    }
+}

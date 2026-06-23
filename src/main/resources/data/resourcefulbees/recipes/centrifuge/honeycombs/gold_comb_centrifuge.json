@@ -1,0 +1,66 @@
+{
+  "type": "resourcefulbees:centrifuge",
+  "ingredient": { "item": "resourcefulbees:gold_honeycomb" },
+  "itemOutputs": [
+    {
+      "chance": 0.70,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:raw_gold",
+            "count": 5
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:raw_gold",
+            "count": 3
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:raw_gold",
+            "count": 1
+          },
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "chance": 0.25,
+      "pool": [
+        {
+          "item": {
+            "id": "minecraft:raw_gold",
+            "count": 5
+          },
+          "weight": 5
+        },
+        {
+          "item": {
+            "id": "minecraft:raw_gold",
+            "count": 3
+          },
+          "weight": 25
+        },
+        {
+          "item": {
+            "id": "minecraft:raw_gold",
+            "count": 1
+          },
+          "weight": 50
+        }
+      ]
+    }
+  ],
+  "fluidOutputs": [
+    {
+      "pool": [
+        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+      ]
+    }
+  ],
+  "time": 200
+}

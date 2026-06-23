@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "M": {
+      "item": "resourcefulbees:waxed_machine_block"
+    },
+    "W": {
+      "item": "resourcefulbees:waxed_slab"
+    },
+    "H": {
+      "tag": "forge:honeycombs"
+    }
+  },
+  "pattern": [
+    "IHI",
+    "IMI",
+    "WWW"
+  ],
+  "result": {
+    "item": "resourcefulbees:centrifuge"
+  }
+}
