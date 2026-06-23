@@ -3,11 +3,9 @@ package com.teamresourceful.resourcefulbees.common.items;
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.HoneyDipperTranslations;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -27,7 +25,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
 import java.util.function.Function;
 
 public class HoneyDipperItem extends Item {
@@ -49,7 +46,7 @@ public class HoneyDipperItem extends Item {
             if (!(entity instanceof Bee bee)) return InteractionResult.FAIL;
 
             if (bee instanceof CustomBee customBee) {
-                if (clickedBlock.is(customBee.getCoreData().flowers())) {
+                if (customBee.getCoreData().isBlockFlower(clickedBlock)) {
                     setFlowerPosition(bee, context);
                     return InteractionResult.SUCCESS;
                 }

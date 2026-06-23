@@ -5,8 +5,7 @@
     "maxTimeInHive": 1200,
     "lore": [
       {
-        "text":"Reach for the stars!",
-        "color": "rainbow"
+        "text":"Reach for the stars!"
       },
       {
         "translate":"tooltip.resourcefulbees.bee.creator",
@@ -39,8 +38,8 @@
     "removeStingerOnAttack": false,
     "inflictsPoison": false,
     "attributes": {
-      "generic.attack_damage": 0,
-      "generic.max_health": 20
+      "attack_damage": 0,
+      "max_health": 20
     }
   },
   "resourcefulbees:mutation/v1": {

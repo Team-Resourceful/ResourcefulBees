@@ -189,7 +189,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         if (getCoreData().hasEntityFlower()) {
             return this.entityFlower.hasData() && this.level().getEntity(this.entityFlower.get()) != null;
         }
-        return WorldUtils.checkBlock(this.level(), pos, state -> state.is(getCoreData().flowers()));
+        return WorldUtils.checkBlock(this.level(), pos, getCoreData()::isBlockFlower);
     }
 
     @Override

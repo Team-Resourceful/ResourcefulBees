@@ -12,8 +12,8 @@ public class CustomHoneyBottleItem extends Item implements Tradeable, ColoredObj
 
     public final HoneyBottleData data;
 
-    public CustomHoneyBottleItem(HoneyBottleData data) {
-        super(new Item.Properties()
+    public CustomHoneyBottleItem(Item.Properties properties, HoneyBottleData data) {
+        super(properties
                 .craftRemainder(Items.GLASS_BOTTLE)
                 .food(data.food().getFood(), data.food().getConsumable())
                 .stacksTo(16)

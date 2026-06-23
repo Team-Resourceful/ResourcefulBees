@@ -27,6 +27,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public final class RegistryHandler {
 
@@ -65,9 +66,20 @@ public final class RegistryHandler {
     }
 
     private static void registerBee(String name, float sizeModifier) {
-        RegistryEntry<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.BEES.register(name + "_bee",
-                () -> CustomBeeEntityType.of(name, (type, level) -> new ResourcefulBee(type, level, name), 0.7F * sizeModifier, 0.6F * sizeModifier));
-        ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", () -> new SpawnEggItem(new Item.Properties().spawnEgg(beeEntityType.get())));
+        RegistryEntry<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.BEES.register(
+                name + "_bee",
+                () -> CustomBeeEntityType.of(
+                        name,
+                        (type, level) -> new ResourcefulBee(type, level, name),
+                        0.7F * sizeModifier,
+                        0.6F * sizeModifier
+                )
+        );
+        ModItems.SPAWN_EGG_ITEMS.register(
+                name + "_bee_spawn_egg",
+                SpawnEggItem::new,
+                () -> new Item.Properties().spawnEgg(beeEntityType.get())
+        );
         ModEntities.getModBees().put(name, beeEntityType);
     }
 
@@ -93,13 +105,25 @@ public final class RegistryHandler {
 
     private static void registerHoneyBlock(String name, CustomHoneyData input) {
         input.getOptionalData(CustomHoneyBlockData.SERIALIZER).ifPresent(data -> {
-            RegistryEntry<Block> block = ModBlocks.HONEY_BLOCKS.register(name + "_honey_block", () -> new CustomHoneyBlock(data));
-            ModItems.HONEY_BLOCK_ITEMS.register(name + "_honey_block", () -> new BlockItem(block.get(), new Item.Properties()));
+            RegistryEntry<Block> block = ModBlocks.HONEY_BLOCKS.register(
+                    name + "_honey_block",
+                    (properties) -> new CustomHoneyBlock(properties, data),
+                    BlockBehaviour.Properties::of
+            );
+            ModItems.HONEY_BLOCK_ITEMS.register(
+                    name + "_honey_block",
+                    (properties) -> new BlockItem(block.get(), properties),
+                    Item.Properties::new
+            );
         });
     }
 
     private static void registerHoneyBottle(String name, CustomHoneyData data) {
-        ModItems.HONEY_BOTTLE_ITEMS.register(name + "_honey_bottle", () -> new CustomHoneyBottleItem(data.getBottleData()));
+        ModItems.HONEY_BOTTLE_ITEMS.register(
+                name + "_honey_bottle",
+                (properties) -> new CustomHoneyBottleItem(properties, data.getBottleData()),
+                Item.Properties::new
+        );
     }
 
     private static void registerHoneyFluid(String name, CustomHoneyData data) {

@@ -20,11 +20,11 @@
     "removeStingerOnAttack": false,
     "inflictsPoison": false,
     "attributes": {
-      "generic.attack_damage": 0,
-      "generic.max_health": 2,
-      "generic.armor": 5,
-      "generic.armor_toughness": 10,
-      "generic.attack_knockback": 3
+      "attack_damage": 0,
+      "max_health": 2,
+      "armor": 5,
+      "armor_toughness": 10,
+      "attack_knockback": 3
     }
   },
   "resourcefulbees:mutation/v1": {

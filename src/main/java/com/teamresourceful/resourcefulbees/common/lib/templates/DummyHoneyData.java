@@ -36,7 +36,7 @@ public final class DummyHoneyData {
 
     private static final BeekeeperTradeData DEFAULT_TRADE = API.beekeeperTrade(
             UniformInt.of(1,1),
-            ItemStack.EMPTY,
+            Items.AIR,
             UniformInt.of(1,1),
             0,
             1,

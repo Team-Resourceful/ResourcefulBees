@@ -1,20 +1,23 @@
 package com.teamresourceful.resourcefulbees.api.data.bee.breeding;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
-import net.minecraft.core.HolderSet;
+import com.teamresourceful.resourcefulbees.api.data.shared.RegistryPredicate;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;
 import java.util.Set;
 
+@NullMarked
 public interface BeeBreedData extends BeeData<BeeBreedData> {
 
     Set<FamilyUnit> families();
 
-    HolderSet<Item> feedItems();
+    RegistryPredicate<Item> feedItems();
 
-    Optional<ItemStack> feedReturnItem();
+    Optional<ItemStackTemplate> feedReturnItem();
 
     int feedAmount();
 
@@ -25,6 +28,6 @@ public interface BeeBreedData extends BeeData<BeeBreedData> {
     boolean hasParents();
 
     default boolean isFood(ItemStack stack) {
-        return feedItems().contains(stack.getItem().builtInRegistryHolder());
+        return feedItems().test(stack);
     }
 }

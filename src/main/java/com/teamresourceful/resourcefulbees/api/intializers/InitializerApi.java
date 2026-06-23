@@ -14,13 +14,14 @@ import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeColorData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerTexture;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
+import com.teamresourceful.resourcefulbees.api.data.shared.RegistryPredicate;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedItemPredicate;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.exceptions.ValidationException;
-import net.minecraft.core.HolderSet;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -28,9 +29,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -59,66 +62,82 @@ public class InitializerApi {
     private Initializers.BreedInitializer breeding;
     private Initializers.FamilyUnitInitializer familyUnit;
 
+    @NullMarked
     public CustomBeeData data(String name, Map<Identifier, BeeData<?>> data) {
         return this.data.create(name, data);
     }
 
-    public BeeCombatData combat(boolean isPassive, boolean removeStingerOnAttack, boolean inflictsPoison, boolean isInvulnerable, Map<Attribute, Double> attributes) {
+    @NullMarked
+    public BeeCombatData combat(boolean isPassive, boolean removeStingerOnAttack, boolean inflictsPoison, boolean isInvulnerable, Map<Holder<Attribute>, Double> attributes) {
         return this.combat.create(isPassive, removeStingerOnAttack, inflictsPoison, isInvulnerable, attributes);
     }
 
-    public BeeCoreData core(String honeycomb, HolderSet<Block> flowers, HolderSet<EntityType<?>> entityFlowers, int maxTimeInHive, List<Component> lore) {
+    @NullMarked
+    public BeeCoreData core(String honeycomb, RegistryPredicate<Block> flowers, RegistryPredicate<EntityType<?>> entityFlowers, int maxTimeInHive, List<Component> lore) {
         return this.core.create(honeycomb, flowers, entityFlowers, maxTimeInHive, lore);
     }
 
-    public BeekeeperTradeData beekeeperTrade(UniformInt amount, ItemStack secondaryItem, UniformInt secondaryItemCost, float priceMultiplier, int maxTrades, int xp) {
+    @NullMarked
+    public BeekeeperTradeData beekeeperTrade(UniformInt amount, Item secondaryItem, UniformInt secondaryItemCost, float priceMultiplier, int maxTrades, int xp) {
         return this.beekeeperTrade.create(amount, secondaryItem, secondaryItemCost, priceMultiplier, maxTrades, xp);
     }
 
+    @NullMarked
     public BeeTraitData trait(int range, Set<String> traits) {
         return this.traits.create(range, traits);
     }
 
+    @NullMarked
     public BeeRenderData render(Set<BeeLayerData> layers, BeeColorData colorData, Identifier model, BeeLayerTexture texture, Identifier animations, float sizeModifier) {
         return this.render.create(layers, colorData, model, texture, animations, sizeModifier);
     }
 
+    @NullMarked
     public BeeLayerTexture layerTexture(Identifier texture, Identifier angryTexture) {
         return this.layerTexture.create(texture, angryTexture);
     }
 
+    @NullMarked
     public BeeLayerData layer(Color color, BeeLayerTexture texture, LayerEffect effect, boolean pollenLayer, float pulseFrequency) {
         return this.layer.create(color, texture, effect, pollenLayer, pulseFrequency);
     }
 
+    @NullMarked
     public BeeColorData color(Color primarySpawnEggColor, Color secondarySpawnEggColor, Color jarColor) {
         return this.color.create(primarySpawnEggColor, secondarySpawnEggColor, jarColor);
     }
 
+    @NullMarked
     public BeeMutationData mutation(int count, Identifier id) {
         return this.mutation.create(count, id);
     }
 
+    @NullMarked
     public MutationType blockMutation(RestrictedBlockPredicate block, double chance, double weight) {
         return this.blockMutation.create(block, chance, weight);
     }
 
+    @NullMarked
     public MutationType itemMutation(RestrictedItemPredicate item, double chance, double weight) {
         return this.itemMutation.create(item, chance, weight);
     }
 
+    @NullMarked
     public MutationType fluidMutation(Fluid fluid, double chance, double weight) {
         return this.fluidMutation.create(fluid, chance, weight);
     }
 
+    @NullMarked
     public MutationType entityMutation(RestrictedEntityPredicate entity, double chance, double weight) {
         return this.entityMutation.create(entity, chance, weight);
     }
 
-    public BeeBreedData breeding(Set<FamilyUnit> families, HolderSet<Item> feedItems, Optional<ItemStack> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
+    @NullMarked
+    public BeeBreedData breeding(Set<FamilyUnit> families, RegistryPredicate<Item> feedItems, Optional<ItemStackTemplate> feedReturnItem, int feedAmount, int childGrowthDelay, int breedDelay) {
         return this.breeding.create(families, feedItems, feedReturnItem, feedAmount, childGrowthDelay, breedDelay);
     }
 
+    @NullMarked
     public FamilyUnit familyUnit(double weight, double chance, String parent1, String parent2, String childName) {
         return this.familyUnit.create(weight, chance, parent1, parent2, childName);
     }

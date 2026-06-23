@@ -257,11 +257,11 @@ public class ModBeePollinateGoal extends Goal {
 
     public Predicate<BlockPos> getFlowerBlockPredicate() {
         return pos -> {
-            if (bee.getCoreData().flowers().size() > 0){
+            if (bee.getCoreData().hasBlockFlowers()){
                 if (!bee.level().isInWorldBounds(pos)) return false;
                 BlockState state = bee.level().getBlockState(pos);
                 if (state.isAir()) return false;
-                return state.is(bee.getCoreData().flowers());
+                return bee.getCoreData().isBlockFlower(state);
             }
             return false;
         };

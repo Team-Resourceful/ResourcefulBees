@@ -23,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.Vec3;
@@ -40,8 +41,8 @@ public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable,
     protected final Color color;
     protected final HoneyBlockData data;
 
-    public CustomHoneyBlock(HoneyBlockData data) {
-        super(Properties.of().speedFactor(data.speedFactor()).jumpFactor(data.jumpFactor()).noOcclusion().sound(SoundType.HONEY_BLOCK));
+    public CustomHoneyBlock(BlockBehaviour.Properties properties, HoneyBlockData data) {
+        super(properties.speedFactor(data.speedFactor()).jumpFactor(data.jumpFactor()).noOcclusion().sound(SoundType.HONEY_BLOCK));
         this.color = data.color();
         this.data = data;
     }

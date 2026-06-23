@@ -23,7 +23,7 @@
             }
         ],
         "isBreedable": true,
-        "feedItem": "minecraft:flowers",
+        "feedItem": "#minecraft:flowers",
         "feedAmount": 8
     },
     "resourcefulbees:trade/v1": {

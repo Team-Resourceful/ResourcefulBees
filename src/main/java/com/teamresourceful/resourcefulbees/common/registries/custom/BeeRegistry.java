@@ -72,14 +72,14 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      */
     public void regenerateCustomBeeData(RegistryAccess access) {
         DynamicOps<JsonElement> ops = access == null ? JsonOps.INSTANCE : RegistryOps.create(JsonOps.INSTANCE, access);
-        RAW_DATA.forEach((s, jsonObject) -> CUSTOM_DATA.compute(s, (s1, customBeeDataCodec) -> parseData(s, ops, jsonObject)));
+        RAW_DATA.forEach((id, json) -> CUSTOM_DATA.compute(id, (_, _) -> parseData(id, ops, json)));
         buildFamilyTree();
     }
 
     private static CustomBeeData parseData(String id, DynamicOps<JsonElement> ops, JsonObject jsonObject) {
         var data = new DispatchMapCodec<>(Identifier.CODEC, BeeDataRegistry.codec(id))
                 .parse(ops, jsonObject)
-                .getOrThrow(s -> new ValidationException(String.format("Could not create Custom Bee Data for %s bee", id)));
+                .getOrThrow(s -> new ValidationException(String.format("Could not create Custom Bee Data for %s bee with reason: %s", id, s)));
         return ResourcefulBeesAPI.getInitializers().data(id, data);
     }
 

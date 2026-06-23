@@ -40,6 +40,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.ValueInput;
@@ -233,7 +234,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
         if (this.isFood(itemstack)) {
             if (!this.level().isClientSide() && this.getAge() == 0 && !this.isInLove()) {
                 this.usePlayerItem(player, hand, itemstack);
-                getBreedData().feedReturnItem().map(ItemStack::copy).ifPresent(player::addItem);
+                getBreedData().feedReturnItem().map(ItemStackTemplate::create).ifPresent(player::addItem);
                 this.addFeedCount();
                 if (this.getFeedCount() >= getBreedData().feedAmount()) {
                     this.setInLove(player);

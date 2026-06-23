@@ -5,8 +5,7 @@
         "maxTimeInHive": 600,
         "lore": [
             {
-                "text":"Bunny Bun Bun.",
-                "color": "rainbow"
+                "text":"Bunny Bun Bun."
             },
             {
                 "translate":"tooltip.resourcefulbees.bee.creator",
@@ -31,8 +30,8 @@
         "removeStingerOnAttack": false,
         "inflictsPoison": false,
         "attributes": {
-            "generic.attack_damage": 0,
-            "generic.max_health": 20
+            "attack_damage": 0,
+            "max_health": 20
         },
         "isPassive": true
     }

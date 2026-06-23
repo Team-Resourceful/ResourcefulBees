@@ -3,7 +3,9 @@ package com.teamresourceful.resourcefulbees.api.data;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.trading.MerchantOffer;
 
 public interface BeekeeperTradeData extends BeeData<BeekeeperTradeData> {
@@ -12,7 +14,7 @@ public interface BeekeeperTradeData extends BeeData<BeekeeperTradeData> {
 
     UniformInt amount();
 
-    ItemStack secondaryItem();
+    Item secondaryItem();
 
     UniformInt secondaryItemCost();
 

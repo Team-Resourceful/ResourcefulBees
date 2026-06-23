@@ -31,7 +31,7 @@
         "parent2": "skeleton"
       }
     ],
-    "feedItem": "forge:ores"
+    "feedItem": "#forge:ores"
   },
   "resourcefulbees:trade/v1": {
     "amount": {

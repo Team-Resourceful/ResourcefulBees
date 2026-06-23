@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerTexture;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
+import com.teamresourceful.resourcefulbees.api.data.shared.RegistryPredicate;
 import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
@@ -16,15 +17,13 @@ import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import net.minecraft.core.HolderSet;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -39,18 +38,17 @@ public final class DummyBeeData {
 
     private static final InitializerApi API = ResourcefulBeesAPI.getInitializers();
 
-    private static ItemStack getBucketWithNbt() {
-        ItemStack bucket = Items.BUCKET.getDefaultInstance();
+    private static ItemStackTemplate getBucketWithNbt() {
         //CompoundTag nbt = new CompoundTag();
         //nbt.putString("this_is", "an_nbt_tag");
         //bucket.setTag(nbt);
-        return bucket;
+        return new ItemStackTemplate(Items.BUCKET);
     }
 
     private static final BeeCoreData CORE_DATA = API.core(
             "dummy_honeycomb",
-            HolderSet.direct(Block::builtInRegistryHolder, Blocks.DIAMOND_BLOCK, Blocks.EMERALD_BLOCK),
-            HolderSet.direct(EntityType::builtInRegistryHolder, EntityType.COW, EntityType.SHEEP),
+            RegistryPredicate.create(Block::builtInRegistryHolder, Blocks.DIAMOND_BLOCK, Blocks.EMERALD_BLOCK),
+            RegistryPredicate.create(EntityType::builtInRegistryHolder, EntityType.COW, EntityType.SHEEP),
             4000,
             List.of(
                 Component.literal("This is a bee template"),
@@ -78,7 +76,7 @@ public final class DummyBeeData {
                 API.familyUnit(75, 0.67, "diamond", "coal", "compressed_diamond"),
                 API.familyUnit(24, 0.67, "diamond", "diamond", "compressed_diamond")
             ),
-            HolderSet.direct(Item::builtInRegistryHolder, Items.POPPY, Items.CARROT),
+            RegistryPredicate.create(Item::builtInRegistryHolder, Items.POPPY, Items.CARROT),
             Optional.of(getBucketWithNbt()),
             2,
             -45_000,
@@ -91,14 +89,14 @@ public final class DummyBeeData {
             true,
             false,
             Util.make(new HashMap<>(), map -> {
-                map.put(Attributes.MAX_HEALTH.value(), 10d);
-                map.put(Attributes.FLYING_SPEED.value(), 0.6D);
-                map.put(Attributes.MOVEMENT_SPEED.value(), 0.3D);
-                map.put(Attributes.ATTACK_DAMAGE.value(), 1d);
-                map.put(Attributes.FOLLOW_RANGE.value(), 48D);
-                map.put(Attributes.ARMOR.value(), 0d);
-                map.put(Attributes.ARMOR_TOUGHNESS.value(), 0d);
-                map.put(Attributes.ATTACK_KNOCKBACK.value(), 0d);
+                map.put(Attributes.MAX_HEALTH, 10d);
+                map.put(Attributes.FLYING_SPEED, 0.6D);
+                map.put(Attributes.MOVEMENT_SPEED, 0.3D);
+                map.put(Attributes.ATTACK_DAMAGE, 1d);
+                map.put(Attributes.FOLLOW_RANGE, 48D);
+                map.put(Attributes.ARMOR, 0d);
+                map.put(Attributes.ARMOR_TOUGHNESS, 0d);
+                map.put(Attributes.ATTACK_KNOCKBACK, 0d);
             })
     );
 

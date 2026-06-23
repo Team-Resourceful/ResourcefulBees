@@ -9,9 +9,14 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.bounds.UniformedNumberCodecs;
 import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 
@@ -19,7 +24,7 @@ import java.util.Optional;
 
 public record TradeData(
         UniformInt amount,
-        ItemStack secondaryItem,
+        Item secondaryItem,
         UniformInt secondaryItemCost,
         float priceMultiplier,
         int maxTrades,
@@ -30,7 +35,7 @@ public record TradeData(
         product.setCount(amount().sample(random));
         return new MerchantOffer(
                 new ItemCost(ModItems.GOLD_FLOWER_ITEM.get(), random.nextIntBetweenInclusive(flowerMin, flowerMax)),
-                Optional.of(new ItemCost(secondaryItem().getItem(), secondaryItemCost().sample(random))),
+                Optional.of(new ItemCost(secondaryItem(), secondaryItemCost().sample(random))),
                 product,
                 0, maxTrades, xp, priceMultiplier
         );
@@ -43,16 +48,16 @@ public record TradeData(
 
     public static final Codec<BeekeeperTradeData> CODEC = RecordCodecBuilder.create(tradeDataInstance -> tradeDataInstance.group(
             UniformedNumberCodecs.rangedUniformIntCodec(1, 64).optionalFieldOf("amount", UniformInt.of(1,1)).forGetter(BeekeeperTradeData::amount),
-            ItemStackCodec.CODEC.optionalFieldOf("secondaryItem", ItemStack.EMPTY).forGetter(BeekeeperTradeData::secondaryItem),
+            BuiltInRegistries.ITEM.byNameCodec().optionalFieldOf("secondaryItem", Items.AIR).forGetter(BeekeeperTradeData::secondaryItem),
             UniformedNumberCodecs.rangedUniformIntCodec(1, 64).optionalFieldOf("secondaryItemCost", UniformInt.of(1, 4)).forGetter(BeekeeperTradeData::secondaryItemCost),
-            CodecExtras.FLOAT_UNIT_INTERVAL.optionalFieldOf("priceMultiplier", 0.05f).forGetter(BeekeeperTradeData::priceMultiplier),
+            CodecExtras.NON_NEGATIVE_FLOAT.optionalFieldOf("priceMultiplier", 0.05f).forGetter(BeekeeperTradeData::priceMultiplier),
             Codec.intRange(1, 64).optionalFieldOf("maxTrades", 8).forGetter(BeekeeperTradeData::maxTrades),
             Codec.intRange(1, 64).optionalFieldOf("xp", 3).forGetter(BeekeeperTradeData::xp)
     ).apply(tradeDataInstance, TradeData::new));
 
-    public static final BeekeeperTradeData DEFAULT = new TradeData(UniformInt.of(0,0), ItemStack.EMPTY, UniformInt.of(0,0), 0, 0, 0);
+    public static final BeekeeperTradeData DEFAULT = new TradeData(UniformInt.of(0,0), Items.AIR, UniformInt.of(0,0), 0, 0, 0);
 
-    public static final BeeDataSerializer<BeekeeperTradeData> SERIALIZER = BeeDataSerializer.of(ModIdentifier.of("trade"), 1, id -> CODEC, DEFAULT);
+    public static final BeeDataSerializer<BeekeeperTradeData> SERIALIZER = BeeDataSerializer.of(ModIdentifier.of("trade"), 1, _ -> CODEC, DEFAULT);
 
     @Override
     public BeeDataSerializer<BeekeeperTradeData> serializer() {

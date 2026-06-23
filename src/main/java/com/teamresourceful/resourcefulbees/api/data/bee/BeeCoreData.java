@@ -2,33 +2,40 @@ package com.teamresourceful.resourcefulbees.api.data.bee;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
+import com.teamresourceful.resourcefulbees.api.data.shared.RegistryPredicate;
 import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
-import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Optional;
 
+@NullMarked
 public interface BeeCoreData extends BeeData<BeeCoreData> {
 
     String honeycomb();
 
-    HolderSet<Block> flowers();
+    RegistryPredicate<Block> blockFlowers();
 
-    default boolean hasFlowers() {
-        return flowers().size() > 0;
+    default boolean hasBlockFlowers() {
+        return blockFlowers().populated();
     }
 
-    HolderSet<EntityType<?>> entityFlowers();
+    default boolean isBlockFlower(BlockState state) {
+        return blockFlowers().test(state);
+    }
+
+    RegistryPredicate<EntityType<?>> entityFlowers();
 
     default boolean hasEntityFlower() {
-        return entityFlowers().size() > 0;
+        return entityFlowers().populated();
     }
 
     default boolean isEntityFlower(EntityType<?> entityType) {
-        return entityFlowers().contains(entityType.builtInRegistryHolder());
+        return entityFlowers().test(entityType.builtInRegistryHolder());
     }
 
     int maxTimeInHive();

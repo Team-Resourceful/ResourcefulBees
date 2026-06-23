@@ -34,7 +34,7 @@
     "removeStingerOnAttack": false,
     "inflictsPoison": false,
     "attributes": {
-      "generic.attack_damage": 0
+      "attack_damage": 0
     }
   }
 }
