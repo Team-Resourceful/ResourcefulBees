@@ -13,15 +13,16 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
-import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import com.teamresourceful.resourcefullib.common.registry.builtin.ResourcefulItemRegistry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.HangingSignItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SignItem;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.level.block.Block;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -233,34 +234,30 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
 //    public static final RegistryEntry<Item> HONEY_BUCKET = ITEMS.register("honey_bucket", () -> new FluidBucketItem(ModFluidProperties.HONEY, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     //region Special Items
-/*    public static final RegistryEntry<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", () -> new SpecialFoodItem(
-                    new Item.Properties().rarity(Rarity.EPIC),
-                    builder -> builder
-                            .effect(new MobEffectInstance(MobEffects.REGENERATION, 600, 1), 1)
-                            .effect(new MobEffectInstance(MobEffects.ABSORPTION, 2400, 3), 1)
-                            .effect(new MobEffectInstance(MobEffects.SATURATION, 2400, 1), 1)
-                            .effect(new MobEffectInstance(MobEffects.LUCK, 600, 3), 1)
-                            .effect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 6000, 0), 1)
-                            .effect(new MobEffectInstance(MobEffects.RESISTANCE, 6000, 0), 1)
-                            .effect(new MobEffectInstance(MobEffects.WATER_BREATHING, 6000, 0), 1)
-                            .effect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1200, 0), 1)
-                            .nutrition(8)
-                            .saturationModifier(2)
-                            .alwaysEdible()
-            )
-    );
+    public static final FoodProperties OREO_FOOD_PROPERTIES = new FoodProperties(8, 2f, true);
 
-    public static final RegistryEntry<Item> STRAWBEERRY_MILKSHAKE = ITEMS.register("strawbeerry_milkshake", () -> new SpecialFoodItem(
-                    new Item.Properties().rarity(Rarity.EPIC),
-                    builder -> builder
-                            .effect(new MobEffectInstance(MobEffects.REGENERATION, 1200, 1), 1)
-                            .effect(new MobEffectInstance(MobEffects.LUCK, 1200, 0), 0)
-                            .effect(new MobEffectInstance(MobEffects.JUMP_BOOST, 1200, 1), 1)
-                            .nutrition(6)
-                            .saturationModifier(1.5f)
-                            .alwaysEdible()
-            )
-    );*/
+    public static final Consumable OREO_CONSUMABLE = Consumable.builder().onConsume(new ApplyStatusEffectsConsumeEffect(List.of(
+            new MobEffectInstance(MobEffects.REGENERATION, 600, 1),
+            new MobEffectInstance(MobEffects.ABSORPTION, 2400, 3),
+            new MobEffectInstance(MobEffects.SATURATION, 2400, 1),
+            new MobEffectInstance(MobEffects.LUCK, 600, 1),
+            new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 6000, 1),
+            new MobEffectInstance(MobEffects.RESISTANCE, 6000, 1),
+            new MobEffectInstance(MobEffects.WATER_BREATHING, 6000, 1),
+            new MobEffectInstance(MobEffects.NIGHT_VISION, 1200, 1)
+    ))).build();
 
+    public static final RegistryEntry<Item> OREO_COOKIE = ITEMS.register("oreo_cookie", Item::new, () -> new Item.Properties().rarity(Rarity.EPIC).food(OREO_FOOD_PROPERTIES, OREO_CONSUMABLE));
 
+    public static final FoodProperties STRAWBEERRY_MILKSHAKE_PROPERTIES = new FoodProperties(6, 1.5f, true);
+
+    public static final Consumable STRAWBEERRY_MILKSHAKE_CONSUMABLE = Consumable.builder().onConsume(new ApplyStatusEffectsConsumeEffect(List.of(
+            new MobEffectInstance(MobEffects.REGENERATION, 1200, 1),
+            new MobEffectInstance(MobEffects.LUCK, 1200, 1),
+            new MobEffectInstance(MobEffects.JUMP_BOOST, 1200, 1)
+    ))).build();
+
+    public static final RegistryEntry<Item> STRAWBEERRY_MILKSHAKE = ITEMS.register("strawbeerry_milkshake", Item::new,
+            () -> new Item.Properties().rarity(Rarity.EPIC).food(STRAWBEERRY_MILKSHAKE_PROPERTIES,
+                    STRAWBEERRY_MILKSHAKE_CONSUMABLE));
 }
