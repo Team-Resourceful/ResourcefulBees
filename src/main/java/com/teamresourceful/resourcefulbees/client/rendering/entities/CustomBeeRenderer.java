@@ -1,26 +1,29 @@
-//package com.teamresourceful.resourcefulbees.client.rendering.entities;
-//
-//import com.geckolib.cache.model.BakedGeoModel;
-//import com.mojang.blaze3d.vertex.PoseStack;
-//import com.mojang.blaze3d.vertex.VertexConsumer;
-//import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
-//import com.teamresourceful.resourcefulbees.client.rendering.entities.layers.CustomBeeLayer;
-//import com.teamresourceful.resourcefulbees.client.rendering.entities.models.CustomBeeModel;
-//import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
-//import net.minecraft.client.renderer.MultiBufferSource;
-//import net.minecraft.client.renderer.entity.EntityRendererProvider;
-//import net.minecraft.client.renderer.rendertype.RenderType;
-//import net.minecraft.resources.Identifier;
-//import org.jetbrains.annotations.NotNull;
-//import org.jetbrains.annotations.Nullable;
-//import com.geckolib.renderer.GeoEntityRenderer;
-//
-//public class CustomBeeRenderer<E extends CustomBeeEntity> extends GeoEntityRenderer<E> {
-//
-//    public CustomBeeRenderer(EntityRendererProvider.Context ctx, BeeRenderData renderData) {
-//        super(ctx, new CustomBeeModel<>());
-//        renderData.layers().stream().limit(6).forEach(layerData -> addRenderLayer(new CustomBeeLayer<>(this, renderData, layerData)));
-//    }
+package com.teamresourceful.resourcefulbees.client.rendering.entities;
+
+import com.geckolib.cache.model.BakedGeoModel;
+import com.geckolib.renderer.base.GeoRenderState;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
+import com.teamresourceful.resourcefulbees.client.rendering.entities.layers.CustomBeeLayer;
+import com.teamresourceful.resourcefulbees.client.rendering.entities.models.CustomBeeModel;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import com.geckolib.renderer.GeoEntityRenderer;
+import org.jspecify.annotations.NonNull;
+
+public class CustomBeeRenderer<R extends EntityRenderState & GeoRenderState> extends GeoEntityRenderer<CustomBeeEntity, @NonNull R> {
+
+    public CustomBeeRenderer(EntityRendererProvider.Context ctx, BeeRenderData renderData) {
+        super(ctx, new CustomBeeModel<>());
+        renderData.layers().stream().limit(6).forEach(layerData -> withRenderLayer(new CustomBeeLayer<>(this, layerData)));
+    }
 //
 //    @Override
 //    public void reRender(BakedGeoModel model, PoseStack poseStack, MultiBufferSource bufferSource, E bee, RenderType renderType, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay, int color) {
@@ -42,4 +45,4 @@
 //    public RenderType getRenderType(E animatable, Identifier texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
 //        return RenderType.entityTranslucent(getTextureLocation(animatable));
 //    }
-//}
+}

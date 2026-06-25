@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.api.registry;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -65,5 +66,5 @@ public interface HoneycombRegistry {
      */
     Set<String> getHoneycombTypes();
 
-    void validateDefaults(String id, Optional<ItemStack> defaultComb, Optional<ItemStack> defaultCombBlock);
+    void validateDefaults(String id, Optional<ItemStackTemplate> defaultComb, Optional<ItemStackTemplate> defaultCombBlock);
 }

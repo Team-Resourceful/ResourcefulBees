@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -174,7 +175,7 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
     private static final boolean DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK = DEFAULT_APIARY_OUTPUT_TYPES.contains(ApiaryOutputType.BLOCK);
 
     @Override
-    public void validateDefaults(String id, Optional<ItemStack> defaultComb, Optional<ItemStack> defaultCombBlock) {
+    public void validateDefaults(String id, Optional<ItemStackTemplate> defaultComb, Optional<ItemStackTemplate> defaultCombBlock) {
         if (DEFAULT_OUTPUT_TYPE_INCLUDES_COMB && defaultComb.isEmpty()) {
             throw new IllegalArgumentException(id + " : Default comb must be present when list is empty and config contains combs!!!");
         } else if (DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK && defaultCombBlock.isEmpty()) {

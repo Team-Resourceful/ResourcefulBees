@@ -28,6 +28,8 @@ import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -36,7 +38,6 @@ import java.nio.file.Paths;
 
 public final class GameSetup {
 
-    //TODO Change to common tag for forge and fabric.
     private static final TagKey<Item> HONEY_BOTTLE_TAG = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "honey_bottles"));
 
     private GameSetup() throws UtilityClassException {
@@ -55,7 +56,7 @@ public final class GameSetup {
         RegisterSpawnPlacementsEvent.EVENT.addListener(GameSetup::initSpawns);
         //RegisterReloadListenerEvent.EVENT.addListener(RecipeBuilder::registerReloadListeners);
         //RegisterVillagerTradesEvent.EVENT.addListener(Beekeeper::setupBeekeeper);
-        RegisterEntityAttributesEvent.EVENT.addListener(GameSetup::registerAttributes);
+        //RegisterEntityAttributesEvent.EVENT.addListener(GameSetup::registerAttributes);
         RegisterHiveBreakBlocksEvent.EVENT.addListener(GameSetup::onHiveBreakConversions);
         RegisterRepositorySourceEvent.EVENT.addListener(GameSetup::registerRepositorySources);
     }
@@ -92,8 +93,8 @@ public final class GameSetup {
         );
     }
 
-    public static void registerAttributes(RegisterEntityAttributesEvent event) {
-        ModEntities.getModBees().forEach((s, entityType) -> event.register(
+    public static void registerAttributes(EntityAttributeCreationEvent event) {
+        ModEntities.getModBees().forEach((s, entityType) -> event.put(
                 entityType.get(),
                 BeeRegistry.get().getBeeData(s).getCombatData().buildAttributes(Mob.createMobAttributes()).build()
         ));

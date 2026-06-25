@@ -1,8 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.items.honey;
 
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
+import com.teamresourceful.resourcefulbees.common.config.HoneycombConfig;
 import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
 import com.teamresourceful.resourcefullib.common.color.Color;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +21,10 @@ public class CustomHoneycombItem extends HoneycombItem implements Tradeable, Col
     private final BeekeeperTradeData tradeData;
 
     public CustomHoneycombItem(Color color, boolean isEdible, Supplier<Item> storageBlock, boolean enchanted, BeekeeperTradeData tradeData, Properties properties) {
+        if (HoneycombConfig.honeycombsEdible && isEdible) {
+            //todo make food properties configurable per comb maybe?
+            properties.food(new FoodProperties(HoneycombConfig.honeycombHunger,HoneycombConfig.honeycombSaturation,false));
+        }
         super(properties);
         this.color = color;
         this.isEdible = isEdible;

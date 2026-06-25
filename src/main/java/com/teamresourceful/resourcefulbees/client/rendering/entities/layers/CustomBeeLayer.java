@@ -1,35 +1,54 @@
-//package com.teamresourceful.resourcefulbees.client.rendering.entities.layers;
-//
-//import com.geckolib.cache.model.BakedGeoModel;
-//import com.mojang.blaze3d.vertex.PoseStack;
-//import com.mojang.blaze3d.vertex.VertexConsumer;
-//import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
-//import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
-//import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
-//import net.minecraft.client.renderer.MultiBufferSource;
-//import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-//import net.minecraft.client.renderer.rendertype.RenderType;
-//import net.minecraft.client.renderer.texture.OverlayTexture;
-//import net.minecraft.resources.Identifier;
-//import com.geckolib.renderer.base.GeoRenderer;
-//import com.geckolib.renderer.layer.GeoRenderLayer;
-//
-//import java.awt.*;
-//
-//public class CustomBeeLayer<E extends CustomBeeEntity> extends GeoRenderLayer<E> {
-//
-//    private final BeeRenderData renderData;
-//    private final BeeLayerData layerData;
-//    private final GeoRenderer<E> renderer;
-//
-//    public CustomBeeLayer(GeoRenderer<E> renderer, BeeRenderData renderData, BeeLayerData layerData) {
-//        super(renderer);
-//        this.renderData = renderData;
-//        this.layerData = layerData;
-//        this.renderer = renderer;
-//    }
-//
-//    @Override
+package com.teamresourceful.resourcefulbees.client.rendering.entities.layers;
+
+import com.geckolib.cache.model.BakedGeoModel;
+import com.geckolib.constant.DataTickets;
+import com.geckolib.renderer.base.GeoRenderState;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
+import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.Identifier;
+import com.geckolib.renderer.base.GeoRenderer;
+import com.geckolib.renderer.layer.GeoRenderLayer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import java.awt.*;
+
+public class CustomBeeLayer<E extends CustomBeeEntity, R extends EntityRenderState & GeoRenderState> extends GeoRenderLayer<CustomBeeEntity, Void, @NonNull R> {
+
+    private final BeeLayerData layerData;
+
+    public CustomBeeLayer(GeoRenderer<CustomBeeEntity, Void, @NonNull R> renderer,  BeeLayerData layerData) {
+        super(renderer);
+        this.layerData = layerData;
+    }
+
+    @Override
+    public void addRenderData(CustomBeeEntity bee, @Nullable Void relatedObject, @NonNull R renderState, float partialTick) {
+        if (!bee.hasNectar() && layerData.pollenLayer()) return;
+        switch (layerData.effect()) {
+            case NONE -> {
+                return;
+            }
+            case GLOW -> {
+                if (layerData.pulseFrequency() == 0 || bee.tickCount % layerData.pulseFrequency() == 0.0f) {
+                    renderState.addGeckolibData(DataTickets.PACKED_LIGHT, 15728640);
+                }
+            }
+            case ENCHANTED -> renderState.addGeckolibData(DataTickets.IS_ENCHANTED, true);
+        }
+
+        renderState.addGeckolibData(DataTickets.RENDER_COLOR, layerData.color().getValue());
+    }
+
+    //    @Override
 //    public void render(PoseStack stack, E bee, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource buffer, VertexConsumer consumer, float partialTicks, int packedLight, int packedOverlay) {
 //        if (!bee.hasNectar() && layerData.pollenLayer()) return;
 //        Identifier texture = layerData.texture().getTexture(bee);
@@ -61,4 +80,4 @@
 //                packedLight, bee1, new Color(layerData, layerData1, layerData2, alpha).getRGB()); //TODO dont create a new color object!
 //                //layerData, layerData1, layerData2, alpha);
 //    }
-//}
+}

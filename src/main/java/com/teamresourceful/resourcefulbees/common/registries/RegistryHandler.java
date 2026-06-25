@@ -75,10 +75,7 @@ public final class RegistryHandler {
                         0.6F * sizeModifier
                 )
         );
-        ModItems.SPAWN_EGG_ITEMS.register(
-                name + "_bee_spawn_egg",
-                SpawnEggItem::new,
-                () -> new Item.Properties().spawnEgg(beeEntityType.get())
+        ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", SpawnEggItem::new, () -> new Item.Properties().spawnEgg(beeEntityType.get())
         );
         ModEntities.getModBees().put(name, beeEntityType);
     }

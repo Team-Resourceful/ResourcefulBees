@@ -1,5 +1,8 @@
 package com.teamresourceful.resourcefulbees;
 
+import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -7,6 +10,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
@@ -27,5 +31,12 @@ public class ResourcefulBeesClient {
         // Some client setup code
         ResourcefulBees.LOGGER.info("HELLO FROM CLIENT SETUP");
         ResourcefulBees.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+    }
+
+    @SubscribeEvent // on the mod event bus only on the physical client
+    public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        ModEntities.getModBees().forEach((s, entityType) ->
+                event.registerEntityRenderer(entityType.get(), manager -> new CustomBeeRenderer<>(manager, BeeRegistry.get().getBeeData(s).getRenderData()))
+        );
     }
 }
