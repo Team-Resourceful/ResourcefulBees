@@ -5,7 +5,7 @@
     },
     "resourcefulbees:rendering/v1": {
         "texture": "icy/icy_bee",
-        "model": "resourcefulbees:geo/slime.geo.json",
+        "model": "resourcefulbees:slime",
         "ColorData": {
             "spawnEggPrimaryColor": "#92b9fe",
             "spawnEggSecondaryColor": "#303030",

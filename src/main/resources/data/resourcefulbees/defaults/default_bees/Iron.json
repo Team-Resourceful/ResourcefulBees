@@ -6,7 +6,7 @@
     },
     "resourcefulbees:rendering/v1": {
         "texture": "ores/iron/iron_bee",
-        "model": "resourcefulbees:geo/ore.geo.json",
+        "model": "resourcefulbees:ore",
         "layers" : [
             { "isPollen": true, "color": "#E2C0AA", "texture": "custom_nectar" }
         ],

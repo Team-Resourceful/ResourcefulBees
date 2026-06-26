@@ -6,7 +6,7 @@
   },
   "resourcefulbees:rendering/v1": {
     "texture": "mushroom/bee_red",
-    "model": "resourcefulbees:geo/flower_moss.geo.json",
+    "model": "resourcefulbees:flower_moss",
     "layers" : [
       { "isPollen": true, "color": "#FFDCC4", "texture": "custom_nectar" }
     ],

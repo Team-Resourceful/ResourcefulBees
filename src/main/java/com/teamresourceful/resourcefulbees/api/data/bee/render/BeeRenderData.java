@@ -15,7 +15,7 @@ public interface BeeRenderData extends BeeData<BeeRenderData> {
 
     BeeLayerTexture texture();
 
-    Identifier animations();
+    Identifier animation();
 
     float sizeModifier();
 }

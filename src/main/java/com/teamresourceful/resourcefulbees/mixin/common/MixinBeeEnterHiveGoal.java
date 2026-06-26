@@ -36,6 +36,7 @@ public abstract class MixinBeeEnterHiveGoal {
     )
     public void onCanBeeUse(CallbackInfoReturnable<Boolean> cir) {
         //noinspection ConstantConditions
+        if (this$0.getHivePos() == null) return;
         BlockEntity blockEntity = this$0.level().getBlockEntity(this$0.getHivePos());
         if (blockEntity instanceof BeeHolderBlockEntity holder) {
             if (holder.hasSpace()) {

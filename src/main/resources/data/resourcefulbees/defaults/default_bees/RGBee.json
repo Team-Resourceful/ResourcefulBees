@@ -6,7 +6,7 @@
   },
   "resourcefulbees:rendering/v1": {
     "texture": "custom/bee",
-    "model": "resourcefulbees:geo/crystal.geo.json",
+    "model": "resourcefulbees:crystal",
     "layers": [
       { "isPollen": true, "color": "rainbow", "texture": "ores/custom/custom_bee_secondary" },
       { "isPollen" : true, "layerEffect": "GLOW", "color": "rainbow", "texture": "ores/custom/custom_bee_emissive" },

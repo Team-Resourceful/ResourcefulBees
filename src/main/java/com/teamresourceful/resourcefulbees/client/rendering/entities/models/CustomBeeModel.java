@@ -10,7 +10,7 @@ import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-public class CustomBeeModel<E extends CustomBeeEntity> extends GeoModel<E> {
+public class CustomBeeModel extends GeoModel<CustomBeeEntity> {
 
     private static final DataTicket<Identifier> RBEES_TEXTURE_TICKET = DataTickets.create("rbees_texture", new TypeToken<>() {});
     private static final DataTicket<Identifier> RBEES_MODEL_TICKET = DataTicket.create("rbees_model", new TypeToken<>() {});
@@ -35,12 +35,12 @@ public class CustomBeeModel<E extends CustomBeeEntity> extends GeoModel<E> {
     }
 
     @Override
-    public @NonNull Identifier getAnimationResource(E bee) {
-        return bee.getRenderData().animations();
+    public @NonNull Identifier getAnimationResource(CustomBeeEntity bee) {
+        return bee.getRenderData().animation();
     }
 
     @Override
-    public void addAdditionalStateData(@NonNull E bee, @Nullable Object relatedObject, @NonNull GeoRenderState renderState) {
+    public void addAdditionalStateData(@NonNull CustomBeeEntity bee, @Nullable Object relatedObject, @NonNull GeoRenderState renderState) {
         super.addAdditionalStateData(bee, relatedObject, renderState);
         renderState.addGeckolibData(RBEES_MODEL_TICKET, bee.getRenderData().model());
         renderState.addGeckolibData(RBEES_TEXTURE_TICKET, bee.getRenderData().texture().getTexture(bee));

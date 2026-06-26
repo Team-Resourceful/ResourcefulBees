@@ -67,7 +67,7 @@ public final class DummyBeeData {
             API.color(ConstantColors.antiquewhite, ConstantColors.chocolate, ConstantColors.cadetblue),
             ModIdentifier.of("geo/base.geo.json"),
             MISSING_LAYER,
-            ModIdentifier.of("animations/bee.animation.json"),
+            ModIdentifier.of("animation/bee.animation.json"),
             1.0f
     );
 

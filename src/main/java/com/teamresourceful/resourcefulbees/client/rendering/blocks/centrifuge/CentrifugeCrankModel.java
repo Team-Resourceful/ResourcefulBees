@@ -20,6 +20,6 @@ public class CentrifugeCrankModel<T extends GeoAnimatable> extends GeoModel<T> {
 
     @Override
     public @NonNull Identifier getAnimationResource(@NonNull GeoAnimatable animatable) {
-        return Identifier.fromNamespaceAndPath("resourcefulbees", "animations/centrifuge_crank.animation.json");
+        return Identifier.fromNamespaceAndPath("resourcefulbees", "animation/centrifuge_crank.animation.json");
     }
 }

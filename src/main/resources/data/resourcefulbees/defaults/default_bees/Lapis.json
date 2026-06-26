@@ -6,7 +6,7 @@
     },
     "resourcefulbees:rendering/v1": {
         "texture": "ores/lapis/lapis_bee",
-        "model": "resourcefulbees:geo/crystal.geo.json",
+        "model": "resourcefulbees:crystal",
         "layers" : [
             { "isPollen": true, "color": "#2861D3", "texture": "custom_nectar" }
         ],

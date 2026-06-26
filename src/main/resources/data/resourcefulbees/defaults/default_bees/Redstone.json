@@ -6,7 +6,7 @@
     },
     "resourcefulbees:rendering/v1": {
         "texture": "ores/redstone/redstone_bee",
-        "model": "resourcefulbees:geo/crystal.geo.json",
+        "model": "resourcefulbees:crystal",
         "layers": [
             {
                 "layerEffect": "GLOW",

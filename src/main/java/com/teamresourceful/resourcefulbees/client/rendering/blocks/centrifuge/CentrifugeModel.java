@@ -25,6 +25,6 @@ public class CentrifugeModel<T extends GeoAnimatable> extends DefaultedItemGeoMo
 
     @Override
     public @NonNull Identifier getAnimationResource(@NonNull GeoAnimatable animatable) {
-        return Identifier.fromNamespaceAndPath("resourcefulbees", "animations/centrifuge.animation.json");
+        return Identifier.fromNamespaceAndPath("resourcefulbees", "animation/centrifuge.animation.json");
     }
 }

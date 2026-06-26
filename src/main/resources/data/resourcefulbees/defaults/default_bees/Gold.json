@@ -6,7 +6,7 @@
     },
     "resourcefulbees:rendering/v1": {
         "texture": "ores/gold/gold_bee",
-        "model": "resourcefulbees:geo/ore.geo.json",
+        "model": "resourcefulbees:ore",
         "layers" : [
             { "isPollen": true, "color": "#FCEE4B", "texture": "custom_nectar" }
         ],

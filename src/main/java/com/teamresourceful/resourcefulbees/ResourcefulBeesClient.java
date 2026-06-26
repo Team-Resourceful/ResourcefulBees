@@ -36,7 +36,7 @@ public class ResourcefulBeesClient {
     @SubscribeEvent // on the mod event bus only on the physical client
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         ModEntities.getModBees().forEach((s, entityType) ->
-                event.registerEntityRenderer(entityType.get(), manager -> new CustomBeeRenderer<>(manager, BeeRegistry.get().getBeeData(s).getRenderData()))
+                event.registerEntityRenderer(entityType.get(), context -> new CustomBeeRenderer<>(context, BeeRegistry.get().getBeeData(s).getRenderData()))
         );
     }
 }

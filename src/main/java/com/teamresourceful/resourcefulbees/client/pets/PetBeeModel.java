@@ -10,7 +10,7 @@ import org.jspecify.annotations.NonNull;
 
 public class PetBeeModel<T extends PetModelData & GeoAnimatable> extends GeoModel<@NonNull T> {
 
-    private static final Identifier ANIMATION = ModIdentifier.of("animations/bee.animation.json");
+    private static final Identifier ANIMATION = ModIdentifier.of("animation/bee.animation.json");
 
     public BakedGeoModel getModel(PetModelData object){
         return this.getBakedModel(getModelResource(object));

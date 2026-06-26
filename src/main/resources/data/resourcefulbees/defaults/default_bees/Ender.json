@@ -6,7 +6,7 @@
     },
     "resourcefulbees:rendering/v1": {
         "texture": "ender/ender_bee",
-        "model": "resourcefulbees:geo/dragon.geo.json",
+        "model": "resourcefulbees:dragon",
         "layers" : [
             { "isPollen": true, "color": "#E69BFF", "texture": "custom_nectar" }
         ],

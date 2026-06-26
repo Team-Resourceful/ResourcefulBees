@@ -1,25 +1,16 @@
 package com.teamresourceful.resourcefulbees.client.rendering.entities.layers;
 
-import com.geckolib.cache.model.BakedGeoModel;
 import com.geckolib.constant.DataTickets;
 import com.geckolib.renderer.base.GeoRenderState;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.geckolib.renderer.base.RenderPassInfo;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
-import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.Identifier;
 import com.geckolib.renderer.base.GeoRenderer;
 import com.geckolib.renderer.layer.GeoRenderLayer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
-import java.awt.*;
 
 public class CustomBeeLayer<E extends CustomBeeEntity, R extends EntityRenderState & GeoRenderState> extends GeoRenderLayer<CustomBeeEntity, Void, @NonNull R> {
 
@@ -34,9 +25,7 @@ public class CustomBeeLayer<E extends CustomBeeEntity, R extends EntityRenderSta
     public void addRenderData(CustomBeeEntity bee, @Nullable Void relatedObject, @NonNull R renderState, float partialTick) {
         if (!bee.hasNectar() && layerData.pollenLayer()) return;
         switch (layerData.effect()) {
-            case NONE -> {
-                return;
-            }
+            case NONE -> renderState.addGeckolibData(DataTickets.INVISIBLE_TO_PLAYER, true);
             case GLOW -> {
                 if (layerData.pulseFrequency() == 0 || bee.tickCount % layerData.pulseFrequency() == 0.0f) {
                     renderState.addGeckolibData(DataTickets.PACKED_LIGHT, 15728640);
@@ -46,6 +35,11 @@ public class CustomBeeLayer<E extends CustomBeeEntity, R extends EntityRenderSta
         }
 
         renderState.addGeckolibData(DataTickets.RENDER_COLOR, layerData.color().getValue());
+    }
+
+    @Override
+    public void submitRenderTask(@NonNull RenderPassInfo<@NonNull R> renderPassInfo, @NonNull SubmitNodeCollector renderTasks) {
+        super.submitRenderTask(renderPassInfo, renderTasks);
     }
 
     //    @Override
