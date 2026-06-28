@@ -5,7 +5,9 @@ import com.geckolib.renderer.base.GeoRenderState;
 import com.geckolib.renderer.base.RenderPassInfo;
 import com.google.common.reflect.TypeToken;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
-import com.teamresourceful.resourcefulbees.client.rendering.entities.layers.CustomBeeLayer;
+import com.teamresourceful.resourcefulbees.client.rendering.entities.layers.CustomBeeGlintLayer;
+import com.teamresourceful.resourcefulbees.client.rendering.entities.layers.CustomBeeGlowLayer;
+import com.teamresourceful.resourcefulbees.client.rendering.entities.layers.CustomBeeTranslucentLayer;
 import com.teamresourceful.resourcefulbees.client.rendering.entities.models.CustomBeeModel;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -20,7 +22,13 @@ public class CustomBeeRenderer<R extends EntityRenderState & GeoRenderState> ext
 
     public CustomBeeRenderer(EntityRendererProvider.Context ctx, BeeRenderData renderData) {
         super(ctx, new CustomBeeModel());
-        renderData.layers().stream().limit(6).forEach(layerData -> withRenderLayer(new CustomBeeLayer<>(this, layerData)));
+        renderData.layers().stream().limit(6).forEach(layerData -> {
+            switch (layerData.effect()) {
+                case GLOW -> withRenderLayer(new CustomBeeGlowLayer<>(this, layerData));
+                case ENCHANTED -> withRenderLayer(new CustomBeeGlintLayer<>(this, layerData));
+                case null, default -> withRenderLayer(new CustomBeeTranslucentLayer<>(this, layerData));
+            }
+        });
         float size = renderData.sizeModifier();
         withScale(size);
     }
@@ -37,6 +45,8 @@ public class CustomBeeRenderer<R extends EntityRenderState & GeoRenderState> ext
     public void addRenderData(@NonNull CustomBeeEntity bee, @Nullable Void relatedObject, @NonNull R renderState, float partialTick) {
         renderState.addGeckolibData(RBEES_IS_BABY_TICKET, bee.isBaby());
     }
+
+
 
     //
 //    @Override

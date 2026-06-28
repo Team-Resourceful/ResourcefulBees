@@ -61,14 +61,15 @@ public final class DummyBeeData {
 
     private static final BeeRenderData RENDER_DATA = API.render(
             Set.of(
-                API.layer(Color.RAINBOW, MISSING_LAYER, LayerEffect.NONE, false, 5),
-                API.layer(ConstantColors.cyan, MISSING_LAYER, LayerEffect.GLOW, false, 5)
+                API.layer(Color.RAINBOW, MISSING_LAYER, LayerEffect.NONE, false),
+                API.layer(ConstantColors.cyan, MISSING_LAYER, LayerEffect.GLOW, false)
             ),
             API.color(ConstantColors.antiquewhite, ConstantColors.chocolate, ConstantColors.cadetblue),
             ModIdentifier.of("geo/base.geo.json"),
             MISSING_LAYER,
             ModIdentifier.of("animation/bee.animation.json"),
-            1.0f
+            1.0f,
+            0.0f
     );
 
     private static final BeeBreedData BREED_DATA = API.breeding(

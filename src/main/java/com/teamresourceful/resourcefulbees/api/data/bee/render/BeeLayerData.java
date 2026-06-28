@@ -12,6 +12,4 @@ public interface BeeLayerData {
     LayerEffect effect();
 
     boolean pollenLayer();
-
-    float pulseFrequency();
 }

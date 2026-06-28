@@ -88,7 +88,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface LayerInitializer {
-        BeeLayerData create(Color color, BeeLayerTexture texture, LayerEffect effect, boolean pollenLayer, float pulseFrequency);
+        BeeLayerData create(Color color, BeeLayerTexture texture, LayerEffect effect, boolean pollenLayer);
     }
 
     @FunctionalInterface
@@ -98,7 +98,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface RenderInitializer {
-        BeeRenderData create(Set<BeeLayerData> layers, BeeColorData colorData, Identifier model, BeeLayerTexture texture, Identifier animations, float sizeModifier);
+        BeeRenderData create(Set<BeeLayerData> layers, BeeColorData colorData, Identifier model, BeeLayerTexture texture, Identifier animations, float sizeModifier, float pulseFrequency);
     }
 
     @FunctionalInterface

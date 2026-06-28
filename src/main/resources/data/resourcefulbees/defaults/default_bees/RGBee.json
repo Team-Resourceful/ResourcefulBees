@@ -9,8 +9,8 @@
     "model": "resourcefulbees:crystal",
     "layers": [
       { "isPollen": true, "color": "rainbow", "texture": "ores/custom/custom_bee_secondary" },
-      { "isPollen" : true, "layerEffect": "GLOW", "color": "rainbow", "texture": "ores/custom/custom_bee_emissive" },
-      { "layerEffect": "GLOW", "color": "rainbow", "texture": "custom/emissive_layer" }
+
+      { "layerEffect": "GLOW", "color": "rainbow", "texture": "custom/bee_emissive" }
     ],
     "ColorData": {
       "spawnEggPrimaryColor": "rainbow",

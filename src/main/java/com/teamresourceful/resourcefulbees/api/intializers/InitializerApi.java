@@ -88,8 +88,8 @@ public class InitializerApi {
     }
 
     @NullMarked
-    public BeeRenderData render(Set<BeeLayerData> layers, BeeColorData colorData, Identifier model, BeeLayerTexture texture, Identifier animations, float sizeModifier) {
-        return this.render.create(layers, colorData, model, texture, animations, sizeModifier);
+    public BeeRenderData render(Set<BeeLayerData> layers, BeeColorData colorData, Identifier model, BeeLayerTexture texture, Identifier animations, float sizeModifier, float pulseFrequency) {
+        return this.render.create(layers, colorData, model, texture, animations, sizeModifier, pulseFrequency);
     }
 
     @NullMarked
@@ -98,8 +98,8 @@ public class InitializerApi {
     }
 
     @NullMarked
-    public BeeLayerData layer(Color color, BeeLayerTexture texture, LayerEffect effect, boolean pollenLayer, float pulseFrequency) {
-        return this.layer.create(color, texture, effect, pollenLayer, pulseFrequency);
+    public BeeLayerData layer(Color color, BeeLayerTexture texture, LayerEffect effect, boolean pollenLayer) {
+        return this.layer.create(color, texture, effect, pollenLayer);
     }
 
     @NullMarked
