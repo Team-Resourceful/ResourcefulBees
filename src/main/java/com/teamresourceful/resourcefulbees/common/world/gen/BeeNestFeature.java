@@ -71,9 +71,9 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
                 //generate hive platform
                 generateHivePlatform(level, biomeHolder, newPos, direction);
                 //select appropriate nest for biome
-                Block nest = getNest(biomeHolder, rand.nextBoolean());
-                BlockState newState = nest.defaultBlockState().setValue(BeehiveBlock.FACING, direction);
-                level.setBlock(newPos, newState, 1);
+                //Block nest = getNest(biomeHolder, rand.nextBoolean());
+                //BlockState newState = nest.defaultBlockState().setValue(BeehiveBlock.FACING, direction);
+                //level.setBlock(newPos, newState, 1);
                 //add bees
                 setNestBees(newPos, biomeHolder, level, rand);
                 return true;
@@ -167,31 +167,31 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private static Block getNest(Holder<Biome> biome, boolean headsOrTails) {
-        if (biome.is(BiomeTags.IS_END)) return ModBlocks.PURPUR_BEE_NEST.get();
-        else if (biome.is(BiomeTags.IS_NETHER)) return getNetherNest(headsOrTails, biome);
-        else if (biome.is(BiomeTags.IS_SAVANNA)) return ModBlocks.ACACIA_BEE_NEST.get();
-        else if (biome.is(BiomeTags.IS_JUNGLE)) return ModBlocks.JUNGLE_BEE_NEST.get();
-        else if (biome.is(BiomeTags.IS_BEACH)) return ModBlocks.PRISMARINE_BEE_NEST.get();
-        else if (biome.is(BiomeTags.IS_OCEAN)) return ModBlocks.PRISMARINE_BEE_NEST.get();
-        else if (biome.is(BiomeTags.IS_TAIGA)) return ModBlocks.SPRUCE_BEE_NEST.get();
-        else if (doesSnowInBiome(biome)) return ModBlocks.SPRUCE_BEE_NEST.get();
-        else if (biome.unwrapKey().map(key -> key.equals(Biomes.MUSHROOM_FIELDS)).orElse(false)) return selectNest(headsOrTails, ModBlocks.RED_MUSHROOM_BEE_NEST.get(), ModBlocks.BROWN_MUSHROOM_BEE_NEST.get());
-        else if (biome.is(BiomeTags.HAS_SWAMP_HUT)) return ModBlocks.OAK_BEE_NEST.get();
-        else if (biome.is(BiomeTags.IS_FOREST)) return selectNest(headsOrTails, ModBlocks.BIRCH_BEE_NEST.get(), ModBlocks.DARK_OAK_BEE_NEST.get());
-        return OVERWORLD_BLOCKS.next();
-    }
+//    private static Block getNest(Holder<Biome> biome, boolean headsOrTails) {
+//        if (biome.is(BiomeTags.IS_END)) return ModBlocks.PURPUR_BEE_NEST.get();
+//        else if (biome.is(BiomeTags.IS_NETHER)) return getNetherNest(headsOrTails, biome);
+//        else if (biome.is(BiomeTags.IS_SAVANNA)) return ModBlocks.ACACIA_BEE_NEST.get();
+//        else if (biome.is(BiomeTags.IS_JUNGLE)) return ModBlocks.JUNGLE_BEE_NEST.get();
+//        else if (biome.is(BiomeTags.IS_BEACH)) return ModBlocks.PRISMARINE_BEE_NEST.get();
+//        else if (biome.is(BiomeTags.IS_OCEAN)) return ModBlocks.PRISMARINE_BEE_NEST.get();
+//        else if (biome.is(BiomeTags.IS_TAIGA)) return ModBlocks.SPRUCE_BEE_NEST.get();
+//        else if (doesSnowInBiome(biome)) return ModBlocks.SPRUCE_BEE_NEST.get();
+//        else if (biome.unwrapKey().map(key -> key.equals(Biomes.MUSHROOM_FIELDS)).orElse(false)) return selectNest(headsOrTails, ModBlocks.RED_MUSHROOM_BEE_NEST.get(), ModBlocks.BROWN_MUSHROOM_BEE_NEST.get());
+//        else if (biome.is(BiomeTags.HAS_SWAMP_HUT)) return ModBlocks.OAK_BEE_NEST.get();
+//        else if (biome.is(BiomeTags.IS_FOREST)) return selectNest(headsOrTails, ModBlocks.BIRCH_BEE_NEST.get(), ModBlocks.DARK_OAK_BEE_NEST.get());
+//        return OVERWORLD_BLOCKS.next();
+//    }
 
     private static boolean doesSnowInBiome(Holder<Biome> biome) {
         return biome.isBound() && biome.value().hasPrecipitation() && biome.value().getBaseTemperature() < 0.15F;
     }
 
-    private static Block getNetherNest(boolean headsOrTails, Holder<Biome> biome){
-        ResourceKey<Biome> key = biome.unwrapKey().orElse(null);
-        if (Biomes.WARPED_FOREST.equals(key)) return selectNest(headsOrTails, ModBlocks.WARPED_BEE_NEST.get(), ModBlocks.WARPED_NYLIUM_BEE_NEST.get());
-        else if (Biomes.CRIMSON_FOREST.equals(key)) return selectNest(headsOrTails, ModBlocks.CRIMSON_BEE_NEST.get(), ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get());
-        return selectNest(headsOrTails, ModBlocks.NETHER_BEE_NEST.get(), ModBlocks.WITHER_BEE_NEST.get());
-    }
+//    private static Block getNetherNest(boolean headsOrTails, Holder<Biome> biome){
+//        ResourceKey<Biome> key = biome.unwrapKey().orElse(null);
+//        if (Biomes.WARPED_FOREST.equals(key)) return selectNest(headsOrTails, ModBlocks.WARPED_BEE_NEST.get(), ModBlocks.WARPED_NYLIUM_BEE_NEST.get());
+//        else if (Biomes.CRIMSON_FOREST.equals(key)) return selectNest(headsOrTails, ModBlocks.CRIMSON_BEE_NEST.get(), ModBlocks.CRIMSON_NYLIUM_BEE_NEST.get());
+//        return selectNest(headsOrTails, ModBlocks.NETHER_BEE_NEST.get(), ModBlocks.WITHER_BEE_NEST.get());
+//    }
 
     private static Block selectNest(boolean headsOrTails, Block blockOne, Block blockTwo){
         return headsOrTails ? blockOne : blockTwo;

@@ -57,7 +57,7 @@ public final class GameSetup {
         //RegisterReloadListenerEvent.EVENT.addListener(RecipeBuilder::registerReloadListeners);
         //RegisterVillagerTradesEvent.EVENT.addListener(Beekeeper::setupBeekeeper);
         //RegisterEntityAttributesEvent.EVENT.addListener(GameSetup::registerAttributes);
-        RegisterHiveBreakBlocksEvent.EVENT.addListener(GameSetup::onHiveBreakConversions);
+        //RegisterHiveBreakBlocksEvent.EVENT.addListener(GameSetup::onHiveBreakConversions);
         RegisterRepositorySourceEvent.EVENT.addListener(GameSetup::registerRepositorySources);
     }
 
@@ -106,24 +106,24 @@ public final class GameSetup {
         }
     }
 
-    public static void onHiveBreakConversions(RegisterHiveBreakBlocksEvent event) {
-        event.register(() -> Blocks.STRIPPED_ACACIA_LOG, ModBlocks.ACACIA_BEE_NEST);
-        event.register(() -> Blocks.STRIPPED_BIRCH_LOG, ModBlocks.BIRCH_BEE_NEST);
-        event.register(() -> Blocks.STRIPPED_JUNGLE_LOG, ModBlocks.JUNGLE_BEE_NEST);
-        event.register(() -> Blocks.STRIPPED_OAK_LOG, ModBlocks.OAK_BEE_NEST);
-        event.register(() -> Blocks.STRIPPED_SPRUCE_LOG, ModBlocks.SPRUCE_BEE_NEST);
-        event.register(() -> Blocks.STRIPPED_DARK_OAK_LOG, ModBlocks.DARK_OAK_BEE_NEST);
-        event.register(() -> Blocks.GRASS_BLOCK, ModBlocks.GRASS_BEE_NEST);
-        event.register(() -> Blocks.CRIMSON_NYLIUM, ModBlocks.CRIMSON_NYLIUM_BEE_NEST);
-        event.register(() -> Blocks.CRIMSON_STEM, ModBlocks.CRIMSON_BEE_NEST);
-        event.register(() -> Blocks.WARPED_NYLIUM, ModBlocks.WARPED_NYLIUM_BEE_NEST);
-        event.register(() -> Blocks.WARPED_STEM, ModBlocks.WARPED_BEE_NEST);
-        event.register(() -> Blocks.RED_MUSHROOM_BLOCK, ModBlocks.RED_MUSHROOM_BEE_NEST);
-        event.register(() -> Blocks.BROWN_MUSHROOM_BLOCK, ModBlocks.BROWN_MUSHROOM_BEE_NEST);
-        event.register(() -> Blocks.PURPUR_BLOCK, ModBlocks.PURPUR_BEE_NEST);
-        event.register(() -> Blocks.NETHERRACK, ModBlocks.NETHER_BEE_NEST);
-        event.register(() -> Blocks.PRISMARINE, ModBlocks.PRISMARINE_BEE_NEST);
-    }
+//    public static void onHiveBreakConversions(RegisterHiveBreakBlocksEvent event) {
+//        event.register(() -> Blocks.STRIPPED_ACACIA_LOG, ModBlocks.ACACIA_BEE_NEST);
+//        event.register(() -> Blocks.STRIPPED_BIRCH_LOG, ModBlocks.BIRCH_BEE_NEST);
+//        event.register(() -> Blocks.STRIPPED_JUNGLE_LOG, ModBlocks.JUNGLE_BEE_NEST);
+//        event.register(() -> Blocks.STRIPPED_OAK_LOG, ModBlocks.OAK_BEE_NEST);
+//        event.register(() -> Blocks.STRIPPED_SPRUCE_LOG, ModBlocks.SPRUCE_BEE_NEST);
+//        event.register(() -> Blocks.STRIPPED_DARK_OAK_LOG, ModBlocks.DARK_OAK_BEE_NEST);
+//        event.register(() -> Blocks.GRASS_BLOCK, ModBlocks.GRASS_BEE_NEST);
+//        event.register(() -> Blocks.CRIMSON_NYLIUM, ModBlocks.CRIMSON_NYLIUM_BEE_NEST);
+//        event.register(() -> Blocks.CRIMSON_STEM, ModBlocks.CRIMSON_BEE_NEST);
+//        event.register(() -> Blocks.WARPED_NYLIUM, ModBlocks.WARPED_NYLIUM_BEE_NEST);
+//        event.register(() -> Blocks.WARPED_STEM, ModBlocks.WARPED_BEE_NEST);
+//        event.register(() -> Blocks.RED_MUSHROOM_BLOCK, ModBlocks.RED_MUSHROOM_BEE_NEST);
+//        event.register(() -> Blocks.BROWN_MUSHROOM_BLOCK, ModBlocks.BROWN_MUSHROOM_BEE_NEST);
+//        event.register(() -> Blocks.PURPUR_BLOCK, ModBlocks.PURPUR_BEE_NEST);
+//        event.register(() -> Blocks.NETHERRACK, ModBlocks.NETHER_BEE_NEST);
+//        event.register(() -> Blocks.PRISMARINE, ModBlocks.PRISMARINE_BEE_NEST);
+//    }
 
     public static void initPaths() {
         ModConstants.LOGGER.info("Setting up config paths...");

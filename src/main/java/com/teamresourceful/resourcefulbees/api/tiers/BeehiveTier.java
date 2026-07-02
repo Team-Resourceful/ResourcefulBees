@@ -2,15 +2,17 @@ package com.teamresourceful.resourcefulbees.api.tiers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public record BeehiveTier(Identifier id, int maxBees, int maxCombs, double timeModifier, Supplier<Collection<Item>> displayItems) {
+public record BeehiveTier(Identifier id, int maxBees, int maxCombs, double timeModifier, Supplier<Collection<Item>> displayItems, Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType) {
 
     private static final Map<Identifier, BeehiveTier> TIERS = new HashMap<>();
     public static final Codec<BeehiveTier> CODEC = Identifier.CODEC.comapFlatMap(BeehiveTier::get, BeehiveTier::id);
@@ -50,6 +52,7 @@ public record BeehiveTier(Identifier id, int maxBees, int maxCombs, double timeM
         private int maxCombs;
         private double timeModifier;
         private Supplier<Collection<Item>> displayItems;
+        private Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
 
         public Builder maxBees(int maxBees) {
             this.maxBees = maxBees;
@@ -71,8 +74,13 @@ public record BeehiveTier(Identifier id, int maxBees, int maxCombs, double timeM
             return this;
         }
 
+        public Builder entityType(Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType) {
+            this.entityType = entityType;
+            return this;
+        }
+
         public BeehiveTier build(Identifier id) {
-            return new BeehiveTier(id, maxBees, maxCombs, timeModifier, displayItems);
+            return new BeehiveTier(id, maxBees, maxCombs, timeModifier, displayItems, entityType);
         }
     }
 }

@@ -93,7 +93,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new TieredBeehiveBlockEntity(entityType, pos, state);
+        return new TieredBeehiveBlockEntity(pos, state);
     }
 
     public boolean isHiveSmoked(BlockPos pos, Level level) {

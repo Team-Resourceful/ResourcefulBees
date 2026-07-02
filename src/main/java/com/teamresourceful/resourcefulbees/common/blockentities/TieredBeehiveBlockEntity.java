@@ -5,6 +5,7 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 import com.google.common.collect.Lists;
 import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
+import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -65,22 +66,19 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             .orElse(null)
     );
 
-    private final Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType;
     private Queue<ItemStack> honeycombs = new LinkedList<>();
     protected boolean isSmoked = false;
     protected int ticksSmoked = -1;
     protected int ticksSinceBeesFlagged;
 
-    public TieredBeehiveBlockEntity(Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType, BlockPos pos, BlockState state) {
+    public TieredBeehiveBlockEntity(BlockPos pos, BlockState state) {
         super(pos, state);
-        this.entityType = entityType;
     }
 
     @NotNull
     @Override
     public BlockEntityType<?> getType() {
-        if (this.entityType == null) return getEntityType();
-        return this.entityType.get();
+       return ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY.get();
     }
 
     /**

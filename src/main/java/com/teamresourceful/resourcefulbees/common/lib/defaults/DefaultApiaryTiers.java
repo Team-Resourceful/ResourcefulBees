@@ -19,7 +19,7 @@ public final class DefaultApiaryTiers {
         .time(0.8)
         .output(() -> ApiaryConfig.tierOneApiaryOutput)
         .amount(() -> ApiaryConfig.tierOneApiaryQuantity)
-        .blockEntity(() -> ModBlockEntityTypes.T2_APIARY_ENTITY.get())
+        .blockEntity(() -> ModBlockEntityTypes.T1_APIARY_ENTITY.get())
         .item(ModItems.T2_APIARY_ITEM)
         .build(ModIdentifier.of("t1"));
 

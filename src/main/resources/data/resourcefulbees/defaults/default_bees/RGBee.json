@@ -8,8 +8,8 @@
     "texture": "custom/bee",
     "model": "resourcefulbees:crystal",
     "layers": [
-      { "isPollen": true, "color": "rainbow", "texture": "ores/custom/custom_bee_secondary" },
-
+      { "isPollen": true, "color": "rainbow", "texture": "custom/bee_emissive" },
+      { "isPollen" : true, "layerEffect": "GLOW", "color": "rainbow", "texture": "custom/bee_angry_glowmask" },
       { "layerEffect": "GLOW", "color": "rainbow", "texture": "custom/bee_emissive" }
     ],
     "ColorData": {

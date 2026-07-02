@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.data.DataGen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultHiveTypes;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
@@ -90,6 +91,7 @@ public class ResourcefulBees {
         ModConstants.forceInit();
         RegistryHandler.init();
         GameSetup.initEvents();
+        DefaultHiveTypes.loadDefaults();
         DefaultBeehiveTiers.loadDefaults();
         DefaultApiaryTiers.loadDefaults();
         DataSetup.setupInitializers(ResourcefulBeesAPI.getInitializers());
@@ -107,6 +109,8 @@ public class ResourcefulBees {
         ResourcefulBeesAPI.getRegistry().setHoneycombRegistry(HoneycombRegistry.getRegistry());
         ResourcefulBeesAPI.getRegistry().setHoneyRegistry(HoneyRegistry.getRegistry());
 
+
+        RegistryHandler.registerResourcefulHives();
         HoneycombSetup.setupHoneycombs();
         BeeSetup.setupBees();
         RegistryHandler.registerDynamicBees();

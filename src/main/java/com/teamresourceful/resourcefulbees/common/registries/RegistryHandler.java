@@ -13,6 +13,7 @@ import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee
 import com.teamresourceful.resourcefulbees.common.items.dispenser.ScraperDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.records.HiveType;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyDataRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
@@ -35,6 +36,8 @@ public final class RegistryHandler {
         throw new UtilityClassException();
     }
 
+    //public static final Set<RegistryEntry<Block>> VALID_HIVES = new HashSet<>();
+
     public static void init() {
         //ItemGroupResourcefulBees.register();
         //ModFluidProperties.PROPERTIES.initialize();
@@ -56,6 +59,21 @@ public final class RegistryHandler {
     }
 
     //Dynamic|Iterative Registration Stuff below this line
+
+    public static void registerResourcefulHives() {
+        HiveType.values().forEach(hiveType -> {
+            for (int i = 1; i < 5; i++) {
+                String id = "nest/" + hiveType.type() + "/" + i;
+                RegistryEntry<Block> block = ModBlocks.registerHive(id, i, hiveType.properties());
+                switch (i) {
+                    case 4 -> ModItems.registerHiveItem(ModItems.T4_NEST_ITEMS, id, block);
+                    case 3 -> ModItems.registerHiveItem(ModItems.T3_NEST_ITEMS, id, block);
+                    case 2 -> ModItems.registerHiveItem(ModItems.T2_NEST_ITEMS, id, block);
+                    default -> ModItems.registerHiveItem(ModItems.T1_NEST_ITEMS, id, block);
+                }
+            }
+        });
+    }
 
     public static void registerDynamicBees() {
         BeeRegistry.get().getBees().forEach((name, beeData) -> registerBee(name, beeData.getRenderData().sizeModifier()));
