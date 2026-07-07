@@ -1,8 +1,6 @@
 {
     "type": "resourcefulbees:hive",
-    "bees": [
-        "minecraft:bee"
-    ],
+    "bees": "minecraft:bee",
     "hiveCombs": {
         "resourcefulbees:t1": "minecraft:honeycomb",
         "resourcefulbees:t2": "minecraft:honeycomb",

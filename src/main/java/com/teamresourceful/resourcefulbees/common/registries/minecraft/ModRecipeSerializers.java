@@ -18,7 +18,7 @@ public final class ModRecipeSerializers {
 
     public static final ResourcefulRegistry<RecipeSerializer<?>> RECIPE_SERIALIZERS = RegistryHelper.create(BuiltInRegistries.RECIPE_SERIALIZER, ModConstants.MOD_ID);
 
-    public static final RegistryEntry<RecipeSerializer<HiveRecipe>> HIVE_RECIPE = RECIPE_SERIALIZERS.register("hive_serializer", () -> new RecipeSerializer<>(HiveRecipe.MAP_CODEC, HiveRecipe.STREAM_CODEC));
+    public static final RegistryEntry<RecipeSerializer<HiveRecipe>> HIVE_RECIPE = RECIPE_SERIALIZERS.register("hive", () -> new RecipeSerializer<>(HiveRecipe.MAP_CODEC, HiveRecipe.STREAM_CODEC));
 //    public static final RegistryEntry<RecipeSerializer<BreederRecipe>> BREEDER_RECIPE = RECIPE_SERIALIZERS.register("breeder", () -> new RecipeSerializer<>(BreederRecipe::codec, BreederRecipe::packetCodec));
 //    public static final RegistryEntry<RecipeSerializer<MutationRecipe>> MUTATION_RECIPE = RECIPE_SERIALIZERS.register("mutation", () -> new RecipeSerializer<>(ModRecipes.MUTATION_RECIPE_TYPE.get(), MutationRecipe::codec));
 //    public static final RegistryEntry<RecipeSerializer<SolidificationRecipe>> SOLIDIFICATION_RECIPE = RECIPE_SERIALIZERS.register("solidification", () -> new RecipeSerializer<>(ModRecipes.SOLIDIFICATION_RECIPE_TYPE.get(), SolidificationRecipe::codec));

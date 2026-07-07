@@ -153,7 +153,7 @@ public record HiveRecipe(
 
         @Override
         public boolean isEmpty() {
-            return RecipeInput.super.isEmpty();
+            return false;
         }
     }
 }
