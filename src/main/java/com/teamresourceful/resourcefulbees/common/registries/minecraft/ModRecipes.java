@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
@@ -17,7 +18,7 @@ public final class ModRecipes {
 
     public static final ResourcefulRegistry<RecipeType<?>> RECIPE_TYPES = RegistryHelper.create(BuiltInRegistries.RECIPE_TYPE, ModConstants.MOD_ID);
 
-    public static final RegistryEntry<RecipeType<HiveRecipe>> HIVE_RECIPE_TYPE = RECIPE_TYPES.register("hive", () -> new RecipeType<>() {});
+    public static final RegistryEntry<RecipeType<HiveRecipe>> HIVE_RECIPE_TYPE = RECIPE_TYPES.register("hive", () -> RecipeType.simple(ModIdentifier.of("hive")));
 //    public static final RegistryEntry<RecipeType<BreederRecipe>> BREEDER_RECIPE_TYPE = RECIPE_TYPES.register("breeder", () -> RecipeType.register("breeder"));
 //    public static final RegistryEntry<RecipeType<MutationRecipe>> MUTATION_RECIPE_TYPE = RECIPE_TYPES.register("mutation", () -> RecipeType.register("mutation"));
 //    public static final RegistryEntry<RecipeType<SolidificationRecipe>> SOLIDIFICATION_RECIPE_TYPE = RECIPE_TYPES.register("solidification", () -> RecipeType.register("solidification"));

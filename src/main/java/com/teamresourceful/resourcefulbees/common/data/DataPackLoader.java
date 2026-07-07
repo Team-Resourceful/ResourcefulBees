@@ -1,6 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
 import com.mojang.serialization.JsonOps;
+import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
+import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.common.utils.GenericMemoryPack;
 import net.minecraft.SharedConstants;
@@ -15,7 +19,9 @@ import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagFile;
+import net.minecraft.world.item.crafting.Recipe;
 
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -31,12 +37,27 @@ public final class DataPackLoader implements RepositorySource {
     @Override
     public void loadPacks(Consumer<Pack> onLoad) {
         try (GenericMemoryPack dataPack = ModUtils.createHiddenDataPack(DATAPACK_NAME, METADATA)) {
-            DataGen.getTags().forEach((location, identifiers) -> {
+            DataGen.getTags().forEach((tagID, tagEntries) -> {
                 TagBuilder builder = TagBuilder.create();
-                identifiers.forEach(builder::addElement);
+                tagEntries.forEach(builder::addElement);
                 TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(builder.build(), false))
                     .result()
-                    .ifPresent(json -> dataPack.putJson(PackType.SERVER_DATA, location, json));
+                    .ifPresent(json -> dataPack.putJson(PackType.SERVER_DATA, tagID, json));
+            });
+
+            ResourcefulBeesAPI.getRegistry().getBeeRegistry().getStreamOfBees().forEach(customBeeData -> {
+                Recipe<HiveRecipe.Input> recipe = RecipeBuilder.makeHiveRecipe(customBeeData);
+                if (recipe != null) {
+                    HiveRecipe.MAP_CODEC.codec().encodeStart(JsonOps.INSTANCE, (HiveRecipe) recipe)
+                            .result()
+                            .ifPresent(jsonElement -> {
+                                var jsonobj = jsonElement.getAsJsonObject();
+                                jsonobj.addProperty("type", ModRecipes.HIVE_RECIPE_TYPE.getId().toString());
+                                String path = "recipe/" + customBeeData.name().toLowerCase(Locale.ROOT) + "_hive_output";
+                                dataPack.putJson(PackType.SERVER_DATA, ModIdentifier.of(path), jsonobj);
+                            });
+
+                }
             });
 
             PackLocationInfo info = new PackLocationInfo(DATAPACK_NAME, TITLE, PackSource.BUILT_IN, Optional.empty());

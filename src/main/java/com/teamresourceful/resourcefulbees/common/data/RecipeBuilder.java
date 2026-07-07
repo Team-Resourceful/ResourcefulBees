@@ -14,7 +14,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 
 public final class RecipeBuilder implements ResourceManagerReloadListener {
-    public static Recipe<?> makeHiveRecipe(CustomBeeData bee) {
+    public static Recipe<HiveRecipe.Input> makeHiveRecipe(CustomBeeData bee) {
         var optData = bee.getCoreData().getHoneycombData();
         if (optData.isEmpty()) return null;
         var data = optData.get();
