@@ -3,6 +3,8 @@ package com.teamresourceful.resourcefulbees.api.tiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -16,6 +18,7 @@ public record BeehiveTier(Identifier id, int maxBees, int maxCombs, double timeM
 
     private static final Map<Identifier, BeehiveTier> TIERS = new HashMap<>();
     public static final Codec<BeehiveTier> CODEC = Identifier.CODEC.comapFlatMap(BeehiveTier::get, BeehiveTier::id);
+    public static final StreamCodec<ByteBuf, BeehiveTier> STREAM_CODEC = Identifier.STREAM_CODEC.map(BeehiveTier::getOrThrow, BeehiveTier::id);
 
     public BeehiveTier {
         if (TIERS.containsKey(id)) {

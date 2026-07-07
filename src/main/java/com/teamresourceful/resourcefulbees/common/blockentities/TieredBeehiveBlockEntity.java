@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
@@ -47,6 +48,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -151,16 +153,16 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
                 if (releaseStatus == BeeReleaseStatus.HONEY_DELIVERED) {
                     if (entity instanceof BeeCompat compat) compat.resourcefulBees$nectarDroppedOff();
                     if (getHoneyLevel(state) < 5) {
-//todo fix recipes
-//                        HiveRecipe.getHiveOutput(hive.getBlock().getTier(), entity)
-//                            .filter(Predicate.not(ItemStack::isEmpty))
-//                            .ifPresent(hive.honeycombs::add);
+
+                        HiveRecipe.getHiveOutput(hive.getBlock().getTier(), entity)
+                            .filter(Predicate.not(ItemStack::isEmpty))
+                            .ifPresent(hive.honeycombs::add);
                         recalculateHoneyLevel(hive);
                     }
 
-                    if (entity instanceof Animal animal) {
-                        EntityUtils.ageBee(((BeehiveBeeDataAccessor) beeData).getTicksInHive(), animal);
-                    }
+                    //if (entity instanceof Animal animal) {
+                   //     EntityUtils.ageBee(((BeehiveBeeDataAccessor) beeData).getTicksInHive(), animal);
+                    //}
                     if (entities != null) entities.add(entity);
                 }
                 hive.level.playSound(null, hive.worldPosition, SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -258,7 +260,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
         BeehiveBlockEntity.BeeData bee;
         for (Iterator<BeeData> iterator = bees.iterator(); iterator.hasNext(); increaseTicksInHive(bee, 1)) {
             bee = iterator.next();
-            if (bee.toOccupant().ticksInHive() > (bee.toOccupant().minTicksInHive())) {
+            if (bee.tick()) {
                 BeeReleaseStatus status = bee.hasNectar() ? BeeReleaseStatus.HONEY_DELIVERED : BeeReleaseStatus.BEE_RELEASED;
                 if (releaseBee(hive, state, bee, null, status)) {
                     iterator.remove();

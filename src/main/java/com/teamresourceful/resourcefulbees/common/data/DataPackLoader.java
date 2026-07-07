@@ -26,14 +26,14 @@ public final class DataPackLoader implements RepositorySource {
     public static final Component TITLE = Component.literal("Data for Resourceful Bees");
     private static final PackMetadataSection METADATA = new PackMetadataSection(TITLE, SharedConstants.getCurrentVersion().packVersion(PackType.SERVER_DATA).minorRange());
 
-    private DataPackLoader() {}
+    public DataPackLoader() {}
 
     @Override
     public void loadPacks(Consumer<Pack> onLoad) {
         try (GenericMemoryPack dataPack = ModUtils.createHiddenDataPack(DATAPACK_NAME, METADATA)) {
-            DataGen.getTags().forEach((location, resourceLocations) -> {
+            DataGen.getTags().forEach((location, identifiers) -> {
                 TagBuilder builder = TagBuilder.create();
-                resourceLocations.forEach(builder::addElement);
+                identifiers.forEach(builder::addElement);
                 TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(builder.build(), false))
                     .result()
                     .ifPresent(json -> dataPack.putJson(PackType.SERVER_DATA, location, json));

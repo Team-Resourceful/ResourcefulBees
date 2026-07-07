@@ -30,19 +30,19 @@ public final class DataGen {
     }
 
     public static void generateCommonData() {
-        generateTags(ModEntities.BEES, Identifier.fromNamespaceAndPath("forge","tags/entity_types/beehive_inhabitors.json"));
+        generateTags(ModEntities.BEES, Identifier.fromNamespaceAndPath("minecraft","tags/entity_type/beehive_inhabitors.json"));
 
-        generateTags(ModItems.HONEYCOMB_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/storage_blocks/honeycombs.json"));
-        generateTags(ModBlocks.HONEYCOMB_BLOCKS, Identifier.fromNamespaceAndPath("forge","tags/blocks/storage_blocks/honeycombs.json"));
-        generateTags(ModItems.HONEYCOMB_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honeycombs.json"));
-
-        //custom honey data
-        generateTags(ModItems.HONEY_BOTTLE_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honey_bottles.json"));
-        generateTags(ModItems.HONEY_BUCKET_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/buckets/honey.json"));
-
-        generateTags(ModBlocks.HONEY_BLOCKS, Identifier.fromNamespaceAndPath("forge","tags/blocks/honey_blocks.json"));
-        generateTags(ModItems.HONEY_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honey_blocks.json"));
-        generateHoneyTags();
+//        generateTags(ModItems.HONEYCOMB_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/storage_blocks/honeycombs.json"));
+//        generateTags(ModBlocks.HONEYCOMB_BLOCKS, Identifier.fromNamespaceAndPath("forge","tags/blocks/storage_blocks/honeycombs.json"));
+//        generateTags(ModItems.HONEYCOMB_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honeycombs.json"));
+//
+//        //custom honey data
+//        generateTags(ModItems.HONEY_BOTTLE_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honey_bottles.json"));
+//        generateTags(ModItems.HONEY_BUCKET_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/buckets/honey.json"));
+//
+//        generateTags(ModBlocks.HONEY_BLOCKS, Identifier.fromNamespaceAndPath("forge","tags/blocks/honey_blocks.json"));
+//        generateTags(ModItems.HONEY_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honey_blocks.json"));
+//        generateHoneyTags();
     }
 
     private static void generateHoneyTags() {
@@ -52,9 +52,9 @@ public final class DataGen {
                         .collect(Collectors.toSet()));
     }
 
-    private static void generateTags(ResourcefulRegistry<?> register, Identifier Identifier) {
-        TAGS.put(Identifier,
-                register.stream()
+    private static void generateTags(ResourcefulRegistry<?> registry, Identifier identifier) {
+        TAGS.put(identifier,
+                registry.stream()
                         .map(RegistryEntry::getId)
                         .collect(Collectors.toSet()));
     }

@@ -29,6 +29,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 
 import java.io.FileWriter;
@@ -58,7 +59,6 @@ public final class GameSetup {
         //RegisterVillagerTradesEvent.EVENT.addListener(Beekeeper::setupBeekeeper);
         //RegisterEntityAttributesEvent.EVENT.addListener(GameSetup::registerAttributes);
         //RegisterHiveBreakBlocksEvent.EVENT.addListener(GameSetup::onHiveBreakConversions);
-        RegisterRepositorySourceEvent.EVENT.addListener(GameSetup::registerRepositorySources);
     }
 
     public static void init() {
@@ -100,10 +100,11 @@ public final class GameSetup {
         ));
     }
 
-    public static void registerRepositorySources(RegisterRepositorySourceEvent event) {
-        if (event.type().equals(PackType.SERVER_DATA)) {
-            event.register(DataPackLoader.INSTANCE);
-        }
+    public static void registerRepositorySources(AddPackFindersEvent event) {
+        event.addRepositorySource(new DataPackLoader());
+        //        if (event.type().equals(PackType.SERVER_DATA)) {
+//            event.register(DataPackLoader.INSTANCE);
+//        }
     }
 
 //    public static void onHiveBreakConversions(RegisterHiveBreakBlocksEvent event) {

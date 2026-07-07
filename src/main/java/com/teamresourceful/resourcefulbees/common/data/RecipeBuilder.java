@@ -1,58 +1,35 @@
-//package com.teamresourceful.resourcefulbees.common.data;
-//
-//import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
-//import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
-//import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
-//import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
-//import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
-//import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
-//import com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry;
-//import com.teamresourceful.resourcefulbees.common.config.RecipeConfig;
-//import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
-//import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneycombItem;
-//import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-//import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
-//import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
-//import com.teamresourceful.resourcefulbees.common.recipes.SolidificationRecipe;
-//import com.teamresourceful.resourcefulbees.common.recipes.base.RecipeFluid;
-//import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
-//import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
-//import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-//import com.teamresourceful.resourcefulbees.common.util.IngredientUtils;
-//import com.teamresourceful.resourcefulbees.mixin.common.RecipeManagerAccessor;
-//import com.teamresourceful.resourcefulbees.mixin.common.ReloadableServerResourcesAccessor;
-//import com.teamresourceful.resourcefulbees.events.RegisterReloadListenerEvent;
-//import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
-//import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
-//import net.minecraft.core.HolderSet;
-//import net.minecraft.core.NonNullList;
-//import net.minecraft.core.registries.BuiltInRegistries;
-//import net.minecraft.resources.Identifier;
-//import net.minecraft.resources.ResourceLocation;
-//import net.minecraft.server.packs.resources.ResourceManager;
-//import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-//import net.minecraft.world.entity.EntityType;
-//import net.minecraft.world.item.ItemStack;
-//import net.minecraft.world.item.Items;
-//import net.minecraft.world.item.crafting.*;
-//import org.jetbrains.annotations.NotNull;
-//
-//import java.util.*;
-//import java.util.stream.Stream;
-//
-//public final class RecipeBuilder implements ResourceManagerReloadListener {
-//
-//    private static final RecipeBuilder INSTANCE = new RecipeBuilder();
-//
-//    private static RecipeManager recipeManager;
-//
-//    private static void setRecipeManager(RecipeManager recipeManager) {
-//        RecipeBuilder.recipeManager = recipeManager;
-//    }
-//
-//    @Override
-//    public void onResourceManagerReload(@NotNull ResourceManager resourceManager) {
-//
+package com.teamresourceful.resourcefulbees.common.data;
+
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
+import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneycombItem;
+import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
+import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
+import net.minecraft.core.HolderSet;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import org.jetbrains.annotations.NotNull;
+
+public final class RecipeBuilder implements ResourceManagerReloadListener {
+    public static Recipe<?> makeHiveRecipe(CustomBeeData bee) {
+        var optData = bee.getCoreData().getHoneycombData();
+        if (optData.isEmpty()) return null;
+        var data = optData.get();
+
+        return new HiveRecipe(
+                //Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, bee.name().toLowerCase(Locale.ROOT) + "_hive_output"),
+                HolderSet.direct(EntityType::builtInRegistryHolder, bee.entityType()),
+                data.hiveCombs(),
+                data.apiaryCombs()
+        );
+    }
+
+    @Override
+    public void onResourceManagerReload(@NotNull ResourceManager resourceManager) {
+
 //        if (RecipeConfig.honeycombBlockRecipes) {
 //            ModConstants.LOGGER.info("Generating comb recipes for {} honeycombs...", ModItems.HONEYCOMB_ITEMS.getEntries().size());
 //            ModItems.HONEYCOMB_ITEMS.getEntries().stream()
@@ -79,21 +56,22 @@
 //                )
 //                .forEach(this::addRecipe);
 //        }
-//
+
 //        ResourcefulBeesAPI.getRegistry().getBeeRegistry()
 //            .getStreamOfBees()
 //            .map(this::makeHiveRecipe)
 //            .filter(Objects::nonNull)
 //            .forEach(this::addRecipe);
-//
+
 //        ResourcefulBeesAPI.getRegistry().getBeeRegistry().getFamilyTree().values().forEach(c -> c.forEach(f -> addRecipe(makeBreedingRecipe(c))));
-//    }
-//
+    }
+
 //    public void addRecipe(Recipe<?> recipe) {
 //        getRecipeManager().getRecipes().computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
 //    }
-//
-//    private Recipe<?> makeBreedingRecipe(WeightedCollection<FamilyUnit> families) {
+
+    private Recipe<?> makeBreedingRecipe(WeightedCollection<FamilyUnit> families) {
+        return null;
 //        Parents parents = families.get(0).getParents();
 //        Identifier id = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, parents.getParent1() + "_" + parents.getParent2() + "_" + families.get(0).getChild());
 //        Ingredient beeJarParent1 = com.teamresourceful.resourcefullib.common.recipe.ingredient.IngredientHelper.getIngredient(new BeeJarIngredient(Set.of(parents.getParent1Data().id().toString())));
@@ -105,27 +83,15 @@
 //        var parent2FeedItems = IngredientUtils.of(parent2BreedData.feedItems());
 //        BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parents.getParent2Data().id().toString()), parent2BreedData.feedAmount(), parent2FeedItems, parent2BreedData.feedReturnItem());
 //        return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(WeightedCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
-//    }
-//
+    }
+
 //    private BreederRecipe.BreederOutput makeOutput(FamilyUnit family) {
 //        ItemStack childBeeJar = BeeJarItem.createFilledJar(family.getChildData().id(), family.getChildData().getRenderData().colorData().jarColor());
-//        return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().id().toString()), family.weight(), family.chance());
+//        return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().id().toString()), family.weight(), family.chancea
 //    }
-//
-//    private Recipe<?> makeHiveRecipe(CustomBeeData bee) {
-//        var optData = bee.getCoreData().getHoneycombData();
-//        if (optData.isEmpty()) return null;
-//        var data = optData.get();
-//
-//        return new HiveRecipe(
-//            Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, bee.name().toLowerCase(Locale.ROOT) + "_hive_output"),
-//            HolderSet.direct(EntityType::builtInRegistryHolder, bee.entityType()),
-//            data.hiveCombs(),
-//            data.apiaryCombs()
-//        );
-//    }
-//
-//    private Recipe<?> makeHoneycombRecipe(CustomHoneycombItem comb) {
+
+    private Recipe<?> makeHoneycombRecipe(CustomHoneycombItem comb) {
+        return null;
 //        Ingredient honeycombItem = Ingredient.of(comb);
 //        return new ShapedRecipe(
 //            Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(comb.getStorageBlockItem())),
@@ -139,8 +105,8 @@
 //            ),
 //            new ItemStack(comb.getStorageBlockItem())
 //        );
-//    }
-//
+    }
+
 //    private Recipe<?> makeHoneyBlockRecipe(CustomHoneyData info) {
 //        Ingredient honeyBottleItem = IngredientUtils.of(info.getBottleData().bottle());
 //        return new ShapedRecipe(
@@ -255,7 +221,7 @@
 //
 //        return recipeManagerInvoker;
 //    }
-//
+
 //    public static void registerReloadListeners(RegisterReloadListenerEvent event) {
 //        event.register(INSTANCE);
 //        setRecipeManager(event.resources().getRecipeManager());
@@ -267,4 +233,4 @@
 //        }
 //        ModConstants.LOGGER.info("Adding Reload Listener: 'resourcefulbees recipe manager'");
 //    }
-//}
+}

@@ -3,6 +3,8 @@ package com.teamresourceful.resourcefulbees.api.tiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,6 +20,7 @@ public record ApiaryTier(Identifier id, int maxBees, double timeMod, Supplier<Ap
 
     private static final Map<Identifier, ApiaryTier> TIERS = new HashMap<>();
     public static final Codec<ApiaryTier> CODEC = Identifier.CODEC.comapFlatMap(ApiaryTier::get, ApiaryTier::id);
+    public static final StreamCodec<ByteBuf, ApiaryTier> STREAM_CODEC = Identifier.STREAM_CODEC.map(ApiaryTier::getOrThrow, ApiaryTier::id);
 
     public ApiaryTier {
         if (TIERS.containsKey(id)) {

@@ -13,7 +13,7 @@
     "common.DamageSourcesInvoker",
     "common.MixinBee",
     "common.MixinBeeEnterHiveGoal",
-    "common.RecipeManagerAccessor",
+    "common.RecipeManagerMixin",
     "common.ServerLevelAccessor",
     "common.StructureCheckAccessor",
     "common.StructureTemplatePoolAccessor"
