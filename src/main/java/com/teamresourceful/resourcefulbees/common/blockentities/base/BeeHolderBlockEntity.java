@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.blockentities.base;
 
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.components.Bees;
+import com.teamresourceful.resourcefulbees.common.components.HiveOccupant;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
@@ -9,9 +10,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtOps;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -26,12 +26,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity implements ContentContainerBlock<PositionContent> {
 
-    protected final List<BlockBee> bees = new ArrayList<>();
+    protected final List<HiveOccupant.Mutable> bees = new ArrayList<>();
     protected int ticksSinceBeesFlagged;
 
     protected BeeHolderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -42,11 +42,11 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity implemen
         return bees.size();
     }
 
-    public List<BlockBee.Occupant> getBees() {
-        return this.bees.stream().map(BlockBee::toOccupant).toList();
+    public List<HiveOccupant> getBees() {
+        return this.bees.stream().map(HiveOccupant.Mutable::immutable).toList();
     }
 
-    public boolean releaseBee(@NotNull BlockState state, BlockBee.Occupant apiaryBee) {
+    public boolean releaseBee(@NotNull BlockState state, HiveOccupant apiaryBee) {
         BlockPos blockPos = this.getBlockPos();
         Direction direction = state.getValue(BeehiveBlock.FACING);
         BlockPos blockPos1 = blockPos.relative(direction);
@@ -68,25 +68,25 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity implemen
     public void tryEnterHive(@NotNull Entity bee) {
         if (this.level != null && hasSpace() && bee instanceof BeeCompat beeCompat) {
             bee.ejectPassengers();
-            storeBee(BlockBee.Occupant.of(bee, beeCompat, this, false));
+            storeBee(HiveOccupant.of(bee, beeCompat, this, false));
             this.level.playSound(null, this.getBlockPos(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
             bee.discard();
         }
     }
 
-    public void storeBee(BlockBee.Occupant occupant) {
-        this.bees.add(new BlockBee(occupant));
+    public void storeBee(HiveOccupant occupant) {
+        this.bees.add(occupant.mutable());
     }
 
     protected abstract int getMaxTimeInHive(@NotNull BeeCompat bee);
 
     public static <T extends BeeHolderBlockEntity> void serverTick(Level level, BlockPos pos, BlockState state, T holder) {
         boolean dirty = false;
-        BlockBee bee;
-        Iterator<BlockBee> iterator = holder.bees.iterator();
+        HiveOccupant.Mutable bee;
+        var iterator = holder.bees.iterator();
         while (iterator.hasNext()) {
             bee = iterator.next();
-            if (bee.tick() && holder.releaseBee(state, bee.toOccupant())) {
+            if (bee.tick() && holder.releaseBee(state, bee.immutable())) {
                 iterator.remove();
             }
             dirty = true;
@@ -125,21 +125,20 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity implemen
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
         this.bees.clear();
-        input.read("bees", BlockBee.Occupant.LIST_CODEC).orElse(List.of()).forEach(this::storeBee);
+        input.read("bees", HiveOccupant.CODEC.listOf()).orElse(List.of()).forEach(this::storeBee);
     }
 
     @Override
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        output.store("bees", BlockBee.Occupant.LIST_CODEC, this.getBees());
+        output.store("bees", HiveOccupant.CODEC.listOf(), this.getBees());
     }
 
     @Override
     protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
         super.applyImplicitComponents(components);
         this.bees.clear();
-        List<BlockBee.Occupant> bees = components.getOrDefault(ModDataComponents.BEES, Bees.EMPTY).bees();
-        bees.forEach(this::storeBee);
+        components.getOrDefault(ModDataComponents.BEES, Bees.EMPTY).bees().forEach(this::storeBee);
     }
 
     @Override
@@ -155,39 +154,18 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity implemen
     }
 
     @Override
-    public ListTag getSyncData(ListTag tag) {
-        return (ListTag) Bees.CODEC.encodeStart(NbtOps.INSTANCE, new Bees(this.getBees())).result().orElse(new ListTag(0));
+    public DataComponentPatch getSyncData() {
+        return DataComponentPatch.builder()
+                .set(ModDataComponents.BEES.get(), new Bees(this.getBees()))
+                .build();
     }
 
     @Override
-    public void readSyncData(@NotNull CompoundTag tag) {
-        bees.clear();
-        Bees.CODEC.parse(NbtOps.INSTANCE, tag);
-        //  todo figure out how to better safeguard null entity types since getString doesn't exist
-        //   getBees().removeIf(bee -> EntityType.byString(String.valueOf(bee.entityData().getString("id"))).isEmpty());
+    public <Data> void setSyncData(DataComponentType<@NotNull Data> type, Optional<Data> data) {
+        if (type == ModDataComponents.BEES.get()) {
+            this.bees.clear();
+            data.ifPresent(bees -> ((Bees) bees).bees().forEach(this::storeBee));
+        }
     }
-
-
-
-
-
-
-
-
-
-
-
-    //    @Override
-//    public @NotNull CompoundTag getSyncData() {
-//        return writeBees();
-//    }
-//
-//    @Override
-//    public void readSyncData(@NotNull CompoundTag tag) {
-//        bees.clear();
-//        loadBees(tag);
-//        bees.removeIf(bee -> EntityType.byString(String.valueOf(bee.entityData.getString("id"))).isEmpty());
-//    }
-    //endregion
 
 }

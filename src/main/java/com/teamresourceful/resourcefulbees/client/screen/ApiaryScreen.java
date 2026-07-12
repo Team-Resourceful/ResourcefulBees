@@ -1,22 +1,16 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentities.base.BlockBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ApiaryTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -133,7 +127,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
             if (mouseX >= left && mouseY >= i1 && mouseX < left + 18 && mouseY < i1 + 18) {
                 List<Component> beeInfo = new ArrayList<>();
-                BlockBee.Occupant apiaryBee = this.menu.getApiaryBee(i);
+                var apiaryBee = this.menu.getApiaryBee(i);
 
                 int ticksInHive = apiaryBee.ticksInHive();
                 beeInfo.add(apiaryBee.displayName());
@@ -148,25 +142,31 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
         var count = apiaryBlockEntity.beeCount();
         System.out.println(count);
         for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < count; ++i) {
-            int j = i - this.beeIndexOffset;
-            int k = left;
-            int i1 = top + j * 18;
-            int j1 = this.imageHeight;
-            if (mouseX >= k && mouseY >= i1 && mouseX < k + 18 && mouseY < i1 + 18) {
-                j1 += 18;
+            var bee = this.menu.getApiaryBee(i);
+            int index = i - this.beeIndexOffset;
+            int x = left;
+            int y = top + index * 18;
+            int v = this.imageHeight;
+            if (mouseX >= x && mouseY >= y && mouseX < x + 18 && mouseY < y + 18) {
+                v += 18;
             }
-            graphics.blit(RenderPipelines.GUI_TEXTURED, VALIDATED_TEXTURE, k, i1, 0, j1, 18, 18, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, VALIDATED_TEXTURE, x, y, 0, v, 18, 18, 256, 256);
             int l1 = 18;
-            k = k + 18;
-            j1 = this.imageHeight;
-            if (this.menu.getApiaryBee(i).locked()) {
+            x = x + 18;
+            v = this.imageHeight;
+            if (bee.locked()) {
                 l1 += 18;
             }
-            if (mouseX >= k && mouseY >= i1 && mouseX < k + 18 && mouseY < i1 + 18) {
-                j1 += 18;
+            if (mouseX >= x && mouseY >= y && mouseX < x + 18 && mouseY < y + 18) {
+                v += 18;
             }
 
-            graphics.blit(RenderPipelines.GUI_TEXTURED, VALIDATED_TEXTURE, k, i1, l1, j1, 18, 18, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, VALIDATED_TEXTURE, x, y, l1, v, 18, 18, 256, 256);
+
+            if (mouseX >= x && mouseY >= y && mouseX < x + 18 && mouseY < y + 18) {
+                // TODO test, should be switched to actual component in a list
+                graphics.setTooltipForNextFrame(bee.displayName(), mouseX, mouseY);
+            }
         }
 
     }
@@ -176,7 +176,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
             int j = i - this.beeIndexOffset;
             int i1 = top + j * 18 + 2;
 
-            BlockBee.Occupant bee = this.menu.getApiaryBee(i);
+            var bee = this.menu.getApiaryBee(i);
 //            CompoundTag entityTag = bee.entityData.copy();
 //            entityTag.putString(NBTConstants.BeeJar.COLOR, bee.color);
 //

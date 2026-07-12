@@ -12,5 +12,10 @@ public class ModDataComponents {
 
     public static final ResourcefulRegistry<DataComponentType<?>> COMPONENTS = RegistryHelper.create(BuiltInRegistries.DATA_COMPONENT_TYPE, ModConstants.MOD_ID);
 
-    public static final RegistryEntry<DataComponentType<Bees>> BEES = COMPONENTS.register("bees", () -> DataComponentType.<Bees>builder().persistent(Bees.CODEC).networkSynchronized(Bees.STREAM_CODEC).cacheEncoding().build());
+    public static final RegistryEntry<DataComponentType<Bees>> BEES = COMPONENTS.register("bees", () -> DataComponentType.<Bees>builder()
+            .persistent(Bees.CODEC)
+            .networkSynchronized(Bees.STREAM_CODEC)
+            .cacheEncoding()
+            .build()
+    );
 }

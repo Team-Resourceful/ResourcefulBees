@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.menus;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
-import com.teamresourceful.resourcefulbees.common.blockentities.base.BlockBee;
+import com.teamresourceful.resourcefulbees.common.components.HiveOccupant;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.LockBeePacket;
@@ -76,7 +76,7 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
         }
     }
 
-    public BlockBee.Occupant getApiaryBee(int i) {
+    public HiveOccupant getApiaryBee(int i) {
         return entity.getBees().get(i);
     }
 
