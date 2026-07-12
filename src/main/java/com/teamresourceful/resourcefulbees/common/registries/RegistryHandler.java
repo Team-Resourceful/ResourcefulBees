@@ -56,6 +56,7 @@ public final class RegistryHandler {
         ModPotions.POTIONS.init();
         ModVillagerProfessions.PROFESSIONS.init();
         ModFeatures.FEATURES.init();
+        ModDataComponents.COMPONENTS.init();
     }
 
     //Dynamic|Iterative Registration Stuff below this line

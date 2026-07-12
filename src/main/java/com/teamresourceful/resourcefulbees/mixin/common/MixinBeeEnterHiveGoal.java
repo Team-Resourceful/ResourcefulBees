@@ -53,7 +53,7 @@ public abstract class MixinBeeEnterHiveGoal {
         if (pos != null) {
             BlockEntity block = this$0.level().getBlockEntity(pos);
             if (block instanceof BeeHolderBlockEntity holder) {
-                holder.tryEnterHive(this$0, this$0.hasNectar(), 0);
+                holder.tryEnterHive(this$0);
             }
         }
     }

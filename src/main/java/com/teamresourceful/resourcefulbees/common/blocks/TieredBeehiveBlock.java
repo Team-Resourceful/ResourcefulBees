@@ -3,8 +3,14 @@ package com.teamresourceful.resourcefulbees.common.blocks;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.items.base.ExpandableTooltip;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
+import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.NestUpgrade;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeehiveTranslations;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.core.BlockPos;
@@ -18,6 +24,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -29,6 +37,8 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.common.ItemAbilities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -87,36 +97,34 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
         return level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity hive && hive.isSedated();
     }
 
-//    @Override
-//    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult hit) {
-//        ItemStack itemstack = player.getItemInHand(handIn);
-//
-//        if (state.getValue(HONEY_LEVEL) >= 5) {
-//            boolean isShear = GeneralConfig.allowShears && ModConstants.SHEAR_ACTION.test(itemstack);
-//            boolean isScraper = ModConstants.SCRAPE_ACTION.test(itemstack);
-//
-//            if (isShear || isScraper) {
-//                InteractionResult success = performHoneyHarvest(state, level, pos, player, handIn, itemstack, isScraper);
-//                if (success != null) {
-//                    return success;
-//                }
-//            }
-//        }
-//
-//        if (itemstack.getItem() instanceof NestUpgrade upgrade && upgrade.isType(UpgradeType.NEST)) {
-//            if (upgrade.getTier().from.equals(this.tier)) {
-//                InteractionResult result = upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
-//                if (result != InteractionResult.FAIL && GeneralConfig.consumeHiveUpgrade) {
-//                    itemstack.shrink(1);
-//                }
-//                return result;
-//            } else {
-//                player.sendSystemMessage(BeehiveTranslations.INVALID_UPGRADE);
-//            }
-//        }
-//
-//        return InteractionResult.PASS;
-//    }
+    @Override
+    protected InteractionResult useItemOn(ItemStack itemstack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (state.getValue(HONEY_LEVEL) >= 5) {
+            boolean isShear = GeneralConfig.allowShears && itemstack.canPerformAction(ItemAbilities.SHEARS_HARVEST);
+            boolean isScraper = itemstack.canPerformAction(ModConstants.SCRAPE_ACTION);
+
+            if (isShear || isScraper) {
+                InteractionResult success = performHoneyHarvest(state, level, pos, player, hand, itemstack, isScraper);
+                if (success != null) {
+                    return success;
+                }
+            }
+        }
+
+        if (itemstack.getItem() instanceof NestUpgrade upgrade && upgrade.isType(UpgradeType.NEST)) {
+            if (upgrade.getTier().from.equals(this.tier)) {
+                InteractionResult result = upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
+                if (result != InteractionResult.FAIL && GeneralConfig.consumeHiveUpgrade) {
+                    itemstack.shrink(1);
+                }
+                return result;
+            } else {
+                player.sendSystemMessage(BeehiveTranslations.INVALID_UPGRADE);
+            }
+        }
+
+        return InteractionResult.PASS;
+    }
 
     @Nullable
     private InteractionResult performHoneyHarvest(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, ItemStack itemstack, boolean isScraper) {

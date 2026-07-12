@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.networking.packets.server;
 
 import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.SyncedGUI;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
@@ -12,40 +11,38 @@ import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketTyp
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.ProblemReporter;
-import net.minecraft.world.level.storage.TagValueInput;
 import org.jetbrains.annotations.NotNull;
 
-public record SyncGuiPacket(BlockPos pos, @NotNull CompoundTag tag) implements Packet<SyncGuiPacket> {
+public record SyncBeesPacket(BlockPos pos, @NotNull ListTag tag) implements Packet<SyncBeesPacket> {
 
-    public static final ClientboundPacketType<SyncGuiPacket> PACKET_TYPE = new Type();
+    public static final ClientboundPacketType<SyncBeesPacket> PACKET_TYPE = new Type();
 
-    public SyncGuiPacket(SyncedGUI syncedBlockEntity) {
-        this(syncedBlockEntity.getBlockPos(), syncedBlockEntity.getSyncData());
+    public SyncBeesPacket(SyncedGUI syncedBlockEntity) {
+        this(syncedBlockEntity.getBlockPos(), syncedBlockEntity.getSyncData(new ListTag(0)));
     }
 
     @Override
-    public PacketType<SyncGuiPacket> type() {
+    public PacketType<SyncBeesPacket> type() {
         return PACKET_TYPE;
     }
 
-    private static class Type extends CodecPacketType<SyncGuiPacket> implements ClientboundPacketType<SyncGuiPacket> {
+    private static class Type extends CodecPacketType<SyncBeesPacket> implements ClientboundPacketType<SyncBeesPacket> {
 
         public Type() {
             super(
-                    Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "sync_gui"),
+                    Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "sync_bees"),
                     ObjectByteCodec.create(
-                            ExtraByteCodecs.BLOCK_POS.fieldOf(SyncGuiPacket::pos),
-                            ExtraByteCodecs.NONNULL_COMPOUND_TAG.fieldOf(SyncGuiPacket::tag),
-                            SyncGuiPacket::new
+                            ExtraByteCodecs.BLOCK_POS.fieldOf(SyncBeesPacket::pos),
+                            ExtraByteCodecs.NONNULL_COMPOUND_TAG.fieldOf(SyncBeesPacket::tag),
+                            SyncBeesPacket::new
                     )
             );
         }
 
         @Override
-        public Runnable handle(SyncGuiPacket message) {
+        public Runnable handle(SyncBeesPacket message) {
             return () -> {
                 assert Minecraft.getInstance().level != null;
                 if (Minecraft.getInstance().level.getBlockEntity(message.pos) instanceof SyncedGUI syncedBlockEntity) {

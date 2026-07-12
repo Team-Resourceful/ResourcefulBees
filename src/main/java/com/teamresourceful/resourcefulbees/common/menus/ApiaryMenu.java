@@ -9,7 +9,10 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTy
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
@@ -27,7 +30,12 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
     protected void addMenuSlots() {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                //this.addSlot(new AutomationSensitiveSlot(entity.getContainer(), j + i * 9, 56 + j * 18, 18 + i * 18));
+                this.addSlot(new ResourceHandlerSlot(entity.resourceHandler(), entity.resourceHandler()::set, j + i * 9, 56 + j * 18, 18 + i * 18) {
+                    @Override
+                    public boolean mayPlace(@NonNull ItemStack stack) {
+                        return false;
+                    }
+                });
             }
         }
     }
@@ -68,7 +76,7 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
         }
     }
 
-    public BlockBee getApiaryBee(int i) {
+    public BlockBee.Occupant getApiaryBee(int i) {
         return entity.getBees().get(i);
     }
 

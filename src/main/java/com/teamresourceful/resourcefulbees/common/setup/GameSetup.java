@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.setup;
 
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesCommand;
 import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument;
 import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
@@ -8,10 +9,7 @@ import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntit
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
 import com.teamresourceful.resourcefulbees.common.world.gen.GoldenFlower;
 import com.teamresourceful.resourcefulbees.events.*;
 import com.teamresourceful.resourcefulbees.events.lifecycle.ServerGoingToStartEvent;
@@ -28,7 +26,10 @@ import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 
@@ -137,5 +138,9 @@ public final class GameSetup {
         } catch (IOException e) {
             ModConstants.LOGGER.error("Failed to create pack.mcmeta file for resource loading");
         }
+    }
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.Item.BLOCK, ModBlockEntityTypes.T1_APIARY_ENTITY.get(), (apiaryBlock, side) -> apiaryBlock.resourceHandler());
     }
 }

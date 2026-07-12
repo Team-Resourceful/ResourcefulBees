@@ -132,6 +132,7 @@ public class ResourcefulBees {
         modEventBus.addListener((this::onLoadingCompleted));
         modEventBus.addListener(GameSetup::registerAttributes);
         modEventBus.addListener(GameSetup::registerRepositorySources);
+        modEventBus.addListener(GameSetup::registerCapabilities);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ResourcefulBees) to respond directly to events.

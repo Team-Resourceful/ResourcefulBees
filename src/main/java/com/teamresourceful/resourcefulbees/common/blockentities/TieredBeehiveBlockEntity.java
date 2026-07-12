@@ -83,15 +83,6 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
        return ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY.get();
     }
 
-    /**
-     * This is a hack to fix an issue where mod devs are using the gather capabilities event and trying to get the block entity type
-     * we can not pass the type to the other constructor because it is not available because the bee hive already sets it, so we override it.
-     */
-    private BlockEntityType<?> getEntityType() {
-        return HIVE_TO_ENTITY.apply(getBlockState().getBlock());
-    }
-
-
     public static void recalculateHoneyLevel(TieredBeehiveBlockEntity hive) {
         float combsInHive = hive.honeycombs.size();
         float percentValue = (combsInHive / hive.getBlock().getTier().maxCombs()) * 100;
@@ -193,7 +184,6 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
         }
     }
 
-    //todo try to reduce these to a single occupantOf method
     private static BeehiveBlockEntity.Occupant occupantOf(Entity entity, BeeCompat compat, TieredBeehiveBlockEntity hive) {
         BeehiveBlockEntity.Occupant occupant;
         try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), LOGGER)) {
@@ -209,18 +199,8 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
         return occupant;
     }
 
-    public static BeehiveBlockEntity.Occupant occupantOf(CustomBeeEntityType<?> entity, WorldGenLevel level, int timeInHive, TieredBeehiveBlockEntity hive) {
-        Entity bee = EntityType.loadEntityRecursive(entity, new CompoundTag(), level.getLevel(), EntitySpawnReason.CHUNK_GENERATION, EntityProcessor.NOP);
-        BeehiveBlockEntity.Occupant occupant;
-        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(bee.problemPath(), LOGGER)) {
-            TagValueOutput output = TagValueOutput.createWithContext(reporter, bee.registryAccess());
-            bee.save(output);
-            BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(output::discard);
-            int maxTimeInHive = (int) (timeInHive * hive.getBlock().getTier().timeModifier());
-            occupant = new BeehiveBlockEntity.Occupant(TypedEntityData.of(entity, output.buildResult()), 0, maxTimeInHive);
-        }
-
-        return occupant;
+    public static BeehiveBlockEntity.Occupant create(CustomBeeEntityType<?> entity, int timeInHive, int maxTimeInHive, TieredBeehiveBlockEntity hive) {
+        return new BeehiveBlockEntity.Occupant(TypedEntityData.of(entity, new CompoundTag()), timeInHive, (int) (maxTimeInHive * hive.getBlock().getTier().timeModifier()));
     }
 
     private TieredBeehiveBlock getBlock() {

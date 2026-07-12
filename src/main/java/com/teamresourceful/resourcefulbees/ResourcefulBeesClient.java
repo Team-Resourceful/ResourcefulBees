@@ -2,7 +2,9 @@ package com.teamresourceful.resourcefulbees;
 
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
+import com.teamresourceful.resourcefulbees.client.screen.ApiaryScreen;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -11,6 +13,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
@@ -38,5 +41,10 @@ public class ResourcefulBeesClient {
         ModEntities.getModBees().forEach((s, entityType) ->
                 event.registerEntityRenderer(entityType.get(), context -> new CustomBeeRenderer<>(context, BeeRegistry.get().getBeeData(s).getRenderData()))
         );
+    }
+
+    @SubscribeEvent
+    public static void registerMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(ModMenuTypes.APIARY.get(), ApiaryScreen::new);
     }
 }

@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.LockBeePacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.DimensionalBeesPacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncBeepediaPacket;
+import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncBeesPacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncGuiPacket;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.network.Network;
@@ -31,5 +32,6 @@ public final class NetworkHandler {
         NETWORK.register(DimensionalBeesPacket.PACKET_TYPE);
         NETWORK.register(SyncBeepediaPacket.PACKET_TYPE);
         NETWORK.register(SyncGuiPacket.PACKET_TYPE);
+        NETWORK.register(SyncBeesPacket.PACKET_TYPE);
     }
 }

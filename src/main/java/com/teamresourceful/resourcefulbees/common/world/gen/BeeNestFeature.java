@@ -207,13 +207,14 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
                     .map(MobSpawnSettings.SpawnerData::type)
                     .filter(type -> type instanceof CustomBeeEntityType<?>)
                     .map(type -> (CustomBeeEntityType<?>) type)
-                    .ifPresent(bee -> addBeeToNest(bee, level, rand, nest));
+                    .ifPresent(bee -> addBeeToNest(bee, rand, nest));
             }
         }
     }
 
-    private static void addBeeToNest(CustomBeeEntityType<?> entity, WorldGenLevel level, RandomSource rand, TieredBeehiveBlockEntity nest) {
-        int timeInHive = rand.nextInt(entity.getData().getCoreData().maxTimeInHive());
-        nest.getBees().add(new BeehiveBlockEntity.BeeData(TieredBeehiveBlockEntity.occupantOf(entity, level, timeInHive, nest)));
+    private static void addBeeToNest(CustomBeeEntityType<?> entity, RandomSource rand, TieredBeehiveBlockEntity nest) {
+        int maxTimeInHive = entity.getData().getCoreData().maxTimeInHive();
+        int timeInHive = rand.nextInt(maxTimeInHive);
+        nest.getBees().add(new BeehiveBlockEntity.BeeData(TieredBeehiveBlockEntity.create(entity, timeInHive, maxTimeInHive, nest)));
     }
 }

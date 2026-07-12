@@ -23,7 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.HashMap;

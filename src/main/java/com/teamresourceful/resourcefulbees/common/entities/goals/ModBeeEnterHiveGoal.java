@@ -55,7 +55,7 @@ public class ModBeeEnterHiveGoal extends Goal {
             if (block instanceof BeehiveBlockEntity hive) {
                 hive.addOccupant(this.bee);
             } else if (block instanceof BeeHolderBlockEntity holder) {
-                holder.tryEnterHive(this.bee, this.bee.hasNectar(), 0);
+                holder.tryEnterHive(this.bee);
             }
         }
     }

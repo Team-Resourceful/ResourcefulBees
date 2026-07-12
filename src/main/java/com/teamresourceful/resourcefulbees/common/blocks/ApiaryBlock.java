@@ -6,10 +6,13 @@ import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseBlock;
+import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -36,20 +39,24 @@ public class ApiaryBlock extends BeeHouseBlock implements BeeHolderBlock {
     return tier;
   }
 
-/*  @Override
+//  @Override
+//  protected @Nullable MenuProvider getMenuProvider(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos) {
+//    return new SimpleMenuProvider((containerId, inventory, player) -> new ApiaryMenu(containerId, inventory, (ApiaryBlockEntity) level.getBlockEntity(pos)), Component.translatable("menu.title.resourcefulbees.apiary_menu"));
+//  }
+
+  /*  @Override
   @Environment(EnvType.CLIENT)
   public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
     components.add(Component.translatable(BeehiveTranslations.MAX_BEES, tier.maxBees()).withStyle(ChatFormatting.GOLD));
     components.add(Component.translatable(BeehiveTranslations.HIVE_TIME, tier.getTimeModificationAsPercent()).withStyle(ChatFormatting.GOLD));
   }*/
 
-  @Nullable
+
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
     return new ApiaryBlockEntity(tier, pos, state);
   }
 
-  @Nullable
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
     return level.isClientSide() ? null : createTickerHelper(type, tier.getBlockEntityType(), (level1, pos, state1, blockEntity) -> ApiaryBlockEntity.serverTick(level1, pos, state1, (ApiaryBlockEntity) blockEntity));
