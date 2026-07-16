@@ -1,6 +1,7 @@
 {
-    "parent": "item/generated",
-    "textures": {
-      "layer0": "resourcefulbees:item/bee_spawn_egg"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "resourcefulbees:item/bee_spawn_egg",
+    "layer1": "resourcefulbees:item/bee_spawn_egg_wings"
   }
+}

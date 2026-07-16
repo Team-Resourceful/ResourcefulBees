@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.components.Bees;
+import com.teamresourceful.resourcefulbees.common.components.JarOccupant;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
@@ -15,6 +16,13 @@ public class ModDataComponents {
     public static final RegistryEntry<DataComponentType<Bees>> BEES = COMPONENTS.register("bees", () -> DataComponentType.<Bees>builder()
             .persistent(Bees.CODEC)
             .networkSynchronized(Bees.STREAM_CODEC)
+            .cacheEncoding()
+            .build()
+    );
+
+    public static final RegistryEntry<DataComponentType<JarOccupant>> JAR_BEE = COMPONENTS.register("jar_bee", () -> DataComponentType.<JarOccupant>builder()
+            .persistent(JarOccupant.CODEC)
+            .networkSynchronized(JarOccupant.STREAM_CODEC)
             .cacheEncoding()
             .build()
     );

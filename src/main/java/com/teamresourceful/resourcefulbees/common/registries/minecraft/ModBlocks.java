@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
+import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
-import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.*;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseTopBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import com.teamresourceful.resourcefullib.common.fluid.data.FluidData;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.builtin.ResourcefulBlockRegistry;
@@ -19,7 +20,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -54,21 +54,21 @@ public final class ModBlocks {
     private static final BlockBehaviour.Properties APIARY_PROPERTIES = BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(5f, 6f).sound(SoundType.METAL);
     public static final BlockBehaviour.Properties HONEY_FLUID_BLOCK_PROPERTIES = BlockBehaviour.Properties.of()
             .mapColor(MapColor.TERRACOTTA_ORANGE)
+            .liquid()
             .noOcclusion()
-            .replaceable()
             .noCollision()
             .strength(100.0F)
-            .noLootTable();
+            .speedFactor(0.15F)
+            .noLootTable()
+            .replaceable()
+            .sound(SoundType.EMPTY)
+            .pushReaction(PushReaction.DESTROY);
 
     public static final BlockSetType WAX_BLOCK_SET = BlockSetType.register(new BlockSetType("resourcefulbees:waxed"));
     public static final WoodType WAXED_WOOD_TYPE = WoodType.register(new WoodType("resourcefulbees:waxed", WAX_BLOCK_SET));
 
-    private static BlockBehaviour.Properties makeNestProperty(MapColor color, SoundType soundType){
-        return BlockBehaviour.Properties.of().strength(1.0F).mapColor(color).sound(soundType);
-    }
-
-    private static TieredBeehiveBlock createNest(Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType, BeehiveTier tier, BlockBehaviour.Properties properties) {
-        return new TieredBeehiveBlock(entityType, tier, properties);
+    private static TieredBeehiveBlock createNest(BeehiveTier tier, BlockBehaviour.Properties properties) {
+        return new TieredBeehiveBlock(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, tier, properties);
     }
 
     private static boolean never(BlockState state, BlockGetter blockGetter, BlockPos blockPos) {
@@ -81,114 +81,12 @@ public final class ModBlocks {
     }
 
     public static RegistryEntry<Block> registerHive(String id, int tier, Supplier<BlockBehaviour.Properties> hiveProps) {
-        return registerBlock(HIVES, id, properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.ordinalOf(tier), properties), hiveProps);
+        return registerBlock(HIVES, id, properties -> createNest(DefaultBeehiveTiers.ordinalOf(tier), properties), hiveProps);
     }
 
-//    //TODO figure out how to make this nest registration cleaner and reduce duplicate processes
-//    //region Nests
-//    //region Acacia
-//    public static final RegistryEntry<Block> ACACIA_BEE_NEST = registerBlock(HIVES, "nest/acacia/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T1_ACACIA_BEEHIVE = registerBlock(HIVES,"nest/acacia/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T2_ACACIA_BEEHIVE = registerBlock(HIVES,"nest/acacia/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T3_ACACIA_BEEHIVE = registerBlock(HIVES,"nest/acacia/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    //endregion
-//    //region Birch
-//    public static final RegistryEntry<Block> BIRCH_BEE_NEST = registerBlock(HIVES, "nest/birch/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T1_BIRCH_BEEHIVE = registerBlock(HIVES, "nest/birch/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T2_BIRCH_BEEHIVE = registerBlock(HIVES, "nest/birch/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T3_BIRCH_BEEHIVE = registerBlock(HIVES, "nest/birch/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    //endregion
-//    //region Brown Mushroom
-//    public static final RegistryEntry<Block> BROWN_MUSHROOM_BEE_NEST = registerBlock(HIVES, "nest/brown_mushroom/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> makeNestProperty(MapColor.DIRT, SoundType.WOOD));
-//    public static final RegistryEntry<Block> T1_BROWN_MUSHROOM_BEEHIVE = registerBlock(HIVES, "nest/brown_mushroom/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> makeNestProperty(MapColor.DIRT, SoundType.WOOD));
-//    public static final RegistryEntry<Block> T2_BROWN_MUSHROOM_BEEHIVE = registerBlock(HIVES, "nest/brown_mushroom/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> makeNestProperty(MapColor.DIRT, SoundType.WOOD));
-//    public static final RegistryEntry<Block> T3_BROWN_MUSHROOM_BEEHIVE = registerBlock(HIVES, "nest/brown_mushroom/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> makeNestProperty(MapColor.DIRT, SoundType.WOOD));
-//    //endregion
-//    //region Crimson
-//    public static final RegistryEntry<Block> CRIMSON_BEE_NEST = registerBlock(HIVES, "nest/crimson/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> makeNestProperty(MapColor.CRIMSON_STEM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T1_CRIMSON_BEEHIVE = registerBlock(HIVES, "nest/crimson/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> makeNestProperty(MapColor.CRIMSON_STEM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T2_CRIMSON_BEEHIVE = registerBlock(HIVES, "nest/crimson/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> makeNestProperty(MapColor.CRIMSON_STEM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T3_CRIMSON_BEEHIVE = registerBlock(HIVES, "nest/crimson/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> makeNestProperty(MapColor.CRIMSON_STEM, SoundType.STEM));
-//    //endregion
-//    //region Crimson Nylium
-//    public static final RegistryEntry<Block> CRIMSON_NYLIUM_BEE_NEST = registerBlock(HIVES, "nest/crimson_nylium/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> makeNestProperty(MapColor.CRIMSON_NYLIUM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T1_CRIMSON_NYLIUM_BEEHIVE = registerBlock(HIVES, "nest/crimson_nylium/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> makeNestProperty(MapColor.CRIMSON_NYLIUM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T2_CRIMSON_NYLIUM_BEEHIVE = registerBlock(HIVES, "nest/crimson_nylium/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> makeNestProperty(MapColor.CRIMSON_NYLIUM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T3_CRIMSON_NYLIUM_BEEHIVE = registerBlock(HIVES, "nest/crimson_nylium/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> makeNestProperty(MapColor.CRIMSON_NYLIUM, SoundType.STEM));
-//    //endregion
-//    //region Dark Oak
-//    public static final RegistryEntry<Block> DARK_OAK_BEE_NEST = registerBlock(HIVES, "nest/dark_oak/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T1_DARK_OAK_BEEHIVE = registerBlock(HIVES, "nest/dark_oak/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T2_DARK_OAK_BEEHIVE = registerBlock(HIVES, "nest/dark_oak/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T3_DARK_OAK_BEEHIVE = registerBlock(HIVES, "nest/dark_oak/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    //endregion
-//    //region Grass
-//    public static final RegistryEntry<Block> GRASS_BEE_NEST = registerBlock(HIVES, "nest/grass/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> makeNestProperty(MapColor.GRASS, SoundType.GRASS));
-//    public static final RegistryEntry<Block> T1_GRASS_BEEHIVE = registerBlock(HIVES, "nest/grass/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> makeNestProperty(MapColor.GRASS, SoundType.GRASS));
-//    public static final RegistryEntry<Block> T2_GRASS_BEEHIVE = registerBlock(HIVES, "nest/grass/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> makeNestProperty(MapColor.GRASS, SoundType.GRASS));
-//    public static final RegistryEntry<Block> T3_GRASS_BEEHIVE = registerBlock(HIVES, "nest/grass/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> makeNestProperty(MapColor.GRASS, SoundType.GRASS));
-//    //endregion
-//    //region Jungle
-//    public static final RegistryEntry<Block> JUNGLE_BEE_NEST = registerBlock(HIVES, "nest/jungle/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T1_JUNGLE_BEEHIVE = registerBlock(HIVES, "nest/jungle/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T2_JUNGLE_BEEHIVE = registerBlock(HIVES, "nest/jungle/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T3_JUNGLE_BEEHIVE = registerBlock(HIVES, "nest/jungle/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    //endregion
-//    //region Nether
-//    public static final RegistryEntry<Block> NETHER_BEE_NEST = registerBlock(HIVES, "nest/netherrack/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> makeNestProperty(MapColor.NETHER, SoundType.NETHERRACK));
-//    public static final RegistryEntry<Block> T1_NETHER_BEEHIVE = registerBlock(HIVES, "nest/netherrack/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> makeNestProperty(MapColor.NETHER, SoundType.NETHERRACK));
-//    public static final RegistryEntry<Block> T2_NETHER_BEEHIVE = registerBlock(HIVES, "nest/netherrack/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> makeNestProperty(MapColor.NETHER, SoundType.NETHERRACK));
-//    public static final RegistryEntry<Block> T3_NETHER_BEEHIVE = registerBlock(HIVES, "nest/netherrack/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> makeNestProperty(MapColor.NETHER, SoundType.NETHERRACK));
-//    //endregion
-//    //region Oak
-//    public static final RegistryEntry<Block> OAK_BEE_NEST = registerBlock(HIVES, "nest/oak/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T1_OAK_BEEHIVE = registerBlock(HIVES, "nest/oak/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T2_OAK_BEEHIVE = registerBlock(HIVES, "nest/oak/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T3_OAK_BEEHIVE = registerBlock(HIVES, "nest/oak/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    //endregion
-//    //region Prismarine
-//    public static final RegistryEntry<Block> PRISMARINE_BEE_NEST = registerBlock(HIVES, "nest/prismarine/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> makeNestProperty(MapColor.DIAMOND, SoundType.STONE));
-//    public static final RegistryEntry<Block> T1_PRISMARINE_BEEHIVE = registerBlock(HIVES, "nest/prismarine/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> makeNestProperty(MapColor.DIAMOND, SoundType.STONE));
-//    public static final RegistryEntry<Block> T2_PRISMARINE_BEEHIVE = registerBlock(HIVES, "nest/prismarine/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> makeNestProperty(MapColor.DIAMOND, SoundType.STONE));
-//    public static final RegistryEntry<Block> T3_PRISMARINE_BEEHIVE = registerBlock(HIVES, "nest/prismarine/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> makeNestProperty(MapColor.DIAMOND, SoundType.STONE));
-//    //endregion
-//    //region Purpur
-//    public static final RegistryEntry<Block> PURPUR_BEE_NEST = registerBlock(HIVES, "nest/chorus/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> makeNestProperty(MapColor.COLOR_MAGENTA, SoundType.STONE));
-//    public static final RegistryEntry<Block> T1_PURPUR_BEEHIVE = registerBlock(HIVES, "nest/chorus/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> makeNestProperty(MapColor.COLOR_MAGENTA, SoundType.STONE));
-//    public static final RegistryEntry<Block> T2_PURPUR_BEEHIVE = registerBlock(HIVES, "nest/chorus/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> makeNestProperty(MapColor.COLOR_MAGENTA, SoundType.STONE));
-//    public static final RegistryEntry<Block> T3_PURPUR_BEEHIVE = registerBlock(HIVES, "nest/chorus/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> makeNestProperty(MapColor.COLOR_MAGENTA, SoundType.STONE));
-//    //endregion
-//    //region Red Mushroom
-//    public static final RegistryEntry<Block> RED_MUSHROOM_BEE_NEST = registerBlock(HIVES, "nest/red_mushroom/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> makeNestProperty(MapColor.COLOR_RED, SoundType.WOOD));
-//    public static final RegistryEntry<Block> T1_RED_MUSHROOM_BEEHIVE = registerBlock(HIVES, "nest/red_mushroom/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> makeNestProperty(MapColor.COLOR_RED, SoundType.WOOD));
-//    public static final RegistryEntry<Block> T2_RED_MUSHROOM_BEEHIVE = registerBlock(HIVES, "nest/red_mushroom/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> makeNestProperty(MapColor.COLOR_RED, SoundType.WOOD));
-//    public static final RegistryEntry<Block> T3_RED_MUSHROOM_BEEHIVE = registerBlock(HIVES, "nest/red_mushroom/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> makeNestProperty(MapColor.COLOR_RED, SoundType.WOOD));
-//    //endregion
-//    //region Spruce
-//    public static final RegistryEntry<Block> SPRUCE_BEE_NEST = registerBlock(HIVES, "nest/spruce/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T1_SPRUCE_BEEHIVE = registerBlock(HIVES, "nest/spruce/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T2_SPRUCE_BEEHIVE = registerBlock(HIVES, "nest/spruce/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    public static final RegistryEntry<Block> T3_SPRUCE_BEEHIVE = registerBlock(HIVES, "nest/spruce/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> WOOD_NEST_PROPERTIES);
-//    //endregion
-//    //region Warped
-//    public static final RegistryEntry<Block> WARPED_BEE_NEST = registerBlock(HIVES, "nest/warped/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> makeNestProperty(MapColor.WARPED_STEM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T1_WARPED_BEEHIVE = registerBlock(HIVES, "nest/warped/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> makeNestProperty(MapColor.WARPED_STEM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T2_WARPED_BEEHIVE = registerBlock(HIVES, "nest/warped/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> makeNestProperty(MapColor.WARPED_STEM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T3_WARPED_BEEHIVE = registerBlock(HIVES, "nest/warped/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> makeNestProperty(MapColor.WARPED_STEM, SoundType.STEM));
-//    //endregion
-//    //region Warped Nylium
-//    public static final RegistryEntry<Block> WARPED_NYLIUM_BEE_NEST = registerBlock(HIVES, "nest/warped_nylium/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> makeNestProperty(MapColor.WARPED_NYLIUM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T1_WARPED_NYLIUM_BEEHIVE = registerBlock(HIVES, "nest/warped_nylium/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> makeNestProperty(MapColor.WARPED_NYLIUM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T2_WARPED_NYLIUM_BEEHIVE = registerBlock(HIVES, "nest/warped_nylium/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> makeNestProperty(MapColor.WARPED_NYLIUM, SoundType.STEM));
-//    public static final RegistryEntry<Block> T3_WARPED_NYLIUM_BEEHIVE = registerBlock(HIVES, "nest/warped_nylium/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> makeNestProperty(MapColor.WARPED_NYLIUM, SoundType.STEM));
-//    //endregion
-//    //region Wither
-//    public static final RegistryEntry<Block> WITHER_BEE_NEST = registerBlock(HIVES, "nest/wither/1", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T1_NEST, properties), () -> makeNestProperty(MapColor.COLOR_BLACK, SoundType.BASALT));
-//    public static final RegistryEntry<Block> T1_WITHER_BEEHIVE = registerBlock(HIVES, "nest/wither/2", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T2_NEST, properties), () -> makeNestProperty(MapColor.COLOR_BLACK, SoundType.BASALT));
-//    public static final RegistryEntry<Block> T2_WITHER_BEEHIVE = registerBlock(HIVES, "nest/wither/3", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T3_NEST, properties), () -> makeNestProperty(MapColor.COLOR_BLACK, SoundType.BASALT));
-//    public static final RegistryEntry<Block> T3_WITHER_BEEHIVE = registerBlock(HIVES, "nest/wither/4", properties -> createNest(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, DefaultBeehiveTiers.T4_NEST, properties), () -> makeNestProperty(MapColor.COLOR_BLACK, SoundType.BASALT));
-//    //endregion
-//    //endregion
+    public static void registerHoneyFluidBlock(String id, HoneyFluidData honeyFluidData, FluidData fluidType) {
+        registerBlock(HONEY_FLUID_BLOCKS, id, properties -> new CustomHoneyFluidBlock(fluidType, properties, honeyFluidData), () -> HONEY_FLUID_BLOCK_PROPERTIES);
+    }
 
     public static final RegistryEntry<Block> T1_APIARY_BLOCK = registerBlock(APIARIES, "apiary/1", properties -> new ApiaryBlock(DefaultApiaryTiers.T1_APIARY, properties), () -> APIARY_PROPERTIES);
     public static final RegistryEntry<Block> T2_APIARY_BLOCK = registerBlock(APIARIES, "apiary/2", properties -> new ApiaryBlock(DefaultApiaryTiers.T2_APIARY, properties), () -> APIARY_PROPERTIES);
@@ -214,6 +112,7 @@ public final class ModBlocks {
     public static final RegistryEntry<Block> WAXED_DOOR = registerBlock(BLOCKS, "waxed_door", properties -> new DoorBlock(WAX_BLOCK_SET, properties), WAXED_PLANKS_PROPERTIES::noOcclusion);
     public static final RegistryEntry<Block> WAXED_TRAPDOOR = registerBlock(BLOCKS, "waxed_trapdoor", properties -> new TrapDoorBlock(WAX_BLOCK_SET, properties), WAXED_PLANKS_PROPERTIES::noOcclusion);
     public static final RegistryEntry<Block> TRIMMED_WAXED_PLANKS = registerBlock(BLOCKS, "trimmed_waxed_planks", Block::new, () -> WAXED_PLANKS_PROPERTIES);
+    // todo consider changing machine block to basic machine block and using vanilla waxing mechanics to convert to waxed variant
     public static final RegistryEntry<Block> WAXED_MACHINE_BLOCK = registerBlock(BLOCKS, "waxed_machine_block", Block::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
 
     public static final RegistryEntry<Block> WAXED_SIGN = registerBlock(BLOCKS, "waxed_sign", properties -> new StandingSignBlock(WAXED_WOOD_TYPE, properties){
@@ -268,6 +167,6 @@ public final class ModBlocks {
 //   public static final RegistryEntry<Block> CENTRIFUGE_CRANK = CENTRIFUGE_BLOCKS.register("centrifuge_crank", () -> new CentrifugeCrankBlock(BlockBehaviour.Properties.of().strength(2).sound(SoundType.WOOD).noOcclusion()));
 //  public static final RegistryEntry<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(CENTRIFUGE_PROPERTIES));
 
-//    public static final RegistryEntry<Block> HONEY_FLUID_BLOCK = HONEY_FLUID_BLOCKS.register("honey", () -> new BotariumLiquidBlock(ModFluidProperties.HONEY, HONEY_FLUID_BLOCK_PROPERTIES));
+    public static final RegistryEntry<Block> HONEY_FLUID_BLOCK = registerBlock(HONEY_FLUID_BLOCKS, "honey_fluid_block", properties -> new HoneyFluidBlock(ModFluids.HONEY_FLUID_TYPE.get(), properties), () -> HONEY_FLUID_BLOCK_PROPERTIES);
 
 }

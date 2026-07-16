@@ -15,7 +15,7 @@
     },
     "honeyBottle": "resourcefulbees:rainbow_honey_bottle",
     "tradeData": {
-      "secondaryItem": "minecraft:bottle"
+      "secondaryItem": "minecraft:glass_bottle"
     }
   },
   "resourcefulbees:block/v1": {

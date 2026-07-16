@@ -8,7 +8,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.Rarity;
 
+//todo add extinguish sound as a customizable option, however limit of group entries is 16 and that puts the codec at 17
+// so need to group like-attributes.
 public record CustomHoneyFluidAttributesData(
         int lightLevel,
         int density,
@@ -23,12 +26,13 @@ public record CustomHoneyFluidAttributesData(
         boolean canConvertToSource,
         boolean supportsBoating,
         boolean canHydrate,
+        Rarity rarity,
         LazyHolder<SoundEvent> bucketFill,
         LazyHolder<SoundEvent> bucketEmpty
 ) implements HoneyFluidAttributesData {
 
     private static final Codec<LazyHolder<SoundEvent>> SOUND_CODEC = Identifier.CODEC.xmap(LazyHolder.map(BuiltInRegistries.SOUND_EVENT), LazyHolder::getId);
-    public static final CustomHoneyFluidAttributesData DEFAULT = new CustomHoneyFluidAttributesData(1, 1000, 300, 1000, 0.5f, 0.014, true, true, true, false, false, false, false, LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_FILL), LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_EMPTY));
+    public static final CustomHoneyFluidAttributesData DEFAULT = new CustomHoneyFluidAttributesData(1, 1000, 300, 1000, 0.5f, 0.014, true, true, true, false, false, false, false, Rarity.COMMON, LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_FILL), LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_EMPTY));
     public static final Codec<HoneyFluidAttributesData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.intRange(0, 15).fieldOf("lightLevel").orElse(1).forGetter(HoneyFluidAttributesData::lightLevel),
             Codec.INT.optionalFieldOf("density", 1000).forGetter(HoneyFluidAttributesData::density),
@@ -43,6 +47,7 @@ public record CustomHoneyFluidAttributesData(
             Codec.BOOL.optionalFieldOf("canConvertToSource", false).forGetter(HoneyFluidAttributesData::canConvertToSource),
             Codec.BOOL.optionalFieldOf("supportsBoating", false).forGetter(HoneyFluidAttributesData::supportsBoating),
             Codec.BOOL.optionalFieldOf("canHydrate", false).forGetter(HoneyFluidAttributesData::canHydrate),
+            Rarity.CODEC.optionalFieldOf("rarity", Rarity.COMMON).forGetter(HoneyFluidAttributesData::rarity),
             SOUND_CODEC.optionalFieldOf("fillSound", LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_FILL)).forGetter(HoneyFluidAttributesData::bucketFill),
             SOUND_CODEC.optionalFieldOf("emptySound", LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_EMPTY)).forGetter(HoneyFluidAttributesData::bucketEmpty)
     ).apply(instance, CustomHoneyFluidAttributesData::new));

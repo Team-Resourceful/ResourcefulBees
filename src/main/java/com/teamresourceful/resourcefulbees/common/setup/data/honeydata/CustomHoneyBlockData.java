@@ -26,7 +26,7 @@ public record CustomHoneyBlockData(
 ) implements HoneyBlockData {
 
     private static final CustomHoneyBlockData DEFAULT = new CustomHoneyBlockData(Color.DEFAULT, 0.5f, 0.4f, LazyHolder.of(BuiltInRegistries.ITEM, Items.AIR), LazyHolder.of(BuiltInRegistries.BLOCK, Blocks.AIR), TradeData.DEFAULT);
-    private static final Codec<HoneyBlockData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final Codec<HoneyBlockData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Color.CODEC.optionalFieldOf("color", Color.DEFAULT).forGetter(HoneyBlockData::color),
             Codec.FLOAT.optionalFieldOf("jumpFactor", 0.5f).forGetter(HoneyBlockData::jumpFactor),
             Codec.FLOAT.optionalFieldOf("speedFactor", 0.4f).forGetter(HoneyBlockData::speedFactor),

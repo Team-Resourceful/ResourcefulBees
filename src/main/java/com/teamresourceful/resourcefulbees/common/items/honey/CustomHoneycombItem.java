@@ -33,8 +33,7 @@ public class CustomHoneycombItem extends HoneycombItem implements Tradeable, Col
         this.tradeData = tradeData;
     }
 
-    @Override
-    public int getObjectColor(int index) {
+    public int color() {
         return color.getValue();
     }
 

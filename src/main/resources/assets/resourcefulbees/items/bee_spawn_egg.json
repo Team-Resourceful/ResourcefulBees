@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "resourcefulbees:item/bee_spawn_egg",
+    "tints": [
+      {
+        "type": "resourcefulbees:bee_spawn_egg"
+      },
+      {
+        "type": "minecraft:constant",
+        "value": -1
+      }
+    ]
+  }
+}

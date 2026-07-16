@@ -38,7 +38,7 @@ public final class DataGen {
 //
 //        //custom honey data
 //        generateTags(ModItems.HONEY_BOTTLE_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honey_bottles.json"));
-//        generateTags(ModItems.HONEY_BUCKET_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/buckets/honey.json"));
+//        generateTags(ModItems.HONEY_BUCKET_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/buckets/honey_fluid_block.json"));
 //
 //        generateTags(ModBlocks.HONEY_BLOCKS, Identifier.fromNamespaceAndPath("forge","tags/blocks/honey_blocks.json"));
 //        generateTags(ModItems.HONEY_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honey_blocks.json"));
@@ -46,7 +46,7 @@ public final class DataGen {
     }
 
     private static void generateHoneyTags() {
-        TAGS.put(Identifier.fromNamespaceAndPath("forge","tags/fluids/honey.json"),
+        TAGS.put(Identifier.fromNamespaceAndPath("forge","tags/fluids/honey_fluid_block.json"),
                 Stream.concat(ModFluids.FLOWING_HONEY_FLUIDS.getEntries().stream(), ModFluids.STILL_HONEY_FLUIDS.getEntries().stream())
                         .map(RegistryEntry::getId)
                         .collect(Collectors.toSet()));

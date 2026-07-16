@@ -55,8 +55,8 @@ public class HoneyInitializerApi {
         return this.fluidRender.create(color, still, flowing, face, overlay);
     }
 
-    public HoneyFluidAttributesData fluidAttributes(int lightLevel, int density, int temperature, int viscosity, float fallDistanceModifier, double motionScale, boolean canPushEntities, boolean canSwimIn, boolean canDrownIn, boolean canExtinguish, boolean canConvertToSource, boolean supportsBoating, boolean canHydrate, LazyHolder<SoundEvent> bucketFill, LazyHolder<SoundEvent> bucketEmpty) {
-        return this.fluidAttributes.create(lightLevel, density, temperature, viscosity, fallDistanceModifier, motionScale, canPushEntities, canSwimIn, canDrownIn, canExtinguish, canConvertToSource, supportsBoating, canHydrate, bucketFill, bucketEmpty);
+    public HoneyFluidAttributesData fluidAttributes(int lightLevel, int density, int temperature, int viscosity, float fallDistanceModifier, double motionScale, boolean canPushEntities, boolean canSwimIn, boolean canDrownIn, boolean canExtinguish, boolean canConvertToSource, boolean supportsBoating, boolean canHydrate, Rarity rarity, LazyHolder<SoundEvent> bucketFill, LazyHolder<SoundEvent> bucketEmpty) {
+        return this.fluidAttributes.create(lightLevel, density, temperature, viscosity, fallDistanceModifier, motionScale, canPushEntities, canSwimIn, canDrownIn, canExtinguish, canConvertToSource, supportsBoating, canHydrate, rarity, bucketFill, bucketEmpty);
     }
 
     public HoneyBlockData block(Color color, float jumpFactor, float speedFactor, LazyHolder<Item> blockItem, LazyHolder<Block> block, BeekeeperTradeData tradeData) {

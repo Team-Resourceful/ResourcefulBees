@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.modcompat.base;
 
-import com.teamresourceful.resourcefulbees.common.modcompat.productivebees.ProductiveBeesCompat;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.utils.modinfo.ModInfoUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
@@ -22,9 +21,6 @@ public final class ModCompatHelper {
     public static void registerCompats() {
         if (ModInfoUtils.isModLoaded("the_bumblezone")) {
             //COMPATS.add(new BumblezoneCompat());
-        }
-        if (ModInfoUtils.isModLoaded("productivebees")) {
-            COMPATS.add(new ProductiveBeesCompat());
         }
     }
 

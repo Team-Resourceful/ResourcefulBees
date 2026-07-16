@@ -3,12 +3,12 @@ package com.teamresourceful.resourcefulbees.common.entities;
 import com.google.common.collect.ImmutableSet;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.flag.FeatureFlags;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Optional;
 
@@ -28,7 +28,7 @@ public class CustomBeeEntityType<T extends Bee> extends EntityType<T> {
                 .5f,
                 5,
                 3,
-                "Resourceful Bees: Bee",
+                String.format("Resourceful Bees: %s Bee", WordUtils.capitalize(beeType)),
                 Optional.empty(),
                 FeatureFlags.DEFAULT_FLAGS,
                 true);

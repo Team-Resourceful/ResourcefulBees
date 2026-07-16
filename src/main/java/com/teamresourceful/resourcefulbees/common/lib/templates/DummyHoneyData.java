@@ -93,6 +93,7 @@ public final class DummyHoneyData {
                     false,
                     false,
                     false,
+                    Rarity.COMMON,
                     LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_FILL),
                     LazyHolder.of(BuiltInRegistries.SOUND_EVENT, SoundEvents.BUCKET_EMPTY)
             ),

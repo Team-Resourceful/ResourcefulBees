@@ -21,6 +21,7 @@ import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnDat
 import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -88,6 +89,12 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     //endregion
 
     //region CUSTOM BEE RELATED METHODS BELOW
+
+
+    @Override
+    protected Component getTypeName() {
+        return super.getTypeName();
+    }
 
     @Override
     public boolean isInvulnerableTo(ServerLevel serverLevel, DamageSource source) {
@@ -182,15 +189,15 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     }
 
     @Override
-    public void readAdditionalSaveData(ValueInput tag) {
-        super.readAdditionalSaveData(tag);
-        this.entityData.set(FEED_COUNT, tag.getIntOr(NBTConstants.NBT_FEED_COUNT, 0));
+    public void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
+        this.entityData.set(FEED_COUNT, input.getIntOr(NBTConstants.NBT_FEED_COUNT, 0));
     }
 
     @Override
-    public void addAdditionalSaveData(ValueOutput compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
+    public void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        output.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
     }
 
     @Override

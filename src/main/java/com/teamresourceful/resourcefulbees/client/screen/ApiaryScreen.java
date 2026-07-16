@@ -4,14 +4,19 @@ import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntit
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ApiaryTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,28 +36,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-        super.extractRenderState(graphics, mouseX, mouseY, a);
-//        if (apiaryBlockEntity != null) {
-//            if (canScroll()) {
-//                if (beeIndexOffset + 7 >= apiaryBlockEntity.beeCount()) {
-//                    beeIndexOffset = Math.max(0, apiaryBlockEntity.beeCount() - 7);
-//                }
-//            } else {
-//                beeIndexOffset = 0;
-//            }
-//            this.renderBackground(graphics, mouseX, mouseY, partialTicks);
-//            super.render(graphics, mouseX, mouseY, partialTicks);
-//            this.renderTooltip(graphics, mouseX, mouseY);
-//            int l = this.leftPos + 5;
-//            int i1 = this.topPos + 34;
-//            int j1 = this.beeIndexOffset + 7;
-//            renderBeeToolTip(mouseX, mouseY, l, i1, j1);
-//        }
-    }
-
-    @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         if (apiaryBlockEntity != null) {
             int i = this.leftPos;
             int j = this.topPos;
@@ -139,9 +123,9 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
     }
 
     private void drawRecipesBackground(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {
-        var count = apiaryBlockEntity.beeCount();
-        System.out.println(count);
-        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < count; ++i) {
+        //var count = apiaryBlockEntity.beeCount();
+        //System.out.println(count);
+        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.beeCount(); ++i) {
             var bee = this.menu.getApiaryBee(i);
             int index = i - this.beeIndexOffset;
             int x = left;
@@ -192,31 +176,33 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         if (this.canScroll()) {
-            //int i = this.getHiddenRows();
-            //this.sliderProgress = (float) (this.sliderProgress - scrollY / i);
+            int i = this.getHiddenRows();
+            this.sliderProgress = (float) (this.sliderProgress - scrollY / i);
             this.sliderProgress = Mth.clamp(this.sliderProgress, 0.0F, 1.0F);
-            //this.beeIndexOffset = (int) ((this.sliderProgress * i) + 0.5D);
+            this.beeIndexOffset = (int) ((this.sliderProgress * i) + 0.5D);
         }
         return true;
-    }
-
-   /* @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int pMouseDragged5, double pMouseDragged6, double pMouseDragged8) {
-        if (this.clickedOnScroll && this.canScroll()) {
-            int i = this.topPos + 14;
-            int j = i + 101;
-            this.sliderProgress = ((float) mouseY - i - 7.5F) / ((j - i) - 15.0F);
-            this.sliderProgress = Mth.clamp(this.sliderProgress, 0.0F, 1.0F);
-            this.beeIndexOffset = (int) ( (this.sliderProgress * this.getHiddenRows()) + 0.5D);
-            return true;
-        }
-        return super.mouseDragged(mouseX, mouseY, pMouseDragged5, pMouseDragged6, pMouseDragged8);
     }
 
     private int getHiddenRows() { return apiaryBlockEntity.beeCount() - 7; }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int pMouseClicked5) {
+    public boolean mouseDragged(@NonNull MouseButtonEvent event, double dx, double dy) {
+        if (this.clickedOnScroll && this.canScroll()) {
+            int i = this.topPos + 28;
+            int j = i + 101;
+            this.sliderProgress = ((float) event.y() - i - 7.5F) / ((j - i) - 15.0F);
+            this.sliderProgress = Mth.clamp(this.sliderProgress, 0.0F, 1.0F);
+            this.beeIndexOffset = (int) ( (this.sliderProgress * this.getHiddenRows()) + 0.5D);
+            return true;
+        }
+        return super.mouseDragged(event, dx, dy);
+    }
+
+    @Override
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mouseX = event.x();
+        double mouseY = event.y();
         this.clickedOnScroll = false;
         if (apiaryBlockEntity.beeCount() > 0) {
             int i = this.leftPos + 5;
@@ -241,7 +227,6 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
                 this.clickedOnScroll = true;
             }
         }
-
-        return super.mouseClicked(mouseX, mouseY, pMouseClicked5);
-    }*/
+        return super.mouseClicked(event, doubleClick);
+    }
 }

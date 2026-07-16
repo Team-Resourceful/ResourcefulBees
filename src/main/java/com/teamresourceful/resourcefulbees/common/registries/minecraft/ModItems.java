@@ -185,7 +185,7 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
     //public static final RegistryEntry<Item> BEEPEDIA = registerItem(ITEMS, "beepedia", () -> new BeepediaItem(new Item.Properties().stacksTo(1)));
     public static final RegistryEntry<Item> HONEY_DIPPER = registerItem(ITEMS, "honey_dipper", HoneyDipperItem::new, () -> new Item.Properties().stacksTo(1));
 
-//    public static final RegistryEntry<Item> BEE_JAR = registerItem(ITEMS, "bee_jar", () -> new BeeJarItem(new Item.Properties().durability(0).stacksTo(16)));
+    public static final RegistryEntry<Item> BEE_JAR = registerItem(ITEMS, "bee_jar", BeeJarItem::new, () -> new Item.Properties().stacksTo(16));
 //    public static final RegistryEntry<Item> POLLEN_SPREADER_FAN = registerItem(ITEMS, "pollen_spreader_fan", () -> new BlockItem(ModBlocks.POLLEN_SPREADER_FAN.get(), new Item.Properties()));
 //    public static final RegistryEntry<Item> POLLEN_SPREADER = registerItem(ITEMS, "pollen_spreader", () -> new BlockItem(ModBlocks.POLLEN_SPREADER.get(), new Item.Properties()));
     //public static final RegistryEntry<Item> MUTATED_POLLEN = registerItem(ITEMS, "mutated_pollen", () -> new MutatedPollenItem(new Item.Properties()));
@@ -235,7 +235,8 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
 //    public static final RegistryEntry<Item> HONEY_GENERATOR_ITEM = ITEMS.register("honey_generator", () -> new BlockItem(ModBlocks.HONEY_GENERATOR.get(), new Item.Properties()));
     //endregion
 
-//    public static final RegistryEntry<Item> HONEY_BUCKET = ITEMS.register("honey_bucket", () -> new FluidBucketItem(ModFluidProperties.HONEY, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    //todo needs texture
+    public static final RegistryEntry<Item> HONEY_BUCKET = registerItem(ITEMS, "honey_bucket", properties -> new BucketItem(ModFluids.HONEY_FLUID_TYPE.get().still().get(), properties), () -> new Item.Properties().stacksTo(1));
 
     //region Special Items
     public static final FoodProperties OREO_FOOD_PROPERTIES = new FoodProperties(8, 2f, true);

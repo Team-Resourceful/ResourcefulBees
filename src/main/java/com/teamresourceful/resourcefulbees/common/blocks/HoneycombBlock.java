@@ -37,8 +37,7 @@ public class HoneycombBlock extends Block implements ColoredObject {
         super.animateTick(stateIn, world, pos, rand);
     }
 
-    @Override
-    public int getObjectColor(int index) {
+    public int color() {
         return color.getValue();
     }
 }

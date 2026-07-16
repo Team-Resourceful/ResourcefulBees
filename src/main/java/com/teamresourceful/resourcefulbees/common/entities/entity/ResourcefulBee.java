@@ -317,17 +317,17 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(@NotNull ValueInput tag) {
-        super.readAdditionalSaveData(tag);
+    public void readAdditionalSaveData(@NotNull ValueInput input) {
+        super.readAdditionalSaveData(input);
         //this.fakeFlower.read(tag);
-        this.numberOfMutations = tag.getIntOr(NBTConstants.NBT_MUTATION_COUNT, 0);
+        this.numberOfMutations = input.getIntOr(NBTConstants.NBT_MUTATION_COUNT, 0);
     }
 
     @Override
-    public void addAdditionalSaveData(@NotNull ValueOutput compound) {
-        super.addAdditionalSaveData(compound);
+    public void addAdditionalSaveData(@NotNull ValueOutput output) {
+        super.addAdditionalSaveData(output);
         //this.fakeFlower.save(compound);
-        compound.putInt(NBTConstants.NBT_MUTATION_COUNT, getNumberOfMutations());
+        output.putInt(NBTConstants.NBT_MUTATION_COUNT, getNumberOfMutations());
     }
 
     public void dropOffMutations() {

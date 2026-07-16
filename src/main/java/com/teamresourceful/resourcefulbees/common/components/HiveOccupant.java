@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -38,10 +39,10 @@ public record HiveOccupant(
         int ticksInHive,
         int minOccupationTicks,
         Component displayName,
-        String color,
+        int color,
         boolean locked,
         boolean hasNectar
-) {
+) implements Occupant{
 
     public static final Codec<HiveOccupant> CODEC = RecordCodecBuilder.create(
             i -> i.group(
@@ -49,7 +50,7 @@ public record HiveOccupant(
                             Codec.INT.fieldOf("ticks_in_hive").forGetter(HiveOccupant::ticksInHive),
                             Codec.INT.fieldOf("min_ticks_in_hive").forGetter(HiveOccupant::minOccupationTicks),
                             ComponentSerialization.CODEC.fieldOf("display_name").forGetter(HiveOccupant::displayName),
-                            Codec.STRING.fieldOf("color").forGetter(HiveOccupant::color),
+                            Codec.INT.fieldOf("color").forGetter(HiveOccupant::color),
                             Codec.BOOL.fieldOf("locked").forGetter(HiveOccupant::locked),
                             Codec.BOOL.fieldOf("has_nectar").forGetter(HiveOccupant::hasNectar)
                     )
@@ -65,7 +66,7 @@ public record HiveOccupant(
             HiveOccupant::minOccupationTicks,
             ComponentSerialization.STREAM_CODEC,
             HiveOccupant::displayName,
-            ByteBufCodecs.STRING_UTF8,
+            ByteBufCodecs.VAR_INT,
             HiveOccupant::color,
             ByteBufCodecs.BOOL,
             HiveOccupant::locked,
@@ -116,22 +117,6 @@ public record HiveOccupant(
             return entity;
         } else {
             return null;
-        }
-    }
-
-    private static void setBeeReleaseData(int ticksInHive, Bee bee) {
-        updateBeeAge(ticksInHive, bee);
-        bee.setInLoveTime(Math.max(0, bee.getInLoveTime() - ticksInHive));
-    }
-
-    private static void updateBeeAge(int ticksInHive, Bee bee) {
-        if (!bee.isAgeLocked()) {
-            int age = bee.getAge();
-            if (age < 0) {
-                bee.setAge(Math.min(0, age + ticksInHive));
-            } else if (age > 0) {
-                bee.setAge(Math.max(0, age - ticksInHive));
-            }
         }
     }
 

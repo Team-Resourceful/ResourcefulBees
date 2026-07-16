@@ -42,7 +42,7 @@ public final class HoneyInitializers {
 
     @FunctionalInterface
     public interface HoneyAttributesInitializer {
-        HoneyFluidAttributesData create(int lightLevel, int density, int temperature, int viscosity, float fallDistanceModifier, double motionScale, boolean canPushEntities, boolean canSwimIn, boolean canDrownIn, boolean canExtinguish, boolean canConvertToSource, boolean supportsBoating, boolean canHydrate, LazyHolder<SoundEvent> bucketFill, LazyHolder<SoundEvent> bucketEmpty);
+        HoneyFluidAttributesData create(int lightLevel, int density, int temperature, int viscosity, float fallDistanceModifier, double motionScale, boolean canPushEntities, boolean canSwimIn, boolean canDrownIn, boolean canExtinguish, boolean canConvertToSource, boolean supportsBoating, boolean canHydrate, Rarity rarity, LazyHolder<SoundEvent> bucketFill, LazyHolder<SoundEvent> bucketEmpty);
     }
 
     @FunctionalInterface

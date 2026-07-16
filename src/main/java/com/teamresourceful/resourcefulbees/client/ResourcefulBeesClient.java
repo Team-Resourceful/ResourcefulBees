@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client;
 
+import com.teamresourceful.resourcefulbees.client.events.ModelBakingCompletedEvent;
 import com.teamresourceful.resourcefulbees.client.events.ScreenOpenEvent;
 import com.teamresourceful.resourcefulbees.client.screen.MissingRegistryScreen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;

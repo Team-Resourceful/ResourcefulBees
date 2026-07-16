@@ -21,10 +21,7 @@ public class CustomHoneyBottleItem extends Item implements Tradeable, ColoredObj
         this.data = data;
     }
 
-    @Override
-    public int getObjectColor(int index) {
-        return index == 0 ? data.color().getValue() : BeeConstants.DEFAULT_ITEM_COLOR;
-    }
+
 
     @Override
     public boolean isTradable() {
@@ -38,5 +35,10 @@ public class CustomHoneyBottleItem extends Item implements Tradeable, ColoredObj
 
     public HoneyBottleData getHoneyData() {
         return data;
+    }
+
+    @Override
+    public int color() {
+        return data.color().getValue();
     }
 }

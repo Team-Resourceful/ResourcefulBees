@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.api.data.honey.fluid;
 
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.Rarity;
 
 public interface HoneyFluidAttributesData {
 
@@ -31,8 +32,11 @@ public interface HoneyFluidAttributesData {
 
     boolean canHydrate();
 
+    Rarity rarity();
+
     LazyHolder<SoundEvent> bucketFill();
 
     LazyHolder<SoundEvent> bucketEmpty();
 
+    //LazyHolder<SoundEvent> extinguishSound();
 }

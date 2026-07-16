@@ -3,23 +3,16 @@ package com.teamresourceful.resourcefulbees.common.util;
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
-import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.NotNull;
 
 public final class EntityUtils {
 
@@ -48,17 +41,8 @@ public final class EntityUtils {
                 });*/
     }
 
-    public static String getBeeColorOrDefault(Entity bee) {
-        return bee instanceof CustomBee iBee ? iBee.getRenderData().colorData().jarColor().toString() : BeeConstants.VANILLA_BEE_COLOR;
-    }
-
-    public static @NotNull CompoundTag createJarBeeTag(Bee bee) {
-        CompoundTag nbt = new CompoundTag();
-//        bee.saveAsPassenger(nbt);
-//        String beeColor = EntityUtils.getBeeColorOrDefault(bee);
-//        nbt.putString(NBTConstants.BeeJar.COLOR, beeColor);
-//        BeehiveEntityAccessor.callRemoveIgnoredBeeTags(nbt);
-        return nbt;
+    public static int getBeeColorOrDefault(Entity bee) {
+        return bee instanceof CustomBee iBee ? iBee.getRenderData().colorData().jarColor().withAlpha(255).getValue() : BeeConstants.VANILLA_BEE_INT_COLOR;
     }
 
     public static void setEntityLocationAndAngle(BlockPos blockpos, Direction direction, Entity entity) {
@@ -68,22 +52,6 @@ public final class EntityUtils {
         double d2 = blockpos.getY() + Math.max(0.5D - (size.height() / 2.0F), 0);
         double d3 = blockpos.getZ() + 0.5D + d0 * direction.getStepZ();
         entity.snapTo(d1, d2, d3, entity.getYRot(), entity.getXRot());
-    }
-
-    public static void ageBee(int ticksInHive, Animal animal) {
-        int i = animal.getAge();
-        if (i < 0) {
-            animal.setAge(Math.min(0, i + ticksInHive));
-        } else if (i > 0) {
-            animal.setAge(Math.max(0, i - ticksInHive));
-        }
-
-        if (animal instanceof CustomBeeEntity bee) {
-            bee.setLoveTime(Math.max(0, animal.getInLoveTime() - ticksInHive));
-        } else {
-            animal.setInLoveTime(Math.max(0, animal.getInLoveTime() - ticksInHive));
-        }
-        if (animal instanceof Bee bee) bee.resetTicksWithoutNectarSinceExitingHive();
     }
 
     public static void flagBeesInRange(BlockPos pos, Level level) {

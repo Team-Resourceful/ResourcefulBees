@@ -1,0 +1,26 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+
+    "property": "resourcefulbees:filled_bee_jar",
+
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "resourcefulbees:item/bee_jar"
+
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "resourcefulbees:item/bee_jar_filled",
+      "tints": [
+        {
+          "type": "minecraft:constant",
+          "value": -1
+        },
+        {
+          "type": "resourcefulbees:filled_bee_jar"
+        }
+      ]
+    }
+  }
+}

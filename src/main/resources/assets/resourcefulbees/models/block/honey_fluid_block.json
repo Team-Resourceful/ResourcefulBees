@@ -1,6 +1,6 @@
 {
-  "render_type": "translucent",
+  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": "resourcefulbees:block/honey/honey_still"
+    "particle": "resourcefulbees:block/honey_fluid/still"
   }
 }
