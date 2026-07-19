@@ -16,25 +16,17 @@ public class CustomHoneycombItem extends HoneycombItem implements Tradeable, Col
 
     private final Supplier<Item> storageBlock;
     private final Color color;
-    private final boolean isEdible;
-    private final boolean enchanted;
     private final BeekeeperTradeData tradeData;
 
-    public CustomHoneycombItem(Color color, boolean isEdible, Supplier<Item> storageBlock, boolean enchanted, BeekeeperTradeData tradeData, Properties properties) {
-        if (HoneycombConfig.honeycombsEdible && isEdible) {
-            //todo make food properties configurable per comb maybe?
-            properties.food(new FoodProperties(HoneycombConfig.honeycombHunger,HoneycombConfig.honeycombSaturation,false));
-        }
+    public CustomHoneycombItem(Color color, Supplier<Item> storageBlock, BeekeeperTradeData tradeData, Properties properties) {
         super(properties);
         this.color = color;
-        this.isEdible = isEdible;
         this.storageBlock = storageBlock;
-        this.enchanted = enchanted;
         this.tradeData = tradeData;
     }
 
     public int color() {
-        return color.getValue();
+        return color.getValue() | 0xff000000;
     }
 
     public Item getStorageBlockItem() {
@@ -54,26 +46,4 @@ public class CustomHoneycombItem extends HoneycombItem implements Tradeable, Col
     public BeekeeperTradeData getTradeData() {
         return tradeData;
     }
-
-    public boolean isEdible() {
-        return isEdible;
-    }
-
-    @Override
-    public boolean isFoil(@NotNull ItemStack stack) {
-        return this.enchanted || stack.isEnchanted();
-    }
-
-//    @Nullable
-//    @Override
-//    public FoodProperties getFoodProperties() {
-//        if (HoneycombConfig.honeycombsEdible && !isEdible) {
-//            return super.getFoodProperties();
-//        }
-//        return new FoodProperties.Builder()
-//                .nutrition(HoneycombConfig.honeycombHunger)
-//                .saturationMod(HoneycombConfig.honeycombSaturation)
-//                .fast()
-//                .build();
-//    }
 }

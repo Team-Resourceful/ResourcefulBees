@@ -1,10 +1,10 @@
 {
     "model": {
         "type": "minecraft:model",
-        "model": "resourcefulbees:item/honeycomb",
+        "model": "resourcefulbees:item/honeycomb_block",
         "tints": [
             {
-                "type": "resourcefulbees:honeycomb"
+                "type": "resourcefulbees:honeycomb_block"
             }
         ]
     }

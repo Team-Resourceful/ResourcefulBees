@@ -1,31 +1,33 @@
 {
-  "required": true,
-  "package": "com.teamresourceful.resourcefulbees.mixin",
-  "compatibilityLevel": "JAVA_25",
-  "mixins": [
-    "EntityMixin",
-    "LivingEntityMixin",
-    "ServerPlayerAccessor",
-    "client.PackRepositoryAccessor",
-    "common.BeeEntityAccessor",
-    "common.BeeGoToHiveGoalInvoker",
-    "common.BeehiveBeeDataAccessor",
-    "common.BeehiveEntityAccessor",
-    "common.BeeInvoker",
-    "common.DamageSourcesInvoker",
-    "common.MixinBee",
-    "common.MixinBeeEnterHiveGoal",
-    "common.ServerLevelAccessor",
-    "common.StructureCheckAccessor",
-    "common.StructureTemplatePoolAccessor"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "overwrites": {
-    "requireAnnotations": true
-  },
-  "client": [
-    "client.LivingEntityRendererInvoker"
+    "required": true,
+    "package": "com.teamresourceful.resourcefulbees.mixin",
+    "compatibilityLevel": "JAVA_25",
+    "mixins": [
+        "EntityMixin",
+        "LivingEntityMixin",
+        "ServerPlayerAccessor",
+        "client.ItemModelResolverMixin",
+        "client.ModelManagerMixin",
+        "client.PackRepositoryAccessor",
+        "common.BeeEntityAccessor",
+        "common.BeeGoToHiveGoalInvoker",
+        "common.BeehiveBeeDataAccessor",
+        "common.BeehiveEntityAccessor",
+        "common.BeeInvoker",
+        "common.DamageSourcesInvoker",
+        "common.MixinBee",
+        "common.MixinBeeEnterHiveGoal",
+        "common.ServerLevelAccessor",
+        "common.StructureCheckAccessor",
+        "common.StructureTemplatePoolAccessor"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "overwrites": {
+        "requireAnnotations": true
+    },
+    "client": [
+        "client.LivingEntityRendererInvoker"
   ]
 }

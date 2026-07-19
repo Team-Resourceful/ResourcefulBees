@@ -84,7 +84,7 @@ public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable,
 
     //region Color stuff
     public int color() {
-        return color.withAlpha(255).getValue();
+        return color.getValue() | 0xff000000;
     }
 
     @Override

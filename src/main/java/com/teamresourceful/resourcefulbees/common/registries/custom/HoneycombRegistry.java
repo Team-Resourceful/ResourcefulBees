@@ -8,26 +8,25 @@ import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
 import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
+import com.teamresourceful.resourcefulbees.common.config.HoneycombConfig;
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneycombItem;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
 import com.teamresourceful.resourcefullib.common.color.Color;
-import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -134,6 +133,7 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
             BeekeeperTradeData tradeData
     ) {
         private static final String HONEYCOMB_BLOCK_SUFFIX = "_honeycomb_block";
+        private static final String HONEYCOMB_SUFFIX = "_honeycomb";
 
         private static Codec<RegistryData> codec(String name) {
             return RecordCodecBuilder.create(instance -> instance.group(
@@ -148,18 +148,47 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
 
         private RegistryData {
             if (block) {
-                String blockRegistryID = name + HONEYCOMB_BLOCK_SUFFIX;
-                RegistryEntry<Block> customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(blockRegistryID, properties -> new HoneycombBlock(color, properties), honeycombBlockProperties(blockRegistryID));
-                final RegistryEntry<Item> blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(blockRegistryID, properties -> new BlockItem(customHoneycombBlock.get(), properties) {
-                    @Override
-                    public boolean isFoil(@NotNull ItemStack stack) {
-                        return enchanted || stack.isEnchanted();
-                    }
-                }, Item.Properties::new);
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", properties -> new CustomHoneycombItem(color, edible, blockItem, enchanted, tradeData, properties), Item.Properties::new);
+                var customHoneycombBlock = ModBlocks.HONEYCOMB_BLOCKS.register(
+                        name + HONEYCOMB_BLOCK_SUFFIX,
+                        properties -> new HoneycombBlock(color, properties),
+                        honeycombBlockProperties(name + HONEYCOMB_BLOCK_SUFFIX)
+                );
+                final var blockItem = ModItems.HONEYCOMB_BLOCK_ITEMS.register(
+                        name + HONEYCOMB_BLOCK_SUFFIX,
+                        properties -> new BlockItem(customHoneycombBlock.get(), properties),
+                        props(ItemType.BLOCK)
+                );
+                ModItems.HONEYCOMB_ITEMS.register(
+                        name + HONEYCOMB_SUFFIX,
+                        properties -> new CustomHoneycombItem(color, blockItem::get, tradeData, properties),
+                        props(ItemType.COMB)
+                );
             } else {
-                ModItems.HONEYCOMB_ITEMS.register(name + "_honeycomb", properties -> new CustomHoneycombItem(color, edible, null, enchanted, tradeData, properties), Item.Properties::new);
+                ModItems.HONEYCOMB_ITEMS.register(
+                        name + HONEYCOMB_SUFFIX,
+                        properties -> new CustomHoneycombItem(color, null, tradeData, properties),
+                        props(ItemType.COMB)
+                );
             }
+        }
+
+        private Supplier<Item.Properties> props(ItemType type) {
+            return () -> {
+                var properties = new Item.Properties();
+                properties.component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), type.getDefaultModel());
+
+                if (this.enchanted) properties.component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
+                if (type == ItemType.COMB && this.edible && HoneycombConfig.honeycombsEdible) {
+                    properties.food(new FoodProperties.Builder()
+                            .nutrition(HoneycombConfig.honeycombHunger)
+                            .saturationModifier(HoneycombConfig.honeycombSaturation)
+                            .alwaysEdible()
+                            .build()
+                    );
+                }
+
+                return properties;
+            };
         }
 
     }
@@ -180,6 +209,16 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
             throw new IllegalArgumentException(id + " : Default comb must be present when list is empty and config contains combs!!!");
         } else if (DEFAULT_OUTPUT_TYPE_INCLUDES_BLOCK && defaultCombBlock.isEmpty()) {
             throw new IllegalArgumentException(id + " : Default block must be present when list is empty and config contains blocks!!!");
+        }
+    }
+
+    private enum ItemType {
+        COMB,
+        BLOCK,
+        ;
+
+        public Identifier getDefaultModel() {
+            return ModIdentifier.of(this == COMB ? "honeycomb" : "honeycomb_block");
         }
     }
 }
