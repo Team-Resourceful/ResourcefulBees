@@ -3,6 +3,9 @@ package com.teamresourceful.resourcefulbees.common.entities;
 import com.google.common.collect.ImmutableSet;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -23,7 +26,7 @@ public class CustomBeeEntityType<T extends Bee> extends EntityType<T> {
                 true,
                 false,
                 false,
-                ImmutableSet.of(),
+                TagKey.create(ResourceKey.createRegistryKey(ModIdentifier.of("")), ModIdentifier.of("")),
                 dimensions,
                 .5f,
                 5,

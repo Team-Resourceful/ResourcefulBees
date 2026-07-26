@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.components.Bees;
+import com.teamresourceful.resourcefulbees.common.components.CentrifugeRotations;
 import com.teamresourceful.resourcefulbees.common.components.JarOccupant;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
@@ -9,6 +10,7 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.item.ResourcefulComponentType;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -36,6 +38,13 @@ public class ModDataComponents {
     public static final RegistryEntry<DataComponentType<Identifier>> FALLBACK_ITEM_MODEL = COMPONENTS.register("fallback_item_model", () -> new ResourcefulComponentType<Identifier>()
             .persistent(Identifier.CODEC)
             .networkSynchronized(ExtraByteCodecs.IDENTIFIER)
+            .cacheEncoding()
+            .build()
+    );
+
+    public static final RegistryEntry<DataComponentType<CentrifugeRotations>> CENTRIFUGE_ROTATIONS = COMPONENTS.register("rotations", () -> DataComponentType.<CentrifugeRotations>builder()
+            .persistent(CentrifugeRotations.CODEC)
+            .networkSynchronized(CentrifugeRotations.STREAM_CODEC)
             .cacheEncoding()
             .build()
     );

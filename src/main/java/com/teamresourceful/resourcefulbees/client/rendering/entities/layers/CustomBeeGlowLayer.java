@@ -51,7 +51,7 @@ public class CustomBeeGlowLayer <R extends EntityRenderState & GeoRenderState> e
 
     @Override
     public void preRender(RenderPassInfo<@NonNull R> renderPassInfo, SubmitNodeCollector renderTasks) {
-        renderPassInfo.renderState().addGeckolibData(DataTickets.RENDER_COLOR, layerData.color().getValue());
+        renderPassInfo.renderState().addGeckolibData(DataTickets.RENDER_COLOR, layerData.color().withAlpha(255).getValue());
         super.preRender(renderPassInfo, renderTasks);
     }
 

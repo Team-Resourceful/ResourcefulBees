@@ -17,6 +17,7 @@ import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluidType;
 import com.teamresourceful.resourcefulbees.common.items.dispenser.ScraperDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.records.HiveType;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyDataRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistry;
@@ -51,6 +52,7 @@ public final class RegistryHandler {
 
     public static void init() {
         //ItemGroupResourcefulBees.register();
+        ModCreativeTabs.CREATIVE_TABS.init();
         //ModFluidProperties.PROPERTIES.initialize();
         ModFluids.FLUIDS.init();
         ModFluids.FLUID_TYPES.init();
@@ -106,8 +108,7 @@ public final class RegistryHandler {
                         0.6F * sizeModifier
                 )
         );
-        ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", SpawnEggItem::new, () -> new Item.Properties().spawnEgg(beeEntityType.get())
-        );
+        ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", SpawnEggItem::new, () -> new Item.Properties().spawnEgg(beeEntityType.get()).component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("bee_spawn_egg")));
         ModEntities.getModBees().put(name, beeEntityType);
     }
 
@@ -141,7 +142,7 @@ public final class RegistryHandler {
             ModItems.HONEY_BLOCK_ITEMS.register(
                     name + "_honey_block",
                     properties -> new BlockItem(block.get(), properties),
-                    Item.Properties::new
+                    () -> new Item.Properties().component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_block"))
             );
         });
     }
@@ -150,7 +151,7 @@ public final class RegistryHandler {
         ModItems.HONEY_BOTTLE_ITEMS.register(
                 name + "_honey_bottle",
                 properties -> new CustomHoneyBottleItem(properties, data.getBottleData()),
-                Item.Properties::new
+                () -> new Item.Properties().component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_bottle"))
         );
     }
 
@@ -160,7 +161,7 @@ public final class RegistryHandler {
             ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey_fluid_source", () -> new ResourcefulFlowingFluid.Still(fluidType.get()));
             ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_fluid_flowing", () -> new ResourcefulFlowingFluid.Flowing(fluidType.get()));
             ModFluids.CLIENT_FLUID_PROPERTIES.register(name + "_honey", () -> CustomHoneyClientFluidProperties.create(fluidData.renderData()));
-            ModItems.ITEMS.register(name + "_honey_bucket", properties -> new BucketItem(fluidType.get().still().get(), properties), () -> new Item.Properties().stacksTo(1));
+            ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", properties -> new BucketItem(fluidType.get().still().get(), properties), () -> new Item.Properties().stacksTo(1).component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_bucket")));
             ModBlocks.registerHoneyFluidBlock(name + "_honey_fluid_block", fluidData, fluidType.get());
         });
     }

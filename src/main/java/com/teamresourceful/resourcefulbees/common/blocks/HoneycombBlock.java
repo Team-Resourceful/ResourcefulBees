@@ -38,7 +38,7 @@ public class HoneycombBlock extends Block implements ColoredObject {
     }
 
     public int color() {
-        return color.getValue() | 0xff000000;
+        return color.getOpaqueValue();
     }
 }
 

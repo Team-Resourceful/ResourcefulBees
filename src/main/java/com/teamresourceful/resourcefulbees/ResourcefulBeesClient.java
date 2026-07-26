@@ -1,13 +1,18 @@
 package com.teamresourceful.resourcefulbees;
 
+import com.geckolib.renderer.GeoBlockRenderer;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.model.property.FilledBeeJarProperty;
+import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.CentrifugeCrankRenderer;
+import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.CentrifugeRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.screen.ApiaryScreen;
+import com.teamresourceful.resourcefulbees.client.screen.CentrifugeScreen;
 import com.teamresourceful.resourcefulbees.client.tints.*;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
@@ -54,17 +59,22 @@ public class ResourcefulBeesClient {
         ModEntities.getModBees().forEach((s, entityType) ->
                 event.registerEntityRenderer(entityType.get(), context -> new CustomBeeRenderer<>(context, BeeRegistry.get().getBeeData(s).getRenderData()))
         );
+
+        event.registerBlockEntityRenderer(ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), context -> new GeoBlockRenderer<>(context, ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get()));
+        event.registerBlockEntityRenderer(ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get(), context -> new CentrifugeCrankRenderer<>(context, ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get()));
     }
 
     @SubscribeEvent
     public static void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.APIARY.get(), ApiaryScreen::new);
+        event.register(ModMenuTypes.CENTRIFUGE.get(), CentrifugeScreen::new);
     }
 
     @SubscribeEvent
     public static void itemColor(RegisterColorHandlersEvent.ItemTintSources event){
         event.register(ModIdentifier.of("honeycomb"), HoneycombTintSource.CODEC);
         event.register(ModIdentifier.of("honeycomb_block"), HoneycombBlockItemTintSource.CODEC);
+        event.register(ModIdentifier.of("honey_block"), HoneyBlockBlockItemTintSource.CODEC);
         event.register(ModIdentifier.of("honey_bottle"), HoneyBottleTintSource.CODEC);
         event.register(ModIdentifier.of("filled_bee_jar"), FilledBeeJarTintSource.CODEC);
         event.register(ModIdentifier.of("bee_spawn_egg"), BeeSpawnEggTintSource.CODEC);

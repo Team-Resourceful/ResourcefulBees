@@ -1,6 +1,6 @@
 {
   "type": "resourcefulbees:centrifuge",
-  "ingredient": { "item": "resourcefulbees:netherite_honeycomb" },
+  "ingredient": "resourcefulbees:netherite_honeycomb",
   "inputAmount": 3,
   "energyPerTick": 20,
   "itemOutputs": [
@@ -60,7 +60,7 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+        {"fluid": { "id": "resourcefulbees:honey_fluid_source", "amount": 100 }}
       ]
     }
   ],

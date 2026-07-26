@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.client.tints;
 
 import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
-import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;
 import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.LivingEntity;

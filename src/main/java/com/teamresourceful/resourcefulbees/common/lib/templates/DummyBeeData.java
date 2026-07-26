@@ -21,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -48,7 +49,7 @@ public final class DummyBeeData {
     private static final BeeCoreData CORE_DATA = API.core(
             "dummy_honeycomb",
             RegistryPredicate.create(Block::builtInRegistryHolder, Blocks.DIAMOND_BLOCK, Blocks.EMERALD_BLOCK),
-            RegistryPredicate.create(EntityType::builtInRegistryHolder, EntityType.COW, EntityType.SHEEP),
+            RegistryPredicate.create(EntityType::builtInRegistryHolder, EntityTypes.COW, EntityTypes.SHEEP),
             4000,
             List.of(
                 Component.literal("This is a bee template"),

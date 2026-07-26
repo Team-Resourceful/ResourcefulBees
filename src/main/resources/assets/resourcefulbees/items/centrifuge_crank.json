@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "resourcefulbees:item/centrifuge_crank",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

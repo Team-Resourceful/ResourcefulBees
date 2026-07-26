@@ -21,10 +21,6 @@ public final class MathUtils {
 
     public static final double HALF_PI = Math.PI/2;
 
-    //exists so I can reduce level != null checks and access a random even if a level value isn't accessible
-    // seriously why doesn't mojang just have this in a math util class instead of level??
-    public static final Random RANDOM = new Random();
-
     public static String createRomanNumeral(int value) {
         return THOUSANDS[value / 1000] + HUNDREDS[(value % 1000) / 100] + TENS[(value % 100) / 10] + UNITS[value % 10];
     }

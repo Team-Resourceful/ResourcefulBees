@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "resourcefulbees:item/centrifuge",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

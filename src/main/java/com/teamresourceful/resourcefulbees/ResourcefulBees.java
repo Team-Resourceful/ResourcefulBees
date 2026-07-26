@@ -86,8 +86,6 @@ public class ResourcefulBees {
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public ResourcefulBees(IEventBus modEventBus, ModContainer modContainer) {
         //CONFIGURATOR.registerConfig(GeneralConfig.class);
-        System.out.println("mod path");
-        System.out.println(modContainer.getModInfo().getOwningFile().getFile().getFilePath());
         ModConstants.forceInit();
         RegistryHandler.init();
         GameSetup.initEvents();

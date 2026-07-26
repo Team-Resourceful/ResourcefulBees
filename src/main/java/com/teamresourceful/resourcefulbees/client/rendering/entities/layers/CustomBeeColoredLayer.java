@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.client.rendering.entities.layers;
 
-import com.geckolib.constant.DataTickets;
 import com.geckolib.renderer.base.GeoRenderState;
 import com.geckolib.renderer.base.GeoRenderer;
 import com.geckolib.renderer.base.RenderPassInfo;

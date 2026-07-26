@@ -34,7 +34,6 @@ public record OutputVariation(String id,
     ).apply(instance, OutputVariation::of));
 
     private static OutputVariation of(String identifier, Map<BeehiveTier, ItemStackTemplate> hiveCombs, Map<ApiaryTier, ItemStackTemplate> apiaryCombs, Optional<ItemStackTemplate> defaultComb, Optional<ItemStackTemplate> defaultCombBlock) {
-        ModItems.HONEYCOMB_ITEMS.getEntries().forEach(itemRegistryEntry -> System.out.println(itemRegistryEntry.get()));
         defaultComb.ifPresent(comb -> comb.withCount(1));
         defaultCombBlock.ifPresent(block -> block.withCount(1));
         hiveCombs = fixHiveCombs(hiveCombs, defaultComb);

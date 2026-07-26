@@ -15,7 +15,7 @@ public class MissingRegistryScreen extends ConfirmScreen {
     private MissingRegistryScreen(Screen parent) {
         super(proceeded -> {
                 if (proceeded) {
-                    Minecraft.getInstance().setScreen(parent);
+                    Minecraft.getInstance().gui.setScreen(parent);
                 } else {
                     Minecraft.getInstance().stop();
                 }

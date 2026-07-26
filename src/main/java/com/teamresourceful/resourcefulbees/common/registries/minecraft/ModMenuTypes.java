@@ -26,8 +26,8 @@ public class ModMenuTypes {
 //            .create(HoneyPotMenu::new, PositionContent.SERIALIZER));
 //    public static final RegistryEntry<MenuType<SolidificationChamberMenu>> SOLIDIFICATION_CHAMBER_CONTAINER = MENUS.register("solidification_chamber", () -> MenuContentHelper
 //            .create(SolidificationChamberMenu::new, PositionContent.SERIALIZER));
-//    public static final RegistryEntry<MenuType<CentrifugeMenu>> CENTRIFUGE = MENUS.register("centrifuge", () -> MenuContentHelper
-//            .create(CentrifugeMenu::new, PositionContent.SERIALIZER));
+    public static final RegistryEntry<MenuType<CentrifugeMenu>> CENTRIFUGE = MENUS.register("centrifuge",
+        () -> MenuContentHelper.create(CentrifugeMenu::new, PositionContent.SERIALIZER));
 //    public static final RegistryEntry<MenuType<HoneyGeneratorMenu>> HONEY_GENERATOR = MENUS.register("honey_generator", () -> MenuContentHelper
 //            .create(HoneyGeneratorMenu::new, PositionContent.SERIALIZER));
 }

@@ -3,8 +3,8 @@
       {
         "enum": "net/minecraft/world/entity/MobCategory",
         "name": "RESOURCEFULBEES_BEE",
-        "constructor": "(Ljava/lang/String;IZZI)V",
-        "parameters": [ "resourcefulbees:bee", 20, true, false, 128 ]
+        "constructor": "(Ljava/lang/String;Ljava/lang/String;IZZI)V",
+        "parameters": [ "resourcefulbees:bee", "resourcefulbees:bee", 20, true, false, 128 ]
       }
     ]
 }

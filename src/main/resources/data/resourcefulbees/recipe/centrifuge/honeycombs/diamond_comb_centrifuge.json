@@ -1,6 +1,6 @@
 {
   "type": "resourcefulbees:centrifuge",
-  "ingredient": { "item": "resourcefulbees:diamond_honeycomb" },
+  "ingredient": "resourcefulbees:diamond_honeycomb",
   "inputAmount": 2,
   "energyPerTick": 16,
   "itemOutputs": [
@@ -60,7 +60,7 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+        {"fluid": { "id": "resourcefulbees:honey_fluid_source", "amount": 100 }}
       ]
     },
     {

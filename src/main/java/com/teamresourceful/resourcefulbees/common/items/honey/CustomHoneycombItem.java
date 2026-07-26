@@ -26,7 +26,7 @@ public class CustomHoneycombItem extends HoneycombItem implements Tradeable, Col
     }
 
     public int color() {
-        return color.getValue() | 0xff000000;
+        return color.getOpaqueValue();
     }
 
     public Item getStorageBlockItem() {

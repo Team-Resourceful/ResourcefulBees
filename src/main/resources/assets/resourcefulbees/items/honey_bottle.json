@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "resourcefulbees:item/honey_bottle",
+    "tints": [
+      {
+        "type": "resourcefulbees:honey_bottle"
+      },
+      {
+        "type": "minecraft:constant",
+        "value": -1
+      }
+    ]
+  }
+}

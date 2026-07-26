@@ -1,6 +1,6 @@
 {
   "type": "resourcefulbees:centrifuge",
-  "ingredient": { "item": "resourcefulbees:catnip_honeycomb" },
+  "ingredient": "resourcefulbees:catnip_honeycomb",
   "itemOutputs": [
     {
       "chance": 0.1,
@@ -11,7 +11,7 @@
     {
       "chance": 0.01,
       "pool": [
-        {"fluid": { "id": "resourcefulbees:catnip_honey", "amount": 250 }}
+        {"fluid": { "id": "resourcefulbees:catnip_honey_fluid_source", "amount": 250 }}
       ]
     }
   ],

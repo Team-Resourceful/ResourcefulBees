@@ -1,11 +1,7 @@
 package com.teamresourceful.resourcefulbees.client;
 
-import com.teamresourceful.resourcefulbees.client.events.ModelBakingCompletedEvent;
-import com.teamresourceful.resourcefulbees.client.events.ScreenOpenEvent;
-import com.teamresourceful.resourcefulbees.client.screen.MissingRegistryScreen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.events.UpdateEvent;
 import com.teamresourceful.resourcefulbees.mixin.client.PackRepositoryAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -23,7 +19,7 @@ import java.util.Optional;
 public class ResourcefulBeesClient {
 
     public static void init() {
-        ScreenOpenEvent.EVENT.addListener(MissingRegistryScreen::onScreenChange);
+        //ScreenOpenEvent.EVENT.addListener(MissingRegistryScreen::onScreenChange);
 /*        RegisterRendererEvent.EVENT.addListener(ResourcefulBeesClient::registerRenderers);
         RegisterColorHandlerEvent.EVENT.addListener(ResourcefulBeesClient::registerColors);
         RegisterScreensEvent.EVENT.addListener(ResourcefulBeesClient::registerScreens);
@@ -34,7 +30,7 @@ public class ResourcefulBeesClient {
  //       RegisterAdditionalModelsEvent.EVENT.addListener(ModelHandler::onAddAdditional);
 //        ModelBakingCompletedEvent.EVENT.addListener(ModelHandler::onModelBake);
         //ModelModifyResultEvent.EVENT.addListener(ModelHandler::onModifyModel);
-        UpdateEvent.EVENT.addListener(ClientDataSetup::onUpdates);
+        //UpdateEvent.EVENT.addListener(ClientDataSetup::onUpdates);
 
         //Color.initRainbow();
 

@@ -2,27 +2,35 @@ package com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import org.jetbrains.annotations.Unmodifiable;
 
 @Unmodifiable
-public record ItemOutput(ItemStack itemStack, double weight) implements AbstractOutput<ItemStack> {
-
+public record ItemOutput(ItemStackTemplate template, double weight) implements AbstractOutput<ItemStack> {
+//todo this may need to change to ItemStackTemplate
     public static final Codec<ItemOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ItemStackCodec.CODEC.fieldOf("item").orElse(ItemStack.EMPTY).forGetter(ItemOutput::itemStack),
+            ItemStackTemplate.CODEC.fieldOf("item").forGetter(ItemOutput::template),
             Codec.doubleRange(1.0d, 1000d).fieldOf("weight").orElse(1.0d).forGetter(ItemOutput::weight)
     ).apply(instance, ItemOutput::new));
 
-    public static final ItemOutput EMPTY = new ItemOutput(ItemStack.EMPTY, 0);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemOutput> STREAM_CODEC = StreamCodec.composite(
+            ItemStackTemplate.STREAM_CODEC,
+            ItemOutput::template,
+            ByteBufCodecs.DOUBLE,
+            ItemOutput::weight,
+            ItemOutput::new
+    );
 
-    @Override
     public ItemStack itemStack() {
-        return itemStack.copy();
+        return template.create();
     }
 
     public ItemStack multiply(int factor) {
-        ItemStack stack = itemStack.copy();
+        ItemStack stack = template.create();
         stack.setCount(stack.getCount() * factor);
         return stack;
     }

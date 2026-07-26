@@ -80,7 +80,7 @@ public record HiveRecipe(
 
     public static Optional<ItemStack> getApiaryOutput(ApiaryTier tier, Entity entity) {
         Optional<RecipeHolder<HiveRecipe>> recipe = findRecipe((RecipeManager) entity.level().recipeAccess(), entity.getType(), entity.level());
-        return OptionalItemStack.ofNullable(recipe.map(t -> t.value().getApiaryOutput(tier)).orElseGet(() -> {
+        return OptionalItemStack.ofNullable(recipe.map(recipeHolder -> recipeHolder.value().getApiaryOutput(tier)).orElseGet(() -> {
             if (entity instanceof BeeCompat compat) {
                 return compat.resourcefulBees$getApiaryOutput(tier);
             }

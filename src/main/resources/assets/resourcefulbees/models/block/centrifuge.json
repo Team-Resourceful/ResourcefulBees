@@ -1,7 +1,6 @@
 {
-    "parent": "builtin/entity",
     "textures":{
-        "particle":"resourcefulbees:block/create_centrifuge"
+        "particle":"resourcefulbees:block/centrifuge"
     },
     "display": {
         "thirdperson_righthand": {

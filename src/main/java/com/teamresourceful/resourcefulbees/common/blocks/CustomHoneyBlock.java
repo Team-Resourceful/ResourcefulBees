@@ -4,13 +4,11 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
-import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
 import com.teamresourceful.resourcefulbees.common.items.honey.ColoredObject;
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.CustomHoneyBlockData;
-import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.HoneyDataImpl;
 import com.teamresourceful.resourcefullib.common.color.Color;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -187,9 +185,11 @@ public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable,
         showParticles(entity, 10);
     }
 
+    //todo figure out slide particles so we dont have to default to honey block
     private static void showParticles(Entity entity, int count) {
         if (entity.level().isClientSide()) {
             BlockState blockState = entity.getBlockStateOn();
+            blockState = blockState.isAir() ? Blocks.HONEY_BLOCK.defaultBlockState() : blockState;
 
             for (int i = 0; i < count; i++) {
                 entity.level()

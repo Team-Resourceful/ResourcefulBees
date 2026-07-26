@@ -39,6 +39,6 @@ public class CustomHoneyBottleItem extends Item implements Tradeable, ColoredObj
 
     @Override
     public int color() {
-        return data.color().getValue() | 0xff000000;
+        return data.color().getOpaqueValue();
     }
 }

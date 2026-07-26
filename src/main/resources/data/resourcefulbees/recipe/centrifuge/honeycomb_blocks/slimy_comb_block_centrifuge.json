@@ -1,6 +1,6 @@
 {
   "type": "resourcefulbees:centrifuge",
-  "ingredient": { "item": "resourcefulbees:slimy_honeycomb_block" },
+  "ingredient": "resourcefulbees:slimy_honeycomb_block",
   "itemOutputs": [
     {
       "pool": [
@@ -57,7 +57,7 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 500 }}
+        {"fluid": { "id": "resourcefulbees:honey_fluid_source", "amount": 500 }}
       ]
     }
   ],

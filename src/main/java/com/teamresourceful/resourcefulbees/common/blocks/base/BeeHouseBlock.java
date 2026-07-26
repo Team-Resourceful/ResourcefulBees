@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
-@SuppressWarnings("deprecation")
 public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
 
     private static final VoxelShape FULL_Z_SHAPE = Stream.of(

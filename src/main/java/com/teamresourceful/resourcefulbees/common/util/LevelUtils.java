@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathType;
 
-public  class LevelUtils {
+public class LevelUtils {
 
 
     public static PathType getType(BlockState state, BlockGetter level, BlockPos pos, Mob mob) {

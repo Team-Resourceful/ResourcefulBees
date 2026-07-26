@@ -19,6 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -32,7 +33,7 @@ public record DefaultBeeData(String name, Map<Identifier, BeeData<?>> data, Iden
             data,
             id,
             Component.translatable("bee_type.resourcefulbees." + name),
-            Suppliers.memoize(() -> BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(EntityType.BEE))
+            Suppliers.memoize(() -> BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(EntityTypes.BEE))
         );
     }
 

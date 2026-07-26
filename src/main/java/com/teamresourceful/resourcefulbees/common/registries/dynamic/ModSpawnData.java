@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.registries.dynamic;
 
 import com.teamresourceful.resourcefulbees.events.lifecycle.ServerGoingToStartEvent;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import net.minecraft.advancements.criterion.LocationPredicate;
+import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;

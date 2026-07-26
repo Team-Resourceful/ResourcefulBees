@@ -163,8 +163,8 @@ public final class ModBlocks {
 //    public static final RegistryEntry<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", EnderBeeconBlock::new);
 //    public static final RegistryEntry<Block> HONEY_POT = BLOCKS.register("honey_pot", () -> new HoneyPotBlock(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops()));
 //    public static final RegistryEntry<Block> SOLIDIFICATION_CHAMBER = BLOCKS.register("solidification_chamber", () -> new SolidificationChamberBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops()));
-//    public static final RegistryEntry<Block> BASIC_CENTRIFUGE = CENTRIFUGE_BLOCKS.register("centrifuge", () -> new CentrifugeBlock(BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL).noOcclusion()));
-//   public static final RegistryEntry<Block> CENTRIFUGE_CRANK = CENTRIFUGE_BLOCKS.register("centrifuge_crank", () -> new CentrifugeCrankBlock(BlockBehaviour.Properties.of().strength(2).sound(SoundType.WOOD).noOcclusion()));
+    public static final RegistryEntry<Block> BASIC_CENTRIFUGE = registerBlock(CENTRIFUGE_BLOCKS, "centrifuge", CentrifugeBlock::new, () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL).noOcclusion());
+    public static final RegistryEntry<Block> CENTRIFUGE_CRANK = registerBlock(CENTRIFUGE_BLOCKS, "centrifuge_crank", CentrifugeCrankBlock::new, () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.WOOD).noOcclusion());
 //  public static final RegistryEntry<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(CENTRIFUGE_PROPERTIES));
 
     public static final RegistryEntry<Block> HONEY_FLUID_BLOCK = registerBlock(HONEY_FLUID_BLOCKS, "honey_fluid_block", properties -> new HoneyFluidBlock(ModFluids.HONEY_FLUID_TYPE.get(), properties), () -> HONEY_FLUID_BLOCK_PROPERTIES);

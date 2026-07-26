@@ -122,14 +122,14 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity implemen
     //region NBT
 
     @Override
-    protected void loadAdditional(ValueInput input) {
+    protected void loadAdditional(@NonNull ValueInput input) {
         super.loadAdditional(input);
         this.bees.clear();
         input.read("bees", HiveOccupant.CODEC.listOf()).orElse(List.of()).forEach(this::storeBee);
     }
 
     @Override
-    protected void saveAdditional(ValueOutput output) {
+    protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
         output.store("bees", HiveOccupant.CODEC.listOf(), this.getBees());
     }

@@ -1,6 +1,6 @@
 {
   "type": "resourcefulbees:centrifuge",
-  "ingredient": { "item": "resourcefulbees:lapis_honeycomb" },
+  "ingredient": "resourcefulbees:lapis_honeycomb",
   "itemOutputs": [
     {
       "chance": 0.80,
@@ -58,7 +58,7 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey", "amount": 100 }}
+        {"fluid": { "id": "resourcefulbees:honey_fluid_source", "amount": 100 }}
       ]
     }
   ],

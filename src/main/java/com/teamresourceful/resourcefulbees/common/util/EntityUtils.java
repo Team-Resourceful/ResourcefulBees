@@ -42,7 +42,7 @@ public final class EntityUtils {
     }
 
     public static int getBeeColorOrDefault(Entity bee) {
-        return bee instanceof CustomBee iBee ? iBee.getRenderData().colorData().jarColor().withAlpha(255).getValue() : BeeConstants.VANILLA_BEE_INT_COLOR;
+        return bee instanceof CustomBee iBee ? iBee.getRenderData().colorData().jarColor().getOpaqueValue() : BeeConstants.VANILLA_BEE_INT_COLOR;
     }
 
     public static void setEntityLocationAndAngle(BlockPos blockpos, Direction direction, Entity entity) {

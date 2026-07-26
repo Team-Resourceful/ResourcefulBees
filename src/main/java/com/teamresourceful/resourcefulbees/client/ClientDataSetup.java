@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.client;
 
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.events.UpdateEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.Level;
@@ -10,11 +9,11 @@ public final class ClientDataSetup {
 
     private static boolean setupsDone = false;
 
-    public static void onUpdates(UpdateEvent ignored){
-        if (Minecraft.getInstance().isLocalServer()) {
-            startSetups();
-        }
-    }
+//    public static void onUpdates(UpdateEvent ignored){
+//        if (Minecraft.getInstance().isLocalServer()) {
+//            startSetups();
+//        }
+//    }
 
     private static void startSetups() {
         if (!setupsDone) {

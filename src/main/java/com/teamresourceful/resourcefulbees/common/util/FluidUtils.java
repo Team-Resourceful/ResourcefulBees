@@ -7,6 +7,7 @@
 //import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 //import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 //import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFluids;
+//import com.teamresourceful.resourcefullib.common.fluid.ResourcefulFlowingFluid;
 //import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.core.registries.BuiltInRegistries;
@@ -94,7 +95,7 @@
 //    }
 //
 //    public static Item getHoneyBottleFromFluid(Fluid fluid) {
-//        if (fluid instanceof CustomHoneyFluid honeyFluid) {
+//        if (fluid instanceof ResourcefulFlowingFluid.Still honeyFluid) {
 //            String id = honeyFluid.getHoneyData().id();
 //            if (id.isEmpty()) return Items.AIR;
 //            return HoneyRegistry.get().getHoneyData(id).getBottleData().bottle().get();
@@ -108,7 +109,7 @@
 //        Item item = player.getItemInHand(hand).getItem();
 //        if (item instanceof BottleItem) {
 //            fillBottle(tank, player, hand);
-//        } else if (item instanceof HoneyBottleItem) {
+//        } else if (item.equals(Items.HONEY_BOTTLE)) {
 //            emptyBottle(tank, player, hand);
 //        } else if (!player.isShiftKeyDown() && !level.isClientSide() && player instanceof ServerPlayer serverPlayer && entity instanceof ContentMenuProvider<?> provider) {
 //            provider.openMenu(serverPlayer);
