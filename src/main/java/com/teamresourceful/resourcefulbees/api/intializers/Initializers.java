@@ -15,10 +15,12 @@ import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerTexture;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.api.data.shared.RegistryPredicate;
+import com.teamresourceful.resourcefulbees.common.lib.codecs.RestrictedBlockPredicate;
+import com.teamresourceful.resourcefulbees.common.lib.codecs.RestrictedItemPredicate;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
-import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
+
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
-import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedItemPredicate;
+
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;

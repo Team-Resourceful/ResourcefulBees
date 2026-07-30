@@ -25,6 +25,7 @@ public final class ModSpawnData {
             .orElse(true);
     }
 
+    //public static void initialize(ServerGoingToStartEvent event) {
 //    public static void initialize(ServerGoingToStartEvent event) {
 //        SPAWN_PREDICATES.clear();
 //        event.access().registryOrThrow(ModUtils.getSpawnDataRegistryKey())
@@ -36,6 +37,7 @@ public final class ModSpawnData {
 //                .getSpawnPredicate()
 //                .ifPresent(predicate -> SPAWN_PREDICATES.put(modifier.getEntityType(), predicate))
 //            );
+   // }
 //    }
 
     private ModSpawnData() throws UtilityClassException {

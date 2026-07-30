@@ -15,6 +15,8 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.level.gamerules.GameRules;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 
 public class BeeBreedGoal extends BreedGoal {
@@ -40,10 +42,12 @@ public class BeeBreedGoal extends BreedGoal {
         FamilyUnit beeFamily = BeeRegistry.get().getWeightedChild(((CustomBee)this.partner).getBeeType(), beeType);
 
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, this.partner, ((CustomBee)this.animal).createSelectedChild(beeFamily));
+        NeoForge.EVENT_BUS.post(event);
         if (event.isCanceled()) {
             resetBreed();
             return;
         }
+
         AgeableMob selectedChild = event.getChild();
         if (selectedChild != null) {
             awardPlayerAdvancement(selectedChild);

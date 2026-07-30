@@ -1,6 +1,6 @@
 {
     "resourcefulbees:core/v1": {
-        "flower": "#minecraft:mushroom_grow_block",
+        "flower": "minecraft:brown_mushroom",
         "creator": "Team Resourceful",
         "maxTimeInHive": 1200
     },

@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.api.data.bee.mutation;
 
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +27,7 @@ public interface MutationType {
 
     double weight();
 
-    Optional<CompoundTag> tag();
+    Optional<DataComponentPatch> components();
 
-    GenericSerializer<MutationType> serializer();
+    GenericSerializer<? extends MutationType> serializer();
 }

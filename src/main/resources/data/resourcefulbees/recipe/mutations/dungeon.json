@@ -22,7 +22,11 @@
                     "type": "block",
                     "block": {
                         "id": "minecraft:chest",
-                        "nbt": {"LootTable": "minecraft:chests/simple_dungeon"}
+                        "components": {
+                            "minecraft:container_loot": {
+                                "loot_table": "minecraft:chests/simple_dungeon"
+                            }
+                        }
                     },
                     "weight": 1
                 }

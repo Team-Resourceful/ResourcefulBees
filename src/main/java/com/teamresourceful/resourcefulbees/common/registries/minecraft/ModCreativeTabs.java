@@ -26,19 +26,19 @@ public class ModCreativeTabs {
 
     public static final RegistryEntry<CreativeModeTab> MAIN_TAB = CREATIVE_TABS.register("main_tab", () -> CreativeModeTab.builder()
 
-                    .icon(() -> ModItems.HONEY_DIPPER.get().getDefaultInstance())
-                    .title(Component.translatable("itemGroup.resourcefulbees"))
-                    .displayItems((parameters, output) -> {
-                    if (GeneralConfig.enableDevBees) output.accept(ModItems.OREO_COOKIE.get());
-                    if (GeneralConfig.enableDevBees) output.accept(ModItems.STRAWBEERRY_MILKSHAKE.get());
-                    output.accept(ModItems.BEE_JAR.get());
-                    output.accept(ModItems.BEE_BOX.get());
-                    output.accept(ModItems.BEE_BOX_TEMP.get());
-                    output.accept(ModItems.HONEY_DIPPER.get());
-                    output.accept(ModItems.SCRAPER.get());
-                    output.accept(ModItems.SMOKER.get());
-                    output.accept(ModItems.BELLOW.get());
-                    output.accept(ModItems.SMOKER_CAN.get());
+                .icon(() -> ModItems.HONEY_DIPPER.get().getDefaultInstance())
+                .title(Component.translatable("itemGroup.resourcefulbees"))
+                .displayItems((parameters, output) -> {
+                if (GeneralConfig.enableDevBees) output.accept(ModItems.OREO_COOKIE.get());
+                if (GeneralConfig.enableDevBees) output.accept(ModItems.STRAWBEERRY_MILKSHAKE.get());
+                output.accept(ModItems.BEE_JAR.get());
+                output.accept(ModItems.BEE_BOX.get());
+                output.accept(ModItems.BEE_BOX_TEMP.get());
+                output.accept(ModItems.HONEY_DIPPER.get());
+                output.accept(ModItems.SCRAPER.get());
+                output.accept(ModItems.SMOKER.get());
+                output.accept(ModItems.BELLOW.get());
+                output.accept(ModItems.SMOKER_CAN.get());
 
                 output.accept(ModItems.WAX.get());
                 output.accept(ModItems.WAX_BLOCK_ITEM.get());
@@ -55,8 +55,8 @@ public class ModCreativeTabs {
 //                output.accept(ModItems.ENDER_BEECON_ITEM.get());
 //                output.accept(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get());
 //                output.accept(ModItems.HONEY_POT_ITEM.get());
-//                output.accept(ModItems.CENTRIFUGE_CRANK.get());
-//                output.accept(ModItems.CENTRIFUGE.get());
+                output.accept(ModItems.CENTRIFUGE_CRANK.get());
+                output.accept(ModItems.CENTRIFUGE.get());
                 output.accept(ModItems.WAXED_MACHINE_BLOCK.get());
 //                output.accept(ModItems.FAKE_FLOWER.get());
 

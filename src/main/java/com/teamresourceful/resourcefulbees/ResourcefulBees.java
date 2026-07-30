@@ -35,8 +35,6 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
-//import com.teamresourceful.resourcefulbees.common.items.BeeSpawnEggItem;
-
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod("resourcefulbees")
 public class ResourcefulBees {
@@ -152,22 +150,14 @@ public class ResourcefulBees {
         }
     }
 
-//    public static void onCommonSetup(CommonSetupEvent event) {
+    //public static void onCommonSetup(CommonSetupEvent event) {
 //        NetworkHandler.init();
 //        RegistryHandler.registerDispenserBehaviors();
 //        GameSetup.initPotionRecipes();
 //        GameSetup.initArguments();
-//
-///*        ModItems.SPAWN_EGG_ITEMS.boundStream()
-//                .filter(item -> item instanceof BeeSpawnEggItem)
-//                .map(item -> (BeeSpawnEggItem) item)
-//                .forEach(egg -> {
-//                    egg.registerDispenserBehavior();
-//                    SpawnEggItemAccessor.getById().put(egg.getDefaultType(), egg);
-//                });*/
-//
-//        SpawnEggItemAccessor.getById().remove(null);
-//
-//        RegisterIngredientsEvent.EVENT.fire(new RegisterIngredientsEvent(IngredientHelper::registerIngredient));
-//    }
+
+
+
+        //RegisterIngredientsEvent.EVENT.fire(new RegisterIngredientsEvent(IngredientHelper::registerIngredient));
+    //}
 }

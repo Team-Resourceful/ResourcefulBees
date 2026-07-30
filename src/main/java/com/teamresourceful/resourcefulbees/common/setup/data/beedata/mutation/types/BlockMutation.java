@@ -1,15 +1,21 @@
 package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.types;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
+import com.teamresourceful.resourcefulbees.common.lib.codecs.RestrictedBlockPredicate;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
-import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +29,7 @@ import java.util.Optional;
 
 public record BlockMutation(RestrictedBlockPredicate predicate, double chance, double weight) implements MutationType, ItemDisplay {
 
-    public static final GenericSerializer<MutationType> SERIALIZER = new Serializer();
+    public static final GenericSerializer<BlockMutation> SERIALIZER = new Serializer();
 
     @Override
     public @Nullable BlockPos check(ServerLevel level, BlockPos pos) {
@@ -50,8 +56,9 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
             return false;
         } else {
             BlockEntity entity = level.getBlockEntity(pos);
-            if (entity != null && tag().isPresent()) {
-                //entity.load(tag().get());
+            if (entity != null && components().isPresent()) {
+                var current = entity.collectComponents();
+                entity.applyComponents(current, components().get());
             }
         }
         level.setBlockAndUpdate(pos, blockState);
@@ -59,12 +66,12 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
     }
 
     @Override
-    public Optional<CompoundTag> tag() {
-        return predicate.getTag();
+    public Optional<DataComponentPatch> components() {
+        return predicate.getComponents();
     }
 
     @Override
-    public GenericSerializer<MutationType> serializer() {
+    public GenericSerializer<BlockMutation> serializer() {
         return SERIALIZER;
     }
 
@@ -73,6 +80,7 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
         ItemStack stack = new ItemStack(Items.BARRIER);
         Item item = predicate.block().asItem();
         if (item.equals(Items.AIR)) {
+            stack.set(DataComponents.CUSTOM_NAME, Component.translatable(ModTranslations.MUTATION_BLOCK, BuiltInRegistries.BLOCK.getKey(predicate.block())));
             //stack.setHoverName(Component.translatable(ModTranslations.MUTATION_BLOCK, BuiltInRegistries.BLOCK.getKey(predicate.block())));
         } else {
             stack = new ItemStack(item);
@@ -81,17 +89,34 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
     }
 
 
-    private static class Serializer implements GenericSerializer<MutationType> {
+    private static class Serializer implements GenericSerializer<BlockMutation> {
 
-        public static final Codec<BlockMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        private static final MapCodec<BlockMutation> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 RestrictedBlockPredicate.CODEC.fieldOf("block").forGetter(BlockMutation::predicate),
                 CodecExtras.DOUBLE_UNIT_INTERVAL.optionalFieldOf("chance", 1D).forGetter(BlockMutation::chance),
                 CodecExtras.NON_NEGATIVE_DOUBLE.optionalFieldOf("weight", 10D).forGetter(BlockMutation::weight)
         ).apply(instance, BlockMutation::new));
 
+        private static final StreamCodec<RegistryFriendlyByteBuf, BlockMutation> STREAM_CODEC = StreamCodec.composite(
+
+
+                RestrictedBlockPredicate.STREAM_CODEC,
+                BlockMutation::predicate,
+                ByteBufCodecs.DOUBLE,
+                BlockMutation::chance,
+                ByteBufCodecs.DOUBLE,
+                BlockMutation::weight,
+                BlockMutation::new
+        );
+
         @Override
-        public MapCodec<? extends MutationType> codec() {
-            return null;//CODEC;
+        public StreamCodec<RegistryFriendlyByteBuf, BlockMutation> streamCodec() {
+            return STREAM_CODEC;
+        }
+
+        @Override
+        public MapCodec<BlockMutation> codec() {
+            return CODEC;
         }
 
         @Override

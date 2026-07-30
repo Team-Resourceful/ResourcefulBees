@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.types;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
@@ -8,8 +7,11 @@ import com.teamresourceful.resourcefulbees.client.util.displays.FluidDisplay;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -20,7 +22,7 @@ import java.util.Optional;
 
 public record FluidMutation(Fluid fluid, double chance, double weight) implements MutationType, FluidDisplay {
 
-    public static final GenericSerializer<MutationType> SERIALIZER = new Serializer();
+    public static final GenericSerializer<FluidMutation> SERIALIZER = new Serializer();
 
     @Override
     public @Nullable BlockPos check(ServerLevel level, BlockPos pos) {
@@ -42,12 +44,12 @@ public record FluidMutation(Fluid fluid, double chance, double weight) implement
     }
 
     @Override
-    public Optional<CompoundTag> tag() {
+    public Optional<DataComponentPatch> components() {
         return Optional.empty();
     }
 
     @Override
-    public GenericSerializer<MutationType> serializer() {
+    public GenericSerializer<FluidMutation> serializer() {
         return SERIALIZER;
     }
 
@@ -56,17 +58,36 @@ public record FluidMutation(Fluid fluid, double chance, double weight) implement
         return fluid;
     }
 
-    private static class Serializer implements GenericSerializer<MutationType> {
+    private static class Serializer implements GenericSerializer<FluidMutation> {
 
-        public static final Codec<FluidMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        private static final MapCodec<FluidMutation> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BuiltInRegistries.FLUID.byNameCodec().fieldOf("fluid").forGetter(FluidMutation::fluid),
             CodecExtras.DOUBLE_UNIT_INTERVAL.optionalFieldOf("chance", 1D).forGetter(FluidMutation::chance),
             CodecExtras.NON_NEGATIVE_DOUBLE.optionalFieldOf("weight", 10D).forGetter(FluidMutation::weight)
         ).apply(instance, FluidMutation::new));
 
+        public static final StreamCodec<RegistryFriendlyByteBuf, FluidMutation> STREAM_CODEC =
+                StreamCodec.composite(
+                        ByteBufCodecs.registry(BuiltInRegistries.FLUID.key()),
+                        FluidMutation::fluid,
+
+                        ByteBufCodecs.DOUBLE,
+                        FluidMutation::chance,
+
+                        ByteBufCodecs.DOUBLE,
+                        FluidMutation::weight,
+
+                        FluidMutation::new
+                );
+
         @Override
-        public MapCodec<? extends MutationType> codec() {
-            return null; //CODEC;
+        public StreamCodec<RegistryFriendlyByteBuf, FluidMutation> streamCodec() {
+            return STREAM_CODEC;
+        }
+
+        @Override
+        public MapCodec<FluidMutation> codec() {
+            return CODEC;
         }
 
         @Override

@@ -37,11 +37,11 @@ public final class GameSetup {
 
     public static void initEvents() {
 //        CommandRegisterEvent.EVENT.addListener(ResourcefulBeesCommand::registerCommand);
-        //PlayerBrokeBlockEvent.EVENT.addListener(HiveBreakEnchantment::onBlockBreak);
+//        //PlayerBrokeBlockEvent.EVENT.addListener(HiveBreakEnchantment::onBlockBreak);
 //        BlockBonemealedEvent.EVENT.addListener(GoldenFlower::onBlockBonemealed);
-        //SyncedDatapackEvent.EVENT.addListener(DimensionalBeeHolder::onDatapackSync);
-        //RegisterIngredientsEvent.EVENT.addListener(GameSetup::initIngredients);
-        //ServerGoingToStartEvent.EVENT.addListener(ModStructures::addStructures);
+//        //SyncedDatapackEvent.EVENT.addListener(DimensionalBeeHolder::onDatapackSync);
+//        //RegisterIngredientsEvent.EVENT.addListener(GameSetup::initIngredients);
+//        //ServerGoingToStartEvent.EVENT.addListener(ModStructures::addStructures);
 //        ServerGoingToStartEvent.EVENT.addListener(ModSpawnData::initialize);
 //        RegisterBurnablesEvent.EVENT.addListener(GameSetup::initBurnables);
 //        RegisterSpawnPlacementsEvent.EVENT.addListener(GameSetup::initSpawns);

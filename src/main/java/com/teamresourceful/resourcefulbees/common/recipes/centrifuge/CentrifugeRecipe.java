@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.Flu
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
+import com.teamresourceful.resourcefulbees.common.util.bytecodecs.StreamCodecExtras;
 import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
 import com.teamresourceful.resourcefullib.common.bytecodecs.StreamCodecByteCodec;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
@@ -141,7 +142,7 @@ public record CentrifugeRecipe(
             return StreamCodec.composite(
                     ByteBufCodecs.DOUBLE,
                     Output::chance,
-                    StreamCodecByteCodec.toRegistry(ExtraByteCodecs.weightedCollection(StreamCodecByteCodec.ofRegistry(codec), AbstractOutput::weight)),
+                    StreamCodecExtras.weightedCollection(codec, AbstractOutput::weight),
                     Output::pool,
                     Output::new
             );

@@ -1,21 +1,29 @@
 package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.types;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.EntityDisplay;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
+import com.teamresourceful.resourcefulbees.common.util.bytecodecs.StreamCodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
 import com.teamresourceful.resourcefullib.common.nbt.TagUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.item.component.TypedEntityData;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +32,7 @@ import java.util.Optional;
 
 public record EntityMutation(RestrictedEntityPredicate predicate, double chance, double weight) implements MutationType, EntityDisplay {
 
-    public static final GenericSerializer<MutationType> SERIALIZER = new Serializer();
+    public static final GenericSerializer<EntityMutation> SERIALIZER = new Serializer();
 
     @Nullable
     @Override
@@ -32,28 +40,32 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
         AABB box = new AABB(pos).expandTowards(0, -2, 0);
         List<Entity> entityList = level.getEntities((Entity) null, box, entity -> predicate().matches(level, entity));
         if (entityList.isEmpty()) return null;
-        BlockPos entityPos = entityList.get(0).blockPosition();
-        entityList.get(0).discard();
+        BlockPos entityPos = entityList.getFirst().blockPosition();
+        entityList.getFirst().discard();
         return entityPos;
     }
 
+    //todo tweak the location/angle setting if possible
     @Override
     public boolean activate(ServerLevel level, BlockPos pos) {
-        CompoundTag entityTag = predicate().getTag().map(nbt -> TagUtils.tagWithData(NBTConstants.ENTITY_TAG, nbt)).orElse(new CompoundTag());
-        Entity entity = predicate().entityType().spawn(level, null, null, pos, EntitySpawnReason.CONVERSION, false, false);
+        CompoundTag entityTag = predicate().getTag().orElse(new CompoundTag());
+        var type = predicate().entityType();
+        var entity = EntityType.loadEntityRecursive(type, entityTag, level, EntitySpawnReason.CONVERSION, EntityProcessor.NOP);
         if (entity != null) {
-            level.levelEvent(2005, pos.below(1), 0);
+            EntityUtils.setEntityLocationAndAngle(pos, Direction.NORTH, entity);
+            level.addFreshEntity(entity);
+            level.levelEvent(2005, pos.below(), 0);
         }
         return true;
     }
 
     @Override
-    public Optional<CompoundTag> tag() {
-        return predicate().getTag();
+    public Optional<DataComponentPatch> components() {
+        return Optional.empty();
     }
 
     @Override
-    public GenericSerializer<MutationType> serializer() {
+    public GenericSerializer<EntityMutation> serializer() {
         return SERIALIZER;
     }
 
@@ -62,17 +74,32 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
         return predicate().entityType();
     }
 
-    private static class Serializer implements GenericSerializer<MutationType> {
+    private static class Serializer implements GenericSerializer<EntityMutation> {
 
-        public static final Codec<EntityMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        private static final MapCodec<EntityMutation> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 RestrictedEntityPredicate.CODEC.fieldOf("entity").forGetter(EntityMutation::predicate),
                 CodecExtras.DOUBLE_UNIT_INTERVAL.optionalFieldOf("chance", 1D).forGetter(EntityMutation::chance),
                 CodecExtras.NON_NEGATIVE_DOUBLE.optionalFieldOf("weight", 10D).forGetter(EntityMutation::weight)
         ).apply(instance, EntityMutation::new));
 
+        private static final StreamCodec<RegistryFriendlyByteBuf, EntityMutation> STREAM_CODEC = StreamCodec.composite(
+                StreamCodecExtras.RESTRICTED_ENTITY_PREDICATE_STREAM_CODEC,
+                EntityMutation::predicate,
+                ByteBufCodecs.DOUBLE,
+                EntityMutation::chance,
+                ByteBufCodecs.DOUBLE,
+                EntityMutation::weight,
+                EntityMutation::new
+        );
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, EntityMutation> streamCodec() {
+            return STREAM_CODEC;
+        }
+
         @Override
         public MapCodec<EntityMutation> codec() {
-            return null;//CODEC;
+            return CODEC;
         }
 
         @Override
