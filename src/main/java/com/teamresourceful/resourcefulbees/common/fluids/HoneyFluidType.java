@@ -5,7 +5,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.pathfinder.PathType;
 
-public class HoneyFluidType {
+public final class HoneyFluidType {
 
     public static FluidProperties.Builder create() {
         return FluidProperties.builder()

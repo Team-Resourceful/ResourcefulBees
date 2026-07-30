@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
-import com.teamresourceful.resourcefulbees.common.items.honey.ColoredObject;
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.CustomHoneyBlockData;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
@@ -37,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 //this class mirrors the HoneyBlock class due to the particles method at the bottom being private
-public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable, ColoredObject {
+public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable {
 
     public static final MapCodec<CustomHoneyBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Properties.CODEC.fieldOf("properties").forGetter(CustomHoneyBlock::properties),
@@ -80,9 +79,8 @@ public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable,
         return data.tradeData().isTradable();
     }
 
-    //region Color stuff
     public int color() {
-        return color.getValue() | 0xff000000;
+        return color.getOpaqueValue();
     }
 
     @Override

@@ -1,13 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.fluids;
 
-import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidAttributesData;
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidProperties;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.pathfinder.PathType;
 
-public class CustomHoneyFluidType {
+public final class CustomHoneyFluidType {
 
     public static FluidProperties.Builder create(HoneyFluidAttributesData attributes) {
         return FluidProperties.builder()

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public class CustomHoneycombItem extends HoneycombItem implements Tradeable, ColoredObject {
+public class CustomHoneycombItem extends HoneycombItem implements Tradeable {
 
     private final Supplier<Item> storageBlock;
     private final Color color;

@@ -5,7 +5,6 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 import com.google.common.collect.Lists;
 import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
-import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -25,14 +24,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.attribute.EnvironmentAttributes;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
@@ -49,7 +47,6 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
@@ -100,6 +97,11 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
 
     public int getTicksSmoked() {
         return ticksSmoked;
+    }
+
+    public void upgradeHive(Collection<ItemStack> honeycombs) {
+        this.honeycombs.addAll(honeycombs);
+        recalculateHoneyLevel(this);
     }
 
     @Override

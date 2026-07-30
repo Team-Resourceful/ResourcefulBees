@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registries.dynamic;
 
-import com.teamresourceful.resourcefulbees.events.lifecycle.ServerGoingToStartEvent;
+//import com.teamresourceful.resourcefulbees.events.lifecycle.ServerGoingToStartEvent;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.core.BlockPos;
@@ -25,7 +25,7 @@ public final class ModSpawnData {
             .orElse(true);
     }
 
-    public static void initialize(ServerGoingToStartEvent event) {
+//    public static void initialize(ServerGoingToStartEvent event) {
 //        SPAWN_PREDICATES.clear();
 //        event.access().registryOrThrow(ModUtils.getSpawnDataRegistryKey())
 //            .holders()
@@ -36,7 +36,7 @@ public final class ModSpawnData {
 //                .getSpawnPredicate()
 //                .ifPresent(predicate -> SPAWN_PREDICATES.put(modifier.getEntityType(), predicate))
 //            );
-    }
+//    }
 
     private ModSpawnData() throws UtilityClassException {
         throw new UtilityClassException();

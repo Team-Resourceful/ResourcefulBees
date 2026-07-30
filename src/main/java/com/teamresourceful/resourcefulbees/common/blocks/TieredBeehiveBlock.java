@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.Nest
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeehiveTranslations;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
@@ -21,6 +22,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -55,7 +57,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
         super(properties);
         this.entityType = entityType;
         this.tier = tier;
-        this.registerDefaultState(this.stateDefinition.any().setValue(HONEY_LEVEL, 0).setValue(FACING, Direction.NORTH));//.setValue(TIER_PROPERTY, tier.ordinal()));
+        this.registerDefaultState(this.stateDefinition.any().setValue(HONEY_LEVEL, 0).setValue(FACING, Direction.NORTH));
     }
 
     public BeehiveTier getTier() { return tier; }
@@ -111,9 +113,10 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
             }
         }
 
-        if (itemstack.getItem() instanceof NestUpgrade upgrade && upgrade.isType(UpgradeType.NEST)) {
-            if (upgrade.getTier().from.equals(this.tier)) {
-                InteractionResult result = upgrade.getTier().upgrader.performUpgrade(state, level, pos, itemstack);
+        if (itemstack.has(ModDataComponents.BEEHIVE_UPGRADE)) {
+            var upgrade = itemstack.get(ModDataComponents.BEEHIVE_UPGRADE);
+            if (upgrade.tier().from.equals(this.tier)) {
+                InteractionResult result = upgrade.tier().upgrader.performUpgrade(state, level, pos);
                 if (result != InteractionResult.FAIL && GeneralConfig.consumeHiveUpgrade) {
                     itemstack.shrink(1);
                 }
@@ -130,7 +133,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements ExpandableToolti
     private InteractionResult performHoneyHarvest(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull InteractionHand handIn, ItemStack itemstack, boolean isScraper) {
         level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BEEHIVE_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
         dropResourceHoneycomb(level, pos, player, isScraper);
-        //itemstack.hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(handIn));
+        itemstack.hurtAndBreak(1, player, handIn == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 
         if (level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity beehiveTileEntity && !beehiveTileEntity.hasCombs()) {
             if (isHiveSmoked(pos, level)) {

@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
 //HoneyBottleItem.class no longer exists now using Item.class
-public class CustomHoneyBottleItem extends Item implements Tradeable, ColoredObject {
+public class CustomHoneyBottleItem extends Item implements Tradeable {
 
     public final HoneyBottleData data;
 
@@ -37,7 +37,6 @@ public class CustomHoneyBottleItem extends Item implements Tradeable, ColoredObj
         return data;
     }
 
-    @Override
     public int color() {
         return data.color().getOpaqueValue();
     }

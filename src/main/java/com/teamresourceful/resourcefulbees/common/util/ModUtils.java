@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.util;
 
-import com.teamresourceful.resourcefulbees.events.SpawnBabyEvent;
 import com.teamresourceful.resourcefullib.common.utils.GenericMemoryPack;
 import com.teamresourceful.resourcefullib.common.utils.neoforge.HiddenGenericMemoryPack;
 import it.unimi.dsi.fastutil.booleans.BooleanObjectImmutablePair;
@@ -20,21 +19,10 @@ import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
-import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.Contract;
 
 public class ModUtils {
-
-    public static void spawnBabyEvent(SpawnBabyEvent event) {
-        SpawnBabyEvent.EVENT.fire(event);
-        final BabyEntitySpawnEvent forgeEvent = new BabyEntitySpawnEvent(event.parent1(), event.parent2(), event.getChild());
-        NeoForge.EVENT_BUS.post(forgeEvent);
-        if (forgeEvent.isCanceled()) {
-            event.setCanceled(true);
-        }
-        event.setChild(forgeEvent.getChild());
-    }
 
     public static BooleanObjectPair<Vec3> enderEntityTeleport(LivingEntity entity, double x, double y, double z) {
         EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(entity, x, y, z);

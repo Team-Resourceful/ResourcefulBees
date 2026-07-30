@@ -1,13 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.blocks.ApiaryBlock;
+import com.teamresourceful.resourcefulbees.common.components.BeehiveUpgrade;
+import com.teamresourceful.resourcefulbees.common.components.Upgrade;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.config.HoneyGenConfig;
 import com.teamresourceful.resourcefulbees.common.items.*;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.BreederTimeUpgradeItem;
-import com.teamresourceful.resourcefulbees.common.items.upgrade.HoneyGenUpgradeItem;
-import com.teamresourceful.resourcefulbees.common.items.upgrade.UpgradeType;
-import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.BeehiveUpgrade;
 import com.teamresourceful.resourcefulbees.common.items.upgrade.nestupgrade.NestUpgradeItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
@@ -195,10 +194,10 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
 
 //    public static final RegistryEntry<Item> BREEDER_ITEM = NEST_registerItem(ITEMS, "breeder", () -> new BlockItem(ModBlocks.BREEDER_BLOCK.get(), new Item.Properties()));
 
-    public static final RegistryEntry<Item> T2_NEST_UPGRADE = registerItem(ITEMS, "t2_nest_upgrade", properties -> new NestUpgradeItem(BeehiveUpgrade.T1_TO_T2, properties), () -> new Item.Properties().stacksTo(16));
-    public static final RegistryEntry<Item> T3_NEST_UPGRADE = registerItem(ITEMS, "t3_nest_upgrade", properties -> new NestUpgradeItem(BeehiveUpgrade.T2_TO_T3, properties), () -> new Item.Properties().stacksTo(16));
-    public static final RegistryEntry<Item> T4_NEST_UPGRADE = registerItem(ITEMS, "t4_nest_upgrade", properties -> new NestUpgradeItem(BeehiveUpgrade.T3_TO_T4, properties), () -> new Item.Properties().stacksTo(16));
-    public static final RegistryEntry<Item> BREED_TIME_UPGRADE = registerItem(ITEMS, "breed_time_upgrade", BreederTimeUpgradeItem::new, () -> new Item.Properties().stacksTo(4));
+    public static final RegistryEntry<Item> T2_NEST_UPGRADE = registerItem(ITEMS, "t2_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T1_TO_T2)));
+    public static final RegistryEntry<Item> T3_NEST_UPGRADE = registerItem(ITEMS, "t3_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T2_TO_T3)));
+    public static final RegistryEntry<Item> T4_NEST_UPGRADE = registerItem(ITEMS, "t4_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T3_TO_T4)));
+    public static final RegistryEntry<Item> BREED_TIME_UPGRADE = registerItem(ITEMS, "breed_time_upgrade", Item::new, () -> new Item.Properties().stacksTo(4).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.BREED_TIME)));
 
     //public static final RegistryEntry<Item> BEE_LOCATOR = registerItem(ITEMS, "bee_locator", () -> new BeeLocatorItem(new Item.Properties().stacksTo(1)));
 
@@ -218,10 +217,10 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
     public static final RegistryEntry<Item> WAXED_HANGING_SIGN = registerItem(ITEMS, "waxed_hanging_sign", properties -> new HangingSignItem(ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get(), properties), Item.Properties::new);
     public static final RegistryEntry<Item> TRIMMED_WAXED_PLANKS = registerBlockItem(ITEMS, "trimmed_waxed_planks", ModBlocks.TRIMMED_WAXED_PLANKS, Item.Properties::new);
     public static final RegistryEntry<Item> WAXED_MACHINE_BLOCK = registerBlockItem(ITEMS, "waxed_machine_block", ModBlocks.WAXED_MACHINE_BLOCK, Item.Properties::new);
-    public static final RegistryEntry<Item> HONEY_CAP_UPGRADE = ModItems.registerItem(ITEMS, "honey_cap_upgrade", properties -> new HoneyGenUpgradeItem(properties, UpgradeType.HONEY_CAPACITY), () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit));
-    public static final RegistryEntry<Item> ENERGY_CAP_UPGRADE = ModItems.registerItem(ITEMS, "energy_cap_upgrade", properties -> new HoneyGenUpgradeItem(properties, UpgradeType.ENERGY_CAPACITY), () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit));
-    public static final RegistryEntry<Item> ENERGY_XFER_UPGRADE = ModItems.registerItem(ITEMS, "energy_xfer_upgrade", properties -> new HoneyGenUpgradeItem(properties, UpgradeType.ENERGY_TRANSFER), () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit));
-    public static final RegistryEntry<Item> ENERGY_FILL_UPGRADE = ModItems.registerItem(ITEMS, "energy_fill_upgrade", properties -> new HoneyGenUpgradeItem(properties, UpgradeType.ENERGY_FILL), () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit));
+    public static final RegistryEntry<Item> HONEY_CAP_UPGRADE = ModItems.registerItem(ITEMS, "honey_cap_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.HONEY_CAPACITY)));
+    public static final RegistryEntry<Item> ENERGY_CAP_UPGRADE = ModItems.registerItem(ITEMS, "energy_cap_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.ENERGY_CAPACITY)));
+    public static final RegistryEntry<Item> ENERGY_XFER_UPGRADE = ModItems.registerItem(ITEMS, "energy_xfer_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.ENERGY_TRANSFER)));
+    public static final RegistryEntry<Item> ENERGY_FILL_UPGRADE = ModItems.registerItem(ITEMS, "energy_fill_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.ENERGY_FILL)));
     //endregion
 
     //region Machines

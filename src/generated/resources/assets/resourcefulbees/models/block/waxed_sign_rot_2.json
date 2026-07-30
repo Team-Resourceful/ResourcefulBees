@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_sign_rot_2",
+  "textures": {
+    "all": "resourcefulbees:block/waxed_sign",
+    "particle": "resourcefulbees:block/waxed_planks"
+  }
+}

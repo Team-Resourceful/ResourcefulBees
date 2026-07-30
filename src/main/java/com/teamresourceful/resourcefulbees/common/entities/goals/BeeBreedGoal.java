@@ -3,8 +3,6 @@ package com.teamresourceful.resourcefulbees.common.entities.goals;
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.events.SpawnBabyEvent;
-import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -17,6 +15,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.level.gamerules.GameRules;
+import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 
 public class BeeBreedGoal extends BreedGoal {
 
@@ -40,8 +39,7 @@ public class BeeBreedGoal extends BreedGoal {
         if (partner == null) return;
         FamilyUnit beeFamily = BeeRegistry.get().getWeightedChild(((CustomBee)this.partner).getBeeType(), beeType);
 
-        final SpawnBabyEvent event = new SpawnBabyEvent(animal, this.partner, ((CustomBee)this.animal).createSelectedChild(beeFamily));
-        ModUtils.spawnBabyEvent(event);
+        final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, this.partner, ((CustomBee)this.animal).createSelectedChild(beeFamily));
         if (event.isCanceled()) {
             resetBreed();
             return;

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "resourcefulbees:block/waxed_wall_sign",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "resourcefulbees:block/waxed_wall_sign",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "resourcefulbees:block/waxed_wall_sign"
+    },
+    "facing=west": {
+      "model": "resourcefulbees:block/waxed_wall_sign",
+      "y": 90
+    }
+  }
+}

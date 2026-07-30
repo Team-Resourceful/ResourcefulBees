@@ -1,16 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
-import com.teamresourceful.resourcefulbees.common.components.Bees;
-import com.teamresourceful.resourcefulbees.common.components.CentrifugeRotations;
-import com.teamresourceful.resourcefulbees.common.components.JarOccupant;
+import com.teamresourceful.resourcefulbees.common.components.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
 import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
-import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.item.ResourcefulComponentType;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
-import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -48,4 +44,16 @@ public class ModDataComponents {
             .cacheEncoding()
             .build()
     );
+
+    public static final RegistryEntry<DataComponentType<Upgrade>> UPGRADE = COMPONENTS.register("upgrade", () -> DataComponentType.<Upgrade>builder()
+            .persistent(Upgrade.CODEC)
+            .networkSynchronized(Upgrade.STREAM_CODEC)
+            .cacheEncoding()
+            .build());
+
+    public static final RegistryEntry<DataComponentType<BeehiveUpgrade>> BEEHIVE_UPGRADE = COMPONENTS.register("beehive_upgrade", () -> DataComponentType.<BeehiveUpgrade>builder()
+            .persistent(BeehiveUpgrade.CODEC)
+            .networkSynchronized(BeehiveUpgrade.STREAM_CODEC)
+            .cacheEncoding()
+            .build());
 }

@@ -5,10 +5,11 @@
 //import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
 //import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 //import com.teamresourceful.resourcefullib.common.fluid.data.FluidData;
+//import net.minecraft.world.item.BucketItem;
 //import net.minecraft.world.item.Item;
 //import net.minecraft.world.item.Items;
 //
-//public class CustomHoneyBucketItem extends FluidBucketItem implements Tradeable, ColoredObject {
+//public class CustomHoneyBucketItem extends BucketItem implements Tradeable, ColoredObject {
 //
 //    private final HoneyFluidData data;
 //
@@ -30,5 +31,10 @@
 //    @Override
 //    public int getObjectColor(int index) {
 //        return index == 1 ? data.renderData().color().getValue() : BeeConstants.DEFAULT_ITEM_COLOR;
+//    }
+//
+//    @Override
+//    public int color() {
+//        return 0;
 //    }
 //}

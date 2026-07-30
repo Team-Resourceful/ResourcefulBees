@@ -1,12 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.MissingRegistryTranslations;
-import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
-import com.teamresourceful.resourcefulbees.client.events.ScreenOpenEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.TitleScreen;
 
 public class MissingRegistryScreen extends ConfirmScreen {
 
@@ -28,12 +25,12 @@ public class MissingRegistryScreen extends ConfirmScreen {
         setDelay(30);
     }
 
-    public static void onScreenChange(ScreenOpenEvent event) {
-        if (event.getScreen() instanceof TitleScreen && MissingRegistrySetup.isMissingRegistries()) {
-            if (!hasShown) {
-                hasShown = true;
-                event.setScreen(new MissingRegistryScreen(event.getScreen()));
-            }
-        }
-    }
+//    public static void onScreenChange(ScreenOpenEvent event) {
+//        if (event.getScreen() instanceof TitleScreen && MissingRegistrySetup.isMissingRegistries()) {
+//            if (!hasShown) {
+//                hasShown = true;
+//                event.setScreen(new MissingRegistryScreen(event.getScreen()));
+//            }
+//        }
+//    }
 }

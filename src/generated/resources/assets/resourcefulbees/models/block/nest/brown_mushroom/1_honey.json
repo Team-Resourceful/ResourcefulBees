@@ -1,0 +1,11 @@
+{
+  "parent": "resourcefulbees:block/nest",
+  "textures": {
+    "bottom": "resourcefulbees:block/nest/brown_mushroom/bottom",
+    "front": "resourcefulbees:block/nest/brown_mushroom/front_honey",
+    "particle": "resourcefulbees:block/nest/brown_mushroom/side",
+    "side": "resourcefulbees:block/nest/brown_mushroom/side",
+    "tier": "resourcefulbees:block/nest/tier_overlay/tier_1",
+    "top": "resourcefulbees:block/nest/brown_mushroom/top"
+  }
+}

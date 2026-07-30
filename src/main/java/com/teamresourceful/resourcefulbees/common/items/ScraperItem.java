@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemInstance;
 import net.neoforged.neoforge.common.ItemAbility;

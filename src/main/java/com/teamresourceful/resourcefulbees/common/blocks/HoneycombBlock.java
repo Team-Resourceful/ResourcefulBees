@@ -1,7 +1,6 @@
 
 package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.teamresourceful.resourcefulbees.common.items.honey.ColoredObject;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class HoneycombBlock extends Block implements ColoredObject {
+public class HoneycombBlock extends Block {
 
     private final Color color;
 

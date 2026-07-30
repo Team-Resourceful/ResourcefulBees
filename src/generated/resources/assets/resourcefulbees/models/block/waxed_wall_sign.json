@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_wall_sign",
+  "textures": {
+    "all": "resourcefulbees:block/waxed_sign",
+    "particle": "resourcefulbees:block/waxed_planks"
+  }
+}

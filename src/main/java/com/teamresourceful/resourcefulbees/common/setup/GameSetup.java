@@ -1,19 +1,13 @@
 package com.teamresourceful.resourcefulbees.common.setup;
 
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
-import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesCommand;
 import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument;
 import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
-import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
-import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
-import com.teamresourceful.resourcefulbees.common.world.gen.GoldenFlower;
-import com.teamresourceful.resourcefulbees.events.*;
-import com.teamresourceful.resourcefulbees.events.lifecycle.ServerGoingToStartEvent;
-import com.teamresourceful.resourcefulbees.events.registry.RegisterRepositorySourceEvent;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.SharedConstants;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
@@ -22,12 +16,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.neoforged.bus.api.Event;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
@@ -47,15 +36,15 @@ public final class GameSetup {
     }
 
     public static void initEvents() {
-        CommandRegisterEvent.EVENT.addListener(ResourcefulBeesCommand::registerCommand);
+//        CommandRegisterEvent.EVENT.addListener(ResourcefulBeesCommand::registerCommand);
         //PlayerBrokeBlockEvent.EVENT.addListener(HiveBreakEnchantment::onBlockBreak);
-        BlockBonemealedEvent.EVENT.addListener(GoldenFlower::onBlockBonemealed);
+//        BlockBonemealedEvent.EVENT.addListener(GoldenFlower::onBlockBonemealed);
         //SyncedDatapackEvent.EVENT.addListener(DimensionalBeeHolder::onDatapackSync);
         //RegisterIngredientsEvent.EVENT.addListener(GameSetup::initIngredients);
         //ServerGoingToStartEvent.EVENT.addListener(ModStructures::addStructures);
-        ServerGoingToStartEvent.EVENT.addListener(ModSpawnData::initialize);
-        RegisterBurnablesEvent.EVENT.addListener(GameSetup::initBurnables);
-        RegisterSpawnPlacementsEvent.EVENT.addListener(GameSetup::initSpawns);
+//        ServerGoingToStartEvent.EVENT.addListener(ModSpawnData::initialize);
+//        RegisterBurnablesEvent.EVENT.addListener(GameSetup::initBurnables);
+//        RegisterSpawnPlacementsEvent.EVENT.addListener(GameSetup::initSpawns);
         //RegisterReloadListenerEvent.EVENT.addListener(RecipeBuilder::registerReloadListeners);
         //RegisterVillagerTradesEvent.EVENT.addListener(Beekeeper::setupBeekeeper);
         //RegisterEntityAttributesEvent.EVENT.addListener(GameSetup::registerAttributes);
@@ -79,20 +68,20 @@ public final class GameSetup {
 //        event.register(BeeJarIngredient.SERIALIZER);
 //    }
 
-    public static void initBurnables(RegisterBurnablesEvent event) {
-        event.register(400, ModItems.WAX.get());
-        event.register(4000, ModItems.WAX_BLOCK_ITEM.get());
-    }
-
-    public static void initSpawns(RegisterSpawnPlacementsEvent event) {
-        ModEntities.getModBees().forEach((s, entityType) ->
-                event.register(entityType.get(),
-                        SpawnPlacementTypes.ON_GROUND,
-                        Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                        CustomBeeEntity::canBeeSpawn
-                )
-        );
-    }
+//    public static void initBurnables(RegisterBurnablesEvent event) {
+//        event.register(400, ModItems.WAX.get());
+//        event.register(4000, ModItems.WAX_BLOCK_ITEM.get());
+//    }
+//
+//    public static void initSpawns(RegisterSpawnPlacementsEvent event) {
+//        ModEntities.getModBees().forEach((s, entityType) ->
+//                event.register(entityType.get(),
+//                        SpawnPlacementTypes.ON_GROUND,
+//                        Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+//                        CustomBeeEntity::canBeeSpawn
+//                )
+//        );
+//    }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         ModEntities.getModBees().forEach((s, entityType) -> event.put(
