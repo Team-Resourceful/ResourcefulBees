@@ -2,8 +2,10 @@ package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.components.DipperEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.HoneyDipperTranslations;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -24,6 +26,8 @@ import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Function;
 
@@ -41,9 +45,9 @@ public class HoneyDipperItem extends Item {
         if (level instanceof ServerLevel serverLevel && player != null) {
             BlockState clickedBlock = level.getBlockState(context.getClickedPos());
 
-            Entity entity = getEntity(serverLevel, context.getItemInHand());
+            Entity dipperEntity = getEntity(serverLevel, context.getItemInHand());
 
-            if (!(entity instanceof Bee bee)) return InteractionResult.FAIL;
+            if (!(dipperEntity instanceof Bee bee)) return InteractionResult.FAIL;
 
             if (bee instanceof CustomBee customBee) {
                 if (customBee.getCoreData().isBlockFlower(clickedBlock)) {
@@ -83,7 +87,7 @@ public class HoneyDipperItem extends Item {
         context.getPlayer().setItemInHand(context.getHand(), setEntity(context.getItemInHand(), null));
     }
 
-    private void sendMessageToPlayer(Bee bee, Player playerEntity, MessageTypes messageTypes, BlockPos pos) {
+    private void sendMessageToPlayer(@Nullable Bee bee, @NonNull Player playerEntity, MessageTypes messageTypes, @Nullable BlockPos pos) {
         switch (messageTypes) {
             case FLOWER, HIVE, FAKE_FLOWER -> playerEntity.sendSystemMessage(messageTypes.create(bee.getDisplayName(), pos.toShortString()));
             case BEE_CLEARED -> playerEntity.sendSystemMessage(messageTypes.create());
@@ -99,15 +103,15 @@ public class HoneyDipperItem extends Item {
     @Override
     public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
         if (player.level() instanceof ServerLevel serverLevel) {
-            Entity stackEntity = getEntity(serverLevel, stack);
+            Entity dipperEntity = getEntity(serverLevel, stack);
 
-            if (entity instanceof Bee bee && stackEntity == null) {
+            if (entity instanceof Bee bee && dipperEntity == null) {
                 player.setItemInHand(hand, setEntity(stack, entity));
                 sendMessageToPlayer(bee, player, MessageTypes.BEE_SELECTED, null);
                 return InteractionResult.SUCCESS;
             }
 
-            if (stackEntity instanceof ResourcefulBee bee && bee.getCoreData().isEntityFlower(entity.getType())) {
+            if (dipperEntity instanceof ResourcefulBee bee && bee.getCoreData().isEntityFlower(entity.getType())) {
                 bee.entityFlower.set(entity.getId());
                 bee.setSavedFlowerPos(entity.blockPosition());
                 sendMessageToPlayer(bee, player, MessageTypes.FLOWER, entity.blockPosition());
@@ -130,22 +134,20 @@ public class HoneyDipperItem extends Item {
         return super.use(level, player, hand);
     }
 
-    private static Entity getEntity(ServerLevel level, ItemStack stack) {
-//        if (stack.isEmpty() || !stack.hasTag()) return null;
-//        CompoundTag stackTag = stack.getOrCreateTag();
-//        UUID uuid = stackTag.hasUUID(NBTConstants.HoneyDipper.Entity) ? stackTag.getUUID(NBTConstants.HoneyDipper.Entity) : null;
-//        return uuid != null ? level.getEntity(uuid) : null;
-        return null;
+    private static @Nullable Entity getEntity(ServerLevel level, ItemStack stack) {
+        var isEmpty = stack.isEmpty();
+        var hasComp = stack.has(ModDataComponents.DIPPER_ENTITY);
+        var equals = stack.get(ModDataComponents.DIPPER_ENTITY).equals(DipperEntity.EMPTY);
+
+
+        if (stack.isEmpty() || !stack.has(ModDataComponents.DIPPER_ENTITY) && stack.get(ModDataComponents.DIPPER_ENTITY).equals(DipperEntity.EMPTY)) {
+            return null;
+        }
+        return level.getEntity(stack.get(ModDataComponents.DIPPER_ENTITY).uuid());
     }
 
-    private static ItemStack setEntity(ItemStack stack, Entity entity) {
-//        if (entity == null) {
-//            stack.setTag(null);
-//        }else {
-//            CompoundTag stackTag = stack.getOrCreateTag();
-//            stackTag.putUUID(NBTConstants.HoneyDipper.Entity, entity.getUUID());
-//            stack.setTag(stackTag);
-//        }
+    private static ItemStack setEntity(ItemStack stack, @Nullable Entity entity) {
+        stack.set(ModDataComponents.DIPPER_ENTITY, DipperEntity.of(entity == null ? null : entity.getUUID()));
         return stack;
     }
 

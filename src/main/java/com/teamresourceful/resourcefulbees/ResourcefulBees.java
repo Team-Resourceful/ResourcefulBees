@@ -4,7 +4,7 @@ package com.teamresourceful.resourcefulbees;
 import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.data.DataGen;
+import com.teamresourceful.resourcefulbees.common.data.TagGenerator;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
@@ -116,7 +116,7 @@ public class ResourcefulBees {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         NetworkHandler.init();
-        RegistryHandler.registerDispenserBehaviors();
+        event.enqueueWork(RegistryHandler::registerDispenserBehaviors);
         GameSetup.initPotionRecipes();
         GameSetup.initArguments();
     }
@@ -141,7 +141,7 @@ public class ResourcefulBees {
         TraitAbilityRegistry.getRegistry().close();
         TraitSetup.buildCustomTraits();
         TraitRegistry.getRegistry().close();
-        DataGen.generateCommonData();
+        TagGenerator.generateCommonData();
         HoneycombRegistry.getRegistry().regenerateVariationData();
         MissingRegistrySetup.checkMissingRegistries();
         if (ModUtils.isProduction()) {

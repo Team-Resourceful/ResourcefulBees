@@ -56,4 +56,10 @@ public class ModDataComponents {
             .networkSynchronized(BeehiveUpgrade.STREAM_CODEC)
             .cacheEncoding()
             .build());
+
+    public static final RegistryEntry<DataComponentType<DipperEntity>> DIPPER_ENTITY = COMPONENTS.register("dipper_entity", () -> DataComponentType.<DipperEntity>builder()
+            .persistent(DipperEntity.CODEC)
+            .networkSynchronized(DipperEntity.STREAM_CODEC)
+            .cacheEncoding()
+            .build());
 }

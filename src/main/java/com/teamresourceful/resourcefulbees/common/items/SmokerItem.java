@@ -11,6 +11,7 @@ import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 public class SmokerItem extends Item {
 
     public SmokerItem(Properties properties) {
-        super(properties.durability(GeneralConfig.smokerDurability * 2));
+        super(properties.durability(GeneralConfig.smokerDurability));
     }
 
     @Override
@@ -43,7 +44,7 @@ public class SmokerItem extends Item {
     @Override
 	public @NotNull InteractionResult use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
 	    if (level instanceof ServerLevel serverLevel) {
-            player.getItemInHand(hand).hurtAndBreak(1, player, hand); //todo fix this
+            player.getItemInHand(hand).hurtAndBreak(1, player, hand);
 
 	        Vec3 vec3d = player.getLookAngle();
 			double x = player.getX() + vec3d.x * 2;
@@ -55,7 +56,7 @@ public class SmokerItem extends Item {
                 .stream()
                 .filter(NeutralMob::isAngry)
                 .forEach(bee -> {
-                    bee.setPersistentAngerEndTime(0); //todo see if this is right
+                    bee.setPersistentAngerEndTime(0);
                     bee.setLastHurtByMob(null);
                 });
 

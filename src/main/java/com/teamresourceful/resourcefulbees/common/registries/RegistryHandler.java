@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee
 //import com.teamresourceful.resourcefulbees.common.items.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluidType;
 import com.teamresourceful.resourcefulbees.common.items.dispenser.ScraperDispenserBehavior;
+import com.teamresourceful.resourcefulbees.common.items.dispenser.ShearsDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneyBottleItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
@@ -30,12 +31,11 @@ import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassExceptio
 import com.teamresourceful.resourcefullib.common.fluid.ResourcefulFlowingFluid;
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidData;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.core.dispenser.ShearsDispenseItemBehavior;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -168,5 +168,7 @@ public final class RegistryHandler {
 
     public static void registerDispenserBehaviors() {
         DispenserBlock.registerBehavior(ModItems.SCRAPER.get().asItem(), new ScraperDispenserBehavior());
+        DispenseItemBehavior vanillaShearsBehavior = new ShearsDispenseItemBehavior();
+        DispenserBlock.registerBehavior(Items.SHEARS, new ShearsDispenserBehavior(vanillaShearsBehavior));
     }
 }

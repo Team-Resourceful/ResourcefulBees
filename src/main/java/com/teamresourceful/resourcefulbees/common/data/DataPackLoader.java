@@ -47,7 +47,7 @@ public final class DataPackLoader implements RepositorySource {
     }
 
     private static void generateTags(GenericMemoryPack dataPack) {
-        DataGen.getTags().forEach((tagID, tagEntries) -> {
+        TagGenerator.getTags().forEach((tagID, tagEntries) -> {
             TagBuilder builder = TagBuilder.create();
             tagEntries.forEach(builder::addElement);
             TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(builder.build(), false))

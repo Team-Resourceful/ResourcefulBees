@@ -98,7 +98,8 @@ public final class GeneralConfig {
     @Comment(
             value = "Sets the max durability for the smoker"
     )
-    public static int smokerDurability = 1000;
+    @ConfigOption.Range(min = 128, max = 4096)
+    public static int smokerDurability = 256;
 
     @ConfigEntry(
             id = "consumeHiveUpgrade",
@@ -107,7 +108,6 @@ public final class GeneralConfig {
     @Comment(
             value = "Set to false if you want hive upgrades to be reusable."
     )
-    @ConfigOption.Range(min = 100, max = 5000)
     public static boolean consumeHiveUpgrade = true;
 
 

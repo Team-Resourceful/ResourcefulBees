@@ -6,25 +6,23 @@ import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneycombIte
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 
 public final class RecipeBuilder implements ResourceManagerReloadListener {
     public static Recipe<HiveRecipe.Input> makeHiveRecipe(CustomBeeData bee) {
-        var optData = bee.getCoreData().getHoneycombData();
-        if (optData.isEmpty()) return null;
-        var data = optData.get();
-
-        return new HiveRecipe(
-                //Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, bee.name().toLowerCase(Locale.ROOT) + "_hive_output"),
-                HolderSet.direct(EntityType::builtInRegistryHolder, bee.entityType()),
-                data.hiveCombs(),
-                data.apiaryCombs()
-        );
+        return bee.getCoreData().getHoneycombData()
+                .<Recipe<HiveRecipe.Input>>map(data -> new HiveRecipe(
+                        HolderSet.direct(
+                                BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(bee.entityType())
+                        ),
+                        data.hiveCombs(),
+                        data.apiaryCombs()
+                ))
+                .orElse(null);
     }
 
     @Override

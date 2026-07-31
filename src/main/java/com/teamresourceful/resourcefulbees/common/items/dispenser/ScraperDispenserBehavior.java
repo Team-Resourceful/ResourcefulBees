@@ -22,14 +22,8 @@ public class ScraperDispenserBehavior extends DefaultDispenseItemBehavior {
         BlockState blockstate = world.getBlockState(blockpos);
         if (blockstate.getBlock() instanceof TieredBeehiveBlock tieredBeehiveBlock) {
             int i = blockstate.getValue(BeehiveBlock.HONEY_LEVEL);
-            if (i >= 5) {
-                /*if (stack.hurtAndBreak(1)) {
-                    stack.setCount(0);
-                }
-*/
-                if (TieredBeehiveBlock.dropResourceHoneycomb(tieredBeehiveBlock, world, blockpos, true)) {
-                    tieredBeehiveBlock.releaseBeesAndResetHoneyLevel(world, blockstate, blockpos, null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
-                }
+            if (i >= 5 && TieredBeehiveBlock.dropResourceHoneycomb(tieredBeehiveBlock, world, blockpos, true)) {
+                tieredBeehiveBlock.releaseBeesAndResetHoneyLevel(world, blockstate, blockpos, null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
             }
         }
         return stack;
