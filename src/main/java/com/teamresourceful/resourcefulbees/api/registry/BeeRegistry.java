@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
+import net.minecraft.resources.Identifier;
 
 import java.util.Map;
 import java.util.Optional;
@@ -39,9 +40,25 @@ public interface BeeRegistry {
      * Returns a BeeData object for the given bee type.
      *
      *  @param bee Bee type for which BeeData is requested.
+     *  @return Returns a BeeData object for the given bee type.
+     */
+    CustomBeeData getBeeData(Identifier bee);
+
+    /**
+     * Returns a BeeData object for the given bee type.
+     *
+     *  @param bee Bee type for which BeeData is requested.
      *  @return Returns an optional BeeData object for the given bee type.
      */
     Optional<CustomBeeData> getOptionalBeeData(String bee);
+
+    /**
+     * Returns a BeeData object for the given bee type.
+     *
+     *  @param bee Bee type for which BeeData is requested.
+     *  @return Returns an optional BeeData object for the given bee type.
+     */
+    Optional<CustomBeeData> getOptionalBeeData(Identifier bee);
 
     /**
      * Returns weather a bee type is registered in the registry.
@@ -52,12 +69,28 @@ public interface BeeRegistry {
     boolean containsBeeType(String bee);
 
     /**
+     * Returns weather a bee type is registered in the registry.
+     *
+     *  @param bee Bee type for which bee is checked.
+     *  @return Returns a boolean if the bee type is registered.
+     */
+    boolean containsBeeType(Identifier bee);
+
+    /**
      * Returns a JsonObject for the given bee type.
      *
      * @param bee Bee type for which BeeData is requested.
      * @return Returns a JsonObject for the given bee type.
      */
     JsonObject getRawBeeData(String bee);
+
+    /**
+     * Returns a JsonObject for the given bee type.
+     *
+     * @param bee Bee type for which BeeData is requested.
+     * @return Returns a JsonObject for the given bee type.
+     */
+    JsonObject getRawBeeData(Identifier bee);
 
     /**
      * Returns a map of parents to families.
@@ -75,6 +108,15 @@ public interface BeeRegistry {
     boolean canParentsBreed(String parent1, String parent2);
 
     /**
+     * Returns true if supplied parents can make a child bee.
+     *
+     *  @param parent1 Bee type for Parent 1.
+     *  @param parent2 Bee type for parent 2.
+     *  @return Returns true/false if parents can breed.
+     */
+    boolean canParentsBreed(Identifier parent1, Identifier parent2);
+
+    /**
      * Returns a weighted random bee type based on the supplied parents.
      *
      *  @param parent1 Bee type for Parent 1.
@@ -82,6 +124,15 @@ public interface BeeRegistry {
      *  @return Returns a weighted random bee type as a string.
      */
     FamilyUnit getWeightedChild(String parent1, String parent2);
+
+    /**
+     * Returns a weighted random bee type based on the supplied parents.
+     *
+     *  @param parent1 Bee type for Parent 1.
+     *  @param parent2 Bee type for parent 2.
+     *  @return Returns a weighted random bee type as a string.
+     */
+    FamilyUnit getWeightedChild(Identifier parent1, Identifier parent2);
 
     /**
      * Returns the adjusted weight for the supplied child's data.
@@ -99,7 +150,7 @@ public interface BeeRegistry {
      *
      *  @return Returns unmodifiable copy of bee registry.
      */
-    Map<String, CustomBeeData> getBees();
+    Map<Identifier, CustomBeeData> getBees();
 
     /**
      * Returns a set containing all registered CustomBeeData.
@@ -117,7 +168,7 @@ public interface BeeRegistry {
     /**
      *  @return Returns a set containing all bee types.
      */
-    Set<String> getBeeTypes();
+    Set<Identifier> getBeeTypes();
 
-    Map<String, JsonObject> getRawBees();
+    Map<Identifier, JsonObject> getRawBees();
 }

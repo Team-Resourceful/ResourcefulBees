@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.AgeableMob;
 
 import java.util.Optional;
@@ -22,8 +23,8 @@ public interface CustomBee {
 
     CustomBeeData getBeeData();
 
-    default String getBeeType() {
-        return getBeeData().name();
+    default Identifier getBeeType() {
+        return getBeeData().id();
     }
 
     default BeeCoreData getCoreData() {

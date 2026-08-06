@@ -15,11 +15,10 @@
         "mutation" : "resourcefulbees:mutations/pigman"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "pigman",
-                "parent2": "pigman"
+                "parent1": "resourcefulbees:pigman_bee",
+                "parent2": "resourcefulbees:pigman_bee"
             }
         ]
     },

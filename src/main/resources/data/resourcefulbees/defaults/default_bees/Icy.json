@@ -17,11 +17,10 @@
         "mutation": "resourcefulbees:mutations/icy"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "icy",
-                "parent2": "icy"
+                "parent1": "resourcefulbees:icy_bee",
+                "parent2": "resourcefulbees:icy_bee"
             }
         ]
     },

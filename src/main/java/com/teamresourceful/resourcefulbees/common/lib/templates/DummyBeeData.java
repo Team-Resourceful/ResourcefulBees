@@ -75,8 +75,8 @@ public final class DummyBeeData {
 
     private static final BeeBreedData BREED_DATA = API.breeding(
             Set.of(
-                API.familyUnit(75, 0.67, "diamond", "coal", "compressed_diamond"),
-                API.familyUnit(24, 0.67, "diamond", "diamond", "compressed_diamond")
+                API.familyUnit(75, 0.67, ModIdentifier.of("diamond"), ModIdentifier.of("coal"), ModIdentifier.of("compressed_diamond")),
+                API.familyUnit(24, 0.67, ModIdentifier.of("diamond"), ModIdentifier.of("diamond"), ModIdentifier.of("compressed_diamond"))
             ),
             RegistryPredicate.create(Item::builtInRegistryHolder, Items.POPPY, Items.CARROT),
             Optional.of(getBucketWithNbt()),

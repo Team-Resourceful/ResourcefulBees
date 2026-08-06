@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Bee
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.resources.Identifier;
 
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class BeeLocatorScreen extends Screen {
             .build();
 
         this.selectButton = Button.builder(BeeLocatorTranslations.SEARCH, button -> getSelected().ifPresent(bee -> {
-                String type = bee.getType();
+                Identifier type = bee.getType();
                 if (type != null) {
                     //NetworkHandler.CHANNEL.sendToServer(new FindBeePacket(type, this.slot)); TODO NETWORK SHIT
                 }

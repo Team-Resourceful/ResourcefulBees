@@ -191,12 +191,12 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
 
     public static final RegistryEntry<Item> GOLD_FLOWER_ITEM = registerBlockItem(ITEMS, "gold_flower", ModBlocks.GOLD_FLOWER, Item.Properties::new);
 
-//    public static final RegistryEntry<Item> BREEDER_ITEM = NEST_registerItem(ITEMS, "breeder", () -> new BlockItem(ModBlocks.BREEDER_BLOCK.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> BREEDER_ITEM = registerBlockItem(ITEMS, "breeder", ModBlocks.BREEDER_BLOCK, Item.Properties::new);
 
     public static final RegistryEntry<Item> T2_NEST_UPGRADE = registerItem(ITEMS, "t2_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T1_TO_T2)));
     public static final RegistryEntry<Item> T3_NEST_UPGRADE = registerItem(ITEMS, "t3_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T2_TO_T3)));
     public static final RegistryEntry<Item> T4_NEST_UPGRADE = registerItem(ITEMS, "t4_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T3_TO_T4)));
-    public static final RegistryEntry<Item> BREED_TIME_UPGRADE = registerItem(ITEMS, "breed_time_upgrade", Item::new, () -> new Item.Properties().stacksTo(4).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.BREED_TIME)));
+    public static final RegistryEntry<Item> BREED_TIME_UPGRADE = registerItem(ITEMS, "breed_time_upgrade", Item::new, () -> new Item.Properties().stacksTo(8).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.BREED_TIME)));
 
     //public static final RegistryEntry<Item> BEE_LOCATOR = registerItem(ITEMS, "bee_locator", () -> new BeeLocatorItem(new Item.Properties().stacksTo(1)));
 

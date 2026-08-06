@@ -20,11 +20,10 @@
         "mutation": "resourcefulbees:mutations/iron"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "iron",
-                "parent2": "iron"
+                "parent1": "resourcefulbees:iron_bee",
+                "parent2": "resourcefulbees:iron_bee"
             }
         ]
     },

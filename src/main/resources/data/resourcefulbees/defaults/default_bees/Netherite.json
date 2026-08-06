@@ -16,11 +16,10 @@
         "mutation": "resourcefulbees:mutations/netherite"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "wither",
-                "parent2": "diamond"
+                "parent1": "resourcefulbees:wither_bee",
+                "parent2": "resourcefulbees:diamond_bee"
             }
         ]
     },

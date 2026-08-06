@@ -4,13 +4,14 @@ import com.google.common.base.Suppliers;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import net.minecraft.resources.Identifier;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public record BeeParents(String parent1, String parent2, Supplier<CustomBeeData> parent1Data, Supplier<CustomBeeData> parent2Data) implements Parents {
+public record BeeParents(Identifier parent1, Identifier parent2, Supplier<CustomBeeData> parent1Data, Supplier<CustomBeeData> parent2Data) implements Parents {
 
-    public static BeeParents of(String parent1, String parent2) {
+    public static BeeParents of(Identifier parent1, Identifier parent2) {
         Supplier<CustomBeeData> parent1Data = Suppliers.memoize(() -> BeeRegistry.get().getBeeData(parent1));
         Supplier<CustomBeeData> parent2Data = Suppliers.memoize(() -> BeeRegistry.get().getBeeData(parent2));
         if (parent1.compareTo(parent2) > 0) {
@@ -21,12 +22,12 @@ public record BeeParents(String parent1, String parent2, Supplier<CustomBeeData>
     }
 
     @Override
-    public String getParent1() {
+    public Identifier getParent1() {
         return parent1;
     }
 
     @Override
-    public String getParent2() {
+    public Identifier getParent2() {
         return parent2;
     }
 

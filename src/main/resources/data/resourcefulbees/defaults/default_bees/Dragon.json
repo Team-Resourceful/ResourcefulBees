@@ -21,11 +21,10 @@
         "mutation": "resourcefulbees:mutations/dragon"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "wither",
-                "parent2": "ender",
+                "parent1": "resourcefulbees:wither_bee",
+                "parent2": "resourcefulbees:ender_bee",
                 "chance": 0.25
             }
         ]

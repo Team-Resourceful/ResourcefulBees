@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.data.bee.base;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +16,7 @@ public interface BeeDataSerializer<T extends BeeData<T>> {
 
     int version();
 
-    Codec<T> codec(String id);
+    Codec<T> codec(Identifier id);
 
     default @Nullable T defaultValue() {
         return null;
@@ -28,7 +27,7 @@ public interface BeeDataSerializer<T extends BeeData<T>> {
         return (T) data;
     }
 
-    static <T extends BeeData<T>> BeeDataSerializer<T> of(Identifier id, int version, Function<String, Codec<T>> codec, @Nullable T defaultValue) {
+    static <T extends BeeData<T>> BeeDataSerializer<T> of(Identifier id, int version, Function<Identifier, Codec<T>> codec, @Nullable T defaultValue) {
         return new BeeDataSerializer<>() {
             @Override
             public Identifier type() {
@@ -41,7 +40,7 @@ public interface BeeDataSerializer<T extends BeeData<T>> {
             }
 
             @Override
-            public Codec<T> codec(String name) {
+            public Codec<T> codec(Identifier name) {
                 return codec.apply(name);
             }
 

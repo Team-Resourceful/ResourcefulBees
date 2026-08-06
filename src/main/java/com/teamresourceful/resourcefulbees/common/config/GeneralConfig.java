@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefulconfig.api.annotations.*;
 @Config(
         value = ModConstants.MOD_ID,
         categories = {
-                ClientConfig.class,
                 BeeConfig.class,
                 RecipeConfig.class,
                 CentrifugeConfig.class,

@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -17,13 +18,12 @@ import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
-import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 
 public class BeeBreedGoal extends BreedGoal {
 
-    private final String beeType;
+    private final Identifier beeType;
 
-    public <T extends Bee & CustomBee> BeeBreedGoal(T animal, double speedIn, String beeType) {
+    public <T extends Bee & CustomBee> BeeBreedGoal(T animal, double speedIn, Identifier beeType) {
         super(animal, speedIn);
         this.beeType = beeType;
     }
@@ -40,7 +40,7 @@ public class BeeBreedGoal extends BreedGoal {
     protected void breed() {
         if (partner == null) return;
         FamilyUnit beeFamily = BeeRegistry.get().getWeightedChild(((CustomBee)this.partner).getBeeType(), beeType);
-
+        if (beeFamily == null) return;
         final BabyEntitySpawnEvent event = new BabyEntitySpawnEvent(animal, this.partner, ((CustomBee)this.animal).createSelectedChild(beeFamily));
         NeoForge.EVENT_BUS.post(event);
         if (event.isCanceled()) {

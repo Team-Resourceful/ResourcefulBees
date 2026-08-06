@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Unmodifiable;
 
 @Unmodifiable
 public record ItemOutput(ItemStackTemplate template, double weight) implements AbstractOutput<ItemStack> {
-//todo this may need to change to ItemStackTemplate
     public static final Codec<ItemOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ItemStackTemplate.CODEC.fieldOf("item").forGetter(ItemOutput::template),
             Codec.doubleRange(1.0d, 1000d).fieldOf("weight").orElse(1.0d).forGetter(ItemOutput::weight)

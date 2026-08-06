@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.setup.data;
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
@@ -47,7 +48,7 @@ public final class BeeSetup {
         try {
             JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
             if (LoadConditionRegistry.canLoad(jsonObject)) {
-                BeeRegistry.getRegistry().cacheRawBeeData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
+                BeeRegistry.getRegistry().cacheRawBeeData(ModIdentifier.of(name.toLowerCase(Locale.ENGLISH).replace(" ", "_")).withSuffix("_bee"), jsonObject);
             }
         } catch (Exception e) {
             ModConstants.LOGGER.error("Error parsing bee: {}", name);

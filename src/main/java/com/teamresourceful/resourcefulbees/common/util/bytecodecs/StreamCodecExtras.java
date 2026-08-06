@@ -15,6 +15,7 @@ import net.minecraft.advancements.predicates.*;
 import net.minecraft.advancements.predicates.entity.EntityFlagsPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -23,16 +24,22 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffect;
+import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import org.jspecify.annotations.NonNull;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.ToDoubleFunction;
+
+import static net.minecraft.network.codec.ByteBufCodecs.collection;
 
 public final class StreamCodecExtras {
 
     private StreamCodecExtras() {
         throw new UnsupportedOperationException("Utility class");
+    }
+
+    public static <B extends ByteBuf, V> StreamCodec.CodecOperation<B, V, Set<V>> set() {
+        return original -> collection(HashSet::new, original);
     }
 
     public static <B extends ByteBuf, T>
@@ -315,4 +322,14 @@ public final class StreamCodecExtras {
 
                     RestrictedItemPredicate::new
             );
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, DataComponentIngredient> DATA_COMPONENT_INGREDIENT_STREAM_CODEC =
+            StreamCodec.composite(
+                    ByteBufCodecs.holderSet(Registries.ITEM),
+                    DataComponentIngredient::itemSet,
+                    DataComponentPatch.STREAM_CODEC,
+                    DataComponentIngredient::components,
+                    ByteBufCodecs.BOOL,
+                    DataComponentIngredient::componentsExhaustive,
+                    DataComponentIngredient::new);
 }

@@ -21,7 +21,6 @@ import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagFile;
 import net.minecraft.world.item.crafting.Recipe;
 
-import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -39,6 +38,7 @@ public final class DataPackLoader implements RepositorySource {
         try (GenericMemoryPack dataPack = ModUtils.createHiddenDataPack(DATAPACK_NAME, METADATA)) {
             generateTags(dataPack);
             generateHiveRecipes(dataPack);
+            //generateBreederRecipes(dataPack);
 
             PackLocationInfo info = new PackLocationInfo(DATAPACK_NAME, TITLE, PackSource.BUILT_IN, Optional.empty());
             PackSelectionConfig selectionConfig = new PackSelectionConfig(true, Pack.Position.BOTTOM, true);
@@ -63,10 +63,10 @@ public final class DataPackLoader implements RepositorySource {
                 HiveRecipe.MAP_CODEC.codec().encodeStart(JsonOps.INSTANCE, (HiveRecipe) recipe)
                         .result()
                         .ifPresent(jsonElement -> {
-                            var jsonobj = jsonElement.getAsJsonObject();
-                            jsonobj.addProperty("type", ModRecipes.HIVE_RECIPE_TYPE.getId().toString());
-                            String path = "recipe/hive/" + customBeeData.name().toLowerCase(Locale.ROOT) + "_hive_output.json";
-                            dataPack.putJson(PackType.SERVER_DATA, ModIdentifier.of(path), jsonobj);
+                            var jsonObj = jsonElement.getAsJsonObject();
+                            jsonObj.addProperty("type", ModRecipes.HIVE_RECIPE_TYPE.getId().toString());
+                            String path = "recipe/hive/" + customBeeData.id().getPath() + "_hive_output.json";
+                            dataPack.putJson(PackType.SERVER_DATA, ModIdentifier.of(path), jsonObj);
                         });
 
             }

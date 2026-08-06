@@ -37,7 +37,7 @@ public final class BeeDataRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public static Function<Identifier, Codec<BeeData<?>>> codec(String id) {
+    public static Function<Identifier, Codec<BeeData<?>>> codec(Identifier id) {
         return type -> (Codec<BeeData<?>>) decode(type)
                 .map(serializer -> serializer.codec(id))
                 .result().orElse(null);

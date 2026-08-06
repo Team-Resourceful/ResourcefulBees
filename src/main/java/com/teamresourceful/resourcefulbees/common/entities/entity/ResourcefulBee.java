@@ -18,8 +18,8 @@ import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeGoToHiveGoalInvoker;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeInvoker;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -63,7 +63,7 @@ public class ResourcefulBee extends CustomBeeEntity {
     private ModBeePollinateGoal pollinateGoal;
     private int explosiveCooldown = 0;
 
-    public ResourcefulBee(EntityType<? extends Bee> type, Level level, String beeType) {
+    public ResourcefulBee(EntityType<? extends Bee> type, Level level, Identifier beeType) {
         super(type, level, beeType);
         //THIS NEEDS TO BE ONLY LOADED ON THE SERVER AS IT WOULD NOT MATCH HOW VANILLA LOADS GOALS OTHERWISE.
         if (level instanceof ServerLevel) registerConditionalGoals();

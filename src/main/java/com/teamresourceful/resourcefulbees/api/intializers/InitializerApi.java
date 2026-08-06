@@ -63,7 +63,7 @@ public class InitializerApi {
     private Initializers.FamilyUnitInitializer familyUnit;
 
     @NullMarked
-    public CustomBeeData data(String name, Map<Identifier, BeeData<?>> data) {
+    public CustomBeeData data(Identifier name, Map<Identifier, BeeData<?>> data) {
         return this.data.create(name, data);
     }
 
@@ -138,7 +138,7 @@ public class InitializerApi {
     }
 
     @NullMarked
-    public FamilyUnit familyUnit(double weight, double chance, String parent1, String parent2, String childName) {
+    public FamilyUnit familyUnit(double weight, double chance, Identifier parent1, Identifier parent2, Identifier childName) {
         return this.familyUnit.create(weight, chance, parent1, parent2, childName);
     }
 

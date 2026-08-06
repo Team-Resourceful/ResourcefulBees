@@ -1,17 +1,20 @@
 package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.common.components.JarOccupant;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -24,15 +27,19 @@ import org.jspecify.annotations.Nullable;
 
 public class BeeJarItem extends Item {
     public BeeJarItem(Properties properties) {
-        super(properties.component(ModDataComponents.JAR_BEE.get(), JarOccupant.EMPTY));
+        super(properties.component(ModDataComponents.JAR_BEE, JarOccupant.EMPTY));
     }
 
     public static boolean isFilled(ItemStack stack) {
-        return stack.has(ModDataComponents.JAR_BEE.get()) && !occupantFrom(stack).equals(JarOccupant.EMPTY);
+        return stack.has(ModDataComponents.JAR_BEE) && !occupantFrom(stack).equals(JarOccupant.EMPTY);
+    }
+
+    public static boolean hasEntityData(ItemStack stack) {
+        return isFilled(stack) && occupantFrom(stack).entityData().isPresent();
     }
 
     public static JarOccupant occupantFrom(ItemStack stack) {
-        return stack.get(ModDataComponents.JAR_BEE.get());
+        return stack.get(ModDataComponents.JAR_BEE);
     }
 
     @Override
@@ -49,25 +56,35 @@ public class BeeJarItem extends Item {
             ItemStack stack = context.getItemInHand();
             Level level = context.getLevel();
             if (level.isClientSide() || !isFilled(stack)) return InteractionResult.FAIL;
-
-            var pos = context.getClickedPos();
-            var relPos = pos.relative(context.getClickedFace());
-            var entity = occupantFrom(stack).createEntity(level, relPos);
-            if (entity != null) {
-                EntityUtils.setEntityLocationAndAngle(relPos, context.getClickedFace(), entity);
-                level.playSound(null, pos, SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
-                level.addFreshEntity(entity);
-            }
-            stack.set(ModDataComponents.JAR_BEE.get(), JarOccupant.EMPTY);
-            if (!player.isCreative() && stack.getCount() > 1) {
-                if (!player.addItem(new ItemStack(ModItems.BEE_JAR.get()))) {
-                    player.drop(new ItemStack(ModItems.BEE_JAR.get()), false);
-                }
-                stack.shrink(1);
-            }
-            return InteractionResult.SUCCESS;
+            return spawnOccupant(context, stack, level, player);
         }
         return InteractionResult.FAIL;
+    }
+
+    private static InteractionResult.Success spawnOccupant(UseOnContext context, ItemStack stack, Level level, Player player) {
+        var pos = context.getClickedPos();
+        var relPos = pos.relative(context.getClickedFace());
+        var entity = getEntity(stack, level, relPos);
+        if (entity != null) {
+            if (entity instanceof Mob mob) mob.setPersistenceRequired();
+            EntityUtils.setEntityLocationAndAngle(relPos, context.getClickedFace(), entity);
+            level.playSound(null, pos, SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.addFreshEntity(entity);
+        }
+
+        if (!player.isCreative()) {
+            stack.shrink(1);
+            if (!player.addItem(new ItemStack(ModItems.BEE_JAR.get()))) {
+                player.drop(new ItemStack(ModItems.BEE_JAR.get()), false);
+            }
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    private static @Nullable Entity getEntity(ItemStack stack, Level level, BlockPos relPos) {
+        return BeeJarItem.hasEntityData(stack)
+                ? occupantFrom(stack).createEntity(level, relPos)
+                : occupantFrom(stack).createEntity(level, EntitySpawnReason.SPAWN_ITEM_USE);
     }
 
 
@@ -77,7 +94,7 @@ public class BeeJarItem extends Item {
             return InteractionResult.FAIL;
         }
 
-        create(stack, player, target);
+        createFilledJar(stack, player, target);
         player.setItemInHand(hand, stack);
         player.swing(hand);
         entity.level().playSound(null, target, SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -85,37 +102,34 @@ public class BeeJarItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    private static void create(@NonNull ItemStack stack, @NonNull Player player, Bee target) {
+    private static void createFilledJar(@NonNull ItemStack stack, @NonNull Player player, Bee target) {
         if (stack.getCount() > 1) {
             ItemStack newJar = ModItems.BEE_JAR.get().getDefaultInstance();
-            newJar.set(ModDataComponents.JAR_BEE.get(), JarOccupant.of(target));
+            newJar.set(ModDataComponents.JAR_BEE.get(), JarOccupant.from(target));
             stack.shrink(1);
             if (!player.addItem(newJar)) {
                 player.drop(newJar, false);
             }
         } else {
-            var jarOccupant = JarOccupant.of(target);
+            var jarOccupant = JarOccupant.from(target);
             stack.set(ModDataComponents.JAR_BEE.get(), jarOccupant);
         }
     }
 
-//    @Override
-//    public @NotNull Component getName(@NotNull ItemStack stack) {
-//        MutableComponent component = super.getName(stack).copy();
-//        if (BeeJarItem.hasEntityDisplay(stack)) {
-//            MutableComponent display = Component.Serializer.fromJson(stack.getOrCreateTag().getString(NBTConstants.BeeJar.DISPLAY_NAME));
-//            if (display != null) {
-//                Color color = getColor(stack);
-//                display = color != null ? display.withStyle(Style.EMPTY.withColor(color.getValue())) : display.withStyle(ChatFormatting.GRAY);
-//                component.append(Component.translatable(ItemTranslations.BEE_BOX_ENTITY_NAME, display));
-//            }
-//        }
-//        return component;
-//    }
-//
-//    @NotNull
-//    @Override
-//    public String getDescriptionId(@NotNull ItemStack stack) {
-//        return isFilled(stack) ? ItemTranslations.BEE_JAR_FILLED : ItemTranslations.BEE_JAR_EMPTY;
-//    }
+    public static ItemStack createFilledJar(EntityType<?> id, int color) {
+        ItemStack newJar = ModItems.BEE_JAR.get().getDefaultInstance();
+        newJar.set(ModDataComponents.JAR_BEE, JarOccupant.from(id, color));
+        return newJar;
+    }
+
+    @Override
+    public @NonNull Component getName(@NonNull ItemStack stack) {
+        MutableComponent name = isFilled(stack) ? ItemTranslations.BEE_JAR_FILLED.copy() : ItemTranslations.BEE_JAR_EMPTY.copy();
+        JarOccupant occupant = stack.getOrDefault(ModDataComponents.JAR_BEE, JarOccupant.EMPTY);
+        if (occupant == JarOccupant.EMPTY) return name;
+
+        MutableComponent display = occupant.displayName().copy().withStyle(Style.EMPTY.withColor(occupant.color()));
+
+        return name.append(Component.translatable(ItemTranslations.BEE_BOX_ENTITY_NAME, display));
+    }
 }

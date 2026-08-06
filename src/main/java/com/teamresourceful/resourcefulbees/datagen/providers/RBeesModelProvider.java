@@ -128,7 +128,7 @@ public class RBeesModelProvider extends ModelProvider {
         registerApiary(blockModels, ModBlocks.T3_APIARY_BLOCK);
         registerApiary(blockModels, ModBlocks.T4_APIARY_BLOCK);
 //        registerApiary(blockModels, Modblocks.FLOW_HIVE.get());
-//        registerApiary(blockModels, ModBlocks.BREEDER.get());
+        registerApiary(blockModels, ModBlocks.BREEDER_BLOCK);
         ModBlocks.HIVES.getEntries().forEach(block -> registerNest(blockModels, block));
         registerWaxedBlocks(blockModels);
         registerHoneyGlass(blockModels);

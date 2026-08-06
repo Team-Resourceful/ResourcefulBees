@@ -17,11 +17,10 @@
         "mutation" : "resourcefulbees:mutations/slimy"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "rgbee",
-                "parent2": "zombee"
+                "parent1": "resourcefulbees:rgbee_bee",
+                "parent2": "resourcefulbees:zombee_bee"
             }
         ]
     },

@@ -115,12 +115,12 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface FamilyUnitInitializer {
-        FamilyUnit create(double weight, double chance, String parent1, String parent2, String childName);
+        FamilyUnit create(double weight, double chance, Identifier parent1, Identifier parent2, Identifier childName);
     }
 
     @FunctionalInterface
     public interface DataInitializer {
-        CustomBeeData create(String name, Map<Identifier, BeeData<?>> data);
+        CustomBeeData create(Identifier name, Map<Identifier, BeeData<?>> data);
     }
 
     @FunctionalInterface

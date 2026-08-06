@@ -6,13 +6,10 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.fluids.CustomHoneyClientFluidProperties;
-import com.teamresourceful.resourcefulbees.client.fluids.HoneyClientFluidProperties;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
-import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyFluidBlock;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
-//import com.teamresourceful.resourcefulbees.common.items.BeeSpawnEggItem;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluidType;
 import com.teamresourceful.resourcefulbees.common.items.dispenser.ScraperDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.items.dispenser.ShearsDispenserBehavior;
@@ -25,7 +22,6 @@ import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistr
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.CustomHoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.fluid.CustomHoneyFluidData;
-import com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.fluid.ResourcefulFlowingFluid;
@@ -39,8 +35,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.capabilities.Capabilities;
+
 
 public final class RegistryHandler {
 
@@ -48,12 +43,9 @@ public final class RegistryHandler {
         throw new UtilityClassException();
     }
 
-    //public static final Set<RegistryEntry<Block>> VALID_HIVES = new HashSet<>();
 
     public static void init() {
-        //ItemGroupResourcefulBees.register();
         ModCreativeTabs.CREATIVE_TABS.init();
-        //ModFluidProperties.PROPERTIES.initialize();
         ModFluids.FLUIDS.init();
         ModFluids.FLUID_TYPES.init();
         ModEntities.ENTITY_TYPES.init();
@@ -98,9 +90,9 @@ public final class RegistryHandler {
         HoneyRegistry.getRegistry().getRawHoney().forEach(RegistryHandler::registerCustomHoney);
     }
 
-    private static void registerBee(String name, float sizeModifier) {
+    private static void registerBee(Identifier name, float sizeModifier) {
         RegistryEntry<EntityType<? extends CustomBeeEntity>> beeEntityType = ModEntities.BEES.register(
-                name + "_bee",
+                name.getPath(),
                 () -> CustomBeeEntityType.of(
                         name,
                         (type, level) -> new ResourcefulBee(type, level, name),
@@ -108,14 +100,15 @@ public final class RegistryHandler {
                         0.6F * sizeModifier
                 )
         );
-        ModItems.SPAWN_EGG_ITEMS.register(name + "_bee_spawn_egg", SpawnEggItem::new, () -> new Item.Properties().spawnEgg(beeEntityType.get()).component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("bee_spawn_egg")));
+        ModItems.SPAWN_EGG_ITEMS.register(name.getPath() + "_spawn_egg", SpawnEggItem::new, () -> new Item.Properties().spawnEgg(beeEntityType.get()).component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("bee_spawn_egg")));
         ModEntities.getModBees().put(name, beeEntityType);
     }
 
     private static void registerCustomHoney(String id, JsonObject honeyData) {
         var data = new DispatchMapCodec<>(Identifier.CODEC, HoneyDataRegistry.codec(id))
                 .parse(JsonOps.INSTANCE, honeyData)
-                .getOrThrow();//false, s -> ModConstants.LOGGER.error("Could not create Honey Data for {} honey", id));
+                .resultOrPartial(message -> ModConstants.LOGGER.error("Could not create Honey Data for {} honey: {}", id, message))
+                .orElseThrow(() -> new IllegalStateException("Failed to parse honey data for '" + id + "'"));
         try {
             HoneyDataRegistry.INSTANCE.check(data.values());
         } catch (Exception e) {

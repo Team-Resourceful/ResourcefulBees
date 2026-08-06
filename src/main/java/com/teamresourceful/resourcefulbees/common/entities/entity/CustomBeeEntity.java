@@ -21,10 +21,10 @@ import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnDat
 import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
@@ -60,7 +60,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     private boolean hasHiveInRange;
     private int disruptorInRange;
 
-    public CustomBeeEntity(EntityType<? extends Bee> type, Level world, String beeType) {
+    public CustomBeeEntity(EntityType<? extends Bee> type, Level world, Identifier beeType) {
         super(type, world);
         this.customBeeData = BeeRegistry.get().getBeeData(beeType);
     }
@@ -89,12 +89,6 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     //endregion
 
     //region CUSTOM BEE RELATED METHODS BELOW
-
-
-    @Override
-    protected Component getTypeName() {
-        return super.getTypeName();
-    }
 
     @Override
     public boolean isInvulnerableTo(ServerLevel serverLevel, DamageSource source) {
@@ -236,26 +230,60 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        if (this.isFood(itemstack)) {
-            if (!this.level().isClientSide() && this.getAge() == 0 && !this.isInLove()) {
-                this.usePlayerItem(player, hand, itemstack);
-                getBreedData().feedReturnItem().map(ItemStackTemplate::create).ifPresent(player::addItem);
+        ItemStack stack = player.getItemInHand(hand);
+
+        if (!this.isFood(stack)) {
+            return super.mobInteract(player, hand);
+        }
+
+        if (this.getAge() == 0 && !this.isInLove()) {
+            if (!this.level().isClientSide()) {
+                this.usePlayerItem(player, hand, stack);
+                this.giveFeedReturnItem(player);
+
                 this.addFeedCount();
-                if (this.getFeedCount() >= getBreedData().feedAmount()) {
+
+                if (this.getFeedCount() >= this.getBreedData().feedAmount()) {
                     this.setInLove(player);
                 }
-                player.swing(hand, true);
-                return InteractionResult.PASS;
             }
 
-            if (this.isBaby()) {
-                this.usePlayerItem(player, hand, itemstack);
-                this.ageUp((int) ((-this.getAge() / 20D) * 0.1F), true);
-                return InteractionResult.PASS;
-            }
+            return this.level().isClientSide()
+                    ? InteractionResult.SUCCESS
+                    : InteractionResult.SUCCESS_SERVER;
         }
-        return InteractionResult.FAIL;
+
+        if (this.isBaby()) {
+            if (!this.level().isClientSide()) {
+                this.usePlayerItem(player, hand, stack);
+                this.giveFeedReturnItem(player);
+
+                int growth = (int) ((-this.getAge() / 20.0D) * 0.1F);
+                this.ageUp(growth, true);
+            }
+
+            return this.level().isClientSide()
+                    ? InteractionResult.SUCCESS
+                    : InteractionResult.SUCCESS_SERVER;
+        }
+
+        return super.mobInteract(player, hand);
+    }
+
+    private void giveFeedReturnItem(Player player) {
+        if (player.isCreative()) {
+            return;
+        }
+
+        this.getBreedData()
+                .feedReturnItem()
+                .map(ItemStackTemplate::create)
+                .filter(returnStack -> !returnStack.isEmpty())
+                .ifPresent(returnStack -> {
+                    if (!player.addItem(returnStack)) {
+                        player.drop(returnStack, false);
+                    }
+                });
     }
 
     @Override

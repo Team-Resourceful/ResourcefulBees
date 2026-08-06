@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees;
 
 import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
+import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesCommand;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.data.TagGenerator;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
@@ -12,8 +13,10 @@ import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultHiveTypes;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
+import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registries.custom.*;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModIngredientTypes;
 import com.teamresourceful.resourcefulbees.common.setup.DataSetup;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
@@ -22,6 +25,7 @@ import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
 import com.teamresourceful.resourcefulbees.common.util.ModUtils;
+import com.teamresourceful.resourcefullib.common.recipe.ingredient.IngredientHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.bus.api.IEventBus;
@@ -94,6 +98,7 @@ public class ResourcefulBees {
         ModValidation.init();
         GameSetup.init();
 
+        NeoForge.EVENT_BUS.addListener(ResourcefulBeesCommand::registerCommand);
         //GameServerStartedEvent.EVENT.addListener(ResourcefulBees::onServerStarted);
         //LoadingCompletedEvent.EVENT.addListener(ResourcefulBees::onLoadingCompleted);
         //CommonSetupEvent.EVENT.addListener(ResourcefulBees::onCommonSetup);
@@ -103,10 +108,11 @@ public class ResourcefulBees {
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener((this::onLoadingCompleted));
+        modEventBus.addListener(this::onLoadingCompleted);
         modEventBus.addListener(GameSetup::registerAttributes);
         modEventBus.addListener(GameSetup::registerRepositorySources);
         modEventBus.addListener(GameSetup::registerCapabilities);
+        ModIngredientTypes.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ResourcefulBees) to respond directly to events.
@@ -117,6 +123,7 @@ public class ResourcefulBees {
     private void commonSetup(FMLCommonSetupEvent event) {
         NetworkHandler.init();
         event.enqueueWork(RegistryHandler::registerDispenserBehaviors);
+        //IngredientHelper.registerIngredient(BeeJarIngredient.SERIALIZER);
         GameSetup.initPotionRecipes();
         GameSetup.initArguments();
     }

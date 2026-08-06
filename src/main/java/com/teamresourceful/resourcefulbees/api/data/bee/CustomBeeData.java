@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public interface CustomBeeData {
 
-    String name();
+    //Identifier name();
 
     Identifier id();
 

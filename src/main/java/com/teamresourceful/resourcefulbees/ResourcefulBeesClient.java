@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.Ce
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.CentrifugeRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.screen.ApiaryScreen;
+import com.teamresourceful.resourcefulbees.client.screen.BreederScreen;
 import com.teamresourceful.resourcefulbees.client.screen.CentrifugeScreen;
 import com.teamresourceful.resourcefulbees.client.tints.*;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
@@ -68,6 +69,7 @@ public class ResourcefulBeesClient {
     public static void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.APIARY.get(), ApiaryScreen::new);
         event.register(ModMenuTypes.CENTRIFUGE.get(), CentrifugeScreen::new);
+        event.register(ModMenuTypes.BREEDER.get(), BreederScreen::new);
     }
 
     @SubscribeEvent

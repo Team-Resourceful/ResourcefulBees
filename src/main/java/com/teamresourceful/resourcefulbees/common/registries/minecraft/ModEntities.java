@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 
 import java.util.HashMap;
@@ -20,8 +21,8 @@ public final class ModEntities {
 
     public static final ResourcefulRegistry<EntityType<?>> ENTITY_TYPES = ResourcefulRegistries.create(BuiltInRegistries.ENTITY_TYPE, ModConstants.MOD_ID);
     public static final ResourcefulRegistry<EntityType<?>> BEES = ResourcefulRegistries.create(ENTITY_TYPES);
-    private static final Map<String, RegistryEntry<EntityType<? extends CustomBeeEntity>>> MOD_BEES = new HashMap<>();
-    public static Map<String, RegistryEntry<EntityType<? extends CustomBeeEntity>>> getModBees() {
+    private static final Map<Identifier, RegistryEntry<EntityType<? extends CustomBeeEntity>>> MOD_BEES = new HashMap<>();
+    public static Map<Identifier, RegistryEntry<EntityType<? extends CustomBeeEntity>>> getModBees() {
         return MOD_BEES;
     }
 

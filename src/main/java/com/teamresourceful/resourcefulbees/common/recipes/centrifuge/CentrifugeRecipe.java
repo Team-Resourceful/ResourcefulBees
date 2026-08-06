@@ -11,15 +11,12 @@ import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.Ite
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefulbees.common.util.bytecodecs.StreamCodecExtras;
-import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
-import com.teamresourceful.resourcefullib.common.bytecodecs.StreamCodecByteCodec;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -137,7 +134,6 @@ public record CentrifugeRecipe(
             ).apply(instance, Output::new));
         }
 
-        //TODO IMPORTANT - clean up this codec or see about adding a weighted collection codec that accepts a stream codec!!!!
         public static <A extends AbstractOutput<B>, B> StreamCodec<RegistryFriendlyByteBuf, Output<A, B>> streamCodec(StreamCodec<RegistryFriendlyByteBuf, A> codec) {
             return StreamCodec.composite(
                     ByteBufCodecs.DOUBLE,

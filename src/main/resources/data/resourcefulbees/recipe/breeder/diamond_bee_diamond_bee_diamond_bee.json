@@ -1,0 +1,49 @@
+{
+  "parent1": {
+    "parent": {
+      "id": "resourcefulbees:diamond_bee",
+      "neoforge:ingredient_type": "resourcefulbees:bee_jar"
+    },
+    "displayEntity": "resourcefulbees:diamond_bee",
+    "feedAmount": 1,
+    "feedItems": "minecraft:lava_bucket",
+    "returnItem": {
+      "id": "minecraft:bucket"
+    }
+  },
+  "parent2": {
+    "parent": {
+      "id": "resourcefulbees:diamond_bee",
+      "neoforge:ingredient_type": "resourcefulbees:bee_jar"
+    },
+    "displayEntity": "resourcefulbees:diamond_bee",
+    "feedAmount": 1,
+    "feedItems": "minecraft:lava_bucket",
+    "returnItem": {
+      "id": "minecraft:bucket"
+    }
+  },
+  "optional": "resourcefulbees:bee_jar",
+  "outputs": [
+    {
+      "child": {
+        "id": "resourcefulbees:bee_jar",
+        "components": {
+          "resourcefulbees:jar_bee": {
+            "entityType": "resourcefulbees:diamond_bee",
+            "ticks_in_jar": 0,
+            "display_name": {
+              "translate": "entity_type.resourcefulbees.diamond_bee"
+            },
+            "color": -16711681
+          }
+        }
+      },
+      "entity": "resourcefulbees:diamond_bee",
+      "weight": 10.0,
+      "chance": 1.0
+    }
+  ],
+  "time": 2400,
+  "type": "resourcefulbees:breeder"
+}

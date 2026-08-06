@@ -20,13 +20,12 @@
         "mutation": "resourcefulbees:mutations/dungeon"
     },
     "resourcefulbees:breeding/v1": {
-        "parents": [
+        "families": [
             {
-                "parent1": "dungeon",
-                "parent2": "dungeon"
+                "parent1": "resourcefulbees:dungeon_bee",
+                "parent2": "resourcefulbees:dungeon_bee"
             }
         ],
-        "isBreedable": true,
         "feedItem": ["minecraft:mossy_cobblestone"],
         "feedAmount": 4
     },

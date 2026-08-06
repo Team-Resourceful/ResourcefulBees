@@ -20,11 +20,10 @@
         "mutation": "resourcefulbees:mutations/ender"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "ender",
-                "parent2": "ender"
+                "parent1": "resourcefulbees:ender_bee",
+                "parent2": "resourcefulbees:ender_bee"
             }
         ],
         "feedItem": ["minecraft:end_stone"],

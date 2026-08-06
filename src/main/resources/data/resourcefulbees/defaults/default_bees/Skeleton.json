@@ -16,13 +16,12 @@
         "mutation" : "resourcefulbees:mutations/skeleton"
     },
     "resourcefulbees:breeding/v1": {
-        "parents": [
+        "families": [
             {
-                "parent1": "skeleton",
-                "parent2": "skeleton"
+                "parent1": "resourcefulbees:skeleton_bee",
+                "parent2": "resourcefulbees:skeleton_bee"
             }
         ],
-        "isBreedable": true,
         "feedItem": "#minecraft:flowers",
         "feedAmount": 8
     },

@@ -19,13 +19,12 @@
     "mutation": "resourcefulbees:mutations/beeper"
   },
   "resourcefulbees:breeding/v1": {
-    "parents": [
+    "families": [
       {
-        "parent1": "beeper",
-        "parent2": "beeper"
+        "parent1": "resourcefulbees:beeper_bee",
+        "parent2": "resourcefulbees:beeper_bee"
       }
-    ],
-    "isBreedable": true
+    ]
   },
   "resourcefulbees:trait/v1": {
     "traits" : ["creeper"]

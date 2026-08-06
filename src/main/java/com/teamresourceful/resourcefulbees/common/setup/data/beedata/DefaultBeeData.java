@@ -9,7 +9,6 @@ import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.breeding.BreedData;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.MutationData;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.rendering.RenderData;
@@ -24,16 +23,14 @@ import net.minecraft.world.entity.EntityTypes;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public record DefaultBeeData(String name, Map<Identifier, BeeData<?>> data, Identifier id, MutableComponent displayName, Supplier<EntityType<?>> type) implements com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData {
+public record DefaultBeeData(Map<Identifier, BeeData<?>> data, Identifier id, MutableComponent displayName, Supplier<EntityType<?>> type) implements com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData {
 
-    public static DefaultBeeData of(String name, Map<Identifier, BeeData<?>> data) {
-        Identifier id = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, name + "_bee");
+    public static DefaultBeeData of(Identifier name, Map<Identifier, BeeData<?>> data) {
         return new DefaultBeeData(
-            name,
             data,
-            id,
-            Component.translatable("bee_type.resourcefulbees." + name),
-            Suppliers.memoize(() -> BuiltInRegistries.ENTITY_TYPE.getOptional(id).orElse(EntityTypes.BEE))
+            name,
+            Component.translatable("bee_type.resourcefulbees." + name.getPath()),
+            Suppliers.memoize(() -> BuiltInRegistries.ENTITY_TYPE.getOptional(name).orElse(EntityTypes.BEE))
         );
     }
 

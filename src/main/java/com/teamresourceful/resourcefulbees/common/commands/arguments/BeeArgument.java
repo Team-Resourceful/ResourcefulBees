@@ -14,6 +14,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Bee
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.resources.Identifier;
 
 import java.util.Collection;
 import java.util.Set;
@@ -26,7 +27,8 @@ public class BeeArgument implements ArgumentType<String> {
 
     public static final Set<String> BEES = ResourcefulBeesAPI.getRegistry().getBeeRegistry()
             .getStreamOfBees()
-            .map(CustomBeeData::name)
+            .map(CustomBeeData::id)
+            .map(Identifier::toString)
             .collect(Collectors.toUnmodifiableSet());
 
     public static RequiredArgumentBuilder<CommandSourceStack, String> argument() {

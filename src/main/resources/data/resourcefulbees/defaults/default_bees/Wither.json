@@ -15,11 +15,10 @@
         "mutation": "resourcefulbees:mutations/wither"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "coal",
-                "parent2": "skeleton"
+                "parent1": "resourcefulbees:coal_bee",
+                "parent2": "resourcefulbees:skeleton_bee"
             }
         ],
         "feedItem": ["minecraft:rotten_flesh"],

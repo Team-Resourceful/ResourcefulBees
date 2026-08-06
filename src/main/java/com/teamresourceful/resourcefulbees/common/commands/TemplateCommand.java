@@ -50,7 +50,7 @@ public final class TemplateCommand {
     }
 
     private static int printBeeTemplate(CommandContext<CommandSourceStack> context) {
-        DataResult<JsonElement> beeResult = new DispatchMapCodec<>(Identifier.CODEC, BeeDataRegistry.codec(TEMPLATE_STRING))
+        DataResult<JsonElement> beeResult = new DispatchMapCodec<>(Identifier.CODEC, BeeDataRegistry.codec(Identifier.parse(TEMPLATE_STRING)))
                 .encodeStart(registryOps(context), DummyBeeData.DATA);
         ModConstants.LOGGER.info(PRETTY_GSON.toJson(beeResult.getOrThrow()));
         context.getSource().sendSuccess(() -> ModTranslations.BEE_TEMPLATE_PRINTED, true);

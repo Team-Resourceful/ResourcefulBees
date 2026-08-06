@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +26,7 @@ public class BeeLocatorEntry extends ObjectSelectionList.Entry<BeeLocatorEntry> 
         return displayName;
     }
 
-    public String getType() {
+    public Identifier getType() {
         return displayEntity.getType() instanceof CustomBeeEntityType<?> customBeeEntityType ? customBeeEntityType.getBeeType() : null;
     }
 

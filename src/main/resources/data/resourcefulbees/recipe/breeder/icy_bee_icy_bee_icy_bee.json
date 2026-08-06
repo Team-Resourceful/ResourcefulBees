@@ -1,0 +1,43 @@
+{
+  "parent1": {
+    "parent": {
+      "id": "resourcefulbees:icy_bee",
+      "neoforge:ingredient_type": "resourcefulbees:bee_jar"
+    },
+    "displayEntity": "resourcefulbees:icy_bee",
+    "feedAmount": 1,
+    "feedItems": "minecraft:poppy"
+  },
+  "parent2": {
+    "parent": {
+      "id": "resourcefulbees:icy_bee",
+      "neoforge:ingredient_type": "resourcefulbees:bee_jar"
+    },
+    "displayEntity": "resourcefulbees:icy_bee",
+    "feedAmount": 1,
+    "feedItems": "minecraft:poppy"
+  },
+  "optional": "resourcefulbees:bee_jar",
+  "outputs": [
+    {
+      "child": {
+        "id": "resourcefulbees:bee_jar",
+        "components": {
+          "resourcefulbees:jar_bee": {
+            "entityType": "resourcefulbees:icy_bee",
+            "ticks_in_jar": 0,
+            "display_name": {
+              "translate": "entity_type.resourcefulbees.icy_bee"
+            },
+            "color": -7161346
+          }
+        }
+      },
+      "entity": "resourcefulbees:icy_bee",
+      "weight": 10.0,
+      "chance": 1.0
+    }
+  ],
+  "time": 2400,
+  "type": "resourcefulbees:breeder"
+}

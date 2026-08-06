@@ -9,11 +9,10 @@ import com.teamresourceful.resourcefulbees.api.data.shared.RegistryPredicate;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
-import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 
@@ -32,10 +31,10 @@ public record BreedData(
     private static final BeeBreedData DEFAULT = new BreedData(Collections.emptySet(), DEFAULT_FEED_ITEM, Optional.empty(), 0, 0, 0);
     public static final BeeDataSerializer<BeeBreedData> SERIALIZER = BeeDataSerializer.of(ModIdentifier.of("breeding"), 1, BreedData::codec, DEFAULT);
 
-    private static Codec<BeeBreedData> codec(String name) {
+    private static Codec<BeeBreedData> codec(Identifier name) {
         return RecordCodecBuilder.create(instance -> instance.group(
-                CodecExtras.set(BeeFamilyUnit.codec(name)).optionalFieldOf("parents", new HashSet<>()).forGetter(BeeBreedData::families),
-                RegistryPredicate.codec(BuiltInRegistries.ITEM).optionalFieldOf("feedItem", DEFAULT_FEED_ITEM).forGetter(BeeBreedData::feedItems),
+                CodecExtras.set(BeeFamilyUnit.codec(name)).optionalFieldOf("families", new HashSet<>()).forGetter(BeeBreedData::families),
+                RegistryPredicate.codec(BuiltInRegistries.ITEM).optionalFieldOf("feedItems", DEFAULT_FEED_ITEM).forGetter(BeeBreedData::feedItems),
                 ItemStackTemplate.CODEC.optionalFieldOf("feedReturnItem").forGetter(BeeBreedData::feedReturnItem),
                 CodecExtras.POSITIVE_INT.optionalFieldOf("feedAmount", 1).forGetter(BeeBreedData::feedAmount),
                 CodecExtras.NON_POSITIVE_INT.optionalFieldOf("childGrowthDelay", BeeConstants.CHILD_GROWTH_DELAY).forGetter(BeeBreedData::childGrowthDelay),

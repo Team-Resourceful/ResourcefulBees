@@ -23,13 +23,12 @@
         "mutation": "resourcefulbees:mutations/emerald"
     },
     "resourcefulbees:breeding/v1": {
-        "parents": [
+        "families": [
             {
-                "parent1": "emerald",
-                "parent2": "emerald"
+                "parent1": "resourcefulbees:emerald_bee",
+                "parent2": "resourcefulbees:emerald_bee"
             }
         ],
-        "isBreedable": true,
         "spawnWeight": 4
     },
     "resourcefulbees:trade/v1": {

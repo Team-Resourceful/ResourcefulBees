@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.client.tints;
 
 import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.LivingEntity;

@@ -24,14 +24,14 @@
     "mutation": "resourcefulbees:mutations/diamond"
   },
   "resourcefulbees:breeding/v1": {
-    "isBreedable": true,
-    "parents": [
+    "families": [
       {
-        "parent1": "coal",
-        "parent2": "skeleton"
+        "parent1": "resourcefulbees:diamond_bee",
+        "parent2": "resourcefulbees:diamond_bee"
       }
     ],
-    "feedItem": "#forge:ores"
+    "feedItems": "minecraft:lava_bucket",
+    "feedReturnItem": "minecraft:bucket"
   },
   "resourcefulbees:trade/v1": {
     "amount": {

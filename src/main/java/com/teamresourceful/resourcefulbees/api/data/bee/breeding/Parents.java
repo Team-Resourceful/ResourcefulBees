@@ -1,12 +1,13 @@
 package com.teamresourceful.resourcefulbees.api.data.bee.breeding;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import net.minecraft.resources.Identifier;
 
 public interface Parents {
 
-    String getParent1();
+    Identifier getParent1();
 
-    String getParent2();
+    Identifier getParent2();
 
     CustomBeeData getParent1Data();
 

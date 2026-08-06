@@ -1,4 +1,4 @@
-// 26.2	2026-07-29T10:47:41.163969	Model Definitions - resourcefulbees
+// 26.2	2026-08-05T14:54:16.022786	Model Definitions - resourcefulbees
 e0f8a31cf0251326b547214d29d171345c903bd4 assets/resourcefulbees/blockstates/apiary/1.json
 24cb446a4c8d450a97403bd9d1e5d156dbc671ec assets/resourcefulbees/blockstates/apiary/2.json
 da465eb18081fa615eb7df7492dfc3d389177977 assets/resourcefulbees/blockstates/apiary/3.json
@@ -6,6 +6,7 @@ da465eb18081fa615eb7df7492dfc3d389177977 assets/resourcefulbees/blockstates/apia
 a724b891cc443fb3f7e96d097c8a034bb81cb3d0 assets/resourcefulbees/blockstates/bee_box.json
 aea0a8c392b41b95e2e5d504c16d7671a9e882ea assets/resourcefulbees/blockstates/bee_box_temp.json
 e655d28b5f67ea59a41d015cca288d4d49cd3de0 assets/resourcefulbees/blockstates/beehouse_top.json
+9bb7c0e1a19410103169d6e12e31c1b8205d90bb assets/resourcefulbees/blockstates/breeder.json
 1afb2cb7444034fa65e1ef26a7a6cfcb7b596b39 assets/resourcefulbees/blockstates/gold_flower.json
 6e3ee4890a31293be9bcd1f9437162193114ef65 assets/resourcefulbees/blockstates/honey_glass.json
 9585e8a673f9080ee208988225bded45c1421128 assets/resourcefulbees/blockstates/honey_glass_player.json
@@ -96,6 +97,7 @@ f640bcc6a7f327269424bba2014b50d25c4afc1f assets/resourcefulbees/blockstates/waxe
 04154c4254c20f09be43e453b2821791bb19ad6c assets/resourcefulbees/items/bee_box.json
 22428a8de2916cd41d6c569c450704d648493bfd assets/resourcefulbees/items/bee_box_temp.json
 1a7f8f51d4af2f6bbb7377337cd406d2e3edaeec assets/resourcefulbees/items/breed_time_upgrade.json
+46fa245f84fa13d51b6e40b71ccd55c0b03b3e7b assets/resourcefulbees/items/breeder.json
 13492756a9bb240aaff8c1c3b70c2177b48bde1d assets/resourcefulbees/items/energy_cap_upgrade.json
 5da2c3dcbe97fd0f146ae06decbd0cb9cd9f38e8 assets/resourcefulbees/items/energy_fill_upgrade.json
 3d6d0c807db47a990ed9d461715123023956bf60 assets/resourcefulbees/items/energy_xfer_upgrade.json
@@ -201,6 +203,7 @@ a313648a81a24e5fcb2dc0e1a5c3bd4af9b3abf4 assets/resourcefulbees/models/block/api
 d88c9792b9f36afc4fcdba0c02b6c0a38d2a334e assets/resourcefulbees/models/block/bee_box.json
 cf522936a35cda284689ad4660a212c567957c36 assets/resourcefulbees/models/block/bee_box_temp.json
 e6031aeceb77a57128f065073b9b6055f7b42bbf assets/resourcefulbees/models/block/beehouse_top.json
+655a87212d6a17bbdc312fcdc6dcd08346732ce9 assets/resourcefulbees/models/block/breeder.json
 8fc8f5547b3c1fa01bda0c0c60c32c11284011ed assets/resourcefulbees/models/block/gold_flower.json
 ec755a80ac6fda5d281658c1e80b69a9a9f3b48a assets/resourcefulbees/models/block/honey_glass.json
 ec755a80ac6fda5d281658c1e80b69a9a9f3b48a assets/resourcefulbees/models/block/honey_glass_player.json

@@ -3,7 +3,7 @@
 //import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 //import com.teamresourceful.resourcefulbees.common.lib.constants.translations.JeiTranslations;
 //import com.teamresourceful.resourcefulbees.common.modcompat.jei.ingredients.EntityIngredient;
-//import com.teamresourceful.resourcefulbees.common.recipes.BreederRecipe;
+//import com.teamresourceful.resourcefulbees.common.recipes.breeder.BreederRecipe;
 //import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 //import mezz.jei.api.constants.VanillaTypes;
 //import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;

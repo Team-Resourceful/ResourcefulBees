@@ -64,7 +64,7 @@ public final class MissingRegistrySetup {
         YabnArray beeArray = new YabnArray();
         YabnArray honeyArray = new YabnArray();
         YabnArray combArray = new YabnArray();
-        BeeRegistry.get().getBeeTypes().forEach(bee -> beeArray.add(YabnPrimitive.ofString(bee)));
+        BeeRegistry.get().getBeeTypes().forEach(bee -> beeArray.add(YabnPrimitive.ofString(String.valueOf(bee))));
         HoneyRegistry.get().getHoneyTypes().forEach(honey -> honeyArray.add(YabnPrimitive.ofString(honey)));
         HoneycombRegistry.get().getHoneycombTypes().forEach(comb -> combArray.add(YabnPrimitive.ofString(comb)));
         object.put("b", beeArray);

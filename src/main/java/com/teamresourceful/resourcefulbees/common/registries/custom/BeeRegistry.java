@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.tools.MapStrategies;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
@@ -27,10 +28,10 @@ import java.util.stream.Stream;
 public final class BeeRegistry implements com.teamresourceful.resourcefulbees.api.registry.BeeRegistry {
 
     private static final BeeRegistry INSTANCE = new BeeRegistry();
-    private static final Map<String, JsonObject> RAW_DATA = new LinkedHashMap<>();
-    private static final Map<String, CustomBeeData> CUSTOM_DATA = new LinkedHashMap<>();
+    private static final Map<Identifier, JsonObject> RAW_DATA = new LinkedHashMap<>();
+    private static final Map<Identifier, CustomBeeData> CUSTOM_DATA = new LinkedHashMap<>();
     private static final Object2ObjectMap<Parents, WeightedCollection<FamilyUnit>> FAMILY_TREE = new Object2ObjectOpenCustomHashMap<>(MapStrategies.BREED_TREE);
-    private static final Supplier<CustomBeeData> DEFAULT_DATA = Suppliers.memoize(() -> ResourcefulBeesAPI.getInitializers().data("error", Map.of()));
+    private static final Supplier<CustomBeeData> DEFAULT_DATA = Suppliers.memoize(() -> ResourcefulBeesAPI.getInitializers().data(ModIdentifier.of("error"), Map.of()));
 
     private BeeRegistry() {
         // Single instanced classes do not need to be able to be extended
@@ -50,16 +51,30 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
     }
 
     public boolean containsBeeType(String beeType) {
+        return CUSTOM_DATA.containsKey(Identifier.parse(beeType));
+    }
+
+    public boolean containsBeeType(Identifier beeType) {
         return CUSTOM_DATA.containsKey(beeType);
     }
 
     @Override
     public CustomBeeData getBeeData(String beeType) {
+        return CUSTOM_DATA.getOrDefault(Identifier.parse(beeType), DEFAULT_DATA.get());
+    }
+
+    @Override
+    public CustomBeeData getBeeData(Identifier beeType) {
         return CUSTOM_DATA.getOrDefault(beeType, DEFAULT_DATA.get());
     }
 
     @Override
     public Optional<CustomBeeData> getOptionalBeeData(String beeType) {
+        return Optional.ofNullable(CUSTOM_DATA.get(Identifier.parse(beeType)));
+    }
+
+    @Override
+    public Optional<CustomBeeData> getOptionalBeeData(Identifier beeType) {
         return Optional.ofNullable(CUSTOM_DATA.get(beeType));
     }
 
@@ -76,7 +91,7 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
         buildFamilyTree();
     }
 
-    private static CustomBeeData parseData(String id, DynamicOps<JsonElement> ops, JsonObject jsonObject) {
+    private static CustomBeeData parseData(Identifier id, DynamicOps<JsonElement> ops, JsonObject jsonObject) {
         var data = new DispatchMapCodec<>(Identifier.CODEC, BeeDataRegistry.codec(id))
                 .parse(ops, jsonObject)
                 .getOrThrow(s -> new ValidationException(String.format("Could not create Custom Bee Data for %s bee with reason: %s", id, s)));
@@ -91,6 +106,17 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      */
     @Override
     public JsonObject getRawBeeData(String bee) {
+        return RAW_DATA.get(Identifier.parse(bee));
+    }
+
+    /**
+     * Returns a BeeData object for the given bee type.
+     *
+     * @param bee Bee type for which BeeData is requested.
+     * @return Returns a BeeData object for the given bee type.
+     */
+    @Override
+    public JsonObject getRawBeeData(Identifier bee) {
         return RAW_DATA.get(bee);
     }
 
@@ -107,7 +133,19 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
     }
 
     @Override
+    public boolean canParentsBreed(Identifier parent1, Identifier parent2) {
+        if (parent1.equals(parent2)) return FAMILY_TREE.containsKey(parent1);
+        return FAMILY_TREE.containsKey(new Pair<>(parent1, parent2));
+    }
+
+    @Override
     public FamilyUnit getWeightedChild(String parent1, String parent2) {
+        if (parent1.equals(parent2)) return FAMILY_TREE.get(parent1).next();
+        return FAMILY_TREE.get(new Pair<>(parent1, parent2)).next();
+    }
+
+    @Override
+    public FamilyUnit getWeightedChild(Identifier parent1, Identifier parent2) {
         if (parent1.equals(parent2)) return FAMILY_TREE.get(parent1).next();
         return FAMILY_TREE.get(new Pair<>(parent1, parent2)).next();
     }
@@ -124,17 +162,17 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      * @param beeType The Bee Type of the bee being registered.
      * @param beeData The raw BeeData of the bee being registered
      */
-    public void cacheRawBeeData(String beeType, JsonObject beeData) {
-        RAW_DATA.computeIfAbsent(beeType.toLowerCase(Locale.ENGLISH).replace(" ", "_"), s -> Objects.requireNonNull(beeData));
+    public void cacheRawBeeData(Identifier beeType, JsonObject beeData) {
+        RAW_DATA.computeIfAbsent(beeType/*.toLowerCase(Locale.ENGLISH).replace(" ", "_")*/, s -> Objects.requireNonNull(beeData));
     }
 
     @Override
-    public Map<String, JsonObject> getRawBees() {
+    public Map<Identifier, JsonObject> getRawBees() {
         return Collections.unmodifiableMap(RAW_DATA);
     }
 
     @Override
-    public Map<String, CustomBeeData> getBees() {
+    public Map<Identifier, CustomBeeData> getBees() {
         return Collections.unmodifiableMap(CUSTOM_DATA);
     }
 
@@ -149,7 +187,7 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
     }
 
     @Override
-    public Set<String> getBeeTypes() {
+    public Set<Identifier> getBeeTypes() {
         return Set.copyOf(CUSTOM_DATA.keySet());
     }
 

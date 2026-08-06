@@ -1,13 +1,14 @@
 package com.teamresourceful.resourcefulbees.common.entities;
 
-import com.google.common.collect.ImmutableSet;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypeIds;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.flag.FeatureFlags;
@@ -17,9 +18,9 @@ import java.util.Optional;
 
 public class CustomBeeEntityType<T extends Bee> extends EntityType<T> {
 
-    private final String beeType;
+    private final Identifier beeType;
 
-    public CustomBeeEntityType(String beeType, EntityFactory<T> factory, EntityDimensions dimensions) {
+    public CustomBeeEntityType(Identifier beeType, EntityFactory<T> factory, EntityDimensions dimensions) {
         super(factory,
                 MobCategory.valueOf("RESOURCEFULBEES_BEE"),
                 true,
@@ -31,18 +32,18 @@ public class CustomBeeEntityType<T extends Bee> extends EntityType<T> {
                 .5f,
                 5,
                 3,
-                String.format("Resourceful Bees: %s Bee", WordUtils.capitalize(beeType)),
+                String.format("entity_type.resourcefulbees.%s", beeType.getPath()),
                 Optional.empty(),
                 FeatureFlags.DEFAULT_FLAGS,
                 true);
         this.beeType = beeType;
     }
 
-    public static <T extends Bee> CustomBeeEntityType<T> of(String beeType, EntityFactory<T> factory, float width, float height) {
+    public static <T extends Bee> CustomBeeEntityType<T> of(Identifier beeType, EntityFactory<T> factory, float width, float height) {
         return new CustomBeeEntityType<>(beeType, factory, EntityDimensions.scalable(width, height));
     }
 
-    public String getBeeType() {
+    public Identifier getBeeType() {
         return beeType;
     }
 

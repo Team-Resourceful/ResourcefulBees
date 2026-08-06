@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.api.data.bee.breeding;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import net.minecraft.resources.Identifier;
 
 public interface FamilyUnit {
 
@@ -11,13 +12,13 @@ public interface FamilyUnit {
 
     Parents getParents();
 
-    String getChild();
+    Identifier getChild();
 
     CustomBeeData getChildData();
 
     default boolean validUnit() {
-        String parent1 = getParents().getParent1();
-        String parent2 = getParents().getParent2();
-        return !parent1.isEmpty() && !parent2.isEmpty() && BeeRegistry.get().containsBeeType(parent1) && BeeRegistry.get().containsBeeType(parent2);
+        Identifier parent1 = getParents().getParent1();
+        Identifier parent2 = getParents().getParent2();
+        return BeeRegistry.get().containsBeeType(parent1) && BeeRegistry.get().containsBeeType(parent2);
     }
 }

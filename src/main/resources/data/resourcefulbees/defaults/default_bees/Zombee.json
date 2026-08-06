@@ -15,11 +15,10 @@
         "mutation": "resourcefulbees:mutations/zombee"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "zombee",
-                "parent2": "zombee"
+                "parent1": "resourcefulbees:zombee_bee",
+                "parent2": "resourcefulbees:zombee_bee"
             }
         ]
     },

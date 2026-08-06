@@ -20,11 +20,10 @@
         "mutation": "resourcefulbees:mutations/gold"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "gold",
-                "parent2": "gold"
+                "parent1": "resourcefulbees:gold_bee",
+                "parent2": "resourcefulbees:gold_bee"
             }
         ]
     },

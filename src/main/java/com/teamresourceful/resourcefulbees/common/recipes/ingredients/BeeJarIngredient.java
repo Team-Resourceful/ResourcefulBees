@@ -1,58 +1,62 @@
-//package com.teamresourceful.resourcefulbees.common.recipes.ingredients;
-//
-//import com.mojang.serialization.Codec;
-//import com.mojang.serialization.codecs.RecordCodecBuilder;
-//import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
-//import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-//import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
-//import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-//import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-//import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
-//import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredient;
-//import com.teamresourceful.resourcefullib.common.recipe.ingredient.CodecIngredientSerializer;
-//import net.minecraft.core.Holder;
-//import net.minecraft.nbt.CompoundTag;
-//import net.minecraft.resources.Identifier;
-//import net.minecraft.world.item.Item;
-//import net.minecraft.world.item.ItemStack;
-//import org.jetbrains.annotations.Nullable;
-//
-//import java.util.List;
-//import java.util.Set;
-//import java.util.stream.Stream;
-//
-//public record BeeJarIngredient(Set<String> ids) implements CodecIngredient<BeeJarIngredient> {
-//
-//    public static final Codec<BeeJarIngredient> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-//            CodecExtras.set(Codec.STRING).fieldOf("ids").orElse(Set.of()).forGetter(BeeJarIngredient::ids)
-//    ).apply(instance, BeeJarIngredient::new));
-//
-//    public static final CodecIngredientSerializer<BeeJarIngredient> SERIALIZER = new CodecIngredientSerializer<>(
-//            Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "bee_jar"),
-//            CODEC
-//    );
-//
-//
-//    @Override
-//    public boolean test(@Nullable ItemStack stack) {
-//        if (stack == null) return false;
-//        CompoundTag entityTag = stack.getTagElement(NBTConstants.BeeJar.ENTITY);
-//        return entityTag != null && (ids.isEmpty() || ids.contains(entityTag.getString(NBTConstants.NBT_ID)));
-//    }
-//
-//    @Override
-//    public Stream<Holder<Item>> getStream() {
-//        return Stream.empty();
-//    }
-//
-//    @Override
-//    public List<ItemStack> getStacks() {
-//        Stream<CustomBeeData> data = ids.isEmpty() ? BeeRegistry.get().getStreamOfBees() : ids.stream().map(BeeRegistry.get()::getBeeData);
-//        return data.map(bee -> BeeJarItem.createFilledJar(bee.id(), bee.getRenderData().colorData().jarColor())).toList();
-//    }
-//
-//    @Override
-//    public CodecIngredientSerializer<BeeJarIngredient> serializer() {
-//        return SERIALIZER;
-//    }
-//}
+package com.teamresourceful.resourcefulbees.common.recipes.ingredients;
+
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.teamresourceful.resourcefulbees.common.components.JarOccupant;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModIngredientTypes;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+
+import java.util.stream.Stream;
+
+public record BeeJarIngredient(Identifier id) implements ICustomIngredient {
+
+    public static final MapCodec<BeeJarIngredient> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Identifier.CODEC.fieldOf("id").forGetter(BeeJarIngredient::id)
+    ).apply(instance, BeeJarIngredient::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, BeeJarIngredient> STREAM_CODEC = StreamCodec.composite(
+            Identifier.STREAM_CODEC,
+            BeeJarIngredient::id,
+            BeeJarIngredient::new
+    );
+
+    @Override
+    public boolean test(@Nullable ItemStack stack) {
+        if (stack == null) return false;
+
+        JarOccupant occupant = stack.get(ModDataComponents.JAR_BEE);
+
+        if (occupant == null || occupant.entityData().isEmpty()) {
+            return false;
+        }
+
+        Identifier entityId = BuiltInRegistries.ENTITY_TYPE.getKey(occupant.entityType());
+        return id.equals(entityId);
+    }
+
+    @Override
+    public @NonNull Stream<Holder<Item>> items() {
+        return Stream.empty();
+    }
+
+    @Override
+    public boolean isSimple() {
+        return false;
+    }
+
+    @Override
+    public @NonNull IngredientType<?> getType() {
+        return ModIngredientTypes.BEE_JAR.get();
+    }
+}

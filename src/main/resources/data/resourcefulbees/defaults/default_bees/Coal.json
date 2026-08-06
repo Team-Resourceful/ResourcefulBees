@@ -20,15 +20,14 @@
     "mutation": "resourcefulbees:mutations/coal"
   },
   "resourcefulbees:breeding/v1": {
-    "parents": [
+    "families": [
       {
-        "parent1": "coal",
-        "parent2": "coal"
+        "parent1": "resourcefulbees:coal_bee",
+        "parent2": "resourcefulbees:coal_bee"
       }
     ],
     "feedItem": ["minecraft:poppy"],
-    "feedAmount": 4,
-    "isBreedable": true
+    "feedAmount": 4
   },
   "resourcefulbees:trade/v1": {
     "amount": {

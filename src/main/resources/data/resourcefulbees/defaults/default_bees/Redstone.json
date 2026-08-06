@@ -24,11 +24,10 @@
         "mutation" : "resourcefulbees:mutations/redstone"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "redstone",
-                "parent2": "redstone"
+                "parent1": "resourcefulbees:redstone_bee",
+                "parent2": "resourcefulbees:redstone_bee"
             }
         ]
     },

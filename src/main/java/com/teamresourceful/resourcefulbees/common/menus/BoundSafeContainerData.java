@@ -2,8 +2,15 @@ package com.teamresourceful.resourcefulbees.common.menus;
 
 import com.teamresourceful.resourcefulbees.common.util.MathUtils;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.common.util.ValueIOSerializable;
 
-public class BoundSafeContainerData implements ContainerData {
+import java.util.Arrays;
+
+public class BoundSafeContainerData implements ContainerData, ValueIOSerializable {
+
+    private static final String VALUES_KEY = "values";
 
     private final int[] ints;
     private final int defaultVal;
@@ -11,6 +18,7 @@ public class BoundSafeContainerData implements ContainerData {
     public BoundSafeContainerData(int size, int defaultVal) {
         this.ints = new int[size];
         this.defaultVal = defaultVal;
+        Arrays.fill(this.ints, defaultVal);
     }
 
     @Override
@@ -49,5 +57,22 @@ public class BoundSafeContainerData implements ContainerData {
     @Override
     public int getCount() {
         return ints.length;
+    }
+
+    public void serialize(ValueOutput output) {
+        output.putIntArray(VALUES_KEY, ints);
+    }
+
+    public void deserialize(ValueInput input) {
+        input.getIntArray(VALUES_KEY).ifPresent(values -> {
+            int copyLength = Math.min(values.length, ints.length);
+
+            System.arraycopy(values, 0, ints, 0, copyLength);
+
+            // Reset any entries not present in the serialized array.
+            if (copyLength < ints.length) {
+                Arrays.fill(ints, copyLength, ints.length, defaultVal);
+            }
+        });
     }
 }

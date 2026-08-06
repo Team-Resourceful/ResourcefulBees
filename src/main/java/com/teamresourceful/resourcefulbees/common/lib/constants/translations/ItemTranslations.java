@@ -60,10 +60,10 @@ public final class ItemTranslations {
     public static final MutableComponent SCRAPER_TOOLTIP_1 = Component.translatable("block.resourcefulbees.scraper.tooltip.info.2");
 
     @Translate("Filled Bee Jar")
-    public static final String BEE_JAR_FILLED = "item.resourcefulbees.bee_jar_filled";
+    public static final MutableComponent BEE_JAR_FILLED = Component.translatable("item.resourcefulbees.bee_jar_filled");
 
     @Translate("Empty Bee Jar")
-    public static final String BEE_JAR_EMPTY = "item.resourcefulbees.bee_jar_empty";
+    public static final MutableComponent BEE_JAR_EMPTY = Component.translatable("item.resourcefulbees.bee_jar_empty");
 
     @Translate("§8Hold [§7SHIFT§8] for %s")
     public static final String SHIFT_TOOLTIP = "item.resourcefulbees.shift_tooltip";

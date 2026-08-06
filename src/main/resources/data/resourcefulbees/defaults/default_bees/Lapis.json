@@ -20,11 +20,10 @@
         "mutation" : "resourcefulbees:mutations/lapis"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "lapis",
-                "parent2": "lapis"
+                "parent1": "resourcefulbees:lapis_bee",
+                "parent2": "resourcefulbees:lapis_bee"
             }
         ]
     },

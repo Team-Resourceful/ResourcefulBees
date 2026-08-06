@@ -12,13 +12,17 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ModCreativeTabs {
 
@@ -45,7 +49,7 @@ public class ModCreativeTabs {
                 output.accept(ModItems.GOLD_FLOWER_ITEM.get());
 
 //                output.accept(ModItems.FLOW_HIVE.get());
-//                output.accept(ModItems.BREEDER_ITEM.get());
+                output.accept(ModItems.BREEDER_ITEM.get());
                 output.accept(ModItems.T1_APIARY_ITEM.get());
                 output.accept(ModItems.T2_APIARY_ITEM.get());
                 output.accept(ModItems.T3_APIARY_ITEM.get());
@@ -87,26 +91,72 @@ public class ModCreativeTabs {
     );
 
     public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES_HIVES = CREATIVE_TABS.register("hives", () -> CreativeModeTab.builder()
-            .icon(Items.BEEHIVE::getDefaultInstance)
-            .displayItems(ModItems.NEST_ITEMS.getEntries().stream().map(RegistryEntry::get).map(Holder::direct).collect(Collectors.toSet()))
-            .build()
-    );
+                    .icon(Items.BEEHIVE::getDefaultInstance)
+                    .displayItems((parameters, output) ->
+                            ModItems.NEST_ITEMS.getEntries().stream()
+                                    .map(RegistryEntry::get)
+                                    .sorted(Comparator.comparing(item ->
+                                            BuiltInRegistries.ITEM.getKey(item).toString()
+                                    ))
+                                    .forEach(output::accept)
+                    )
+                    .build()
+            );
 
-    public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES_HONEY = CREATIVE_TABS.register("honey", () -> new ResourcefulCreativeModeTab(ModIdentifier.of("honey"))
-            .setItemIcon(() -> Items.HONEY_BOTTLE)
-            .addRegistry(ModItems.HONEY_BOTTLE_ITEMS)
-            .addRegistry(ModItems.HONEY_BLOCK_ITEMS)
-            .addRegistry(ModItems.HONEY_BUCKET_ITEMS)
-            .build());
+    public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES_HONEY =
+            CREATIVE_TABS.register("honey", () ->
+                    new ResourcefulCreativeModeTab(ModIdentifier.of("honey"))
+                            .setItemIcon(() -> Items.HONEY_BOTTLE)
+                            .addContent(() ->
+                                    Stream.concat(
+                                                    Stream.concat(
+                                                            ModItems.HONEY_BOTTLE_ITEMS.boundStream(),
+                                                            ModItems.HONEY_BLOCK_ITEMS.boundStream()
+                                                    ),
+                                                    ModItems.HONEY_BUCKET_ITEMS.boundStream()
+                                            )
+                                            .sorted(Comparator.comparing(item ->
+                                                    BuiltInRegistries.ITEM
+                                                            .getKey(item.asItem())
+                                                            .toString()
+                                            ))
+                                            .map(ItemStack::new)
+                            )
+                            .build()
+            );
 
-    public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES_COMBS = CREATIVE_TABS.register("combs", () -> new ResourcefulCreativeModeTab(ModIdentifier.of("combs"))
-            .setItemIcon(() -> Items.HONEYCOMB)
-            .addRegistry(ModItems.HONEYCOMB_ITEMS)
-            .addRegistry(ModItems.HONEYCOMB_BLOCK_ITEMS)
-            .build());
+    public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES_COMBS =
+            CREATIVE_TABS.register("combs", () ->
+                    new ResourcefulCreativeModeTab(ModIdentifier.of("combs"))
+                            .setItemIcon(() -> Items.HONEYCOMB)
+                            .addContent(() ->
+                                    Stream.concat(
+                                                    ModItems.HONEYCOMB_ITEMS.boundStream(),
+                                                    ModItems.HONEYCOMB_BLOCK_ITEMS.boundStream()
+                                            )
+                                            .sorted(Comparator.comparing(item ->
+                                                    BuiltInRegistries.ITEM
+                                                            .getKey(item.asItem())
+                                                            .toString()
+                                            ))
+                                            .map(ItemStack::new)
+                            )
+                            .build()
+            );
 
-    public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES_BEES = CREATIVE_TABS.register("bees", () -> new ResourcefulCreativeModeTab(ModIdentifier.of("bees"))
-            .setItemIcon(() -> Items.BEE_SPAWN_EGG)
-            .addRegistry(ModItems.SPAWN_EGG_ITEMS)
-            .build());
+    public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES_BEES =
+            CREATIVE_TABS.register("bees", () ->
+                    new ResourcefulCreativeModeTab(ModIdentifier.of("bees"))
+                            .setItemIcon(() -> Items.BEE_SPAWN_EGG)
+                            .addContent(() ->
+                                    ModItems.SPAWN_EGG_ITEMS.boundStream()
+                                            .sorted(Comparator.comparing(item ->
+                                                    BuiltInRegistries.ITEM
+                                                            .getKey(item.asItem())
+                                                            .toString()
+                                            ))
+                                            .map(ItemStack::new)
+                            )
+                            .build()
+            );
 }

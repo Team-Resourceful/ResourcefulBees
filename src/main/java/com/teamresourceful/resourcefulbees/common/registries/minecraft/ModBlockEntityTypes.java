@@ -42,8 +42,8 @@ public final class ModBlockEntityTypes {
             () -> new BlockEntityType<>((pos, state) -> new ApiaryBlockEntity(DefaultApiaryTiers.T4_APIARY, pos, state), ModBlocks.T4_APIARY_BLOCK.get()));
     //endregion
 
-    //    public static final RegistryEntry<BlockEntityType<BreederBlockEntity>> BREEDER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("breeder",
-    //            () -> new BlockEntityType<>((BreederBlockEntity::new), ModBlocks.BREEDER_BLOCK.get()));
+    public static final RegistryEntry<BlockEntityType<BreederBlockEntity>> BREEDER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("breeder",
+            () -> new BlockEntityType<>((BreederBlockEntity::new), ModBlocks.BREEDER_BLOCK.get()));
 
     public static final RegistryEntry<BlockEntityType<BeeBoxBlockEntity>> BEE_BOX_ENTITY = BLOCK_ENTITY_TYPES.register("bee_box",
             () -> new BlockEntityType<>((BeeBoxBlockEntity::new), ModBlocks.BEE_BOX.get(), ModBlocks.BEE_BOX_TEMP.get()));

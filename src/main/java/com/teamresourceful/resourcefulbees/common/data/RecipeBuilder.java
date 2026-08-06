@@ -1,18 +1,33 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
+import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneycombItem;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.breeder.BreederRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.breeder.ChildOutput;
+import com.teamresourceful.resourcefulbees.common.recipes.breeder.ParentInput;
+import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
+import com.teamresourceful.resourcefulbees.common.util.IngredientUtils;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 public final class RecipeBuilder implements ResourceManagerReloadListener {
+
     public static Recipe<HiveRecipe.Input> makeHiveRecipe(CustomBeeData bee) {
         return bee.getCoreData().getHoneycombData()
                 .<Recipe<HiveRecipe.Input>>map(data -> new HiveRecipe(
@@ -23,6 +38,28 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
                         data.apiaryCombs()
                 ))
                 .orElse(null);
+    }
+
+    public static Recipe<BreederRecipe.Input> makeBreedingRecipe(WeightedCollection<FamilyUnit> family) {
+        Parents parents = family.get(0).getParents();
+        ParentInput parent1 = makeInput(parents.getParent1(), parents.getParent1Data().getBreedData());
+        ParentInput parent2 = makeInput(parents.getParent2(), parents.getParent2Data().getBreedData());
+        return new BreederRecipe(parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), family.stream().map(RecipeBuilder::makeOutput).collect(WeightedCollection.getCollector(ChildOutput::weight)), 2400);
+    }
+
+    private static ParentInput makeInput(Identifier id, BeeBreedData breedData) {
+        Ingredient ingredient = new BeeJarIngredient(id).toVanilla();
+        var parent1FeedItems = IngredientUtils.of(breedData.feedItems());
+        return new ParentInput(ingredient, Optional.of(id), breedData.feedAmount(), parent1FeedItems, breedData.feedReturnItem());
+    }
+
+    private static ChildOutput makeOutput(FamilyUnit family) {
+        ItemStackTemplate childBeeJar = ItemStackTemplate.fromNonEmptyStack(BeeJarItem.createFilledJar(family.getChildData().entityType(), getJarColor(family)));
+        return new ChildOutput(childBeeJar, Optional.of(family.getChildData().id().toString()), family.weight(), family.chance());
+    }
+
+    private static int getJarColor(FamilyUnit family) {
+        return family.getChildData().getRenderData().colorData().jarColor().getOpaqueValue();
     }
 
     @Override
@@ -66,26 +103,6 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
 
 //    public void addRecipe(Recipe<?> recipe) {
 //        getRecipeManager().getRecipes().computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
-//    }
-
-    private Recipe<?> makeBreedingRecipe(WeightedCollection<FamilyUnit> families) {
-        return null;
-//        Parents parents = families.get(0).getParents();
-//        Identifier id = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, parents.getParent1() + "_" + parents.getParent2() + "_" + families.get(0).getChild());
-//        Ingredient beeJarParent1 = com.teamresourceful.resourcefullib.common.recipe.ingredient.IngredientHelper.getIngredient(new BeeJarIngredient(Set.of(parents.getParent1Data().id().toString())));
-//        BeeBreedData parent1BreedData = parents.getParent1Data().getBreedData();
-//        var parent1FeedItems = IngredientUtils.of(parent1BreedData.feedItems());
-//        BreederRecipe.BreederPair parent1 = new BreederRecipe.BreederPair(beeJarParent1, Optional.of(parents.getParent1Data().id().toString()), parent1BreedData.feedAmount(), parent1FeedItems, parent1BreedData.feedReturnItem());
-//        BeeBreedData parent2BreedData = parents.getParent2Data().getBreedData();
-//        Ingredient beeJarParent2 = com.teamresourceful.resourcefullib.common.recipe.ingredient.IngredientHelper.getIngredient(new BeeJarIngredient(Set.of(parents.getParent2Data().id().toString())));
-//        var parent2FeedItems = IngredientUtils.of(parent2BreedData.feedItems());
-//        BreederRecipe.BreederPair parent2 = new BreederRecipe.BreederPair(beeJarParent2, Optional.of(parents.getParent2Data().id().toString()), parent2BreedData.feedAmount(), parent2FeedItems, parent2BreedData.feedReturnItem());
-//        return new BreederRecipe(id, parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), families.stream().map(this::makeOutput).collect(WeightedCollection.getCollector(BreederRecipe.BreederOutput::weight)), 2400);
-    }
-
-//    private BreederRecipe.BreederOutput makeOutput(FamilyUnit family) {
-//        ItemStack childBeeJar = BeeJarItem.createFilledJar(family.getChildData().id(), family.getChildData().getRenderData().colorData().jarColor());
-//        return new BreederRecipe.BreederOutput(childBeeJar, Optional.of(family.getChildData().id().toString()), family.weight(), family.chancea
 //    }
 
     private Recipe<?> makeHoneycombRecipe(CustomHoneycombItem comb) {

@@ -20,11 +20,10 @@
         "mutation" : "resourcefulbees:mutations/quartz"
     },
     "resourcefulbees:breeding/v1": {
-        "isBreedable": true,
-        "parents": [
+        "families": [
             {
-                "parent1": "nether_quartz",
-                "parent2": "coal"
+                "parent1": "resourcefulbees:nether_quartz_bee",
+                "parent2": "resourcefulbees:coal_bee"
             }
         ]
     },
