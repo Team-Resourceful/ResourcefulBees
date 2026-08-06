@@ -53,7 +53,9 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
 
     private static final EntityDataAccessor<Integer> FEED_COUNT = SynchedEntityData.defineId(CustomBeeEntity.class, EntityDataSerializers.INT);
 
-    private static final RawAnimation ANIMATION = RawAnimation.begin().thenLoop("animation.bee.fly").thenLoop("animation.bee.fly.bobbing");
+    private static final RawAnimation FLY_ANIMATION = RawAnimation.begin().thenLoop("animation.bee.fly");
+    private static final RawAnimation BOB_ANIMATION = RawAnimation.begin().thenLoop("animation.bee.fly.bobbing");
+
     private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
 
     protected final CustomBeeData customBeeData;
@@ -310,11 +312,12 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-        data.add(new AnimationController<>("controller", 0, animatable -> {
-            animatable.controller().setAnimation(ANIMATION);
-            return PlayState.CONTINUE;
-        }));
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>("fly", 0, state ->
+                state.setAndContinue(FLY_ANIMATION)));
+
+        controllers.add(new AnimationController<>("bobbing", 0, state ->
+                state.setAndContinue(BOB_ANIMATION)));
     }
 
     @Override

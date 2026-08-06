@@ -132,4 +132,9 @@ public class BeeJarItem extends Item {
 
         return name.append(Component.translatable(ItemTranslations.BEE_BOX_ENTITY_NAME, display));
     }
+
+    @Override
+    public boolean shouldCauseReequipAnimation(@NonNull ItemStack oldStack, @NonNull ItemStack newStack, boolean slotChanged) {
+        return slotChanged || oldStack.getItem() != newStack.getItem();
+    }
 }
