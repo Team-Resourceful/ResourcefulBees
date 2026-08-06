@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.blockentities.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.menus.CentrifugeMenu;
@@ -35,6 +36,15 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
             int i = this.leftPos;
             int j = this.topPos;
             graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0f, 0f, this.imageWidth, this.imageHeight, 256, 256);
+            ClientRenderUtils.drawTank(
+                    graphics,
+                    tileEntity.fluidResourceHandler(),
+                    0,
+                    leftPos + 152,
+                    topPos + 23,
+                    16,
+                    52
+            );
         }
     }
 

@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ApiaryTranslations;
@@ -10,6 +11,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
@@ -161,11 +163,8 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
             int i1 = top + j * 18 + 2;
 
             var bee = this.menu.getApiaryBee(i);
-//            CompoundTag entityTag = bee.entityData.copy();
-//            entityTag.putString(NBTConstants.BeeJar.COLOR, bee.color);
-//
-//            ItemStack beeJar = BeeJarItem.createFilledJar(entityTag, null);
-//            graphics.renderItem(beeJar, left, i1);
+
+            ClientRenderUtils.renderEntity(graphics,bee.createEntity(Minecraft.getInstance().level, new BlockPos(0,0,0)), left, i1, 16, 16, 180f, 1.0f);
         }
     }
 
