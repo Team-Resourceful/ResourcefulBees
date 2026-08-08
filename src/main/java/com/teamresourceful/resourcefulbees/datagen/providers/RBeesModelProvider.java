@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen.providers;
 
 import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
@@ -33,7 +34,7 @@ import java.util.stream.Stream;
 
 public class RBeesModelProvider extends ModelProvider {
     public RBeesModelProvider(PackOutput output) {
-        super(output, ResourcefulBees.MODID);
+        super(output, ModConstants.MOD_ID);
     }
 
     private static final TextureSlot APIARY_TEXTURE =
@@ -41,12 +42,7 @@ public class RBeesModelProvider extends ModelProvider {
 
     private static final ModelTemplate APIARY_TEMPLATE =
             new ModelTemplate(
-                    Optional.of(
-                            Identifier.fromNamespaceAndPath(
-                                    ResourcefulBees.MODID,
-                                    "block/beehouse"
-                            )
-                    ),
+                    Optional.of(ModIdentifier.of("block/beehouse")),
                     Optional.empty(),
                     TextureSlot.PARTICLE,
                     APIARY_TEXTURE
@@ -69,12 +65,7 @@ public class RBeesModelProvider extends ModelProvider {
 
     private static final ModelTemplate NEST_TEMPLATE =
             new ModelTemplate(
-                    Optional.of(
-                            Identifier.fromNamespaceAndPath(
-                                    ResourcefulBees.MODID,
-                                    "block/nest"
-                            )
-                    ),
+                    Optional.of(ModIdentifier.of("block/nest")),
                     Optional.empty(),
                     TextureSlot.PARTICLE,
                     BOTTOM,
@@ -86,12 +77,7 @@ public class RBeesModelProvider extends ModelProvider {
 
     private static final ModelTemplate NEST_HONEY_TEMPLATE =
             new ModelTemplate(
-                    Optional.of(
-                            Identifier.fromNamespaceAndPath(
-                                    ResourcefulBees.MODID,
-                                    "block/nest"
-                            )
-                    ),
+                    Optional.of(ModIdentifier.of("block/nest")),
                     Optional.of("_honey"),
                     TextureSlot.PARTICLE,
                     BOTTOM,
@@ -607,7 +593,7 @@ public class RBeesModelProvider extends ModelProvider {
     }
 
     private static Material blockTexture(String path) {
-        return new Material(Identifier.fromNamespaceAndPath(ResourcefulBees.MODID, "block/" + path), false);
+        return new Material(ModIdentifier.of("block/" + path), false);
     }
 
     private static Material modMaterial(String path) {

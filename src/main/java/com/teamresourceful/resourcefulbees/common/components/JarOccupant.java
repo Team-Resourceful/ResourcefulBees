@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -63,7 +63,7 @@ public record JarOccupant(
 
     public static JarOccupant from(Entity entity) {
         JarOccupant occupant;
-        try (var reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), ResourcefulBees.LOGGER)) {
+        try (var reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), ModConstants.LOGGER)) {
             var output = TagValueOutput.createWithContext(reporter, entity.registryAccess());
             entity.save(output);
             BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(output::discard);

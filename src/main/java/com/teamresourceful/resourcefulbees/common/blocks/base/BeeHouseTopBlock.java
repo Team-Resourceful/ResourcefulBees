@@ -19,12 +19,10 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -116,8 +114,7 @@ public class BeeHouseTopBlock extends Block {
     @Override
     protected @NonNull ItemStack getCloneItemStack(@NonNull LevelReader level, @NonNull BlockPos pos, @NonNull BlockState state, boolean includeData) {
         if (level.getBlockState(pos.below()).getBlock() instanceof BeeHouseBlock block) {
-            assert Minecraft.getInstance().player != null;
-            return block.getCloneItemStack(level, pos, state, false, Minecraft.getInstance().player);
+            return block.getCloneItemStack(level, pos, state, false);
         }
         return Items.AIR.getDefaultInstance();
     }

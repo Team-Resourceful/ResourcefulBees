@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees;
 
 
-import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesCommand;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
@@ -13,7 +12,6 @@ import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultHiveTypes;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
-import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registries.custom.*;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModIngredientTypes;
@@ -25,9 +23,6 @@ import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
 import com.teamresourceful.resourcefulbees.common.util.ModUtils;
-import com.teamresourceful.resourcefullib.common.recipe.ingredient.IngredientHelper;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -36,42 +31,19 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
-@Mod("resourcefulbees")
+@Mod(ModConstants.MOD_ID)
 public class ResourcefulBees {
 
-    //public static final Configurator CONFIGURATOR = new Configurator(ModConstants.MOD_ID);
-
-    // Define mod id in a common place for everything to reference
-    public static final String MODID = "resourcefulbees";
-    // Directly reference a slf4j logger
-    public static final Logger LOGGER = LogUtils.getLogger();
-
-    // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "resourcefulbees" namespace
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-
-    // Creates a creative tab with the id "resourcefulbees:example_tab" for the example item, that is placed after the combat tab
-//    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
-//            .title(Component.translatable("itemGroup.resourcefulbees")) //The language key for the title of your CreativeModeTab
-//            .withTabsBefore(CreativeModeTabs.COMBAT)
-//            .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
-//            .displayItems((parameters, output) -> {
-//                output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
-//            }).build());
-
-    // The constructor for the mod class is the first code that is run when your mod is loaded.
-    // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public ResourcefulBees(IEventBus modEventBus, ModContainer modContainer) {
-        //CONFIGURATOR.registerConfig(GeneralConfig.class);
-        ModConstants.forceInit();
         RegistryHandler.init();
         GameSetup.initEvents();
+        //load default data
         DefaultHiveTypes.loadDefaults();
         DefaultBeehiveTiers.loadDefaults();
         DefaultApiaryTiers.loadDefaults();
+        //setup initializers
         DataSetup.setupInitializers(ResourcefulBeesAPI.getInitializers());
         DataSetup.setupInitializers(ResourcefulBeesAPI.getHoneyInitializers());
         ResourcefulBeesAPI.getEvents().registerCondition(DataSetup::setupRegister);

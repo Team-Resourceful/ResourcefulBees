@@ -2,9 +2,9 @@ package com.teamresourceful.resourcefulbees;
 
 import com.geckolib.renderer.GeoBlockRenderer;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.client.fluids.ModClientFluidProperties;
 import com.teamresourceful.resourcefulbees.client.model.property.FilledBeeJarProperty;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.CentrifugeCrankRenderer;
-import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.CentrifugeRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.screen.ApiaryScreen;
 import com.teamresourceful.resourcefulbees.client.screen.BreederScreen;
@@ -22,16 +22,13 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTy
 import com.teamresourceful.resourcefulbees.mixin.client.PackRepositoryAccessor;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.world.level.block.HoneyBlock;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -42,23 +39,22 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterConditionalItemModelPropertyEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.client.gui.ConfigurationScreen;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
-@Mod(value = ResourcefulBees.MODID, dist = Dist.CLIENT)
+@Mod(value = ModConstants.MOD_ID, dist = Dist.CLIENT)
 // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-@EventBusSubscriber(modid = ResourcefulBees.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = ModConstants.MOD_ID, value = Dist.CLIENT)
 public class ResourcefulBeesClient {
     public ResourcefulBeesClient(ModContainer container) {
         // Allows NeoForge to create a config screen for this mod's configs.
         // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
         // Do not forget to add translations for your config options to the en_us.json file.
         //container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        ModClientFluidProperties.registerHoneyFluids();
         loadResources();
     }
 

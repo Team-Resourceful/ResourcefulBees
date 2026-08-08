@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.fluids.CustomHoneyClientFluidProperties;
+import com.teamresourceful.resourcefulbees.client.fluids.ModClientFluidProperties;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
@@ -25,7 +26,6 @@ import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.CustomHon
 import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.fluid.CustomHoneyFluidData;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import com.teamresourceful.resourcefullib.common.fluid.ResourcefulFlowingFluid;
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidData;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
@@ -36,6 +36,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.api.distmarker.Dist;
 
 
 public final class RegistryHandler {
@@ -154,7 +155,7 @@ public final class RegistryHandler {
             RegistryEntry<FluidData> fluidType = ModFluids.FLUID_TYPES.register(name + "_honey", CustomHoneyFluidType.create(fluidData.fluidAttributesData()));
             ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey_fluid_source", () -> new CustomHoneyFluid.Still(fluidData, fluidType.get()));
             ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_fluid_flowing", () -> new CustomHoneyFluid.Flowing(fluidData, fluidType.get()));
-            ModFluids.CLIENT_FLUID_PROPERTIES.register(name + "_honey", () -> CustomHoneyClientFluidProperties.create(fluidData.renderData()));
+            //ModClientFluidProperties.CLIENT_FLUID_PROPERTIES.register(name + "_honey", () -> CustomHoneyClientFluidProperties.create(fluidData.renderData()));
             ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", properties -> new BucketItem(fluidType.get().still().get(), properties), () -> new Item.Properties().stacksTo(1).component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_bucket")));
             ModBlocks.registerHoneyFluidBlock(name + "_honey_fluid_block", fluidData, fluidType.get());
         });

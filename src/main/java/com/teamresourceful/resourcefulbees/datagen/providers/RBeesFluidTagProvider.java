@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFluids;
 import net.minecraft.core.HolderLookup;
@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class RBeesFluidTagProvider extends FluidTagsProvider {
     public RBeesFluidTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(output, lookupProvider, ResourcefulBees.MODID);
+        super(output, lookupProvider, ModConstants.MOD_ID);
     }
 
     @Override
