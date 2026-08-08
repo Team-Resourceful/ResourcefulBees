@@ -51,7 +51,7 @@ public final class ModBlocks {
     public static final BlockBehaviour.Properties WAXED_PLANKS_PROPERTIES = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
     public static final BlockBehaviour.Properties CENTRIFUGE_PROPERTIES = BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL);
     private static final BlockBehaviour.Properties WOOD_NEST_PROPERTIES = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1F).sound(SoundType.WOOD);
-    private static final BlockBehaviour.Properties APIARY_PROPERTIES = BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(5f, 6f).sound(SoundType.METAL);
+    private static final BlockBehaviour.Properties APIARY_PROPERTIES = BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(5f, 6f).mapColor(MapColor.WOOD);
     public static final BlockBehaviour.Properties HONEY_FLUID_BLOCK_PROPERTIES = BlockBehaviour.Properties.of()
             .mapColor(MapColor.TERRACOTTA_ORANGE)
             .liquid()
@@ -92,7 +92,7 @@ public final class ModBlocks {
     public static final RegistryEntry<Block> T2_APIARY_BLOCK = registerBlock(APIARIES, "apiary/2", properties -> new ApiaryBlock(DefaultApiaryTiers.T2_APIARY, properties), () -> APIARY_PROPERTIES);
     public static final RegistryEntry<Block> T3_APIARY_BLOCK = registerBlock(APIARIES, "apiary/3", properties -> new ApiaryBlock(DefaultApiaryTiers.T3_APIARY, properties), () -> APIARY_PROPERTIES);
     public static final RegistryEntry<Block> T4_APIARY_BLOCK = registerBlock(APIARIES, "apiary/4", properties -> new ApiaryBlock(DefaultApiaryTiers.T4_APIARY, properties), () -> APIARY_PROPERTIES);
- //   public static final RegistryEntry<Block> FLOW_HIVE = BLOCKS.register("flow_hive", FlowHiveBlock::new);
+    public static final RegistryEntry<Block> FLOW_HIVE = registerBlock(BLOCKS,"flow_hive", FlowHiveBlock::new, () -> APIARY_PROPERTIES);
 
     public static final RegistryEntry<Block> WAX_BLOCK = registerBlock(BLOCKS, "wax_block", Block::new, () -> BlockBehaviour.Properties.of().sound(SoundType.SNOW).strength(0.3F));
 

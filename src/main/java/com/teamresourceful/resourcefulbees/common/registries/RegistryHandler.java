@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
+import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluidType;
 import com.teamresourceful.resourcefulbees.common.items.dispenser.ScraperDispenserBehavior;
 import com.teamresourceful.resourcefulbees.common.items.dispenser.ShearsDispenserBehavior;
@@ -151,8 +152,8 @@ public final class RegistryHandler {
     private static void registerHoneyFluid(String name, CustomHoneyData data) {
         data.getOptionalData(CustomHoneyFluidData.SERIALIZER).ifPresent(fluidData -> {
             RegistryEntry<FluidData> fluidType = ModFluids.FLUID_TYPES.register(name + "_honey", CustomHoneyFluidType.create(fluidData.fluidAttributesData()));
-            ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey_fluid_source", () -> new ResourcefulFlowingFluid.Still(fluidType.get()));
-            ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_fluid_flowing", () -> new ResourcefulFlowingFluid.Flowing(fluidType.get()));
+            ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey_fluid_source", () -> new CustomHoneyFluid.Still(fluidData, fluidType.get()));
+            ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_fluid_flowing", () -> new CustomHoneyFluid.Flowing(fluidData, fluidType.get()));
             ModFluids.CLIENT_FLUID_PROPERTIES.register(name + "_honey", () -> CustomHoneyClientFluidProperties.create(fluidData.renderData()));
             ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", properties -> new BucketItem(fluidType.get().still().get(), properties), () -> new Item.Properties().stacksTo(1).component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_bucket")));
             ModBlocks.registerHoneyFluidBlock(name + "_honey_fluid_block", fluidData, fluidType.get());

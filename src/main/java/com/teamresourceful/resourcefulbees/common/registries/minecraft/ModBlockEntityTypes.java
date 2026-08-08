@@ -12,6 +12,8 @@ import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.HangingSignBlockEntity;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,18 +49,18 @@ public final class ModBlockEntityTypes {
 
     public static final RegistryEntry<BlockEntityType<BeeBoxBlockEntity>> BEE_BOX_ENTITY = BLOCK_ENTITY_TYPES.register("bee_box",
             () -> new BlockEntityType<>((BeeBoxBlockEntity::new), ModBlocks.BEE_BOX.get(), ModBlocks.BEE_BOX_TEMP.get()));
-    public static final RegistryEntry<BlockEntityType<WaxedSignBlockEntity>> WAXED_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_sign",
-            () -> new BlockEntityType<>((WaxedSignBlockEntity::new), ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get()));
-    public static final RegistryEntry<BlockEntityType<WaxedHangingSignBlockEntity>> WAXED_HANGING_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_hanging_sign",
-            () -> new BlockEntityType<>((WaxedHangingSignBlockEntity::new), ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get()));
+    public static final RegistryEntry<BlockEntityType<SignBlockEntity>> WAXED_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_sign",
+            () -> new BlockEntityType<>((SignBlockEntity::new), ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get()));
+    public static final RegistryEntry<BlockEntityType<HangingSignBlockEntity>> WAXED_HANGING_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_hanging_sign",
+            () -> new BlockEntityType<>((HangingSignBlockEntity::new), ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get()));
     //    public static final RegistryEntry<BlockEntityType<AcceleratorBlockEntity>> ACCELERATOR_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("accelerator",
     //            () -> new BlockEntityType<>((AcceleratorBlockEntity::new), ModBlocks.ACCELERATOR.get()));
 
     //public static final RegistryEntry<BlockEntityType<? extends FakeFlowerBlockEntity>> FAKE_FLOWER_ENTITY = BLOCK_ENTITY_TYPES.register("fake_flower",
     //        () -> new BlockEntityType<>((FakeFlowerBlockEntity::new), ModBlocks.FAKE_FLOWER.get()));
 
-    //    public static final RegistryEntry<BlockEntityType<? extends FlowHiveBlockEntity>> FLOW_HIVE_ENTITY = BLOCK_ENTITY_TYPES.register("flow_hive",
-    //            () -> new BlockEntityType<>((FlowHiveBlockEntity::new), ModBlocks.FLOW_HIVE.get()));
+        public static final RegistryEntry<BlockEntityType<? extends FlowHiveBlockEntity>> FLOW_HIVE_ENTITY = BLOCK_ENTITY_TYPES.register("flow_hive",
+                () -> new BlockEntityType<>((FlowHiveBlockEntity::new), ModBlocks.FLOW_HIVE.get()));
     //
     //    public static final RegistryEntry<BlockEntityType<CreativeGenBlockEntity>> CREATIVE_GEN_ENTITY = BLOCK_ENTITY_TYPES.register("creative_gen",
     //            () -> new BlockEntityType<>((CreativeGenBlockEntity::new), ModBlocks.CREATIVE_GEN.get()));

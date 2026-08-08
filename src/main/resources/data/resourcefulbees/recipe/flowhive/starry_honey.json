@@ -4,7 +4,7 @@
         "resourcefulbees:starry_bee"
     ],
     "fluid": {
-        "id": "resourcefulbees:starry_honey",
+        "id": "resourcefulbees:starry_honey_fluid_source",
         "amount": 25
     }
 }

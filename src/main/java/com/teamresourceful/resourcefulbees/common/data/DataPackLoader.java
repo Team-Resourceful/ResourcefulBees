@@ -38,7 +38,6 @@ public final class DataPackLoader implements RepositorySource {
         try (GenericMemoryPack dataPack = ModUtils.createHiddenDataPack(DATAPACK_NAME, METADATA)) {
             generateTags(dataPack);
             generateHiveRecipes(dataPack);
-            //generateBreederRecipes(dataPack);
 
             PackLocationInfo info = new PackLocationInfo(DATAPACK_NAME, TITLE, PackSource.BUILT_IN, Optional.empty());
             PackSelectionConfig selectionConfig = new PackSelectionConfig(true, Pack.Position.BOTTOM, true);

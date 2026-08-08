@@ -224,7 +224,7 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
 
     //region Machines
 
-//    public static final RegistryEntry<Item> FLOW_HIVE = NEST_ITEMS.register("flow_hive", () -> new BlockItem(ModBlocks.FLOW_HIVE.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> FLOW_HIVE = registerBlockItem(NEST_ITEMS, "flow_hive", ModBlocks.FLOW_HIVE, Item.Properties::new);
 //    public static final RegistryEntry<Item> ENDER_BEECON_ITEM = ITEMS.register("ender_beecon", () -> new BlockItem(ModBlocks.ENDER_BEECON.get(), new Item.Properties()));
 //    public static final RegistryEntry<Item> HONEY_POT_ITEM = ITEMS.register("honey_pot", () -> new BlockItem(ModBlocks.HONEY_POT.get(), new Item.Properties()));
 //    public static final RegistryEntry<Item> SOLIDIFICATION_CHAMBER_ITEM = ITEMS.register("solidification_chamber", () -> new BlockItem(ModBlocks.SOLIDIFICATION_CHAMBER.get(), new Item.Properties()));
@@ -234,7 +234,7 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
     //endregion
 
     //todo needs texture
-    public static final RegistryEntry<Item> HONEY_BUCKET = registerItem(ITEMS, "honey_bucket", properties -> new BucketItem(ModFluids.HONEY_FLUID_TYPE.get().still().get(), properties), () -> new Item.Properties().stacksTo(1));
+    public static final RegistryEntry<Item> HONEY_BUCKET = registerItem(HONEY_BUCKET_ITEMS, "honey_bucket", properties -> new BucketItem(ModFluids.HONEY_FLUID_TYPE.get().still().get(), properties), () -> new Item.Properties().stacksTo(1));
 
     //region Special Items
     public static final FoodProperties OREO_FOOD_PROPERTIES = new FoodProperties(8, 2f, true);

@@ -48,7 +48,7 @@ public class ModCreativeTabs {
                 output.accept(ModItems.WAX_BLOCK_ITEM.get());
                 output.accept(ModItems.GOLD_FLOWER_ITEM.get());
 
-//                output.accept(ModItems.FLOW_HIVE.get());
+                output.accept(ModItems.FLOW_HIVE.get());
                 output.accept(ModItems.BREEDER_ITEM.get());
                 output.accept(ModItems.T1_APIARY_ITEM.get());
                 output.accept(ModItems.T2_APIARY_ITEM.get());
@@ -122,6 +122,9 @@ public class ModCreativeTabs {
                                             ))
                                             .map(ItemStack::new)
                             )
+                            //.addStack(() -> Items.HONEY_BOTTLE)
+                            //.addStack(() -> Items.HONEY_BLOCK)
+                            //.addStack(ModItems.HONEY_BUCKET::get)
                             .build()
             );
 

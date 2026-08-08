@@ -4,7 +4,7 @@
         "resourcefulbees:rgbee_bee"
     ],
     "fluid": {
-        "id": "resourcefulbees:rainbow_honey",
+        "id": "resourcefulbees:rainbow_honey_fluid_source",
         "amount": 250
     }
 }

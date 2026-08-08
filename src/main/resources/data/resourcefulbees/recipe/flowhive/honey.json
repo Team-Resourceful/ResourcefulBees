@@ -30,7 +30,7 @@
         "resourcefulbees:abbee_bee"
     ],
     "fluid": {
-        "id": "resourcefulbees:honey",
+        "id": "resourcefulbees:honey_fluid_source",
         "amount": 250
     }
 }
