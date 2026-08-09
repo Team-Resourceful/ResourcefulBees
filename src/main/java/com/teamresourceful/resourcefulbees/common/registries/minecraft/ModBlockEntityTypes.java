@@ -71,8 +71,8 @@ public final class ModBlockEntityTypes {
     //    public static final RegistryEntry<BlockEntityType<HoneyPotBlockEntity>> HONEY_POT_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_pot",
     //            () -> new BlockEntityType<>((HoneyPotBlockEntity::new), ModBlocks.HONEY_POT.get()));
     //
-    //    public static final RegistryEntry<BlockEntityType<SolidificationChamberBlockEntity>> SOLIDIFICATION_CHAMBER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("solidification_chamber",
-    //            () -> new BlockEntityType<>((SolidificationChamberBlockEntity::new), ModBlocks.SOLIDIFICATION_CHAMBER.get()));
+        public static final RegistryEntry<BlockEntityType<SolidificationChamberBlockEntity>> SOLIDIFICATION_CHAMBER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("solidification_chamber",
+                () -> new BlockEntityType<>((SolidificationChamberBlockEntity::new), ModBlocks.SOLIDIFICATION_CHAMBER.get()));
     //
         public static final RegistryEntry<BlockEntityType<CentrifugeBlockEntity>> BASIC_CENTRIFUGE_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge",
                 () -> new BlockEntityType<>(CentrifugeBlockEntity::new, ModBlocks.BASIC_CENTRIFUGE.get()));

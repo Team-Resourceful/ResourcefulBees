@@ -1,5 +1,8 @@
 {
   "type": "resourcefulbees:solidification",
-  "fluid": { "id":  "resourcefulbees:honey" },
+  "fluid": {
+    "ingredient":  "resourcefulbees:honey_fluid_source",
+    "amount": 1000
+  },
   "result": { "id": "minecraft:honey_block" }
 }

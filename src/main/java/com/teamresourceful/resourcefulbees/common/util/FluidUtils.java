@@ -49,9 +49,8 @@ public final class FluidUtils {
             int inserted = tank.insert(resource, BeeConstants.HONEY_PER_BOTTLE, transaction);
             if (inserted < BeeConstants.HONEY_PER_BOTTLE) return;
             transaction.commit();
+            bottleAction(new ItemStack(Items.GLASS_BOTTLE), SoundEvents.BOTTLE_EMPTY, player, hand);
         }
-
-        bottleAction(new ItemStack(Items.GLASS_BOTTLE), SoundEvents.BOTTLE_EMPTY, player, hand);
     }
 
     private static void bottleAction(ItemStack returnStack, SoundEvent soundEvent, Player player, InteractionHand hand) {

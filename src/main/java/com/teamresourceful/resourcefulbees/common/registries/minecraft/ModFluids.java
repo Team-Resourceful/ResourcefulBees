@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.fluids.HoneyFluidType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
@@ -29,4 +28,9 @@ public final class ModFluids {
 
     public static final RegistryEntry<Fluid> HONEY_STILL = STILL_HONEY_FLUIDS.register("honey_fluid_source", () ->  new ResourcefulFlowingFluid.Still(HONEY_FLUID_TYPE.get()));
     public static final RegistryEntry<Fluid> HONEY_FLOWING = FLOWING_HONEY_FLUIDS.register("honey_fluid_flowing", () ->  new ResourcefulFlowingFluid.Flowing(HONEY_FLUID_TYPE.get()));
+
+    static {
+        HONEY_FLUID_TYPE.get().setBucket(ModItems.HONEY_BUCKET);
+    }
+
 }

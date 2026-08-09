@@ -57,112 +57,6 @@ public final class ModItems {
         registerBlockItem(registry, id, block, Item.Properties::new);
     }
 
-
-//    //region Nests
-//    //region Acacia
-//    public static final RegistryEntry<Item> ACACIA_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/acacia/1", ModBlocks.ACACIA_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_ACACIA_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/acacia/2", ModBlocks.T1_ACACIA_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_ACACIA_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/acacia/3", ModBlocks.T2_ACACIA_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_ACACIA_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/acacia/4", ModBlocks.T3_ACACIA_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Birch
-//    public static final RegistryEntry<Item> BIRCH_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/birch/1", ModBlocks.BIRCH_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_BIRCH_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/birch/2", ModBlocks.T1_BIRCH_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_BIRCH_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/birch/3", ModBlocks.T2_BIRCH_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_BIRCH_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/birch/4", ModBlocks.T3_BIRCH_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Brown Mushroom
-//    public static final RegistryEntry<Item> BROWN_MUSHROOM_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/brown_mushroom/1", ModBlocks.BROWN_MUSHROOM_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_BROWN_MUSHROOM_NEST_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/brown_mushroom/2", ModBlocks.T1_BROWN_MUSHROOM_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_BROWN_MUSHROOM_NEST_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/brown_mushroom/3", ModBlocks.T2_BROWN_MUSHROOM_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_BROWN_MUSHROOM_NEST_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/brown_mushroom/4", ModBlocks.T3_BROWN_MUSHROOM_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Crimson
-//    public static final RegistryEntry<Item> CRIMSON_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/crimson/1", ModBlocks.CRIMSON_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_CRIMSON_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/crimson/2", ModBlocks.T1_CRIMSON_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_CRIMSON_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/crimson/3", ModBlocks.T2_CRIMSON_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_CRIMSON_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/crimson/4", ModBlocks.T3_CRIMSON_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Crimson Nylium
-//    public static final RegistryEntry<Item> CRIMSON_NYLIUM_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/crimson_nylium/1", ModBlocks.CRIMSON_NYLIUM_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_CRIMSON_NYLIUM_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/crimson_nylium/2", ModBlocks.T1_CRIMSON_NYLIUM_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_CRIMSON_NYLIUM_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/crimson_nylium/3", ModBlocks.T2_CRIMSON_NYLIUM_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_CRIMSON_NYLIUM_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/crimson_nylium/4", ModBlocks.T3_CRIMSON_NYLIUM_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Dark Oak
-//    public static final RegistryEntry<Item> DARK_OAK_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/dark_oak/1", ModBlocks.DARK_OAK_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_DARK_OAK_NEST_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/dark_oak/2", ModBlocks.T1_DARK_OAK_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_DARK_OAK_NEST_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/dark_oak/3", ModBlocks.T2_DARK_OAK_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_DARK_OAK_NEST_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/dark_oak/4", ModBlocks.T3_DARK_OAK_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Grass
-//    public static final RegistryEntry<Item> GRASS_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/grass/1", ModBlocks.GRASS_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_GRASS_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/grass/2", ModBlocks.T1_GRASS_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_GRASS_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/grass/3", ModBlocks.T2_GRASS_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_GRASS_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/grass/4", ModBlocks.T3_GRASS_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Jungle
-//    public static final RegistryEntry<Item> JUNGLE_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/jungle/1", ModBlocks.JUNGLE_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_JUNGLE_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/jungle/2", ModBlocks.T1_JUNGLE_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_JUNGLE_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/jungle/3", ModBlocks.T2_JUNGLE_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_JUNGLE_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/jungle/4", ModBlocks.T3_JUNGLE_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Nether
-//    public static final RegistryEntry<Item> NETHER_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/netherrack/1", ModBlocks.NETHER_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_NETHER_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/netherrack/2", ModBlocks.T1_NETHER_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_NETHER_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/netherrack/3", ModBlocks.T2_NETHER_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_NETHER_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/netherrack/4", ModBlocks.T3_NETHER_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Oak
-//    public static final RegistryEntry<Item> OAK_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/oak/1", ModBlocks.OAK_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_OAK_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/oak/2", ModBlocks.T1_OAK_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_OAK_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/oak/3", ModBlocks.T2_OAK_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_OAK_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/oak/4", ModBlocks.T3_OAK_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Prismarine
-//    public static final RegistryEntry<Item> PRISMARINE_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/prismarine/1", ModBlocks.PRISMARINE_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_PRISMARINE_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/prismarine/2", ModBlocks.T1_PRISMARINE_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_PRISMARINE_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/prismarine/3", ModBlocks.T2_PRISMARINE_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_PRISMARINE_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/prismarine/4", ModBlocks.T3_PRISMARINE_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Purpur
-//    public static final RegistryEntry<Item> PURPUR_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/chorus/1", ModBlocks.PURPUR_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_PURPUR_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/chorus/2", ModBlocks.T1_PURPUR_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_PURPUR_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/chorus/3", ModBlocks.T2_PURPUR_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_PURPUR_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/chorus/4", ModBlocks.T3_PURPUR_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Red Mushroom
-//    public static final RegistryEntry<Item> RED_MUSHROOM_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/red_mushroom/1", ModBlocks.RED_MUSHROOM_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_RED_MUSHROOM_NEST_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/red_mushroom/2", ModBlocks.T1_RED_MUSHROOM_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_RED_MUSHROOM_NEST_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/red_mushroom/3", ModBlocks.T2_RED_MUSHROOM_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_RED_MUSHROOM_NEST_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/red_mushroom/4", ModBlocks.T3_RED_MUSHROOM_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Spruce
-//    public static final RegistryEntry<Item> SPRUCE_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/spruce/1", ModBlocks.SPRUCE_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_SPRUCE_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/spruce/2", ModBlocks.T1_SPRUCE_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_SPRUCE_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/spruce/3", ModBlocks.T2_SPRUCE_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_SPRUCE_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/spruce/4", ModBlocks.T3_SPRUCE_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Warped
-//    public static final RegistryEntry<Item> WARPED_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/warped/1", ModBlocks.WARPED_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_WARPED_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/warped/2", ModBlocks.T1_WARPED_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_WARPED_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/warped/3", ModBlocks.T2_WARPED_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_WARPED_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/warped/4", ModBlocks.T3_WARPED_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Warped Nylium
-//    public static final RegistryEntry<Item> WARPED_NYLIUM_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/warped_nylium/1", ModBlocks.WARPED_NYLIUM_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_WARPED_NYLIUM_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/warped_nylium/2", ModBlocks.T1_WARPED_NYLIUM_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_WARPED_NYLIUM_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/warped_nylium/3", ModBlocks.T2_WARPED_NYLIUM_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_WARPED_NYLIUM_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/warped_nylium/4", ModBlocks.T3_WARPED_NYLIUM_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //region Wither
-//    public static final RegistryEntry<Item> WITHER_BEE_NEST_ITEM = registerBlockItem(T1_NEST_ITEMS, "nest/wither/1", ModBlocks.WITHER_BEE_NEST, Item.Properties::new);
-//    public static final RegistryEntry<Item> T1_WITHER_BEEHIVE_ITEM = registerBlockItem(T2_NEST_ITEMS, "nest/wither/2", ModBlocks.T1_WITHER_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T2_WITHER_BEEHIVE_ITEM = registerBlockItem(T3_NEST_ITEMS, "nest/wither/3", ModBlocks.T2_WITHER_BEEHIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> T3_WITHER_BEEHIVE_ITEM = registerBlockItem(T4_NEST_ITEMS, "nest/wither/4", ModBlocks.T3_WITHER_BEEHIVE, Item.Properties::new);
-//    //endregion
-//    //endregion
-
     public static final RegistryEntry<Item> T1_APIARY_ITEM = registerItem(T1_NEST_ITEMS, "t1_apiary", properties -> new ApiaryBlockItem((ApiaryBlock) ModBlocks.T1_APIARY_BLOCK.get(), properties), Item.Properties::new);
     public static final RegistryEntry<Item> T2_APIARY_ITEM = registerItem(T1_NEST_ITEMS,"t2_apiary", properties -> new ApiaryBlockItem((ApiaryBlock) ModBlocks.T2_APIARY_BLOCK.get(), properties), Item.Properties::new);
     public static final RegistryEntry<Item> T3_APIARY_ITEM = registerItem(T1_NEST_ITEMS,"t3_apiary", properties -> new ApiaryBlockItem((ApiaryBlock) ModBlocks.T3_APIARY_BLOCK.get(), properties), Item.Properties::new);
@@ -227,7 +121,7 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
     public static final RegistryEntry<Item> FLOW_HIVE = registerBlockItem(NEST_ITEMS, "flow_hive", ModBlocks.FLOW_HIVE, Item.Properties::new);
 //    public static final RegistryEntry<Item> ENDER_BEECON_ITEM = ITEMS.register("ender_beecon", () -> new BlockItem(ModBlocks.ENDER_BEECON.get(), new Item.Properties()));
 //    public static final RegistryEntry<Item> HONEY_POT_ITEM = ITEMS.register("honey_pot", () -> new BlockItem(ModBlocks.HONEY_POT.get(), new Item.Properties()));
-//    public static final RegistryEntry<Item> SOLIDIFICATION_CHAMBER_ITEM = ITEMS.register("solidification_chamber", () -> new BlockItem(ModBlocks.SOLIDIFICATION_CHAMBER.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> SOLIDIFICATION_CHAMBER_ITEM = registerBlockItem(ITEMS, "solidification_chamber", ModBlocks.SOLIDIFICATION_CHAMBER, Item.Properties::new);
     public static final RegistryEntry<Item> CENTRIFUGE_CRANK = registerItem(ITEMS, "centrifuge_crank", properties -> new CrankItem(ModBlocks.CENTRIFUGE_CRANK.get(), properties), Item.Properties::new);
     public static final RegistryEntry<Item> CENTRIFUGE = registerItem(ITEMS, "centrifuge", properties -> new CentrifugeItem(ModBlocks.BASIC_CENTRIFUGE.get(), properties), Item.Properties::new);
 //    public static final RegistryEntry<Item> HONEY_GENERATOR_ITEM = ITEMS.register("honey_generator", () -> new BlockItem(ModBlocks.HONEY_GENERATOR.get(), new Item.Properties()));

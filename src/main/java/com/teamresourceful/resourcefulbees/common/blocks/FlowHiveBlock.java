@@ -29,6 +29,8 @@ import org.jspecify.annotations.NonNull;
 
 public class FlowHiveBlock extends BeeHouseBlock implements BeeHolderBlock {
 
+    private static final MapCodec<FlowHiveBlock> CODEC = BlockBehaviour.simpleCodec(FlowHiveBlock::new);
+
     public FlowHiveBlock(BlockBehaviour.Properties properties) {
         super(properties);
     }
@@ -61,8 +63,8 @@ public class FlowHiveBlock extends BeeHouseBlock implements BeeHolderBlock {
     }
 
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return null;
+    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Nullable

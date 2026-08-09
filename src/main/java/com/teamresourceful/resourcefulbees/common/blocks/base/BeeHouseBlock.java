@@ -1,17 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.blocks.base;
 
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
-import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -32,7 +27,7 @@ import java.util.stream.Stream;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
-public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
+public abstract class BeeHouseBlock extends RenderingBaseEntityBlock implements MenuBlock{
 
     private static final VoxelShape FULL_Z_SHAPE = Stream.of(
             Block.box(1, 0, 1, 15, 13, 15),
@@ -55,19 +50,6 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
     protected BeeHouseBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(HORIZONTAL_FACING, Direction.NORTH));
-    }
-
-    @Override
-    protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull BlockHitResult hitResult) {
-        if (!player.isShiftKeyDown() && !level.isClientSide()) {
-            MenuProvider blockEntity = state.getMenuProvider(level,pos);
-            if (blockEntity instanceof ContentMenuProvider<?> contentMenu) {
-                contentMenu.openMenu((ServerPlayer) player);
-            } else if (blockEntity != null) {
-                player.openMenu(blockEntity);
-            }
-        }
-        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -109,5 +91,10 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock {
     @Override
     public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return state.hasProperty(HORIZONTAL_FACING) && state.getValue(HORIZONTAL_FACING).getAxis().equals(Direction.Axis.Z) ? FULL_Z_SHAPE : FULL_X_SHAPE;
+    }
+
+    @Override
+    public @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull BlockHitResult hitResult) {
+        return MenuBlock.super.useWithoutItem(state, level, pos, player, hitResult);
     }
 }

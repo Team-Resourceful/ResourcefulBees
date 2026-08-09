@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.SharedConstants;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
@@ -21,6 +22,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.transfer.fluid.BucketResourceHandler;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -131,5 +133,8 @@ public final class GameSetup {
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModBlockEntityTypes.T1_APIARY_ENTITY.get(), (apiaryBlock, side) -> apiaryBlock.resourceHandler());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), (blockEntity, side) -> blockEntity.fluidHandler());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), (blockEntity, side) -> blockEntity.fluidResourceHandler());
+        event.registerItem(Capabilities.Fluid.ITEM, (object, context) ->  new BucketResourceHandler(context), ModItems.HONEY_BUCKET.get());
     }
 }

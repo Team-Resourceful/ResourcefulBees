@@ -2,14 +2,11 @@ package com.teamresourceful.resourcefulbees.common.blocks;
 
 import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.CentrifugeBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.base.MenuBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
-import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -26,11 +23,13 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-public class CentrifugeBlock extends RenderingBaseEntityBlock {
+public class CentrifugeBlock extends RenderingBaseEntityBlock implements MenuBlock {
 
     public static final VoxelShape SHAPE = Shapes.join(
             Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
@@ -54,16 +53,15 @@ public class CentrifugeBlock extends RenderingBaseEntityBlock {
     }
 
     @Override
-    protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull BlockHitResult hitResult) {
-        if (!player.isShiftKeyDown() && !level.isClientSide()) {
-            MenuProvider blockEntity = state.getMenuProvider(level,pos);
-            if (blockEntity instanceof ContentMenuProvider<?> contentMenu) {
-                contentMenu.openMenu((ServerPlayer) player);
-            } else if (blockEntity != null) {
-                player.openMenu(blockEntity);
+    protected @NonNull InteractionResult useItemOn(@NonNull ItemStack itemStack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
+        try (Transaction transaction = Transaction.openRoot()) {
+            var moved = FluidUtil.interactWithFluidHandler(player, hand, level, pos, null, transaction);
+            if (moved) {
+                transaction.commit();
+                return InteractionResult.SUCCESS_SERVER;
             }
         }
-        return InteractionResult.SUCCESS;
+        return super.useItemOn(itemStack, state, level, pos, player, hand, hitResult);
     }
 
 //    @Override
@@ -93,5 +91,10 @@ public class CentrifugeBlock extends RenderingBaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new CentrifugeBlockEntity(pos, state);
+    }
+
+    @Override
+    public @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull BlockHitResult hitResult) {
+        return MenuBlock.super.useWithoutItem(state, level, pos, player, hitResult);
     }
 }

@@ -24,13 +24,6 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
     }
 
     @Override
-    protected void init() {
-        super.init();
-        clearWidgets();
-        //addRenderableWidget(new SelectableFluidWidget(tileEntity.getSelectableFluidContainer(), tileEntity.getBlkPos(), this.leftPos + 152, this.topPos + 11, 16, 64, CentrifugeTranslations.TANK));
-    }
-
-    @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         if (tileEntity != null) {
             int i = this.leftPos;

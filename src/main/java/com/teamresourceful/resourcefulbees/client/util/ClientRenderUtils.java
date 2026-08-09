@@ -1,11 +1,8 @@
 package com.teamresourceful.resourcefulbees.client.util;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefullib.common.caches.CacheableBiFunction;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.block.FluidModel;
@@ -13,7 +10,6 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
@@ -122,7 +118,7 @@ public final class ClientRenderUtils {
 
         if (amount <= 0 || capacity <= 0) return;
 
-        int fluidHeight = (int) Math.clamp(amount * height / capacity, 1L, height);
+        int fluidHeight = (int) Math.clamp(amount * height / capacity, 0L, height);
 
         Fluid fluid = resource.getFluid();
 
