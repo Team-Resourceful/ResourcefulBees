@@ -5,8 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
 import com.teamresourceful.resourcefulbees.common.lib.codecs.RestrictedItemPredicate;
-import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
-import com.teamresourceful.resourcefulbees.common.util.bytecodecs.StreamCodecExtras;
+import com.teamresourceful.resourcefulbees.common.lib.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 
 import net.minecraft.core.BlockPos;

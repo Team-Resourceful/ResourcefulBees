@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.menus.content;
 
-import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.WorldUtils;
 import com.teamresourceful.resourcefullib.common.menu.MenuContent;
 import com.teamresourceful.resourcefullib.common.menu.MenuContentSerializer;
 import net.minecraft.core.BlockPos;

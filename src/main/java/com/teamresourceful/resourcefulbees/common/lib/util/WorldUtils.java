@@ -23,7 +23,7 @@
  * Methods below are taken from Mekanism and modified to fit Resourceful Bees -> https://github.com/mekanism/Mekanism
  */
 
-package com.teamresourceful.resourcefulbees.common.util;
+package com.teamresourceful.resourcefulbees.common.lib.util;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;

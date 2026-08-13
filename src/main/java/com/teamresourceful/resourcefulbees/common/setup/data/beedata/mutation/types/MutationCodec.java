@@ -3,17 +3,15 @@ package com.teamresourceful.resourcefulbees.common.setup.data.beedata.mutation.t
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
-import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
+import com.teamresourceful.resourcefulbees.common.lib.util.GenericSerializer;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public final class MutationCodec {
 

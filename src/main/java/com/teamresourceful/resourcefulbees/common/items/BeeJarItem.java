@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefulbees.common.components.JarOccupant;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;

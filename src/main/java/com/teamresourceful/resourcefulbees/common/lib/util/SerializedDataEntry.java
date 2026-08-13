@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.util;
+package com.teamresourceful.resourcefulbees.common.lib.util;
 
 import net.minecraft.nbt.*;
 

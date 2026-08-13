@@ -16,7 +16,7 @@ public abstract class TickingBlock<E extends BlockEntity & InstanceBlockEntityTi
 
     private final Supplier<BlockEntityType<@NonNull E>> blockEntity;
 
-    public TickingBlock(Supplier<BlockEntityType<@NonNull E>> blockEntity, Properties properties) {
+    protected TickingBlock(Supplier<BlockEntityType<@NonNull E>> blockEntity, Properties properties) {
         super(properties);
         this.blockEntity = blockEntity;
     }

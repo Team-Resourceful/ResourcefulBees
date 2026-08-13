@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.lib.codecs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.util.CodecUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.CodecUtils;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;

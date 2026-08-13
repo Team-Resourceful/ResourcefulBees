@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.common.components.Bees;
 import com.teamresourceful.resourcefulbees.common.components.HiveOccupant;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
-import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentGetter;

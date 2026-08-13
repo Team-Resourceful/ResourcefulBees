@@ -1,4 +1,4 @@
-//package com.teamresourceful.resourcefulbees.common.util;
+//package com.teamresourceful.resourcefulbees.common.lib.util;
 //
 //import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
 //import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;

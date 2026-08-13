@@ -119,7 +119,7 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
     //region Machines
 
     public static final RegistryEntry<Item> FLOW_HIVE = registerBlockItem(NEST_ITEMS, "flow_hive", ModBlocks.FLOW_HIVE, Item.Properties::new);
-//    public static final RegistryEntry<Item> ENDER_BEECON_ITEM = ITEMS.register("ender_beecon", () -> new BlockItem(ModBlocks.ENDER_BEECON.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> ENDER_BEECON_ITEM = registerBlockItem(ITEMS, "ender_beecon", ModBlocks.ENDER_BEECON, Item.Properties::new);
 //    public static final RegistryEntry<Item> HONEY_POT_ITEM = ITEMS.register("honey_pot", () -> new BlockItem(ModBlocks.HONEY_POT.get(), new Item.Properties()));
     public static final RegistryEntry<Item> SOLIDIFICATION_CHAMBER_ITEM = registerBlockItem(ITEMS, "solidification_chamber", ModBlocks.SOLIDIFICATION_CHAMBER, Item.Properties::new);
     public static final RegistryEntry<Item> CENTRIFUGE_CRANK = registerItem(ITEMS, "centrifuge_crank", properties -> new CrankItem(ModBlocks.CENTRIFUGE_CRANK.get(), properties), Item.Properties::new);

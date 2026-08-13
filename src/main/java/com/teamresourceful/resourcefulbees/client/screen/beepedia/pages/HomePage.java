@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaData;
 import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
-import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import com.teamresourceful.resourcefullib.common.collections.CycleableList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

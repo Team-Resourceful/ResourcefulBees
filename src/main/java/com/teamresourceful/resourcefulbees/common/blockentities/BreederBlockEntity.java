@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.common.recipes.breeder.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.ParentInput;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
-import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

@@ -22,7 +22,7 @@ import com.teamresourceful.resourcefulbees.common.setup.data.BeeSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
-import com.teamresourceful.resourcefulbees.common.util.ModUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -71,9 +71,6 @@ public class ResourcefulBees {
         GameSetup.init();
 
         NeoForge.EVENT_BUS.addListener(ResourcefulBeesCommand::registerCommand);
-        //GameServerStartedEvent.EVENT.addListener(ResourcefulBees::onServerStarted);
-        //LoadingCompletedEvent.EVENT.addListener(ResourcefulBees::onLoadingCompleted);
-        //CommonSetupEvent.EVENT.addListener(ResourcefulBees::onCommonSetup);
 
 
 
@@ -100,21 +97,14 @@ public class ResourcefulBees {
         GameSetup.initArguments();
     }
 
-    // Add the example block item to the building blocks tab
-//    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-//        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-//            event.accept(EXAMPLE_BLOCK_ITEM);
-//        }
-//    }
-
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        if (event.getServer().isDedicatedServer()){
-            BeeRegistry.getRegistry().regenerateCustomBeeData(event.getServer().registryAccess());
-        }
-    }
+        //if (event.getServer().isDedicatedServer()){
 
+            BeeRegistry.getRegistry().regenerateCustomBeeData(event.getServer().registryAccess());
+        //}
+    }
 
     private void onLoadingCompleted(FMLLoadCompleteEvent event) {
         TraitAbilityRegistry.getRegistry().close();
@@ -125,7 +115,6 @@ public class ResourcefulBees {
         MissingRegistrySetup.checkMissingRegistries();
         if (ModUtils.isProduction()) {
             GeneralConfig.generateDefaults = false;
-            //CONFIGURATOR.saveConfig(GeneralConfig.class);
         }
     }
 
@@ -134,9 +123,4 @@ public class ResourcefulBees {
 //        RegistryHandler.registerDispenserBehaviors();
 //        GameSetup.initPotionRecipes();
 //        GameSetup.initArguments();
-
-
-
-        //RegisterIngredientsEvent.EVENT.fire(new RegisterIngredientsEvent(IngredientHelper::registerIngredient));
-    //}
 }

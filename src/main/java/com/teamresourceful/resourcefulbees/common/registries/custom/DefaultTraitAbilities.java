@@ -3,16 +3,13 @@ package com.teamresourceful.resourcefulbees.common.registries.custom;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
+import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
-import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +17,6 @@ import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
@@ -46,26 +42,16 @@ public final class DefaultTraitAbilities {
 
     private static void enderAbility(Bee input) {
         if (input instanceof ResourcefulBee bee && canTeleport(bee)) {
-            double x = bee.getX() + (bee.getRandom().nextDouble() - 0.5D) * 4.0D;
-            double y = bee.getY() + (bee.getRandom().nextInt(4) - 2);
-            double z = bee.getZ() + (bee.getRandom().nextDouble() - 0.5D) * 4.0D;
-            BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(x, y, z);
+            double x = bee.getX() + (bee.getRandom().nextDouble() - 0.5D) * 16.0D;
+            double y = bee.getY() + (bee.getRandom().nextInt(3) - 2);
+            double z = bee.getZ() + (bee.getRandom().nextDouble() - 0.5D) * 16.0D;
 
-            while (blockPos.getY() > 0 && !bee.level().getBlockState(blockPos).blocksMotion()) {
-                blockPos.move(Direction.DOWN);
-            }
-
-            BlockState blockstate = bee.level().getBlockState(blockPos);
-            boolean water = blockstate.getFluidState().is(FluidTags.WATER);
-            if (blockstate.blocksMotion() && !water) {
-                var result = ModUtils.enderEntityTeleport(bee, x, y, z);
-                if (result.keyBoolean()) return;
-                Vec3 target = result.value();
-                boolean teleported = bee.randomTeleport(target.x(), target.y(), target.z(), true);
-                if (teleported) {
-                    bee.level().playSound(null, target.x(), target.y(), target.z(), SoundEvents.ENDERMAN_TELEPORT, bee.getSoundSource(), 1.0F, 1.0F);
-                    bee.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
-                }
+            var result = ModUtils.enderEntityTeleport(bee, x, y, z);
+            if (result.keyBoolean()) return;
+            Vec3 target = result.value();
+            if (bee.randomTeleport(target.x(), target.y(), target.z(), true)) {
+                bee.level().playSound(null, target.x(), target.y(), target.z(), SoundEvents.ENDERMAN_TELEPORT, bee.getSoundSource(), 1.0F, 1.0F);
+                bee.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
             }
         }
     }

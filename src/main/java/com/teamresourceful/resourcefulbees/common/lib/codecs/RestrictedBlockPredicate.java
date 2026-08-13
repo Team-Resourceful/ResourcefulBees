@@ -2,8 +2,8 @@ package com.teamresourceful.resourcefulbees.common.lib.codecs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.teamresourceful.resourcefulbees.common.util.CodecUtils;
-import com.teamresourceful.resourcefulbees.common.util.bytecodecs.StreamCodecExtras;
+import com.teamresourceful.resourcefulbees.common.lib.util.CodecUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.bytecodecs.StreamCodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.properties.BlockStatePredicate;
 import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.core.BlockPos;

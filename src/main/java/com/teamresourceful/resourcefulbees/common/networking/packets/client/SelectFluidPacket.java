@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.networking.packets.client;
 
 import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.util.bytecodecs.ByteCodecExtras;
+import com.teamresourceful.resourcefulbees.common.lib.util.bytecodecs.ByteCodecExtras;
 import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
 
 import com.teamresourceful.resourcefullib.common.network.Packet;

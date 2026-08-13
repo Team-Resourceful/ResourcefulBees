@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.common.blockentities.SolidificationCh
 import com.teamresourceful.resourcefulbees.common.blocks.base.MenuBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.lib.util.FluidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -23,7 +25,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
-import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
@@ -88,12 +89,13 @@ public class SolidificationChamberBlock extends TickingBlock<SolidificationChamb
 
     @Override
     protected @NonNull InteractionResult useItemOn(@NonNull ItemStack itemStack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
-        try (Transaction transaction = Transaction.openRoot()) {
-            var moved = FluidUtil.interactWithFluidHandler(player, hand, level, pos, null, transaction);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof SolidificationChamberBlockEntity chamber) {
+            boolean moved = FluidUtil.interactWithFluidHandler(player, hand, pos, chamber.fluidHandler(), null);
             if (moved) {
-                transaction.commit();
                 return InteractionResult.SUCCESS_SERVER;
             }
+            return FluidUtils.fillOrEmptyBottle(chamber.fluidHandler(), player, hand);
         }
         return super.useItemOn(itemStack, state, level, pos, player, hand, hitResult);
     }

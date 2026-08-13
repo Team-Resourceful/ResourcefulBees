@@ -25,6 +25,7 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
 
     @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
         if (tileEntity != null) {
             int i = this.leftPos;
             int j = this.topPos;
@@ -33,6 +34,11 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
             //int height = (int) (tileEntity.fluidHandler().percentStored() * 62);
             ClientRenderUtils.drawTank(graphics, tileEntity.fluidHandler(), 0, i+67, j + 12, 14, 62);
         }
+    }
+
+    @Override
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractRenderState(graphics, mouseX, mouseY, a);
     }
 
     /*    @Override

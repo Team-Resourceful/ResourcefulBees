@@ -1,8 +1,6 @@
-package com.teamresourceful.resourcefulbees.common.util;
+package com.teamresourceful.resourcefulbees.common.lib.util;
 
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-
-import java.util.Random;
 
 public final class MathUtils {
 
@@ -16,6 +14,10 @@ public final class MathUtils {
     }
 
     public static boolean inRangeInclusive(int value, int min, int max) {
+        return value <= max && value >= min;
+    }
+
+    public static boolean inRangeInclusive(double value, double min, double max) {
         return value <= max && value >= min;
     }
 

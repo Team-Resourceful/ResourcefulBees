@@ -39,6 +39,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
     @Override
     public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
         if (apiaryBlockEntity != null) {
             int i = this.leftPos;
             int j = this.topPos;

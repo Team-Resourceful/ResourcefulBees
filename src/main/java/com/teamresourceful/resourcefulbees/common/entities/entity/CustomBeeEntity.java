@@ -16,8 +16,8 @@ import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
-import com.teamresourceful.resourcefulbees.common.util.ModUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -44,6 +44,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
@@ -109,6 +110,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     }
 
     @Override
+    @Deprecated
     public boolean canBeAffected(MobEffectInstance effectInstance) {
         BeeTraitData info = getTraitData();
         if (info.hasTraits() && info.hasPotionImmunities()) {
@@ -308,6 +310,35 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
 
     public boolean hasDisruptorInRange() {
         return disruptorInRange > 0;
+    }
+
+    @Override
+    public boolean randomTeleport(double x, double y, double z, boolean showParticles, ItemStack consumedStack) {
+        Level level = level();
+        BlockPos pos = BlockPos.containing(x, y, z);
+
+        if (!level.hasChunkAt(pos)) {
+            return false;
+        }
+
+        AABB targetBox = getBoundingBox().move(
+                x - getX(),
+                y - getY(),
+                z - getZ()
+        );
+
+        if (!level.noCollision(this, targetBox)) return false;
+        if (level.containsAnyLiquid(targetBox)) return false;
+
+        teleportTo(x, y, z);
+
+        if (showParticles) {
+            level.broadcastEntityEvent(this, (byte) 46);
+        }
+
+        getNavigation().stop();
+
+        return true;
     }
 
     @Override

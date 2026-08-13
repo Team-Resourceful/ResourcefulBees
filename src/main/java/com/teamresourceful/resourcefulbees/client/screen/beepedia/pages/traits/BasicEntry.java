@@ -4,7 +4,7 @@
 //import com.teamresourceful.resourcefulbees.api.data.trait.TraitAbility;
 //import com.teamresourceful.resourcefulbees.client.component.selection.BaseListEntry;
 //import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
-//import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+//import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 //import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 //import com.teamresourceful.resourcefullib.client.scissor.ScissorBoxStack;
 //import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;

@@ -2,7 +2,7 @@
 //
 //import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 //import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
-//import com.teamresourceful.resourcefulbees.common.util.BeepediaUtils;
+//import com.teamresourceful.resourcefulbees.common.lib.util.BeepediaUtils;
 //import net.minecraft.world.InteractionHand;
 //import net.minecraft.world.InteractionResult;
 //import net.minecraft.world.entity.LivingEntity;

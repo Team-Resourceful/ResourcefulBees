@@ -4,7 +4,7 @@
 //import com.teamresourceful.resourcefulbees.common.blockentities.HoneyGeneratorBlockEntity;
 //import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
 //import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
-//import com.teamresourceful.resourcefulbees.common.util.FluidUtils;
+//import com.teamresourceful.resourcefulbees.common.lib.util.FluidUtils;
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.core.Direction;
 //import net.minecraft.world.InteractionResult;

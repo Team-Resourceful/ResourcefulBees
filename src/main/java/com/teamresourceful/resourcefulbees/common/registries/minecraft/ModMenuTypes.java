@@ -23,8 +23,8 @@ public class ModMenuTypes {
     public static final RegistryEntry<MenuType<BreederMenu>> BREEDER = MENUS.register("breeder",
         () -> MenuContentHelper.create(BreederMenu::new, PositionContent.SERIALIZER));
 
-//    public static final RegistryEntry<MenuType<EnderBeeconMenu>> ENDER_BEECON = MENUS.register("ender_beecon", () -> MenuContentHelper
-//            .create(EnderBeeconMenu::new, PositionContent.SERIALIZER));
+    public static final RegistryEntry<MenuType<EnderBeeconMenu>> ENDER_BEECON = MENUS.register("ender_beecon",
+            () -> MenuContentHelper.create(EnderBeeconMenu::new, PositionContent.SERIALIZER));
 
 //    public static final RegistryEntry<MenuType<HoneyPotMenu>> HONEY_POT = MENUS.register("honey_pot", () -> MenuContentHelper
 //            .create(HoneyPotMenu::new, PositionContent.SERIALIZER));

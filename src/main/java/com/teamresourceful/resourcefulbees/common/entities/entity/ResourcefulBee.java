@@ -11,9 +11,9 @@ import com.teamresourceful.resourcefulbees.common.entities.goals.*;
 import com.teamresourceful.resourcefulbees.common.entities.pathfinding.BeePathNavigation;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
-import com.teamresourceful.resourcefulbees.common.util.ModUtils;
-import com.teamresourceful.resourcefulbees.common.util.SerializedDataEntry;
-import com.teamresourceful.resourcefulbees.common.util.WorldUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.SerializedDataEntry;
+import com.teamresourceful.resourcefulbees.common.lib.util.WorldUtils;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeGoToHiveGoalInvoker;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeInvoker;
@@ -22,6 +22,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
@@ -33,6 +34,7 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowParentGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.bee.Bee;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
@@ -103,7 +105,7 @@ public class ResourcefulBee extends CustomBeeEntity {
      * The only difference is they call theirs on finalize spawn because they choose a type on spawn, but we choose it before in construction and pass it in.
      * But the premise still apply that they wait because they need data that would not be available in the normal registerGoals method.
      * <br>
-     * See {@link net.minecraft.world.entity.animal.Fox#setTargetGoals()}
+     * See {@link net.minecraft.world.entity.animal.fox.Fox#setTargetGoals()}
      */
     @SuppressWarnings("JavadocReference")
     protected void registerConditionalGoals() {
@@ -241,8 +243,10 @@ public class ResourcefulBee extends CustomBeeEntity {
     @Override
     public boolean doHurtTarget(@NonNull ServerLevel serverLevel, @NotNull Entity entity) {
         float damage = (float) getAttributeValue(Attributes.ATTACK_DAMAGE);
-        if (entity.hurtServer(serverLevel, damageSources().sting(this), damage)) {
-            //this.doEnchantDamageEffects(this, entity); todo find replacement for this
+        DamageSource damageSource = damageSources().sting(this);
+
+        if (entity.hurtServer(serverLevel, damageSource, damage)) {
+            EnchantmentHelper.doPostAttackEffects(serverLevel, entity, damageSource);
             if (entity instanceof LivingEntity target) {
                 target.setStingerCount(target.getStingerCount() + 1);
                 applyTraitEffectsAndDamage(target, getDifficultyModifier());

@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ModTranslations;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.SelectFluidPacket;
-import com.teamresourceful.resourcefulbees.common.util.containers.SelectableFluidContainer;
+import com.teamresourceful.resourcefulbees.common.lib.util.containers.SelectableFluidContainer;
 import com.teamresourceful.resourcefullib.client.utils.ScreenUtils;
 import com.teamresourceful.resourcefullib.common.collections.SelectableList;
 import net.minecraft.client.gui.GuiGraphics;

@@ -2,6 +2,14 @@ package com.teamresourceful.resourcefulbees.api.registry;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
+import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
+import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneyBottleItem;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFluids;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import java.util.Map;
 import java.util.Set;
@@ -54,4 +62,69 @@ public interface HoneyRegistry {
      * @return Returns a set containing all registered honeys ids.
      */
     Set<String> getHoneyTypes();
+
+    /**
+     * Gets the fluid resource associated with a honey bottle.
+     *
+     * @param item Bottle item.
+     * @return Associated fluid resource, or {@link FluidResource#EMPTY} if none exists.
+     */
+    default FluidResource getResourceFromBottle(Item item) {
+        if (item == Items.HONEY_BOTTLE) {
+            return FluidResource.of(ModFluids.HONEY_STILL.get());
+        }
+
+        if (!(item instanceof CustomHoneyBottleItem bottle)) {
+            return FluidResource.EMPTY;
+        }
+
+        String id = bottle.getHoneyData().id();
+
+        if (id.isEmpty()) {
+            return FluidResource.EMPTY;
+        }
+
+        CustomHoneyData honey = getHoneyData(id);
+
+        if (honey == null) {
+            return FluidResource.EMPTY;
+        }
+
+        return FluidResource.of(
+                honey.getFluidData()
+                        .stillFluid()
+                        .get()
+        );
+    }
+
+    /**
+     * Gets the bottle associated with a honey fluid.
+     *
+     * @param fluidResource Honey fluid.
+     * @return Associated honey bottle, or {@link Items#AIR} if none exists.
+     */
+    default Item getBottleFromFluid(FluidResource fluidResource) {
+        Fluid fluid = fluidResource.getFluid();
+        if (fluid instanceof CustomHoneyFluid.Still honeyFluid) {
+            String id = honeyFluid.getHoneyFluidData().id();
+
+            if (id.isEmpty()) {
+                return Items.AIR;
+            }
+
+            CustomHoneyData honey = getHoneyData(id);
+
+            if (honey == null) {
+                return Items.AIR;
+            }
+
+            return honey.getBottleData()
+                    .bottle()
+                    .get();
+        }
+
+        return fluid.is(ModFluidTags.HONEY)
+                ? Items.HONEY_BOTTLE
+                : Items.AIR;
+    }
 }

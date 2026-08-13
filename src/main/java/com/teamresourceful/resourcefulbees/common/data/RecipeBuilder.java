@@ -12,7 +12,7 @@ import com.teamresourceful.resourcefulbees.common.recipes.breeder.ChildOutput;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.ParentInput;
 import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.util.IngredientUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.IngredientUtils;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;

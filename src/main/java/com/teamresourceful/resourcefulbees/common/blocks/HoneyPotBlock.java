@@ -5,7 +5,7 @@
 //import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 //import com.teamresourceful.resourcefulbees.common.lib.enums.HoneyPotState;
 //import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
-//import com.teamresourceful.resourcefulbees.common.util.FluidUtils;
+//import com.teamresourceful.resourcefulbees.common.lib.util.FluidUtils;
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.util.Util;
 //import net.minecraft.world.InteractionHand;

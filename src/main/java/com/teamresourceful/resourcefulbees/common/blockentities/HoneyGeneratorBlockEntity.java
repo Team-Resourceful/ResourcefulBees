@@ -15,7 +15,7 @@
 //import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 //import com.teamresourceful.resourcefulbees.common.recipes.HoneyGenRecipe;
 //import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
-//import com.teamresourceful.resourcefulbees.common.util.containers.AutomationSensitiveContainer;
+//import com.teamresourceful.resourcefulbees.common.lib.util.containers.AutomationSensitiveContainer;
 //import earth.terrarium.botarium.common.energy.base.BotariumEnergyBlock;
 //import earth.terrarium.botarium.common.energy.impl.ExtractOnlyEnergyContainer;
 //import earth.terrarium.botarium.common.energy.impl.WrappedBlockEnergyContainer;

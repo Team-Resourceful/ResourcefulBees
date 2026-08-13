@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -63,6 +64,16 @@ public final class ModBlocks {
             .replaceable()
             .sound(SoundType.EMPTY)
             .pushReaction(PushReaction.DESTROY);
+
+    public static final BlockBehaviour.Properties BEECON_PROPERTIES = BlockBehaviour.Properties.of()
+            .instrument(NoteBlockInstrument.HAT)
+            .mapColor(MapColor.COLOR_PURPLE)
+            .requiresCorrectToolForDrops()
+            .strength(5)
+            .sound(SoundType.LODESTONE)
+            .lightLevel(luminance -> 15)
+            .noOcclusion()
+            .dynamicShape();
 
     public static final BlockSetType WAX_BLOCK_SET = BlockSetType.register(new BlockSetType("resourcefulbees:waxed"));
     public static final WoodType WAXED_WOOD_TYPE = WoodType.register(new WoodType("resourcefulbees:waxed", WAX_BLOCK_SET));
@@ -160,7 +171,7 @@ public final class ModBlocks {
 //            return null;
 //        }
 //    });
-//    public static final RegistryEntry<Block> ENDER_BEECON = BLOCKS.register("ender_beecon", EnderBeeconBlock::new);
+    public static final RegistryEntry<Block> ENDER_BEECON = registerBlock(BLOCKS,"ender_beecon", EnderBeeconBlock::new, () -> BEECON_PROPERTIES);
 //    public static final RegistryEntry<Block> HONEY_POT = BLOCKS.register("honey_pot", () -> new HoneyPotBlock(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops()));
     public static final RegistryEntry<Block> SOLIDIFICATION_CHAMBER = registerBlock(BLOCKS, "solidification_chamber", SolidificationChamberBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops());
     public static final RegistryEntry<Block> BASIC_CENTRIFUGE = registerBlock(CENTRIFUGE_BLOCKS, "centrifuge", CentrifugeBlock::new, () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL).noOcclusion());

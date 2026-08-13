@@ -1,37 +1,31 @@
-/*
 package com.teamresourceful.resourcefulbees.client.component;
 
-import com.teamresourceful.resourcefullib.client.components.ImageButton;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
 
-public class BasicImageButton extends ImageButton {
+public class BasicImageButton extends AbstractWidget {
 
-    private final ResourceLocation texture;
+    private final Identifier texture;
     private final int u;
     private final int v;
     private boolean selected;
 
-    public BasicImageButton(int x, int y, int u, int v, boolean selected, ResourceLocation texture) {
-        super(x, y, 20, 20);
+    public BasicImageButton(int x, int y, int u, int v, boolean selected, Identifier texture) {
+        super(x, y, 20, 20, Component.empty());
         this.u = u;
         this.v = v;
         this.selected = selected;
         this.texture = texture;
     }
 
-    @Override
-    public ResourceLocation getTexture(int mouseX, int mouseY) {
-        return this.texture;
-    }
-
-    @Override
-    public int getU(int mouseX, int mouseY) {
-        return selected ? u + 20 : u;
-    }
-
-    @Override
-    public int getV(int mouseX, int mouseY) {
-        return isHovered ? v + 20 : v;
+    public boolean isSelected() {
+        return this.selected;
     }
 
     public void setSelected(boolean selected) {
@@ -39,8 +33,32 @@ public class BasicImageButton extends ImageButton {
     }
 
     @Override
-    public void onPress() {
+    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        int textureU = this.selected ? this.u + 20 : this.u;
+        int textureV = this.isHovered() ? this.v + 20 : this.v;
+
+        graphics.blit(
+                RenderPipelines.GUI_TEXTURED,
+                this.texture,
+                this.getX(),
+                this.getY(),
+                textureU,
+                textureV,
+                20,
+                20,
+                20,
+                20,
+                256,
+                256);
+    }
+
+    @Override
+    public void onClick(@NonNull MouseButtonEvent event, boolean doubleClick) {
         setSelected(!this.selected);
     }
+
+    @Override
+    protected void updateWidgetNarration(NarrationElementOutput output) {
+        // document why this method is empty
+    }
 }
-*/

@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.api.data.trait.Trait;
 import com.teamresourceful.resourcefulbees.api.data.trait.TraitDamageType;
 import com.teamresourceful.resourcefulbees.api.registry.TraitRegistry;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.core.particles.ParticleType;
@@ -48,7 +49,11 @@ public record TraitData(
 
         for (String id : traits) {
             Trait trait = TraitRegistry.get().getTrait(id);
-            if (trait == null) continue;
+            ModConstants.LOGGER.info(
+                    "Resolving trait '{}' -> '{}'",
+                    id,
+                    trait.name()
+            );
             potionDamageEffects.addAll(trait.potionDamageEffects());
             damageImmunities.addAll(trait.damageImmunities());
             potionImmunities.addAll(trait.potionImmunities());

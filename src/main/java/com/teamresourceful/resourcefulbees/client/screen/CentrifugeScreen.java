@@ -25,6 +25,7 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
 
     @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
         if (tileEntity != null) {
             int i = this.leftPos;
             int j = this.topPos;

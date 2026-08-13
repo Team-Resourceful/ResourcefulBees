@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.items;
 
-import com.teamresourceful.resourcefulbees.common.blockentities.SmokeableHive;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.SmokeableHive;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,7 +11,6 @@ import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;

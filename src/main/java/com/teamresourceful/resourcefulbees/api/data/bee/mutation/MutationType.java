@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.data.bee.mutation;
 
-import com.teamresourceful.resourcefulbees.common.util.GenericSerializer;
+import com.teamresourceful.resourcefulbees.common.lib.util.GenericSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.server.level.ServerLevel;

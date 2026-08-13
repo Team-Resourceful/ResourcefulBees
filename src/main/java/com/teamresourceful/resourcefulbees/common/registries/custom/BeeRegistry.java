@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.tools.MapStrategies;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
@@ -86,6 +87,13 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      * maps are constructed.
      */
     public void regenerateCustomBeeData(RegistryAccess access) {
+        ModConstants.LOGGER.info(
+                "Regenerating {} bees with {} traits registered: {}",
+                RAW_DATA.size(),
+                TraitRegistry.getRegistry().getTraits().size(),
+                TraitRegistry.getRegistry().getTraits().keySet()
+        );
+
         DynamicOps<JsonElement> ops = access == null ? JsonOps.INSTANCE : RegistryOps.create(JsonOps.INSTANCE, access);
         RAW_DATA.forEach((id, json) -> CUSTOM_DATA.compute(id, (_, _) -> parseData(id, ops, json)));
         buildFamilyTree();
@@ -163,7 +171,7 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      * @param beeData The raw BeeData of the bee being registered
      */
     public void cacheRawBeeData(Identifier beeType, JsonObject beeData) {
-        RAW_DATA.computeIfAbsent(beeType/*.toLowerCase(Locale.ENGLISH).replace(" ", "_")*/, s -> Objects.requireNonNull(beeData));
+        RAW_DATA.computeIfAbsent(beeType, s -> Objects.requireNonNull(beeData));
     }
 
     @Override

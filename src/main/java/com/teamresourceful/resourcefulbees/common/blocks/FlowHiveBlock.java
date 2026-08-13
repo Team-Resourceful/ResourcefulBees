@@ -6,7 +6,7 @@ import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBl
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.util.FluidUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.FluidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

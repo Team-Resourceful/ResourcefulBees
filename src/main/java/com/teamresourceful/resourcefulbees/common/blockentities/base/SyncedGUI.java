@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -20,8 +19,6 @@ public interface SyncedGUI extends MenuProvider {
     BlockPos getBlockPos();
 
     @Nullable Level getLevel();
-
-    ProblemReporter.PathElement problemPath();
 
     List<ServerPlayer> getListeners();
 

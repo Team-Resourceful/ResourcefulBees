@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
-import com.teamresourceful.resourcefulbees.common.util.bytecodecs.StreamCodecExtras;
+import com.teamresourceful.resourcefulbees.common.lib.util.bytecodecs.StreamCodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.network.RegistryFriendlyByteBuf;

@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.util;
+package com.teamresourceful.resourcefulbees.common.lib.util;
 
 import com.teamresourceful.resourcefullib.common.utils.GenericMemoryPack;
 import com.teamresourceful.resourcefullib.common.utils.neoforge.HiddenGenericMemoryPack;
@@ -26,7 +26,7 @@ public class ModUtils {
 
     public static BooleanObjectPair<Vec3> enderEntityTeleport(LivingEntity entity, double x, double y, double z) {
         EntityTeleportEvent.EnderEntity event = new EntityTeleportEvent.EnderEntity(entity, x, y, z);
-        return new BooleanObjectImmutablePair<>(NeoForge.EVENT_BUS.post(event).isCanceled(), new Vec3(event.getTargetX(), event.getTargetY(), event.getTargetZ()));
+        return new BooleanObjectImmutablePair<>(NeoForge.EVENT_BUS.post(event).isCanceled(), event.getTarget());
     }
 
     @Contract(value = "null -> false", pure = true)

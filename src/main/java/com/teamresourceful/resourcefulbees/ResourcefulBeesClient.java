@@ -4,12 +4,11 @@ import com.geckolib.renderer.GeoBlockRenderer;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.fluids.ModClientFluidProperties;
 import com.teamresourceful.resourcefulbees.client.model.property.FilledBeeJarProperty;
+import com.teamresourceful.resourcefulbees.client.rendering.blocks.EnderBeeconRenderer;
+import com.teamresourceful.resourcefulbees.client.rendering.blocks.SolidificationChamberRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.CentrifugeCrankRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
-import com.teamresourceful.resourcefulbees.client.screen.ApiaryScreen;
-import com.teamresourceful.resourcefulbees.client.screen.BreederScreen;
-import com.teamresourceful.resourcefulbees.client.screen.CentrifugeScreen;
-import com.teamresourceful.resourcefulbees.client.screen.SolidificationChamberScreen;
+import com.teamresourceful.resourcefulbees.client.screen.*;
 import com.teamresourceful.resourcefulbees.client.tints.*;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;
@@ -23,6 +22,7 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTy
 import com.teamresourceful.resourcefulbees.mixin.client.PackRepositoryAccessor;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackSelectionConfig;
@@ -40,6 +40,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterConditionalItemModelPropertyEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +73,8 @@ public class ResourcefulBeesClient {
 
         event.registerBlockEntityRenderer(ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), context -> new GeoBlockRenderer<>(context, ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get()));
         event.registerBlockEntityRenderer(ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get(), context -> new CentrifugeCrankRenderer<>(context, ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get()));
+        event.registerBlockEntityRenderer(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), EnderBeeconRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), SolidificationChamberRenderer::new);
     }
 
     @SubscribeEvent
@@ -80,6 +83,7 @@ public class ResourcefulBeesClient {
         event.register(ModMenuTypes.CENTRIFUGE.get(), CentrifugeScreen::new);
         event.register(ModMenuTypes.BREEDER.get(), BreederScreen::new);
         event.register(ModMenuTypes.SOLIDIFICATION_CHAMBER.get(), SolidificationChamberScreen::new);
+        event.register(ModMenuTypes.ENDER_BEECON.get(), EnderBeeconScreen::new);
     }
 
     @SubscribeEvent
@@ -139,5 +143,12 @@ public class ResourcefulBeesClient {
             }
             consumer.accept(pack);
         });
+    }
+
+    @SubscribeEvent
+    public static void onLevelLoad(LevelEvent.Load event) {
+        if (event.getLevel() instanceof ClientLevel level) {
+            com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry.getRegistry().regenerateCustomBeeData(level.registryAccess());
+        }
     }
 }

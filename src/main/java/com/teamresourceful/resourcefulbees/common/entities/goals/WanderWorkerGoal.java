@@ -1,7 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.entities.goals;
 
 import com.teamresourceful.resourcefulbees.common.entities.goals.base.WorkerGoal;
-import com.teamresourceful.resourcefulbees.common.util.RandomPositionGenerator;
+import com.teamresourceful.resourcefulbees.common.lib.util.RandomPositionGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.function.ToDoubleFunction;
 
-import static com.teamresourceful.resourcefulbees.common.util.MathUtils.HALF_PI;
+import static com.teamresourceful.resourcefulbees.common.lib.util.MathUtils.HALF_PI;
 
 public class WanderWorkerGoal extends WorkerGoal {
 

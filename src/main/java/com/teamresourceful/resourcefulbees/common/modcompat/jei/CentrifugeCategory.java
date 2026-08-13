@@ -7,7 +7,7 @@
 //import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.FluidOutput;
 //import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.ItemOutput;
 //import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-//import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+//import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 //import it.unimi.dsi.fastutil.Pair;
 //import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 //import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;

@@ -30,6 +30,7 @@ public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
 
     @Override
     public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
         graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.leftPos, this.topPos, 0, 0, 198, 188, 256, 256);
         int y = this.topPos + 21;
         for (int i = 0; i < BreederConstants.BREEDERS; i++) {

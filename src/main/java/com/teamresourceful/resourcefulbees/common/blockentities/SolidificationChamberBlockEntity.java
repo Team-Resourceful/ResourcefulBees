@@ -48,11 +48,9 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements Ins
     private final ItemHandler container = new ItemHandler();
 
     private final ResourcefulDataSlot processTime = new ResourcefulDataSlot();
-
-    private boolean dirty;
     private SolidificationRecipe cachedRecipe;
 
-    private FluidResource lastFluid;
+    private FluidResource lastFluid = FluidResource.EMPTY;
     public SolidificationChamberBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), pos, state);
     }
@@ -74,41 +72,92 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements Ins
     }
 
     public boolean canProcessHoney() {
-        if (level == null) return false;
-        FluidResource fluid = getFluid();
-        if (fluid.isEmpty()) {
-            cachedRecipe = null;
-            lastFluid = null;
+        if (level == null) {
             return false;
         }
-        final SolidificationRecipe recipe = fluid.equals(lastFluid) && cachedRecipe != null
-                ? cachedRecipe
-                : getRecipe(fluid);
-        if (recipe == null) return false;
 
-        boolean isTankReady = !fluid.isEmpty() && tank.getAmountAsInt(TANK_INPUT) >= recipe.fluid().amount();
+        FluidResource fluid = fluidResource();
 
-        ItemResource output = container.getResource(BLOCK_OUTPUT);
-        ItemStack stack = output.toStack(container.getAmountAsInt(BLOCK_OUTPUT));
-        boolean canOutput = output.isEmpty() || ItemStack.isSameItemSameComponents(stack, recipe.stack()) && stack.getCount() < output.getMaxStackSize();
+        if (fluid.isEmpty()) {
+            clearRecipeCache();
+            return false;
+        }
 
-        cachedRecipe = recipe;
-        lastFluid = fluid;
-        return isTankReady && canOutput;
+        SolidificationRecipe recipe = getCachedRecipe(fluid);
+
+        return recipe != null
+                && tank.getAmountAsInt(TANK_INPUT) >= recipe.fluid().amount()
+                && canAcceptOutput(recipe.stack().create());
     }
 
-    private SolidificationRecipe getRecipe(FluidResource resource) {
-        if (level == null) return null;
-        var recipe = SolidificationRecipe.findRecipe((RecipeManager) level.recipeAccess(), resource.toStack(tank.getAmountAsInt(TANK_INPUT)), level);
-        return recipe.map(RecipeHolder::value).orElse(null);
+    private boolean canAcceptOutput(ItemStack result) {
+        ItemResource resource = container.getResource(BLOCK_OUTPUT);
+
+        if (resource.isEmpty()) {
+            return result.getCount() <= result.getMaxStackSize();
+        }
+
+        ItemStack existing = resource.toStack(container.getAmountAsInt(BLOCK_OUTPUT));
+
+        return ItemStack.isSameItemSameComponents(existing, result)
+                && existing.getCount() + result.getCount() <= existing.getMaxStackSize();
     }
 
-    public void processResult() {
+    private void clearRecipeCache() {
+        cachedRecipe = null;
+        lastFluid = FluidResource.EMPTY;
+    }
+
+    private SolidificationRecipe getCachedRecipe(FluidResource resource) {
+        if (level == null) {
+            return null;
+        }
+
+        if (resource.equals(lastFluid)) {
+            return cachedRecipe;
+        }
+
+        lastFluid = resource;
+        cachedRecipe = SolidificationRecipe.findRecipe(
+                (RecipeManager) level.recipeAccess(),
+                resource.toStack(tank.getAmountAsInt(TANK_INPUT)),
+                level
+        ).map(RecipeHolder::value).orElse(null);
+
+        return cachedRecipe;
+    }
+
+    private boolean processResult() {
+        if (cachedRecipe == null || lastFluid.isEmpty()) {
+            return false;
+        }
+
         SizedFluidIngredient fluidIngredient = cachedRecipe.fluid();
-        try (Transaction transaction = Transaction.openRoot()){
-            tank.extract(lastFluid, fluidIngredient.amount(), transaction);
-            container.insertOutput(ItemResource.of(cachedRecipe.stack()), cachedRecipe.stack().count(), transaction);
+        ItemStack result = cachedRecipe.stack().create();
+
+        try (Transaction transaction = Transaction.openRoot()) {
+            int extracted = tank.extract(
+                    lastFluid,
+                    fluidIngredient.amount(),
+                    transaction
+            );
+
+            if (extracted != fluidIngredient.amount()) {
+                return false;
+            }
+
+            int inserted = container.insertOutput(
+                    ItemResource.of(result),
+                    result.getCount(),
+                    transaction
+            );
+
+            if (inserted != result.getCount()) {
+                return false;
+            }
+
             transaction.commit();
+            return true;
         }
     }
 
@@ -119,15 +168,13 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements Ins
 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state) {
-        if (this.canProcessHoney() && processTime.increment() >= cachedRecipe.time()) {
-            this.processResult();
-            this.processTime.set(0);
+        if (!canProcessHoney()) {
+            processTime.set(0);
+            return;
         }
 
-
-        if (this.dirty) {
-            this.dirty = false;
-            this.setChanged();
+        if (processTime.increment() >= cachedRecipe.time() && processResult()) {
+            processTime.set(0);
         }
     }
 
@@ -147,6 +194,7 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements Ins
         super.loadAdditional(input);
         input.readChild("tank", tank);
         input.readChild("inventory", container);
+        clearRecipeCache();
     }
 
     @Override
@@ -169,8 +217,12 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements Ins
         return this.tank;
     }
 
-    public FluidResource getFluid() {
+    public FluidResource fluidResource() {
         return this.tank.getResource(TANK_INPUT);
+    }
+
+    public FluidStack fluidStack() {
+        return fluidResource().toStack(tank.getAmountAsInt(TANK_INPUT));
     }
 
     public ItemHandler itemHandler() {
@@ -198,8 +250,8 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements Ins
             return 0;
         }
 
-        public void insertOutput(ItemResource resource, int amount, TransactionContext transaction) {
-            super.insert(resource, amount, transaction);
+        public int insertOutput(ItemResource resource, int amount, TransactionContext transaction) {
+            return super.insert(resource, amount, transaction);
         }
     }
 

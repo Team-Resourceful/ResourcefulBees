@@ -5,7 +5,7 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
-import com.teamresourceful.resourcefulbees.common.util.ModUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
 import com.teamresourceful.resourcefullib.common.utils.GenericMemoryPack;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.Component;

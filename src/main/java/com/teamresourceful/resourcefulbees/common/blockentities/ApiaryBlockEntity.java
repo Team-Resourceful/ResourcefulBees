@@ -79,13 +79,13 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
     //region NBT HANDLING
 
     @Override
-    protected void saveAdditional(ValueOutput output) {
+    protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
         this.resourceHandler.serialize(output);
     }
 
     @Override
-    protected void loadAdditional(ValueInput input) {
+    protected void loadAdditional(@NonNull ValueInput input) {
         super.loadAdditional(input);
         this.resourceHandler.deserialize(input);
     }

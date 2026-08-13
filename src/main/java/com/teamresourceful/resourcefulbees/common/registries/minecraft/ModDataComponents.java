@@ -63,4 +63,10 @@ public class ModDataComponents {
             .networkSynchronized(DipperEntity.STREAM_CODEC)
             .cacheEncoding()
             .build());
+
+    public static final RegistryEntry<DataComponentType<BeeconClient>> BEECON_CLIENT = COMPONENTS.register("beecon_client", () -> DataComponentType.<BeeconClient>builder()
+            .persistent(BeeconClient.CODEC)
+            .networkSynchronized(BeeconClient.STREAM_CODEC)
+            .cacheEncoding()
+            .build());
 }

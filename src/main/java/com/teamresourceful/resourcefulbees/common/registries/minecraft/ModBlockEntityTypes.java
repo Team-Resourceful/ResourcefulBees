@@ -3,20 +3,13 @@ package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 import com.teamresourceful.resourcefulbees.common.blockentities.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
-import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
-import com.teamresourceful.resourcefulbees.common.registries.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.HangingSignBlockEntity;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class ModBlockEntityTypes {
@@ -49,10 +42,10 @@ public final class ModBlockEntityTypes {
 
     public static final RegistryEntry<BlockEntityType<BeeBoxBlockEntity>> BEE_BOX_ENTITY = BLOCK_ENTITY_TYPES.register("bee_box",
             () -> new BlockEntityType<>((BeeBoxBlockEntity::new), ModBlocks.BEE_BOX.get(), ModBlocks.BEE_BOX_TEMP.get()));
-    public static final RegistryEntry<BlockEntityType<SignBlockEntity>> WAXED_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_sign",
-            () -> new BlockEntityType<>((SignBlockEntity::new), ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get()));
-    public static final RegistryEntry<BlockEntityType<HangingSignBlockEntity>> WAXED_HANGING_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_hanging_sign",
-            () -> new BlockEntityType<>((HangingSignBlockEntity::new), ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get()));
+    public static final RegistryEntry<BlockEntityType<WaxedSignBlockEntity>> WAXED_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_sign",
+            () -> new BlockEntityType<>((WaxedSignBlockEntity::new), ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get()));
+    public static final RegistryEntry<BlockEntityType<WaxedHangingSignBlockEntity>> WAXED_HANGING_SIGN_ENTITY = BLOCK_ENTITY_TYPES.register("waxed_hanging_sign",
+            () -> new BlockEntityType<>((WaxedHangingSignBlockEntity::new), ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get()));
     //    public static final RegistryEntry<BlockEntityType<AcceleratorBlockEntity>> ACCELERATOR_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("accelerator",
     //            () -> new BlockEntityType<>((AcceleratorBlockEntity::new), ModBlocks.ACCELERATOR.get()));
 
@@ -65,8 +58,8 @@ public final class ModBlockEntityTypes {
     //    public static final RegistryEntry<BlockEntityType<CreativeGenBlockEntity>> CREATIVE_GEN_ENTITY = BLOCK_ENTITY_TYPES.register("creative_gen",
     //            () -> new BlockEntityType<>((CreativeGenBlockEntity::new), ModBlocks.CREATIVE_GEN.get()));
     //
-    //    public static final RegistryEntry<BlockEntityType<EnderBeeconBlockEntity>> ENDER_BEECON_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("ender_beecon",
-    //            () -> new BlockEntityType<>((EnderBeeconBlockEntity::new), ModBlocks.ENDER_BEECON.get()));
+        public static final RegistryEntry<BlockEntityType<EnderBeeconBlockEntity>> ENDER_BEECON_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("ender_beecon",
+                () -> new BlockEntityType<>((EnderBeeconBlockEntity::new), ModBlocks.ENDER_BEECON.get()));
     //
     //    public static final RegistryEntry<BlockEntityType<HoneyPotBlockEntity>> HONEY_POT_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_pot",
     //            () -> new BlockEntityType<>((HoneyPotBlockEntity::new), ModBlocks.HONEY_POT.get()));

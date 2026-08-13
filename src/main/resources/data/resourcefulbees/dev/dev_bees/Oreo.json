@@ -30,7 +30,7 @@
     "removeStingerOnAttack": false,
     "inflictsPoison": false,
     "attributes": {
-      "attack_damage": 0,
+      "attack_damage": 1,
       "max_health": 2,
       "armor": 5,
       "armor_toughness": 10,

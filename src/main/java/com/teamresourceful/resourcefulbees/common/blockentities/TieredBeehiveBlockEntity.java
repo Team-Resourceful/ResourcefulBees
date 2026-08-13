@@ -3,19 +3,18 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 
 
 import com.google.common.collect.Lists;
-import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.SmokeableHive;
 import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
-import com.teamresourceful.resourcefulbees.common.util.EntityUtils;
-import com.teamresourceful.resourcefulbees.common.util.MathUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import com.teamresourceful.resourcefulbees.mixin.common.BeehiveBeeDataAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
-import com.teamresourceful.resourcefullib.common.caches.CacheableFunction;
-import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -32,7 +31,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -43,7 +41,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -53,17 +51,6 @@ import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConsta
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.SMOKE_TIME;
 
 public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements SmokeableHive {
-
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final CacheableFunction<Block, BlockEntityType<?>> HIVE_TO_ENTITY = new CacheableFunction<>(block ->
-        ModBlockEntityTypes.BLOCK_ENTITY_TYPES
-            .getEntries()
-            .stream()
-            .map(RegistryEntry::get)
-            .filter(type -> type.isValid(block.defaultBlockState()))
-            .findFirst()
-            .orElse(null)
-    );
 
     private Queue<ItemStack> honeycombs = new LinkedList<>();
     protected boolean isSmoked = false;
@@ -153,9 +140,6 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
                         recalculateHoneyLevel(hive);
                     }
 
-                    //if (entity instanceof Animal animal) {
-                   //     EntityUtils.ageBee(((BeehiveBeeDataAccessor) beeData).getTicksInHive(), animal);
-                    //}
                     if (entities != null) entities.add(entity);
                 }
                 hive.level.playSound(null, hive.worldPosition, SoundEvents.BEEHIVE_EXIT, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -172,8 +156,6 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             bee.stopRiding();
             bee.ejectPassengers();
             bee.dropLeash();
-            //CompoundTag nbt = new CompoundTag();
-            //bee.save(nbt);
 
             if (this.level != null) {
                 getBees().add(new BeeData(occupantOf(bee, compat, this)));
@@ -188,7 +170,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
 
     private static BeehiveBlockEntity.Occupant occupantOf(Entity entity, BeeCompat compat, TieredBeehiveBlockEntity hive) {
         BeehiveBlockEntity.Occupant occupant;
-        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), LOGGER)) {
+        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), ModConstants.LOGGER)) {
             TagValueOutput output = TagValueOutput.createWithContext(reporter, entity.registryAccess());
             entity.save(output);
             BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(output::discard);
@@ -234,8 +216,6 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             var vec = Vec3.atBottomCenterOf(pos);
             level.playSound(null, vec.x(), vec.y(), vec.z(), SoundEvents.BEEHIVE_WORK, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
-
-        //DebugPackets.sendHiveInfo(level, pos, state, hive);
     }
 
     private static void tickOccupants(TieredBeehiveBlockEntity hive, BlockState state, List<BeeData> bees) {
@@ -292,7 +272,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
 
 
     @Override
-    protected void loadAdditional(ValueInput input) {
+    protected void loadAdditional(@NonNull ValueInput input) {
         super.loadAdditional(input);
         isSmoked = input.getBooleanOr(NBTConstants.BeeHive.SMOKED, false);
         honeycombs = input.listOrEmpty(NBTConstants.BeeHive.HONEYCOMBS, ItemStack.CODEC)
@@ -300,7 +280,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
     }
 
     @Override
-    protected void saveAdditional(ValueOutput output) {
+    protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
         output.putBoolean(NBTConstants.BeeHive.SMOKED, isSmoked);
         ValueOutput.TypedOutputList<ItemStack> outputList = output.list(NBTConstants.BeeHive.HONEYCOMBS, ItemStack.CODEC);

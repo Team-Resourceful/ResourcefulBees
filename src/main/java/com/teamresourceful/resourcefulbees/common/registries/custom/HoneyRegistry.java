@@ -29,7 +29,7 @@ public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.
 
     @Override
     public boolean containsHoney(String honey) {
-        return INSTANCE.honeyInfo.containsKey(honey);
+        return honeyInfo.containsKey(honey);
     }
 
     @Override
@@ -38,7 +38,7 @@ public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.
     }
 
     public void cacheRawHoneyData(String name, JsonObject jsonObject) {
-        rawHoneyData.computeIfAbsent(name, s -> jsonObject);
+        rawHoneyData.putIfAbsent(name, jsonObject);
     }
 
     @Override
@@ -53,29 +53,32 @@ public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.
 
     @Override
     public Stream<CustomHoneyData> getStreamOfHoney() {
-        return getSetOfHoney().stream();
+        return honeyInfo.values().stream();
     }
 
     @Override
     public Set<String> getHoneyTypes() {
-        return Set.copyOf(honeyInfo.keySet());
+        return Collections.unmodifiableSet(honeyInfo.keySet());
     }
 
     /**
      * Registers the supplied Honey Type and associated data to the mod.
-     * If the bee already exists in the registry the method will return false.
+     * If the honey already exists in the registry the method will return false.
      *
      * @param honeyType Honey Type of the honey being registered.
      * @param honeyData HoneyData of the honey being registered
-     * @return Returns false if bee already exists in the registry.
+     * @return Returns false if honey already exists in the registry.
      */
     public boolean register(String honeyType, CustomHoneyData honeyData) {
-        if (honeyInfo.containsKey(honeyType)) return false;
-        honeyInfo.putIfAbsent(honeyType, honeyData);
-        return true;
+        return honeyInfo.putIfAbsent(honeyType, honeyData) == null;
     }
 
+    /**
+     * Returns a Map containing the raw json data.
+     *
+     * @return Returns a Map containing the raw json data.
+     */
     public Map<String, JsonObject> getRawHoney() {
-        return rawHoneyData;
+        return Collections.unmodifiableMap(rawHoneyData);
     }
 }

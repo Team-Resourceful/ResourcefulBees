@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.entities.pathfinding;
 
-import com.teamresourceful.resourcefulbees.common.util.LevelUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;

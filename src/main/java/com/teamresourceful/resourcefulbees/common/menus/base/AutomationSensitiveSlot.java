@@ -1,6 +1,6 @@
 //package com.teamresourceful.resourcefulbees.common.menus.base;
 //
-//import com.teamresourceful.resourcefulbees.common.util.containers.AutomationSensitiveContainer;
+//import com.teamresourceful.resourcefulbees.common.lib.util.containers.AutomationSensitiveContainer;
 //import net.minecraft.world.entity.player.Player;
 //import net.minecraft.world.inventory.Slot;
 //import net.minecraft.world.item.ItemStack;

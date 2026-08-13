@@ -9,7 +9,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeehiveTranslations;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
-import com.teamresourceful.resourcefulbees.common.util.ModUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

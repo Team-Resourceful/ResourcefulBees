@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.util.bytecodecs;
+package com.teamresourceful.resourcefulbees.common.lib.util.bytecodecs;
 
 import com.teamresourceful.resourcefullib.common.codecs.predicates.NbtPredicate;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedBlockPredicate;

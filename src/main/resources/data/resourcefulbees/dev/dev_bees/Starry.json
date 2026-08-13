@@ -28,7 +28,7 @@
       }
     ],
     "sizeModifier": 1.25,
-    "model": "resourcefulbees:geo/queen.geo.json"
+    "model": "resourcefulbees:queen"
   },
   "resourcefulbees:trait/v1": {
     "traits": [ "starry" ]
