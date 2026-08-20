@@ -51,10 +51,10 @@ public class ModCreativeTabs {
                 output.accept(ModItems.T3_APIARY_ITEM.get());
                 output.accept(ModItems.T4_APIARY_ITEM.get());
 
-//                output.accept(ModItems.HONEY_GENERATOR_ITEM.get());
-//                output.accept(ModItems.ENDER_BEECON_ITEM.get());
-//                output.accept(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get());
-//                output.accept(ModItems.HONEY_POT_ITEM.get());
+                output.accept(ModItems.HONEY_GENERATOR_ITEM.get());
+                output.accept(ModItems.ENDER_BEECON_ITEM.get());
+                output.accept(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get());
+                output.accept(ModItems.HONEY_POT_ITEM.get());
                 output.accept(ModItems.CENTRIFUGE_CRANK.get());
                 output.accept(ModItems.CENTRIFUGE.get());
                 output.accept(ModItems.WAXED_MACHINE_BLOCK.get());

@@ -45,7 +45,7 @@ public final class ModItems {
     public static final ResourcefulItemRegistry HONEY_BLOCK_ITEMS = ResourcefulRegistries.createForItems(ITEMS);
     public static final ResourcefulItemRegistry HONEY_BUCKET_ITEMS = ResourcefulRegistries.createForItems(ITEMS);
 
-    private static RegistryEntry<Item> registerBlockItem(ResourcefulItemRegistry registry, String id, RegistryEntry<Block> block, Supplier<Item.Properties> getter) {
+    private static RegistryEntry<Item> registerBasicBlockItem(ResourcefulItemRegistry registry, String id, RegistryEntry<Block> block, Supplier<Item.Properties> getter) {
         return registerItem(registry, id, properties -> new BlockItem(block.get(), properties), getter);
     }
 
@@ -54,7 +54,7 @@ public final class ModItems {
     }
 
     public static void registerHiveItem(ResourcefulItemRegistry registry, String id, RegistryEntry<Block> block) {
-        registerBlockItem(registry, id, block, Item.Properties::new);
+        registerBasicBlockItem(registry, id, block, Item.Properties::new);
     }
 
     public static final RegistryEntry<Item> T1_APIARY_ITEM = registerItem(T1_NEST_ITEMS, "t1_apiary", properties -> new ApiaryBlockItem((ApiaryBlock) ModBlocks.T1_APIARY_BLOCK.get(), properties), Item.Properties::new);
@@ -64,7 +64,7 @@ public final class ModItems {
 
 
     public static final RegistryEntry<Item> WAX = registerItem(ITEMS, "wax", WaxItem::new, Item.Properties::new);
-public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS, "wax_block", ModBlocks.WAX_BLOCK, Item.Properties::new);
+public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBasicBlockItem(ITEMS, "wax_block", ModBlocks.WAX_BLOCK, Item.Properties::new);
 
     public static final RegistryEntry<Item> SCRAPER = registerItem(ITEMS,"scraper", ScraperItem::new, () -> new Item.Properties().stacksTo(1));
 
@@ -83,9 +83,9 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
     //public static final RegistryEntry<Item> MUTATED_POLLEN = registerItem(ITEMS, "mutated_pollen", () -> new MutatedPollenItem(new Item.Properties()));
 //    public static final RegistryEntry<Item> FAKE_FLOWER = registerItem(ITEMS, "fake_flower", () -> new BlockItem(ModBlocks.FAKE_FLOWER.get(), new Item.Properties()));
 
-    public static final RegistryEntry<Item> GOLD_FLOWER_ITEM = registerBlockItem(ITEMS, "gold_flower", ModBlocks.GOLD_FLOWER, Item.Properties::new);
+    public static final RegistryEntry<Item> GOLD_FLOWER_ITEM = registerBasicBlockItem(ITEMS, "gold_flower", ModBlocks.GOLD_FLOWER, Item.Properties::new);
 
-    public static final RegistryEntry<Item> BREEDER_ITEM = registerBlockItem(ITEMS, "breeder", ModBlocks.BREEDER_BLOCK, Item.Properties::new);
+    public static final RegistryEntry<Item> BREEDER_ITEM = registerBasicBlockItem(ITEMS, "breeder", ModBlocks.BREEDER_BLOCK, Item.Properties::new);
 
     public static final RegistryEntry<Item> T2_NEST_UPGRADE = registerItem(ITEMS, "t2_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T1_TO_T2)));
     public static final RegistryEntry<Item> T3_NEST_UPGRADE = registerItem(ITEMS, "t3_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T2_TO_T3)));
@@ -95,21 +95,21 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
     //public static final RegistryEntry<Item> BEE_LOCATOR = registerItem(ITEMS, "bee_locator", () -> new BeeLocatorItem(new Item.Properties().stacksTo(1)));
 
     //region Waxed Blocks
-    public static final RegistryEntry<Item> HONEY_GLASS = registerBlockItem(ITEMS, "honey_glass", ModBlocks.HONEY_GLASS, Item.Properties::new);
-    public static final RegistryEntry<Item> HONEY_GLASS_PLAYER = registerBlockItem(ITEMS, "honey_glass_player", ModBlocks.HONEY_GLASS_PLAYER, Item.Properties::new);
-    public static final RegistryEntry<Item> WAXED_PLANKS = registerBlockItem(ITEMS, "waxed_planks", ModBlocks.WAXED_PLANKS, Item.Properties::new);
-    public static final RegistryEntry<Item> WAXED_STAIRS = registerBlockItem(ITEMS, "waxed_stairs", ModBlocks.WAXED_STAIRS, Item.Properties::new);
-    public static final RegistryEntry<Item> WAXED_SLAB = registerBlockItem(ITEMS, "waxed_slab", ModBlocks.WAXED_SLAB, Item.Properties::new);
-    public static final RegistryEntry<Item> WAXED_FENCE = registerBlockItem(ITEMS, "waxed_fence", ModBlocks.WAXED_FENCE, Item.Properties::new);
-    public static final RegistryEntry<Item> WAXED_FENCE_GATE = registerBlockItem(ITEMS, "waxed_fence_gate", ModBlocks.WAXED_FENCE_GATE, Item.Properties::new);
-    public static final RegistryEntry<Item> WAXED_BUTTON = registerBlockItem(ITEMS, "waxed_button", ModBlocks.WAXED_BUTTON, Item.Properties::new);
-    public static final RegistryEntry<Item> WAXED_PRESSURE_PLATE = registerBlockItem(ITEMS, "waxed_pressure_plate", ModBlocks.WAXED_PRESSURE_PLATE, Item.Properties::new);
-    public static final RegistryEntry<Item> WAXED_DOOR = registerBlockItem(ITEMS, "waxed_door", ModBlocks.WAXED_DOOR, Item.Properties::new);
-    public static final RegistryEntry<Item> WAXED_TRAPDOOR = registerBlockItem(ITEMS, "waxed_trapdoor", ModBlocks.WAXED_TRAPDOOR, Item.Properties::new);
+    public static final RegistryEntry<Item> HONEY_GLASS = registerBasicBlockItem(ITEMS, "honey_glass", ModBlocks.HONEY_GLASS, Item.Properties::new);
+    public static final RegistryEntry<Item> HONEY_GLASS_PLAYER = registerBasicBlockItem(ITEMS, "honey_glass_player", ModBlocks.HONEY_GLASS_PLAYER, Item.Properties::new);
+    public static final RegistryEntry<Item> WAXED_PLANKS = registerBasicBlockItem(ITEMS, "waxed_planks", ModBlocks.WAXED_PLANKS, Item.Properties::new);
+    public static final RegistryEntry<Item> WAXED_STAIRS = registerBasicBlockItem(ITEMS, "waxed_stairs", ModBlocks.WAXED_STAIRS, Item.Properties::new);
+    public static final RegistryEntry<Item> WAXED_SLAB = registerBasicBlockItem(ITEMS, "waxed_slab", ModBlocks.WAXED_SLAB, Item.Properties::new);
+    public static final RegistryEntry<Item> WAXED_FENCE = registerBasicBlockItem(ITEMS, "waxed_fence", ModBlocks.WAXED_FENCE, Item.Properties::new);
+    public static final RegistryEntry<Item> WAXED_FENCE_GATE = registerBasicBlockItem(ITEMS, "waxed_fence_gate", ModBlocks.WAXED_FENCE_GATE, Item.Properties::new);
+    public static final RegistryEntry<Item> WAXED_BUTTON = registerBasicBlockItem(ITEMS, "waxed_button", ModBlocks.WAXED_BUTTON, Item.Properties::new);
+    public static final RegistryEntry<Item> WAXED_PRESSURE_PLATE = registerBasicBlockItem(ITEMS, "waxed_pressure_plate", ModBlocks.WAXED_PRESSURE_PLATE, Item.Properties::new);
+    public static final RegistryEntry<Item> WAXED_DOOR = registerBasicBlockItem(ITEMS, "waxed_door", ModBlocks.WAXED_DOOR, Item.Properties::new);
+    public static final RegistryEntry<Item> WAXED_TRAPDOOR = registerBasicBlockItem(ITEMS, "waxed_trapdoor", ModBlocks.WAXED_TRAPDOOR, Item.Properties::new);
     public static final RegistryEntry<Item> WAXED_SIGN = registerItem(ITEMS, "waxed_sign", properties -> new SignItem(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get(), properties), Item.Properties::new);
     public static final RegistryEntry<Item> WAXED_HANGING_SIGN = registerItem(ITEMS, "waxed_hanging_sign", properties -> new HangingSignItem(ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get(), properties), Item.Properties::new);
-    public static final RegistryEntry<Item> TRIMMED_WAXED_PLANKS = registerBlockItem(ITEMS, "trimmed_waxed_planks", ModBlocks.TRIMMED_WAXED_PLANKS, Item.Properties::new);
-    public static final RegistryEntry<Item> WAXED_MACHINE_BLOCK = registerBlockItem(ITEMS, "waxed_machine_block", ModBlocks.WAXED_MACHINE_BLOCK, Item.Properties::new);
+    public static final RegistryEntry<Item> TRIMMED_WAXED_PLANKS = registerBasicBlockItem(ITEMS, "trimmed_waxed_planks", ModBlocks.TRIMMED_WAXED_PLANKS, Item.Properties::new);
+    public static final RegistryEntry<Item> WAXED_MACHINE_BLOCK = registerBasicBlockItem(ITEMS, "waxed_machine_block", ModBlocks.WAXED_MACHINE_BLOCK, Item.Properties::new);
     public static final RegistryEntry<Item> HONEY_CAP_UPGRADE = ModItems.registerItem(ITEMS, "honey_cap_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.HONEY_CAPACITY)));
     public static final RegistryEntry<Item> ENERGY_CAP_UPGRADE = ModItems.registerItem(ITEMS, "energy_cap_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.ENERGY_CAPACITY)));
     public static final RegistryEntry<Item> ENERGY_XFER_UPGRADE = ModItems.registerItem(ITEMS, "energy_xfer_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.ENERGY_TRANSFER)));
@@ -118,13 +118,13 @@ public static final RegistryEntry<Item> WAX_BLOCK_ITEM = registerBlockItem(ITEMS
 
     //region Machines
 
-    public static final RegistryEntry<Item> FLOW_HIVE = registerBlockItem(NEST_ITEMS, "flow_hive", ModBlocks.FLOW_HIVE, Item.Properties::new);
-    public static final RegistryEntry<Item> ENDER_BEECON_ITEM = registerBlockItem(ITEMS, "ender_beecon", ModBlocks.ENDER_BEECON, Item.Properties::new);
-//    public static final RegistryEntry<Item> HONEY_POT_ITEM = ITEMS.register("honey_pot", () -> new BlockItem(ModBlocks.HONEY_POT.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> SOLIDIFICATION_CHAMBER_ITEM = registerBlockItem(ITEMS, "solidification_chamber", ModBlocks.SOLIDIFICATION_CHAMBER, Item.Properties::new);
+    public static final RegistryEntry<Item> FLOW_HIVE = registerBasicBlockItem(NEST_ITEMS, "flow_hive", ModBlocks.FLOW_HIVE, Item.Properties::new);
+    public static final RegistryEntry<Item> ENDER_BEECON_ITEM = registerBasicBlockItem(ITEMS, "ender_beecon", ModBlocks.ENDER_BEECON, Item.Properties::new);
+    public static final RegistryEntry<Item> HONEY_POT_ITEM = registerBasicBlockItem(ITEMS, "honey_pot", ModBlocks.HONEY_POT, Item.Properties::new);
+    public static final RegistryEntry<Item> SOLIDIFICATION_CHAMBER_ITEM = registerBasicBlockItem(ITEMS, "solidification_chamber", ModBlocks.SOLIDIFICATION_CHAMBER, Item.Properties::new);
     public static final RegistryEntry<Item> CENTRIFUGE_CRANK = registerItem(ITEMS, "centrifuge_crank", properties -> new CrankItem(ModBlocks.CENTRIFUGE_CRANK.get(), properties), Item.Properties::new);
     public static final RegistryEntry<Item> CENTRIFUGE = registerItem(ITEMS, "centrifuge", properties -> new CentrifugeItem(ModBlocks.BASIC_CENTRIFUGE.get(), properties), Item.Properties::new);
-//    public static final RegistryEntry<Item> HONEY_GENERATOR_ITEM = ITEMS.register("honey_generator", () -> new BlockItem(ModBlocks.HONEY_GENERATOR.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> HONEY_GENERATOR_ITEM = registerBasicBlockItem(ITEMS, "honey_generator", ModBlocks.HONEY_GENERATOR, Item.Properties::new);
     //endregion
 
     //todo needs texture

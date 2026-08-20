@@ -1,6 +1,6 @@
 {
     "type": "resourcefulbees:honey_gen",
-    "honey": {"id": "resourcefulbees:catnip_honey"},
+    "honey": "resourcefulbees:catnip_honey_fluid_source",
     "energyFillRate": 100,
     "honeyDrainRate": 1
 }

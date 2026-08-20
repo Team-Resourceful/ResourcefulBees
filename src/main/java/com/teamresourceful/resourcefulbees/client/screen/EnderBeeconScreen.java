@@ -46,7 +46,6 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
             @Override
             public void setSelected(boolean selected) {
                 super.setSelected(selected);
-                System.out.println("UI selected = " + selected);
                 NetworkHandler.NETWORK.sendToServer(new BeeconSettingPacket(BeeconPacketOption.SOUND, selected ? 0 : 1, menu.getEntity().getBlockPos()));
             }
         });

@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.util;
 
+import com.teamresourceful.resourcefulbees.common.components.TankData;
 import com.teamresourceful.resourcefullib.common.caches.CacheableBiFunction;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.client.Minecraft;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import org.joml.Quaternionf;
@@ -119,9 +121,27 @@ public final class ClientRenderUtils {
         if (amount <= 0 || capacity <= 0) return;
 
         int fluidHeight = (int) Math.clamp(amount * height / capacity, 0L, height);
-
         Fluid fluid = resource.getFluid();
+        renderFluid(graphics, x, y, width, height, fluid, fluidHeight);
+    }
 
+    public static void drawTank(GuiGraphicsExtractor graphics, TankData tankData, int x, int y, int width, int height) {
+        if (tankData.isEmpty() || tankData.capacity() <= 0) {
+            return;
+        }
+
+        FluidStack fluidStack = tankData.fluid();
+        int fluidHeight = (int) Math.clamp((long) fluidStack.amount() * height / tankData.capacity(), 0L, height);
+
+        if (fluidHeight == 0) {
+            return;
+        }
+
+        Fluid fluid = fluidStack.getFluid();
+        renderFluid(graphics, x, y, width, height, fluid, fluidHeight);
+    }
+
+    private static void renderFluid(GuiGraphicsExtractor graphics, int x, int y, int width, int height, Fluid fluid, int fluidHeight) {
         FluidModel fluidModel = Minecraft.getInstance()
                 .getModelManager()
                 .getFluidStateModelSet()
@@ -131,12 +151,10 @@ public final class ClientRenderUtils {
                 .stillMaterial()
                 .sprite();
 
-        int tint = 0xFFFFFFFF;
-
         drawTiledSprite(
                 graphics,
                 sprite,
-                tint,
+                0xFFFFFFFF,
                 x,
                 y + height - fluidHeight,
                 width,

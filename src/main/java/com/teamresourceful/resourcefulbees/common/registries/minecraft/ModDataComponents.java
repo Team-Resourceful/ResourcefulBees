@@ -10,8 +10,9 @@ import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.crafting.Recipe;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.List;
 
 @NullMarked
 public class ModDataComponents {
@@ -39,13 +40,6 @@ public class ModDataComponents {
             .build()
     );
 
-    public static final RegistryEntry<DataComponentType<CentrifugeRotations>> CENTRIFUGE_ROTATIONS = COMPONENTS.register("rotations", () -> DataComponentType.<CentrifugeRotations>builder()
-            .persistent(CentrifugeRotations.CODEC)
-            .networkSynchronized(CentrifugeRotations.STREAM_CODEC)
-            .cacheEncoding()
-            .build()
-    );
-
     public static final RegistryEntry<DataComponentType<Upgrade>> UPGRADE = COMPONENTS.register("upgrade", () -> DataComponentType.<Upgrade>builder()
             .persistent(Upgrade.CODEC)
             .networkSynchronized(Upgrade.STREAM_CODEC)
@@ -64,9 +58,21 @@ public class ModDataComponents {
             .cacheEncoding()
             .build());
 
-    public static final RegistryEntry<DataComponentType<BeeconClient>> BEECON_CLIENT = COMPONENTS.register("beecon_client", () -> DataComponentType.<BeeconClient>builder()
-            .persistent(BeeconClient.CODEC)
-            .networkSynchronized(BeeconClient.STREAM_CODEC)
+    public static final RegistryEntry<DataComponentType<BeeconData>> BEECON_DATA = COMPONENTS.register("beecon_data", () -> DataComponentType.<BeeconData>builder()
+            .persistent(BeeconData.CODEC)
+            .networkSynchronized(BeeconData.STREAM_CODEC)
+            .cacheEncoding()
+            .build());
+
+    public static final RegistryEntry<DataComponentType<List<TankData>>> TANK_DATA = COMPONENTS.register("tank_data", () -> DataComponentType.<List<TankData>>builder()
+            .persistent(TankData.LIST_CODEC)
+            .networkSynchronized(TankData.LIST_STREAM_CODEC)
+            .cacheEncoding()
+            .build());
+
+    public static final RegistryEntry<DataComponentType<BatteryData>> BATTERY_DATA = COMPONENTS.register("battery_data", () -> DataComponentType.<BatteryData>builder()
+            .persistent(BatteryData.CODEC)
+            .networkSynchronized(BatteryData.STREAM_CODEC)
             .cacheEncoding()
             .build());
 }

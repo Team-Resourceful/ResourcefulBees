@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.fluids.ModClientFluidProperties;
 import com.teamresourceful.resourcefulbees.client.model.property.FilledBeeJarProperty;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.EnderBeeconRenderer;
+import com.teamresourceful.resourcefulbees.client.rendering.blocks.HoneyGenRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.SolidificationChamberRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.CentrifugeCrankRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
@@ -75,6 +76,7 @@ public class ResourcefulBeesClient {
         event.registerBlockEntityRenderer(ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get(), context -> new CentrifugeCrankRenderer<>(context, ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get()));
         event.registerBlockEntityRenderer(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), EnderBeeconRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), SolidificationChamberRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), HoneyGenRenderer::new);
     }
 
     @SubscribeEvent
@@ -84,6 +86,8 @@ public class ResourcefulBeesClient {
         event.register(ModMenuTypes.BREEDER.get(), BreederScreen::new);
         event.register(ModMenuTypes.SOLIDIFICATION_CHAMBER.get(), SolidificationChamberScreen::new);
         event.register(ModMenuTypes.ENDER_BEECON.get(), EnderBeeconScreen::new);
+        event.register(ModMenuTypes.HONEY_GENERATOR.get(), HoneyGeneratorScreen::new);
+        event.register(ModMenuTypes.HONEY_POT.get(), HoneyPotScreen::new);
     }
 
     @SubscribeEvent

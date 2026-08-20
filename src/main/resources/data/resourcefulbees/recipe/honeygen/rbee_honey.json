@@ -1,4 +1,4 @@
 {
     "type": "resourcefulbees:honey_gen",
-    "honey": {"id": "resourcefulbees:honey"}
+    "honey": "resourcefulbees:honey_fluid_source"
 }

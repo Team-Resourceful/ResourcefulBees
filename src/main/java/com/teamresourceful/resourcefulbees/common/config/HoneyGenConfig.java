@@ -26,7 +26,7 @@ public final class HoneyGenConfig {
         id = "maxTankCapacity",
         translation = "Max Tank Capacity"
     )
-    @Comment("Maximum internal honey capacity.")
+    @Comment("Maximum internal honey capacity BEFORE upgrades.")
     @ConfigOption.Range(min = 1000, max = 100000)
     public static int maxTankCapacity = 10000;
 
@@ -48,7 +48,7 @@ public final class HoneyGenConfig {
     @Comment("""
             x=b+(b*p*n). (WIP - may change)
             b = maxTankCapacity
-            p = this
+            p = this value
             n = total upgrades in slot
                                     
             Recommended value:
@@ -66,7 +66,7 @@ public final class HoneyGenConfig {
     @Comment("""
             x=b+(b*p*n). (WIP - may change)
             b = maxTankCapacity
-            p = this
+            p = this value
             n = total upgrades in slot
                         
             Recommended value:

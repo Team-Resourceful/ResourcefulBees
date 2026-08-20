@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
+import com.teamresourceful.resourcefulbees.client.component.TankWidget;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.blockentities.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
@@ -22,6 +23,14 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
         tileEntity = menu.getEntity();
         titleLabelY -= 3;
     }
+
+    @Override
+    protected void init() {
+        super.init();
+
+        addRenderableWidget(new TankWidget(leftPos + 67, topPos + 12, 14, 62, tileEntity::tankData));
+    }
+
 
     @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {

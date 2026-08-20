@@ -21,6 +21,19 @@ public class CentrifugeMenu extends AbstractModContainerMenu<CentrifugeBlockEnti
 
     public CentrifugeMenu(int id, Inventory inv, CentrifugeBlockEntity entity) {
         super(ModMenuTypes.CENTRIFUGE.get(), id, inv, entity);
+
+        if (player instanceof ServerPlayer serverPlayer) {
+            entity.addListeningPlayer(serverPlayer);
+            entity.sendToPlayer(serverPlayer);
+        }
+    }
+
+    @Override
+    public void removed(@NonNull Player player) {
+        super.removed(player);
+        if (player instanceof ServerPlayer serverPlayer) {
+            entity.removeListeningPlayer(serverPlayer);
+        }
     }
 
     @Override

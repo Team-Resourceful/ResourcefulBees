@@ -2,10 +2,7 @@ package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
-import com.teamresourceful.resourcefulbees.common.recipes.FlowHiveRecipe;
-import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
-import com.teamresourceful.resourcefulbees.common.recipes.MutationRecipe;
-import com.teamresourceful.resourcefulbees.common.recipes.SolidificationRecipe;
+import com.teamresourceful.resourcefulbees.common.recipes.*;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
@@ -28,7 +25,7 @@ public final class ModRecipes {
     public static final RegistryEntry<RecipeType<MutationRecipe>> MUTATION_RECIPE_TYPE = RECIPE_TYPES.register("mutation", () -> RecipeType.simple(ModIdentifier.of("mutation")));
     public static final RegistryEntry<RecipeType<SolidificationRecipe>> SOLIDIFICATION_RECIPE_TYPE = RECIPE_TYPES.register("solidification", () -> RecipeType.simple(ModIdentifier.of("solidification")));
     public static final RegistryEntry<RecipeType<FlowHiveRecipe>> FLOW_HIVE_RECIPE_TYPE = RECIPE_TYPES.register("flow_hive", () -> RecipeType.simple(ModIdentifier.of("flow_hive")));
-//    public static final RegistryEntry<RecipeType<HoneyGenRecipe>> HONEY_GEN_RECIPE_TYPE = RECIPE_TYPES.register("honey_gen", () -> RecipeType.register("honey_gen"));
+    public static final RegistryEntry<RecipeType<HoneyGenRecipe>> HONEY_GEN_RECIPE_TYPE = RECIPE_TYPES.register("honey_gen", () -> RecipeType.simple(ModIdentifier.of("honey_gen")));
     public static final RegistryEntry<RecipeType<CentrifugeRecipe>> CENTRIFUGE_RECIPE_TYPE = RECIPE_TYPES.register("centrifuge", () -> RecipeType.simple(ModIdentifier.of("centrifuge")));
 
 

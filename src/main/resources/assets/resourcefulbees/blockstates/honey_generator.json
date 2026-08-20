@@ -1,33 +1,33 @@
 {
   "variants": {
-    "facing=east,on=false": {
+    "facing=east,active=false": {
       "model": "resourcefulbees:block/honey_generator",
       "y": 90
     },
-    "facing=north,on=false": {
+    "facing=north,active=false": {
       "model": "resourcefulbees:block/honey_generator"
     },
-    "facing=south,on=false": {
+    "facing=south,active=false": {
       "model": "resourcefulbees:block/honey_generator",
       "y": 180
     },
-    "facing=west,on=false": {
+    "facing=west,active=false": {
       "model": "resourcefulbees:block/honey_generator",
       "y": 270
     },
-    "facing=east,on=true": {
-      "model": "resourcefulbees:block/honey_generator_on",
+    "facing=east,active=true": {
+      "model": "resourcefulbees:block/honey_generator_active",
       "y": 90
     },
-    "facing=north,on=true": {
-      "model": "resourcefulbees:block/honey_generator_on"
+    "facing=north,active=true": {
+      "model": "resourcefulbees:block/honey_generator_active"
     },
-    "facing=south,on=true": {
-      "model": "resourcefulbees:block/honey_generator_on",
+    "facing=south,active=true": {
+      "model": "resourcefulbees:block/honey_generator_active",
       "y": 180
     },
-    "facing=west,on=true": {
-      "model": "resourcefulbees:block/honey_generator_on",
+    "facing=west,active=true": {
+      "model": "resourcefulbees:block/honey_generator_active",
       "y": 270
     }
   }

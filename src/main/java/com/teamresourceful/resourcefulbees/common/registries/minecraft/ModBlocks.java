@@ -110,8 +110,8 @@ public final class ModBlocks {
     public static final RegistryEntry<Block> BEE_BOX = registerBlock(BLOCKS, "bee_box", BeeBoxBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(0.5f));
     public static final RegistryEntry<Block> BEE_BOX_TEMP = registerBlock(BLOCKS, "bee_box_temp", BeeBoxBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(0.5f));
 
-    public static final RegistryEntry<Block> HONEY_GLASS_PLAYER = registerBlock(BLOCKS, "honey_glass_player", properties -> new HoneyGlass(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollision());
-    public static final RegistryEntry<Block> HONEY_GLASS = registerBlock(BLOCKS, "honey_glass", properties -> new HoneyGlass(properties, true), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollision());
+    public static final RegistryEntry<Block> HONEY_GLASS_PLAYER = registerBlock(BLOCKS, "honey_glass_player", properties -> new HoneyGlassBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollision());
+    public static final RegistryEntry<Block> HONEY_GLASS = registerBlock(BLOCKS, "honey_glass", properties -> new HoneyGlassBlock(properties, true), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollision());
 
     public static final RegistryEntry<Block> WAXED_PLANKS = registerBlock(BLOCKS, "waxed_planks", Block::new, () -> WAXED_PLANKS_PROPERTIES);
     public static final RegistryEntry<Block> WAXED_STAIRS = registerBlock(BLOCKS, "waxed_stairs", properties -> new StairBlock(WAXED_PLANKS.get().defaultBlockState(), properties), WAXED_PLANKS_PROPERTIES::dynamicShape);
@@ -172,11 +172,11 @@ public final class ModBlocks {
 //        }
 //    });
     public static final RegistryEntry<Block> ENDER_BEECON = registerBlock(BLOCKS,"ender_beecon", EnderBeeconBlock::new, () -> BEECON_PROPERTIES);
-//    public static final RegistryEntry<Block> HONEY_POT = BLOCKS.register("honey_pot", () -> new HoneyPotBlock(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops()));
+    public static final RegistryEntry<Block> HONEY_POT = registerBlock(BLOCKS, "honey_pot", HoneyPotBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops());
     public static final RegistryEntry<Block> SOLIDIFICATION_CHAMBER = registerBlock(BLOCKS, "solidification_chamber", SolidificationChamberBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops());
     public static final RegistryEntry<Block> BASIC_CENTRIFUGE = registerBlock(CENTRIFUGE_BLOCKS, "centrifuge", CentrifugeBlock::new, () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL).noOcclusion());
     public static final RegistryEntry<Block> CENTRIFUGE_CRANK = registerBlock(CENTRIFUGE_BLOCKS, "centrifuge_crank", CentrifugeCrankBlock::new, () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.WOOD).noOcclusion());
-//  public static final RegistryEntry<Block> HONEY_GENERATOR = BLOCKS.register("honey_generator", () -> new HoneyGenerator(CENTRIFUGE_PROPERTIES));
+    public static final RegistryEntry<Block> HONEY_GENERATOR = registerBlock(BLOCKS, "honey_generator", HoneyGeneratorBlock::new, () -> CENTRIFUGE_PROPERTIES);
 
     public static final RegistryEntry<Block> HONEY_FLUID_BLOCK = registerBlock(HONEY_FLUID_BLOCKS, "honey_fluid_block", properties -> new HoneyFluidBlock(ModFluids.HONEY_FLUID_TYPE.get(), properties), () -> HONEY_FLUID_BLOCK_PROPERTIES);
 

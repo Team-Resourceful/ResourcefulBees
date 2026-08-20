@@ -17,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-public class HoneyGlass extends TransparentBlock {
+public class HoneyGlassBlock extends TransparentBlock {
 
     private final boolean collidePlayer; //if true player cannot go through block but bee can - if false player can go through block but bee cannot
 
-    public HoneyGlass(BlockBehaviour.Properties properties, boolean collidePlayer) {
+    public HoneyGlassBlock(BlockBehaviour.Properties properties, boolean collidePlayer) {
         super(properties);
         this.collidePlayer = collidePlayer;
     }

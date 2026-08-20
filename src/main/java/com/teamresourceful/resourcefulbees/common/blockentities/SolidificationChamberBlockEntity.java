@@ -1,18 +1,23 @@
 package com.teamresourceful.resourcefulbees.common.blockentities;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.base.ContentContainerBlock;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
+import com.teamresourceful.resourcefulbees.common.components.TankData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.menus.SolidificationChamberMenu;
 import com.teamresourceful.resourcefulbees.common.menus.base.ResourcefulDataSlot;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -23,7 +28,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -36,10 +40,13 @@ import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-public class SolidificationChamberBlockEntity extends BlockEntity implements InstanceBlockEntityTicker, ContentContainerBlock<PositionContent> {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, ContentContainerBlock<PositionContent> {
 
     public static final int BLOCK_OUTPUT = 0;
     private static final int TANK_INPUT = 0;
@@ -50,6 +57,8 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements Ins
     private final ResourcefulDataSlot processTime = new ResourcefulDataSlot();
     private SolidificationRecipe cachedRecipe;
 
+    private boolean guiDirty = true;
+    private List<TankData> tankData = new ArrayList<>();
     private FluidResource lastFluid = FluidResource.EMPTY;
     public SolidificationChamberBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), pos, state);
@@ -176,17 +185,11 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements Ins
         if (processTime.increment() >= cachedRecipe.time() && processResult()) {
             processTime.set(0);
         }
-    }
 
-    @Override
-    public @NonNull CompoundTag getUpdateTag(HolderLookup.@NonNull Provider registries) {
-        return this.saveWithoutMetadata(registries);
-    }
-
-    @Nullable
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
+        if (guiDirty && level.getGameTime() % 5 == 0) {
+            sendToPlayersTrackingChunk();
+            guiDirty = false;
+        }
     }
 
     @Override
@@ -234,6 +237,45 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements Ins
         return new PositionContent(this.getBlockPos());
     }
 
+    public List<TankData> tankData() {
+        return tankData;
+    }
+
+    @Override
+    protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
+        super.applyImplicitComponents(components);
+        tankData = components.getOrDefault(ModDataComponents.TANK_DATA, new ArrayList<>());
+    }
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
+        super.collectImplicitComponents(components);
+        components.set(ModDataComponents.TANK_DATA, createTankDataPatch());
+    }
+
+    private List<TankData> createTankDataPatch() {
+        return List.of(new TankData(fluidStack(), tank.getCapacity()));
+    }
+
+    @Override
+    public void removeComponentsFromTag(@NonNull ValueOutput output) {
+        super.removeComponentsFromTag(output);
+        output.discard("tank_data");
+    }
+
+    @Override
+    public DataComponentPatch getSyncData() {
+        return DataComponentPatch.builder()
+                .set(ModDataComponents.TANK_DATA.get(), createTankDataPatch())
+                .build();
+    }
+
+    @Override
+    public <Data> void setSyncData(DataComponentType<Data> type, Optional<Data> data) {
+        if (type == ModDataComponents.TANK_DATA.get()) {
+            tankData = (List<TankData>) data.orElseThrow();
+        }
+    }
+
     public class ItemHandler extends ItemStacksResourceHandler {
 
         public ItemHandler() {
@@ -263,7 +305,19 @@ public class SolidificationChamberBlockEntity extends BlockEntity implements Ins
 
         @Override
         protected void onContentsChanged(int index, @NonNull FluidStack previousContents) {
+            if (level instanceof ServerLevel) {
+                guiDirty = true;
+            }
             SolidificationChamberBlockEntity.this.setChanged();
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        @Override
+        public boolean isValid(int index, FluidResource resource) {
+            return resource.is(ModFluidTags.HONEY);
         }
     }
 }

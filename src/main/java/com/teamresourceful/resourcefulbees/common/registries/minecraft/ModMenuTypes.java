@@ -24,10 +24,10 @@ public class ModMenuTypes {
         () -> MenuContentHelper.create(BreederMenu::new, PositionContent.SERIALIZER));
 
     public static final RegistryEntry<MenuType<EnderBeeconMenu>> ENDER_BEECON = MENUS.register("ender_beecon",
-            () -> MenuContentHelper.create(EnderBeeconMenu::new, PositionContent.SERIALIZER));
+        () -> MenuContentHelper.create(EnderBeeconMenu::new, PositionContent.SERIALIZER));
 
-//    public static final RegistryEntry<MenuType<HoneyPotMenu>> HONEY_POT = MENUS.register("honey_pot", () -> MenuContentHelper
-//            .create(HoneyPotMenu::new, PositionContent.SERIALIZER));
+    public static final RegistryEntry<MenuType<HoneyPotMenu>> HONEY_POT = MENUS.register("honey_pot",
+        () -> MenuContentHelper.create(HoneyPotMenu::new, PositionContent.SERIALIZER));
 
     public static final RegistryEntry<MenuType<SolidificationChamberMenu>> SOLIDIFICATION_CHAMBER = MENUS.register("solidification_chamber",
         () -> MenuContentHelper.create(SolidificationChamberMenu::new, PositionContent.SERIALIZER));
@@ -35,6 +35,6 @@ public class ModMenuTypes {
     public static final RegistryEntry<MenuType<CentrifugeMenu>> CENTRIFUGE = MENUS.register("centrifuge",
         () -> MenuContentHelper.create(CentrifugeMenu::new, PositionContent.SERIALIZER));
 
-//    public static final RegistryEntry<MenuType<HoneyGeneratorMenu>> HONEY_GENERATOR = MENUS.register("honey_generator", () -> MenuContentHelper
-//            .create(HoneyGeneratorMenu::new, PositionContent.SERIALIZER));
+    public static final RegistryEntry<MenuType<HoneyGeneratorMenu>> HONEY_GENERATOR = MENUS.register("honey_generator",
+        () -> MenuContentHelper.create(HoneyGeneratorMenu::new, PositionContent.SERIALIZER));
 }

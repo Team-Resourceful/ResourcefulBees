@@ -54,25 +54,25 @@ public final class ModBlockEntityTypes {
 
         public static final RegistryEntry<BlockEntityType<? extends FlowHiveBlockEntity>> FLOW_HIVE_ENTITY = BLOCK_ENTITY_TYPES.register("flow_hive",
                 () -> new BlockEntityType<>((FlowHiveBlockEntity::new), ModBlocks.FLOW_HIVE.get()));
-    //
+
     //    public static final RegistryEntry<BlockEntityType<CreativeGenBlockEntity>> CREATIVE_GEN_ENTITY = BLOCK_ENTITY_TYPES.register("creative_gen",
     //            () -> new BlockEntityType<>((CreativeGenBlockEntity::new), ModBlocks.CREATIVE_GEN.get()));
-    //
+
         public static final RegistryEntry<BlockEntityType<EnderBeeconBlockEntity>> ENDER_BEECON_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("ender_beecon",
                 () -> new BlockEntityType<>((EnderBeeconBlockEntity::new), ModBlocks.ENDER_BEECON.get()));
-    //
-    //    public static final RegistryEntry<BlockEntityType<HoneyPotBlockEntity>> HONEY_POT_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_pot",
-    //            () -> new BlockEntityType<>((HoneyPotBlockEntity::new), ModBlocks.HONEY_POT.get()));
-    //
+
+        public static final RegistryEntry<BlockEntityType<HoneyPotBlockEntity>> HONEY_POT_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("honey_pot",
+                () -> new BlockEntityType<>((HoneyPotBlockEntity::new), ModBlocks.HONEY_POT.get()));
+
         public static final RegistryEntry<BlockEntityType<SolidificationChamberBlockEntity>> SOLIDIFICATION_CHAMBER_TILE_ENTITY = BLOCK_ENTITY_TYPES.register("solidification_chamber",
                 () -> new BlockEntityType<>((SolidificationChamberBlockEntity::new), ModBlocks.SOLIDIFICATION_CHAMBER.get()));
-    //
+
         public static final RegistryEntry<BlockEntityType<CentrifugeBlockEntity>> BASIC_CENTRIFUGE_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge",
                 () -> new BlockEntityType<>(CentrifugeBlockEntity::new, ModBlocks.BASIC_CENTRIFUGE.get()));
 
         public static final RegistryEntry<BlockEntityType<CentrifugeCrankBlockEntity>> CENTRIFUGE_CRANK_ENTITY = BLOCK_ENTITY_TYPES.register("centrifuge_crank",
                 () -> new BlockEntityType<>((pos, state) -> new CentrifugeCrankBlockEntity(ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get(), pos, state), ModBlocks.CENTRIFUGE_CRANK.get()));
-    //
-    //    public static final RegistryEntry<BlockEntityType<HoneyGeneratorBlockEntity>> HONEY_GENERATOR_ENTITY = BLOCK_ENTITY_TYPES.register("honey_generator",
-    //            () -> new BlockEntityType<>((HoneyGeneratorBlockEntity::new), ModBlocks.HONEY_GENERATOR.get()));
+
+        public static final RegistryEntry<BlockEntityType<HoneyGeneratorBlockEntity>> HONEY_GENERATOR_ENTITY = BLOCK_ENTITY_TYPES.register("honey_generator",
+                () -> new BlockEntityType<>((HoneyGeneratorBlockEntity::new), ModBlocks.HONEY_GENERATOR.get()));
 }

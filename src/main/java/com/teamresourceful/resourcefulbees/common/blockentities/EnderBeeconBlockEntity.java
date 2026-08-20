@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.EnderBeeconBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
-import com.teamresourceful.resourcefulbees.common.components.BeeconClient;
+import com.teamresourceful.resourcefulbees.common.components.BeeconData;
 import com.teamresourceful.resourcefulbees.common.config.EnderBeeconConfig;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
@@ -44,7 +44,6 @@ import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
-import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -106,7 +105,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     @Override
     protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
         super.applyImplicitComponents(components);
-        BeeconClient client = components.getOrDefault(ModDataComponents.BEECON_CLIENT, BeeconClient.EMPTY);
+        BeeconData client = components.getOrDefault(ModDataComponents.BEECON_DATA, BeeconData.EMPTY);
         this.activeEffects.clear();
         activeEffects.addAll(client.activeEffects());
         range = client.range();
@@ -116,28 +115,28 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     @Override
     protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
         super.collectImplicitComponents(components);
-        components.set(ModDataComponents.BEECON_CLIENT, new BeeconClient(activeEffects, range, active, fluidStackInTank()));
+        components.set(ModDataComponents.BEECON_DATA, new BeeconData(activeEffects, range, active, fluidStackInTank()));
     }
 
     @Override
     public void removeComponentsFromTag(@NonNull ValueOutput output) {
         super.removeComponentsFromTag(output);
-        output.discard("beecon_client");
+        output.discard("beecon_data");
     }
 
     @Override
     public DataComponentPatch getSyncData() {
         return DataComponentPatch.builder()
-                .set(ModDataComponents.BEECON_CLIENT.get(), new BeeconClient(activeEffects, range, active, fluidStackInTank()))
+                .set(ModDataComponents.BEECON_DATA.get(), new BeeconData(activeEffects, range, active, fluidStackInTank()))
                 .build();
     }
 
     @Override
     public <Data> void setSyncData(DataComponentType<Data> type, Optional<Data> data) {
-        if (type == ModDataComponents.BEECON_CLIENT.get()) {
+        if (type == ModDataComponents.BEECON_DATA.get()) {
             this.activeEffects.clear();
             data.ifPresent(value -> {
-                BeeconClient client = (BeeconClient) value;
+                BeeconData client = (BeeconData) value;
 
                 activeEffects.addAll(client.activeEffects());
                 range = client.range();
@@ -294,7 +293,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
                 continue;
             }
 
-            if (!resource.getFluid().is(ModFluidTags.HONEY)) {
+            if (!resource.is(ModFluidTags.HONEY)) {
                 continue;
             }
 
@@ -432,9 +431,8 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         }
 
         @Override
-        public int insert(FluidResource resource, int amount, @NonNull TransactionContext transaction) {
-            if (!resource.getFluid().is(ModFluidTags.HONEY)) return 0;
-            return super.insert(resource, amount, transaction);
+        public boolean isValid(int index, FluidResource resource) {
+            return resource.is(ModFluidTags.HONEY);
         }
 
         @Override

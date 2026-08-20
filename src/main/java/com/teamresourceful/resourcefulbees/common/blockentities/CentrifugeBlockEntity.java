@@ -13,7 +13,7 @@ import com.geckolib.util.GeckoLibUtil;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.ContentContainerBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.CentrifugeBlock;
-import com.teamresourceful.resourcefulbees.common.components.CentrifugeRotations;
+import com.teamresourceful.resourcefulbees.common.components.TankData;
 import com.teamresourceful.resourcefulbees.common.menus.CentrifugeMenu;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.CentrifugeRecipe;
@@ -53,6 +53,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBlockEntity, ContentContainerBlock<PositionContent> {
@@ -70,72 +73,79 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
     private static final int TANKS = 6;
     private static final int TANK_CAPACITY = 32000;
 
-    private final CentrifugeItemResourceHandler itemResourceHandler = new CentrifugeItemResourceHandler();
-    private final CentrifugeFluidResourceHandler fluidResourceHandler = new CentrifugeFluidResourceHandler();
+    private final CentrifugeItemResourceHandler inventory = new CentrifugeItemResourceHandler();
+    private final CentrifugeFluidResourceHandler tank = new CentrifugeFluidResourceHandler();
 
     private final AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
 
     private boolean firstCheck = true;
 
     private CentrifugeRecipe cachedRecipe;
-    private int rotations = 0; //todo consider changing this to a data slot to have network sync by default
+    private int rotations = 0;
+    private List<TankData> tankData = Collections.nCopies(TANKS, TankData.EMPTY);
 
     public CentrifugeBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), pos, state);
     }
 
-    @Override
-    public void setChanged() {
-        super.setChanged();
-        sendToPlayersTrackingChunk();
+    public List<TankData> tankData() {
+        return tankData;
+    }
+
+    public List<TankData> createTankDataPatch() {
+        var list = new ArrayList<TankData>();
+        for (int i = 0; i < tank.size(); i++) {
+            list.add(new TankData(tank.fluidStack(i), tank.getCapacity()));
+        }
+        return list;
     }
 
     @Override
     public DataComponentPatch getSyncData() {
         return DataComponentPatch.builder()
-                .set(ModDataComponents.CENTRIFUGE_ROTATIONS.get(), new CentrifugeRotations(rotations))
+                .set(ModDataComponents.TANK_DATA.get(), createTankDataPatch())
                 .build();
     }
 
     @Override
     public <Data> void setSyncData(DataComponentType<Data> type, Optional<Data> data) {
-        if (type == ModDataComponents.CENTRIFUGE_ROTATIONS.get()) {
-            data.ifPresent(data1 -> this.rotations = ((CentrifugeRotations) data1).rotations());
+        if (type == ModDataComponents.TANK_DATA.get()) {
+            data.ifPresent(data1 -> tankData = (List<TankData>) data1);
         }
     }
 
     @Override
     protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
         super.applyImplicitComponents(components);
-        this.rotations = components.getOrDefault(ModDataComponents.CENTRIFUGE_ROTATIONS, CentrifugeRotations.DEFAULT).rotations();
+        tankData = components.getOrDefault(ModDataComponents.TANK_DATA.get(), new ArrayList<>());
     }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
         super.collectImplicitComponents(components);
-        components.set(ModDataComponents.CENTRIFUGE_ROTATIONS, new CentrifugeRotations(this.rotations));
+        components.set(ModDataComponents.TANK_DATA.get(), createTankDataPatch());
     }
 
     @Override
     public void removeComponentsFromTag(@NonNull ValueOutput output) {
         super.removeComponentsFromTag(output);
-        output.discard("rotations");
+        output.discard("tank_data");
     }
 
     @Override
     protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
         output.putInt("rotations", rotations);
-        output.putChild("items", itemResourceHandler);
-        output.putChild("fluids", fluidResourceHandler);
+        output.putChild("items", inventory);
+        output.putChild("fluids", tank);
     }
 
     @Override
     protected void loadAdditional(@NonNull ValueInput input) {
         super.loadAdditional(input);
         rotations = input.getIntOr("rotations", 0);
-        input.readChild("items", itemResourceHandler);
-        input.readChild("fluids", fluidResourceHandler);
+        input.readChild("items", inventory);
+        input.readChild("fluids", tank);
     }
 
     private void updateCachedRecipe() {
@@ -144,7 +154,7 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
             return;
         }
         firstCheck = false;
-        var tempRecipe = CentrifugeRecipe.getRecipe(level, itemResourceHandler.getResource(0).toStack());
+        var tempRecipe = CentrifugeRecipe.getRecipe(level, inventory.getResource(0).toStack());
         if (tempRecipe.isEmpty()) {
             cachedRecipe = null;
             return;
@@ -190,7 +200,7 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
 
     private boolean canProcess() {
         if (cachedRecipe == null && firstCheck) updateCachedRecipe();
-        return cachedRecipe != null && (cachedRecipe.itemOutputs().isEmpty() || !itemResourceHandler.isFull()) && (cachedRecipe.fluidOutputs().isEmpty() || !fluidResourceHandler.isFull());
+        return cachedRecipe != null && (cachedRecipe.itemOutputs().isEmpty() || !inventory.isFull()) && (cachedRecipe.fluidOutputs().isEmpty() || !tank.isFull());
     }
 
     private void finishRecipe() {
@@ -198,7 +208,7 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
         if (cachedRecipe != null && level != null && !level.isClientSide()) {
             try(Transaction root = Transaction.openRoot()) {
                 try(Transaction t1 = Transaction.open(root)) {
-                    itemResourceHandler.extract(0, itemResourceHandler.getResource(0), 1, t1);
+                    inventory.extract(0, inventory.getResource(0), 1, t1);
                     t1.commit();
                 }
                 try(Transaction t2 = Transaction.open(root)) {
@@ -227,11 +237,11 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
     }
 
     private void deliverItem(ItemStackTemplate stack, TransactionContext transactionContext) {
-        itemResourceHandler.insertOutput(ItemResource.of(stack), stack.count(), transactionContext);
+        inventory.insertOutput(ItemResource.of(stack), stack.count(), transactionContext);
     }
 
     private void deliverFluid(FluidStackTemplate fluid, TransactionContext transactionContext) {
-        fluidResourceHandler.internalInsert(FluidResource.of(fluid), fluid.amount(), transactionContext);
+        tank.internalInsert(FluidResource.of(fluid), fluid.amount(), transactionContext);
     }
 
     @Override
@@ -282,17 +292,17 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
     @Override
     public void preRemoveSideEffects(@NonNull BlockPos pos, @NonNull BlockState state) {
         if (this.level != null) {
-            Containers.dropContents(this.level, pos, this.itemResourceHandler.copyToList());
+            Containers.dropContents(this.level, pos, this.inventory.copyToList());
             //todo can/should we drop fluid contents too?
         }
     }
 
     public CentrifugeItemResourceHandler itemResourceHandler() {
-        return this.itemResourceHandler;
+        return this.inventory;
     }
 
     public CentrifugeFluidResourceHandler fluidResourceHandler() {
-        return this.fluidResourceHandler;
+        return this.tank;
     }
 
     public class CentrifugeItemResourceHandler extends ItemStacksResourceHandler {
@@ -358,10 +368,19 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
         @Override
         protected void onContentsChanged(int index, @NonNull FluidStack previousContents) {
             CentrifugeBlockEntity.this.setChanged();
+            sendToListeningPlayers();
         }
 
         public boolean isFull() {
             return stacks.stream().noneMatch(FluidStack::isEmpty);
+        }
+
+        public FluidStack fluidStack(int index) {
+            return stacks.get(index);
+        }
+
+        public int getCapacity() {
+            return capacity;
         }
     }
 }
