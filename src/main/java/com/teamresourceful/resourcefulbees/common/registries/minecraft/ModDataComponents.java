@@ -64,7 +64,13 @@ public class ModDataComponents {
             .cacheEncoding()
             .build());
 
-    public static final RegistryEntry<DataComponentType<List<TankData>>> TANK_DATA = COMPONENTS.register("tank_data", () -> DataComponentType.<List<TankData>>builder()
+    public static final RegistryEntry<DataComponentType<TankData>> SINGLE_TANK_DATA = COMPONENTS.register("single_tank_data", () -> DataComponentType.<TankData>builder()
+            .persistent(TankData.CODEC)
+            .networkSynchronized(TankData.STREAM_CODEC)
+            .cacheEncoding()
+            .build());
+
+    public static final RegistryEntry<DataComponentType<List<TankData>>> MULTI_TANK_DATA = COMPONENTS.register("multi_tank_data", () -> DataComponentType.<List<TankData>>builder()
             .persistent(TankData.LIST_CODEC)
             .networkSynchronized(TankData.LIST_STREAM_CODEC)
             .cacheEncoding()

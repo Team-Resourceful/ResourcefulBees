@@ -28,7 +28,7 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
     protected void init() {
         super.init();
         HoneyGeneratorBlockEntity honeyGen = menu.getEntity();
-        addRenderableWidget(new TankWidget(leftPos + 28, topPos + 16, 12, 54, honeyGen::tankData));
+        addRenderableWidget(TankWidget.single(leftPos + 28, topPos + 16, 12, 54, honeyGen::tankData));
         addRenderableWidget(new BatteryWidget(leftPos + 136, topPos + 16, 12, 54, 176, 0, BACKGROUND, honeyGen::batteryData));
     }
 
@@ -50,7 +50,7 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
     ) {
         super.extractLabels(graphics, mouseX, mouseY);
 
-        FluidStack fluid = menu.getEntity().tankData().getFirst().fluid();
+        FluidStack fluid = menu.getEntity().tankData().fluid();
 
         graphics.text(
                 font,

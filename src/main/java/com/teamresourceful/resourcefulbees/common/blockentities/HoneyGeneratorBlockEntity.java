@@ -71,7 +71,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     private double honeyDrainModifier = 1;
 
     private BatteryData batteryData = BatteryData.EMPTY;
-    private List<TankData> tankData = Collections.nCopies(1, TankData.EMPTY);
+    private TankData tankData = TankData.EMPTY;
     private boolean guiDirty = true;
 
     public HoneyGeneratorBlockEntity(BlockPos pos, BlockState state) {
@@ -257,7 +257,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
         return fluidResource().toStack(tank.getAmountAsInt(0));
     }
 
-    public List<TankData> tankData() {
+    public TankData tankData() {
         return tankData;
     }
 
@@ -268,18 +268,18 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     @Override
     protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
         super.applyImplicitComponents(components);
-        tankData = components.getOrDefault(ModDataComponents.TANK_DATA, new ArrayList<>());
+        tankData = components.getOrDefault(ModDataComponents.SINGLE_TANK_DATA, TankData.EMPTY);
         batteryData = components.getOrDefault(ModDataComponents.BATTERY_DATA, BatteryData.EMPTY);
     }
     @Override
     protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
         super.collectImplicitComponents(components);
-        components.set(ModDataComponents.TANK_DATA, createTankDataPatch());
+        components.set(ModDataComponents.SINGLE_TANK_DATA, createTankDataPatch());
         components.set(ModDataComponents.BATTERY_DATA, createBatteryDataPatch());
     }
 
-    private @NonNull List<TankData> createTankDataPatch() {
-        return List.of(new TankData(fluidStack(), tank.getCapacityAsInt(0, fluidResource())));
+    private @NonNull TankData createTankDataPatch() {
+        return new TankData(fluidStack(), tank.getCapacity());
     }
 
     private @NonNull BatteryData createBatteryDataPatch() {
@@ -289,14 +289,14 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     @Override
     public void removeComponentsFromTag(@NonNull ValueOutput output) {
         super.removeComponentsFromTag(output);
-        output.discard("tank_data");
+        output.discard("single_tank_data");
         output.discard("battery_data");
     }
 
     @Override
     public DataComponentPatch getSyncData() {
         return DataComponentPatch.builder()
-                .set(ModDataComponents.TANK_DATA.get(), createTankDataPatch())
+                .set(ModDataComponents.SINGLE_TANK_DATA.get(), createTankDataPatch())
                 .set(ModDataComponents.BATTERY_DATA.get(), createBatteryDataPatch())
                 .build();
     }
@@ -306,8 +306,8 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
             DataComponentType<Data> type,
             Optional<Data> data
     ) {
-        if (type == ModDataComponents.TANK_DATA.get()) {
-            tankData = (List<TankData>) data.orElseThrow();
+        if (type == ModDataComponents.SINGLE_TANK_DATA.get()) {
+            tankData = (TankData) data.orElseThrow();
         }
         if (type == ModDataComponents.BATTERY_DATA.get()) {
             batteryData = (BatteryData) data.orElseThrow();
@@ -345,6 +345,10 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
             if (stacks.getFirst().amount() >= amount) {
                 stacks.getFirst().setAmount(amount);
             }
+        }
+
+        public int getCapacity() {
+            return capacity;
         }
     }
 

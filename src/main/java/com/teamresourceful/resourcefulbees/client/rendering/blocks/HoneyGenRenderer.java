@@ -23,8 +23,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-import java.util.List;
-
 public class HoneyGenRenderer implements BlockEntityRenderer<HoneyGeneratorBlockEntity, HoneyGenRenderer.RenderState> {
 
     public HoneyGenRenderer(BlockEntityRendererProvider.Context context) {}
@@ -38,8 +36,8 @@ public class HoneyGenRenderer implements BlockEntityRenderer<HoneyGeneratorBlock
     public void extractRenderState(@NonNull HoneyGeneratorBlockEntity tile, @NonNull RenderState state, float partialTick, @NonNull Vec3 cameraPosition, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
         BlockEntityRenderState.extractBase(tile, state, breakProgress);
 
-        List<TankData> tankData = tile.tankData();
-        FluidStack fluid = tankData.getFirst().fluid();
+        TankData tankData = tile.tankData();
+        FluidStack fluid = tankData.fluid();
 
         state.hasFluid = !fluid.isEmpty();
 
@@ -49,7 +47,7 @@ public class HoneyGenRenderer implements BlockEntityRenderer<HoneyGeneratorBlock
             return;
         }
 
-        int capacity = tankData.getFirst().capacity();
+        int capacity = tankData.capacity();
 
         state.fluidHeight = capacity > 0
                 ? Math.clamp(fluid.amount() / (float) capacity, 0.0F, 1.0F)

@@ -103,13 +103,13 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
     @Override
     public DataComponentPatch getSyncData() {
         return DataComponentPatch.builder()
-                .set(ModDataComponents.TANK_DATA.get(), createTankDataPatch())
+                .set(ModDataComponents.MULTI_TANK_DATA.get(), createTankDataPatch())
                 .build();
     }
 
     @Override
     public <Data> void setSyncData(DataComponentType<Data> type, Optional<Data> data) {
-        if (type == ModDataComponents.TANK_DATA.get()) {
+        if (type == ModDataComponents.SINGLE_TANK_DATA.get()) {
             data.ifPresent(data1 -> tankData = (List<TankData>) data1);
         }
     }
@@ -117,19 +117,19 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
     @Override
     protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
         super.applyImplicitComponents(components);
-        tankData = components.getOrDefault(ModDataComponents.TANK_DATA.get(), new ArrayList<>());
+        tankData = components.getOrDefault(ModDataComponents.MULTI_TANK_DATA.get(), TankData.EMPTY_LIST);
     }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
         super.collectImplicitComponents(components);
-        components.set(ModDataComponents.TANK_DATA.get(), createTankDataPatch());
+        components.set(ModDataComponents.MULTI_TANK_DATA.get(), createTankDataPatch());
     }
 
     @Override
     public void removeComponentsFromTag(@NonNull ValueOutput output) {
         super.removeComponentsFromTag(output);
-        output.discard("tank_data");
+        output.discard("multi_tank_data");
     }
 
     @Override

@@ -42,8 +42,6 @@ import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, ContentContainerBlock<PositionContent> {
@@ -58,7 +56,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
     private SolidificationRecipe cachedRecipe;
 
     private boolean guiDirty = true;
-    private List<TankData> tankData = new ArrayList<>();
+    private TankData tankData = TankData.EMPTY;
     private FluidResource lastFluid = FluidResource.EMPTY;
     public SolidificationChamberBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), pos, state);
@@ -237,42 +235,42 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
         return new PositionContent(this.getBlockPos());
     }
 
-    public List<TankData> tankData() {
+    public TankData tankData() {
         return tankData;
     }
 
     @Override
     protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
         super.applyImplicitComponents(components);
-        tankData = components.getOrDefault(ModDataComponents.TANK_DATA, new ArrayList<>());
+        tankData = components.getOrDefault(ModDataComponents.SINGLE_TANK_DATA, TankData.EMPTY);
     }
     @Override
     protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
         super.collectImplicitComponents(components);
-        components.set(ModDataComponents.TANK_DATA, createTankDataPatch());
-    }
-
-    private List<TankData> createTankDataPatch() {
-        return List.of(new TankData(fluidStack(), tank.getCapacity()));
+        components.set(ModDataComponents.SINGLE_TANK_DATA, createTankDataPatch());
     }
 
     @Override
     public void removeComponentsFromTag(@NonNull ValueOutput output) {
         super.removeComponentsFromTag(output);
-        output.discard("tank_data");
+        output.discard("single_tank_data");
+    }
+
+    private TankData createTankDataPatch() {
+        return new TankData(fluidStack(), tank.getCapacity());
     }
 
     @Override
     public DataComponentPatch getSyncData() {
         return DataComponentPatch.builder()
-                .set(ModDataComponents.TANK_DATA.get(), createTankDataPatch())
+                .set(ModDataComponents.SINGLE_TANK_DATA.get(), createTankDataPatch())
                 .build();
     }
 
     @Override
     public <Data> void setSyncData(DataComponentType<Data> type, Optional<Data> data) {
-        if (type == ModDataComponents.TANK_DATA.get()) {
-            tankData = (List<TankData>) data.orElseThrow();
+        if (type == ModDataComponents.SINGLE_TANK_DATA.get()) {
+            tankData = (TankData) data.orElseThrow();
         }
     }
 

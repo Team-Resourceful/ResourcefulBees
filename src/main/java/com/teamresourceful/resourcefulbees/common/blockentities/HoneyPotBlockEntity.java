@@ -10,6 +10,8 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockE
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
@@ -18,6 +20,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
@@ -25,15 +28,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 public class HoneyPotBlockEntity extends GUISyncedBlockEntity implements ContentMenuProvider<PositionContent> {
 
     public static final int TANK_CAPACITY = 64000;
     private final FluidHandler tank = new FluidHandler();
-    private List<TankData> tankData = Collections.nCopies(1, TankData.EMPTY);
+    private TankData tankData = TankData.EMPTY;
 
     public HoneyPotBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.HONEY_POT_TILE_ENTITY.get(), pos, state);
@@ -56,28 +57,45 @@ public class HoneyPotBlockEntity extends GUISyncedBlockEntity implements Content
     }
 
     @Override
+    protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
+        super.applyImplicitComponents(components);
+        tankData = components.getOrDefault(ModDataComponents.SINGLE_TANK_DATA, TankData.EMPTY);
+    }
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
+        super.collectImplicitComponents(components);
+        components.set(ModDataComponents.SINGLE_TANK_DATA, createTankDataPatch());
+    }
+
+    @Override
+    public void removeComponentsFromTag(@NonNull ValueOutput output) {
+        super.removeComponentsFromTag(output);
+        output.discard("single_tank_data");
+    }
+
+    @Override
     public DataComponentPatch getSyncData() {
         return DataComponentPatch.builder()
-                .set(ModDataComponents.TANK_DATA.get(), createTankDataPatch())
+                .set(ModDataComponents.SINGLE_TANK_DATA.get(), createTankDataPatch())
                 .build();
     }
 
     @Override
     public <Data> void setSyncData(DataComponentType<Data> type, Optional<Data> data) {
-        if (type == ModDataComponents.TANK_DATA.get()) {
-            data.ifPresent(data1 -> tankData = (List<TankData>) data1);
+        if (type == ModDataComponents.SINGLE_TANK_DATA.get()) {
+            data.ifPresent(data1 -> tankData = (TankData) data1);
         }
     }
 
-    private @NonNull List<TankData> createTankDataPatch() {
-        return List.of(new TankData(tank.fluidStack(), tank.getCapacity()));
+    private @NonNull TankData createTankDataPatch() {
+        return new TankData(tank.fluidStack(), tank.getCapacity());
     }
 
     public FluidHandler tank() {
         return tank;
     }
 
-    public List<TankData> tankData() {
+    public TankData tankData() {
         return tankData;
     }
 

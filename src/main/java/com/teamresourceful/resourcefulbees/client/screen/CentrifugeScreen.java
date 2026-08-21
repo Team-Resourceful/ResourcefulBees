@@ -27,7 +27,7 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
     @Override
     protected void init() {
         super.init();
-        tankWidget = new TankWidget(leftPos + 152, topPos + 23, 16, 52, tileEntity::tankData);
+        tankWidget = TankWidget.selectable(leftPos + 152, topPos + 23, 16, 52, tileEntity::tankData);
         addRenderableWidget(tankWidget);
     }
 
@@ -49,24 +49,4 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
 
         return super.mouseScrolled(x, y, scrollX, scrollY);
     }
-
-    /*    @Override
-    protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/gui/centrifuge/basic.png");
-        if (tileEntity != null) {
-            int i = this.leftPos;
-            int j = this.topPos;
-            graphics.blit(texture, i, j, 0, 0, this.imageWidth, this.imageHeight);
-        }
-    }
-
-    @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        if (this.tileEntity != null) {
-            this.renderBackground(graphics, mouseX, mouseY, partialTicks);
-            super.render(graphics, mouseX, mouseY, partialTicks);
-            this.renderTooltip(graphics, mouseX, mouseY);
-        }
-    }*/
-
 }

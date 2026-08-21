@@ -25,7 +25,7 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
     @Override
     protected void init() {
         super.init();
-        addRenderableWidget(new TankWidget(leftPos + 129, topPos + 16, 12, 54, () -> menu.getEntity().tankData()));
+        addRenderableWidget(TankWidget.single(leftPos + 129, topPos + 16, 12, 54, () -> menu.getEntity().tankData()));
     }
 
     @Override
@@ -38,11 +38,7 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
     protected void extractLabels(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         super.extractLabels(graphics, mouseX, mouseY);
 
-        FluidStack fluid = menu.getEntity()
-                .tankData()
-                .getFirst()
-                .fluid();
-
+        FluidStack fluid = menu.getEntity().tankData().fluid();
         graphics.text(font, Component.literal("Fluid:"), 36, 17, 0xFFFFFFFF, false);
 
         graphics.drawScrollingString(
