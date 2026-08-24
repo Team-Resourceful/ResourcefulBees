@@ -19,7 +19,7 @@ group = mod_group_id
 
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
-    maven { url = "https://nexus.resourcefulbees.com/repository/maven-public/" }
+    maven { url = "https://maven.teamresourceful.com/repository/maven-public/" }
 }
 
 base {
