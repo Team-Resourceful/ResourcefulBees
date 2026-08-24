@@ -6,23 +6,14 @@
             "count": 3
         },
         {
-            "type": "minecraft:height_range",
-            "height": {
-                "type": "minecraft:uniform",
-                "max_inclusive": {
-                    "below_top": 10
-                },
-                "min_inclusive": {
-                    "above_bottom": 10
-                }
-            }
+            "type": "minecraft:rarity_filter",
+            "chance": 8
         },
         {
             "type": "minecraft:in_square"
         },
         {
-            "type": "minecraft:rarity_filter",
-            "chance": 8
+            "type": "minecraft:biome"
         }
     ]
 }

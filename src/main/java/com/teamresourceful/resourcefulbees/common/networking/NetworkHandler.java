@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.networking;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconEffectPacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconSettingPacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.LockBeePacket;
@@ -17,7 +17,7 @@ public final class NetworkHandler {
         throw new UtilityClassException();
     }
 
-    private static final Identifier MAIN_CHANNEL = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "main");
+    private static final Identifier MAIN_CHANNEL = ModIdentifier.of("main");
     public static final Network NETWORK = new Network(MAIN_CHANNEL, 0, true);
 
     public static void init() {

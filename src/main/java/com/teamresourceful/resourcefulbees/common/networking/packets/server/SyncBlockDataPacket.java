@@ -2,7 +2,7 @@ package com.teamresourceful.resourcefulbees.common.networking.packets.server;
 
 import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.SyncedGUI;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
 import com.teamresourceful.resourcefullib.common.bytecodecs.StreamCodecByteCodec;
 import com.teamresourceful.resourcefullib.common.network.Packet;
@@ -12,7 +12,6 @@ import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketTyp
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.resources.Identifier;
 
 public record SyncBlockDataPacket(
         BlockPos pos,
@@ -34,7 +33,7 @@ public record SyncBlockDataPacket(
 
         public Type() {
             super(
-                    Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "sync_block_data"),
+                    ModIdentifier.of("sync_block_data"),
                     ObjectByteCodec.create(
                             ExtraByteCodecs.BLOCK_POS.fieldOf(SyncBlockDataPacket::pos),
                             StreamCodecByteCodec.ofRegistry(DataComponentPatch.STREAM_CODEC).fieldOf(SyncBlockDataPacket::patch),

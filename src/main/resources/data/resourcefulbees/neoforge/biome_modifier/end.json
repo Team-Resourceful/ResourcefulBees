@@ -1,0 +1,19 @@
+{
+  "type": "resourcefulbees:spawns",
+  "whitelist": [
+    "#minecraft:is_end"
+  ],
+  "spawn": {
+    "type": "resourcefulbees:ender_bee",
+    "weight": 8,
+    "minCount": 1,
+    "maxCount": 3
+  },
+  "spawnPredicate": {
+    "light": {
+      "light": {
+        "max": 7
+      }
+    }
+  }
+}

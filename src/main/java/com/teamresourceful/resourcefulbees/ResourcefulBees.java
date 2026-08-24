@@ -5,16 +5,22 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesCommand;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.data.TagGenerator;
+import com.teamresourceful.resourcefulbees.common.enchantments.HiveBreakHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultHiveTypes;
 import com.teamresourceful.resourcefulbees.common.lib.tools.ModValidation;
+import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registries.custom.*;
+import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBiomeModifiers;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModConditions;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModIngredientTypes;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModStructures;
 import com.teamresourceful.resourcefulbees.common.setup.DataSetup;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
@@ -22,7 +28,7 @@ import com.teamresourceful.resourcefulbees.common.setup.data.BeeSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
-import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
+import com.teamresourceful.resourcefulbees.common.world.gen.GoldenFlower;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -68,12 +74,12 @@ public class ResourcefulBees {
         RegistryHandler.registerDynamicHoney();
 
         ModValidation.init();
-        GameSetup.init();
 
         NeoForge.EVENT_BUS.addListener(ResourcefulBeesCommand::registerCommand);
-
-
-
+        NeoForge.EVENT_BUS.addListener(ModSpawnData::initialize);
+        NeoForge.EVENT_BUS.addListener(GoldenFlower::onBonemeal);
+        NeoForge.EVENT_BUS.addListener(ModStructures::onServerAboutToStart);
+        NeoForge.EVENT_BUS.addListener(HiveBreakHandler::onBlockDrops);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -81,7 +87,11 @@ public class ResourcefulBees {
         modEventBus.addListener(GameSetup::registerAttributes);
         modEventBus.addListener(GameSetup::registerRepositorySources);
         modEventBus.addListener(GameSetup::registerCapabilities);
+        modEventBus.addListener(GameSetup::initSpawns);
         ModIngredientTypes.register(modEventBus);
+        ModBiomeModifiers.init(modEventBus);
+        ModConditions.init(modEventBus);
+
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ResourcefulBees) to respond directly to events.

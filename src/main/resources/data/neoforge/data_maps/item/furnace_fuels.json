@@ -1,0 +1,10 @@
+{
+  "values": {
+    "resourcefulbees:wax": {
+      "burn_time": 400
+    },
+    "resourcefulbees:wax_block": {
+      "burn_time": 4000
+    }
+  }
+}

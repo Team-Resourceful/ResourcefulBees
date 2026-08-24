@@ -1,0 +1,12 @@
+{
+  "type": "resourcefulbees:spawns",
+  "whitelist": [
+    "#minecraft:is_nether"
+  ],
+  "spawn": {
+    "type": "resourcefulbees:pigman_bee",
+    "weight": 8,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

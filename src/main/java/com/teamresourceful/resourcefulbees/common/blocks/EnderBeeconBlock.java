@@ -73,10 +73,10 @@ public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> imple
                 }
             }
 
-            boolean moved = FluidUtil.interactWithFluidHandler(player, hand, pos, beecon.fluidHandler(), null);
+            boolean moved = FluidUtil.interactWithFluidHandler(player, hand, pos, beecon.tank(), null);
             if(moved) return InteractionResult.SUCCESS_SERVER;
 
-            return FluidUtils.fillOrEmptyBottle(beecon.fluidHandler(), player, hand);
+            return FluidUtils.fillOrEmptyBottle(beecon.tank(), player, hand);
         }
 
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);

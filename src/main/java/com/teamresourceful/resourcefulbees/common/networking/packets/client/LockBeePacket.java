@@ -3,14 +3,13 @@ package com.teamresourceful.resourcefulbees.common.networking.packets.client;
 import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.bytecodecs.base.object.ObjectByteCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
 import com.teamresourceful.resourcefullib.common.network.Packet;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.base.ServerboundPacketType;
 import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Consumer;
@@ -28,7 +27,7 @@ public record LockBeePacket(BlockPos pos, int bee) implements Packet<LockBeePack
 
         public Type() {
             super(
-                    Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "lock_bee"),
+                    ModIdentifier.of("lock_bee"),
                     ObjectByteCodec.create(
                             ExtraByteCodecs.BLOCK_POS.fieldOf(LockBeePacket::pos),
                             ByteCodec.VAR_INT.fieldOf(LockBeePacket::bee),

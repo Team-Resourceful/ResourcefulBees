@@ -1,13 +1,12 @@
 package com.teamresourceful.resourcefulbees.common.networking.packets.server;
 
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
 import com.teamresourceful.resourcefullib.common.network.Packet;
 import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketType;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketType;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public record SyncBeepediaPacket(@NotNull CompoundTag data) implements Packet<SyncBeepediaPacket> {
@@ -24,7 +23,7 @@ public record SyncBeepediaPacket(@NotNull CompoundTag data) implements Packet<Sy
 
         public Type() {
             super(
-                    Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "sync_beepedia"),
+                    ModIdentifier.of("sync_beepedia"),
                     ExtraByteCodecs.NONNULL_COMPOUND_TAG.map(SyncBeepediaPacket::new, SyncBeepediaPacket::data)
             );
         }

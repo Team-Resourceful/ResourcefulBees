@@ -1,0 +1,22 @@
+// 26.2	2026-08-23T19:09:43.565488	Resourceful Bees Block Tags
+10d6735ffb502bb2ffbab87542621fd71a6b8f05 data/c/tags/block/heat_sources.json
+36a491a695201f5b03b2c0cca537c626edbc6f3f data/c/tags/block/mushrooms.json
+a01355a860ebe6ffeaf9088113f98fa8b671a5f9 data/c/tags/block/storage_blocks.json
+d6cf88ab73624a67b1cffc6e2fe8d4b95b053a79 data/c/tags/block/storage_blocks/honeycombs.json
+97db687cb55b4a5035a83a364f8a26096ca17e7f data/c/tags/block/storage_blocks/wax.json
+9d7e57af77bd0bf8bb0026ca33c039f4d2010afc data/minecraft/tags/block/all_hanging_signs.json
+7aee81647e299b831904546b45116d0720d3f69d data/minecraft/tags/block/beehives.json
+9d7e57af77bd0bf8bb0026ca33c039f4d2010afc data/minecraft/tags/block/ceiling_hanging_signs.json
+456eaa5ca132de5ff23892fa6a371b4f7ab2e7d2 data/minecraft/tags/block/mineable/axe.json
+3fbd492babafeb04c14de061430ca0d4e9debe89 data/minecraft/tags/block/mineable/pickaxe.json
+9d7e57af77bd0bf8bb0026ca33c039f4d2010afc data/minecraft/tags/block/wall_hanging_signs.json
+4e7d97482f63a2f0eade2239ea7fda350aa2ac9f data/minecraft/tags/block/wooden_buttons.json
+82ad92ee1b2ea8a7998dc670055448bc48d090ac data/minecraft/tags/block/wooden_doors.json
+6e3cff71b97a16a431bf8e782cda2843eceac86c data/minecraft/tags/block/wooden_fences.json
+f65d846a9850662435bc04ba4cfc3ef286c95149 data/minecraft/tags/block/wooden_pressure_plates.json
+1ccef0138663648744c480496898695d9fe1cba2 data/minecraft/tags/block/wooden_slabs.json
+22d290ab9f9d905be675e07ca15d3bd94bb68735 data/minecraft/tags/block/wooden_stairs.json
+6fa8cc47a9d02fe2420b12f09d28e9dfc2eda1bc data/minecraft/tags/block/wooden_trapdoors.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/rbees_centrifuge/tags/block/pickaxe_mineable.json
+5909f1e85832cc442accaed95ef8bf1d67490960 data/resourcefulbees/tags/block/gold_flower_bonemealable.json
+9650a48240e50e2a8a5e87ef16c4d16cffbe822c data/resourcefulbees/tags/block/nest_placeable_on.json

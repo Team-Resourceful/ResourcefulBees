@@ -27,6 +27,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.permissions.Permissions;
 
+import java.util.Optional;
+
 public final class TemplateCommand {
 
     private static final Gson PRETTY_GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -91,25 +93,65 @@ public final class TemplateCommand {
         return 1;
     }
 
-    private static int printHoneycombTemplate(CommandContext<CommandSourceStack> context) {
+    private static int printHoneycombTemplate(
+            CommandContext<CommandSourceStack> context
+    ) {
         DataResult<JsonElement> variationResult = OutputVariation.CODEC.encodeStart(registryOps(context), DummyHoneycombData.DUMMY_OUTPUT_VARIATION);
-        ModConstants.LOGGER.info(PRETTY_GSON.toJson(variationResult.getOrThrow())); //todo add loggers back
+
+        Optional<JsonElement> result = variationResult.resultOrPartial(
+                error -> ModConstants.LOGGER.error(
+                        "Failed to encode honeycomb template: {}",
+                        error
+                )
+        );
+
+        if (result.isEmpty()) {
+            return 0;
+        }
+
+        ModConstants.LOGGER.info(PRETTY_GSON.toJson(result.get()));
         context.getSource().sendSuccess(() -> ModTranslations.HONEYCOMB_TEMPLATE_PRINTED, true);
+
         return 1;
     }
 
     private static int printHoneyTemplate(CommandContext<CommandSourceStack> context) {
-        DataResult<JsonElement> honeyResult = new DispatchMapCodec<>(Identifier.CODEC, HoneyDataRegistry.codec(TEMPLATE_STRING))
-                .encodeStart(registryOps(context), DummyHoneyData.DATA);
-        ModConstants.LOGGER.info(PRETTY_GSON.toJson(honeyResult.getOrThrow()));
+        DataResult<JsonElement> honeyResult = new DispatchMapCodec<>(Identifier.CODEC, HoneyDataRegistry.codec(TEMPLATE_STRING)).encodeStart(registryOps(context), DummyHoneyData.DATA);
+
+        Optional<JsonElement> result = honeyResult.resultOrPartial(
+                error -> ModConstants.LOGGER.error(
+                        "Failed to encode honey template: {}",
+                        error
+                )
+        );
+
+        if (result.isEmpty()) {
+            return 0;
+        }
+
+        ModConstants.LOGGER.info(PRETTY_GSON.toJson(result.get()));
         context.getSource().sendSuccess(() -> ModTranslations.HONEY_TEMPLATE_PRINTED, true);
+
         return 1;
     }
 
     private static int printTraitTemplate(CommandContext<CommandSourceStack> context) {
         DataResult<JsonElement> traitResult = Trait.getCodec(TEMPLATE_STRING).encodeStart(registryOps(context), DummyTraitData.DUMMY_TRAIT_DATA);
-        ModConstants.LOGGER.info(PRETTY_GSON.toJson(traitResult.getOrThrow()));
+
+        Optional<JsonElement> result = traitResult.resultOrPartial(
+                error -> ModConstants.LOGGER.error(
+                        "Failed to encode trait template: {}",
+                        error
+                )
+        );
+
+        if (result.isEmpty()) {
+            return 0;
+        }
+
+        ModConstants.LOGGER.info(PRETTY_GSON.toJson(result.get()));
         context.getSource().sendSuccess(() -> ModTranslations.TRAIT_TEMPLATE_PRINTED, true);
+
         return 1;
     }
 }

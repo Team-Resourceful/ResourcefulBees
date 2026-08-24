@@ -10,6 +10,7 @@ import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.config.ApiaryConfig;
 import com.teamresourceful.resourcefulbees.common.config.HoneycombConfig;
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneycombItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
@@ -97,8 +98,8 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
 
     private static void parseVariationData(String s, JsonObject jsonObject) {
         VARIATION_CODEC.parse(JsonOps.INSTANCE, jsonObject)
-                .getOrThrow()//(false, s2 -> ModConstants.LOGGER.error("Could not create output variation from {} json file!", s))
-                .forEach(HoneycombRegistry::computeVariation);
+                .resultOrPartial(s1 -> ModConstants.LOGGER.error("Could not create output variation from {} json file!", s))
+                .ifPresent(outputVariations -> outputVariations.forEach(HoneycombRegistry::computeVariation));
     }
 
     private static void computeVariation(OutputVariation variation) {
@@ -116,7 +117,7 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
 
     private static void parseRegistryData(String s, JsonObject jsonObject) {
         RegistryData.codec(s).optionalFieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject)
-                .getOrThrow();//(false, s2 -> ModConstants.LOGGER.warn("Could not create honeycomb registry item from {} json file.", s));
+                .resultOrPartial(s1 -> ModConstants.LOGGER.warn("Could not create honeycomb registry item from {} json file.", s));
     }
 
     @Override

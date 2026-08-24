@@ -126,8 +126,6 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
     }
 
     private void drawRecipesBackground(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {
-        //var count = apiaryBlockEntity.beeCount();
-        //System.out.println(count);
         for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.beeCount(); ++i) {
             var bee = this.menu.getApiaryBee(i);
             int index = i - this.beeIndexOffset;

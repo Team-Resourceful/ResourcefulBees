@@ -14,12 +14,12 @@ import java.util.List;
 public interface StructureTemplatePoolAccessor {
 
     @Accessor("templates")
-    ObjectArrayList<StructurePoolElement> getTemplates();
+    ObjectArrayList<StructurePoolElement> resourcefulbees$getTemplates();
 
     @Accessor("rawTemplates")
-    List<Pair<StructurePoolElement, Integer>> getRawTemplates();
+    List<Pair<StructurePoolElement, Integer>> resourcefulbees$getRawTemplates();
 
     @Mutable
     @Accessor("rawTemplates")
-    void setRawTemplates(List<Pair<StructurePoolElement, Integer>> templates);
+    void resourcefulbees$setRawTemplates(List<Pair<StructurePoolElement, Integer>> templates);
 }

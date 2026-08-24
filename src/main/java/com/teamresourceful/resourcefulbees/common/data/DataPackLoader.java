@@ -31,7 +31,9 @@ public final class DataPackLoader implements RepositorySource {
     public static final Component TITLE = Component.literal("Data for Resourceful Bees");
     private static final PackMetadataSection METADATA = new PackMetadataSection(TITLE, SharedConstants.getCurrentVersion().packVersion(PackType.SERVER_DATA).minorRange());
 
-    public DataPackLoader() {}
+    public DataPackLoader() {
+        //cant throw exception for utility class
+    }
 
     @Override
     public void loadPacks(Consumer<Pack> onLoad) {

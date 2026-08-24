@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.setup;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument;
 import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
+import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModArguments;
@@ -17,17 +18,22 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.transfer.fluid.BucketResourceHandler;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 public final class GameSetup {
 
@@ -53,10 +59,6 @@ public final class GameSetup {
         //RegisterHiveBreakBlocksEvent.EVENT.addListener(GameSetup::onHiveBreakConversions);
     }
 
-    public static void init() {
-        //ConditionRegistry.registerCondition(new LoadDevRecipes());
-    }
-
     public static void initPotionRecipes() {
         //PotionRegistry.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(HONEY_BOTTLE_TAG), ModPotions.CALMING_POTION.get());
         //PotionRegistry.registerPotionRecipe(ModPotions.CALMING_POTION.get(), Ingredient.of(Items.GLOWSTONE_DUST), ModPotions.LONG_CALMING_POTION.get());
@@ -66,24 +68,17 @@ public final class GameSetup {
         ArgumentTypeInfos.registerByClass(BeeArgument.class, ModArguments.BEE_TYPE.get());
     }
 
-//    public static void initIngredients(RegisterIngredientsEvent event) {
-//        event.register(BeeJarIngredient.SERIALIZER);
-//    }
 
-//    public static void initBurnables(RegisterBurnablesEvent event) {
-//        event.register(400, ModItems.WAX.get());
-//        event.register(4000, ModItems.WAX_BLOCK_ITEM.get());
-//    }
-//
-//    public static void initSpawns(RegisterSpawnPlacementsEvent event) {
-//        ModEntities.getModBees().forEach((s, entityType) ->
-//                event.register(entityType.get(),
-//                        SpawnPlacementTypes.ON_GROUND,
-//                        Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-//                        CustomBeeEntity::canBeeSpawn
-//                )
-//        );
-//    }
+    public static void initSpawns(RegisterSpawnPlacementsEvent event) {
+        ModEntities.getModBees().forEach((s, entityType) ->
+                event.register(entityType.get(),
+                        SpawnPlacementTypes.ON_GROUND,
+                        Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                        CustomBeeEntity::canBeeSpawn,
+                        RegisterSpawnPlacementsEvent.Operation.REPLACE
+                )
+        );
+    }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         ModEntities.getModBees().forEach((s, entityType) -> event.put(
@@ -99,42 +94,51 @@ public final class GameSetup {
 //        }
     }
 
-//    public static void onHiveBreakConversions(RegisterHiveBreakBlocksEvent event) {
-//        event.register(() -> Blocks.STRIPPED_ACACIA_LOG, ModBlocks.ACACIA_BEE_NEST);
-//        event.register(() -> Blocks.STRIPPED_BIRCH_LOG, ModBlocks.BIRCH_BEE_NEST);
-//        event.register(() -> Blocks.STRIPPED_JUNGLE_LOG, ModBlocks.JUNGLE_BEE_NEST);
-//        event.register(() -> Blocks.STRIPPED_OAK_LOG, ModBlocks.OAK_BEE_NEST);
-//        event.register(() -> Blocks.STRIPPED_SPRUCE_LOG, ModBlocks.SPRUCE_BEE_NEST);
-//        event.register(() -> Blocks.STRIPPED_DARK_OAK_LOG, ModBlocks.DARK_OAK_BEE_NEST);
-//        event.register(() -> Blocks.GRASS_BLOCK, ModBlocks.GRASS_BEE_NEST);
-//        event.register(() -> Blocks.CRIMSON_NYLIUM, ModBlocks.CRIMSON_NYLIUM_BEE_NEST);
-//        event.register(() -> Blocks.CRIMSON_STEM, ModBlocks.CRIMSON_BEE_NEST);
-//        event.register(() -> Blocks.WARPED_NYLIUM, ModBlocks.WARPED_NYLIUM_BEE_NEST);
-//        event.register(() -> Blocks.WARPED_STEM, ModBlocks.WARPED_BEE_NEST);
-//        event.register(() -> Blocks.RED_MUSHROOM_BLOCK, ModBlocks.RED_MUSHROOM_BEE_NEST);
-//        event.register(() -> Blocks.BROWN_MUSHROOM_BLOCK, ModBlocks.BROWN_MUSHROOM_BEE_NEST);
-//        event.register(() -> Blocks.PURPUR_BLOCK, ModBlocks.PURPUR_BEE_NEST);
-//        event.register(() -> Blocks.NETHERRACK, ModBlocks.NETHER_BEE_NEST);
-//        event.register(() -> Blocks.PRISMARINE, ModBlocks.PRISMARINE_BEE_NEST);
-//    }
-
     public static void initPaths() {
         ModConstants.LOGGER.info("Setting up config paths...");
 
-        try (FileWriter file = new FileWriter(Paths.get(ModPaths.RESOURCES.toAbsolutePath().toString(), "pack.mcmeta").toFile())) {
-            int clientVersion = SharedConstants.getCurrentVersion().packVersion(PackType.CLIENT_RESOURCES).major(); //todo fix this
-            String mcMetaContent = "{\"pack\":{\"pack_format\":" + clientVersion + ",\"description\":\"Resourceful Bees resource pack used for lang purposes for the user to add lang for bee/items.\"}}";
-            file.write(mcMetaContent);
-        } catch (FileAlreadyExistsException ignored) { //ignored
+        Path packMeta = ModPaths.RESOURCES.resolve("pack.mcmeta");
+
+        if (Files.exists(packMeta)) {
+            return;
+        }
+
+        try {
+            Files.createDirectories(ModPaths.RESOURCES);
+
+            var packVersion = SharedConstants.getCurrentVersion().packVersion(PackType.CLIENT_RESOURCES);
+
+            String mcMetaContent = """
+                {
+                  "pack": {
+                    "min_format": [%d, %d],
+                    "max_format": [%d, %d],
+                    "description": "Resourceful Bees resource pack used for user-provided bee/item translations."
+                  }
+                }
+                """.formatted(
+                    packVersion.major(),
+                    packVersion.minor(),
+                    packVersion.major(),
+                    packVersion.minor()
+            );
+
+            Files.writeString(packMeta, mcMetaContent, StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW);
+        } catch (FileAlreadyExistsException _) {
         } catch (IOException e) {
-            ModConstants.LOGGER.error("Failed to create pack.mcmeta file for resource loading");
+            ModConstants.LOGGER.error("Failed to create resource pack metadata at {}", packMeta, e);
         }
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModBlockEntityTypes.T1_APIARY_ENTITY.get(), (apiaryBlock, side) -> apiaryBlock.resourceHandler());
-        event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), (blockEntity, side) -> blockEntity.fluidHandler());
-        event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), (blockEntity, side) -> blockEntity.fluidResourceHandler());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY.get(), (blockEntity, side) -> blockEntity.tank());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), (blockEntity, side) -> blockEntity.tank());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.HONEY_POT_TILE_ENTITY.get(), (blockEntity, context) -> blockEntity.tank());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), (blockEntity, context) -> blockEntity.tank());
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), (blockEntity, context) -> blockEntity.tank());
+
+
         event.registerItem(Capabilities.Fluid.ITEM, (object, context) ->  new BucketResourceHandler(context), ModItems.HONEY_BUCKET.get());
     }
 }

@@ -301,7 +301,7 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
         return this.inventory;
     }
 
-    public CentrifugeFluidResourceHandler fluidResourceHandler() {
+    public CentrifugeFluidResourceHandler tank() {
         return this.tank;
     }
 

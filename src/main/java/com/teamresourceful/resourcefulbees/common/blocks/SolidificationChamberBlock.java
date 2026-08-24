@@ -91,11 +91,11 @@ public class SolidificationChamberBlock extends TickingBlock<SolidificationChamb
     protected @NonNull InteractionResult useItemOn(@NonNull ItemStack itemStack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof SolidificationChamberBlockEntity chamber) {
-            boolean moved = FluidUtil.interactWithFluidHandler(player, hand, pos, chamber.fluidHandler(), null);
+            boolean moved = FluidUtil.interactWithFluidHandler(player, hand, pos, chamber.tank(), null);
             if (moved) {
                 return InteractionResult.SUCCESS_SERVER;
             }
-            return FluidUtils.fillOrEmptyBottle(chamber.fluidHandler(), player, hand);
+            return FluidUtils.fillOrEmptyBottle(chamber.tank(), player, hand);
         }
         return super.useItemOn(itemStack, state, level, pos, player, hand, hitResult);
     }

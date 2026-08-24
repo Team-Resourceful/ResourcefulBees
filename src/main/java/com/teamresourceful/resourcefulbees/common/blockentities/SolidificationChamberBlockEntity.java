@@ -48,6 +48,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
 
     public static final int BLOCK_OUTPUT = 0;
     private static final int TANK_INPUT = 0;
+    public static final int TANK_CAPACITY = 64000;
 
     private final FluidHandler tank = new FluidHandler();
     private final ItemHandler container = new ItemHandler();
@@ -214,7 +215,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
         }
     }
 
-    public FluidHandler fluidHandler() {
+    public FluidHandler tank() {
         return this.tank;
     }
 
@@ -298,7 +299,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
     public class FluidHandler extends FluidStacksResourceHandler {
 
         public FluidHandler() {
-            super(1, 64000);
+            super(1, TANK_CAPACITY);
         }
 
         @Override

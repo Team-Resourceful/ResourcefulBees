@@ -5,9 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.registry.HoneycombRegistry;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-import com.teamresourceful.resourcefullib.common.codecs.recipes.ItemStackCodec;
-import com.teamresourceful.resourcefullib.common.lib.Constants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -26,7 +24,7 @@ public record OutputVariation(String id,
 ) {
 
     public static final Codec<OutputVariation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.STRING.fieldOf("identifier").orElseGet((Consumer<String>) s -> Constants.LOGGER.error("Identifier is REQUIRED!"), null).forGetter(OutputVariation::id),
+            Codec.STRING.fieldOf("identifier").orElseGet((Consumer<String>) s -> ModConstants.LOGGER.error("Identifier is REQUIRED!"), null).forGetter(OutputVariation::id),
             Codec.unboundedMap(BeehiveTier.CODEC, ItemStackTemplate.CODEC).fieldOf("hiveCombs").orElseGet(HashMap::new).forGetter(OutputVariation::hiveCombs),
             Codec.unboundedMap(ApiaryTier.CODEC, ItemStackTemplate.CODEC).fieldOf("apiaryCombs").orElseGet(HashMap::new).forGetter(OutputVariation::apiaryCombs),
             ItemStackTemplate.CODEC.optionalFieldOf("defaultComb").forGetter(OutputVariation::defaultComb),

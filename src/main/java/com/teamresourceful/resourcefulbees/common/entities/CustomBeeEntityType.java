@@ -2,17 +2,15 @@ package com.teamresourceful.resourcefulbees.common.entities;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EntityTypeIds;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.flag.FeatureFlags;
-import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Optional;
 
@@ -22,7 +20,7 @@ public class CustomBeeEntityType<T extends Bee> extends EntityType<T> {
 
     public CustomBeeEntityType(Identifier beeType, EntityFactory<T> factory, EntityDimensions dimensions) {
         super(factory,
-                MobCategory.valueOf("RESOURCEFULBEES_BEE"),
+                ModConstants.RESOURCEFUL_BEE_CATEGORY,
                 true,
                 true,
                 false,

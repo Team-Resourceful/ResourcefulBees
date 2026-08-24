@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.datagen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.datagen.providers.RBeesModelProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.RBeesFluidTagProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.RBeesBlockTagProvider;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -29,6 +30,7 @@ public final class RBeesDataGenerator {
 
         event.addProvider(new RBeesModelProvider(output));
         event.addProvider(new RBeesFluidTagProvider(output, provider));
+        event.addProvider(new RBeesBlockTagProvider(output, provider));
 
 
 

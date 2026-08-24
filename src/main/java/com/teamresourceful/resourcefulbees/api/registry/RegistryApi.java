@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.registry;
 
-import com.teamresourceful.resourcefullib.common.lib.Constants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import org.jetbrains.annotations.ApiStatus;
 
 @SuppressWarnings("unused")
@@ -17,7 +17,7 @@ public class RegistryApi {
     public void setBeeRegistry(BeeRegistry beeRegistry) {
         if (bee == null) {
             bee = beeRegistry;
-            Constants.LOGGER.info("Bee Registry Initialized...");
+            ModConstants.LOGGER.info("Bee Registry Initialized...");
         }
     }
 
@@ -25,7 +25,7 @@ public class RegistryApi {
     public void setTraitRegistry(TraitRegistry traitRegistry) {
         if (trait == null) {
             trait = traitRegistry;
-            Constants.LOGGER.info("Trait Registry Initialized...");
+            ModConstants.LOGGER.info("Trait Registry Initialized...");
         }
     }
 
@@ -33,7 +33,7 @@ public class RegistryApi {
     public void setHoneyRegistry(HoneyRegistry honeyRegistry) {
         if (honey == null) {
             honey = honeyRegistry;
-            Constants.LOGGER.info("Honey Registry Initialized...");
+            ModConstants.LOGGER.info("Honey Registry Initialized...");
         }
     }
 
@@ -41,7 +41,7 @@ public class RegistryApi {
     public void setTraitAbilityRegistry(TraitAbilityRegistry traitAbilityRegistry) {
         if (ability == null) {
             ability = traitAbilityRegistry;
-            Constants.LOGGER.info("Trait Ability Registry Initialized...");
+            ModConstants.LOGGER.info("Trait Ability Registry Initialized...");
         }
     }
 
@@ -49,7 +49,7 @@ public class RegistryApi {
     public void setHoneycombRegistry(HoneycombRegistry honeycombRegistry) {
         if (combs == null) {
             combs = honeycombRegistry;
-            Constants.LOGGER.info("Honeycomb Registry Initialized...");
+            ModConstants.LOGGER.info("Honeycomb Registry Initialized...");
         }
     }
 

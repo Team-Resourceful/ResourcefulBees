@@ -8,11 +8,14 @@ import com.teamresourceful.resourcefullib.common.item.tabs.ResourcefulCreativeMo
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.Comparator;
 import java.util.stream.Stream;
@@ -83,6 +86,7 @@ public class ModCreativeTabs {
                 output.accept(ModItems.WAXED_TRAPDOOR.get());
                 output.accept(ModItems.WAXED_SIGN.get());
                 output.accept(ModItems.WAXED_HANGING_SIGN.get());
+                addHiveBreakBooks(parameters, output);
             }).build()
     );
 
@@ -158,4 +162,16 @@ public class ModCreativeTabs {
                             )
                             .build()
             );
+
+    private static void addHiveBreakBooks(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
+        Holder<Enchantment> hiveBreak = parameters.holders()
+                .lookupOrThrow(Registries.ENCHANTMENT)
+                .getOrThrow(ModEnchantments.HIVE_BREAK);
+
+        for (int level = hiveBreak.value().getMinLevel(); level <= hiveBreak.value().getMaxLevel(); level++) {
+            ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
+            book.enchant(hiveBreak, level);
+            output.accept(book);
+        }
+    }
 }

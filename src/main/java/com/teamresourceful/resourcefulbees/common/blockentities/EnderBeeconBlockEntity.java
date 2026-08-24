@@ -149,7 +149,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     @Override
     protected void loadAdditional(@NonNull ValueInput input) {
         super.loadAdditional(input);
-        input.readChild("tank", fluidHandler());
+        input.readChild("tank", tank());
         setRange(input.getIntOr("range", 10));
         activeEffects.clear();
         input.listOrEmpty("activeEffects", BeeconEffect.CODEC).forEach(activeEffects::add);
@@ -160,7 +160,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     @Override
     protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
-        output.putChild("tank", fluidHandler());
+        output.putChild("tank", tank());
         output.putInt("range", range);
         ValueOutput.TypedOutputList<BeeconEffect> outputList = output.list("activeEffects", BeeconEffect.CODEC);
         for (BeeconEffect effect : activeEffects) outputList.add(effect);
@@ -412,7 +412,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         return Math.toIntExact(Math.round(base));
     }
 
-    public FluidHandler fluidHandler() {
+    public FluidHandler tank() {
         return tank;
     }
 

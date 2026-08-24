@@ -2,12 +2,15 @@ package com.teamresourceful.resourcefulbees.common.lib.constants;
 
 import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import net.minecraft.world.entity.MobCategory;
 import net.neoforged.neoforge.common.ItemAbility;
 import org.slf4j.Logger;
 
 import java.util.UUID;
 
 public final class ModConstants {
+
+    public static final MobCategory RESOURCEFUL_BEE_CATEGORY = MobCategory.valueOf("RESOURCEFULBEES_BEE");
 
     private ModConstants() throws UtilityClassException {
         throw new UtilityClassException();

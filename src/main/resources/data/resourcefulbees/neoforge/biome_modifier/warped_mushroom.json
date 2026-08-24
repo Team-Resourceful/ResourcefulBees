@@ -1,0 +1,10 @@
+{
+  "type": "resourcefulbees:spawns",
+  "whitelist": ["minecraft:warped_forest"],
+  "spawn": {
+    "type": "resourcefulbees:warped_fungus_bee",
+    "weight": 8,
+    "minCount": 1,
+    "maxCount": 3
+  }
+}

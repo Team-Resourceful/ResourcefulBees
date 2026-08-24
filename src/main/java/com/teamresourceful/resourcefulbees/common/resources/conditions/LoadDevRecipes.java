@@ -1,22 +1,27 @@
 package com.teamresourceful.resourcefulbees.common.resources.conditions;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
-import com.teamresourceful.resourcefulbees.common.lib.data.conditions.Conditional;
-import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import org.jspecify.annotations.NonNull;
 
-public final class LoadDevRecipes implements Conditional {
+public final class LoadDevRecipes implements ICondition {
 
-    private static final Identifier ID = ModIdentifier.of("dev_recipes");
+    public static final LoadDevRecipes INSTANCE = new LoadDevRecipes();
 
-    @Override
-    public Identifier getId() {
-        return ID;
+    public static final MapCodec<LoadDevRecipes> CODEC =
+            MapCodec.unit(INSTANCE);
+
+    private LoadDevRecipes() {
     }
 
     @Override
-    public boolean test(JsonObject jsonObject) {
+    public boolean test(@NonNull IContext context) {
         return GeneralConfig.enableDevBees;
+    }
+
+    @Override
+    public @NonNull MapCodec<? extends ICondition> codec() {
+        return CODEC;
     }
 }

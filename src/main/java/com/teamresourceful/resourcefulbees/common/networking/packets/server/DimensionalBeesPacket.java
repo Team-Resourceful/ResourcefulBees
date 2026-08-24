@@ -2,19 +2,19 @@ package com.teamresourceful.resourcefulbees.common.networking.packets.server;
 
 import com.teamresourceful.bytecodecs.base.ByteCodec;
 import com.teamresourceful.bytecodecs.defaults.MapCodec;
-//import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.bytecodecs.ExtraByteCodecs;
 import com.teamresourceful.resourcefullib.common.network.Packet;
 import com.teamresourceful.resourcefullib.common.network.base.ClientboundPacketType;
 import com.teamresourceful.resourcefullib.common.network.base.PacketType;
 import com.teamresourceful.resourcefullib.common.network.defaults.CodecPacketType;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Map;
+
+//import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 
 public record DimensionalBeesPacket(
         Map<ResourceKey<Level>, List<String>> bees
@@ -31,7 +31,7 @@ public record DimensionalBeesPacket(
 
         public Type() {
             super(
-                    Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "dimensional_bees"),
+                    ModIdentifier.of("dimensional_bees"),
                     new MapCodec<>(ExtraByteCodecs.DIMENSION, ByteCodec.STRING.listOf()).map(DimensionalBeesPacket::new, DimensionalBeesPacket::bees)
             );
         }

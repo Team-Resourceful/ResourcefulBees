@@ -6,15 +6,14 @@
             "count": 2
         },
         {
-            "type": "minecraft:heightmap",
-            "heightmap": "WORLD_SURFACE_WG"
+            "type": "minecraft:rarity_filter",
+            "chance": 32
         },
         {
             "type": "minecraft:in_square"
         },
         {
-            "type": "minecraft:rarity_filter",
-            "chance": 32
+            "type": "minecraft:biome"
         }
     ]
 }

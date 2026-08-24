@@ -24,7 +24,7 @@
 //    private static class PacketType extends CodecPacketType<FindBeePacket> implements ServerboundPacketType<FindBeePacket> {
 //        public PacketType() {
 //            super(
-//                    Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "find_bee"),
+//                    ModIdentifier.of("find_bee"),
 //                    ObjectByteCodec.create(
 //                            ByteCodec.STRING.fieldOf(FindBeePacket::bee),
 //                            ByteCodec.VAR_INT.fieldOf(FindBeePacket::slot),

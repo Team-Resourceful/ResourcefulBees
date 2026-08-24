@@ -71,11 +71,16 @@ public final class RegistryHandler {
             for (int i = 1; i < 5; i++) {
                 String id = "nest/" + hiveType.type() + "/" + i;
                 RegistryEntry<Block> block = ModBlocks.registerHive(id, i, hiveType.properties());
+
                 switch (i) {
                     case 4 -> ModItems.registerHiveItem(ModItems.T4_NEST_ITEMS, id, block);
                     case 3 -> ModItems.registerHiveItem(ModItems.T3_NEST_ITEMS, id, block);
                     case 2 -> ModItems.registerHiveItem(ModItems.T2_NEST_ITEMS, id, block);
-                    default -> ModItems.registerHiveItem(ModItems.T1_NEST_ITEMS, id, block);
+                    case 1 ->  {
+                        ModItems.registerHiveItem(ModItems.T1_NEST_ITEMS, id, block);
+                        hiveType.cacheTierOneNest(block);
+                    }
+                    default -> throw new IllegalStateException("Only 4 hive tiers exist, please report to github!");
                 }
             }
         });

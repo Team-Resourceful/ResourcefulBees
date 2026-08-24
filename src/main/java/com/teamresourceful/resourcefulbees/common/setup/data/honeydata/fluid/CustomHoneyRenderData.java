@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.setup.data.honeydata.fluid;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.resources.Identifier;
 
@@ -15,9 +15,9 @@ public record CustomHoneyRenderData(
         Identifier overlay
 ) implements HoneyRenderData {
 
-    private static final Identifier CUSTOM_FLUID_STILL = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "block/honey/custom_honey_still");
-    private static final Identifier CUSTOM_FLUID_FLOWING = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "block/honey/custom_honey_flow");
-    private static final Identifier CUSTOM_FLUID_UNDERWATER = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "textures/block/honey/custom_honey_underwater.png");
+    private static final Identifier CUSTOM_FLUID_STILL = ModIdentifier.of("block/honey/custom_honey_still");
+    private static final Identifier CUSTOM_FLUID_FLOWING = ModIdentifier.of("block/honey/custom_honey_flow");
+    private static final Identifier CUSTOM_FLUID_UNDERWATER = ModIdentifier.of("textures/block/honey/custom_honey_underwater.png");
 
     public static final CustomHoneyRenderData DEFAULT = new CustomHoneyRenderData(Color.DEFAULT, CUSTOM_FLUID_STILL, CUSTOM_FLUID_FLOWING, CUSTOM_FLUID_FLOWING, CUSTOM_FLUID_UNDERWATER);
 
