@@ -17,10 +17,7 @@ import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHandler;
 import com.teamresourceful.resourcefulbees.common.registries.custom.*;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBiomeModifiers;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModConditions;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModIngredientTypes;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModStructures;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.*;
 import com.teamresourceful.resourcefulbees.common.setup.DataSetup;
 import com.teamresourceful.resourcefulbees.common.setup.GameSetup;
 import com.teamresourceful.resourcefulbees.common.setup.MissingRegistrySetup;
@@ -80,6 +77,7 @@ public class ResourcefulBees {
         NeoForge.EVENT_BUS.addListener(GoldenFlower::onBonemeal);
         NeoForge.EVENT_BUS.addListener(ModStructures::onServerAboutToStart);
         NeoForge.EVENT_BUS.addListener(HiveBreakHandler::onBlockDrops);
+        NeoForge.EVENT_BUS.addListener(ModBrewingRecipes::register);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);

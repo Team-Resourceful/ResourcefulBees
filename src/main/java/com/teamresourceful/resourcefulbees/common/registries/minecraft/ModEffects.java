@@ -3,7 +3,7 @@ package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
-import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
@@ -21,7 +21,7 @@ public final class ModEffects {
 
     public static final ResourcefulRegistry<MobEffect> EFFECTS = RegistryHelper.create(BuiltInRegistries.MOB_EFFECT, ModConstants.MOD_ID);
 
-    public static final RegistryEntry<MobEffect> CALMING = EFFECTS.register("calming", () -> new MobEffect(MobEffectCategory.BENEFICIAL, 16763783) {
+    public static final HolderRegistryEntry<MobEffect> CALMING = EFFECTS.registerHolder("calming", () -> new MobEffect(MobEffectCategory.BENEFICIAL, 16763783) {
         @Override
         public boolean applyEffectTick(@NonNull ServerLevel serverLevel, @NonNull LivingEntity mob, int amplification) {
             if (mob instanceof NeutralMob neutralMob) neutralMob.stopBeingAngry();
