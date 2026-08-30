@@ -1,0 +1,23 @@
+{
+  "additional_wants": {
+    "count": {
+      "type": "minecraft:uniform",
+      "max": 24.0,
+      "min": 8.0
+    },
+    "id": "minecraft:grass_block"
+  },
+  "gives": {
+    "id": "resourcefulbees:nest/grass/4"
+  },
+  "reputation_discount": 0.1,
+  "wants": {
+    "count": {
+      "type": "minecraft:uniform",
+      "max": 32.0,
+      "min": 16.0
+    },
+    "id": "resourcefulbees:gold_flower"
+  },
+  "xp": 3.0
+}

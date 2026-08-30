@@ -15,12 +15,11 @@ import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.List;
 import java.util.Map;
@@ -35,9 +34,9 @@ public final class DummyHoneyData {
     private static final InitializerApi API = ResourcefulBeesAPI.getInitializers();
 
     private static final BeekeeperTradeData DEFAULT_TRADE = API.beekeeperTrade(
-            UniformInt.of(1,1),
+            UniformGenerator.between(1,1),
             Items.AIR,
-            UniformInt.of(1,1),
+            UniformGenerator.between(1,1),
             0,
             1,
             1

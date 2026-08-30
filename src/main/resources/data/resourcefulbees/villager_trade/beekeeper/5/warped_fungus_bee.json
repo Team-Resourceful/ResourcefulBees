@@ -1,0 +1,44 @@
+{
+  "wants": {
+    "id": "resourcefulbees:gold_flower",
+    "count": {
+      "min": 32.0,
+      "max": 64.0,
+      "type": "minecraft:uniform"
+    }
+  },
+  "additional_wants": {
+    "id": "minecraft:warped_hyphae",
+    "count": {
+      "min": 4.0,
+      "max": 8.0,
+      "type": "minecraft:uniform"
+    }
+  },
+  "gives": {
+    "id": "resourcefulbees:bee_jar",
+    "components": {
+      "resourcefulbees:jar_bee": {
+        "entityType": "resourcefulbees:warped_fungus_bee",
+        "ticks_in_jar": 0,
+        "display_name": {
+          "translate": "entity_type.resourcefulbees.warped_fungus_bee"
+        },
+        "color": -15303034
+      }
+    }
+  },
+  "max_uses": 2.0,
+  "reputation_discount": 4.0,
+  "xp": 3.0,
+  "given_item_modifiers": [
+    {
+      "count": {
+        "min": 1.0,
+        "max": 1.0,
+        "type": "minecraft:uniform"
+      },
+      "function": "minecraft:set_count"
+    }
+  ]
+}

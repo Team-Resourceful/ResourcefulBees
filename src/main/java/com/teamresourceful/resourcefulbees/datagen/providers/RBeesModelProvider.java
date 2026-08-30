@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.datagen.providers;
 
-import com.teamresourceful.resourcefulbees.ResourcefulBees;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
@@ -602,5 +601,10 @@ public class RBeesModelProvider extends ModelProvider {
 
     private static Material minecraftMaterial(String path) {
         return new Material(Identifier.withDefaultNamespace(path), false);
+    }
+
+    @Override
+    public @NonNull String getName() {
+        return "Resourceful Bees Model Provider";
     }
 }

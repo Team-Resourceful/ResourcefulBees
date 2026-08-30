@@ -33,6 +33,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -85,7 +86,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface BeekeeperTradeInitializer {
-        BeekeeperTradeData create(UniformInt amount, Item secondaryItem, UniformInt secondaryItemCost, float priceMultiplier, int maxTrades, int xp);
+        BeekeeperTradeData create(UniformGenerator amount, Item secondaryItem, UniformGenerator secondaryItemCost, float priceMultiplier, int maxTrades, int xp);
     }
 
     @FunctionalInterface

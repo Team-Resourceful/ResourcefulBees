@@ -2,7 +2,8 @@ package com.teamresourceful.resourcefulbees.common.setup;
 
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.commands.arguments.BeeArgument;
-import com.teamresourceful.resourcefulbees.common.data.DataPackLoader;
+import com.teamresourceful.resourcefulbees.common.data.ConfigDatapack;
+import com.teamresourceful.resourcefulbees.common.data.InMemoryDatapack;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
@@ -14,8 +15,14 @@ import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassExceptio
 import net.minecraft.SharedConstants;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.PackLocationInfo;
+import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.PathPackResources;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -34,6 +41,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Optional;
 
 public final class GameSetup {
 
@@ -88,10 +96,25 @@ public final class GameSetup {
     }
 
     public static void registerRepositorySources(AddPackFindersEvent event) {
-        event.addRepositorySource(new DataPackLoader());
-        //        if (event.type().equals(PackType.SERVER_DATA)) {
-//            event.register(DataPackLoader.INSTANCE);
-//        }
+        if (event.getPackType().equals(PackType.SERVER_DATA)) {
+            event.addRepositorySource(InMemoryDatapack.INSTANCE);
+            event.addRepositorySource(ConfigDatapack.INSTANCE);
+        }
+
+        if (event.getPackType() == PackType.CLIENT_RESOURCES) {
+            event.addRepositorySource(consumer -> {
+                PackLocationInfo locationInfo = new PackLocationInfo(ModConstants.MOD_ID, Component.literal(ModConstants.MOD_ID), PackSource.BUILT_IN, Optional.empty());
+                PackSelectionConfig selectionConfig = new PackSelectionConfig(true, Pack.Position.BOTTOM, false);
+                Pack pack = Pack.readMetaAndCreate(locationInfo, new PathPackResources.PathResourcesSupplier(ModPaths.RESOURCES), PackType.CLIENT_RESOURCES, selectionConfig);
+
+                if (pack == null) {
+                    ModConstants.LOGGER.error("Failed to load Resourceful Bees client resource pack.");
+                    return;
+                }
+
+                consumer.accept(pack);
+            });
+        }
     }
 
     public static void initPaths() {

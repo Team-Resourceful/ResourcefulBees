@@ -1,0 +1,27 @@
+{
+  "replace": false,
+  "values": [
+    "resourcefulbees:beekeeper/5/queen_bee_banner",
+    "resourcefulbees:beekeeper/5/lapis_bee",
+    "resourcefulbees:beekeeper/5/gold_bee",
+    "resourcefulbees:beekeeper/5/coal_bee",
+    "resourcefulbees:beekeeper/5/pigman_bee",
+    "resourcefulbees:beekeeper/5/rgbee_bee",
+    "resourcefulbees:beekeeper/5/brown_mushroom_bee",
+    "resourcefulbees:beekeeper/5/skeleton_bee",
+    "resourcefulbees:beekeeper/5/emerald_bee",
+    "resourcefulbees:beekeeper/5/zombee_bee",
+    "resourcefulbees:beekeeper/5/icy_bee",
+    "resourcefulbees:beekeeper/5/slimy_bee",
+    "resourcefulbees:beekeeper/5/ender_bee",
+    "resourcefulbees:beekeeper/5/red_mushroom_bee",
+    "resourcefulbees:beekeeper/5/nether_quartz_bee",
+    "resourcefulbees:beekeeper/5/redstone_bee",
+    "resourcefulbees:beekeeper/5/iron_bee",
+    "resourcefulbees:beekeeper/5/beeper_bee",
+    "resourcefulbees:beekeeper/5/dungeon_bee",
+    "resourcefulbees:beekeeper/5/warped_fungus_bee",
+    "resourcefulbees:beekeeper/5/diamond_bee",
+    "resourcefulbees:beekeeper/5/crimson_fungus_bee"
+  ]
+}

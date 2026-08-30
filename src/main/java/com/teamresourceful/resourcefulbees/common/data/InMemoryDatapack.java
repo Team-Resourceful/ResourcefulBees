@@ -24,14 +24,14 @@ import net.minecraft.world.item.crafting.Recipe;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public final class DataPackLoader implements RepositorySource {
+public final class InMemoryDatapack implements RepositorySource {
 
     private static final String DATAPACK_NAME = "resourcefulbees:internals";
-    public static final DataPackLoader INSTANCE = new DataPackLoader();
+    public static final InMemoryDatapack INSTANCE = new InMemoryDatapack();
     public static final Component TITLE = Component.literal("Data for Resourceful Bees");
     private static final PackMetadataSection METADATA = new PackMetadataSection(TITLE, SharedConstants.getCurrentVersion().packVersion(PackType.SERVER_DATA).minorRange());
 
-    public DataPackLoader() {
+    private InMemoryDatapack() {
         //cant throw exception for utility class
     }
 

@@ -1,0 +1,44 @@
+{
+  "wants": {
+    "id": "resourcefulbees:gold_flower",
+    "count": {
+      "min": 32.0,
+      "max": 64.0,
+      "type": "minecraft:uniform"
+    }
+  },
+  "additional_wants": {
+    "id": "minecraft:glowstone",
+    "count": {
+      "min": 12.0,
+      "max": 16.0,
+      "type": "minecraft:uniform"
+    }
+  },
+  "gives": {
+    "id": "resourcefulbees:bee_jar",
+    "components": {
+      "resourcefulbees:jar_bee": {
+        "entityType": "resourcefulbees:pigman_bee",
+        "ticks_in_jar": 0,
+        "display_name": {
+          "translate": "entity_type.resourcefulbees.pigman_bee"
+        },
+        "color": -7841450
+      }
+    }
+  },
+  "max_uses": 2.0,
+  "reputation_discount": 4.0,
+  "xp": 3.0,
+  "given_item_modifiers": [
+    {
+      "count": {
+        "min": 1.0,
+        "max": 1.0,
+        "type": "minecraft:uniform"
+      },
+      "function": "minecraft:set_count"
+    }
+  ]
+}

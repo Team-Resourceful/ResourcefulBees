@@ -1,0 +1,52 @@
+{
+  "wants": {
+    "id": "resourcefulbees:gold_flower",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 32,
+      "max": 64
+    }
+  },
+  "additional_wants": {
+    "id": "minecraft:black_banner"
+  },
+  "gives": {
+    "id": "minecraft:black_banner",
+    "components": {
+      "minecraft:banner_patterns": [
+        {
+          "pattern": "minecraft:rhombus",
+          "color": "light_blue"
+        },
+        {
+          "pattern": "minecraft:stripe_downright",
+          "color": "yellow"
+        },
+        {
+          "pattern": "minecraft:stripe_downleft",
+          "color": "yellow"
+        },
+        {
+          "pattern": "minecraft:stripe_bottom",
+          "color": "yellow"
+        },
+        {
+          "pattern": "minecraft:triangle_top",
+          "color": "yellow"
+        },
+        {
+          "pattern": "minecraft:curly_border",
+          "color": "yellow"
+        }
+      ],
+      "minecraft:custom_name": {
+        "translate": "item.resourcefulbees.queen_bee_banner",
+        "color": "gold",
+        "italic": false
+      }
+    }
+  },
+  "max_uses": 1,
+  "reputation_discount": 0.2,
+  "xp": 3
+}

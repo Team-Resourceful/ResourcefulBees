@@ -1,0 +1,16 @@
+{
+  "wants": {
+    "id": "resourcefulbees:gold_flower",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 8,
+      "max": 16
+    }
+  },
+  "gives": {
+    "id": "minecraft:honeycomb"
+  },
+  "max_uses": 8,
+  "xp": 3,
+  "reputation_discount": 0.05
+}

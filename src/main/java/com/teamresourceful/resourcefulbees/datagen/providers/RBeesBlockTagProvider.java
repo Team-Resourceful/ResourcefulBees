@@ -173,6 +173,6 @@ public class RBeesBlockTagProvider extends BlockTagsProvider {
 
     @Override
     public @NonNull String getName() {
-        return "Resourceful Bees Block Tags";
+        return "Resourceful Bees Block Tag Provider";
     }
 }

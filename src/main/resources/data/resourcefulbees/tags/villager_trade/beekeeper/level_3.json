@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "resourcefulbees:beekeeper/3/honeycomb",
+    "resourcefulbees:beekeeper/3/honey_bottle",
+    "resourcefulbees:beekeeper/3/honey_bucket",
+    "resourcefulbees:beekeeper/3/honey_block",
+    "resourcefulbees:beekeeper/3/rainbow_honey_bottle",
+    "resourcefulbees:beekeeper/3/rainbow_honey_bucket",
+    "resourcefulbees:beekeeper/3/rainbow_honey_block",
+    "resourcefulbees:beekeeper/3/beeper_honeycomb",
+    "resourcefulbees:beekeeper/3/nether_quartz_honeycomb",
+    "resourcefulbees:beekeeper/3/ender_honeycomb",
+    "resourcefulbees:beekeeper/3/gold_honeycomb",
+    "resourcefulbees:beekeeper/3/skeleton_honeycomb",
+    "resourcefulbees:beekeeper/3/diamond_honeycomb",
+    "resourcefulbees:beekeeper/3/zombee_honeycomb",
+    "resourcefulbees:beekeeper/3/coal_honeycomb",
+    "resourcefulbees:beekeeper/3/iron_honeycomb",
+    "resourcefulbees:beekeeper/3/lapis_honeycomb",
+    "resourcefulbees:beekeeper/3/rgbee_honeycomb",
+    "resourcefulbees:beekeeper/3/slimy_honeycomb",
+    "resourcefulbees:beekeeper/3/redstone_honeycomb",
+    "resourcefulbees:beekeeper/3/emerald_honeycomb"
+  ]
+}

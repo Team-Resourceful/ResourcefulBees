@@ -1,0 +1,26 @@
+{
+  "wants": {
+    "id": "resourcefulbees:gold_flower",
+    "count": {
+      "min": 8.0,
+      "max": 16.0,
+      "type": "minecraft:uniform"
+    }
+  },
+  "gives": {
+    "id": "resourcefulbees:iron_honeycomb"
+  },
+  "max_uses": 8.0,
+  "reputation_discount": 0.05,
+  "xp": 3.0,
+  "given_item_modifiers": [
+    {
+      "count": {
+        "min": 1.0,
+        "max": 1.0,
+        "type": "minecraft:uniform"
+      },
+      "function": "minecraft:set_count"
+    }
+  ]
+}

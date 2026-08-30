@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.api.registry;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.honeycomb.OutputVariation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import org.jetbrains.annotations.Nullable;
 

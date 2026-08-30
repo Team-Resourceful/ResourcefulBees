@@ -1,0 +1,24 @@
+{
+  "wants": {
+    "id": "resourcefulbees:gold_flower",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 6,
+      "max": 12
+    }
+  },
+  "additional_wants": {
+    "id": "resourcefulbees:waxed_planks",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 1,
+      "max": 2
+    }
+  },
+  "gives": {
+    "id": "resourcefulbees:bee_box"
+  },
+  "max_uses": 4,
+  "xp": 3,
+  "reputation_discount": 0.05
+}

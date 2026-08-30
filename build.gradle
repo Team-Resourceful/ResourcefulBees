@@ -165,6 +165,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
     expand replaceProperties
     from "src/main/templates"
     into "build/generated/sources/modMetadata"
+    DuplicatesStrategy.INCLUDE
 }
 // Include the output of "generateModMetadata" as an input directory for the build
 // this works with both building through Gradle and the IDE.

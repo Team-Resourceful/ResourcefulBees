@@ -1,0 +1,26 @@
+{
+  "wants": {
+    "id": "resourcefulbees:gold_flower",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 1,
+      "max": 2
+    }
+  },
+  "gives": {
+    "id": "resourcefulbees:wax"
+  },
+  "max_uses": 12,
+  "reputation_discount": 0.05,
+  "xp": 3,
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 4
+      }
+    }
+  ]
+}

@@ -36,7 +36,6 @@
       "min": 8,
       "max": 12
     },
-    "priceMultiplier": 4,
     "maxTrades": 2
   }
 }

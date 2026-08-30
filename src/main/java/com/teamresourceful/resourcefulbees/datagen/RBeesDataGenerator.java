@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.datagen;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.datagen.providers.BeekeeperTradeProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.RBeesModelProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.RBeesFluidTagProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.RBeesBlockTagProvider;
@@ -31,7 +32,7 @@ public final class RBeesDataGenerator {
         event.addProvider(new RBeesModelProvider(output));
         event.addProvider(new RBeesFluidTagProvider(output, provider));
         event.addProvider(new RBeesBlockTagProvider(output, provider));
-
+        event.addProvider(new BeekeeperTradeProvider(output, provider));
 
 
 

@@ -15,22 +15,12 @@ import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
-import com.teamresourceful.resourcefulbees.mixin.client.PackRepositoryAccessor;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.packs.PackLocationInfo;
-import net.minecraft.server.packs.PackSelectionConfig;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.PathPackResources;
-import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -45,7 +35,6 @@ import net.neoforged.neoforge.event.level.LevelEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
 @Mod(value = ModConstants.MOD_ID, dist = Dist.CLIENT)
@@ -58,7 +47,7 @@ public class ResourcefulBeesClient {
         // Do not forget to add translations for your config options to the en_us.json file.
         //container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         ModClientFluidProperties.registerHoneyFluids();
-        loadResources();
+        //loadResources();
     }
 
     @SubscribeEvent
@@ -124,30 +113,30 @@ public class ResourcefulBeesClient {
         event.register(ModIdentifier.of("filled_bee_jar"), FilledBeeJarProperty.MAP_CODEC);
     }
 
-    private static void loadResources() {
-        //This is needed for data gen as Minecraft.getInstance() is null in data gen.
-        //noinspection ConstantConditions
-        if (Minecraft.getInstance() == null) return;
-
-        PackRepositoryAccessor accessor = (PackRepositoryAccessor) Minecraft.getInstance().getResourcePackRepository();
-
-        accessor.getSources().add(consumer -> {
-            final PackLocationInfo locationInfo = new PackLocationInfo(ModConstants.MOD_ID, Component.literal(ModConstants.MOD_ID), PackSource.BUILT_IN, Optional.empty());
-            final PackSelectionConfig selectionConfig = new PackSelectionConfig(true, Pack.Position.TOP, false);
-            final Pack pack = Pack.readMetaAndCreate(
-                    locationInfo,
-                    new PathPackResources.PathResourcesSupplier(ModPaths.RESOURCES),
-                    PackType.CLIENT_RESOURCES,
-                    selectionConfig
-            );
-
-            if (pack == null) {
-                ModConstants.LOGGER.error("Failed to load resource pack, some things may not work.");
-                return;
-            }
-            consumer.accept(pack);
-        });
-    }
+//    private static void loadResources() {
+//        //This is needed for data gen as Minecraft.getInstance() is null in data gen.
+//        //noinspection ConstantConditions
+//        if (Minecraft.getInstance() == null) return;
+//
+//        PackRepositoryAccessor accessor = (PackRepositoryAccessor) Minecraft.getInstance().getResourcePackRepository();
+//
+//        accessor.getSources().add(consumer -> {
+//            final PackLocationInfo locationInfo = new PackLocationInfo(ModConstants.MOD_ID, Component.literal(ModConstants.MOD_ID), PackSource.BUILT_IN, Optional.empty());
+//            final PackSelectionConfig selectionConfig = new PackSelectionConfig(true, Pack.Position.TOP, false);
+//            final Pack pack = Pack.readMetaAndCreate(
+//                    locationInfo,
+//                    new PathPackResources.PathResourcesSupplier(ModPaths.RESOURCES),
+//                    PackType.CLIENT_RESOURCES,
+//                    selectionConfig
+//            );
+//
+//            if (pack == null) {
+//                ModConstants.LOGGER.error("Failed to load resource pack, some things may not work.");
+//                return;
+//            }
+//            consumer.accept(pack);
+//        });
+//    }
 
     @SubscribeEvent
     public static void onLevelLoad(LevelEvent.Load event) {

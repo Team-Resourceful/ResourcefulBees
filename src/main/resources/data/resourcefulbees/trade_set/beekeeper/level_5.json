@@ -1,0 +1,6 @@
+{
+  "trades": "#resourcefulbees:beekeeper/level_5",
+  "amount": 2,
+  "allow_duplicates": false,
+  "random_sequence": "resourcefulbees:beekeeper/level_5"
+}

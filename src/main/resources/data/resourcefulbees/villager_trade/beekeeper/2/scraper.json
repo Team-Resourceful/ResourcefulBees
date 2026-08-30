@@ -1,0 +1,24 @@
+{
+  "wants": {
+    "id": "resourcefulbees:gold_flower",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 2,
+      "max": 6
+    }
+  },
+  "additional_wants": {
+    "id": "minecraft:iron_ingot",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 1,
+      "max": 3
+    }
+  },
+  "gives": {
+    "id": "resourcefulbees:scraper"
+  },
+  "max_uses": 4,
+  "xp": 3,
+  "reputation_discount": 0.05
+}

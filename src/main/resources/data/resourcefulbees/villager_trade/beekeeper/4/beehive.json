@@ -1,0 +1,24 @@
+{
+  "wants": {
+    "id": "resourcefulbees:gold_flower",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 16,
+      "max": 32
+    }
+  },
+  "additional_wants": {
+    "id": "minecraft:grass_block",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 8,
+      "max": 24
+    }
+  },
+  "gives": {
+    "id": "minecraft:beehive"
+  },
+  "max_uses": 4,
+  "reputation_discount": 0.1,
+  "xp": 3
+}

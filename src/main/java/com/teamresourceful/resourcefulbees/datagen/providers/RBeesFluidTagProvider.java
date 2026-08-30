@@ -21,4 +21,9 @@ public class RBeesFluidTagProvider extends FluidTagsProvider {
     protected void addTags(HolderLookup.@NonNull Provider registries) {
         tag(ModFluidTags.HONEY).add(ResourceKey.create(BuiltInRegistries.FLUID.key(), ModFluids.HONEY_STILL.getId()));
     }
+
+    @Override
+    public @NonNull String getName() {
+        return "Resourceful Bees Fluid Tag Provider";
+    }
 }

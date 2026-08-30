@@ -24,14 +24,13 @@ import com.teamresourceful.resourcefullib.common.exceptions.ValidationException;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -78,7 +77,7 @@ public class InitializerApi {
     }
 
     @NullMarked
-    public BeekeeperTradeData beekeeperTrade(UniformInt amount, Item secondaryItem, UniformInt secondaryItemCost, float priceMultiplier, int maxTrades, int xp) {
+    public BeekeeperTradeData beekeeperTrade(UniformGenerator amount, Item secondaryItem, UniformGenerator secondaryItemCost, float priceMultiplier, int maxTrades, int xp) {
         return this.beekeeperTrade.create(amount, secondaryItem, secondaryItemCost, priceMultiplier, maxTrades, xp);
     }
 
