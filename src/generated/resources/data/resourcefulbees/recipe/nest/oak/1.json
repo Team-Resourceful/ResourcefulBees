@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": "minecraft:beehive",
+    "P": "minecraft:oak_planks",
+    "W": "resourcefulbees:waxed_planks"
+  },
+  "pattern": [
+    "WPW",
+    "PHP",
+    "WPW"
+  ],
+  "result": {
+    "id": "resourcefulbees:nest/oak/1"
+  }
+}

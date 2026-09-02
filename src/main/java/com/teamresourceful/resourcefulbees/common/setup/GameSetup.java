@@ -14,19 +14,15 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.SharedConstants;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacementTypes;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
@@ -37,7 +33,6 @@ import net.neoforged.neoforge.transfer.fluid.BucketResourceHandler;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -45,31 +40,8 @@ import java.util.Optional;
 
 public final class GameSetup {
 
-    private static final TagKey<Item> HONEY_BOTTLE_TAG = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "honey_bottles"));
-
     private GameSetup() throws UtilityClassException {
         throw new UtilityClassException();
-    }
-
-    public static void initEvents() {
-//        CommandRegisterEvent.EVENT.addListener(ResourcefulBeesCommand::registerCommand);
-//        //PlayerBrokeBlockEvent.EVENT.addListener(HiveBreakEnchantment::onBlockBreak);
-//        BlockBonemealedEvent.EVENT.addListener(GoldenFlower::onBlockBonemealed);
-//        //SyncedDatapackEvent.EVENT.addListener(DimensionalBeeHolder::onDatapackSync);
-//        //RegisterIngredientsEvent.EVENT.addListener(GameSetup::initIngredients);
-//        //ServerGoingToStartEvent.EVENT.addListener(ModStructures::addStructures);
-//        ServerGoingToStartEvent.EVENT.addListener(ModSpawnData::initialize);
-//        RegisterBurnablesEvent.EVENT.addListener(GameSetup::initBurnables);
-//        RegisterSpawnPlacementsEvent.EVENT.addListener(GameSetup::initSpawns);
-        //RegisterReloadListenerEvent.EVENT.addListener(RecipeBuilder::registerReloadListeners);
-        //RegisterVillagerTradesEvent.EVENT.addListener(Beekeeper::setupBeekeeper);
-        //RegisterEntityAttributesEvent.EVENT.addListener(GameSetup::registerAttributes);
-        //RegisterHiveBreakBlocksEvent.EVENT.addListener(GameSetup::onHiveBreakConversions);
-    }
-
-    public static void initPotionRecipes() {
-        //PotionRegistry.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(HONEY_BOTTLE_TAG), ModPotions.CALMING_POTION.get());
-        //PotionRegistry.registerPotionRecipe(ModPotions.CALMING_POTION.get(), Ingredient.of(Items.GLOWSTONE_DUST), ModPotions.LONG_CALMING_POTION.get());
     }
 
     public static void initArguments() {
@@ -101,7 +73,7 @@ public final class GameSetup {
             event.addRepositorySource(ConfigDatapack.INSTANCE);
         }
 
-        if (event.getPackType() == PackType.CLIENT_RESOURCES) {
+        if (event.getPackType().equals(PackType.CLIENT_RESOURCES)) {
             event.addRepositorySource(consumer -> {
                 PackLocationInfo locationInfo = new PackLocationInfo(ModConstants.MOD_ID, Component.literal(ModConstants.MOD_ID), PackSource.BUILT_IN, Optional.empty());
                 PackSelectionConfig selectionConfig = new PackSelectionConfig(true, Pack.Position.BOTTOM, false);
@@ -117,26 +89,20 @@ public final class GameSetup {
         }
     }
 
+    //todo split resourcepack and datapack so that there is two pack.mcmeta with the right versions
     public static void initPaths() {
         ModConstants.LOGGER.info("Setting up config paths...");
-
         Path packMeta = ModPaths.RESOURCES.resolve("pack.mcmeta");
 
-        if (Files.exists(packMeta)) {
-            return;
-        }
-
         try {
-            Files.createDirectories(ModPaths.RESOURCES);
-
-            var packVersion = SharedConstants.getCurrentVersion().packVersion(PackType.CLIENT_RESOURCES);
+            var packVersion = SharedConstants.getCurrentVersion().packVersion(PackType.SERVER_DATA);
 
             String mcMetaContent = """
                 {
                   "pack": {
                     "min_format": [%d, %d],
                     "max_format": [%d, %d],
-                    "description": "Resourceful Bees resource pack used for user-provided bee/item translations."
+                    "description": "Resourceful Bees pack for generated resources."
                   }
                 }
                 """.formatted(
@@ -146,8 +112,7 @@ public final class GameSetup {
                     packVersion.minor()
             );
 
-            Files.writeString(packMeta, mcMetaContent, StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW);
-        } catch (FileAlreadyExistsException _) {
+            Files.writeString(packMeta, mcMetaContent, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             ModConstants.LOGGER.error("Failed to create resource pack metadata at {}", packMeta, e);
         }

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": "minecraft:stick",
+    "W": "resourcefulbees:waxed_machine_block"
+  },
+  "pattern": [
+    "S  ",
+    "SSS",
+    "  W"
+  ],
+  "result": {
+    "id": "resourcefulbees:centrifuge_crank"
+  }
+}

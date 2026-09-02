@@ -1,0 +1,32 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/bee_jar",
+  "criteria": {
+    "has_bee_box": {
+      "conditions": {
+        "items": [
+          {
+            "items": "resourcefulbees:bee_box"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.resourcefulbees.bee_box.description"
+    },
+    "icon": {
+      "id": "resourcefulbees:bee_box"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.bee_box.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_bee_box"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,22 +1,21 @@
-/*
 package com.teamresourceful.resourcefulbees.client.overlay;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
-import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeLocatorTranslations;
 import com.teamresourceful.resourcefulbees.client.rendering.OverlayRenderer;
-import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
+import com.teamresourceful.resourcefulbees.common.components.BeeLocatorData;
+import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeLocatorTranslations;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -26,59 +25,102 @@ public class BeeLocatorOverlay implements OverlayRenderer {
 
     public static final BeeLocatorOverlay INSTANCE = new BeeLocatorOverlay();
 
+    private static final int PREVIEW_ENTITY_ID = -1001;
+
     private Entity displayBee;
 
     @Override
-    public void render(Minecraft mc, GuiGraphics graphics, float partialTick, int width, int height) {
+    public void render(GuiGraphicsExtractor graphics, DeltaTracker partialTick) {
+        Minecraft mc = Minecraft.getInstance();
+
         Player player = mc.player;
-        if (player == null) return;
-        ItemStack stack = player.getMainHandItem().getItem() instanceof BeeLocatorItem ? player.getMainHandItem() : player.getOffhandItem();
-        if (stack.getItem() instanceof BeeLocatorItem && hasBeeAndPos(stack)) {
-            BlockPos pos = NbtUtils.readBlockPos(stack.getTag().getCompound(NBTConstants.BeeLocator.LAST_BIOME));
-            pos = new BlockPos(pos.getX(), player.blockPosition().getY(), pos.getZ());
-            String bee = stack.getTag().getString(NBTConstants.BeeLocator.LAST_BEE);
-            ResourceLocation biome = ResourceLocation.tryParse(stack.getTag().getString(NBTConstants.BeeLocator.LAST_BIOME_ID));
-            if (!BeeRegistry.get().containsBeeType(bee)) return;
-            CustomBeeData data = BeeRegistry.get().getBeeData(bee);
-            Entity entity = getDisplayBee(data.entityType(), player.level());
-            if (entity == null) return;
-            graphics.fill(0, 0, 150, 50, 1325400064);
-            ClientRenderUtils.renderEntity(graphics, entity, 10, 5, 45f, 1.5f);
-            graphics.drawString(mc.font, data.displayName(), 45, 5, -14829228, false);
-
-            try (var pose = new CloseablePoseStack(graphics)) {
-                pose.scale(0.75f, 0.75f, 0.75f);
-                Component location = Component.translatable(BeeLocatorTranslations.LOCATION, pos.getX(), pos.getZ());
-                graphics.drawString(mc.font, location, 60, 20, 0xFFFFFFFF, false);
-            }
-
-            try (var pose = new CloseablePoseStack(graphics)) {
-                pose.scale(0.75f, 0.75f, 0.75f);
-                Component distance = Component.translatable(BeeLocatorTranslations.DISTANCE, pos.distManhattan(player.blockPosition()));
-                graphics.drawString(mc.font, distance, 60, 30, 0xFFFFFFFF, false);
-            }
-
-            if (biome != null && !biome.getPath().isEmpty()) {
-                try (var pose = new CloseablePoseStack(graphics)) {
-                    pose.scale(0.75f, 0.75f, 0.75f);
-                    Component text = Component.translatable(BeeLocatorTranslations.BIOME, Component.translatable(String.format("biome.%s.%s", biome.getNamespace(), biome.getPath())));
-                    graphics.drawString(mc.font, text, 60, 40, 0xFFFFFFFF, false);
-                }
-            }
+        if (player == null) {
+            return;
         }
+
+        ItemStack stack = getLocator(player);
+        if (stack.isEmpty()) {
+            return;
+        }
+
+        BeeLocatorData locatorData = stack.get(ModDataComponents.BEE_LOCATOR_DATA.get());
+
+        if (locatorData == null) {
+            return;
+        }
+
+        BeeRegistry beeRegistry = BeeRegistry.get();
+
+        if (!beeRegistry.containsBeeType(locatorData.bee())) {
+            return;
+        }
+
+        CustomBeeData beeData = beeRegistry.getBeeData(locatorData.bee());
+        Entity entity = getDisplayBee(beeData.entityType(), player.level());
+
+        if (entity == null) {
+            return;
+        }
+
+        BlockPos targetPos = locatorData.position();
+        graphics.fill(0, 0, 150, 50, 1325400064);
+        ClientRenderUtils.renderEntity(graphics, entity, 5, 5, 35, 40, -135f, .75f);
+        graphics.text(mc.font, beeData.displayName(), 45, 5, -14829228, false);
+        drawScaledText(graphics, mc, Component.translatable(BeeLocatorTranslations.LOCATION, targetPos.getX(), targetPos.getZ()), 60, 20);
+
+        if (locatorData.dimension().equals(player.level().dimension())) {
+            BlockPos horizontalTarget = new BlockPos(targetPos.getX(), player.blockPosition().getY(), targetPos.getZ());
+
+            drawScaledText(graphics, mc, Component.translatable(BeeLocatorTranslations.DISTANCE, horizontalTarget.distManhattan(player.blockPosition())), 60, 30);
+        } else {
+            drawScaledText(graphics, mc, Component.translatable(BeeLocatorTranslations.DIMENSION, getDimensionName(locatorData.dimension().identifier())), 60, 30);
+        }
+
+        Identifier biome = locatorData.biome();
+        Component biomeName = Component.translatable("biome.%s.%s".formatted(biome.getNamespace(), biome.getPath()));
+        drawScaledText(graphics, mc, Component.translatable(BeeLocatorTranslations.BIOME, biomeName), 60, 40);
+    }
+
+    private static ItemStack getLocator(Player player) {
+        ItemStack mainHand = player.getMainHandItem();
+
+        if (mainHand.getItem() instanceof BeeLocatorItem) {
+            return mainHand;
+        }
+
+        ItemStack offHand = player.getOffhandItem();
+
+        if (offHand.getItem() instanceof BeeLocatorItem) {
+            return offHand;
+        }
+
+        return ItemStack.EMPTY;
     }
 
     private Entity getDisplayBee(EntityType<?> type, Level level) {
-        if (this.displayBee == null) {
-            this.displayBee = type.create(level);
-        } else if (this.displayBee.getType() != type) {
-            this.displayBee = type.create(level);
+        if (displayBee == null || displayBee.getType() != type) {
+            displayBee = type.create(level, EntitySpawnReason.COMMAND);
+
+            if (displayBee != null) {
+                displayBee.setId(PREVIEW_ENTITY_ID);
+            }
         }
-        return this.displayBee;
+
+        return displayBee;
     }
 
-    private static boolean hasBeeAndPos(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().contains(NBTConstants.BeeLocator.LAST_BIOME, Tag.TAG_COMPOUND) && stack.getTag().contains(NBTConstants.BeeLocator.LAST_BEE, Tag.TAG_STRING);
+    private static Component getDimensionName(Identifier dimension) {
+        return Component.translatable("dimension.%s.%s".formatted(dimension.getNamespace(), dimension.getPath()));
+    }
+
+    private static void drawScaledText(GuiGraphicsExtractor graphics, Minecraft mc, Component text, int x, int y) {
+        graphics.pose().pushMatrix();
+
+        try {
+            graphics.pose().scale(0.75f, 0.75f);
+            graphics.text(mc.font, text, x, y, 0xFFFFFFFF, false);
+        } finally {
+            graphics.pose().popMatrix();
+        }
     }
 }
-*/

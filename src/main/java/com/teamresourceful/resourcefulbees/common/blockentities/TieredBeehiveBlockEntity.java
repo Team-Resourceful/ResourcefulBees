@@ -197,7 +197,6 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
     }
 
     public static void serverSideTick(Level level, BlockPos pos, BlockState state, TieredBeehiveBlockEntity hive) {
-        System.out.println(level.getServer().getLevel(Level.OVERWORLD).getPoiManager().getType(pos));
         if (hive.isSmoked) {
             if (MathUtils.inRangeInclusive(hive.ticksSmoked, 0, SMOKE_TIME)) {
                 hive.ticksSmoked++;

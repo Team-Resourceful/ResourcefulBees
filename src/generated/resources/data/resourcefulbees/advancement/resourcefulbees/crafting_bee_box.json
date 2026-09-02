@@ -1,0 +1,34 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/bee_box",
+  "criteria": {
+    "has_crafting_bee_box": {
+      "conditions": {
+        "items": [
+          {
+            "items": "resourcefulbees:bee_box_temp"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.resourcefulbees.crafting_bee_box.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "id": "resourcefulbees:bee_box_temp"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.crafting_bee_box.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_crafting_bee_box"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -3,13 +3,20 @@ package com.teamresourceful.resourcefulbees.common.lib.records;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.*;
 import java.util.function.Supplier;
 
-public record HiveType(Identifier id, String type, Supplier<BlockBehaviour.Properties> properties, List<Supplier<? extends Block>> hiveBreakBlocks) {
+public record HiveType(
+        Identifier id,
+        String type,
+        Supplier<BlockBehaviour.Properties> properties,
+        List<Supplier<? extends Block>> hiveBreakBlocks,
+        Supplier<? extends ItemLike> tierOneRecipeMaterial
+) {
 
     public static final Codec<HiveType> CODEC = Identifier.CODEC.comapFlatMap(HiveType::get, HiveType::id);
     private static final Map<Identifier, HiveType> HIVE_TYPES = new HashMap<>();
@@ -61,6 +68,10 @@ public record HiveType(Identifier id, String type, Supplier<BlockBehaviour.Prope
         return nest.get();
     }
 
+    public ItemLike tierOneRecipeMaterialItem() {
+        return tierOneRecipeMaterial.get();
+    }
+
     public static HiveType getOrThrow(Identifier id) {
         return get(id).getOrThrow();
     }
@@ -69,6 +80,7 @@ public record HiveType(Identifier id, String type, Supplier<BlockBehaviour.Prope
         String type;
         Supplier<BlockBehaviour.Properties> properties;
         List<Supplier<? extends Block>> hiveBreakBlocks = new ArrayList<>();
+        Supplier<? extends ItemLike> tierOneRecipeMaterial;
 
         public Builder type(String type) {
             this.type = type;
@@ -81,19 +93,27 @@ public record HiveType(Identifier id, String type, Supplier<BlockBehaviour.Prope
         }
 
         @SafeVarargs
-        public final Builder hiveBreakBlocks(
-                Supplier<? extends Block>... blocks
-        ) {
+        public final Builder hiveBreakBlocks(Supplier<? extends Block>... blocks) {
             Collections.addAll(hiveBreakBlocks, blocks);
             return this;
         }
 
+        public Builder tierOneRecipeMaterial(Supplier<? extends ItemLike> material) {
+            this.tierOneRecipeMaterial = material;
+            return this;
+        }
+
         public HiveType build(Identifier id) {
+            Objects.requireNonNull(type, "Hive type must be set");
+            Objects.requireNonNull(properties, "Hive properties must be set");
+            Objects.requireNonNull(tierOneRecipeMaterial, "Tier one recipe material must be set");
+
             return new HiveType(
                     id,
                     type,
                     properties,
-                    hiveBreakBlocks
+                    hiveBreakBlocks,
+                    tierOneRecipeMaterial
             );
         }
     }

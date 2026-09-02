@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_honeycomb_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:storage_blocks/honeycombs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "resourcefulbees:t3_apiary"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_honeycomb_block"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "resourcefulbees:t3_apiary"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "W": "resourcefulbees:waxed_planks"
+  },
+  "pattern": [
+    "WW"
+  ],
+  "result": {
+    "id": "resourcefulbees:waxed_pressure_plate"
+  }
+}

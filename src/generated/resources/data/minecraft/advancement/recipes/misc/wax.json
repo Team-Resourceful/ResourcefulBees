@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:wax"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wax_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "resourcefulbees:wax_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_wax_block"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:wax"
+    ]
+  }
+}

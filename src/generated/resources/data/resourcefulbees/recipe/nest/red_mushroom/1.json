@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": "minecraft:beehive",
+    "P": "minecraft:red_mushroom_block",
+    "W": "resourcefulbees:waxed_planks"
+  },
+  "pattern": [
+    "WPW",
+    "PHP",
+    "WPW"
+  ],
+  "result": {
+    "id": "resourcefulbees:nest/red_mushroom/1"
+  }
+}

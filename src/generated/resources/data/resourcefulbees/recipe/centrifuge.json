@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": "#c:storage_blocks/honeycombs",
+    "R": "minecraft:redstone_block",
+    "W": "resourcefulbees:waxed_machine_block"
+  },
+  "pattern": [
+    "WHW",
+    "HRH",
+    "WHW"
+  ],
+  "result": {
+    "id": "resourcefulbees:centrifuge"
+  }
+}

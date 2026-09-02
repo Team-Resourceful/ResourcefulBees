@@ -1,7 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.data;
 
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFluids;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
@@ -30,21 +32,21 @@ public final class TagGenerator {
     public static void generateCommonData() {
         generateTags(ModEntities.BEES, Identifier.fromNamespaceAndPath("minecraft","tags/entity_type/beehive_inhabitors.json"));
 
-//        generateTags(ModItems.HONEYCOMB_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/storage_blocks/honeycombs.json"));
-//        generateTags(ModBlocks.HONEYCOMB_BLOCKS, Identifier.fromNamespaceAndPath("forge","tags/blocks/storage_blocks/honeycombs.json"));
-//        generateTags(ModItems.HONEYCOMB_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honeycombs.json"));
-//
-//        //custom honey data
-//        generateTags(ModItems.HONEY_BOTTLE_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honey_bottles.json"));
-//        generateTags(ModItems.HONEY_BUCKET_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/buckets/honey_fluid_block.json"));
-//
-//        generateTags(ModBlocks.HONEY_BLOCKS, Identifier.fromNamespaceAndPath("forge","tags/blocks/honey_blocks.json"));
-//        generateTags(ModItems.HONEY_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("forge","tags/items/honey_blocks.json"));
-//        generateHoneyTags();
+        generateTags(ModItems.HONEYCOMB_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("c","tags/item/storage_blocks/honeycombs.json"));
+        generateTags(ModBlocks.HONEYCOMB_BLOCKS, Identifier.fromNamespaceAndPath("c","tags/block/storage_blocks/honeycombs.json"));
+        generateTags(ModItems.HONEYCOMB_ITEMS, Identifier.fromNamespaceAndPath("c","tags/item/honeycombs.json"));
+
+        //custom honey data
+        generateTags(ModItems.HONEY_BOTTLE_ITEMS, Identifier.fromNamespaceAndPath("c","tags/item/honey_bottles.json"));
+        generateTags(ModItems.HONEY_BUCKET_ITEMS, Identifier.fromNamespaceAndPath("c","tags/item/buckets/honey.json"));
+
+        generateTags(ModBlocks.HONEY_BLOCKS, Identifier.fromNamespaceAndPath("c","tags/block/honey_blocks.json"));
+        generateTags(ModItems.HONEY_BLOCK_ITEMS, Identifier.fromNamespaceAndPath("c","tags/item/honey_blocks.json"));
+        generateHoneyTags();
     }
 
     private static void generateHoneyTags() {
-        TAGS.put(Identifier.fromNamespaceAndPath("c","tags/fluids/honey_fluid_block.json"),
+        TAGS.put(Identifier.fromNamespaceAndPath("c","tags/fluid/honey_fluid_block.json"),
                 Stream.concat(ModFluids.FLOWING_HONEY_FLUIDS.getEntries().stream(), ModFluids.STILL_HONEY_FLUIDS.getEntries().stream())
                         .map(RegistryEntry::getId)
                         .collect(Collectors.toSet()));

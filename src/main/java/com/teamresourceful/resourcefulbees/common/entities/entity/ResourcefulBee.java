@@ -296,10 +296,10 @@ public class ResourcefulBee extends CustomBeeEntity {
     }
 
     private void explode(int radius) {
-        if (!this.level().isClientSide()) {
-            Level.ExplosionInteraction mode = ModUtils.getExplosionInteraction(level(), this);
+        if (level() instanceof ServerLevel serverLevel) {
+            Level.ExplosionInteraction mode = ModUtils.getExplosionInteraction(serverLevel, this);
             this.dead = true;
-            this.level().explode(this, this.getX(), this.getY(), this.getZ(), random.nextFloat() * radius, explosiveCooldown > 0 ? Level.ExplosionInteraction.NONE : mode);
+            serverLevel.explode(this, this.getX(), this.getY(), this.getZ(), random.nextFloat() * radius, explosiveCooldown > 0 ? Level.ExplosionInteraction.NONE : mode);
             this.discard();
             this.spawnLingeringCloud(this.getActiveEffects().stream().map(MobEffectInstance::new).toList());
         }

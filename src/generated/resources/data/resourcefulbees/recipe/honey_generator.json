@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "@": "minecraft:iron_block",
+    "B": "#c:buckets/honey",
+    "G": "#c:glass_panes",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "S": "minecraft:iron_bars"
+  },
+  "pattern": [
+    "I@I",
+    "SGR",
+    "IBI"
+  ],
+  "result": {
+    "id": "resourcefulbees:honey_generator"
+  }
+}

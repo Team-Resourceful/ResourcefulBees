@@ -1,0 +1,32 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/root",
+  "criteria": {
+    "has_ender_beecon": {
+      "conditions": {
+        "items": [
+          {
+            "items": "resourcefulbees:ender_beecon"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.resourcefulbees.ender_beecon.description"
+    },
+    "icon": {
+      "id": "resourcefulbees:ender_beecon"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.ender_beecon.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_ender_beecon"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

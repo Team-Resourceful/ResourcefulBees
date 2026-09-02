@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": "minecraft:beehive",
+    "P": "minecraft:grass_block",
+    "W": "resourcefulbees:waxed_planks"
+  },
+  "pattern": [
+    "WPW",
+    "PHP",
+    "WPW"
+  ],
+  "result": {
+    "id": "resourcefulbees:nest/grass/1"
+  }
+}

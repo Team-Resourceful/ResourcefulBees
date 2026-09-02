@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": "#c:glass_panes",
+    "I": "minecraft:iron_ingot",
+    "S": "#minecraft:stone_tool_materials",
+    "W": "#c:wax"
+  },
+  "pattern": [
+    " G ",
+    "IGI",
+    "SWS"
+  ],
+  "result": {
+    "id": "resourcefulbees:solidification_chamber"
+  }
+}

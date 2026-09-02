@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "minecraft:compass",
+    "E": "minecraft:end_rod",
+    "I": "#c:ingots/iron",
+    "R": "minecraft:comparator"
+  },
+  "pattern": [
+    " E ",
+    "ICI",
+    "IRI"
+  ],
+  "result": {
+    "id": "resourcefulbees:bee_locator"
+  }
+}

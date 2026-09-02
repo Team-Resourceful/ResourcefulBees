@@ -56,12 +56,12 @@ public final class RegistryHandler {
         ModMenuTypes.MENUS.init();
         ModEffects.EFFECTS.init();
         ModArguments.ARGUMENTS.init();
-        //ModEnchantments.ENCHANTMENTS.init();
         ModPOIs.POIS.init();
         ModPotions.POTIONS.init();
         ModVillagerProfessions.PROFESSIONS.init();
         ModFeatures.FEATURES.init();
         ModDataComponents.COMPONENTS.init();
+        ModDataComponentPredicates.PREDICATES.init();
     }
 
     //Dynamic|Iterative Registration Stuff below this line
@@ -157,7 +157,6 @@ public final class RegistryHandler {
             RegistryEntry<FluidData> fluidType = ModFluids.FLUID_TYPES.register(name + "_honey", CustomHoneyFluidType.create(fluidData.fluidAttributesData()));
             ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey_fluid_source", () -> new CustomHoneyFluid.Still(fluidData, fluidType.get()));
             ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_fluid_flowing", () -> new CustomHoneyFluid.Flowing(fluidData, fluidType.get()));
-            //ModClientFluidProperties.CLIENT_FLUID_PROPERTIES.register(name + "_honey", () -> CustomHoneyClientFluidProperties.create(fluidData.renderData()));
             ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", properties -> new BucketItem(fluidType.get().still().get(), properties), () -> new Item.Properties().stacksTo(1).component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_bucket")));
             fluidType.get().setBucket(ModItems.HONEY_BUCKET);
             ModBlocks.registerHoneyFluidBlock(name + "_honey_fluid_block", fluidData, fluidType.get());

@@ -31,4 +31,7 @@ public final class BeeLocatorTranslations {
 
     @Translate("Dist: %sm")
     public static final String DISTANCE = "gui.resourcefulbees.bee_locator.distance";
+
+    @Translate("Dimension: %s")
+    public static final String DIMENSION = "gui.resourcefulbees.bee_locator.dimension";
 }

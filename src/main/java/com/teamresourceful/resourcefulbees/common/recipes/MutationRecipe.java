@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.common.recipes;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.MutationType;
+import com.teamresourceful.resourcefulbees.client.recipe.RBeesClientRecipes;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
@@ -16,6 +16,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -39,7 +40,7 @@ public record MutationRecipe(Color pollenBaseColor, Color pollenTopColor, Map<Mu
         public @NonNull Map<MutationType, WeightedCollection<MutationType>> decode(RegistryFriendlyByteBuf buffer) {
             int size = buffer.readVarInt();
 
-            Map<MutationType, WeightedCollection<MutationType>> mutations = new HashMap<>(size);
+            Map<MutationType, WeightedCollection<MutationType>> mutations = HashMap.newHashMap(size);
 
             for (int index = 0; index < size; index++) {
                 MutationEntry entry = MutationEntry.STREAM_CODEC.decode(buffer);
@@ -74,7 +75,17 @@ public record MutationRecipe(Color pollenBaseColor, Color pollenTopColor, Map<Mu
     );
 
     public static RecipeHolder<MutationRecipe> getRecipe(@NotNull Level level, Identifier id) {
-        return level.getServer().getRecipeManager().byKeyTyped(ModRecipes.MUTATION_RECIPE_TYPE.get(), ResourceKey.create(Registries.RECIPE, id));
+        ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, id);
+
+        if (level instanceof ServerLevel serverLevel) {
+            return serverLevel.getServer().getRecipeManager().byKeyTyped(ModRecipes.MUTATION_RECIPE_TYPE.get(), key);
+        }
+
+        return RBeesClientRecipes.getMutationRecipes()
+                .stream()
+                .filter(holder -> holder.id().equals(key))
+                .findFirst()
+                .orElse(null);
     }
 
     public Color getPollenBaseColor() {
@@ -86,13 +97,13 @@ public record MutationRecipe(Color pollenBaseColor, Color pollenTopColor, Map<Mu
     }
 
     @Override
-    public boolean matches(RecipeInput recipeInput, Level level) {
+    public boolean matches(@NonNull RecipeInput recipeInput, @NonNull Level level) {
         return false;
     }
 
     @Override
-    public ItemStack assemble(RecipeInput input) {
-        return null;
+    public @NonNull ItemStack assemble(@NonNull RecipeInput input) {
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -101,42 +112,35 @@ public record MutationRecipe(Color pollenBaseColor, Color pollenTopColor, Map<Mu
     }
 
     @Override
-    public String group() {
+    public @NonNull String group() {
         return "";
     }
 
     @Override
-    public RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
+    public @NonNull RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
         return ModRecipeSerializers.MUTATION_RECIPE.get();
     }
 
     @Override
-    public RecipeType<? extends Recipe<RecipeInput>> getType() {
+    public @NonNull RecipeType<? extends Recipe<RecipeInput>> getType() {
         return ModRecipes.MUTATION_RECIPE_TYPE.get();
     }
 
     @Override
-    public PlacementInfo placementInfo() {
+    public @NonNull PlacementInfo placementInfo() {
         return PlacementInfo.NOT_PLACEABLE;
     }
 
     @Override
-    public RecipeBookCategory recipeBookCategory() {
+    public @NonNull RecipeBookCategory recipeBookCategory() {
         return RecipeBookCategories.CRAFTING_MISC;
     }
 
     public record Input() implements RecipeInput {
 
-
-
-
-
-
-
-
         @Override
-        public ItemStack getItem(int index) {
-            return null;
+        public @NonNull ItemStack getItem(int index) {
+            return ItemStack.EMPTY;
         }
 
         @Override

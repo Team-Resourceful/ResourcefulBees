@@ -27,7 +27,7 @@ public class ModCreativeTabs {
 
     public static final ResourcefulRegistry<CreativeModeTab> CREATIVE_TABS = ResourcefulRegistries.create(BuiltInRegistries.CREATIVE_MODE_TAB, ModConstants.MOD_ID);
 
-    public static final RegistryEntry<CreativeModeTab> MAIN_TAB = CREATIVE_TABS.register("main_tab", () -> CreativeModeTab.builder()
+    public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES = CREATIVE_TABS.register("main_tab", () -> CreativeModeTab.builder()
 
                 .icon(() -> ModItems.HONEY_DIPPER.get().getDefaultInstance())
                 .title(Component.translatable("itemGroup.resourcefulbees"))
@@ -92,16 +92,22 @@ public class ModCreativeTabs {
 
     public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES_HIVES = CREATIVE_TABS.register("hives", () -> CreativeModeTab.builder()
                     .icon(Items.BEEHIVE::getDefaultInstance)
-                    .displayItems((parameters, output) ->
-                            ModItems.NEST_ITEMS.getEntries().stream()
-                                    .map(RegistryEntry::get)
-                                    .sorted(Comparator.comparing(item ->
-                                            BuiltInRegistries.ITEM.getKey(item).toString()
-                                    ))
-                                    .forEach(output::accept)
+                    .title(Component.translatable("itemGroup.resourcefulbees.hives"))
+                    .displayItems((parameters, output) -> {
+                                ModItems.NEST_ITEMS.getEntries().stream()
+                                        .map(RegistryEntry::get)
+                                        .sorted(Comparator.comparing(item ->
+                                                BuiltInRegistries.ITEM.getKey(item).toString()
+                                        ))
+                                        .forEach(output::accept);
+                                output.accept(ModItems.T1_APIARY_ITEM.get());
+                                output.accept(ModItems.T2_APIARY_ITEM.get());
+                                output.accept(ModItems.T3_APIARY_ITEM.get());
+                                output.accept(ModItems.T4_APIARY_ITEM.get());
+                                output.accept(ModItems.FLOW_HIVE.get());
+                            }
                     )
-                    .build()
-            );
+                    .build());
 
     public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES_HONEY =
             CREATIVE_TABS.register("honey", () ->

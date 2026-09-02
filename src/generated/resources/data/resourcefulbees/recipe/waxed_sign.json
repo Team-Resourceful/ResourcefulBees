@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": "minecraft:stick",
+    "W": "resourcefulbees:waxed_planks"
+  },
+  "pattern": [
+    "WWW",
+    "WWW",
+    " S "
+  ],
+  "result": {
+    "count": 3,
+    "id": "resourcefulbees:waxed_sign"
+  }
+}

@@ -6,6 +6,8 @@ import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassExceptio
 public final class BeeConstants {
 
 
+    public static final float ENTITY_DISPLAY_ROTATION = -135.0f;
+
     private BeeConstants() throws UtilityClassException {
         throw new UtilityClassException();
     }

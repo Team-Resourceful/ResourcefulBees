@@ -1,0 +1,32 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/obtain_bee_nest",
+  "criteria": {
+    "has_honey_dipper": {
+      "conditions": {
+        "items": [
+          {
+            "items": "resourcefulbees:honey_dipper"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.resourcefulbees.honey_dipper.description"
+    },
+    "icon": {
+      "id": "resourcefulbees:honey_dipper"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.honey_dipper.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_honey_dipper"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "#c:honeycombs",
+    "S": "minecraft:stick",
+    "W": "#c:wax"
+  },
+  "pattern": [
+    " CW",
+    " SC",
+    "S  "
+  ],
+  "result": {
+    "id": "resourcefulbees:honey_dipper"
+  }
+}

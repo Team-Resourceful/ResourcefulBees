@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.networking;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconEffectPacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconSettingPacket;
+import com.teamresourceful.resourcefulbees.common.networking.packets.client.FindBeePacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.LockBeePacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.DimensionalBeesPacket;
 import com.teamresourceful.resourcefulbees.common.networking.packets.server.SyncBeepediaPacket;
@@ -25,7 +26,7 @@ public final class NetworkHandler {
         NETWORK.register(BeeconEffectPacket.PACKET_TYPE);
         NETWORK.register(BeeconSettingPacket.PACKET_TYPE);
         // todo NETWORK.register(SelectableFluidPacket.PACKET_TYPE);
-        //NETWORK.register(FindBeePacket.PACKET_TYPE);
+        NETWORK.register(FindBeePacket.PACKET_TYPE);
         NETWORK.register(LockBeePacket.PACKET_TYPE);
 
         //clientbound

@@ -11,10 +11,7 @@ import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.model.ModelTemplate;
-import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TextureMapping;
-import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
@@ -119,6 +116,8 @@ public class RBeesModelProvider extends ModelProvider {
         registerHoneyGlass(blockModels);
         registerMiscBlocks(blockModels);
         registerItems(itemModels);
+        // Cross model using the cutout render type.
+        registerCross(blockModels, itemModels, ModBlocks.GOLD_FLOWER.get(), modMaterial("block/gold_flower"));
     }
 
     @Override
@@ -430,13 +429,6 @@ public class RBeesModelProvider extends ModelProvider {
 //                TextureMapping.getBlockTexture(ModBlocks.CREATIVE_GEN.get()),
 //                false
 //        );
-
-        // Cross model using the cutout render type.
-        registerCross(
-                blockModels,
-                ModBlocks.GOLD_FLOWER.get(),
-                modMaterial("block/gold_flower")
-        );
     }
 
     private static void registerParticleOnly(
@@ -482,10 +474,11 @@ public class RBeesModelProvider extends ModelProvider {
 
     private static void registerCross(
             BlockModelGenerators blockModels,
+            ItemModelGenerators itemModels,
             Block block,
             Material texture
     ) {
-        Identifier model = ModelTemplates.CROSS.create(
+        Identifier blockModel = ModelTemplates.CROSS.create(
                 block,
                 new TextureMapping()
                         .put(TextureSlot.CROSS, texture),
@@ -495,11 +488,21 @@ public class RBeesModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(
                 BlockModelGenerators.createSimpleBlock(
                         block,
-                        BlockModelGenerators.plainVariant(model)
+                        BlockModelGenerators.plainVariant(blockModel)
                 )
         );
 
-        blockModels.registerSimpleItemModel(block, model);
+        Identifier itemModel = ModelTemplates.FLAT_ITEM.create(
+                block.asItem(),
+                new TextureMapping()
+                        .put(TextureSlot.LAYER0, texture),
+                itemModels.modelOutput
+        );
+
+        itemModels.itemModelOutput.accept(
+                block.asItem(),
+                ItemModelUtils.plainModel(itemModel)
+        );
     }
 
     private static void registerSimpleBlockState(

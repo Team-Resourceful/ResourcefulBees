@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "P": "#minecraft:planks",
+    "W": "#c:wax"
+  },
+  "pattern": [
+    "WPW",
+    "PWP",
+    "WPW"
+  ],
+  "result": {
+    "count": 4,
+    "id": "resourcefulbees:waxed_planks"
+  }
+}

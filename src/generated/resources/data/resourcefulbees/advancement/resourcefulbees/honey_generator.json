@@ -1,0 +1,32 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/root",
+  "criteria": {
+    "has_honey_generator": {
+      "conditions": {
+        "items": [
+          {
+            "items": "resourcefulbees:honey_generator"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.resourcefulbees.honey_generator.description"
+    },
+    "icon": {
+      "id": "resourcefulbees:honey_generator"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.honey_generator.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_honey_generator"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/obtain_bee_nest",
+  "criteria": {
+    "has_t2_hive_upgrade": {
+      "conditions": {
+        "items": [
+          {
+            "items": "resourcefulbees:t2_nest_upgrade"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.resourcefulbees.t2_hive_upgrade.description"
+    },
+    "icon": {
+      "id": "resourcefulbees:t2_nest_upgrade"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.t2_hive_upgrade.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_t2_hive_upgrade"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

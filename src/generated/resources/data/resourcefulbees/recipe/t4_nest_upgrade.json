@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "#minecraft:planks",
+    "M": "#c:storage_blocks/honeycombs",
+    "S": "#c:storage_blocks/wax"
+  },
+  "pattern": [
+    "CSC",
+    "SMS",
+    "CSC"
+  ],
+  "result": {
+    "id": "resourcefulbees:t4_nest_upgrade"
+  }
+}

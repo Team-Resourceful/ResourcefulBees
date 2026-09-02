@@ -1,0 +1,32 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/t4_hive_upgrade",
+  "criteria": {
+    "has_t1_apiary": {
+      "conditions": {
+        "items": [
+          {
+            "items": "resourcefulbees:t1_apiary"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.resourcefulbees.t1_apiary.description"
+    },
+    "icon": {
+      "id": "resourcefulbees:t1_apiary"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.t1_apiary.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_t1_apiary"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

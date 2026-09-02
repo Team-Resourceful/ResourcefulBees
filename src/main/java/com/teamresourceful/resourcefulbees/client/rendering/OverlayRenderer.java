@@ -1,6 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.rendering;
 
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+
 public interface OverlayRenderer {
 
-//    void render(Minecraft minecraft, GuiGraphics graphics, float partialTicks, int screenWidth, int screenHeight);
+    void render(GuiGraphicsExtractor graphics, DeltaTracker partialTick);
 }

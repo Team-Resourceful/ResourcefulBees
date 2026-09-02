@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": "minecraft:leather"
+  },
+  "pattern": [
+    "LL ",
+    "L L",
+    " LL"
+  ],
+  "result": {
+    "id": "resourcefulbees:bellow"
+  }
+}

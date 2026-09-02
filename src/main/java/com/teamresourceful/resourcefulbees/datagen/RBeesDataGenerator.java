@@ -3,8 +3,13 @@ package com.teamresourceful.resourcefulbees.datagen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.datagen.providers.BeekeeperTradeProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.RBeesModelProvider;
-import com.teamresourceful.resourcefulbees.datagen.providers.RBeesFluidTagProvider;
-import com.teamresourceful.resourcefulbees.datagen.providers.RBeesBlockTagProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.advancements.RBeesAdvancementProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.lang.RBeesLanguageProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.loottables.RBeesLootTableProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.recipes.RBeesRecipeProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.tags.RBeesBlockTagProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.tags.RBeesFluidTagProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.tags.RBeesItemTagProvider;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -33,7 +38,11 @@ public final class RBeesDataGenerator {
         event.addProvider(new RBeesFluidTagProvider(output, provider));
         event.addProvider(new RBeesBlockTagProvider(output, provider));
         event.addProvider(new BeekeeperTradeProvider(output, provider));
-
+        event.addProvider(new RBeesLanguageProvider(output));
+        event.addProvider(new RBeesItemTagProvider(output, provider));
+        event.addProvider(new RBeesAdvancementProvider(output, provider));
+        event.addProvider(new RBeesLootTableProvider(output, provider));
+        event.addProvider(new RBeesRecipeProvider.Runner(output, provider));
 
 
 

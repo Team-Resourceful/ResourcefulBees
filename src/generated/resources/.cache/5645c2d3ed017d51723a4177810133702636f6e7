@@ -1,0 +1,25 @@
+// 26.2	2026-09-02T16:42:45.143168	Resourceful Bees Item Tags
+f95fe53b59cee6bcd3cf85b9ca90168a800d2602 data/c/tags/item/buckets/honey.json
+70cd4e1a0eaf500fa1b392262afeaeaaff74a6d4 data/c/tags/item/flowers/small.json
+d87a9f8fd22293746481df0b90caf0f2b3abe6c8 data/c/tags/item/heat_sources.json
+b7c610fe74377a42b51b7a87a3693fc1244cd9d6 data/c/tags/item/honey_blocks.json
+4546095bedc2f00f5b292731ce930510bc0fe87a data/c/tags/item/honey_bottles.json
+d878c230cd5cb1b54fbe6e53f3ef71379d080c6f data/c/tags/item/honeycombs.json
+05c763b42388a891135f6ae901e18cca737b806b data/c/tags/item/storage_blocks.json
+d6cf88ab73624a67b1cffc6e2fe8d4b95b053a79 data/c/tags/item/storage_blocks/honeycombs.json
+97db687cb55b4a5035a83a364f8a26096ca17e7f data/c/tags/item/storage_blocks/wax.json
+6a27f753764c8cb4f67d5209c793c4f0f51ea70a data/c/tags/item/wax.json
+9d7e57af77bd0bf8bb0026ca33c039f4d2010afc data/minecraft/tags/item/hanging_signs.json
+d535d8574986d19d4b8c405893530a91d2334fad data/minecraft/tags/item/signs.json
+4e7d97482f63a2f0eade2239ea7fda350aa2ac9f data/minecraft/tags/item/wooden_buttons.json
+82ad92ee1b2ea8a7998dc670055448bc48d090ac data/minecraft/tags/item/wooden_doors.json
+6e3cff71b97a16a431bf8e782cda2843eceac86c data/minecraft/tags/item/wooden_fences.json
+f65d846a9850662435bc04ba4cfc3ef286c95149 data/minecraft/tags/item/wooden_pressure_plates.json
+1ccef0138663648744c480496898695d9fe1cba2 data/minecraft/tags/item/wooden_slabs.json
+22d290ab9f9d905be675e07ca15d3bd94bb68735 data/minecraft/tags/item/wooden_stairs.json
+6fa8cc47a9d02fe2420b12f09d28e9dfc2eda1bc data/minecraft/tags/item/wooden_trapdoors.json
+e9c0a6e966e48c5bc92ca6680934a28912c7c225 data/resourcefulbees/tags/item/beehives.json
+ca5746c909583b888ea6b82b34088d49c4a32675 data/resourcefulbees/tags/item/t1_nests.json
+1293fea696d675bdc7e0d0dee7058a166b799855 data/resourcefulbees/tags/item/t2_nests.json
+3b04a7cccda2bfd436ff4b2fd45c3c5ee3857f7f data/resourcefulbees/tags/item/t3_nests.json
+bb2a5d1178f5ca5b559f125e81f147973f60ac1e data/resourcefulbees/tags/item/t4_nests.json

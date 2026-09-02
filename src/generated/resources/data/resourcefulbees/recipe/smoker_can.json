@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "minecraft:campfire",
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "II ",
+    "I I",
+    "ICI"
+  ],
+  "result": {
+    "id": "resourcefulbees:smoker_can"
+  }
+}

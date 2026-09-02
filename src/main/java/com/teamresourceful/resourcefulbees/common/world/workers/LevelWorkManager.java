@@ -1,28 +1,58 @@
 package com.teamresourceful.resourcefulbees.common.world.workers;
 
-import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
+import net.minecraft.server.level.ServerLevel;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public final class LevelWorkManager {
 
-    private LevelWorkManager() throws UtilityClassException {
-        throw new UtilityClassException();
+    private static final List<LevelWorker> WORKERS = new ArrayList<>();
+    private static final List<LevelWorker> PENDING_WORKERS = new ArrayList<>();
+
+    private static boolean ticking;
+
+    private LevelWorkManager() {
     }
 
-    //todo see https://github.com/neoforged/NeoForge/issues/2436
-    public static synchronized void addWork(LevelWorker worker) {
-        //WorldWorkerManager.addWorker(new WorkerWorker(worker));
+    public static void addWork(LevelWorker worker) {
+        if (ticking) {
+            PENDING_WORKERS.add(worker);
+        } else {
+            WORKERS.add(worker);
+        }
     }
 
-/*    private record WorkerWorker(LevelWorker worker) implements WorldWorkerManager.IWorker {
+    public static void tick(ServerLevel level) {
+        ticking = true;
 
-        @Override
-        public boolean hasWork() {
-            return worker.canWork();
+        try {
+            Iterator<LevelWorker> iterator = WORKERS.iterator();
+
+            while (iterator.hasNext()) {
+                LevelWorker worker = iterator.next();
+
+                if (worker.level() != level) {
+                    continue;
+                }
+
+                if (!worker.work()) {
+                    iterator.remove();
+                }
+            }
+        } finally {
+            ticking = false;
         }
 
-        @Override
-        public boolean doWork() {
-            return worker.work();
+        if (!PENDING_WORKERS.isEmpty()) {
+            WORKERS.addAll(PENDING_WORKERS);
+            PENDING_WORKERS.clear();
         }
-    }*/
+    }
+
+    public static void clear(ServerLevel level) {
+        WORKERS.removeIf(worker -> worker.level() == level);
+        PENDING_WORKERS.removeIf(worker -> worker.level() == level);
+    }
 }

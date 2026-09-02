@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "G": "#c:glass_blocks",
+    "H": "#c:honey_blocks"
+  },
+  "pattern": [
+    "HG",
+    "GH"
+  ],
+  "result": {
+    "count": 4,
+    "id": "resourcefulbees:honey_glass"
+  }
+}

@@ -1,89 +1,55 @@
 package com.teamresourceful.resourcefulbees.client.screen.locator;
 
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
+import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 
+import java.util.Comparator;
 import java.util.function.Consumer;
 
-public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
+public class BeeListWidget
+        extends ObjectSelectionList<BeeLocatorEntry> {
 
     public static final Identifier BACKGROUND = ModIdentifier.of("textures/gui/advancements/backgrounds/resourcefulbees.png");
 
     private final Consumer<BeeLocatorEntry> selector;
 
     public BeeListWidget(Consumer<BeeLocatorEntry> selector, Minecraft minecraft, int width, int height, int top, int bottom, int entryHeight) {
-        super(minecraft, width, height, top, bottom);
+        super(minecraft, width, bottom - top, top, entryHeight);
         this.selector = selector;
-/*        this.setRenderBackground(false);
-        this.setRenderTopAndBottom(false);*/
     }
-
-/*    @Override
-    protected void renderListBackground(GuiGraphics guiGraphics) { //TODO right override?
-*//*        Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tesselator.getBuilder();
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-        RenderSystem.setShaderTexture(0, BACKGROUND);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        bufferbuilder.vertex(this.x0, this.y1, 0.0D).uv(this.x0 / 32.0f, (this.y1 + (int)this.getScrollAmount()) / 32.0f).color(32, 32, 32, 255).endVertex();
-        bufferbuilder.vertex(this.x1, this.y1, 0.0D).uv(this.x1 / 32.0f, (this.y1 + (int)this.getScrollAmount()) / 32.0f).color(32, 32, 32, 255).endVertex();
-        bufferbuilder.vertex(this.x1, this.y0, 0.0D).uv(this.x1 / 32.0f, (this.y0 + (int)this.getScrollAmount()) / 32.0f).color(32, 32, 32, 255).endVertex();
-        bufferbuilder.vertex(this.x0, this.y0, 0.0D).uv(this.x0 / 32.0f, (this.y0 + (int)this.getScrollAmount()) / 32.0f).color(32, 32, 32, 255).endVertex();
-        tesselator.end();*//*
-    }
-
-    @Override
-    protected void renderDecorations(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
-*//*        Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tesselator.getBuilder();
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-        RenderSystem.setShaderTexture(0, BACKGROUND);
-        RenderSystem.enableDepthTest();
-        RenderSystem.depthFunc(519);
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-        bufferbuilder.vertex(this.x0, this.y0, -100.0D).uv(0.0F, this.y0 / 32.0f).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex((this.x0 + this.width), this.y0, -100.0D).uv(this.width / 32.0f, this.y0 / 32.0f).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex((this.x0 + this.width), 0.0D, -100.0D).uv(this.width / 32.0f, 0.0f).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex(this.x0, 0.0D, -100.0D).uv(0.0F, 0.0F).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex(this.x0, this.height, -100.0D).uv(0.0F, this.height / 32.0f).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex((this.x0 + this.width), this.height, -100.0D).uv(this.width / 32.0f, this.height / 32.0f).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex((this.x0 + this.width), this.y1, -100.0D).uv(this.width / 32.0f, this.y1 / 32.0f).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.vertex(this.x0, this.y1, -100.0D).uv(0.0F, this.y1 / 32.0f).color(64, 64, 64, 255).endVertex();
-        tesselator.end();
-        RenderSystem.depthFunc(515);
-        RenderSystem.disableDepthTest();
-        RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        bufferbuilder.vertex(this.x0, (this.y0 + 4), 0.0D).color(0, 0, 0, 0).endVertex();
-        bufferbuilder.vertex(this.x1, (this.y0 + 4), 0.0D).color(0, 0, 0, 0).endVertex();
-        bufferbuilder.vertex(this.x1, this.y0, 0.0D).color(0, 0, 0, 255).endVertex();
-        bufferbuilder.vertex(this.x0, this.y0, 0.0D).color(0, 0, 0, 255).endVertex();
-        bufferbuilder.vertex(this.x0, this.y1, 0.0D).color(0, 0, 0, 255).endVertex();
-        bufferbuilder.vertex(this.x1, this.y1, 0.0D).color(0, 0, 0, 255).endVertex();
-        bufferbuilder.vertex(this.x1, (this.y1 - 4), 0.0D).color(0, 0, 0, 0).endVertex();
-        bufferbuilder.vertex(this.x0, (this.y1 - 4), 0.0D).color(0, 0, 0, 0).endVertex();
-        tesselator.end();*//*
-    }*/
 
     public void updateEntries(BeeRegistry registry) {
-        var level = this.minecraft.level;
-        if (level == null) return;
-        this.clearEntries();
+        var level = minecraft.level;
 
-//        registry.getSetOfBees()
-//            .stream()
-//            .filter(bee -> DimensionalBeeHolder.getBees(level.dimension()).contains(bee.name()))
-//            .sorted(Comparator.comparing(CustomBeeData::name))
-//            .forEach(bee -> {
-//                //Entity entity = bee.entityType().create(level);
-//                //if (entity != null) this.addEntry(new BeeLocatorEntry(this.selector, entity, bee.displayName().copy()));
-//            });
+        if (level == null) {
+            return;
+        }
+
+        clearEntries();
+
+        var dimensionalBees = DimensionalBeeHolder.getBees(level.dimension());
+
+        registry.getSetOfBees()
+                .stream()
+                .filter(bee -> dimensionalBees.contains(bee.id()))
+                .sorted(Comparator.comparing(CustomBeeData::id))
+                .forEach(bee -> {
+                    Entity entity = bee.entityType().create(level, EntitySpawnReason.COMMAND);
+
+                    if (entity == null) {
+                        return;
+                    }
+
+                    ClientRenderUtils.preparePreviewEntity(entity);
+                    addEntry(new BeeLocatorEntry(selector, entity, bee.displayName().copy()));
+                });
     }
 }

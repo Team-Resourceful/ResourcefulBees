@@ -163,7 +163,13 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
             var bee = this.menu.getApiaryBee(i);
 
-            ClientRenderUtils.renderEntity(graphics,bee.createEntity(Minecraft.getInstance().level, new BlockPos(0,0,0)), left, i1, 16, 16, 180f, 1.0f);
+            if (Minecraft.getInstance().level != null) {
+                var entity = bee.createEntity(Minecraft.getInstance().level, new BlockPos(0, 0, 0));
+                if (entity != null) {
+                    ClientRenderUtils.preparePreviewEntity(entity);
+                    ClientRenderUtils.renderEntity(graphics, entity, left, i1, 16, 16, 180f, 1.0f);
+                }
+            }
         }
     }
 

@@ -56,6 +56,7 @@ public interface RegistryPredicate<T> extends Predicate<Holder<T>> {
         return create(Either.right(Set.of(holder)));
     }
 
+    @SafeVarargs
     static <E, T> RegistryPredicate<T> create(Function<E, Holder<T>> factory, E... elements) {
         return create(Either.right(Stream.of(elements).map(factory).collect(ImmutableSet.toImmutableSet())));
     }

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public final class  ModPaths {
     private ModPaths() throws UtilityClassException {
@@ -23,7 +22,7 @@ public final class  ModPaths {
 
 
     private static Path createCustomPath(String pathName) {
-        Path customPath = Paths.get(PathUtils.getConfigPath().toAbsolutePath().toString(), ModConstants.MOD_ID, pathName);
+        Path customPath = PathUtils.getConfigPath().toAbsolutePath().resolve(ModConstants.MOD_ID).resolve(pathName);
         createDirectory(customPath, pathName);
         return customPath;
     }

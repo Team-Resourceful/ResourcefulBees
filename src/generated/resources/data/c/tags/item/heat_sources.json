@@ -1,0 +1,15 @@
+{
+  "values": [
+    "minecraft:torch",
+    "minecraft:soul_torch",
+    "minecraft:lava_bucket",
+    "minecraft:campfire",
+    "minecraft:soul_campfire",
+    "minecraft:magma_block",
+    "minecraft:lantern",
+    "minecraft:sea_lantern",
+    "minecraft:soul_lantern",
+    "minecraft:jack_o_lantern",
+    "#minecraft:candles"
+  ]
+}

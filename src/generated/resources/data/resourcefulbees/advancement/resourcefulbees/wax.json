@@ -1,0 +1,32 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/root",
+  "criteria": {
+    "has_wax": {
+      "conditions": {
+        "items": [
+          {
+            "items": "resourcefulbees:wax"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.resourcefulbees.wax.description"
+    },
+    "icon": {
+      "id": "resourcefulbees:wax"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.wax.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_wax"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

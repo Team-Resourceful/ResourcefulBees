@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "resourcefulbees:centrifuge_crank"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_waxed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "resourcefulbees:waxed_machine_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_waxed"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "resourcefulbees:centrifuge_crank"
+    ]
+  }
+}

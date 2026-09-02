@@ -1,11 +1,6 @@
 {
   "replace": false,
   "values": [
-    "resourcefulbees:beekeeper/4/t1_apiary",
-    "resourcefulbees:beekeeper/4/t2_apiary",
-    "resourcefulbees:beekeeper/4/t3_apiary",
-    "resourcefulbees:beekeeper/4/t4_apiary",
-    "resourcefulbees:beekeeper/4/flow_hive",
     "resourcefulbees:beekeeper/4/nest/acacia/1",
     "resourcefulbees:beekeeper/4/nest/acacia/2",
     "resourcefulbees:beekeeper/4/nest/acacia/3",

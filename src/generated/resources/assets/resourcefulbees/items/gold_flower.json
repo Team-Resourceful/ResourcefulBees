@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "resourcefulbees:block/gold_flower"
+    "model": "resourcefulbees:item/gold_flower"
   }
 }

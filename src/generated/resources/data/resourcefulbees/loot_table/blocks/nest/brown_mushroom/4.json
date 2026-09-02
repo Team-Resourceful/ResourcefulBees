@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "resourcefulbees:nest/brown_mushroom/4"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "resourcefulbees:blocks/nest/brown_mushroom/4"
+}

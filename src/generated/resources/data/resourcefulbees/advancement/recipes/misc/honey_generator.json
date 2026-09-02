@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_honey_bucket": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:buckets/honey"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "resourcefulbees:honey_generator"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_honey_bucket"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "resourcefulbees:honey_generator"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "#c:chains",
+    "W": "resourcefulbees:waxed_planks"
+  },
+  "pattern": [
+    "C C",
+    "WWW",
+    "WWW"
+  ],
+  "result": {
+    "count": 6,
+    "id": "resourcefulbees:waxed_hanging_sign"
+  }
+}

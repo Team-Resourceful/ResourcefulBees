@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "resourcefulbees:smoker_can",
+    "resourcefulbees:bellow"
+  ],
+  "result": {
+    "id": "resourcefulbees:smoker"
+  }
+}

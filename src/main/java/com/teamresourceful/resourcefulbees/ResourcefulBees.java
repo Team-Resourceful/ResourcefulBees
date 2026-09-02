@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesComman
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.data.TagGenerator;
 import com.teamresourceful.resourcefulbees.common.enchantments.HiveBreakHandler;
+import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
@@ -26,6 +27,7 @@ import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
 import com.teamresourceful.resourcefulbees.common.world.gen.GoldenFlower;
+import com.teamresourceful.resourcefulbees.common.world.workers.LevelWorkEvents;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -33,6 +35,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -41,7 +44,6 @@ public class ResourcefulBees {
 
     public ResourcefulBees(IEventBus modEventBus, ModContainer modContainer) {
         RegistryHandler.init();
-        GameSetup.initEvents();
         //load default data
         DefaultHiveTypes.loadDefaults();
         DefaultBeehiveTiers.loadDefaults();
@@ -78,6 +80,8 @@ public class ResourcefulBees {
         NeoForge.EVENT_BUS.addListener(ModStructures::onServerAboutToStart);
         NeoForge.EVENT_BUS.addListener(HiveBreakHandler::onBlockDrops);
         NeoForge.EVENT_BUS.addListener(ModBrewingRecipes::register);
+        NeoForge.EVENT_BUS.addListener(DimensionalBeeHolder::onDatapackSync);
+        NeoForge.EVENT_BUS.addListener(LevelWorkEvents::onLevelTick);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -100,18 +104,13 @@ public class ResourcefulBees {
     private void commonSetup(FMLCommonSetupEvent event) {
         NetworkHandler.init();
         event.enqueueWork(RegistryHandler::registerDispenserBehaviors);
-        //IngredientHelper.registerIngredient(BeeJarIngredient.SERIALIZER);
-        GameSetup.initPotionRecipes();
         GameSetup.initArguments();
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        //if (event.getServer().isDedicatedServer()){
-
-            BeeRegistry.getRegistry().regenerateCustomBeeData(event.getServer().registryAccess());
-        //}
+        BeeRegistry.getRegistry().regenerateCustomBeeData(event.getServer().registryAccess());
     }
 
     private void onLoadingCompleted(FMLLoadCompleteEvent event) {
@@ -126,9 +125,14 @@ public class ResourcefulBees {
         }
     }
 
-    //public static void onCommonSetup(CommonSetupEvent event) {
-//        NetworkHandler.init();
-//        RegistryHandler.registerDispenserBehaviors();
-//        GameSetup.initPotionRecipes();
-//        GameSetup.initArguments();
+    @SubscribeEvent
+    public void syncRecipes(OnDatapackSyncEvent event) {
+        event.sendRecipes(ModRecipes.HIVE_RECIPE_TYPE.get());
+        event.sendRecipes(ModRecipes.BREEDER_RECIPE_TYPE.get());
+        event.sendRecipes(ModRecipes.CENTRIFUGE_RECIPE_TYPE.get());
+        event.sendRecipes(ModRecipes.SOLIDIFICATION_RECIPE_TYPE.get());
+        event.sendRecipes(ModRecipes.HONEY_GEN_RECIPE_TYPE.get());
+        event.sendRecipes(ModRecipes.FLOW_HIVE_RECIPE_TYPE.get());
+        event.sendRecipes(ModRecipes.MUTATION_RECIPE_TYPE.get());
+    }
 }

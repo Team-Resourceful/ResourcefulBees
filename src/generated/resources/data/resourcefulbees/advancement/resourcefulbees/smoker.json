@@ -1,0 +1,32 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/scraper",
+  "criteria": {
+    "has_smoker": {
+      "conditions": {
+        "items": [
+          {
+            "items": "resourcefulbees:smoker"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.resourcefulbees.smoker.description"
+    },
+    "icon": {
+      "id": "resourcefulbees:smoker"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.smoker.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_smoker"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

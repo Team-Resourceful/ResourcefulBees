@@ -9,6 +9,7 @@ import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NullMarked;
 
@@ -80,5 +81,15 @@ public class ModDataComponents {
             .persistent(BatteryData.CODEC)
             .networkSynchronized(BatteryData.STREAM_CODEC)
             .cacheEncoding()
+            .build());
+
+    public static final RegistryEntry<DataComponentType<BeeLocatorData>> BEE_LOCATOR_DATA = COMPONENTS.register("bee_locator_data", () -> DataComponentType.<BeeLocatorData>builder()
+            .persistent(BeeLocatorData.CODEC)
+            .networkSynchronized(BeeLocatorData.STREAM_CODEC)
+            .cacheEncoding()
+            .build());
+
+    public static final RegistryEntry<DataComponentType<Boolean>> BEE_LOCATOR_SEARCHING = COMPONENTS.register("bee_locator_searching", () -> DataComponentType.<Boolean>builder()
+            .networkSynchronized(ByteBufCodecs.BOOL)
             .build());
 }

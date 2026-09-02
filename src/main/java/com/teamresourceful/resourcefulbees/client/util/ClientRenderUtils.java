@@ -16,6 +16,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import org.joml.Quaternionf;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -50,6 +51,10 @@ public final class ClientRenderUtils {
         }
     }*/
 
+    public static void preparePreviewEntity(Entity entity) {
+        entity.setId(NEXT_PREVIEW_ENTITY_ID.getAndDecrement());
+    }
+
     public static void renderEntity(
             GuiGraphicsExtractor graphics,
             Entity entity,
@@ -66,16 +71,6 @@ public final class ClientRenderUtils {
             return;
         }
 
-        /*
-         * GUI-only entities are not added to the level, so they do not receive
-         * a normal runtime entity ID. Render-state extraction still requires one.
-         */
-        try {
-            entity.getId();
-        } catch (IllegalStateException _) {
-            entity.setId(NEXT_PREVIEW_ENTITY_ID.getAndDecrement());
-        }
-
         entity.tickCount = minecraft.player.tickCount;
 
         float entitySize = Math.max(entity.getBbWidth(), entity.getBbHeight());
@@ -83,30 +78,43 @@ public final class ClientRenderUtils {
             return;
         }
 
-        float partialTick = minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(true);
-        EntityRenderState renderState = minecraft.getEntityRenderDispatcher().extractEntity(entity, partialTick);
+        float partialTick = minecraft.getDeltaTracker()
+                .getGameTimeDeltaPartialTick(true);
 
-        /*
-         * Scale is expressed in GUI pixels per model unit.
-         *
-         * Use the available GUI area rather than a fixed value of 15.
-         */
+        EntityRenderState renderState = minecraft
+                .getEntityRenderDispatcher()
+                .extractEntity(entity, partialTick);
+
         float availableSize = Math.min(width, height);
         float scale = availableSize / entitySize * renderScale;
 
-        /*
-         * Model-space offset inside the GUI rectangle.
-         *
-         * Move the entity upward by half of its bounding-box height so its
-         * center is located in the preview rectangle.
-         */
-        Vector3f translation = new Vector3f(0.0F, entity.getBbHeight() / 2.0F, 0.0F);
+        Vector3f translation = new Vector3f(
+                0.0F,
+                entity.getBbHeight() / 2.0F,
+                0.0F
+        );
 
         Quaternionf modelRotation = new Quaternionf()
                 .rotateZ((float) Math.PI)
                 .rotateY((float) Math.toRadians(rotation));
 
-        graphics.entity(renderState, scale, translation, modelRotation, null, x, y, x + width, y + height);
+        Vector2f topLeft = new Vector2f(x, y);
+        Vector2f bottomRight = new Vector2f(x + width, y + height);
+
+        graphics.pose().transformPosition(topLeft);
+        graphics.pose().transformPosition(bottomRight);
+
+        graphics.entity(
+                renderState,
+                scale,
+                translation,
+                modelRotation,
+                null,
+                Math.round(topLeft.x),
+                Math.round(topLeft.y),
+                Math.round(bottomRight.x),
+                Math.round(bottomRight.y)
+        );
     }
 
 

@@ -5,8 +5,7 @@
     "textures": {
       "base": "minecraft:item/bucket",
       "particle": "minecraft:item/bucket",
-      "fluid": "neoforge:item/mask/bucket_fluid",
-      "cover": "neoforge:item/mask/bucket_fluid_cover"
+      "fluid": "resourcefulbees:item/honey/honey_bucket_contents"
     },
     "flip_gas": true
   }

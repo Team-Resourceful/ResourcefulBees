@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "#c:storage_blocks/honeycombs",
+    "M": "minecraft:nether_star",
+    "S": "resourcefulbees:t1_apiary"
+  },
+  "pattern": [
+    "CSC",
+    "SMS",
+    "CSC"
+  ],
+  "result": {
+    "id": "resourcefulbees:t2_apiary"
+  }
+}

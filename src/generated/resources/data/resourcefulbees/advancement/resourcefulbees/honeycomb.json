@@ -1,0 +1,32 @@
+{
+  "parent": "resourcefulbees:resourcefulbees/root",
+  "criteria": {
+    "has_honeycomb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:honeycombs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.resourcefulbees.honeycomb.description"
+    },
+    "icon": {
+      "id": "minecraft:honeycomb"
+    },
+    "title": {
+      "translate": "advancements.resourcefulbees.honeycomb.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_honeycomb"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
