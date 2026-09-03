@@ -20,6 +20,6 @@ public final class MissingRegistryTranslations {
     @Translate("Resourceful Bees custom registry entries missing!")
     public static final MutableComponent TITLE = Component.translatable("gui.resourcefulbees.missing_registry.title");
 
-    @Translate("Bees, Honey, or Combs that were loaded previously are missing this startup.\n Are you sure you would you like to proceed?\nInformation on which entries are missing is provided in the logs.")
+    @Translate("Bees, Honey, or Combs that were loaded previously are missing this startup.\nAre you sure you would you like to proceed?\nInformation on which entries are missing is provided in the logs.")
     public static final MutableComponent DESCRIPTION = Component.translatable("gui.resourcefulbees.missing_registry.description");
 }
