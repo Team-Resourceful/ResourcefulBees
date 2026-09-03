@@ -15,17 +15,22 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
     private static final Identifier VALIDATED_TEXTURE = ModIdentifier.of("textures/gui/apiary/validated.png");
+
+    private final Map<Integer, Entity> previewEntities = new HashMap<>();
     private int beeIndexOffset;
     private float sliderProgress;
     private boolean clickedOnScroll;
@@ -49,78 +54,44 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
             }
             int k = (int) (99.0F * this.sliderProgress);
             graphics.blit(RenderPipelines.GUI_TEXTURED, VALIDATED_TEXTURE, i + 44, j + 34 + k, 54f + (this.canScroll() ? 0 : 6), imageHeight, 6, 27, 256, 256);
-            int l = this.leftPos + 5;
-            int i1 = this.topPos + 34;
-            int j1 = this.beeIndexOffset + 7;
-            this.drawRecipesBackground(graphics, mouseX, mouseY, l, i1, j1);
-            this.drawBees(graphics, l, i1, j1);
-        }
-    }
-
-    /*  @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        if (apiaryBlockEntity != null) {
-            if (canScroll()) {
-                if (beeIndexOffset + 7 >= apiaryBlockEntity.beeCount()) {
-                    beeIndexOffset = Math.max(0, apiaryBlockEntity.beeCount() - 7);
-                }
-            } else {
-                beeIndexOffset = 0;
-            }
-            this.renderBackground(graphics, mouseX, mouseY, partialTicks);
-            super.render(graphics, mouseX, mouseY, partialTicks);
-            this.renderTooltip(graphics, mouseX, mouseY);
-            int l = this.leftPos + 5;
-            int i1 = this.topPos + 34;
-            int j1 = this.beeIndexOffset + 7;
-            renderBeeToolTip(mouseX, mouseY, l, i1, j1);
-        }
-    }
-
-
-
-    @Override
-    protected void renderBg(@NotNull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
-        Minecraft client = this.minecraft;
-        if (client != null && apiaryBlockEntity != null) {
-            int i = this.leftPos;
-            int j = this.topPos;
-            graphics.blit(VALIDATED_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
-            if (!this.canScroll()) {
-                this.sliderProgress = 0;
-            }
-            int k = (int) (99.0F * this.sliderProgress);
-            graphics.blit(VALIDATED_TEXTURE, i + 44, j + 34 + k, 54 + (this.canScroll() ? 0 : 6), imageHeight, 6, 27);
-            int l = this.leftPos + 5;
-            int i1 = this.topPos + 34;
-            int j1 = this.beeIndexOffset + 7;
-            this.drawRecipesBackground(graphics, mouseX, mouseY, l, i1, j1);
-            this.drawBees(graphics, l, i1, j1);
+            int beeLeft = this.leftPos + 5;
+            int beeTop = this.topPos + 34;
+            int beeIndexOffsetMax = this.beeIndexOffset + 7;
+            this.drawRecipesBackground(graphics, mouseX, mouseY, beeLeft, beeTop, beeIndexOffsetMax);
+            this.drawBees(graphics, beeLeft, beeTop, beeIndexOffsetMax);
+            renderBeeToolTip(graphics, mouseX, mouseY, beeLeft, beeTop, beeIndexOffsetMax);
         }
     }
 
     @Override
-    protected void renderLabels(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
-        String s = String.format("(%1$s/%2$s)", apiaryBlockEntity.beeCount(), apiaryBlockEntity.getTier().maxBees());
-        graphics.drawString(this.font, s, 4, 17, 0x404040, false);
-        graphics.drawString(this.font, getTitle(), 55, 7, 0x404040, false);
-        graphics.drawString(this.font, GuiTranslations.INVENTORY, 55, 75, 0x404040, false);
-    }*/
+    protected void extractLabels(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        if (apiaryBlockEntity == null) {
+            return;
+        }
 
-    private void renderBeeToolTip(int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {
+        String beeCount = "(%1$s/%2$s)".formatted(apiaryBlockEntity.beeCount(), apiaryBlockEntity.getTier().maxBees());
+        graphics.text(this.font, beeCount, 4, 17, 0xff404040, false);
+        graphics.text(this.font, getTitle(), 55, 7, 0xff404040, false);
+        graphics.text(this.font, this.playerInventoryTitle, 55, 75, 0xff404040, false);
+    }
+
+    private void renderBeeToolTip(GuiGraphicsExtractor graphics, int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {
         for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.beeCount(); ++i) {
-            int j = i - this.beeIndexOffset;
-            int i1 = top + j * 18;
+            int index = i - this.beeIndexOffset;
+            int y = top + index * 18;
 
-            if (mouseX >= left && mouseY >= i1 && mouseX < left + 18 && mouseY < i1 + 18) {
-                List<Component> beeInfo = new ArrayList<>();
+            if (mouseX >= left && mouseY >= y && mouseX < left + 18 && mouseY < y + 18) {
                 var apiaryBee = this.menu.getApiaryBee(i);
-
                 int ticksInHive = apiaryBee.ticksInHive();
-                beeInfo.add(apiaryBee.displayName());
-                beeInfo.add(Component.translatable(ApiaryTranslations.TICKS_HIVE, ticksInHive));
-                beeInfo.add(Component.translatable(ApiaryTranslations.TICKS_LEFT, Math.max(apiaryBee.minOccupationTicks() - ticksInHive, 0)));
-                //ScreenUtils.setTooltip(beeInfo);
+
+                List<FormattedCharSequence> beeInfo = List.of(
+                        apiaryBee.displayName().getVisualOrderText(),
+                        Component.translatable(ApiaryTranslations.TICKS_HIVE, ticksInHive).getVisualOrderText(),
+                        Component.translatable(ApiaryTranslations.TICKS_LEFT, Math.max(apiaryBee.minOccupationTicks() - ticksInHive, 0)).getVisualOrderText()
+                );
+
+                graphics.setTooltipForNextFrame(beeInfo, mouseX, mouseY);
+                return;
             }
         }
     }
@@ -147,28 +118,47 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
             }
 
             graphics.blit(RenderPipelines.GUI_TEXTURED, VALIDATED_TEXTURE, x, y, l1, v, 18, 18, 256, 256);
-
-            if (mouseX >= x && mouseY >= y && mouseX < x + 18 && mouseY < y + 18) {
-                // TODO test, should be switched to actual component in a list
-                graphics.setTooltipForNextFrame(bee.displayName(), mouseX, mouseY);
-            }
         }
 
     }
 
     private void drawBees(GuiGraphicsExtractor graphics, int left, int top, int beeIndexOffsetMax) {
+        Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.level == null) {
+            return;
+        }
+
         for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.beeCount(); ++i) {
-            int j = i - this.beeIndexOffset;
-            int i1 = top + j * 18 + 2;
+            int index = i - this.beeIndexOffset;
+            int y = top + index * 18 + 2;
 
-            var bee = this.menu.getApiaryBee(i);
+            var apiaryBee = this.menu.getApiaryBee(i);
 
-            if (Minecraft.getInstance().level != null) {
-                var entity = bee.createEntity(Minecraft.getInstance().level, new BlockPos(0, 0, 0));
-                if (entity != null) {
-                    ClientRenderUtils.preparePreviewEntity(entity);
-                    ClientRenderUtils.renderEntity(graphics, entity, left, i1, 16, 16, 180f, 1.0f);
+            Entity entity = previewEntities.computeIfAbsent(i, ignored -> {
+                Entity created = apiaryBee.createEntity(
+                        minecraft.level,
+                        BlockPos.ZERO
+                );
+
+                if (created != null) {
+                    ClientRenderUtils.preparePreviewEntity(created);
                 }
+
+                return created;
+            });
+
+            if (entity != null) {
+                ClientRenderUtils.renderEntity(
+                        graphics,
+                        entity,
+                        left,
+                        y,
+                        16,
+                        16,
+                        180f,
+                        0.85f
+                );
             }
         }
     }
