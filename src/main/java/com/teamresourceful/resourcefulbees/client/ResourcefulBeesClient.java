@@ -32,6 +32,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.LevelEvent;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class ResourcefulBeesClient {
 
     public ResourcefulBeesClient(ModContainer container) {
         ModClientFluidProperties.registerHoneyFluids();
+        NeoForge.EVENT_BUS.addListener(MissingRegistryScreen::onScreenOpening);
     }
 
     @SubscribeEvent

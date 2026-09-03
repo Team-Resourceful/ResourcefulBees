@@ -9,7 +9,6 @@ public class BeeLanguageModule implements LanguageModule {
     @Override
     public void addEntries(BaseLanguageProvider provider) {
         addBees(provider);
-        //TODO why are the two lines below this the only ones like this?
         provider.add(LangGenerator.ITEM_RESOURCEFULBEES+"rgbee_bee_spawn_egg", "RGBee Spawn Egg");
         provider.add(LangGenerator.ENTITY_RESOURCEFULBEES+"rgbee_bee", "RGBee");
         addHoney(provider);

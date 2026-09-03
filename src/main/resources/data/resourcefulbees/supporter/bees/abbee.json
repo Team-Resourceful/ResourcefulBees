@@ -14,7 +14,7 @@
         ]
     },
     "resourcefulbees:rendering/v1": {
-        "texture": "/abbee/bee",
+        "texture": "abbee/bee",
         "model": "resourcefulbees:bunny",
         "ColorData": {
             "spawnEggPrimaryColor": "#E5DED5",

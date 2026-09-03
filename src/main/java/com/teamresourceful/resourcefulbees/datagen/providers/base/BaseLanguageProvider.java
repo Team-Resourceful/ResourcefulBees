@@ -10,6 +10,7 @@ import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -82,12 +83,14 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
     public void addBee(String id, String name) {
         add(LangGenerator.ITEM_RESOURCEFULBEES+id+"_bee_spawn_egg", name +" Bee Spawn Egg");
         add("entity.resourcefulbees."+id+"_bee", name +" Bee");
+        add(LangGenerator.ENTITY_TYPE_RESOURCEFULBEES+id+"_bee", name +" Bee");
         add("bee_type.resourcefulbees."+id, name);
     }
 
     public void addHoneycomb(String id, String name) {
         add(LangGenerator.ITEM_RESOURCEFULBEES+id+"_honeycomb", name +" Honeycomb");
         add(LangGenerator.BLOCK_RESOURCEFULBEES+id+"_honeycomb_block", name +" Honeycomb Block");
+        add(LangGenerator.ITEM_RESOURCEFULBEES+id+"_honeycomb_block", name +" Honeycomb Block");
         addHoneycombType(id, name);
     }
 
@@ -116,7 +119,10 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
     }
 
     public void addHoney(String id, String name, boolean fluid, boolean block) {
-        if (block) add(LangGenerator.BLOCK_RESOURCEFULBEES+id+"_honey_block", name +" Honey Block");
+        if (block) {
+            add(LangGenerator.BLOCK_RESOURCEFULBEES+id+"_honey_block", name +" Honey Block");
+            add(LangGenerator.ITEM_RESOURCEFULBEES+id+"_honey_block", name +" Honey Block");
+        }
         if (fluid) {
             add("item.resourcefulbees."+id+"_honey_bucket", name+" Honey Bucket");
             add("fluid.resourcefulbees."+id+"_honey", name+" Honey");
@@ -131,7 +137,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
     }
 
     public void addFluid(FluidData fluid, String name) {
-        //add(Util.makeDescriptionId("fluid_type", fluid.getInformation().id()), name);
+        add(Util.makeDescriptionId("fluid_type", fluid.id()), name);
     }
 
     public void addPotion(RegistryEntry<Potion> key, String name){

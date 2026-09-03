@@ -5,7 +5,7 @@
     "maxTimeInHive": 600
   },
   "resourcefulbees:rendering/v1": {
-    "texture": "/creeper/creeper_bee",
+    "texture": "creeper/creeper_bee",
     "layers": [
       { "layerEffect": "GLOW", "texture": "creeper/creeper_bee_emissive", "color": "#E2D3D3", "pulseFrequency": 10 }
     ],

@@ -33,38 +33,27 @@ public final class MissingRegistrySetup {
             YabnElement parse = YabnParser.parse(new ArrayByteReader(FileUtils.readFileToByteArray(registryCheckFile)));
             if (parse instanceof YabnObject object) {
                 if (object.get("b") instanceof YabnArray array) {
-                    StringBuilder missingBees = new StringBuilder();
-                    getStrings(array).stream()
-                            .filter(s -> !BeeRegistry.get().containsBeeType(s) && (anyRegistriesMissing = true))
-                            .forEach(s -> missingBees.append("    - ").append(s).append("\n"));
-                    if (!missingBees.isEmpty()) ModConstants.LOGGER.warn("\nThe following bees are missing from the registry: \n {}", missingBees);
+                    checkBeeRegistry(array);
                 }
                 if (object.get("h") instanceof YabnArray array) {
-                    StringBuilder missingHoney = new StringBuilder();
-                    getStrings(array).stream()
-                            .filter(s -> !HoneyRegistry.get().containsHoney(s) && (anyRegistriesMissing = true))
-                            .forEach(s -> missingHoney.append("    - ").append(s).append("\n"));
-                    if (!missingHoney.isEmpty()) ModConstants.LOGGER.warn("\nThe following honey are missing from the registry: \n {}", missingHoney);
+                    checkHoneyRegistry(array);
                 }
                 if (object.get("c") instanceof YabnArray array) {
-                    StringBuilder missingCombs = new StringBuilder();
-                    getStrings(array).stream()
-                            .filter(s -> !HoneycombRegistry.get().containsHoneycomb(s) && (anyRegistriesMissing = true))
-                            .forEach(s -> missingCombs.append("    - ").append(s).append("\n"));
-                    if (!missingCombs.isEmpty()) ModConstants.LOGGER.warn("\nThe following combs are missing from the registry: \n {}", missingCombs);
+                    checkHoneycombRegistry(array);
                 }
             }
         } catch (Exception e) {
             ModConstants.LOGGER.error("Failed to read registry check file. Registries may be missing.");
-            if (ModConstants.LOGGER.isDebugEnabled())
+            if (ModConstants.LOGGER.isDebugEnabled()) {
                 e.printStackTrace();
+            }
         }
 
         YabnObject object = new YabnObject();
         YabnArray beeArray = new YabnArray();
         YabnArray honeyArray = new YabnArray();
         YabnArray combArray = new YabnArray();
-        BeeRegistry.get().getBeeTypes().forEach(bee -> beeArray.add(YabnPrimitive.ofString(String.valueOf(bee))));
+        BeeRegistry.get().getBeeTypes().forEach(bee -> beeArray.add(YabnPrimitive.ofString(bee.toString())));
         HoneyRegistry.get().getHoneyTypes().forEach(honey -> honeyArray.add(YabnPrimitive.ofString(honey)));
         HoneycombRegistry.get().getHoneycombTypes().forEach(comb -> combArray.add(YabnPrimitive.ofString(comb)));
         object.put("b", beeArray);
@@ -75,6 +64,30 @@ public final class MissingRegistrySetup {
         } catch (Exception e) {
             ModConstants.LOGGER.error("Failed to write registry check file. Registries may be missing next run!");
         }
+    }
+
+    private static void checkHoneycombRegistry(YabnArray array) {
+        StringBuilder missingCombs = new StringBuilder();
+        getStrings(array).stream()
+                .filter(s -> !HoneycombRegistry.get().containsHoneycomb(s) && (anyRegistriesMissing = true))
+                .forEach(s -> missingCombs.append("    - ").append(s).append("\n"));
+        if (!missingCombs.isEmpty()) ModConstants.LOGGER.warn("\nThe following combs are missing from the registry: \n {}", missingCombs);
+    }
+
+    private static void checkHoneyRegistry(YabnArray array) {
+        StringBuilder missingHoney = new StringBuilder();
+        getStrings(array).stream()
+                .filter(s -> !HoneyRegistry.get().containsHoney(s) && (anyRegistriesMissing = true))
+                .forEach(s -> missingHoney.append("    - ").append(s).append("\n"));
+        if (!missingHoney.isEmpty()) ModConstants.LOGGER.warn("\nThe following honey are missing from the registry: \n {}", missingHoney);
+    }
+
+    private static void checkBeeRegistry(YabnArray array) {
+        StringBuilder missingBees = new StringBuilder();
+        getStrings(array).stream()
+                .filter(s -> !BeeRegistry.get().containsBeeType(s) && (anyRegistriesMissing = true))
+                .forEach(s -> missingBees.append("    - ").append(s).append("\n"));
+        if (!missingBees.isEmpty()) ModConstants.LOGGER.warn("\nThe following bees are missing from the registry: \n {}", missingBees);
     }
 
     private static List<String> getStrings(YabnArray array) {

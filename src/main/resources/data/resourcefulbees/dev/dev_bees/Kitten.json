@@ -16,7 +16,7 @@
   },
   "resourcefulbees:rendering/v1": {
     "sizeModifier": 0.75,
-    "texture": "/kitten/bee",
+    "texture": "kitten/bee",
     "model": "resourcefulbees:kitten",
     "layers" : [
       { "isPollen": true, "color": "#FFDCC4", "texture": "custom_nectar" }
