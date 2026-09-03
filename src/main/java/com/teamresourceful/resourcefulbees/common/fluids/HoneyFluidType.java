@@ -14,6 +14,7 @@ public final class HoneyFluidType {
                 .canDrown(true)
                 .canExtinguish(true)
                 .canPushEntity(true)
+                .isWaterLike(true)
                 .canSwim(true)
                 .pathType(PathType.WATER)
                 .adjacentPathType(PathType.WATER_BORDER)

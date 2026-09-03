@@ -18,7 +18,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.Comparator;
-import java.util.stream.Stream;
 
 public class ModCreativeTabs {
     private ModCreativeTabs() throws UtilityClassException {
@@ -42,6 +41,7 @@ public class ModCreativeTabs {
                 output.accept(ModItems.SMOKER.get());
                 output.accept(ModItems.BELLOW.get());
                 output.accept(ModItems.SMOKER_CAN.get());
+                output.accept(ModItems.BEE_LOCATOR.get());
 
                 output.accept(ModItems.WAX.get());
                 output.accept(ModItems.WAX_BLOCK_ITEM.get());
@@ -113,24 +113,7 @@ public class ModCreativeTabs {
             CREATIVE_TABS.register("honey", () ->
                     new ResourcefulCreativeModeTab(ModIdentifier.of("honey"))
                             .setItemIcon(() -> Items.HONEY_BOTTLE)
-                            .addContent(() ->
-                                    Stream.concat(
-                                                    Stream.concat(
-                                                            ModItems.HONEY_BOTTLE_ITEMS.boundStream(),
-                                                            ModItems.HONEY_BLOCK_ITEMS.boundStream()
-                                                    ),
-                                                    ModItems.HONEY_BUCKET_ITEMS.boundStream()
-                                            )
-                                            .sorted(Comparator.comparing(item ->
-                                                    BuiltInRegistries.ITEM
-                                                            .getKey(item.asItem())
-                                                            .toString()
-                                            ))
-                                            .map(ItemStack::new)
-                            )
-                            //.addStack(() -> Items.HONEY_BOTTLE)
-                            //.addStack(() -> Items.HONEY_BLOCK)
-                            //.addStack(ModItems.HONEY_BUCKET::get)
+                            .addAndSortRegistries(ModItems.HONEY_BOTTLE_ITEMS, ModItems.HONEY_BLOCK_ITEMS, ModItems.HONEY_BUCKET_ITEMS)
                             .build()
             );
 
@@ -138,18 +121,7 @@ public class ModCreativeTabs {
             CREATIVE_TABS.register("combs", () ->
                     new ResourcefulCreativeModeTab(ModIdentifier.of("combs"))
                             .setItemIcon(() -> Items.HONEYCOMB)
-                            .addContent(() ->
-                                    Stream.concat(
-                                                    ModItems.HONEYCOMB_ITEMS.boundStream(),
-                                                    ModItems.HONEYCOMB_BLOCK_ITEMS.boundStream()
-                                            )
-                                            .sorted(Comparator.comparing(item ->
-                                                    BuiltInRegistries.ITEM
-                                                            .getKey(item.asItem())
-                                                            .toString()
-                                            ))
-                                            .map(ItemStack::new)
-                            )
+                            .addAndSortRegistries(ModItems.HONEYCOMB_ITEMS, ModItems.HONEYCOMB_BLOCK_ITEMS)
                             .build()
             );
 
@@ -157,15 +129,7 @@ public class ModCreativeTabs {
             CREATIVE_TABS.register("bees", () ->
                     new ResourcefulCreativeModeTab(ModIdentifier.of("bees"))
                             .setItemIcon(() -> Items.BEE_SPAWN_EGG)
-                            .addContent(() ->
-                                    ModItems.SPAWN_EGG_ITEMS.boundStream()
-                                            .sorted(Comparator.comparing(item ->
-                                                    BuiltInRegistries.ITEM
-                                                            .getKey(item.asItem())
-                                                            .toString()
-                                            ))
-                                            .map(ItemStack::new)
-                            )
+                            .addAndSortRegistries(ModItems.SPAWN_EGG_ITEMS)
                             .build()
             );
 
