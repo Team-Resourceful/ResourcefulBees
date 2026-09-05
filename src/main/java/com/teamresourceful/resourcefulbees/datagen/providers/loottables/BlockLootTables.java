@@ -1,15 +1,33 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.loottables;
 
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.datagen.providers.base.BaseBlockLootTable;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import net.minecraft.advancements.predicates.entity.EntityFlagsPredicate;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.CopyBlockState;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.function.Supplier;
 
 public class BlockLootTables extends BaseBlockLootTable {
+
+    private static final LootItemCondition.Builder WHEN_PLAYER_SHIFTING = LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().flags(EntityFlagsPredicate.Builder.flags().setCrouching(true)));
 
     public BlockLootTables(HolderLookup.Provider registries) {
         super(registries);
@@ -85,29 +103,36 @@ public class BlockLootTables extends BaseBlockLootTable {
         addBeeBox(ModBlocks.BEE_BOX_TEMP, true);
     }
 
-    private void addBeeBox(
-            Supplier<? extends Block> box,
-            boolean temporary
-    ) {
+    private void addBeeBox(Supplier<? extends Block> box, boolean temporary) {
         Block block = box.get();
 
-        // TODO:
-        // Restore Bee Box component/block-entity data copying for 26.2.
-        //
-        // Until that is implemented, dropping the box itself is safer
-        // than generating no loot table at all.
-        dropSelf(block);
+        LootPoolEntryContainer.Builder<?> drop = LootItem.lootTableItem(block)
+                .when(WHEN_PLAYER_SHIFTING)
+                .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
+                        .include(ModDataComponents.BEE_BOX_OCCUPANTS.get()));
+
+        if (!temporary) {
+            drop = drop.otherwise(LootItem.lootTableItem(block));
+        }
+
+        add(block, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(drop)));
     }
 
-    private void addNest(
-            RegistryEntry<? extends Block> nest
-    ) {
+    private void addNest(RegistryEntry<? extends Block> nest) {
         Block block = nest.get();
 
-        // TODO:
-        // Restore occupied-bee / tier data preservation for 26.2.
-        //
-        // Basic fallback for now.
-        dropSelf(block);
+        add(block, LootTable.lootTable().withPool(getNestPool(block)));
+    }
+
+    private LootPool.Builder getNestPool(Block block) {
+        return LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .add(LootItem.lootTableItem(block)
+                        .when(hasSilkTouch())
+                        .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
+                                .include(DataComponents.BEES))
+                                .apply(CopyBlockState.copyState(block).copy(BeehiveBlock.HONEY_LEVEL))
+                                .otherwise(LootItem.lootTableItem(block))
+                );
     }
 }

@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.items;
 
-import com.teamresourceful.resourcefulbees.common.items.base.ExpandableTooltip;
-import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
-import net.minecraft.network.chat.Component;
+import com.teamresourceful.resourcefulbees.common.components.BeeBoxOccupant;
+import com.teamresourceful.resourcefulbees.common.components.BeeBoxOccupants;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,15 +10,10 @@ import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
-public class BeeBoxItem extends BlockItem implements ExpandableTooltip {
+public class BeeBoxItem extends BlockItem {
 
     private final boolean temp;
 
@@ -35,77 +30,49 @@ public class BeeBoxItem extends BlockItem implements ExpandableTooltip {
         return new BeeBoxItem(block, properties, false);
     }
 
-    @NotNull
     @Override
-    public InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
-        if (temp || entity.level().isClientSide() || !(entity instanceof Bee target) || !entity.isAlive()) {
+    public @NotNull InteractionResult interactLivingEntity(
+            @NotNull ItemStack stack,
+            @NotNull Player player,
+            @NotNull LivingEntity entity,
+            @NotNull InteractionHand hand
+    ) {
+        if (this.temp
+                || entity.level().isClientSide()
+                || !(entity instanceof Bee target)
+                || !target.isAlive()) {
             return InteractionResult.FAIL;
         }
 
-//        CompoundTag stackTag = stack.getOrCreateTag();
-//        CompoundTag blockTag = stackTag.getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG);
-//        ListTag bees = blockTag.getList(NBTConstants.NBT_BEES, Tag.TAG_COMPOUND);
-//        ListTag displayNames = stackTag.getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING);
-//
-//        if (bees.size() == BeeConstants.MAX_BEES_BEE_BOX) return InteractionResult.FAIL;
-//
-//        bees.add(EntityUtils.createJarBeeTag(target));
-//        displayNames.add(StringTag.valueOf(Component.Serializer.toJson(target.getType().getDescription())));
-//
-//        blockTag.put(NBTConstants.NBT_BEES, bees);
-//        blockTag.put(NBTConstants.NBT_DISPLAYNAMES, displayNames);
-//        stackTag.put(NBTConstants.NBT_BLOCK_ENTITY_TAG, blockTag);
-//
-//        stack.setTag(stackTag);
-//        player.setItemInHand(hand, stack);
-//        player.swing(hand);
-//        target.discard();
+        BeeBoxOccupants occupants = stack.getOrDefault(
+                ModDataComponents.BEE_BOX_OCCUPANTS.get(),
+                BeeBoxOccupants.EMPTY
+        );
+
+        if (occupants.isFull()) {
+            return InteractionResult.FAIL;
+        }
+
+        stack.set(
+                ModDataComponents.BEE_BOX_OCCUPANTS.get(),
+                occupants.add(BeeBoxOccupant.from(target))
+        );
+
+        player.swing(hand);
+        target.discard();
+
         return InteractionResult.SUCCESS;
     }
 
     public static boolean isFilled(ItemStack stack) {
-        //noinspection ConstantConditions
-        //return !stack.isEmpty() && stack.hasTag() && stack.getTag().contains(NBTConstants.NBT_BLOCK_ENTITY_TAG) && stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).contains(NBTConstants.NBT_DISPLAYNAMES);
-        return false;
+        if (stack.isEmpty()) {
+            return false;
+        }
+
+        BeeBoxOccupants occupants = stack.get(
+                ModDataComponents.BEE_BOX_OCCUPANTS.get()
+        );
+
+        return occupants != null && !occupants.isEmpty();
     }
-
-//    @Override
-//    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level world, @NotNull List<Component> components, @NotNull TooltipFlag tooltipFlag) {
-//        super.appendHoverText(stack, world, components, tooltipFlag);
-//        if (this.temp) {
-//            components.add(ItemTranslations.BEE_BOX_TOOLTIP_TEMP.withStyle(ChatFormatting.GOLD));
-//        } else {
-//            components.add(Component.translatable(ItemTranslations.BEE_BOX_TOOLTIP, BeeConstants.MAX_BEES_BEE_BOX).withStyle(ChatFormatting.GOLD));
-//        }
-//        setupTooltip(stack, world, components, tooltipFlag);
-//    }
-
-    @Override
-    public Component getShiftingDisplay() {
-        return ItemTranslations.TOOLTIP_CONTENTS;
-    }
-
-    @Override
-    public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-
-    }
-
-//    @Override
-//    public void appendShiftTooltip(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-//        components.add(ItemTranslations.BEES.withStyle(ChatFormatting.YELLOW));
-//
-//        //noinspection ConstantConditions
-//        ListTag bees = isFilled(stack) ? stack.getTag().getCompound(NBTConstants.NBT_BLOCK_ENTITY_TAG).getList(NBTConstants.NBT_DISPLAYNAMES, Tag.TAG_STRING) : new ListTag();
-//
-//        if (bees.isEmpty()) {
-//            components.add(ItemTranslations.NO_BEES.withStyle(ChatFormatting.GOLD));
-//        } else {
-//            bees.stream()
-//                .map(StringTag.class::cast)
-//                .forEach(displayJson -> {
-//                    Component display = Component.Serializer.fromJson(displayJson.getAsString());
-//                    components.add(Component.translatable(ItemTranslations.BEE_BOX_ENTITY_NAME, display).withStyle(ChatFormatting.GRAY));
-//                });
-//        }
-//    }
 }

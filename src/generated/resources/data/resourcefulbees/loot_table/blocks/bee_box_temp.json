@@ -2,14 +2,29 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
       "entries": [
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "minecraft:flags": {
+                  "is_sneaking": true
+                }
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "resourcefulbees:bee_box_occupants"
+              ],
+              "source": "block_entity"
+            }
+          ],
           "name": "resourcefulbees:bee_box_temp"
         }
       ],

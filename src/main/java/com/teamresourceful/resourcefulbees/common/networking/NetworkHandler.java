@@ -25,7 +25,6 @@ public final class NetworkHandler {
         // serverbound
         NETWORK.register(BeeconEffectPacket.PACKET_TYPE);
         NETWORK.register(BeeconSettingPacket.PACKET_TYPE);
-        // todo NETWORK.register(SelectableFluidPacket.PACKET_TYPE);
         NETWORK.register(FindBeePacket.PACKET_TYPE);
         NETWORK.register(LockBeePacket.PACKET_TYPE);
 

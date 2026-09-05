@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
 import com.teamresourceful.resourcefulbees.common.blocks.ApiaryBlock;
+import com.teamresourceful.resourcefulbees.common.components.BeeBoxOccupants;
 import com.teamresourceful.resourcefulbees.common.components.BeehiveUpgrade;
 import com.teamresourceful.resourcefulbees.common.components.DipperEntity;
 import com.teamresourceful.resourcefulbees.common.components.Upgrade;
@@ -15,14 +16,18 @@ import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.builtin.ResourcefulItemRegistry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.Bees;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
@@ -60,7 +65,9 @@ public final class ModItems {
     }
 
     public static void registerHiveItem(ResourcefulItemRegistry registry, String id, RegistryEntry<Block> block) {
-        registerBasicBlockItem(registry, id, block, Item.Properties::new);
+        registerBasicBlockItem(registry, id, block, () -> new Item.Properties()
+                .component(DataComponents.BEES, Bees.EMPTY)
+                .component(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(BeehiveBlock.HONEY_LEVEL, 0)));
     }
 
     public static final HolderRegistryEntry<Item> T1_APIARY_ITEM = registerItem(ITEMS, "t1_apiary", properties -> new ApiaryBlockItem((ApiaryBlock) ModBlocks.T1_APIARY_BLOCK.get(), properties), Item.Properties::new);
@@ -79,7 +86,7 @@ public static final HolderRegistryEntry<Item> WAX_BLOCK_ITEM = registerBasicBloc
     public static final HolderRegistryEntry<Item> SMOKER_CAN = registerItem(ITEMS, "smoker_can", Item::new, Item.Properties::new);
 
     public static final HolderRegistryEntry<Item> BEE_BOX_TEMP = registerItem(ITEMS, "bee_box_temp", properties -> BeeBoxItem.temp(ModBlocks.BEE_BOX_TEMP.get(), properties), () -> new Item.Properties().stacksTo(1));
-    public static final HolderRegistryEntry<Item> BEE_BOX = registerItem(ITEMS, "bee_box", properties -> BeeBoxItem.of(ModBlocks.BEE_BOX.get(), properties), () -> new Item.Properties().stacksTo(1));
+    public static final HolderRegistryEntry<Item> BEE_BOX = registerItem(ITEMS, "bee_box", properties -> BeeBoxItem.of(ModBlocks.BEE_BOX.get(), properties), () -> new Item.Properties().stacksTo(1).component(ModDataComponents.BEE_BOX_OCCUPANTS, BeeBoxOccupants.EMPTY));
     //public static final HolderRegistryEntry<Item> BEEPEDIA = registerItem(ITEMS, "beepedia", () -> new BeepediaItem(new Item.Properties().stacksTo(1)));
     public static final HolderRegistryEntry<Item> HONEY_DIPPER = registerItem(ITEMS, "honey_dipper", HoneyDipperItem::new, () -> new Item.Properties().stacksTo(1).component(ModDataComponents.DIPPER_ENTITY, DipperEntity.EMPTY));
 

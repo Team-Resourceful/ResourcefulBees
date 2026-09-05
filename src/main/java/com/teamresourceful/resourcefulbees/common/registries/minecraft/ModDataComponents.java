@@ -92,4 +92,14 @@ public class ModDataComponents {
     public static final RegistryEntry<DataComponentType<Boolean>> BEE_LOCATOR_SEARCHING = COMPONENTS.register("bee_locator_searching", () -> DataComponentType.<Boolean>builder()
             .networkSynchronized(ByteBufCodecs.BOOL)
             .build());
+
+    public static final RegistryEntry<DataComponentType<BeeBoxOccupant>> BEE_BOX_OCCUPANT = COMPONENTS.register("bee_box_occupant", () -> DataComponentType.<BeeBoxOccupant>builder()
+            .persistent(BeeBoxOccupant.CODEC)
+            .networkSynchronized(BeeBoxOccupant.STREAM_CODEC)
+            .build());
+
+    public static final RegistryEntry<DataComponentType<BeeBoxOccupants>> BEE_BOX_OCCUPANTS = COMPONENTS.register("bee_box_occupants", () -> DataComponentType.<BeeBoxOccupants>builder()
+            .persistent(BeeBoxOccupants.CODEC)
+            .networkSynchronized(BeeBoxOccupants.STREAM_CODEC)
+            .build());
 }

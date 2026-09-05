@@ -36,6 +36,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.event.RegisterTooltipAppendersEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -90,6 +91,7 @@ public class ResourcefulBees {
         modEventBus.addListener(GameSetup::registerRepositorySources);
         modEventBus.addListener(GameSetup::registerCapabilities);
         modEventBus.addListener(GameSetup::initSpawns);
+        modEventBus.addListener(this::addTooltipsProviders);
         ModIngredientTypes.register(modEventBus);
         ModBiomeModifiers.init(modEventBus);
         ModConditions.init(modEventBus);
@@ -134,5 +136,13 @@ public class ResourcefulBees {
         event.sendRecipes(ModRecipes.HONEY_GEN_RECIPE_TYPE.get());
         event.sendRecipes(ModRecipes.FLOW_HIVE_RECIPE_TYPE.get());
         event.sendRecipes(ModRecipes.MUTATION_RECIPE_TYPE.get());
+    }
+
+    public void addTooltipsProviders(RegisterTooltipAppendersEvent event) {
+        event.registerComponentAppenderAfterAll(
+                ModDataComponents.BEE_BOX_OCCUPANTS,
+                (stack, context, display, player, flag, consumer) ->
+                        stack.addToTooltip(ModDataComponents.BEE_BOX_OCCUPANTS, context, display, consumer, flag)
+        );
     }
 }
