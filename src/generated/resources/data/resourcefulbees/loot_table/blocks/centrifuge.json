@@ -2,15 +2,20 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "resourcefulbees:centrifuge"
+        }
+      ],
+      "functions": [
+        {
+          "function": "minecraft:copy_components",
+          "include": [
+            "resourcefulbees:multi_tank_data",
+            "minecraft:container"
+          ],
+          "source": "block_entity"
         }
       ],
       "rolls": 1.0

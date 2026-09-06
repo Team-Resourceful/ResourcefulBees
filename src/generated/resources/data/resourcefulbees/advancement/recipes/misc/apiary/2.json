@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:t4_apiary"
+        "recipe": "resourcefulbees:apiary/2"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "resourcefulbees:t4_apiary"
+      "resourcefulbees:apiary/2"
     ]
   }
 }

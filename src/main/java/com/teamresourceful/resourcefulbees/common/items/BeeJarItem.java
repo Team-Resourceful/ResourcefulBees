@@ -2,14 +2,13 @@ package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.common.components.JarOccupant;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -40,13 +39,6 @@ public class BeeJarItem extends Item {
 
     public static JarOccupant occupantFrom(ItemStack stack) {
         return stack.get(ModDataComponents.JAR_BEE);
-    }
-
-    @Override
-    public void inventoryTick(@NonNull ItemStack itemStack, @NonNull ServerLevel level, @NonNull Entity owner, @Nullable EquipmentSlot slot) {
-        if (isFilled(itemStack)) {
-            itemStack.set(ModDataComponents.JAR_BEE, occupantFrom(itemStack).withTickOffSet());
-        }
     }
 
     @Override
@@ -116,7 +108,7 @@ public class BeeJarItem extends Item {
         }
     }
 
-    public static ItemStack createFilledJar(EntityType<?> id, int color) {
+    public static ItemStack createDisplayJar(EntityType<?> id, int color) {
         ItemStack newJar = ModItems.BEE_JAR.get().getDefaultInstance();
         newJar.set(ModDataComponents.JAR_BEE, JarOccupant.from(id, color));
         return newJar;

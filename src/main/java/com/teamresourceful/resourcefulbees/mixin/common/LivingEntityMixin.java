@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.mixin;
+package com.teamresourceful.resourcefulbees.mixin.common;
 
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import net.minecraft.world.entity.Entity;

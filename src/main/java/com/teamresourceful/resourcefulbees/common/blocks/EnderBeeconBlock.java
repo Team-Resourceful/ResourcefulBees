@@ -113,12 +113,6 @@ public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> imple
         return state;
     }
 
-//    @Override
-//    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-//        tooltip.add(ItemTranslations.BEECON_TOOLTIP.withStyle(ChatFormatting.LIGHT_PURPLE));
-//        tooltip.add(ItemTranslations.BEECON_TOOLTIP_1.withStyle(ChatFormatting.LIGHT_PURPLE));
-//    }
-
     @Override
     protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
     return CODEC;

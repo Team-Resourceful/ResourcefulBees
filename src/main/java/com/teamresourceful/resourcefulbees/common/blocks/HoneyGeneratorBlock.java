@@ -71,10 +71,4 @@ public class HoneyGeneratorBlock extends TickingBlock<HoneyGeneratorBlockEntity>
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(ACTIVE_PROPERTY, FACING);
     }
-
-//    @Override
-//    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-//        tooltip.add(ItemTranslations.GEN_TOOLTIP.withStyle(ChatFormatting.GOLD));
-//        super.appendHoverText(stack, worldIn, tooltip, flagIn);
-//    }
 }

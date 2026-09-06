@@ -34,19 +34,6 @@ public class ApiaryBlock extends BeeHouseBlock implements BeeHolderBlock {
     return tier;
   }
 
-//  @Override
-//  protected @Nullable MenuProvider getMenuProvider(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos) {
-//    return new SimpleMenuProvider((containerId, inventory, player) -> new ApiaryMenu(containerId, inventory, (ApiaryBlockEntity) level.getBlockEntity(pos)), Component.translatable("menu.title.resourcefulbees.apiary_menu"));
-//  }
-
-  /*  @Override
-  @Environment(EnvType.CLIENT)
-  public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-    components.add(Component.translatable(BeehiveTranslations.MAX_BEES, tier.maxBees()).withStyle(ChatFormatting.GOLD));
-    components.add(Component.translatable(BeehiveTranslations.HIVE_TIME, tier.getTimeModificationAsPercent()).withStyle(ChatFormatting.GOLD));
-  }*/
-
-
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
     return new ApiaryBlockEntity(tier, pos, state);

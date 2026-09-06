@@ -1,5 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
+import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
+import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.components.*;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
@@ -20,9 +22,16 @@ public class ModDataComponents {
 
     public static final ResourcefulRegistry<DataComponentType<?>> COMPONENTS = RegistryHelper.create(BuiltInRegistries.DATA_COMPONENT_TYPE, ModConstants.MOD_ID);
 
-    public static final RegistryEntry<DataComponentType<Bees>> BEES = COMPONENTS.register("bees", () -> DataComponentType.<Bees>builder()
-            .persistent(Bees.CODEC)
-            .networkSynchronized(Bees.STREAM_CODEC)
+    public static final RegistryEntry<DataComponentType<ApiaryBees>> APIARY_BEES = COMPONENTS.register("apiary_bees", () -> DataComponentType.<ApiaryBees>builder()
+            .persistent(ApiaryBees.CODEC)
+            .networkSynchronized(ApiaryBees.STREAM_CODEC)
+            .cacheEncoding()
+            .build()
+    );
+
+    public static final RegistryEntry<DataComponentType<HiveBees>> HIVE_BEES = COMPONENTS.register("hive_bees", () -> DataComponentType.<HiveBees>builder()
+            .persistent(HiveBees.CODEC)
+            .networkSynchronized(HiveBees.STREAM_CODEC)
             .cacheEncoding()
             .build()
     );
@@ -96,10 +105,24 @@ public class ModDataComponents {
     public static final RegistryEntry<DataComponentType<BeeBoxOccupant>> BEE_BOX_OCCUPANT = COMPONENTS.register("bee_box_occupant", () -> DataComponentType.<BeeBoxOccupant>builder()
             .persistent(BeeBoxOccupant.CODEC)
             .networkSynchronized(BeeBoxOccupant.STREAM_CODEC)
+            .cacheEncoding()
             .build());
 
     public static final RegistryEntry<DataComponentType<BeeBoxOccupants>> BEE_BOX_OCCUPANTS = COMPONENTS.register("bee_box_occupants", () -> DataComponentType.<BeeBoxOccupants>builder()
             .persistent(BeeBoxOccupants.CODEC)
             .networkSynchronized(BeeBoxOccupants.STREAM_CODEC)
+            .cacheEncoding()
+            .build());
+
+    public static final RegistryEntry<DataComponentType<ApiaryTier>> APIARY_TIER = COMPONENTS.register("apiary_tier", () -> DataComponentType.<ApiaryTier>builder()
+            .persistent(ApiaryTier.CODEC)
+            .networkSynchronized(ApiaryTier.STREAM_CODEC)
+            .cacheEncoding()
+            .build());
+
+    public static final RegistryEntry<DataComponentType<BeehiveTier>> BEEHIVE_TIER = COMPONENTS.register("beehive_tier", () -> DataComponentType.<BeehiveTier>builder()
+            .persistent(BeehiveTier.CODEC)
+            .networkSynchronized(BeehiveTier.STREAM_CODEC)
+            .cacheEncoding()
             .build());
 }

@@ -1,0 +1,11 @@
+{
+  "fluid": {
+    "ingredient": "resourcefulbees:rainbow_honey_fluid_source",
+    "amount": 1000
+  },
+  "result": {
+    "id": "resourcefulbees:rainbow_honey_block"
+  },
+  "time": 200,
+  "type": "resourcefulbees:solidification"
+}

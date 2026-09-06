@@ -25,9 +25,7 @@ public class HoneycombBlock extends Block {
     @NotNull
     @Override
     public List<ItemStack> getDrops(@NotNull BlockState blockState, @NotNull LootParams.Builder builder) {
-        List<ItemStack> drops = super.getDrops(blockState, builder);
-        drops.add(this.asItem().getDefaultInstance());
-        return drops;
+        return List.of(new ItemStack(this));
     }
 
     @Override

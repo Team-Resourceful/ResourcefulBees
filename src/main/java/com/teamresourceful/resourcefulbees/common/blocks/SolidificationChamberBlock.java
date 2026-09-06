@@ -4,9 +4,11 @@ import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.MenuBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.lib.util.FluidUtils;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -53,27 +55,15 @@ public class SolidificationChamberBlock extends TickingBlock<SolidificationChamb
         return level.getBlockEntity(pos) instanceof SolidificationChamberBlockEntity entity ? entity : null;
     }
 
-
-    //    @Override
-//    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
-//        if (level.getBlockEntity(pos) instanceof SolidificationChamberBlockEntity chamber) {
-//            if (!level.isClientSide()) {
-//                FluidUtils.checkBottleAndCapability(chamber.getFluidContainer(), chamber, player, level, pos, hand);
-//            }
-//            return InteractionResult.SUCCESS_SERVER;
-//        }
-//        return super.use(state, level, pos, player, hand, hitResult);
-//    }
-//
-//    @Override
-//    public void animateTick(@NotNull BlockState stateIn, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
-//        SolidificationChamberBlockEntity tank = getBlockEntity(level, pos);
-//        if (tank == null) return;
-//        if (tank.getFluid().getFluid() instanceof CustomHoneyFluid fluid && fluid.getHoneyData().renderData().color().isRainbow()) {
-//            level.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
-//        }
-//        super.animateTick(stateIn, level, pos, rand);
-//    }
+    @Override
+    public void animateTick(@NotNull BlockState stateIn, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
+        SolidificationChamberBlockEntity tank = getBlockEntity(level, pos);
+        if (tank == null) return;
+        if (tank.fluidResource().getFluid() instanceof CustomHoneyFluid.Still fluid && fluid.getHoneyFluidData().renderData().color().isSpecial()) {
+            level.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
+        }
+        super.animateTick(stateIn, level, pos, rand);
+    }
 
 
     @NotNull

@@ -1,0 +1,11 @@
+{
+  "fluid": {
+    "ingredient": "resourcefulbees:starry_honey_fluid_source",
+    "amount": 1000
+  },
+  "result": {
+    "id": "resourcefulbees:starry_honey_block"
+  },
+  "time": 200,
+  "type": "resourcefulbees:solidification"
+}

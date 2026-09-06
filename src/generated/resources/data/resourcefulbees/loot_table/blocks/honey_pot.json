@@ -2,15 +2,19 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "resourcefulbees:honey_pot"
+        }
+      ],
+      "functions": [
+        {
+          "function": "minecraft:copy_components",
+          "include": [
+            "resourcefulbees:single_tank_data"
+          ],
+          "source": "block_entity"
         }
       ],
       "rolls": 1.0

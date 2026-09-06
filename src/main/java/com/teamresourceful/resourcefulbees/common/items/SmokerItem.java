@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.common.blockentities.base.SmokeableHi
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -11,12 +12,17 @@ import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 public class SmokerItem extends Item {
 
@@ -64,10 +70,8 @@ public class SmokerItem extends Item {
 		return super.use(level, player, hand);
 	}
 
-/*    @Override
-    @Environment(EnvType.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(ItemTranslations.SMOKER_TOOLTIP.withStyle(ChatFormatting.GOLD));
-        components.add(ItemTranslations.SMOKER_TOOLTIP1.withStyle(ChatFormatting.GOLD));
-    }*/
+    @Override
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+        super.appendHoverText(itemStack, context, display, builder, tooltipFlag);
+    }
 }

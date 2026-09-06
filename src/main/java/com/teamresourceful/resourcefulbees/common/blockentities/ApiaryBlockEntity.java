@@ -9,12 +9,17 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Gui
 import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -91,6 +96,18 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
     }
 
     @Override
+    protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
+        super.collectImplicitComponents(components);
+        components.set(DataComponents.CONTAINER, this.resourceHandler.toContainerContents());
+    }
+
+    @Override
+    protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
+        super.applyImplicitComponents(components);
+        this.resourceHandler.fromContainerContents(components.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY));
+    }
+
+    @Override
     public @NotNull Component getDisplayName() {
         return GuiTranslations.APIARY;
     }
@@ -111,6 +128,25 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
 
         public ApiaryResourceHandler() {
             super(27);
+        }
+
+        public ItemContainerContents toContainerContents() {
+            return ItemContainerContents.fromItems(this.copyToList());
+        }
+
+        public void fromContainerContents(ItemContainerContents contents) {
+            NonNullList<ItemStack> items = NonNullList.withSize(this.size(), ItemStack.EMPTY);
+            contents.copyInto(items);
+
+            for (int slot = 0; slot < this.size(); slot++) {
+                ItemStack stack = items.get(slot);
+
+                if (stack.isEmpty()) {
+                    this.set(slot, ItemResource.EMPTY, 0);
+                } else {
+                    this.set(slot, ItemResource.of(stack), stack.getCount());
+                }
+            }
         }
 
         @Override

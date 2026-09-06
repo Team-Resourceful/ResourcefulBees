@@ -1,4 +1,4 @@
-// 26.2	2026-09-01T15:04:49.32167	Resourceful Bees Model Provider
+// 26.2	2026-09-05T11:29:25.199985	Resourceful Bees Model Provider
 e0f8a31cf0251326b547214d29d171345c903bd4 assets/resourcefulbees/blockstates/apiary/1.json
 24cb446a4c8d450a97403bd9d1e5d156dbc671ec assets/resourcefulbees/blockstates/apiary/2.json
 da465eb18081fa615eb7df7492dfc3d389177977 assets/resourcefulbees/blockstates/apiary/3.json
@@ -95,6 +95,10 @@ d2e9c55a120b40a6473841b2087a8f1053121b73 assets/resourcefulbees/blockstates/waxe
 f640bcc6a7f327269424bba2014b50d25c4afc1f assets/resourcefulbees/blockstates/waxed_trapdoor.json
 36b25424769eeaa2ae67256d042c0e408a66a0cd assets/resourcefulbees/blockstates/waxed_wall_hanging_sign.json
 1bd8a7adff82a6bb48b7bad26724a80a80fe3fe0 assets/resourcefulbees/blockstates/waxed_wall_sign.json
+82166d69b25fdfdb8eae462a65bfe5919b79275f assets/resourcefulbees/items/apiary/1.json
+825a800cd7aed4609a2ec36aa974b2cc4d5b1555 assets/resourcefulbees/items/apiary/2.json
+b8462bc4055d65efe7aa32adce855438be2c8873 assets/resourcefulbees/items/apiary/3.json
+c20dc6e420d33aa6496a7ce960e6853fac1645cb assets/resourcefulbees/items/apiary/4.json
 04154c4254c20f09be43e453b2821791bb19ad6c assets/resourcefulbees/items/bee_box.json
 22428a8de2916cd41d6c569c450704d648493bfd assets/resourcefulbees/items/bee_box_temp.json
 1a7f8f51d4af2f6bbb7377337cd406d2e3edaeec assets/resourcefulbees/items/breed_time_upgrade.json
@@ -176,12 +180,8 @@ a6fe5161cd17c8622f2e52b65acf292c302ec889 assets/resourcefulbees/items/nest/withe
 40fdf6a633a521c88d19cd549e2f213e4dc4d24d assets/resourcefulbees/items/nest/wither/3.json
 6cc8c8741c1e122be3f35f12ca98a33d5831250e assets/resourcefulbees/items/nest/wither/4.json
 c840e9cf66f93e91a99fe7ef014174c2d2f246dd assets/resourcefulbees/items/strawbeerry_milkshake.json
-82166d69b25fdfdb8eae462a65bfe5919b79275f assets/resourcefulbees/items/t1_apiary.json
-825a800cd7aed4609a2ec36aa974b2cc4d5b1555 assets/resourcefulbees/items/t2_apiary.json
 4aed7b7290da6642824250fc3ce9ea1597b1da21 assets/resourcefulbees/items/t2_nest_upgrade.json
-b8462bc4055d65efe7aa32adce855438be2c8873 assets/resourcefulbees/items/t3_apiary.json
 f077f4b26d1e9570c2307c2a751a1205fd7eb00c assets/resourcefulbees/items/t3_nest_upgrade.json
-c20dc6e420d33aa6496a7ce960e6853fac1645cb assets/resourcefulbees/items/t4_apiary.json
 ab8ffaea413744b8ac7ab5a978afbc6a91b52781 assets/resourcefulbees/items/t4_nest_upgrade.json
 bc2e1690a0c677336f93d4c72c10c4b220937277 assets/resourcefulbees/items/trimmed_waxed_planks.json
 f40a4a890133552b9378059add101f9184e1249c assets/resourcefulbees/items/wax.json

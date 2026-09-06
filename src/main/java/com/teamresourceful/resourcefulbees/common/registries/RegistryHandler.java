@@ -73,11 +73,11 @@ public final class RegistryHandler {
                 RegistryEntry<Block> block = ModBlocks.registerHive(id, i, hiveType.properties());
 
                 switch (i) {
-                    case 4 -> ModItems.registerHiveItem(ModItems.T4_NEST_ITEMS, id, block);
-                    case 3 -> ModItems.registerHiveItem(ModItems.T3_NEST_ITEMS, id, block);
-                    case 2 -> ModItems.registerHiveItem(ModItems.T2_NEST_ITEMS, id, block);
+                    case 4 -> ModItems.registerHiveItem(ModItems.T4_NEST_ITEMS, id, block, i);
+                    case 3 -> ModItems.registerHiveItem(ModItems.T3_NEST_ITEMS, id, block, i);
+                    case 2 -> ModItems.registerHiveItem(ModItems.T2_NEST_ITEMS, id, block, i);
                     case 1 ->  {
-                        ModItems.registerHiveItem(ModItems.T1_NEST_ITEMS, id, block);
+                        ModItems.registerHiveItem(ModItems.T1_NEST_ITEMS, id, block, i);
                         hiveType.cacheTierOneNest(block);
                     }
                     default -> throw new IllegalStateException("Only 4 hive tiers exist, please report to github!");
@@ -157,8 +157,8 @@ public final class RegistryHandler {
             RegistryEntry<FluidData> fluidType = ModFluids.FLUID_TYPES.register(name + "_honey", CustomHoneyFluidType.create(fluidData.fluidAttributesData()));
             ModFluids.STILL_HONEY_FLUIDS.register(name + "_honey_fluid_source", () -> new CustomHoneyFluid.Still(fluidData, fluidType.get()));
             ModFluids.FLOWING_HONEY_FLUIDS.register(name + "_honey_fluid_flowing", () -> new CustomHoneyFluid.Flowing(fluidData, fluidType.get()));
-            ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", properties -> new BucketItem(fluidType.get().still().get(), properties), () -> new Item.Properties().stacksTo(1).component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_bucket")));
-            fluidType.get().setBucket(ModItems.HONEY_BUCKET);
+            var bucket = ModItems.HONEY_BUCKET_ITEMS.register(name + "_honey_bucket", properties -> new BucketItem(fluidType.get().still().get(), properties), () -> new Item.Properties().stacksTo(1).component(ModDataComponents.FALLBACK_ITEM_MODEL.get(), ModIdentifier.of("honey_bucket")));
+            fluidType.get().setBucket(bucket);
             ModBlocks.registerHoneyFluidBlock(name + "_honey_fluid_block", fluidData, fluidType.get());
         });
     }

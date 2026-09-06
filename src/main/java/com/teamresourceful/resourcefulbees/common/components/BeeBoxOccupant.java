@@ -29,31 +29,21 @@ public record BeeBoxOccupant(
         long insertionGameTime
 ) implements Occupant {
 
-    public static final Codec<BeeBoxOccupant> CODEC = RecordCodecBuilder.create(instance ->
-            instance.group(
-                    TypedEntityData.codec(EntityType.CODEC)
-                            .fieldOf("entity_data")
-                            .forGetter(BeeBoxOccupant::entityData),
-                    Codec.LONG
-                            .fieldOf("insertion_game_time")
-                            .forGetter(BeeBoxOccupant::insertionGameTime)
-            ).apply(instance, BeeBoxOccupant::new)
+    public static final Codec<BeeBoxOccupant> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            TypedEntityData.codec(EntityType.CODEC).fieldOf("entity_data").forGetter(BeeBoxOccupant::entityData),
+            Codec.LONG.fieldOf("insertion_game_time").forGetter(BeeBoxOccupant::insertionGameTime)
+    ).apply(instance, BeeBoxOccupant::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, BeeBoxOccupant> STREAM_CODEC = StreamCodec.composite(
+            TypedEntityData.streamCodec(EntityType.STREAM_CODEC),
+            BeeBoxOccupant::entityData,
+            ByteBufCodecs.VAR_LONG,
+            BeeBoxOccupant::insertionGameTime,
+            BeeBoxOccupant::new
     );
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, BeeBoxOccupant> STREAM_CODEC =
-            StreamCodec.composite(
-                    TypedEntityData.streamCodec(EntityType.STREAM_CODEC),
-                    BeeBoxOccupant::entityData,
-                    ByteBufCodecs.VAR_LONG,
-                    BeeBoxOccupant::insertionGameTime,
-                    BeeBoxOccupant::new
-            );
-
     public static BeeBoxOccupant from(Entity entity) {
-        try (var reporter = new ProblemReporter.ScopedCollector(
-                entity.problemPath(),
-                ModConstants.LOGGER
-        )) {
+        try (var reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), ModConstants.LOGGER)) {
             var output = TagValueOutput.createWithContext(
                     reporter,
                     entity.registryAccess()

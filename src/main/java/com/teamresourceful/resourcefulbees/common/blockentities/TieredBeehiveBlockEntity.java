@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.SmokeableHive;
 import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
+import com.teamresourceful.resourcefulbees.common.components.HiveBees;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
@@ -13,10 +14,14 @@ import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
 import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.mixin.common.BeehiveBeeDataAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
+import com.teamresourceful.resourcefulbees.common.extensions.BeehiveBlockEntityExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -127,7 +132,7 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             if (!level.getBlockState(facingPos).getCollisionShape(level, facingPos).isEmpty() && releaseStatus != BeeReleaseStatus.EMERGENCY) {
                 return false;
             }
-            Entity entity = beeData.toOccupant().createEntity(level, hive.getBlockPos());//EntityType.loadEntityRecursive(nbt, hive.level, entity1 -> entity1);
+            Entity entity = beeData.toOccupant().createEntity(level, hive.getBlockPos());
             if (entity != null) {
                 EntityUtils.setEntityLocationAndAngle(hive.worldPosition, facing, entity);
                 if (releaseStatus == BeeReleaseStatus.HONEY_DELIVERED) {
@@ -285,6 +290,23 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
         output.putBoolean(NBTConstants.BeeHive.SMOKED, isSmoked);
         ValueOutput.TypedOutputList<ItemStack> outputList = output.list(NBTConstants.BeeHive.HONEYCOMBS, ItemStack.CODEC);
         for (ItemStack honeycomb : honeycombs) outputList.add(honeycomb);
+    }
+
+    @Override
+    protected void applyImplicitComponents(DataComponentGetter components) {
+        ((BeehiveBlockEntityExtension)this).resourcefulbees$clearBees();
+        List<BeehiveBlockEntity.Occupant> bees = components.getOrDefault(ModDataComponents.HIVE_BEES.get(), HiveBees.EMPTY).bees();
+        bees.forEach(this::storeBee);
+    }
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder components) {
+        components.set(ModDataComponents.HIVE_BEES.get(), new HiveBees(this.getBees().stream().map(BeeData::toOccupant).toList()));
+    }
+
+    @Override
+    public void removeComponentsFromTag(ValueOutput output) {
+        output.discard("hive_bees");
     }
 
     public Collection<ItemStack> getHoneycombs() {

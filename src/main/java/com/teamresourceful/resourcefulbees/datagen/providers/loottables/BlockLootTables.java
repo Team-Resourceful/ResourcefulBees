@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.loottables;
 
+import com.teamresourceful.resourcefulbees.common.blocks.ApiaryBlock;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
@@ -43,10 +44,15 @@ public class BlockLootTables extends BaseBlockLootTable {
         ModBlocks.HIVES.getEntries().forEach(this::addNest);
 
         // Apiary
-        dropSelf(ModBlocks.T1_APIARY_BLOCK);
-        dropSelf(ModBlocks.T2_APIARY_BLOCK);
-        dropSelf(ModBlocks.T3_APIARY_BLOCK);
-        dropSelf(ModBlocks.T4_APIARY_BLOCK);
+        //dropSelf(ModBlocks.T1_APIARY_BLOCK);
+        //dropSelf(ModBlocks.T2_APIARY_BLOCK);
+        //dropSelf(ModBlocks.T3_APIARY_BLOCK);
+        //dropSelf(ModBlocks.T4_APIARY_BLOCK);
+        add(ModBlocks.T1_APIARY_BLOCK, LootTable.lootTable().withPool(getApiaryPool((ApiaryBlock) ModBlocks.T1_APIARY_BLOCK.get())));
+        add(ModBlocks.T2_APIARY_BLOCK, LootTable.lootTable().withPool(getApiaryPool((ApiaryBlock) ModBlocks.T2_APIARY_BLOCK.get())));
+        add(ModBlocks.T3_APIARY_BLOCK, LootTable.lootTable().withPool(getApiaryPool((ApiaryBlock) ModBlocks.T3_APIARY_BLOCK.get())));
+        add(ModBlocks.T4_APIARY_BLOCK, LootTable.lootTable().withPool(getApiaryPool((ApiaryBlock) ModBlocks.T4_APIARY_BLOCK.get())));
+
         dropSelf(ModBlocks.BREEDER_BLOCK);
         dropSelf(ModBlocks.FLOW_HIVE);
 
@@ -54,7 +60,8 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.HONEY_GENERATOR);
         dropSelf(ModBlocks.SOLIDIFICATION_CHAMBER);
         dropSelf(ModBlocks.ENDER_BEECON);
-        dropSelf(ModBlocks.HONEY_POT);
+        add(ModBlocks.HONEY_POT, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(ModBlocks.HONEY_POT.get())).apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(ModDataComponents.SINGLE_TANK_DATA.get()))));
+        //dropSelf(ModBlocks.HONEY_POT);
 
         // Waxed building blocks
         dropSelf(ModBlocks.WAXED_MACHINE_BLOCK);
@@ -95,9 +102,10 @@ public class BlockLootTables extends BaseBlockLootTable {
 
         dropSelf(ModBlocks.TRIMMED_WAXED_PLANKS);
 
-        ModBlocks.CENTRIFUGE_BLOCKS
-                .getEntries()
-                .forEach(this::dropSelf);
+        add(ModBlocks.BREEDER_BLOCK, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(ModBlocks.BREEDER_BLOCK.get())).apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(DataComponents.CONTAINER))));
+        add(ModBlocks.BASIC_CENTRIFUGE, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(ModBlocks.BASIC_CENTRIFUGE.get())).apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(ModDataComponents.MULTI_TANK_DATA.get()).include(DataComponents.CONTAINER))));
+        dropSelf(ModBlocks.CENTRIFUGE_CRANK);
+        //ModBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
 
         addBeeBox(ModBlocks.BEE_BOX, false);
         addBeeBox(ModBlocks.BEE_BOX_TEMP, true);
@@ -130,9 +138,18 @@ public class BlockLootTables extends BaseBlockLootTable {
                 .add(LootItem.lootTableItem(block)
                         .when(hasSilkTouch())
                         .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
-                                .include(DataComponents.BEES))
+                                .include(ModDataComponents.HIVE_BEES.get()))
                                 .apply(CopyBlockState.copyState(block).copy(BeehiveBlock.HONEY_LEVEL))
                                 .otherwise(LootItem.lootTableItem(block))
                 );
+    }
+
+    private LootPool.Builder getApiaryPool(ApiaryBlock apiary) {
+        return LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .add(LootItem.lootTableItem(apiary))
+                .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
+                        .include(ModDataComponents.APIARY_BEES.get())
+                        .include(DataComponents.CONTAINER));
     }
 }

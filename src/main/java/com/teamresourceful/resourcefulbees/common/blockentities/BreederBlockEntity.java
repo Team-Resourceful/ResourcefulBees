@@ -12,12 +12,17 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipe
 import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -181,6 +186,18 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
     }
 
     @Override
+    protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
+        super.collectImplicitComponents(components);
+        components.set(DataComponents.CONTAINER, resourceHandler.toContainerContents());
+    }
+
+    @Override
+    protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
+        super.applyImplicitComponents(components);
+        resourceHandler.fromContainerContents(components.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY));
+    }
+
+    @Override
     public PositionContent createContent(ServerPlayer player) {
         return new PositionContent(this.worldPosition);
     }
@@ -192,6 +209,25 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
     public class ResourceHandler extends ItemStacksResourceHandler {
         public ResourceHandler() {
             super(29);
+        }
+
+        public ItemContainerContents toContainerContents() {
+            return ItemContainerContents.fromItems(this.copyToList());
+        }
+
+        public void fromContainerContents(ItemContainerContents contents) {
+            NonNullList<ItemStack> items = NonNullList.withSize(this.size(), ItemStack.EMPTY);
+            contents.copyInto(items);
+
+            for (int slot = 0; slot < this.size(); slot++) {
+                ItemStack stack = items.get(slot);
+
+                if (stack.isEmpty()) {
+                    this.set(slot, ItemResource.EMPTY, 0);
+                } else {
+                    this.set(slot, ItemResource.of(stack), stack.getCount());
+                }
+            }
         }
 
         @Override

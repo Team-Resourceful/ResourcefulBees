@@ -88,7 +88,7 @@ public final class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.
                     .getOpaqueValue();
 
             builder.addInputSlot(parentX, parentY)
-                    .add(BeeJarItem.createFilledJar(entityType, jarColor))
+                    .add(BeeJarItem.createDisplayJar(entityType, jarColor))
                     .setSlotName(name + "_ingredient");
 
             builder.addInputSlot(displayX, displayY)

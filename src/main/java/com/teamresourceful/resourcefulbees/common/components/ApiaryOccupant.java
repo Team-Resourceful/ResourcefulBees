@@ -33,7 +33,7 @@ import java.util.List;
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 
 @NullMarked
-public record HiveOccupant(
+public record ApiaryOccupant(
         TypedEntityData<EntityType<?>> entityData,
         int ticksInHive,
         int minOccupationTicks,
@@ -43,39 +43,39 @@ public record HiveOccupant(
         boolean hasNectar
 ) implements Occupant{
 
-    public static final Codec<HiveOccupant> CODEC = RecordCodecBuilder.create(
+    public static final Codec<ApiaryOccupant> CODEC = RecordCodecBuilder.create(
             i -> i.group(
-                            TypedEntityData.codec(EntityType.CODEC).fieldOf("entity_data").forGetter(HiveOccupant::entityData),
-                            Codec.INT.fieldOf("ticks_in_hive").forGetter(HiveOccupant::ticksInHive),
-                            Codec.INT.fieldOf("min_ticks_in_hive").forGetter(HiveOccupant::minOccupationTicks),
-                            ComponentSerialization.CODEC.fieldOf("display_name").forGetter(HiveOccupant::displayName),
-                            Codec.INT.fieldOf("color").forGetter(HiveOccupant::color),
-                            Codec.BOOL.fieldOf("locked").forGetter(HiveOccupant::locked),
-                            Codec.BOOL.fieldOf("has_nectar").forGetter(HiveOccupant::hasNectar)
+                            TypedEntityData.codec(EntityType.CODEC).fieldOf("entity_data").forGetter(ApiaryOccupant::entityData),
+                            Codec.INT.fieldOf("ticks_in_hive").forGetter(ApiaryOccupant::ticksInHive),
+                            Codec.INT.fieldOf("min_ticks_in_hive").forGetter(ApiaryOccupant::minOccupationTicks),
+                            ComponentSerialization.CODEC.fieldOf("display_name").forGetter(ApiaryOccupant::displayName),
+                            Codec.INT.fieldOf("color").forGetter(ApiaryOccupant::color),
+                            Codec.BOOL.fieldOf("locked").forGetter(ApiaryOccupant::locked),
+                            Codec.BOOL.fieldOf("has_nectar").forGetter(ApiaryOccupant::hasNectar)
                     )
-                    .apply(i, HiveOccupant::new)
+                    .apply(i, ApiaryOccupant::new)
     );
-    public static final Codec<List<HiveOccupant>> LIST_CODEC = CODEC.listOf();
-    public static final StreamCodec<RegistryFriendlyByteBuf, HiveOccupant> STREAM_CODEC = StreamCodec.composite(
+    public static final Codec<List<ApiaryOccupant>> LIST_CODEC = CODEC.listOf();
+    public static final StreamCodec<RegistryFriendlyByteBuf, ApiaryOccupant> STREAM_CODEC = StreamCodec.composite(
             TypedEntityData.streamCodec(EntityType.STREAM_CODEC),
-            HiveOccupant::entityData,
+            ApiaryOccupant::entityData,
             ByteBufCodecs.VAR_INT,
-            HiveOccupant::ticksInHive,
+            ApiaryOccupant::ticksInHive,
             ByteBufCodecs.VAR_INT,
-            HiveOccupant::minOccupationTicks,
+            ApiaryOccupant::minOccupationTicks,
             ComponentSerialization.STREAM_CODEC,
-            HiveOccupant::displayName,
+            ApiaryOccupant::displayName,
             ByteBufCodecs.VAR_INT,
-            HiveOccupant::color,
+            ApiaryOccupant::color,
             ByteBufCodecs.BOOL,
-            HiveOccupant::locked,
+            ApiaryOccupant::locked,
             ByteBufCodecs.BOOL,
-            HiveOccupant::hasNectar,
-            HiveOccupant::new
+            ApiaryOccupant::hasNectar,
+            ApiaryOccupant::new
     );
 
-    public static HiveOccupant of(Entity entity, BeeCompat compat, BeeHolderBlockEntity holderBlock, boolean locked) {
-        HiveOccupant occupant;
+    public static ApiaryOccupant of(Entity entity, BeeCompat compat, BeeHolderBlockEntity holderBlock, boolean locked) {
+        ApiaryOccupant occupant;
         try (var reporter = new ProblemReporter.ScopedCollector(entity.problemPath(), ModConstants.LOGGER)) {
             var output = TagValueOutput.createWithContext(reporter, entity.registryAccess());
             entity.save(output);
@@ -88,7 +88,7 @@ public record HiveOccupant(
             } else {
                 maxTimeInHive = compat.resourcefulBees$getMaxTimeInHive();
             }
-            occupant = new HiveOccupant(
+            occupant = new ApiaryOccupant(
                     TypedEntityData.of(entity.getType(), entityTag),
                     0,
                     hasNectar ? maxTimeInHive : MIN_HIVE_TIME,
@@ -119,18 +119,18 @@ public record HiveOccupant(
         }
     }
 
-    public HiveOccupant.Mutable mutable() {
-        return new HiveOccupant.Mutable(this);
+    public ApiaryOccupant.Mutable mutable() {
+        return new ApiaryOccupant.Mutable(this);
     }
 
     public static class Mutable {
 
-        private final HiveOccupant occupant;
+        private final ApiaryOccupant occupant;
 
         private boolean locked;
         private int ticksInHive;
 
-        private Mutable(HiveOccupant occupant) {
+        private Mutable(ApiaryOccupant occupant) {
             this.occupant = occupant;
             this.locked = occupant.locked();
             this.ticksInHive = occupant.ticksInHive();
@@ -162,8 +162,8 @@ public record HiveOccupant(
             return tick(1);
         }
 
-        public HiveOccupant immutable() {
-            return new HiveOccupant(
+        public ApiaryOccupant immutable() {
+            return new ApiaryOccupant(
                     this.occupant.entityData,
                     this.ticksInHive,
                     this.occupant.minOccupationTicks,

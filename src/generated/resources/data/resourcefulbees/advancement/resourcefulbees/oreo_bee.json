@@ -30,8 +30,8 @@
           "display_name": {
             "translate": "entity_type.resourcefulbees.oreo_bee"
           },
-          "entityType": "resourcefulbees:oreo_bee",
-          "ticks_in_jar": 0
+          "entity_type": "resourcefulbees:oreo_bee",
+          "insertion_game_time": 0
         }
       },
       "id": "resourcefulbees:bee_jar"

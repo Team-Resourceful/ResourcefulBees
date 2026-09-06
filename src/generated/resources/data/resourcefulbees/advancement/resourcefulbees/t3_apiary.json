@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "resourcefulbees:t3_apiary"
+            "items": "resourcefulbees:apiary/3"
           }
         ]
       },
@@ -17,7 +17,7 @@
       "translate": "advancements.resourcefulbees.t3_apiary.description"
     },
     "icon": {
-      "id": "resourcefulbees:t3_apiary"
+      "id": "resourcefulbees:apiary/3"
     },
     "title": {
       "translate": "advancements.resourcefulbees.t3_apiary.title"

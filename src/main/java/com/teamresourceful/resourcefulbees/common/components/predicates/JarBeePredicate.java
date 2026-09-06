@@ -8,6 +8,7 @@ import net.minecraft.advancements.predicates.SingleComponentItemPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.world.entity.EntityType;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
@@ -34,12 +35,12 @@ public record JarBeePredicate(
     }
 
     @Override
-    public DataComponentType<JarOccupant> componentType() {
+    public @NonNull DataComponentType<JarOccupant> componentType() {
         return ModDataComponents.JAR_BEE.get();
     }
 
     @Override
-    public boolean matches(JarOccupant occupant) {
+    public boolean matches(@NonNull JarOccupant occupant) {
         return entityType
                 .map(type -> occupant.entityType() == type)
                 .orElse(true);

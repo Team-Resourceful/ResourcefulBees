@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.items;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemInstance;
 import net.neoforged.neoforge.common.ItemAbility;
@@ -17,13 +16,4 @@ public class ScraperItem extends Item {
     public boolean canPerformAction(@NonNull ItemInstance stack, ItemAbility itemAbility) {
         return itemAbility.equals(ModConstants.SCRAPE_ACTION);
     }
-
-
-
-    /*    @Override
-    @Environment(EnvType.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
-        components.add(ItemTranslations.SCRAPER_TOOLTIP.withStyle(ChatFormatting.GOLD));
-        components.add(ItemTranslations.SCRAPER_TOOLTIP_1.withStyle(ChatFormatting.GOLD));
-    }*/
 }

@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gamerules.GameRules;
 import org.jetbrains.annotations.NotNull;
@@ -21,22 +22,19 @@ import javax.annotation.Nullable;
 
 public class BeeBoxBlock extends RenderingBaseEntityBlock {
 
+    private static final MapCodec<BeeBoxBlock> CODEC = BlockBehaviour.simpleCodec(BeeBoxBlock::new);
+
     public BeeBoxBlock(Properties properties) {
         super(properties);
     }
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
-        return null;
+        return CODEC;
     }
 
     @Override
-    public @NonNull BlockState playerWillDestroy(
-            @NotNull Level level,
-            @NotNull BlockPos pos,
-            @NotNull BlockState state,
-            @NotNull Player player
-    ) {
+    public @NonNull BlockState playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         if (!level.isClientSide()
                 && player.isCreative()
                 && level.getServer() != null
@@ -47,20 +45,8 @@ public class BeeBoxBlock extends RenderingBaseEntityBlock {
                 && beeBox.hasBees()) {
 
             ItemStack stack = new ItemStack(this);
-
-            stack.set(
-                    ModDataComponents.BEE_BOX_OCCUPANTS.get(),
-                    beeBox.getOccupants()
-            );
-
-            ItemEntity itemEntity = new ItemEntity(
-                    level,
-                    pos.getX() + 0.5D,
-                    pos.getY() + 0.5D,
-                    pos.getZ() + 0.5D,
-                    stack
-            );
-
+            stack.set(ModDataComponents.BEE_BOX_OCCUPANTS.get(), beeBox.getOccupants());
+            ItemEntity itemEntity = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, stack);
             itemEntity.setDefaultPickUpDelay();
             level.addFreshEntity(itemEntity);
         }
@@ -69,32 +55,17 @@ public class BeeBoxBlock extends RenderingBaseEntityBlock {
     }
 
     @Override
-    public void playerDestroy(
-            @NotNull Level level,
-            @NotNull Player player,
-            @NotNull BlockPos pos,
-            @NotNull BlockState state,
-            BlockEntity blockEntity,
-            @NotNull ItemStack stack
-    ) {
+    public void playerDestroy(@NotNull Level level, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState state, BlockEntity blockEntity, @NotNull ItemStack stack) {
         super.playerDestroy(level, player, pos, state, blockEntity, stack);
 
-        if (!level.isClientSide()
-                && blockEntity instanceof BeeBoxBlockEntity beeBox
-                && !player.isShiftKeyDown()) {
-
+        if (!level.isClientSide() && blockEntity instanceof BeeBoxBlockEntity beeBox && !player.isShiftKeyDown()) {
             beeBox.summonBees(level, pos);
         }
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(
-            @NotNull BlockPos pos,
-            @NotNull BlockState state
-    ) {
-        return ModBlockEntityTypes.BEE_BOX_ENTITY
-                .get()
-                .create(pos, state);
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return ModBlockEntityTypes.BEE_BOX_ENTITY.get().create(pos, state);
     }
 }

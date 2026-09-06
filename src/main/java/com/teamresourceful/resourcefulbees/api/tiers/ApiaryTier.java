@@ -2,21 +2,37 @@ package com.teamresourceful.resourcefulbees.api.tiers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeehiveTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.ApiaryOutputType;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public record ApiaryTier(Identifier id, int maxBees, double timeMod, Supplier<ApiaryOutputType> outputType, IntSupplier outputAmount, Supplier<BlockEntityType<? extends BlockEntity>> blockEntity, Supplier<? extends Item> item) {
+public record ApiaryTier(
+        Identifier id,
+        int maxBees,
+        double timeMod,
+        Supplier<ApiaryOutputType> outputType,
+        IntSupplier outputAmount,
+        Supplier<BlockEntityType<? extends BlockEntity>> blockEntity,
+        Supplier<? extends Item> item
+) implements TooltipProvider {
 
     private static final Map<Identifier, ApiaryTier> TIERS = new HashMap<>();
     public static final Codec<ApiaryTier> CODEC = Identifier.CODEC.comapFlatMap(ApiaryTier::get, ApiaryTier::id);
@@ -54,6 +70,12 @@ public record ApiaryTier(Identifier id, int maxBees, double timeMod, Supplier<Ap
 
     public static Collection<ApiaryTier> values() {
         return TIERS.values();
+    }
+
+    @Override
+    public void addToTooltip(Item.@NonNull TooltipContext tooltipContext, @NonNull Consumer<Component> consumer, @NonNull TooltipFlag tooltipFlag, @NonNull DataComponentGetter dataComponentGetter) {
+        consumer.accept(Component.translatable(BeehiveTranslations.MAX_BEES, maxBees).withStyle(ChatFormatting.GOLD));
+        consumer.accept(Component.translatable(BeehiveTranslations.HIVE_TIME, getTimeModificationAsPercent()).withStyle(ChatFormatting.GOLD));
     }
 
     public static class Builder {

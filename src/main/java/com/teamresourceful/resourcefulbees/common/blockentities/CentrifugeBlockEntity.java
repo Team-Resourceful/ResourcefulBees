@@ -22,10 +22,8 @@ import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.Ite
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponentGetter;
-import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.*;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,6 +35,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -118,12 +117,14 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
     protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
         super.applyImplicitComponents(components);
         tankData = components.getOrDefault(ModDataComponents.MULTI_TANK_DATA.get(), TankData.EMPTY_LIST);
+        inventory.fromContainerContents(components.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY));
     }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
         super.collectImplicitComponents(components);
         components.set(ModDataComponents.MULTI_TANK_DATA.get(), createTankDataPatch());
+        components.set(DataComponents.CONTAINER, inventory.toContainerContents());
     }
 
     @Override
@@ -311,6 +312,25 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
             super(SLOTS);
         }
 
+        public ItemContainerContents toContainerContents() {
+            return ItemContainerContents.fromItems(this.copyToList());
+        }
+
+        public void fromContainerContents(ItemContainerContents contents) {
+            NonNullList<ItemStack> items = NonNullList.withSize(this.size(), ItemStack.EMPTY);
+            contents.copyInto(items);
+
+            for (int slot = 0; slot < this.size(); slot++) {
+                ItemStack stack = items.get(slot);
+
+                if (stack.isEmpty()) {
+                    this.set(slot, ItemResource.EMPTY, 0);
+                } else {
+                    this.set(slot, ItemResource.of(stack), stack.getCount());
+                }
+            }
+        }
+
         @Override
         public int insert(int index, @NonNull ItemResource resource, int amount, @NonNull TransactionContext transaction) {
             return index == 0 ? super.insert(index, resource, amount, transaction) : 0;
@@ -325,17 +345,6 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
                 inserted += super.insert(index, resource, amount - inserted, context);
                 if (inserted == amount) break;
             }
-        }
-
-        @Override
-        public int extract(int index, @NonNull ItemResource resource, int amount, @NonNull TransactionContext transaction) {
-
-            return super.extract(index, resource, amount, transaction);
-            //return index != 0 ? super.extract(index, resource, amount, transaction) : 0;
-        }
-
-        public void extractInput(ItemResource resource, int amount, TransactionContext context) {
-            super.extract(0, resource, amount, context);
         }
 
         @Override

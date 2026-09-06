@@ -7,7 +7,6 @@ import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.renderer.GeoItemRenderer;
 import com.geckolib.util.GeckoLibUtil;
 import com.google.common.base.Suppliers;
-import com.teamresourceful.resourcefulbees.client.rendering.items.CentrifugeCrankItemRenderer;
 import com.teamresourceful.resourcefulbees.common.blocks.CentrifugeBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;

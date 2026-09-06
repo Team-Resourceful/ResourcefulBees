@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 public class HoneyDipperItem extends Item {
@@ -82,16 +83,18 @@ public class HoneyDipperItem extends Item {
             ((BeeEntityAccessor)bee).getPollinateGoal().stopPollinating();
         }
         bee.setSavedFlowerPos(context.getClickedPos());
-        sendMessageToPlayer(bee, context.getPlayer(), MessageTypes.FLOWER, context.getClickedPos());
-        if (context.getPlayer() == null) return;
-        context.getPlayer().setItemInHand(context.getHand(), setEntity(context.getItemInHand(), null));
+        Player player = context.getPlayer();
+        if (player != null) {
+            sendMessageToPlayer(bee, player, MessageTypes.FLOWER, context.getClickedPos());
+            player.setItemInHand(context.getHand(), setEntity(context.getItemInHand(), null));
+        }
     }
 
     private void sendMessageToPlayer(@Nullable Bee bee, @NonNull Player playerEntity, MessageTypes messageTypes, @Nullable BlockPos pos) {
         switch (messageTypes) {
-            case FLOWER, HIVE, FAKE_FLOWER -> playerEntity.sendSystemMessage(messageTypes.create(bee.getDisplayName(), pos.toShortString()));
+            case FLOWER, HIVE, FAKE_FLOWER -> playerEntity.sendSystemMessage(messageTypes.create(Objects.requireNonNull(bee, "Bee is required for flower, hive, and fake flower message types!").getDisplayName(), Objects.requireNonNull(pos, "Pos is required for flower, hive, and fake flower messages!").toShortString()));
             case BEE_CLEARED -> playerEntity.sendSystemMessage(messageTypes.create());
-            case BEE_SELECTED -> playerEntity.sendSystemMessage(messageTypes.create(bee.getDisplayName()));
+            case BEE_SELECTED -> playerEntity.sendSystemMessage(messageTypes.create(Objects.requireNonNull(bee, "Bee is required for bee_selected message type!").getDisplayName()));
             default -> throw new IllegalStateException("Unexpected value: " + messageTypes);
         }
     }
@@ -135,15 +138,17 @@ public class HoneyDipperItem extends Item {
     }
 
     private static @Nullable Entity getEntity(ServerLevel level, ItemStack stack) {
-        var isEmpty = stack.isEmpty();
-        var hasComp = stack.has(ModDataComponents.DIPPER_ENTITY);
-        var equals = stack.get(ModDataComponents.DIPPER_ENTITY).equals(DipperEntity.EMPTY);
-
-
-        if (stack.isEmpty() || !stack.has(ModDataComponents.DIPPER_ENTITY) && stack.get(ModDataComponents.DIPPER_ENTITY).equals(DipperEntity.EMPTY)) {
+        if (stack.isEmpty()) {
             return null;
         }
-        return level.getEntity(stack.get(ModDataComponents.DIPPER_ENTITY).uuid());
+
+        DipperEntity dipperEntity = stack.get(ModDataComponents.DIPPER_ENTITY);
+
+        if (dipperEntity == null || dipperEntity.equals(DipperEntity.EMPTY)) {
+            return null;
+        }
+
+        return level.getEntity(dipperEntity.uuid());
     }
 
     private static ItemStack setEntity(ItemStack stack, @Nullable Entity entity) {

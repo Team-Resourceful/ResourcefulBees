@@ -64,18 +64,6 @@ public class CentrifugeBlock extends RenderingBaseEntityBlock implements MenuBlo
         return super.useItemOn(itemStack, state, level, pos, player, hand, hitResult);
     }
 
-//    @Override
-//    protected InteractionResult useItemOn(@NonNull ItemStack itemStack, @NonNull BlockState state, Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
-//        if (level.getBlockEntity(pos) instanceof CentrifugeBlockEntity centrifuge) {
-//            if (!level.isClientSide()) {
-//                //FluidUtils.checkBottleAndCapability(centrifuge.getFluidContainer(), centrifuge, player, level, pos, hand);
-//            }
-//            return InteractionResult.SUCCESS_SERVER;
-//        }
-//
-//        return super.useItemOn(itemStack, state, level, pos, player, hand, hitResult);
-//    }
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(ROTATION).add(USABLE);

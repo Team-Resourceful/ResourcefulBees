@@ -46,7 +46,7 @@ public final class TagGenerator {
     }
 
     private static void generateHoneyTags() {
-        TAGS.put(Identifier.fromNamespaceAndPath("c","tags/fluid/honey_fluid_block.json"),
+        TAGS.put(Identifier.fromNamespaceAndPath("c","tags/fluid/honey.json"),
                 Stream.concat(ModFluids.FLOWING_HONEY_FLUIDS.getEntries().stream(), ModFluids.STILL_HONEY_FLUIDS.getEntries().stream())
                         .map(RegistryEntry::getId)
                         .collect(Collectors.toSet()));

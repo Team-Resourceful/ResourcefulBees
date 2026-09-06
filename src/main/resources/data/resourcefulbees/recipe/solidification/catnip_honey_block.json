@@ -1,0 +1,11 @@
+{
+  "fluid": {
+    "ingredient": "resourcefulbees:catnip_honey_fluid_source",
+    "amount": 1000
+  },
+  "result": {
+    "id": "resourcefulbees:catnip_honey_block"
+  },
+  "time": 200,
+  "type": "resourcefulbees:solidification"
+}

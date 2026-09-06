@@ -26,8 +26,8 @@
           "display_name": {
             "translate": "entity.minecraft.bee"
           },
-          "entityType": "minecraft:bee",
-          "ticks_in_jar": 0
+          "entity_type": "minecraft:bee",
+          "insertion_game_time": 0
         }
       },
       "id": "resourcefulbees:bee_jar"

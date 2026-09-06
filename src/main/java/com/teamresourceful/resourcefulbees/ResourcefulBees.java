@@ -7,7 +7,10 @@ import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.data.TagGenerator;
 import com.teamresourceful.resourcefulbees.common.enchantments.HiveBreakHandler;
 import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.FlowHiveTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ItemTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultHiveTypes;
@@ -28,6 +31,8 @@ import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
 import com.teamresourceful.resourcefulbees.common.world.gen.GoldenFlower;
 import com.teamresourceful.resourcefulbees.common.world.workers.LevelWorkEvents;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -35,6 +40,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.tooltip.TooltipLocation;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.RegisterTooltipAppendersEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -144,5 +150,53 @@ public class ResourcefulBees {
                 (stack, context, display, player, flag, consumer) ->
                         stack.addToTooltip(ModDataComponents.BEE_BOX_OCCUPANTS, context, display, consumer, flag)
         );
+
+        event.registerComponentAppenderAfterAll(
+                ModDataComponents.APIARY_BEES,
+                (stack, context, display, player, flag, consumer) ->
+                        stack.addToTooltip(ModDataComponents.APIARY_BEES, context, display, consumer, flag)
+        );
+
+        event.registerComponentAppenderAfterAll(
+                ModDataComponents.HIVE_BEES,
+                (stack, context, display, player, flag, consumer) ->
+                        stack.addToTooltip(ModDataComponents.HIVE_BEES, context, display, consumer, flag)
+        );
+
+        event.registerComponentAppenderAfterAll(
+                ModDataComponents.BEEHIVE_TIER,
+                (stack, context, display, player, flag, consumer) ->
+                        stack.addToTooltip(ModDataComponents.BEEHIVE_TIER, context, display, consumer, flag)
+        );
+
+        event.registerComponentAppenderAfterAll(
+                ModDataComponents.APIARY_TIER,
+                (stack, context, display, player, flag, consumer) ->
+                        stack.addToTooltip(ModDataComponents.APIARY_TIER, context, display, consumer, flag)
+        );
+        
+        event.registerAppender(TooltipLocation.POST_CUSTOM, (stack, context, display, player, tooltipFlag, builder) -> {
+            if (stack.is(ModItems.SMOKER.get())) {
+                builder.accept(ItemTranslations.SMOKER_TOOLTIP.withStyle(ChatFormatting.GOLD));
+                builder.accept(ItemTranslations.SMOKER_TOOLTIP1.withStyle(ChatFormatting.GOLD));
+            } else if (stack.is(ModItems.SCRAPER.get())) {
+                builder.accept(ItemTranslations.SCRAPER_TOOLTIP.withStyle(ChatFormatting.GOLD));
+                builder.accept(ItemTranslations.SCRAPER_TOOLTIP_1.withStyle(ChatFormatting.GOLD));
+            } else if (stack.is(ModItems.BREEDER_ITEM.get())) {
+                builder.accept(Component.translatable(ItemTranslations.BREEDER_TOOLTIP_1, BreederConstants.DEFAULT_BREEDER_TIME).withStyle(ChatFormatting.GOLD));
+                builder.accept(ItemTranslations.BREEDER_TOOLTIP_2.withStyle(ChatFormatting.GOLD));
+            } else if (stack.is(ModItems.ENDER_BEECON_ITEM.get())) {
+                builder.accept(ItemTranslations.BEECON_TOOLTIP.withStyle(ChatFormatting.LIGHT_PURPLE));
+                builder.accept(ItemTranslations.BEECON_TOOLTIP_1.withStyle(ChatFormatting.LIGHT_PURPLE));
+            } else if (stack.is(ModItems.FLOW_HIVE.get())) {
+                builder.accept(FlowHiveTranslations.INFO.withStyle(ChatFormatting.GOLD));
+                builder.accept(FlowHiveTranslations.HARVEST.withStyle(ChatFormatting.GOLD));
+                builder.accept(FlowHiveTranslations.CAPACITY.withStyle(ChatFormatting.GOLD));
+            } else if (stack.is(ModItems.HONEY_GENERATOR_ITEM.get())) {
+                builder.accept(ItemTranslations.GEN_TOOLTIP.withStyle(ChatFormatting.GOLD));
+            }
+        });
+
+
     }
 }

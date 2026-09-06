@@ -29,7 +29,7 @@
                 {
                   "function": "minecraft:copy_components",
                   "include": [
-                    "minecraft:bees"
+                    "resourcefulbees:hive_bees"
                   ],
                   "source": "block_entity"
                 },

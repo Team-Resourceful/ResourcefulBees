@@ -19,7 +19,8 @@ import org.jspecify.annotations.NonNull;
 
 public class HoneyGlassBlock extends TransparentBlock {
 
-    private final boolean collidePlayer; //if true player cannot go through block but bee can - if false player can go through block but bee cannot
+    //if true player cannot go through block but bee can - if false player can go through block but bee cannot
+    private final boolean collidePlayer;
 
     public HoneyGlassBlock(BlockBehaviour.Properties properties, boolean collidePlayer) {
         super(properties);

@@ -54,7 +54,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     private static ChildOutput makeOutput(FamilyUnit family) {
-        ItemStackTemplate childBeeJar = ItemStackTemplate.fromNonEmptyStack(BeeJarItem.createFilledJar(family.getChildData().entityType(), getJarColor(family)));
+        ItemStackTemplate childBeeJar = ItemStackTemplate.fromNonEmptyStack(BeeJarItem.createDisplayJar(family.getChildData().entityType(), getJarColor(family)));
         return new ChildOutput(childBeeJar, Optional.of(family.getChildData().id()), family.weight(), family.chance());
     }
 

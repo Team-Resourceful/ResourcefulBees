@@ -1,16 +1,14 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
-import com.teamresourceful.resourcefulbees.common.blocks.ApiaryBlock;
-import com.teamresourceful.resourcefulbees.common.components.BeeBoxOccupants;
-import com.teamresourceful.resourcefulbees.common.components.BeehiveUpgrade;
-import com.teamresourceful.resourcefulbees.common.components.DipperEntity;
-import com.teamresourceful.resourcefulbees.common.components.Upgrade;
+import com.teamresourceful.resourcefulbees.common.components.*;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.config.HoneyGenConfig;
 import com.teamresourceful.resourcefulbees.common.items.*;
 import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultApiaryTiers;
+import com.teamresourceful.resourcefulbees.common.lib.defaults.DefaultBeehiveTiers;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
@@ -23,7 +21,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.component.Bees;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
@@ -64,16 +61,17 @@ public final class ModItems {
         return registry.registerHolder(id, () -> factory.apply(getter.get().setId(key)));
     }
 
-    public static void registerHiveItem(ResourcefulItemRegistry registry, String id, RegistryEntry<Block> block) {
+    public static void registerHiveItem(ResourcefulItemRegistry registry, String id, RegistryEntry<Block> block, int tier) {
         registerBasicBlockItem(registry, id, block, () -> new Item.Properties()
-                .component(DataComponents.BEES, Bees.EMPTY)
-                .component(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(BeehiveBlock.HONEY_LEVEL, 0)));
+                .component(ModDataComponents.HIVE_BEES, HiveBees.EMPTY)
+                .component(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY.with(BeehiveBlock.HONEY_LEVEL, 0))
+                .component(ModDataComponents.BEEHIVE_TIER, DefaultBeehiveTiers.ordinalOf(tier)));
     }
 
-    public static final HolderRegistryEntry<Item> T1_APIARY_ITEM = registerItem(ITEMS, "t1_apiary", properties -> new ApiaryBlockItem((ApiaryBlock) ModBlocks.T1_APIARY_BLOCK.get(), properties), Item.Properties::new);
-    public static final HolderRegistryEntry<Item> T2_APIARY_ITEM = registerItem(ITEMS,"t2_apiary", properties -> new ApiaryBlockItem((ApiaryBlock) ModBlocks.T2_APIARY_BLOCK.get(), properties), Item.Properties::new);
-    public static final HolderRegistryEntry<Item> T3_APIARY_ITEM = registerItem(ITEMS,"t3_apiary", properties -> new ApiaryBlockItem((ApiaryBlock) ModBlocks.T3_APIARY_BLOCK.get(), properties), Item.Properties::new);
-    public static final HolderRegistryEntry<Item> T4_APIARY_ITEM = registerItem(ITEMS,"t4_apiary", properties -> new ApiaryBlockItem((ApiaryBlock) ModBlocks.T4_APIARY_BLOCK.get(), properties), Item.Properties::new);
+    public static final HolderRegistryEntry<Item> T1_APIARY_ITEM = registerBasicBlockItem(ITEMS, "apiary/1", ModBlocks.T1_APIARY_BLOCK, () -> new Item.Properties().component(ModDataComponents.APIARY_BEES.get(), ApiaryBees.EMPTY).component(ModDataComponents.APIARY_TIER.get(), DefaultApiaryTiers.T1_APIARY));
+    public static final HolderRegistryEntry<Item> T2_APIARY_ITEM = registerBasicBlockItem(ITEMS,"apiary/2", ModBlocks.T2_APIARY_BLOCK, () -> new Item.Properties().component(ModDataComponents.APIARY_BEES.get(), ApiaryBees.EMPTY).component(ModDataComponents.APIARY_TIER.get(), DefaultApiaryTiers.T2_APIARY));
+    public static final HolderRegistryEntry<Item> T3_APIARY_ITEM = registerBasicBlockItem(ITEMS,"apiary/3", ModBlocks.T3_APIARY_BLOCK, () -> new Item.Properties().component(ModDataComponents.APIARY_BEES.get(), ApiaryBees.EMPTY).component(ModDataComponents.APIARY_TIER.get(), DefaultApiaryTiers.T3_APIARY));
+    public static final HolderRegistryEntry<Item> T4_APIARY_ITEM = registerBasicBlockItem(ITEMS,"apiary/4", ModBlocks.T4_APIARY_BLOCK, () -> new Item.Properties().component(ModDataComponents.APIARY_BEES.get(), ApiaryBees.EMPTY).component(ModDataComponents.APIARY_TIER.get(), DefaultApiaryTiers.T4_APIARY));
 
 
     public static final HolderRegistryEntry<Item> WAX = registerItem(ITEMS, "wax", WaxItem::new, Item.Properties::new);

@@ -19,17 +19,17 @@
     "id": "resourcefulbees:bee_jar",
     "components": {
       "resourcefulbees:jar_bee": {
-        "entityType": "resourcefulbees:rgbee_bee",
-        "ticks_in_jar": 0,
+        "entity_type": "resourcefulbees:rgbee_bee",
+        "insertion_game_time": 0,
         "display_name": {
           "translate": "entity_type.resourcefulbees.rgbee_bee"
         },
-        "color": -8781691
+        "color": -10747741
       }
     }
   },
   "max_uses": 2.0,
-  "reputation_discount": 4.0,
+  "reputation_discount": 0.05,
   "xp": 3.0,
   "given_item_modifiers": [
     {

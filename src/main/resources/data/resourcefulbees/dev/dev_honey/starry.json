@@ -24,10 +24,6 @@
   "resourcefulbees:fluid/v1": {
     "rendering": {
       "color": "#FFA500"
-    },
-    "stillFluid": "resourcefulbees:starry_honey",
-    "flowingFluid": "resourcefulbees:starry_honey_flowing",
-    "fluidBucket": "resourcefulbees:starry_honey_bucket",
-    "fluidBlock": "resourcefulbees:starry_honey"
+    }
   }
 }

@@ -13,6 +13,7 @@ import com.teamresourceful.resourcefulbees.client.data.LangGenerator;
 import com.teamresourceful.resourcefulbees.common.data.RecipeBuilder;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
+import com.teamresourceful.resourcefulbees.common.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistry;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
@@ -36,6 +37,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jspecify.annotations.NonNull;
 
 import java.io.IOException;
@@ -81,8 +83,10 @@ public class GenerateCommand {
         return  Commands.literal("recipe")
                 .then(Commands.literal("breeder")
                         .requires(stack -> stack.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
-                        .executes(GenerateCommand::generateBreederRecipes)
-        );
+                        .executes(GenerateCommand::generateBreederRecipes))
+                .then(Commands.literal("chamber")
+                        .requires(stack -> stack.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+                        .executes(GenerateCommand::generateChamberRecipes));
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerTradeCommand() {
@@ -128,6 +132,62 @@ public class GenerateCommand {
                             });
                         })
                 );
+
+        return 1;
+    }
+
+    private static int generateChamberRecipes(CommandContext<CommandSourceStack> context) {
+        Path recipePath = GENERATED_DATA_PATH
+                .resolve("recipe")
+                .resolve("solidification");
+
+        RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, context.getSource().registryAccess());
+
+        HoneyRegistry.getRegistry()
+                .getStreamOfHoney()
+                .forEach(honey -> {
+                    HoneyFluidData fluidData = honey.getFluidData();
+                    HoneyBlockData blockData = honey.getBlockData();
+
+                    var fluid = fluidData.stillFluid().get();
+                    Item result = blockData.blockItem().get();
+
+                    if (result == Items.AIR) {
+                        return;
+                    }
+
+                    SolidificationRecipe recipe = new SolidificationRecipe(SizedFluidIngredient.of(fluid, 1000), ItemStackTemplate.fromNonEmptyStack(result.getDefaultInstance()), 200);
+
+                    SolidificationRecipe.CODEC.codec()
+                            .encodeStart(registryOps, recipe)
+                            .resultOrPartial(error -> {
+                                throw new IllegalStateException(
+                                        "Failed to encode solidification recipe for "
+                                                + honey.name()
+                                                + ": "
+                                                + error
+                                );
+                            })
+                            .ifPresent(jsonElement -> {
+                                JsonObject json = jsonElement.getAsJsonObject();
+
+                                json.addProperty(
+                                        "type",
+                                        ModRecipes.SOLIDIFICATION_RECIPE_TYPE
+                                                .getId()
+                                                .toString()
+                                );
+
+                                writeJsonFile(json, recipePath.resolve(honey.name() + "_honey_block.json"));
+                            });
+                });
+
+        context.getSource().sendSuccess(
+                () -> Component.literal(
+                        "Generated Resourceful Bees solidification chamber recipes."
+                ),
+                false
+        );
 
         return 1;
     }
@@ -273,7 +333,7 @@ public class GenerateCommand {
         JsonArray values = new JsonArray();
 
         // Static trade shipped with Resourceful Bees.
-        //values.add("resourcefulbees:beekeeper/5/queen_bee_banner");
+        values.add("resourcefulbees:beekeeper/5/queen_bee_banner");
 
         ResourcefulBeesAPI.getRegistry()
                 .getBeeRegistry()
@@ -281,7 +341,7 @@ public class GenerateCommand {
                 .filter(bee -> bee.getTradeData().isTradable())
                 .forEach(bee -> {
                     BeekeeperTradeData tradeData = bee.getTradeData();
-                    ItemStack result = BeeJarItem.createFilledJar(bee.entityType(), bee.getRenderData().colorData().jarColor().getOpaqueValue());
+                    ItemStack result = BeeJarItem.createDisplayJar(bee.entityType(), bee.getRenderData().colorData().jarColor().getOpaqueValue());
                     VillagerTrade trade = createBeekeeperTrade(tradeData, result, UniformGenerator.between(32.0F, 64.0F));
                     String name = bee.id().getPath();
                     writeVillagerTrade(registryOps, trade, tradePath.resolve(name + ".json"));

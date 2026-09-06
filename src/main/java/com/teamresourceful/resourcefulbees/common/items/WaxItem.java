@@ -27,19 +27,26 @@ public class WaxItem extends Item {
     public @NotNull InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        return getWaxed(level.getBlockState(pos)).map((state) -> {
-            Player player = context.getPlayer();
-            ItemStack itemstack = context.getItemInHand();
-            if (player instanceof ServerPlayer serverplayer) {
-                CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverplayer, pos, itemstack);
-            }
 
-            itemstack.shrink(1);
-            level.setBlock(pos, state, 11);
-            level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, state));
-            level.levelEvent(player, 3003, pos, 0);
-            return InteractionResult.SUCCESS_SERVER;
-        }).orElse(InteractionResult.SUCCESS); //todo why can't this be PASS?
+        Optional<BlockState> waxedState = getWaxed(level.getBlockState(pos));
+        if (waxedState.isEmpty()) {
+            return InteractionResult.PASS;
+        }
+
+        BlockState state = waxedState.get();
+        Player player = context.getPlayer();
+        ItemStack stack = context.getItemInHand();
+
+        if (player instanceof ServerPlayer serverPlayer) {
+            CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverPlayer, pos, stack);
+        }
+
+        stack.shrink(1);
+        level.setBlock(pos, state, 11);
+        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, state));
+        level.levelEvent(player, 3003, pos, 0);
+
+        return InteractionResult.SUCCESS_SERVER;
     }
 
     private static Optional<BlockState> getWaxed(BlockState state) {

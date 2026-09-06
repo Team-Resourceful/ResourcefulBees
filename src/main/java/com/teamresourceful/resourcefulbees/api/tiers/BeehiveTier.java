@@ -3,18 +3,34 @@ package com.teamresourceful.resourcefulbees.api.tiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
+import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeehiveTranslations;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public record BeehiveTier(Identifier id, int maxBees, int maxCombs, double timeModifier, Supplier<Collection<Item>> displayItems, Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType) {
+public record BeehiveTier(
+        Identifier id,
+        int maxBees,
+        int maxCombs,
+        double timeModifier,
+        Supplier<Collection<Item>>
+        displayItems,
+        Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType
+) implements TooltipProvider {
 
     private static final Map<Identifier, BeehiveTier> TIERS = new HashMap<>();
     public static final Codec<BeehiveTier> CODEC = Identifier.CODEC.comapFlatMap(BeehiveTier::get, BeehiveTier::id);
@@ -48,6 +64,12 @@ public record BeehiveTier(Identifier id, int maxBees, int maxCombs, double timeM
 
     public static Collection<BeehiveTier> values() {
         return TIERS.values();
+    }
+
+    @Override
+    public void addToTooltip(Item.@NonNull TooltipContext tooltipContext, @NonNull Consumer<Component> consumer, @NonNull TooltipFlag tooltipFlag, @NonNull DataComponentGetter dataComponentGetter) {
+        consumer.accept(Component.translatable(BeehiveTranslations.MAX_BEES, maxBees).withStyle(ChatFormatting.GOLD));
+        consumer.accept(Component.translatable(BeehiveTranslations.HIVE_TIME, getTimeModificationAsPercent()).withStyle(ChatFormatting.GOLD));
     }
 
     public static class Builder {

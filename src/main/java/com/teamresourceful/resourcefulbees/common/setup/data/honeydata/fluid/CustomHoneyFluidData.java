@@ -9,7 +9,6 @@ import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
-import com.teamresourceful.resourcefullib.common.codecs.recipes.LazyHolders;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
@@ -34,15 +33,45 @@ public record CustomHoneyFluidData(
     private static Codec<HoneyFluidData> codec(String id) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 RecordCodecBuilder.point(id),
-                CustomHoneyRenderData.CODEC.optionalFieldOf("rendering", CustomHoneyRenderData.DEFAULT).forGetter(HoneyFluidData::renderData),
-                CustomHoneyFluidAttributesData.CODEC.optionalFieldOf("attributes", CustomHoneyFluidAttributesData.DEFAULT).forGetter(HoneyFluidData::fluidAttributesData),
-                LazyHolders.LAZY_FLUID.fieldOf("stillFluid").forGetter(HoneyFluidData::stillFluid),
-                LazyHolders.LAZY_FLUID.fieldOf("flowingFluid").forGetter(HoneyFluidData::flowingFluid),
-                LazyHolders.LAZY_ITEM.fieldOf("fluidBucket").forGetter(HoneyFluidData::fluidBucket),
-                LazyHolders.LAZY_BLOCK.fieldOf("fluidBlock").forGetter(HoneyFluidData::fluidBlock),
-                TradeData.CODEC.optionalFieldOf("tradeData", TradeData.DEFAULT).forGetter(HoneyFluidData::tradeData)
-        ).apply(instance, CustomHoneyFluidData::new));
+
+                CustomHoneyRenderData.CODEC
+                        .optionalFieldOf("rendering", CustomHoneyRenderData.DEFAULT)
+                        .forGetter(HoneyFluidData::renderData),
+
+                CustomHoneyFluidAttributesData.CODEC
+                        .optionalFieldOf("attributes", CustomHoneyFluidAttributesData.DEFAULT)
+                        .forGetter(HoneyFluidData::fluidAttributesData),
+
+                TradeData.CODEC
+                        .optionalFieldOf("tradeData", TradeData.DEFAULT)
+                        .forGetter(HoneyFluidData::tradeData)
+
+        ).apply(instance, (honeyId, rendering, attributes, tradeData) ->
+                new CustomHoneyFluidData(
+                        honeyId,
+                        rendering,
+                        attributes,
+                        LazyHolder.of(
+                                BuiltInRegistries.FLUID,
+                                ModIdentifier.of(honeyId + "_honey_fluid_source")
+                        ),
+                        LazyHolder.of(
+                                BuiltInRegistries.FLUID,
+                                ModIdentifier.of(honeyId + "_honey_fluid_flowing")
+                        ),
+                        LazyHolder.of(
+                                BuiltInRegistries.ITEM,
+                                ModIdentifier.of(honeyId + "_honey_bucket")
+                        ),
+                        LazyHolder.of(
+                                BuiltInRegistries.BLOCK,
+                                ModIdentifier.of(honeyId + "_honey_fluid_block")
+                        ),
+                        tradeData
+                )
+        ));
     }
+
     public static final HoneyDataSerializer<HoneyFluidData> SERIALIZER = HoneyDataSerializer.of(ModIdentifier.of("fluid"), 1, CustomHoneyFluidData::codec, DEFAULT);
 
     @Override

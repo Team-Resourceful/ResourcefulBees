@@ -17,7 +17,7 @@ public final class BeehiveTranslations {
     @Translate("Max Honeycombs: %s")
     public static final String MAX_COMBS = "block.resourcefulbees.beehive.tooltip.max_combs";
 
-    @Translate("Hive Time Modification: %s%s%%")
+    @Translate("Hive Time Modification: %1$s%%")
     public static final String HIVE_TIME = "block.resourcefulbees.beehive.tooltip.hive_time";
 
     @Translate("Bees:")

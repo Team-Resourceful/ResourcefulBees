@@ -3,7 +3,7 @@
   "key": {
     "C": "#c:storage_blocks/honeycombs",
     "M": "minecraft:nether_star",
-    "S": "resourcefulbees:t1_apiary"
+    "S": "resourcefulbees:apiary/1"
   },
   "pattern": [
     "CSC",
@@ -11,6 +11,6 @@
     "CSC"
   ],
   "result": {
-    "id": "resourcefulbees:t2_apiary"
+    "id": "resourcefulbees:apiary/2"
   }
 }

@@ -46,7 +46,7 @@ public class RBeesAdvancementProvider extends BaseAdvancementProvider {
 
             writer.apply(createSimpleAdvancement(ModItems.WAX, "wax", root));
 
-            AdvancementHolder honeycomb = writer.apply(createAdvancement(Items.HONEYCOMB, "honeycomb", root)
+            writer.apply(createAdvancement(Items.HONEYCOMB, "honeycomb", root)
                     .addCriterion("has_honeycomb", has(registries, ModItemTags.HONEYCOMBS))
                     .build(advancementId("honeycomb"))
             );
