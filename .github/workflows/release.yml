@@ -34,15 +34,9 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v6
         with:
-          distribution: 'temurin'
-          java-version: 17
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v6
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
+          distribution: microsoft
+          java-version: 25
+          cache: gradle
 
       - name: Set Gradle Perms
         run: chmod +x gradlew
