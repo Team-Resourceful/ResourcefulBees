@@ -208,7 +208,7 @@ idea {
 
 sonar {
     properties {
-        property "sonar.organization", "team_resourceful"
+        property "sonar.organization", "team-resourceful"
         property "sonar.projectKey", "com.teamresourceful.resourcefulbees:ResourcefulBees"
     }
 }
