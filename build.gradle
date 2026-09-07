@@ -1,8 +1,10 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.141'
+    id 'net.neoforged.moddev' version '2.0.146'
     id 'idea'
+
+    id 'org.sonarqube' version '7.5.0.8588'
 }
 
 tasks.named('wrapper', Wrapper).configure {
