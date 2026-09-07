@@ -205,3 +205,10 @@ idea {
         downloadJavadoc = true
     }
 }
+
+sonar {
+    properties {
+        property "sonar.organization", "team_resourceful"
+        property "sonar.projectKey", "com.teamresourceful.resourcefulbees:ResourcefulBees"
+    }
+}
