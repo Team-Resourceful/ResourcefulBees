@@ -5,11 +5,14 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Jei
 import com.teamresourceful.resourcefulbees.common.recipes.SolidificationRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IPlatformFluidHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.types.IRecipeType;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
@@ -24,16 +27,13 @@ public final class SolidificationCategory
     private static final int WIDTH = 46;
     private static final int HEIGHT = 61;
 
-    public static final Identifier ID =
-            ModIdentifier.of("solidification");
+    public static final Identifier GUI_BACK = ModIdentifier.of("textures/gui/jei/solidification.png");
+    public static final Identifier ID = ModIdentifier.of("solidification");
 
-    public static final IRecipeType<SolidificationRecipe> RECIPE =
-            IRecipeType.create(
-                    ID,
-                    SolidificationRecipe.class
-            );
+    public static final IRecipeType<SolidificationRecipe> RECIPE = IRecipeType.create(ID, SolidificationRecipe.class);
 
     private final IPlatformFluidHelper<FluidStack> fluidHelper;
+    private final IDrawable back;
 
     public SolidificationCategory(
             IGuiHelper guiHelper,
@@ -51,6 +51,13 @@ public final class SolidificationCategory
         );
 
         this.fluidHelper = fluidHelper;
+        this.back = guiHelper.createDrawable(GUI_BACK, 0, 0, WIDTH, HEIGHT);
+    }
+
+    @Override
+    public void draw(@NonNull SolidificationRecipe recipe, @NonNull IRecipeSlotsView recipeSlotsView, @NonNull GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+        this.back.draw(guiGraphics);
+        super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
     }
 
     @Override
@@ -63,41 +70,21 @@ public final class SolidificationCategory
                 .ingredient()
                 .fluids()
                 .stream()
-                .map(holder ->
-                        fluidHelper.create(
-                                holder,
-                                recipe.fluid().amount()
-                        )
-                )
+                .map(holder -> fluidHelper.create(holder, recipe.fluid().amount()))
                 .toList();
 
-        builder.addSlot(
-                        RecipeIngredientRole.INPUT,
-                        21,
-                        11
-                )
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
                 .addIngredients(fluidHelper.getFluidIngredientType(), fluids)
-                .setFluidRenderer(
-                        recipe.fluid().amount(),
-                        false,
-                        16,
-                        16
-                )
+                .setFluidRenderer(recipe.fluid().amount(), false, 16, 16)
                 .setSlotName("input");
 
-        builder.addSlot(
-                        RecipeIngredientRole.OUTPUT,
-                        49,
-                        54
-                )
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 29, 44)
                 .add(recipe.stack())
                 .setSlotName("output");
     }
 
     @Override
-    public @Nullable Identifier getIdentifier(
-            @NonNull SolidificationRecipe recipe
-    ) {
+    public @Nullable Identifier getIdentifier(@NonNull SolidificationRecipe recipe) {
         return null;
     }
 }

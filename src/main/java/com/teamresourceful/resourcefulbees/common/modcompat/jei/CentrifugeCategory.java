@@ -99,7 +99,7 @@ public final class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Ce
 
         for (int i = 0; i < 3; i++) {
             if (i < itemStacks.size()) {
-                builder.addInputSlot(72, 7 + i * 18)
+                builder.addOutputSlot(72, 7 + i * 18)
                         .addIngredients(VanillaTypes.ITEM_STACK, itemStacks.get(i))
                         .setSlotName("item_output_" + i);
             }
