@@ -53,7 +53,8 @@ public class ResourcefulBeesClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-        // TODO document why this method is empty
+        // pet database server is down so I cant test currently
+        //PetLoader.loadAPI();
     }
 
     @SubscribeEvent // on the mod event bus only on the physical client

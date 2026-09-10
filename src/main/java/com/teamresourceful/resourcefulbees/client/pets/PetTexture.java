@@ -2,10 +2,9 @@ package com.teamresourceful.resourcefulbees.client.pets;
 
 import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -15,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.Optional;
 import java.util.Set;
@@ -34,18 +34,27 @@ public final class PetTexture {
     private final String id;
     private final String texture;
     private final Identifier location;
-    private SimpleTexture img;
+
+    @Nullable
+    private DynamicTexture image;
 
     public PetTexture(String id, @Nullable String texture) {
         this.id = getIdHash(id, texture);
         this.texture = texture;
-        this.location = Identifier.fromNamespaceAndPath("resourcefulbees_pet",  "textures/entity/" + this.id);
+
+        this.location = Identifier.fromNamespaceAndPath(
+                "resourcefulbees_pet",
+                "textures/entity/" + this.id
+        );
     }
 
-    @SuppressWarnings({"UnstableApiUsage", "deprecation"})
+    @SuppressWarnings("deprecation")
     private static String getIdHash(String id, @Nullable String texture) {
         String hashedUrl = FilenameUtils.getBaseName(texture);
-        return Hashing.sha1().hashUnencodedChars(id + (hashedUrl == null ? "" : hashedUrl)).toString();
+
+        return Hashing.sha1()
+                .hashUnencodedChars(id + (hashedUrl == null ? "" : hashedUrl))
+                .toString();
     }
 
     public Identifier getResourceLocation() {
@@ -53,119 +62,128 @@ public final class PetTexture {
         return location;
     }
 
+    @Nullable
     public String getTexture() {
         return texture;
     }
 
     public void checkOrDownload() {
-        if (img != null || texture == null) return;
-        img = new DownloadableTexture(new File(Minecraft.getInstance().gameDirectory,"teamresourceful/pet_bees/cache/" + this.id), this.texture, location);
-        Minecraft.getInstance().getTextureManager().register(this.location, img);
+        if (image != null || texture == null) {
+            return;
+        }
+
+        File cacheFile = new File(
+                Minecraft.getInstance().gameDirectory,
+                "teamresourceful/pet_bees/cache/" + id
+        );
+
+        loadTexture(cacheFile, texture);
     }
 
-    public static class DownloadableTexture extends SimpleTexture {
+    private void loadTexture(File file, String url) {
+        Optional<NativeImage> cached =
+                file.isFile() ? loadImage(file) : Optional.empty();
 
-        @Nullable
-        private final File file;
-        @Nullable
-        private final String url;
-        @Nullable
-        private CompletableFuture<Void> future;
-        private boolean uploaded;
-
-        public DownloadableTexture(@Nullable File file, @Nullable String url, Identifier location) {
-            super(location);
-            this.file = file;
-            this.url = url;
+        if (cached.isPresent()) {
+            register(cached.get());
+            return;
         }
 
-        private void loadCallback(NativeImage image) {
-            Minecraft.getInstance().execute(() -> {
-                this.uploaded = true;
-                if (!RenderSystem.isOnRenderThread()) {
-                    //RenderSystem.recordRenderCall(() -> this.upload(image));
-                } else {
-                    this.upload(image);
-                }
-            });
-        }
+        CompletableFuture.runAsync(() ->
+                createUrl(url).ifPresent(downloadUrl -> {
+                    HttpURLConnection connection = null;
 
-        private void upload(NativeImage image) {
-            //TextureUtil.prepareImage(this.getId(), image.getWidth(), image.getHeight());
-            //image.upload(0, 0, 0, true);
-        }
-
-        /*@Override
-        public void load(@NotNull ResourceManager manager) throws IOException {
-            Minecraft.getInstance().execute(() -> {
-                if (!this.uploaded) {
                     try {
-                        super.load(manager);
-                    } catch (Exception ignored) {
-                        *//*Do Nothing*//*
-                    }
-                    this.uploaded = true;
-                }
-            });
-            if (this.future == null) {
-                Optional<NativeImage> nativeimage = this.file != null && this.file.isFile() ? this.load(this.file) : Optional.empty();
+                        connection = (HttpURLConnection) downloadUrl.openConnection(
+                                Minecraft.getInstance().getProxy()
+                        );
 
-                if (nativeimage.isPresent()) {
-                    this.loadCallback(nativeimage.get());
-                } else {
-                    this.future = runDownload();
-                }
-            }
-        }*/
+                        connection.setDoInput(true);
+                        connection.setDoOutput(false);
+                        connection.connect();
 
-        private CompletableFuture<Void> runDownload() {
-            return CompletableFuture.runAsync(() ->
-                    createUrl(this.url).ifPresent(url -> {
-                        HttpURLConnection httpurlconnection = null;
-                        try {
-                            httpurlconnection = (HttpURLConnection) url.openConnection(Minecraft.getInstance().getProxy());
-                            httpurlconnection.setDoInput(true);
-                            httpurlconnection.setDoOutput(false);
-                            httpurlconnection.connect();
-
-                            if (httpurlconnection.getResponseCode() / 100 == 2) {
-                                if (this.file != null) {
-                                    FileUtils.copyInputStreamToFile(httpurlconnection.getInputStream(), this.file);
-                                }
-
-                                Minecraft.getInstance().execute(() -> this.load(this.file).ifPresent(this::loadCallback));
-                            }
-                        } catch (IOException ignored) {
-                            //Do Nothing!
-                        } finally {
-                            if (httpurlconnection != null) httpurlconnection.disconnect();
+                        if (connection.getResponseCode() / 100 != 2) {
+                            return;
                         }
-                    }));//, Util.backgroundExecutor());
+
+                        FileUtils.copyInputStreamToFile(
+                                connection.getInputStream(),
+                                file
+                        );
+
+                        loadImage(file).ifPresent(nativeImage ->
+                                Minecraft.getInstance().execute(
+                                        () -> register(nativeImage)
+                                )
+                        );
+
+                    } catch (IOException e) {
+                        ModConstants.LOGGER.warn(
+                                "Failed to download pet texture {}",
+                                downloadUrl,
+                                e
+                        );
+                    } finally {
+                        if (connection != null) {
+                            connection.disconnect();
+                        }
+                    }
+                })
+        );
+    }
+
+    private void register(NativeImage nativeImage) {
+        Minecraft minecraft = Minecraft.getInstance();
+
+        DynamicTexture dynamicTexture =
+                new DynamicTexture(
+                        location::toString,
+                        nativeImage
+                );
+
+        this.image = dynamicTexture;
+
+        minecraft.getTextureManager().register(
+                location,
+                dynamicTexture
+        );
+    }
+
+    private static Optional<NativeImage> loadImage(File file) {
+        try (FileInputStream stream = new FileInputStream(file)) {
+            return Optional.of(NativeImage.read(stream));
+        } catch (Exception _) {
+            return Optional.empty();
+        }
+    }
+
+    private static Optional<URL> createUrl(@Nullable String string) {
+        if (string == null) {
+            return Optional.empty();
         }
 
+        try {
+            URL url = new URI(string).toURL();
 
-        private Optional<NativeImage> load(File file) {
-            try {
-                return Optional.of(NativeImage.read(new FileInputStream(file)));
-            } catch (Exception ignored) {
+            if (!ALLOWED_DOMAINS.contains(url.getHost())) {
+                ModConstants.LOGGER.warn(
+                        "Tried to load texture from disallowed domain: {}",
+                        url.getHost()
+                );
+
                 return Optional.empty();
             }
-        }
 
-        private static Optional<URL> createUrl(@Nullable String string) {
-            if (string == null) return Optional.empty();
-            try {
-                URL url = new URL(string);
-                if (!PetTexture.ALLOWED_DOMAINS.contains(url.getHost())) {
-                    ModConstants.LOGGER.warn("Tried to load texture from disallowed domain: " + url.getHost());
-                    return Optional.empty();
-                }
-                if (!url.getProtocol().equals("https")) return Optional.empty();
-                return Optional.of(url);
-            } catch (Exception ignored) {
+            boolean secure = url.getProtocol().equals("https");
+            boolean local = url.getHost().equals("localhost");
+
+            if (!secure && !local) {
                 return Optional.empty();
             }
-        }
 
+            return Optional.of(url);
+        } catch (Exception _) {
+            return Optional.empty();
+        }
     }
 }

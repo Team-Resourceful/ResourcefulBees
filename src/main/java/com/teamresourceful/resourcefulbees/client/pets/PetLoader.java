@@ -41,7 +41,7 @@ public final class PetLoader {
             if (json.get("default") instanceof JsonPrimitive primitive) {
                 PetInfo.defaultModel = PetInfo.getModel(primitive.getAsString());
             }
-        }catch (Exception ignored){
+        } catch (Exception _){
             //Does nothing
         }
     }

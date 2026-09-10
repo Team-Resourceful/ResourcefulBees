@@ -30,7 +30,7 @@ public final class PetInfo {
     static void addUser(String uuid, String model){
         try {
             getUUID(uuid).ifPresent(uid -> USER_PETS.put(uid, model));
-        } catch (Exception ignored) {
+        } catch (Exception _) {
             //does nothing
         }
     }

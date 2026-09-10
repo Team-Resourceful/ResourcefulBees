@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.pets;
 import com.geckolib.animatable.GeoAnimatable;
 import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 import com.mojang.serialization.Codec;
@@ -22,7 +23,8 @@ import java.util.Set;
 public class PetModelData implements GeoAnimatable {
 
     private static final Identifier BASE_MODEL = ModIdentifier.of("geo/base.geo.json");
-    private static final RawAnimation ANIMATION = RawAnimation.begin().thenLoop("animation.bee.fly").thenLoop("animation.bee.fly.bobbing");
+    private static final RawAnimation FLY_ANIMATION = RawAnimation.begin().thenLoop("animation.bee.fly");
+    private static final RawAnimation BOB_ANIMATION = RawAnimation.begin().thenLoop("animation.bee.fly.bobbing");
 
     public static final Codec<PetModelData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("version").orElse(-1).forGetter(PetModelData::getVersion),
@@ -34,7 +36,7 @@ public class PetModelData implements GeoAnimatable {
     ).apply(instance, PetModelData::new));
 
     private final PetBeeModel<PetModelData> model = new PetBeeModel<>();
-    private final AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
+    private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
 
     private final int version;
     private final String id;
@@ -87,21 +89,21 @@ public class PetModelData implements GeoAnimatable {
     }
 
     @Override
-    public void registerControllers(AnimatableManager.@NonNull ControllerRegistrar controllers) {
-        /*controllers.add(new AnimationController<>("bee_controller", 0, new AnimationController<>(ANIMATION)));
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>("fly", 0, state ->
+                state.setAndContinue(FLY_ANIMATION)));
 
-        controllers.add(new AnimationController<>(new AnimationController<>(this, "bee_controller", 0, event -> {
-            event.getController().setAnimation(ANIMATION);
-            return PlayState.CONTINUE;
-        })));*/
+        controllers.add(new AnimationController<>("bobbing", 0, state ->
+                state.setAndContinue(BOB_ANIMATION)));
     }
 
+    @Override
     public @NonNull AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.factory;
+        return animationCache;
     }
 
-/*    @Override
-    public double getTick(Object o) {
-        return RenderUtil.getCurrentTick();
-    }*/
+//    @Override
+//    public double getTick(Object o) {
+//        return RenderUtil.getCurrentTick();
+//    }
 }
