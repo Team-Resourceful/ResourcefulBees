@@ -423,12 +423,12 @@ public class RBeesModelProvider extends ModelProvider {
         );
 
         // Cube-all blockstate/model, without explicitly registering an item model.
-//        registerCubeAll(
-//                blockModels,
-//                ModBlocks.CREATIVE_GEN.get(),
-//                TextureMapping.getBlockTexture(ModBlocks.CREATIVE_GEN.get()),
-//                false
-//        );
+        registerCubeAll(
+                blockModels,
+                ModBlocks.CREATIVE_GEN.get(),
+                TextureMapping.getBlockTexture(ModBlocks.CREATIVE_GEN.get()),
+                false
+        );
     }
 
     private static void registerParticleOnly(
@@ -492,17 +492,9 @@ public class RBeesModelProvider extends ModelProvider {
                 )
         );
 
-        Identifier itemModel = ModelTemplates.FLAT_ITEM.create(
-                block.asItem(),
-                new TextureMapping()
-                        .put(TextureSlot.LAYER0, texture),
-                itemModels.modelOutput
-        );
+        Identifier itemModel = ModelTemplates.FLAT_ITEM.create(block.asItem(), new TextureMapping().put(TextureSlot.LAYER0, texture), itemModels.modelOutput);
 
-        itemModels.itemModelOutput.accept(
-                block.asItem(),
-                ItemModelUtils.plainModel(itemModel)
-        );
+        itemModels.itemModelOutput.accept(block.asItem(), ItemModelUtils.plainModel(itemModel));
     }
 
     private static void registerSimpleBlockState(

@@ -31,13 +31,6 @@ public class BreederBlock extends BeeHouseBlock {
         return CODEC;
     }
 
-//    @Override
-//    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-//        tooltip.add(Component.translatable(ItemTranslations.BREEDER_TOOLTIP_1, BreederConstants.DEFAULT_BREEDER_TIME).withStyle(ChatFormatting.GOLD));
-//        tooltip.add(ItemTranslations.BREEDER_TOOLTIP_2.withStyle(ChatFormatting.GOLD));
-//        super.appendHoverText(stack, worldIn, tooltip, flagIn);
-//    }
-
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {

@@ -51,7 +51,6 @@ public final class ModBlocks {
 
     public static final BlockBehaviour.Properties WAXED_PLANKS_PROPERTIES = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
     public static final BlockBehaviour.Properties CENTRIFUGE_PROPERTIES = BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL);
-    private static final BlockBehaviour.Properties WOOD_NEST_PROPERTIES = BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1F).sound(SoundType.WOOD);
     private static final BlockBehaviour.Properties APIARY_PROPERTIES = BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(5f, 6f).mapColor(MapColor.WOOD);
     public static final BlockBehaviour.Properties HONEY_FLUID_BLOCK_PROPERTIES = BlockBehaviour.Properties.of()
             .mapColor(MapColor.TERRACOTTA_ORANGE)
@@ -154,7 +153,7 @@ public final class ModBlocks {
         }
     }, () -> BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision());
 
-//    public static final HolderRegistryEntry<Block> ACCELERATOR = BLOCKS.register("accelerator", () -> new TickingBlock<>(ModBlockEntityTypes.ACCELERATOR_TILE_ENTITY, CENTRIFUGE_PROPERTIES));
+    public static final HolderRegistryEntry<Block> ACCELERATOR = registerBlock(BLOCKS, "accelerator", properties -> new AcceleratorBlock(properties), () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL));
 
 //    public static final HolderRegistryEntry<Block> POLLEN_SPREADER_FAN = BLOCKS.register("pollen_spreader_fan", () -> new PollenSpreader.Fan(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.5f).sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion()));
 //    public static final HolderRegistryEntry<Block> POLLEN_SPREADER = BLOCKS.register("pollen_spreader", () -> new PollenSpreader(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.5f).sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion()));
@@ -165,12 +164,7 @@ public final class ModBlocks {
 
     public static final HolderRegistryEntry<Block> BEEHOUSE_TOP = registerBlock(BLOCKS, "beehouse_top", BeeHouseTopBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(5f, 6f).pushReaction(PushReaction.BLOCK));
     public static final HolderRegistryEntry<Block> BREEDER_BLOCK = registerBlock(BLOCKS, "breeder", BreederBlock::new, () -> BlockBehaviour.Properties.of().strength(1F).sound(SoundType.WOOD));
-//    public static final HolderRegistryEntry<Block> CREATIVE_GEN = BLOCKS.register("creative_gen", () -> new TickingBlock<>(ModBlockEntityTypes.CREATIVE_GEN_ENTITY, CENTRIFUGE_PROPERTIES) {
-//        @Override
-//        protected MapCodec<? extends BaseEntityBlock> codec() {
-//            return null;
-//        }
-//    });
+    public static final HolderRegistryEntry<Block> CREATIVE_GEN = registerBlock(BLOCKS, "creative_gen", CreativeGeneratorBlock::new, () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL));
     public static final HolderRegistryEntry<Block> ENDER_BEECON = registerBlock(BLOCKS,"ender_beecon", EnderBeeconBlock::new, () -> BEECON_PROPERTIES);
     public static final HolderRegistryEntry<Block> HONEY_POT = registerBlock(BLOCKS, "honey_pot", HoneyPotBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(1.5f).requiresCorrectToolForDrops());
     public static final HolderRegistryEntry<Block> SOLIDIFICATION_CHAMBER = registerBlock(BLOCKS, "solidification_chamber", SolidificationChamberBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.GLASS).strength(1.5f).requiresCorrectToolForDrops());
