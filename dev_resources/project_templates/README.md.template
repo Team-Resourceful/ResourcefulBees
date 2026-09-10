@@ -22,7 +22,7 @@ If you would like to contribute to the mod feel free to submit a PR.
 Be sure to add our maven to your `build.gradle`:
 ```gradle
 repositories {
-    maven { url = "https://maven.resourcefulbees.com/repository/maven-public/" }
+    maven { url = "https://maven.teamresourceful.com/repository/maven-public/" }
     <--- other repositories here --->
 }
 ```
@@ -33,14 +33,11 @@ You can then add our mod as a dependency:
 dependencies {
     <--- Other dependencies here --->
 
-    implementation fg.deobf("com.teamresourceful.resourcefulbees:resourcefulbees-forge-${mc_version}:${version}")
+    implementation "com.teamresourceful.resourcefulbees:resourcefulbees-neoforge-${mc_version}:${version}"
     
     //below are required dependencies for resourceful bees to work.
-    runtimeOnly fg.deobf("com.teamresourceful.resourcefullib:resourcefullib-forge-${mc_version}:${rlib_version}")
-    runtimeOnly fg.deobf("com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-${mc_version}:${rconfig_version}")
-    runtimeOnly fg.deobf("software.bernie.geckolib:${gecko_forge}:${gecko_forge_version}")
-    runtimeOnly fg.deobf("net.roguelogix.phosphophyllite:Phosphophyllite:${phos_version}")
+    runtimeOnly "com.teamresourceful.resourcefullib:resourcefullib-forge-${mc_version}:${rlib_version}"
+    runtimeOnly "com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-${mc_version}:${rconfig_version}"
+    runtimeOnly "software.bernie.geckolib:${gecko_forge}:${gecko_forge_version}"
 }
 ```
-
-TODO: Update this to include Architectury and Fabric

@@ -1,7 +1,7 @@
 {
   "username": "Beekeeper",
   "avatar_url": "https://cdn.discordapp.com/avatars/738571182101626930/72ad643b1ee4036cd79f8c457ed1d420.png",
-  "content": "<@&873346297053204561>",
+  "content": "",
   "embeds": [
     {
       "title": "Resourceful Bees",
@@ -35,12 +35,12 @@
           "value": "${mc_version}"
         },
         {
-          "name": "Forge Version",
+          "name": "NeoForge Version",
           "value": "${forge_version}"
         },
         {
           "name": "Download",
-          "value": "[Forge](https://nexus.resourcefulbees.com/repository/maven-public/com/teamresourceful/resourcefulbees/resourcefulbees-forge-${mc_version}/${version}/resourcefulbees-forge-${mc_version}-${version}.jar)\n[Fabric](https://nexus.resourcefulbees.com/repository/maven-public/com/teamresourceful/resourcefulbees/resourcefulbees-fabric-${mc_version}/${version}/resourcefulbees-fabric-${mc_version}-${version}.jar)"
+          "value": "[NeoForge](https://nexus.resourcefulbees.com/repository/maven-public/com/teamresourceful/resourcefulbees/resourcefulbees-neoforge-${mc_version}/${version}/resourcefulbees-neoforge-${mc_version}-${version}.jar)"
         }
       ]
     }
