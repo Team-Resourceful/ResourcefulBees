@@ -193,17 +193,56 @@ public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable 
         showParticles(entity, 10);
     }
 
-    //todo figure out slide particles so we dont have to default to honey block
     private static void showParticles(Entity entity, int count) {
-        if (entity.level().isClientSide()) {
-            BlockState blockState = entity.getBlockStateOn();
-            blockState = blockState.isAir() ? Blocks.HONEY_BLOCK.defaultBlockState() : blockState;
+        if (!entity.level().isClientSide()) {
+            return;
+        }
 
-            for (int i = 0; i < count; i++) {
-                entity.level()
-                        .addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockState), entity.getX(), entity.getY(), entity.getZ(), 0.0, 0.0, 0.0);
+        BlockState blockState = findHoneyBlockState(entity);
+
+        for (int i = 0; i < count; i++) {
+            entity.level().addParticle(
+                    new BlockParticleOption(ParticleTypes.BLOCK, blockState),
+                    entity.getX(),
+                    entity.getY(),
+                    entity.getZ(),
+                    0.0,
+                    0.0,
+                    0.0
+            );
+        }
+    }
+
+    private static BlockState findHoneyBlockState(Entity entity) {
+        Level level = entity.level();
+
+        var box = entity.getBoundingBox().inflate(0.1);
+
+        BlockPos min = BlockPos.containing(
+                box.minX,
+                box.minY,
+                box.minZ
+        );
+
+        BlockPos max = BlockPos.containing(
+                box.maxX,
+                box.maxY,
+                box.maxZ
+        );
+
+        for (BlockPos pos : BlockPos.betweenClosed(min, max)) {
+            BlockState state = level.getBlockState(pos);
+
+            if (state.getBlock() instanceof CustomHoneyBlock) {
+                return state;
             }
         }
+
+        BlockState state = entity.getBlockStateOn();
+
+        return state.isAir()
+                ? Blocks.HONEY_BLOCK.defaultBlockState()
+                : state;
     }
 }
 
