@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.blockentities.EnderBeeconBlock
 import com.teamresourceful.resourcefulbees.common.blocks.EnderBeeconBlock;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.blockentity.BeaconRenderer;
@@ -51,9 +52,15 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
         BlockState blockState = beecon.getBlockState();
 
         renderState.showBeam = blockState.hasProperty(EnderBeeconBlock.BEAM) && blockState.getValue(EnderBeeconBlock.BEAM);
-        renderState.gameTime = beecon.getLevel() != null
-                ? beecon.getLevel().getGameTime() + partialTicks
+        renderState.animationTime = beecon.getLevel() != null
+                ? Math.floorMod(beecon.getLevel().getGameTime(), 40) + partialTicks
                 : 0.0F;
+
+        float distanceToBeecon = (float) cameraPosition.subtract(Vec3.atCenterOf(renderState.blockPos)).horizontalDistance();
+        LocalPlayer player = Minecraft.getInstance().player;
+        renderState.beamRadiusScale = player != null && player.isScoping()
+                ? 1.0F
+                : Math.max(1.0F, distanceToBeecon / 96.0F);
 
         if (fluid.getFluid() instanceof CustomHoneyFluid.Still customHoney) {
             renderState.fluidColor = customHoney.getHoneyFluidData().renderData().color().getOpaqueValue();
@@ -85,8 +92,18 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
     }
 
     private static void submitBeam(RenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
-        float rotation = (state.gameTime % 40L) * 2.25F;
-        BeaconRenderer.submitBeaconBeam(poseStack, collector, BeaconRenderer.BEAM_LOCATION, 1.0F, rotation, 0, BeaconRenderer.MAX_RENDER_Y, state.fluidColor, 0.2F, 0.25F);
+        BeaconRenderer.submitBeaconBeam(
+                poseStack,
+                collector,
+                BeaconRenderer.BEAM_LOCATION,
+                1.0F,
+                state.animationTime,
+                0,
+                BeaconRenderer.MAX_RENDER_Y,
+                state.fluidColor,
+                BeaconRenderer.SOLID_BEAM_RADIUS * state.beamRadiusScale,
+                BeaconRenderer.BEAM_GLOW_RADIUS * state.beamRadiusScale
+        );
     }
 
     private static void submitFluid(RenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
@@ -132,7 +149,8 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
 
         public int fluidColor = 0xFFFFFFFF;
 
-        public float gameTime;
+        public float animationTime;
+        public float beamRadiusScale = 1.0F;
 
         @Nullable
         public TextureAtlasSprite fluidSprite;
@@ -143,7 +161,7 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
             fluidHeight = 0.0F;
             fluidColor = 0xFFFFFFFF;
             fluidSprite = null;
-            gameTime = 0L;
+            animationTime = 0F;
         }
     }
 }
