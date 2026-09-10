@@ -9,7 +9,12 @@ import net.minecraft.resources.Identifier;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public record BeeParents(Identifier parent1, Identifier parent2, Supplier<CustomBeeData> parent1Data, Supplier<CustomBeeData> parent2Data) implements Parents {
+public record BeeParents(
+        Identifier parent1,
+        Identifier parent2,
+        Supplier<CustomBeeData> parent1Data,
+        Supplier<CustomBeeData> parent2Data
+) implements Parents {
 
     public static BeeParents of(Identifier parent1, Identifier parent2) {
         Supplier<CustomBeeData> parent1Data = Suppliers.memoize(() -> BeeRegistry.get().getBeeData(parent1));

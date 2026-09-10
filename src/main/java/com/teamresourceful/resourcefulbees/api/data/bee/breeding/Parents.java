@@ -9,6 +9,10 @@ public interface Parents {
 
     Identifier getParent2();
 
+    default ParentPair parentPair() {
+        return ParentPair.of(getParent1(), getParent2());
+    }
+
     CustomBeeData getParent1Data();
 
     CustomBeeData getParent2Data();

@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
-import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
+import com.teamresourceful.resourcefulbees.api.data.bee.breeding.ParentPair;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.resources.Identifier;
 
@@ -96,7 +96,7 @@ public interface BeeRegistry {
      * Returns a map of parents to families.
      * @return Returns a map of parents to families.
      */
-    Map<Parents, WeightedCollection<FamilyUnit>> getFamilyTree();
+    Map<ParentPair, WeightedCollection<FamilyUnit>> getFamilyTree();
 
     /**
      * Returns true if supplied parents can make a child bee.
