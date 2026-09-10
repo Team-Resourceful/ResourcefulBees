@@ -10,7 +10,6 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.tools.MapStrategies;
 import com.teamresourceful.resourcefullib.common.codecs.maps.DispatchMapCodec;
@@ -87,22 +86,20 @@ public final class BeeRegistry implements com.teamresourceful.resourcefulbees.ap
      * maps are constructed.
      */
     public void regenerateCustomBeeData(RegistryAccess access) {
-        ModConstants.LOGGER.info(
-                "Regenerating {} bees with {} traits registered: {}",
-                RAW_DATA.size(),
-                TraitRegistry.getRegistry().getTraits().size(),
-                TraitRegistry.getRegistry().getTraits().keySet()
+        DynamicOps<JsonElement> ops = access == null ? JsonOps.INSTANCE : RegistryOps.create(JsonOps.INSTANCE, access);
+        CUSTOM_DATA.clear();
+
+        RAW_DATA.forEach((id, json) ->
+                CUSTOM_DATA.put(id, parseData(id, ops, json))
         );
 
-        DynamicOps<JsonElement> ops = access == null ? JsonOps.INSTANCE : RegistryOps.create(JsonOps.INSTANCE, access);
-        RAW_DATA.forEach((id, json) -> CUSTOM_DATA.compute(id, (_, _) -> parseData(id, ops, json)));
         buildFamilyTree();
     }
 
     private static CustomBeeData parseData(Identifier id, DynamicOps<JsonElement> ops, JsonObject jsonObject) {
         var data = new DispatchMapCodec<>(Identifier.CODEC, BeeDataRegistry.codec(id))
                 .parse(ops, jsonObject)
-                .getOrThrow(s -> new ValidationException(String.format("Could not create Custom Bee Data for %s bee with reason: %s", id, s)));
+                .getOrThrow(error -> new ValidationException("Could not create Custom Bee Data for %s bee with reason: %s".formatted(id, error)));
         return ResourcefulBeesAPI.getInitializers().data(id, data);
     }
 

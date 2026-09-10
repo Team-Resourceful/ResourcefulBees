@@ -2,13 +2,9 @@ package com.teamresourceful.resourcefulbees.common.setup;
 
 import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.RegisterBeeDataEvent;
-import com.teamresourceful.resourcefulbees.api.data.conditions.RegisterConditionEvent;
 import com.teamresourceful.resourcefulbees.api.data.honey.base.RegisterHoneyDataEvent;
 import com.teamresourceful.resourcefulbees.api.intializers.HoneyInitializerApi;
 import com.teamresourceful.resourcefulbees.api.intializers.InitializerApi;
-//import com.teamresourceful.resourcefulbees.common.lib.data.conditions.AndCondition;
-//import com.teamresourceful.resourcefulbees.common.lib.data.conditions.ModLoadedCondition;
-//import com.teamresourceful.resourcefulbees.common.lib.data.conditions.OrCondition;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.CombatData;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.CoreData;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.DefaultBeeData;
@@ -97,11 +93,5 @@ public final class DataSetup {
         registrar.register(CustomHoneyBlockData.SERIALIZER);
         registrar.register(CustomHoneyBottleData.SERIALIZER);
         registrar.register(CustomHoneyFluidData.SERIALIZER);
-    }
-
-    public static void setupRegister(RegisterConditionEvent registrar) {
-//        registrar.register(ModLoadedCondition.SERIALIZER);
-//        registrar.register(OrCondition.SERIALIZER);
-//        registrar.register(AndCondition.SERIALIZER);
     }
 }

@@ -93,17 +93,18 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
     //region Regeneration Methods
 
     public void regenerateVariationData() {
+        VARIATION_DATA.clear();
         RAW_DATA.forEach(HoneycombRegistry::parseVariationData);
     }
 
-    private static void parseVariationData(String s, JsonObject jsonObject) {
+    private static void parseVariationData(String id, JsonObject jsonObject) {
         VARIATION_CODEC.parse(JsonOps.INSTANCE, jsonObject)
-                .resultOrPartial(s1 -> ModConstants.LOGGER.error("Could not create output variation from {} json file!", s))
+                .resultOrPartial(message -> ModConstants.LOGGER.error("Could not create output variation from {} json file: {}", id, message))
                 .ifPresent(outputVariations -> outputVariations.forEach(HoneycombRegistry::computeVariation));
     }
 
     private static void computeVariation(OutputVariation variation) {
-        VARIATION_DATA.compute(variation.id(), (s1, outputVariation1) -> variation);
+        VARIATION_DATA.put(variation.id(), variation);
     }
 
     //endregion
@@ -115,9 +116,9 @@ public final class HoneycombRegistry implements com.teamresourceful.resourcefulb
         itemsRegistered = true;
     }
 
-    private static void parseRegistryData(String s, JsonObject jsonObject) {
-        RegistryData.codec(s).optionalFieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject)
-                .resultOrPartial(s1 -> ModConstants.LOGGER.warn("Could not create honeycomb registry item from {} json file.", s));
+    private static void parseRegistryData(String id, JsonObject jsonObject) {
+        RegistryData.codec(id).optionalFieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject)
+                .resultOrPartial(message -> ModConstants.LOGGER.warn("Could not create honeycomb registry item from {} json file: {}", id, message));
     }
 
     @Override

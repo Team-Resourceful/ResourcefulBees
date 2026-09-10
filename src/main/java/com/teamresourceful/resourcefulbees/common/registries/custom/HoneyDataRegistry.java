@@ -63,9 +63,9 @@ public final class HoneyDataRegistry {
 
     public void check(Collection<HoneyData<?>> check) {
         Set<Identifier> types = check.stream().map(HoneyData::serializer).map(HoneyDataSerializer::type).collect(Collectors.toSet());
-        for (Identifier resourceLocation : required) {
-            if (!types.contains(resourceLocation)) {
-                throw new IllegalStateException("Missing required bee data type: " + resourceLocation);
+        for (Identifier identifier : required) {
+            if (!types.contains(identifier)) {
+                throw new IllegalStateException("Missing required bee data type: " + identifier);
             }
         }
     }

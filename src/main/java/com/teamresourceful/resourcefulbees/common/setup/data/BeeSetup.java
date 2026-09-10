@@ -6,7 +6,6 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
-import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.FileUtils;
@@ -47,9 +46,7 @@ public final class BeeSetup {
     private static void parseBee(Reader reader, String name) {
         try {
             JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
-            if (LoadConditionRegistry.canLoad(jsonObject)) {
-                BeeRegistry.getRegistry().cacheRawBeeData(ModIdentifier.of(name.toLowerCase(Locale.ENGLISH).replace(" ", "_")).withSuffix("_bee"), jsonObject);
-            }
+            BeeRegistry.getRegistry().cacheRawBeeData(ModIdentifier.of(name.toLowerCase(Locale.ENGLISH).replace(" ", "_")).withSuffix("_bee"), jsonObject);
         } catch (Exception e) {
             ModConstants.LOGGER.error("Error parsing bee: {}", name);
             throw e;

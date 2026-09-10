@@ -7,7 +7,6 @@ import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneycombRegistry;
-import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.FileUtils;
@@ -50,10 +49,8 @@ public final class HoneycombSetup {
 
     private static void parseHoneycomb(Reader reader, String name) {
         JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
-        if (LoadConditionRegistry.canLoad(jsonObject)) {
-            name = Codec.STRING.fieldOf("name").orElse(name).codec().fieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject).result().orElse(name);
-            HoneycombRegistry.getRegistry().cacheRawHoneycombData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
-        }
+        name = Codec.STRING.fieldOf("name").orElse(name).codec().fieldOf("honeycomb").codec().parse(JsonOps.INSTANCE, jsonObject).result().orElse(name);
+        HoneycombRegistry.getRegistry().cacheRawHoneycombData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
     }
 
 }

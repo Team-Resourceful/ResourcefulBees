@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModPaths;
 import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistry;
-import com.teamresourceful.resourcefulbees.common.registries.custom.LoadConditionRegistry;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.lib.Constants;
 import com.teamresourceful.resourcefullib.common.utils.FileUtils;
@@ -42,8 +41,6 @@ public final class HoneySetup {
 
     private static void parseHoney(Reader reader, String name) {
         JsonObject jsonObject = GsonHelper.fromJson(Constants.GSON, reader, JsonObject.class);
-        if (LoadConditionRegistry.canLoad(jsonObject)) {
-            HoneyRegistry.getRegistry().cacheRawHoneyData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
-        }
+        HoneyRegistry.getRegistry().cacheRawHoneyData(name.toLowerCase(Locale.ENGLISH).replace(" ", "_"), jsonObject);
     }
 }

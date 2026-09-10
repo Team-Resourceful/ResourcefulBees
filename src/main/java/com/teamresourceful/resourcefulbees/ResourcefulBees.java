@@ -58,10 +58,8 @@ public class ResourcefulBees {
         //setup initializers
         DataSetup.setupInitializers(ResourcefulBeesAPI.getInitializers());
         DataSetup.setupInitializers(ResourcefulBeesAPI.getHoneyInitializers());
-        ResourcefulBeesAPI.getEvents().registerCondition(DataSetup::setupRegister);
         BeeDataRegistry.init();
         HoneyDataRegistry.init();
-        LoadConditionRegistry.init();
         GameSetup.initPaths();
         ModCompatHelper.registerCompats();
 
@@ -100,7 +98,6 @@ public class ResourcefulBees {
         modEventBus.addListener(this::addTooltipsProviders);
         ModIngredientTypes.register(modEventBus);
         ModBiomeModifiers.init(modEventBus);
-        ModConditions.init(modEventBus);
 
 
         // Register ourselves for server and other game events we are interested in.
