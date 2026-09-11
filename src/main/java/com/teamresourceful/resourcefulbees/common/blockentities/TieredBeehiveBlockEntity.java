@@ -8,8 +8,9 @@ import com.teamresourceful.resourcefulbees.common.blockentities.base.SmokeableHi
 import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.components.HiveBees;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
+import com.teamresourceful.resourcefulbees.common.extensions.BeehiveBlockEntityExtension;
+import com.teamresourceful.resourcefulbees.common.lib.constants.DataConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
 import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
 import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
@@ -17,7 +18,6 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockE
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.mixin.common.BeehiveBeeDataAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
-import com.teamresourceful.resourcefulbees.common.extensions.BeehiveBlockEntityExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentGetter;
@@ -279,16 +279,16 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
     @Override
     protected void loadAdditional(@NonNull ValueInput input) {
         super.loadAdditional(input);
-        isSmoked = input.getBooleanOr(NBTConstants.BeeHive.SMOKED, false);
-        honeycombs = input.listOrEmpty(NBTConstants.BeeHive.HONEYCOMBS, ItemStack.CODEC)
+        isSmoked = input.getBooleanOr(DataConstants.Beehive.SMOKED, false);
+        honeycombs = input.listOrEmpty(DataConstants.Beehive.HONEYCOMBS, ItemStack.CODEC)
                 .stream().collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override
     protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
-        output.putBoolean(NBTConstants.BeeHive.SMOKED, isSmoked);
-        ValueOutput.TypedOutputList<ItemStack> outputList = output.list(NBTConstants.BeeHive.HONEYCOMBS, ItemStack.CODEC);
+        output.putBoolean(DataConstants.Beehive.SMOKED, isSmoked);
+        ValueOutput.TypedOutputList<ItemStack> outputList = output.list(DataConstants.Beehive.HONEYCOMBS, ItemStack.CODEC);
         for (ItemStack honeycomb : honeycombs) outputList.add(honeycomb);
     }
 

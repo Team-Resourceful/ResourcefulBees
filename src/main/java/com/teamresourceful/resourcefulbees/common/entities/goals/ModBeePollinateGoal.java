@@ -141,7 +141,7 @@ public class ModBeePollinateGoal extends Goal {
     public void clearTask() {
         if (canBeesFreelyFindFlowers()) {
             bee.setSavedFlowerPos(null);
-            bee.entityFlower.clear();
+            bee.entityFlower = 0;
             boundingBox = null;
         }
     }
@@ -151,7 +151,7 @@ public class ModBeePollinateGoal extends Goal {
         ++this.ticks;
         if (this.ticks > 600) {
             this.clearTask();
-        } else if ((bee.getCoreData().hasEntityFlower() || bee.entityFlower.hasData())) {
+        } else if ((bee.getCoreData().hasEntityFlower())) {
             handleEntityFlower();
         } else {
             handleBlockFlower();
@@ -215,7 +215,7 @@ public class ModBeePollinateGoal extends Goal {
 
     private void handleEntityFlower() {
         if (bee.tickCount % 5 == 0 && bee.getCoreData().hasEntityFlower()) {
-            Entity flowerEntity = bee.level().getEntity(bee.entityFlower.get());
+            Entity flowerEntity = bee.level().getEntity(bee.entityFlower);
             if (flowerEntity != null) {
                 boundingBox = new Vec3(flowerEntity.getBoundingBox().getCenter().x(), flowerEntity.getBoundingBox().maxY, flowerEntity.getBoundingBox().getCenter().z());
                 bee.setSavedFlowerPos(flowerEntity.blockPosition());
@@ -239,7 +239,7 @@ public class ModBeePollinateGoal extends Goal {
                     .filter(Entity::isAlive)
                     .findFirst()
                     .map(entity -> {
-                        bee.entityFlower.set(entity.getId());
+                        bee.entityFlower = entity.getId();
                         return entity.blockPosition();
                     });
         } else {

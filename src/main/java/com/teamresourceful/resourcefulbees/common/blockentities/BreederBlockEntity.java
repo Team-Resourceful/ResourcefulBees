@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
+import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import com.teamresourceful.resourcefulbees.common.menus.BoundSafeContainerData;
 import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
@@ -9,7 +10,6 @@ import com.teamresourceful.resourcefulbees.common.recipes.breeder.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.ParentInput;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
-import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -39,7 +39,7 @@ import java.util.List;
 
 public class BreederBlockEntity extends BlockEntity implements ContentMenuProvider<PositionContent> {
 
-    private final ResourceHandler resourceHandler = new ResourceHandler();
+    private final ResourceHandler inventory = new ResourceHandler();
     private final BreederRecipe[] recipes = {null, null};
     private final BoundSafeContainerData times = new BoundSafeContainerData(2, 0);
     private final BoundSafeContainerData endTimes = new BoundSafeContainerData(2, 0);
@@ -49,8 +49,8 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
         super(ModBlockEntityTypes.BREEDER_BLOCK_ENTITY.get(), pos, state);
     }
 
-    public ResourceHandler getResourceHandler() {
-        return resourceHandler;
+    public ResourceHandler getInventory() {
+        return inventory;
     }
 
     public static void serverTick(BreederBlockEntity entity) {
@@ -88,7 +88,7 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
         var recipeHolder = level.getServer().getRecipeManager().getRecipeFor(ModRecipes.BREEDER_RECIPE_TYPE.get(), makeRecipeInput(i), level).orElse(null);
         recipes[i] = recipeHolder == null ? null : recipeHolder.value();
         if (recipes[i] != null) {
-            recalculateRecipeEndtimes(resourceHandler.getAmountAsInt(BreederConstants.UPGRADE_SLOT));
+            recalculateRecipeEndtimes(inventory.getAmountAsInt(BreederConstants.UPGRADE_SLOT));
         }
     }
 
@@ -113,9 +113,9 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
 
             try (Transaction transaction = Transaction.openRoot()) {
                 recipe.optionalIngredient().ifPresent(_ ->
-                        resourceHandler.extract(
+                        inventory.extract(
                                 BreederConstants.EMPTY_JAR_SLOTS.get(breeder),
-                                resourceHandler.getResource(BreederConstants.EMPTY_JAR_SLOTS.get(breeder)),
+                                inventory.getResource(BreederConstants.EMPTY_JAR_SLOTS.get(breeder)),
                                 1,
                                 transaction)
                 );
@@ -133,9 +133,9 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
 
     private void extractFeedItems(List<Integer> feedSlots, int breeder, ParentInput parent, TransactionContext context) {
         getItem(feedSlots.get(breeder)).shrink(parent.feedAmount());
-        resourceHandler.extract(
+        inventory.extract(
                 feedSlots.get(breeder),
-                resourceHandler.getResource(feedSlots.get(breeder)),
+                inventory.getResource(feedSlots.get(breeder)),
                 parent.feedAmount(),
                 context
         );
@@ -147,7 +147,7 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
     }
 
     private void deliverItem(ItemStack stack, TransactionContext context) {
-        resourceHandler.insertOutput(ItemResource.of(stack), stack.count(), context);
+        inventory.insertOutput(ItemResource.of(stack), stack.count(), context);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
     @Override
     protected void loadAdditional(@NonNull ValueInput input) {
         super.loadAdditional(input);
-        resourceHandler.deserialize(input);
+        inventory.deserialize(input);
         input.readChild("end_times", endTimes);
         input.readChild("times", times);
     }
@@ -180,7 +180,7 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
     @Override
     protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
-        resourceHandler.serialize(output);
+        inventory.serialize(output);
         output.putChild("end_times", endTimes);
         output.putChild("times", times);
     }
@@ -188,13 +188,13 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
     @Override
     protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
         super.collectImplicitComponents(components);
-        components.set(DataComponents.CONTAINER, resourceHandler.toContainerContents());
+        components.set(DataComponents.CONTAINER, inventory.toContainerContents());
     }
 
     @Override
     protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
         super.applyImplicitComponents(components);
-        resourceHandler.fromContainerContents(components.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY));
+        inventory.fromContainerContents(components.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY));
     }
 
     @Override
@@ -203,7 +203,7 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
     }
 
     public ItemStack getItem(int index) {
-        return resourceHandler.getResource(index).toStack();
+        return inventory.getResource(index).toStack();
     }
 
     public class ResourceHandler extends ItemStacksResourceHandler {
@@ -247,17 +247,14 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
         }
 
         @Override
-        public int extract(int index, @NonNull ItemResource resource, int amount, @NonNull TransactionContext transaction) {
-            return super.extract(index, resource, amount, transaction);
-        }
-
-        @Override
         protected void onContentsChanged(int index, @NonNull ItemStack previousContents) {
             if (index == BreederConstants.UPGRADE_SLOT) {
                 recalculateRecipeEndtimes(getAmountAsInt(index));
             }
             if (MathUtils.inRangeInclusive(index, 1, 10)) {
-                for (int i = 0; i < BreederConstants.BREEDERS; i++) { checkAndCacheRecipe(i); }
+                for (int i = 0; i < BreederConstants.BREEDERS; i++) {
+                    checkAndCacheRecipe(i);
+                }
             }
             BreederBlockEntity.this.setChanged();
         }

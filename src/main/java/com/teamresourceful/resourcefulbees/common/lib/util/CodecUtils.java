@@ -17,13 +17,8 @@ public class CodecUtils {
      * <p>A populated patch entry requires an equal component value.
      * A removed patch entry requires the component to be absent.</p>
      */
-    public static boolean matchesComponents(
-            DataComponentPatch expected,
-            DataComponentGetter actual
-    ) {
-        for (Map.Entry<DataComponentType<?>, Optional<?>> entry
-                : expected.entrySet()) {
-
+    public static boolean matchesComponents(DataComponentPatch expected, DataComponentGetter actual) {
+        for (Map.Entry<DataComponentType<?>, Optional<?>> entry : expected.entrySet()) {
             Object actualValue = actual.get(entry.getKey());
             Optional<?> expectedValue = entry.getValue();
 

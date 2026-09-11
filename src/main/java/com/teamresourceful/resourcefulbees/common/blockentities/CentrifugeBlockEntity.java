@@ -26,6 +26,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.*;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -150,12 +151,12 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
     }
 
     private void updateCachedRecipe() {
-        if (level == null) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             cachedRecipe = null;
             return;
         }
         firstCheck = false;
-        var tempRecipe = CentrifugeRecipe.getRecipe(level, inventory.getResource(0).toStack());
+        var tempRecipe = CentrifugeRecipe.getRecipe(serverLevel, inventory.getResource(0).toStack());
         if (tempRecipe.isEmpty()) {
             cachedRecipe = null;
             return;

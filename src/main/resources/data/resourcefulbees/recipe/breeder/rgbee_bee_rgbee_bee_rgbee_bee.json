@@ -24,12 +24,12 @@
         "id": "resourcefulbees:bee_jar",
         "components": {
           "resourcefulbees:jar_bee": {
-            "entityType": "resourcefulbees:rgbee_bee",
-            "ticks_in_jar": 0,
+            "entity_type": "resourcefulbees:rgbee_bee",
+            "insertion_game_time": 0,
             "display_name": {
               "translate": "entity_type.resourcefulbees.rgbee_bee"
             },
-            "color": -16771606
+            "color": -16745341
           }
         }
       },

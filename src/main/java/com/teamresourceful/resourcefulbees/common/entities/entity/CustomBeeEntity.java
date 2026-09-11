@@ -15,7 +15,7 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.api.tiers.BeehiveTier;
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.DataConstants;
 import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
 import net.minecraft.core.BlockPos;
@@ -188,13 +188,13 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     @Override
     public void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
-        this.entityData.set(FEED_COUNT, input.getIntOr(NBTConstants.NBT_FEED_COUNT, 0));
+        this.entityData.set(FEED_COUNT, input.getIntOr(DataConstants.FEED_COUNT, 0));
     }
 
     @Override
     public void addAdditionalSaveData(ValueOutput output) {
         super.addAdditionalSaveData(output);
-        output.putInt(NBTConstants.NBT_FEED_COUNT, this.getFeedCount());
+        output.putInt(DataConstants.FEED_COUNT, this.getFeedCount());
     }
 
     @Override

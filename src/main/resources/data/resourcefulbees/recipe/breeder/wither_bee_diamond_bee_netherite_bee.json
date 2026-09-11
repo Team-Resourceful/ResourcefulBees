@@ -27,8 +27,8 @@
         "id": "resourcefulbees:bee_jar",
         "components": {
           "resourcefulbees:jar_bee": {
-            "entityType": "resourcefulbees:netherite_bee",
-            "ticks_in_jar": 0,
+            "entity_type": "resourcefulbees:netherite_bee",
+            "insertion_game_time": 0,
             "display_name": {
               "translate": "entity_type.resourcefulbees.netherite_bee"
             },

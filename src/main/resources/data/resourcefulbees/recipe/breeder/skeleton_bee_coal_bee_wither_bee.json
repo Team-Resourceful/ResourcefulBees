@@ -24,8 +24,8 @@
         "id": "resourcefulbees:bee_jar",
         "components": {
           "resourcefulbees:jar_bee": {
-            "entityType": "resourcefulbees:wither_bee",
-            "ticks_in_jar": 0,
+            "entity_type": "resourcefulbees:wither_bee",
+            "insertion_game_time": 0,
             "display_name": {
               "translate": "entity_type.resourcefulbees.wither_bee"
             },

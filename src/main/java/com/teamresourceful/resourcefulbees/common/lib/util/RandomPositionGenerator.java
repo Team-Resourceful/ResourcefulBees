@@ -35,7 +35,7 @@ public final class RandomPositionGenerator {
 
     @Nullable
     private static Vec3 findTarget(PathfinderMob bee, int horizontalOffset, int verticalOffset, int zero, @Nullable Vec3 vector3d, boolean pathOnWater, ToDoubleFunction<BlockPos> blockWeightOfBeePOS) {
-        PathNavigation pathnavigator = bee.getNavigation();
+        PathNavigation pathNavigator = bee.getNavigation();
         RandomSource random = bee.getRandom();
 
 
@@ -70,7 +70,7 @@ public final class RandomPositionGenerator {
                 BlockPos targetPos = BlockPos.containing(rndPosX + bee.getX(), rndPosY + bee.getY(), rndPosZ + bee.getZ());
 
                 //if target Y is between 0 and world height AND (is not in Distance of home OR target pos is in distance of home) AND entity can stand on target pos
-                if (MathUtils.inRangeInclusive(targetPos.getY(), bee.level().getMinY(), bee.level().getMaxY()) && (!inDistanceOfHome || bee.isWithinHome(targetPos)) && pathnavigator.isStableDestination(targetPos)) {
+                if (MathUtils.inRangeInclusive(targetPos.getY(), bee.level().getMinY(), bee.level().getMaxY()) && (!inDistanceOfHome || bee.isWithinHome(targetPos)) && pathNavigator.isStableDestination(targetPos)) {
 
                     //flip a coin heads = check block above is air if so find valid position above else go below
                     if (random.nextBoolean() && bee.level().isEmptyBlock(bee.blockPosition().above())) {

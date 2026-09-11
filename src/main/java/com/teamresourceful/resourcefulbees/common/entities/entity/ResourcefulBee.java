@@ -9,16 +9,14 @@ import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.entities.ai.AuraHandler;
 import com.teamresourceful.resourcefulbees.common.entities.goals.*;
 import com.teamresourceful.resourcefulbees.common.entities.pathfinding.BeePathNavigation;
-import com.teamresourceful.resourcefulbees.common.lib.constants.NBTConstants;
+import com.teamresourceful.resourcefulbees.common.lib.constants.DataConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.TraitConstants;
 import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
-import com.teamresourceful.resourcefulbees.common.lib.util.SerializedDataEntry;
 import com.teamresourceful.resourcefulbees.common.lib.util.WorldUtils;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeGoToHiveGoalInvoker;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeInvoker;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -58,7 +56,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         .withWriter(NbtUtils::writeBlockPos)
         .withReader(NbtUtils::readBlockPos)
         .build();*/
-    public final SerializedDataEntry<Integer, Tag> entityFlower = SerializedDataEntry.Builder.of("", (Integer) null).build();
+    public int entityFlower = 0;
 
     private boolean wasColliding;
     private int numberOfMutations;
@@ -189,7 +187,7 @@ public class ResourcefulBee extends CustomBeeEntity {
 
     public boolean isFlowerValid(@NotNull BlockPos pos) {
         if (getCoreData().hasEntityFlower()) {
-            return this.entityFlower.hasData() && this.level().getEntity(this.entityFlower.get()) != null;
+            return this.level().getEntity(this.entityFlower) != null;
         }
         return WorldUtils.checkBlock(this.level(), pos, getCoreData()::isBlockFlower);
     }
@@ -324,14 +322,14 @@ public class ResourcefulBee extends CustomBeeEntity {
     public void readAdditionalSaveData(@NotNull ValueInput input) {
         super.readAdditionalSaveData(input);
         //this.fakeFlower.read(tag);
-        this.numberOfMutations = input.getIntOr(NBTConstants.NBT_MUTATION_COUNT, 0);
+        this.numberOfMutations = input.getIntOr(DataConstants.MUTATION_COUNT, 0);
     }
 
     @Override
     public void addAdditionalSaveData(@NotNull ValueOutput output) {
         super.addAdditionalSaveData(output);
         //this.fakeFlower.save(compound);
-        output.putInt(NBTConstants.NBT_MUTATION_COUNT, getNumberOfMutations());
+        output.putInt(DataConstants.MUTATION_COUNT, getNumberOfMutations());
     }
 
     public void dropOffMutations() {

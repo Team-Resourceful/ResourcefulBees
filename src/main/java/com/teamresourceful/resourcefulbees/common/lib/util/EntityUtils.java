@@ -6,11 +6,9 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
@@ -18,27 +16,6 @@ public final class EntityUtils {
 
     private EntityUtils() throws UtilityClassException {
         throw new UtilityClassException();
-    }
-
-    public static void summonEntity(CompoundTag tag, Level level, Player player, BlockPos pos) {
-/*        if (tag == null) return;
-        EntityType.by(tag)
-                .map(type -> type.create(level))
-                .ifPresent(entity -> {
-                    entity.load(tag);
-                    entity.(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-                    level.addFreshEntity(entity);
-                    if (entity instanceof Bee bee) {
-                        bee.setSavedFlowerPos(null);
-                        ((BeeEntityAccessor) bee).setHivePos(null);
-                        if (bee.isAngry()) {
-                            bee.setTarget(player);
-                        }
-                        if (entity instanceof CustomBeeEntity customBee) {
-                            customBee.setPersistenceRequired();
-                        }
-                    }
-                });*/
     }
 
     public static int getBeeColorOrDefault(Entity bee) {

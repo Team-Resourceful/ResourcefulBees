@@ -7,13 +7,11 @@ import com.teamresourceful.resourcefulconfig.api.annotations.*;
         value = ModConstants.MOD_ID,
         categories = {
                 BeeConfig.class,
-                RecipeConfig.class,
                 CentrifugeConfig.class,
                 WorldGenConfig.class,
                 ApiaryConfig.class,
                 EnderBeeconConfig.class,
-                HoneycombConfig.class,
-                SolidificationConfig.class
+                HoneycombConfig.class
         }
 )
 @ConfigInfo(

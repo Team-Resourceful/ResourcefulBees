@@ -115,7 +115,7 @@ public class HoneyDipperItem extends Item {
             }
 
             if (dipperEntity instanceof ResourcefulBee bee && bee.getCoreData().isEntityFlower(entity.getType())) {
-                bee.entityFlower.set(entity.getId());
+                bee.entityFlower = entity.getId();
                 bee.setSavedFlowerPos(entity.blockPosition());
                 sendMessageToPlayer(bee, player, MessageTypes.FLOWER, entity.blockPosition());
                 player.setItemInHand(hand, setEntity(stack, null));
