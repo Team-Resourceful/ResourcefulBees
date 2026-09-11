@@ -1,10 +1,13 @@
 package com.teamresourceful.resourcefulbees.client.rendering.entities.layers;
 
+import com.geckolib.constant.DataTickets;
 import com.geckolib.renderer.base.GeoRenderState;
 import com.geckolib.renderer.base.GeoRenderer;
+import com.geckolib.renderer.base.RenderPassInfo;
 import com.geckolib.renderer.layer.builtin.CustomBoneTextureGeoLayer;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -14,8 +17,11 @@ import org.jspecify.annotations.Nullable;
 
 public class CustomBeeGlintLayer<R extends EntityRenderState & GeoRenderState> extends CustomBoneTextureGeoLayer<CustomBeeEntity, Void, @NonNull R> {
 
+    private final BeeLayerData layerData;
+
     public CustomBeeGlintLayer(GeoRenderer<CustomBeeEntity, Void, @NonNull R> renderer, BeeLayerData layerData) {
         super(renderer, "body", layerData.texture().texture());
+        this.layerData = layerData;
     }
 
     @Override
@@ -27,6 +33,12 @@ public class CustomBeeGlintLayer<R extends EntityRenderState & GeoRenderState> e
     @Override
     protected @Nullable RenderType getRenderType(@NonNull R renderState, @NonNull Identifier texture) {
         return RenderTypes.entityGlint();
+    }
+
+    @Override
+    public void preRender(RenderPassInfo<@NonNull R> renderPassInfo, @NonNull SubmitNodeCollector renderTasks) {
+        renderPassInfo.renderState().addGeckolibData(DataTickets.RENDER_COLOR, layerData.color().getOpaqueValue());
+        super.preRender(renderPassInfo, renderTasks);
     }
 
     //    @Override

@@ -1,23 +1,21 @@
 package com.teamresourceful.resourcefulbees.client.rendering.entities.layers;
 
-import com.geckolib.constant.DataTickets;
 import com.geckolib.renderer.base.GeoRenderState;
+import com.geckolib.renderer.base.GeoRenderer;
 import com.geckolib.renderer.layer.builtin.CustomBoneTextureGeoLayer;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
-import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import com.geckolib.renderer.base.GeoRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-public class CustomBeeTranslucentLayer<E extends CustomBeeEntity, R extends EntityRenderState & GeoRenderState> extends CustomBoneTextureGeoLayer<CustomBeeEntity, Void, @NonNull R> {
+public class CustomBeeTranslucentLayer<R extends EntityRenderState & GeoRenderState> extends CustomBoneTextureGeoLayer<CustomBeeEntity, Void, @NonNull R> {
 
     public CustomBeeTranslucentLayer(GeoRenderer<CustomBeeEntity, Void, @NonNull R> renderer, BeeLayerData layerData) {
-        super(renderer, "body", layerData.texture().texture());
+        super(renderer, "gel", layerData.texture().texture());
     }
 
     @Override
@@ -28,6 +26,7 @@ public class CustomBeeTranslucentLayer<E extends CustomBeeEntity, R extends Enti
 
     @Override
     protected @Nullable RenderType getRenderType(@NonNull R renderState, @NonNull Identifier texture) {
+        System.out.println(texture);
         return RenderTypes.entityTranslucent(texture);
     }
 

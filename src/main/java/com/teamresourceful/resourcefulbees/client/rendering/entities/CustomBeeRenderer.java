@@ -1,10 +1,12 @@
 package com.teamresourceful.resourcefulbees.client.rendering.entities;
 
 import com.geckolib.constant.dataticket.DataTicket;
+import com.geckolib.renderer.GeoEntityRenderer;
 import com.geckolib.renderer.base.GeoRenderState;
 import com.geckolib.renderer.base.RenderPassInfo;
 import com.google.common.reflect.TypeToken;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
+import com.teamresourceful.resourcefulbees.client.rendering.entities.layers.CustomBeeColoredLayer;
 import com.teamresourceful.resourcefulbees.client.rendering.entities.layers.CustomBeeGlintLayer;
 import com.teamresourceful.resourcefulbees.client.rendering.entities.layers.CustomBeeGlowLayer;
 import com.teamresourceful.resourcefulbees.client.rendering.entities.layers.CustomBeeTranslucentLayer;
@@ -12,7 +14,9 @@ import com.teamresourceful.resourcefulbees.client.rendering.entities.models.Cust
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import com.geckolib.renderer.GeoEntityRenderer;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -26,7 +30,8 @@ public class CustomBeeRenderer<R extends EntityRenderState & GeoRenderState> ext
             switch (layerData.effect()) {
                 case GLOW -> withRenderLayer(new CustomBeeGlowLayer<>(this, layerData));
                 case ENCHANTED -> withRenderLayer(new CustomBeeGlintLayer<>(this, layerData));
-                case null, default -> withRenderLayer(new CustomBeeTranslucentLayer<>(this, layerData));
+                case TRANSLUCENT -> withRenderLayer(new CustomBeeTranslucentLayer<>(this, layerData));
+                case null, default -> withRenderLayer(new CustomBeeColoredLayer<>(this, layerData));
             }
         });
         float size = renderData.sizeModifier();
@@ -46,7 +51,15 @@ public class CustomBeeRenderer<R extends EntityRenderState & GeoRenderState> ext
         renderState.addGeckolibData(RBEES_IS_BABY_TICKET, bee.isBaby());
     }
 
+    @Override
+    public int getRenderColor(CustomBeeEntity animatable, @Nullable Void relatedObject, float partialTick) {
+        return 0xFFFFFFFF;
+    }
 
+    @Override
+    public @Nullable RenderType getRenderType(@NonNull R renderState, @NonNull Identifier texture) {
+        return RenderTypes.entityTranslucent(texture);
+    }
 
     //
 //    @Override
