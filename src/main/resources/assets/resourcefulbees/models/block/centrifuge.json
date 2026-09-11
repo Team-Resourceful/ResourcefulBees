@@ -5,30 +5,30 @@
     "display": {
         "thirdperson_righthand": {
             "scale": [
-                0.45,
-                0.45,
-                0.45
+                0.60,
+                0.60,
+                0.60
             ]
         },
         "thirdperson_lefthand": {
             "scale": [
-                0.45,
-                0.45,
-                0.45
+                0.60,
+                0.60,
+                0.60
             ]
         },
         "firstperson_righthand": {
             "scale": [
-                0.45,
-                0.45,
-                0.45
+                0.60,
+                0.60,
+                0.60
             ]
         },
         "firstperson_lefthand": {
             "scale": [
-                0.45,
-                0.45,
-                0.45
+                0.60,
+                0.60,
+                0.60
             ]
         },
         "ground": {
@@ -55,9 +55,9 @@
                 0
             ],
             "scale": [
-                0.5,
-                0.5,
-                0.5
+                0.75,
+                0.75,
+                0.75
             ]
         },
         "head": {
