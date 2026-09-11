@@ -92,7 +92,8 @@ public final class CentrifugeCategory extends BaseCategory<CentrifugeCategory.Ce
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull CentrifugeRecipeAdapter adapter, @NotNull IFocusGroup focuses) {
         CentrifugeRecipe recipe = adapter.recipe();
 
-        builder.addInputSlot(10, 25).add(recipe.ingredient()).setSlotName("input");
+        var input = recipe.ingredient().getValues().stream().map(itemHolder -> new ItemStack(itemHolder, recipe.inputAmount())).findFirst().orElse(ItemStack.EMPTY);
+        builder.addInputSlot(10, 25).add(input).setSlotName("input");
 
         List<List<ItemStack>> itemStacks = recipe.itemOutputs().stream().map(output -> output.pool().stream().map(ItemOutput::itemStack).toList()).toList();
         List<List<FluidStack>> fluidStacks = recipe.fluidOutputs().stream().map(output -> output.pool().stream().map(FluidOutput::fluid).map(FluidStackTemplate::create).toList()).toList();

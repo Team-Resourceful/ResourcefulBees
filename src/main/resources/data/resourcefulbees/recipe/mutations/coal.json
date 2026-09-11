@@ -14,7 +14,15 @@
                     "type": "block",
                     "block": {
                         "id": "minecraft:coal_ore"
-                    }
+                    },
+                    "weight": 50
+                },
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:cobblestone"
+                    },
+                    "weight": 50
                 }
             ]
         }

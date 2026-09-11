@@ -3,14 +3,26 @@
     "mutations" : [
         {
             "input": {
-                "type": "fluid",
-                "fluid": "minecraft:lava",
-                "chance": 0.75
+                "type": "block",
+                "block": {
+                    "id": "minecraft:stone"
+                },
+                "chance": 0.50
             },
             "outputs" : [
                 {
-                    "type": "fluid",
-                    "fluid": "minecraft:water"
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:diamond_ore"
+                    },
+                    "weight": 10
+                },
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:cobblestone"
+                    },
+                    "weight": 90
                 }
             ]
         }

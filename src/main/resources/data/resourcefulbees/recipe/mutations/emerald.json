@@ -7,12 +7,22 @@
                 "block": {
                     "id": "minecraft:stone"
                 },
-                "chance": 0.75
+                "chance": 0.25
             },
             "outputs" : [
                 {
-                    "type": "fluid",
-                    "fluid": "minecraft:lava"
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:emerald_ore"
+                    },
+                    "weight": 5
+                },
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:cobblestone"
+                    },
+                    "weight": 95
                 }
             ]
         }

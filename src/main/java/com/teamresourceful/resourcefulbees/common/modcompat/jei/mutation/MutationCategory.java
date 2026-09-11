@@ -72,13 +72,7 @@ public final class MutationCategory
 
         this.fluidHelper = fluidHelper;
 
-        this.background = guiHelper.createDrawable(
-                GUI,
-                0,
-                0,
-                WIDTH,
-                HEIGHT
-        );
+        this.background = guiHelper.createDrawable(GUI, 0, 0, WIDTH, HEIGHT);
     }
 
     public static List<MutationRecipe> getMutationRecipes(Level level) {

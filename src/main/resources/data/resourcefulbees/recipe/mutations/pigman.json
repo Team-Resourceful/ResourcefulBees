@@ -13,13 +13,21 @@
                     "type": "block",
                     "block": {
                         "id": "minecraft:glowstone"
+                    },
+                    "weight": 25
+                },
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "minecraft:gold_block"
                     }
                 },
                 {
                     "type": "block",
                     "block": {
                         "id": "minecraft:cobblestone"
-                    }
+                    },
+                    "weight": 65
                 }
             ]
         }

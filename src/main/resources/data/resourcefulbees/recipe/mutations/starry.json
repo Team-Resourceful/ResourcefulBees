@@ -20,6 +20,12 @@
                     "type": "item",
                     "item": {
                         "id": "minecraft:nether_star"
+                    }
+                },
+                {
+                    "type": "block",
+                    "block": {
+                        "id": "resourcefulbees:starry_honey_block"
                     },
                     "weight": 30
                 }

@@ -60,19 +60,19 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:honey_fluid_source", "amount": 500 }}
+        {"fluid": { "id": "resourcefulbees:honey_fluid_source", "amount": 2000 }}
       ]
     },
     {
       "chance": 0.5,
       "pool": [
-        {"fluid": { "id": "minecraft:lava", "amount": 250 }}
+        {"fluid": { "id": "minecraft:lava", "amount": 500 }}
       ]
     },
     {
       "chance": 0.5,
       "pool": [
-        {"fluid": { "id": "minecraft:water", "amount": 250 }}
+        {"fluid": { "id": "minecraft:water", "amount": 500 }}
       ]
     }
   ],

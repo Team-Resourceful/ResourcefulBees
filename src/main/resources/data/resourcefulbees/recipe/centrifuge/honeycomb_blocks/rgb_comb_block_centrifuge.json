@@ -68,7 +68,7 @@
   "fluidOutputs": [
     {
       "pool": [
-        {"fluid": { "id": "resourcefulbees:rainbow_honey_fluid_source", "amount": 500 }}
+        {"fluid": { "id": "resourcefulbees:rainbow_honey_fluid_source", "amount": 1000 }}
       ]
     }
   ],

@@ -5,7 +5,7 @@
             "input": {
                 "type": "block",
                 "block": {
-                    "id": "minecraft:obsidian"
+                    "id": "minecraft:end_stone"
                 },
                 "chance": 0.5
             },
@@ -13,7 +13,7 @@
                 {
                     "type": "block",
                     "block": {
-                        "id": "minecraft:end_stone"
+                        "id": "minecraft:obsidian"
                     }
                 }
             ]
