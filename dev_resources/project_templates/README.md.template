@@ -28,16 +28,7 @@ repositories {
 ```
 You can then add our mod as a dependency:
 
-### Forge:
+### Neoforge:
 ```gradle
-dependencies {
-    <--- Other dependencies here --->
-
-    implementation "com.teamresourceful.resourcefulbees:resourcefulbees-neoforge-${mc_version}:${version}"
-    
-    //below are required dependencies for resourceful bees to work.
-    runtimeOnly "com.teamresourceful.resourcefullib:resourcefullib-forge-${mc_version}:${rlib_version}"
-    runtimeOnly "com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-${mc_version}:${rconfig_version}"
-    runtimeOnly "software.bernie.geckolib:${gecko_forge}:${gecko_forge_version}"
-}
+    //TODO
 ```
