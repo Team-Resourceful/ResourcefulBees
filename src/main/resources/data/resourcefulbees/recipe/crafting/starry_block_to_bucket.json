@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "resourcefulbees:starry_honey_block",
+    "minecraft:bucket"
+  ],
+  "result": {
+    "id": "resourcefulbees:starry_honey_bucket"
+  }
+}

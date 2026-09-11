@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CC",
+    "CC"
+  ],
+  "key": {
+    "C": "resourcefulbees:nether_quartz_honeycomb"
+  },
+  "result": {
+    "id": "resourcefulbees:nether_quartz_honeycomb_block"
+  }
+}

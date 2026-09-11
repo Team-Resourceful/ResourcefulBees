@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "resourcefulbees:lapis_honeycomb_block"
+  ],
+  "result": {
+    "id": "resourcefulbees:lapis_honeycomb",
+    "count": 4
+  }
+}

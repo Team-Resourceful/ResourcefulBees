@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "resourcefulbees:nether_quartz_honeycomb_block"
+  ],
+  "result": {
+    "id": "resourcefulbees:nether_quartz_honeycomb",
+    "count": 4
+  }
+}

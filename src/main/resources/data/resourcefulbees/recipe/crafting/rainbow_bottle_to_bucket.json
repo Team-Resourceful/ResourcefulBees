@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bucket",
+    "resourcefulbees:rainbow_honey_bottle",
+    "resourcefulbees:rainbow_honey_bottle",
+    "resourcefulbees:rainbow_honey_bottle",
+    "resourcefulbees:rainbow_honey_bottle"
+  ],
+  "result": {
+    "id": "resourcefulbees:rainbow_honey_bucket"
+  }
+}

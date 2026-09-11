@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "resourcefulbees:dragon_honeycomb_block"
+  ],
+  "result": {
+    "id": "resourcefulbees:dragon_honeycomb",
+    "count": 4
+  }
+}

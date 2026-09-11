@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CC",
+    "CC"
+  ],
+  "key": {
+    "C": "resourcefulbees:redstone_honeycomb"
+  },
+  "result": {
+    "id": "resourcefulbees:redstone_honeycomb_block"
+  }
+}

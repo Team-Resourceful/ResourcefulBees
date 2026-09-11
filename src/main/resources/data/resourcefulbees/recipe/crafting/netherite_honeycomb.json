@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "resourcefulbees:netherite_honeycomb_block"
+  ],
+  "result": {
+    "id": "resourcefulbees:netherite_honeycomb",
+    "count": 4
+  }
+}

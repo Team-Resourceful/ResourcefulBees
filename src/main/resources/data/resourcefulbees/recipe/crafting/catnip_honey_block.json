@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "HH",
+    "HH"
+  ],
+  "key": {
+    "H": "resourcefulbees:catnip_honey_bottle"
+  },
+  "result": {
+    "id": "resourcefulbees:catnip_honey_block"
+  }
+}

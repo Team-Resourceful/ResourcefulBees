@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "resourcefulbees:beeper_honeycomb_block"
+  ],
+  "result": {
+    "id": "resourcefulbees:beeper_honeycomb",
+    "count": 4
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "resourcefulbees:catnip_honeycomb_block"
+  ],
+  "result": {
+    "id": "resourcefulbees:catnip_honeycomb",
+    "count": 4
+  }
+}
