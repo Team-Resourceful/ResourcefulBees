@@ -56,7 +56,7 @@ jobs:
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: "./gradle.properties"
-          properties: "mc_version enabled_platforms"
+          properties: "mc_version"
 
       - name: Publish package
         run: ./gradlew publish --info
@@ -72,7 +72,6 @@ jobs:
 
       ### Need to duplicate this block for fabric or abuse the files-secondary field
       - name: Upload NeoForge Releases (Curse/Modrinth/Github)
-        if: contains(steps.props.outputs.enabled_platforms, 'neoforge')
         uses: Kir-Antipov/mc-publish@v3.3.1
         with:
           curseforge-id: ${{ vars.CURSE_ID }}
