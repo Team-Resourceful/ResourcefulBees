@@ -38,8 +38,8 @@ public class CustomBeeRenderer<R extends EntityRenderState & GeoRenderState> ext
             switch (layerData.effect()) {
                 case GLOW -> withRenderLayer(new CustomBeeGlowLayer<>(this, layerData));
                 case ENCHANTED -> {
-                    withRenderLayer(new CustomBeeGlintLayer<>(this, layerData));
                     withRenderLayer(new CustomBoneTextureGeoLayer<>(this, layerData.bone(), layerData.texture().texture()));
+                    withRenderLayer(new CustomBeeGlintLayer<>(this, layerData));
                 }
                 case null, default -> withRenderLayer(new CustomBeeColoredLayer<>(this, layerData));
             }

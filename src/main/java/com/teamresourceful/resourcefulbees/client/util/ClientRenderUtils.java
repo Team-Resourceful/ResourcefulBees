@@ -31,26 +31,6 @@ public final class ClientRenderUtils {
 
     public static final CacheableBiFunction<Identifier, Identifier, Identifier> DEFAULT_TEXTURER = new CacheableBiFunction<>((texture, other) -> texture == other ? texture : Minecraft.getInstance().getResourceManager().getResource(texture).isPresent() ? texture : other);
 
-   /* public static void renderEntity(GuiGraphics graphics, Entity entity, float x, float y, float rotation, float renderScale) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null) entity.tickCount = mc.player.tickCount;
-        float scaledSize = 15 / (Math.max(entity.getBbWidth(), entity.getBbHeight()));
-        if (mc.player != null) {
-            try (var pose = new CloseablePoseStack(graphics)) {
-                pose.translate(10, 15 * renderScale, 0.5);
-                pose.translate(x, y, 1);
-                pose.mulPose(Axis.ZP.rotationDegrees(180.0F));
-                pose.translate(0, 0, 100);
-                pose.scale(-(scaledSize * renderScale), (scaledSize * renderScale), 30);
-                pose.mulPose(Axis.YP.rotationDegrees(rotation));
-                EntityRenderDispatcher entityRenderer = mc.getEntityRenderDispatcher();
-                MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
-                entityRenderer.render(entity, 0, 0, 0.0D, mc.getTimer().getGameTimeDeltaPartialTick(true), 1, pose, buffer, LightTexture.FULL_BRIGHT);
-                buffer.endBatch();
-            }
-        }
-    }*/
-
     public static void preparePreviewEntity(Entity entity) {
         entity.setId(NEXT_PREVIEW_ENTITY_ID.getAndDecrement());
     }
