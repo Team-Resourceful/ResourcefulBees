@@ -14,7 +14,7 @@ public interface BeekeeperTradeData extends BeeData<BeekeeperTradeData> {
 
     UniformGenerator secondaryItemCost();
 
-    float priceMultiplier();
+    float reputationDiscount();
 
     int maxTrades();
 

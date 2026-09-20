@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/resourcefulbees-honeycomb.schema.json",
+  "title": "Resourceful Bees Honeycomb Data",
+  "description": "Schema reconstructed from Resourceful Bees HoneycombSetup, HoneycombRegistry, OutputVariation, tier codecs, TradeData, and ItemStackTemplate usage.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "honeycomb": {
+      "$ref": "#/$defs/honeycombRegistryData"
+    },
+    "variations": {
+      "type": "array",
+      "description": "Output variations registered from this honeycomb file.",
+      "items": {
+        "$ref": "#/$defs/outputVariation"
+      },
+      "default": []
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "description": "Minecraft resource identifier.",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "color": {
+      "description": "ResourcefulLib Color. The codec accepts a numeric color value, a string such as #ffffff or a registered special color name, or an RGBA object.",
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r": {
+              "type": "integer",
+              "default": 255
+            },
+            "g": {
+              "type": "integer",
+              "default": 255
+            },
+            "b": {
+              "type": "integer",
+              "default": 255
+            },
+            "a": {
+              "type": "integer",
+              "default": 255
+            }
+          }
+        }
+      ],
+      "default": "#ffffff"
+    },
+    "dataComponentPatch": {
+      "type": "object",
+      "description": "Minecraft DataComponentPatch. Component keys are registry-driven and therefore intentionally left extensible.",
+      "additionalProperties": true,
+      "default": {}
+    },
+    "itemStackTemplate": {
+      "description": "ItemStackTemplate. Accepts either a compact item identifier or an expanded object.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/identifier"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/identifier"
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 99,
+              "default": 1
+            },
+            "components": {
+              "$ref": "#/$defs/dataComponentPatch"
+            }
+          }
+        }
+      ]
+    },
+    "numberProvider": {
+      "description": "Minecraft NumberProvider. Constants encode inline as numbers. Other registered provider types use provider objects.",
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "uniformGenerator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "max"
+      ],
+      "properties": {
+        "min": {
+          "$ref": "#/$defs/numberProvider"
+        },
+        "max": {
+          "$ref": "#/$defs/numberProvider"
+        }
+      }
+    },
+    "tradeData": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Beekeeper trade data. Note that omitting tradeData entirely uses TradeData.DEFAULT (non-tradable), while an explicitly present empty object uses the codec defaults below.",
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/uniformGenerator",
+          "default": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "secondaryItem": {
+          "$ref": "#/$defs/identifier",
+          "default": "minecraft:air"
+        },
+        "secondaryItemCost": {
+          "$ref": "#/$defs/uniformGenerator",
+          "default": {
+            "min": 1,
+            "max": 4
+          }
+        },
+        "priceMultiplier": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0.05
+        },
+        "maxTrades": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64,
+          "default": 8
+        },
+        "xp": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64,
+          "default": 3
+        }
+      }
+    },
+    "honeycombRegistryData": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Honeycomb item/block registration data. The name field is read separately by HoneycombSetup to override the filename-derived honeycomb name; RegistryData itself receives that name as a codec point.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Optional override for the filename-derived honeycomb name. The loader lowercases it and replaces spaces with underscores."
+        },
+        "color": {
+          "$ref": "#/$defs/color",
+          "default": "#ffffff"
+        },
+        "edible": {
+          "type": "boolean",
+          "default": true
+        },
+        "block": {
+          "type": "boolean",
+          "default": true
+        },
+        "enchanted": {
+          "type": "boolean",
+          "default": false
+        },
+        "tradeData": {
+          "$ref": "#/$defs/tradeData"
+        }
+      }
+    },
+    "beehiveCombMap": {
+      "type": "object",
+      "description": "Map from registered BeehiveTier identifier to ItemStackTemplate. The four built-in tiers are declared explicitly for editor completion, while addon tiers remain allowed.",
+      "propertyNames": {
+        "$ref": "#/$defs/identifier"
+      },
+      "properties": {
+        "resourcefulbees:t1": {
+          "$ref": "#/$defs/itemStackTemplate"
+        },
+        "resourcefulbees:t2": {
+          "$ref": "#/$defs/itemStackTemplate"
+        },
+        "resourcefulbees:t3": {
+          "$ref": "#/$defs/itemStackTemplate"
+        },
+        "resourcefulbees:t4": {
+          "$ref": "#/$defs/itemStackTemplate"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/itemStackTemplate"
+      },
+      "default": {}
+    },
+    "apiaryCombMap": {
+      "type": "object",
+      "description": "Map from registered ApiaryTier identifier to ItemStackTemplate. The four built-in tiers are declared explicitly for editor completion, while addon tiers remain allowed.",
+      "propertyNames": {
+        "$ref": "#/$defs/identifier"
+      },
+      "properties": {
+        "resourcefulbees:t1": {
+          "$ref": "#/$defs/itemStackTemplate"
+        },
+        "resourcefulbees:t2": {
+          "$ref": "#/$defs/itemStackTemplate"
+        },
+        "resourcefulbees:t3": {
+          "$ref": "#/$defs/itemStackTemplate"
+        },
+        "resourcefulbees:t4": {
+          "$ref": "#/$defs/itemStackTemplate"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/itemStackTemplate"
+      },
+      "default": {}
+    },
+    "outputVariation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identifier"
+      ],
+      "description": "One honeycomb output variation. identifier is treated as required in this schema because the codec logs 'Identifier is REQUIRED!' and otherwise supplies null.",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hiveCombs": {
+          "$ref": "#/$defs/beehiveCombMap"
+        },
+        "apiaryCombs": {
+          "$ref": "#/$defs/apiaryCombMap"
+        },
+        "defaultComb": {
+          "$ref": "#/$defs/itemStackTemplate"
+        },
+        "defaultCombBlock": {
+          "$ref": "#/$defs/itemStackTemplate"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "anyOf": [
+              {
+                "not": {
+                  "required": [
+                    "hiveCombs"
+                  ]
+                }
+              },
+              {
+                "properties": {
+                  "hiveCombs": {
+                    "type": "object",
+                    "maxProperties": 0
+                  }
+                },
+                "required": [
+                  "hiveCombs"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "required": [
+              "defaultComb"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

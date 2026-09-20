@@ -1,0 +1,13 @@
+{
+  "type": "resourcefulbees:solidification",
+  "fluid": {
+    "ingredient": "minecraft:lava",
+    "amount": 1000
+  },
+  "result": {
+    "id": "minecraft:obsidian",
+    "count": 1,
+    "components": {}
+  },
+  "time": 200
+}

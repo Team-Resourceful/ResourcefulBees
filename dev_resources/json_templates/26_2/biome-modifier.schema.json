@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/resourcefulbees-biome-modifier.schema.json",
+  "title": "Resourceful Bees Bee Biome Modifier",
+  "description": "Schema reconstructed from BeeBiomeModifier, ModBiomeModifiers, Weighted, MobSpawnSettings.SpawnerData, LocationPredicate, RegistryCodecs, HolderSetCodec, LightPredicate, BlockPredicate, FluidPredicate, and MinMaxBounds.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "whitelist",
+    "spawn"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "resourcefulbees:spawns",
+        "resourcefulbees:dev_spawns",
+        "resourcefulbees:supporter_spawns"
+      ]
+    },
+    "whitelist": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/biomeHolderSet"
+      },
+      "description": "Required list of biome holder sets. An empty list is codec-valid but matches no biomes."
+    },
+    "blacklist": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/biomeHolderSet"
+      },
+      "default": []
+    },
+    "spawn": {
+      "$ref": "#/$defs/spawn"
+    },
+    "spawnPredicate": {
+      "$ref": "#/$defs/locationPredicate"
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "tagIdentifier": {
+      "type": "string",
+      "pattern": "^#(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "registryHolderSet": {
+      "description": "Minecraft/NeoForge HolderSet form with alwaysUseList=false: tag, single registry entry, compact list, or a custom NeoForge holder-set dispatch object.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/tagIdentifier"
+        },
+        {
+          "$ref": "#/$defs/identifier"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "$ref": "#/$defs/identifier"
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "biomeHolderSet": {
+      "$ref": "#/$defs/registryHolderSet"
+    },
+    "structureHolderSet": {
+      "$ref": "#/$defs/registryHolderSet"
+    },
+    "blockHolderSet": {
+      "$ref": "#/$defs/registryHolderSet"
+    },
+    "fluidHolderSet": {
+      "$ref": "#/$defs/registryHolderSet"
+    },
+    "spawn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "minCount",
+        "maxCount",
+        "weight"
+      ],
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/identifier",
+          "description": "Registered entity type. MobSpawnSettings.SpawnerData replaces MISC-category entities with minecraft:pig at construction time."
+        },
+        "minCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "weight": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "description": "SpawnerData requires minCount <= maxCount. Draft 2020-12 cannot directly compare sibling numeric properties, so that codec validation is documented rather than enforced here."
+    },
+    "doubleBounds": {
+      "description": "MinMaxBounds.Doubles: either an exact number or an object with optional min/max. The codec rejects min > max.",
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          }
+        }
+      ]
+    },
+    "intBounds": {
+      "description": "MinMaxBounds.Ints: either an exact integer or an object with optional min/max. The codec rejects min > max.",
+      "oneOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "min": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            }
+          }
+        }
+      ]
+    },
+    "positionPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/doubleBounds"
+        },
+        "y": {
+          "$ref": "#/$defs/doubleBounds"
+        },
+        "z": {
+          "$ref": "#/$defs/doubleBounds"
+        }
+      }
+    },
+    "lightPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "light": {
+          "$ref": "#/$defs/intBounds"
+        }
+      }
+    },
+    "blockPredicate": {
+      "type": "object",
+      "description": "Known BlockPredicate fields are modeled. state, nbt, and flattened DataComponentMatchers internals remain permissive because their codecs were not supplied.",
+      "properties": {
+        "blocks": {
+          "$ref": "#/$defs/blockHolderSet"
+        },
+        "state": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "nbt": {}
+      },
+      "additionalProperties": true
+    },
+    "fluidPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fluids": {
+          "$ref": "#/$defs/fluidHolderSet"
+        },
+        "state": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "locationPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "position": {
+          "$ref": "#/$defs/positionPredicate"
+        },
+        "biomes": {
+          "$ref": "#/$defs/biomeHolderSet"
+        },
+        "structures": {
+          "$ref": "#/$defs/structureHolderSet"
+        },
+        "dimension": {
+          "$ref": "#/$defs/identifier"
+        },
+        "smokey": {
+          "type": "boolean"
+        },
+        "light": {
+          "$ref": "#/$defs/lightPredicate"
+        },
+        "block": {
+          "$ref": "#/$defs/blockPredicate"
+        },
+        "fluid": {
+          "$ref": "#/$defs/fluidPredicate"
+        },
+        "can_see_sky": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -6,12 +6,8 @@
   },
   "resourcefulbees:rendering/v1": {
     "texture": "creeper/creeper_bee",
-    "layers": [
-      { "layerEffect": "GLOW", "texture": "creeper/creeper_bee_emissive", "color": "#E2D3D3", "pulseFrequency": 10 }
-    ],
-    "ColorData": {
-      "spawnEggPrimaryColor": "#0C9F0A",
-      "spawnEggSecondaryColor": "#303030",
+    "colors": {
+      "spawnEgg": "#0C9F0A",
       "jarColor": "#0C9F0A"
     }
   },

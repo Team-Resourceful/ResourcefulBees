@@ -1,0 +1,563 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/resourcefulbees-bee-data.schema.json",
+  "title": "Resourceful Bees Bee Data",
+  "description": "JSON Schema for Resourceful Bees custom bee data, reconstructed from the mod's Mojang Codec definitions.",
+  "type": "object",
+  "properties": {
+    "resourcefulbees:core/v1": {
+      "$ref": "#/$defs/coreData"
+    },
+    "resourcefulbees:combat/v1": {
+      "$ref": "#/$defs/combatData"
+    },
+    "resourcefulbees:rendering/v1": {
+      "$ref": "#/$defs/renderData"
+    },
+    "resourcefulbees:mutation/v1": {
+      "$ref": "#/$defs/mutationData"
+    },
+    "resourcefulbees:breeding/v1": {
+      "$ref": "#/$defs/breedData"
+    },
+    "resourcefulbees:trait/v1": {
+      "$ref": "#/$defs/traitData"
+    },
+    "resourcefulbees:trade/v1": {
+      "$ref": "#/$defs/tradeData"
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "description": "Minecraft resource identifier.",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "registryEntry": {
+      "type": "string",
+      "description": "Minecraft registry entry identifier.",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "registryTag": {
+      "type": "string",
+      "description": "Minecraft registry tag.",
+      "pattern": "^#(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "registryPredicate": {
+      "description": "RegistryPredicate. Accepts a registry tag, one registry entry, or a compact list of registry entries.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/registryTag"
+        },
+        {
+          "$ref": "#/$defs/registryEntry"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/registryEntry"
+          },
+          "uniqueItems": true
+        }
+      ]
+    },
+    "color": {
+      "description": "ResourcefulLib Color. Accepts a number, a string such as #ffffff or rainbow, or an RGBA object.",
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r": {
+              "type": "integer",
+              "default": 255
+            },
+            "g": {
+              "type": "integer",
+              "default": 255
+            },
+            "b": {
+              "type": "integer",
+              "default": 255
+            },
+            "a": {
+              "type": "integer",
+              "default": 255
+            }
+          }
+        }
+      ]
+    },
+    "minecraftComponent": {
+      "description": "Minecraft chat Component. This schema covers common string, list, and object forms while remaining open to registered component types and style fields.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/minecraftComponent"
+          }
+        },
+        {
+          "type": "object",
+          "minProperties": 1,
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            },
+            "translate": {
+              "type": "string"
+            },
+            "fallback": {
+              "type": "string"
+            },
+            "with": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/minecraftComponent"
+              }
+            },
+            "keybind": {
+              "type": "string"
+            },
+            "selector": {
+              "type": "string"
+            },
+            "separator": {
+              "$ref": "#/$defs/minecraftComponent"
+            },
+            "nbt": {
+              "type": "string"
+            },
+            "interpret": {
+              "type": "boolean"
+            },
+            "extra": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/minecraftComponent"
+              }
+            },
+            "bold": {
+              "type": "boolean"
+            },
+            "italic": {
+              "type": "boolean"
+            },
+            "underlined": {
+              "type": "boolean"
+            },
+            "strikethrough": {
+              "type": "boolean"
+            },
+            "obfuscated": {
+              "type": "boolean"
+            },
+            "color": {},
+            "font": {
+              "$ref": "#/$defs/identifier"
+            },
+            "insertion": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "layerEffect": {
+      "description": "Bee rendering layer effect. Named values are encoded as enum names; decoding is case-insensitive. Numeric enum ordinals are also accepted.",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^(?:[Nn][Oo][Nn][Ee]|[Ee][Nn][Cc][Hh][Aa][Nn][Tt][Ee][Dd]|[Gg][Ll][Oo][Ww]|[Tt][Rr][Aa][Nn][Ss][Ll][Uu][Cc][Ee][Nn][Tt])$"
+        },
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        }
+      ]
+    },
+    "layerTexture": {
+      "type": "string",
+      "description": "Short bee texture name. Resourceful Bees expands this under its textures/entity directory and derives the normal and angry texture paths."
+    },
+    "layerData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "color": {
+          "$ref": "#/$defs/color",
+          "default": "#ffffff"
+        },
+        "texture": {
+          "$ref": "#/$defs/layerTexture"
+        },
+        "layerEffect": {
+          "$ref": "#/$defs/layerEffect",
+          "default": "NONE"
+        },
+        "isPollen": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "colors": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "spawnEgg": {
+          "$ref": "#/$defs/color",
+          "default": "#ffffff"
+        },
+        "jarColor": {
+          "$ref": "#/$defs/color",
+          "default": "#ffffff"
+        }
+      }
+    },
+    "itemStackTemplate": {
+      "description": "ItemStackTemplate. Accepts either a compact item identifier or an expanded object.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/registryEntry"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/registryEntry"
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 99,
+              "default": 1
+            },
+            "components": {
+              "type": "object",
+              "description": "Minecraft DataComponentPatch. Registered component keys are extensible.",
+              "additionalProperties": true,
+              "default": {}
+            }
+          }
+        }
+      ]
+    },
+    "familyUnit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent1",
+        "parent2"
+      ],
+      "properties": {
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "default": 10.0
+        },
+        "chance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1.0
+        },
+        "parent1": {
+          "$ref": "#/$defs/identifier"
+        },
+        "parent2": {
+          "$ref": "#/$defs/identifier"
+        }
+      }
+    },
+    "numberProvider": {
+      "description": "Minecraft NumberProvider. ConstantValue is encoded inline as a number. Other providers use typed provider objects.",
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Registered loot number provider type, such as uniform, binomial, score, storage, sum, enchantment_level, or environment_attribute."
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "uniformGenerator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "max"
+      ],
+      "properties": {
+        "min": {
+          "$ref": "#/$defs/numberProvider"
+        },
+        "max": {
+          "$ref": "#/$defs/numberProvider"
+        }
+      }
+    },
+    "coreData": {
+      "title": "Core Bee Data",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "honeycombVariation": {
+          "type": "string",
+          "default": ""
+        },
+        "flower": {
+          "$ref": "#/$defs/registryPredicate"
+        },
+        "entityFlower": {
+          "$ref": "#/$defs/registryPredicate"
+        },
+        "maxTimeInHive": {
+          "type": "integer",
+          "minimum": 600,
+          "maximum": 2147483647,
+          "default": 2400
+        },
+        "lore": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/minecraftComponent"
+          },
+          "default": []
+        }
+      }
+    },
+    "combatData": {
+      "title": "Combat Bee Data",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "isPassive": {
+          "type": "boolean",
+          "default": false
+        },
+        "removeStingerOnAttack": {
+          "type": "boolean",
+          "default": true
+        },
+        "inflictsPoison": {
+          "type": "boolean",
+          "default": true
+        },
+        "isInvulnerable": {
+          "type": "boolean",
+          "default": false
+        },
+        "attributes": {
+          "type": "object",
+          "description": "Map of Minecraft attribute identifier to double value.",
+          "propertyNames": {
+            "$ref": "#/$defs/identifier"
+          },
+          "additionalProperties": {
+            "type": "number"
+          },
+          "default": {
+            "minecraft:max_health": 10.0,
+            "minecraft:flying_speed": 0.6,
+            "minecraft:movement_speed": 0.3,
+            "minecraft:attack_damage": 1.0,
+            "minecraft:follow_range": 48.0,
+            "minecraft:armor": 0.0,
+            "minecraft:armor_toughness": 0.0,
+            "minecraft:attack_knockback": 0.0
+          }
+        }
+      }
+    },
+    "renderData": {
+      "title": "Rendering Bee Data",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "layers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/layerData"
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "colors": {
+          "$ref": "#/$defs/colors"
+        },
+        "model": {
+          "$ref": "#/$defs/identifier",
+          "default": "resourcefulbees:base"
+        },
+        "texture": {
+          "$ref": "#/$defs/layerTexture"
+        },
+        "animation": {
+          "$ref": "#/$defs/identifier",
+          "default": "resourcefulbees:bee"
+        },
+        "sizeModifier": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 2.0,
+          "default": 1.0
+        },
+        "pulseFrequency": {
+          "type": "number",
+          "minimum": 5.0,
+          "maximum": 100.0,
+          "description": "When omitted, the codec uses the special default 0.0. If explicitly present, the value must be between 5 and 100."
+        }
+      }
+    },
+    "mutationData": {
+      "title": "Mutation Bee Data",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mutation"
+      ],
+      "properties": {
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 10
+        },
+        "mutation": {
+          "$ref": "#/$defs/identifier"
+        }
+      }
+    },
+    "breedData": {
+      "title": "Breeding Bee Data",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "families": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/familyUnit"
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "feedItems": {
+          "$ref": "#/$defs/registryPredicate"
+        },
+        "feedReturnItem": {
+          "$ref": "#/$defs/itemStackTemplate"
+        },
+        "feedAmount": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "childGrowthDelay": {
+          "type": "integer",
+          "maximum": 0,
+          "default": -24000
+        },
+        "breedDelay": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 6000
+        }
+      }
+    },
+    "traitData": {
+      "title": "Trait Bee Data",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "auraRange": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 20,
+          "default": 10
+        },
+        "traits": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "default": []
+        }
+      }
+    },
+    "tradeData": {
+      "title": "Trade Bee Data",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/uniformGenerator",
+          "default": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "secondaryItem": {
+          "$ref": "#/$defs/registryEntry",
+          "default": "minecraft:air"
+        },
+        "secondaryItemCost": {
+          "$ref": "#/$defs/uniformGenerator",
+          "default": {
+            "min": 1,
+            "max": 4
+          }
+        },
+        "priceMultiplier": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0.05
+        },
+        "maxTrades": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64,
+          "default": 8
+        },
+        "xp": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64,
+          "default": 3
+        }
+      }
+    }
+  }
+}
+

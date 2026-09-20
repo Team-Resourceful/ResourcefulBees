@@ -1,4 +1,4 @@
-package com.teamresourceful.resourcefulbees.common.menus;
+package com.teamresourceful.resourcefulbees.common.menus.base;
 
 import com.teamresourceful.resourcefulbees.common.lib.util.WorldUtils;
 import net.minecraft.network.FriendlyByteBuf;

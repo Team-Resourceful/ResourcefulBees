@@ -1,0 +1,333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/resourcefulbees-mutation-recipe.schema.json",
+  "title": "Resourceful Bees Mutation Recipe",
+  "description": "Draft 2020-12 schema reconstructed from MutationRecipe, MutationEntry, MutationCodec, built-in mutation serializers, and predicate codecs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "mutations"
+  ],
+  "properties": {
+    "type": {
+      "const": "resourcefulbees:mutation"
+    },
+    "pollenBaseColor": {
+      "$ref": "#/$defs/color",
+      "default": 12681264
+    },
+    "pollenTopColor": {
+      "$ref": "#/$defs/color",
+      "default": 13408304
+    },
+    "mutations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/mutationEntry"
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "description": "Minecraft resource identifier.",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "color": {
+      "description": "ResourcefulLib Color. Accepted forms include numeric values, string values/special color names, or RGBA objects.",
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r": {
+              "type": "integer",
+              "default": 255
+            },
+            "g": {
+              "type": "integer",
+              "default": 255
+            },
+            "b": {
+              "type": "integer",
+              "default": 255
+            },
+            "a": {
+              "type": "integer",
+              "default": 255
+            }
+          }
+        }
+      ]
+    },
+    "dataComponentPatch": {
+      "description": "Minecraft DataComponentPatch. Full vanilla component schema is not defined by the supplied Resourceful Bees source.",
+      "type": "object",
+      "additionalProperties": true
+    },
+    "minMaxInts": {
+      "description": "Minecraft MinMaxBounds.Ints. Kept permissive because its full vanilla codec shape is outside the supplied source."
+    },
+    "locationPredicate": {
+      "description": "Minecraft LocationPredicate. Kept permissive because its full vanilla codec shape is outside the supplied source.",
+      "type": "object",
+      "additionalProperties": true
+    },
+    "mobEffectsPredicate": {
+      "description": "Minecraft MobEffectsPredicate. Kept permissive because its full vanilla codec shape is outside the supplied source.",
+      "type": "object",
+      "additionalProperties": true
+    },
+    "nbtPredicate": {
+      "description": "Minecraft NbtPredicate. Kept permissive because its full vanilla codec shape is outside the supplied source."
+    },
+    "entityFlagsPredicate": {
+      "description": "Minecraft EntityFlagsPredicate. Kept permissive because its full vanilla codec shape is outside the supplied source.",
+      "type": "object",
+      "additionalProperties": true
+    },
+    "entityPredicate": {
+      "description": "Minecraft EntityPredicate. Kept permissive because its full vanilla codec shape is outside the supplied source.",
+      "type": "object",
+      "additionalProperties": true
+    },
+    "blockStatePredicate": {
+      "description": "ResourcefulLib BlockStatePredicate. Kept permissive because its full codec shape is outside the supplied source."
+    },
+    "restrictedItemPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "components": {
+          "$ref": "#/$defs/dataComponentPatch"
+        },
+        "durability": {
+          "$ref": "#/$defs/minMaxInts"
+        },
+        "count": {
+          "$ref": "#/$defs/minMaxInts"
+        }
+      }
+    },
+    "restrictedBlockPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "components": {
+          "$ref": "#/$defs/dataComponentPatch"
+        },
+        "location": {
+          "$ref": "#/$defs/locationPredicate"
+        },
+        "properties": {
+          "$ref": "#/$defs/blockStatePredicate"
+        }
+      }
+    },
+    "restrictedEntityPredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/identifier"
+        },
+        "location": {
+          "$ref": "#/$defs/locationPredicate"
+        },
+        "effects": {
+          "$ref": "#/$defs/mobEffectsPredicate"
+        },
+        "nbt": {
+          "$ref": "#/$defs/nbtPredicate"
+        },
+        "flags": {
+          "$ref": "#/$defs/entityFlagsPredicate"
+        },
+        "target": {
+          "$ref": "#/$defs/entityPredicate"
+        }
+      }
+    },
+    "mutationCommon": {
+      "type": "object",
+      "properties": {
+        "chance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1.0
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "default": 10.0
+        }
+      }
+    },
+    "itemMutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "item"
+      ],
+      "properties": {
+        "type": {
+          "const": "item"
+        },
+        "item": {
+          "$ref": "#/$defs/restrictedItemPredicate"
+        },
+        "chance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1.0
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "default": 10.0
+        }
+      }
+    },
+    "blockMutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "block"
+      ],
+      "properties": {
+        "type": {
+          "const": "block"
+        },
+        "block": {
+          "$ref": "#/$defs/restrictedBlockPredicate"
+        },
+        "chance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1.0
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "default": 10.0
+        }
+      }
+    },
+    "fluidMutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "fluid"
+      ],
+      "properties": {
+        "type": {
+          "const": "fluid"
+        },
+        "fluid": {
+          "$ref": "#/$defs/identifier"
+        },
+        "chance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1.0
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "default": 10.0
+        }
+      }
+    },
+    "entityMutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "entity"
+      ],
+      "properties": {
+        "type": {
+          "const": "entity"
+        },
+        "entity": {
+          "$ref": "#/$defs/restrictedEntityPredicate"
+        },
+        "chance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1.0
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "default": 10.0
+        }
+      }
+    },
+    "mutationType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/itemMutation"
+        },
+        {
+          "$ref": "#/$defs/blockMutation"
+        },
+        {
+          "$ref": "#/$defs/fluidMutation"
+        },
+        {
+          "$ref": "#/$defs/entityMutation"
+        }
+      ]
+    },
+    "mutationEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input",
+        "outputs"
+      ],
+      "properties": {
+        "input": {
+          "$ref": "#/$defs/mutationType"
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mutationType"
+          }
+        }
+      }
+    }
+  }
+}

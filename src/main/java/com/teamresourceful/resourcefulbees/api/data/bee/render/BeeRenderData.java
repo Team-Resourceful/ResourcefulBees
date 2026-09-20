@@ -18,6 +18,4 @@ public interface BeeRenderData extends BeeData<BeeRenderData> {
     Identifier animation();
 
     float sizeModifier();
-
-    float pulseFrequency();
 }

@@ -72,33 +72,6 @@ public final class ModStructures {
 
         for (int i = 0; i < weight; i++) {
             templates.add(element);
-
-            ModConstants.LOGGER.info(
-                    "Pool {} after injection: raw entries={}, weighted entries={}",
-                    poolId,
-                    pool.getTemplates().size(),
-                    pool.size()
-            );
-
-            long rawMatches = pool.getTemplates()
-                    .stream()
-                    .filter(pair -> pair.getFirst() == element)
-                    .count();
-
-            long weightedMatches = templates
-                    .stream()
-                    .filter(entry -> entry == element)
-                    .count();
-
-            ModConstants.LOGGER.info(
-                    "Injected {} into {}: raw matches={}, weighted matches={}",
-                    pieceId,
-                    poolId,
-                    rawMatches,
-                    weightedMatches
-            );
         }
-
-        ModConstants.LOGGER.info("Added structure {} to pool {} with weight {}", pieceId, poolId, weight);
     }
 }

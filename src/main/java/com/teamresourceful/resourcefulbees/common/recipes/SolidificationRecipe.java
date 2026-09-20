@@ -1,10 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.recipes;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
+import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -27,7 +27,7 @@ public record SolidificationRecipe(
     public static MapCodec<SolidificationRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             SizedFluidIngredient.CODEC.fieldOf("fluid").forGetter(SolidificationRecipe::fluid),
             ItemStackTemplate.CODEC.fieldOf("result").forGetter(SolidificationRecipe::stack),
-            Codec.INT.fieldOf("time").orElse(200).forGetter(SolidificationRecipe::time)
+            CodecExtras.NON_NEGATIVE_INT.fieldOf("time").orElse(200).forGetter(SolidificationRecipe::time)
     ).apply(instance, SolidificationRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SolidificationRecipe> STREAM_CODEC = StreamCodec.composite(

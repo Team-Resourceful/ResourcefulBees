@@ -10,9 +10,8 @@
     "layers" : [
       { "isPollen": true, "color": "#494B3F", "texture": "custom_nectar" }
     ],
-    "ColorData": {
-      "spawnEggPrimaryColor": "#8F8F8F",
-      "spawnEggSecondaryColor": "#101010",
+    "colors": {
+      "spawnEgg": "#8F8F8F",
       "jarColor": "#303030"
     }
   },
@@ -26,7 +25,7 @@
         "parent2": "resourcefulbees:coal_bee"
       }
     ],
-    "feedItem": ["minecraft:poppy"],
+    "feedItems": ["minecraft:poppy"],
     "feedAmount": 4
   },
   "resourcefulbees:trade/v1": {

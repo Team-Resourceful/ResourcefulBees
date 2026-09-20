@@ -30,7 +30,11 @@ public record LayerTexture(Identifier texture, Identifier angryTexture) implemen
 
 
     public Identifier getTexture(NeutralMob neutralMob) {
-        return ClientRenderUtils.DEFAULT_TEXTURER.apply(neutralMob.isAngry() ? angryTexture() : texture(), texture());
+        return getTexture(neutralMob.isAngry());
+    }
+
+    public Identifier getTexture(boolean isAngry) {
+        return ClientRenderUtils.DEFAULT_TEXTURER.apply(isAngry ? angryTexture : texture, texture);
     }
 
     @Override

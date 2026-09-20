@@ -210,12 +210,13 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
         if (cachedRecipe != null && level != null && !level.isClientSide()) {
             try(Transaction root = Transaction.openRoot()) {
                 try(Transaction t1 = Transaction.open(root)) {
-                    inventory.extract(0, inventory.getResource(0), 1, t1);
+                    inventory.extract(0, inventory.getResource(0), cachedRecipe.inputAmount(), t1);
                     t1.commit();
                 }
                 try(Transaction t2 = Transaction.open(root)) {
                     cachedRecipe.itemOutputs()
                             .stream()
+                            .limit(3)
                             .filter(item -> level.getRandom().nextDouble() < item.chance())
                             .map(CentrifugeRecipe.Output::getRandomResult)
                             .map(ItemOutput::template)
@@ -225,6 +226,7 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
                 try(Transaction t3 = Transaction.open(root)) {
                     cachedRecipe.fluidOutputs()
                             .stream()
+                            .limit(3)
                             .filter(fluid -> level.getRandom().nextDouble() < fluid.chance())
                             .map(CentrifugeRecipe.Output::getRandomResult)
                             .map(FluidOutput::fluid)

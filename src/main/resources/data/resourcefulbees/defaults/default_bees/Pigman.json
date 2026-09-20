@@ -5,9 +5,8 @@
     },
     "resourcefulbees:rendering/v1": {
         "texture": "pigman/pigman_bee",
-        "ColorData": {
-            "spawnEggPrimaryColor": "#885956",
-            "spawnEggSecondaryColor": "#303030",
+        "colors": {
+            "spawnEgg": "#885956",
             "jarColor": "#885956"
         }
     },

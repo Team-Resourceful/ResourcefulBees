@@ -59,8 +59,8 @@ public class HoneyInitializerApi {
         return this.fluidAttributes.create(lightLevel, density, temperature, viscosity, fallDistanceModifier, motionScale, canPushEntities, canSwimIn, canDrownIn, canExtinguish, canConvertToSource, supportsBoating, canHydrate, rarity, bucketFill, bucketEmpty);
     }
 
-    public HoneyBlockData block(Color color, float jumpFactor, float speedFactor, LazyHolder<Item> blockItem, LazyHolder<Block> block, BeekeeperTradeData tradeData) {
-        return this.block.create(color, jumpFactor, speedFactor, blockItem, block, tradeData);
+    public HoneyBlockData block(Color color, float jumpFactor, float speedFactor, LazyHolder<Item> blockItem, LazyHolder<Block> block, BeekeeperTradeData tradeData, String id) {
+        return this.block.create(color, jumpFactor, speedFactor, blockItem, block, tradeData, id);
     }
 
     public HoneyBottleData bottle(String id, Color color, HoneyFoodData food, Rarity rarity, LazyHolder<Item> bottle, BeekeeperTradeData tradeData) {

@@ -54,13 +54,8 @@ public record BeeNestBiomeModifier(
 
     public static MapCodec<BeeNestBiomeModifier> makeCodec() {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Biome.LIST_CODEC
-                        .fieldOf("biomes")
-                        .forGetter(BeeNestBiomeModifier::biomes),
-
-                PlacedFeature.LIST_CODEC
-                        .fieldOf("features")
-                        .forGetter(BeeNestBiomeModifier::features)
+                Biome.LIST_CODEC.fieldOf("biomes").forGetter(BeeNestBiomeModifier::biomes),
+                PlacedFeature.LIST_CODEC.fieldOf("features").forGetter(BeeNestBiomeModifier::features)
         ).apply(instance, BeeNestBiomeModifier::new));
     }
 }

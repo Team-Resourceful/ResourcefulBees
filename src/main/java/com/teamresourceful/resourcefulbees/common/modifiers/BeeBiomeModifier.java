@@ -17,13 +17,12 @@ import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jspecify.annotations.NonNull;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
 public record BeeBiomeModifier(
-        List<HolderSet<Biome>> whitelist,
-        List<HolderSet<Biome>> blacklist,
+        HolderSet<Biome> whitelist,
+        HolderSet<Biome> blacklist,
         Weighted<MobSpawnSettings.SpawnerData> spawn,
         Optional<LocationPredicate> spawnPredicate,
         Type type
@@ -56,12 +55,8 @@ public record BeeBiomeModifier(
         );
     }
 
-    private static boolean isInList(
-            List<HolderSet<Biome>> biomes,
-            Holder<Biome> checkingBiome
-    ) {
-        return biomes.stream()
-                .anyMatch(set -> set.contains(checkingBiome));
+    private static boolean isInList(HolderSet<Biome> biomes, Holder<Biome> checkingBiome) {
+        return biomes.contains(checkingBiome);
     }
 
     @Override
@@ -93,24 +88,10 @@ public record BeeBiomeModifier(
 
     private static MapCodec<BeeBiomeModifier> makeCodec(Type type) {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Biome.LIST_CODEC
-                        .listOf()
-                        .fieldOf("whitelist")
-                        .forGetter(BeeBiomeModifier::whitelist),
-
-                Biome.LIST_CODEC
-                        .listOf()
-                        .optionalFieldOf("blacklist", List.of())
-                        .forGetter(BeeBiomeModifier::blacklist),
-
-                Weighted.codec(MobSpawnSettings.SpawnerData.CODEC)
-                        .fieldOf("spawn")
-                        .forGetter(BeeBiomeModifier::spawn),
-
-                LocationPredicate.CODEC
-                        .optionalFieldOf("spawnPredicate")
-                        .forGetter(BeeBiomeModifier::spawnPredicate),
-
+                Biome.LIST_CODEC.fieldOf("whitelist").forGetter(BeeBiomeModifier::whitelist),
+                Biome.LIST_CODEC.optionalFieldOf("blacklist", HolderSet.empty()).forGetter(BeeBiomeModifier::blacklist),
+                Weighted.codec(MobSpawnSettings.SpawnerData.CODEC).fieldOf("spawn").forGetter(BeeBiomeModifier::spawn),
+                LocationPredicate.CODEC.optionalFieldOf("spawnPredicate").forGetter(BeeBiomeModifier::spawnPredicate),
                 RecordCodecBuilder.point(type)
         ).apply(instance, BeeBiomeModifier::new));
     }

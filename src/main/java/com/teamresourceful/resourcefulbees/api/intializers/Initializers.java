@@ -71,7 +71,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface ColorInitializer {
-        BeeColorData create(Color primarySpawnEggColor, Color secondarySpawnEggColor, Color jarColor);
+        BeeColorData create(Color spawnEgg, Color jarColor);
     }
 
     @FunctionalInterface
@@ -91,7 +91,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface LayerInitializer {
-        BeeLayerData create(Color color, BeeLayerTexture texture, LayerEffect effect, boolean pollenLayer);
+        BeeLayerData create(Color color, BeeLayerTexture texture, LayerEffect effect, boolean pollenLayer, float pulseFrequency, String bone);
     }
 
     @FunctionalInterface
@@ -101,7 +101,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface RenderInitializer {
-        BeeRenderData create(Set<BeeLayerData> layers, BeeColorData colorData, Identifier model, BeeLayerTexture texture, Identifier animations, float sizeModifier, float pulseFrequency);
+        BeeRenderData create(Set<BeeLayerData> layers, BeeColorData colorData, Identifier model, BeeLayerTexture texture, Identifier animations, float sizeModifier);
     }
 
     @FunctionalInterface

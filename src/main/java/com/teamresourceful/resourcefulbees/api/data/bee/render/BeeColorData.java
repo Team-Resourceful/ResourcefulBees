@@ -4,9 +4,7 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 
 public interface BeeColorData {
 
-    Color primarySpawnEggColor();
-
-    Color secondarySpawnEggColor();
+    Color spawnEgg();
 
     Color jarColor();
 }

@@ -6,9 +6,8 @@
     },
     "resourcefulbees:rendering/v1": {
         "texture": "ores/netherite/netherite_bee",
-        "ColorData": {
-            "spawnEggPrimaryColor": "#654740",
-            "spawnEggSecondaryColor": "#303030",
+        "colors": {
+            "spawnEgg": "#654740",
             "jarColor": "#654740"
         }
     },
@@ -24,7 +23,6 @@
         ]
     },
     "resourcefulbees:trait/v1": {
-        "hasTraits": true,
         "traits": ["nether", "wither"]
     }
 }

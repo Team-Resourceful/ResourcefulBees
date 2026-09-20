@@ -10,9 +10,8 @@
         "layers" : [
             { "isPollen": true, "color": "#FFDCC4", "texture": "custom_nectar" }
         ],
-        "ColorData": {
-            "spawnEggPrimaryColor": "#916D55",
-            "spawnEggSecondaryColor": "#CC9978",
+        "colors": {
+            "spawnEgg": "#916D55",
             "jarColor": "#CC9978"
         }
     },
@@ -22,7 +21,7 @@
     },
     "resourcefulbees:breeding/v1": {
         "isBreedable": true,
-        "feedItem": ["minecraft:brown_mushroom"],
+        "feedItems": ["minecraft:brown_mushroom"],
         "feedAmount": 4
     },
     "resourcefulbees:trade/v1": {
@@ -35,7 +34,7 @@
             "min": 4,
             "max": 8
         },
-        "priceMultiplier": 4,
+        "reputationDiscount": 0.4,
         "maxTrades": 2
     }
 }

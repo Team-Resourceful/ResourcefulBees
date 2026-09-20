@@ -6,13 +6,13 @@ import com.teamresourceful.resourcefulbees.api.data.bee.breeding.FamilyUnit;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.Parents;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
 import com.teamresourceful.resourcefulbees.common.items.honey.CustomHoneycombItem;
+import com.teamresourceful.resourcefulbees.common.lib.util.IngredientUtils;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.ChildOutput;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.ParentInput;
 import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.lib.util.IngredientUtils;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -44,7 +44,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         Parents parents = family.get(0).getParents();
         ParentInput parent1 = makeInput(parents.getParent1(), parents.getParent1Data().getBreedData());
         ParentInput parent2 = makeInput(parents.getParent2(), parents.getParent2Data().getBreedData());
-        return new BreederRecipe(parent1, parent2, Optional.of(Ingredient.of(ModItems.BEE_JAR.get())), family.stream().map(RecipeBuilder::makeOutput).collect(WeightedCollection.getCollector(ChildOutput::weight)), 2400);
+        return new BreederRecipe(parent1, parent2, Ingredient.of(ModItems.BEE_JAR.get()), family.stream().map(RecipeBuilder::makeOutput).collect(WeightedCollection.getCollector(ChildOutput::weight)), 2400);
     }
 
     private static ParentInput makeInput(Identifier id, BeeBreedData breedData) {

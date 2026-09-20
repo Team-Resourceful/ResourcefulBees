@@ -3,8 +3,8 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
-import com.teamresourceful.resourcefulbees.common.menus.BoundSafeContainerData;
 import com.teamresourceful.resourcefulbees.common.menus.BreederMenu;
+import com.teamresourceful.resourcefulbees.common.menus.base.BoundSafeContainerData;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.ParentInput;
@@ -112,13 +112,11 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
         if (recipeSuccess) {
 
             try (Transaction transaction = Transaction.openRoot()) {
-                recipe.optionalIngredient().ifPresent(_ ->
-                        inventory.extract(
-                                BreederConstants.EMPTY_JAR_SLOTS.get(breeder),
-                                inventory.getResource(BreederConstants.EMPTY_JAR_SLOTS.get(breeder)),
-                                1,
-                                transaction)
-                );
+                inventory.extract(
+                        BreederConstants.EMPTY_JAR_SLOTS.get(breeder),
+                        inventory.getResource(BreederConstants.EMPTY_JAR_SLOTS.get(breeder)),
+                        1,
+                        transaction);
                 ItemStack stack = output.child().create();
                 stack.setCount(1);
                 deliverItem(stack, transaction);

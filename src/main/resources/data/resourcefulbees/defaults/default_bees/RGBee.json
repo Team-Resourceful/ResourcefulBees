@@ -10,11 +10,11 @@
     "layers": [
       {"layerEffect": "GLOW", "color": "rainbow", "texture": "custom/bee_emissive" }
     ],
-    "ColorData": {
-      "spawnEggPrimaryColor": "rainbow",
-      "spawnEggSecondaryColor": "#303030",
+    "colors": {
+      "spawnEgg": "rainbow",
       "jarColor": "rainbow"
-    }
+    },
+    "pulseFrequency": 10
   },
   "resourcefulbees:breeding/v1": {
     "families": [

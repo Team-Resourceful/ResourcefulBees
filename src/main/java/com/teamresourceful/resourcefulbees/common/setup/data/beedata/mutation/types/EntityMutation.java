@@ -17,7 +17,10 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityProcessor;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +42,6 @@ public record EntityMutation(RestrictedEntityPredicate predicate, double chance,
         return entityPos;
     }
 
-    //todo tweak the location/angle setting if possible
     @Override
     public boolean activate(ServerLevel level, BlockPos pos) {
         CompoundTag entityTag = predicate().getTag().orElse(new CompoundTag());

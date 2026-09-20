@@ -42,16 +42,18 @@ import java.util.List;
 //this class mirrors the HoneyBlock class due to the particles method at the bottom being private
 public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable {
 
-    public static final MapCodec<CustomHoneyBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Properties.CODEC.fieldOf("properties").forGetter(CustomHoneyBlock::properties),
-            CustomHoneyBlockData.CODEC.fieldOf("data").forGetter(CustomHoneyBlock::data)
-    ).apply(instance, CustomHoneyBlock::new));
+    public static MapCodec<CustomHoneyBlock> codec(String id) {
+        return RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Properties.CODEC.fieldOf("properties").forGetter(CustomHoneyBlock::properties),
+                CustomHoneyBlockData.codec(id).fieldOf("data").forGetter(CustomHoneyBlock::data)
+        ).apply(instance, CustomHoneyBlock::new));
+    }
 
     private static final VoxelShape SHAPE = Block.column(14.0, 0.0, 15.0);
 
     @Override
     public @NonNull MapCodec<CustomHoneyBlock> codec() {
-        return CODEC;
+        return codec(data.id());
     }
 
     protected final Color color;

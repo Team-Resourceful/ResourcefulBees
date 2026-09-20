@@ -23,19 +23,15 @@
       },
       "fields": [
         {
-          "name": "Changelog",
-          "value": "[View Changelog](https://raw.githubusercontent.com/Team-Resourceful/ResourcefulBees/1.19/changelog.md)"
-        },
-        {
           "name": "Mod Version",
           "value": "${version}"
         },
         {
           "name": "Minecraft Version",
-          "value": "1.19.2"
+          "value": "26.2"
         },
         {
-          "name": "Forge Version",
+          "name": "NeoForge Version",
           "value": "${forge_version}"
         },
         {

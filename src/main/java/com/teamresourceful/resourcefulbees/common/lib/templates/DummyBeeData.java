@@ -43,7 +43,7 @@ public final class DummyBeeData {
         //CompoundTag nbt = new CompoundTag();
         //nbt.putString("this_is", "an_nbt_tag");
         //bucket.setTag(nbt);
-        return new ItemStackTemplate(Items.BUCKET);
+        return new ItemStackTemplate(Items.WATER_BUCKET);
     }
 
     private static final BeeCoreData CORE_DATA = API.core(
@@ -62,15 +62,15 @@ public final class DummyBeeData {
 
     private static final BeeRenderData RENDER_DATA = API.render(
             Set.of(
-                API.layer(Color.RAINBOW, MISSING_LAYER, LayerEffect.NONE, false),
-                API.layer(ConstantColors.cyan, MISSING_LAYER, LayerEffect.GLOW, false)
+                API.layer(Color.RAINBOW, MISSING_LAYER, LayerEffect.NONE, false, 0, "body"),
+                API.layer(ConstantColors.cyan, MISSING_LAYER, LayerEffect.GLOW, false, 0, "body")
             ),
-            API.color(ConstantColors.antiquewhite, ConstantColors.chocolate, ConstantColors.cadetblue),
+            API.color(ConstantColors.antiquewhite, ConstantColors.cadetblue),
             ModIdentifier.of("geo/base.geo.json"),
             MISSING_LAYER,
+            LayerEffect.NONE,
             ModIdentifier.of("animation/bee.animation.json"),
-            1.0f,
-            0.0f
+            1.0f
     );
 
     private static final BeeBreedData BREED_DATA = API.breeding(

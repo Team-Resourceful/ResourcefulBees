@@ -208,6 +208,6 @@ public class TradeCommand {
         ItemStackTemplate gives = ItemStackTemplate.fromNonEmptyStack(result);
         List<LootItemFunction> givenItemModifiers = List.of(SetItemCountFunction.setCount(tradeData.amount()).build());
 
-        return new VillagerTrade(wants, additionalWants, gives, tradeData.maxTrades(), tradeData.xp(), tradeData.priceMultiplier(), Optional.empty(), givenItemModifiers);
+        return new VillagerTrade(wants, additionalWants, gives, tradeData.maxTrades(), tradeData.xp(), tradeData.reputationDiscount(), Optional.empty(), givenItemModifiers);
     }
 }

@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/resourcefulbees-trait.schema.json",
+  "title": "Resourceful Bees Trait",
+  "description": "Schema reconstructed from TraitSetup, Trait, PotionEffect, TraitDamageType, DamageEffect, Aura, AuraType, and CodecExtras.set.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Optional trait name override. If omitted, the filename-derived name is used. Runtime lowercases the name and replaces spaces with underscores."
+    },
+    "displayItem": {
+      "$ref": "#/$defs/identifier",
+      "default": "minecraft:nether_star"
+    },
+    "potionDamageEffects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/potionEffect"
+      },
+      "default": []
+    },
+    "damageImmunities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "potionImmunities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
+      "default": []
+    },
+    "damageTypes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/traitDamageType"
+      },
+      "default": []
+    },
+    "specialAbilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "particleType": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
+      "default": []
+    },
+    "auras": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/aura"
+      },
+      "default": []
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "potionEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "effect": {
+          "$ref": "#/$defs/identifier",
+          "default": "minecraft:luck"
+        },
+        "strength": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4,
+          "default": 1
+        }
+      }
+    },
+    "traitDamageType": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "damageType": {
+          "type": "string",
+          "default": ""
+        },
+        "amplifier": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        }
+      }
+    },
+    "damageEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/identifier",
+          "default": "minecraft:generic"
+        },
+        "hasEntity": {
+          "type": "boolean",
+          "default": false
+        },
+        "strength": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20,
+          "default": 0
+        }
+      }
+    },
+    "auraType": {
+      "description": "AuraType EnumCodec: strings are case-insensitive; integer ordinals 0-5 are accepted.",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^(?i:BURNING|POTION|HEALING|EXPERIENCE|DAMAGING|EXPERIENCE_DRAIN)$"
+        },
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        }
+      ]
+    },
+    "aura": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "aura"
+      ],
+      "properties": {
+        "aura": {
+          "$ref": "#/$defs/auraType"
+        },
+        "damageEffect": {
+          "$ref": "#/$defs/damageEffect",
+          "default": {
+            "source": "minecraft:generic",
+            "hasEntity": false,
+            "strength": 0
+          }
+        },
+        "potionEffect": {
+          "$ref": "#/$defs/potionEffect",
+          "default": {
+            "effect": "minecraft:luck",
+            "strength": 1
+          }
+        },
+        "modifier": {
+          "type": "integer",
+          "default": 0
+        },
+        "calmingDisabled": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  }
+}

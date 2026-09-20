@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCombatData;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeCoreData;
 import com.teamresourceful.resourcefulbees.api.data.bee.BeeTraitData;
+import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.breeding.BeeBreedData;
 import com.teamresourceful.resourcefulbees.api.data.bee.mutation.BeeMutationData;
@@ -23,7 +24,7 @@ import net.minecraft.world.entity.EntityTypes;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public record DefaultBeeData(Map<Identifier, BeeData<?>> data, Identifier id, MutableComponent displayName, Supplier<EntityType<?>> type) implements com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData {
+public record DefaultBeeData(Map<Identifier, BeeData<?>> data, Identifier id, MutableComponent displayName, Supplier<EntityType<?>> type) implements CustomBeeData {
 
     public static DefaultBeeData of(Identifier name, Map<Identifier, BeeData<?>> data) {
         return new DefaultBeeData(

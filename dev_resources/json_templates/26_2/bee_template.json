@@ -1,0 +1,89 @@
+{
+  "resourcefulbees:core/v1": {
+    "honeycombVariation": "",
+    "flower": "minecraft:poppy",
+    "entityFlower": [],
+    "maxTimeInHive": 2400,
+    "lore": []
+  },
+
+  "resourcefulbees:combat/v1": {
+    "isPassive": false,
+    "removeStingerOnAttack": true,
+    "inflictsPoison": true,
+    "isInvulnerable": false,
+    "attributes": {
+      "minecraft:max_health": 10.0,
+      "minecraft:flying_speed": 0.6,
+      "minecraft:movement_speed": 0.3,
+      "minecraft:attack_damage": 1.0,
+      "minecraft:follow_range": 48.0,
+      "minecraft:armor": 0.0,
+      "minecraft:armor_toughness": 0.0,
+      "minecraft:attack_knockback": 0.0
+    }
+  },
+
+  "resourcefulbees:rendering/v1": {
+    "layers": [
+      {
+        "color": "#ffffff",
+        "texture": "example_bee",
+        "layerEffect": "NONE",
+        "isPollen": false
+      }
+    ],
+    "colors": {
+      "spawnEgg": "#ffffff",
+      "jarColor": "#ffffff"
+    },
+    "model": "resourcefulbees:base",
+    "texture": "example_bee",
+    "animation": "resourcefulbees:bee",
+    "sizeModifier": 1.0
+  },
+
+  "resourcefulbees:mutation/v1": {
+    "count": 10,
+    "mutation": "resourcefulbees:some_mutation"
+  },
+
+  "resourcefulbees:breeding/v1": {
+    "families": [
+      {
+        "weight": 10.0,
+        "chance": 1.0,
+        "parent1": "resourcefulbees:parent_bee_1",
+        "parent2": "resourcefulbees:parent_bee_2"
+      }
+    ],
+    "feedItems": "minecraft:poppy",
+    "feedReturnItem": {
+      "id": "minecraft:bucket",
+      "count": 1
+    },
+    "feedAmount": 1,
+    "childGrowthDelay": -24000,
+    "breedDelay": 6000
+  },
+
+  "resourcefulbees:trait/v1": {
+    "auraRange": 10,
+    "traits": []
+  },
+
+  "resourcefulbees:trade/v1": {
+    "amount": {
+      "min": 1,
+      "max": 99
+    },
+    "secondaryItem": "minecraft:air",
+    "secondaryItemCost": {
+      "min": 1,
+      "max": 99
+    },
+    "priceMultiplier": 0.05,
+    "maxTrades": 8,
+    "xp": 3
+  }
+}

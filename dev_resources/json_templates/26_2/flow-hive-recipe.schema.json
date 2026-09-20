@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/resourcefulbees-flow-hive-recipe.schema.json",
+  "title": "Resourceful Bees Flow Hive Recipe",
+  "description": "Draft 2020-12 schema reconstructed from FlowHiveRecipe, ResourcefulLib HolderSetCodec, and NeoForge FluidStackTemplate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "bees",
+    "fluid"
+  ],
+  "properties": {
+    "type": {
+      "const": "resourcefulbees:flow_hive"
+    },
+    "bees": {
+      "$ref": "#/$defs/entityHolderSet"
+    },
+    "fluid": {
+      "$ref": "#/$defs/fluidStackTemplate"
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "description": "Minecraft resource identifier.",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "nonEmptyFluidIdentifier": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/identifier"
+        },
+        {
+          "not": {
+            "enum": [
+              "minecraft:empty",
+              "empty"
+            ]
+          }
+        }
+      ],
+      "description": "Registered non-empty fluid identifier."
+    },
+    "tagIdentifier": {
+      "type": "string",
+      "description": "Minecraft tag identifier.",
+      "pattern": "^#(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "entityHolderSet": {
+      "description": "Entity holder set accepted by HolderSetCodec: a #tag, a single entity ID, or a list of entity IDs.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/tagIdentifier"
+        },
+        {
+          "$ref": "#/$defs/identifier"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
+        }
+      ]
+    },
+    "dataComponentPatch": {
+      "type": "object",
+      "description": "Minecraft DataComponentPatch. Kept extensible because the full vanilla component codec is outside the supplied source.",
+      "additionalProperties": true
+    },
+    "fluidStackTemplateObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "amount"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyFluidIdentifier"
+        },
+        "amount": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Required positive fluid amount."
+        },
+        "components": {
+          "$ref": "#/$defs/dataComponentPatch",
+          "default": {}
+        }
+      }
+    },
+    "fluidStackTemplate": {
+      "description": "NeoForge FluidStackTemplate. A bare fluid ID is shorthand for that fluid with FluidType.BUCKET_VOLUME (1000) and no component patch.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/nonEmptyFluidIdentifier"
+        },
+        {
+          "$ref": "#/$defs/fluidStackTemplateObject"
+        }
+      ]
+    }
+  }
+}

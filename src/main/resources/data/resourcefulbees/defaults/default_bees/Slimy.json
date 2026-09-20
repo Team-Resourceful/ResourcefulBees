@@ -7,11 +7,11 @@
     "resourcefulbees:rendering/v1": {
         "model": "resourcefulbees:slime",
         "texture": "slime/slime_bee",
-        "ColorData": {
-            "spawnEggPrimaryColor": "#62B64A",
-            "spawnEggSecondaryColor": "#303030",
+        "colors": {
+            "spawnEgg": "#62B64A",
             "jarColor": "#62B64A"
-        }
+        },
+        "renderType": "TRANSLUCENT"
     },
     "resourcefulbees:mutation/v1": {
         "mutation" : "resourcefulbees:mutations/slimy"

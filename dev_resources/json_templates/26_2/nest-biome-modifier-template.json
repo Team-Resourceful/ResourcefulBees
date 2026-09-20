@@ -1,0 +1,8 @@
+{
+  "type": "resourcefulbees:nests",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "resourcefulbees:oak_bee_nest",
+    "resourcefulbees:birch_bee_nest"
+  ]
+}

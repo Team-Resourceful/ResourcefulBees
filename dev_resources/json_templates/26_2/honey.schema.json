@@ -1,0 +1,375 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/resourcefulbees-honey.schema.json",
+  "title": "Resourceful Bees Honey Data",
+  "type": "object",
+  "required": [
+    "resourcefulbees:bottle/v1"
+  ],
+  "properties": {
+    "resourcefulbees:block/v1": {
+      "$ref": "#/$defs/blockData"
+    },
+    "resourcefulbees:fluid/v1": {
+      "$ref": "#/$defs/fluidData"
+    },
+    "resourcefulbees:bottle/v1": {
+      "$ref": "#/$defs/bottleData"
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "color": {
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "r": {
+              "type": "integer",
+              "default": 255
+            },
+            "g": {
+              "type": "integer",
+              "default": 255
+            },
+            "b": {
+              "type": "integer",
+              "default": 255
+            },
+            "a": {
+              "type": "integer",
+              "default": 255
+            }
+          }
+        }
+      ],
+      "default": "#ffffff"
+    },
+    "numberProvider": {
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "uniformGenerator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "max"
+      ],
+      "properties": {
+        "min": {
+          "$ref": "#/$defs/numberProvider"
+        },
+        "max": {
+          "$ref": "#/$defs/numberProvider"
+        }
+      }
+    },
+    "tradeData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/uniformGenerator",
+          "default": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        "secondaryItem": {
+          "$ref": "#/$defs/identifier",
+          "default": "minecraft:air"
+        },
+        "secondaryItemCost": {
+          "$ref": "#/$defs/uniformGenerator",
+          "default": {
+            "min": 1,
+            "max": 4
+          }
+        },
+        "priceMultiplier": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0.05
+        },
+        "maxTrades": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64,
+          "default": 8
+        },
+        "xp": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64,
+          "default": 3
+        }
+      }
+    },
+    "rarityEnumCodec": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^(?i:COMMON|UNCOMMON|RARE|EPIC)$"
+        },
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        }
+      ]
+    },
+    "rarityCodec": {
+      "type": "string",
+      "enum": [
+        "common",
+        "uncommon",
+        "rare",
+        "epic"
+      ]
+    },
+    "blockData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "color": {
+          "$ref": "#/$defs/color"
+        },
+        "jumpFactor": {
+          "type": "number",
+          "default": 0.5
+        },
+        "speedFactor": {
+          "type": "number",
+          "default": 0.4
+        },
+        "honeyBlockItem": {
+          "$ref": "#/$defs/identifier",
+          "default": "minecraft:honey_block"
+        },
+        "honeyBlock": {
+          "$ref": "#/$defs/identifier",
+          "default": "minecraft:honey_block"
+        },
+        "tradeData": {
+          "$ref": "#/$defs/tradeData"
+        }
+      }
+    },
+    "fluidRendering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "color"
+      ],
+      "properties": {
+        "color": {
+          "$ref": "#/$defs/color"
+        },
+        "still": {
+          "$ref": "#/$defs/identifier",
+          "default": "resourcefulbees:block/honey/custom_honey_still"
+        },
+        "flowing": {
+          "$ref": "#/$defs/identifier",
+          "default": "resourcefulbees:block/honey/custom_honey_flow"
+        },
+        "face": {
+          "$ref": "#/$defs/identifier",
+          "default": "resourcefulbees:block/honey/custom_honey_flow"
+        },
+        "overlay": {
+          "$ref": "#/$defs/identifier",
+          "default": "resourcefulbees:textures/block/honey/custom_honey_underwater.png"
+        }
+      }
+    },
+    "fluidAttributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lightLevel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15,
+          "default": 1
+        },
+        "density": {
+          "type": "integer",
+          "default": 1000
+        },
+        "temperature": {
+          "type": "integer",
+          "default": 300
+        },
+        "viscosity": {
+          "type": "integer",
+          "default": 1000
+        },
+        "fallDistanceModifier": {
+          "type": "number",
+          "default": 0.5
+        },
+        "motionScale": {
+          "type": "number",
+          "default": 0.014
+        },
+        "canPushEntities": {
+          "type": "boolean",
+          "default": true
+        },
+        "canSwimIn": {
+          "type": "boolean",
+          "default": true
+        },
+        "canDrownIn": {
+          "type": "boolean",
+          "default": true
+        },
+        "canExtinguish": {
+          "type": "boolean",
+          "default": false
+        },
+        "canConvertToSource": {
+          "type": "boolean",
+          "default": false
+        },
+        "supportsBoating": {
+          "type": "boolean",
+          "default": false
+        },
+        "canHydrate": {
+          "type": "boolean",
+          "default": false
+        },
+        "rarity": {
+          "$ref": "#/$defs/rarityCodec"
+        },
+        "fillSound": {
+          "$ref": "#/$defs/identifier",
+          "default": "minecraft:item.bucket.fill"
+        },
+        "emptySound": {
+          "$ref": "#/$defs/identifier",
+          "default": "minecraft:item.bucket.empty"
+        }
+      }
+    },
+    "fluidData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rendering": {
+          "$ref": "#/$defs/fluidRendering"
+        },
+        "attributes": {
+          "$ref": "#/$defs/fluidAttributes"
+        },
+        "tradeData": {
+          "$ref": "#/$defs/tradeData"
+        }
+      }
+    },
+    "bottleEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effect"
+      ],
+      "properties": {
+        "effect": {
+          "$ref": "#/$defs/identifier"
+        },
+        "duration": {
+          "type": "integer",
+          "default": 300
+        },
+        "strength": {
+          "type": "integer",
+          "default": 0
+        },
+        "chance": {
+          "type": "number",
+          "default": 1.0
+        }
+      }
+    },
+    "foodData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "hunger": {
+          "type": "integer",
+          "default": 1
+        },
+        "saturation": {
+          "type": "number",
+          "default": 1.0
+        },
+        "canAlwaysEat": {
+          "type": "boolean",
+          "default": false
+        },
+        "consumeSeconds": {
+          "type": "number",
+          "default": 2.0
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bottleEffect"
+          },
+          "default": []
+        }
+      }
+    },
+    "bottleData": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "color": {
+          "$ref": "#/$defs/color"
+        },
+        "food": {
+          "$ref": "#/$defs/foodData"
+        },
+        "rarity": {
+          "$ref": "#/$defs/rarityEnumCodec"
+        },
+        "honeyBottle": {
+          "$ref": "#/$defs/identifier",
+          "default": "minecraft:honey_bottle"
+        },
+        "tradeData": {
+          "$ref": "#/$defs/tradeData"
+        }
+      }
+    }
+  }
+}

@@ -6,9 +6,8 @@
     },
     "resourcefulbees:rendering/v1": {
         "texture": "skeleton/skeleton_bee",
-        "ColorData": {
-            "spawnEggPrimaryColor": "#F6F2E6",
-            "spawnEggSecondaryColor": "#303030",
+        "colors": {
+            "spawnEgg": "#F6F2E6",
             "jarColor": "#F6F2E6"
         }
     },
@@ -22,7 +21,7 @@
                 "parent2": "resourcefulbees:skeleton_bee"
             }
         ],
-        "feedItem": "#minecraft:flowers",
+        "feedItems": "#minecraft:flowers",
         "feedAmount": 8
     },
     "resourcefulbees:trade/v1": {

@@ -81,7 +81,6 @@ public record BlockMutation(RestrictedBlockPredicate predicate, double chance, d
         Item item = predicate.block().asItem();
         if (item.equals(Items.AIR)) {
             stack.set(DataComponents.CUSTOM_NAME, Component.translatable(ModTranslations.MUTATION_BLOCK, BuiltInRegistries.BLOCK.getKey(predicate.block())));
-            //stack.setHoverName(Component.translatable(ModTranslations.MUTATION_BLOCK, BuiltInRegistries.BLOCK.getKey(predicate.block())));
         } else {
             stack = new ItemStack(item);
         }

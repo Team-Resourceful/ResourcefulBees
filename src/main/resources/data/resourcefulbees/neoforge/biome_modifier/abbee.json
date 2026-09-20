@@ -1,8 +1,6 @@
 {
   "type": "resourcefulbees:supporter_spawns",
-  "whitelist": [
-    "#c:is_rare"
-  ],
+  "whitelist": "#c:is_rare",
   "spawn": {
     "type": "resourcefulbees:abbee_bee",
     "weight": 3,

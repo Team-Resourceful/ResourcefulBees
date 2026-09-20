@@ -5,14 +5,15 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeconTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeeconEffect;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeeconPacketOption;
+import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconEffectPacket;
-import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -97,6 +98,8 @@ public class BeeconEffectWidget extends AbstractWidget {
 
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {
+        output.add(NarratedElementType.HINT, effect.effect().getDescriptionId());
+        output.add(NarratedElementType.HINT, "Is active: %s".formatted(isActive()));
         // document why this method is empty
     }
 }

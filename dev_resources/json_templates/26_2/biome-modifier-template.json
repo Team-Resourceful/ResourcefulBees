@@ -1,0 +1,41 @@
+{
+  "type": "resourcefulbees:spawns",
+  "whitelist": [
+    "#minecraft:is_overworld"
+  ],
+  "blacklist": [
+    "minecraft:deep_dark"
+  ],
+  "spawn": {
+    "type": "resourcefulbees:ruby_bee",
+    "minCount": 1,
+    "maxCount": 3,
+    "weight": 10
+  },
+  "spawnPredicate": {
+    "position": {
+      "y": {
+        "min": 60.0,
+        "max": 128.0
+      }
+    },
+    "biomes": "#minecraft:is_overworld",
+    "dimension": "minecraft:overworld",
+    "smokey": false,
+    "light": {
+      "light": {
+        "min": 8
+      }
+    },
+    "block": {
+      "blocks": [
+        "minecraft:grass_block",
+        "minecraft:dirt"
+      ]
+    },
+    "fluid": {
+      "fluids": "minecraft:water"
+    },
+    "can_see_sky": true
+  }
+}

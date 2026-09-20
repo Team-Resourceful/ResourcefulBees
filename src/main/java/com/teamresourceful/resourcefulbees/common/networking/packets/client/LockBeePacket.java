@@ -45,43 +45,4 @@ public record LockBeePacket(BlockPos pos, int bee) implements Packet<LockBeePack
             };
         }
     }
-    /*
-
-
-
-    public static final ResourceLocation ID = new ResourceLocation(ModConstants.MOD_ID, "lock_bee");
-    public static final Handler HANDLER = new Handler();
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
-    @Override
-    public PacketHandler<LockBeePacket> getHandler() {
-        return HANDLER;
-    }
-
-    @SuppressWarnings("UnstableApiUsage")
-    private static class Handler extends CodecPacketHandler<LockBeePacket> {
-
-        public Handler() {
-            super(ObjectByteCodec.create(
-                ExtraByteCodecs.BLOCK_POS.fieldOf(LockBeePacket::pos),
-                ByteCodec.VAR_INT.fieldOf(LockBeePacket::bee),
-                LockBeePacket::new
-            ));
-        }
-
-        @Override
-        public PacketContext handle(LockBeePacket message) {
-            return (player, level) -> {
-                if (level.isLoaded(message.pos)) {
-                    if (level.getBlockEntity(message.pos) instanceof ApiaryBlockEntity apiaryBlockEntity) {
-                        apiaryBlockEntity.lockOrUnlockBee(message.bee);
-                    }
-                }
-            };
-        }
-    }*/
 }

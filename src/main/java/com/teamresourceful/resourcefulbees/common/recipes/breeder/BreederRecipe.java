@@ -4,9 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
+import com.teamresourceful.resourcefulbees.common.lib.util.bytecodecs.StreamCodecExtras;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
-import com.teamresourceful.resourcefulbees.common.lib.util.bytecodecs.StreamCodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -17,12 +18,10 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.NonNull;
 
-import java.util.Optional;
-
 public record BreederRecipe(
         ParentInput parent1,
         ParentInput parent2,
-        Optional<Ingredient> optionalIngredient,
+        Ingredient optional,
         WeightedCollection<ChildOutput> outputs,
         int time
 ) implements Recipe<BreederRecipe.Input> {
@@ -30,7 +29,7 @@ public record BreederRecipe(
     public static final MapCodec<BreederRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             ParentInput.CODEC.fieldOf("parent1").forGetter(BreederRecipe::parent1),
             ParentInput.CODEC.fieldOf("parent2").forGetter(BreederRecipe::parent2),
-            Ingredient.CODEC.optionalFieldOf("optional").forGetter(BreederRecipe::optionalIngredient),
+            Ingredient.CODEC.fieldOf("optional").orElse(Ingredient.of(ModItems.BEE_JAR.get())).forGetter(BreederRecipe::optional),
             CodecExtras.weightedCollection(ChildOutput.CODEC, ChildOutput::weight).fieldOf("outputs").forGetter(BreederRecipe::outputs),
             Codec.intRange(100, 72000).fieldOf("time").orElse(BreederConstants.DEFAULT_BREEDER_TIME).forGetter(BreederRecipe::time)
         ).apply(i, BreederRecipe::new));
@@ -42,8 +41,8 @@ public record BreederRecipe(
             ParentInput.STREAM_CODEC,
             BreederRecipe::parent2,
 
-            ByteBufCodecs.optional(Ingredient.CONTENTS_STREAM_CODEC),
-            BreederRecipe::optionalIngredient,
+            Ingredient.CONTENTS_STREAM_CODEC,
+            BreederRecipe::optional,
 
             StreamCodecExtras.weightedCollection(ChildOutput.STREAM_CODEC, ChildOutput::weight),
             BreederRecipe::outputs,
@@ -78,7 +77,7 @@ public record BreederRecipe(
     public boolean matches(Input input, @NonNull Level level) {
         return parent1.matches(input.input1, input.feedItem1)
                 && parent2.matches(input.input2, input.feedItem2)
-                && (this.optionalIngredient.isPresent() && !this.optionalIngredient.get().isEmpty() && this.optionalIngredient.get().test(input.optionalInput));
+                && this.optional.test(input.optionalInput);
     }
 
     @Override

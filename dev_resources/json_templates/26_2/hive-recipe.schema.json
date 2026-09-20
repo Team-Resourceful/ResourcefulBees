@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/resourcefulbees-hive-recipe.schema.json",
+  "title": "Resourceful Bees Hive Recipe",
+  "description": "Schema reconstructed from HiveRecipe, HolderSetCodec, tier codecs, and ItemStackTemplate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "bees"
+  ],
+  "properties": {
+    "type": {
+      "const": "resourcefulbees:hive"
+    },
+    "bees": {
+      "$ref": "#/$defs/entityHolderSet"
+    },
+    "hiveCombs": {
+      "$ref": "#/$defs/tierCombMap",
+      "default": {}
+    },
+    "apiaryCombs": {
+      "$ref": "#/$defs/tierCombMap",
+      "default": {}
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "tagIdentifier": {
+      "type": "string",
+      "pattern": "^#(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "entityHolderSet": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/tagIdentifier"
+        },
+        {
+          "$ref": "#/$defs/identifier"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
+        }
+      ]
+    },
+    "dataComponentPatch": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "itemStackTemplateObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99,
+          "default": 1
+        },
+        "components": {
+          "$ref": "#/$defs/dataComponentPatch",
+          "default": {}
+        }
+      }
+    },
+    "itemStackTemplate": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/identifier"
+        },
+        {
+          "$ref": "#/$defs/itemStackTemplateObject"
+        }
+      ]
+    },
+    "tierCombMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/identifier"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/itemStackTemplate"
+      }
+    }
+  }
+}

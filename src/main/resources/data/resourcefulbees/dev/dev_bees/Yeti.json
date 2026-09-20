@@ -6,9 +6,8 @@
   "resourcefulbees:rendering/v1": {
     "texture": "yeti/yeti_bee",
     "model":  "resourcefulbees:yeti",
-    "ColorData": {
-      "spawnEggPrimaryColor": "#e9f4f6",
-      "spawnEggSecondaryColor": "#c1d3d6",
+    "colors": {
+      "spawnEgg": "#e9f4f6",
       "jarColor": "#e9f4f6"
     },
     "sizeModifier": 1.25

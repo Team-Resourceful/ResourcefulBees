@@ -66,7 +66,8 @@ public final class DummyHoneyData {
             8,
             LazyHolder.of(BuiltInRegistries.ITEM, Items.HONEY_BLOCK),
             LazyHolder.of(BuiltInRegistries.BLOCK, Blocks.HONEY_BLOCK),
-            DEFAULT_TRADE
+            DEFAULT_TRADE,
+            "template"
     );
 
     private static final HoneyFluidData FLUID_DATA = HONEY_API.fluid(

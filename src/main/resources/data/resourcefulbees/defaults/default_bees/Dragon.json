@@ -11,9 +11,8 @@
             { "isPollen": true, "color": "#E400FF", "texture": "custom_nectar" },
             { "layerEffect": "GLOW", "texture": "dragon/dragon_bee_emissive", "color": "#E400FF" }
         ],
-        "ColorData": {
-            "spawnEggPrimaryColor": "#171717",
-            "spawnEggSecondaryColor": "#E400FF",
+        "colors": {
+            "spawnEgg": "#171717",
             "jarColor": "#222222"
         }
     },

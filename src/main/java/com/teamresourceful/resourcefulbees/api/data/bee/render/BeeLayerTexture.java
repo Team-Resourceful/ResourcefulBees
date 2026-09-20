@@ -11,6 +11,8 @@ public interface BeeLayerTexture {
 
     Identifier getTexture(NeutralMob neutralMob);
 
+    Identifier getTexture(boolean isAngry);
+
     default String id() {
         return texture().getPath().substring("textures/entity/".length(), texture().getPath().length() - 4);
     }

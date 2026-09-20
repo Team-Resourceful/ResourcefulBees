@@ -9,12 +9,10 @@ import com.teamresourceful.resourcefulbees.api.data.honey.bottle.HoneyFoodData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.setup.data.beedata.TradeData;
 import com.teamresourceful.resourcefullib.common.codecs.EnumCodec;
-import com.teamresourceful.resourcefullib.common.codecs.recipes.LazyHolders;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 
 public record CustomHoneyBottleData(
@@ -32,9 +30,8 @@ public record CustomHoneyBottleData(
                 Color.CODEC.optionalFieldOf("color", Color.DEFAULT).forGetter(HoneyBottleData::color),
                 CustomHoneyFoodData.CODEC.optionalFieldOf("food", CustomHoneyFoodData.DEFAULT).forGetter(HoneyBottleData::food),
                 EnumCodec.of(Rarity.class).optionalFieldOf("rarity", Rarity.COMMON).forGetter(HoneyBottleData::rarity),
-                LazyHolders.LAZY_ITEM.optionalFieldOf("honeyBottle", LazyHolder.of(BuiltInRegistries.ITEM, Items.HONEY_BOTTLE)).forGetter(HoneyBottleData::bottle),
                 TradeData.CODEC.optionalFieldOf("tradeData", TradeData.DEFAULT).forGetter(HoneyBottleData::tradeData)
-        ).apply(instance, CustomHoneyBottleData::new));
+        ).apply(instance, (s, color1, honeyFoodData, rarity1, beekeeperTradeData) -> new CustomHoneyBottleData(s, color1, honeyFoodData, rarity1, LazyHolder.of(BuiltInRegistries.ITEM, ModIdentifier.of(id + "_honey_bottle")), beekeeperTradeData)));
     }
     public static final HoneyDataSerializer<HoneyBottleData> SERIALIZER = HoneyDataSerializer.of(ModIdentifier.of("bottle"), 1, CustomHoneyBottleData::codec);
 

@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/resourcefulbees-solidification-recipe.schema.json",
+  "title": "Resourceful Bees Solidification Recipe",
+  "description": "Draft 2020-12 schema reconstructed from SolidificationRecipe, NeoForge SizedFluidIngredient, and NeoForge FluidIngredient dispatch codecs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "fluid",
+    "result"
+  ],
+  "properties": {
+    "type": {
+      "const": "resourcefulbees:solidification"
+    },
+    "fluid": {
+      "$ref": "#/$defs/sizedFluidIngredient"
+    },
+    "result": {
+      "$ref": "#/$defs/itemStackTemplate"
+    },
+    "time": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 200
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "description": "Minecraft/NeoForge resource identifier.",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "fluidOrTag": {
+      "type": "string",
+      "description": "Simple fluid ingredient using a direct fluid identifier or #tag.",
+      "pattern": "^#?(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "customFluidIngredient": {
+      "type": "object",
+      "description": "Custom NeoForge FluidIngredient. The discriminator is fixed by FluidIngredientCodecs.dispatch; remaining fields depend on the registered ingredient type.",
+      "required": [
+        "neoforge:ingredient_type"
+      ],
+      "properties": {
+        "neoforge:ingredient_type": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "additionalProperties": true
+    },
+    "fluidIngredient": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/fluidOrTag"
+        },
+        {
+          "$ref": "#/$defs/customFluidIngredient"
+        }
+      ]
+    },
+    "sizedFluidIngredient": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ingredient"
+      ],
+      "properties": {
+        "ingredient": {
+          "$ref": "#/$defs/fluidIngredient"
+        },
+        "amount": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1000,
+          "description": "Fluid amount. Defaults to FluidType.BUCKET_VOLUME (1000)."
+        }
+      }
+    },
+    "dataComponentPatch": {
+      "type": "object",
+      "description": "Minecraft DataComponentPatch. Kept extensible because the full vanilla component codec is outside the supplied source.",
+      "additionalProperties": true
+    },
+    "itemStackTemplateObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99,
+          "default": 1
+        },
+        "components": {
+          "$ref": "#/$defs/dataComponentPatch",
+          "default": {}
+        }
+      }
+    },
+    "itemStackTemplate": {
+      "description": "Minecraft ItemStackTemplate compact string or expanded object form.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/identifier"
+        },
+        {
+          "$ref": "#/$defs/itemStackTemplateObject"
+        }
+      ]
+    }
+  }
+}

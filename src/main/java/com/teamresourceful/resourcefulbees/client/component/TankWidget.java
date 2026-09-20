@@ -21,7 +21,6 @@ public class TankWidget extends AbstractWidget {
 
 
     private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance();
-    public static final Tooltip EMPTY_TOOLTIP = Tooltip.create(Component.literal("Empty"));
     private final Supplier<List<TankData>> tankData;
     private double scrollAccumulator;
 
@@ -102,13 +101,7 @@ public class TankWidget extends AbstractWidget {
 
     private Tooltip createTooltip(TankData data) {
         FluidStack fluidStack = data.fluid();
-
-        //if (fluidStack.isEmpty()) {
-        //    return EMPTY_TOOLTIP;
-        //}
-
         long amount = fluidStack.amount();
-
         Component amountText;
 
         if (Minecraft.getInstance().hasShiftDown() || amount < 500) {

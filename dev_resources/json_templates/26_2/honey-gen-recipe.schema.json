@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/resourcefulbees-honey-gen-recipe.schema.json",
+  "title": "Resourceful Bees Honey Generator Recipe",
+  "description": "Schema reconstructed from HoneyGenRecipe and NeoForge FluidIngredient codecs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "honey"
+  ],
+  "properties": {
+    "type": {
+      "const": "resourcefulbees:honey_gen"
+    },
+    "honey": {
+      "$ref": "#/$defs/fluidIngredient"
+    },
+    "energyFillRate": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 125
+    },
+    "honeyDrainRate": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 5
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "description": "Minecraft/NeoForge resource identifier.",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "fluidOrTag": {
+      "type": "string",
+      "description": "Simple fluid ingredient: a direct fluid identifier or #tag.",
+      "pattern": "^#?(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "customFluidIngredient": {
+      "type": "object",
+      "description": "Custom NeoForge FluidIngredient. Remaining fields are determined by the registered FluidIngredientType codec.",
+      "required": [
+        "neoforge:ingredient_type"
+      ],
+      "properties": {
+        "neoforge:ingredient_type": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "additionalProperties": true
+    },
+    "fluidIngredient": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/fluidOrTag"
+        },
+        {
+          "$ref": "#/$defs/customFluidIngredient"
+        }
+      ]
+    }
+  }
+}

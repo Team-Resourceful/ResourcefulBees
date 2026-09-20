@@ -1,11 +1,6 @@
 {
   "type": "resourcefulbees:spawns",
-  "whitelist": [
-    "#minecraft:is_overworld"
-  ],
-  "blacklist": [
-    "#minecraft:is_ocean"
-  ],
+  "whitelist": "#minecraft:is_nether",
   "spawn": {
     "type": "resourcefulbees:gold_bee",
     "weight": 8,

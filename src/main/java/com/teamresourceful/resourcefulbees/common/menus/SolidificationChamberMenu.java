@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.menus;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.SolidificationChamberBlockEntity;
+import com.teamresourceful.resourcefulbees.common.menus.base.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
 import net.minecraft.world.entity.player.Inventory;

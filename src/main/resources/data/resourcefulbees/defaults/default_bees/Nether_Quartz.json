@@ -10,9 +10,8 @@
         "layers" : [
             { "isPollen": true, "color": "#EAE5DE", "texture": "custom_nectar" }
         ],
-        "ColorData": {
-            "spawnEggPrimaryColor": "#A52E2E",
-            "spawnEggSecondaryColor": "#D4CABA",
+        "colors": {
+            "spawnEgg": "#A52E2E",
             "jarColor": "#D4CABA"
         }
     },

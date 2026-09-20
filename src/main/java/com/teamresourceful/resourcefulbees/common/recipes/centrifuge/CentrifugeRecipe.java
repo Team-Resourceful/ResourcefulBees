@@ -5,17 +5,19 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.config.CentrifugeConfig;
+import com.teamresourceful.resourcefulbees.common.lib.util.bytecodecs.StreamCodecExtras;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.AbstractOutput;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.FluidOutput;
 import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.ItemOutput;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipeSerializers;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
-import com.teamresourceful.resourcefulbees.common.lib.util.bytecodecs.StreamCodecExtras;
 import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
+import com.teamresourceful.resourcefullib.common.exceptions.ValidationException;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -40,13 +42,16 @@ public record CentrifugeRecipe(
 
     public static final MapCodec<CentrifugeRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Ingredient.CODEC.fieldOf("ingredient").forGetter(CentrifugeRecipe::ingredient),
-            Codec.INT.fieldOf("inputAmount").orElse(1).forGetter(CentrifugeRecipe::inputAmount),
+            ExtraCodecs.POSITIVE_INT.fieldOf("inputAmount").orElse(1).forGetter(CentrifugeRecipe::inputAmount),
             Output.codec(ItemOutput.CODEC).listOf().fieldOf("itemOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::itemOutputs),
             Output.codec(FluidOutput.CODEC).listOf().fieldOf("fluidOutputs").orElse(new ArrayList<>()).forGetter(CentrifugeRecipe::fluidOutputs),
-            Codec.INT.fieldOf("time").orElse(CentrifugeConfig.defaultCentrifugeRecipeTime).forGetter(CentrifugeRecipe::time),
-            Codec.INT.fieldOf("energyPerTick").orElse(CentrifugeConfig.centrifugeRfPerTick).forGetter(CentrifugeRecipe::energyPerTick),
-            Codec.INT.optionalFieldOf("rotations").forGetter(CentrifugeRecipe::rotations)
-    ).apply(instance, CentrifugeRecipe::new));
+            ExtraCodecs.POSITIVE_INT.fieldOf("time").orElse(CentrifugeConfig.defaultCentrifugeRecipeTime).forGetter(CentrifugeRecipe::time),
+            ExtraCodecs.POSITIVE_INT.fieldOf("energyPerTick").orElse(CentrifugeConfig.centrifugeRfPerTick).forGetter(CentrifugeRecipe::energyPerTick),
+            ExtraCodecs.POSITIVE_INT.optionalFieldOf("rotations").forGetter(CentrifugeRecipe::rotations)
+    ).apply(instance, (ingredient1, integer, outputs, outputs2, integer2, integer3, integer4) -> {
+        if (outputs.isEmpty() && outputs2.isEmpty()) throw new ValidationException("At least one of `itemOutputs` or `fluidOutputs` must be non-empty.");
+        return new CentrifugeRecipe(ingredient1, integer, outputs, outputs2, integer2, integer3, integer4);
+    }));
 
 
     public static final StreamCodec<RegistryFriendlyByteBuf, CentrifugeRecipe> STREAM_CODEC = StreamCodec

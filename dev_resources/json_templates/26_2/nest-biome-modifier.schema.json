@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/resourcefulbees-nest-biome-modifier.schema.json",
+  "title": "Resourceful Bees Nest Biome Modifier",
+  "description": "Schema reconstructed from BeeNestBiomeModifier, Biome.LIST_CODEC, PlacedFeature.LIST_CODEC, RegistryCodecs, and HolderSetCodec.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "biomes",
+    "features"
+  ],
+  "properties": {
+    "type": {
+      "const": "resourcefulbees:nests"
+    },
+    "biomes": {
+      "$ref": "#/$defs/biomeHolderSet",
+      "description": "Required biome holder set. May be a single biome ID, biome tag, list of biome IDs, or NeoForge custom holder-set object."
+    },
+    "features": {
+      "$ref": "#/$defs/placedFeatureHolderSet",
+      "description": "Required placed-feature holder set. May be a single placed-feature ID, placed-feature tag, list of placed-feature IDs, or NeoForge custom holder-set object."
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "tagIdentifier": {
+      "type": "string",
+      "pattern": "^#(?:[a-z0-9_.-]+:)?[a-z0-9/._-]+$"
+    },
+    "customHolderSet": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "additionalProperties": true,
+      "description": "NeoForge custom holder-set dispatch object. Its additional fields depend on the registered holder-set type."
+    },
+    "biomeHolderSet": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/tagIdentifier"
+        },
+        {
+          "$ref": "#/$defs/identifier"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
+        },
+        {
+          "$ref": "#/$defs/customHolderSet"
+        }
+      ]
+    },
+    "placedFeatureHolderSet": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/tagIdentifier"
+        },
+        {
+          "$ref": "#/$defs/identifier"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          }
+        },
+        {
+          "$ref": "#/$defs/customHolderSet"
+        }
+      ],
+      "description": "PlacedFeature.LIST_CODEC also has an inline direct-value branch through PlacedFeature.DIRECT_CODEC. This schema intentionally models normal datapack registry-reference authoring plus NeoForge custom holder sets, rather than guessing ConfiguredFeature/PlacementModifier internals."
+    }
+  }
+}

@@ -15,16 +15,8 @@ public class ModClientFluidProperties {
 
     public static void registerHoneyFluids() {
         HoneyRegistry.getRegistry().getHoneyBottles().forEach((id, honeyData) ->
-                honeyData
-                        .getOptionalData(CustomHoneyFluidData.SERIALIZER)
-                        .ifPresent(fluidData ->
-                                CLIENT_FLUID_PROPERTIES.register(
-                                        id + "_honey",
-                                        () -> CustomHoneyClientFluidProperties.create(
-                                                fluidData.renderData()
-                                        )
-                                )
-                        )
+                honeyData.getOptionalData(CustomHoneyFluidData.SERIALIZER)
+                        .ifPresent(fluidData -> CLIENT_FLUID_PROPERTIES.register(id + "_honey", () -> CustomHoneyClientFluidProperties.create(fluidData.renderData())))
         );
     }
 }

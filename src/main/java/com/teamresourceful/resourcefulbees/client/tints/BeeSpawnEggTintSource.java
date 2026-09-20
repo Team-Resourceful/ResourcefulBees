@@ -17,7 +17,7 @@ public record BeeSpawnEggTintSource() implements ItemTintSource {
     @Override
     public int calculate(@NonNull ItemStack itemStack, @Nullable ClientLevel level, @Nullable LivingEntity owner) {
         if (SpawnEggItem.getType(itemStack) instanceof CustomBeeEntityType<?> customBeeEntityType) {
-            return customBeeEntityType.getData().getRenderData().colorData().primarySpawnEggColor().withAlpha(255).getValue();
+            return customBeeEntityType.getData().getRenderData().colorData().spawnEgg().withAlpha(255).getValue();
         }
         return 0xffffffff;
     }

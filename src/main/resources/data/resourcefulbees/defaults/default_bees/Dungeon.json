@@ -9,9 +9,8 @@
         "layers" : [
             { "isPollen": true, "color": "#406278", "texture": "custom_nectar" }
         ],
-        "ColorData": {
-            "spawnEggPrimaryColor": "#406278",
-            "spawnEggSecondaryColor": "#303030",
+        "colors": {
+            "spawnEgg": "#406278",
             "jarColor": "#406278"
         }
     },
@@ -26,7 +25,7 @@
                 "parent2": "resourcefulbees:dungeon_bee"
             }
         ],
-        "feedItem": ["minecraft:mossy_cobblestone"],
+        "feedItems": ["minecraft:mossy_cobblestone"],
         "feedAmount": 4
     },
     "resourcefulbees:trade/v1": {

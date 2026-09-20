@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.menus;
 import com.teamresourceful.resourcefulbees.common.blockentities.BreederBlockEntity;
 import com.teamresourceful.resourcefulbees.common.components.Upgrade;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
+import com.teamresourceful.resourcefulbees.common.menus.base.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;

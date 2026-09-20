@@ -1,0 +1,6 @@
+{
+  "type": "resourcefulbees:honey_gen",
+  "honey": "resourcefulbees:ruby_honey_fluid_source",
+  "energyFillRate": 125,
+  "honeyDrainRate": 5
+}

@@ -10,9 +10,8 @@
         "layers" : [
             { "isPollen": true, "color": "#E69BFF", "texture": "custom_nectar" }
         ],
-        "ColorData": {
-            "spawnEggPrimaryColor": "#339786",
-            "spawnEggSecondaryColor": "#303030",
+        "colors": {
+            "spawnEgg": "#339786",
             "jarColor": "#339786"
         }
     },
@@ -26,7 +25,7 @@
                 "parent2": "resourcefulbees:ender_bee"
             }
         ],
-        "feedItem": ["minecraft:end_stone"],
+        "feedItems": ["minecraft:end_stone"],
         "feedAmount": 12
     },
     "resourcefulbees:trait/v1": {

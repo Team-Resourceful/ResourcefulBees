@@ -47,7 +47,7 @@ public final class HoneyInitializers {
 
     @FunctionalInterface
     public interface HoneyBlockDataInitializer {
-        HoneyBlockData create(Color color, float jumpFactor, float speedFactor, LazyHolder<Item> blockItem, LazyHolder<Block> block, BeekeeperTradeData tradeData);
+        HoneyBlockData create(Color color, float jumpFactor, float speedFactor, LazyHolder<Item> blockItem, LazyHolder<Block> block, BeekeeperTradeData tradeData, String id);
     }
 
     @FunctionalInterface

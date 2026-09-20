@@ -1,8 +1,6 @@
 {
   "type": "resourcefulbees:dev_spawns",
-  "whitelist": [
-    "#c:is_rare"
-  ],
+  "whitelist": "#c:is_rare",
   "spawn": {
     "type": "resourcefulbees:yeti_bee",
     "weight": 3,

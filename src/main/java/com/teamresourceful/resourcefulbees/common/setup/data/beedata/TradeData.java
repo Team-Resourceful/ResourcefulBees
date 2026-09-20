@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeDataSerializer;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
-import com.teamresourceful.resourcefullib.common.codecs.CodecExtras;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -15,7 +14,7 @@ public record TradeData(
         UniformGenerator amount,
         Item secondaryItem,
         UniformGenerator secondaryItemCost,
-        float priceMultiplier,
+        float reputationDiscount,
         int maxTrades,
         int xp
 ) implements BeekeeperTradeData {
@@ -29,7 +28,7 @@ public record TradeData(
             UniformGenerator.MAP_CODEC.fieldOf("amount").orElse(UniformGenerator.between(1f,1f)).forGetter(BeekeeperTradeData::amount),
             BuiltInRegistries.ITEM.byNameCodec().optionalFieldOf("secondaryItem", Items.AIR).forGetter(BeekeeperTradeData::secondaryItem),
             UniformGenerator.MAP_CODEC.fieldOf("secondaryItemCost").orElse(UniformGenerator.between(1, 4)).forGetter(BeekeeperTradeData::secondaryItemCost),
-            CodecExtras.NON_NEGATIVE_FLOAT.optionalFieldOf("priceMultiplier", 0.05f).forGetter(BeekeeperTradeData::priceMultiplier),
+            Codec.floatRange(0, 1).optionalFieldOf("reputationDiscount", 0.05f).forGetter(BeekeeperTradeData::reputationDiscount),
             Codec.intRange(1, 64).optionalFieldOf("maxTrades", 8).forGetter(BeekeeperTradeData::maxTrades),
             Codec.intRange(1, 64).optionalFieldOf("xp", 3).forGetter(BeekeeperTradeData::xp)
     ).apply(tradeDataInstance, TradeData::new));

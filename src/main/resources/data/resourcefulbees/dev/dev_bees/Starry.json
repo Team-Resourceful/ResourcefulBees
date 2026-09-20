@@ -15,9 +15,8 @@
   },
   "resourcefulbees:rendering/v1": {
     "texture": "starry/starry_bee",
-    "ColorData": {
-      "spawnEggPrimaryColor": "#FFA500",
-      "spawnEggSecondaryColor": "#f0d800",
+    "colors": {
+      "spawnEgg": "#FFA500",
       "jarColor": "#FFA500"
     },
     "layers": [

@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.client.fluids;
 
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefullib.client.fluid.data.ClientFluidProperties;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.resources.model.sprite.Material;
@@ -12,8 +11,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class CustomHoneyClientFluidProperties {
 
-    private static final Identifier STILL_TEXTURE = ModIdentifier.of("block/honey_fluid/still");
-    private static final Identifier FLOWING_TEXTURE = ModIdentifier.of("block/honey_fluid/flow");
 
     public static ClientFluidProperties create(HoneyRenderData renderData) {
         return new ClientFluidProperties() {

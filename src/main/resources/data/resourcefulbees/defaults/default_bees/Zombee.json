@@ -6,9 +6,8 @@
     },
     "resourcefulbees:rendering/v1": {
         "texture": "zombie/zombie_bee",
-        "ColorData": {
-            "spawnEggPrimaryColor": "#2F4E32",
-            "spawnEggSecondaryColor": "#303030"
+        "colors": {
+            "spawnEgg": "#2F4E32"
         }
     },
     "resourcefulbees:mutation/v1": {

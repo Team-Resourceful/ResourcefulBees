@@ -55,12 +55,10 @@ public final class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.
         BreederRecipe recipe = wrapper.recipe();
         addParent(builder, recipe.parent1(), 1, 11, 1, 29, 22, 20, "parent_1");
         addParent(builder, recipe.parent2(), 1, 83, 1, 101, 22, 92, "parent_2");
-
-        recipe.optionalIngredient().ifPresent(optional ->
-                builder.addInputSlot(64, 56)
-                        .add(optional)
-                        .setSlotName("optional_input")
-        );
+        
+        builder.addInputSlot(64, 56)
+                .add(recipe.optional())
+                .setSlotName("optional_input");
 
         ChildOutput output = wrapper.output();
 

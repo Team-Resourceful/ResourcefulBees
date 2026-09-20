@@ -1,0 +1,45 @@
+{
+  "name": "fiery",
+  "displayItem": "minecraft:blaze_powder",
+  "potionDamageEffects": [
+    {
+      "effect": "minecraft:poison",
+      "strength": 1
+    }
+  ],
+  "damageImmunities": [
+    "inFire",
+    "onFire",
+    "lava"
+  ],
+  "potionImmunities": [
+    "minecraft:poison"
+  ],
+  "damageTypes": [
+    {
+      "damageType": "setOnFire",
+      "amplifier": 2
+    }
+  ],
+  "specialAbilities": [
+    "flammable"
+  ],
+  "particleType": [
+    "minecraft:flame"
+  ],
+  "auras": [
+    {
+      "aura": "BURNING",
+      "modifier": 0,
+      "calmingDisabled": false
+    },
+    {
+      "aura": "DAMAGING",
+      "damageEffect": {
+        "source": "minecraft:generic",
+        "hasEntity": false,
+        "strength": 3
+      }
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import com.geckolib.renderer.base.RenderPassInfo;
 import com.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer;
 import com.google.common.reflect.TypeToken;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeLayerData;
+import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
@@ -38,26 +39,22 @@ public class CustomBeeGlowLayer <R extends EntityRenderState & GeoRenderState> e
 
     @Override
     public void addRenderData(CustomBeeEntity animatable, @Nullable Void relatedObject, @NonNull R renderState, float partialTick) {
-        var pulseFrequency = animatable.getRenderData().pulseFrequency();
+        var pulseFrequency = layerData.pulseFrequency();
         int brightness = (pulseFrequency == 0 || animatable.tickCount % pulseFrequency == 0) ? LightCoordsUtil.FULL_SKY : 0;
         renderState.addGeckolibData(RBEES_BRIGHTNESS_TICKET, brightness);
-
     }
 
     @Override
     protected @NonNull Identifier getTextureResource(@NonNull R renderState) {
-        return layerData.texture().texture();
+        return layerData.texture().getTexture(renderState.getGeckolibData(CustomBeeRenderer.IS_ANGRY));
     }
 
     @Override
-    public void preRender(RenderPassInfo<@NonNull R> renderPassInfo, SubmitNodeCollector renderTasks) {
-        renderPassInfo.renderState().addGeckolibData(DataTickets.RENDER_COLOR, layerData.color().getOpaqueValue());
-        super.preRender(renderPassInfo, renderTasks);
-    }
-
-    @Override
-    public void submitRenderTask(RenderPassInfo<@NonNull R> renderPassInfo, SubmitNodeCollector renderTasks) {
-        super.submitRenderTask(renderPassInfo, renderTasks);
-        //renderPassInfo.renderState().addGeckolibData(DataTickets.RENDER_COLOR, 0xFFFFFFFF);
+    public void submitRenderTask(RenderPassInfo<@NonNull R> renderPassInfo, @NonNull SubmitNodeCollector renderTasks) {
+        if (!layerData.pollenLayer() || layerData.pollenLayer() && renderPassInfo.renderState().getGeckolibData(CustomBeeRenderer.HAS_NECTAR)) {
+            renderPassInfo.renderState().addGeckolibData(DataTickets.RENDER_COLOR, layerData.color().getOpaqueValue());
+            super.submitRenderTask(renderPassInfo, renderTasks);
+            renderPassInfo.renderState().addGeckolibData(DataTickets.RENDER_COLOR, 0xFFFFFFFF);
+        }
     }
 }

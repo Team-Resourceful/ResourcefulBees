@@ -9,14 +9,14 @@
         "model": "resourcefulbees:crystal",
         "layers": [
             {
-                "layerEffect": "GLOW",
-                "texture": "ores/redstone/redstone_bee_emissive"
+                "layerEffect": "ENCHANTED",
+                "texture": "ores/redstone/redstone_bee_glint",
+                "bone": "crystals"
             },
             { "isPollen": true, "color": "#FF0000", "texture": "custom_nectar" }
         ],
-        "ColorData": {
-            "spawnEggPrimaryColor": "#8F8F8F",
-            "spawnEggSecondaryColor": "#aa0f01",
+        "colors": {
+            "spawnEgg": "#8F8F8F",
             "jarColor": "#aa0f01"
         }
     },

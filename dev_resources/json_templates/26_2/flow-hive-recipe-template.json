@@ -1,0 +1,12 @@
+{
+  "type": "resourcefulbees:flow_hive",
+  "bees": [
+    "minecraft:bee",
+    "resourcefulbees:ruby_bee"
+  ],
+  "fluid": {
+    "id": "resourcefulbees:ruby_honey_fluid_source",
+    "amount": 1000,
+    "components": {}
+  }
+}

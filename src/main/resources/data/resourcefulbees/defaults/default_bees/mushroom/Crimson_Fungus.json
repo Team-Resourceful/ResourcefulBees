@@ -10,9 +10,8 @@
     "layers" : [
       { "isPollen": true, "color": "#FFDCC4", "texture": "custom_nectar" }
     ],
-    "ColorData": {
-      "spawnEggPrimaryColor": "#941818",
-      "spawnEggSecondaryColor": "#FFA468",
+    "colors": {
+      "spawnEgg": "#941818",
       "jarColor": "#8B4513"
     }
   },
@@ -22,7 +21,7 @@
   },
   "resourcefulbees:breeding/v1": {
     "isBreedable": true,
-    "feedItem": ["minecraft:crimson_fungus"],
+    "feedItems": ["minecraft:crimson_fungus"],
     "feedAmount": 4
   },
   "resourcefulbees:trait/v1" : {
@@ -38,7 +37,7 @@
       "min": 4,
       "max": 8
     },
-    "priceMultiplier": 4,
+    "reputationDiscount": 0.4,
     "maxTrades": 2
   }
 }

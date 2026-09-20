@@ -1,9 +1,6 @@
 {
   "type": "resourcefulbees:spawns",
-  "whitelist": [
-    "#minecraft:is_mountain",
-    "#minecraft:is_hill"
-  ],
+  "whitelist": "#resourcefulbees:emerald_spawn",
   "spawn": {
     "type": "resourcefulbees:emerald_bee",
     "weight": 8,

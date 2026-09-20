@@ -1,0 +1,41 @@
+{
+  "type": "resourcefulbees:mutation",
+  "pollenBaseColor": 12681264,
+  "pollenTopColor": 13408304,
+  "mutations": [
+    {
+      "input": {
+        "type": "item",
+        "item": {
+          "id": "minecraft:diamond"
+        },
+        "chance": 1.0,
+        "weight": 10.0
+      },
+      "outputs": [
+        {
+          "type": "block",
+          "block": {
+            "id": "minecraft:diamond_block"
+          },
+          "chance": 1.0,
+          "weight": 10.0
+        },
+        {
+          "type": "fluid",
+          "fluid": "minecraft:water",
+          "chance": 1.0,
+          "weight": 10.0
+        },
+        {
+          "type": "entity",
+          "entity": {
+            "type": "minecraft:cow"
+          },
+          "chance": 1.0,
+          "weight": 10.0
+        }
+      ]
+    }
+  ]
+}

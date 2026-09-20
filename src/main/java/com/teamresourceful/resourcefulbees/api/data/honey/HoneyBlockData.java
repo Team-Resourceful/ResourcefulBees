@@ -20,4 +20,6 @@ public interface HoneyBlockData extends HoneyData<HoneyBlockData> {
     LazyHolder<Block> block();
 
     BeekeeperTradeData tradeData();
+
+    String id();
 }
