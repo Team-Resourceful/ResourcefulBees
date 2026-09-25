@@ -16,7 +16,7 @@ public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
     private static final Identifier BACKGROUND = ModIdentifier.of("textures/gui/apiary/apiary_breeder_gui.png");
 
     public BreederScreen(BreederMenu screenContainer, Inventory inv, Component titleIn) {
-        super(screenContainer, inv, titleIn);
+        super(screenContainer, inv, titleIn, 198, 188);
         preInit();
     }
 

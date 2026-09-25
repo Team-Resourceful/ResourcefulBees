@@ -46,7 +46,7 @@ public class CustomBeeGlowLayer <R extends EntityRenderState & GeoRenderState> e
 
     @Override
     protected @NonNull Identifier getTextureResource(@NonNull R renderState) {
-        return layerData.texture().getTexture(renderState.getGeckolibData(CustomBeeRenderer.IS_ANGRY));
+        return layerData.texture().texture();
     }
 
     @Override
