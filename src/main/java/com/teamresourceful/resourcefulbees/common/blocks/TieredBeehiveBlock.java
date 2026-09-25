@@ -72,7 +72,43 @@ public class TieredBeehiveBlock extends BeehiveBlock implements BeeHolderBlock {
         return block.dropResourceHoneycomb(level, pos, null, useScraper);
     }
 
+    /**
+     * Harvests a single resource honeycomb using scraper-style harvesting.
+     *
+     * <p>This is intended for automated harvesting where no player is
+     * responsible for the interaction, such as dispensers or villager AI.</p>
+     *
+     * @param level the level containing the hive
+     * @param pos   the hive position
+     * @return true if a resource honeycomb was harvested
+     */
+    public boolean harvestWithScraper(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
 
+        if (state.getBlock() != this) {
+            return false;
+        }
+
+        if (state.getValue(HONEY_LEVEL) < 5) {
+            return false;
+        }
+
+        if (!(level.getBlockEntity(pos) instanceof TieredBeehiveBlockEntity hive)) {
+            return false;
+        }
+
+        if (!hive.hasCombs()) {
+            return false;
+        }
+
+        boolean emptied = this.dropResourceHoneycomb(level, pos, null, true);
+
+        if (emptied) {
+            this.releaseBeesAndResetHoneyLevel(level, state, pos, null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
+        }
+
+        return true;
+    }
 
     @Override
     public @NonNull BlockState getStateForPlacement(BlockPlaceContext context) {
