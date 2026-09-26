@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     branches:
-      - 26.2
+      - 26.3
   pull_request:
     types: [opened, synchronize, reopened]
 
