@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.entities.goals;
 import com.teamresourceful.resourcefulbees.common.entities.goals.base.WorkerGoal;
 import com.teamresourceful.resourcefulbees.common.lib.util.RandomPositionGenerator;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.PathfinderMob;
@@ -135,9 +136,9 @@ public class WanderWorkerGoal extends WorkerGoal {
 
             //flip a coin heads = check block above is air if so find valid position above else go below
             if (random.nextBoolean() && bee.level().isEmptyBlock(bee.blockPosition().above())) {
-                targetPos = RandomPositionGenerator.findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level().getMaxY(), pos -> bee.level().getBlockState(pos).blocksMotion());
+                targetPos = RandomPositionGenerator.findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level().getMaxY(), pos -> bee.level().getBlockState(pos).is(BlockTags.BLOCKS_MOTION));
             } else {
-                targetPos = RandomPositionGenerator.findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level().getMaxY(), pos -> bee.level().getBlockState(pos).blocksMotion());
+                targetPos = RandomPositionGenerator.findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level().getMinY(), pos -> bee.level().getBlockState(pos).is(BlockTags.BLOCKS_MOTION));
             }
 
             // if can travel through water or target pos is not tagged as water

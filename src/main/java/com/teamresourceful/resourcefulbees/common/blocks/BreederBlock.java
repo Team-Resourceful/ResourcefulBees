@@ -1,14 +1,11 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.BreederBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHouseBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -16,19 +13,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
 
 public class BreederBlock extends BeeHouseBlock {
 
-    private static final MapCodec<BreederBlock> CODEC = BlockBehaviour.simpleCodec(BreederBlock::new);
-
     public BreederBlock(BlockBehaviour.Properties properties) {
         super(properties);
-    }
-
-    @Override
-    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Nullable

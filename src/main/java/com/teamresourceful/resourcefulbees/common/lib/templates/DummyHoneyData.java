@@ -19,7 +19,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.List;
 import java.util.Map;
@@ -34,12 +35,12 @@ public final class DummyHoneyData {
     private static final InitializerApi API = ResourcefulBeesAPI.getInitializers();
 
     private static final BeekeeperTradeData DEFAULT_TRADE = API.beekeeperTrade(
-            UniformGenerator.between(1,1),
+            ContextIntProviders.exactly(1),
             Items.AIR,
-            UniformGenerator.between(1,1),
-            0,
-            1,
-            1
+            ContextIntProviders.exactly(1),
+            ContextFloatProviders.exactly(0),
+            ContextIntProviders.exactly(1),
+            ContextIntProviders.exactly(1)
     );
 
     private static final HoneyBottleData BOTTLE_DATA = HONEY_API.bottle(

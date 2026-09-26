@@ -26,6 +26,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Prediction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -44,7 +45,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.phys.AABB;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
@@ -284,7 +284,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
                 .filter(returnStack -> !returnStack.isEmpty())
                 .ifPresent(returnStack -> {
                     if (!player.addItem(returnStack)) {
-                        player.drop(returnStack, false);
+                        player.drop(returnStack, false, Prediction.SERVER_ONLY);
                     }
                 });
     }
@@ -312,34 +312,34 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
         return disruptorInRange > 0;
     }
 
-    @Override
-    public boolean randomTeleport(double x, double y, double z, boolean showParticles, ItemStack consumedStack) {
-        Level level = level();
-        BlockPos pos = BlockPos.containing(x, y, z);
-
-        if (!level.hasChunkAt(pos)) {
-            return false;
-        }
-
-        AABB targetBox = getBoundingBox().move(
-                x - getX(),
-                y - getY(),
-                z - getZ()
-        );
-
-        if (!level.noCollision(this, targetBox)) return false;
-        if (level.containsAnyLiquid(targetBox)) return false;
-
-        teleportTo(x, y, z);
-
-        if (showParticles) {
-            level.broadcastEntityEvent(this, (byte) 46);
-        }
-
-        getNavigation().stop();
-
-        return true;
-    }
+//    @Override
+//    public boolean randomTeleport(double x, double y, double z, boolean showParticles, ItemStack consumedStack) {
+//        Level level = level();
+//        BlockPos pos = BlockPos.containing(x, y, z);
+//
+//        if (!level.hasChunkAt(pos)) {
+//            return false;
+//        }
+//
+//        AABB targetBox = getBoundingBox().move(
+//                x - getX(),
+//                y - getY(),
+//                z - getZ()
+//        );
+//
+//        if (!level.noCollision(this, targetBox)) return false;
+//        if (level.containsAnyLiquid(targetBox)) return false;
+//
+//        teleportTo(x, y, z);
+//
+//        if (showParticles) {
+//            level.broadcastEntityEvent(this, (byte) 46);
+//        }
+//
+//        getNavigation().stop();
+//
+//        return true;
+//    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {

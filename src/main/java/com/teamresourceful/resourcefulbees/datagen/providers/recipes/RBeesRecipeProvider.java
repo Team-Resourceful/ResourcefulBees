@@ -1,31 +1,35 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
+import com.teamresourceful.resourcefulbees.common.brewing.PotionIngredientBrewingRecipe;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.records.HiveType;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModItemTags;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-import net.minecraft.core.HolderLookup;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModPotions;
+import com.teamresourceful.resourcefulbees.datagen.providers.advancements.RBeesAdvancementProvider;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.core.component.predicates.PotionsPredicate;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Recipe;
 import net.neoforged.neoforge.common.Tags;
-import org.jspecify.annotations.NonNull;
-
-import java.util.concurrent.CompletableFuture;
 
 public class RBeesRecipeProvider extends RecipeProvider {
 
-    protected RBeesRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output);
+    public RBeesRecipeProvider(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
+        super(recipeOutput, advancementOutput);
     }
 
     @Override
     protected void buildRecipes() {
+        new RBeesAdvancementProvider(advancementOutput).generate();
         buildHiveUpgrades();
         buildApiaries();
         buildNestRecipes();
@@ -34,6 +38,7 @@ public class RBeesRecipeProvider extends RecipeProvider {
         buildWaxedBlocks();
         buildTools();
         buildMachines();
+        buildBrewingRecipes();
     }
 
     private void buildHiveUpgrades() {
@@ -408,20 +413,15 @@ public class RBeesRecipeProvider extends RecipeProvider {
                 .save(output);
     }
 
-    public static class Runner extends RecipeProvider.Runner {
-
-        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-            super(output, registries);
-        }
-
-        @Override
-        protected @NonNull RecipeProvider createRecipeProvider(HolderLookup.@NonNull Provider provider, @NonNull RecipeOutput output) {
-            return new RBeesRecipeProvider(provider, output);
-        }
-
-        @Override
-        public @NonNull String getName() {
-            return "Resourceful Bees Recipe Provider";
-        }
+    private void buildBrewingRecipes() {
+        output.accept(
+                ResourceKey.create(Registries.RECIPE, ModIdentifier.of("brewing/calming_potion")),
+                new PotionIngredientBrewingRecipe(
+                        PotionsPredicate.ofPotion(Potions.AWKWARD),
+                        tag(ModItemTags.HONEY_BOTTLES),
+                        new PotionContents(ModPotions.CALMING_POTION.holder())
+                ),
+                null
+        );
     }
 }

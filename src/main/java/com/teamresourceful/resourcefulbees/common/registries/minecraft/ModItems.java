@@ -14,6 +14,7 @@ import com.teamresourceful.resourcefullib.common.registry.HolderRegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.builtin.ResourcefulItemRegistry;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -117,7 +118,7 @@ public static final HolderRegistryEntry<Item> WAX_BLOCK_ITEM = registerBasicBloc
     public static final HolderRegistryEntry<Item> WAXED_PRESSURE_PLATE = registerBasicBlockItem(ITEMS, "waxed_pressure_plate", ModBlocks.WAXED_PRESSURE_PLATE, Item.Properties::new);
     public static final HolderRegistryEntry<Item> WAXED_DOOR = registerBasicBlockItem(ITEMS, "waxed_door", ModBlocks.WAXED_DOOR, Item.Properties::new);
     public static final HolderRegistryEntry<Item> WAXED_TRAPDOOR = registerBasicBlockItem(ITEMS, "waxed_trapdoor", ModBlocks.WAXED_TRAPDOOR, Item.Properties::new);
-    public static final HolderRegistryEntry<Item> WAXED_SIGN = registerItem(ITEMS, "waxed_sign", properties -> new SignItem(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get(), properties), Item.Properties::new);
+    public static final HolderRegistryEntry<Item> WAXED_SIGN = registerItem(ITEMS, "waxed_sign", properties -> new StandingAndWallBlockItem(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get(), Direction.DOWN, properties), Item.Properties::new);
     public static final HolderRegistryEntry<Item> WAXED_HANGING_SIGN = registerItem(ITEMS, "waxed_hanging_sign", properties -> new HangingSignItem(ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get(), properties), Item.Properties::new);
     public static final HolderRegistryEntry<Item> TRIMMED_WAXED_PLANKS = registerBasicBlockItem(ITEMS, "trimmed_waxed_planks", ModBlocks.TRIMMED_WAXED_PLANKS, Item.Properties::new);
     public static final HolderRegistryEntry<Item> WAXED_MACHINE_BLOCK = registerBasicBlockItem(ITEMS, "waxed_machine_block", ModBlocks.WAXED_MACHINE_BLOCK, Item.Properties::new);

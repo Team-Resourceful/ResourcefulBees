@@ -8,34 +8,18 @@
           "children": [
             {
               "type": "minecraft:item",
-              "conditions": [
+              "condition": "minecraft:tool/can_silk_touch",
+              "modifier": [
                 {
-                  "condition": "minecraft:match_tool",
-                  "predicate": {
-                    "predicates": {
-                      "minecraft:enchantments": [
-                        {
-                          "enchantments": "minecraft:silk_touch",
-                          "levels": {
-                            "min": 1
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              ],
-              "functions": [
-                {
-                  "function": "minecraft:copy_components",
+                  "type": "minecraft:copy_components",
                   "include": [
                     "resourcefulbees:hive_bees"
                   ],
                   "source": "block_entity"
                 },
                 {
+                  "type": "minecraft:copy_state",
                   "block": "resourcefulbees:nest/acacia/1",
-                  "function": "minecraft:copy_state",
                   "properties": [
                     "honey_level"
                   ]
@@ -50,7 +34,7 @@
           ]
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "resourcefulbees:blocks/nest/acacia/1"

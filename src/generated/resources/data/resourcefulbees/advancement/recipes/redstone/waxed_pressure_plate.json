@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:waxed_pressure_plate"
+        "recipes": "resourcefulbees:waxed_pressure_plate"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

@@ -1,6 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.world.gen;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.TieredBeehiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.config.WorldGenConfig;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
@@ -13,6 +13,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedList;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -22,29 +23,28 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
-public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
+public class BeeNestFeature implements Feature {
 
-    public BeeNestFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<BeeNestFeature> CODEC = MapCodec.unit(BeeNestFeature::new);
+
+    @Override
+    public @NonNull MapCodec<BeeNestFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(@NonNull FeaturePlaceContext<NoneFeatureConfiguration> context) {
+    public boolean place(@NonNull WorldGenLevel level, @NonNull ChunkGenerator chunkGenerator, @NonNull RandomSource random, @NonNull BlockPos origin) {
         if (!WorldGenConfig.generateBeeNests) {
             return false;
         }
 
-        WorldGenLevel level = context.level();
-        BlockPos origin = context.origin();
-        RandomSource random = context.random();
         Holder<Biome> biome = level.getBiome(origin);
 
         if (!biome.isBound()) {
@@ -77,7 +77,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
 
         level.setBlock(nestPos, nestState, Block.UPDATE_ALL);
-        setNestBees(nestPos, biome, level, random);
+        setNestBees(nestPos, level, random);
 
         return true;
     }
@@ -193,7 +193,7 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private static void setNestBees(BlockPos pos, Holder<Biome> biome, WorldGenLevel level, RandomSource random) {
+    private static void setNestBees(BlockPos pos, WorldGenLevel level, RandomSource random) {
         if (!(level.getBlockEntity(pos)
                 instanceof TieredBeehiveBlockEntity nest)) {
             return;
@@ -205,9 +205,8 @@ public class BeeNestFeature extends Feature<NoneFeatureConfiguration> {
             return;
         }
 
-        WeightedList<MobSpawnSettings.SpawnerData> bees = biome.value()
-                .getMobSettings()
-                .getMobs(ModConstants.RESOURCEFUL_BEE_CATEGORY);
+        MobSpawnSettings settings = level.environmentAttributes().getValue(EnvironmentAttributes.NATURAL_MOB_SPAWNS, pos);
+        WeightedList<MobSpawnSettings.SpawnerData> bees = settings.getMobsToSpawn(ModConstants.RESOURCEFUL_BEE_CATEGORY);
 
         for (int i = random.nextInt(maxBees); i < maxBees; i++) {
 

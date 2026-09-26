@@ -3,7 +3,6 @@ package com.teamresourceful.resourcefulbees.datagen;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.datagen.providers.BeekeeperTradeProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.RBeesModelProvider;
-import com.teamresourceful.resourcefulbees.datagen.providers.advancements.RBeesAdvancementProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.lang.RBeesLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.loottables.RBeesLootTableProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.recipes.RBeesRecipeProvider;
@@ -12,8 +11,11 @@ import com.teamresourceful.resourcefulbees.datagen.providers.tags.RBeesFluidTagP
 import com.teamresourceful.resourcefulbees.datagen.providers.tags.RBeesItemTagProvider;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -31,7 +33,7 @@ public final class RBeesDataGenerator {
     public static void gatherData(GatherDataEvent.Client event) {
         ModConstants.LOGGER.info("Data Generator Loaded!");
         DataGenerator generator = event.getGenerator();
-        CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
+        CompletableFuture<HolderLookup.Provider> provider = event.getReloadableLookupProvider();
         PackOutput output = generator.getPackOutput();
 
         event.addProvider(new RBeesModelProvider(output));
@@ -40,9 +42,12 @@ public final class RBeesDataGenerator {
         event.addProvider(new BeekeeperTradeProvider(output, provider));
         event.addProvider(new RBeesLanguageProvider(output));
         event.addProvider(new RBeesItemTagProvider(output, provider));
-        event.addProvider(new RBeesAdvancementProvider(output, provider));
-        event.addProvider(new RBeesLootTableProvider(output, provider));
-        event.addProvider(new RBeesRecipeProvider.Runner(output, provider));
+
+        RegistrySetBuilder registryBuilder = new RegistrySetBuilder()
+                .add(RecipeProvider.asBootstrap(RBeesRecipeProvider::new))
+                .add(Registries.LOOT_TABLE, new RBeesLootTableProvider());
+
+        event.createReloadableRegistryObjects(registryBuilder);
 
 
 

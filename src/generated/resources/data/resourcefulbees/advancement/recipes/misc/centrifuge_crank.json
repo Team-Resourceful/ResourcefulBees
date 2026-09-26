@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:centrifuge_crank"
+        "recipes": "resourcefulbees:centrifuge_crank"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

@@ -20,7 +20,7 @@ public class CustomBeeGlintLayer<R extends EntityRenderState & GeoRenderState> e
 
     @Override
     protected @Nullable RenderType getRenderType(@NonNull R renderState, @NonNull Identifier texture) {
-        return RenderTypes.entityGlint();
+        return RenderTypes.entitySolidGlint(texture);
     }
 
     //    @Override

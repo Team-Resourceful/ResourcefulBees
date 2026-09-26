@@ -1,11 +1,10 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.MenuBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.lib.util.FluidUtils;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.ItemTags;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -52,8 +50,6 @@ public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> imple
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty BEAM = BooleanProperty.create("beam");
     public static final BooleanProperty SOUND = BooleanProperty.create("sound");
-
-    private static final MapCodec<EnderBeeconBlock> CODEC = BlockBehaviour.simpleCodec(EnderBeeconBlock::new);
 
     public EnderBeeconBlock(BlockBehaviour.Properties properties) {
         super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY, properties);
@@ -111,11 +107,6 @@ public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> imple
             ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
         return state;
-    }
-
-    @Override
-    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
-    return CODEC;
     }
 
     @Override

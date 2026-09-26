@@ -1,0 +1,10 @@
+{
+  "type": "resourcefulbees:potion_ingredient_brewing",
+  "input": {
+    "potions": "minecraft:awkward"
+  },
+  "output": {
+    "potion": "resourcefulbees:calming"
+  },
+  "reagent": "#c:honey_bottles"
+}

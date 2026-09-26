@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.MenuBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
@@ -11,7 +10,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,16 +38,9 @@ public class CentrifugeBlock extends RenderingBaseEntityBlock implements MenuBlo
     public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 1, 8);
     public static final BooleanProperty USABLE = BooleanProperty.create("usable");
 
-    public static final MapCodec<CentrifugeCrankBlock> CODEC = simpleCodec(CentrifugeCrankBlock::new);
-
     public CentrifugeBlock(Properties properties) {
         super(properties);
         registerDefaultState(getStateDefinition().any().setValue(ROTATION, 1).setValue(USABLE, false));
-    }
-
-    @Override
-    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

@@ -47,12 +47,7 @@ public record BeeBiomeModifier(
         }
 
         MobSpawnSettings.SpawnerData spawner = spawn.value();
-
-        builder.getMobSpawnSettings().addSpawn(
-                spawner.type().getCategory(),
-                spawn.weight(),
-                spawner
-        );
+        builder.getMobSpawnSettings().addSpawn(spawner.type(), spawn.weight(), spawner.count());
     }
 
     private static boolean isInList(HolderSet<Biome> biomes, Holder<Biome> checkingBiome) {

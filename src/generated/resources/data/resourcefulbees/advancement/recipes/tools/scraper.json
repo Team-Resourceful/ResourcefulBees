@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:scraper"
+        "recipes": "resourcefulbees:scraper"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

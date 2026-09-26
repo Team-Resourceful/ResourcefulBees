@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:ender_beecon"
+        "recipes": "resourcefulbees:ender_beecon"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

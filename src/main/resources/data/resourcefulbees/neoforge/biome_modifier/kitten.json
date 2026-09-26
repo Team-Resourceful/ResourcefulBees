@@ -4,7 +4,6 @@
   "spawn": {
     "type": "resourcefulbees:kitten_bee",
     "weight": 3,
-    "minCount": 1,
-    "maxCount": 1
+    "count": 1
   }
 }

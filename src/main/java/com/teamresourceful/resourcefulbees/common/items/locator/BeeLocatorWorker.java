@@ -11,6 +11,8 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.attribute.EnvironmentAttributeMap;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
@@ -105,11 +107,21 @@ public final class BeeLocatorWorker implements LevelWorker {
             return true;
         }
 
-        for (var weightedSpawner :
-                biomeHolder.value()
-                        .getMobSettings()
-                        .getMobs(ModConstants.RESOURCEFUL_BEE_CATEGORY)
-                        .unwrap()) {
+        EnvironmentAttributeMap attributes =
+                biomeHolder.value().getModifiedEnvironmentAttributes();
+
+        var spawnEntry = attributes.get(EnvironmentAttributes.NATURAL_MOB_SPAWNS);
+
+        if (spawnEntry == null) {
+            return true;
+        }
+
+        MobSpawnSettings spawnSettings =
+                spawnEntry.applyModifier(MobSpawnSettings.EMPTY);
+
+        for (var weightedSpawner : spawnSettings
+                .getMobsInCategory(ModConstants.RESOURCEFUL_BEE_CATEGORY)
+                .unwrap()) {
 
             MobSpawnSettings.SpawnerData spawnData = weightedSpawner.value();
 
@@ -189,22 +201,4 @@ public final class BeeLocatorWorker implements LevelWorker {
 
         return queue;
     }
-
-//    private static Queue<Vector2ic> createRange(int range) {
-//        Queue<Vector2ic> queue = new ArrayDeque<>();
-//
-//        for (int i = 0; i < range; i++) {
-//            for (int j = 0; j <= i; j = j > 0 ? -j : 1 - j) {
-//                for (
-//                        int k = j < i && j > -i ? i : 0;
-//                        k <= i;
-//                        k = k > 0 ? -k : 1 - k
-//                ) {
-//                    queue.add(new Vector2i(j, k));
-//                }
-//            }
-//        }
-//
-//        return queue;
-//    }
 }

@@ -10,6 +10,7 @@ import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,7 +59,7 @@ public class BeeBoxItem extends BlockItem {
                 occupants.add(BeeBoxOccupant.from(target))
         );
 
-        player.swing(hand);
+        player.swing(hand, SwingAnimation.DEFAULT, true);
         target.discard();
 
         return InteractionResult.SUCCESS;

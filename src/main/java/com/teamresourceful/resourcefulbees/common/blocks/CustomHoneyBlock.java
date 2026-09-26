@@ -1,11 +1,8 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
 import com.teamresourceful.resourcefulbees.common.items.base.Tradeable;
-import com.teamresourceful.resourcefulbees.common.setup.data.honeydata.CustomHoneyBlockData;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -35,26 +32,13 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
 //this class mirrors the HoneyBlock class due to the particles method at the bottom being private
 public class CustomHoneyBlock extends HalfTransparentBlock implements Tradeable {
 
-    public static MapCodec<CustomHoneyBlock> codec(String id) {
-        return RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Properties.CODEC.fieldOf("properties").forGetter(CustomHoneyBlock::properties),
-                CustomHoneyBlockData.codec(id).fieldOf("data").forGetter(CustomHoneyBlock::data)
-        ).apply(instance, CustomHoneyBlock::new));
-    }
-
     private static final VoxelShape SHAPE = Block.column(14.0, 0.0, 15.0);
-
-    @Override
-    public @NonNull MapCodec<CustomHoneyBlock> codec() {
-        return codec(data.id());
-    }
 
     protected final Color color;
 

@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.datagen.providers.base.BaseBlockLootT
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.advancements.predicates.entity.EntityFlagsPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
@@ -22,7 +21,7 @@ import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.function.Supplier;
 
@@ -30,8 +29,8 @@ public class BlockLootTables extends BaseBlockLootTable {
 
     private static final LootItemCondition.Builder WHEN_PLAYER_SHIFTING = LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().flags(EntityFlagsPredicate.Builder.flags().setCrouching(true)));
 
-    public BlockLootTables(HolderLookup.Provider registries) {
-        super(registries);
+    protected BlockLootTables(Context context) {
+        super(context);
     }
 
     @Override
@@ -44,10 +43,6 @@ public class BlockLootTables extends BaseBlockLootTable {
         ModBlocks.HIVES.getEntries().forEach(this::addNest);
 
         // Apiary
-        //dropSelf(ModBlocks.T1_APIARY_BLOCK);
-        //dropSelf(ModBlocks.T2_APIARY_BLOCK);
-        //dropSelf(ModBlocks.T3_APIARY_BLOCK);
-        //dropSelf(ModBlocks.T4_APIARY_BLOCK);
         add(ModBlocks.T1_APIARY_BLOCK, LootTable.lootTable().withPool(getApiaryPool((ApiaryBlock) ModBlocks.T1_APIARY_BLOCK.get())));
         add(ModBlocks.T2_APIARY_BLOCK, LootTable.lootTable().withPool(getApiaryPool((ApiaryBlock) ModBlocks.T2_APIARY_BLOCK.get())));
         add(ModBlocks.T3_APIARY_BLOCK, LootTable.lootTable().withPool(getApiaryPool((ApiaryBlock) ModBlocks.T3_APIARY_BLOCK.get())));
@@ -60,8 +55,7 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.HONEY_GENERATOR);
         dropSelf(ModBlocks.SOLIDIFICATION_CHAMBER);
         dropSelf(ModBlocks.ENDER_BEECON);
-        add(ModBlocks.HONEY_POT, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(ModBlocks.HONEY_POT.get())).apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(ModDataComponents.SINGLE_TANK_DATA.get()))));
-        //dropSelf(ModBlocks.HONEY_POT);
+        add(ModBlocks.HONEY_POT, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(LootItem.lootTableItem(ModBlocks.HONEY_POT.get())).apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(ModDataComponents.SINGLE_TANK_DATA.get()))));
 
         // Waxed building blocks
         dropSelf(ModBlocks.WAXED_MACHINE_BLOCK);
@@ -102,8 +96,8 @@ public class BlockLootTables extends BaseBlockLootTable {
 
         dropSelf(ModBlocks.TRIMMED_WAXED_PLANKS);
 
-        add(ModBlocks.BREEDER_BLOCK, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(ModBlocks.BREEDER_BLOCK.get())).apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(DataComponents.CONTAINER))));
-        add(ModBlocks.BASIC_CENTRIFUGE, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(ModBlocks.BASIC_CENTRIFUGE.get())).apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(ModDataComponents.MULTI_TANK_DATA.get()).include(DataComponents.CONTAINER))));
+        add(ModBlocks.BREEDER_BLOCK, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(LootItem.lootTableItem(ModBlocks.BREEDER_BLOCK.get())).apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(DataComponents.CONTAINER))));
+        add(ModBlocks.BASIC_CENTRIFUGE, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(LootItem.lootTableItem(ModBlocks.BASIC_CENTRIFUGE.get())).apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(ModDataComponents.MULTI_TANK_DATA.get()).include(DataComponents.CONTAINER))));
         dropSelf(ModBlocks.CENTRIFUGE_CRANK);
         //ModBlocks.CENTRIFUGE_BLOCKS.getEntries().forEach(this::dropSelf);
 
@@ -123,7 +117,7 @@ public class BlockLootTables extends BaseBlockLootTable {
             drop = drop.otherwise(LootItem.lootTableItem(block));
         }
 
-        add(block, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(drop)));
+        add(block, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(drop)));
     }
 
     private void addNest(RegistryEntry<? extends Block> nest) {
@@ -134,7 +128,7 @@ public class BlockLootTables extends BaseBlockLootTable {
 
     private LootPool.Builder getNestPool(Block block) {
         return LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1))
+                .setRolls(ContextIntProviders.exactly(1))
                 .add(LootItem.lootTableItem(block)
                         .when(hasSilkTouch())
                         .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
@@ -146,7 +140,7 @@ public class BlockLootTables extends BaseBlockLootTable {
 
     private LootPool.Builder getApiaryPool(ApiaryBlock apiary) {
         return LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1))
+                .setRolls(ContextIntProviders.exactly(1))
                 .add(LootItem.lootTableItem(apiary))
                 .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
                         .include(ModDataComponents.APIARY_BEES.get())

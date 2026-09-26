@@ -1,7 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.base;
 
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
@@ -16,8 +15,8 @@ public abstract class BaseBlockLootTable extends BlockLootSubProvider {
 
     private final Set<Block> knownBlocks = new HashSet<>();
 
-    protected BaseBlockLootTable(HolderLookup.Provider registries) {
-        super(Set.of(), FeatureFlags.DEFAULT_FLAGS, registries);
+    protected BaseBlockLootTable(Context context) {
+        super(Set.of(), FeatureFlags.DEFAULT_FLAGS, context);
     }
 
     @Override

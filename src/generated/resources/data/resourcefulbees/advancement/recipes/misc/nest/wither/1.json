@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:nest/wither/1"
+        "recipes": "resourcefulbees:nest/wither/1"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

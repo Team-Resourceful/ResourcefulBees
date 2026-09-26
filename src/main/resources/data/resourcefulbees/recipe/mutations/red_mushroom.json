@@ -5,7 +5,7 @@
             "input": {
                 "type": "block",
                 "block": {
-                    "id": "minecraft:grass"
+                    "id": "minecraft:grass_block"
                 }
             },
             "outputs" : [

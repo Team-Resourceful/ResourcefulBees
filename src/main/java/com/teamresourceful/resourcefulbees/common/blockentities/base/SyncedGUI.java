@@ -27,15 +27,14 @@ public interface SyncedGUI extends MenuProvider {
     <Data> void setSyncData(DataComponentType<Data> type, Optional<Data> data);
 
     default void setSyncData(DataComponentPatch patch) {
-        for (var entry : patch.entrySet()) {
-            applyPatch(entry.getKey(), patch);
+        for (DataComponentType<?> type : patch.keySet()) {
+            applyPatch(type, patch);
         }
     }
 
-    private <Data> void applyPatch(DataComponentType<@NotNull Data> type, DataComponentPatch patch) {
-        var data = patch.getPatch(type);
-        if (data == null) return;
-        setSyncData(type, data);
+    private <Data> void applyPatch(DataComponentType<Data> type, DataComponentPatch patch) {
+        Data data = patch.getPatch(type);
+        setSyncData(type, Optional.ofNullable(data));
     }
 
     /**

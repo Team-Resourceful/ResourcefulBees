@@ -2,11 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "J": {
-      "type": "resourcefulbees:bee_jar"
+      "neoforge:ingredient_type": "resourcefulbees:bee_jar"
     },
-    "C": {
-      "item": "minecraft:clock"
-    }
+    "C": "minecraft:clock"
   },
   "pattern": [
     "JJJ",
@@ -14,6 +12,6 @@
     "JJJ"
   ],
   "result": {
-    "item": "resourcefulbees:breed_time_upgrade"
+    "id": "resourcefulbees:breed_time_upgrade"
   }
 }

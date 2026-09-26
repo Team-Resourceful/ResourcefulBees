@@ -4,7 +4,10 @@
   "spawn": {
     "type": "resourcefulbees:warped_fungus_bee",
     "weight": 8,
-    "minCount": 1,
-    "maxCount": 3
+    "count": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 1,
+      "max_inclusive": 3
+    }
   }
 }

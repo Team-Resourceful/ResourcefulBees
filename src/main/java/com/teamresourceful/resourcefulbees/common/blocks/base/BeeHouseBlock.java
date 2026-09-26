@@ -68,12 +68,6 @@ public abstract class BeeHouseBlock extends RenderingBaseEntityBlock implements 
         level.setBlock(pos.above(), ModBlocks.BEEHOUSE_TOP.get().withPropertiesOf(state), Block.UPDATE_ALL);
     }
 
-    //We make this public so the top block can call this.
-    @Override
-    public void spawnDestroyParticles(@NotNull Level level, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState state) {
-        super.spawnDestroyParticles(level, player, pos, state);
-    }
-
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {

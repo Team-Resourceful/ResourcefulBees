@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:solidification_chamber"
+        "recipes": "resourcefulbees:solidification_chamber"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

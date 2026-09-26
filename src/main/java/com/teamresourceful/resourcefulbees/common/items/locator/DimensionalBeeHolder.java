@@ -11,13 +11,18 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.random.WeightedList;
+import net.minecraft.world.attribute.EnvironmentAttributeMap;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public final class DimensionalBeeHolder {
 
@@ -38,7 +43,9 @@ public final class DimensionalBeeHolder {
                     .stream()
                     .filter(Holder::isBound)
                     .map(Holder::value)
-                    .map(biome -> biome.getMobSettings().getMobs(ModConstants.RESOURCEFUL_BEE_CATEGORY))
+                    .map(DimensionalBeeHolder::getMobSpawnSettings)
+                    .map(settings -> settings.getMobsInCategory(ModConstants.RESOURCEFUL_BEE_CATEGORY))
+                    .filter(Objects::nonNull)
                     .map(WeightedList::unwrap)
                     .flatMap(List::stream)
                     .map(weighted -> weighted.value().type())
@@ -50,6 +57,16 @@ public final class DimensionalBeeHolder {
 
             DIMENSIONAL_BEES.put(level.dimension(), bees);
         }
+    }
+
+    private static MobSpawnSettings getMobSpawnSettings(Biome biome) {
+        EnvironmentAttributeMap.Entry<MobSpawnSettings, ?> entry = biome.getModifiedEnvironmentAttributes().get(EnvironmentAttributes.NATURAL_MOB_SPAWNS);
+
+        if (entry == null) {
+            return MobSpawnSettings.EMPTY;
+        }
+
+        return entry.applyModifier(MobSpawnSettings.EMPTY);
     }
 
     public static List<Identifier> getBees(ResourceKey<Level> dimension) {

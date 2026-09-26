@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModIngred
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
@@ -17,16 +18,19 @@ import net.neoforged.neoforge.common.crafting.IngredientType;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
-public record BeeJarIngredient(Identifier id) implements ICustomIngredient {
+public record BeeJarIngredient(
+        Optional<Identifier> id
+) implements ICustomIngredient {
 
     public static final MapCodec<BeeJarIngredient> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Identifier.CODEC.fieldOf("id").forGetter(BeeJarIngredient::id)
+            Identifier.CODEC.optionalFieldOf("id").forGetter(BeeJarIngredient::id)
     ).apply(instance, BeeJarIngredient::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, BeeJarIngredient> STREAM_CODEC = StreamCodec.composite(
-            Identifier.STREAM_CODEC,
+            ByteBufCodecs.optional(Identifier.STREAM_CODEC),
             BeeJarIngredient::id,
             BeeJarIngredient::new
     );
@@ -42,7 +46,12 @@ public record BeeJarIngredient(Identifier id) implements ICustomIngredient {
         }
 
         Identifier entityId = BuiltInRegistries.ENTITY_TYPE.getKey(occupant.entityType());
-        return id.equals(entityId);
+
+        if (id().isEmpty()) {
+            return true;
+        }
+
+        return id.get().equals(entityId);
     }
 
     @Override

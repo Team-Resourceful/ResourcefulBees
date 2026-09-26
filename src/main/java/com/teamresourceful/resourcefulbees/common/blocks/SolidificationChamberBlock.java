@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.MenuBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
@@ -16,10 +15,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -32,8 +29,6 @@ import org.jspecify.annotations.NonNull;
 
 public class SolidificationChamberBlock extends TickingBlock<SolidificationChamberBlockEntity> implements MenuBlock {
 
-    private static final MapCodec<SolidificationChamberBlock> CODEC = BlockBehaviour.simpleCodec(SolidificationChamberBlock::new);
-
     protected static final VoxelShape VOXEL_SHAPE = Util.make(() -> {
         VoxelShape shape = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 5.0D, 15.0D);
         shape = Shapes.join(shape, Block.box(6.0D, 5.0D, 1.0D, 10.0D, 9.0D, 15.0D), BooleanOp.OR);
@@ -44,11 +39,6 @@ public class SolidificationChamberBlock extends TickingBlock<SolidificationChamb
 
     public SolidificationChamberBlock(Properties properties) {
         super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY, properties);
-    }
-
-    @Override
-    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     private static SolidificationChamberBlockEntity getBlockEntity(@NotNull BlockGetter level, @NotNull BlockPos pos) {

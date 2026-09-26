@@ -33,6 +33,7 @@ public class CustomBeeEntityType<T extends Bee> extends EntityType<T> {
                 String.format("entity_type.resourcefulbees.%s", beeType.getPath()),
                 Optional.empty(),
                 FeatureFlags.DEFAULT_FLAGS,
+                true,
                 true);
         this.beeType = beeType;
     }

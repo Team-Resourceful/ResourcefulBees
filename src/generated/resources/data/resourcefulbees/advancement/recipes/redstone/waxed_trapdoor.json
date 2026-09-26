@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:waxed_trapdoor"
+        "recipes": "resourcefulbees:waxed_trapdoor"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

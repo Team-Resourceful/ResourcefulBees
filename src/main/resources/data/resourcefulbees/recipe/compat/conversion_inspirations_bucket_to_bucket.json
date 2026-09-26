@@ -1,17 +1,16 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:mod_loaded",
+      "type": "neoforge:mod_loaded",
       "modid": "inspirations"
     }
   ],
   "ingredients": [
-    { "item": "inspirations:honey_bucket" }
-    
+    "inspirations:honey_bucket"
   ],
   "result": {
-    "item": "resourcefulbees:honey_fluid_bucket",
+    "id": "resourcefulbees:honey_fluid_bucket",
     "count": 1
   }
 }

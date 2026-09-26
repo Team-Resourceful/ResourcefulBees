@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.FlowHiveBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.BeeHolderBlock;
@@ -14,7 +13,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -27,8 +25,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 public class FlowHiveBlock extends BeeHouseBlock implements BeeHolderBlock {
-
-    private static final MapCodec<FlowHiveBlock> CODEC = BlockBehaviour.simpleCodec(FlowHiveBlock::new);
 
     public FlowHiveBlock(BlockBehaviour.Properties properties) {
         super(properties);
@@ -51,11 +47,6 @@ public class FlowHiveBlock extends BeeHouseBlock implements BeeHolderBlock {
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new FlowHiveBlockEntity(pos, state);
-    }
-
-    @Override
-    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Nullable

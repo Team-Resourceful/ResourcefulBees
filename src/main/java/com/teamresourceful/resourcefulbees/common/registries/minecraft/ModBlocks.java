@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
@@ -62,7 +63,7 @@ public final class ModBlocks {
             .noLootTable()
             .replaceable()
             .sound(SoundType.EMPTY)
-            .pushReaction(PushReaction.DESTROY);
+            .pushReaction(PushReaction.POPPED);
 
     public static final BlockBehaviour.Properties BEECON_PROPERTIES = BlockBehaviour.Properties.of()
             .instrument(NoteBlockInstrument.HAT)
@@ -81,6 +82,10 @@ public final class ModBlocks {
         return new TieredBeehiveBlock(ModBlockEntityTypes.TIERED_BEEHIVE_ENTITY, tier, properties);
     }
 
+    private static boolean never(BlockState state, BlockGetter blockGetter, BlockPos pos, AABB aabb) {
+        return false;
+    }
+    
     private static boolean never(BlockState state, BlockGetter blockGetter, BlockPos blockPos) {
         return false;
     }
@@ -162,7 +167,7 @@ public final class ModBlocks {
 
     public static final HolderRegistryEntry<Block> GOLD_FLOWER = registerBlock(BLOCKS, "gold_flower", properties -> new FlowerBlock(MobEffects.INVISIBILITY, 10, properties), () -> BlockBehaviour.Properties.of().noCollision().strength(0).sound(SoundType.GRASS));
 
-    public static final HolderRegistryEntry<Block> BEEHOUSE_TOP = registerBlock(BLOCKS, "beehouse_top", BeeHouseTopBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(5f, 6f).pushReaction(PushReaction.BLOCK));
+    public static final HolderRegistryEntry<Block> BEEHOUSE_TOP = registerBlock(BLOCKS, "beehouse_top", BeeHouseTopBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(5f, 6f).pushReaction(PushReaction.IMMOVEABLE));
     public static final HolderRegistryEntry<Block> BREEDER_BLOCK = registerBlock(BLOCKS, "breeder", BreederBlock::new, () -> BlockBehaviour.Properties.of().strength(1F).sound(SoundType.WOOD));
     public static final HolderRegistryEntry<Block> CREATIVE_GEN = registerBlock(BLOCKS, "creative_gen", CreativeGeneratorBlock::new, () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL));
     public static final HolderRegistryEntry<Block> ENDER_BEECON = registerBlock(BLOCKS,"ender_beecon", EnderBeeconBlock::new, () -> BEECON_PROPERTIES);

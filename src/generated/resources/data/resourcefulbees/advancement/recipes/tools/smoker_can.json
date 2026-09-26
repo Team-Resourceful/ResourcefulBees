@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:smoker_can"
+        "recipes": "resourcefulbees:smoker_can"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

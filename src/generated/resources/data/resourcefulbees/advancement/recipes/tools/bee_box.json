@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:bee_box"
+        "recipes": "resourcefulbees:bee_box"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

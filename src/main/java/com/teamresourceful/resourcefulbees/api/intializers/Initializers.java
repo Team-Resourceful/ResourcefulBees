@@ -18,9 +18,7 @@ import com.teamresourceful.resourcefulbees.api.data.shared.RegistryPredicate;
 import com.teamresourceful.resourcefulbees.common.lib.codecs.RestrictedBlockPredicate;
 import com.teamresourceful.resourcefulbees.common.lib.codecs.RestrictedItemPredicate;
 import com.teamresourceful.resourcefulbees.common.lib.enums.LayerEffect;
-
 import com.teamresourceful.resourcefullib.common.codecs.predicates.RestrictedEntityPredicate;
-
 import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -33,7 +31,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -86,7 +85,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface BeekeeperTradeInitializer {
-        BeekeeperTradeData create(UniformGenerator amount, Item secondaryItem, UniformGenerator secondaryItemCost, float priceMultiplier, int maxTrades, int xp);
+        BeekeeperTradeData create(Holder<ContextIntProvider> amount, Item secondaryItem, Holder<ContextIntProvider> secondaryItemCost, Holder<ContextFloatProvider> priceMultiplier, Holder<ContextIntProvider> maxTrades, Holder<ContextIntProvider> xp);
     }
 
     @FunctionalInterface

@@ -84,7 +84,6 @@ public class ResourcefulBees {
         NeoForge.EVENT_BUS.addListener(GoldenFlower::onBonemeal);
         NeoForge.EVENT_BUS.addListener(ModStructures::onServerAboutToStart);
         NeoForge.EVENT_BUS.addListener(HiveBreakHandler::onBlockDrops);
-        NeoForge.EVENT_BUS.addListener(ModBrewingRecipes::register);
         NeoForge.EVENT_BUS.addListener(DimensionalBeeHolder::onDatapackSync);
         NeoForge.EVENT_BUS.addListener(LevelWorkEvents::onLevelTick);
 

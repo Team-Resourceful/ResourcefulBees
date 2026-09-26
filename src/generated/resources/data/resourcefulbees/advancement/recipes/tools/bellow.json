@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:bellow"
+        "recipes": "resourcefulbees:bellow"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

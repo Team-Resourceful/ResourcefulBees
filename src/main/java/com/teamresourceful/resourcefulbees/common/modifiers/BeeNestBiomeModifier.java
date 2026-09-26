@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBiomeModifiers;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -31,9 +32,14 @@ public record BeeNestBiomeModifier(
         if (!biomes.contains(biome)) {
             return;
         }
-        var spawnerData = builder.getMobSpawnSettings()
-                .getSpawner(ModConstants.RESOURCEFUL_BEE_CATEGORY)
-                .build();
+        WeightedList.Builder<?> spawnSettings = builder.getMobSpawnSettings().getSpawner(ModConstants.RESOURCEFUL_BEE_CATEGORY);
+
+        if (spawnSettings == null) {
+            return;
+        }
+
+        var spawnerData = spawnSettings.build();
+
         if (spawnerData.isEmpty()) {
             return;
         }

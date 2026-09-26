@@ -21,12 +21,11 @@ import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.TradeCost;
 import net.minecraft.world.item.trading.VillagerTrade;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class BeekeeperTradeProvider implements DataProvider {
@@ -68,26 +67,6 @@ public class BeekeeperTradeProvider implements DataProvider {
 
     private CompletableFuture<?>[] generateLevelFourTrades(CachedOutput cachedOutput, net.minecraft.resources.RegistryOps<JsonElement> registryOps, Path tradePath, Path tagPath, JsonArray values) {
         var futures = new java.util.ArrayList<CompletableFuture<?>>();
-
-//        addNestTrade(
-//                cachedOutput,
-//                registryOps,
-//                tradePath,
-//                values,
-//                "beehive",
-//                Items.BEEHIVE,
-//                futures
-//        );
-//
-//        addNestTrade(
-//                cachedOutput,
-//                registryOps,
-//                tradePath,
-//                values,
-//                "bee_nest",
-//                Items.BEE_NEST,
-//                futures
-//        );
 
         for (RegistryEntry<Item> entry : ModItems.NEST_ITEMS.getEntries()) {
             addNestTrade(
@@ -133,20 +112,13 @@ public class BeekeeperTradeProvider implements DataProvider {
     }
 
     private VillagerTrade createNestTrade(Identifier nest) {
-        TradeCost wants = new TradeCost(ModItems.GOLD_FLOWER_ITEM.get(), UniformGenerator.between(16.0F, 32.0F));
-        TradeCost additionalWants = new TradeCost(Items.GRASS_BLOCK, UniformGenerator.between(8.0F, 24.0F));
+        TradeCost wants = new TradeCost(ModItems.GOLD_FLOWER_ITEM.get(), ContextIntProviders.between(16, 32));
+        TradeCost additionalWants = new TradeCost(Items.GRASS_BLOCK, ContextIntProviders.between(8, 24));
         ItemStackTemplate gives = new ItemStackTemplate(BuiltInRegistries.ITEM.get(nest).orElseThrow(), 1, DataComponentPatch.EMPTY);
 
-        return new VillagerTrade(
-                wants,
-                Optional.of(additionalWants),
-                gives,
-                4,
-                3,
-                0.1F,
-                Optional.empty(),
-                List.of()
-        );
+        return VillagerTrade.builder(wants, gives, 4, 3, 0.1F)
+                .additionalWants(additionalWants)
+                .build();
     }
 
     @Override

@@ -49,7 +49,7 @@ public final class DefaultTraitAbilities {
             var result = ModUtils.enderEntityTeleport(bee, x, y, z);
             if (result.keyBoolean()) return;
             Vec3 target = result.value();
-            if (bee.randomTeleport(target.x(), target.y(), target.z(), true)) {
+            if (bee.randomTeleport(target.x(), target.y(), target.z(), true, state -> false)) {
                 bee.level().playSound(null, target.x(), target.y(), target.z(), SoundEvents.ENDERMAN_TELEPORT, bee.getSoundSource(), 1.0F, 1.0F);
                 bee.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
             }

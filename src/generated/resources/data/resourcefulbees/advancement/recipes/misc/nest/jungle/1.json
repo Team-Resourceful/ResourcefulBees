@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:nest/jungle/1"
+        "recipes": "resourcefulbees:nest/jungle/1"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

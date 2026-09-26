@@ -6,7 +6,6 @@ import com.geckolib.renderer.GeoEntityRenderer;
 import com.geckolib.renderer.base.BoneSnapshots;
 import com.geckolib.renderer.base.GeoRenderState;
 import com.geckolib.renderer.base.RenderPassInfo;
-import com.geckolib.renderer.layer.builtin.CustomBoneTextureGeoLayer;
 import com.google.common.reflect.TypeToken;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.api.data.bee.render.BeeRenderData;
@@ -38,7 +37,7 @@ public class CustomBeeRenderer<R extends EntityRenderState & GeoRenderState> ext
             switch (layerData.effect()) {
                 case GLOW -> withRenderLayer(new CustomBeeGlowLayer<>(this, layerData));
                 case ENCHANTED -> {
-                    withRenderLayer(new CustomBoneTextureGeoLayer<>(this, layerData.bone(), layerData.texture().texture()));
+                    //withRenderLayer(new CustomBoneTextureGeoLayer<>(this, layerData.bone(), layerData.texture().texture()));
                     withRenderLayer(new CustomBeeGlintLayer<>(this, layerData));
                 }
                 case null, default -> withRenderLayer(new CustomBeeColoredLayer<>(this, layerData));
@@ -91,26 +90,4 @@ public class CustomBeeRenderer<R extends EntityRenderState & GeoRenderState> ext
             snapshot.skipChildrenRender(hasStung);
         });
     }
-
-    //
-//    @Override
-//    public void reRender(BakedGeoModel model, PoseStack poseStack, MultiBufferSource bufferSource, E bee, RenderType renderType, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay, int color) {
-//        model.getBone("stinger").ifPresent(bone -> bone.setHidden(bee.hasStung()));
-//        super.reRender(model, poseStack, bufferSource, animatable, renderType, buffer, partialTick, packedLight, packedOverlay, color);
-//    }
-//
-//    @Override
-//    public void render(E bee, float entityYaw, float partialTick, PoseStack stack, @NotNull MultiBufferSource buffer, int packedLight) {
-//        float size = bee.getRenderData().sizeModifier();
-//        stack.scale(size, size, size);
-//        if (bee.isBaby()){
-//            stack.scale(0.5f, 0.5f, 0.5f);
-//        }
-//        super.render(bee, entityYaw, partialTick, stack, buffer, packedLight);
-//    }
-//
-//    @Override
-//    public RenderType getRenderType(E animatable, Identifier texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
-//        return RenderType.entityTranslucent(getTextureLocation(animatable));
-//    }
 }

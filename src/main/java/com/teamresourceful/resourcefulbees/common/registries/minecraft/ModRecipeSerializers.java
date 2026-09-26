@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
+import com.teamresourceful.resourcefulbees.common.brewing.PotionIngredientBrewingRecipe;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.recipes.*;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.BreederRecipe;
@@ -9,6 +10,7 @@ import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassExceptio
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.crafting.BrewingRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
 public final class ModRecipeSerializers {
@@ -26,5 +28,5 @@ public final class ModRecipeSerializers {
     public static final RegistryEntry<RecipeSerializer<FlowHiveRecipe>> FLOW_HIVE_RECIPE = RECIPE_SERIALIZERS.register("flow_hive", () -> new RecipeSerializer<>(FlowHiveRecipe.MAP_CODEC, FlowHiveRecipe.STREAM_CODEC));
     public static final RegistryEntry<RecipeSerializer<HoneyGenRecipe>> HONEY_GEN_RECIPE = RECIPE_SERIALIZERS.register("honey_gen", () -> new RecipeSerializer<>(HoneyGenRecipe.CODEC, HoneyGenRecipe.STREAM_CODEC));
     public static final RegistryEntry<RecipeSerializer<CentrifugeRecipe>> CENTRIFUGE_RECIPE = RECIPE_SERIALIZERS.register("centrifuge", () -> new RecipeSerializer<>(CentrifugeRecipe.MAP_CODEC, CentrifugeRecipe.STREAM_CODEC));
-
+    public static final RegistryEntry<RecipeSerializer<BrewingRecipe>> POTION_INGREDIENT_BREWING = RECIPE_SERIALIZERS.register("potion_ingredient_brewing", () -> new RecipeSerializer<>(PotionIngredientBrewingRecipe.MAP_CODEC, PotionIngredientBrewingRecipe.STREAM_CODEC));
 }

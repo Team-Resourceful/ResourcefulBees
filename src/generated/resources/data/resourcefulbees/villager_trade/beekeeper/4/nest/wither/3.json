@@ -2,8 +2,8 @@
   "additional_wants": {
     "count": {
       "type": "minecraft:uniform",
-      "max": 24.0,
-      "min": 8.0
+      "max": 24,
+      "min": 8
     },
     "id": "minecraft:grass_block"
   },
@@ -14,10 +14,10 @@
   "wants": {
     "count": {
       "type": "minecraft:uniform",
-      "max": 32.0,
-      "min": 16.0
+      "max": 32,
+      "min": 16
     },
     "id": "resourcefulbees:gold_flower"
   },
-  "xp": 3.0
+  "xp": 3
 }

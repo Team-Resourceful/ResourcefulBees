@@ -48,7 +48,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     }
 
     private static ParentInput makeInput(Identifier id, BeeBreedData breedData) {
-        Ingredient ingredient = new BeeJarIngredient(id).toVanilla();
+        Ingredient ingredient = new BeeJarIngredient(Optional.of(id)).toVanilla();
         var parent1FeedItems = IngredientUtils.of(breedData.feedItems());
         return new ParentInput(ingredient, Optional.of(id), breedData.feedAmount(), parent1FeedItems, breedData.feedReturnItem());
     }

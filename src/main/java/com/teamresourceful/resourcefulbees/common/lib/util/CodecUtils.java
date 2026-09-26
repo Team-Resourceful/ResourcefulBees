@@ -4,11 +4,10 @@ import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 public class CodecUtils {
+
     /**
      * Treats the patch as a partial exact-match predicate.
      *
@@ -18,19 +17,19 @@ public class CodecUtils {
      * A removed patch entry requires the component to be absent.</p>
      */
     public static boolean matchesComponents(DataComponentPatch expected, DataComponentGetter actual) {
-        for (Map.Entry<DataComponentType<?>, Optional<?>> entry : expected.entrySet()) {
-            Object actualValue = actual.get(entry.getKey());
-            Optional<?> expectedValue = entry.getValue();
-
-            if (expectedValue.isEmpty()) {
-                if (actualValue != null) {
-                    return false;
-                }
-            } else if (!Objects.equals(expectedValue.get(), actualValue)) {
+        for (DataComponentType<?> type : expected.keySet()) {
+            if (!matchesComponent(expected, actual, type)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    private static <T> boolean matchesComponent(DataComponentPatch expected, DataComponentGetter actual, DataComponentType<T> type) {
+        T expectedValue = expected.getPatch(type);
+        T actualValue = actual.get(type);
+
+        return Objects.equals(expectedValue, actualValue);
     }
 }

@@ -30,7 +30,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -77,7 +78,7 @@ public class InitializerApi {
     }
 
     @NullMarked
-    public BeekeeperTradeData beekeeperTrade(UniformGenerator amount, Item secondaryItem, UniformGenerator secondaryItemCost, float priceMultiplier, int maxTrades, int xp) {
+    public BeekeeperTradeData beekeeperTrade(Holder<ContextIntProvider> amount, Item secondaryItem, Holder<ContextIntProvider> secondaryItemCost, Holder<ContextFloatProvider> priceMultiplier, Holder<ContextIntProvider> maxTrades, Holder<ContextIntProvider> xp) {
         return this.beekeeperTrade.create(amount, secondaryItem, secondaryItemCost, priceMultiplier, maxTrades, xp);
     }
 

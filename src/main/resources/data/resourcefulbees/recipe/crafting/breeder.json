@@ -1,17 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "B": {
-      "item": "resourcefulbees:beepedia"
-    },
-    "O": {
-      "item": "resourcefulbees:bee_box"
-    },
-    "W": {
-      "item": "resourcefulbees:waxed_stairs"
-    },
+    "B": "resourcefulbees:apiary/1",
+    "O": "resourcefulbees:bee_box",
+    "W": "resourcefulbees:waxed_stairs",
     "F": {
-      "type": "resourcefulbees:bee_jar"
+      "neoforge:ingredient_type": "resourcefulbees:bee_jar"
     }
   },
   "pattern": [
@@ -20,6 +14,6 @@
     "FBF"
   ],
   "result": {
-    "item": "resourcefulbees:breeder"
+    "id": "resourcefulbees:breeder"
   }
 }

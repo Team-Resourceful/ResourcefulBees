@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:nest/netherrack/1"
+        "recipes": "resourcefulbees:nest/netherrack/1"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

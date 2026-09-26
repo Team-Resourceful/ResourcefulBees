@@ -1,24 +1,26 @@
 package com.teamresourceful.resourcefulbees.api.data;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.base.BeeData;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 
 public interface BeekeeperTradeData extends BeeData<BeekeeperTradeData> {
 
     boolean isTradable();
 
-    UniformGenerator amount();
+    Holder<ContextIntProvider> amount();
 
     Item secondaryItem();
 
-    UniformGenerator secondaryItemCost();
+    Holder<ContextIntProvider> secondaryItemCost();
 
-    float reputationDiscount();
+    Holder<ContextFloatProvider> reputationDiscount();
 
-    int maxTrades();
+    Holder<ContextIntProvider> maxTrades();
 
-    int xp();
+    Holder<ContextIntProvider> xp();
 
     //MerchantOffer getMerchantOffer(RandomSource random, ItemStack product, int flowerMin, int flowerMax);
 }

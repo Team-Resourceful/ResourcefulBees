@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blockentities.CentrifugeCrankBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
@@ -9,7 +8,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,20 +21,11 @@ import org.jspecify.annotations.NonNull;
 
 public class CentrifugeCrankBlock extends RenderingBaseEntityBlock {
 
-    private static final MapCodec<CentrifugeBlock> CODEC = simpleCodec(CentrifugeBlock::new);
-
     public static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 6.0D, 14.0D);
 
     public CentrifugeCrankBlock(Properties properties) {
         super(properties);
     }
-
-    @Override
-    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-
-
 
     @Override
     protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, Level level, BlockPos pos, @NonNull Player player, @NonNull BlockHitResult hitResult) {

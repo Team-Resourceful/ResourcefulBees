@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:honey_glass_player"
+        "recipes": "resourcefulbees:honey_glass_player"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

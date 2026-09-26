@@ -1,18 +1,17 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.BeeBoxBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gamerules.GameRules;
 import org.jetbrains.annotations.NotNull;
@@ -22,15 +21,9 @@ import javax.annotation.Nullable;
 
 public class BeeBoxBlock extends RenderingBaseEntityBlock {
 
-    private static final MapCodec<BeeBoxBlock> CODEC = BlockBehaviour.simpleCodec(BeeBoxBlock::new);
 
     public BeeBoxBlock(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override
@@ -55,8 +48,8 @@ public class BeeBoxBlock extends RenderingBaseEntityBlock {
     }
 
     @Override
-    public void playerDestroy(@NotNull Level level, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState state, BlockEntity blockEntity, @NotNull ItemStack stack) {
-        super.playerDestroy(level, player, pos, state, blockEntity, stack);
+    public void playerDestroy(ServerLevel level, ServerPlayer player, BlockPos pos, BlockState state, @org.jspecify.annotations.Nullable BlockEntity blockEntity, ItemStack destroyedWith) {
+        super.playerDestroy(level, player, pos, state, blockEntity, destroyedWith);
 
         if (!level.isClientSide() && blockEntity instanceof BeeBoxBlockEntity beeBox && !player.isShiftKeyDown()) {
             beeBox.summonBees(level, pos);

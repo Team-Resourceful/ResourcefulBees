@@ -1,12 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "I": {
-      "tag": "forge:ingots/iron"
-    },
-    "S": {
-      "tag": "forge:rods/wooden"
-    }
+    "I": "#c:ingots/iron",
+    "S": "#c:rods/wooden"
   },
   "pattern": [
     "S S",
@@ -14,6 +10,6 @@
     "S S"
   ],
   "result": {
-    "item": "resourcefulbees:centrifuge_crank"
+    "id": "resourcefulbees:centrifuge_crank"
   }
 }

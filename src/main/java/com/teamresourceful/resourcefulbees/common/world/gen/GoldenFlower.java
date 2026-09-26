@@ -11,12 +11,12 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.neoforged.neoforge.event.entity.player.BonemealEvent;
 
 public final class GoldenFlower {
 
-    private static final ResourceKey<ConfiguredFeature<?, ?>> GOLD_FLOWER_FEATURE = ResourceKey.create(Registries.CONFIGURED_FEATURE, ModIdentifier.of("gold_flower"));
+    private static final ResourceKey<Feature> GOLD_FLOWER_FEATURE = ResourceKey.create(Registries.FEATURE, ModIdentifier.of("gold_flower"));
 
     private GoldenFlower() throws UtilityClassException {
         throw new UtilityClassException();
@@ -45,15 +45,15 @@ public final class GoldenFlower {
             return;
         }
 
-        ConfiguredFeature<?, ?> feature = level.registryAccess()
-                .lookupOrThrow(Registries.CONFIGURED_FEATURE)
+        Feature feature = level.registryAccess()
+                .lookupOrThrow(Registries.FEATURE)
                 .getOrThrow(GOLD_FLOWER_FEATURE)
                 .value();
 
         placePatch(level, feature, event.getPos(), random);
     }
 
-    private static void placePatch(ServerLevel level, ConfiguredFeature<?, ?> feature, BlockPos origin, RandomSource random) {
+    private static void placePatch(ServerLevel level, Feature feature, BlockPos origin, RandomSource random) {
         int tries = WorldGenConfig.goldFlowerBonemealTries;
         int spread = WorldGenConfig.goldFlowerBonemealXZSpread;
 

@@ -38,7 +38,7 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
     }
 
     @Override
-    public @NotNull List<Component> getTooltip(@NotNull EntityIngredient ingredient, @NotNull TooltipFlag tooltipFlag) {
+    public List<Component> getTooltip(EntityIngredient ingredient, TooltipFlag tooltipFlag) {
         List<Component> tooltip = new ArrayList<>();
 
         tooltip.add(ingredient.getDisplayName());
@@ -46,4 +46,15 @@ public class EntityRenderer implements IIngredientRenderer<EntityIngredient> {
 
         return tooltip;
     }
+
+
+//    @Override
+//    public @NonNull List<Component> getTooltip(EntityIngredient ingredient, Item.@NonNull TooltipContext tooltipContext, @Nullable Player player, @NonNull TooltipFlag tooltipFlag) {
+//        List<Component> tooltip = new ArrayList<>();
+//
+//        tooltip.add(ingredient.getDisplayName());
+//        tooltip.addAll(ingredient.getTooltip());
+//
+//        return tooltip;
+//    }
 }

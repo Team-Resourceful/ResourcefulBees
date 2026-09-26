@@ -1,6 +1,5 @@
 package com.teamresourceful.resourcefulbees.common.blocks;
 
-import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.blockentities.HoneyPotBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.MenuBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.RenderingBaseEntityBlock;
@@ -19,10 +18,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -38,8 +35,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 public class HoneyPotBlock extends RenderingBaseEntityBlock implements MenuBlock {
-
-    private static final MapCodec<HoneyPotBlock> CODEC = BlockBehaviour.simpleCodec(HoneyPotBlock::new);
 
     private static final VoxelShape NO_LID = Util.make(() -> {
         VoxelShape shape = Shapes.box(0.125, 0, 0.125, 0.875, 0.625, 0.875);
@@ -59,11 +54,6 @@ public class HoneyPotBlock extends RenderingBaseEntityBlock implements MenuBlock
     public HoneyPotBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(getStateDefinition().any().setValue(LID_STATE, HoneyPotState.CLOSED));
-    }
-
-    @Override
-    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override

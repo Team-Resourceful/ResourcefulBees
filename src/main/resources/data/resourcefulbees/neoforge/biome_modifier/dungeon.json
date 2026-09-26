@@ -5,8 +5,7 @@
   "spawn": {
     "type": "resourcefulbees:dungeon_bee",
     "weight": 8,
-    "minCount": 1,
-    "maxCount": 1
+    "count": 1
   },
   "spawnPredicate": {
     "y": {

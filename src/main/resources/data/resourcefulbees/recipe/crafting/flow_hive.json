@@ -1,15 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "N": {
-      "tag": "resourcefulbees:t2_nests"
-    },
-    "H": {
-      "tag": "forge:honey_bottles"
-    },
-    "W": {
-      "tag": "forge:wax"
-    }
+    "N": "#resourcefulbees:t2_nests",
+    "H": "#c:honey_bottles",
+    "W": "#c:wax"
   },
   "pattern": [
     "WHW",
@@ -17,6 +11,6 @@
     "WHW"
   ],
   "result": {
-    "item": "resourcefulbees:flow_hive"
+    "id": "resourcefulbees:flow_hive"
   }
 }

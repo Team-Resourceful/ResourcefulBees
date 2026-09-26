@@ -11,6 +11,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -67,7 +69,7 @@ public class BeeJarItem extends Item {
         if (!player.isCreative()) {
             stack.shrink(1);
             if (!player.addItem(new ItemStack(ModItems.BEE_JAR.get()))) {
-                player.drop(new ItemStack(ModItems.BEE_JAR.get()), false);
+                player.drop(new ItemStack(ModItems.BEE_JAR.get()), false, Prediction.SERVER_ONLY);
             }
         }
         return InteractionResult.SUCCESS;
@@ -88,7 +90,7 @@ public class BeeJarItem extends Item {
 
         createFilledJar(stack, player, target);
         player.setItemInHand(hand, stack);
-        player.swing(hand);
+        player.swing(hand, SwingAnimation.DEFAULT, true);
         entity.level().playSound(null, target, SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
         target.discard();
         return InteractionResult.SUCCESS;
@@ -100,7 +102,7 @@ public class BeeJarItem extends Item {
             newJar.set(ModDataComponents.JAR_BEE.get(), JarOccupant.from(target));
             stack.shrink(1);
             if (!player.addItem(newJar)) {
-                player.drop(newJar, false);
+                player.drop(newJar, false, Prediction.SERVER_ONLY);
             }
         } else {
             var jarOccupant = JarOccupant.from(target);

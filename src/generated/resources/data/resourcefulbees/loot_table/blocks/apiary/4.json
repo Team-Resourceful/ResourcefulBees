@@ -8,17 +8,15 @@
           "name": "resourcefulbees:apiary/4"
         }
       ],
-      "functions": [
-        {
-          "function": "minecraft:copy_components",
-          "include": [
-            "resourcefulbees:apiary_bees",
-            "minecraft:container"
-          ],
-          "source": "block_entity"
-        }
-      ],
-      "rolls": 1.0
+      "modifier": {
+        "type": "minecraft:copy_components",
+        "include": [
+          "resourcefulbees:apiary_bees",
+          "minecraft:container"
+        ],
+        "source": "block_entity"
+      },
+      "rolls": 1
     }
   ],
   "random_sequence": "resourcefulbees:blocks/apiary/4"

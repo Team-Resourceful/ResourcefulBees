@@ -29,7 +29,9 @@
                     "type": "entity",
                     "entity": {
                         "type": "minecraft:hoglin",
-                        "nbt": "{\"IsImmuneToZombification\": true}"
+                        "nbt": {
+                            "IsImmuneToZombification": true
+                        }
                     }
                 }
             ]

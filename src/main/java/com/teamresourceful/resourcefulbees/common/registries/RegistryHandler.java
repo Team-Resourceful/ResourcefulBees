@@ -59,7 +59,7 @@ public final class RegistryHandler {
         ModPOIs.POIS.init();
         ModPotions.POTIONS.init();
         ModVillagerProfessions.PROFESSIONS.init();
-        ModFeatures.FEATURES.init();
+        ModFeatures.FEATURE_TYPES.init();
         ModDataComponents.COMPONENTS.init();
         ModDataComponentPredicates.PREDICATES.init();
     }

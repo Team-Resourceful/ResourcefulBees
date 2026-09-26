@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:trimmed_waxed_planks"
+        "recipes": "resourcefulbees:trimmed_waxed_planks"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

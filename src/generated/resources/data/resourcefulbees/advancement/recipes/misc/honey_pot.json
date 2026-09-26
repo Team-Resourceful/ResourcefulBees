@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:honey_pot"
+        "recipes": "resourcefulbees:honey_pot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

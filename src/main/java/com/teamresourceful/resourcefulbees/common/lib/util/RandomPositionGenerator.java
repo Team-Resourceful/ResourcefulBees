@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.common.lib.util;
 
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -74,11 +75,9 @@ public final class RandomPositionGenerator {
 
                     //flip a coin heads = check block above is air if so find valid position above else go below
                     if (random.nextBoolean() && bee.level().isEmptyBlock(bee.blockPosition().above())) {
-                        targetPos = findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level().getMaxY(),
-                                pos -> bee.level().getBlockState(pos).isSolid());
+                        targetPos = findValidPositionAbove(targetPos, random.nextInt(3) + 1, bee.level().getMaxY(), pos -> bee.level().getBlockState(pos).is(BlockTags.BLOCKS_MOTION));
                     } else {
-                        targetPos = findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level().getMinY(),
-                                pos -> bee.level().getBlockState(pos).isSolid());
+                        targetPos = findValidPositionBelow(targetPos, random.nextInt(3) + 1, bee.level().getMinY(), pos -> bee.level().getBlockState(pos).is(BlockTags.BLOCKS_MOTION));
                     }
 
                     // if can travel through water or target pos is not tagged as water
@@ -147,7 +146,7 @@ public final class RandomPositionGenerator {
     }
 
     public static BlockPos findValidPositionBelow(BlockPos blockPos3, int randInt3, int worldFloor, Predicate<BlockPos> posPredicate) {
-        if (randInt3 < 0) throw new IllegalArgumentException("aboveSolidAmount was " + randInt3 + ", expected >= 0");
+        if (randInt3 < 0) throw new IllegalArgumentException("belowSolidAmount was " + randInt3 + ", expected >= 0");
         if (!posPredicate.test(blockPos3)) return blockPos3;
 
         BlockPos blockpos = blockPos3.below();

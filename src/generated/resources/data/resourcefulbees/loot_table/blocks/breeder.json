@@ -8,16 +8,14 @@
           "name": "resourcefulbees:breeder"
         }
       ],
-      "functions": [
-        {
-          "function": "minecraft:copy_components",
-          "include": [
-            "minecraft:container"
-          ],
-          "source": "block_entity"
-        }
-      ],
-      "rolls": 1.0
+      "modifier": {
+        "type": "minecraft:copy_components",
+        "include": [
+          "minecraft:container"
+        ],
+        "source": "block_entity"
+      },
+      "rolls": 1
     }
   ],
   "random_sequence": "resourcefulbees:blocks/breeder"

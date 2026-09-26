@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefulbees.common.registries.custom.HoneyRegistr
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryOps;
@@ -26,8 +27,8 @@ import net.minecraft.world.item.trading.TradeCost;
 import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;
@@ -159,7 +160,7 @@ public class TradeCommand {
             return;
         }
 
-        VillagerTrade trade = createBeekeeperTrade(tradeData, result.getDefaultInstance(), UniformGenerator.between(8.0F, 16.0F));
+        VillagerTrade trade = createBeekeeperTrade(tradeData, result.getDefaultInstance(), ContextIntProviders.between(8, 16));
         CommandUtil.writeVillagerTrade(registryOps, trade, tradePath.resolve(name + ".json"));
         values.add("resourcefulbees:beekeeper/3/" + name);
     }
@@ -188,7 +189,7 @@ public class TradeCommand {
                 .forEach(bee -> {
                     BeekeeperTradeData tradeData = bee.getTradeData();
                     ItemStack result = BeeJarItem.createDisplayJar(bee.entityType(), bee.getRenderData().colorData().jarColor().getOpaqueValue());
-                    VillagerTrade trade = createBeekeeperTrade(tradeData, result, UniformGenerator.between(32.0F, 64.0F));
+                    VillagerTrade trade = createBeekeeperTrade(tradeData, result, ContextIntProviders.between(32, 64));
                     String name = bee.id().getPath();
                     CommandUtil.writeVillagerTrade(registryOps, trade, tradePath.resolve(name + ".json"));
                     values.add("resourcefulbees:beekeeper/5/" + name);
@@ -197,7 +198,7 @@ public class TradeCommand {
         CommandUtil.writeTradeTag(values, tagPath);
     }
 
-    private static VillagerTrade createBeekeeperTrade(BeekeeperTradeData tradeData, ItemStack result, NumberProvider flowerCost) {
+    private static VillagerTrade createBeekeeperTrade(BeekeeperTradeData tradeData, ItemStack result, Holder<ContextIntProvider> flowerCost) {
         TradeCost wants = new TradeCost(ModItems.GOLD_FLOWER_ITEM.get(), flowerCost);
 
         Optional<TradeCost> additionalWants = tradeData.secondaryItem() == Items.AIR
@@ -206,8 +207,12 @@ public class TradeCommand {
 
         result.setCount(1);
         ItemStackTemplate gives = ItemStackTemplate.fromNonEmptyStack(result);
-        List<LootItemFunction> givenItemModifiers = List.of(SetItemCountFunction.setCount(tradeData.amount()).build());
+        List<Holder<LootItemFunction>> givenItemModifiers = List.of(Holder.direct(SetItemCountFunction.setCount(tradeData.amount()).build()));
 
-        return new VillagerTrade(wants, additionalWants, gives, tradeData.maxTrades(), tradeData.xp(), tradeData.reputationDiscount(), Optional.empty(), givenItemModifiers);
+        var builder = new VillagerTrade.Builder(wants, gives, tradeData.maxTrades(), tradeData.xp(), tradeData.reputationDiscount());
+        additionalWants.ifPresent(builder::additionalWants);
+        builder.addModifiers(givenItemModifiers);
+
+        return builder.build();
     }
 }

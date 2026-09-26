@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "resourcefulbees:t2_nest_upgrade"
+        "recipes": "resourcefulbees:t2_nest_upgrade"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
