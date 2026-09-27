@@ -28,7 +28,7 @@
         },
         {
           "name": "Minecraft Version",
-          "value": "26.2"
+          "value": "${mc_version}"
         },
         {
           "name": "NeoForge Version",
