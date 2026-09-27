@@ -89,7 +89,6 @@ jobs:
           changelog-file: changelog.md
           loaders: neoforge
           game-versions: ${{ steps.props.outputs.mc_version }}
-          version-resolver: exact
 
       - name: Update Readme
         run: |
