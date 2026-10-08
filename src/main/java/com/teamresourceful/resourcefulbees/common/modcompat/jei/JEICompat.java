@@ -37,8 +37,7 @@ import java.util.ServiceLoader;
 @JeiPlugin
 public final class JEICompat implements IModPlugin {
 
-    public static final IIngredientType<EntityIngredient> ENTITY_INGREDIENT =
-            () -> EntityIngredient.class;
+    public static final IIngredientType<EntityIngredient> ENTITY_INGREDIENT = () -> EntityIngredient.class;
 
     private static IJeiRuntime jeiRuntime;
 

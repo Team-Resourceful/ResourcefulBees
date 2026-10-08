@@ -8,6 +8,7 @@ import com.teamresourceful.resourcefulbees.common.world.gen.SpawnDataModifier;
 import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.random.Weighted;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
@@ -30,6 +31,7 @@ public record BeeBiomeModifier(
 
     @Override
     public void modify(
+            @NonNull RegistryAccess registries,
             @NonNull Holder<Biome> biome,
             @NonNull Phase phase,
             ModifiableBiomeInfo.BiomeInfo.@NonNull Builder builder
@@ -93,35 +95,15 @@ public record BeeBiomeModifier(
 
     private enum Type {
 
-        CUSTOM(
-                () -> true,
-                ModBiomeModifiers.SPAWN_MODIFIER
-        ),
-
-        DEV(
-                () -> GeneralConfig.enableDevBees,
-                ModBiomeModifiers.DEV_SPAWN_MODIFIER
-        ),
-
-        SUPPORTER(
-                () -> GeneralConfig.enableSupporterBees,
-                ModBiomeModifiers.SUPPORTER_SPAWN_MODIFIER
-        );
+        CUSTOM(() -> true, ModBiomeModifiers.SPAWN_MODIFIER),
+        DEV(() -> GeneralConfig.enableDevBees, ModBiomeModifiers.DEV_SPAWN_MODIFIER),
+        SUPPORTER(() -> GeneralConfig.enableSupporterBees, ModBiomeModifiers.SUPPORTER_SPAWN_MODIFIER);
 
         private final BooleanSupplier abortCriteria;
 
-        private final DeferredHolder<
-                        MapCodec<? extends BiomeModifier>,
-                        MapCodec<BeeBiomeModifier>
-                        > modifier;
+        private final DeferredHolder<MapCodec<? extends BiomeModifier>, MapCodec<BeeBiomeModifier>> modifier;
 
-        Type(
-                BooleanSupplier abortCriteria,
-                DeferredHolder<
-                        MapCodec<? extends BiomeModifier>,
-                        MapCodec<BeeBiomeModifier>
-                        > modifier
-        ) {
+        Type(BooleanSupplier abortCriteria, DeferredHolder<MapCodec<? extends BiomeModifier>, MapCodec<BeeBiomeModifier>> modifier) {
             this.abortCriteria = abortCriteria;
             this.modifier = modifier;
         }
@@ -130,10 +112,7 @@ public record BeeBiomeModifier(
             return abortCriteria;
         }
 
-        public DeferredHolder<
-                MapCodec<? extends BiomeModifier>,
-                MapCodec<BeeBiomeModifier>
-                > modifier() {
+        public DeferredHolder<MapCodec<? extends BiomeModifier>, MapCodec<BeeBiomeModifier>> modifier() {
             return modifier;
         }
     }

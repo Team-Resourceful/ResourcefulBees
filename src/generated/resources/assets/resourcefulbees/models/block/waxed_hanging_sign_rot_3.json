@@ -2,6 +2,6 @@
   "parent": "minecraft:block/template_hanging_sign_rot_3",
   "textures": {
     "all": "resourcefulbees:block/waxed_hanging_sign",
-    "particle": "minecraft:block/air"
+    "particle": "resourcefulbees:block/stripped_waxed_log"
   }
 }

@@ -9,9 +9,11 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Bee
 import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
 import com.teamresourceful.resourcefulbees.common.modcompat.base.ModCompatHelper;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -110,6 +112,11 @@ public class TieredBeehiveBlock extends BeehiveBlock implements BeeHolderBlock {
         return true;
     }
 
+    private static boolean beekeeperInRange(@NonNull ServerLevel level, BlockPos pos) {
+        return !level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos).inflate(4),
+                player -> player.hasEffect(ModEffects.BEEKEEPERS_RESOLVE.holder())).isEmpty();
+    }
+
     @Override
     public @NonNull BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction direction = context.getPlayer() != null && context.getPlayer().isShiftKeyDown() ? context.getHorizontalDirection() : context.getHorizontalDirection().getOpposite();
@@ -127,7 +134,7 @@ public class TieredBeehiveBlock extends BeehiveBlock implements BeeHolderBlock {
     }
 
     @Override
-    protected InteractionResult useItemOn(ItemStack itemstack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected @NonNull InteractionResult useItemOn(@NonNull ItemStack itemstack, BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         if (state.getValue(HONEY_LEVEL) >= 5) {
             boolean isShear = GeneralConfig.allowShears && itemstack.canPerformAction(ItemAbilities.SHEARS_HARVEST);
             boolean isScraper = itemstack.canPerformAction(ModConstants.SCRAPE_ACTION);

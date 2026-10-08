@@ -16,4 +16,5 @@ public final class TraitConstants {
     public static final String ANGRY = "angry";
     public static final String SPIDER = "spider";
     public static final String STARRY = "starry";
+    public static final String SCULK = "sculk";
 }

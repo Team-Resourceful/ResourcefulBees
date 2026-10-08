@@ -18,7 +18,10 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 
 @NullMarked
-public class ModDataComponents {
+public final class ModDataComponents {
+
+    ModDataComponents() {
+    }
 
     public static final ResourcefulRegistry<DataComponentType<?>> COMPONENTS = RegistryHelper.create(BuiltInRegistries.DATA_COMPONENT_TYPE, ModConstants.MOD_ID);
 

@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
 import com.teamresourceful.resourcefulbees.common.commands.ResourcefulBeesCommand;
 import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.data.TagGenerator;
+import com.teamresourceful.resourcefulbees.common.effect.BeekeepersResolveEffect;
 import com.teamresourceful.resourcefulbees.common.enchantments.HiveBreakHandler;
 import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
@@ -33,6 +34,7 @@ import com.teamresourceful.resourcefulbees.common.world.gen.GoldenFlower;
 import com.teamresourceful.resourcefulbees.common.world.workers.LevelWorkEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -41,6 +43,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.tooltip.TooltipLocation;
+import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.RegisterTooltipAppendersEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -61,7 +64,7 @@ public class ResourcefulBees {
         BeeDataRegistry.init();
         HoneyDataRegistry.init();
         GameSetup.initPaths();
-        ModCompatHelper.registerCompats();
+        ModCompatHelper.registerCompatibleMods();
 
         ResourcefulBeesAPI.getRegistry().setBeeRegistry(BeeRegistry.getRegistry());
         ResourcefulBeesAPI.getRegistry().setTraitRegistry(TraitRegistry.getRegistry());
@@ -86,6 +89,8 @@ public class ResourcefulBees {
         NeoForge.EVENT_BUS.addListener(HiveBreakHandler::onBlockDrops);
         NeoForge.EVENT_BUS.addListener(DimensionalBeeHolder::onDatapackSync);
         NeoForge.EVENT_BUS.addListener(LevelWorkEvents::onLevelTick);
+        NeoForge.EVENT_BUS.addListener(BeekeepersResolveEffect::onPlayerTick);
+        NeoForge.EVENT_BUS.addListener(BeekeepersResolveEffect::invulnerabilityEvent);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -95,8 +100,10 @@ public class ResourcefulBees {
         modEventBus.addListener(GameSetup::registerCapabilities);
         modEventBus.addListener(GameSetup::initSpawns);
         modEventBus.addListener(this::addTooltipsProviders);
+        modEventBus.addListener(this::addBlockEntityBlocks);
         ModIngredientTypes.register(modEventBus);
         ModBiomeModifiers.init(modEventBus);
+        ModAttachments.ATTACHMENTS.register(modEventBus);
 
 
         // Register ourselves for server and other game events we are interested in.
@@ -127,6 +134,12 @@ public class ResourcefulBees {
         if (ModUtils.isProduction()) {
             GeneralConfig.generateDefaults = false;
         }
+    }
+
+    public void addBlockEntityBlocks(BlockEntityTypeAddBlocksEvent event) {
+        event.modify(BlockEntityTypes.SIGN, ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get());
+        event.modify(BlockEntityTypes.HANGING_SIGN, ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get());
+        event.modify(BlockEntityTypes.SHELF, ModBlocks.WAXED_SHELF.get());
     }
 
     @SubscribeEvent

@@ -18,6 +18,7 @@ import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
 import com.teamresourceful.resourcefulbees.common.lib.constants.DataConstants;
 import com.teamresourceful.resourcefulbees.common.lib.util.ModUtils;
 import com.teamresourceful.resourcefulbees.common.registries.dynamic.ModSpawnData;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -25,6 +26,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Prediction;
 import net.minecraft.util.RandomSource;
@@ -45,6 +47,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 
@@ -61,6 +64,7 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     protected final CustomBeeData customBeeData;
     private boolean hasHiveInRange;
     private int disruptorInRange;
+    private boolean beekeeperInRange = false;
 
     public CustomBeeEntity(EntityType<? extends Bee> type, Level world, Identifier beeType) {
         super(type, world);
@@ -138,11 +142,17 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
         if (BeeConfig.beesDieInVoid && this.position().y <= level().getMinY()) {
             this.remove(RemovalReason.KILLED);
         }
+
         if (this.tickCount % 100 == 0) {
-            hasHiveInRange = false;
+            hasHiveInRange = false; //todo this line might need to be removed
             if ((disruptorInRange--) < 0) {
                 disruptorInRange = 0;
             }
+        }
+
+        if (this.tickCount % 20 == 0) {
+            beekeeperInRange = !level().getEntitiesOfClass(ServerPlayer.class, new AABB(blockPosition()).inflate(4),
+                    player -> player.hasEffect(ModEffects.BEEKEEPERS_RESOLVE.holder())).isEmpty();
         }
     }
 
@@ -162,6 +172,10 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
                     (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
                     (this.random.nextDouble() - 0.5D) * 2.0D);
         }
+    }
+
+    public boolean beekeeperInRange() {
+        return beekeeperInRange;
     }
 
     public boolean hasHiveInRange() {
@@ -311,35 +325,6 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
     public boolean hasDisruptorInRange() {
         return disruptorInRange > 0;
     }
-
-//    @Override
-//    public boolean randomTeleport(double x, double y, double z, boolean showParticles, ItemStack consumedStack) {
-//        Level level = level();
-//        BlockPos pos = BlockPos.containing(x, y, z);
-//
-//        if (!level.hasChunkAt(pos)) {
-//            return false;
-//        }
-//
-//        AABB targetBox = getBoundingBox().move(
-//                x - getX(),
-//                y - getY(),
-//                z - getZ()
-//        );
-//
-//        if (!level.noCollision(this, targetBox)) return false;
-//        if (level.containsAnyLiquid(targetBox)) return false;
-//
-//        teleportTo(x, y, z);
-//
-//        if (showParticles) {
-//            level.broadcastEntityEvent(this, (byte) 46);
-//        }
-//
-//        getNavigation().stop();
-//
-//        return true;
-//    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {

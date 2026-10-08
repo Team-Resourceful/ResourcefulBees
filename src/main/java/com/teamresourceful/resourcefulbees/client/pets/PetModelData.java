@@ -22,7 +22,7 @@ import java.util.Set;
 
 public class PetModelData implements GeoAnimatable {
 
-    private static final Identifier BASE_MODEL = ModIdentifier.of("geo/base.geo.json");
+    private static final Identifier BASE_MODEL = ModIdentifier.of("base");
     private static final RawAnimation FLY_ANIMATION = RawAnimation.begin().thenLoop("animation.bee.fly");
     private static final RawAnimation BOB_ANIMATION = RawAnimation.begin().thenLoop("animation.bee.fly.bobbing");
 
@@ -35,7 +35,6 @@ public class PetModelData implements GeoAnimatable {
             CodecExtras.linkedSet(LayerData.CODEC).fieldOf("layers").orElse(new LinkedHashSet<>()).forGetter(PetModelData::getLayers)
     ).apply(instance, PetModelData::new));
 
-    private final PetBeeModel<PetModelData> model = new PetBeeModel<>();
     private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
 
     private final int version;
@@ -48,10 +47,24 @@ public class PetModelData implements GeoAnimatable {
     public PetModelData(int version, String id, Identifier modelLocation, Identifier texture, Optional<String> urlTexture, Set<BeeLayerData> layers) {
         this.version = version;
         this.id = id;
-        this.modelLocation = modelLocation;
+        this.modelLocation = correctModelLocation(modelLocation);
         this.texture = texture;
         this.urlTexture = urlTexture.map(url -> new PetTexture(id, url)).orElse(null);
         this.layers = layers;
+    }
+
+    private static Identifier correctModelLocation(Identifier modelLocation) {
+        String path = modelLocation.getPath();
+
+        if (path.startsWith("geo/")) {
+            path = path.substring("geo/".length());
+        }
+
+        if (path.endsWith(".geo.json")) {
+            path = path.substring(0, path.length() - ".geo.json".length());
+        }
+
+        return Identifier.fromNamespaceAndPath(modelLocation.getNamespace(), path);
     }
 
     public int getVersion() {
@@ -60,15 +73,6 @@ public class PetModelData implements GeoAnimatable {
 
     public String getId() {
         return id;
-    }
-
-    public PetBeeModel<PetModelData> getModel() {
-        return model;
-    }
-
-    @SuppressWarnings("rawtypes")
-    public PetBeeModel getModelRaw() {
-        return model;
     }
 
     public Identifier getModelLocation() {
@@ -101,9 +105,4 @@ public class PetModelData implements GeoAnimatable {
     public @NonNull AnimatableInstanceCache getAnimatableInstanceCache() {
         return animationCache;
     }
-
-//    @Override
-//    public double getTick(Object o) {
-//        return RenderUtil.getCurrentTick();
-//    }
 }

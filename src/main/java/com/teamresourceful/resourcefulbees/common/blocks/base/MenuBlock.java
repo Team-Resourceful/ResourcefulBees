@@ -13,7 +13,7 @@ import org.jspecify.annotations.NonNull;
 
 public interface MenuBlock {
 
-    default @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull BlockHitResult hitResult) {
+    default @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult hitResult) {
         if (!player.isShiftKeyDown() && !level.isClientSide()) {
             MenuProvider blockEntity = state.getMenuProvider(level,pos);
             if (blockEntity instanceof ContentMenuProvider<?> contentMenu) {

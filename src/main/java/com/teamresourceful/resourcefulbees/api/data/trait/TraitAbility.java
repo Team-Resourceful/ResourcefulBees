@@ -1,8 +1,8 @@
 package com.teamresourceful.resourcefulbees.api.data.trait;
 
 import com.teamresourceful.resourcefulbees.client.util.displays.ItemDisplay;
+import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.animal.bee.Bee;
 
 public interface TraitAbility extends ItemDisplay {
 
@@ -14,5 +14,5 @@ public interface TraitAbility extends ItemDisplay {
         return true;
     }
 
-    void run(Bee bee);
+    void run(ResourcefulBee bee);
 }

@@ -28,6 +28,8 @@ public class RBeesItemTagProvider extends ItemTagsProvider {
         addCommonTags();
         addHiveTags();
         addWaxedWoodTags();
+        tag(ItemTags.DECORATED_POT_SHERDS).add(ModItems.HONEYCOMB_POTTERY_SHERD.holder().getKey());
+        tag(ItemTags.DECORATED_POT_SHERDS).add(ModItems.BEE_POTTERY_SHERD.holder().getKey());
     }
 
     private void addCommonTags() {
@@ -84,6 +86,7 @@ public class RBeesItemTagProvider extends ItemTagsProvider {
     }
 
     private void addWaxedWoodTags() {
+        tag(ModItemTags.WAXED_TOOL_MATERIALS).addTags(ModItemTags.WAX);
         tag(ItemTags.WOODEN_DOORS).add(ModItems.WAXED_DOOR.holder().getKey());
         tag(ItemTags.WOODEN_BUTTONS).add(ModItems.WAXED_BUTTON.holder().getKey());
         tag(ItemTags.WOODEN_FENCES).add(ModItems.WAXED_FENCE.holder().getKey());

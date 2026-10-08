@@ -18,7 +18,7 @@ import org.jspecify.annotations.NonNull;
 
 public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGeneratorMenu> {
 
-    public static final Identifier BACKGROUND = ModIdentifier.of("textures/gui/generator/honey_gen.png");
+    public static final Identifier BACKGROUND = ModIdentifier.of("generator/background");
 
     public HoneyGeneratorScreen(HoneyGeneratorMenu screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);
@@ -35,51 +35,18 @@ public class HoneyGeneratorScreen extends AbstractContainerScreen<HoneyGenerator
     @Override
     public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         super.extractBackground(graphics, mouseX, mouseY, partialTicks);
-
-        int x = leftPos;
-        int y = topPos;
-
-        graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, 0, leftPos, topPos, imageWidth, imageHeight);
     }
 
     @Override
-    protected void extractLabels(
-            @NonNull GuiGraphicsExtractor graphics,
-            int mouseX,
-            int mouseY
-    ) {
+    protected void extractLabels(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         super.extractLabels(graphics, mouseX, mouseY);
 
         FluidStack fluid = menu.getEntity().tankData().fluid();
 
-        graphics.text(
-                font,
-                Component.literal("Fluid:"),
-                45,
-                18,
-                0xFFFFFFFF,
-                false
-        );
-
-        graphics.drawScrollingString(
-                graphics.textRenderer(),
-                font,
-                fluid.isEmpty()
-                        ? GuiTranslations.NO_FLUID
-                        : fluid.getHoverName(),
-                45,
-                130,
-                28
-        );
-
-        graphics.text(
-                font,
-                Component.literal("Amount: " + fluid.amount() + " mB"),
-                45,
-                39,
-                0xFFFFFFFF,
-                false
-        );
+        graphics.text(font, Component.literal("Fluid:"), 45, 18, 0xFFFFFFFF, false);
+        graphics.drawScrollingString(graphics.textRenderer(), font, fluid.isEmpty() ? GuiTranslations.NO_FLUID : fluid.getHoverName(), 45, 130, 28);
+        graphics.text(font, Component.literal("Amount: " + fluid.amount() + " mB"), 45, 39, 0xFFFFFFFF, false);
     }
 
     @Override

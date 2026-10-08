@@ -11,6 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +29,7 @@ public class WaxItem extends Item {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
-        Optional<BlockState> waxedState = getWaxed(level.getBlockState(pos));
+        Optional<BlockState> waxedState = HoneycombItem.getWaxed(level.getBlockState(pos));
         if (waxedState.isEmpty()) {
             return InteractionResult.PASS;
         }
@@ -42,7 +43,7 @@ public class WaxItem extends Item {
         }
 
         stack.shrink(1);
-        level.setBlock(pos, state, 11);
+        level.setBlock(pos, state, Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS | Block.UPDATE_IMMEDIATE);
         level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, state));
         level.levelEvent(player, 3003, pos, 0);
 

@@ -146,6 +146,9 @@ public class RBeesBlockTagProvider extends BlockTagsProvider {
                         blockKey(Blocks.MAGMA_BLOCK)
                 );
 
+        tag(BlockTags.LOGS).add(blockKey(ModBlocks.WAXED_LOG));
+        tag(BlockTags.LOGS).add(blockKey(ModBlocks.STRIPPED_WAXED_LOG));
+        tag(BlockTags.WOODEN_SHELVES).add(blockKey(ModBlocks.WAXED_SHELF));
         tag(BlockTags.WOODEN_FENCES).add(blockKey(ModBlocks.WAXED_FENCE));
         tag(BlockTags.WOODEN_TRAPDOORS).add(blockKey(ModBlocks.WAXED_TRAPDOOR));
         tag(BlockTags.WOODEN_SLABS).add(blockKey(ModBlocks.WAXED_SLAB));
@@ -154,8 +157,8 @@ public class RBeesBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.WOODEN_DOORS).add(blockKey(ModBlocks.WAXED_DOOR));
         tag(BlockTags.WOODEN_BUTTONS).add(blockKey(ModBlocks.WAXED_BUTTON));
         tag(BlockTags.CEILING_HANGING_SIGNS).add(blockKey(ModBlocks.WAXED_HANGING_SIGN));
-        tag(BlockTags.WALL_HANGING_SIGNS).add(blockKey(ModBlocks.WAXED_HANGING_SIGN));
-        tag(BlockTags.ALL_HANGING_SIGNS).add(blockKey(ModBlocks.WAXED_HANGING_SIGN));
+        tag(BlockTags.WALL_HANGING_SIGNS).add(blockKey(ModBlocks.WAXED_WALL_HANGING_SIGN));
+        tag(BlockTags.ALL_HANGING_SIGNS).add(blockKey(ModBlocks.WAXED_HANGING_SIGN)).add(blockKey(ModBlocks.WAXED_WALL_HANGING_SIGN));
     }
 
     private static ResourceKey<Block> blockKey(RegistryEntry<? extends Block> entry) {

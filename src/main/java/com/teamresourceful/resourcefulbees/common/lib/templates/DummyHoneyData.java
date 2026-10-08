@@ -24,6 +24,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntPr
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class DummyHoneyData {
 
@@ -102,7 +103,8 @@ public final class DummyHoneyData {
             LazyHolder.of(BuiltInRegistries.FLUID, ModIdentifier.of("honey_flowing")),
             LazyHolder.of(BuiltInRegistries.ITEM, ModIdentifier.of("honey_bucket")),
             LazyHolder.of(BuiltInRegistries.BLOCK, ModIdentifier.of("honey")),
-            DEFAULT_TRADE
+            DEFAULT_TRADE,
+            Set.of()
     );
 
     public static final Map<Identifier, com.teamresourceful.resourcefulbees.api.data.honey.base.HoneyData<?>> DATA = Map.of(

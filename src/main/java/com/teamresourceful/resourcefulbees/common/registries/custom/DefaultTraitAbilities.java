@@ -13,7 +13,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -33,15 +32,27 @@ public final class DefaultTraitAbilities {
         registry.register(TraitConstants.FLAMMABLE, new DefaultAbility("flammable", Items.BLAZE_POWDER, DefaultTraitAbilities::fireAbility));
         registry.register(TraitConstants.ANGRY, new DefaultAbility("angry", Items.IRON_AXE, DefaultTraitAbilities::angryAbility));
         registry.register(TraitConstants.SPIDER, new DefaultAbility("spider", Items.COBWEB, null));
+        registry.register(TraitConstants.SCULK, new DefaultAbility("sculk", Items.SCULK_CATALYST, DefaultTraitAbilities::tickSculkAbility));
         return registry;
     }
 
-    private static boolean canTeleport(ResourcefulBee bee) {
-        return !bee.level().isClientSide() && bee.isAlive() && bee.tickCount % 150 == 0 && !bee.hasCustomName() && bee.level().isBrightOutside() && !bee.isPollinating() && !bee.hasHiveInRange() && !bee.hasDisruptorInRange();
+    private static void tickSculkAbility(ResourcefulBee bee) {
+        bee.tickSculkAbility();
     }
 
-    private static void enderAbility(Bee input) {
-        if (input instanceof ResourcefulBee bee && canTeleport(bee)) {
+    private static boolean canTeleport(ResourcefulBee bee) {
+        return !bee.level().isClientSide()
+                && bee.isAlive()
+                && bee.tickCount % 150 == 0
+                && !bee.hasCustomName()
+                && bee.level().isBrightOutside()
+                && !bee.isPollinating()
+                && !bee.hasHiveInRange()
+                && !bee.hasDisruptorInRange();
+    }
+
+    private static void enderAbility(ResourcefulBee bee) {
+        if (canTeleport(bee)) {
             double x = bee.getX() + (bee.getRandom().nextDouble() - 0.5D) * 16.0D;
             double y = bee.getY() + (bee.getRandom().nextInt(3) - 2);
             double z = bee.getZ() + (bee.getRandom().nextDouble() - 0.5D) * 16.0D;
@@ -49,15 +60,15 @@ public final class DefaultTraitAbilities {
             var result = ModUtils.enderEntityTeleport(bee, x, y, z);
             if (result.keyBoolean()) return;
             Vec3 target = result.value();
-            if (bee.randomTeleport(target.x(), target.y(), target.z(), true, state -> false)) {
+            if (bee.randomTeleport(target.x(), target.y(), target.z(), true, _ -> false)) {
                 bee.level().playSound(null, target.x(), target.y(), target.z(), SoundEvents.ENDERMAN_TELEPORT, bee.getSoundSource(), 1.0F, 1.0F);
                 bee.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
             }
         }
     }
 
-    private static void slimeAbility(Bee input) {
-        if (input instanceof ResourcefulBee bee && !bee.checkSpawnObstruction(bee.level()) && !bee.wasColliding()) {
+    private static void slimeAbility(ResourcefulBee bee) {
+        if (!bee.checkSpawnObstruction(bee.level()) && !bee.wasColliding()) {
             for (int j = 0; j < 8; ++j) {
                 float f = bee.getRandom().nextFloat() * ((float) Math.PI * 2F);
                 float f1 = bee.getRandom().nextFloat() * 0.5F + 0.5F;
@@ -71,13 +82,13 @@ public final class DefaultTraitAbilities {
         }
     }
 
-    private static void fireAbility(Bee bee) {
+    private static void fireAbility(ResourcefulBee bee) {
         if (bee.tickCount % 150 == 0) {
             bee.igniteForSeconds(3);
         }
     }
 
-    private static void angryAbility(Bee bee) {
+    private static void angryAbility(ResourcefulBee bee) {
         if (!bee.hasEffect(Holder.direct(ModEffects.CALMING.get()))) {
             LivingEntity player = bee.level().getNearestPlayer(bee, 20);
             bee.setPersistentAngerTarget(player != null ? EntityReference.of(player) : null);
@@ -85,7 +96,7 @@ public final class DefaultTraitAbilities {
         }
     }
 
-    public record DefaultAbility(String id, Item item, Consumer<Bee> ability) implements TraitAbility {
+    public record DefaultAbility(String id, Item item, Consumer<ResourcefulBee> ability) implements TraitAbility {
 
         @Override
         public ItemStack displayedItem() {
@@ -108,7 +119,7 @@ public final class DefaultTraitAbilities {
         }
 
         @Override
-        public void run(Bee bee) {
+        public void run(ResourcefulBee bee) {
             ability.accept(bee);
         }
     }

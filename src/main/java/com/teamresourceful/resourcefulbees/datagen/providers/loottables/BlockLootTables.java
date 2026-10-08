@@ -61,6 +61,10 @@ public class BlockLootTables extends BaseBlockLootTable {
         dropSelf(ModBlocks.WAXED_MACHINE_BLOCK);
         dropSelf(ModBlocks.WAXED_PLANKS);
 
+        dropSelf(ModBlocks.WAXED_SHELF);
+        dropSelf(ModBlocks.WAXED_LOG);
+        dropSelf(ModBlocks.STRIPPED_WAXED_LOG);
+
         add(
                 ModBlocks.WAXED_DOOR,
                 createDoorTable(ModBlocks.WAXED_DOOR.get())

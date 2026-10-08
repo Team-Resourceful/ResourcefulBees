@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefulbees.common.lib.util.FluidUtils;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +18,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -29,13 +27,11 @@ import org.jspecify.annotations.NonNull;
 
 public class SolidificationChamberBlock extends TickingBlock<SolidificationChamberBlockEntity> implements MenuBlock {
 
-    protected static final VoxelShape VOXEL_SHAPE = Util.make(() -> {
-        VoxelShape shape = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 5.0D, 15.0D);
-        shape = Shapes.join(shape, Block.box(6.0D, 5.0D, 1.0D, 10.0D, 9.0D, 15.0D), BooleanOp.OR);
-        shape = Shapes.join(shape, Block.box(1.0D, 5.0D, 6.0D, 15.0D, 9.0D, 10.0D), BooleanOp.OR);
-        shape = Shapes.join(shape, Block.box(3.0D, 5.0D, 3.0D, 13.0D, 16.0D, 13.0D), BooleanOp.OR);
-        return shape;
-    });
+    private static final VoxelShape SHAPE = Shapes.or(
+            Block.box(3, 4, 3, 13, 5, 13),
+            Block.box(1, 0, 1, 15, 4, 15),
+            Block.box(3, 5, 3, 13, 16, 13)
+    );
 
     public SolidificationChamberBlock(Properties properties) {
         super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY, properties);
@@ -59,7 +55,7 @@ public class SolidificationChamberBlock extends TickingBlock<SolidificationChamb
     @NotNull
     @Override
     public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter getter, @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        return VOXEL_SHAPE;
+        return SHAPE;
     }
 
     @Override

@@ -73,7 +73,7 @@ public class CentrifugeBlock extends RenderingBaseEntityBlock implements MenuBlo
     }
 
     @Override
-    public @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull BlockHitResult hitResult) {
+    public @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult hitResult) {
         return MenuBlock.super.useWithoutItem(state, level, pos, player, hitResult);
     }
 }

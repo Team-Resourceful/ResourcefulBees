@@ -124,6 +124,7 @@ public final class GameSetup {
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), (blockEntity, side) -> blockEntity.tank());
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.HONEY_POT_TILE_ENTITY.get(), (blockEntity, context) -> blockEntity.tank());
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), (blockEntity, context) -> blockEntity.tank());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ModBlockEntityTypes.HONEY_GENERATOR_ENTITY.get(), (blockEntity, context) -> blockEntity.battery());
         event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), (blockEntity, context) -> blockEntity.tank());
 
 

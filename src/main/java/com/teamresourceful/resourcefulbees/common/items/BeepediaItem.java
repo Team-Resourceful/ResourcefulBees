@@ -1,49 +1,76 @@
-//package com.teamresourceful.resourcefulbees.common.items;
-//
-//import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
-//import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeepediaSavedData;
-//import com.teamresourceful.resourcefulbees.common.lib.util.BeepediaUtils;
-//import net.minecraft.world.InteractionHand;
-//import net.minecraft.world.InteractionResult;
-//import net.minecraft.world.entity.LivingEntity;
-//import net.minecraft.world.entity.player.Player;
-//import net.minecraft.world.item.Item;
-//import net.minecraft.world.item.ItemStack;
-//import net.minecraft.world.level.Level;
-//import org.jetbrains.annotations.NotNull;
-//
-//public class BeepediaItem extends Item {
-//
-//    public BeepediaItem(Properties properties) {
-//        super(properties);
-//    }
-//
+package com.teamresourceful.resourcefulbees.common.items;
+
+import com.teamresourceful.resourcefulbees.client.screen.beepedia.BeepediaScreen;
+import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModAttachments;
+import com.teamresourceful.resourcefulbees.common.resources.storage.beepedia.BeeDiscoveryData;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+
+public class BeepediaItem extends Item {
+
+    private final boolean creative;
+
+    public BeepediaItem(Properties properties, boolean creative) {
+        super(properties);
+        this.creative = creative;
+    }
+
+    @Override
+    public @NotNull InteractionResult use(@NonNull Level level, @NonNull Player player, @NotNull InteractionHand hand) {
+        if (level.isClientSide()) {
+            BeepediaScreen.open(creative);
+            return InteractionResult.SUCCESS;
+        }
+
+        return InteractionResult.SUCCESS_SERVER;
+    }
+
+    @Override
+    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
+        if (!(entity.getType() instanceof CustomBeeEntityType<?> beeType)) {
+            return super.interactLivingEntity(stack, player, entity, hand);
+        }
+
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            return InteractionResult.SUCCESS;
+        }
+
+        BeeDiscoveryData discovery = serverPlayer.getData(ModAttachments.BEE_DISCOVERY);
+
+        if (discovery.discover(beeType.getBeeType())) {
+            serverPlayer.syncData(ModAttachments.BEE_DISCOVERY);
+        }
+
+        return InteractionResult.SUCCESS;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //    @Override
-//    public @NotNull InteractionResult use(Level level, Player player, @NotNull InteractionHand hand) {
-//        ItemStack itemstack = player.getItemInHand(hand);
-//        if (level.isClientSide()) {
-//            BeepediaUtils.loadBeepedia(itemstack, player);
-//        } else {
-//            //NetworkHandler.NETWORK.sendToPlayer(SyncBeepediaPacket.of(player), player); //todo no .of method anymore
-//        }
-//        return InteractionResult.SUCCESS_SERVER;
-//    }
-//
-//    @Override
-//    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
-//        if (entity.getType() instanceof CustomBeeEntityType<?> beeType) {
-//            if (player.level().isClientSide()) {
-//                return InteractionResult.PASS;
-//            } else {
-//                BeepediaSavedData.addBee(player, beeType.getBeeType());
-//            }
-//            player.setItemInHand(hand, stack);
-//            return InteractionResult.SUCCESS;
-//        }
-//        return super.interactLivingEntity(stack, player, entity, hand);
-//    }
-//
-///*    @Override
 //    public @NotNull Component getName(ItemStack stack) {
 //        if (stack.hasTag() && stack.getTag() != null && !stack.getTag().isEmpty()) {
 //            if (stack.getTag().getBoolean(NBTConstants.Beepedia.CREATIVE)) return ItemTranslations.CREATIVE_BEEPEDIA.withStyle(ChatFormatting.LIGHT_PURPLE);
@@ -68,5 +95,5 @@
 //
 //    public static boolean isCreative(ItemStack stack) {
 //        return stack.getItem() instanceof BeepediaItem && !stack.isEmpty() && stack.hasTag() && stack.getOrCreateTag().getBoolean(NBTConstants.Beepedia.CREATIVE);
-//    }*/
-//}
+//    }
+}

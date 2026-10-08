@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -32,7 +32,7 @@ public record BeehiveTier(
         Supplier<BlockEntityType<TieredBeehiveBlockEntity>> entityType
 ) implements TooltipProvider {
 
-    private static final Map<Identifier, BeehiveTier> TIERS = new HashMap<>();
+    private static final Map<Identifier, BeehiveTier> TIERS = new LinkedHashMap<>();
     public static final Codec<BeehiveTier> CODEC = Identifier.CODEC.comapFlatMap(BeehiveTier::get, BeehiveTier::id);
     public static final StreamCodec<ByteBuf, BeehiveTier> STREAM_CODEC = Identifier.STREAM_CODEC.map(BeehiveTier::getOrThrow, BeehiveTier::id);
 

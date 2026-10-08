@@ -24,11 +24,37 @@
     "honeyBlock": "resourcefulbees:rainbow_honey_block"
   },
   "resourcefulbees:fluid/v1": {
-    "rendering" : {
+    "rendering": {
       "color": "rainbow"
     },
     "tradeData": {
       "secondaryItem": "minecraft:bucket"
-    }
+    },
+    "effects": [
+      {
+        "effect": "minecraft:speed",
+        "drainAmount": 15
+      },
+      {
+        "effect": "minecraft:regeneration",
+        "drainAmount": 10
+      },
+      {
+        "effect": "minecraft:slowness",
+        "drainAmount": 20
+      },
+      {
+        "effect": "minecraft:resistance",
+        "drainAmount": 3
+      },
+      {
+        "effect": "minecraft:haste",
+        "drainAmount": 7
+      },
+      {
+        "effect": "minecraft:strength",
+        "drainAmount": 87
+      }
+    ]
   }
 }

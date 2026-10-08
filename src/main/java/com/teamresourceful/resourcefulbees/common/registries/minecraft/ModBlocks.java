@@ -19,7 +19,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -28,8 +27,6 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.NonNull;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -117,6 +114,9 @@ public final class ModBlocks {
     public static final HolderRegistryEntry<Block> HONEY_GLASS_PLAYER = registerBlock(BLOCKS, "honey_glass_player", properties -> new HoneyGlassBlock(properties, false), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollision());
     public static final HolderRegistryEntry<Block> HONEY_GLASS = registerBlock(BLOCKS, "honey_glass", properties -> new HoneyGlassBlock(properties, true), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never).noCollision());
 
+    public static final HolderRegistryEntry<Block> WAXED_SHELF = registerBlock(BLOCKS, "waxed_shelf", ShelfBlock::new, () -> WAXED_PLANKS_PROPERTIES);
+    public static final HolderRegistryEntry<Block> WAXED_LOG = registerBlock(BLOCKS, "waxed_log", RotatedPillarBlock::new, () -> WAXED_PLANKS_PROPERTIES);
+    public static final HolderRegistryEntry<Block> STRIPPED_WAXED_LOG = registerBlock(BLOCKS, "stripped_waxed_log", RotatedPillarBlock::new, () -> WAXED_PLANKS_PROPERTIES);
     public static final HolderRegistryEntry<Block> WAXED_PLANKS = registerBlock(BLOCKS, "waxed_planks", Block::new, () -> WAXED_PLANKS_PROPERTIES);
     public static final HolderRegistryEntry<Block> WAXED_STAIRS = registerBlock(BLOCKS, "waxed_stairs", properties -> new StairBlock(WAXED_PLANKS.get().defaultBlockState(), properties), WAXED_PLANKS_PROPERTIES::dynamicShape);
     public static final HolderRegistryEntry<Block> WAXED_SLAB = registerBlock(BLOCKS, "waxed_slab", SlabBlock::new, WAXED_PLANKS_PROPERTIES::dynamicShape);
@@ -130,35 +130,13 @@ public final class ModBlocks {
     // todo consider changing machine block to basic machine block and using vanilla waxing mechanics to convert to waxed variant
     public static final HolderRegistryEntry<Block> WAXED_MACHINE_BLOCK = registerBlock(BLOCKS, "waxed_machine_block", Block::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
 
-    public static final HolderRegistryEntry<Block> WAXED_SIGN = registerBlock(BLOCKS, "waxed_sign", properties -> new StandingSignBlock(WAXED_WOOD_TYPE, properties){
-        @Override
-        public @NonNull BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-            return ModBlockEntityTypes.WAXED_SIGN_ENTITY.get().create(pos, state);
-        }
-    }, () -> BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision());
+    public static final HolderRegistryEntry<Block> WAXED_SIGN = registerBlock(BLOCKS, "waxed_sign", properties -> new StandingSignBlock(WAXED_WOOD_TYPE, properties), () -> BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision());
+    public static final HolderRegistryEntry<Block> WAXED_WALL_SIGN = registerBlock(BLOCKS, "waxed_wall_sign", properties -> new WallSignBlock(WAXED_WOOD_TYPE, properties) , () -> BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision());
 
-    public static final HolderRegistryEntry<Block> WAXED_WALL_SIGN = registerBlock(BLOCKS, "waxed_wall_sign", properties -> new WallSignBlock(WAXED_WOOD_TYPE, properties) {
-        @Override
-        public @NonNull BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-            return ModBlockEntityTypes.WAXED_SIGN_ENTITY.get().create(pos, state);
-        }
-    }, () -> BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision());
+    public static final HolderRegistryEntry<Block> WAXED_HANGING_SIGN = registerBlock(BLOCKS, "waxed_hanging_sign", properties -> new CeilingHangingSignBlock(WAXED_WOOD_TYPE, properties), () -> BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision());
+    public static final HolderRegistryEntry<Block> WAXED_WALL_HANGING_SIGN = registerBlock(BLOCKS, "waxed_wall_hanging_sign", properties -> new WallHangingSignBlock(WAXED_WOOD_TYPE, properties), () -> BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision());
 
-    public static final HolderRegistryEntry<Block> WAXED_HANGING_SIGN = registerBlock(BLOCKS, "waxed_hanging_sign", properties -> new CeilingHangingSignBlock(WAXED_WOOD_TYPE, properties) {
-        @Override
-        public @NonNull BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-            return ModBlockEntityTypes.WAXED_HANGING_SIGN_ENTITY.get().create(pos, state);
-        }
-    }, () -> BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision());
-
-    public static final HolderRegistryEntry<Block> WAXED_WALL_HANGING_SIGN = registerBlock(BLOCKS, "waxed_wall_hanging_sign", properties -> new WallHangingSignBlock(WAXED_WOOD_TYPE, properties) {
-        @Override
-        public @NonNull BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-            return ModBlockEntityTypes.WAXED_HANGING_SIGN_ENTITY.get().create(pos, state);
-        }
-    }, () -> BlockBehaviour.Properties.ofFullCopy(WAXED_PLANKS.get()).noOcclusion().noCollision());
-
-    public static final HolderRegistryEntry<Block> ACCELERATOR = registerBlock(BLOCKS, "accelerator", properties -> new AcceleratorBlock(properties), () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL));
+    public static final HolderRegistryEntry<Block> ACCELERATOR = registerBlock(BLOCKS, "accelerator", AcceleratorBlock::new, () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL));
 
 //    public static final HolderRegistryEntry<Block> POLLEN_SPREADER_FAN = BLOCKS.register("pollen_spreader_fan", () -> new PollenSpreader.Fan(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.5f).sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion()));
 //    public static final HolderRegistryEntry<Block> POLLEN_SPREADER = BLOCKS.register("pollen_spreader", () -> new PollenSpreader(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.5f).sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion()));

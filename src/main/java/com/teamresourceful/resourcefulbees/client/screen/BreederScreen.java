@@ -13,7 +13,7 @@ import org.jspecify.annotations.NonNull;
 
 public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
 
-    private static final Identifier BACKGROUND = ModIdentifier.of("textures/gui/apiary/apiary_breeder_gui.png");
+    private static final Identifier BACKGROUND = ModIdentifier.of("breeder/background");
 
     public BreederScreen(BreederMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn, 198, 188);
@@ -29,11 +29,11 @@ public class BreederScreen extends AbstractContainerScreen<BreederMenu> {
     @Override
     public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractBackground(graphics, mouseX, mouseY, a);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.leftPos, this.topPos, 0, 0, 198, 188, 256, 256);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, 0, this.leftPos, this.topPos, 198, 188);
         int y = this.topPos + 21;
         for (int i = 0; i < BreederConstants.BREEDERS; i++) {
             int width = (int)(((float)menu.times.get(i) / menu.endTimes.get(i)) * 118);
-            graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.leftPos+51, y, 0, 246, width, 10, 256, 256);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, 246, this.leftPos + 51, y, width, 10);
             y+= 20;
         }
     }

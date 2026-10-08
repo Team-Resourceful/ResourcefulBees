@@ -1,7 +1,10 @@
 package com.teamresourceful.resourcefulbees.datagen;
 
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDecoratedPotPatterns;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModFuels;
 import com.teamresourceful.resourcefulbees.datagen.providers.BeekeeperTradeProvider;
+import com.teamresourceful.resourcefulbees.datagen.providers.RBeesDataMapProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.RBeesModelProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.lang.RBeesLanguageProvider;
 import com.teamresourceful.resourcefulbees.datagen.providers.loottables.RBeesLootTableProvider;
@@ -20,6 +23,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @EventBusSubscriber
@@ -42,27 +46,18 @@ public final class RBeesDataGenerator {
         event.addProvider(new BeekeeperTradeProvider(output, provider));
         event.addProvider(new RBeesLanguageProvider(output));
         event.addProvider(new RBeesItemTagProvider(output, provider));
+        event.addProvider(new RBeesDataMapProvider(output, provider));
 
         RegistrySetBuilder registryBuilder = new RegistrySetBuilder()
                 .add(RecipeProvider.asBootstrap(RBeesRecipeProvider::new))
-                .add(Registries.LOOT_TABLE, new RBeesLootTableProvider());
+                .add(Registries.LOOT_TABLE, new RBeesLootTableProvider())
+                .add(Registries.CONTEXT_INT_PROVIDER, ModFuels::bootstrap);
 
-        event.createReloadableRegistryObjects(registryBuilder);
+        event.createReloadableRegistryObjects(registryBuilder, Set.of(ModConstants.MOD_ID, "minecraft"));
 
+        RegistrySetBuilder builder = new RegistrySetBuilder()
+                .add(Registries.DECORATED_POT_PATTERN, ModDecoratedPotPatterns::bootstrap);
 
-
-
-//        generator.addProvider(event.includeClient(), new ModBlockStateProvider(generator, existingFileHelper));
-//        generator.addProvider(event.includeClient(), new ModItemModelProvider(generator, existingFileHelper));
-//        generator.addProvider(event.includeClient(), new ModLanguageProvider(generator));
-//
-//        ModBlockTagProvider blockTagProvider = new ModBlockTagProvider(generator, provider, existingFileHelper);
-//        generator.addProvider(event.includeServer(), blockTagProvider);
-//        generator.addProvider(event.includeServer(), new ModPoiTagProvider(generator, provider, existingFileHelper));
-//        generator.addProvider(event.includeServer(), new ModItemTagProvider(generator, provider, blockTagProvider.contentsGetter(), existingFileHelper));
-//        generator.addProvider(event.includeServer(), new ModFluidTagProvider(generator, provider, existingFileHelper));
-//        generator.addProvider(event.includeServer(), new ModRecipeProvider(generator));
-//        generator.addProvider(event.includeServer(), new ModAdvancementProvider(generator, provider));
-//        generator.addProvider(event.includeServer(), new ModLootTableProvider(generator, provider));
+        event.createWorldRegistryObjects(builder, Set.of(ModConstants.MOD_ID));
     }
 }

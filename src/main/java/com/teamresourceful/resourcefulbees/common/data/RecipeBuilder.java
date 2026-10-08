@@ -31,9 +31,7 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
     public static Recipe<HiveRecipe.Input> makeHiveRecipe(CustomBeeData bee) {
         return bee.getCoreData().getHoneycombData()
                 .<Recipe<HiveRecipe.Input>>map(data -> new HiveRecipe(
-                        HolderSet.direct(
-                                BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(bee.entityType())
-                        ),
+                        HolderSet.direct(BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(bee.entityType())),
                         data.hiveCombs(),
                         data.apiaryCombs()
                 ))

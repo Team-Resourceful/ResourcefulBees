@@ -105,7 +105,7 @@ public final class Initializers {
 
     @FunctionalInterface
     public interface TraitInitializer {
-        BeeTraitData create(int range, Set<String> traits);
+        BeeTraitData create(int range, int sculkCharge, Set<String> traits);
     }
 
     @FunctionalInterface

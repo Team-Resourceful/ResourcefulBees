@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
@@ -34,7 +34,7 @@ public record ApiaryTier(
         Supplier<? extends Item> item
 ) implements TooltipProvider {
 
-    private static final Map<Identifier, ApiaryTier> TIERS = new HashMap<>();
+    private static final Map<Identifier, ApiaryTier> TIERS = new LinkedHashMap<>();
     public static final Codec<ApiaryTier> CODEC = Identifier.CODEC.comapFlatMap(ApiaryTier::get, ApiaryTier::id);
     public static final StreamCodec<ByteBuf, ApiaryTier> STREAM_CODEC = Identifier.STREAM_CODEC.map(ApiaryTier::getOrThrow, ApiaryTier::id);
 

@@ -15,8 +15,11 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.types.IRecipeType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +46,9 @@ public final class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.
     public BeeBreedingCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE, JeiTranslations.BREEDING, guiHelper.createDrawableItemLike(ModItems.BREEDER_ITEM.get()), WIDTH, HEIGHT);
 
+        TextureAtlas guiAtlas = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.GUI);
+
+        //this.background = guiHelper.createDrawableSprite(guiAtlas, GUI, WIDTH, HEIGHT);
         this.background = guiHelper.createDrawable(GUI, 0, 0, WIDTH, HEIGHT);
     }
 

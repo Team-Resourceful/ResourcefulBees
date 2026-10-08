@@ -23,16 +23,7 @@ public class BatteryWidget extends AbstractWidget {
     private final int textureU;
     private final int textureV;
 
-    public BatteryWidget(
-            int x,
-            int y,
-            int width,
-            int height,
-            int textureU,
-            int textureV,
-            Identifier texture,
-            Supplier<BatteryData> battery
-    ) {
+    public BatteryWidget(int x, int y, int width, int height, int textureU, int textureV, Identifier texture, Supplier<BatteryData> battery) {
         super(x, y, width, height, Component.empty());
 
         this.battery = battery;
@@ -42,35 +33,15 @@ public class BatteryWidget extends AbstractWidget {
     }
 
     @Override
-    protected void extractWidgetRenderState(
-            @NonNull GuiGraphicsExtractor graphics,
-            int mouseX,
-            int mouseY,
-            float partialTick
-    ) {
+    protected void extractWidgetRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         BatteryData batteryData = battery.get();
         int amount = batteryData.energy();
         int capacity = batteryData.capacity();
 
         if (amount > 0 && capacity > 0) {
-            int energyHeight = (int) Math.clamp(
-                    (long) amount * getHeight() / capacity,
-                    0L,
-                    getHeight()
-            );
+            int energyHeight = (int) Math.clamp((long) amount * getHeight() / capacity, 0L, getHeight());
 
-            graphics.blit(
-                    RenderPipelines.GUI_TEXTURED,
-                    texture,
-                    getX(),
-                    getY() + getHeight() - energyHeight,
-                    textureU,
-                    textureV + getHeight() - energyHeight,
-                    getWidth(),
-                    energyHeight,
-                    256,
-                    256
-            );
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, texture, 256, 256, textureU, textureV + getHeight() - energyHeight, getX(), getY() + getHeight() - energyHeight, getWidth(), energyHeight);
         }
 
         if (isHovered()) {

@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBiomeModifiers;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -21,6 +22,7 @@ public record BeeNestBiomeModifier(
 
     @Override
     public void modify(
+            @NonNull RegistryAccess registries,
             @NonNull Holder<Biome> biome,
             @NonNull Phase phase,
             ModifiableBiomeInfo.BiomeInfo.@NonNull Builder builder

@@ -7,11 +7,14 @@ import java.util.Locale;
 
 public enum HoneyPotState implements StringRepresentable {
     OPEN,
-    BEECON,
     CLOSED;
 
     @Override
     public @NotNull String getSerializedName() {
         return this.name().toLowerCase(Locale.ROOT);
+    }
+
+    public HoneyPotState toggle() {
+        return this == CLOSED ? OPEN : CLOSED;
     }
 }

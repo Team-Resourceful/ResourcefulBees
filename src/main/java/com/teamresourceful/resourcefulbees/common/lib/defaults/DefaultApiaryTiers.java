@@ -19,7 +19,7 @@ public final class DefaultApiaryTiers {
         .output(() -> ApiaryConfig.tierOneApiaryOutput)
         .amount(() -> ApiaryConfig.tierOneApiaryQuantity)
         .blockEntity(ModBlockEntityTypes.T1_APIARY_ENTITY::get)
-        .item(ModItems.T2_APIARY_ITEM)
+        .item(ModItems.T1_APIARY_ITEM)
         .build(ModIdentifier.of("t1"));
 
     public static final ApiaryTier T2_APIARY = new ApiaryTier.Builder()

@@ -3,76 +3,35 @@
         "particle":"resourcefulbees:block/centrifuge_crank"
     },
     "display": {
-        "thirdperson_righthand": {
-            "scale": [
-                0.60,
-                0.60,
-                0.60
-            ]
-        },
-        "thirdperson_lefthand": {
-            "scale": [
-                0.60,
-                0.60,
-                0.60
-            ]
-        },
-        "firstperson_righthand": {
-            "scale": [
-                0.60,
-                0.60,
-                0.60
-            ]
-        },
-        "firstperson_lefthand": {
-            "scale": [
-                0.60,
-                0.60,
-                0.60
-            ]
-        },
-        "ground": {
-            "translation": [
-                0,
-                -2.25,
-                0
-            ],
-            "scale": [
-                0.6,
-                0.6,
-                0.6
-            ]
-        },
-        "gui": {
-            "rotation": [
-                15,
-                -145,
-                0
-            ],
-            "translation": [
-                0,
-                -3.25,
-                0
-            ],
-            "scale": [
-                1,
-                1,
-                1
-            ]
-        },
-        "head": {
-            "translation": [
-                0,
-                6.5,
-                0
-            ]
-        },
-        "fixed": {
-            "translation": [
-                0,
-                -5.25,
-                -0.75
-            ]
-        }
-    }
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 135, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 135, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"translation": [0, -2, 0],
+			"rotation": [30, -135, 0],
+			"scale": [0.8, 0.8, 0.8]
+		},
+		"fixed": {
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
 }

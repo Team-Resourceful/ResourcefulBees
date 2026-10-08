@@ -131,7 +131,10 @@ public class RBeesModelProvider extends ModelProvider {
                 ModBlocks.WAXED_PLANKS.get(),
                 ModBlocks.WAXED_PRESSURE_PLATE.get(),
                 ModBlocks.WAXED_HANGING_SIGN.get(),
-                ModBlocks.WAXED_WALL_HANGING_SIGN.get()
+                ModBlocks.WAXED_WALL_HANGING_SIGN.get(),
+                ModBlocks.WAXED_SHELF.get(),
+                ModBlocks.WAXED_LOG.get(),
+                ModBlocks.STRIPPED_WAXED_LOG.get()
         ).map(BuiltInRegistries.BLOCK::wrapAsHolder);
     }
 
@@ -147,6 +150,9 @@ public class RBeesModelProvider extends ModelProvider {
                 ModItems.WAXED_PLANKS.get(),
                 ModItems.WAXED_PRESSURE_PLATE.get(),
                 ModItems.WAXED_HANGING_SIGN.get(),
+                ModItems.WAXED_SHELF.get(),
+                ModItems.WAXED_LOG.get(),
+                ModItems.STRIPPED_WAXED_LOG.get(),
 
                 ModItems.ENERGY_CAP_UPGRADE.get(),
                 ModItems.ENERGY_FILL_UPGRADE.get(),
@@ -326,10 +332,23 @@ public class RBeesModelProvider extends ModelProvider {
                     .trapdoor(ModBlocks.WAXED_TRAPDOOR.get())
                     .sign(ModBlocks.WAXED_SIGN.get(), ModBlocks.WAXED_WALL_SIGN.get())
                     .hangingSign(ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get())
+                    .log(ModBlocks.WAXED_LOG.get())
+                    .strippedLog(ModBlocks.STRIPPED_WAXED_LOG.get())
                     .getFamily();
 
     private void registerWaxedBlocks(BlockModelGenerators blockModels) {
         blockModels.family(ModBlocks.WAXED_PLANKS.get()).generateFor(WAXED_FAMILY);
+
+        blockModels.createShelf(
+                ModBlocks.WAXED_SHELF.get(),
+                ModBlocks.WAXED_PLANKS.get()
+        );
+
+        blockModels.woodProvider(ModBlocks.WAXED_LOG.get())
+                .logWithHorizontal(ModBlocks.WAXED_LOG.get());
+
+        blockModels.woodProvider(ModBlocks.STRIPPED_WAXED_LOG.get())
+                .logWithHorizontal(ModBlocks.STRIPPED_WAXED_LOG.get());
 
         registerCubeAll(
                 blockModels,
@@ -512,6 +531,16 @@ public class RBeesModelProvider extends ModelProvider {
 
     private static void registerItems(ItemModelGenerators itemModels) {
         itemModels.generateFlatItem(
+                ModItems.BEEPEDIA.get(),
+                ModelTemplates.FLAT_ITEM
+        );
+
+        itemModels.generateFlatItem(
+                ModItems.BEEPEDIA_CREATIVE.get(),
+                ModelTemplates.FLAT_ITEM
+        );
+
+        itemModels.generateFlatItem(
                 ModItems.WAX.get(),
                 ModelTemplates.FLAT_ITEM
         );
@@ -580,6 +609,14 @@ public class RBeesModelProvider extends ModelProvider {
                 ModItems.BREED_TIME_UPGRADE.get(),
                 ModelTemplates.FLAT_ITEM
         );
+
+        itemModels.generateFlatItem(ModItems.BEEKEEPER_HELMET.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.BEEKEEPER_CHESTPLATE.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.BEEKEEPER_LEGGINGS.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.BEEKEEPER_BOOTS.get(), ModelTemplates.FLAT_ITEM);
+
+        itemModels.generateFlatItem(ModItems.BEE_POTTERY_SHERD.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.HONEYCOMB_POTTERY_SHERD.get(), ModelTemplates.FLAT_ITEM);
     }
 
     private static Material blockMaterial(Identifier blockId, String path) {

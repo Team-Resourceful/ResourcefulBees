@@ -25,6 +25,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 
@@ -73,12 +74,28 @@ public final class ModItems {
     public static final HolderRegistryEntry<Item> T2_APIARY_ITEM = registerBasicBlockItem(ITEMS,"apiary/2", ModBlocks.T2_APIARY_BLOCK, () -> new Item.Properties().component(ModDataComponents.APIARY_BEES.get(), ApiaryBees.EMPTY).component(ModDataComponents.APIARY_TIER.get(), DefaultApiaryTiers.T2_APIARY));
     public static final HolderRegistryEntry<Item> T3_APIARY_ITEM = registerBasicBlockItem(ITEMS,"apiary/3", ModBlocks.T3_APIARY_BLOCK, () -> new Item.Properties().component(ModDataComponents.APIARY_BEES.get(), ApiaryBees.EMPTY).component(ModDataComponents.APIARY_TIER.get(), DefaultApiaryTiers.T3_APIARY));
     public static final HolderRegistryEntry<Item> T4_APIARY_ITEM = registerBasicBlockItem(ITEMS,"apiary/4", ModBlocks.T4_APIARY_BLOCK, () -> new Item.Properties().component(ModDataComponents.APIARY_BEES.get(), ApiaryBees.EMPTY).component(ModDataComponents.APIARY_TIER.get(), DefaultApiaryTiers.T4_APIARY));
+    public static final HolderRegistryEntry<Item> BREEDER_ITEM = registerBasicBlockItem(ITEMS, "breeder", ModBlocks.BREEDER_BLOCK, Item.Properties::new);
 
 
-    public static final HolderRegistryEntry<Item> WAX = registerItem(ITEMS, "wax", WaxItem::new, Item.Properties::new);
-public static final HolderRegistryEntry<Item> WAX_BLOCK_ITEM = registerBasicBlockItem(ITEMS, "wax_block", ModBlocks.WAX_BLOCK, Item.Properties::new);
+    public static final HolderRegistryEntry<Item> WAX = registerItem(ITEMS, "wax", WaxItem::new, () -> new Item.Properties().cookingFuel(ModFuels.WAX_BURN_TIME));
+    public static final HolderRegistryEntry<Item> WAX_BLOCK_ITEM = registerBasicBlockItem(ITEMS, "wax_block", ModBlocks.WAX_BLOCK, () -> new Item.Properties().cookingFuel(ModFuels.WAX_BLOCK_BURN_TIME));
+
+    public static final HolderRegistryEntry<Item> WAXED_PICKAXE = registerItem(ITEMS, "waxed_pickaxe", properties -> new Item(properties.pickaxe(ModMaterials.WAXED, 1.0F, -2.8F)), Item.Properties::new);
+    public static final HolderRegistryEntry<Item> WAXED_AXE = registerItem(ITEMS, "waxed_axe", properties -> new Item(properties.axe(ModMaterials.WAXED, 6.0F, -3.1F)), Item.Properties::new);
+    public static final HolderRegistryEntry<Item> WAXED_SHOVEL = registerItem(ITEMS, "waxed_shovel", properties -> new Item(properties.shovel(ModMaterials.WAXED, 1.5F, -3.0F)), Item.Properties::new);
+    public static final HolderRegistryEntry<Item> WAXED_HOE = registerItem(ITEMS, "waxed_hoe", properties -> new Item(properties.hoe(ModMaterials.WAXED, 0F, -1.0F)), Item.Properties::new);
+    public static final HolderRegistryEntry<Item> WAXED_SWORD = registerItem(ITEMS, "waxed_sword", properties -> new Item(properties.sword(ModMaterials.WAXED, 3.0F, -2.4F)), Item.Properties::new);
+
+
+    public static final HolderRegistryEntry<Item> BEEKEEPER_HELMET = registerItem(ITEMS, "beekeeper_helmet", properties -> new BeekeeperArmorItem(properties.humanoidArmor(ModMaterials.BEEKEEPER, ArmorType.HELMET)), Item.Properties::new);
+    public static final HolderRegistryEntry<Item> BEEKEEPER_CHESTPLATE = registerItem(ITEMS, "beekeeper_chestplate", properties -> new BeekeeperArmorItem(properties.humanoidArmor(ModMaterials.BEEKEEPER, ArmorType.CHESTPLATE)), Item.Properties::new);
+    public static final HolderRegistryEntry<Item> BEEKEEPER_LEGGINGS = registerItem(ITEMS, "beekeeper_leggings", properties -> new BeekeeperArmorItem(properties.humanoidArmor(ModMaterials.BEEKEEPER, ArmorType.LEGGINGS)), Item.Properties::new);
+    public static final HolderRegistryEntry<Item> BEEKEEPER_BOOTS = registerItem(ITEMS, "beekeeper_boots", properties -> new BeekeeperArmorItem(properties.humanoidArmor(ModMaterials.BEEKEEPER, ArmorType.BOOTS)), Item.Properties::new);
+
+
 
     public static final HolderRegistryEntry<Item> SCRAPER = registerItem(ITEMS,"scraper", ScraperItem::new, () -> new Item.Properties().stacksTo(1));
+    public static final HolderRegistryEntry<Item> HONEY_DIPPER = registerItem(ITEMS, "honey_dipper", HoneyDipperItem::new, () -> new Item.Properties().stacksTo(1).component(ModDataComponents.DIPPER_ENTITY, DipperEntity.EMPTY));
 
     public static final HolderRegistryEntry<Item> SMOKER = registerItem(ITEMS, "smoker", SmokerItem::new, () -> new Item.Properties().durability(GeneralConfig.smokerDurability));
     public static final HolderRegistryEntry<Item> BELLOW = registerItem(ITEMS, "bellow", Item::new, Item.Properties::new);
@@ -86,10 +103,11 @@ public static final HolderRegistryEntry<Item> WAX_BLOCK_ITEM = registerBasicBloc
 
     public static final HolderRegistryEntry<Item> BEE_BOX_TEMP = registerItem(ITEMS, "bee_box_temp", properties -> BeeBoxItem.temp(ModBlocks.BEE_BOX_TEMP.get(), properties), () -> new Item.Properties().stacksTo(1));
     public static final HolderRegistryEntry<Item> BEE_BOX = registerItem(ITEMS, "bee_box", properties -> BeeBoxItem.of(ModBlocks.BEE_BOX.get(), properties), () -> new Item.Properties().stacksTo(1).component(ModDataComponents.BEE_BOX_OCCUPANTS, BeeBoxOccupants.EMPTY));
-    //public static final HolderRegistryEntry<Item> BEEPEDIA = registerItem(ITEMS, "beepedia", () -> new BeepediaItem(new Item.Properties().stacksTo(1)));
-    public static final HolderRegistryEntry<Item> HONEY_DIPPER = registerItem(ITEMS, "honey_dipper", HoneyDipperItem::new, () -> new Item.Properties().stacksTo(1).component(ModDataComponents.DIPPER_ENTITY, DipperEntity.EMPTY));
-
     public static final HolderRegistryEntry<Item> BEE_JAR = registerItem(ITEMS, "bee_jar", BeeJarItem::new, () -> new Item.Properties().stacksTo(16));
+    public static final HolderRegistryEntry<Item> BEE_LOCATOR = registerItem(ITEMS, "bee_locator", BeeLocatorItem::new, () -> new Item.Properties().stacksTo(1));
+    public static final HolderRegistryEntry<Item> BEEPEDIA = registerItem(ITEMS, "beepedia", properties -> new BeepediaItem(properties, false), () -> new Item.Properties().stacksTo(1));
+    public static final HolderRegistryEntry<Item> BEEPEDIA_CREATIVE = registerItem(ITEMS, "beepedia_creative", properties -> new BeepediaItem(properties, true), () -> new Item.Properties().stacksTo(1));
+
 //    public static final HolderRegistryEntry<Item> POLLEN_SPREADER_FAN = registerItem(ITEMS, "pollen_spreader_fan", () -> new BlockItem(ModBlocks.POLLEN_SPREADER_FAN.get(), new Item.Properties()));
 //    public static final HolderRegistryEntry<Item> POLLEN_SPREADER = registerItem(ITEMS, "pollen_spreader", () -> new BlockItem(ModBlocks.POLLEN_SPREADER.get(), new Item.Properties()));
     //public static final HolderRegistryEntry<Item> MUTATED_POLLEN = registerItem(ITEMS, "mutated_pollen", () -> new MutatedPollenItem(new Item.Properties()));
@@ -97,18 +115,21 @@ public static final HolderRegistryEntry<Item> WAX_BLOCK_ITEM = registerBasicBloc
 
     public static final HolderRegistryEntry<Item> GOLD_FLOWER_ITEM = registerBasicBlockItem(ITEMS, "gold_flower", ModBlocks.GOLD_FLOWER, Item.Properties::new);
 
-    public static final HolderRegistryEntry<Item> BREEDER_ITEM = registerBasicBlockItem(ITEMS, "breeder", ModBlocks.BREEDER_BLOCK, Item.Properties::new);
-
     public static final HolderRegistryEntry<Item> T2_NEST_UPGRADE = registerItem(ITEMS, "t2_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T1_TO_T2)));
     public static final HolderRegistryEntry<Item> T3_NEST_UPGRADE = registerItem(ITEMS, "t3_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T2_TO_T3)));
     public static final HolderRegistryEntry<Item> T4_NEST_UPGRADE = registerItem(ITEMS, "t4_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T3_TO_T4)));
     public static final HolderRegistryEntry<Item> BREED_TIME_UPGRADE = registerItem(ITEMS, "breed_time_upgrade", Item::new, () -> new Item.Properties().stacksTo(8).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.BREED_TIME)));
 
-    public static final HolderRegistryEntry<Item> BEE_LOCATOR = registerItem(ITEMS, "bee_locator", BeeLocatorItem::new, () -> new Item.Properties().stacksTo(1));
+    public static final HolderRegistryEntry<Item> HONEYCOMB_POTTERY_SHERD = registerItem(ITEMS, "honeycomb_pottery_sherd", Item::new, () -> new Item.Properties().potPattern(ModDecoratedPotPatterns.HONEYCOMB));
+    public static final HolderRegistryEntry<Item> BEE_POTTERY_SHERD = registerItem(ITEMS, "bee_pottery_sherd", Item::new, () -> new Item.Properties().potPattern(ModDecoratedPotPatterns.BEE));
 
-    //region Waxed Blocks
     public static final HolderRegistryEntry<Item> HONEY_GLASS = registerBasicBlockItem(ITEMS, "honey_glass", ModBlocks.HONEY_GLASS, Item.Properties::new);
     public static final HolderRegistryEntry<Item> HONEY_GLASS_PLAYER = registerBasicBlockItem(ITEMS, "honey_glass_player", ModBlocks.HONEY_GLASS_PLAYER, Item.Properties::new);
+
+    //region Waxed Blocks
+    public static final HolderRegistryEntry<Item> WAXED_SHELF = registerBasicBlockItem(ITEMS, "waxed_shelf", ModBlocks.WAXED_SHELF, Item.Properties::new);
+    public static final HolderRegistryEntry<Item> WAXED_LOG = registerBasicBlockItem(ITEMS, "waxed_log", ModBlocks.WAXED_LOG, Item.Properties::new);
+    public static final HolderRegistryEntry<Item> STRIPPED_WAXED_LOG = registerBasicBlockItem(ITEMS, "stripped_waxed_log", ModBlocks.STRIPPED_WAXED_LOG, Item.Properties::new);
     public static final HolderRegistryEntry<Item> WAXED_PLANKS = registerBasicBlockItem(ITEMS, "waxed_planks", ModBlocks.WAXED_PLANKS, Item.Properties::new);
     public static final HolderRegistryEntry<Item> WAXED_STAIRS = registerBasicBlockItem(ITEMS, "waxed_stairs", ModBlocks.WAXED_STAIRS, Item.Properties::new);
     public static final HolderRegistryEntry<Item> WAXED_SLAB = registerBasicBlockItem(ITEMS, "waxed_slab", ModBlocks.WAXED_SLAB, Item.Properties::new);
@@ -122,11 +143,12 @@ public static final HolderRegistryEntry<Item> WAX_BLOCK_ITEM = registerBasicBloc
     public static final HolderRegistryEntry<Item> WAXED_HANGING_SIGN = registerItem(ITEMS, "waxed_hanging_sign", properties -> new HangingSignItem(ModBlocks.WAXED_HANGING_SIGN.get(), ModBlocks.WAXED_WALL_HANGING_SIGN.get(), properties), Item.Properties::new);
     public static final HolderRegistryEntry<Item> TRIMMED_WAXED_PLANKS = registerBasicBlockItem(ITEMS, "trimmed_waxed_planks", ModBlocks.TRIMMED_WAXED_PLANKS, Item.Properties::new);
     public static final HolderRegistryEntry<Item> WAXED_MACHINE_BLOCK = registerBasicBlockItem(ITEMS, "waxed_machine_block", ModBlocks.WAXED_MACHINE_BLOCK, Item.Properties::new);
+    //endregion
+
+    public static final HolderRegistryEntry<Item> ENERGY_FILL_UPGRADE = ModItems.registerItem(ITEMS, "energy_fill_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.ENERGY_FILL)));
     public static final HolderRegistryEntry<Item> HONEY_CAP_UPGRADE = ModItems.registerItem(ITEMS, "honey_cap_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.HONEY_CAPACITY)));
     public static final HolderRegistryEntry<Item> ENERGY_CAP_UPGRADE = ModItems.registerItem(ITEMS, "energy_cap_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.ENERGY_CAPACITY)));
     public static final HolderRegistryEntry<Item> ENERGY_XFER_UPGRADE = ModItems.registerItem(ITEMS, "energy_xfer_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.ENERGY_TRANSFER)));
-    public static final HolderRegistryEntry<Item> ENERGY_FILL_UPGRADE = ModItems.registerItem(ITEMS, "energy_fill_upgrade", Item::new, () -> new Item.Properties().stacksTo(HoneyGenConfig.upgradeStackLimit).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.ENERGY_FILL)));
-    //endregion
 
     //region Machines
 
@@ -139,7 +161,6 @@ public static final HolderRegistryEntry<Item> WAX_BLOCK_ITEM = registerBasicBloc
     public static final HolderRegistryEntry<Item> HONEY_GENERATOR_ITEM = registerBasicBlockItem(ITEMS, "honey_generator", ModBlocks.HONEY_GENERATOR, Item.Properties::new);
     //endregion
 
-    //todo needs texture
     public static final HolderRegistryEntry<Item> HONEY_BUCKET = registerItem(HONEY_BUCKET_ITEMS, "honey_bucket", properties -> new BucketItem(ModFluids.HONEY_FLUID_TYPE.get().still().get(), properties), () -> new Item.Properties().stacksTo(1));
 
     //region Special Items

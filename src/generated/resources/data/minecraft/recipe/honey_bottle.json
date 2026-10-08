@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:glass_bottle",
+    "minecraft:glass_bottle",
+    "minecraft:glass_bottle",
+    "minecraft:glass_bottle",
+    "resourcefulbees:honey_bucket"
+  ],
+  "result": {
+    "count": 4,
+    "id": "minecraft:honey_bottle"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "values": {
+    "minecraft:oak_fence": {
+      "replace": true,
+      "value": {
+        "waxed": "resourcefulbees:waxed_fence"
+      }
+    },
+    "minecraft:oak_planks": {
+      "replace": true,
+      "value": {
+        "waxed": "resourcefulbees:waxed_planks"
+      }
+    },
+    "minecraft:oak_pressure_plate": {
+      "replace": true,
+      "value": {
+        "waxed": "resourcefulbees:waxed_pressure_plate"
+      }
+    },
+    "minecraft:oak_slab": {
+      "replace": true,
+      "value": {
+        "waxed": "resourcefulbees:waxed_slab"
+      }
+    },
+    "minecraft:oak_stairs": {
+      "replace": true,
+      "value": {
+        "waxed": "resourcefulbees:waxed_stairs"
+      }
+    },
+    "resourcefulbees:trimmed_waxed_planks": {
+      "replace": true,
+      "value": {
+        "waxed": "resourcefulbees:waxed_machine_block"
+      }
+    },
+    "resourcefulbees:waxed_planks": {
+      "replace": true,
+      "value": {
+        "waxed": "resourcefulbees:trimmed_waxed_planks"
+      }
+    }
+  }
+}

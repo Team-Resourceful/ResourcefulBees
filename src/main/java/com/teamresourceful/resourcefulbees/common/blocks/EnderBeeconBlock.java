@@ -9,14 +9,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
@@ -29,23 +27,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> implements MenuBlock {
-
-    protected static final VoxelShape VOXEL_SHAPE_TOP = Util.make(() -> {
-        VoxelShape shape = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 1.0D, 14.0D);
-        shape = Shapes.join(shape, Block.box(3.0D, 1.0D, 3.0D, 13.0D, 3.0D, 13.0D), BooleanOp.OR);
-        shape = Shapes.join(shape, Block.box(4.0D, 3.0D, 4.0D, 12.0D, 11.0D, 12.0D), BooleanOp.OR);
-        shape = Shapes.join(shape, Block.box(3.0D, 11.0D, 3.0D, 13.0D, 13.0D, 13.0D), BooleanOp.OR);
-        return shape;
-    });
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty BEAM = BooleanProperty.create("beam");
@@ -57,7 +43,7 @@ public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> imple
     }
 
     @Override
-    protected @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         if (level.getBlockEntity(pos) instanceof EnderBeeconBlockEntity beecon) {
             if (!level.isClientSide()) {
                 if (stack.is(ItemTags.WOOL)) {
@@ -76,13 +62,6 @@ public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> imple
         }
 
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
-    }
-
-    @NotNull
-    @Override
-    @Deprecated
-    public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull CollisionContext context) {
-        return VOXEL_SHAPE_TOP;
     }
 
     @Override
@@ -110,7 +89,7 @@ public class EnderBeeconBlock extends TickingBlock<EnderBeeconBlockEntity> imple
     }
 
     @Override
-    public @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull BlockHitResult hitResult) {
+    public @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult hitResult) {
         return MenuBlock.super.useWithoutItem(state, level, pos, player, hitResult);
     }
 }

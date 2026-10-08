@@ -38,7 +38,7 @@ public class CustomBeeGlowLayer <R extends EntityRenderState & GeoRenderState> e
     }
 
     @Override
-    public void addRenderData(CustomBeeEntity animatable, @Nullable Void relatedObject, @NonNull R renderState, float partialTick) {
+    public void addRenderData(@NonNull CustomBeeEntity animatable, @Nullable Void relatedObject, @NonNull R renderState, float partialTick) {
         var pulseFrequency = layerData.pulseFrequency();
         int brightness = (pulseFrequency == 0 || animatable.tickCount % pulseFrequency == 0) ? LightCoordsUtil.FULL_SKY : 0;
         renderState.addGeckolibData(RBEES_BRIGHTNESS_TICKET, brightness);
@@ -50,7 +50,7 @@ public class CustomBeeGlowLayer <R extends EntityRenderState & GeoRenderState> e
     }
 
     @Override
-    public void submitRenderTask(RenderPassInfo<@NonNull R> renderPassInfo, @NonNull SubmitNodeCollector renderTasks) {
+    public void submitRenderTask(@NonNull RenderPassInfo<@NonNull R> renderPassInfo, @NonNull SubmitNodeCollector renderTasks) {
         if (!layerData.pollenLayer() || layerData.pollenLayer() && renderPassInfo.renderState().getGeckolibData(CustomBeeRenderer.HAS_NECTAR)) {
             renderPassInfo.renderState().addGeckolibData(DataTickets.RENDER_COLOR, layerData.color().getOpaqueValue());
             super.submitRenderTask(renderPassInfo, renderTasks);

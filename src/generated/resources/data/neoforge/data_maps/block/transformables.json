@@ -1,0 +1,31 @@
+{
+  "values": {
+    "resourcefulbees:waxed_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "resourcefulbees:waxed_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "resourcefulbees:stripped_waxed_log",
+                  "properties": {
+                    "axis": "y"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    }
+  }
+}

@@ -65,6 +65,14 @@ public final class BeeConfig {
     public static int defaultAuraRange = 10;
 
     @ConfigEntry(
+            id = "beeSculkCharge",
+            translation = "Bee Sculk Charge"
+    )
+    @Comment("The default charge that all sculk bees will use.")
+    @ConfigOption.Range(min = 10, max = 1000)
+    public static int defaultSculkCharge = 50;
+
+    @ConfigEntry(
             id = "auraFrequency",
             translation = "Aura Frequency"
     )

@@ -12,6 +12,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -28,6 +29,14 @@ public interface HoneyRegistry {
      * @return Returns a HoneyBottleData object for the given bee type.
      */
     CustomHoneyData getHoneyData(String honey);
+
+    /**
+     * Returns an Optional HoneyBottleData object for the given honey type.
+     *
+     * @param honey Honey type for which HoneyData is requested.
+     * @return Returns an Optional HoneyBottleData object for the given bee type.
+     */
+    Optional<CustomHoneyData> getOptionalHoneyData(String honey);
 
     /**
      * Returns whether the given honey type is registered.

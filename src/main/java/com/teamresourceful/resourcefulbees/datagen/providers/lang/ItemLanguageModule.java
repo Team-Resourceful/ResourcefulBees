@@ -52,7 +52,8 @@ public class ItemLanguageModule implements LanguageModule {
         provider.addItem(ModItems.OREO_COOKIE, "Epic Oreo");
         provider.addItem(ModItems.BEE_BOX_TEMP, "Lost Bee Box");
         provider.addItem(ModItems.BEE_BOX, "Bee Box");
-        //provider.addItem(ModItems.BEEPEDIA, "Beepedia");
+        provider.addItem(ModItems.BEEPEDIA, "Beepedia");
+        provider.addItem(ModItems.BEEPEDIA_CREATIVE, "Creative Beepedia");
         provider.addItem(ModItems.HONEY_DIPPER, "Honey Dipper");
         provider.addItem(ModItems.SCRAPER, "Scraper");
         provider.addItem(ModItems.SMOKER, "Bee Smoker");
@@ -60,7 +61,6 @@ public class ItemLanguageModule implements LanguageModule {
         provider.addItem(ModItems.SMOKER_CAN, "Smoker Canister");
         provider.addItem(ModItems.WAX, "Beeswax");
         provider.addItem(ModItems.BREED_TIME_UPGRADE, "Breed Time Upgrade");
-        //provider.addItem(ModItems.HONEY_BUCKET, "Honey Bucket");
         //provider.addItem(ModItems.MUTATED_POLLEN, "Mutated Pollen");
         provider.addItem(ModItems.T2_NEST_UPGRADE, "Tier 2 Nest Upgrade");
         provider.addItem(ModItems.T3_NEST_UPGRADE, "Tier 3 Nest Upgrade");

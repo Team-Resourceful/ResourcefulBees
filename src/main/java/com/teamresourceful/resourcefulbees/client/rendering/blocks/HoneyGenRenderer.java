@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.rendering.blocks;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefulbees.client.util.RenderCuboid;
 import com.teamresourceful.resourcefulbees.common.blockentities.HoneyGeneratorBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blocks.HoneyGeneratorBlock;
 import com.teamresourceful.resourcefulbees.common.components.TankData;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import net.minecraft.client.Minecraft;
@@ -17,6 +18,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -35,6 +37,8 @@ public class HoneyGenRenderer implements BlockEntityRenderer<HoneyGeneratorBlock
     @Override
     public void extractRenderState(@NonNull HoneyGeneratorBlockEntity tile, @NonNull RenderState state, float partialTick, @NonNull Vec3 cameraPosition, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
         BlockEntityRenderState.extractBase(tile, state, breakProgress);
+        state.facing = tile.getBlockState().getValue(HoneyGeneratorBlock.FACING);
+
 
         TankData tankData = tile.tankData();
         FluidStack fluid = tankData.fluid();
@@ -79,15 +83,7 @@ public class HoneyGenRenderer implements BlockEntityRenderer<HoneyGeneratorBlock
             return;
         }
 
-        AABB box = new AABB(
-                0.0625,
-                0.0625,
-                0.0625,
-
-                0.9375,
-                0.0625 + state.fluidHeight * 0.875,
-                0.9375
-        );
+        AABB box = createFluidBox(state.facing, state.fluidHeight);
 
         RenderType renderType = RenderTypes.translucentMovingBlock();
 
@@ -106,12 +102,59 @@ public class HoneyGenRenderer implements BlockEntityRenderer<HoneyGeneratorBlock
         );
     }
 
+    private static AABB createFluidBox(Direction facing, float fluidHeight) {
+        // Glass tank bounds in the NORTH-facing model:
+        // x: 10 -> 16
+        // y:  5 -> 13
+        // z:  0 -> 12
+        //
+        // Inset by half a model pixel to prevent z-fighting with the glass.
+        double inset = 0.5 / 16.0;
+
+        double minX = 10.0 / 16.0 + inset;
+        double minY =  5.0 / 16.0 + inset;
+        double minZ =  0.0 / 16.0 + inset;
+
+        double maxX = 1.0 - inset;
+        double maxY = 13.0 / 16.0 - inset;
+        double maxZ = 12.0 / 16.0 - inset;
+
+        double fluidY = minY + (maxY - minY) * fluidHeight;
+
+        return switch (facing) {
+            case NORTH -> new AABB(
+                    minX, minY, minZ,
+                    maxX, fluidY, maxZ
+            );
+
+            case EAST -> new AABB(
+                    1.0 - maxZ, minY, minX,
+                    1.0 - minZ, fluidY, maxX
+            );
+
+            case SOUTH -> new AABB(
+                    1.0 - maxX, minY, 1.0 - maxZ,
+                    1.0 - minX, fluidY, 1.0 - minZ
+            );
+
+            case WEST -> new AABB(
+                    minZ, minY, 1.0 - maxX,
+                    maxZ, fluidY, 1.0 - minX
+            );
+
+            default -> throw new IllegalStateException(
+                    "Unexpected honey generator facing: " + facing
+            );
+        };
+    }
+
     public static class RenderState extends BlockEntityRenderState {
 
         public boolean hasFluid;
         public float fluidHeight;
 
         public int fluidColor = 0xFFFFFFFF;
+        public Direction facing = Direction.NORTH;
 
         @Nullable
         public TextureAtlasSprite fluidSprite;

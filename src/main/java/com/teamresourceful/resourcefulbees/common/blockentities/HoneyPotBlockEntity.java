@@ -32,7 +32,7 @@ import java.util.Optional;
 
 public class HoneyPotBlockEntity extends GUISyncedBlockEntity implements ContentMenuProvider<PositionContent> {
 
-    public static final int TANK_CAPACITY = 64000;
+    public static final int TANK_CAPACITY = 1024000;
     private final FluidHandler tank = new FluidHandler();
     private TankData tankData = TankData.EMPTY;
 

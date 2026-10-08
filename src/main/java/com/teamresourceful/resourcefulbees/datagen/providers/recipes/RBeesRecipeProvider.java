@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers.recipes;
 
+import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.resourcefulbees.common.brewing.PotionIngredientBrewingRecipe;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.records.HiveType;
@@ -13,13 +14,18 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Recipe;
 import net.neoforged.neoforge.common.Tags;
+import org.jspecify.annotations.NonNull;
 
 public class RBeesRecipeProvider extends RecipeProvider {
 
@@ -39,6 +45,28 @@ public class RBeesRecipeProvider extends RecipeProvider {
         buildTools();
         buildMachines();
         buildBrewingRecipes();
+        waxables(FeatureFlags.REGISTRY.allFlags());
+    }
+
+    @SuppressWarnings("deprecation")
+    protected void waxables(@NonNull FeatureFlagSet flagSet) {
+        var waxables = HoneycombItem.WAXABLES;
+
+        waxables.get().forEach((block, waxedBlock) -> {
+            if (waxedBlock.requiredFeatures().isSubsetOf(flagSet)) {
+                Pair<RecipeCategory, String> pair = HoneycombItem.WAXED_RECIPES.getOrDefault(waxedBlock, Pair.of(RecipeCategory.BUILDING_BLOCKS, getItemName(waxedBlock)));
+
+                RecipeCategory recipeCategory = pair.getFirst();
+                String group = pair.getSecond();
+
+                this.shapeless(recipeCategory, waxedBlock)
+                        .requires(block)
+                        .requires(ModItemTags.HONEYCOMBS)
+                        .group(group)
+                        .unlockedBy(getHasName(block), this.has(block))
+                        .save(this.output, ResourceKey.create(Registries.RECIPE, Identifier.withDefaultNamespace(getConversionRecipeName(waxedBlock, Items.HONEYCOMB))));
+            }
+        });
     }
 
     private void buildHiveUpgrades() {

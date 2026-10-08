@@ -94,12 +94,13 @@ public class SolidificationChamberRenderer implements BlockEntityRenderer<
         }
 
         AABB box = new AABB(
-                0.188,
-                0.3125,
-                0.188,
-                0.812,
-                0.3125 + state.fluidHeight * 0.687,
-                0.812
+                0.21925,
+                0.34375,
+                0.21925,
+
+                0.78075,
+                0.34375 + state.fluidHeight * 0.6245,
+                0.78075
         );
 
         collector.submitCustomGeometry(

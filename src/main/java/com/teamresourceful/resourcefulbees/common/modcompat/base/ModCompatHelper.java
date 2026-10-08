@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.modcompat.base;
 
+import com.teamresourceful.resourcefulbees.common.modcompat.resourcefulbees.ResourcefulBeesCompat;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.utils.modinfo.ModInfoUtils;
 import it.unimi.dsi.fastutil.ints.IntDoublePair;
@@ -12,20 +13,22 @@ import java.util.List;
 
 public final class ModCompatHelper {
 
-    private static final List<ModCompat> COMPATS = new ArrayList<>();
+    private static final List<ModCompat> COMPATIBLE_MODS = new ArrayList<>();
 
     private ModCompatHelper() throws UtilityClassException {
         throw new UtilityClassException();
     }
 
-    public static void registerCompats() {
+    public static void registerCompatibleMods() {
+        COMPATIBLE_MODS.add(new ResourcefulBeesCompat());
+
         if (ModInfoUtils.isModLoaded("the_bumblezone")) {
-            //COMPATS.add(new BumblezoneCompat());
+            //COMPATIBLE_MODS.add(new BumblezoneCompat());
         }
     }
 
     public static boolean shouldNotAngerBees(ServerPlayer player) {
-        return !COMPATS.isEmpty() && COMPATS.stream().anyMatch(compat -> compat.shouldNotAngerBees(player));
+        return !COMPATIBLE_MODS.isEmpty() && COMPATIBLE_MODS.stream().anyMatch(compat -> compat.shouldNotAngerBees(player));
     }
 
     public static IntDoublePair rollExtraHoneycombs(@Nullable Player player, boolean scraper) {
@@ -33,7 +36,7 @@ public final class ModCompatHelper {
         int validCompats = 0;
         int rolls = 0;
         double chance = 0;
-        for (ModCompat compat : COMPATS) {
+        for (ModCompat compat : COMPATIBLE_MODS) {
             IntDoublePair pair = compat.rollExtraHoneycombs(player, scraper);
             if (pair.firstInt() != 0 && pair.secondDouble() != 0) {
                 validCompats++;

@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
 
-    private static final Identifier VALIDATED_TEXTURE = ModIdentifier.of("textures/gui/apiary/validated.png");
+    private static final Identifier BACKGROUND = ModIdentifier.of("apiary/background");
 
     private final Map<Integer, Entity> previewEntities = new HashMap<>();
     private int beeIndexOffset;
@@ -48,12 +48,14 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
         if (apiaryBlockEntity != null) {
             int i = this.leftPos;
             int j = this.topPos;
-            graphics.blit(RenderPipelines.GUI_TEXTURED, VALIDATED_TEXTURE, i, j, 0f, 0f, this.imageWidth, this.imageHeight, 256, 256);
+            //bg
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, 0, i, j, this.imageWidth, this.imageHeight);
             if (!this.canScroll()) {
                 this.sliderProgress = 0;
             }
             int k = (int) (99.0F * this.sliderProgress);
-            graphics.blit(RenderPipelines.GUI_TEXTURED, VALIDATED_TEXTURE, i + 44, j + 34 + k, 54f + (this.canScroll() ? 0 : 6), imageHeight, 6, 27, 256, 256);
+            //scrollbar
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 54 + (this.canScroll() ? 0 : 6), imageHeight, i + 44, j + 34 + k, 6, 27);
             int beeLeft = this.leftPos + 5;
             int beeTop = this.topPos + 34;
             int beeIndexOffsetMax = this.beeIndexOffset + 7;
@@ -106,7 +108,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
             if (mouseX >= x && mouseY >= y && mouseX < x + 18 && mouseY < y + 18) {
                 v += 18;
             }
-            graphics.blit(RenderPipelines.GUI_TEXTURED, VALIDATED_TEXTURE, x, y, 0, v, 18, 18, 256, 256);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, v, x, y, 18, 18);
             int l1 = 18;
             x = x + 18;
             v = this.imageHeight;
@@ -117,7 +119,7 @@ public class ApiaryScreen extends AbstractContainerScreen<ApiaryMenu> {
                 v += 18;
             }
 
-            graphics.blit(RenderPipelines.GUI_TEXTURED, VALIDATED_TEXTURE, x, y, l1, v, 18, 18, 256, 256);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, l1, v, x, y, 18, 18);
         }
 
     }

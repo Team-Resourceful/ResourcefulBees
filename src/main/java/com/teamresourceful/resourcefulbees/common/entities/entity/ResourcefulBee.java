@@ -35,6 +35,7 @@ import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SculkSpreader;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -62,6 +63,8 @@ public class ResourcefulBee extends CustomBeeEntity {
     private int numberOfMutations;
     private ModBeePollinateGoal pollinateGoal;
     private int explosiveCooldown = 0;
+
+    private final SculkSpreader sculkSpreader = SculkSpreader.createLevelSpreader();
 
     public ResourcefulBee(EntityType<? extends Bee> type, Level level, Identifier beeType) {
         super(type, level, beeType);
@@ -225,6 +228,22 @@ public class ResourcefulBee extends CustomBeeEntity {
         super.customServerAiStep(serverLevel);
     }
 
+    public void pollinationComplete(BlockPos flowerPos) {
+        if (getTraitData().hasAbility(TraitConstants.SCULK)) {
+            addSculkCharge(flowerPos, random.nextInt(1, getTraitData().sculkCharge()));
+        }
+    }
+
+    private void addSculkCharge(BlockPos flowerPos, int charge) {
+        sculkSpreader.addCursors(flowerPos.above(), charge);
+    }
+
+    public void tickSculkAbility() {
+        if (level() instanceof ServerLevel serverLevel && !sculkSpreader.getCursors().isEmpty()) {
+            sculkSpreader.updateCursors(serverLevel, blockPosition(), serverLevel.getRandom(), true);
+        }
+    }
+
     public void setColliding() {
         wasColliding = true;
     }
@@ -236,7 +255,6 @@ public class ResourcefulBee extends CustomBeeEntity {
     public boolean isPollinating() {
         return this.pollinateGoal.isPollinating();
     }
-
 
     @Override
     public boolean doHurtTarget(@NonNull ServerLevel serverLevel, @NotNull Entity entity) {
@@ -323,6 +341,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         super.readAdditionalSaveData(input);
         //this.fakeFlower.read(tag);
         this.numberOfMutations = input.getIntOr(DataConstants.MUTATION_COUNT, 0);
+        this.sculkSpreader.load(input);
     }
 
     @Override
@@ -330,6 +349,7 @@ public class ResourcefulBee extends CustomBeeEntity {
         super.addAdditionalSaveData(output);
         //this.fakeFlower.save(compound);
         output.putInt(DataConstants.MUTATION_COUNT, getNumberOfMutations());
+        this.sculkSpreader.save(output);
     }
 
     public void dropOffMutations() {

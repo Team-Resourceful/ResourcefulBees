@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "resourcefulbees:block/waxed_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "resourcefulbees:block/waxed_log"
+    },
+    "axis=z": {
+      "model": "resourcefulbees:block/waxed_log_horizontal",
+      "x": 90
+    }
+  }
+}

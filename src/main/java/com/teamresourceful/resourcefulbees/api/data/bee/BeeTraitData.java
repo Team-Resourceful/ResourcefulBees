@@ -13,6 +13,8 @@ public interface BeeTraitData extends BeeData<BeeTraitData> {
 
     int auraRange();
 
+    int sculkCharge();
+
     Set<String> traits();
     Set<PotionEffect> potionDamageEffects();
     Set<String> damageImmunities();
@@ -56,4 +58,11 @@ public interface BeeTraitData extends BeeData<BeeTraitData> {
         return !hasDamageTypes() && !hasPotionDamageEffects();
     }
 
+    default boolean hasTrait(String trait) {
+        return traits().contains(trait);
+    }
+
+    default boolean hasAbility(String ability) {
+        return specialAbilities().contains(ability);
+    }
 }

@@ -1,6 +1,6 @@
 {
   "resourcefulbees:core/v1": {
-    "flower": "#c:storage_blocks/diamond",
+    "flower": "minecraft:diamond_block",
     "honeycombVariation": "diamond",
     "maxTimeInHive": 600
   },
@@ -27,9 +27,21 @@
       {
         "parent1": "resourcefulbees:diamond_bee",
         "parent2": "resourcefulbees:diamond_bee"
+      },
+      {
+        "parent1": "resourcefulbees:coal_bee",
+        "parent2": "resourcefulbees:diamond_bee"
+      },
+      {
+        "parent1": "resourcefulbees:ender_bee",
+        "parent2": "resourcefulbees:gold_bee"
+      },
+      {
+        "parent1": "resourcefulbees:rgbee_bee",
+        "parent2": "resourcefulbees:skeleton_bee"
       }
     ],
-    "feedItems": "minecraft:lava_bucket",
+    "feedItems": "#c:flowers",
     "feedReturnItem": "minecraft:bucket"
   },
   "resourcefulbees:trade/v1": {
@@ -43,5 +55,8 @@
       "max": 8
     },
     "maxTrades": 2
-  }
+  },
+  "resourcefulbees:trait/v1": {
+  "traits": ["ender", "slimy", "nether", "wither", "oreo", "clingy", "blaze", "sculk"]
+}
 }

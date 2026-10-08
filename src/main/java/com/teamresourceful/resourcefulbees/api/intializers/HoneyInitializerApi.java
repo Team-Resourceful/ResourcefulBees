@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.intializers;
 
+import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
@@ -13,6 +14,7 @@ import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.exceptions.ValidationException;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
@@ -26,6 +28,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @ApiStatus.NonExtendable
 @SuppressWarnings("unused")
@@ -47,8 +50,8 @@ public class HoneyInitializerApi {
         return this.data.create(name, data);
     }
 
-    public HoneyFluidData fluid(String id, HoneyRenderData renderData, HoneyFluidAttributesData attributes, LazyHolder<Fluid> still, LazyHolder<Fluid> flowing, LazyHolder<Item> bucket, LazyHolder<Block> block, BeekeeperTradeData tradeData) {
-        return this.fluid.create(id, renderData, attributes, still, flowing, bucket, block, tradeData);
+    public HoneyFluidData fluid(String id, HoneyRenderData renderData, HoneyFluidAttributesData attributes, LazyHolder<Fluid> still, LazyHolder<Fluid> flowing, LazyHolder<Item> bucket, LazyHolder<Block> block, BeekeeperTradeData tradeData, Set<Pair<Holder<MobEffect>, Float>> effects) {
+        return this.fluid.create(id, renderData, attributes, still, flowing, bucket, block, tradeData, effects);
     }
 
     public HoneyRenderData fluidRender(Color color, Identifier still, Identifier flowing, Identifier face, Identifier overlay) {

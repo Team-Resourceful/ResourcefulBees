@@ -1,12 +1,12 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
+import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.resourcefulbees.client.component.BasicImageButton;
 import com.teamresourceful.resourcefulbees.client.component.BeeconEffectWidget;
 import com.teamresourceful.resourcefulbees.common.blockentities.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.EnderBeeconBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeconTranslations;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeeconEffect;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeeconPacketOption;
 import com.teamresourceful.resourcefulbees.common.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
@@ -15,17 +15,30 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jspecify.annotations.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> {
 
-    private static final Identifier BACKGROUND = ModIdentifier.of("textures/gui/ender_beecon/ender_beecon.png");
+    private static final Identifier BACKGROUND = ModIdentifier.of("ender_beecon/background");
+
+    private static final int EFFECT_X = 9;
+    private static final int EFFECT_TOP = 17;
+    private static final int EFFECT_BOTTOM = 107;
+    private static final int EFFECT_ROW_HEIGHT = 22;
+
+    private int effectScroll;
 
     private final EnderBeeconBlockEntity tileEntity;
+    private final List<BeeconEffectWidget> effectWidgets = new ArrayList<>();
 
     public EnderBeeconScreen(EnderBeeconMenu screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn, 230, 200);
@@ -64,21 +77,86 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
     public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractBackground(graphics, mouseX, mouseY, a);
         if (tileEntity != null) {
-            graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
-            graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.leftPos+100, this.topPos+17, 138, 200, 6, 27, 256, 256);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, 0, this.leftPos, this.topPos, this.imageWidth, this.imageHeight);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 138, 200, this.leftPos + 100, this.topPos + 17, 6, 27);
         }
     }
 
-    private void addEffectButtons() {
-        int buttonStartY = this.topPos + 17;
+    private boolean isEffectVisible(int y, int height) {
+        int top = topPos + EFFECT_TOP;
+        int bottom = topPos + EFFECT_BOTTOM;
 
-        for (BeeconEffect effect : BeeconEffect.values()) {
-            BeeconEffectWidget button = new BeeconEffectWidget(this.leftPos + 9, buttonStartY, effect, menu.getEntity());
-            button.active = true;
+        return y >= top && y + height <= bottom;
+    }
+
+    private void addEffectButtons() {
+        effectWidgets.clear();
+
+        for (Pair<Holder<MobEffect>, Float> effect : tileEntity.availableEffects()) {
+            BeeconEffectWidget button = new BeeconEffectWidget(
+                    leftPos + EFFECT_X,
+                    topPos + EFFECT_TOP,
+                    effect,
+                    menu.getEntity(),
+                    leftPos,
+                    topPos + EFFECT_TOP,
+                    leftPos + 100,
+                    topPos + EFFECT_BOTTOM
+            );
+
             button.setSelected(tileEntity.isEffectActive(effect));
+
+            effectWidgets.add(button);
             addRenderableWidget(button);
-            buttonStartY += 22;
         }
+
+        updateEffectPositions();
+    }
+
+    private void updateEffectPositions() {
+        for (int i = 0; i < effectWidgets.size(); i++) {
+            BeeconEffectWidget widget = effectWidgets.get(i);
+
+            int y = topPos + EFFECT_TOP
+                    + (i - effectScroll) * EFFECT_ROW_HEIGHT;
+
+            widget.setY(y);
+            widget.active = isEffectVisible(y, widget.getHeight());
+        }
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        int left = leftPos;
+        int right = leftPos + 100;
+        int top = topPos + EFFECT_TOP;
+        int bottom = topPos + EFFECT_BOTTOM;
+
+        if (mouseX >= left && mouseX < right
+                && mouseY >= top && mouseY < bottom) {
+
+            int visibleRows = (EFFECT_BOTTOM - EFFECT_TOP) / EFFECT_ROW_HEIGHT;
+            int maxScroll = Math.max(
+                    0,
+                    tileEntity.availableEffects().size() - visibleRows
+            );
+
+            int oldScroll = effectScroll;
+
+            if (scrollY < 0) {
+                effectScroll = Math.min(effectScroll + 1, maxScroll);
+            } else if (scrollY > 0) {
+                effectScroll = Math.max(effectScroll - 1, 0);
+            }
+
+            if (effectScroll != oldScroll) {
+                updateEffectPositions();
+            }
+
+            return true;
+        }
+
+        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
     @Override

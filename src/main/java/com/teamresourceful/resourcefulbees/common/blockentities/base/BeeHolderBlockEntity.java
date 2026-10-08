@@ -3,12 +3,15 @@ package com.teamresourceful.resourcefulbees.common.blockentities.base;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.components.ApiaryBees;
 import com.teamresourceful.resourcefulbees.common.components.ApiaryOccupant;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
+import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
-import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.*;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,6 +22,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
@@ -83,6 +87,11 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity implemen
         var iterator = holder.bees.iterator();
         while (iterator.hasNext()) {
             bee = iterator.next();
+            //if beekeeper in range tick occupants one extra tick every 5 ticks
+            if (beekeeperInRange((ServerLevel) level, pos) && level.getGameTime() % GeneralConfig.beekeeperHiveAcceleration == 0) {
+                bee.tick();
+            }
+
             if (bee.tick() && holder.releaseBee(state, bee.immutable())) {
                 iterator.remove();
             }
@@ -101,6 +110,11 @@ public abstract class BeeHolderBlockEntity extends GUISyncedBlockEntity implemen
             EntityUtils.flagBeesInRange(pos, level);
             holder.ticksSinceBeesFlagged = 0;
         }
+    }
+
+    private static boolean beekeeperInRange(@NonNull ServerLevel level, BlockPos pos) {
+        return !level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos).inflate(4),
+                player -> player.hasEffect(ModEffects.BEEKEEPERS_RESOLVE.holder())).isEmpty();
     }
 
     public abstract boolean hasSpace();

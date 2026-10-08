@@ -1,58 +1,35 @@
-//package com.teamresourceful.resourcefulbees.client.rendering.pet;
-//
-//import com.mojang.blaze3d.vertex.PoseStack;
-//import com.mojang.blaze3d.vertex.VertexConsumer;
-//import com.teamresourceful.resourcefulbees.client.pets.PetModelData;
-//import net.minecraft.client.renderer.MultiBufferSource;
-//import net.minecraft.client.renderer.RenderType;
-//import org.joml.Matrix4f;
-//import software.bernie.geckolib.cache.object.BakedGeoModel;
-//import software.bernie.geckolib.cache.object.GeoBone;
-//import software.bernie.geckolib.animation.AnimationState;
-//import software.bernie.geckolib.model.GeoModel;
-//import software.bernie.geckolib.renderer.GeoObjectRenderer;
-//
-//public class PetBeeRenderer extends GeoObjectRenderer<PetModelData> {
-//
-//    private GeoModel<PetModelData> model;
-//
-//    public PetBeeRenderer() {
-//        super(null);
-//    }
-//
-//    @Override
-//    public GeoModel<PetModelData> getGeoModel() {
-//        return this.model;
-//    }
-//
-//    public void setGeoModel(GeoModel<PetModelData> model) {
-//        this.model = model;
-//    }
-//
-//    @Override
-//    public void actuallyRender(
-//        PoseStack poseStack, PetModelData data, BakedGeoModel model, RenderType renderType,
-//        MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick,
-//        int packedLight, int packedOverlay, int color
-//    ) {
-//        if (getGeoModel() == null) return;
-//        poseStack.pushPose();
-//
-//        if (!isReRender) {
-//            AnimationState<PetModelData> animationState = new AnimationState<>(data, 0, 0, partialTick, false);
-//            long instanceId = getInstanceId(animatable);
-//
-//            getGeoModel().addAdditionalStateData(animatable, instanceId, animationState::setData);
-//            getGeoModel().handleAnimations(animatable, instanceId, animationState, partialTick);
-//        }
-//
-//        this.modelRenderTranslations = new Matrix4f(poseStack.last().pose());
-//
-//        updateAnimatedTextureFrame(data);
-//        for (GeoBone group : model.topLevelBones()) {
-//            renderRecursively(poseStack, data, group, renderType, bufferSource, buffer, isReRender, partialTick, packedLight,
-//                packedOverlay, color);
-//        }
-//        poseStack.popPose();
-//    }
-//}
+package com.teamresourceful.resourcefulbees.client.rendering.pet;
+
+import com.geckolib.constant.dataticket.DataTicket;
+import com.geckolib.renderer.GeoObjectRenderer;
+import com.geckolib.renderer.base.GeoRenderState;
+import com.google.common.reflect.TypeToken;
+import com.teamresourceful.resourcefulbees.client.pets.PetBeeModel;
+import com.teamresourceful.resourcefulbees.client.pets.PetModelData;
+import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+public class PetBeeRenderer extends GeoObjectRenderer<PetModelData, Void, GeoRenderState> {
+
+    public static final DataTicket<Identifier> MODEL = DataTicket.create("pet_model", new TypeToken<>() {});
+    public static final DataTicket<Identifier> TEXTURE = DataTicket.create("pet_texture", new TypeToken<>() {});
+
+    public PetBeeRenderer() {
+        super(new PetBeeModel<>());
+    }
+
+    @Override
+    public void addRenderData(@NonNull PetModelData animatable, @Nullable Void relatedObject, @NonNull GeoRenderState renderState, float partialTick) {
+        renderState.addGeckolibData(MODEL, animatable.getModelLocation());
+        renderState.addGeckolibData(TEXTURE, animatable.getTexture());
+    }
+
+    @Override
+    public long getInstanceId(
+            @NonNull PetModelData animatable,
+            @Nullable Void relatedObject
+    ) {
+        return System.identityHashCode(animatable);
+    }
+}

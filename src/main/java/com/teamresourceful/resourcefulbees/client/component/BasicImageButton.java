@@ -37,19 +37,7 @@ public class BasicImageButton extends AbstractWidget {
         int textureU = this.selected ? this.u + 20 : this.u;
         int textureV = this.isHovered() ? this.v + 20 : this.v;
 
-        graphics.blit(
-                RenderPipelines.GUI_TEXTURED,
-                this.texture,
-                this.getX(),
-                this.getY(),
-                textureU,
-                textureV,
-                20,
-                20,
-                20,
-                20,
-                256,
-                256);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.texture, 256, 256, textureU, textureV, this.getX(), this.getY(), 20, 20);
     }
 
     @Override
@@ -58,7 +46,7 @@ public class BasicImageButton extends AbstractWidget {
     }
 
     @Override
-    protected void updateWidgetNarration(NarrationElementOutput output) {
+    protected void updateWidgetNarration(@NonNull NarrationElementOutput output) {
         // document why this method is empty
     }
 }

@@ -7,6 +7,7 @@ import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.SmokeableHive;
 import com.teamresourceful.resourcefulbees.common.blocks.TieredBeehiveBlock;
 import com.teamresourceful.resourcefulbees.common.components.HiveBees;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.entities.CustomBeeEntityType;
 import com.teamresourceful.resourcefulbees.common.extensions.BeehiveBlockEntityExtension;
 import com.teamresourceful.resourcefulbees.common.lib.constants.DataConstants;
@@ -16,6 +17,7 @@ import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import com.teamresourceful.resourcefulbees.mixin.common.BeehiveBeeDataAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.BeehiveEntityAccessor;
 import net.minecraft.core.BlockPos;
@@ -23,6 +25,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -43,6 +47,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -217,10 +222,21 @@ public class TieredBeehiveBlockEntity extends BeehiveBlockEntity implements Smok
             hive.ticksSinceBeesFlagged = 0;
         }
         tickOccupants(hive, state, hive.getBees());
+
+        //if beekeeper in range tick occupants one extra tick every 5 ticks
+        if (beekeeperInRange((ServerLevel) level, pos) && level.getGameTime() % GeneralConfig.beekeeperHiveAcceleration == 0) {
+            tickOccupants(hive, state, hive.getBees());
+        }
+
         if (hive.hasBees() && level.getRandom().nextDouble() < 0.005D) {
             var vec = Vec3.atBottomCenterOf(pos);
             level.playSound(null, vec.x(), vec.y(), vec.z(), SoundEvents.BEEHIVE_WORK, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
+    }
+
+    private static boolean beekeeperInRange(@NonNull ServerLevel level, BlockPos pos) {
+        return !level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos).inflate(4),
+                player -> player.hasEffect(ModEffects.BEEKEEPERS_RESOLVE.holder())).isEmpty();
     }
 
     private static void tickOccupants(TieredBeehiveBlockEntity hive, BlockState state, List<BeeData> bees) {

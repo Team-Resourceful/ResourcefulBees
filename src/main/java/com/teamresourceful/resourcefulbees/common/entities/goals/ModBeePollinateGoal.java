@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.entities.goals;
 
 import com.teamresourceful.resourcefulbees.common.config.BeeConfig;
+import com.teamresourceful.resourcefulbees.common.config.GeneralConfig;
 import com.teamresourceful.resourcefulbees.common.entities.entity.ResourcefulBee;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeEntityAccessor;
 import com.teamresourceful.resourcefulbees.mixin.common.BeeInvoker;
@@ -60,7 +61,8 @@ public class ModBeePollinateGoal extends Goal {
                     return true;
                 })
                 .orElseGet(() -> {
-                    ((BeeEntityAccessor)bee).setRemainingCooldownBeforeLocatingNewFlower(600);
+                    var cooldown = bee.beekeeperInRange() ? GeneralConfig.beekeeperCooldown : 600;
+                    ((BeeEntityAccessor)bee).setRemainingCooldownBeforeLocatingNewFlower(cooldown);
                     return false;
                 });
         } else if (bee.getSavedFlowerPos() != null) {
@@ -94,7 +96,7 @@ public class ModBeePollinateGoal extends Goal {
     }
 
     private boolean completedPollination() {
-        return this.pollinationTicks > 400;
+        return this.pollinationTicks > (bee.beekeeperInRange() ? 200 : 400);
     }
 
     public boolean isPollinating() {
@@ -131,6 +133,7 @@ public class ModBeePollinateGoal extends Goal {
         if (this.completedPollination()) {
             bee.resetTicksWithoutNectarSinceExitingHive();
             ((BeeInvoker) bee).callSetFlag(8, true);
+            bee.pollinationComplete(bee.getSavedFlowerPos());
         }
 
         this.running = false;

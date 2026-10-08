@@ -27,6 +27,7 @@
     },
     "client": [
         "client.BlockStateModelLoaderMixin",
-        "client.LivingEntityRendererInvoker"
-  ]
+        "client.LivingEntityRendererInvoker",
+        "client.LivingEntityRendererMixin"
+    ]
 }

@@ -1,22 +1,26 @@
 package com.teamresourceful.resourcefulbees.common.blockentities;
 
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.EnderBeeconBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.components.BeeconData;
 import com.teamresourceful.resourcefulbees.common.config.EnderBeeconConfig;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
+import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
-import com.teamresourceful.resourcefulbees.common.lib.enums.BeeconEffect;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeeconPacketOption;
 import com.teamresourceful.resourcefulbees.common.lib.tags.ModFluidTags;
 import com.teamresourceful.resourcefulbees.common.menus.EnderBeeconMenu;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -26,6 +30,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Inventory;
@@ -34,6 +39,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
@@ -48,9 +54,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, ContentMenuProvider<PositionContent> {
 
@@ -58,7 +62,9 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     private static final int TANK_CAPACITY = 16_000;
 
     private final FluidHandler tank = new FluidHandler();
-    private final EnumSet<BeeconEffect> activeEffects = EnumSet.noneOf(BeeconEffect.class);
+    //private final EnumSet<BeeconEffect> activeEffects = EnumSet.noneOf(BeeconEffect.class);
+    private final Set<Pair<Holder<MobEffect>, Float>> activeEffects = new HashSet<>();
+    private final Set<Pair<Holder<MobEffect>, Float>> availableEffects = new HashSet<>();
 
     private boolean active = false;
     private int range = 10;
@@ -73,6 +79,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     @Override
     public void onLoad() {
         super.onLoad();
+        updateAvailableEffects();
         if (level instanceof ServerLevel serverLevel) {
             fluidCache = BlockCapabilityCache.create(
                     Capabilities.Fluid.BLOCK,
@@ -152,7 +159,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         input.readChild("tank", tank());
         setRange(input.getIntOr("range", 10));
         activeEffects.clear();
-        input.listOrEmpty("activeEffects", BeeconEffect.CODEC).forEach(activeEffects::add);
+        input.listOrEmpty("activeEffects", Codec.pair(MobEffect.CODEC, Codec.FLOAT)).forEach(activeEffects::add);
         active = input.getBooleanOr("isActive", false);
         clientFluid = fluidStackInTank();
     }
@@ -162,8 +169,8 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         super.saveAdditional(output);
         output.putChild("tank", tank());
         output.putInt("range", range);
-        ValueOutput.TypedOutputList<BeeconEffect> outputList = output.list("activeEffects", BeeconEffect.CODEC);
-        for (BeeconEffect effect : activeEffects) outputList.add(effect);
+        ValueOutput.TypedOutputList<Pair<Holder<MobEffect>, Float>> outputList = output.list("activeEffects", Codec.pair(MobEffect.CODEC, Codec.FLOAT));
+        for (Pair<Holder<MobEffect>, Float> effect : activeEffects) outputList.add(effect);
         output.putBoolean("isActive", active);
     }
 
@@ -231,8 +238,8 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
 
     private void applyBeeconEffects(List<Bee> bees) {
         for (Bee bee : bees) {
-            for (BeeconEffect effect : activeEffects) {
-                bee.addEffect(new MobEffectInstance(effect.effectHolder(), 120, 0, false, false));
+            for (Pair<Holder<MobEffect>, Float> effect : activeEffects) {
+                bee.addEffect(new MobEffectInstance(effect.getFirst(), 120, 0, false, false));
             }
         }
     }
@@ -343,7 +350,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         this.range = Math.clamp(range, 10, 50);
     }
 
-    public boolean isEffectActive(BeeconEffect effect) {
+    public boolean isEffectActive(Pair<Holder<MobEffect>, Float> effect) {
         return activeEffects.contains(effect);
     }
 
@@ -360,7 +367,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         return tank.getAmountAsInt(TANK_INPUT) >= amount;
     }
 
-    public void handleBeeconUpdate(BeeconPacketOption option, @Nullable BeeconEffect effect, int value) {
+    public void handleBeeconUpdate(BeeconPacketOption option, @Nullable Pair<Holder<MobEffect>, Float> effect, int value) {
         if (this.level == null) return;
 
         switch (option) {
@@ -395,7 +402,26 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     @Override
     public void setChanged() {
         super.setChanged();
+        updateAvailableEffects();
         refreshActiveState();
+    }
+
+    public Set<Pair<Holder<MobEffect>, Float>> availableEffects() {
+        return Collections.unmodifiableSet(availableEffects);
+    }
+
+    private void updateAvailableEffects() {
+        availableEffects.clear();
+        if (fluidResource().isEmpty()) {
+            return;
+        }
+
+        Fluid honey = fluidResource().getFluid();
+        if (honey instanceof CustomHoneyFluid.Still customHoneyFluid) {
+            availableEffects.addAll(customHoneyFluid.getHoneyFluidData().beeconEffects());
+        } else {
+            availableEffects.add(Pair.of(ModEffects.CALMING.holder(), 10f));
+        }
     }
 
     @Override
@@ -405,10 +431,10 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
 
     public int drainAmount() {
         double base = EnderBeeconConfig.beeconBaseDrain;
-        for (BeeconEffect e : activeEffects) {
-            base += e.drainAmount();
+        for (Pair<Holder<MobEffect>, Float> e : activeEffects) {
+            base += e.getSecond();
         }
-        base = (base * (range * EnderBeeconConfig.beeconRangeMultiplier * 0.10d));
+        base = (base * (range * EnderBeeconConfig.beeconRangeMultiplier * 0.10d)); //todo decide if this shoulstay as the calculation
         return Math.toIntExact(Math.round(base));
     }
 

@@ -13,6 +13,7 @@ public final class ModItemTags {
     public static final TagKey<Item> T2_NESTS = TagKey.create(Registries.ITEM, ModIdentifier.of("t2_nests"));
     public static final TagKey<Item> T3_NESTS = TagKey.create(Registries.ITEM, ModIdentifier.of("t3_nests"));
     public static final TagKey<Item> T4_NESTS = TagKey.create(Registries.ITEM, ModIdentifier.of("t4_nests"));
+    public static final TagKey<Item> WAXED_TOOL_MATERIALS = TagKey.create(Registries.ITEM, ModIdentifier.of("waxed_tool_materials"));
     public static final TagKey<Item> HONEYCOMBS = commonTag("honeycombs");
     public static final TagKey<Item> HONEYCOMB_STORAGE_BLOCKS = commonTag("storage_blocks/honeycombs");
     public static final TagKey<Item> HONEY_BUCKETS = commonTag("buckets/honey");

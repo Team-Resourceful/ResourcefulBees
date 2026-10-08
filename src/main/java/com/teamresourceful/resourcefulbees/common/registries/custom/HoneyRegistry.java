@@ -3,10 +3,7 @@ package com.teamresourceful.resourcefulbees.common.registries.custom;
 import com.google.gson.JsonObject;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.api.registry.HoneyRegistry {
@@ -35,6 +32,11 @@ public final class HoneyRegistry implements com.teamresourceful.resourcefulbees.
     @Override
     public CustomHoneyData getHoneyData(String honey) {
         return honeyInfo.get(honey);
+    }
+
+    @Override
+    public Optional<CustomHoneyData> getOptionalHoneyData(String honey) {
+        return Optional.ofNullable(honeyInfo.get(honey));
     }
 
     public void cacheRawHoneyData(String name, JsonObject jsonObject) {

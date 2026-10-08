@@ -10,10 +10,11 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
+import org.jspecify.annotations.NonNull;
 
 public class SolidificationChamberScreen extends AbstractContainerScreen<SolidificationChamberMenu> {
 
-    private static final Identifier TEXTURE = ModIdentifier.of("textures/gui/solidification/solidification.png");
+    private static final Identifier BACKGROUND = ModIdentifier.of("solidification/background");
 
     private final SolidificationChamberBlockEntity tileEntity;
 
@@ -26,22 +27,14 @@ public class SolidificationChamberScreen extends AbstractContainerScreen<Solidif
     @Override
     protected void init() {
         super.init();
-
         addRenderableWidget(TankWidget.single(leftPos + 67, topPos + 12, 14, 62, tileEntity::tankData));
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+    public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractBackground(graphics, mouseX, mouseY, a);
         if (tileEntity != null) {
-            int i = this.leftPos;
-            int j = this.topPos;
-            graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, 0, leftPos, topPos, imageWidth, imageHeight);
         }
-    }
-
-    @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-        super.extractRenderState(graphics, mouseX, mouseY, a);
     }
 }

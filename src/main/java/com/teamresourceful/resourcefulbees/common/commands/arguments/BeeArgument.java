@@ -8,59 +8,66 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import com.teamresourceful.resourcefulbees.api.ResourcefulBeesAPI;
-import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeepediaTranslations;
+import com.teamresourceful.resourcefulbees.common.registries.custom.BeeRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.resources.Identifier;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class BeeArgument implements ArgumentType<String> {
+public class BeeArgument implements ArgumentType<Identifier> {
 
-    private static final DynamicCommandExceptionType BEE_NOT_FOUND = new DynamicCommandExceptionType(input -> BeepediaTranslations.COMMAND_NONE_FOUND);
+    private static final DynamicCommandExceptionType BEE_NOT_FOUND = new DynamicCommandExceptionType(_ -> BeepediaTranslations.COMMAND_NONE_FOUND);
 
-    public static final Set<String> BEES = ResourcefulBeesAPI.getRegistry().getBeeRegistry()
-            .getStreamOfBees()
-            .map(CustomBeeData::id)
-            .map(Identifier::toString)
-            .collect(Collectors.toUnmodifiableSet());
+    private static Stream<Identifier> bees() {
+        return BeeRegistry.getRegistry().getBeeTypes().stream();
+    }
 
-    public static RequiredArgumentBuilder<CommandSourceStack, String> argument() {
-        return Commands.argument("bee", new BeeArgument());
+    public static RequiredArgumentBuilder<CommandSourceStack, Identifier> argument() {
+        return Commands.argument(
+                "bee",
+                new BeeArgument()
+        );
     }
 
     @Override
-    public String parse(StringReader reader) throws CommandSyntaxException {
+    public Identifier parse(StringReader reader) throws CommandSyntaxException {
         int cursor = reader.getCursor();
-        String id = reader.readString();
-        if (!BEES.contains(id)) {
+
+        Identifier id = Identifier.readNonEmpty(reader);
+
+        if (bees().noneMatch(id::equals)) {
             reader.setCursor(cursor);
-            throw BEE_NOT_FOUND.createWithContext(reader, id);
+
+            throw BEE_NOT_FOUND.createWithContext(
+                    reader,
+                    id
+            );
         }
+
         return id;
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(BEES.stream(), builder);
+        return SharedSuggestionProvider.suggest(bees().map(Identifier::toString), builder);
     }
 
     @Override
     public Collection<String> getExamples() {
-        return BEES;
+        return bees()
+                .map(Identifier::toString)
+                .toList();
     }
 
-    public static String get(final CommandContext<?> context) throws CommandSyntaxException {
-        String value = context.getArgument("bee", String.class);
-        if (BEES.contains(value)) {
-            return value;
-        }
-        throw BEE_NOT_FOUND.create(value);
+    public static Identifier get(CommandContext<?> context) {
+        return context.getArgument(
+                "bee",
+                Identifier.class
+        );
     }
 }

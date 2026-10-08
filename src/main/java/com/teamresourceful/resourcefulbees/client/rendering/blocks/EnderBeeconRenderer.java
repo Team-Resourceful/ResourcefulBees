@@ -71,11 +71,10 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
                 .getFluidStateModelSet()
                 .get(fluid.getFluid().defaultFluidState());
 
-        try (TextureAtlasSprite sprite = fluidModel
+        renderState.fluidSprite = fluidModel
                 .stillMaterial()
-                .sprite()) {
-            renderState.fluidSprite = sprite;
-        }
+                .sprite();
+
     }
 
     @Override
@@ -111,13 +110,16 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
             return;
         }
 
+        double inset = 0.5 / 16.0;
+
         AABB box = new AABB(
-                0.26,
-                0.25,
-                0.26,
-                0.74,
-                0.25 + state.fluidHeight * 0.375,
-                0.74
+                inset,
+                inset,
+                inset,
+
+                1.0 - inset,
+                inset + state.fluidHeight * (1.0 - inset * 2.0),
+                1.0 - inset
         );
 
         collector.submitCustomGeometry(

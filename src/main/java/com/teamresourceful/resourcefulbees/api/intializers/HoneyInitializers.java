@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.api.intializers;
 
+import com.mojang.datafixers.util.Pair;
 import com.teamresourceful.resourcefulbees.api.data.BeekeeperTradeData;
 import com.teamresourceful.resourcefulbees.api.data.honey.CustomHoneyData;
 import com.teamresourceful.resourcefulbees.api.data.honey.HoneyBlockData;
@@ -12,6 +13,7 @@ import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyRenderData;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.item.LazyHolder;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.material.Fluid;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class HoneyInitializers {
 
@@ -32,7 +35,7 @@ public final class HoneyInitializers {
 
     @FunctionalInterface
     public interface HoneyFluidDataInitializer {
-        HoneyFluidData create(String id, HoneyRenderData renderData, HoneyFluidAttributesData attributes, LazyHolder<Fluid> still, LazyHolder<Fluid> flowing, LazyHolder<Item> bucket, LazyHolder<Block> block, BeekeeperTradeData tradeData);
+        HoneyFluidData create(String id, HoneyRenderData renderData, HoneyFluidAttributesData attributes, LazyHolder<Fluid> still, LazyHolder<Fluid> flowing, LazyHolder<Item> bucket, LazyHolder<Block> block, BeekeeperTradeData tradeData, Set<Pair<Holder<MobEffect>, Float>> beeconEffects);
     }
 
     @FunctionalInterface

@@ -107,6 +107,33 @@ public final class GeneralConfig {
     )
     public static boolean consumeHiveUpgrade = true;
 
+    @ConfigEntry(
+            id = "beekeeperHiveAcceleration",
+            translation = "Beekeeper's Resolve Hive Acceleration"
+    )
+    @Comment(
+            value = "Frequency in which an extra tick is applied to bees in hives and apiaries. Calculated as gameTime % beekeeperHiveAcceleration == 0"
+    )
+    @ConfigOption.Range(min = 1, max = 40)
+    public static int beekeeperHiveAcceleration = 10;
 
+    @ConfigEntry(
+            id = "beekeeperCooldown",
+            translation = "Beekeeper's Resolve Pollination Cooldown"
+    )
+    @Comment(
+            value = "The cooldown before a bee can pollinate a flower again after failing"
+    )
+    @ConfigOption.Range(min = 50, max = 400)
+    public static int beekeeperCooldown = 200;
 
+    @ConfigEntry(
+            id = "beekeeperPollinateTicks",
+            translation = "Beekeeper's Resolve Pollination Ticks"
+    )
+    @Comment(
+            value = "The number of ticks a bee must spend at the flower before being considered pollinated"
+    )
+    @ConfigOption.Range(min = 50, max = 300)
+    public static int beekeeperPollinateTicks = 200;
 }

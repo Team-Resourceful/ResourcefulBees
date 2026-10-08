@@ -17,7 +17,6 @@ public final class TraitRegistry implements com.teamresourceful.resourcefulbees.
     private boolean closed = false;
 
     private TraitRegistry() {
-        // Single instanced classes do not need to be able to be extended
     }
 
     /**

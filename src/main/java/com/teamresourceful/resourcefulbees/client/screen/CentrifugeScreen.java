@@ -13,7 +13,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
 
-    private static final Identifier TEXTURE = ModIdentifier.of("textures/gui/centrifuges/basic.png");
+    private static final Identifier TEXTURE = ModIdentifier.of("centrifuge/basic.png");
 
     private final CentrifugeBlockEntity tileEntity;
     private TankWidget tankWidget;
@@ -37,7 +37,7 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
         if (tileEntity != null) {
             int i = this.leftPos;
             int j = this.topPos;
-            graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0f, 0f, this.imageWidth, this.imageHeight, 256, 256);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, TEXTURE, 256, 256, 0, 0, i, j, this.imageWidth, this.imageHeight);
         }
     }
 

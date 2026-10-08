@@ -16,7 +16,7 @@ public final class PetInfo {
 
     private static final int VERSION = 1;
 
-    private static final PetModelData FALLBACK_MODEL = new PetModelData(-1, "fallback", ModIdentifier.of("geo/base-nocloak.geo.json"), Identifier.tryParse("textures/entity/bee/bee.png"), Optional.empty(), new HashSet<>());
+    private static final PetModelData FALLBACK_MODEL = new PetModelData(-1, "fallback", ModIdentifier.of("base-nocloak"), Identifier.tryParse("textures/entity/bee/bee.png"), Optional.empty(), new HashSet<>());
 
     static PetModelData defaultModel = null;
 
@@ -27,7 +27,7 @@ public final class PetInfo {
         throw new UtilityClassException();
     }
 
-    static void addUser(String uuid, String model){
+    static void addUser(String uuid, String model) {
         try {
             getUUID(uuid).ifPresent(uid -> USER_PETS.put(uid, model));
         } catch (Exception _) {

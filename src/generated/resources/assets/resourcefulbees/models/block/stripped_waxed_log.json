@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "resourcefulbees:block/stripped_waxed_log_top",
+    "side": "resourcefulbees:block/stripped_waxed_log"
+  }
+}

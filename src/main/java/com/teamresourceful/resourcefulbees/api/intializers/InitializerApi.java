@@ -83,8 +83,8 @@ public class InitializerApi {
     }
 
     @NullMarked
-    public BeeTraitData trait(int range, Set<String> traits) {
-        return this.traits.create(range, traits);
+    public BeeTraitData trait(int range, int sculkCharge, Set<String> traits) {
+        return this.traits.create(range, sculkCharge, traits);
     }
 
     @NullMarked

@@ -5,12 +5,15 @@ import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.fluids.ModClientFluidProperties;
 import com.teamresourceful.resourcefulbees.client.model.property.FilledBeeJarProperty;
 import com.teamresourceful.resourcefulbees.client.overlay.BeeLocatorOverlay;
+import com.teamresourceful.resourcefulbees.client.pets.PetInfo;
+import com.teamresourceful.resourcefulbees.client.pets.PetLoader;
 import com.teamresourceful.resourcefulbees.client.recipe.RBeesClientRecipes;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.EnderBeeconRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.HoneyGenRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.SolidificationChamberRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.CentrifugeCrankRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
+import com.teamresourceful.resourcefulbees.client.rendering.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.screen.*;
 import com.teamresourceful.resourcefulbees.client.tints.*;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
@@ -22,8 +25,11 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEntities;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
+import net.minecraft.client.entity.ClientAvatarEntity;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.Avatar;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -32,8 +38,11 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.client.renderstate.AvatarRenderStateModifier;
+import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.LevelEvent;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +63,32 @@ public class ResourcefulBeesClient {
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
         // pet database server is down so I cant test currently
-        //PetLoader.loadAPI();
+        PetLoader.loadAPI();
+    }
+
+//    @SubscribeEvent
+//    public static void registerEntityLayers(EntityRenderersEvent.AddLayers event) {
+//        for (PlayerModelType type : event.getSkins()) {
+//            AvatarRenderer<AbstractClientPlayer> renderer = event.getPlayerRenderer(type);
+//
+//            if (renderer != null) {
+//                renderer.addLayer(new BeeRewardRender(renderer));
+//            }
+//        }
+//    }
+
+    @SubscribeEvent
+    public static void registerRenderStateModifiers(RegisterRenderStateModifiersEvent event) {
+        event.registerAvatarEntityModifier(new AvatarRenderStateModifier() {
+            @Override
+            public <T extends Avatar & ClientAvatarEntity> void accept(@NonNull T avatar, @NonNull AvatarRenderState state) {
+                state.setRenderData(BeeRewardRender.PET_DATA, PetInfo.getPet(avatar.getUUID()));
+            }
+        });
     }
 
     @SubscribeEvent // on the mod event bus only on the physical client
-    public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         ModEntities.getModBees().forEach((s, entityType) ->
                 event.registerEntityRenderer(entityType.get(), context -> new CustomBeeRenderer<>(context, BeeRegistry.get().getBeeData(s).getRenderData()))
         );

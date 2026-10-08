@@ -33,6 +33,7 @@ public class ModCreativeTabs {
                 .displayItems((parameters, output) -> {
                 if (GeneralConfig.enableDevBees) output.accept(ModItems.OREO_COOKIE.get());
                 if (GeneralConfig.enableDevBees) output.accept(ModItems.STRAWBEERRY_MILKSHAKE.get());
+
                 output.accept(ModItems.BEE_JAR.get());
                 output.accept(ModItems.BEE_BOX.get());
                 output.accept(ModItems.BEE_BOX_TEMP.get());
@@ -42,10 +43,26 @@ public class ModCreativeTabs {
                 output.accept(ModItems.BELLOW.get());
                 output.accept(ModItems.SMOKER_CAN.get());
                 output.accept(ModItems.BEE_LOCATOR.get());
+                output.accept(ModItems.BEEPEDIA.get());
+                output.accept(ModItems.BEEPEDIA_CREATIVE.get());
+
+                output.accept(ModItems.WAXED_PICKAXE.get());
+                output.accept(ModItems.WAXED_AXE.get());
+                output.accept(ModItems.WAXED_HOE.get());
+                output.accept(ModItems.WAXED_SHOVEL.get());
+                output.accept(ModItems.WAXED_SWORD.get());
+
+                output.accept(ModItems.BEEKEEPER_HELMET.get());
+                output.accept(ModItems.BEEKEEPER_CHESTPLATE.get());
+                output.accept(ModItems.BEEKEEPER_LEGGINGS.get());
+                output.accept(ModItems.BEEKEEPER_BOOTS.get());
 
                 output.accept(ModItems.WAX.get());
                 output.accept(ModItems.WAX_BLOCK_ITEM.get());
                 output.accept(ModItems.GOLD_FLOWER_ITEM.get());
+
+                output.accept(ModItems.HONEYCOMB_POTTERY_SHERD.get());
+                output.accept(ModItems.BEE_POTTERY_SHERD.get());
 
                 output.accept(ModItems.FLOW_HIVE.get());
                 output.accept(ModItems.BREEDER_ITEM.get());
@@ -74,6 +91,7 @@ public class ModCreativeTabs {
 
                 output.accept(ModItems.HONEY_GLASS.get());
                 output.accept(ModItems.HONEY_GLASS_PLAYER.get());
+
                 output.accept(ModItems.TRIMMED_WAXED_PLANKS.get());
                 output.accept(ModItems.WAXED_PLANKS.get());
                 output.accept(ModItems.WAXED_STAIRS.get());
@@ -86,6 +104,7 @@ public class ModCreativeTabs {
                 output.accept(ModItems.WAXED_TRAPDOOR.get());
                 output.accept(ModItems.WAXED_SIGN.get());
                 output.accept(ModItems.WAXED_HANGING_SIGN.get());
+
                 addHiveBreakBooks(parameters, output);
             }).build()
     );

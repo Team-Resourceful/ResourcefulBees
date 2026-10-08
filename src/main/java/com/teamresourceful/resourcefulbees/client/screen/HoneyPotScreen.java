@@ -15,8 +15,7 @@ import org.jspecify.annotations.NonNull;
 
 public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
 
-    private static final Identifier BACKGROUND =
-            ModIdentifier.of("textures/gui/honey_tank/honey_pot.png");
+    private static final Identifier BACKGROUND = ModIdentifier.of("honey_pot/background");
 
     public HoneyPotScreen(HoneyPotMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -31,7 +30,7 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
     @Override
     public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick);
-        graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, 0, leftPos, topPos, imageWidth, imageHeight);
     }
 
     @Override
@@ -41,16 +40,7 @@ public class HoneyPotScreen extends AbstractContainerScreen<HoneyPotMenu> {
         FluidStack fluid = menu.getEntity().tankData().fluid();
         graphics.text(font, Component.literal("Fluid:"), 36, 17, 0xFFFFFFFF, false);
 
-        graphics.drawScrollingString(
-                graphics.textRenderer(),
-                font,
-                fluid.isEmpty()
-                        ? GuiTranslations.NO_FLUID
-                        : fluid.getHoverName(),
-                40,
-                118,
-                27
-        );
+        graphics.drawScrollingString(graphics.textRenderer(), font, fluid.isEmpty() ? GuiTranslations.NO_FLUID : fluid.getHoverName(), 40, 118, 27);
 
         graphics.text(font, Component.literal("Amount: " + fluid.amount() + " mB"), 36, 39, 0xFFFFFFFF, false);
     }

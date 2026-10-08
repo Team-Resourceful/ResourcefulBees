@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.registries.minecraft;
 
+import com.teamresourceful.resourcefulbees.common.effect.BeekeepersResolveEffect;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.registries.RegistryHelper;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
@@ -33,4 +34,6 @@ public final class ModEffects {
             return duration % 5 == 0;
         }
     });
+
+    public static final HolderRegistryEntry<MobEffect> BEEKEEPERS_RESOLVE = EFFECTS.registerHolder("beekeepers_resolve", BeekeepersResolveEffect::new);
 }

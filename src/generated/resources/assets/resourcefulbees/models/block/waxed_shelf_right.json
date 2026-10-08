@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_shelf_right",
+  "textures": {
+    "all": "resourcefulbees:block/waxed_shelf",
+    "particle": "resourcefulbees:block/waxed_planks"
+  }
+}

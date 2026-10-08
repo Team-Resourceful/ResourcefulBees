@@ -39,10 +39,7 @@ public final class DummyBeeData {
 
     private static final InitializerApi API = ResourcefulBeesAPI.getInitializers();
 
-    private static ItemStackTemplate getBucketWithNbt() {
-        //CompoundTag nbt = new CompoundTag();
-        //nbt.putString("this_is", "an_nbt_tag");
-        //bucket.setTag(nbt);
+    private static ItemStackTemplate getBucket() {
         return new ItemStackTemplate(Items.WATER_BUCKET);
     }
 
@@ -79,7 +76,7 @@ public final class DummyBeeData {
                 API.familyUnit(24, 0.67, ModIdentifier.of("diamond"), ModIdentifier.of("diamond"), ModIdentifier.of("compressed_diamond"))
             ),
             RegistryPredicate.create(Item::builtInRegistryHolder, Items.POPPY, Items.CARROT),
-            Optional.of(getBucketWithNbt()),
+            Optional.of(getBucket()),
             2,
             -45_000,
             2_400
@@ -107,7 +104,7 @@ public final class DummyBeeData {
             ModIdentifier.of("mutations/template")
     );
 
-    private static final BeeTraitData TRAIT_DATA = API.trait(BeeConfig.defaultAuraRange, Set.of());
+    private static final BeeTraitData TRAIT_DATA = API.trait(BeeConfig.defaultAuraRange, BeeConfig.defaultSculkCharge, Set.of());
 
     public static final Map<Identifier, BeeData<?>> DATA = Map.of(
             CORE_DATA.serializer().id(), CORE_DATA,

@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public record TraitData(
-        int auraRange, Set<String> traits, boolean hasTraits,
+        int auraRange, int sculkCharge, Set<String> traits, boolean hasTraits,
         Set<PotionEffect> potionDamageEffects,
         Set<String> damageImmunities,
         Set<MobEffect> potionImmunities,
@@ -30,14 +30,15 @@ public record TraitData(
         Set<Aura> auras
 ) implements BeeTraitData {
 
-    private static final BeeTraitData DEFAULT = TraitData.of(BeeConfig.defaultAuraRange, Collections.emptySet());
+    private static final BeeTraitData DEFAULT = TraitData.of(BeeConfig.defaultAuraRange, BeeConfig.defaultSculkCharge, Collections.emptySet());
     private static final Codec<BeeTraitData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.intRange(3, 20).optionalFieldOf("auraRange", BeeConfig.defaultAuraRange).forGetter(BeeTraitData::auraRange),
+            Codec.intRange(10, 1000).optionalFieldOf("sculkCharge", BeeConfig.defaultSculkCharge).forGetter(BeeTraitData::sculkCharge),
             CodecExtras.set(Codec.STRING).optionalFieldOf("traits", new HashSet<>()).forGetter(BeeTraitData::traits)
     ).apply(instance, TraitData::of));
-    public static final BeeDataSerializer<BeeTraitData> SERIALIZER = BeeDataSerializer.of(ModIdentifier.of("trait"), 1, id -> CODEC, DEFAULT);
+    public static final BeeDataSerializer<BeeTraitData> SERIALIZER = BeeDataSerializer.of(ModIdentifier.of("trait"), 1, _ -> CODEC, DEFAULT);
 
-    public static TraitData of(int range, Set<String> traits) {
+    public static TraitData of(int range, int sculkCharge, Set<String> traits) {
         Set<PotionEffect> potionDamageEffects = new HashSet<>();
         Set<String> damageImmunities = new HashSet<>();
         Set<MobEffect> potionImmunities = new HashSet<>();
@@ -61,6 +62,7 @@ public record TraitData(
 
         return new TraitData(
                 range,
+                sculkCharge,
                 traits,
                 hasData,
                 Collections.unmodifiableSet(potionDamageEffects),

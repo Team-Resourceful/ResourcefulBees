@@ -4,20 +4,15 @@ import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.items.locator.DimensionalBeeHolder;
-import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 
 import java.util.Comparator;
 import java.util.function.Consumer;
 
-public class BeeListWidget
-        extends ObjectSelectionList<BeeLocatorEntry> {
-
-    public static final Identifier BACKGROUND = ModIdentifier.of("textures/gui/advancements/backgrounds/resourcefulbees.png");
+public class BeeListWidget extends ObjectSelectionList<BeeLocatorEntry> {
 
     private final Consumer<BeeLocatorEntry> selector;
 
