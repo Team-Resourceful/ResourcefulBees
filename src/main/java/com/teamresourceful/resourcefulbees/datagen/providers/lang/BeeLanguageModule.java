@@ -11,6 +11,7 @@ public class BeeLanguageModule implements LanguageModule {
         addBees(provider);
         provider.add(LangGenerator.ITEM_RESOURCEFULBEES+"rgbee_bee_spawn_egg", "RGBee Spawn Egg");
         provider.add(LangGenerator.ENTITY_RESOURCEFULBEES+"rgbee_bee", "RGBee");
+        provider.add(LangGenerator.BEE_RESOURCEFULBEES+"rgbee_bee", "RGBee");
         addHoney(provider);
         addTraits(provider);
         addHoneycombs(provider);
@@ -117,6 +118,7 @@ public class BeeLanguageModule implements LanguageModule {
         provider.addTraitType("healer", "Healer");
         provider.addTraitType("starry", "Starry");
         provider.addTraitType("abbee", "AbBee");
+        provider.addTraitType("sculk", "Sculk");
     }
 
     private static void addHoney(BaseLanguageProvider provider) {

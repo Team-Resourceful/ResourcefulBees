@@ -136,16 +136,6 @@ dependencies {
     implementation "maven.modrinth:jade:${jade_version}"
     implementation "maven.modrinth:iRmWy6ga:neoforge-1.2.33+26.3" //pipez
 
-    // Integrated Dynamics
-    implementation "maven.modrinth:integrated-dynamics:${integrated_dynamics_version}"
-
-    // Required dependencies
-    //implementation "maven.modrinth:cyclops-core:${cyclops_core_version}"
-    implementation "maven.modrinth:common-capabilities:${common_capabilities_version}"
-
-    // Integrated Tunnels
-    implementation "maven.modrinth:integrated-tunnels:${integrated_tunnels_version}"
-
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
