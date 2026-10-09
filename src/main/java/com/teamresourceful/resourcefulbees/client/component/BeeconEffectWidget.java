@@ -5,10 +5,8 @@ import com.teamresourceful.resourcefulbees.common.blockentities.EnderBeeconBlock
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.BeeconTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.enums.BeeconPacketOption;
-import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.BeeconEffectPacket;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -19,9 +17,11 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class BeeconEffectWidget extends AbstractWidget {
 
@@ -37,18 +37,20 @@ public class BeeconEffectWidget extends AbstractWidget {
     private final Pair<Holder<MobEffect>, Float> effect;
     private boolean selected;
     private final Identifier effectSprite;
-    private final Tooltip effectTooltip;
     private final int clipLeft;
     private final int clipTop;
     private final int clipRight;
     private final int clipBottom;
 
     public BeeconEffectWidget(int x, int y, Pair<Holder<MobEffect>, Float> effect, EnderBeeconBlockEntity tile, int clipLeft, int clipTop, int clipRight, int clipBottom) {
-        super(x, y, 88, 22, BeeconTranslations.BEECON_EFFECT_BUTTON);
+        super(x, y, 27, 23, BeeconTranslations.BEECON_EFFECT_BUTTON);
         this.tile = tile;
         this.effect = effect;
         this.effectSprite = Hud.getMobEffectSprite(effect.getFirst());
-        this.effectTooltip = Tooltip.create(effect.getFirst().value().getDisplayName());
+
+        MutableComponent name = effect.getFirst().value().getDisplayName().copy();
+        MutableComponent drains = Component.literal("%nDrains: %smb/t".formatted(effect.getSecond()));
+        setTooltip(Tooltip.create(name.append(drains)));
         this.clipLeft = clipLeft;
         this.clipTop = clipTop;
         this.clipRight = clipRight;
@@ -67,47 +69,36 @@ public class BeeconEffectWidget extends AbstractWidget {
     protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         graphics.enableScissor(clipLeft, clipTop, clipRight, clipBottom);
         try {
-            Minecraft mc = Minecraft.getInstance();
-
-            boolean buttonHover = inBounds(mouseX, mouseY);
-            boolean spriteHover = inSpriteBounds(mouseX, mouseY);
-
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, selected ? 0 : 26, buttonHover ? 216 : 200, getX() + 59, getY() + 3, 26, 16);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 178, selected ? 112 : 136, getX(), getY() + 1, 27, 23);
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, effectSprite, getX() + 2, getY() + 2, 18, 18);
-            graphics.text(mc.font, Component.literal("+" + effect.getSecond()), this.getX() + 24, this.getY() + 6, 0xFFE0E0E0);
-
-            if (spriteHover) {
-                setTooltip(effectTooltip);
-            } else if (buttonHover) {
-                setTooltip(selected ? ACTIVE_TOOLTIP : INACTIVE_TOOLTIP);
-            } else {
-                setTooltip(null);
-            }
         } finally {
             graphics.disableScissor();
         }
     }
 
     @Override
-    public void onClick(MouseButtonEvent event, boolean doubleClick) {
-        if (inBounds(event.x(), event.y())) {
-            selected = !selected;
-            NetworkHandler.NETWORK.sendToServer(new BeeconEffectPacket(
-                    selected ? BeeconPacketOption.EFFECT_ON : BeeconPacketOption.EFFECT_OFF,
-                    effect,
-                    tile.getBlockPos()
-            ));
+    public void onClick(@NonNull MouseButtonEvent event, boolean doubleClick) {
+        selected = !selected;
+        NetworkHandler.NETWORK.sendToServer(new BeeconEffectPacket(
+                selected ? BeeconPacketOption.EFFECT_ON : BeeconPacketOption.EFFECT_OFF,
+                effect,
+                tile.getBlockPos()
+        ));
+    }
+
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        if (!visible || !active) {
+            return false;
         }
-    }
 
-    private boolean inBounds(double x, double y) {
-        return MathUtils.inRangeInclusive(x, getX() + 59d, getX() + 84d)
-                && MathUtils.inRangeInclusive(y, getY() + 3d, getY() + 18d);
-    }
+        boolean insideViewport =
+                mouseX >= clipLeft
+                        && mouseX < clipRight
+                        && mouseY >= clipTop
+                        && mouseY < clipBottom;
 
-    private boolean inSpriteBounds(double x, double y) {
-        return MathUtils.inRangeInclusive(x, getX() + 2d, getX() + 19d)
-                && MathUtils.inRangeInclusive(y, getY() + 2d, getY() + 19d);
+        return insideViewport && super.isMouseOver(mouseX, mouseY);
     }
 
     @Override

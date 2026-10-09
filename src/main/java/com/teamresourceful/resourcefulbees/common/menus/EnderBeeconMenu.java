@@ -56,7 +56,7 @@ public class EnderBeeconMenu extends AbstractModContainerMenu<EnderBeeconBlockEn
 
     @Override
     protected void addMenuSlots() {
-        //nothing
+        //has no menu slots
     }
 
     @Override

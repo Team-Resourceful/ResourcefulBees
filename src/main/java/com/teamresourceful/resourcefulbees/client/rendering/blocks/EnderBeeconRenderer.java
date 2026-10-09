@@ -39,15 +39,27 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
         renderState.reset();
 
         BlockEntityRenderState.extractBase(beecon, renderState, breakProgress);
-        FluidStack fluid = beecon.clientFluid();
+        FluidStack fluid = beecon.tankData().fluid();
         renderState.hasFluid = !fluid.isEmpty();
+        renderState.fluidHeight = fluid.amount() / 16_000F;
 
         if (!renderState.hasFluid) {
             renderState.showBeam = false;
             return;
         }
 
-        renderState.fluidHeight = fluid.amount() / 16_000F;
+        if (fluid.getFluid() instanceof CustomHoneyFluid.Still customHoney) {
+            renderState.fluidColor = customHoney.getHoneyFluidData().renderData().color().getOpaqueValue();
+        }
+
+        FluidModel fluidModel = Minecraft.getInstance()
+                .getModelManager()
+                .getFluidStateModelSet()
+                .get(fluid.getFluid().defaultFluidState());
+
+        renderState.fluidSprite = fluidModel
+                .stillMaterial()
+                .sprite();
 
         BlockState blockState = beecon.getBlockState();
 
@@ -62,18 +74,7 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
                 ? 1.0F
                 : Math.max(1.0F, distanceToBeecon / 96.0F);
 
-        if (fluid.getFluid() instanceof CustomHoneyFluid.Still customHoney) {
-            renderState.fluidColor = customHoney.getHoneyFluidData().renderData().color().getOpaqueValue();
-        }
 
-        FluidModel fluidModel = Minecraft.getInstance()
-                .getModelManager()
-                .getFluidStateModelSet()
-                .get(fluid.getFluid().defaultFluidState());
-
-        renderState.fluidSprite = fluidModel
-                .stillMaterial()
-                .sprite();
 
     }
 

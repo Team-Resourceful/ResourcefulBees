@@ -2,10 +2,12 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.EnderBeeconBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.InstanceBlockEntityTicker;
 import com.teamresourceful.resourcefulbees.common.components.BeeconData;
+import com.teamresourceful.resourcefulbees.common.components.TankData;
 import com.teamresourceful.resourcefulbees.common.config.EnderBeeconConfig;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
@@ -17,7 +19,9 @@ import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModEffects;
+import com.teamresourceful.resourcefullib.common.codecs.EnumCodec;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -26,12 +30,15 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -61,16 +68,21 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     private static final int TANK_INPUT = 0;
     private static final int TANK_CAPACITY = 16_000;
 
+    private static final Codec<Pair<Holder<MobEffect>, Float>> EFFECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            MobEffect.CODEC.fieldOf("effect").forGetter(Pair::getFirst),
+            Codec.FLOAT.fieldOf("drain").forGetter(Pair::getSecond)
+    ).apply(instance, Pair::of));
+
     private final FluidHandler tank = new FluidHandler();
-    //private final EnumSet<BeeconEffect> activeEffects = EnumSet.noneOf(BeeconEffect.class);
     private final Set<Pair<Holder<MobEffect>, Float>> activeEffects = new HashSet<>();
     private final Set<Pair<Holder<MobEffect>, Float>> availableEffects = new HashSet<>();
 
     private boolean active = false;
     private int range = 10;
-    private FluidStack clientFluid = FluidStack.EMPTY;
+    private TankData tankData = TankData.EMPTY;
     private BlockCapabilityCache<ResourceHandler<FluidResource>, @Nullable Direction> fluidCache;
     private boolean fluidDirty = false;
+    private Target targeting = Target.BEE;
 
     public EnderBeeconBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.ENDER_BEECON_TILE_ENTITY.get(), pos, state);
@@ -105,9 +117,16 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         return new EnderBeeconMenu(id, playerInventory, this);
     }
 
+    public Target target() {
+        return targeting;
+    }
 
     //endregion
     //region SYNCABLE GUI
+
+    public TankData tankData() {
+        return tankData;
+    }
 
     @Override
     protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
@@ -117,24 +136,32 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         activeEffects.addAll(client.activeEffects());
         range = client.range();
         active = client.active();
-        clientFluid = client.fluid();
+        targeting = client.target();
+        tankData = components.getOrDefault(ModDataComponents.SINGLE_TANK_DATA, TankData.EMPTY);
     }
     @Override
     protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
         super.collectImplicitComponents(components);
-        components.set(ModDataComponents.BEECON_DATA, new BeeconData(activeEffects, range, active, fluidStackInTank()));
+        components.set(ModDataComponents.BEECON_DATA, new BeeconData(activeEffects, range, active, fluidStackInTank(), targeting));
+        components.set(ModDataComponents.SINGLE_TANK_DATA, createTankDataPatch());
     }
 
     @Override
     public void removeComponentsFromTag(@NonNull ValueOutput output) {
         super.removeComponentsFromTag(output);
         output.discard("beecon_data");
+        output.discard("single_tank_data");
+    }
+
+    private TankData createTankDataPatch() {
+        return new TankData(fluidStack(), tank.getCapacity());
     }
 
     @Override
     public DataComponentPatch getSyncData() {
         return DataComponentPatch.builder()
-                .set(ModDataComponents.BEECON_DATA.get(), new BeeconData(activeEffects, range, active, fluidStackInTank()))
+                .set(ModDataComponents.BEECON_DATA.get(), new BeeconData(activeEffects, range, active, fluidStackInTank(), targeting))
+                .set(ModDataComponents.SINGLE_TANK_DATA.get(), createTankDataPatch())
                 .build();
     }
 
@@ -148,8 +175,12 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
                 activeEffects.addAll(client.activeEffects());
                 range = client.range();
                 active = client.active();
-                clientFluid = client.fluid();
+                targeting = client.target();
             });
+        }
+
+        if (type == ModDataComponents.SINGLE_TANK_DATA.get()) {
+            tankData = (TankData) data.orElseThrow();
         }
     }
 
@@ -159,9 +190,9 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         input.readChild("tank", tank());
         setRange(input.getIntOr("range", 10));
         activeEffects.clear();
-        input.listOrEmpty("activeEffects", Codec.pair(MobEffect.CODEC, Codec.FLOAT)).forEach(activeEffects::add);
+        input.listOrEmpty("activeEffects", EFFECT_CODEC).forEach(activeEffects::add);
         active = input.getBooleanOr("isActive", false);
-        clientFluid = fluidStackInTank();
+        targeting = input.read("target", Target.CODEC).orElse(Target.BEE);
     }
 
     @Override
@@ -169,9 +200,10 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         super.saveAdditional(output);
         output.putChild("tank", tank());
         output.putInt("range", range);
-        ValueOutput.TypedOutputList<Pair<Holder<MobEffect>, Float>> outputList = output.list("activeEffects", Codec.pair(MobEffect.CODEC, Codec.FLOAT));
+        ValueOutput.TypedOutputList<Pair<Holder<MobEffect>, Float>> outputList = output.list("activeEffects", EFFECT_CODEC);
         for (Pair<Holder<MobEffect>, Float> effect : activeEffects) outputList.add(effect);
         output.putBoolean("isActive", active);
+        output.store("target", Target.CODEC, targeting);
     }
 
     @Override
@@ -197,16 +229,29 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         }
 
         // give effects
-        if (level.getGameTime() % 80L == 0L && !this.tank.isEmpty()) {
-            List<Bee> bees = getBeesInRange(level, pos);
-            markDisruptorRange(bees);
-            if (active) {
-                applyBeeconEffects(bees);
-                if (state.hasProperty(EnderBeeconBlock.SOUND) && state.getValue(EnderBeeconBlock.SOUND)) {
-                    level.playSound(null, pos, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 1f, 1f);
+        if (level.getGameTime() % 80L == 0L && !tank.isEmpty()) {
+            if (targeting == Target.BEE) {
+                List<Bee> bees = getBeesInRange(level, pos);
+                markDisruptorRange(bees);
+
+                if (active) {
+                    applyBeeconEffects(bees);
                 }
+            } else if (targeting == Target.PLAYER && active) {
+                applyBeeconEffects(getPlayersInRange(level, pos));
+            }
+
+            if (active && state.hasProperty(EnderBeeconBlock.SOUND) && state.getValue(EnderBeeconBlock.SOUND)) {
+                level.playSound(null, pos, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 1.0f, 1.0f);
             }
         }
+    }
+
+    private List<Player> getPlayersInRange(Level level, BlockPos pos) {
+        return level.getEntitiesOfClass(
+                Player.class,
+                getEffectBox(level, pos, range)
+        );
     }
 
     private void drainTank() {
@@ -236,8 +281,8 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         }
     }
 
-    private void applyBeeconEffects(List<Bee> bees) {
-        for (Bee bee : bees) {
+    private void applyBeeconEffects(List<? extends LivingEntity> bees) {
+        for (LivingEntity bee : bees) {
             for (Pair<Holder<MobEffect>, Float> effect : activeEffects) {
                 bee.addEffect(new MobEffectInstance(effect.getFirst(), 120, 0, false, false));
             }
@@ -333,8 +378,8 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
         return tank.getResource(TANK_INPUT);
     }
 
-    public FluidStack clientFluid() {
-        return clientFluid;
+    public FluidStack fluidStack() {
+        return fluidResource().toStack(tank.getAmountAsInt(TANK_INPUT));
     }
 
     public static AABB getEffectBox(@NotNull Level level, BlockPos pos, int range) {
@@ -393,6 +438,13 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
 
                 if (range != oldRange) {
                     refreshActiveState();
+                    sendToListeningPlayers();
+                }
+            }
+            case TARGET -> {
+                if (this.targeting != Target.ordinalOf(value)) {
+                    this.targeting = Target.ordinalOf(value);
+                    setChanged();
                     sendToListeningPlayers();
                 }
             }
@@ -467,8 +519,29 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
             EnderBeeconBlockEntity.this.setChanged();
         }
 
+        public int getCapacity() {
+            return capacity;
+        }
+
         public boolean isEmpty() {
             return getResource(0).isEmpty();
+        }
+    }
+
+    public enum Target {
+        BEE,
+        PLAYER;
+
+        public static final EnumCodec<Target> CODEC = EnumCodec.of(Target.class);
+
+        public static final StreamCodec<ByteBuf, Target> STREAM_CODEC = ByteBufCodecs.fromCodec(CODEC);
+
+        public static Target ordinalOf(int ordinal) {
+            if (ordinal == 1) {
+                return PLAYER;
+            }
+
+            return BEE;
         }
     }
 }

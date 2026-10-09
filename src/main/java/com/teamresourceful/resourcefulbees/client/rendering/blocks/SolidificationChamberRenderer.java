@@ -37,18 +37,8 @@ public class SolidificationChamberRenderer implements BlockEntityRenderer<
     }
 
     @Override
-    public void extractRenderState(
-            @NonNull SolidificationChamberBlockEntity chamber,
-            @NonNull RenderState renderState,
-            float partialTicks,
-            @NonNull Vec3 cameraPosition,
-            @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress
-    ) {
-        BlockEntityRenderState.extractBase(
-                chamber,
-                renderState,
-                breakProgress
-        );
+    public void extractRenderState(@NonNull SolidificationChamberBlockEntity chamber, @NonNull RenderState renderState, float partialTicks, @NonNull Vec3 cameraPosition, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
+        BlockEntityRenderState.extractBase(chamber, renderState, breakProgress);
 
         renderState.hasFluid = false;
         renderState.fluidHeight = 0.0F;

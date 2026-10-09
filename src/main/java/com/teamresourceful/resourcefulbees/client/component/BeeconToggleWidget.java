@@ -9,15 +9,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 
-public class BasicImageButton extends AbstractWidget {
+public class BeeconToggleWidget extends AbstractWidget {
 
     private final Identifier texture;
     private final int u;
     private final int v;
     private boolean selected;
 
-    public BasicImageButton(int x, int y, int u, int v, boolean selected, Identifier texture) {
-        super(x, y, 20, 20, Component.empty());
+    public BeeconToggleWidget(int x, int y, int u, int v, boolean selected, Identifier texture) {
+        super(x, y, 14, 14, Component.empty());
         this.u = u;
         this.v = v;
         this.selected = selected;
@@ -33,11 +33,15 @@ public class BasicImageButton extends AbstractWidget {
     }
 
     @Override
-    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-        int textureU = this.selected ? this.u + 20 : this.u;
-        int textureV = this.isHovered() ? this.v + 20 : this.v;
+    protected void extractWidgetRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        //int textureU = this.selected ? this.u + 20 : this.u;
+        //int textureV = this.isHovered() ? this.v + 20 : this.v;
 
-        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.texture, 256, 256, textureU, textureV, this.getX(), this.getY(), 20, 20);
+        //graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.texture, 256, 256, textureU, textureV, this.getX(), this.getY(), 20, 20);
+
+        int v1 = this.selected ? 0 : v + 15;
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.texture, 256, 256, u, v1, getX(), getY(), 14, 14);
+        //graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.texture, 256, 256, u, v1, getX(), getY() + 15, 14, 14);
     }
 
     @Override

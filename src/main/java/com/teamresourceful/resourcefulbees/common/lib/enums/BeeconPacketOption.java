@@ -6,4 +6,5 @@ public enum BeeconPacketOption {
     BEAM,
     SOUND,
     RANGE,
+    TARGET
 }

@@ -15,6 +15,7 @@ import com.teamresourceful.resourcefulbees.client.rendering.blocks.centrifuge.Ce
 import com.teamresourceful.resourcefulbees.client.rendering.entities.CustomBeeRenderer;
 import com.teamresourceful.resourcefulbees.client.rendering.pet.BeeRewardRender;
 import com.teamresourceful.resourcefulbees.client.screen.*;
+import com.teamresourceful.resourcefulbees.client.screen.beecon.EnderBeeconScreen;
 import com.teamresourceful.resourcefulbees.client.tints.*;
 import com.teamresourceful.resourcefulbees.common.blocks.CustomHoneyBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.HoneycombBlock;

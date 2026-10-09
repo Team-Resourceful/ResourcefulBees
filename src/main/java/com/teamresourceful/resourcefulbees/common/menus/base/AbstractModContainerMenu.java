@@ -89,7 +89,6 @@ public abstract class AbstractModContainerMenu<T extends BlockEntity> extends Ab
         return itemStack;
     }
 
-    // Centrifuge should be the only one overriding due to slot dimensions of 17 vs 18
     protected void addPlayerInvSlots() {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
