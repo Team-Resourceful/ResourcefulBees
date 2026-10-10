@@ -9,11 +9,6 @@ import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-
 public final class BeeOverview {
 
     private BeeOverview() {
@@ -29,19 +24,13 @@ public final class BeeOverview {
             layout.withChild(Widgets.textarea(lore, contentWidth));
         }
 
-        Instant instant = Instant.ofEpochSecond(discovered.discoveredAt());
-
-        String discoveredAt = DateTimeFormatter
-                .ofLocalizedDateTime(FormatStyle.MEDIUM)
-                .withZone(ZoneId.systemDefault())
-                .format(instant);
-
         LinearLayout discovery = LinearLayout.vertical();
 
         discovery.addChild(BeepediaScreenUtil.property(
                 Component.literal("Discovered"),
-                Component.literal(discoveredAt)), settings -> settings.paddingTop(4).paddingBottom(4)
-        );
+                BeepediaScreenUtil.formateRelativeDateTime(discovered.discoveredAt()),
+                BeepediaScreenUtil.formatDateTime(discovered.discoveredAt())
+        ), settings -> settings.paddingTop(4).paddingBottom(4));
 
         layout.withChild(discovery);
 
