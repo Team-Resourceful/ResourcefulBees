@@ -32,7 +32,7 @@ public record BreederRecipe(
             Ingredient.CODEC.fieldOf("optional").orElse(Ingredient.of(ModItems.BEE_JAR.get())).forGetter(BreederRecipe::optional),
             CodecExtras.weightedCollection(ChildOutput.CODEC, ChildOutput::weight).fieldOf("outputs").forGetter(BreederRecipe::outputs),
             Codec.intRange(100, 72000).fieldOf("time").orElse(BreederConstants.DEFAULT_BREEDER_TIME).forGetter(BreederRecipe::time)
-        ).apply(i, BreederRecipe::new));
+    ).apply(i, BreederRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, BreederRecipe> STREAM_CODEC = StreamCodec.composite(
             ParentInput.STREAM_CODEC,
@@ -75,8 +75,10 @@ public record BreederRecipe(
 
     @Override
     public boolean matches(Input input, @NonNull Level level) {
-        return parent1.matches(input.input1, input.feedItem1)
-                && parent2.matches(input.input2, input.feedItem2)
+        return (parent1.matches(input.input1, input.feedItem1)
+                && parent2.matches(input.input2, input.feedItem2))
+                || (parent2.matches(input.input1, input.feedItem1)
+                && parent1.matches(input.input2, input.feedItem2))
                 && this.optional.test(input.optionalInput);
     }
 
