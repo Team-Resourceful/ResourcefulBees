@@ -148,7 +148,7 @@ public class ResourcefulBeesClient {
 
     @SubscribeEvent
     public static void registerGuiLayers(RegisterGuiLayersEvent event) {
-        event.registerAbove(VanillaGuiLayers.HOTBAR, BEE_LOCATOR_OVERLAY, BeeLocatorOverlay.INSTANCE::render);
+        event.registerAbove(VanillaGuiLayers.HOTBAR, BEE_LOCATOR_OVERLAY, BeeLocatorOverlay.INSTANCE);
     }
 
     @SubscribeEvent

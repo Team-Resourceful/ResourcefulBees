@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.client.overlay;
 
 import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
-import com.teamresourceful.resourcefulbees.client.rendering.OverlayRenderer;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.components.BeeLocatorData;
 import com.teamresourceful.resourcefulbees.common.items.locator.BeeLocatorItem;
@@ -20,8 +19,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.client.gui.GuiLayer;
+import org.jspecify.annotations.NonNull;
 
-public class BeeLocatorOverlay implements OverlayRenderer {
+public class BeeLocatorOverlay implements GuiLayer {
 
     public static final BeeLocatorOverlay INSTANCE = new BeeLocatorOverlay();
 
@@ -30,7 +31,7 @@ public class BeeLocatorOverlay implements OverlayRenderer {
     private Entity displayBee;
 
     @Override
-    public void render(GuiGraphicsExtractor graphics, DeltaTracker partialTick) {
+    public void render(@NonNull GuiGraphicsExtractor graphics, @NonNull DeltaTracker partialTick) {
         Minecraft mc = Minecraft.getInstance();
 
         Player player = mc.player;
