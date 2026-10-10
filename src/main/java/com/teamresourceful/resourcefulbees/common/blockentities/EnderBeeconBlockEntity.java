@@ -66,7 +66,7 @@ import java.util.*;
 public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, ContentMenuProvider<PositionContent> {
 
     private static final int TANK_INPUT = 0;
-    private static final int TANK_CAPACITY = 16_000;
+    private static final int TANK_CAPACITY = 64_000;
 
     private static final Codec<Pair<Holder<MobEffect>, Float>> EFFECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             MobEffect.CODEC.fieldOf("effect").forGetter(Pair::getFirst),
@@ -188,6 +188,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
     protected void loadAdditional(@NonNull ValueInput input) {
         super.loadAdditional(input);
         input.readChild("tank", tank());
+        tankData = createTankDataPatch();
         setRange(input.getIntOr("range", 10));
         activeEffects.clear();
         input.listOrEmpty("activeEffects", EFFECT_CODEC).forEach(activeEffects::add);
@@ -515,6 +516,7 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
 
         @Override
         protected void onContentsChanged(int index, @NonNull FluidStack previousContents) {
+            tankData = createTankDataPatch();
             fluidDirty = true;
             EnderBeeconBlockEntity.this.setChanged();
         }

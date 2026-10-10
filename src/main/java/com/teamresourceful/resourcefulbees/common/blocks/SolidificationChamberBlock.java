@@ -3,11 +3,9 @@ package com.teamresourceful.resourcefulbees.common.blocks;
 import com.teamresourceful.resourcefulbees.common.blockentities.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.base.MenuBlock;
 import com.teamresourceful.resourcefulbees.common.blocks.base.TickingBlock;
-import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefulbees.common.lib.util.FluidUtils;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -36,21 +34,6 @@ public class SolidificationChamberBlock extends TickingBlock<SolidificationChamb
     public SolidificationChamberBlock(Properties properties) {
         super(ModBlockEntityTypes.SOLIDIFICATION_CHAMBER_TILE_ENTITY, properties);
     }
-
-    private static SolidificationChamberBlockEntity getBlockEntity(@NotNull BlockGetter level, @NotNull BlockPos pos) {
-        return level.getBlockEntity(pos) instanceof SolidificationChamberBlockEntity entity ? entity : null;
-    }
-
-    @Override
-    public void animateTick(@NotNull BlockState stateIn, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
-        SolidificationChamberBlockEntity tank = getBlockEntity(level, pos);
-        if (tank == null) return;
-        if (tank.fluidResource().getFluid() instanceof CustomHoneyFluid.Still fluid && fluid.getHoneyFluidData().renderData().color().isSpecial()) {
-            level.sendBlockUpdated(pos, stateIn, stateIn, Block.UPDATE_CLIENTS);
-        }
-        super.animateTick(stateIn, level, pos, rand);
-    }
-
 
     @NotNull
     @Override

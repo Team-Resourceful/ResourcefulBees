@@ -26,13 +26,7 @@ public class TankWidget extends AbstractWidget {
 
     private int selectedTank = 0;
 
-    private TankWidget(
-            int x,
-            int y,
-            int width,
-            int height,
-            Supplier<List<TankData>> tankData
-    ) {
+    private TankWidget(int x, int y, int width, int height, Supplier<List<TankData>> tankData) {
         super(x, y, width, height, Component.empty());
         this.tankData = tankData;
     }

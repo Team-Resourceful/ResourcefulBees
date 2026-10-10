@@ -45,7 +45,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements InstanceBlockEntityTicker, ContentContainerBlock<PositionContent> {
 
@@ -192,6 +194,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     protected void loadAdditional(@NonNull ValueInput input) {
         super.loadAdditional(input);
         input.readChild("tank", tank);
+        tankData = createTankDataPatch();
         input.readChild("battery", battery);
         input.readChild("inventory", inventory);
     }
@@ -302,10 +305,7 @@ public class HoneyGeneratorBlockEntity extends GUISyncedBlockEntity implements I
     }
 
     @Override
-    public <Data> void setSyncData(
-            DataComponentType<Data> type,
-            Optional<Data> data
-    ) {
+    public <Data> void setSyncData(DataComponentType<Data> type, Optional<Data> data) {
         if (type == ModDataComponents.SINGLE_TANK_DATA.get()) {
             tankData = (TankData) data.orElseThrow();
         }

@@ -39,12 +39,6 @@ public class SolidificationChamberRenderer implements BlockEntityRenderer<
     @Override
     public void extractRenderState(@NonNull SolidificationChamberBlockEntity chamber, @NonNull RenderState renderState, float partialTicks, @NonNull Vec3 cameraPosition, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
         BlockEntityRenderState.extractBase(chamber, renderState, breakProgress);
-
-        renderState.hasFluid = false;
-        renderState.fluidHeight = 0.0F;
-        renderState.fluidColor = 0xFFFFFFFF;
-        renderState.fluidSprite = null;
-
         FluidStack fluid = chamber.fluidStack();
 
         if (fluid.isEmpty()) {
@@ -55,11 +49,7 @@ public class SolidificationChamberRenderer implements BlockEntityRenderer<
         renderState.fluidHeight = fluid.amount() / TANK_CAPACITY;
 
         if (fluid.getFluid() instanceof CustomHoneyFluid.Still customHoney) {
-            renderState.fluidColor = customHoney
-                    .getHoneyFluidData()
-                    .renderData()
-                    .color()
-                    .getOpaqueValue();
+            renderState.fluidColor = customHoney.color();
         }
 
         FluidModel fluidModel = Minecraft.getInstance()
@@ -73,24 +63,19 @@ public class SolidificationChamberRenderer implements BlockEntityRenderer<
     }
 
     @Override
-    public void submit(
-            RenderState state,
-            @NonNull PoseStack poseStack,
-            @NonNull SubmitNodeCollector collector,
-            @NonNull CameraRenderState camera
-    ) {
+    public void submit(RenderState state, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector collector, @NonNull CameraRenderState camera) {
         if (!state.hasFluid || state.fluidSprite == null) {
             return;
         }
 
         AABB box = new AABB(
-                0.21925,
+                0.19,
                 0.34375,
-                0.21925,
+                0.19,
 
-                0.78075,
+                0.80,
                 0.34375 + state.fluidHeight * 0.6245,
-                0.78075
+                0.80
         );
 
         collector.submitCustomGeometry(
@@ -110,11 +95,11 @@ public class SolidificationChamberRenderer implements BlockEntityRenderer<
 
     public static class RenderState extends BlockEntityRenderState {
 
-        public boolean hasFluid;
-        public float fluidHeight;
+        public boolean hasFluid = false;
+        public float fluidHeight = 0;
         public int fluidColor = 0xFFFFFFFF;
 
         @Nullable
-        public TextureAtlasSprite fluidSprite;
+        public TextureAtlasSprite fluidSprite = null;
     }
 }

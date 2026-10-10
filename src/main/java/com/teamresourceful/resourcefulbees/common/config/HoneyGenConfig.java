@@ -27,8 +27,8 @@ public final class HoneyGenConfig {
         translation = "Max Tank Capacity"
     )
     @Comment("Maximum internal honey capacity BEFORE upgrades.")
-    @ConfigOption.Range(min = 1000, max = 100000)
-    public static int maxTankCapacity = 10000;
+    @ConfigOption.Range(min = 1000, max = 256_000)
+    public static int maxTankCapacity = 64_000;
 
     @ConfigEntry(
             id = "upgradeStackLimit",

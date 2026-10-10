@@ -304,6 +304,7 @@ public class SolidificationChamberBlockEntity extends GUISyncedBlockEntity imple
 
         @Override
         protected void onContentsChanged(int index, @NonNull FluidStack previousContents) {
+            tankData = createTankDataPatch();
             if (level instanceof ServerLevel) {
                 guiDirty = true;
             }

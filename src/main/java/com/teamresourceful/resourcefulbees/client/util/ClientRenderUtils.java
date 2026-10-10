@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.util;
 
 import com.teamresourceful.resourcefulbees.common.components.TankData;
+import com.teamresourceful.resourcefulbees.common.fluids.CustomHoneyFluid;
 import com.teamresourceful.resourcefullib.common.caches.CacheableBiFunction;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.client.Minecraft;
@@ -139,10 +140,16 @@ public final class ClientRenderUtils {
                 .stillMaterial()
                 .sprite();
 
+        var fluidColor = 0xFFFFFFFF;
+
+        if (fluid instanceof CustomHoneyFluid.Still customHoney) {
+            fluidColor = customHoney.color();
+        }
+
         drawTiledSprite(
                 graphics,
                 sprite,
-                0xFFFFFFFF,
+                fluidColor,
                 x,
                 y + height - fluidHeight,
                 width,

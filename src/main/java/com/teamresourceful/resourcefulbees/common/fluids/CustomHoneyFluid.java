@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.common.fluids;
 
 import com.teamresourceful.resourcefulbees.api.data.honey.fluid.HoneyFluidData;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import com.teamresourceful.resourcefullib.common.fluid.ResourcefulFlowingFluid;
 import com.teamresourceful.resourcefullib.common.fluid.data.FluidData;
@@ -27,14 +28,20 @@ public class CustomHoneyFluid {
     public static class Still extends ResourcefulFlowingFluid.Still {
 
         private final HoneyFluidData honeyFluidData;
+        private final Color color;
 
         public Still(HoneyFluidData honeyFluidData, FluidData data) {
             super(data);
             this.honeyFluidData = honeyFluidData;
+            this.color = honeyFluidData.renderData().color();
         }
 
         public HoneyFluidData getHoneyFluidData() {
             return honeyFluidData;
+        }
+
+        public int color() {
+            return color.getOpaqueValue();
         }
     }
 

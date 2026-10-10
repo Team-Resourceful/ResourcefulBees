@@ -36,7 +36,7 @@ public class CustomHoneyClientFluidProperties {
 
             @Override
             public int tintColor(@Nullable BlockAndTintGetter view, @Nullable BlockPos pos, @Nullable FluidState state) {
-                return renderData.color().withAlpha(255).getValue();
+                return renderData.color().getOpaqueValue();
             }
         };
     }

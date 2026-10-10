@@ -35,36 +35,23 @@ public class HoneyGenRenderer implements BlockEntityRenderer<HoneyGeneratorBlock
     }
 
     @Override
-    public void extractRenderState(@NonNull HoneyGeneratorBlockEntity tile, @NonNull RenderState state, float partialTick, @NonNull Vec3 cameraPosition, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
-        BlockEntityRenderState.extractBase(tile, state, breakProgress);
-        state.facing = tile.getBlockState().getValue(HoneyGeneratorBlock.FACING);
+    public void extractRenderState(@NonNull HoneyGeneratorBlockEntity generatorBlockEntity, @NonNull RenderState state, float partialTick, @NonNull Vec3 cameraPosition, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
+        BlockEntityRenderState.extractBase(generatorBlockEntity, state, breakProgress);
+        state.facing = generatorBlockEntity.getBlockState().getValue(HoneyGeneratorBlock.FACING);
 
-
-        TankData tankData = tile.tankData();
+        TankData tankData = generatorBlockEntity.tankData();
         FluidStack fluid = tankData.fluid();
 
-        state.hasFluid = !fluid.isEmpty();
 
-        if (!state.hasFluid) {
-            state.fluidSprite = null;
-            state.fluidHeight = 0;
+        if (fluid.isEmpty()) {
             return;
         }
 
-        int capacity = tankData.capacity();
-
-        state.fluidHeight = capacity > 0
-                ? Math.clamp(fluid.amount() / (float) capacity, 0.0F, 1.0F)
-                : 0.0F;
-
-        state.fluidColor = 0xFFFFFFFF;
+        state.hasFluid = true;
+        state.fluidHeight = Math.clamp(fluid.amount() / (float) tankData.capacity(), 0.0F, 1.0F);
 
         if (fluid.getFluid() instanceof CustomHoneyFluid.Still customHoney) {
-            state.fluidColor = customHoney
-                    .getHoneyFluidData()
-                    .renderData()
-                    .color()
-                    .getOpaqueValue();
+            state.fluidColor = customHoney.color();
         }
 
         FluidModel fluidModel = Minecraft.getInstance()
@@ -72,9 +59,7 @@ public class HoneyGenRenderer implements BlockEntityRenderer<HoneyGeneratorBlock
                 .getFluidStateModelSet()
                 .get(fluid.getFluid().defaultFluidState());
 
-        state.fluidSprite = fluidModel
-                .stillMaterial()
-                .sprite();
+        state.fluidSprite = fluidModel.stillMaterial().sprite();
     }
 
     @Override
@@ -108,8 +93,8 @@ public class HoneyGenRenderer implements BlockEntityRenderer<HoneyGeneratorBlock
         // y:  5 -> 13
         // z:  0 -> 12
         //
-        // Inset by half a model pixel to prevent z-fighting with the glass.
-        double inset = 0.5 / 16.0;
+        // Inset by point one pixel to prevent z-fighting with the glass.
+        double inset = 0.1 / 16.0;
 
         double minX = 10.0 / 16.0 + inset;
         double minY =  5.0 / 16.0 + inset;
@@ -150,13 +135,13 @@ public class HoneyGenRenderer implements BlockEntityRenderer<HoneyGeneratorBlock
 
     public static class RenderState extends BlockEntityRenderState {
 
-        public boolean hasFluid;
-        public float fluidHeight;
+        public boolean hasFluid = false;
+        public float fluidHeight = 0;
 
         public int fluidColor = 0xFFFFFFFF;
         public Direction facing = Direction.NORTH;
 
         @Nullable
-        public TextureAtlasSprite fluidSprite;
+        public TextureAtlasSprite fluidSprite = null;
     }
 }

@@ -27,12 +27,6 @@ public class BeeconEffectWidget extends AbstractWidget {
 
     private static final Identifier BACKGROUND = ModIdentifier.of("ender_beecon/background");
 
-    private static final Tooltip ACTIVE_TOOLTIP =
-            Tooltip.create(BeeconTranslations.EFFECT_ACTIVE);
-
-    private static final Tooltip INACTIVE_TOOLTIP =
-            Tooltip.create(BeeconTranslations.EFFECT_INACTIVE);
-
     private final EnderBeeconBlockEntity tile;
     private final Pair<Holder<MobEffect>, Float> effect;
     private boolean selected;

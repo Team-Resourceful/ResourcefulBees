@@ -27,6 +27,8 @@ import org.jspecify.annotations.NonNull;
 
 public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlockEntity, EnderBeeconRenderer.RenderState> {
 
+    private static final int TANK_CAPACITY = 64_000;
+
     public EnderBeeconRenderer(BlockEntityRendererProvider.Context context) {}
 
     @Override
@@ -36,20 +38,18 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
 
     @Override
     public void extractRenderState(@NonNull EnderBeeconBlockEntity beecon, @NonNull RenderState renderState, float partialTicks, @NonNull Vec3 cameraPosition, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
-        renderState.reset();
-
         BlockEntityRenderState.extractBase(beecon, renderState, breakProgress);
         FluidStack fluid = beecon.tankData().fluid();
-        renderState.hasFluid = !fluid.isEmpty();
-        renderState.fluidHeight = fluid.amount() / 16_000F;
 
-        if (!renderState.hasFluid) {
-            renderState.showBeam = false;
+        if (fluid.isEmpty()) {
             return;
         }
 
+        renderState.hasFluid = true;
+        renderState.fluidHeight = (float) fluid.amount() / TANK_CAPACITY;
+
         if (fluid.getFluid() instanceof CustomHoneyFluid.Still customHoney) {
-            renderState.fluidColor = customHoney.getHoneyFluidData().renderData().color().getOpaqueValue();
+            renderState.fluidColor = customHoney.color();
         }
 
         FluidModel fluidModel = Minecraft.getInstance()
@@ -57,9 +57,7 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
                 .getFluidStateModelSet()
                 .get(fluid.getFluid().defaultFluidState());
 
-        renderState.fluidSprite = fluidModel
-                .stillMaterial()
-                .sprite();
+        renderState.fluidSprite = fluidModel.stillMaterial().sprite();
 
         BlockState blockState = beecon.getBlockState();
 
@@ -111,7 +109,7 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
             return;
         }
 
-        double inset = 0.5 / 16.0;
+        double inset = 0.1 / 16.0;
 
         AABB box = new AABB(
                 inset,
@@ -145,26 +143,17 @@ public class EnderBeeconRenderer implements BlockEntityRenderer<EnderBeeconBlock
 
     public static class RenderState extends BlockEntityRenderState {
 
-        public boolean hasFluid;
-        public boolean showBeam;
+        public boolean hasFluid = false;
+        public boolean showBeam = false;
 
-        public float fluidHeight;
+        public float fluidHeight = 0;
 
         public int fluidColor = 0xFFFFFFFF;
 
-        public float animationTime;
+        public float animationTime = 0;
         public float beamRadiusScale = 1.0F;
 
         @Nullable
         public TextureAtlasSprite fluidSprite;
-
-        protected void reset() {
-            hasFluid = false;
-            showBeam = false;
-            fluidHeight = 0.0F;
-            fluidColor = 0xFFFFFFFF;
-            fluidSprite = null;
-            animationTime = 0F;
-        }
     }
 }

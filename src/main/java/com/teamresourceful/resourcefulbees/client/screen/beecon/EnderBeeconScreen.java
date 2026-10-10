@@ -64,8 +64,6 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
     @Override
     protected void init() {
         super.init();
-        clearWidgets();
-
         var state = menu.getEntity().getBlockState();
 
         addRenderableWidget(TankWidget.single(leftPos+17, topPos+27, 14, 56, tileEntity::tankData));
@@ -155,7 +153,7 @@ public class EnderBeeconScreen extends AbstractContainerScreen<EnderBeeconMenu> 
                     menu.getEntity(),
                     leftPos + EFFECT_X,
                     topPos + EFFECT_TOP,
-                    leftPos + 100, //todo chnage this to be narrower in scope
+                    leftPos + 100, //todo change this to be narrower in scope
                     topPos + EFFECT_BOTTOM
             );
 
