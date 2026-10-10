@@ -8,17 +8,14 @@ import com.teamresourceful.resourcefulbees.common.modcompat.jei.ingredients.Enti
 import com.teamresourceful.resourcefulbees.common.modcompat.jei.ingredients.EntityRenderer;
 import com.teamresourceful.resourcefulbees.common.modcompat.jei.mutation.MutationCategory;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
-import com.teamresourceful.resourcefulbees.common.subsystems.JeiSubsystem;
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.helpers.IPlatformFluidHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
@@ -32,7 +29,6 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.ServiceLoader;
 
 @JeiPlugin
 public final class JEICompat implements IModPlugin {
@@ -108,15 +104,6 @@ public final class JEICompat implements IModPlugin {
                 ModItems.CENTRIFUGE.get(),
                 ModItems.CENTRIFUGE_CRANK.get()
         );
-
-        ServiceLoader.load(JeiSubsystem.class)
-                .stream()
-                .map(ServiceLoader.Provider::get)
-                .forEach(system -> system.addRecipeCatalysts((ingredient, recipeTypes) -> {
-                    for (IRecipeType<?> recipeType : recipeTypes) {
-                        registration.addCraftingStation(recipeType, ingredient.getItem());
-                    }
-                }));
     }
 
     @Override
@@ -173,20 +160,6 @@ public final class JEICompat implements IModPlugin {
                 FlowHiveCategory.RECIPE,
                 FlowHiveCategory.getHoneycombRecipes(unwrapRecipes(RBeesClientRecipes.getFlowHiveRecipes()))
         );
-
-        ServiceLoader.load(JeiSubsystem.class)
-                .stream()
-                .map(ServiceLoader.Provider::get)
-                .forEach(system ->
-                        system.addExtraInfo(
-                                (item, text) ->
-                                        registration.addIngredientInfo(
-                                                item,
-                                                VanillaTypes.ITEM_STACK,
-                                                text
-                                        )
-                        )
-                );
     }
 
     @Override
@@ -217,14 +190,6 @@ public final class JEICompat implements IModPlugin {
          *     ModDataComponents.<BEEPEDIA_COMPONENT>.get()
          * );
          */
-    }
-
-    @Override
-    public void registerGuiHandlers(@NotNull IGuiHandlerRegistration registration) {
-        ServiceLoader.load(JeiSubsystem.class)
-                .stream()
-                .map(ServiceLoader.Provider::get)
-                .forEach(system -> system.addScreenHandlers(registration::addGhostIngredientHandler));
     }
 
     @Override
