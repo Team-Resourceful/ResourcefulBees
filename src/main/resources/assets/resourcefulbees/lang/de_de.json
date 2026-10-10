@@ -97,9 +97,7 @@
 	"block.resourcefulbees.centrifuge_casing": "Zentrifuge Hülle",
 	"block.resourcefulbees.centrifuge.tooltip.info": "Wandelt Waben mithilfe von RF in Ressourcen um.",
 
-	"item.resourcefulbees.smoker_can": "Raucherkanister",
 	"item.resourcefulbees.smoker": "Bienenraucher",
-	"item.resourcefulbees.bellow": "Blasebalg",
 	"item.resourcefulbees.wax": "Bienenwachs",
 	"item.resourcefulbees.pollen": "Pollen",
 	"item.resourcefulbees.fertilizer": "Dünger",

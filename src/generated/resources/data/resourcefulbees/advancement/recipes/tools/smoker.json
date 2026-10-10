@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_smoker_can": {
+    "has_iron": {
       "conditions": {
         "items": [
           {
-            "items": "resourcefulbees:smoker_can"
+            "items": "minecraft:iron_ingot"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_smoker_can"
+      "has_iron"
     ]
   ],
   "rewards": {

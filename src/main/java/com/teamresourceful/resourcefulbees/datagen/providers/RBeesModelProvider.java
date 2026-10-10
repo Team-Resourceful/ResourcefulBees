@@ -566,16 +566,6 @@ public class RBeesModelProvider extends ModelProvider {
 //        );
 //
 //        itemModels.generateFlatItem(
-//                ModItems.SMOKER_CAN.get(),
-//                ModelTemplates.FLAT_ITEM
-//        );
-//
-//        itemModels.generateFlatItem(
-//                ModItems.BELLOW.get(),
-//                ModelTemplates.FLAT_ITEM
-//        );
-//
-//        itemModels.generateFlatItem(
 //                ModItems.OREO_COOKIE.get(),
 //                ModelTemplates.FLAT_ITEM
 //        );

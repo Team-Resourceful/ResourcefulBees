@@ -308,15 +308,6 @@ public class RBeesRecipeProvider extends RecipeProvider {
     }
 
     private void buildTools() {
-        shaped(RecipeCategory.TOOLS, ModItems.SMOKER_CAN.get())
-                .pattern("II ")
-                .pattern("I I")
-                .pattern("ICI")
-                .define('I', Items.IRON_INGOT)
-                .define('C', Items.CAMPFIRE)
-                .unlockedBy("has_iron", has(Items.IRON_INGOT))
-                .save(output);
-
         shaped(RecipeCategory.TOOLS, ModItems.SCRAPER.get())
                 .pattern(" II")
                 .pattern(" SI")
@@ -332,14 +323,6 @@ public class RBeesRecipeProvider extends RecipeProvider {
                 .pattern("GGG")
                 .define('G', Tags.Items.GLASS_PANES_COLORLESS)
                 .unlockedBy("has_glass_panes", has(Tags.Items.GLASS_PANES_COLORLESS))
-                .save(output);
-
-        shaped(RecipeCategory.TOOLS, ModItems.BELLOW.get())
-                .pattern("LL ")
-                .pattern("L L")
-                .pattern(" LL")
-                .define('L', Items.LEATHER)
-                .unlockedBy("has_leather", has(Items.LEATHER))
                 .save(output);
 
         /*
@@ -367,10 +350,14 @@ public class RBeesRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_honeycomb", has(ModItemTags.HONEYCOMBS))
                 .save(output);
 
-        shapeless(RecipeCategory.TOOLS, ModItems.SMOKER.get())
-                .requires(ModItems.SMOKER_CAN.get())
-                .requires(ModItems.BELLOW.get())
-                .unlockedBy("has_smoker_can", has(ModItems.SMOKER_CAN.get()))
+        shaped(RecipeCategory.TOOLS, ModItems.SMOKER.get())
+                .pattern("II ")
+                .pattern("IIL")
+                .pattern("ICI")
+                .define('I', Items.IRON_INGOT)
+                .define('C', Items.CAMPFIRE)
+                .define('L', Items.LEATHER)
+                .unlockedBy("has_iron", has(Items.IRON_INGOT))
                 .save(output);
     }
 

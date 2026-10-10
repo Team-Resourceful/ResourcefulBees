@@ -40,8 +40,6 @@ public class ModCreativeTabs {
                 output.accept(ModItems.HONEY_DIPPER.get());
                 output.accept(ModItems.SCRAPER.get());
                 output.accept(ModItems.SMOKER.get());
-                output.accept(ModItems.BELLOW.get());
-                output.accept(ModItems.SMOKER_CAN.get());
                 output.accept(ModItems.BEE_LOCATOR.get());
                 output.accept(ModItems.BEEPEDIA.get());
                 output.accept(ModItems.BEEPEDIA_CREATIVE.get());

@@ -98,8 +98,6 @@ public final class ModItems {
     public static final HolderRegistryEntry<Item> HONEY_DIPPER = registerItem(ITEMS, "honey_dipper", HoneyDipperItem::new, () -> new Item.Properties().stacksTo(1).component(ModDataComponents.DIPPER_ENTITY, DipperEntity.EMPTY));
 
     public static final HolderRegistryEntry<Item> SMOKER = registerItem(ITEMS, "smoker", SmokerItem::new, () -> new Item.Properties().durability(GeneralConfig.smokerDurability));
-    public static final HolderRegistryEntry<Item> BELLOW = registerItem(ITEMS, "bellow", Item::new, Item.Properties::new);
-    public static final HolderRegistryEntry<Item> SMOKER_CAN = registerItem(ITEMS, "smoker_can", Item::new, Item.Properties::new);
 
     public static final HolderRegistryEntry<Item> BEE_BOX_TEMP = registerItem(ITEMS, "bee_box_temp", properties -> BeeBoxItem.temp(ModBlocks.BEE_BOX_TEMP.get(), properties), () -> new Item.Properties().stacksTo(1));
     public static final HolderRegistryEntry<Item> BEE_BOX = registerItem(ITEMS, "bee_box", properties -> BeeBoxItem.of(ModBlocks.BEE_BOX.get(), properties), () -> new Item.Properties().stacksTo(1).component(ModDataComponents.BEE_BOX_OCCUPANTS, BeeBoxOccupants.EMPTY));
