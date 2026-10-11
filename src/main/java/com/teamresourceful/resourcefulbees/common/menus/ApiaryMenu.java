@@ -31,7 +31,7 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
     protected void addMenuSlots() {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new ResourceHandlerSlot(entity.resourceHandler(), entity.resourceHandler()::set, j + i * 9, 56 + j * 18, 18 + i * 18) {
+                this.addSlot(new ResourceHandlerSlot(entity.resourceHandler(), entity.resourceHandler()::set, j + i * 9, 41 + j * 18, 81 + i * 18) {
                     @Override
                     public boolean mayPlace(@NonNull ItemStack stack) {
                         return false;
@@ -63,12 +63,12 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
 
     @Override
     public int getPlayerInvXOffset() {
-        return 56;
+        return 41;
     }
 
     @Override
     public int getPlayerInvYOffset() {
-        return 86;
+        return 172;
     }
 
     public void lockOrUnlockBee(int id) {

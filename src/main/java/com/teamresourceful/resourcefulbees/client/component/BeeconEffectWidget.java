@@ -37,7 +37,7 @@ public class BeeconEffectWidget extends AbstractWidget {
     private final int clipBottom;
 
     public BeeconEffectWidget(int x, int y, Pair<Holder<MobEffect>, Float> effect, EnderBeeconBlockEntity tile, int clipLeft, int clipTop, int clipRight, int clipBottom) {
-        super(x, y, 27, 23, BeeconTranslations.BEECON_EFFECT_BUTTON);
+        super(x, y, 24, 25, BeeconTranslations.BEECON_EFFECT_BUTTON);
         this.tile = tile;
         this.effect = effect;
         this.effectSprite = Hud.getMobEffectSprite(effect.getFirst());
@@ -62,9 +62,16 @@ public class BeeconEffectWidget extends AbstractWidget {
     @Override
     protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         graphics.enableScissor(clipLeft, clipTop, clipRight, clipBottom);
+        // RID: Added Hover effect
+        int v = isSelected() ? 204 : 180;
         try {
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 178, selected ? 112 : 136, getX(), getY() + 1, 27, 23);
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, effectSprite, getX() + 2, getY() + 2, 18, 18);
+            if (this.isHovered()) {
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, v, 101, getX(), getY(), 24, 25);
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, effectSprite, getX() + 3, getY() + 4, 18, 18);
+            } else {
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, v, 76, getX(), getY(), 24, 25);
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, effectSprite, getX() + 3, getY() + 3, 18, 18);
+            }
         } finally {
             graphics.disableScissor();
         }

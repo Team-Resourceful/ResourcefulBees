@@ -10,16 +10,20 @@ import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.NonNull;
 
 public class BeeconToggleWidget extends AbstractWidget {
-
+    // RID: Added Width and Height variables instead of hard-coded as I needed more control over them.
     private final Identifier texture;
     private final int u;
     private final int v;
+    private final int w;
+    private final int h;
     private boolean selected;
 
-    public BeeconToggleWidget(int x, int y, int u, int v, boolean selected, Identifier texture) {
-        super(x, y, 14, 14, Component.empty());
+    public BeeconToggleWidget(int x, int y, int u, int v, int w, int h, boolean selected, Identifier texture) {
+        super(x, y, w, h, Component.empty());
         this.u = u;
         this.v = v;
+        this.w = w;
+        this.h = h;
         this.selected = selected;
         this.texture = texture;
     }
@@ -34,14 +38,13 @@ public class BeeconToggleWidget extends AbstractWidget {
 
     @Override
     protected void extractWidgetRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-        //int textureU = this.selected ? this.u + 20 : this.u;
-        //int textureV = this.isHovered() ? this.v + 20 : this.v;
-
-        //graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.texture, 256, 256, textureU, textureV, this.getX(), this.getY(), 20, 20);
-
-        int v1 = this.selected ? 0 : v + 15;
-        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.texture, 256, 256, u, v1, getX(), getY(), 14, 14);
-        //graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.texture, 256, 256, u, v1, getX(), getY() + 15, 14, 14);
+        // RID: Added hover effect.
+        int v1 = this.selected ? 0 : v + h + 19;
+        if (this.isHovered()) {
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.texture, 256, 256, u, v1 + 19, getX(), getY(), w, h);
+        } else {
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.texture, 256, 256, u, v1, getX(), getY(), w, h);
+        }
     }
 
     @Override

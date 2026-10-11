@@ -98,7 +98,7 @@ public class BeeconScrollbarWidget extends AbstractWidget {
         dragging = true;
 
         if (event.y() >= thumbY && event.y() < thumbY + thumbHeight) {
-            dragOffset = event.y() - thumbY;
+            dragOffset = event.y() - thumbY + 20;
         } else {
             dragOffset = thumbHeight / 2.0;
             scrollToMouse(event.y());

@@ -10,7 +10,8 @@ public final class BreederConstants {
         throw new UtilityClassException();
     }
 
-    public static final int BREEDERS = 2;
+    // RID: Changed BREEDERS to 1 row
+    public static final int BREEDERS = 1;
 
     public static final int UPGRADE_SLOT = 0;
     public static final int OUTPUT_SLOT_START = 11;
