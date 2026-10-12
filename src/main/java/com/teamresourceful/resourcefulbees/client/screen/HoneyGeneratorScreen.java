@@ -47,8 +47,8 @@ public class HoneyGeneratorScreen extends BaseScreen<HoneyGeneratorMenu> {
         super.extractLabels(graphics, mouseX, mouseY);
         FluidStack fluid = menu.getEntity().tankData().fluid();
 
-        graphics.text(font, Component.literal("Fluid:"), 47, 30, 0xFF4f312b, false);
-        graphics.text(font, Component.literal("Fluid:"), 47, 29, 0xFFf1d65d, false);
+        graphics.text(font, Component.literal("Fluid:"), 47, 31, 0xFF4f312b, false);
+        graphics.text(font, Component.literal("Fluid:"), 47, 30, 0xFFf1d65d, false);
 
         graphics.drawScrollingString(graphics.textRenderer(), font, fluid.isEmpty()
                 ? GuiTranslations.NO_FLUID.copy().withColor(0xFF4f312b).withoutShadow()
@@ -59,8 +59,8 @@ public class HoneyGeneratorScreen extends BaseScreen<HoneyGeneratorMenu> {
                         : fluid.getHoverName().copy().withColor(0xFFf1d65d).withoutShadow()
                 , 47, 133, 40);
 
-        graphics.text(font, Component.literal("Amount: " + fluid.amount() + " mB"), 47, 52, 0xFF4f312b, false);
-        graphics.text(font, Component.literal("Amount: " + fluid.amount() + " mB"), 47, 51, 0xFFf1d65d, false);
+        graphics.text(font, Component.literal("Amount: " + fluid.amount() + " mB"), 47, 51, 0xFF4f312b, false);
+        graphics.text(font, Component.literal("Amount: " + fluid.amount() + " mB"), 47, 50, 0xFFf1d65d, false);
     }
 
     @Override
