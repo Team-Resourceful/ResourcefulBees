@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.client.screen;
 import com.teamresourceful.resourcefulbees.client.component.ApiaryToggleWidget;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
+import com.teamresourceful.resourcefulbees.common.components.ApiaryOccupant;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.ApiaryTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
@@ -31,11 +32,12 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
     private static final Identifier BACKGROUND = ModIdentifier.of("apiary/background");
     private static final Identifier SCROLLBAR = ModIdentifier.of("apiary/scrollbar");
 
-    private final Map<Integer, Entity> previewEntities = new HashMap<>();
     private int beeIndexOffset;
     private float sliderProgress;
     private boolean clickedOnScroll;
     private final ApiaryBlockEntity apiaryBlockEntity;
+    private final Map<Integer, BeePreview> previewEntities = new HashMap<>();
+    private record BeePreview(ApiaryOccupant occupant, Entity entity) {}
 
     public ApiaryScreen(ApiaryMenu screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
@@ -61,13 +63,22 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
             // Scrollbar
             // RID: Moved the scrollbar into its own sprite and have it expand horizontally instead.
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLBAR, 60, 60, 48, 0, i + 86 + k, j + 63, 11, 8);
-            int beeLeft = this.leftPos + 35;
+            int beeLeft = this.leftPos + 37;
             int beeTop = this.topPos + 26;
             int beeIndexOffsetMax = this.beeIndexOffset + 7;
             this.drawRecipesBackground(beeLeft, beeTop, beeIndexOffsetMax);
-            this.drawBees(graphics, beeLeft, beeTop, beeIndexOffsetMax);
             this.renderBeeToolTip(graphics, mouseX, mouseY, beeLeft, beeTop, beeIndexOffsetMax);
         }
+    }
+
+    // RID: Moved the Bee render to extractRenderState so it renders on top of the widget.
+    @Override
+    public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractRenderState(graphics, mouseX, mouseY, a);
+        if (apiaryBlockEntity != null) {
+            drawBees(graphics, this.leftPos + 37, this.topPos + 26,this.beeIndexOffset + 7, mouseX, mouseY);
+        }
+
     }
 
     @Override
@@ -77,8 +88,12 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
             return;
         }
 
-        String beeCount = "(%1$s/%2$s)".formatted(apiaryBlockEntity.beeCount(), apiaryBlockEntity.getTier().maxBees());
-        graphics.text(this.font, beeCount, 4, 17, 0xff404040, false);
+//        String beeCount = "(%1$s/%2$s)".formatted(apiaryBlockEntity.beeCount(), apiaryBlockEntity.getTier().maxBees());
+//        graphics.text(this.font, beeCount, 4, 17, 0xff404040, false);
+        graphics.text(this.font, "%02d".formatted(apiaryBlockEntity.beeCount()), 36, 64, 0xFF995b35, false);
+        graphics.text(this.font, "%02d".formatted(apiaryBlockEntity.beeCount()), 36, 63, 0xFF4f312b, false);
+        graphics.text(this.font, "%02d".formatted(apiaryBlockEntity.getTier().maxBees()), 53, 64, 0xFF995b35, false);
+        graphics.text(this.font, "%02d".formatted(apiaryBlockEntity.getTier().maxBees()), 53, 63, 0xFF4f312b, false);
     }
 
     private void renderBeeToolTip(GuiGraphicsExtractor graphics, int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {
@@ -93,8 +108,7 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
                 List<FormattedCharSequence> beeInfo = List.of(
                         apiaryBee.displayName().getVisualOrderText(),
                         Component.translatable(ApiaryTranslations.TICKS_HIVE, ticksInHive).getVisualOrderText(),
-                        Component.translatable(ApiaryTranslations.TICKS_LEFT, Math.max(apiaryBee.minOccupationTicks() - ticksInHive, 0)).getVisualOrderText(),
-                        Component.translatable("is Locked: " + apiaryBee.locked()).getVisualOrderText() // RID: For testing purposes - TO BE REMOVED
+                        Component.translatable(ApiaryTranslations.TICKS_LEFT, Math.max(apiaryBee.minOccupationTicks() - ticksInHive, 0)).getVisualOrderText()
                 );
 
                 graphics.setTooltipForNextFrame(beeInfo, mouseX, mouseY);
@@ -109,7 +123,7 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
             var bee = this.menu.getApiaryBee(i);
 
             int finalI = i;
-            addRenderableWidget(new ApiaryToggleWidget(left + finalI * 24, top, 0, 0, 24, 28,
+            addRenderableWidget(new ApiaryToggleWidget(left + (finalI - this.beeIndexOffset) * 24, top, 0, 0, 24, 28,
                     bee.locked(),
                     SCROLLBAR) {
                 @Override
@@ -124,7 +138,7 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
 
     }
 
-    private void drawBees(GuiGraphicsExtractor graphics, int left, int top, int beeIndexOffsetMax) {
+    private void drawBees(GuiGraphicsExtractor graphics, int left, int top, int beeIndexOffsetMax, int mouseX, int mouseY) {
         Minecraft minecraft = Minecraft.getInstance();
 
         if (minecraft.level == null) {
@@ -133,35 +147,41 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
 
         for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.beeCount(); ++i) {
             int index = i - this.beeIndexOffset;
-            int x = left + index * 24 + 8;
+            int x = left + index * 24 + 4;
+            boolean hovered = mouseX >= x && mouseX < x + 24 && mouseY >= top && mouseY < top + 28;
+
 
             var apiaryBee = this.menu.getApiaryBee(i);
+            boolean locked = apiaryBee.locked();
 
-            Entity entity = previewEntities.computeIfAbsent(i, ignored -> {
-                Entity created = apiaryBee.createEntity(
-                        minecraft.level,
-                        BlockPos.ZERO
-                );
+            int beeY = top + (locked
+                    ? (hovered ? 7 : 6)   // Hover Locked / Locked
+                    : (hovered ? 6 : 4)); // Hovered
 
-                if (created != null) {
-                    ClientRenderUtils.preparePreviewEntity(created);
+            // RID: Switched to using Bee Occupant to render the bee to avoid needing to close the GUI to update its occupants.
+            BeePreview preview = previewEntities.get(i);
+            if (preview == null || !preview.occupant().entityData().equals(apiaryBee.entityData())) {
+                Entity entity = apiaryBee.createEntity(minecraft.level, BlockPos.ZERO);
+                if (entity == null) {
+                    previewEntities.remove(i);
+                    continue;
                 }
 
-                return created;
-            });
-
-            if (entity != null) {
-                ClientRenderUtils.renderEntity(
-                        graphics,
-                        entity,
-                        x,
-                        top + 4,
-                        16,
-                        16,
-                        180f,
-                        0.85f
-                );
+                ClientRenderUtils.preparePreviewEntity(entity);
+                preview = new BeePreview(apiaryBee, entity);
+                previewEntities.put(i, preview);
             }
+
+            ClientRenderUtils.renderEntity(
+                    graphics,
+                    preview.entity(),
+                    x,
+                    beeY,
+                    16,
+                    16,
+                    180f,
+                    0.65f
+            );
         }
     }
 
@@ -201,23 +221,8 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
         double mouseY = event.y();
         this.clickedOnScroll = false;
         if (apiaryBlockEntity.beeCount() > 0) {
-            int i = this.leftPos + 24;
-            int j = this.topPos;
-            int k = this.beeIndexOffset + 7;
-
-//            for (int l = this.beeIndexOffset; l < k; ++l) {
-//                int i1 = l - this.beeIndexOffset;
-//                double d0 = mouseX - (i);
-//                double d1 = mouseY - (j + i1 * 18);
-//                if (d0 >= 24.0D && d1 >= 0.0D && d0 <= 48.0D && d1 <= 24.0D) {
-//                    this.menu.lockOrUnlockBee(l);
-//                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-//                    return true;
-//                }
-//            }
-
-            i = this.leftPos + 44;
-            j = this.topPos + 34 + ((int) (99.0F * this.sliderProgress));
+            int i = this.leftPos + 44;
+            int j = this.topPos + 34 + ((int) (99.0F * this.sliderProgress));
 
             if (mouseX >= i && mouseX < (i + 6) && mouseY >= j && mouseY <= (j + 27)) {
                 this.clickedOnScroll = true;

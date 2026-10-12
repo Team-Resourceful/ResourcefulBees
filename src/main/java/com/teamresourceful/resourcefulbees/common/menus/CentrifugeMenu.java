@@ -49,20 +49,20 @@ public class CentrifugeMenu extends AbstractModContainerMenu<CentrifugeBlockEnti
 
     @Override
     public int getPlayerInvXOffset() {
-        return 8;
+        return 10;
     }
 
     @Override
     public int getPlayerInvYOffset() {
-        return 84;
+        return 116;
     }
 
     @Override
     protected void addMenuSlots() {
-        this.addSlot(new ResourceHandlerSlot(entity.itemResourceHandler(), entity.itemResourceHandler()::set, 0, 26, 11));
+        this.addSlot(new ResourceHandlerSlot(entity.itemResourceHandler(), entity.itemResourceHandler()::set, 0, 17, 29));
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 4; ++j) {
-                this.addSlot(new ResourceHandlerSlot(entity.itemResourceHandler(), entity.itemResourceHandler()::set, 1 + j + i * 4, 62 + j * 18, 11 + i * 18) {
+                this.addSlot(new ResourceHandlerSlot(entity.itemResourceHandler(), entity.itemResourceHandler()::set, 1 + j + i * 4, 61 + j * 18, 28 + i * 18) {
                     @Override
                     public boolean mayPlace(@NonNull ItemStack stack) {
                         return false;

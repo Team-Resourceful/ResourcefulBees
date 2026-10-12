@@ -10,10 +10,11 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
+import org.jspecify.annotations.NonNull;
 
-public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
+public class CentrifugeScreen extends BaseScreen<CentrifugeMenu> {
 
-    private static final Identifier TEXTURE = ModIdentifier.of("centrifuge/basic.png");
+    private static final Identifier BACKGROUND = ModIdentifier.of("centrifuge/background");
 
     private final CentrifugeBlockEntity tileEntity;
     private TankWidget tankWidget;
@@ -21,13 +22,15 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
     public CentrifugeScreen(CentrifugeMenu menu, Inventory inventory, Component displayName) {
         super(menu, inventory, displayName);
         tileEntity = menu.getEntity();
-        titleLabelY -= 3;
+        titleLabelX = 7;
+        inventoryLabelX = 7;
+        inventoryLabelY = 103;
     }
 
     @Override
     protected void init() {
         super.init();
-        tankWidget = TankWidget.selectable(leftPos + 152, topPos + 23, 16, 52, tileEntity::tankData);
+        tankWidget = TankWidget.selectable(leftPos + 148, topPos + 27, 12, 54, tileEntity::tankData);
         addRenderableWidget(tankWidget);
     }
 
@@ -37,7 +40,7 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
         if (tileEntity != null) {
             int i = this.leftPos;
             int j = this.topPos;
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, TEXTURE, 256, 256, 0, 0, i, j, this.imageWidth, this.imageHeight);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, 0, i, j, 180, 200);
         }
     }
 
@@ -46,7 +49,13 @@ public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
         if (tankWidget != null && tankWidget.isMouseOver(x, y) && tankWidget.mouseScrolled(x, y, scrollX, scrollY)) {
             return true;
         }
-
         return super.mouseScrolled(x, y, scrollX, scrollY);
+    }
+
+    @Override
+    public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractRenderState(graphics, mouseX, mouseY, a);
+        // RID: Blit-ing an empty tank sprite on top of the rendered fluid to keep the shine in the foreground.
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 180, 0, leftPos + 147, topPos + 26, 12, 54);
     }
 }
