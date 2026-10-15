@@ -65,6 +65,7 @@ public class EnderBeeconScreen extends CustomContainerScreen<EnderBeeconMenu, En
 
                     return Widgets.button()
                             .withSize(16, 19)
+                            .withSounds(true)
                             .withCallback(InputConstants.MOUSE_BUTTON_LEFT, () -> state.set(!state.get()))
                             .withBackground(CustomWidgetRenderers.toggleable(state, option.sprites()));
                 })
@@ -116,6 +117,7 @@ public class EnderBeeconScreen extends CustomContainerScreen<EnderBeeconMenu, En
                             this.getEntity().getBlockPos()
                     )));
 
+                    button.withSounds(true);
                     button.withSize(22, 23);
                     button.withCallback(InputConstants.MOUSE_BUTTON_LEFT, () -> state.set(!state.get()));
                     button.withBackground(CustomWidgetRenderers.toggleable(state, BeeconScreenConstants.EFFECT_BUTTON));
