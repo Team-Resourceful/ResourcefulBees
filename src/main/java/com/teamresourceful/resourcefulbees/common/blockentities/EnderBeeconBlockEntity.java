@@ -540,10 +540,10 @@ public class EnderBeeconBlockEntity extends GUISyncedBlockEntity implements Inst
 
         public static Target ordinalOf(int ordinal) {
             if (ordinal == 1) {
-                return PLAYER;
+                return BEE;
             }
 
-            return BEE;
+            return PLAYER;
         }
     }
 }
