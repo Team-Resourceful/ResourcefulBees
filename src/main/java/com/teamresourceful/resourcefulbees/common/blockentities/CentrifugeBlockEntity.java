@@ -69,9 +69,9 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
     private static final RawAnimation ROT_270 = RawAnimation.begin().thenPlay("animation.centrifuge.270");
     private static final RawAnimation ROT_315 = RawAnimation.begin().thenPlay("animation.centrifuge.315");
 
-    private static final int SLOTS = 13;
-    private static final int TANKS = 6;
-    private static final int TANK_CAPACITY = 32000;
+    public static final int SLOTS = 13;
+    public static final int TANKS = 6;
+    public static final int TANK_CAPACITY = 32000;
 
     private final CentrifugeItemResourceHandler inventory = new CentrifugeItemResourceHandler();
     private final CentrifugeFluidResourceHandler tank = new CentrifugeFluidResourceHandler();
@@ -109,7 +109,7 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
 
     @Override
     public <Data> void setSyncData(DataComponentType<Data> type, Optional<Data> data) {
-        if (type == ModDataComponents.SINGLE_TANK_DATA.get()) {
+        if (type == ModDataComponents.MULTI_TANK_DATA.get()) {
             data.ifPresent(data1 -> tankData = (List<TankData>) data1);
         }
     }

@@ -1,6 +1,7 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
 import com.teamresourceful.resourcefulbees.client.component.ApiaryToggleWidget;
+import com.teamresourceful.resourcefulbees.client.screen.base.CustomContainerScreen;
 import com.teamresourceful.resourcefulbees.client.util.ClientRenderUtils;
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.components.ApiaryOccupant;
@@ -27,77 +28,65 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
+public class ApiaryScreen extends CustomContainerScreen<ApiaryMenu, ApiaryBlockEntity> {
 
-    private static final Identifier BACKGROUND = ModIdentifier.of("apiary/background");
     private static final Identifier SCROLLBAR = ModIdentifier.of("apiary/scrollbar");
 
     private int beeIndexOffset;
     private float sliderProgress;
     private boolean clickedOnScroll;
-    private final ApiaryBlockEntity apiaryBlockEntity;
     private final Map<Integer, BeePreview> previewEntities = new HashMap<>();
     private record BeePreview(ApiaryOccupant occupant, Entity entity) {}
 
     public ApiaryScreen(ApiaryMenu screenContainer, Inventory inv, Component titleIn) {
-        super(screenContainer, inv, titleIn);
-        apiaryBlockEntity = this.menu.getEntity();
-        titleLabelX = 7;
-        inventoryLabelX = 37;
-        inventoryLabelY = 159;
+        super(screenContainer, inv, titleIn, 242, 256);
+
+        this.background = ModIdentifier.of("textures/gui/containers/apiary.png");
+        this.titleLabelX = 7;
+        this.inventoryLabelX = 37;
+        this.inventoryLabelY = 159;
     }
 
     @Override
     public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractBackground(graphics, mouseX, mouseY, a);
-        if (apiaryBlockEntity != null) {
-            int i = this.leftPos;
-            int j = this.topPos;
-            // Background
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, 0, i, j, 242, 256);
-            if (!this.canScroll()) {
-                this.sliderProgress = 0;
-            }
-            // RID: Changed from 99.0F to 105.0F to expand the scrollbar further.
-            int k = (int) (105.0F * this.sliderProgress);
-            // Scrollbar
-            // RID: Moved the scrollbar into its own sprite and have it expand horizontally instead.
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLBAR, 60, 60, 48, 0, i + 86 + k, j + 63, 11, 8);
-            int beeLeft = this.leftPos + 37;
-            int beeTop = this.topPos + 26;
-            int beeIndexOffsetMax = this.beeIndexOffset + 7;
-            this.drawRecipesBackground(beeLeft, beeTop, beeIndexOffsetMax);
-            this.renderBeeToolTip(graphics, mouseX, mouseY, beeLeft, beeTop, beeIndexOffsetMax);
+        int i = this.leftPos;
+        int j = this.topPos;
+
+        if (!this.canScroll()) {
+            this.sliderProgress = 0;
         }
+        // RID: Changed from 99.0F to 105.0F to expand the scrollbar further.
+        int k = (int) (105.0F * this.sliderProgress);
+        // Scrollbar
+        // RID: Moved the scrollbar into its own sprite and have it expand horizontally instead.
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLBAR, 60, 60, 48, 0, i + 86 + k, j + 63, 11, 8);
+        int beeLeft = this.leftPos + 37;
+        int beeTop = this.topPos + 26;
+        int beeIndexOffsetMax = this.beeIndexOffset + 7;
+        this.drawRecipesBackground(beeLeft, beeTop, beeIndexOffsetMax);
+        this.renderBeeToolTip(graphics, mouseX, mouseY, beeLeft, beeTop, beeIndexOffsetMax);
     }
 
     // RID: Moved the Bee render to extractRenderState so it renders on top of the widget.
     @Override
     public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractRenderState(graphics, mouseX, mouseY, a);
-        if (apiaryBlockEntity != null) {
-            drawBees(graphics, this.leftPos + 37, this.topPos + 26,this.beeIndexOffset + 7, mouseX, mouseY);
-        }
-
+        drawBees(graphics, this.leftPos + 37, this.topPos + 26,this.beeIndexOffset + 7, mouseX, mouseY);
     }
 
     @Override
     protected void extractLabels(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         super.extractLabels(graphics, mouseX, mouseY);
-        if (apiaryBlockEntity == null) {
-            return;
-        }
 
-//        String beeCount = "(%1$s/%2$s)".formatted(apiaryBlockEntity.beeCount(), apiaryBlockEntity.getTier().maxBees());
-//        graphics.text(this.font, beeCount, 4, 17, 0xff404040, false);
-        graphics.text(this.font, "%02d".formatted(apiaryBlockEntity.beeCount()), 36, 64, 0xFF995b35, false);
-        graphics.text(this.font, "%02d".formatted(apiaryBlockEntity.beeCount()), 36, 63, 0xFF4f312b, false);
-        graphics.text(this.font, "%02d".formatted(apiaryBlockEntity.getTier().maxBees()), 53, 64, 0xFF995b35, false);
-        graphics.text(this.font, "%02d".formatted(apiaryBlockEntity.getTier().maxBees()), 53, 63, 0xFF4f312b, false);
+        graphics.text(this.font, "%02d".formatted(this.block().beeCount()), 36, 64, 0xFF995b35, false);
+        graphics.text(this.font, "%02d".formatted(this.block().beeCount()), 36, 63, 0xFF4f312b, false);
+        graphics.text(this.font, "%02d".formatted(this.block().getTier().maxBees()), 53, 64, 0xFF995b35, false);
+        graphics.text(this.font, "%02d".formatted(this.block().getTier().maxBees()), 53, 63, 0xFF4f312b, false);
     }
 
     private void renderBeeToolTip(GuiGraphicsExtractor graphics, int mouseX, int mouseY, int left, int top, int beeIndexOffsetMax) {
-        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.beeCount(); ++i) {
+        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < this.block().beeCount(); ++i) {
             int index = i - this.beeIndexOffset;
             int x = left + index * 24;
 
@@ -119,7 +108,7 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
 
     private void drawRecipesBackground(int left, int top, int beeIndexOffsetMax) {
         clearWidgets();
-        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.beeCount(); ++i) {
+        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < this.block().beeCount(); ++i) {
             var bee = this.menu.getApiaryBee(i);
 
             int finalI = i;
@@ -145,7 +134,7 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
             return;
         }
 
-        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < apiaryBlockEntity.beeCount(); ++i) {
+        for (int i = this.beeIndexOffset; i < beeIndexOffsetMax && i < this.block().beeCount(); ++i) {
             int index = i - this.beeIndexOffset;
             int x = left + index * 24 + 4;
             boolean hovered = mouseX >= x && mouseX < x + 24 && mouseY >= top && mouseY < top + 28;
@@ -186,7 +175,7 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
     }
 
     private boolean canScroll() {
-        return apiaryBlockEntity.beeCount() > 7;
+        return this.block().beeCount() > 7;
     }
 
     @Override
@@ -200,7 +189,7 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
         return true;
     }
 
-    private int getHiddenRows() { return apiaryBlockEntity.beeCount() - 7; }
+    private int getHiddenRows() { return this.block().beeCount() - 7; }
 
     @Override
     public boolean mouseDragged(@NonNull MouseButtonEvent event, double dx, double dy) {
@@ -220,7 +209,7 @@ public class ApiaryScreen extends BaseScreen<ApiaryMenu> {
         double mouseX = event.x();
         double mouseY = event.y();
         this.clickedOnScroll = false;
-        if (apiaryBlockEntity.beeCount() > 0) {
+        if (this.block().beeCount() > 0) {
             int i = this.leftPos + 44;
             int j = this.topPos + 34 + ((int) (99.0F * this.sliderProgress));
 

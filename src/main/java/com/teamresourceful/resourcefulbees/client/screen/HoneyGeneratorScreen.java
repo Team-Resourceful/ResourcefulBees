@@ -1,45 +1,35 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
-import com.teamresourceful.resourcefulbees.client.component.BatteryWidget;
-import com.teamresourceful.resourcefulbees.client.component.TankWidget;
+import com.teamresourceful.resourcefulbees.client.screen.base.CustomContainerScreen;
+import com.teamresourceful.resourcefulbees.client.screen.base.CustomWidgets;
 import com.teamresourceful.resourcefulbees.common.blockentities.HoneyGeneratorBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.HoneyGeneratorMenu;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jspecify.annotations.NonNull;
 
-public class HoneyGeneratorScreen extends BaseScreen<HoneyGeneratorMenu> {
-
-    public static final Identifier BACKGROUND = ModIdentifier.of("generator/background");
+public class HoneyGeneratorScreen extends CustomContainerScreen<HoneyGeneratorMenu, HoneyGeneratorBlockEntity> {
 
     public HoneyGeneratorScreen(HoneyGeneratorMenu screenContainer, Inventory inventory, Component titleIn) {
-        super(screenContainer, inventory, titleIn);
-        titleLabelX = 7;
-        inventoryLabelX = 7;
-        inventoryLabelY = 103;
+        super(screenContainer, inventory, titleIn, 180, 200);
+
+        this.background = ModIdentifier.of("textures/gui/containers/generator.png");
+        this.titleLabelX = 7;
+        this.inventoryLabelX = 7;
+        this.inventoryLabelY = 103;
     }
 
     @Override
     protected void init() {
         super.init();
-        HoneyGeneratorBlockEntity honeyGen = menu.getEntity();
-        addRenderableWidget(TankWidget.single(leftPos + 30, topPos + 27, 12, 54, honeyGen::tankData));
-        addRenderableWidget(new BatteryWidget(leftPos + 138, topPos + 27, 12, 54, 180, 0, BACKGROUND, honeyGen::batteryData));
-    }
 
-    @Override
-    public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
-        super.extractBackground(graphics, mouseX, mouseY, partialTicks);
-        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, 0, leftPos, topPos, 180, 200);
+        this.putAt(CustomWidgets.tank(this.block()::tankData).withSize(14, 56), 29, 26);
+        this.putAt(CustomWidgets.battery(this.block()::batteryData).withSize(12, 54), 138, 27);
     }
 
     @Override
@@ -66,9 +56,6 @@ public class HoneyGeneratorScreen extends BaseScreen<HoneyGeneratorMenu> {
     @Override
     public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractRenderState(graphics, mouseX, mouseY, a);
-
-        // RID: Blit-ing an empty tank sprite on top of the rendered fluid to keep the shine in the foreground.
-        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 192, 0, leftPos + 29, topPos + 26, 12, 54);
 
         Slot slot = getHoveredSlot();
         if (slot != null && !slot.hasItem()) {

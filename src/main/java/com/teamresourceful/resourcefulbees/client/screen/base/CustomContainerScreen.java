@@ -2,6 +2,7 @@ package com.teamresourceful.resourcefulbees.client.screen.base;
 
 import com.teamresourceful.resourcefulbees.common.menus.base.AbstractModContainerMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -19,8 +20,14 @@ public class CustomContainerScreen<M extends AbstractModContainerMenu<B>, B exte
 		super(menu, inventory, title, width, height);
 	}
 
-	protected B getEntity() {
+	protected B block() {
 		return this.menu.getEntity();
+	}
+
+	protected <T extends AbstractWidget> T putAt(T widget, int x, int y) {
+		this.addRenderableWidget(widget);
+		widget.setPosition(x + this.leftPos, y + this.topPos);
+		return widget;
 	}
 
 	@Override
@@ -37,19 +44,27 @@ public class CustomContainerScreen<M extends AbstractModContainerMenu<B>, B exte
 		graphics.text(font, playerInventoryTitle, inventoryLabelX + 2, inventoryLabelY, 0xFF683e36, false);
 	}
 
+	protected void extractSurface(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+
+	}
+
 	@Override
 	public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
 		super.extractBackground(graphics, mouseX, mouseY, partialTicks);
-		if (this.getEntity() != null) {
-			graphics.blit(
-					RenderPipelines.GUI_TEXTURED,
-					this.background,
-					this.leftPos, this.topPos,
-					0, 0,
-					this.imageWidth, this.imageHeight,
-					this.imageWidth, this.imageHeight
-			);
-		}
+
+		graphics.blit(
+				RenderPipelines.GUI_TEXTURED,
+				this.background,
+				this.leftPos, this.topPos,
+				0, 0,
+				this.imageWidth, this.imageHeight,
+				this.imageWidth, this.imageHeight
+		);
+
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(this.leftPos, this.topPos);
+		this.extractSurface(graphics, mouseX, mouseY, partialTicks);
+		graphics.pose().popMatrix();
 	}
 
 	// RID: Slot Hover Effect - Credit: AE2.

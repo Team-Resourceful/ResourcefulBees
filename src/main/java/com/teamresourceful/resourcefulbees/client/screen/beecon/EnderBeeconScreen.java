@@ -1,9 +1,9 @@
 package com.teamresourceful.resourcefulbees.client.screen.beecon;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.teamresourceful.resourcefulbees.client.component.TankWidget;
 import com.teamresourceful.resourcefulbees.client.screen.base.CustomContainerScreen;
 import com.teamresourceful.resourcefulbees.client.screen.base.CustomWidgetRenderers;
+import com.teamresourceful.resourcefulbees.client.screen.base.CustomWidgets;
 import com.teamresourceful.resourcefulbees.common.blockentities.EnderBeeconBlockEntity;
 import com.teamresourceful.resourcefulbees.common.blocks.EnderBeeconBlock;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
@@ -53,15 +53,15 @@ public class EnderBeeconScreen extends CustomContainerScreen<EnderBeeconMenu, En
     protected void init() {
         super.init();
 
-        this.addRenderableWidget(TankWidget.single(leftPos + 20, topPos + 27, 12, 54, this.getEntity()::tankData));
+        this.putAt(CustomWidgets.tank(this.block()::tankData).withSize(14, 56), 19, 26);
 
         Layouts.row()
             .withPosition(this.leftPos + 76, this.topPos + 21)
             .withGap(1)
             .withChildren(Arrays.stream(Option.values())
                 .map(option -> {
-                    var state = ListenableState.of(option.isEnabled(this.getEntity()));
-                    state.registerListener(selected -> option.set(this.getEntity(), selected));
+                    var state = ListenableState.of(option.isEnabled(this.block()));
+                    state.registerListener(selected -> option.set(this.block(), selected));
 
                     return Widgets.button()
                             .withSize(16, 19)
@@ -105,8 +105,8 @@ public class EnderBeeconScreen extends CustomContainerScreen<EnderBeeconMenu, En
             list.withContents(content -> {
                 content.withGap(1);
 
-                for (var effect : this.getEntity().availableEffects()) {
-                    var state = ListenableState.of(this.getEntity().isEffectActive(effect));
+                for (var effect : this.block().availableEffects()) {
+                    var state = ListenableState.of(this.block().isEffectActive(effect));
                     var button = Widgets.button();
                     var holder = effect.getFirst();
                     var sprite = new WidgetSprites(Hud.getMobEffectSprite(holder));
@@ -114,7 +114,7 @@ public class EnderBeeconScreen extends CustomContainerScreen<EnderBeeconMenu, En
                     state.registerListener(selected -> NetworkHandler.NETWORK.sendToServer(new BeeconEffectPacket(
                             selected ? BeeconPacketOption.EFFECT_ON : BeeconPacketOption.EFFECT_OFF,
                             effect,
-                            this.getEntity().getBlockPos()
+                            this.block().getBlockPos()
                     )));
 
                     button.withSounds(true);

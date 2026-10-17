@@ -41,7 +41,7 @@ public record ApiaryOccupant(
         int color,
         boolean locked,
         boolean hasNectar
-) implements Occupant{
+) implements Occupant {
 
     public static final Codec<ApiaryOccupant> CODEC = RecordCodecBuilder.create(
             i -> i.group(
