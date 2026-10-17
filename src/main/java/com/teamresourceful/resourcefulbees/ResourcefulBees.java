@@ -30,7 +30,6 @@ import com.teamresourceful.resourcefulbees.common.setup.data.BeeSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneySetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.HoneycombSetup;
 import com.teamresourceful.resourcefulbees.common.setup.data.TraitSetup;
-import com.teamresourceful.resourcefulbees.common.world.gen.GoldenFlower;
 import com.teamresourceful.resourcefulbees.common.world.workers.LevelWorkEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -84,7 +83,6 @@ public class ResourcefulBees {
 
         NeoForge.EVENT_BUS.addListener(ResourcefulBeesCommand::registerCommand);
         NeoForge.EVENT_BUS.addListener(ModSpawnData::initialize);
-        NeoForge.EVENT_BUS.addListener(GoldenFlower::onBonemeal);
         NeoForge.EVENT_BUS.addListener(ModStructures::onServerAboutToStart);
         NeoForge.EVENT_BUS.addListener(HiveBreakHandler::onBlockDrops);
         NeoForge.EVENT_BUS.addListener(DimensionalBeeHolder::onDatapackSync);

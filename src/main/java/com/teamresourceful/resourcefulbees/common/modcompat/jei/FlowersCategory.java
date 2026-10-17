@@ -57,7 +57,7 @@ public class FlowersCategory extends BaseCategory<FlowersCategory.Recipe> {
     private final IDrawable back;
 
     public FlowersCategory(IGuiHelper guiHelper) {
-        super(guiHelper, RECIPE, JeiTranslations.FLOWERS, guiHelper.createDrawableItemLike(ModBlocks.GOLD_FLOWER.get()), WIDTH, HEIGHT);
+        super(guiHelper, RECIPE, JeiTranslations.FLOWERS, guiHelper.createDrawableItemLike(ModBlocks.GOLD_ROSE_BUSH.get()), WIDTH, HEIGHT);
         this.back = guiHelper.createDrawable(GUI_BACK, 0, 0, WIDTH, HEIGHT);
     }
 

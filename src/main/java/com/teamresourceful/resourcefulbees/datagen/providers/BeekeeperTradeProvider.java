@@ -112,7 +112,7 @@ public class BeekeeperTradeProvider implements DataProvider {
     }
 
     private VillagerTrade createNestTrade(Identifier nest) {
-        TradeCost wants = new TradeCost(ModItems.GOLD_FLOWER_ITEM.get(), ContextIntProviders.between(16, 32));
+        TradeCost wants = new TradeCost(ModItems.GOLD_ROSE_BUSH.get(), ContextIntProviders.between(16, 32));
         TradeCost additionalWants = new TradeCost(Items.GRASS_BLOCK, ContextIntProviders.between(8, 24));
         ItemStackTemplate gives = new ItemStackTemplate(BuiltInRegistries.ITEM.get(nest).orElseThrow(), 1, DataComponentPatch.EMPTY);
 

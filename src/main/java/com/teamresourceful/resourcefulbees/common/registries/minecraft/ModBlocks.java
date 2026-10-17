@@ -16,7 +16,6 @@ import com.teamresourceful.resourcefullib.common.registry.builtin.ResourcefulBlo
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -68,7 +67,7 @@ public final class ModBlocks {
             .requiresCorrectToolForDrops()
             .strength(5)
             .sound(SoundType.LODESTONE)
-            .lightLevel(luminance -> 15)
+            .lightLevel(_ -> 15)
             .noOcclusion()
             .dynamicShape();
 
@@ -138,12 +137,7 @@ public final class ModBlocks {
 
     public static final HolderRegistryEntry<Block> ACCELERATOR = registerBlock(BLOCKS, "accelerator", AcceleratorBlock::new, () -> BlockBehaviour.Properties.of().strength(2).sound(SoundType.METAL));
 
-//    public static final HolderRegistryEntry<Block> POLLEN_SPREADER_FAN = BLOCKS.register("pollen_spreader_fan", () -> new PollenSpreader.Fan(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.5f).sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion()));
-//    public static final HolderRegistryEntry<Block> POLLEN_SPREADER = BLOCKS.register("pollen_spreader", () -> new PollenSpreader(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.5f).sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion()));
-
-//    public static final HolderRegistryEntry<Block> FAKE_FLOWER = BLOCKS.register("fake_flower", () -> new FakeFlowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(2.0f, 3.0f).sound(SoundType.WOOD).noOcclusion().lightLevel(value -> 1)));
-
-    public static final HolderRegistryEntry<Block> GOLD_FLOWER = registerBlock(BLOCKS, "gold_flower", properties -> new FlowerBlock(MobEffects.INVISIBILITY, 10, properties), () -> BlockBehaviour.Properties.of().noCollision().strength(0).sound(SoundType.GRASS));
+    public static final HolderRegistryEntry<Block> GOLD_ROSE_BUSH = registerBlock(BLOCKS, "gold_rose_bush", TallFlowerBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.ROSE_BUSH));
 
     public static final HolderRegistryEntry<Block> BEEHOUSE_TOP = registerBlock(BLOCKS, "beehouse_top", BeeHouseTopBlock::new, () -> BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(5f, 6f).pushReaction(PushReaction.IMMOVEABLE));
     public static final HolderRegistryEntry<Block> BREEDER_BLOCK = registerBlock(BLOCKS, "breeder", BreederBlock::new, () -> BlockBehaviour.Properties.of().strength(1F).sound(SoundType.WOOD));

@@ -37,7 +37,7 @@ public class BlockLootTables extends BaseBlockLootTable {
     protected void generate() {
         // Misc
         dropSelf(ModBlocks.WAX_BLOCK);
-        dropSelf(ModBlocks.GOLD_FLOWER);
+        dropSelf(ModBlocks.GOLD_ROSE_BUSH);
 
         // Hives / nests
         ModBlocks.HIVES.getEntries().forEach(this::addNest);

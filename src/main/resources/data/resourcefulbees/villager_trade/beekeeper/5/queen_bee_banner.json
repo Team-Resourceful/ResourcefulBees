@@ -1,6 +1,6 @@
 {
   "wants": {
-    "id": "resourcefulbees:gold_flower",
+    "id": "resourcefulbees:gold_rose_bush",
     "count": {
       "type": "minecraft:uniform",
       "min": 32,

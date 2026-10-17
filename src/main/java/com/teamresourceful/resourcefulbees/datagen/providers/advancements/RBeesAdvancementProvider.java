@@ -30,11 +30,11 @@ public class RBeesAdvancementProvider extends BaseAdvancementProvider {
     public void generate() {
         AdvancementHolder root = register(
                 createRootAdvancement(
-                        ModItems.GOLD_FLOWER_ITEM,
+                        ModItems.GOLD_ROSE_BUSH,
                         Component.translatable("advancements.resourcefulbees.root.title"),
                         Component.translatable("advancements.resourcefulbees.root.description"),
                         ModIdentifier.of("gui/advancements/backgrounds/resourcefulbees"),
-                        itemPredicate(ModItems.GOLD_FLOWER_ITEM.get())
+                        itemPredicate(ModItems.GOLD_ROSE_BUSH.get())
                 )
         );
 

@@ -57,7 +57,7 @@ public class ModCreativeTabs {
 
                 output.accept(ModItems.WAX.get());
                 output.accept(ModItems.WAX_BLOCK_ITEM.get());
-                output.accept(ModItems.GOLD_FLOWER_ITEM.get());
+                output.accept(ModItems.GOLD_ROSE_BUSH.get());
 
                 output.accept(ModItems.HONEYCOMB_POTTERY_SHERD.get());
                 output.accept(ModItems.BEE_POTTERY_SHERD.get());

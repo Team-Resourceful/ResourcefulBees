@@ -4,6 +4,8 @@ import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jspecify.annotations.NonNull;
 
@@ -34,7 +36,12 @@ public abstract class BaseBlockLootTable extends BlockLootSubProvider {
     }
 
     protected void dropSelf(RegistryEntry<? extends Block> entry) {
-        dropSelf(entry.get());
+        var block = entry.get();
+        if (block.defaultBlockState().hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
+            add(block, createSinglePropConditionTable(block, BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER));
+        } else {
+            dropSelf(block);
+        }
     }
 
     @Override

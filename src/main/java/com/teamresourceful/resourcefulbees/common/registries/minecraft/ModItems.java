@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -55,7 +56,11 @@ public final class ModItems {
     public static final ResourcefulItemRegistry HONEY_BUCKET_ITEMS = ResourcefulRegistries.createForItems(ITEMS);
 
     private static HolderRegistryEntry<Item> registerBasicBlockItem(ResourcefulItemRegistry registry, String id, RegistryEntry<Block> block, Supplier<Item.Properties> getter) {
-        return registerItem(registry, id, properties -> new BlockItem(block.get(), properties), getter);
+        return registerBlockItem(registry, id, block, BlockItem::new, getter);
+    }
+
+    private static HolderRegistryEntry<Item> registerBlockItem(ResourcefulItemRegistry registry, String id, RegistryEntry<Block> block, BiFunction<Block, Item.Properties, Item> factory, Supplier<Item.Properties> getter) {
+        return registerItem(registry, id, properties -> factory.apply(block.get(), properties), getter);
     }
 
     private static HolderRegistryEntry<Item> registerItem(ResourcefulItemRegistry registry, String id, Function<Item.Properties, Item> factory, Supplier<Item.Properties> getter) {
@@ -111,7 +116,7 @@ public final class ModItems {
     //public static final HolderRegistryEntry<Item> MUTATED_POLLEN = registerItem(ITEMS, "mutated_pollen", () -> new MutatedPollenItem(new Item.Properties()));
 //    public static final HolderRegistryEntry<Item> FAKE_FLOWER = registerItem(ITEMS, "fake_flower", () -> new BlockItem(ModBlocks.FAKE_FLOWER.get(), new Item.Properties()));
 
-    public static final HolderRegistryEntry<Item> GOLD_FLOWER_ITEM = registerBasicBlockItem(ITEMS, "gold_flower", ModBlocks.GOLD_FLOWER, Item.Properties::new);
+    public static final HolderRegistryEntry<Item> GOLD_ROSE_BUSH = registerBlockItem(ITEMS, "gold_rose_bush", ModBlocks.GOLD_ROSE_BUSH, DoubleHighBlockItem::new, Item.Properties::new);
 
     public static final HolderRegistryEntry<Item> T2_NEST_UPGRADE = registerItem(ITEMS, "t2_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T1_TO_T2)));
     public static final HolderRegistryEntry<Item> T3_NEST_UPGRADE = registerItem(ITEMS, "t3_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T2_TO_T3)));
