@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cross",
   "textures": {
-    "cross": "resourcefulbees:block/gold_flower"
+    "cross": "resourcefulbees:block/gold_rose_bush_top"
   }
 }

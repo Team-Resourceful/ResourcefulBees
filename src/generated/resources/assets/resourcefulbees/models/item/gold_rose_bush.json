@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "resourcefulbees:block/gold_flower"
+    "layer0": "resourcefulbees:block/gold_rose_bush_top"
   }
 }

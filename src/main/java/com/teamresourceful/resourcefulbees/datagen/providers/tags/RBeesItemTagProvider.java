@@ -28,50 +28,50 @@ public class RBeesItemTagProvider extends ItemTagsProvider {
         addCommonTags();
         addHiveTags();
         addWaxedWoodTags();
-        tag(ItemTags.DECORATED_POT_SHERDS).add(ModItems.HONEYCOMB_POTTERY_SHERD.holder().getKey());
-        tag(ItemTags.DECORATED_POT_SHERDS).add(ModItems.BEE_POTTERY_SHERD.holder().getKey());
+        tag(ItemTags.DECORATED_POT_SHERDS).add(ModItems.HONEYCOMB_POTTERY_SHERD.holder().key());
+        tag(ItemTags.DECORATED_POT_SHERDS).add(ModItems.BEE_POTTERY_SHERD.holder().key());
     }
 
     private void addCommonTags() {
-        tag(ModItemTags.HONEYCOMBS).add(Items.HONEYCOMB.builtInRegistryHolder().getKey());
+        tag(ModItemTags.HONEYCOMBS).add(Items.HONEYCOMB.builtInRegistryHolder().key());
 
-        tag(ModItemTags.HONEYCOMB_STORAGE_BLOCKS).add(Items.HONEYCOMB_BLOCK.builtInRegistryHolder().getKey());
+        tag(ModItemTags.HONEYCOMB_STORAGE_BLOCKS).add(Items.HONEYCOMB_BLOCK.builtInRegistryHolder().key());
 
-        tag(ModItemTags.HONEY_BUCKETS).add(ModItems.HONEY_BUCKET.holder().getKey());
+        tag(ModItemTags.HONEY_BUCKETS).add(ModItems.HONEY_BUCKET.holder().key());
 
-        tag(ModItemTags.HONEY_BLOCKS).add(Items.HONEY_BLOCK.builtInRegistryHolder().getKey());
+        tag(ModItemTags.HONEY_BLOCKS).add(Items.HONEY_BLOCK.builtInRegistryHolder().key());
 
-        tag(ModItemTags.HONEY_BOTTLES).add(Items.HONEY_BOTTLE.builtInRegistryHolder().getKey());
+        tag(ModItemTags.HONEY_BOTTLES).add(Items.HONEY_BOTTLE.builtInRegistryHolder().key());
 
-        tag(ModItemTags.WAX).add(ModItems.WAX.holder().getKey());
+        tag(ModItemTags.WAX).add(ModItems.WAX.holder().key());
 
-        tag(ModItemTags.WAX_STORAGE_BLOCKS).add(ModItems.WAX_BLOCK_ITEM.holder().getKey());
+        tag(ModItemTags.WAX_STORAGE_BLOCKS).add(ModItems.WAX_BLOCK_ITEM.holder().key());
 
         tag(Tags.Items.STORAGE_BLOCKS).addTag(ModItemTags.WAX);
 
         tag(ModItemTags.HEAT_SOURCES)
                 .add(
-                        Items.TORCH.builtInRegistryHolder().getKey(),
-                        Items.SOUL_TORCH.builtInRegistryHolder().getKey(),
-                        Items.LAVA_BUCKET.builtInRegistryHolder().getKey(),
-                        Items.CAMPFIRE.builtInRegistryHolder().getKey(),
-                        Items.SOUL_CAMPFIRE.builtInRegistryHolder().getKey(),
-                        Items.MAGMA_BLOCK.builtInRegistryHolder().getKey(),
-                        Items.LANTERN.builtInRegistryHolder().getKey(),
-                        Items.SEA_LANTERN.builtInRegistryHolder().getKey(),
-                        Items.SOUL_LANTERN.builtInRegistryHolder().getKey(),
-                        Items.JACK_O_LANTERN.builtInRegistryHolder().getKey()
+                        Items.TORCH.builtInRegistryHolder().key(),
+                        Items.SOUL_TORCH.builtInRegistryHolder().key(),
+                        Items.LAVA_BUCKET.builtInRegistryHolder().key(),
+                        Items.CAMPFIRE.builtInRegistryHolder().key(),
+                        Items.SOUL_CAMPFIRE.builtInRegistryHolder().key(),
+                        Items.MAGMA_BLOCK.builtInRegistryHolder().key(),
+                        Items.LANTERN.builtInRegistryHolder().key(),
+                        Items.SEA_LANTERN.builtInRegistryHolder().key(),
+                        Items.SOUL_LANTERN.builtInRegistryHolder().key(),
+                        Items.JACK_O_LANTERN.builtInRegistryHolder().key()
                 )
                 .addTag(ItemTags.CANDLES);
 
-        tag(Tags.Items.FLOWERS_SMALL).add(ModItems.GOLD_FLOWER_ITEM.holder().getKey());
+        tag(Tags.Items.FLOWERS_TALL).add(ModItems.GOLD_ROSE_BUSH.holder().key());
     }
 
     private void addHiveTags() {
         TagAppender<Item> beehives = tag(ModItemTags.BEEHIVES)
                 .add(
-                        Items.BEEHIVE.builtInRegistryHolder().getKey(),
-                        Items.BEE_NEST.builtInRegistryHolder().getKey()
+                        Items.BEEHIVE.builtInRegistryHolder().key(),
+                        Items.BEE_NEST.builtInRegistryHolder().key()
                 );
 
         TagAppender<Item> t1Nests = tag(ModItemTags.T1_NESTS);
@@ -87,15 +87,15 @@ public class RBeesItemTagProvider extends ItemTagsProvider {
 
     private void addWaxedWoodTags() {
         tag(ModItemTags.WAXED_TOOL_MATERIALS).addTags(ModItemTags.WAX);
-        tag(ItemTags.WOODEN_DOORS).add(ModItems.WAXED_DOOR.holder().getKey());
-        tag(ItemTags.WOODEN_BUTTONS).add(ModItems.WAXED_BUTTON.holder().getKey());
-        tag(ItemTags.WOODEN_FENCES).add(ModItems.WAXED_FENCE.holder().getKey());
-        tag(ItemTags.WOODEN_SLABS).add(ModItems.WAXED_SLAB.holder().getKey());
-        tag(ItemTags.WOODEN_STAIRS).add(ModItems.WAXED_STAIRS.holder().getKey());
-        tag(ItemTags.WOODEN_PRESSURE_PLATES).add(ModItems.WAXED_PRESSURE_PLATE.holder().getKey());
-        tag(ItemTags.WOODEN_TRAPDOORS).add(ModItems.WAXED_TRAPDOOR.holder().getKey());
-        tag(ItemTags.HANGING_SIGNS).add(ModItems.WAXED_HANGING_SIGN.holder().getKey());
-        tag(ItemTags.SIGNS).add(ModItems.WAXED_SIGN.holder().getKey());
+        tag(ItemTags.WOODEN_DOORS).add(ModItems.WAXED_DOOR.holder().key());
+        tag(ItemTags.WOODEN_BUTTONS).add(ModItems.WAXED_BUTTON.holder().key());
+        tag(ItemTags.WOODEN_FENCES).add(ModItems.WAXED_FENCE.holder().key());
+        tag(ItemTags.WOODEN_SLABS).add(ModItems.WAXED_SLAB.holder().key());
+        tag(ItemTags.WOODEN_STAIRS).add(ModItems.WAXED_STAIRS.holder().key());
+        tag(ItemTags.WOODEN_PRESSURE_PLATES).add(ModItems.WAXED_PRESSURE_PLATE.holder().key());
+        tag(ItemTags.WOODEN_TRAPDOORS).add(ModItems.WAXED_TRAPDOOR.holder().key());
+        tag(ItemTags.HANGING_SIGNS).add(ModItems.WAXED_HANGING_SIGN.holder().key());
+        tag(ItemTags.SIGNS).add(ModItems.WAXED_SIGN.holder().key());
     }
 
     @SafeVarargs
@@ -103,7 +103,7 @@ public class RBeesItemTagProvider extends ItemTagsProvider {
             HolderRegistryEntry<Item> entry,
             TagAppender<Item>... appenders
     ) {
-        ResourceKey<Item> key = entry.holder().getKey();
+        ResourceKey<Item> key = entry.holder().key();
 
         for (TagAppender<Item> appender : appenders) {
             appender.add(key);

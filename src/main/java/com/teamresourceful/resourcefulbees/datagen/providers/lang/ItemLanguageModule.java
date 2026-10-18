@@ -11,7 +11,7 @@ public class ItemLanguageModule implements LanguageModule {
     @Override
     public void addEntries(BaseLanguageProvider provider) {
         provider.addItem(ModItems.WAX_BLOCK_ITEM, "Beeswax Block");
-        provider.addItem(ModItems.GOLD_FLOWER_ITEM, "Golden Flower");
+        provider.addItem(ModItems.GOLD_ROSE_BUSH, "Golden Rose Bush");
         provider.addItem(ModItems.T1_APIARY_ITEM, "Tier 1 Apiary");
         provider.addItem(ModItems.T2_APIARY_ITEM, "Tier 2 Apiary");
         provider.addItem(ModItems.T3_APIARY_ITEM, "Tier 3 Apiary");

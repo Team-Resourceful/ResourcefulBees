@@ -98,8 +98,6 @@ public class RBeesBlockTagProvider extends BlockTagsProvider {
                         BlockTags.CANDLES
                 );
 
-        tag(ModBlockTags.GOLD_FLOWER_BONEMEALABLE).addTags(BlockTags.GRASS_BLOCKS);
-
         tag(ModBlockTags.NEST_PLACEABLE_ON)
                 .addTags(
                         BlockTags.LOGS,

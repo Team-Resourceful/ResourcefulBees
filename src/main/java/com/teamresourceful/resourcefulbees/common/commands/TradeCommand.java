@@ -199,7 +199,7 @@ public class TradeCommand {
     }
 
     private static VillagerTrade createBeekeeperTrade(BeekeeperTradeData tradeData, ItemStack result, Holder<ContextIntProvider> flowerCost) {
-        TradeCost wants = new TradeCost(ModItems.GOLD_FLOWER_ITEM.get(), flowerCost);
+        TradeCost wants = new TradeCost(ModItems.GOLD_ROSE_BUSH.get(), flowerCost);
 
         Optional<TradeCost> additionalWants = tradeData.secondaryItem() == Items.AIR
                 ? Optional.empty()

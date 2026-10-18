@@ -14,7 +14,6 @@ public final class ModBlockTags {
 
     public static final TagKey<Block> HEAT_SOURCES = createBlockTag("c", "heat_sources");
     public static final TagKey<Block> NEST_PLACEABLE_ON = createBlockTag(ModConstants.MOD_ID, "nest_placeable_on");
-    public static final TagKey<Block> GOLD_FLOWER_BONEMEALABLE = createBlockTag(ModConstants.MOD_ID, "gold_flower_bonemealable");
 
     public static final TagKey<Block> CENTRIFUGE_PICKABLE = createBlockTag("rbees_centrifuge", "pickaxe_mineable");
 

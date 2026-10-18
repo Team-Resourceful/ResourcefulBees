@@ -1,6 +1,6 @@
 {
   "wants": {
-    "id": "resourcefulbees:gold_flower",
+    "id": "resourcefulbees:gold_rose_bush",
     "count": {
       "min": 32.0,
       "max": 64.0,

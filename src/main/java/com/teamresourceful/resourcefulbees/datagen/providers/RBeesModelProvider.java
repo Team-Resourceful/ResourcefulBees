@@ -11,7 +11,10 @@ import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.data.models.model.ModelTemplate;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
@@ -116,8 +119,7 @@ public class RBeesModelProvider extends ModelProvider {
         registerHoneyGlass(blockModels);
         registerMiscBlocks(blockModels);
         registerItems(itemModels);
-        // Cross model using the cutout render type.
-        registerCross(blockModels, itemModels, ModBlocks.GOLD_FLOWER.get(), modMaterial("block/gold_flower"));
+        blockModels.createDoublePlantWithDefaultItem(ModBlocks.GOLD_ROSE_BUSH.get(), BlockModelGenerators.PlantType.NOT_TINTED);
     }
 
     @Override
@@ -489,31 +491,6 @@ public class RBeesModelProvider extends ModelProvider {
         if (registerItemModel) {
             blockModels.registerSimpleItemModel(block, model);
         }
-    }
-
-    private static void registerCross(
-            BlockModelGenerators blockModels,
-            ItemModelGenerators itemModels,
-            Block block,
-            Material texture
-    ) {
-        Identifier blockModel = ModelTemplates.CROSS.create(
-                block,
-                new TextureMapping()
-                        .put(TextureSlot.CROSS, texture),
-                blockModels.modelOutput
-        );
-
-        blockModels.blockStateOutput.accept(
-                BlockModelGenerators.createSimpleBlock(
-                        block,
-                        BlockModelGenerators.plainVariant(blockModel)
-                )
-        );
-
-        Identifier itemModel = ModelTemplates.FLAT_ITEM.create(block.asItem(), new TextureMapping().put(TextureSlot.LAYER0, texture), itemModels.modelOutput);
-
-        itemModels.itemModelOutput.accept(block.asItem(), ItemModelUtils.plainModel(itemModel));
     }
 
     private static void registerSimpleBlockState(
