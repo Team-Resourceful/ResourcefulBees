@@ -1,40 +1,28 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
-import com.teamresourceful.resourcefulbees.client.component.TankWidget;
+import com.teamresourceful.resourcefulbees.client.screen.base.CustomContainerScreen;
+import com.teamresourceful.resourcefulbees.client.screen.base.CustomWidgets;
 import com.teamresourceful.resourcefulbees.common.blockentities.SolidificationChamberBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.menus.SolidificationChamberMenu;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import org.jspecify.annotations.NonNull;
 
-public class SolidificationChamberScreen extends AbstractContainerScreen<SolidificationChamberMenu> {
-
-    private static final Identifier BACKGROUND = ModIdentifier.of("solidification/background");
-
-    private final SolidificationChamberBlockEntity tileEntity;
+public class SolidificationChamberScreen extends CustomContainerScreen<SolidificationChamberMenu, SolidificationChamberBlockEntity> {
 
     public SolidificationChamberScreen(SolidificationChamberMenu menu, Inventory inventory, Component displayName) {
-        super(menu, inventory, displayName);
-        tileEntity = menu.getEntity();
-        titleLabelY -= 3;
+        super(menu, inventory, displayName, 180, 200);
+
+        this.background = ModIdentifier.of("textures/gui/containers/solidifier.png");
+        this.titleLabelX = 7;
+        this.inventoryLabelX = 7;
+        this.inventoryLabelY = 103;
     }
 
     @Override
     protected void init() {
         super.init();
-        addRenderableWidget(TankWidget.single(leftPos + 67, topPos + 12, 14, 62, tileEntity::tankData));
-    }
 
-    @Override
-    public void extractBackground(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-        super.extractBackground(graphics, mouseX, mouseY, a);
-        if (tileEntity != null) {
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND, 256, 256, 0, 0, leftPos, topPos, imageWidth, imageHeight);
-        }
+        this.putAt(CustomWidgets.tank(this.block()::tankData).withSize(14, 56), 63, 26);
     }
 }

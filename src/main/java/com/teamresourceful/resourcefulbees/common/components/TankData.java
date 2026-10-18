@@ -34,6 +34,10 @@ public record TankData(FluidStack fluid, int capacity) {
     public static final StreamCodec<RegistryFriendlyByteBuf, List<TankData>> LIST_STREAM_CODEC = STREAM_CODEC.apply(ByteBufCodecs.list());
 
     public boolean isEmpty() {
-        return this.equals(EMPTY);
+        return this.fluid.isEmpty() || this.capacity == 0;
+    }
+
+    public float percentage() {
+        return this.capacity == 0 ? 0 : (float) this.fluid.amount() / this.capacity;
     }
 }

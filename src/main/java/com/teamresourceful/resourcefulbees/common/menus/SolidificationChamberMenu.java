@@ -30,22 +30,22 @@ public class SolidificationChamberMenu extends AbstractModContainerMenu<Solidifi
 
     @Override
     public int getInventoryStart() {
-        return 1;
+        return 6;
     }
 
     @Override
     public int getPlayerInvXOffset() {
-        return 8;
+        return 10;
     }
 
     @Override
     public int getPlayerInvYOffset() {
-        return 84;
+        return 116;
     }
 
     @Override
     protected void addMenuSlots() {
-        this.addSlot(new ResourceHandlerSlot(entity.itemHandler(), entity.itemHandler()::set, SolidificationChamberBlockEntity.BLOCK_OUTPUT, 93, 54) {
+        this.addSlot(new ResourceHandlerSlot(entity.itemHandler(), entity.itemHandler()::set, SolidificationChamberBlockEntity.BLOCK_OUTPUT, 98, 68) {
             @Override
             public boolean mayPlace(@NonNull ItemStack stack) {
                 return false;

@@ -1,52 +1,35 @@
 package com.teamresourceful.resourcefulbees.client.screen;
 
-import com.teamresourceful.resourcefulbees.client.component.TankWidget;
+import com.teamresourceful.resourcefulbees.client.screen.base.CustomContainerScreen;
+import com.teamresourceful.resourcefulbees.client.screen.base.CustomWidgets;
 import com.teamresourceful.resourcefulbees.common.blockentities.CentrifugeBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.menus.CentrifugeMenu;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
-public class CentrifugeScreen extends AbstractContainerScreen<CentrifugeMenu> {
-
-    private static final Identifier TEXTURE = ModIdentifier.of("centrifuge/basic.png");
-
-    private final CentrifugeBlockEntity tileEntity;
-    private TankWidget tankWidget;
+public class CentrifugeScreen extends CustomContainerScreen<CentrifugeMenu, CentrifugeBlockEntity> {
 
     public CentrifugeScreen(CentrifugeMenu menu, Inventory inventory, Component displayName) {
-        super(menu, inventory, displayName);
-        tileEntity = menu.getEntity();
-        titleLabelY -= 3;
+        super(menu, inventory, displayName, 180, 200);
+
+        this.background = ModIdentifier.of("textures/gui/containers/centrifuge.png");
+        this.titleLabelX = 7;
+        this.inventoryLabelX = 7;
+        this.inventoryLabelY = 103;
     }
 
     @Override
     protected void init() {
         super.init();
-        tankWidget = TankWidget.selectable(leftPos + 152, topPos + 23, 16, 52, tileEntity::tankData);
-        addRenderableWidget(tankWidget);
-    }
 
-    @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
-        super.extractBackground(graphics, mouseX, mouseY, a);
-        if (tileEntity != null) {
-            int i = this.leftPos;
-            int j = this.topPos;
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, TEXTURE, 256, 256, 0, 0, i, j, this.imageWidth, this.imageHeight);
+        for (var i = 0; i < CentrifugeBlockEntity.TANKS; i++) {
+            final int index = i;
+            this.addRenderableWidget(
+                    CustomWidgets.tank(() -> this.block().tankData().get(index))
+                            .withSize(14, 56)
+                            .withPosition(leftPos + 147 + i * 15, topPos + 26)
+            );
         }
-    }
-
-    @Override
-    public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
-        if (tankWidget != null && tankWidget.isMouseOver(x, y) && tankWidget.mouseScrolled(x, y, scrollX, scrollY)) {
-            return true;
-        }
-
-        return super.mouseScrolled(x, y, scrollX, scrollY);
     }
 }

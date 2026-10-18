@@ -52,17 +52,17 @@ public class BreederMenu extends AbstractModContainerMenu<BreederBlockEntity> {
 
     @Override
     public int getPlayerInvXOffset() {
-        return 30;
+        return 10;
     }
 
     @Override
     public int getPlayerInvYOffset() {
-        return 106;
+        return 172;
     }
 
     @Override
     protected void addMenuSlots() {
-        this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, 0, 6, 18) {
+        this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, 0, 31, 54) {
             @Override
             public boolean mayPlace(@NonNull ItemStack stack) {
                 return stack.has(ModDataComponents.UPGRADE) && stack.get(ModDataComponents.UPGRADE).isType(Upgrade.Type.BREED_TIME);
@@ -70,16 +70,17 @@ public class BreederMenu extends AbstractModContainerMenu<BreederBlockEntity> {
         });
 
         for (int i = 0; i < BreederConstants.BREEDERS; i++) {
-            this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, BreederConstants.PARENT_1_SLOTS.get(i), 30, 18 +(i *20)));
-            this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, BreederConstants.FEED_1_SLOTS.get(i), 66, 18 +(i*20)));
-            this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, BreederConstants.PARENT_2_SLOTS.get(i), 102, 18 +(i*20)));
-            this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, BreederConstants.FEED_2_SLOTS.get(i), 138, 18 +(i*20)));
-            this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, BreederConstants.EMPTY_JAR_SLOTS.get(i), 174, 18 +(i*20)));
+            this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, BreederConstants.PARENT_1_SLOTS.get(i), 55, 27));
+            this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, BreederConstants.FEED_1_SLOTS.get(i), 75, 27));
+            this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, BreederConstants.PARENT_2_SLOTS.get(i), 55, 54));
+            this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, BreederConstants.FEED_2_SLOTS.get(i), 75, 54));
+            this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, BreederConstants.EMPTY_JAR_SLOTS.get(i), 130, 50));
         }
 
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 9; j++) {
-                this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, 11 + (j + i * 9), 30+(j*18), 58 + (i*18)) {
+        // RID: Switched to 3 Rows of 6 Slots instead
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 6; j++) {
+                this.addSlot(new ResourceHandlerSlot(getEntity().getInventory(), entity.getInventory()::set, 11 + (j + i * 6), 37+(j*18), 84 + (i*18)) {
                     @Override
                     public boolean mayPlace(@NonNull ItemStack stack) {
                         return false;

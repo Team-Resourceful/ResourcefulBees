@@ -36,17 +36,17 @@ public class HoneyGeneratorMenu extends AbstractModContainerMenu<HoneyGeneratorB
 
     @Override
     public int getInventoryStart() {
-        return 4;
+        return 6;
     }
 
     @Override
     public int getPlayerInvXOffset() {
-        return 8;
+        return 10;
     }
 
     @Override
     public int getPlayerInvYOffset() {
-        return 84;
+        return 116;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class HoneyGeneratorMenu extends AbstractModContainerMenu<HoneyGeneratorB
 
         for (int i = 0; i < 4; i++) {
             int finalI = i;
-            this.addSlot(new ResourceHandlerSlot(inv, inv::set, finalI, 53 + i * 18, 54) {
+            this.addSlot(new ResourceHandlerSlot(inv, inv::set, finalI, 59 + i * 20, 70) {
                 @Override
                 public boolean mayPlace(@NonNull ItemStack stack) {
                     return stack.has(ModDataComponents.UPGRADE) && stack.get(ModDataComponents.UPGRADE).isHoneyGenUpgrade(finalI);

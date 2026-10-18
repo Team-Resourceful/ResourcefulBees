@@ -32,4 +32,8 @@ public record BatteryData(int energy, int capacity, int maxTransfer) {
     public boolean isEmpty() {
         return this == EMPTY;
     }
+
+    public float percentage() {
+        return this.capacity == 0 ? 0 : (float) this.energy / this.capacity;
+    }
 }
