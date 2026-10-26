@@ -4,16 +4,21 @@ package com.teamresourceful.resourcefulbees.common.blockentities;
 import com.teamresourceful.resourcefulbees.api.compat.BeeCompat;
 import com.teamresourceful.resourcefulbees.api.tiers.ApiaryTier;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.IOResourceHandler;
 import com.teamresourceful.resourcefulbees.common.blocks.ApiaryBlock;
+import com.teamresourceful.resourcefulbees.common.components.Upgrade;
+import com.teamresourceful.resourcefulbees.common.items.PollenItem;
+import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.menus.ApiaryMenu;
 import com.teamresourceful.resourcefulbees.common.recipes.HiveRecipe;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -25,9 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.item.ItemResource;
-import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
-import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -36,6 +39,7 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
 
     protected final ApiaryTier tier;
     private final ApiaryResourceHandler resourceHandler = new ApiaryResourceHandler();
+    private boolean producesPollen;
 
     public ApiaryBlockEntity(ApiaryTier tier, BlockPos pos, BlockState state) {
         super(tier.getBlockEntityType(), pos, state);
@@ -54,13 +58,21 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
     protected void deliverNectar(boolean hasNectar, Entity bee) {
         if (hasNectar) {
             if (bee instanceof BeeCompat compat) compat.resourcefulBees$nectarDroppedOff();
-            HiveRecipe.getApiaryOutput(tier, bee)
-                .ifPresent(stack -> {
-                    try(Transaction transaction = Transaction.openRoot()) {
-                        this.resourceHandler.internalInsert(ItemResource.of(stack), stack.count(), transaction);
-                        transaction.commit();
-                    }
-                });
+            HiveRecipe.getApiaryOutput(tier, bee).ifPresent(stack -> {
+                try(Transaction transaction = Transaction.openRoot()) {
+                    this.resourceHandler.insertOutput(ItemResource.of(stack), stack.count(), transaction);
+
+                    if (producesPollen) {
+                        for (int i = 0; i < tier.pollenRolls(); i++) {
+                            if (level instanceof ServerLevel serverLevel
+                                && serverLevel.getRandom().nextDouble() <= tier.pollenChance()) {
+                                    this.resourceHandler.insertOutput(ItemResource.of(PollenItem.createRandom(serverLevel)), 1, transaction);
+                                }
+                            }
+                        }
+                    transaction.commit();
+                }
+            });
         }
     }
 
@@ -124,43 +136,35 @@ public class ApiaryBlockEntity extends BeeHolderBlockEntity {
         sendToPlayersTrackingChunk();
     }
 
-    public class ApiaryResourceHandler extends ItemStacksResourceHandler {
+    public class ApiaryResourceHandler extends IOResourceHandler {
+
 
         public ApiaryResourceHandler() {
-            super(27);
-        }
-
-        public ItemContainerContents toContainerContents() {
-            return ItemContainerContents.fromItems(this.copyToList());
-        }
-
-        public void fromContainerContents(ItemContainerContents contents) {
-            NonNullList<ItemStack> items = NonNullList.withSize(this.size(), ItemStack.EMPTY);
-            contents.copyInto(items);
-
-            for (int slot = 0; slot < this.size(); slot++) {
-                ItemStack stack = items.get(slot);
-
-                if (stack.isEmpty()) {
-                    this.set(slot, ItemResource.EMPTY, 0);
-                } else {
-                    this.set(slot, ItemResource.of(stack), stack.getCount());
-                }
-            }
-        }
-
-        @Override
-        public int insert(@NonNull ItemResource resource, int amount, @NonNull TransactionContext transaction) {
-            return 0;
-        }
-
-        public void internalInsert(ItemResource resource, int amount, TransactionContext transactionContext) {
-            super.insert(resource, amount, transactionContext);
+            super(28, 1);
         }
 
         @Override
         protected void onContentsChanged(int index, @NonNull ItemStack previousContents) {
+            if (index == BreederConstants.UPGRADE_SLOT) {
+                var resource = getResource(index);
+                if (resource.isEmpty()) {
+                    clearUpgrade();
+                } else {
+                    handleUpgrade(resource.get(ModDataComponents.UPGRADE));
+                }
+            }
+
             ApiaryBlockEntity.this.setChanged();
+        }
+
+        private void clearUpgrade() {
+            ApiaryBlockEntity.this.producesPollen = false;
+        }
+
+        private void handleUpgrade(Upgrade upgrade) {
+            if (upgrade.isType(Upgrade.Type.APIARY_POLLEN)) {
+                ApiaryBlockEntity.this.producesPollen = true;
+            }
         }
     }
 }

@@ -27,104 +27,103 @@ public class ModCreativeTabs {
     public static final ResourcefulRegistry<CreativeModeTab> CREATIVE_TABS = ResourcefulRegistries.create(BuiltInRegistries.CREATIVE_MODE_TAB, ModConstants.MOD_ID);
 
     public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES = CREATIVE_TABS.register("main_tab", () -> CreativeModeTab.builder()
-
                 .icon(() -> ModItems.HONEY_DIPPER.get().getDefaultInstance())
                 .title(Component.translatable("itemGroup.resourcefulbees"))
                 .displayItems((parameters, output) -> {
-                if (GeneralConfig.enableDevBees) output.accept(ModItems.OREO_COOKIE.get());
-                if (GeneralConfig.enableDevBees) output.accept(ModItems.STRAWBEERRY_MILKSHAKE.get());
+                    if (GeneralConfig.enableDevBees) output.accept(ModItems.OREO_COOKIE.get());
+                    if (GeneralConfig.enableDevBees) output.accept(ModItems.STRAWBEERRY_MILKSHAKE.get());
 
-                output.accept(ModItems.BEE_JAR.get());
-                output.accept(ModItems.BEE_BOX.get());
-                output.accept(ModItems.BEE_BOX_TEMP.get());
-                output.accept(ModItems.HONEY_DIPPER.get());
-                output.accept(ModItems.SCRAPER.get());
-                output.accept(ModItems.SMOKER.get());
-                output.accept(ModItems.BEE_LOCATOR.get());
-                output.accept(ModItems.BEEPEDIA.get());
-                output.accept(ModItems.BEEPEDIA_CREATIVE.get());
+                    output.accept(ModItems.BEE_JAR.get());
+                    output.accept(ModItems.BEE_BOX.get());
+                    output.accept(ModItems.BEE_BOX_TEMP.get());
+                    output.accept(ModItems.HONEY_DIPPER.get());
+                    output.accept(ModItems.SCRAPER.get());
+                    output.accept(ModItems.SMOKER.get());
+                    output.accept(ModItems.BEE_LOCATOR.get());
+                    output.accept(ModItems.BEEPEDIA.get());
+                    output.accept(ModItems.BEEPEDIA_CREATIVE.get());
 
-                output.accept(ModItems.WAXED_PICKAXE.get());
-                output.accept(ModItems.WAXED_AXE.get());
-                output.accept(ModItems.WAXED_HOE.get());
-                output.accept(ModItems.WAXED_SHOVEL.get());
-                output.accept(ModItems.WAXED_SWORD.get());
+                    output.accept(ModItems.WAXED_PICKAXE.get());
+                    output.accept(ModItems.WAXED_AXE.get());
+                    output.accept(ModItems.WAXED_HOE.get());
+                    output.accept(ModItems.WAXED_SHOVEL.get());
+                    output.accept(ModItems.WAXED_SWORD.get());
 
-                output.accept(ModItems.BEEKEEPER_HELMET.get());
-                output.accept(ModItems.BEEKEEPER_CHESTPLATE.get());
-                output.accept(ModItems.BEEKEEPER_LEGGINGS.get());
-                output.accept(ModItems.BEEKEEPER_BOOTS.get());
+                    output.accept(ModItems.BEEKEEPER_HELMET.get());
+                    output.accept(ModItems.BEEKEEPER_CHESTPLATE.get());
+                    output.accept(ModItems.BEEKEEPER_LEGGINGS.get());
+                    output.accept(ModItems.BEEKEEPER_BOOTS.get());
 
-                output.accept(ModItems.WAX.get());
-                output.accept(ModItems.WAX_BLOCK_ITEM.get());
-                output.accept(ModItems.GOLD_ROSE_BUSH.get());
+                    output.accept(ModItems.WAX.get());
+                    output.accept(ModItems.WAX_BLOCK_ITEM.get());
+                    output.accept(ModItems.GOLD_ROSE_BUSH.get());
 
-                output.accept(ModItems.HONEYCOMB_POTTERY_SHERD.get());
-                output.accept(ModItems.BEE_POTTERY_SHERD.get());
+                    output.accept(ModItems.HONEYCOMB_POTTERY_SHERD.get());
+                    output.accept(ModItems.BEE_POTTERY_SHERD.get());
 
-                output.accept(ModItems.FLOW_HIVE.get());
-                output.accept(ModItems.BREEDER_ITEM.get());
-                output.accept(ModItems.T1_APIARY_ITEM.get());
-                output.accept(ModItems.T2_APIARY_ITEM.get());
-                output.accept(ModItems.T3_APIARY_ITEM.get());
-                output.accept(ModItems.T4_APIARY_ITEM.get());
+                    output.accept(ModItems.FLOW_HIVE.get());
+                    output.accept(ModItems.BREEDER_ITEM.get());
+                    output.accept(ModItems.T1_APIARY_ITEM.get());
+                    output.accept(ModItems.T2_APIARY_ITEM.get());
+                    output.accept(ModItems.T3_APIARY_ITEM.get());
+                    output.accept(ModItems.T4_APIARY_ITEM.get());
 
-                output.accept(ModItems.HONEY_GENERATOR_ITEM.get());
-                output.accept(ModItems.ENDER_BEECON_ITEM.get());
-                output.accept(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get());
-                output.accept(ModItems.HONEY_POT_ITEM.get());
-                output.accept(ModItems.CENTRIFUGE_CRANK.get());
-                output.accept(ModItems.CENTRIFUGE.get());
-                output.accept(ModItems.WAXED_MACHINE_BLOCK.get());
-//                output.accept(ModItems.FAKE_FLOWER.get());
+                    output.accept(ModItems.HONEY_GENERATOR_ITEM.get());
+                    output.accept(ModItems.ENDER_BEECON_ITEM.get());
+                    output.accept(ModItems.SOLIDIFICATION_CHAMBER_ITEM.get());
+                    output.accept(ModItems.HONEY_POT_ITEM.get());
+                    output.accept(ModItems.CENTRIFUGE_CRANK.get());
+                    output.accept(ModItems.CENTRIFUGE.get());
+                    output.accept(ModItems.WAXED_MACHINE_BLOCK.get());
 
-                output.accept(ModItems.ENERGY_CAP_UPGRADE.get());
-                output.accept(ModItems.ENERGY_XFER_UPGRADE.get());
-                output.accept(ModItems.ENERGY_FILL_UPGRADE.get());
-                output.accept(ModItems.HONEY_CAP_UPGRADE.get());
-                output.accept(ModItems.BREED_TIME_UPGRADE.get());
-                output.accept(ModItems.T2_NEST_UPGRADE.get());
-                output.accept(ModItems.T3_NEST_UPGRADE.get());
-                output.accept(ModItems.T4_NEST_UPGRADE.get());
+                    output.accept(ModItems.ENERGY_CAP_UPGRADE.get());
+                    output.accept(ModItems.ENERGY_XFER_UPGRADE.get());
+                    output.accept(ModItems.ENERGY_FILL_UPGRADE.get());
+                    output.accept(ModItems.HONEY_CAP_UPGRADE.get());
+                    output.accept(ModItems.BREED_TIME_UPGRADE.get());
+                    output.accept(ModItems.APIARY_POLLEN_UPGRADE.get());
+                    output.accept(ModItems.T2_NEST_UPGRADE.get());
+                    output.accept(ModItems.T3_NEST_UPGRADE.get());
+                    output.accept(ModItems.T4_NEST_UPGRADE.get());
 
-                output.accept(ModItems.HONEY_GLASS.get());
-                output.accept(ModItems.HONEY_GLASS_PLAYER.get());
+                    output.accept(ModItems.HONEY_GLASS.get());
+                    output.accept(ModItems.HONEY_GLASS_PLAYER.get());
 
-                output.accept(ModItems.TRIMMED_WAXED_PLANKS.get());
-                output.accept(ModItems.WAXED_PLANKS.get());
-                output.accept(ModItems.WAXED_STAIRS.get());
-                output.accept(ModItems.WAXED_SLAB.get());
-                output.accept(ModItems.WAXED_FENCE.get());
-                output.accept(ModItems.WAXED_FENCE_GATE.get());
-                output.accept(ModItems.WAXED_BUTTON.get());
-                output.accept(ModItems.WAXED_PRESSURE_PLATE.get());
-                output.accept(ModItems.WAXED_DOOR.get());
-                output.accept(ModItems.WAXED_TRAPDOOR.get());
-                output.accept(ModItems.WAXED_SIGN.get());
-                output.accept(ModItems.WAXED_HANGING_SIGN.get());
+                    output.accept(ModItems.TRIMMED_WAXED_PLANKS.get());
+                    output.accept(ModItems.WAXED_PLANKS.get());
+                    output.accept(ModItems.WAXED_STAIRS.get());
+                    output.accept(ModItems.WAXED_SLAB.get());
+                    output.accept(ModItems.WAXED_FENCE.get());
+                    output.accept(ModItems.WAXED_FENCE_GATE.get());
+                    output.accept(ModItems.WAXED_BUTTON.get());
+                    output.accept(ModItems.WAXED_PRESSURE_PLATE.get());
+                    output.accept(ModItems.WAXED_DOOR.get());
+                    output.accept(ModItems.WAXED_TRAPDOOR.get());
+                    output.accept(ModItems.WAXED_SIGN.get());
+                    output.accept(ModItems.WAXED_HANGING_SIGN.get());
 
-                addHiveBreakBooks(parameters, output);
-            }).build()
+                    output.accept(ModItems.POLLEN.get());
+
+                    addHiveBreakBooks(parameters, output);
+                }).build()
     );
 
     public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES_HIVES = CREATIVE_TABS.register("hives", () -> CreativeModeTab.builder()
                     .icon(Items.BEEHIVE::getDefaultInstance)
                     .title(Component.translatable("itemGroup.resourcefulbees.hives"))
                     .displayItems((parameters, output) -> {
-                                ModItems.NEST_ITEMS.getEntries().stream()
-                                        .map(RegistryEntry::get)
-                                        .sorted(Comparator.comparing(item ->
-                                                BuiltInRegistries.ITEM.getKey(item).toString()
-                                        ))
-                                        .forEach(output::accept);
-                                output.accept(ModItems.T1_APIARY_ITEM.get());
-                                output.accept(ModItems.T2_APIARY_ITEM.get());
-                                output.accept(ModItems.T3_APIARY_ITEM.get());
-                                output.accept(ModItems.T4_APIARY_ITEM.get());
-                                output.accept(ModItems.FLOW_HIVE.get());
-                            }
-                    )
-                    .build());
+                        ModItems.NEST_ITEMS.getEntries().stream()
+                                .map(RegistryEntry::get)
+                                .sorted(Comparator.comparing(item ->
+                                        BuiltInRegistries.ITEM.getKey(item).toString()
+                                ))
+                                .forEach(output::accept);
+                        output.accept(ModItems.T1_APIARY_ITEM.get());
+                        output.accept(ModItems.T2_APIARY_ITEM.get());
+                        output.accept(ModItems.T3_APIARY_ITEM.get());
+                        output.accept(ModItems.T4_APIARY_ITEM.get());
+                        output.accept(ModItems.FLOW_HIVE.get());
+                    }).build());
 
     public static final RegistryEntry<CreativeModeTab> RESOURCEFUL_BEES_HONEY =
             CREATIVE_TABS.register("honey", () ->

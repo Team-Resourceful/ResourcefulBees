@@ -116,12 +116,15 @@ public final class ModItems {
     //public static final HolderRegistryEntry<Item> MUTATED_POLLEN = registerItem(ITEMS, "mutated_pollen", () -> new MutatedPollenItem(new Item.Properties()));
 //    public static final HolderRegistryEntry<Item> FAKE_FLOWER = registerItem(ITEMS, "fake_flower", () -> new BlockItem(ModBlocks.FAKE_FLOWER.get(), new Item.Properties()));
 
+
+    public static final HolderRegistryEntry<Item> POLLEN = registerItem(ITEMS, "pollen", PollenItem::new, Item.Properties::new);
     public static final HolderRegistryEntry<Item> GOLD_ROSE_BUSH = registerBlockItem(ITEMS, "gold_rose_bush", ModBlocks.GOLD_ROSE_BUSH, DoubleHighBlockItem::new, Item.Properties::new);
 
     public static final HolderRegistryEntry<Item> T2_NEST_UPGRADE = registerItem(ITEMS, "t2_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T1_TO_T2)));
     public static final HolderRegistryEntry<Item> T3_NEST_UPGRADE = registerItem(ITEMS, "t3_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T2_TO_T3)));
     public static final HolderRegistryEntry<Item> T4_NEST_UPGRADE = registerItem(ITEMS, "t4_nest_upgrade", Item::new, () -> new Item.Properties().stacksTo(16).component(ModDataComponents.BEEHIVE_UPGRADE, BeehiveUpgrade.create(BeehiveUpgrade.Tier.T3_TO_T4)));
     public static final HolderRegistryEntry<Item> BREED_TIME_UPGRADE = registerItem(ITEMS, "breed_time_upgrade", Item::new, () -> new Item.Properties().stacksTo(8).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.BREED_TIME)));
+    public static final HolderRegistryEntry<Item> APIARY_POLLEN_UPGRADE = registerItem(ITEMS, "apiary_pollen_upgrade", Item::new, () -> new Item.Properties().stacksTo(8).component(ModDataComponents.UPGRADE, Upgrade.create(Upgrade.Type.APIARY_POLLEN)));
 
     public static final HolderRegistryEntry<Item> HONEYCOMB_POTTERY_SHERD = registerItem(ITEMS, "honeycomb_pottery_sherd", Item::new, () -> new Item.Properties().potPattern(ModDecoratedPotPatterns.HONEYCOMB));
     public static final HolderRegistryEntry<Item> BEE_POTTERY_SHERD = registerItem(ITEMS, "bee_pottery_sherd", Item::new, () -> new Item.Properties().potPattern(ModDecoratedPotPatterns.BEE));

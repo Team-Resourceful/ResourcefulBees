@@ -17,7 +17,8 @@ public class GenerateCommand {
         return Commands.literal("generate")
                 .then(registerRecipeCommand())
                 .then(registerTradeCommand())
-                .then(registerLangCommand());
+                .then(registerLangCommand())
+                .then(registerLootCommand());
     }
 
     // -------------------------------------------------------------------------
@@ -28,6 +29,12 @@ public class GenerateCommand {
         return Commands.literal("lang")
                 .requires(stack -> stack.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                 .executes(LangGenerator::generateEnglishLang);
+    }
+
+    private static ArgumentBuilder<CommandSourceStack, ?> registerLootCommand() {
+        return Commands.literal("loot")
+                .requires(stack -> stack.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+                .executes(LootCommand::generateBeeLoot);
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> registerRecipeCommand() {

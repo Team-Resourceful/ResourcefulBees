@@ -28,6 +28,7 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTy
 import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import net.minecraft.client.entity.ClientAvatarEntity;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Avatar;
@@ -67,17 +68,6 @@ public class ResourcefulBeesClient {
         PetLoader.loadAPI();
     }
 
-//    @SubscribeEvent
-//    public static void registerEntityLayers(EntityRenderersEvent.AddLayers event) {
-//        for (PlayerModelType type : event.getSkins()) {
-//            AvatarRenderer<AbstractClientPlayer> renderer = event.getPlayerRenderer(type);
-//
-//            if (renderer != null) {
-//                renderer.addLayer(new BeeRewardRender(renderer));
-//            }
-//        }
-//    }
-
     @SubscribeEvent
     public static void registerRenderStateModifiers(RegisterRenderStateModifiersEvent event) {
         event.registerAvatarEntityModifier(new AvatarRenderStateModifier() {
@@ -93,6 +83,8 @@ public class ResourcefulBeesClient {
         ModEntities.getModBees().forEach((s, entityType) ->
                 event.registerEntityRenderer(entityType.get(), context -> new CustomBeeRenderer<>(context, BeeRegistry.get().getBeeData(s).getRenderData()))
         );
+
+        event.registerEntityRenderer(ModEntities.THROWN_POLLEN.get(), ThrownItemRenderer::new);
 
         event.registerBlockEntityRenderer(ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get(), context -> new GeoBlockRenderer<>(context, ModBlockEntityTypes.BASIC_CENTRIFUGE_ENTITY.get()));
         event.registerBlockEntityRenderer(ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get(), context -> new CentrifugeCrankRenderer<>(context, ModBlockEntityTypes.CENTRIFUGE_CRANK_ENTITY.get()));
@@ -120,6 +112,7 @@ public class ResourcefulBeesClient {
         event.register(ModIdentifier.of("honey_bottle"), HoneyBottleTintSource.CODEC);
         event.register(ModIdentifier.of("filled_bee_jar"), FilledBeeJarTintSource.CODEC);
         event.register(ModIdentifier.of("bee_spawn_egg"), BeeSpawnEggTintSource.CODEC);
+        event.register(ModIdentifier.of("pollen"), PollenTintSource.CODEC);
     }
 
     @SubscribeEvent

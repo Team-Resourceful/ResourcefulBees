@@ -133,7 +133,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
     }
 
     public void addMutation(String id, String name) {
-        add("mutation.resourcefulbees.mutation." + id, name);
+        add("mutation.resourcefulbees.mutations." + id, name);
     }
 
     public void addFluid(FluidData fluid, String name) {

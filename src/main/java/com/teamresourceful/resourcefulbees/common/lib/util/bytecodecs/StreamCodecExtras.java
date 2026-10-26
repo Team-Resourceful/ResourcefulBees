@@ -9,8 +9,8 @@ import com.teamresourceful.resourcefullib.common.codecs.predicates.properties.Ex
 import com.teamresourceful.resourcefullib.common.codecs.predicates.properties.PropertyMatcher;
 import com.teamresourceful.resourcefullib.common.codecs.predicates.properties.RangePropertyMatcher;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.advancements.predicates.*;
 import net.minecraft.advancements.predicates.entity.EntityFlagsPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
@@ -27,7 +27,10 @@ import net.minecraft.world.effect.MobEffect;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import org.jspecify.annotations.NonNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.ToDoubleFunction;
 
 import static net.minecraft.network.codec.ByteBufCodecs.collection;
@@ -332,4 +335,36 @@ public final class StreamCodecExtras {
                     ByteBufCodecs.BOOL,
                     DataComponentIngredient::componentsExhaustive,
                     DataComponentIngredient::new);
+
+    public static final StreamCodec<ByteBuf, Color> COLOR_STREAM_CODEC =
+            new StreamCodec<>() {
+
+                @Override
+                public @NonNull Color decode(ByteBuf buffer) {
+                    return switch (buffer.readByte()) {
+                        case 0 -> Color.DEFAULT;
+                        case 1 -> Color.parse(ByteBufCodecs.STRING_UTF8.decode(buffer));
+                        case 2 -> new Color(buffer.readInt());
+                        default -> throw new IllegalArgumentException(
+                                "Unknown color type"
+                        );
+                    };
+                }
+
+                @Override
+                public void encode(@NonNull ByteBuf buffer, Color color) {
+                    if (color.isDefault()) {
+                        buffer.writeByte(0);
+                    } else if (color.isSpecial()) {
+                        buffer.writeByte(1);
+                        ByteBufCodecs.STRING_UTF8.encode(
+                                buffer,
+                                color.toString()
+                        );
+                    } else {
+                        buffer.writeByte(2);
+                        buffer.writeInt(color.getValue());
+                    }
+                }
+            };
 }

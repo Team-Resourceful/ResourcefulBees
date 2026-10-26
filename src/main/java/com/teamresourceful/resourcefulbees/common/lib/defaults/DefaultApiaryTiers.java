@@ -14,17 +14,21 @@ public final class DefaultApiaryTiers {
     }
 
     public static final ApiaryTier T1_APIARY = new ApiaryTier.Builder()
-        .max(8)
-        .time(0.8)
-        .output(() -> ApiaryConfig.tierOneApiaryOutput)
-        .amount(() -> ApiaryConfig.tierOneApiaryQuantity)
-        .blockEntity(ModBlockEntityTypes.T1_APIARY_ENTITY::get)
-        .item(ModItems.T1_APIARY_ITEM)
-        .build(ModIdentifier.of("t1"));
+            .max(8)
+            .time(0.8)
+            .pollenChance(0.6) //84
+            .pollenRolls(2)
+            .output(() -> ApiaryConfig.tierOneApiaryOutput)
+            .amount(() -> ApiaryConfig.tierOneApiaryQuantity)
+            .blockEntity(ModBlockEntityTypes.T1_APIARY_ENTITY::get)
+            .item(ModItems.T1_APIARY_ITEM)
+            .build(ModIdentifier.of("t1"));
 
     public static final ApiaryTier T2_APIARY = new ApiaryTier.Builder()
             .max(12)
             .time(0.7)
+            .pollenChance(0.4) //87.04
+            .pollenRolls(4)
             .output(() -> ApiaryConfig.tierTwoApiaryOutput)
             .amount(() -> ApiaryConfig.tierTwoApiaryQuantity)
             .blockEntity(ModBlockEntityTypes.T2_APIARY_ENTITY::get)
@@ -34,6 +38,8 @@ public final class DefaultApiaryTiers {
     public static final ApiaryTier T3_APIARY = new ApiaryTier.Builder()
             .max(16)
             .time(0.6)
+            .pollenChance(0.5) //93.75
+            .pollenRolls(4)
             .output(() -> ApiaryConfig.tierThreeApiaryOutput)
             .amount(() -> ApiaryConfig.tierThreeApiaryQuantity)
             .blockEntity(ModBlockEntityTypes.T3_APIARY_ENTITY::get)
@@ -43,6 +49,8 @@ public final class DefaultApiaryTiers {
     public static final ApiaryTier T4_APIARY = new ApiaryTier.Builder()
             .max(20)
             .time(0.5)
+            .pollenChance(0.5) //99.6094
+            .pollenRolls(8)
             .output(() -> ApiaryConfig.tierFourApiaryOutput)
             .amount(() -> ApiaryConfig.tierFourApiaryQuantity)
             .blockEntity(ModBlockEntityTypes.T4_APIARY_ENTITY::get)

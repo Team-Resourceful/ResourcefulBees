@@ -1,5 +1,7 @@
 {
     "type": "resourcefulbees:mutation",
+    "pollenBaseColor": "#757361",
+    "pollenTopColor": "#8b8a7e",
     "mutations": [
         {
             "input": {

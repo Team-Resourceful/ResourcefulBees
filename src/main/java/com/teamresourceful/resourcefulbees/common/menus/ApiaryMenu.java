@@ -2,10 +2,12 @@ package com.teamresourceful.resourcefulbees.common.menus;
 
 import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntity;
 import com.teamresourceful.resourcefulbees.common.components.ApiaryOccupant;
+import com.teamresourceful.resourcefulbees.common.components.Upgrade;
 import com.teamresourceful.resourcefulbees.common.menus.base.AbstractModContainerMenu;
 import com.teamresourceful.resourcefulbees.common.menus.content.PositionContent;
 import com.teamresourceful.resourcefulbees.common.networking.NetworkHandler;
 import com.teamresourceful.resourcefulbees.common.networking.packets.client.LockBeePacket;
+import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModMenuTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -29,9 +31,22 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
 
     @Override
     protected void addMenuSlots() {
+        //upgrade slot
+        this.addSlot(new ResourceHandlerSlot(entity.resourceHandler(), entity.resourceHandler()::set, 0, 5, 5) {
+            @Override
+            public int getMaxStackSize(@NonNull ItemStack stack) {
+                return 1;
+            }
+
+            @Override
+            public boolean mayPlace(@NonNull ItemStack stack) {
+                return stack.has(ModDataComponents.UPGRADE) && stack.get(ModDataComponents.UPGRADE).isType(Upgrade.Type.APIARY_POLLEN);
+            }
+        });
+        //output slots
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new ResourceHandlerSlot(entity.resourceHandler(), entity.resourceHandler()::set, j + i * 9, 56 + j * 18, 18 + i * 18) {
+                this.addSlot(new ResourceHandlerSlot(entity.resourceHandler(), entity.resourceHandler()::set, 1+j + i * 9, 56 + j * 18, 18 + i * 18) {
                     @Override
                     public boolean mayPlace(@NonNull ItemStack stack) {
                         return false;
@@ -48,17 +63,17 @@ public class ApiaryMenu extends AbstractModContainerMenu<ApiaryBlockEntity> {
 
     @Override
     public int getContainerInputEnd() {
-        return 27;
+        return 1;
     }
 
     @Override
     public int getInventoryStart() {
-        return 27;
+        return 28;
     }
 
     @Override
     public int startIndex() {
-        return 27;
+        return 28;
     }
 
     @Override

@@ -1,4 +1,4 @@
-// 26.3	2026-10-17T18:24:55.63606777	Resourceful Bees Model Provider
+// 26.3	2026-10-19T22:43:57.230776	Resourceful Bees Model Provider
 a1087ceb1c1293169fe6e432f27c890b739aca12 assets/minecraft/items/air.json
 e0f8a31cf0251326b547214d29d171345c903bd4 assets/resourcefulbees/blockstates/apiary/1.json
 24cb446a4c8d450a97403bd9d1e5d156dbc671ec assets/resourcefulbees/blockstates/apiary/2.json
@@ -192,6 +192,7 @@ e239435cccb701f1cd569be70f6a8d93281cc59e assets/resourcefulbees/items/nest/withe
 a6fe5161cd17c8622f2e52b65acf292c302ec889 assets/resourcefulbees/items/nest/wither/2.json
 40fdf6a633a521c88d19cd549e2f213e4dc4d24d assets/resourcefulbees/items/nest/wither/3.json
 6cc8c8741c1e122be3f35f12ca98a33d5831250e assets/resourcefulbees/items/nest/wither/4.json
+7395a08e4bad303572fb998e3a05284793368f95 assets/resourcefulbees/items/pollen.json
 c840e9cf66f93e91a99fe7ef014174c2d2f246dd assets/resourcefulbees/items/strawbeerry_milkshake.json
 e74dc927f50b5b4aa75cf3de7e1af4288378b5c9 assets/resourcefulbees/items/stripped_waxed_log.json
 4aed7b7290da6642824250fc3ce9ea1597b1da21 assets/resourcefulbees/items/t2_nest_upgrade.json
@@ -435,6 +436,7 @@ cf4d44ae681ec2b0cbb1c0d0466c7c0058d774a4 assets/resourcefulbees/models/item/ener
 6bbe052bd6583ee0b695d4077d00b3c1a6304054 assets/resourcefulbees/models/item/gold_rose_bush.json
 9c45d32dde5c616df9d0ba2f2d4e0ad9b5783c93 assets/resourcefulbees/models/item/honey_cap_upgrade.json
 8b67b2ac895a43f8c8c96b44864bdc275d9a58e2 assets/resourcefulbees/models/item/honeycomb_pottery_sherd.json
+23a325bae91081df41792f060377819ea45a2b3a assets/resourcefulbees/models/item/pollen.json
 55476f86fcb754001283debf2022001eea22c8c2 assets/resourcefulbees/models/item/strawbeerry_milkshake.json
 ce79e7b17127141594434e53337569654777d27b assets/resourcefulbees/models/item/t2_nest_upgrade.json
 ab92346cc3af5b00eae7adb27ab403e384fad5e7 assets/resourcefulbees/models/item/t3_nest_upgrade.json

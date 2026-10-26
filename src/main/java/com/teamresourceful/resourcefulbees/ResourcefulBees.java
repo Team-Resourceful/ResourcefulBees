@@ -181,6 +181,12 @@ public class ResourcefulBees {
                 (stack, context, display, player, flag, consumer) ->
                         stack.addToTooltip(ModDataComponents.APIARY_TIER, context, display, consumer, flag)
         );
+
+        event.registerAppender(
+                TooltipLocation.HEAD,
+                (stack, context, display, player, tooltipFlag, builder) ->
+                        stack.addToTooltip(ModDataComponents.POLLEN_RECIPE, context, display, builder, tooltipFlag)
+        );
         
         event.registerAppender(TooltipLocation.POST_CUSTOM, (stack, context, display, player, tooltipFlag, builder) -> {
             if (stack.is(ModItems.SMOKER.get())) {

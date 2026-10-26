@@ -28,6 +28,8 @@ public record ApiaryTier(
         Identifier id,
         int maxBees,
         double timeMod,
+        double pollenChance,
+        int pollenRolls,
         Supplier<ApiaryOutputType> outputType,
         IntSupplier outputAmount,
         Supplier<BlockEntityType<? extends BlockEntity>> blockEntity,
@@ -81,6 +83,8 @@ public record ApiaryTier(
     public static class Builder {
         private int max;
         private double time;
+        private double pollenChance;
+        private int pollenRolls;
         private Supplier<ApiaryOutputType> output;
         private IntSupplier amount;
         private Supplier<BlockEntityType<? extends BlockEntity>> blockEntity;
@@ -93,6 +97,16 @@ public record ApiaryTier(
 
         public Builder time(double time) {
             this.time = time;
+            return this;
+        }
+
+        public Builder pollenChance(double pollenChance) {
+            this.pollenChance = pollenChance;
+            return this;
+        }
+
+        public Builder pollenRolls(int pollenRolls) {
+            this.pollenRolls = pollenRolls;
             return this;
         }
 
@@ -117,7 +131,7 @@ public record ApiaryTier(
         }
 
         public ApiaryTier build(Identifier id) {
-            return new ApiaryTier(id, max, time, output, amount, blockEntity, item);
+            return new ApiaryTier(id, max, time, pollenChance, pollenRolls, output, amount, blockEntity, item);
         }
     }
 

@@ -47,7 +47,8 @@ public record Upgrade(Type type) {
         HONEY_CAPACITY,
         ENERGY_CAPACITY,
         ENERGY_TRANSFER,
-        ENERGY_FILL;
+        ENERGY_FILL,
+        APIARY_POLLEN;
 
         private static final IntFunction<Type> BY_ID =
                 ByIdMap.continuous(

@@ -62,6 +62,8 @@ public final class RegistryHandler {
         ModFeatures.FEATURE_TYPES.init();
         ModDataComponents.COMPONENTS.init();
         ModDataComponentPredicates.PREDICATES.init();
+        ModLootConditions.LOOT_CONDITIONS.init();
+        ModLootFunctions.LOOT_FUNCTIONS.init();
     }
 
     //Dynamic|Iterative Registration Stuff below this line

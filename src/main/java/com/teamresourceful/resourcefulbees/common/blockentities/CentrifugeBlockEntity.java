@@ -12,6 +12,7 @@ import com.geckolib.animation.state.AnimationTest;
 import com.geckolib.util.GeckoLibUtil;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.ContentContainerBlock;
 import com.teamresourceful.resourcefulbees.common.blockentities.base.GUISyncedBlockEntity;
+import com.teamresourceful.resourcefulbees.common.blockentities.base.IOResourceHandler;
 import com.teamresourceful.resourcefulbees.common.blocks.CentrifugeBlock;
 import com.teamresourceful.resourcefulbees.common.components.TankData;
 import com.teamresourceful.resourcefulbees.common.menus.CentrifugeMenu;
@@ -22,7 +23,6 @@ import com.teamresourceful.resourcefulbees.common.recipes.centrifuge.outputs.Ite
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockEntityTypes;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.*;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -42,11 +42,9 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidStackTemplate;
-import net.neoforged.neoforge.transfer.TransferPreconditions;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
-import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
@@ -309,45 +307,10 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
         return this.tank;
     }
 
-    public class CentrifugeItemResourceHandler extends ItemStacksResourceHandler {
+    public class CentrifugeItemResourceHandler extends IOResourceHandler {
 
         public CentrifugeItemResourceHandler() {
-            super(SLOTS);
-        }
-
-        public ItemContainerContents toContainerContents() {
-            return ItemContainerContents.fromItems(this.copyToList());
-        }
-
-        public void fromContainerContents(ItemContainerContents contents) {
-            NonNullList<ItemStack> items = NonNullList.withSize(this.size(), ItemStack.EMPTY);
-            contents.copyInto(items);
-
-            for (int slot = 0; slot < this.size(); slot++) {
-                ItemStack stack = items.get(slot);
-
-                if (stack.isEmpty()) {
-                    this.set(slot, ItemResource.EMPTY, 0);
-                } else {
-                    this.set(slot, ItemResource.of(stack), stack.getCount());
-                }
-            }
-        }
-
-        @Override
-        public int insert(int index, @NonNull ItemResource resource, int amount, @NonNull TransactionContext transaction) {
-            return index == 0 ? super.insert(index, resource, amount, transaction) : 0;
-        }
-
-        public void insertOutput(ItemResource resource, int amount, TransactionContext context) {
-            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
-
-            int inserted = 0;
-            int size = size();
-            for (int index = 1; index < size; index++) {
-                inserted += super.insert(index, resource, amount - inserted, context);
-                if (inserted == amount) break;
-            }
+            super(SLOTS, 1);
         }
 
         @Override
@@ -363,7 +326,6 @@ public class CentrifugeBlockEntity extends GUISyncedBlockEntity implements GeoBl
 
     public class CentrifugeFluidResourceHandler extends FluidStacksResourceHandler {
 
-        //todo make size dynamic to hold all fluids at once
         public CentrifugeFluidResourceHandler() {
             super(TANKS, TANK_CAPACITY);
         }

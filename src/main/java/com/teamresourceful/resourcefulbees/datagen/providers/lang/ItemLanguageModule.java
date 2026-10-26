@@ -59,7 +59,7 @@ public class ItemLanguageModule implements LanguageModule {
         provider.addItem(ModItems.SMOKER, "Bee Smoker");
         provider.addItem(ModItems.WAX, "Beeswax");
         provider.addItem(ModItems.BREED_TIME_UPGRADE, "Breed Time Upgrade");
-        //provider.addItem(ModItems.MUTATED_POLLEN, "Mutated Pollen");
+        provider.addItem(ModItems.POLLEN, "Pollen");
         provider.addItem(ModItems.T2_NEST_UPGRADE, "Tier 2 Nest Upgrade");
         provider.addItem(ModItems.T3_NEST_UPGRADE, "Tier 3 Nest Upgrade");
         provider.addItem(ModItems.T4_NEST_UPGRADE, "Tier 4 Nest Upgrade");

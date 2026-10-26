@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.common.blockentities;
 
+import com.teamresourceful.resourcefulbees.common.blockentities.base.IOResourceHandler;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BreederConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.translations.GuiTranslations;
 import com.teamresourceful.resourcefulbees.common.lib.util.MathUtils;
@@ -12,7 +13,6 @@ import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlockE
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModRecipes;
 import com.teamresourceful.resourcefullib.common.menu.ContentMenuProvider;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -27,9 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.transfer.TransferPreconditions;
 import net.neoforged.neoforge.transfer.item.ItemResource;
-import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
@@ -204,44 +202,9 @@ public class BreederBlockEntity extends BlockEntity implements ContentMenuProvid
         return inventory.getResource(index).toStack();
     }
 
-    public class ResourceHandler extends ItemStacksResourceHandler {
+    public class ResourceHandler extends IOResourceHandler {
         public ResourceHandler() {
-            super(29);
-        }
-
-        public ItemContainerContents toContainerContents() {
-            return ItemContainerContents.fromItems(this.copyToList());
-        }
-
-        public void fromContainerContents(ItemContainerContents contents) {
-            NonNullList<ItemStack> items = NonNullList.withSize(this.size(), ItemStack.EMPTY);
-            contents.copyInto(items);
-
-            for (int slot = 0; slot < this.size(); slot++) {
-                ItemStack stack = items.get(slot);
-
-                if (stack.isEmpty()) {
-                    this.set(slot, ItemResource.EMPTY, 0);
-                } else {
-                    this.set(slot, ItemResource.of(stack), stack.getCount());
-                }
-            }
-        }
-
-        @Override
-        public int insert(int index, @NonNull ItemResource resource, int amount, @NonNull TransactionContext transaction) {
-            return index <= 11 ? super.insert(index, resource, amount, transaction) : 0;
-        }
-
-        public void insertOutput(ItemResource resource, int amount, TransactionContext context) {
-            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
-
-            int inserted = 0;
-            int size = size();
-            for (int index = 11; index < size; index++) {
-                inserted += super.insert(index, resource, amount - inserted, context);
-                if (inserted == amount) break;
-            }
+            super(29, 11);
         }
 
         @Override

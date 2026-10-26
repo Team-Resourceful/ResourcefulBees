@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "resourcefulbees:item/pollen",
+    "tints": [
+      {
+        "type": "resourcefulbees:pollen",
+        "layer": 0
+      },
+      {
+        "type": "resourcefulbees:pollen",
+        "layer": 1
+      }
+    ]
+  }
+}

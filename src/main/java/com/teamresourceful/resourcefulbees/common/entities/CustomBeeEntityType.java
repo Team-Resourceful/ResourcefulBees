@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefulbees.api.data.bee.CustomBeeData;
 import com.teamresourceful.resourcefulbees.api.registry.BeeRegistry;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -31,7 +32,7 @@ public class CustomBeeEntityType<T extends Bee> extends EntityType<T> {
                 5,
                 3,
                 String.format("entity_type.resourcefulbees.%s", beeType.getPath()),
-                Optional.empty(),
+                Optional.of(ResourceKey.create(Registries.LOOT_TABLE, ModIdentifier.of("entities/" + beeType.getPath()))),
                 FeatureFlags.DEFAULT_FLAGS,
                 true,
                 true);

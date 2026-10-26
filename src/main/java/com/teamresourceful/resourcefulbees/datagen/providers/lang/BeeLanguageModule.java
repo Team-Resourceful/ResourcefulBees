@@ -21,33 +21,33 @@ public class BeeLanguageModule implements LanguageModule {
     }
 
     private static void addMutations(BaseLanguageProvider provider) {
-        provider.addMutation("gold", "Gold");
-        provider.addMutation("iron", "Iron");
-        provider.addMutation("emerald", "Emerald");
-        provider.addMutation("diamond", "Diamond");
-        provider.addMutation("redstone", "Redstone");
-        provider.addMutation("nether_quartz", "Nether Quartz");
-        provider.addMutation("lapis", "Lapis");
-        provider.addMutation("coal", "Coal");
-        provider.addMutation("ender", "Ender");
-        provider.addMutation("beeper", "Beeper");
-        provider.addMutation("pigman", "Pigman");
-        provider.addMutation("skeleton", "Skeleton");
-        provider.addMutation("wither", "Wither");
-        provider.addMutation("zombee", "Zombee");
-        provider.addMutation("netherite", "Netherite");
-        provider.addMutation("oreo", "Oreo");
-        provider.addMutation("slimy", "Slimy");
-        provider.addMutation("icy", "Icy");
-        provider.addMutation("kitten", "Kitten");
-        provider.addMutation("dragon", "Dragon");
-        provider.addMutation("dungeon", "Dungeon");
-        provider.addMutation("brown_mushroom", "Brown Mushroom");
-        provider.addMutation("red_mushroom", "Red Mushroom");
-        provider.addMutation("crimson_fungus", "Crimson Fungus");
-        provider.addMutation("warped_fungus", "Warped Fungus");
-        provider.addMutation("yeti", "Yeti");
-        provider.addMutation("starry", "Starry");
+        provider.addMutation("gold", "Gold Mutation");
+        provider.addMutation("iron", "Iron Mutation");
+        provider.addMutation("emerald", "Emerald Mutation");
+        provider.addMutation("diamond", "Diamond Mutation");
+        provider.addMutation("redstone", "Redstone Mutation");
+        provider.addMutation("quartz", "Nether Quartz Mutation");
+        provider.addMutation("lapis", "Lapis Mutation");
+        provider.addMutation("coal", "Coal Mutation");
+        provider.addMutation("ender", "Ender Mutation");
+        provider.addMutation("beeper", "Beeper Mutation");
+        provider.addMutation("pigman", "Pigman Mutation");
+        provider.addMutation("skeleton", "Skeleton Mutation");
+        provider.addMutation("wither", "Wither Mutation");
+        provider.addMutation("zombee", "Zombee Mutation");
+        provider.addMutation("netherite", "Netherite Mutation");
+        provider.addMutation("oreo", "Oreo Mutation");
+        provider.addMutation("slimy", "Slimy Mutation");
+        provider.addMutation("icy", "Icy Mutation");
+        provider.addMutation("kitten", "Kitten Mutation");
+        provider.addMutation("dragon", "Dragon Mutation");
+        provider.addMutation("dungeon", "Dungeon Mutation");
+        provider.addMutation("brown_mushroom", "Brown Mushroom Mutation");
+        provider.addMutation("red_mushroom", "Red Mushroom Mutation");
+        provider.addMutation("crimson_fungus", "Crimson Fungus Mutation");
+        provider.addMutation("warped_fungus", "Warped Fungus Mutation");
+        provider.addMutation("yeti", "Yeti Mutation");
+        provider.addMutation("starry", "Starry Mutation");
     }
 
     private static void addTraitDamageTypes(BaseLanguageProvider provider) {

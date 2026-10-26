@@ -26,11 +26,7 @@ public class BeeBoxBlockEntity extends BlockEntity {
     private BeeBoxOccupants occupants = BeeBoxOccupants.EMPTY;
 
     public BeeBoxBlockEntity(BlockPos pos, BlockState state) {
-        super(
-                ModBlockEntityTypes.BEE_BOX_ENTITY.get(),
-                pos,
-                state
-        );
+        super(ModBlockEntityTypes.BEE_BOX_ENTITY.get(), pos, state);
     }
 
     public BeeBoxOccupants getOccupants() {
@@ -59,9 +55,7 @@ public class BeeBoxBlockEntity extends BlockEntity {
             return false;
         }
 
-        this.occupants = this.occupants.add(
-                BeeBoxOccupant.from(entity)
-        );
+        this.occupants = this.occupants.add(BeeBoxOccupant.from(entity));
 
         this.setChanged();
 
@@ -91,48 +85,29 @@ public class BeeBoxBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void loadAdditional(
-            @NotNull ValueInput input
-    ) {
+    protected void loadAdditional(@NotNull ValueInput input) {
         super.loadAdditional(input);
-
-        this.occupants = input.read(
-                        OCCUPANTS_KEY,
-                        BeeBoxOccupants.CODEC
-                )
-                .orElse(BeeBoxOccupants.EMPTY);
+        this.occupants = input.read(OCCUPANTS_KEY, BeeBoxOccupants.CODEC).orElse(BeeBoxOccupants.EMPTY);
     }
 
     @Override
-    protected void collectImplicitComponents(
-            DataComponentMap.@NonNull Builder components
-    ) {
+    protected void collectImplicitComponents(DataComponentMap.@NonNull Builder components) {
         super.collectImplicitComponents(components);
 
         if (!this.occupants.isEmpty()) {
-            components.set(
-                    ModDataComponents.BEE_BOX_OCCUPANTS.get(),
-                    this.occupants
-            );
+            components.set(ModDataComponents.BEE_BOX_OCCUPANTS.get(), this.occupants);
         }
     }
 
     @Override
-    protected void applyImplicitComponents(
-            @NonNull DataComponentGetter components
-    ) {
+    protected void applyImplicitComponents(@NonNull DataComponentGetter components) {
         super.applyImplicitComponents(components);
 
-        this.occupants = components.getOrDefault(
-                ModDataComponents.BEE_BOX_OCCUPANTS.get(),
-                BeeBoxOccupants.EMPTY
-        );
+        this.occupants = components.getOrDefault(ModDataComponents.BEE_BOX_OCCUPANTS.get(), BeeBoxOccupants.EMPTY);
     }
 
     @Override
-    public void removeComponentsFromTag(
-            @NotNull ValueOutput output
-    ) {
+    public void removeComponentsFromTag(@NotNull ValueOutput output) {
         super.removeComponentsFromTag(output);
 
         output.discard(OCCUPANTS_KEY);

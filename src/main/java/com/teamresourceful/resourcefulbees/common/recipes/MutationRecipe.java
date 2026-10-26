@@ -29,8 +29,8 @@ import java.util.Map;
 public record MutationRecipe(Color pollenBaseColor, Color pollenTopColor, Map<MutationType, WeightedCollection<MutationType>> mutations) implements Recipe<RecipeInput> {
 
     public static final MapCodec<MutationRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Color.CODEC.fieldOf("pollenBaseColor").orElse(BeeConstants.DEFAULT_POLLEN_BASE_COLOR).forGetter(MutationRecipe::getPollenBaseColor),
-        Color.CODEC.fieldOf("pollenTopColor").orElse(BeeConstants.DEFAULT_POLLEN_TOP_COLOR).forGetter(MutationRecipe::getPollenTopColor),
+        Color.CODEC.fieldOf("pollenBaseColor").orElse(BeeConstants.DEFAULT_POLLEN_BASE_COLOR).forGetter(MutationRecipe::pollenBaseColor),
+        Color.CODEC.fieldOf("pollenTopColor").orElse(BeeConstants.DEFAULT_POLLEN_TOP_COLOR).forGetter(MutationRecipe::pollenTopColor),
         MutationEntry.MUTATION_MAP_CODEC.fieldOf("mutations").forGetter(MutationRecipe::mutations)
     ).apply(instance, MutationRecipe::new));
 
@@ -66,19 +66,26 @@ public record MutationRecipe(Color pollenBaseColor, Color pollenTopColor, Map<Mu
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MutationRecipe> STREAM_CODEC = StreamCodec.composite(
             StreamCodecByteCodec.to(Color.BYTE_CODEC),
-        MutationRecipe::getPollenBaseColor,
+            MutationRecipe::pollenBaseColor,
+
             StreamCodecByteCodec.to(Color.BYTE_CODEC),
-        MutationRecipe::getPollenTopColor,
-        MUTATION_MAP_STREAM_CODEC,
-        MutationRecipe::mutations,
-        MutationRecipe::new
+            MutationRecipe::pollenTopColor,
+
+            MUTATION_MAP_STREAM_CODEC,
+            MutationRecipe::mutations,
+
+            MutationRecipe::new
     );
+
+    public static RecipeHolder<MutationRecipe> getRecipe(@NonNull ServerLevel level, ResourceKey<Recipe<?>> recipe) {
+        return level.recipeAccess().byKeyTyped(ModRecipes.MUTATION_RECIPE_TYPE.get(), recipe);
+    }
 
     public static RecipeHolder<MutationRecipe> getRecipe(@NotNull Level level, Identifier id) {
         ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, id);
 
         if (level instanceof ServerLevel serverLevel) {
-            return serverLevel.getServer().getRecipeManager().byKeyTyped(ModRecipes.MUTATION_RECIPE_TYPE.get(), key);
+            return getRecipe(serverLevel, key);
         }
 
         return RBeesClientRecipes.getMutationRecipes()
@@ -86,14 +93,6 @@ public record MutationRecipe(Color pollenBaseColor, Color pollenTopColor, Map<Mu
                 .filter(holder -> holder.id().equals(key))
                 .findFirst()
                 .orElse(null);
-    }
-
-    public Color getPollenBaseColor() {
-        return pollenBaseColor;
-    }
-
-    public Color getPollenTopColor() {
-        return pollenTopColor;
     }
 
     @Override

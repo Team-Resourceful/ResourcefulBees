@@ -1,5 +1,6 @@
 package com.teamresourceful.resourcefulbees.datagen.providers;
 
+import com.teamresourceful.resourcefulbees.client.tints.PollenTintSource;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModIdentifier;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModBlocks;
@@ -11,10 +12,7 @@ import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.model.ModelTemplate;
-import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TextureMapping;
-import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
@@ -507,6 +505,8 @@ public class RBeesModelProvider extends ModelProvider {
     }
 
     private static void registerItems(ItemModelGenerators itemModels) {
+        registerPollen(itemModels);
+
         itemModels.generateFlatItem(
                 ModItems.BEEPEDIA.get(),
                 ModelTemplates.FLAT_ITEM
@@ -584,6 +584,29 @@ public class RBeesModelProvider extends ModelProvider {
 
         itemModels.generateFlatItem(ModItems.BEE_POTTERY_SHERD.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.HONEYCOMB_POTTERY_SHERD.get(), ModelTemplates.FLAT_ITEM);
+    }
+
+    private static void registerPollen(ItemModelGenerators itemModels) {
+        Item pollen = ModItems.POLLEN.get();
+
+        TextureMapping textures = new TextureMapping()
+                .put(TextureSlot.LAYER0, modMaterial("item/pollen_base"))
+                .put(TextureSlot.LAYER1, modMaterial("item/pollen_top"));
+
+        Identifier model = ModelTemplates.TWO_LAYERED_ITEM.create(
+                pollen,
+                textures,
+                itemModels.modelOutput
+        );
+
+        itemModels.itemModelOutput.accept(
+                pollen,
+                ItemModelUtils.tintedModel(
+                        model,
+                        new PollenTintSource(0),
+                        new PollenTintSource(1)
+                )
+        );
     }
 
     private static Material blockMaterial(Identifier blockId, String path) {

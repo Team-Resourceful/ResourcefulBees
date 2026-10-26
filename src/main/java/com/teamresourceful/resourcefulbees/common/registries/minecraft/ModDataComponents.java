@@ -128,4 +128,10 @@ public final class ModDataComponents {
             .networkSynchronized(BeehiveTier.STREAM_CODEC)
             .cacheEncoding()
             .build());
+
+    public static final RegistryEntry<DataComponentType<PollenRecipe>> POLLEN_RECIPE = COMPONENTS.register("pollen_recipe", () -> DataComponentType.<PollenRecipe>builder()
+            .persistent(PollenRecipe.CODEC)
+            .networkSynchronized(PollenRecipe.STREAM_CODEC)
+            .cacheEncoding()
+            .build());
 }
