@@ -13,7 +13,7 @@ public final class BeeConstants {
     }
 
     public static final String ENTITY_TEXTURES_DIR = "textures/entity/";
-    public static final int VANILLA_BEE_INT_COLOR = 15582019;
+    public static final Color VANILLA_BEE_COLOR = new Color(15582019);
     public static final Color DEFAULT_POLLEN_TOP_COLOR = new Color(13408304);
     public static final Color DEFAULT_POLLEN_BASE_COLOR = new Color(12681264);
     public static final double DEFAULT_BREED_WEIGHT = 10;

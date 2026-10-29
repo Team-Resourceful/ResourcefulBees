@@ -9,17 +9,15 @@ import com.teamresourceful.resourcefulbees.common.recipes.breeder.BreederRecipe;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.ChildOutput;
 import com.teamresourceful.resourcefulbees.common.recipes.breeder.ParentInput;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.types.IRecipeType;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
@@ -45,10 +43,6 @@ public final class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.
 
     public BeeBreedingCategory(IGuiHelper guiHelper) {
         super(guiHelper, RECIPE, JeiTranslations.BREEDING, guiHelper.createDrawableItemLike(ModItems.BREEDER_ITEM.get()), WIDTH, HEIGHT);
-
-        TextureAtlas guiAtlas = Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.GUI);
-
-        //this.background = guiHelper.createDrawableSprite(guiAtlas, GUI, WIDTH, HEIGHT);
         this.background = guiHelper.createDrawable(GUI, 0, 0, WIDTH, HEIGHT);
     }
 
@@ -85,11 +79,7 @@ public final class BeeBreedingCategory extends BaseCategory<BeeBreedingCategory.
         parent.displayEntity().flatMap(entityId -> BeeRegistry.get().getOptionalBeeData(entityId)).ifPresent(beeData -> {
             EntityType<?> entityType = beeData.entityType();
 
-            int jarColor = beeData
-                    .getRenderData()
-                    .colorData()
-                    .jarColor()
-                    .getOpaqueValue();
+            Color jarColor = beeData.getRenderData().colorData().jarColor();
 
             builder.addInputSlot(parentX, parentY)
                     .add(BeeJarItem.createDisplayJar(entityType, jarColor))

@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.bytecodecs.StreamCodecExtras;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -28,14 +30,15 @@ public record JarOccupant(
     EntityType<?> entityType,
     long insertionGameTime,
     Component displayName,
-    int color
+    Color color
 ) implements Occupant {
+
     public static final JarOccupant EMPTY = new JarOccupant(
             Optional.empty(),
             EntityTypes.PIG,
             0,
             Component.literal("Empty"),
-            EntityUtils.getBeeColorOrDefault(null)
+            Color.DEFAULT
     );
 
     public static final Codec<JarOccupant> CODEC = RecordCodecBuilder.create(i -> i.group(
@@ -43,7 +46,7 @@ public record JarOccupant(
             EntityType.CODEC.fieldOf("entity_type").forGetter(JarOccupant::entityType),
             Codec.LONG.fieldOf("insertion_game_time").forGetter(JarOccupant::insertionGameTime),
             ComponentSerialization.CODEC.fieldOf("display_name").forGetter(JarOccupant::displayName),
-            Codec.INT.fieldOf("color").forGetter(JarOccupant::color)
+            Color.CODEC.fieldOf("color").forGetter(JarOccupant::color)
     ).apply(i, JarOccupant::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, JarOccupant> STREAM_CODEC = StreamCodec.composite(
@@ -55,7 +58,7 @@ public record JarOccupant(
             JarOccupant::insertionGameTime,
             ComponentSerialization.STREAM_CODEC,
             JarOccupant::displayName,
-            ByteBufCodecs.VAR_INT,
+            StreamCodecExtras.COLOR_STREAM_CODEC,
             JarOccupant::color,
             JarOccupant::new
     );
@@ -79,7 +82,7 @@ public record JarOccupant(
         return occupant;
     }
 
-    public static JarOccupant from(EntityType<?> type, int color) {
+    public static JarOccupant from(EntityType<?> type, Color color) {
         return new JarOccupant(
                 Optional.empty(),
                 type,

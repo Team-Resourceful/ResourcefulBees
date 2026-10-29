@@ -7,6 +7,8 @@ import com.teamresourceful.resourcefulbees.common.blockentities.ApiaryBlockEntit
 import com.teamresourceful.resourcefulbees.common.blockentities.base.BeeHolderBlockEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.ModConstants;
 import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
+import com.teamresourceful.resourcefulbees.common.lib.util.bytecodecs.StreamCodecExtras;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -28,7 +30,6 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import org.jspecify.annotations.NullMarked;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 import static com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants.MIN_HIVE_TIME;
 
@@ -38,24 +39,21 @@ public record ApiaryOccupant(
         int ticksInHive,
         int minOccupationTicks,
         Component displayName,
-        int color,
+        Color color,
         boolean locked,
         boolean hasNectar
 ) implements Occupant{
 
-    public static final Codec<ApiaryOccupant> CODEC = RecordCodecBuilder.create(
-            i -> i.group(
-                            TypedEntityData.codec(EntityType.CODEC).fieldOf("entity_data").forGetter(ApiaryOccupant::entityData),
-                            Codec.INT.fieldOf("ticks_in_hive").forGetter(ApiaryOccupant::ticksInHive),
-                            Codec.INT.fieldOf("min_ticks_in_hive").forGetter(ApiaryOccupant::minOccupationTicks),
-                            ComponentSerialization.CODEC.fieldOf("display_name").forGetter(ApiaryOccupant::displayName),
-                            Codec.INT.fieldOf("color").forGetter(ApiaryOccupant::color),
-                            Codec.BOOL.fieldOf("locked").forGetter(ApiaryOccupant::locked),
-                            Codec.BOOL.fieldOf("has_nectar").forGetter(ApiaryOccupant::hasNectar)
-                    )
-                    .apply(i, ApiaryOccupant::new)
-    );
-    public static final Codec<List<ApiaryOccupant>> LIST_CODEC = CODEC.listOf();
+    public static final Codec<ApiaryOccupant> CODEC = RecordCodecBuilder.create(i -> i.group(
+            TypedEntityData.codec(EntityType.CODEC).fieldOf("entity_data").forGetter(ApiaryOccupant::entityData),
+            Codec.INT.fieldOf("ticks_in_hive").forGetter(ApiaryOccupant::ticksInHive),
+            Codec.INT.fieldOf("min_ticks_in_hive").forGetter(ApiaryOccupant::minOccupationTicks),
+            ComponentSerialization.CODEC.fieldOf("display_name").forGetter(ApiaryOccupant::displayName),
+            Color.CODEC.fieldOf("color").forGetter(ApiaryOccupant::color),
+            Codec.BOOL.fieldOf("locked").forGetter(ApiaryOccupant::locked),
+            Codec.BOOL.fieldOf("has_nectar").forGetter(ApiaryOccupant::hasNectar)
+    ).apply(i, ApiaryOccupant::new));
+
     public static final StreamCodec<RegistryFriendlyByteBuf, ApiaryOccupant> STREAM_CODEC = StreamCodec.composite(
             TypedEntityData.streamCodec(EntityType.STREAM_CODEC),
             ApiaryOccupant::entityData,
@@ -65,7 +63,7 @@ public record ApiaryOccupant(
             ApiaryOccupant::minOccupationTicks,
             ComponentSerialization.STREAM_CODEC,
             ApiaryOccupant::displayName,
-            ByteBufCodecs.VAR_INT,
+            StreamCodecExtras.COLOR_STREAM_CODEC,
             ApiaryOccupant::color,
             ByteBufCodecs.BOOL,
             ApiaryOccupant::locked,

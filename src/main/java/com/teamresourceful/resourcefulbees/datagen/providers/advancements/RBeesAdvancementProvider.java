@@ -182,7 +182,7 @@ public class RBeesAdvancementProvider extends BaseAdvancementProvider {
          * Display icon uses a vanilla bee in a jar, but the criterion
          * only requires that the JAR_BEE component exists.
          */
-        ItemStackTemplate filledJar = createJarTemplate(EntityTypes.BEE, Color.parseColor("#FFedc343"));
+        ItemStackTemplate filledJar = createJarTemplate(EntityTypes.BEE, Color.parse("#FFedc343"));
 
         AdvancementHolder collectBee = register(createAdvancement(filledJar, "collect_bee", beeJar)
                 .addCriterion("has_filled_jar", hasAnyJarBee())
@@ -196,7 +196,7 @@ public class RBeesAdvancementProvider extends BaseAdvancementProvider {
                 .getBeeData(Identifier.parse("resourcefulbees:kitten_bee"))
                 .entityType();
 
-        ItemStackTemplate kittenJar = createJarTemplate(kittenBeeType, Color.parseColor("#FFEAA939"));
+        ItemStackTemplate kittenJar = createJarTemplate(kittenBeeType, Color.parse("#FFEAA939"));
 
         register(
                 createChallengeAchievement(
@@ -221,7 +221,7 @@ public class RBeesAdvancementProvider extends BaseAdvancementProvider {
          */
         EntityType<?> oreoBeeType = BeeRegistry.get().getBeeData(Identifier.parse("resourcefulbees:oreo_bee")).entityType();
 
-        ItemStackTemplate oreoJar = createJarTemplate(oreoBeeType, Color.parseColor("#FF442920"));
+        ItemStackTemplate oreoJar = createJarTemplate(oreoBeeType, Color.parse("#FF442920"));
 
         register(
                 createChallengeAchievement(
@@ -241,7 +241,7 @@ public class RBeesAdvancementProvider extends BaseAdvancementProvider {
         );
     }
 
-    private static ItemStackTemplate createJarTemplate(EntityType<?> entityType, int color) {
+    private static ItemStackTemplate createJarTemplate(EntityType<?> entityType, Color color) {
         DataComponentPatch components = DataComponentPatch.builder()
                 .set(ModDataComponents.JAR_BEE.get(), JarOccupant.from(entityType, color))
                 .build();

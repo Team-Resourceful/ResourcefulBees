@@ -14,6 +14,7 @@ import com.teamresourceful.resourcefulbees.common.recipes.breeder.ParentInput;
 import com.teamresourceful.resourcefulbees.common.recipes.ingredients.BeeJarIngredient;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
 import com.teamresourceful.resourcefullib.common.collections.WeightedCollection;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -56,8 +57,8 @@ public final class RecipeBuilder implements ResourceManagerReloadListener {
         return new ChildOutput(childBeeJar, Optional.of(family.getChildData().id()), family.weight(), family.chance());
     }
 
-    private static int getJarColor(FamilyUnit family) {
-        return family.getChildData().getRenderData().colorData().jarColor().getOpaqueValue();
+    private static Color getJarColor(FamilyUnit family) {
+        return family.getChildData().getRenderData().colorData().jarColor();
     }
 
     @Override

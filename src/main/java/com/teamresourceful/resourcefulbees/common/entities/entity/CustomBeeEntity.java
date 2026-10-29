@@ -331,8 +331,10 @@ public class CustomBeeEntity extends Bee implements CustomBee, GeoEntity, BeeCom
         controllers.add(new AnimationController<>("fly", 0, state ->
                 state.setAndContinue(FLY_ANIMATION)));
 
-        controllers.add(new AnimationController<>("bobbing", 0, state ->
-                state.setAndContinue(BOB_ANIMATION)));
+        if (!isNoAi()) {
+            controllers.add(new AnimationController<>("bobbing", 0, state ->
+                    state.setAndContinue(BOB_ANIMATION)));
+        }
     }
 
     @Override

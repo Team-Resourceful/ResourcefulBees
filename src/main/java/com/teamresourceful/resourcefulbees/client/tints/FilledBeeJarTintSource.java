@@ -2,7 +2,6 @@ package com.teamresourceful.resourcefulbees.client.tints;
 
 import com.mojang.serialization.MapCodec;
 import com.teamresourceful.resourcefulbees.common.items.BeeJarItem;
-import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +16,7 @@ public record FilledBeeJarTintSource() implements ItemTintSource {
     @Override
     public int calculate(@NonNull ItemStack itemStack, @Nullable ClientLevel level, @Nullable LivingEntity owner) {
         if (BeeJarItem.isFilled(itemStack)) {
-            return BeeJarItem.occupantFrom(itemStack).color();
+            return BeeJarItem.occupantFrom(itemStack).color().getOpaqueValue();
         }
 
         return 0xffffffff;

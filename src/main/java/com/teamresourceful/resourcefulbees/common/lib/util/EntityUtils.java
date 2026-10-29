@@ -3,6 +3,7 @@ package com.teamresourceful.resourcefulbees.common.lib.util;
 import com.teamresourceful.resourcefulbees.api.compat.CustomBee;
 import com.teamresourceful.resourcefulbees.common.entities.entity.CustomBeeEntity;
 import com.teamresourceful.resourcefulbees.common.lib.constants.BeeConstants;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.exceptions.UtilityClassException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,8 +19,8 @@ public final class EntityUtils {
         throw new UtilityClassException();
     }
 
-    public static int getBeeColorOrDefault(Entity bee) {
-        return bee instanceof CustomBee iBee ? iBee.getRenderData().colorData().jarColor().getOpaqueValue() : BeeConstants.VANILLA_BEE_INT_COLOR;
+    public static Color getBeeColorOrDefault(Entity bee) {
+        return bee instanceof CustomBee iBee ? iBee.getRenderData().colorData().jarColor() : BeeConstants.VANILLA_BEE_COLOR;
     }
 
     public static void setEntityLocationAndAngle(BlockPos blockpos, Direction direction, Entity entity) {

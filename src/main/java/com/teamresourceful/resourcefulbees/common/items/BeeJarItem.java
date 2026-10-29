@@ -5,6 +5,7 @@ import com.teamresourceful.resourcefulbees.common.lib.constants.translations.Ite
 import com.teamresourceful.resourcefulbees.common.lib.util.EntityUtils;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModDataComponents;
 import com.teamresourceful.resourcefulbees.common.registries.minecraft.ModItems;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -110,7 +111,7 @@ public class BeeJarItem extends Item {
         }
     }
 
-    public static ItemStack createDisplayJar(EntityType<?> id, int color) {
+    public static ItemStack createDisplayJar(EntityType<?> id, Color color) {
         ItemStack newJar = ModItems.BEE_JAR.get().getDefaultInstance();
         newJar.set(ModDataComponents.JAR_BEE, JarOccupant.from(id, color));
         return newJar;
@@ -122,7 +123,7 @@ public class BeeJarItem extends Item {
         JarOccupant occupant = stack.getOrDefault(ModDataComponents.JAR_BEE, JarOccupant.EMPTY);
         if (occupant == JarOccupant.EMPTY) return name;
 
-        MutableComponent display = occupant.displayName().copy().withStyle(Style.EMPTY.withColor(occupant.color()));
+        MutableComponent display = occupant.displayName().copy().withStyle(Style.EMPTY.withColor(occupant.color().getOpaqueValue()));
 
         return name.append(Component.translatable(ItemTranslations.BEE_BOX_ENTITY_NAME, display));
     }

@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
@@ -34,6 +35,9 @@ public final class ClientRenderUtils {
 
     public static void preparePreviewEntity(Entity entity) {
         entity.setId(NEXT_PREVIEW_ENTITY_ID.getAndDecrement());
+        if (entity instanceof Mob mob) {
+            mob.setNoAi(true);
+        }
     }
 
     public static void renderEntity(

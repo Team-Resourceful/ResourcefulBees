@@ -188,7 +188,7 @@ public class TradeCommand {
                 .filter(bee -> bee.getTradeData().isTradable())
                 .forEach(bee -> {
                     BeekeeperTradeData tradeData = bee.getTradeData();
-                    ItemStack result = BeeJarItem.createDisplayJar(bee.entityType(), bee.getRenderData().colorData().jarColor().getOpaqueValue());
+                    ItemStack result = BeeJarItem.createDisplayJar(bee.entityType(), bee.getRenderData().colorData().jarColor());
                     VillagerTrade trade = createBeekeeperTrade(tradeData, result, ContextIntProviders.between(32, 64));
                     String name = bee.id().getPath();
                     CommandUtil.writeVillagerTrade(registryOps, trade, tradePath.resolve(name + ".json"));
